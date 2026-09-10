@@ -31,6 +31,8 @@ import {
 } from './seminary';
 import { parishWeekHook, resolvePending, seminaryWeekHook, type EventDeps } from './weekHook';
 import { setDiscretionary as doSetDiscretionary, setObligation as doSetObligation, startAssignment } from './parish';
+import { startFounding as doStartFounding, suppressGroup as doSuppress } from '@/systems/groups';
+import type { GroupType } from '@/types';
 
 /** Weeks per synchronous batch when running to the next stop. */
 export const BATCH_WEEKS: Record<Speed, number> = {
@@ -71,6 +73,8 @@ export interface GameStore {
   acceptAssignment(): void;
   setObligation(key: ObligationKey, quality: Quality): void;
   setDiscretionary(actionId: string, ap: number): void;
+  foundGroup(type: GroupType): void;
+  suppressGroup(groupId: string, suppressed: boolean): void;
   chooseEmphasis(emphasis: Record<Pillar, number>): void;
   chooseSummer(id: SummerAssignment): void;
   /** Resolve the event at the head of the pending queue. */
@@ -278,6 +282,12 @@ export const useGameStore = create<GameStore>()((set, get) => ({
   },
   setDiscretionary(actionId, ap) {
     update(set, get, (game) => doSetDiscretionary(game, actionId, ap));
+  },
+  foundGroup(type) {
+    update(set, get, (game) => doStartFounding(game, type));
+  },
+  suppressGroup(groupId, suppressed) {
+    update(set, get, (game) => doSuppress(game, groupId, suppressed));
   },
   acceptOffer(offerId) {
     const def = offerById(offerId);

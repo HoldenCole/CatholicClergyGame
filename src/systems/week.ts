@@ -5,6 +5,7 @@ import { applyEffects } from '@/engine/effects';
 import { commitmentAp } from '@/engine/offers';
 import { seasonOf } from '@/engine/time';
 import { decayWeek } from './stats';
+import { groupRelief, groupsWeek, finishFounding } from './groups';
 import type { Rng } from '@/engine/rng';
 
 /** Tunables for the weekly loop. DESIGN 2.6 and 8.1; numbers not in the design are invented. */
@@ -31,10 +32,10 @@ export const WEEK = {
 
 const NEXT_DOWN: Record<Quality, Quality | null> = { invested: 'standard', standard: 'min', min: null };
 
-export function obligationAp(key: ObligationKey, quality: Quality): number {
+export function obligationAp(key: ObligationKey, quality: Quality, relief = 0): number {
   const def = obligationDefs.find((o) => o.key === key)!;
-  const ap = def.ap[quality];
-  return ap ?? def.ap.standard;
+  const ap = def.ap[quality] ?? def.ap.standard;
+  return Math.max(1, ap - relief);
 }
 
 export function adminFloorFor(state: GameState): number {
@@ -70,9 +71,10 @@ export interface Plan {
 export function planWeek(state: GameState): Plan {
   const parish = state.parish!;
   const budget = weekBudget(state);
-  const fixed = seasonalLoad(state) + adminFloorFor(state) + commitmentAp(state);
+  const fixed = seasonalLoad(state) + adminFloorFor(state) + commitmentAp(state) + (state.founding?.apPerWeek ?? 0);
+  const relief = groupRelief(state);
   const obligations = { ...parish.routine.obligations };
-  const mandatoryOf = () => fixed + OBLIGATION_KEYS.reduce((n, k) => n + obligationAp(k, obligations[k]), 0);
+  const mandatoryOf = () => fixed + OBLIGATION_KEYS.reduce((n, k) => n + obligationAp(k, obligations[k], (relief as Record<string, number>)[k] ?? 0), 0);
 
   let neglected = false;
   let guard = 0;
@@ -157,6 +159,15 @@ export function resolveWeek(state: GameState, rng: Rng): { state: GameState; led
     if (def.usesKnowledge) knowledgeUsed = true;
   }
   if (plan.slack > 0) next = applyEffects(next, [{ target: 'stat', key: 'piety', delta: WEEK.restPietyPerAp * plan.slack }]);
+
+  // Groups: the sustaining AP goes to them; founding projects resolve.
+  const groupResult = groupsWeek(next, plan.discretionary.groups ?? 0, rng);
+  next = groupResult.state;
+  lines.push(...groupResult.lines);
+  const day = new Date((next.clock.startDay + next.clock.week * 7) * 86_400_000);
+  const founded = finishFounding(next, rng, day.getUTCFullYear());
+  next = founded.state;
+  if (founded.line) lines.push(founded.line);
 
   // Decay.
   const c = next.character!;

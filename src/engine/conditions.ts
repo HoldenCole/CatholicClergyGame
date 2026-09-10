@@ -2,8 +2,16 @@ import type { Condition, GameState } from '@/types';
 import { seasonOf } from './time';
 import { resolveSelector } from './selectors';
 
+import type { Group } from '@/types';
+import { vitalityBand } from '@/systems/groups';
+
 function compare(op: '>=' | '<=', actual: number, value: number): boolean {
   return op === '>=' ? actual >= value : actual <= value;
+}
+
+export function groupMatches(g: Group, key: 'type' | 'vitality' | 'hostile' | 'suppressed' | 'foundedByPlayer' | 'agenda', value: string | boolean): boolean {
+  if (key === 'vitality') return vitalityBand(g.vitality) === value;
+  return g[key] === value;
 }
 
 /**
@@ -58,6 +66,13 @@ export function evaluateCondition(
       const at = state.flags.ordination_week;
       if (typeof at !== 'number') return false;
       return compare(cond.op, (state.clock.week - at) / 52, cond.value);
+    }
+    case 'group': {
+      // Bound group first; otherwise any group of the current parish.
+      const boundLeader = bindings['@group_leader'];
+      const bound = boundLeader ? Object.values(state.groups).find((g) => g.leaderId === boundLeader) : undefined;
+      const pool = bound ? [bound] : Object.values(state.groups).filter((g) => g.parishId === state.assignment?.parishId);
+      return pool.some((g) => groupMatches(g, cond.key, cond.value));
     }
     case 'not':
       return !evaluateCondition(cond.inner, state, bindings);

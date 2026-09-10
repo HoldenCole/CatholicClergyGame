@@ -118,7 +118,8 @@ describe('engine/effects', () => {
     applyEffect(state, { target: 'stat', key: 'piety', delta: 5 });
     expect(state.character?.stats.piety).toBe(40);
     expect(() => applyEffect({ ...state, character: null }, { target: 'stat', key: 'piety', delta: 5 })).toThrow(EffectError);
-    expect(() => applyEffect(state, { target: 'group', key: 'x', delta: 5 })).toThrow(EffectError);
+    expect(() => applyEffect(state, { target: 'nonsense' as never, key: 'x', delta: 5 })).toThrow(EffectError);
+    expect(() => applyEffect(state, { target: 'group', key: 'nonsense' }, { '@group_leader': 'nobody' })).not.toThrow();
   });
 });
 

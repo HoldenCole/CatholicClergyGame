@@ -76,6 +76,11 @@ export type Condition =
   | { type: 'role'; value: 'parochial_vicar' | 'administrator' | 'pastor' }
   /** Extension: years since ordination. */
   | { type: 'years_ordained'; op: Op; value: number }
+  /**
+   * Extension: some group of the current parish matches. When an event
+   * carries group conditions, @group_leader binds to a matching group.
+   */
+  | { type: 'group'; key: 'type' | 'vitality' | 'hostile' | 'suppressed' | 'foundedByPlayer' | 'agenda'; value: string | boolean }
   | { type: 'not'; inner: Condition }
   | { type: 'any'; inner: Condition[] }
   | { type: 'all'; inner: Condition[] };
@@ -94,6 +99,7 @@ export type Condition =
  *  - `risk`         key: risk id, value: label, delta: severity
  *  - `npc`          key: selector, value: new NpcStatus
  *  - `end`          key: Ending; the run ends
+ *  - `group`        key: vitality | size | hostile | suppressed | dissolve, on the bound group (@group_leader)
  * `relationship.key` and `npc.key` accept selectors ("@rector").
  */
 export type EffectTarget =

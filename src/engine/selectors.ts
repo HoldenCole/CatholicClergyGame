@@ -47,6 +47,15 @@ export function resolveSelector(state: GameState, key: string, rng?: Rng): Npc |
       const lay = pid ? Object.values(state.npcs).filter((n) => n.status === 'active' && n.role === 'lay' && n.tags.includes(`parish:${pid}`)) : [];
       return lay.length && rng ? rng.pick(lay.sort((a, b) => (a.id < b.id ? -1 : 1))) : (lay[0] ?? null);
     }
+    case 'group_leader': {
+      const pid = state.assignment?.parishId;
+      const leaders = Object.values(state.groups)
+        .filter((g) => g.parishId === pid)
+        .map((g) => state.npcs[g.leaderId])
+        .filter((n): n is Npc => !!n && n.status === 'active')
+        .sort((a, b) => (a.id < b.id ? -1 : 1));
+      return leaders.length && rng ? rng.pick(leaders) : (leaders[0] ?? null);
+    }
     case 'brother_priest': {
       const pid = state.assignment?.parishId;
       const priests = Object.values(state.npcs)

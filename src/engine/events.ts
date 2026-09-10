@@ -4,6 +4,13 @@ import { applyEffects } from './effects';
 import type { Rng } from './rng';
 import { resolveSelector, selectorsIn } from './selectors';
 import { recordPosition } from '@/systems/reputation';
+import { groupMatches } from './conditions';
+import type { Condition } from '@/types';
+
+/** Top-level group conditions of an event, used to pick which group @group_leader binds to. */
+export function groupConditions(event: GameEvent): Extract<Condition, { type: 'group' }>[] {
+  return (event.requires ?? []).filter((c): c is Extract<Condition, { type: 'group' }> => c.type === 'group');
+}
 
 export const WEEKS_PER_YEAR = 52;
 
@@ -83,7 +90,19 @@ export function fireEvent(
   rng: Rng,
 ): { state: GameState; pending: PendingEvent } {
   const bindings: Record<string, string> = {};
-  for (const sel of eventSelectors(event)) {
+  const selectors = eventSelectors(event);
+  const wantsGroup = selectors.includes('@group_leader') || groupConditions(event).length > 0;
+  if (wantsGroup) {
+    const conds = groupConditions(event);
+    const candidates = Object.values(state.groups)
+      .filter((g) => g.parishId === state.assignment?.parishId && conds.every((c) => groupMatches(g, c.key, c.value)))
+      .filter((g) => state.npcs[g.leaderId]?.status === 'active')
+      .sort((a, b) => (a.id < b.id ? -1 : 1));
+    const chosen = candidates.length ? rng.pick(candidates) : null;
+    if (chosen) bindings['@group_leader'] = chosen.leaderId;
+  }
+  for (const sel of selectors) {
+    if (sel === '@group_leader') continue;
     const npc = resolveSelector(state, sel, rng);
     if (npc) bindings[sel] = npc.id;
   }

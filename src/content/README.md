@@ -235,3 +235,30 @@ next week. Flags set by the parish loop: `role:parochial_vicar`,
 (from creation), `speaks_spanish`, `ordained`, `pref_*` (from Y7),
 `affiliation:*` and `patron:*` (from offers), `late_vocation`.
 Tokens: `{parish}` (the parish's name), `{diocese}`.
+
+## Group events (DESIGN.md §10)
+
+Files under `src/content/events/parish/groups*.json`. Same schema, phase
+`parochial_vicar` (or `pastor`). An event about a specific group carries a
+top-level `group` condition and refers to the group's leader as
+`{@group_leader}`; when it fires, the engine binds `@group_leader` to a
+random group of the parish that matches every `group` condition, and group
+effects land on that group.
+
+```json
+{ "type": "group", "key": "type", "value": "youth" }            // see GroupType in src/types/groups.ts
+{ "type": "group", "key": "vitality", "value": "dying" }        // thriving | steady | declining | dying
+{ "type": "group", "key": "agenda", "value": "empire" }         // saintly | empire | political | tired | new | grieving
+{ "type": "group", "key": "hostile", "value": true }
+{ "type": "group", "key": "foundedByPlayer", "value": true }
+{ "target": "group", "key": "vitality", "delta": -15 }
+{ "target": "group", "key": "size", "delta": 4 }
+{ "target": "group", "key": "hostile", "value": true }
+{ "target": "group", "key": "dissolve" }
+{ "target": "relationship", "key": "@group_leader", "delta": -10 }
+```
+
+Group types: young_adult, youth, pro_life, svdp (St. Vincent de Paul),
+knights (Knights of Columbus), womens_guild, bible_study, adoration, choir,
+rcia, marriage_prep, school_parents, ethnic_community, tlm_society,
+social_justice, mens_group, grief_support, recovery.

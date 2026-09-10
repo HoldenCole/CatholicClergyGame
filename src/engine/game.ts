@@ -47,6 +47,8 @@ export function newGame(options: NewGameOptions): { state: GameState; rng: Rng }
     world: null,
     assignment: null,
     parish: null,
+    groups: {},
+    founding: null,
   };
   return { state, rng };
 }

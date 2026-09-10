@@ -70,10 +70,10 @@ function assertState(v: unknown, path: string): asserts v is GameState {
   for (const key of ['pending', 'history', 'beats', 'digest', 'firedOnce', 'offers', 'commitments', 'offerHistory'] as const) {
     if (!Array.isArray(v[key])) throw new SaveError(`${path}.${key} must be an array`);
   }
-  for (const key of ['npcs', 'flags', 'threads', 'suppressedUntil', 'mode', 'clusters'] as const) {
+  for (const key of ['npcs', 'flags', 'threads', 'suppressedUntil', 'mode', 'clusters', 'groups'] as const) {
     if (!isRecord(v[key])) throw new SaveError(`${path}.${key} must be an object`);
   }
-  for (const key of ['candidates', 'world', 'assignment', 'parish'] as const) {
+  for (const key of ['candidates', 'world', 'assignment', 'parish', 'founding'] as const) {
     if (!(key in v)) throw new SaveError(`${path}.${key} missing`);
   }
 }

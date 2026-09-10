@@ -137,6 +137,8 @@ export function applyEffect(
     case 'position':
       // Handled by applyChoice via opensThread / resolvesThread / volume.
       return state;
+    default:
+      throw new EffectError(`unknown effect target ${String((effect as { target: string }).target)}`);
     case 'money': {
       if (!state.parish) return state;
       return { ...state, parish: { ...state.parish, finance: { ...state.parish.finance, cash: state.parish.finance.cash + delta } } };
@@ -145,8 +147,32 @@ export function applyEffect(
       if (!state.parish) return state;
       return { ...state, parish: { ...state.parish, apNextWeek: state.parish.apNextWeek + delta } };
     }
-    case 'group':
-      throw new EffectError(`${effect.target} effects are not implemented yet`);
+    case 'group': {
+      const leader = bindings['@group_leader'];
+      const group = Object.values(state.groups).find((g) => g.leaderId === leader);
+      if (!group) return state;
+      const groups = { ...state.groups };
+      switch (effect.key) {
+        case 'vitality':
+          groups[group.id] = { ...group, vitality: Math.max(0, Math.min(100, group.vitality + delta)) };
+          break;
+        case 'size':
+          groups[group.id] = { ...group, size: Math.max(0, group.size + delta) };
+          break;
+        case 'hostile':
+          groups[group.id] = { ...group, hostile: effect.value !== false };
+          break;
+        case 'suppressed':
+          groups[group.id] = { ...group, suppressed: effect.value !== false };
+          break;
+        case 'dissolve':
+          delete groups[group.id];
+          break;
+        default:
+          throw new EffectError(`unknown group effect key ${effect.key}`);
+      }
+      return { ...state, groups };
+    }
   }
 }
 

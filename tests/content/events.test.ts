@@ -44,7 +44,10 @@ const SELECTORS = [
   '@vicar_general',
   '@chancellor',
   '@vicar_for_clergy',
+  '@group_leader',
 ];
+const GROUP_KEYS = ['type', 'vitality', 'hostile', 'suppressed', 'foundedByPlayer', 'agenda'];
+const GROUP_EFFECT_KEYS = ['vitality', 'size', 'hostile', 'suppressed', 'dissolve'];
 const PARISH_KEYS = ['kind', 'terrain', 'school', 'problem', 'needsSpanish', 'wealth', 'generational'];
 const ROLES = ['parochial_vicar', 'administrator', 'pastor'];
 const EFFECT_TARGETS = [
@@ -104,6 +107,9 @@ function checkCondition(c: Condition, where: string, problems: Problem[]): void 
     case 'years_ordained':
       if (!hasOp(c.op) || typeof c.value !== 'number') problems.push(`${where}: bad years_ordained condition`);
       break;
+    case 'group':
+      if (!GROUP_KEYS.includes(c.key) || c.value === undefined) problems.push(`${where}: bad group condition`);
+      break;
     case 'not':
       checkCondition(c.inner, where, problems);
       break;
@@ -143,7 +149,8 @@ function checkEffect(e: Effect, where: string, problems: Problem[]): void {
   if (e.target === 'flag' && e.value === undefined && e.delta === undefined) {
     problems.push(`${where}: flag effect needs value or delta`);
   }
-  if (e.target === 'group') problems.push(`${where}: group effects are not implemented yet`);
+  if (e.target === 'group' && !GROUP_EFFECT_KEYS.includes(e.key)) problems.push(`${where}: bad group effect key ${e.key}`);
+  if (e.target === 'group' && (e.key === 'vitality' || e.key === 'size') && typeof e.delta !== 'number') problems.push(`${where}: group ${e.key} needs delta`);
   if ((e.target === 'money' || e.target === 'ap') && typeof e.delta !== 'number') problems.push(`${where}: ${e.target} effect needs delta`);
 }
 

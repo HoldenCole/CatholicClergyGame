@@ -1,6 +1,7 @@
 import type { Assignment, Beat, GameState, ParishState, Quality, ObligationKey } from '@/types';
 import type { Rng } from './rng';
 import { generateParishPeople } from '@/generation/parishPeople';
+import { generateGroups } from '@/systems/groups';
 import { assignFirstParish } from '@/systems/assignment';
 import { resolveWeek } from '@/systems/week';
 import { seasonOf } from './time';
@@ -58,7 +59,16 @@ export function startAssignment(state: GameState, rng: Rng): GameState {
   const npcs = { ...state.npcs };
   for (const n of people) npcs[n.id] = n;
   const staffIds = parish.staffIds.length ? parish.staffIds : people.filter((n) => n.tags.includes('staff')).map((n) => n.id);
-  const parishes = world.parishes.map((p) => (p.id === parish.id ? { ...p, staffIds } : p));
+  let groups = state.groups;
+  let groupIds = parish.groupIds;
+  if (groupIds.length === 0) {
+    const made = generateGroups(rng.derive(`groups:${parish.id}`), { ...state, npcs }, parish, year);
+    groups = { ...groups };
+    for (const g of made.groups) groups[g.id] = g;
+    for (const n of made.leaders) npcs[n.id] = n;
+    groupIds = made.groups.map((g) => g.id);
+  }
+  const parishes = world.parishes.map((p) => (p.id === parish.id ? { ...p, staffIds, groupIds } : p));
 
   const arcYears = rng.int(ARC.minYears, ARC.maxYears);
   const arcEndWeek = state.clock.week + arcYears * 52;
@@ -95,6 +105,7 @@ export function startAssignment(state: GameState, rng: Rng): GameState {
   return {
     ...state,
     npcs,
+    groups,
     world: { ...world, parishes },
     parish: parishState,
     beats,
@@ -158,6 +169,7 @@ export function endOfArc(state: GameState, rng: Rng): GameState {
     character: { ...c, reputation: { ...c.reputation, parishioners: carried } },
     assignment: next,
     parish: null,
+    founding: null,
     mode: { kind: 'assignment', assignment: next },
     flags: { ...state.flags, transfers: Number(state.flags.transfers ?? 0) + 1 },
   };

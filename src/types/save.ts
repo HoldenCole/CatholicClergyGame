@@ -6,6 +6,7 @@ import type { Npc } from './npc';
 import type { ActiveOffer, Commitment, OfferRecord } from './offers';
 import type { Assignment, Diocese, Parish, World } from './world';
 import type { ParishState } from './parish';
+import type { Founding, Group } from './groups';
 
 /** A rolled diocese the player may choose, held only during creation. */
 export interface DioceseCandidate {
@@ -71,6 +72,9 @@ export interface GameState {
   assignment: Assignment | null;
   /** The live parish loop, once assigned. */
   parish: ParishState | null;
+  /** Special interest groups across every parish the player has served. DESIGN §10 */
+  groups: Record<string, Group>;
+  founding: Founding | null;
 }
 
 export interface DigestWeek {

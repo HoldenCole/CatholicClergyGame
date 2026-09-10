@@ -12,3 +12,4 @@ export * from './offers';
 export * from './world';
 export * from './preset';
 export * from './parish';
+export * from './groups';
