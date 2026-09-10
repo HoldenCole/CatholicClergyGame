@@ -7,6 +7,8 @@ import type { ActiveOffer, Commitment, OfferRecord } from './offers';
 import type { Assignment, Diocese, Parish, World } from './world';
 import type { ParishState } from './parish';
 import type { Founding, Group } from './groups';
+import type { CareerEntry, Project } from './career';
+import type { Opening } from './promotion';
 
 /** A rolled diocese the player may choose, held only during creation. */
 export interface DioceseCandidate {
@@ -75,6 +77,14 @@ export interface GameState {
   /** Special interest groups across every parish the player has served. DESIGN §10 */
   groups: Record<string, Group>;
   founding: Founding | null;
+  /** Openings the personnel board currently has. Refreshed each career year. */
+  openings: Opening[];
+  /** The pastor's current project, if any. DESIGN 8.3 */
+  project: Project | null;
+  /** The record the career summary is written from. */
+  career: CareerEntry[];
+  /** Rome's current temperament, −100..100, for successions. DESIGN 9.3 */
+  romeTemperament: number;
 }
 
 export interface DigestWeek {

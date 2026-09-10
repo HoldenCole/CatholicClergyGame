@@ -8,6 +8,7 @@ import { evaluate, formationWeek, nameArchetype, setEmphasis, zeroPillars } from
 import { summerOptions } from '@/content/seminary';
 import { renderText } from './text';
 import { assignFirstParish } from '@/systems/assignment';
+import { beginCareer } from './career';
 import { driftYear } from '@/systems/drift';
 import { fromDayNumber } from './calendar';
 
@@ -279,8 +280,14 @@ export function ordain(state: GameState, rng: Rng): GameState {
     flags: { ...state.flags, ordained: true, ordination_week: state.clock.week },
   };
   if (!ordained.world) return { ...ordained, mode: { kind: 'clock' } };
-  const assignment = assignFirstParish(ordained, rng.derive('assignment'));
-  return { ...ordained, assignment, mode: { kind: 'assignment', assignment } };
+  const withCareer = beginCareer(ordained, rng);
+  const assignment = assignFirstParish(withCareer, rng.derive('assignment'));
+  return {
+    ...withCareer,
+    assignment,
+    mode: { kind: 'assignment', assignment },
+    career: [...withCareer.career, { week: withCareer.clock.week, kind: 'assignment', text: `First assignment: parochial vicar of ${withCareer.world!.parishes.find((p) => p.id === assignment.parishId)?.name ?? 'a parish'}.` }],
+  };
 }
 
 /** The player has read the letter of assignment. */

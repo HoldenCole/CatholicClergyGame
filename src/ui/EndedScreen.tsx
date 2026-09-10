@@ -17,7 +17,7 @@ export default function EndedScreen() {
     <div className="min-h-screen bg-stone-950 text-stone-100 flex items-center justify-center">
       <div className="w-full max-w-2xl rounded border border-stone-800 bg-stone-900/60 p-8 flex flex-col gap-4">
         <h1 className="text-2xl">{ENDING_TITLE[game.mode.ending] ?? game.mode.ending}</h1>
-        <p className="text-stone-200 leading-relaxed">{game.mode.summary}</p>
+        <p className="text-stone-200 leading-relaxed whitespace-pre-line">{game.mode.summary}</p>
         {c && (
           <p className="text-sm text-stone-400">
             {c.name.first} {c.name.last}, {game.seminary ? `year ${game.seminary.year} of formation` : ''}. {game.history.length} decisions recorded.

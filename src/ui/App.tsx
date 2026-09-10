@@ -19,6 +19,7 @@ import AssignmentPanel from './seminary/AssignmentPanel';
 import RoutinePanel from './parish/RoutinePanel';
 import ParishPanel from './parish/ParishPanel';
 import GroupsPanel from './parish/GroupsPanel';
+import ProjectsPanel from './parish/ProjectsPanel';
 
 export default function App() {
   const game = useGameStore((s) => s.game);
@@ -58,6 +59,7 @@ export default function App() {
           {error && <p className="rounded border border-red-900 bg-red-950/30 p-3 text-sm text-red-300">{error}</p>}
           {game.parish ? <ParishPanel /> : game.seminary && <FormationPanel />}
           {game.parish && <GroupsPanel />}
+          {game.parish && <ProjectsPanel />}
           <InterruptSettings />
           <SavePanel />
         </aside>

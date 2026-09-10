@@ -29,7 +29,7 @@ export default function ParishPanel() {
   return (
     <Panel title={`${parish.name}, ${parish.place}`}>
       <p className="text-sm text-stone-300">
-        {c.name.first} {c.name.last}, parochial vicar, {yearsIn === 0 ? 'first year' : `year ${yearsIn + 1}`}. {game.world.diocese.visible.name}
+        {c.name.first} {c.name.last}, {p.role.replace('_', ' ')}, {yearsIn === 0 ? 'first year' : `year ${yearsIn + 1}`}. {game.world.diocese.visible.name}
         {bishop ? `, under ${bishop.title} ${bishop.name.last}` : ''}.
       </p>
       <dl className="mt-3 grid grid-cols-2 gap-x-4 gap-y-1 text-sm">

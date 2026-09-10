@@ -70,7 +70,7 @@ export function startAssignment(state: GameState, rng: Rng): GameState {
   }
   const parishes = world.parishes.map((p) => (p.id === parish.id ? { ...p, staffIds, groupIds } : p));
 
-  const arcYears = rng.int(ARC.minYears, ARC.maxYears);
+  const arcYears = assignment.role === 'pastor' ? 6 : rng.int(ARC.minYears, ARC.maxYears);
   const arcEndWeek = state.clock.week + arcYears * 52;
   const parishState: ParishState = {
     parishId: parish.id,

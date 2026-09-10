@@ -4,7 +4,9 @@ import { shouldInterrupt } from './interrupts';
 import { offersWeek } from './offers';
 import type { Rng } from './rng';
 import { formationBeats, markBeatFired, weekPool } from './seminary';
-import { endOfArc, isPlayedWeek, parishWeek } from './parish';
+import { isPlayedWeek, parishWeek } from './parish';
+import { careerYear, isCareerYear, nextAssignment } from './career';
+import { projectWeek } from '@/systems/projects';
 import { renderText } from './text';
 import type { WeekHook } from './clock';
 
@@ -89,12 +91,17 @@ export function parishWeekHook(deps: EventDeps): WeekHook {
   return (state: GameState, rng: Rng, reachedBeats: Beat[]) => {
     if (!state.parish) return state;
     let next = parishWeek(state, rng);
+    const project = projectWeek(next);
+    next = project.state;
+    if (project.line) next = addDigestLine(next, project.line);
+    if (isCareerYear(next)) next = careerYear(next, rng);
+    if (next.mode.kind !== 'clock') return next;
     if (isPlayedWeek(next)) {
       const [event] = drawEvents(deps.pool, next, rng, 1);
       if (event) next = fireOrResolve(next, event, rng, deps);
     }
     if (reachedBeats.some((b) => b.kind === 'assignment') && next.mode.kind === 'clock') {
-      next = endOfArc(next, rng);
+      next = nextAssignment(next, rng).state;
     }
     if (next.mode.kind !== 'clock' || next.pending.length > 0) return next;
     return offersStep(next, rng, deps);

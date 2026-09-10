@@ -7,10 +7,11 @@ export default function AssignmentPanel() {
   const accept = useGameStore((s) => s.acceptAssignment);
   if (!game || game.mode.kind !== 'assignment' || !game.world) return null;
   const a = game.mode.assignment;
+  const passedOver = [...game.career].reverse().find((e) => e.kind === 'passed_over' && e.week === game.clock.week);
   const parish = game.world.parishes.find((p) => p.id === a.parishId);
   const pastor = parish ? game.npcs[parish.pastorId] : undefined;
   return (
-    <Panel title="Letter of assignment">
+    <Panel title={a.role === 'pastor' ? 'Letter of appointment' : 'Letter of assignment'}>
       <pre className="whitespace-pre-wrap font-serif text-stone-200 leading-relaxed">{a.letter}</pre>
       {parish && (
         <div className="mt-4 text-sm text-stone-400">
@@ -24,7 +25,8 @@ export default function AssignmentPanel() {
               The pastor, {pastor.title} {pastor.name.last}, is {game.clock.week >= 0 ? new Date((game.clock.startDay + game.clock.week * 7) * 86_400_000).getUTCFullYear() - pastor.birthYear : '?'}.
             </p>
           )}
-          <p className="mt-2 text-xs text-stone-500">Why you: {a.reasons.join('; ')}.</p>
+          <p className="mt-2 text-xs text-stone-500">{a.role === 'pastor' ? 'Why you' : passedOver ? 'What the board decided' : 'Why you'}: {a.reasons.join('; ')}.</p>
+          {passedOver && <p className="mt-1 text-xs text-amber-700">{passedOver.text}</p>}
         </div>
       )}
       <button className="mt-4 rounded bg-amber-700 px-4 py-2 text-sm font-medium hover:bg-amber-600" onClick={accept}>

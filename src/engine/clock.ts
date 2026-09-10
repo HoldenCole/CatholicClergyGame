@@ -104,6 +104,9 @@ export function stopAfterWeek(speed: Speed, state: GameState, reachedBeats: Beat
   }
   const beat = reachedBeats.find((b) => !INFORMATIONAL_BEATS.has(b.kind));
   if (beat) return { kind: 'beat', beat };
+  // A beat a hook scheduled for this very week (a succession) stops the clock too.
+  const late = state.beats.find((b) => b.week === state.clock.week && !INFORMATIONAL_BEATS.has(b.kind));
+  if (late) return { kind: 'beat', beat: late };
   // A decision the player must make always stops the clock.
   if (state.mode.kind !== 'clock') return { kind: 'mode', mode: state.mode.kind };
   // An offer arriving this week stops every speed: windows are short and expiry has a cost.

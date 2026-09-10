@@ -49,6 +49,10 @@ export function newGame(options: NewGameOptions): { state: GameState; rng: Rng }
     parish: null,
     groups: {},
     founding: null,
+    openings: [],
+    project: null,
+    career: [],
+    romeTemperament: 0,
   };
   return { state, rng };
 }

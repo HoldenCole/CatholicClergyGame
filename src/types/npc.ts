@@ -1,5 +1,6 @@
 import type { Stats } from './stats';
 import type { Career, Field, Origin, PersonName } from './character';
+import type { Milestone } from './career';
 
 export type NpcRole =
   | 'classmate'
@@ -84,4 +85,6 @@ export interface Npc {
     field: Field | null;
     career: Career | null;
   };
+  /** Rolled at ordination for classmates; simulated forward each year. */
+  trajectory?: Milestone[];
 }
