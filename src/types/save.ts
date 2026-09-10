@@ -98,7 +98,7 @@ export interface Snapshot {
   rngState: RngState;
 }
 
-export const SAVE_VERSION = 1;
+export const SAVE_VERSION = 2;
 
 export interface SaveFile {
   version: number;

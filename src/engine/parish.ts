@@ -1,8 +1,7 @@
-import type { Assignment, Beat, GameState, ParishState, Quality, ObligationKey } from '@/types';
+import type { Beat, GameState, ParishState, Quality, ObligationKey } from '@/types';
 import type { Rng } from './rng';
 import { generateParishPeople } from '@/generation/parishPeople';
 import { generateGroups } from '@/systems/groups';
-import { assignFirstParish } from '@/systems/assignment';
 import { resolveWeek } from '@/systems/week';
 import { seasonOf } from './time';
 import { fromDayNumber } from './calendar';
@@ -154,25 +153,6 @@ export function parishWeek(state: GameState, rng: Rng): GameState {
     ? [...next.digest.slice(0, -1), { ...last, lines: [...last.lines, ...lines] }]
     : [...next.digest, { week: next.clock.week, lines }];
   return { ...next, digest };
-}
-
-/** The arc is over: the bishop reassigns. Phase 5 replaces this with the promotion engine. */
-export function endOfArc(state: GameState, rng: Rng): GameState {
-  if (!state.world || !state.character || !state.parish) return state;
-  const current = state.parish.parishId;
-  const others = { ...state, world: { ...state.world, parishes: state.world.parishes.filter((p) => p.id !== current) } };
-  const next: Assignment = assignFirstParish(others, rng.derive(`reassign:${state.clock.week}`));
-  const c = state.character;
-  const carried = Math.round(c.reputation.parishioners * ARC.parishionersCarryover);
-  return {
-    ...state,
-    character: { ...c, reputation: { ...c.reputation, parishioners: carried } },
-    assignment: next,
-    parish: null,
-    founding: null,
-    mode: { kind: 'assignment', assignment: next },
-    flags: { ...state.flags, transfers: Number(state.flags.transfers ?? 0) + 1 },
-  };
 }
 
 export function setObligation(state: GameState, key: ObligationKey, quality: Quality): GameState {

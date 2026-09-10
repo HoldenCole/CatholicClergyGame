@@ -11,6 +11,7 @@ import type {
   Speed,
   SummerAssignment,
 } from '@/types';
+import { SAVE_VERSION } from '@/types';
 import { noDraw, noHook, runClock, type StopReason, type WeekDraw, type WeekHook } from './clock';
 import { newGame as buildNewGame, type NewGameOptions } from './game';
 import type { Rng } from './rng';
@@ -243,7 +244,7 @@ export const useGameStore = create<GameStore>()((set, get) => ({
   rewind() {
     const { previous } = get();
     if (!previous || !rng) return;
-    rng = rngFromSave({ version: 1, state: previous.state, rngState: previous.rngState, previous: null, prose: {} });
+    rng = rngFromSave({ version: SAVE_VERSION, state: previous.state, rngState: previous.rngState, previous: null, prose: {} });
     set({
       game: { ...previous.state, speed: 'MANUAL' },
       previous: null,
