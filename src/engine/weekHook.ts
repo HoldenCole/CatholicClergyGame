@@ -96,6 +96,13 @@ export function parishWeekHook(deps: EventDeps): WeekHook {
     if (project.line) next = addDigestLine(next, project.line);
     if (isCareerYear(next)) next = careerYear(next, rng);
     if (next.mode.kind !== 'clock') return next;
+    if (next.flags.new_bishop_pending) {
+      // A succession always gets its scene, played week or not. DESIGN 5.3
+      const [event] = drawEvents(deps.pool.filter((e) => e.beat === 'succession'), next, rng, 1);
+      next = { ...next, flags: { ...next.flags, new_bishop_pending: false } };
+      if (event) next = fireOrResolve(next, event, rng, deps);
+      if (next.mode.kind !== 'clock' || next.pending.length > 0) return next;
+    }
     if (isPlayedWeek(next)) {
       const [event] = drawEvents(deps.pool, next, rng, 1);
       if (event) next = fireOrResolve(next, event, rng, deps);

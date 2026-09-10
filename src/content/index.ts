@@ -1,4 +1,4 @@
-import type { GameEvent } from '@/types';
+import type { GameEvent, Phase } from '@/types';
 
 interface EventFile {
   _notes?: string;
@@ -18,8 +18,8 @@ export function eventById(id: string): GameEvent | undefined {
   return byId.get(id);
 }
 
-export function eventsForPhase(phase: GameEvent['phase']): GameEvent[] {
-  return allEvents.filter((e) => e.phase === phase);
+export function eventsForPhase(phase: Phase): GameEvent[] {
+  return allEvents.filter((e) => (Array.isArray(e.phase) ? e.phase.includes(phase) : e.phase === phase));
 }
 
 /** Path of each content file, for validation messages. */

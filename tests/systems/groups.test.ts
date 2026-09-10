@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { createRng } from '@/engine/rng';
 import { evaluateCondition } from '@/engine/conditions';
 import { applyEffect } from '@/engine/effects';
-import { fireEvent } from '@/engine/events';
+import { fireEvent, isEligible } from '@/engine/events';
 import { finishFounding, generateGroups, groupRelief, groupsWeek, parishGroups, startFounding, suppressGroup, vitalityBand } from '@/systems/groups';
 import { planWeek, resolveWeek } from '@/systems/week';
 import { parishState } from './week.test';
@@ -110,6 +110,23 @@ describe('systems/groups', () => {
     expect(successes).toBeLessThan(40);
     const viaWeek = resolveWeek(done, createRng('w')).state;
     expect(viaWeek.founding).toBeNull();
+  });
+
+  it('paired group conditions must hold for one group, not across two', () => {
+    let s = parishState('pair');
+    const [a, b] = parishGroups(s);
+    if (!a || !b) return;
+    s = { ...s, groups: { ...s.groups, [a.id]: { ...a, vitality: 5, agenda: 'new' }, [b.id]: { ...b, vitality: 90, agenda: 'tired' } } };
+    const ev = testEvent({
+      id: 'pair',
+      phase: 'parochial_vicar',
+      requires: [{ type: 'group', key: 'vitality', value: 'dying' }, { type: 'group', key: 'agenda', value: 'tired' }],
+      body: '{@group_leader}',
+    });
+    expect(isEligible(ev, s)).toBe(false);
+    s = { ...s, groups: { ...s.groups, [b.id]: { ...s.groups[b.id]!, vitality: 5 } } };
+    expect(isEligible(ev, s)).toBe(true);
+    expect(fireEvent(s, ev, createRng('p')).pending.bindings['@group_leader']).toBe(b.leaderId);
   });
 
   it('events bind @group_leader to a group matching their group conditions and effects land on it', () => {

@@ -64,7 +64,7 @@ export function careerYear(state: GameState, rng: Rng): GameState {
   if (succession.newBishop) {
     next = addDigest(next, succession.lines);
     next = note(next, 'succession', succession.lines.join(' '));
-    next = { ...next, beats: [...next.beats, { kind: 'succession', week: next.clock.week, label: 'A new bishop' }] };
+    next = { ...next, flags: { ...next.flags, new_bishop_pending: true }, beats: [...next.beats, { kind: 'succession', week: next.clock.week, label: 'A new bishop' }] };
   }
 
   const traj = advanceTrajectories(next, years);

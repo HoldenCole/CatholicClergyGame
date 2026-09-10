@@ -153,7 +153,8 @@ export interface Choice {
 
 export interface GameEvent {
   id: string;
-  phase: Phase;
+  /** One phase, or several for events that belong to the whole career. */
+  phase: Phase | Phase[];
   yearGate?: number[];
   pressure: Pressure[];
   severity: Severity;

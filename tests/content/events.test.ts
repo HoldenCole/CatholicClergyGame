@@ -164,7 +164,8 @@ function checkEvent(ev: GameEvent, file: string, problems: Problem[], ids: Set<s
   if (typeof ev.id !== 'string' || !/^[a-z0-9_]+$/.test(ev.id)) problems.push(`${where}: id must be snake_case`);
   if (ids.has(ev.id)) problems.push(`${where}: duplicate id`);
   ids.add(ev.id);
-  if (!PHASES.includes(ev.phase)) problems.push(`${where}: bad phase`);
+  const phases = Array.isArray(ev.phase) ? ev.phase : [ev.phase];
+  if (phases.length === 0 || phases.some((p) => !PHASES.includes(p))) problems.push(`${where}: bad phase`);
   if (!SEVERITIES.includes(ev.severity)) problems.push(`${where}: bad severity`);
   if (!EVENT_CATEGORIES.includes(ev.category)) problems.push(`${where}: bad category`);
   if (!Array.isArray(ev.pressure) || ev.pressure.length === 0 || ev.pressure.some((p) => !PRESSURES.includes(p))) {
@@ -172,7 +173,7 @@ function checkEvent(ev: GameEvent, file: string, problems: Problem[], ids: Set<s
   }
   if (typeof ev.baseWeight !== 'number' || ev.baseWeight <= 0) problems.push(`${where}: baseWeight must be > 0`);
   if (typeof ev.suppressYears !== 'number' || ev.suppressYears < 1) problems.push(`${where}: suppressYears must be >= 1`);
-  if (ev.phase === 'seminary') {
+  if (phases.includes('seminary')) {
     if (!ev.yearGate || ev.yearGate.some((y) => y < 1 || y > 7)) problems.push(`${where}: seminary events need yearGate within 1..7`);
   } else if (ev.yearGate) {
     problems.push(`${where}: yearGate is seminary-only; use years_ordained conditions`);
@@ -250,7 +251,7 @@ describe('content/events', () => {
   });
 
   it('the seminary pools are deep enough', () => {
-    const seminary = allEvents.filter((e) => e.phase === 'seminary');
+    const seminary = allEvents.filter((e) => e.phase === 'seminary' || (Array.isArray(e.phase) && e.phase.includes('seminary')));
     if (seminary.length === 0) return; // pools not authored yet
     for (let year = 1; year <= 7; year++) {
       const pool = seminary.filter((e) => e.yearGate?.includes(year));

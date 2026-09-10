@@ -22,6 +22,10 @@ describe('a whole career with real content', () => {
     // Something structural happened in thirty years.
     const kinds = new Set(end.career.map((e) => e.kind));
     expect(kinds.has('promotion') || kinds.has('passed_over')).toBe(true);
+    // Every succession got its scene.
+    const successions = end.career.filter((e) => e.kind === 'succession').length;
+    const scenes = end.history.filter((h) => h.eventId.startsWith('career_new_bishop')).length;
+    expect(scenes).toBe(successions);
   });
 
   it('is deterministic from the same seed and choices', () => {

@@ -14,15 +14,29 @@ export function groupConditions(event: GameEvent): Extract<Condition, { type: 'g
 
 export const WEEKS_PER_YEAR = 52;
 
+export function eventInPhase(event: GameEvent, phase: GameState['phase']): boolean {
+  return Array.isArray(event.phase) ? event.phase.includes(phase) : event.phase === phase;
+}
+
 /** Whether an event may fire now. Suppression, once, and pending are all checked here. */
 export function isEligible(event: GameEvent, state: GameState): boolean {
-  if (event.phase !== state.phase) return false;
+  if (!eventInPhase(event, state.phase)) return false;
   if (event.yearGate && state.seminary && !event.yearGate.includes(state.seminary.year)) return false;
   if (event.once && state.firedOnce.includes(event.id)) return false;
   const until = state.suppressedUntil[event.id];
   if (until !== undefined && state.clock.week < until) return false;
   if (state.pending.some((p) => p.eventId === event.id)) return false;
-  if (!evaluateAll(event.requires, state)) return false;
+  // Group conditions must all hold for one group, the one @group_leader will bind to.
+  const groupConds = groupConditions(event);
+  if (groupConds.length) {
+    const pid = state.assignment?.parishId;
+    const match = Object.values(state.groups).some(
+      (g) => g.parishId === pid && state.npcs[g.leaderId]?.status === 'active' && groupConds.every((c) => groupMatches(g, c.key, c.value)),
+    );
+    if (!match) return false;
+  }
+  const rest = (event.requires ?? []).filter((c) => c.type !== 'group');
+  if (!evaluateAll(rest, state)) return false;
   // Every selector the event needs must resolve, or the text would have holes.
   for (const sel of eventSelectors(event)) {
     if (sel === '@random_classmate') continue;
