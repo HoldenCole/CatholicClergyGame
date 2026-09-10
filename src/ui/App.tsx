@@ -15,6 +15,7 @@ import EvaluationPanel from './seminary/EvaluationPanel';
 import OrdinationPanel from './seminary/OrdinationPanel';
 import FormationPanel from './seminary/FormationPanel';
 import OffersPanel from './seminary/OffersPanel';
+import AssignmentPanel from './seminary/AssignmentPanel';
 
 export default function App() {
   const game = useGameStore((s) => s.game);
@@ -32,6 +33,7 @@ export default function App() {
     game.mode.kind === 'summer' ? <SummerPanel /> :
     game.mode.kind === 'evaluation' ? <EvaluationPanel /> :
     game.mode.kind === 'ordination' ? <OrdinationPanel /> :
+    game.mode.kind === 'assignment' ? <AssignmentPanel /> :
     null;
 
   return (

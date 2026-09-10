@@ -88,8 +88,9 @@ const SPECS: FormatorSpec[] = [
  * The seminary faculty and the diocese's nearest officials. The bishop made
  * here is a placeholder that Phase 2's diocese generator replaces.
  */
-export function generateFormators(rng: Rng, entryYear: number): Npc[] {
-  return SPECS.map((spec) => {
+export function generateFormators(rng: Rng, entryYear: number, options: { includeBishop?: boolean } = {}): Npc[] {
+  const specs = options.includeBishop === false ? SPECS.filter((s) => s.id !== 'bishop') : SPECS;
+  return specs.map((spec) => {
     const age = rng.int(spec.ageRange[0], spec.ageRange[1]);
     const birthYear = entryYear - age;
     const heritage = rollHeritage(rng, CLERGY_HERITAGE);

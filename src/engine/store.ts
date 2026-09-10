@@ -17,6 +17,9 @@ import { eventById, eventsForPhase } from '@/content';
 import { offerById, offersForPhase } from '@/content/offers';
 import { acceptOffer as doAccept, declineOffer as doDecline } from './offers';
 import { generateRun } from '@/generation';
+import { generateCandidates, installWorld } from '@/generation/world';
+import { fromDayNumber } from './calendar';
+import { acceptAssignment as doAcceptAssignment } from './seminary';
 import {
   acknowledgeEvaluation as ackEvaluation,
   chooseEmphasis as pickEmphasis,
@@ -58,8 +61,11 @@ export interface GameStore {
   importSave(json: string): void;
   clearError(): void;
 
+  /** Pick one of the rolled dioceses, or 'surprise' for a blind roll with a small bonus. DESIGN §3.1a */
+  chooseDiocese(presetId: string | 'surprise'): void;
   /** Character creation is done; generate the run and enter seminary. */
   startGame(answers: CreationAnswers): void;
+  acceptAssignment(): void;
   chooseEmphasis(emphasis: Record<Pillar, number>): void;
   chooseSummer(id: SummerAssignment): void;
   /** Resolve the event at the head of the pending queue. */
@@ -127,7 +133,25 @@ export const useGameStore = create<GameStore>()((set, get) => ({
   newGame(options) {
     const built = buildNewGame(options);
     rng = built.rng;
-    set({ game: built.state, previous: null, prose: {}, lastStop: null, running: false, error: null });
+    const year = fromDayNumber(built.state.clock.startDay).year;
+    const candidates = generateCandidates(rng.derive('world'), year);
+    set({ game: { ...built.state, candidates }, previous: null, prose: {}, lastStop: null, running: false, error: null, lastOfferOutcome: null });
+  },
+
+  chooseDiocese(presetId) {
+    update(set, get, (game, r) => {
+      const candidates = game.candidates ?? [];
+      if (candidates.length === 0) throw new Error('no dioceses rolled');
+      const year = fromDayNumber(game.clock.startDay).year;
+      if (presetId === 'surprise') {
+        const pick = r.derive('surprise').pick(candidates);
+        const installed = installWorld(game, pick, year);
+        return { ...installed, flags: { ...installed.flags, surprise_me: true } };
+      }
+      const chosen = candidates.find((c) => c.presetId === presetId);
+      if (!chosen) throw new Error(`unknown diocese ${presetId}`);
+      return installWorld(game, chosen, year);
+    });
   },
 
   setSpeed(speed) {
@@ -238,7 +262,10 @@ export const useGameStore = create<GameStore>()((set, get) => ({
     set({ running: false });
   },
   ordain() {
-    update(set, get, (game) => doOrdain(game));
+    update(set, get, (game, r) => doOrdain(game, r));
+  },
+  acceptAssignment() {
+    update(set, get, (game) => doAcceptAssignment(game));
   },
   acceptOffer(offerId) {
     const def = offerById(offerId);

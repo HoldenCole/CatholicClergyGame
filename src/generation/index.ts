@@ -6,6 +6,7 @@ import { SEMINARY_NAMES, startSeminary } from '@/engine/seminary';
 import { generateClass } from './classmates';
 import { generateFamily } from './family';
 import { generateFormators } from './formators';
+import { presetById } from '@/content/dioceses';
 
 /**
  * Turn creation answers into a run: the character, the family, the seminary
@@ -20,7 +21,7 @@ export function generateRun(state: GameState, answers: CreationAnswers, rng: Rng
   const originOpt = creationContent.origins.find((o) => o.id === answers.origin)!;
   const npcs: Npc[] = [
     ...generateFamily(rng.derive('family'), character, familyOpt, originOpt),
-    ...generateFormators(rng.derive('formators'), answers.entryYear),
+    ...generateFormators(rng.derive('formators'), answers.entryYear, { includeBishop: !state.world }),
     ...generateClass(rng.derive('classmates'), answers.entryYear),
   ];
   const map = Object.fromEntries(npcs.map((n) => [n.id, n]));
@@ -29,6 +30,7 @@ export function generateRun(state: GameState, answers: CreationAnswers, rng: Rng
     const npc = npcs.find((n) => n.tags.includes(h.id));
     return npc ? { ...h, npcId: npc.id } : h;
   });
-  const seminaryName = rng.derive('seminary').pick(SEMINARY_NAMES);
+  const preset = state.world ? presetById(state.world.diocese.presetId) : undefined;
+  const seminaryName = preset?.seminaryName ?? rng.derive('seminary').pick(SEMINARY_NAMES);
   return startSeminary({ ...created, character: { ...character, hooks }, npcs: map }, classmateIds, seminaryName);
 }

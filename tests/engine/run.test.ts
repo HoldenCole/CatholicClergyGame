@@ -86,6 +86,7 @@ describe('engine/store with real content', () => {
     setWeekDraw(noDraw);
     setWeekHook(null);
     useGameStore.getState().newGame({ seed: 'store-run', start: { year: 2010, month: 8, day: 20 } });
+    useGameStore.getState().chooseDiocese('chicago');
   });
 
   it('has authored seminary content', () => {
@@ -130,18 +131,27 @@ describe('engine/store with real content', () => {
     // Every event that fired resolved every selector it used.
     for (const h of end.history) expect(eventById(h.eventId), h.eventId).toBeTruthy();
     useGameStore.getState().ordain();
-    expect(useGameStore.getState().game!.phase).toBe('parochial_vicar');
-    expect(useGameStore.getState().game!.character!.archetype).toBeTruthy();
+    const after = useGameStore.getState().game!;
+    expect(after.phase).toBe('parochial_vicar');
+    expect(after.character!.archetype).toBeTruthy();
+    expect(after.mode.kind).toBe('assignment');
+    expect(after.assignment?.role).toBe('parochial_vicar');
+    expect(after.assignment?.letter).toMatch(/Parochial Vicar of/);
+    expect(after.world!.parishes.some((p) => p.id === after.assignment!.parishId)).toBe(true);
+    useGameStore.getState().acceptAssignment();
+    expect(useGameStore.getState().game!.mode.kind).toBe('clock');
   });
 
   it('two runs from the same seed and choices are identical; different seeds differ by year four', () => {
     useGameStore.getState().startGame(answers);
     const a = autoplay();
     useGameStore.getState().newGame({ seed: 'store-run', start: { year: 2010, month: 8, day: 20 } });
+    useGameStore.getState().chooseDiocese('chicago');
     useGameStore.getState().startGame(answers);
     const b = autoplay();
     expect(b).toEqual(a);
     useGameStore.getState().newGame({ seed: 'other-seed', start: { year: 2010, month: 8, day: 20 } });
+    useGameStore.getState().chooseDiocese('chicago');
     useGameStore.getState().startGame(answers);
     const c = autoplay();
     const firedA = a.history.filter((h) => h.week < 4 * 52).map((h) => h.eventId);

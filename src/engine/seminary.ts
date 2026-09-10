@@ -7,6 +7,9 @@ import { gameYearOf, yearStartDay } from './time';
 import { evaluate, formationWeek, nameArchetype, setEmphasis, zeroPillars } from '@/systems/formation';
 import { summerOptions } from '@/content/seminary';
 import { renderText } from './text';
+import { assignFirstParish } from '@/systems/assignment';
+import { driftYear } from '@/systems/drift';
+import { fromDayNumber } from './calendar';
 
 /** Absolute week offsets within a formation year. Invented. */
 export const YEAR_SHAPE = {
@@ -100,12 +103,15 @@ export function chooseEmphasis(state: GameState, emphasis: Record<Pillar, number
     { kind: 'assignment' as const, week: start + YEAR_SHAPE.summerWeek, label: `Summer assignment, year ${sem.year}` },
     { kind: 'evaluation' as const, week: start + YEAR_SHAPE.evaluationWeek, label: `Annual evaluation, year ${sem.year}` },
   ].sort((a, b) => a.week - b.week);
-  return {
-    ...withEmphasis,
-    beats,
-    mode: { kind: 'clock' },
-    seminary: { ...sem, playedWeeks, yearStartWeek: start, pillarScores: zeroPillars(), summerAssignment: null },
-  };
+  return driftAtYearStart(
+    {
+      ...withEmphasis,
+      beats,
+      mode: { kind: 'clock' },
+      seminary: { ...sem, playedWeeks, yearStartWeek: start, pillarScores: zeroPillars(), summerAssignment: null },
+    },
+    rng,
+  );
 }
 
 /** Whether this week is a played week, and which structural beat (if any) it must carry. */
@@ -262,17 +268,51 @@ export function leaveSeminary(state: GameState, reason?: string): GameState {
   };
 }
 
-/** DESIGN.md §6.6: the exit payload. Names the archetype and moves to the next phase. */
-export function ordain(state: GameState): GameState {
+/** DESIGN.md §6.6: the exit payload. Names the archetype, then the bishop assigns. */
+export function ordain(state: GameState, rng: Rng): GameState {
   if (!state.character || !state.seminary) return state;
   const archetype = nameArchetype(state);
-  return {
+  const ordained: GameState = {
     ...state,
     character: { ...state.character, archetype },
     phase: 'parochial_vicar',
-    mode: { kind: 'clock' },
     flags: { ...state.flags, ordained: true, ordination_week: state.clock.week },
   };
+  if (!ordained.world) return { ...ordained, mode: { kind: 'clock' } };
+  const assignment = assignFirstParish(ordained, rng.derive('assignment'));
+  return { ...ordained, assignment, mode: { kind: 'assignment', assignment } };
+}
+
+/** The player has read the letter of assignment. */
+export function acceptAssignment(state: GameState): GameState {
+  if (state.mode.kind !== 'assignment') return state;
+  return { ...state, mode: { kind: 'clock' } };
+}
+
+/** Calendar year of the current week. */
+export function calendarYear(state: GameState): number {
+  return fromDayNumber(state.clock.startDay + state.clock.week * 7).year;
+}
+
+/**
+ * Between the preview and ordination the diocese drifts (DESIGN.md §3.1a).
+ * Called once per formation year after the emphasis is chosen.
+ */
+export function driftAtYearStart(state: GameState, rng: Rng): GameState {
+  const sem = state.seminary;
+  if (!sem || !state.world || sem.year < 2) return state;
+  const year = calendarYear(state);
+  if (state.flags[`drifted:${year}`]) return state;
+  const { state: drifted, newBishop } = driftYear(state, rng.derive(`drift:${year}`), year);
+  let next: GameState = { ...drifted, flags: { ...drifted.flags, [`drifted:${year}`]: true } };
+  if (newBishop) {
+    next = {
+      ...next,
+      flags: { ...next.flags, new_bishop_during_seminary: true, [`new_bishop:${year}`]: true },
+      digest: [...next.digest, { week: next.clock.week, lines: [`Rome has named ${newBishop.title} ${newBishop.name.first} ${newBishop.name.last} to the see of ${next.world!.diocese.visible.see}.`] }],
+    };
+  }
+  return next;
 }
 
 function ordinal(n: number): string {

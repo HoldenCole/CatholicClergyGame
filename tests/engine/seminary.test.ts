@@ -207,7 +207,7 @@ describe('engine/seminary', () => {
     expect(s.seminary!.diaconate).toBe(true);
     expect(s.flags.diaconate_done).toBe(true);
     expect(s.seminary!.evaluations).toHaveLength(7);
-    const o = ordain(s);
+    const o = ordain(s, rng);
     expect(o.phase).toBe('parochial_vicar');
     expect(o.character!.archetype).toBeTruthy();
     expect(o.flags.ordained).toBe(true);

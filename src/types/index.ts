@@ -9,3 +9,6 @@ export * from './seminary';
 export * from './mode';
 export * from './creation';
 export * from './offers';
+export * from './world';
+export * from './preset';
+export * from './parish';

@@ -43,6 +43,9 @@ export function newGame(options: NewGameOptions): { state: GameState; rng: Rng }
     commitments: [],
     offerHistory: [],
     clusters: {},
+    candidates: null,
+    world: null,
+    assignment: null,
   };
   return { state, rng };
 }

@@ -4,12 +4,16 @@ import { useGameStore } from '@/engine/store';
 import { availableCareers, entryAge, maxYearsWorked, validateAnswers } from '@/systems/creation';
 import type { CreationAnswers, CreationOption } from '@/types';
 import OptionList from './OptionList';
+import DioceseCards from './DioceseCards';
+import { revealFieldForTie, revealFor } from '@/generation/world';
+import { createRng } from '@/engine/rng';
 
-type Step = 'name' | 'origin' | 'tie' | 'path' | 'field' | 'career' | 'motive' | 'family' | 'past' | 'summary';
-const ORDER: Step[] = ['name', 'origin', 'tie', 'path', 'field', 'career', 'motive', 'family', 'past', 'summary'];
+type Step = 'name' | 'diocese' | 'origin' | 'tie' | 'path' | 'field' | 'career' | 'motive' | 'family' | 'past' | 'summary';
+const ORDER: Step[] = ['name', 'diocese', 'origin', 'tie', 'path', 'field', 'career', 'motive', 'family', 'past', 'summary'];
 
 const QUESTIONS: Record<Step, { title: string; prompt: string }> = {
   name: { title: 'Your name', prompt: 'The vocation director writes it at the top of a file that will follow you for forty years.' },
+  diocese: { title: 'Choosing a diocese', prompt: 'You visited. You talked to the vocations director. You read what people say. Incardination is for life, and seven years will pass before you are ordained into it.' },
   origin: { title: 'Where you are from', prompt: 'Not where you live now. Where you learned what a parish was.' },
   tie: { title: 'Your tie to the diocese', prompt: 'How much of a native you are. It matters for the whole career.' },
   path: { title: 'Your road to seminary', prompt: 'Seminary is seven years whatever you did before it. What you did before it is the question.' },
@@ -23,7 +27,9 @@ const QUESTIONS: Record<Step, { title: string; prompt: string }> = {
 
 export default function CreationScreen() {
   const startGame = useGameStore((s) => s.startGame);
+  const chooseDiocese = useGameStore((s) => s.chooseDiocese);
   const game = useGameStore((s) => s.game);
+  const [dioceseChoice, setDioceseChoice] = useState<string | null>(null);
   const [step, setStep] = useState<Step>('name');
   const [answers, setAnswers] = useState<CreationAnswers>({
     firstName: '',
@@ -67,6 +73,13 @@ export default function CreationScreen() {
 
   const q = QUESTIONS[step];
   const errors = validateAnswers(full, content);
+  const candidates = game?.candidates ?? [];
+  const worldChosen = !!game?.world;
+  const revealField = revealFieldForTie(full.tie);
+  const reveal =
+    step === 'tie' && revealField && game?.world
+      ? revealFor({ diocese: game.world.diocese, npcs: Object.values(game.npcs) }, revealField, createRng(`${game.seed}:reveal`))
+      : null;
 
   return (
     <div className="min-h-screen bg-stone-950 text-stone-100">
@@ -87,6 +100,21 @@ export default function CreationScreen() {
             <Input label="First name" value={answers.firstName} onChange={(v) => setAnswers((a) => ({ ...a, firstName: v }))} />
             <Input label="Surname" value={answers.lastName} onChange={(v) => setAnswers((a) => ({ ...a, lastName: v }))} />
           </div>
+        )}
+        {step === 'diocese' && !worldChosen && (
+          <DioceseCards
+            dioceses={candidates.map((c) => c.diocese.visible)}
+            selected={dioceseChoice}
+            onSelect={setDioceseChoice}
+            onSurprise={() => {
+              chooseDiocese('surprise');
+              setDioceseChoice(null);
+              next();
+            }}
+          />
+        )}
+        {step === 'diocese' && worldChosen && (
+          <p className="text-stone-300">You are bound for {game?.world?.diocese.visible.name}. The vocation director has your file.</p>
         )}
         {step === 'origin' && (
           <OptionList options={content.origins} selected={full.origin} onSelect={(o) => choose('origin', o, { origin: o.id })} />
@@ -125,6 +153,12 @@ export default function CreationScreen() {
         {step !== 'summary' && seen[step] && (
           <p className="rounded border border-amber-900/50 bg-amber-950/30 p-4 text-stone-200 leading-relaxed">{seen[step]}</p>
         )}
+        {reveal && (
+          <p className="rounded border border-stone-700 bg-stone-900 p-4 text-sm text-stone-300 leading-relaxed">
+            <span className="text-xs uppercase tracking-wider text-stone-500">What a son of the diocese knows · </span>
+            {reveal}
+          </p>
+        )}
 
         <div className="flex items-center gap-3 pt-2">
           <button className="rounded border border-stone-700 px-4 py-2 text-sm text-stone-300 hover:bg-stone-800 disabled:opacity-40" onClick={back} disabled={idx === 0}>
@@ -133,8 +167,14 @@ export default function CreationScreen() {
           {step !== 'summary' ? (
             <button
               className="rounded bg-amber-700 px-4 py-2 text-sm font-medium text-stone-50 hover:bg-amber-600 disabled:opacity-40"
-              onClick={next}
-              disabled={step === 'name' && (!answers.firstName.trim() || !answers.lastName.trim())}
+              onClick={() => {
+                if (step === 'diocese' && !worldChosen && dioceseChoice) chooseDiocese(dioceseChoice);
+                next();
+              }}
+              disabled={
+                (step === 'name' && (!answers.firstName.trim() || !answers.lastName.trim())) ||
+                (step === 'diocese' && !worldChosen && !dioceseChoice)
+              }
             >
               Continue
             </button>
@@ -142,7 +182,7 @@ export default function CreationScreen() {
             <button
               className="rounded bg-amber-700 px-4 py-2 text-sm font-medium text-stone-50 hover:bg-amber-600 disabled:opacity-40"
               onClick={() => startGame(full)}
-              disabled={errors.length > 0}
+              disabled={errors.length > 0 || !worldChosen}
             >
               Enter the seminary
             </button>

@@ -1,4 +1,5 @@
 import type { EvaluationRecord } from './seminary';
+import type { Assignment } from './world';
 
 export type Ending =
   | 'dismissed'
@@ -18,4 +19,5 @@ export type Mode =
   | { kind: 'summer'; year: number }
   | { kind: 'evaluation'; record: EvaluationRecord }
   | { kind: 'ordination' }
+  | { kind: 'assignment'; assignment: Assignment }
   | { kind: 'ended'; ending: Ending; summary: string };

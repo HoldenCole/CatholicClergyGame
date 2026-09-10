@@ -4,6 +4,15 @@ import type { InterruptConfig } from './interrupts';
 import type { Mode } from './mode';
 import type { Npc } from './npc';
 import type { ActiveOffer, Commitment, OfferRecord } from './offers';
+import type { Assignment, Diocese, Parish, World } from './world';
+
+/** A rolled diocese the player may choose, held only during creation. */
+export interface DioceseCandidate {
+  presetId: string;
+  diocese: Diocese;
+  parishes: Parish[];
+  npcs: Npc[];
+}
 import type { SeminaryState } from './seminary';
 import type { Phase } from './stats';
 import type { Beat, Clock, Speed } from './time';
@@ -55,6 +64,10 @@ export interface GameState {
   offerHistory: OfferRecord[];
   /** Cluster -> count of accepted offers, for clustering. */
   clusters: Record<string, number>;
+  /** The five rolled dioceses, until one is chosen. */
+  candidates: DioceseCandidate[] | null;
+  world: World | null;
+  assignment: Assignment | null;
 }
 
 export interface DigestWeek {
