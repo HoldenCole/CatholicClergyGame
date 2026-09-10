@@ -263,3 +263,27 @@ Group types: young_adult, youth, pro_life, svdp (St. Vincent de Paul),
 knights (Knights of Columbus), womens_guild, bible_study, adoration, choir,
 rcia, marriage_prep, school_parents, ethnic_community, tlm_society,
 social_justice, mens_group, grief_support, recovery.
+
+## Furnishings (`parish/decor.json`)
+
+Every place a man can change (the church, his office, the rectory, his
+seminary room, a chancery office) has slots, and each slot holds one
+option. The renderer reads `art` to pick a layer; drop a PNG at
+`src/art/<scene>/<layer>/<variant>.png` to replace the drawn one.
+
+```json
+{ "id": "rail_wood", "place": "church", "slot": "altar_rail", "label": "A wooden altar rail",
+  "blurb": "...", "cost": 9000, "alignment": -45, "policy": "altar_rail", "art": "wood",
+  "requires": [ ... ], "effects": [ ... ] }
+```
+
+- `cost` is parish cash for the church, nothing for personal rooms.
+- `alignment` sizes the parish's reaction (−100 traditional .. +100
+  progressive); `null` provokes none.
+- `policy` names what the bishop governs: `ad_orientem`, `latin_mass`,
+  `altar_rail`, `tabernacle`, `renovation`. Each bishop rolls a stance
+  per topic (free, by permission, forbidden). By permission means a
+  letter to the chancery and an answer some weeks later; the grant is
+  recorded as the flag `permission:<topic>`, so events can read it.
+- Church slots: sanctuary, altar_rail, orientation, confessionals, choir,
+  statues, tabernacle, mass_form. Personal slots: wall, desk, corner.

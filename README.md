@@ -24,7 +24,7 @@ src/systems     stats, reputation, formation, creation, week resolution, groups,
 src/generation  names, NPCs, classmates, formators, family, dioceses, bishops, chanceries, parishes
 src/content     events, offers, creation questions, presets, name pools, obligations, actions (all JSON)
 src/llm         the optional prose layer (off by default)
-src/ui          screens and panels; src/ui/scenes is the environment with clickable hotspots
+src/ui          the table: the room (src/ui/scenes, drawn in src/ui/scenes/art) and the desk of paper sheets
 tests           systems, engine, generation, content validators
 ```
 
