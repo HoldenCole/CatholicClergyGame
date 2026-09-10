@@ -21,10 +21,14 @@ import RoutinePanel from './parish/RoutinePanel';
 import ParishPanel from './parish/ParishPanel';
 import GroupsPanel from './parish/GroupsPanel';
 import ProjectsPanel from './parish/ProjectsPanel';
+import SceneView from './scenes/SceneView';
+import { useRef } from 'react';
 
 export default function App() {
   const game = useGameStore((s) => s.game);
   const error = useGameStore((s) => s.error);
+  const panels = useRef<Record<string, HTMLDivElement | null>>({});
+  const jump = (panel: string) => panels.current[panel]?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   useClockRunner();
 
   if (!game) return <NewGameScreen />;
@@ -50,17 +54,18 @@ export default function App() {
       <main className="mx-auto max-w-6xl grid grid-cols-12 gap-6 p-6">
         <section className="col-span-8 flex flex-col gap-6">
           {decision}
-          <OffersPanel />
+          {!decision && game.parish && <SceneView onPanel={jump} />}
+          <div ref={(el) => { panels.current.offers = el; }}><OffersPanel /></div>
           <ClockPanel />
           {!decision && <SpeedControls />}
-          {!decision && game.parish && <RoutinePanel />}
-          <DigestPanel />
+          {!decision && game.parish && <div ref={(el) => { panels.current.routine = el; }}><RoutinePanel /></div>}
+          <div ref={(el) => { panels.current.digest = el; }}><DigestPanel /></div>
         </section>
         <aside className="col-span-4 flex flex-col gap-6">
           {error && <p className="rounded border border-red-900 bg-red-950/30 p-3 text-sm text-red-300">{error}</p>}
-          {game.parish ? <ParishPanel /> : game.seminary && <FormationPanel />}
-          {game.parish && <GroupsPanel />}
-          {game.parish && <ProjectsPanel />}
+          <div ref={(el) => { panels.current.parish = el; }}>{game.parish ? <ParishPanel /> : game.seminary && <FormationPanel />}</div>
+          {game.parish && <div ref={(el) => { panels.current.groups = el; }}><GroupsPanel /></div>}
+          {game.parish && <div ref={(el) => { panels.current.projects = el; }}><ProjectsPanel /></div>}
           <InterruptSettings />
           <SavePanel />
           <SettingsPanel />

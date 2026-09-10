@@ -214,6 +214,7 @@ Gate on the career instead:
 { "type": "parish", "key": "generational", "value": "aging" }          // aging | mixed | young
 { "type": "parish", "key": "wealth", "value": 1 }                      // 1..5
 { "type": "season", "value": "holy_week" }
+{ "type": "bishop_alignment", "op": "<=", "value": -20 }              // the current bishop's own alignment
 ```
 
 Additional selectors in parish life:

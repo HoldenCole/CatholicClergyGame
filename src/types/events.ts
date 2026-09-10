@@ -76,6 +76,8 @@ export type Condition =
   | { type: 'role'; value: 'parochial_vicar' | 'administrator' | 'pastor' }
   /** Extension: years since ordination. */
   | { type: 'years_ordained'; op: Op; value: number }
+  /** Extension: the current bishop's alignment, −100 traditional .. +100 progressive. */
+  | { type: 'bishop_alignment'; op: Op; value: number }
   /**
    * Extension: some group of the current parish matches. When an event
    * carries group conditions, @group_leader binds to a matching group.

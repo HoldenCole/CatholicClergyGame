@@ -82,6 +82,7 @@ function checkCondition(c: Condition, where: string, problems: Problem[]): void 
       if (typeof c.key !== 'string' || typeof c.value !== 'boolean') problems.push(`${where}: bad flag condition`);
       break;
     case 'alignment':
+    case 'bishop_alignment':
     case 'outspokenness':
     case 'year':
       if (!hasOp(c.op) || typeof c.value !== 'number') problems.push(`${where}: bad ${c.type} condition`);

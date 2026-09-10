@@ -67,6 +67,8 @@ export function evaluateCondition(
       if (typeof at !== 'number') return false;
       return compare(cond.op, (state.clock.week - at) / 52, cond.value);
     }
+    case 'bishop_alignment':
+      return !!state.world && compare(cond.op, state.world.diocese.hidden.bishop.alignment, cond.value);
     case 'group': {
       // Bound group first; otherwise any group of the current parish.
       const boundLeader = bindings['@group_leader'];
