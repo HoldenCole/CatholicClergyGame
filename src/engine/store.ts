@@ -79,9 +79,11 @@ export const useGameStore = create<GameStore>()((set, get) => ({
     const maxWeeks = game.speed === 'MANUAL' ? 1 : weeks;
     const result = runClock(game, rng, { maxWeeks, draw });
     const autoResolved = game.speed === 'AUTO' || game.speed === 'SKIP';
+    // A one-week timer tick that simply kept going has no stop worth reporting.
+    const keptGoing = result.stop.kind === 'cap' && maxWeeks === 1;
     set({
       game: result.state,
-      lastStop: result.stop,
+      lastStop: keptGoing ? null : result.stop,
       previous: autoResolved ? result.beforeLast : null,
       running: result.stop.kind === 'cap' ? get().running : false,
     });

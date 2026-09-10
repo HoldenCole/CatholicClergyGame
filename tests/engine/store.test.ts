@@ -108,3 +108,19 @@ describe('engine/store', () => {
     expect(useGameStore.getState().running).toBe(false);
   });
 });
+
+describe('engine/store timer ticks', () => {
+  it('a one-week AUTO tick that keeps going reports no stop', () => {
+    setWeekDraw(noDraw);
+    useGameStore.getState().newGame({ seed: 'timer', start });
+    const s = useGameStore.getState();
+    s.setSpeed('AUTO');
+    s.setRunning(true);
+    expect(s.tick(1)?.kind).toBe('cap');
+    expect(useGameStore.getState().lastStop).toBeNull();
+    expect(useGameStore.getState().running).toBe(true);
+    expect(useGameStore.getState().tick(52)?.kind).toBe('beat');
+    expect(useGameStore.getState().lastStop?.kind).toBe('beat');
+    expect(useGameStore.getState().running).toBe(false);
+  });
+});
