@@ -8,14 +8,14 @@ import DioceseCards from './DioceseCards';
 import { revealFieldForTie, revealFor } from '@/generation/world';
 import { createRng } from '@/engine/rng';
 import Portrait from '../portraits/Portrait';
-import { facesFor, parseSpec, serializeSpec } from '../portraits/spec';
+import { adjustSpec, facesFor, parseSpec, serializeSpec, SPEC_KEYS, SPEC_LABELS } from '../portraits/spec';
 
 type Step = 'name' | 'face' | 'diocese' | 'origin' | 'tie' | 'path' | 'field' | 'career' | 'motive' | 'family' | 'past' | 'summary';
 const ORDER: Step[] = ['name', 'face', 'diocese', 'origin', 'tie', 'path', 'field', 'career', 'motive', 'family', 'past', 'summary'];
 
 const QUESTIONS: Record<Step, { title: string; prompt: string }> = {
   name: { title: 'Your name', prompt: 'The vocation director writes it at the top of a file that will follow you for forty years.' },
-  face: { title: 'Your face', prompt: 'The photograph clipped to the file. It will be taken again at ordination, and again when the hair goes.' },
+  face: { title: 'Your face', prompt: 'The photograph clipped to the file. Start from one of these, then change what you like. It will be taken again at ordination, and again when the hair goes.' },
   diocese: { title: 'Choosing a diocese', prompt: 'You visited. You talked to the vocations director. You read what people say. Incardination is for life, and seven years will pass before you are ordained into it.' },
   origin: { title: 'Where you are from', prompt: 'Not where you live now. Where you learned what a parish was.' },
   tie: { title: 'Your tie to the diocese', prompt: 'How much of a native you are. It matters for the whole career.' },
@@ -106,23 +106,7 @@ export default function CreationScreen() {
           </div>
         )}
         {step === 'face' && game && (
-          <div>
-            <ul className="grid grid-cols-4 gap-3 max-w-2xl">
-              {facesFor(game.seed, facePage).map((spec) => {
-                const id = serializeSpec(spec);
-                const chosen = answers.portrait === id;
-                return (
-                  <li key={id}>
-                    <button onClick={() => setAnswers((a) => ({ ...a, portrait: id }))} className={'choice flex flex-col items-center border rule p-2 ' + (chosen ? 'choice-chosen' : '')}>
-                      <Portrait portrait={{ spec, dress: 'seminarian', age: entryAge(full, content), female: false }} size={88} />
-                    </button>
-                  </li>
-                );
-              })}
-            </ul>
-            <button className="pbtn-link mt-3" onClick={() => setFacePage((p) => p + 1)}>Other faces</button>
-            {parseSpec(answers.portrait) && <span className="ink-faint ml-4 text-xs">A face is chosen.</span>}
-          </div>
+          <FaceStep seed={game.seed} value={answers.portrait} age={entryAge(full, content)} page={facePage} onPage={() => setFacePage((p) => p + 1)} onChange={(v) => setAnswers((a) => ({ ...a, portrait: v }))} />
         )}
         {step === 'diocese' && !worldChosen && (
           <DioceseCards
@@ -266,6 +250,50 @@ function Summary({ answers, seen }: { answers: CreationAnswers; seen: Partial<Re
       {paragraphs.map((p, i) => (
         <p key={i}>{p}</p>
       ))}
+    </div>
+  );
+}
+
+function FaceStep({ seed, value, age, page, onPage, onChange }: { seed: string; value: string; age: number; page: number; onPage: () => void; onChange: (v: string) => void }) {
+  const chosen = parseSpec(value);
+  return (
+    <div className="flex gap-6">
+      <div>
+        <div className="heading mb-2">Start from one</div>
+        <ul className="grid grid-cols-4 gap-2">
+          {facesFor(seed, page).map((spec) => {
+            const id = serializeSpec(spec);
+            return (
+              <li key={id}>
+                <button onClick={() => onChange(id)} className={'choice flex flex-col items-center border rule p-1.5 ' + (value === id ? 'choice-chosen' : '')}>
+                  <Portrait portrait={{ spec, dress: 'seminarian', age, female: false }} size={64} />
+                </button>
+              </li>
+            );
+          })}
+        </ul>
+        <button className="pbtn-link mt-3" onClick={onPage}>Other faces</button>
+      </div>
+      <div className="flex-1">
+        <div className="heading mb-2">Then change what you like</div>
+        {chosen ? (
+          <div className="flex gap-5">
+            <Portrait portrait={{ spec: chosen, dress: 'seminarian', age, female: false }} size={150} />
+            <ul className="flex flex-1 flex-col gap-1 text-sm">
+              {SPEC_KEYS.map((k) => (
+                <li key={k} className="flex items-center gap-2">
+                  <span className="ink-muted w-24">{SPEC_LABELS[k].label}</span>
+                  <button className="pbtn px-2 py-0 text-xs" aria-label={`${SPEC_LABELS[k].label} back`} onClick={() => onChange(serializeSpec(adjustSpec(chosen, k, -1)))}>◀</button>
+                  <span className="w-28 text-center">{SPEC_LABELS[k].values[chosen[k]]}</span>
+                  <button className="pbtn px-2 py-0 text-xs" aria-label={`${SPEC_LABELS[k].label} forward`} onClick={() => onChange(serializeSpec(adjustSpec(chosen, k, 1)))}>▶</button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : (
+          <p className="ink-faint text-sm">Pick a face to begin.</p>
+        )}
+      </div>
     </div>
   );
 }

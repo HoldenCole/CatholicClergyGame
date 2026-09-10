@@ -4,27 +4,31 @@ import { namePools } from '@/content/names';
 /**
  * A face is a handful of independent attributes. NPC faces derive from a
  * hash of the person (never stored, always the same); the player's is
- * chosen at creation and kept on the character as a string.
+ * chosen and adjusted at creation and kept on the character as a string.
  */
 export interface PortraitSpec {
-  /** 0..5, light to dark. */
+  /** 0..7, light to dark. */
   skin: number;
-  /** 0 black, 1 dark brown, 2 brown, 3 blond, 4 red, 5 grey. Age overrides to grey and white. */
+  /** 0 black, 1 dark brown, 2 brown, 3 light brown, 4 blond, 5 red, 6 auburn, 7 grey. Age overrides toward grey and white. */
   hairColor: number;
-  /** 0..6 for men: short, parted, cropped, curly, waves, bald, receding. For women: bob, long, up, curly, waves, short, grey-up. */
+  /** 0..11. Men: short, parted, cropped, curly, waves, bald, receding, swept back, fringe, buzz, tight curls, long. Women: bob, long, up, curly, waves, short, bun, ponytail, braids, pixie, bangs, natural. */
   hairStyle: number;
-  /** 0 none, 1 moustache, 2 beard, 3 stubble. Men only. */
+  /** 0 none, 1 moustache, 2 full beard, 3 stubble, 4 goatee, 5 short beard. Men only. */
   facial: number;
-  /** 0 none, 1 round, 2 square. */
+  /** 0 none, 1 round, 2 square, 3 rimless, 4 thick. */
   glasses: number;
-  /** 0 oval, 1 round, 2 long, 3 square. */
+  /** 0 oval, 1 round, 2 long, 3 square, 4 heart, 5 wide. */
   face: number;
-  /** 0..2 eye color: brown, blue, green. */
+  /** 0 brown, 1 blue, 2 green, 3 hazel, 4 dark. */
   eyes: number;
-  /** 0 neutral, 1 slight smile, 2 set. */
+  /** 0 neutral, 1 slight smile, 2 set, 3 downturned. */
   mouth: number;
-  /** 0 straight, 1 arched, 2 heavy. */
+  /** 0 straight, 1 arched, 2 heavy, 3 thin. */
   brows: number;
+  /** 0 medium, 1 long, 2 broad. */
+  nose: number;
+  /** 0 none, 1 mole, 2 freckles, 3 scar. */
+  mark: number;
 }
 
 export type Dress = 'lay_m' | 'lay_f' | 'seminarian' | 'priest' | 'monsignor' | 'bishop';
@@ -36,8 +40,23 @@ export interface Portrait {
   female: boolean;
 }
 
-export const SPEC_RANGES: Record<keyof PortraitSpec, number> = { skin: 6, hairColor: 6, hairStyle: 7, facial: 4, glasses: 3, face: 4, eyes: 3, mouth: 3, brows: 3 };
-const KEYS = Object.keys(SPEC_RANGES) as (keyof PortraitSpec)[];
+export const SPEC_RANGES: Record<keyof PortraitSpec, number> = { skin: 8, hairColor: 8, hairStyle: 12, facial: 6, glasses: 5, face: 6, eyes: 5, mouth: 4, brows: 4, nose: 3, mark: 4 };
+export const SPEC_KEYS = Object.keys(SPEC_RANGES) as (keyof PortraitSpec)[];
+
+/** What each value is called, for the adjusting hand at creation. */
+export const SPEC_LABELS: Record<keyof PortraitSpec, { label: string; values: string[] }> = {
+  skin: { label: 'Complexion', values: ['fair', 'light', 'olive', 'tan', 'warm brown', 'brown', 'dark brown', 'deep'] },
+  hairColor: { label: 'Hair', values: ['black', 'dark brown', 'brown', 'light brown', 'blond', 'red', 'auburn', 'grey'] },
+  hairStyle: { label: 'Cut', values: ['short', 'parted', 'cropped', 'curly', 'waves', 'bald', 'receding', 'swept back', 'fringe', 'buzz', 'tight curls', 'long'] },
+  facial: { label: 'Beard', values: ['clean-shaven', 'moustache', 'full beard', 'stubble', 'goatee', 'short beard'] },
+  glasses: { label: 'Glasses', values: ['none', 'round', 'square', 'rimless', 'thick'] },
+  face: { label: 'Face', values: ['oval', 'round', 'long', 'square', 'heart', 'wide'] },
+  eyes: { label: 'Eyes', values: ['brown', 'blue', 'green', 'hazel', 'dark'] },
+  mouth: { label: 'Mouth', values: ['even', 'a slight smile', 'set', 'downturned'] },
+  brows: { label: 'Brows', values: ['straight', 'arched', 'heavy', 'thin'] },
+  nose: { label: 'Nose', values: ['medium', 'long', 'broad'] },
+  mark: { label: 'Mark', values: ['none', 'a mole', 'freckles', 'a scar'] },
+};
 
 /** FNV-1a, 32-bit. Deterministic and cheap; this is rendering, not game logic. */
 export function hash(s: string): number {
@@ -57,24 +76,37 @@ function roll(seed: string, n: number): number {
 /** A spec from a seed string: every attribute takes its own hash so none correlate. */
 export function specFrom(seed: string): PortraitSpec {
   const out = {} as PortraitSpec;
-  for (const k of KEYS) out[k] = roll(`${seed}/${k}`, SPEC_RANGES[k]);
-  // Glasses and beards are less common than a uniform draw would make them.
+  for (const k of SPEC_KEYS) out[k] = roll(`${seed}/${k}`, SPEC_RANGES[k]);
+  // Glasses, beards, and marks are less common than a uniform draw would make them.
   if (roll(`${seed}/wears-glasses`, 3) !== 0) out.glasses = 0;
   if (roll(`${seed}/has-beard`, 2) !== 0) out.facial = 0;
+  if (roll(`${seed}/marked`, 3) !== 0) out.mark = 0;
   return out;
 }
 
 export function serializeSpec(s: PortraitSpec): string {
-  return `v1:${KEYS.map((k) => s[k]).join('.')}`;
+  return `v2:${SPEC_KEYS.map((k) => s[k]).join('.')}`;
 }
 
+/** Reads v1 (nine attributes) and v2 (eleven); anything else is not a face. */
 export function parseSpec(text: string): PortraitSpec | null {
-  if (!text.startsWith('v1:')) return null;
-  const parts = text.slice(3).split('.').map(Number);
-  if (parts.length !== KEYS.length || parts.some((n) => !Number.isInteger(n))) return null;
+  const m = /^v([12]):(.+)$/.exec(text);
+  if (!m) return null;
+  const parts = m[2]!.split('.').map(Number);
+  const expected = m[1] === '1' ? 9 : SPEC_KEYS.length;
+  if (parts.length !== expected || parts.some((n) => !Number.isInteger(n))) return null;
   const out = {} as PortraitSpec;
-  KEYS.forEach((k, i) => { out[k] = ((parts[i]! % SPEC_RANGES[k]) + SPEC_RANGES[k]) % SPEC_RANGES[k]; });
+  SPEC_KEYS.forEach((k, i) => {
+    const n = parts[i] ?? 0;
+    out[k] = ((n % SPEC_RANGES[k]) + SPEC_RANGES[k]) % SPEC_RANGES[k];
+  });
   return out;
+}
+
+/** Step one attribute forward or back, wrapping. */
+export function adjustSpec(s: PortraitSpec, key: keyof PortraitSpec, dir: 1 | -1): PortraitSpec {
+  const n = SPEC_RANGES[key];
+  return { ...s, [key]: (s[key] + dir + n) % n };
 }
 
 /** A page of faces to choose from at creation, deterministic in the run's seed. */
