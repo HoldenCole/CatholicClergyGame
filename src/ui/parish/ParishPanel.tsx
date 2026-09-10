@@ -3,6 +3,7 @@ import { PROBLEM_LABEL } from '@/generation/parishes';
 import { OFFICE_LABEL } from '@/generation/chancery';
 import { STAT_KEYS, CONSTITUENCY_KEYS } from '@/types';
 import { useState } from 'react';
+import { arcKey } from '@/llm/skin';
 import Panel from '../Panel';
 
 function word(v: number): string {
@@ -15,8 +16,11 @@ function word(v: number): string {
 
 export default function ParishPanel() {
   const game = useGameStore((s) => s.game);
+  const prose = useGameStore((s) => s.prose);
   const [inspect, setInspect] = useState(false);
   if (!game?.parish || !game.world || !game.character) return null;
+  const portraitKey = arcKey(game);
+  const portrait = portraitKey ? prose[portraitKey] : undefined;
   const c = game.character;
   const p = game.parish;
   const parish = game.world.parishes.find((x) => x.id === p.parishId)!;
@@ -41,6 +45,7 @@ export default function ParishPanel() {
         <div className="flex justify-between"><dt className="text-stone-500">Debt</dt><dd>${fin.debt.toLocaleString()}</dd></div>
       </dl>
       <p className="mt-3 text-xs text-stone-500">{PROBLEM_LABEL[parish.problem] ?? parish.problem}</p>
+      {portrait && <p className="mt-3 text-sm text-stone-300 leading-relaxed whitespace-pre-line">{portrait}</p>}
       <div className="mt-3 text-xs uppercase tracking-wider text-stone-500">The rectory and the office</div>
       <ul className="mt-1 text-sm">
         {pastor && (

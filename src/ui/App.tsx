@@ -4,6 +4,7 @@ import ClockPanel from './ClockPanel';
 import SpeedControls from './SpeedControls';
 import InterruptSettings from './InterruptSettings';
 import SavePanel from './SavePanel';
+import SettingsPanel from './SettingsPanel';
 import DigestPanel from './DigestPanel';
 import { useClockRunner } from './useClockRunner';
 import CreationScreen from './creation/CreationScreen';
@@ -62,6 +63,7 @@ export default function App() {
           {game.parish && <ProjectsPanel />}
           <InterruptSettings />
           <SavePanel />
+          <SettingsPanel />
         </aside>
       </main>
     </div>

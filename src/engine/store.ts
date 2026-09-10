@@ -34,6 +34,9 @@ import { setDiscretionary as doSetDiscretionary, setObligation as doSetObligatio
 import { startFounding as doStartFounding, suppressGroup as doSuppress } from '@/systems/groups';
 import type { GroupType, ProjectType } from '@/types';
 import { startProject as doStartProject } from '@/systems/projects';
+import { anthropicProvider, type Provider } from '@/llm/provider';
+import { DEFAULT_LLM, loadLlmSettings, saveLlmSettings, type LlmSettings } from '@/llm/settings';
+import { skinArc, skinEvent, skinOutcome } from '@/llm/skin';
 
 /** Weeks per synchronous batch when running to the next stop. */
 export const BATCH_WEEKS: Record<Speed, number> = {
@@ -77,6 +80,12 @@ export interface GameStore {
   foundGroup(type: GroupType): void;
   suppressGroup(groupId: string, suppressed: boolean): void;
   startProject(type: ProjectType): void;
+
+  /** The skinning layer. Off by default; the game is complete without it. */
+  llm: LlmSettings;
+  setLlm(patch: Partial<LlmSettings>): void;
+  /** Called after the state changes: skins whatever is newly waiting, in the background. */
+  requestSkins(): void;
   chooseEmphasis(emphasis: Record<Pillar, number>): void;
   chooseSummer(id: SummerAssignment): void;
   /** Resolve the event at the head of the pending queue. */
@@ -95,6 +104,18 @@ export interface GameStore {
 let rng: Rng | null = null;
 let draw: WeekDraw = noDraw;
 let hookOverride: WeekHook | null = null;
+let providerOverride: Provider | null = null;
+
+/** Tests inject a fake provider. */
+export function setProvider(p: Provider | null): void {
+  providerOverride = p;
+}
+
+function providerFor(settings: LlmSettings): Provider | null {
+  if (providerOverride) return providerOverride;
+  if (!settings.enabled || !settings.apiKey) return null;
+  return anthropicProvider(settings);
+}
 
 /** Tests inject a synthetic draw here. */
 export function setWeekDraw(next: WeekDraw): void {
@@ -123,6 +144,7 @@ function update(set: (partial: Partial<GameStore>) => void, get: () => GameStore
   if (!game || !rng) return;
   try {
     set({ game: fn(game, rng), error: null });
+    get().requestSkins();
   } catch (err) {
     set({ error: err instanceof Error ? err.message : String(err) });
   }
@@ -141,6 +163,28 @@ export const useGameStore = create<GameStore>()((set, get) => ({
   running: false,
   error: null,
   lastOfferOutcome: null,
+  llm: typeof window === 'undefined' ? DEFAULT_LLM : loadLlmSettings(),
+
+  setLlm(patch) {
+    const llm = { ...get().llm, ...patch };
+    saveLlmSettings(llm);
+    set({ llm });
+  },
+
+  requestSkins() {
+    const { game, prose, llm } = get();
+    if (!game) return;
+    const provider = providerFor(llm);
+    if (!provider) return;
+    const store = (result: { key: string; prose: string } | null) => {
+      if (result) set({ prose: { ...get().prose, [result.key]: result.prose } });
+    };
+    for (const pending of game.pending) {
+      const event = eventById(pending.eventId);
+      if (event) void skinEvent(game, event, pending, prose, provider).then(store);
+    }
+    if (game.parish && game.parish.weeksServed === 0) void skinArc(game, prose, provider).then(store);
+  },
 
   newGame(options) {
     const built = buildNewGame(options);
@@ -186,6 +230,7 @@ export const useGameStore = create<GameStore>()((set, get) => ({
       previous: autoResolved ? result.beforeLast : null,
       running: result.stop.kind === 'cap' ? get().running : false,
     });
+    if (result.state.pending.length || result.stop.kind === 'mode') get().requestSkins();
     return result.stop;
   },
 
@@ -259,10 +304,19 @@ export const useGameStore = create<GameStore>()((set, get) => ({
     update(set, get, (game) => pickSummer(game, id));
   },
   resolveEvent(choiceId) {
+    const before = get().game;
+    const pending = before?.pending[0];
+    const event = pending ? eventById(pending.eventId) : undefined;
+    const provider = providerFor(get().llm);
+    if (before && pending && event && provider) {
+      void skinOutcome(before, event, pending, choiceId, get().prose, provider).then((r) => {
+        if (r) set({ prose: { ...get().prose, [r.key]: r.prose } });
+      });
+    }
     update(set, get, (game, r) => {
-      const pending = game.pending[0];
-      if (!pending) return game;
-      return resolvePending(game, pending, choiceId, r, depsFor(game));
+      const p = game.pending[0];
+      if (!p) return game;
+      return resolvePending(game, p, choiceId, r, depsFor(game));
     });
     set({ previous: null });
   },

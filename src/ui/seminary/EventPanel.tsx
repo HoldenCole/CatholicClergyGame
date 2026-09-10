@@ -2,11 +2,13 @@ import { eventById } from '@/content';
 import { visibleChoices } from '@/engine/events';
 import { useGameStore } from '@/engine/store';
 import { renderText } from '@/engine/text';
+import { eventKey } from '@/llm/skin';
 import Panel from '../Panel';
 
 export default function EventPanel() {
   const game = useGameStore((s) => s.game);
   const resolve = useGameStore((s) => s.resolveEvent);
+  const prose = useGameStore((s) => s.prose);
   const pending = game?.pending[0];
   if (!game || !pending) return null;
   const event = eventById(pending.eventId);
@@ -17,7 +19,7 @@ export default function EventPanel() {
   return (
     <Panel title={`${event.severity === 'CRITICAL' ? 'A decision' : 'This week'} · ${event.category.replace('_', ' ')}`}>
       <h2 className="text-xl">{r(event.title)}</h2>
-      <div className="mt-3 text-stone-200 leading-relaxed whitespace-pre-line max-h-[300px] overflow-y-auto pr-2">{r(event.body)}</div>
+      <div className="mt-3 text-stone-200 leading-relaxed whitespace-pre-line max-h-[300px] overflow-y-auto pr-2">{prose[eventKey(pending)] ?? r(event.body)}</div>
       <ul className="mt-4 flex flex-col gap-2">
         {choices.map(({ choice, available }) => (
           <li key={choice.id}>
