@@ -2,7 +2,7 @@ import type { CreationAnswers, GameState, Npc } from '@/types';
 import type { Rng } from '@/engine/rng';
 import { creationContent } from '@/content/creation';
 import { applyCreation } from '@/systems/creation';
-import { startSeminary } from '@/engine/seminary';
+import { SEMINARY_NAMES, startSeminary } from '@/engine/seminary';
 import { generateClass } from './classmates';
 import { generateFamily } from './family';
 import { generateFormators } from './formators';
@@ -29,5 +29,6 @@ export function generateRun(state: GameState, answers: CreationAnswers, rng: Rng
     const npc = npcs.find((n) => n.tags.includes(h.id));
     return npc ? { ...h, npcId: npc.id } : h;
   });
-  return startSeminary({ ...created, character: { ...character, hooks }, npcs: map }, classmateIds);
+  const seminaryName = rng.derive('seminary').pick(SEMINARY_NAMES);
+  return startSeminary({ ...created, character: { ...character, hooks }, npcs: map }, classmateIds, seminaryName);
 }

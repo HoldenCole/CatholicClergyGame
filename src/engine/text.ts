@@ -1,6 +1,13 @@
 import type { GameState } from '@/types';
 import { resolveSelector } from './selectors';
 
+/** Tokens every piece of text can use, derived from state. Later phases add {diocese} and {parish}. */
+export function textExtras(state: GameState): Record<string, string> {
+  const out: Record<string, string> = {};
+  if (state.seminary) out.seminary = state.seminary.name;
+  return out;
+}
+
 /**
  * Replace {tokens} in authored text.
  *   {name} {first_name} {surname}       the player
@@ -35,7 +42,7 @@ export function renderText(
       case 'surname':
         return c ? c.name.last : whole;
       default:
-        return extra[token] ?? whole;
+        return extra[token] ?? textExtras(state)[token] ?? whole;
     }
   });
 }

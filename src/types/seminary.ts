@@ -21,6 +21,8 @@ export type SummerAssignment =
   | 'language_immersion';
 
 export interface SeminaryState {
+  /** The seminary's name, for {seminary} tokens. */
+  name: string;
   /** 1 (propaedeutic) .. 7 (transitional deacon). */
   year: number;
   /** Chosen at year start. Sums to EMPHASIS_POINTS. Null until chosen. */

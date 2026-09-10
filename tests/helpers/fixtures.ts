@@ -59,6 +59,7 @@ export function testNpc(id: string, overrides: Partial<Npc> = {}): Npc {
 
 export function testSeminary(overrides: Partial<SeminaryState> = {}): SeminaryState {
   return {
+    name: 'St. John Vianney Seminary',
     year: 1,
     emphasis: null,
     pillarScores: { human: 0, spiritual: 0, intellectual: 0, pastoral: 0 },

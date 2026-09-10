@@ -28,8 +28,21 @@ export function beatFlag(beat: string, year: number): string {
   return `beat_fired:${beat}:${year}`;
 }
 
-export function freshSeminary(classmateIds: string[]): SeminaryState {
+/** Invented seminary names; presets may override later. */
+export const SEMINARY_NAMES = [
+  'St. John Vianney Seminary',
+  'Sacred Heart Seminary',
+  'Holy Apostles Seminary',
+  'St. Charles Borromeo Seminary',
+  'Immaculate Conception Seminary',
+  'Mount St. Mary Seminary',
+  'St. Joseph Seminary',
+  'Christ the King Seminary',
+] as const;
+
+export function freshSeminary(classmateIds: string[], name: string = SEMINARY_NAMES[0]): SeminaryState {
   return {
+    name,
     year: 1,
     emphasis: null,
     pillarScores: zeroPillars(),
@@ -49,11 +62,11 @@ export function freshSeminary(classmateIds: string[]): SeminaryState {
 }
 
 /** Enter seminary: phase, state, and the first emphasis choice. */
-export function startSeminary(state: GameState, classmateIds: string[]): GameState {
+export function startSeminary(state: GameState, classmateIds: string[], name?: string): GameState {
   return {
     ...state,
     phase: 'seminary',
-    seminary: freshSeminary(classmateIds),
+    seminary: freshSeminary(classmateIds, name),
     mode: { kind: 'year_start', year: 1 },
   };
 }

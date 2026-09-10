@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useGameStore } from '@/engine/store';
+import { FORMATION } from '@/systems/formation';
 import { PILLARS, STAT_KEYS, CONSTITUENCY_KEYS, type Pillar } from '@/types';
 import Panel from '../Panel';
 import { pillarWord } from './EvaluationPanel';
@@ -14,6 +15,9 @@ export default function FormationPanel() {
   const c = game.character;
   const sem = game.seminary;
   const classmates = sem.classmateIds.map((id) => game.npcs[id]).filter((n): n is NonNullable<typeof n> => !!n);
+  // Mid-year, show where the pillar is heading at the current pace rather than the raw total so far.
+  const elapsed = Math.max(1, Math.min(FORMATION.academicWeeks, game.clock.week - sem.yearStartWeek));
+  const pace = (p: Pillar) => (sem.pillarScores[p] * FORMATION.academicWeeks) / elapsed;
 
   return (
     <Panel title={`${c.name.first} ${c.name.last} · year ${sem.year}`}>
@@ -21,7 +25,7 @@ export default function FormationPanel() {
         {PILLARS.map((p) => (
           <div key={p} className="flex justify-between">
             <dt className="text-stone-500">{PILLAR_LABEL[p]}</dt>
-            <dd>{sem.emphasis ? pillarWord(sem.pillarScores[p] + (sem.emphasis[p] ?? 0) * 0.01) : '—'}</dd>
+            <dd>{sem.emphasis ? pillarWord(elapsed < 4 ? (sem.emphasis[p] ?? 0) * FORMATION.pillarPerPoint : pace(p)) : '—'}</dd>
           </div>
         ))}
       </dl>
