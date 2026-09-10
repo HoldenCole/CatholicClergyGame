@@ -11,9 +11,10 @@ is written.
   use Copy JSON and Load a file to carry a run elsewhere (the Download
   button does nothing on that host).
 - **GitHub Pages:** https://holdencole.github.io/CatholicClergyGame/
-  Served by `.github/workflows/pages.yml`, which enables Pages on its first
-  run. It redeploys on every push to `main`, or by hand from the Actions
-  tab for any branch.
+  Served by `.github/workflows/pages.yml` once Pages is switched on under
+  Settings → Pages with "GitHub Actions" as the source (a one-time click the
+  workflow cannot do for itself). It redeploys on every push to `main`, or
+  by hand from the Actions tab for any branch.
 - **Locally:** `npm run playtest` writes `dist-playtest/vocation.html`, one
   file that opens anywhere.
 
