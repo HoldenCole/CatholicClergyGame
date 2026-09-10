@@ -11,6 +11,11 @@ import type { Rng } from './rng';
  *   @rival_classmate                              lowest relationship
  *   @random_classmate                             rolled once when the event fires
  *   @classmate:<n>                                the n-th classmate by id order
+ *   @pastor                                       pastor of the current parish
+ *   @secretary @dre @music_director @maintenance  parish staff by tag
+ *   @parishioner                                  a random lay NPC of the current parish
+ *   @brother_priest                               a random active priest of the diocese, not the pastor
+ *   @vicar_general @chancellor @vicar_for_clergy  chancery officials by office tag
  */
 export function isSelector(key: string): boolean {
   return key.startsWith('@');
@@ -33,9 +38,30 @@ export function resolveSelector(state: GameState, key: string, rng?: Rng): Npc |
       return classmates.reduce<Npc | null>((best, n) => (!best || n.relationship < best.relationship ? n : best), null);
     case 'random_classmate':
       return classmates.length && rng ? rng.pick(classmates) : null;
+    case 'pastor': {
+      const pid = state.assignment?.parishId;
+      return pid ? (Object.values(state.npcs).find((n) => n.status === 'active' && n.tags.includes(`pastor:${pid}`)) ?? null) : null;
+    }
+    case 'parishioner': {
+      const pid = state.assignment?.parishId;
+      const lay = pid ? Object.values(state.npcs).filter((n) => n.status === 'active' && n.role === 'lay' && n.tags.includes(`parish:${pid}`)) : [];
+      return lay.length && rng ? rng.pick(lay.sort((a, b) => (a.id < b.id ? -1 : 1))) : (lay[0] ?? null);
+    }
+    case 'brother_priest': {
+      const pid = state.assignment?.parishId;
+      const priests = Object.values(state.npcs)
+        .filter((n) => n.status === 'active' && n.role === 'priest' && !n.tags.includes(`pastor:${pid}`))
+        .sort((a, b) => (a.id < b.id ? -1 : 1));
+      return priests.length && rng ? rng.pick(priests) : (priests[0] ?? null);
+    }
     default: {
       const m = /^classmate:(\d+)$/.exec(name);
       if (m) return classmates[Number(m[1])] ?? null;
+      const pid = state.assignment?.parishId;
+      // Parish staff are tagged with both their job and their parish.
+      if (pid && ['secretary', 'dre', 'music_director', 'maintenance'].includes(name)) {
+        return Object.values(state.npcs).find((n) => n.status === 'active' && n.tags.includes(name) && n.tags.includes(`parish:${pid}`)) ?? null;
+      }
       return Object.values(state.npcs).find((n) => n.status === 'active' && n.tags.includes(name)) ?? null;
     }
   }

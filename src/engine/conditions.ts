@@ -47,6 +47,18 @@ export function evaluateCondition(
       return !!state.seminary && compare(cond.op, state.seminary.year, cond.value);
     case 'thread':
       return (cond.key in state.threads) === cond.open;
+    case 'parish': {
+      const parish = state.world && state.assignment ? state.world.parishes.find((p) => p.id === state.assignment!.parishId) : undefined;
+      if (!parish) return false;
+      return parish[cond.key] === cond.value;
+    }
+    case 'role':
+      return state.assignment?.role === cond.value;
+    case 'years_ordained': {
+      const at = state.flags.ordination_week;
+      if (typeof at !== 'number') return false;
+      return compare(cond.op, (state.clock.week - at) / 52, cond.value);
+    }
     case 'not':
       return !evaluateCondition(cond.inner, state, bindings);
     case 'any':

@@ -196,3 +196,42 @@ Rules from DESIGN.md §7.5: offers must be legible in hindsight (the
 visibly bad fits; anything that takes the player away from formation or
 parish life must cost something; declining always has a consequence
 (`decline.effects` or `from`). Offers may not end the run.
+
+## Parish events (DESIGN.md §8, §12)
+
+Files under `src/content/events/parish/*.json`, same schema as seminary
+events with `"phase": "parochial_vicar"` or `"pastor"` and **no `yearGate`**.
+Gate on the career instead:
+
+```json
+{ "type": "years_ordained", "op": "<=", "value": 2 }
+{ "type": "role", "value": "parochial_vicar" }
+{ "type": "parish", "key": "kind", "value": "immigrant_growing" }      // flagship_suburban | struggling_urban | immigrant_growing | rural | difficult
+{ "type": "parish", "key": "terrain", "value": "urban" }               // urban | latino | rural | suburban
+{ "type": "parish", "key": "school", "value": "at_risk" }              // open | at_risk | closing | none
+{ "type": "parish", "key": "needsSpanish", "value": true }
+{ "type": "parish", "key": "problem", "value": "roof" }                // see PROBLEM_LABEL in src/generation/parishes.ts
+{ "type": "parish", "key": "generational", "value": "aging" }          // aging | mixed | young
+{ "type": "parish", "key": "wealth", "value": 1 }                      // 1..5
+{ "type": "season", "value": "holy_week" }
+```
+
+Additional selectors in parish life:
+
+| selector | who |
+|---|---|
+| `@pastor` | the pastor of the current parish (a major NPC: mentor, obstacle, or disaster) |
+| `@secretary` / `@dre` / `@music_director` / `@maintenance` | parish staff, each with an alignment and an agenda |
+| `@parishioner` | a random named parishioner, rolled when the event fires |
+| `@brother_priest` | a random active priest of the diocese, never the pastor |
+| `@bishop` | the diocesan bishop |
+| `@vicar_general` / `@chancellor` / `@vicar_for_clergy` / `@vocation_director` | chancery officials |
+| classmates and family | as before; classmates are now priests across the diocese |
+
+Extra effects: `{ "target": "money", "key": "cash", "delta": -5000 }` moves parish
+cash; `{ "target": "ap", "key": "next_week", "delta": -2 }` costs or grants AP
+next week. Flags set by the parish loop: `role:parochial_vicar`,
+`parish:kind:<kind>`, `parish:needs_spanish`, `home_terrain:<terrain>`
+(from creation), `speaks_spanish`, `ordained`, `pref_*` (from Y7),
+`affiliation:*` and `patron:*` (from offers), `late_vocation`.
+Tokens: `{parish}` (the parish's name), `{diocese}`.

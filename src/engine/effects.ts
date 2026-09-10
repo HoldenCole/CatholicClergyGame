@@ -137,9 +137,15 @@ export function applyEffect(
     case 'position':
       // Handled by applyChoice via opensThread / resolvesThread / volume.
       return state;
+    case 'money': {
+      if (!state.parish) return state;
+      return { ...state, parish: { ...state.parish, finance: { ...state.parish.finance, cash: state.parish.finance.cash + delta } } };
+    }
+    case 'ap': {
+      if (!state.parish) return state;
+      return { ...state, parish: { ...state.parish, apNextWeek: state.parish.apNextWeek + delta } };
+    }
     case 'group':
-    case 'money':
-    case 'ap':
       throw new EffectError(`${effect.target} effects are not implemented yet`);
   }
 }

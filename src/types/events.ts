@@ -70,6 +70,12 @@ export type Condition =
   | { type: 'pillar'; key: Pillar; op: Op; value: number }
   | { type: 'year'; op: Op; value: number }
   | { type: 'thread'; key: string; open: boolean }
+  /** Extension: a fact about the current parish (kind, terrain, school, problem, needsSpanish, wealth, generational). */
+  | { type: 'parish'; key: 'kind' | 'terrain' | 'school' | 'problem' | 'needsSpanish' | 'wealth' | 'generational'; value: string | boolean | number }
+  /** Extension: the current role. */
+  | { type: 'role'; value: 'parochial_vicar' | 'administrator' | 'pastor' }
+  /** Extension: years since ordination. */
+  | { type: 'years_ordained'; op: Op; value: number }
   | { type: 'not'; inner: Condition }
   | { type: 'any'; inner: Condition[] }
   | { type: 'all'; inner: Condition[] };

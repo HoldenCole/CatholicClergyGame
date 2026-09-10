@@ -5,6 +5,7 @@ import type { Mode } from './mode';
 import type { Npc } from './npc';
 import type { ActiveOffer, Commitment, OfferRecord } from './offers';
 import type { Assignment, Diocese, Parish, World } from './world';
+import type { ParishState } from './parish';
 
 /** A rolled diocese the player may choose, held only during creation. */
 export interface DioceseCandidate {
@@ -68,6 +69,8 @@ export interface GameState {
   candidates: DioceseCandidate[] | null;
   world: World | null;
   assignment: Assignment | null;
+  /** The live parish loop, once assigned. */
+  parish: ParishState | null;
 }
 
 export interface DigestWeek {

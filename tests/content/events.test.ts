@@ -34,7 +34,19 @@ const SELECTORS = [
   '@closest_classmate',
   '@rival_classmate',
   '@random_classmate',
+  '@pastor',
+  '@secretary',
+  '@dre',
+  '@music_director',
+  '@maintenance',
+  '@parishioner',
+  '@brother_priest',
+  '@vicar_general',
+  '@chancellor',
+  '@vicar_for_clergy',
 ];
+const PARISH_KEYS = ['kind', 'terrain', 'school', 'problem', 'needsSpanish', 'wealth', 'generational'];
+const ROLES = ['parochial_vicar', 'administrator', 'pastor'];
 const EFFECT_TARGETS = [
   'stat', 'reputation', 'relationship', 'flag', 'group', 'money', 'ap', 'thread', 'position',
   'pillar', 'alignment', 'outspokenness', 'honesty', 'credential', 'trait', 'archetype',
@@ -83,6 +95,15 @@ function checkCondition(c: Condition, where: string, problems: Problem[]): void 
     case 'thread':
       if (typeof c.key !== 'string' || typeof c.open !== 'boolean') problems.push(`${where}: bad thread condition`);
       break;
+    case 'parish':
+      if (!PARISH_KEYS.includes(c.key) || c.value === undefined) problems.push(`${where}: bad parish condition`);
+      break;
+    case 'role':
+      if (!ROLES.includes(c.value)) problems.push(`${where}: bad role ${c.value}`);
+      break;
+    case 'years_ordained':
+      if (!hasOp(c.op) || typeof c.value !== 'number') problems.push(`${where}: bad years_ordained condition`);
+      break;
     case 'not':
       checkCondition(c.inner, where, problems);
       break;
@@ -122,7 +143,8 @@ function checkEffect(e: Effect, where: string, problems: Problem[]): void {
   if (e.target === 'flag' && e.value === undefined && e.delta === undefined) {
     problems.push(`${where}: flag effect needs value or delta`);
   }
-  if (['group', 'money', 'ap'].includes(e.target)) problems.push(`${where}: ${e.target} effects are not implemented yet`);
+  if (e.target === 'group') problems.push(`${where}: group effects are not implemented yet`);
+  if ((e.target === 'money' || e.target === 'ap') && typeof e.delta !== 'number') problems.push(`${where}: ${e.target} effect needs delta`);
 }
 
 function tokensIn(text: string): string[] {
@@ -144,6 +166,8 @@ function checkEvent(ev: GameEvent, file: string, problems: Problem[], ids: Set<s
   if (typeof ev.suppressYears !== 'number' || ev.suppressYears < 1) problems.push(`${where}: suppressYears must be >= 1`);
   if (ev.phase === 'seminary') {
     if (!ev.yearGate || ev.yearGate.some((y) => y < 1 || y > 7)) problems.push(`${where}: seminary events need yearGate within 1..7`);
+  } else if (ev.yearGate) {
+    problems.push(`${where}: yearGate is seminary-only; use years_ordained conditions`);
   }
   if (typeof ev.title !== 'string' || ev.title.length < 3) problems.push(`${where}: title`);
   if (typeof ev.body !== 'string' || ev.body.split(/\s+/).length < 40) problems.push(`${where}: body too short (< 40 words)`);
