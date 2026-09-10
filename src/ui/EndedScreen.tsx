@@ -1,4 +1,5 @@
 import { useGameStore } from '@/engine/store';
+import { careerSummary } from '@/engine/career';
 
 const ENDING_TITLE: Record<string, string> = {
   dismissed: 'Dismissed',
@@ -13,11 +14,15 @@ export default function EndedScreen() {
   const newGame = useGameStore((s) => s.newGame);
   if (!game || game.mode.kind !== 'ended') return null;
   const c = game.character;
+  const ending = game.mode.ending;
+  const showCareer = game.flags.ordained && (ending === 'left_priesthood' || ending === 'retired' || ending === 'died') && !/years a priest/.test(game.mode.summary);
+  const career = showCareer && c ? careerSummary(game, ending as 'left_priesthood' | 'retired' | 'died') : null;
   return (
     <div className="min-h-screen bg-stone-950 text-stone-100 flex items-center justify-center">
       <div className="w-full max-w-2xl rounded border border-stone-800 bg-stone-900/60 p-8 flex flex-col gap-4">
         <h1 className="text-2xl">{ENDING_TITLE[game.mode.ending] ?? game.mode.ending}</h1>
         <p className="text-stone-200 leading-relaxed whitespace-pre-line">{game.mode.summary}</p>
+        {career && <p className="text-stone-300 leading-relaxed whitespace-pre-line border-t border-stone-800 pt-4">{career}</p>}
         {c && (
           <p className="text-sm text-stone-400">
             {c.name.first} {c.name.last}, {game.seminary ? `year ${game.seminary.year} of formation` : ''}. {game.history.length} decisions recorded.
