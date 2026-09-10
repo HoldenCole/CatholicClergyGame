@@ -108,10 +108,10 @@ export default function CreationScreen() {
         {step === 'face' && game && (
           <FaceStep seed={game.seed} value={answers.portrait} age={entryAge(full, content)} page={facePage} onPage={() => setFacePage((p) => p + 1)} onChange={(v) => setAnswers((a) => ({ ...a, portrait: v }))} />
         )}
-        {step === 'diocese' && !worldChosen && (
+        {step === 'diocese' && (
           <DioceseCards
             dioceses={candidates.map((c) => c.diocese.visible)}
-            selected={dioceseChoice}
+            selected={dioceseChoice ?? (game?.flags.surprise_me ? null : (game?.world?.diocese.presetId ?? null))}
             onSelect={setDioceseChoice}
             onSurprise={() => {
               chooseDiocese('surprise');
@@ -120,8 +120,8 @@ export default function CreationScreen() {
             }}
           />
         )}
-        {step === 'diocese' && worldChosen && (
-          <p>You are bound for {game?.world?.diocese.visible.name}. The vocation director has your file.</p>
+        {step === 'diocese' && game?.flags.surprise_me && (
+          <p className="ink-muted text-sm">You asked to be surprised. Choosing a diocese by name now gives up the surprise and its small bonus.</p>
         )}
         {step === 'origin' && (
           <OptionList options={content.origins} selected={full.origin} onSelect={(o) => choose('origin', o, { origin: o.id })} />
@@ -175,7 +175,7 @@ export default function CreationScreen() {
             <button
               className="pbtn pbtn-primary"
               onClick={() => {
-                if (step === 'diocese' && !worldChosen && dioceseChoice) chooseDiocese(dioceseChoice);
+                if (step === 'diocese' && dioceseChoice && (dioceseChoice !== game?.world?.diocese.presetId || game?.flags.surprise_me)) chooseDiocese(dioceseChoice);
                 next();
               }}
               disabled={

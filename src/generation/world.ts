@@ -19,6 +19,9 @@ export function generateCandidates(rng: Rng, year: number): Candidate[] {
 /** Install a candidate as the run's world and merge its people into the state. */
 export function installWorld(state: GameState, candidate: Candidate, year: number): GameState {
   const npcs: Record<string, Npc> = { ...state.npcs };
+  // Choosing again during creation: the people of the diocese chosen before go with it.
+  const previous = state.candidates?.find((c) => c.presetId === state.world?.diocese.presetId);
+  for (const n of previous?.npcs ?? []) delete npcs[n.id];
   for (const n of candidate.npcs) npcs[n.id] = n;
   const world: World = {
     diocese: candidate.diocese,
@@ -26,7 +29,8 @@ export function installWorld(state: GameState, candidate: Candidate, year: numbe
     generatedYear: year,
     bishopHistory: [candidate.diocese.hidden.bishop.npcId],
   };
-  return { ...state, world, npcs, candidates: null };
+  // The rolled dioceses stay until the run begins, so the choice can be changed.
+  return { ...state, world, npcs, candidates: state.candidates };
 }
 
 const TRAIT_TEXT: Record<string, string> = {

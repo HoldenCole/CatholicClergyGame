@@ -214,7 +214,9 @@ export const useGameStore = create<GameStore>()((set, get) => ({
       }
       const chosen = candidates.find((c) => c.presetId === presetId);
       if (!chosen) throw new Error(`unknown diocese ${presetId}`);
-      return installWorld(game, chosen, year);
+      const installed = installWorld(game, chosen, year);
+      const { surprise_me: _surprise, ...flags } = installed.flags;
+      return { ...installed, flags };
     });
   },
 
@@ -303,7 +305,7 @@ export const useGameStore = create<GameStore>()((set, get) => ({
   },
 
   startGame(answers) {
-    update(set, get, (game, r) => generateRun(game, answers, r));
+    update(set, get, (game, r) => ({ ...generateRun(game, answers, r), candidates: null }));
   },
   chooseEmphasis(emphasis) {
     update(set, get, (game, r) => pickEmphasis(game, emphasis, r));

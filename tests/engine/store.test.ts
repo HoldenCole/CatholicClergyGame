@@ -128,3 +128,28 @@ describe('engine/store timer ticks', () => {
     expect(useGameStore.getState().running).toBe(false);
   });
 });
+
+describe('engine/store creation can change its mind', () => {
+  it('a diocese chosen by mistake can be replaced, and the rolled set survives until the run begins', () => {
+    const s = useGameStore;
+    s.getState().newGame({ seed: 'rechoose', start: { year: 2010, month: 8, day: 20 } });
+    s.getState().chooseDiocese('chicago');
+    const first = s.getState().game!;
+    const chicagoBishop = first.npcs[first.world!.diocese.hidden.bishop.npcId]!;
+    const chicagoIds = first.candidates!.find((c) => c.presetId === 'chicago')!.npcs.map((n) => n.id);
+    expect(first.candidates).toHaveLength(5);
+    s.getState().chooseDiocese('houston');
+    const second = s.getState().game!;
+    expect(second.world!.diocese.presetId).toBe('houston');
+    const houstonIds = new Set(second.candidates!.find((c) => c.presetId === 'houston')!.npcs.map((n) => n.id));
+    for (const id of chicagoIds) if (!houstonIds.has(id)) expect(second.npcs[id], id).toBeUndefined();
+    const bishop = second.npcs[second.world!.diocese.hidden.bishop.npcId]!;
+    expect(`${bishop.name.first} ${bishop.name.last}`).not.toBe(`${chicagoBishop.name.first} ${chicagoBishop.name.last}`);
+    expect(second.candidates).toHaveLength(5);
+    s.getState().chooseDiocese('surprise');
+    expect(s.getState().game!.flags.surprise_me).toBe(true);
+    s.getState().chooseDiocese('chicago');
+    expect(s.getState().game!.flags.surprise_me).toBeUndefined();
+    expect(s.getState().error).toBeNull();
+  });
+});
