@@ -9,7 +9,7 @@ const busyDraw: WeekDraw = (state, rng) => {
   if (!rng.chance(0.15)) return [];
   const severity = rng.pick(['ROUTINE', 'NOTABLE', 'MAJOR'] as const);
   const category = rng.pick(['finance', 'admin', 'group', 'classmate'] as const);
-  return [{ eventId: `ev-${state.clock.week}`, severity, category, week: state.clock.week }];
+  return [{ eventId: `ev-${state.clock.week}`, severity, category, week: state.clock.week, bindings: {} }];
 };
 
 /** Play forward: AUTO through interrupts, resolving each pending event with a fixed choice. */

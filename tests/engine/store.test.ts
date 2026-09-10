@@ -29,7 +29,7 @@ describe('engine/store', () => {
   it('AUTO runs to a flagged event and retains the prior week', () => {
     setWeekDraw((state) =>
       state.clock.week === 6
-        ? [{ eventId: 'ev', severity: 'MAJOR', category: 'personal', week: 6 }]
+        ? [{ eventId: 'ev', severity: 'MAJOR', category: 'personal', week: 6, bindings: {} }]
         : [],
     );
     const s = useGameStore.getState();

@@ -11,7 +11,7 @@ function fresh(speed: GameState['speed'] = 'MANUAL'): ReturnType<typeof newGame>
 const fireAt =
   (week: number, severity: Severity, category: PendingEvent['category'] = 'personal'): WeekDraw =>
   (state) =>
-    state.clock.week === week ? [{ eventId: `ev-${week}`, severity, category, week }] : [];
+    state.clock.week === week ? [{ eventId: `ev-${week}`, severity, category, week, bindings: {} }] : [];
 
 describe('engine/clock', () => {
   it('advanceWeek moves one week and writes a digest line', () => {
@@ -115,7 +115,7 @@ describe('engine/clock', () => {
 
   it('stopAfterWeek honors the interrupt config', () => {
     const { state } = fresh('AUTO');
-    const ev: PendingEvent = { eventId: 'x', severity: 'ROUTINE', category: 'admin', week: 1 };
+    const ev: PendingEvent = { eventId: 'x', severity: 'ROUTINE', category: 'admin', week: 1, bindings: {} };
     expect(stopAfterWeek('AUTO', { ...state, pending: [ev] }, [])).toBeNull();
     const loud = { ...state, interrupts: { ...state.interrupts, admin: 'ROUTINE' as const } };
     expect(stopAfterWeek('AUTO', { ...loud, pending: [ev] }, [])).toMatchObject({ kind: 'event' });
