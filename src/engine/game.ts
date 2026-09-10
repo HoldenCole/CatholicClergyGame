@@ -39,6 +39,10 @@ export function newGame(options: NewGameOptions): { state: GameState; rng: Rng }
     threads: {},
     suppressedUntil: {},
     firedOnce: [],
+    offers: [],
+    commitments: [],
+    offerHistory: [],
+    clusters: {},
   };
   return { state, rng };
 }

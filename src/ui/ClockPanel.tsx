@@ -26,6 +26,8 @@ function describeStop(stop: StopReason | null): string | null {
       return `Stopped: ${stop.beat.label}.`;
     case 'mode':
       return 'A decision is waiting.';
+    case 'offer':
+      return 'An offer has arrived.';
     case 'cap':
       return 'Stopped after a full batch of weeks.';
   }

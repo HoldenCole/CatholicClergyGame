@@ -3,6 +3,7 @@ import type { HistoryEntry, PendingEvent } from './events';
 import type { InterruptConfig } from './interrupts';
 import type { Mode } from './mode';
 import type { Npc } from './npc';
+import type { ActiveOffer, Commitment, OfferRecord } from './offers';
 import type { SeminaryState } from './seminary';
 import type { Phase } from './stats';
 import type { Beat, Clock, Speed } from './time';
@@ -47,6 +48,13 @@ export interface GameState {
   suppressedUntil: Record<string, number>;
   /** Ids of `once` events that have fired. */
   firedOnce: string[];
+  /** Open offers with their windows. DESIGN.md §7.5 */
+  offers: ActiveOffer[];
+  /** Background commitments from accepted offers. */
+  commitments: Commitment[];
+  offerHistory: OfferRecord[];
+  /** Cluster -> count of accepted offers, for clustering. */
+  clusters: Record<string, number>;
 }
 
 export interface DigestWeek {
