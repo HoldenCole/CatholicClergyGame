@@ -44,7 +44,7 @@ export default function App() {
   return (
     <div className="felt min-h-screen text-stone-100">
       <Hud />
-      <main className="mx-auto flex max-w-[1400px] gap-5 px-5 pb-6 pt-4">
+      <main className="layout mx-auto flex max-w-[1400px] gap-5 px-5 pb-6 pt-4">
         <section className="relative min-w-0 flex-[3]">
           <SceneView />
           {decision && (

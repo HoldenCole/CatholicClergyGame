@@ -54,7 +54,7 @@ export default function Hud() {
   const stop = describeStop(lastStop);
 
   return (
-    <header className="plate flex items-center justify-between gap-6 px-5 py-2">
+    <header className="plate hud flex items-center justify-between gap-6 px-5 py-2">
       <div className="flex min-w-0 items-center gap-4">
         <h1 className="title text-lg tracking-wide" style={{ color: '#e6c25a' }}>Vocation</h1>
         {c && <Portrait portrait={portraitForCharacter(c, yearOf(clock.startDay, clock.week), game.phase)} size={34} title={`${c.name.first} ${c.name.last}`} />}

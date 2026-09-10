@@ -150,3 +150,12 @@ select.pinput { appearance: auto; color-scheme: light; }
 .scrim { background: rgba(12, 8, 5, 0.55); backdrop-filter: blur(1.5px); }
 
 .scroll-paper { scrollbar-color: #b9a98a #eadfc6; scrollbar-width: thin; }
+
+/* Narrow screens: the desk drops under the room; nothing scrolls sideways. */
+@media (max-width: 1100px) {
+  .layout { flex-direction: column; }
+  .layout > aside { width: 100% !important; }
+  .desk { height: auto !important; min-height: 0 !important; }
+  .plate.hud { flex-wrap: wrap; }
+}
+html, body { overflow-x: hidden; }

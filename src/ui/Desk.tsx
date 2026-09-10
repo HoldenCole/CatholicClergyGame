@@ -40,7 +40,7 @@ export default function Desk() {
   const letters = game.offers.length;
 
   return (
-    <div className="flex h-[calc(100vh-88px)] min-h-[560px] flex-col">
+    <div className="desk flex h-[calc(100vh-88px)] min-h-[560px] flex-col">
       <div className="flex flex-wrap gap-1 px-2">
         {tabs.map((t) => (
           <button key={t} className={'tab ' + (t === open ? 'tab-active' : '')} onClick={() => openSheet(t)}>
