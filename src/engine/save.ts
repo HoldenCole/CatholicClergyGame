@@ -28,6 +28,9 @@ export function buildSave(
   previous: Snapshot | null,
   prose: Record<string, string> = {},
 ): SaveFile {
+  // Derived streams are named from the RNG's seed, so a save must carry the same seed
+  // or a restored game would draw different sub-streams than the live one.
+  if (rng.seed !== state.seed) throw new SaveError(`rng seed ${rng.seed} does not match state seed ${state.seed}`);
   return {
     version: SAVE_VERSION,
     state,

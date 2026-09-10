@@ -4,7 +4,9 @@ import type {
   EventCategory,
   GameState,
   InterruptLevel,
+  ObligationKey,
   Pillar,
+  Quality,
   Snapshot,
   Speed,
   SummerAssignment,
@@ -27,7 +29,8 @@ import {
   leaveSeminary as leave,
   ordain as doOrdain,
 } from './seminary';
-import { resolvePending, seminaryWeekHook, type EventDeps } from './weekHook';
+import { parishWeekHook, resolvePending, seminaryWeekHook, type EventDeps } from './weekHook';
+import { setDiscretionary as doSetDiscretionary, setObligation as doSetObligation, startAssignment } from './parish';
 
 /** Weeks per synchronous batch when running to the next stop. */
 export const BATCH_WEEKS: Record<Speed, number> = {
@@ -66,6 +69,8 @@ export interface GameStore {
   /** Character creation is done; generate the run and enter seminary. */
   startGame(answers: CreationAnswers): void;
   acceptAssignment(): void;
+  setObligation(key: ObligationKey, quality: Quality): void;
+  setDiscretionary(actionId: string, ap: number): void;
   chooseEmphasis(emphasis: Record<Pillar, number>): void;
   chooseSummer(id: SummerAssignment): void;
   /** Resolve the event at the head of the pending queue. */
@@ -103,6 +108,7 @@ function depsFor(state: GameState): EventDeps {
 function hookFor(state: GameState): WeekHook {
   if (hookOverride) return hookOverride;
   if (state.phase === 'seminary') return seminaryWeekHook(depsFor(state));
+  if (state.parish) return parishWeekHook(depsFor(state));
   return noHook;
 }
 
@@ -265,7 +271,13 @@ export const useGameStore = create<GameStore>()((set, get) => ({
     update(set, get, (game, r) => doOrdain(game, r));
   },
   acceptAssignment() {
-    update(set, get, (game) => doAcceptAssignment(game));
+    update(set, get, (game, r) => startAssignment(doAcceptAssignment(game), r));
+  },
+  setObligation(key, quality) {
+    update(set, get, (game) => doSetObligation(game, key, quality));
+  },
+  setDiscretionary(actionId, ap) {
+    update(set, get, (game) => doSetDiscretionary(game, actionId, ap));
   },
   acceptOffer(offerId) {
     const def = offerById(offerId);

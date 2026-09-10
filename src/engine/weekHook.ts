@@ -4,6 +4,7 @@ import { shouldInterrupt } from './interrupts';
 import { offersWeek } from './offers';
 import type { Rng } from './rng';
 import { formationBeats, markBeatFired, weekPool } from './seminary';
+import { endOfArc, isPlayedWeek, parishWeek } from './parish';
 import { renderText } from './text';
 import type { WeekHook } from './clock';
 
@@ -80,5 +81,22 @@ export function seminaryWeekHook(deps: EventDeps): WeekHook {
     const [event] = drawEvents(pool, next, rng, 1);
     if (!event) return next;
     return fireOrResolve(next, event, rng, deps);
+  };
+}
+
+/** The parish week: the routine resolves, a played week may fire an event, the arc may end, offers tick. */
+export function parishWeekHook(deps: EventDeps): WeekHook {
+  return (state: GameState, rng: Rng, reachedBeats: Beat[]) => {
+    if (!state.parish) return state;
+    let next = parishWeek(state, rng);
+    if (isPlayedWeek(next)) {
+      const [event] = drawEvents(deps.pool, next, rng, 1);
+      if (event) next = fireOrResolve(next, event, rng, deps);
+    }
+    if (reachedBeats.some((b) => b.kind === 'assignment') && next.mode.kind === 'clock') {
+      next = endOfArc(next, rng);
+    }
+    if (next.mode.kind !== 'clock' || next.pending.length > 0) return next;
+    return offersStep(next, rng, deps);
   };
 }
