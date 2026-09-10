@@ -149,6 +149,12 @@ export interface GameEvent {
   bias?: { when: Condition; multiplier: number }[];
   suppressYears: number;
   once?: boolean;
+  /**
+   * Extension: a structural beat this event can carry ("candidacy",
+   * "diaconate"). The year guarantees one event with the beat fires;
+   * which one varies. DESIGN.md §12.2.
+   */
+  beat?: string;
   title: string;
   body: string;
   flavorPrompt?: string;
