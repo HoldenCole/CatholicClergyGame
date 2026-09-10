@@ -18,19 +18,17 @@ export default function EndedScreen() {
   const showCareer = game.flags.ordained && (ending === 'left_priesthood' || ending === 'retired' || ending === 'died') && !/years a priest/.test(game.mode.summary);
   const career = showCareer && c ? careerSummary(game, ending as 'left_priesthood' | 'retired' | 'died') : null;
   return (
-    <div className="min-h-screen bg-stone-950 text-stone-100 flex items-center justify-center">
-      <div className="w-full max-w-2xl rounded border border-stone-800 bg-stone-900/60 p-8 flex flex-col gap-4">
-        <h1 className="text-2xl">{ENDING_TITLE[game.mode.ending] ?? game.mode.ending}</h1>
-        <p className="text-stone-200 leading-relaxed whitespace-pre-line">{game.mode.summary}</p>
-        {career && <p className="text-stone-300 leading-relaxed whitespace-pre-line border-t border-stone-800 pt-4">{career}</p>}
+    <div className="felt flex min-h-screen items-center justify-center p-6">
+      <div className="paper paper-tilt-r flex w-full max-w-2xl flex-col gap-4 px-8 py-8">
+        <h1 className="title text-2xl">{ENDING_TITLE[game.mode.ending] ?? game.mode.ending}</h1>
+        <p className="whitespace-pre-line leading-relaxed">{game.mode.summary}</p>
+        {career && <p className="ink-muted whitespace-pre-line border-t rule pt-4 leading-relaxed">{career}</p>}
         {c && (
-          <p className="text-sm text-stone-400">
-            {c.name.first} {c.name.last}, {game.seminary ? `year ${game.seminary.year} of formation` : ''}. {game.history.length} decisions recorded.
+          <p className="ink-faint text-sm">
+            {c.name.first} {c.name.last}{game.seminary ? `, year ${game.seminary.year} of formation` : ''}. {game.history.length} decisions recorded.
           </p>
         )}
-        <button className="self-start rounded border border-stone-700 px-4 py-2 text-sm hover:bg-stone-800" onClick={() => newGame({ seed: `run-${Date.now().toString(36)}` })}>
-          Begin again
-        </button>
+        <button className="pbtn self-start" onClick={() => newGame({ seed: `run-${Date.now().toString(36)}` })}>Begin again</button>
       </div>
     </div>
   );

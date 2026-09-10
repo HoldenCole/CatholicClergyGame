@@ -3,7 +3,7 @@ import { useGameStore } from '@/engine/store';
 import { groupTypeDefs } from '@/content/parish';
 import { parishGroups, vitalityBand } from '@/systems/groups';
 import type { GroupType } from '@/types';
-import Panel from '../Panel';
+import Sheet from '../Sheet';
 
 const AGENDA_TEXT: Record<string, string> = {
   saintly: 'does it for the right reasons',
@@ -26,11 +26,9 @@ export default function GroupsPanel() {
   const founding = game.founding;
 
   return (
-    <Panel title="The groups">
-      {sustain === 0 && groups.length > 0 && (
-        <p className="mb-2 text-xs text-amber-700">Nothing in your routine goes to them. They will fade.</p>
-      )}
-      <ul className="flex flex-col gap-1.5 text-sm">
+    <Sheet title="The groups">
+      {sustain === 0 && groups.length > 0 && <p className="ink-wine mb-2 text-xs">Nothing in your routine goes to them. They will fade.</p>}
+      <ul className="flex flex-col gap-2 text-sm">
         {groups.map((g) => {
           const leader = game.npcs[g.leaderId];
           const band = vitalityBand(g.vitality);
@@ -39,21 +37,17 @@ export default function GroupsPanel() {
               <div>
                 <div>
                   {g.name}
-                  <span className={'ml-2 text-xs ' + (band === 'thriving' ? 'text-emerald-500' : band === 'dying' ? 'text-red-500' : 'text-stone-500')}>{band}</span>
-                  {g.foundedByPlayer && <span className="ml-2 text-xs text-amber-700">yours</span>}
-                  {g.hostile && <span className="ml-2 text-xs text-red-500">against you</span>}
+                  <span className={'ml-2 text-xs ' + (band === 'thriving' ? 'text-emerald-800' : band === 'dying' ? 'ink-wine' : 'ink-faint')}>{band}</span>
+                  {g.foundedByPlayer && <span className="ml-2 text-xs" style={{ color: '#8f6a1e' }}>yours</span>}
+                  {g.hostile && <span className="ink-wine ml-2 text-xs">against you</span>}
                 </div>
                 {leader && (
-                  <div className="text-xs text-stone-500">
+                  <div className="ink-muted text-xs">
                     {leader.name.first} {leader.name.last} leads it and {AGENDA_TEXT[g.agenda]}.
                   </div>
                 )}
               </div>
-              <button
-                className="shrink-0 text-xs text-stone-500 hover:text-stone-300"
-                onClick={() => suppress(g.id, !g.suppressed)}
-                title={g.suppressed ? 'Restore your support' : 'Withdraw support and let it die. The leader will call the chancery.'}
-              >
+              <button className="pbtn-link shrink-0" onClick={() => suppress(g.id, !g.suppressed)} title={g.suppressed ? 'Restore your support' : 'Withdraw support and let it die. The leader will call the chancery.'}>
                 {g.suppressed ? 'restore' : 'let it go'}
               </button>
             </li>
@@ -61,36 +55,26 @@ export default function GroupsPanel() {
         })}
       </ul>
       {founding ? (
-        <p className="mt-3 text-xs text-stone-400">
+        <p className="ink-muted mt-3 text-xs">
           Founding a {groupTypeDefs.find((d) => d.type === founding.type)?.label.toLowerCase()}: {Math.max(0, founding.endWeek - game.clock.week)} weeks to go, {founding.apPerWeek} hours a week.
         </p>
       ) : picking ? (
         <div className="mt-3">
-          <div className="text-xs text-stone-500 mb-1">Found what? Months of work, and it can fail.</div>
+          <div className="ink-muted mb-1 text-xs">Found what? Months of work, and it can fail.</div>
           <div className="flex flex-wrap gap-1">
             {groupTypeDefs
               .filter((d) => !existing.has(d.type))
               .map((d) => (
-                <button
-                  key={d.type}
-                  className="rounded border border-stone-700 px-2 py-0.5 text-xs hover:border-amber-600"
-                  onClick={() => {
-                    found(d.type as GroupType);
-                    setPicking(false);
-                  }}
-                  title={`${d.founding.weeks} weeks at ${d.founding.apPerWeek} hours a week`}
-                >
+                <button key={d.type} className="pbtn px-2 py-0.5 text-xs" onClick={() => { found(d.type as GroupType); setPicking(false); }} title={`${d.founding.weeks} weeks at ${d.founding.apPerWeek} hours a week`}>
                   {d.label}
                 </button>
               ))}
           </div>
-          <button className="mt-2 text-xs text-stone-500" onClick={() => setPicking(false)}>never mind</button>
+          <button className="pbtn-link mt-2" onClick={() => setPicking(false)}>never mind</button>
         </div>
       ) : (
-        <button className="mt-3 text-xs text-stone-500 hover:text-stone-300" onClick={() => setPicking(true)}>
-          Found a group
-        </button>
+        <button className="pbtn mt-3" onClick={() => setPicking(true)}>Found a group</button>
       )}
-    </Panel>
+    </Sheet>
   );
 }

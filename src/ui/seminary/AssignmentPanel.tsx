@@ -11,10 +11,10 @@ export default function AssignmentPanel() {
   const parish = game.world.parishes.find((p) => p.id === a.parishId);
   const pastor = parish ? game.npcs[parish.pastorId] : undefined;
   return (
-    <Panel title={a.role === 'pastor' ? 'Letter of appointment' : 'Letter of assignment'}>
-      <pre className="whitespace-pre-wrap font-serif text-stone-200 leading-relaxed">{a.letter}</pre>
+    <Panel title={a.role === 'pastor' ? 'Letter of appointment' : 'Letter of assignment'} tilt="r">
+      <pre className="whitespace-pre-wrap font-[inherit] leading-relaxed">{a.letter}</pre>
       {parish && (
-        <div className="mt-4 text-sm text-stone-400">
+        <div className="ink-muted mt-4 text-sm">
           <p>
             {parish.name}, {parish.place}: about {parish.households.toLocaleString()} households, {parish.generational}, {parish.school === 'none' ? 'no school' : `school ${parish.school.replace('_', ' ')}`}.
             {parish.needsSpanish ? ' Spanish is needed.' : ''}
@@ -22,16 +22,14 @@ export default function AssignmentPanel() {
           <p className="mt-1">{PROBLEM_LABEL[parish.problem] ?? parish.problem}</p>
           {pastor && (
             <p className="mt-1">
-              The pastor, {pastor.title} {pastor.name.last}, is {game.clock.week >= 0 ? new Date((game.clock.startDay + game.clock.week * 7) * 86_400_000).getUTCFullYear() - pastor.birthYear : '?'}.
+              The pastor, {pastor.title} {pastor.name.last}, is {new Date((game.clock.startDay + game.clock.week * 7) * 86_400_000).getUTCFullYear() - pastor.birthYear}.
             </p>
           )}
-          <p className="mt-2 text-xs text-stone-500">{a.role === 'pastor' ? 'Why you' : passedOver ? 'What the board decided' : 'Why you'}: {a.reasons.join('; ')}.</p>
-          {passedOver && <p className="mt-1 text-xs text-amber-700">{passedOver.text}</p>}
+          <p className="ink-faint mt-2 text-xs">{a.role === 'pastor' ? 'Why you' : passedOver ? 'What the board decided' : 'Why you'}: {a.reasons.join('; ')}.</p>
+          {passedOver && <p className="ink-wine mt-1 text-xs">{passedOver.text}</p>}
         </div>
       )}
-      <button className="mt-4 rounded bg-amber-700 px-4 py-2 text-sm font-medium hover:bg-amber-600" onClick={accept}>
-        Report to the parish
-      </button>
+      <button className="pbtn pbtn-primary mt-4" onClick={accept}>Report to the parish</button>
     </Panel>
   );
 }

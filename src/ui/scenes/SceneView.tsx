@@ -3,33 +3,42 @@ import { useGameStore } from '@/engine/store';
 import { actionById, obligationDefs } from '@/content/parish';
 import { seasonOf } from '@/engine/time';
 import { planWeek } from '@/systems/week';
-import type { Quality } from '@/types';
+import { previewState } from '@/systems/decor';
+import type { DecorPlace, Quality } from '@/types';
 import SceneArt from './SceneArt';
 import { CHANCERY_SCENE, SCENES, SEMINARY_SCENE, sceneById, type HotspotBinding, type SceneId } from './scenes';
-import FurnishPanel from './FurnishPanel';
-import type { DecorPlace } from '@/types';
+import { useUiStore, type Sheet } from '../uiStore';
 
 const NEXT_QUALITY: Record<Quality, Quality> = { min: 'standard', standard: 'invested', invested: 'min' };
+const PANEL_SHEET: Record<string, Sheet> = { routine: 'week', groups: 'people', projects: 'people', offers: 'letters', digest: 'record', parish: 'parish', formation: 'formation' };
+const PLACE_SCENE: Record<DecorPlace, SceneId> = { church: 'church', office: 'office', rectory: 'rectory', seminary_room: 'seminary_room', chancery: 'chancery' };
 
 /**
- * The environment. Hotspots are read from the scene table and bound to the
- * actions, obligations, and panels the systems already expose, so clicking
- * the confessional is the same routine change as pressing "+" in the list.
+ * The room. Hotspots are read from the scene table and bound to the
+ * actions, obligations, and sheets the systems already expose, so clicking
+ * the confessional is the same routine change as pressing "+" on the sheet.
  */
-export default function SceneView({ onPanel }: { onPanel: (panel: string) => void }) {
+export default function SceneView() {
   const game = useGameStore((s) => s.game);
   const setDiscretionary = useGameStore((s) => s.setDiscretionary);
   const setObligation = useGameStore((s) => s.setObligation);
-  const inSeminary = !!game?.seminary && !game?.parish;
-  const [sceneId, setSceneId] = useState<SceneId>(inSeminary ? 'seminary_room' : 'rectory');
+  const chosenScene = useUiStore((s) => s.scene);
+  const setScene = useUiStore((s) => s.setScene);
+  const openSheet = useUiStore((s) => s.openSheet);
+  const furnish = useUiStore((s) => s.furnish);
+  const hoverPreview = useUiStore((s) => s.preview);
+  const selected = useUiStore((s) => s.selected);
+  const preview = selected ?? hoverPreview;
   const [hover, setHover] = useState<string | null>(null);
-  const [furnishing, setFurnishing] = useState<DecorPlace | null>(null);
   if (!game || (!game.parish && !game.seminary)) return null;
-  const scene = sceneById(inSeminary ? 'seminary_room' : sceneId);
+  const inSeminary = !!game.seminary && !game.parish;
+  const sceneId: SceneId = inSeminary ? 'seminary_room' : chosenScene && chosenScene !== 'seminary_room' ? chosenScene : 'rectory';
+  const scene = sceneById(sceneId);
   const plan = game.parish ? planWeek(game) : null;
   const routine = game.parish?.routine ?? { obligations: {} as Record<string, never>, discretionary: {} as Record<string, number> };
   const hasChancery = Object.keys(game.flags).some((k) => k.startsWith('office:') && game.flags[k]);
   const rooms = inSeminary ? [SEMINARY_SCENE] : hasChancery ? [...SCENES, CHANCERY_SCENE] : SCENES;
+  const shown = preview ? previewState(game, preview.place, preview.optionId) : game;
 
   const describe = (binds: HotspotBinding): string => {
     switch (binds.kind) {
@@ -45,9 +54,9 @@ export default function SceneView({ onPanel }: { onPanel: (panel: string) => voi
         return `${def.label}: ${q}${actual !== q ? `, cut to ${actual} this week` : ''}. ${def.blurb[q]} (click to change)`;
       }
       case 'panel':
-        return `Open: ${binds.panel}`;
+        return `Open the sheet: ${binds.panel}`;
       case 'furnish':
-        return binds.place === 'church' ? 'How the church looks. The pastor decides.' : 'How this room looks. Click to change it.';
+        return binds.place === 'church' ? 'How the church looks. The pastor decides; the bishop has a say.' : 'How this room looks. Click to change it.';
       case 'scene':
         return sceneById(binds.scene).label;
     }
@@ -60,6 +69,7 @@ export default function SceneView({ onPanel }: { onPanel: (panel: string) => voi
         if (!def) return;
         const ap = routine.discretionary[binds.actionId] ?? 0;
         setDiscretionary(binds.actionId, ap >= def.maxAp ? 0 : ap + 1);
+        openSheet('week');
         break;
       }
       case 'obligation': {
@@ -67,16 +77,18 @@ export default function SceneView({ onPanel }: { onPanel: (panel: string) => voi
         let next = NEXT_QUALITY[(routine.obligations as Record<string, Quality>)[binds.key] ?? 'standard'];
         if (next === 'invested' && def.ap.invested === null) next = 'min';
         setObligation(binds.key, next);
+        openSheet('week');
         break;
       }
       case 'panel':
-        onPanel(binds.panel);
+        openSheet(PANEL_SHEET[binds.panel] ?? 'week');
         break;
       case 'furnish':
-        setFurnishing(binds.place);
+        furnish(binds.place);
+        if (!inSeminary) setScene(PLACE_SCENE[binds.place]);
         break;
       case 'scene':
-        setSceneId(binds.scene);
+        setScene(binds.scene);
         setHover(null);
         break;
     }
@@ -84,23 +96,24 @@ export default function SceneView({ onPanel }: { onPanel: (panel: string) => voi
 
   const hovered = scene.hotspots.find((h) => h.id === hover);
   return (
-    <div className="rounded border border-stone-800 bg-stone-900/60">
-      <div className="flex items-center justify-between border-b border-stone-800 px-4 py-2">
-        <span className="text-xs uppercase tracking-widest text-stone-400">{scene.label}</span>
-        <nav className="flex gap-1">
+    <div className="overflow-hidden rounded-sm border border-[#3a2a18] shadow-[0_18px_40px_rgba(0,0,0,0.6)]">
+      <div className="plate flex items-center justify-between px-4 py-1.5">
+        <span className="heading" style={{ color: '#e6c25a' }}>{scene.label}</span>
+        <nav className="flex gap-0.5">
           {rooms.map((s) => (
             <button
               key={s.id}
-              onClick={() => setSceneId(s.id)}
-              className={'rounded px-2 py-0.5 text-xs ' + (s.id === sceneId ? 'bg-stone-700 text-stone-100' : 'text-stone-500 hover:text-stone-300')}
+              onClick={() => setScene(s.id)}
+              className={'rounded px-2 py-0.5 text-xs ' + (s.id === sceneId ? 'bg-[#c9a24a] text-[#2b2116]' : 'text-[#cbbfa4] hover:text-[#f1e8d3]')}
             >
-              {s.label.replace('The ', '')}
+              {s.label.replace('The ', '').replace('Your ', '')}
             </button>
           ))}
         </nav>
       </div>
-      <div className="relative aspect-[100/60] w-full overflow-hidden">
-        <SceneArt scene={scene.id} season={seasonOf(game.clock)} state={game} />
+      <div className="relative aspect-[100/60] w-full overflow-hidden bg-[#1a120c]">
+        <SceneArt scene={scene.id} season={seasonOf(game.clock)} state={shown} />
+        {preview && <div className="pointer-events-none absolute left-3 top-3 rounded bg-[#2b2116]/80 px-2 py-1 text-xs text-[#e6c25a]">As it would look</div>}
         {scene.hotspots.map((h) => {
           const active = h.binds.kind === 'action' ? (routine.discretionary[h.binds.actionId] ?? 0) > 0 : h.binds.kind === 'obligation' ? (routine.obligations as Record<string, Quality>)[h.binds.key] !== 'standard' : false;
           return (
@@ -113,18 +126,14 @@ export default function SceneView({ onPanel }: { onPanel: (panel: string) => voi
               onBlur={() => setHover(null)}
               onClick={() => act(h.binds)}
               style={{ left: `${h.x}%`, top: `${h.y}%`, width: `${h.w}%`, height: `${h.h}%` }}
-              className={
-                'absolute rounded-sm border transition-colors ' +
-                (hover === h.id ? 'border-amber-400/80 bg-amber-300/10' : active ? 'border-amber-700/50 bg-amber-900/10' : 'border-transparent hover:border-amber-400/60')
-              }
+              className={'hotspot ' + (active ? 'hotspot-active' : '')}
             />
           );
         })}
-        <div className="pointer-events-none absolute bottom-0 left-0 right-0 bg-gradient-to-t from-stone-950/90 to-transparent px-4 py-2 text-sm text-stone-200">
-          {hovered ? describe(hovered.binds) : inSeminary ? 'Your room. The shelf fills with what you give the year to.' : 'Everything in the room is something you could do with the week.'}
-        </div>
       </div>
-      {furnishing && <FurnishPanel place={furnishing} onClose={() => setFurnishing(null)} />}
+      <div className="plate px-4 py-2">
+        {hovered ? describe(hovered.binds) : inSeminary ? 'Your room. The shelf fills with what you give the year to.' : 'Everything in the room is something you could do with the week.'}
+      </div>
     </div>
   );
 }

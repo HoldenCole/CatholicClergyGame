@@ -82,17 +82,17 @@ export default function CreationScreen() {
       : null;
 
   return (
-    <div className="min-h-screen bg-stone-950 text-stone-100">
-      <header className="border-b border-stone-800 px-6 py-3 flex items-baseline justify-between">
-        <h1 className="text-lg font-semibold tracking-wide">Vocation</h1>
-        <span className="text-xs text-stone-500">
+    <div className="felt min-h-screen">
+      <header className="plate flex items-baseline justify-between px-6 py-2">
+        <h1 className="title text-lg tracking-wide" style={{ color: '#e6c25a' }}>Vocation</h1>
+        <span className="text-xs opacity-80">
           Step {idx + 1} of {ORDER.length} · entering seminary in {startYear}
         </span>
       </header>
-      <main className="mx-auto max-w-4xl p-6 flex flex-col gap-5">
+      <main className="paper paper-tilt-l mx-auto my-6 flex max-w-4xl flex-col gap-5 px-8 py-6">
         <div>
-          <h2 className="text-2xl">{q.title}</h2>
-          <p className="mt-1 text-stone-400">{q.prompt}</p>
+          <h2 className="title text-2xl">{q.title}</h2>
+          <p className="ink-muted mt-1">{q.prompt}</p>
         </div>
 
         {step === 'name' && (
@@ -114,7 +114,7 @@ export default function CreationScreen() {
           />
         )}
         {step === 'diocese' && worldChosen && (
-          <p className="text-stone-300">You are bound for {game?.world?.diocese.visible.name}. The vocation director has your file.</p>
+          <p>You are bound for {game?.world?.diocese.visible.name}. The vocation director has your file.</p>
         )}
         {step === 'origin' && (
           <OptionList options={content.origins} selected={full.origin} onSelect={(o) => choose('origin', o, { origin: o.id })} />
@@ -151,22 +151,22 @@ export default function CreationScreen() {
         {step === 'summary' && <Summary answers={full} seen={seen} />}
 
         {step !== 'summary' && seen[step] && (
-          <p className="rounded border border-amber-900/50 bg-amber-950/30 p-4 text-stone-200 leading-relaxed">{seen[step]}</p>
+          <p className="rounded border rule bg-white/30 p-4 leading-relaxed">{seen[step]}</p>
         )}
         {reveal && (
-          <p className="rounded border border-stone-700 bg-stone-900 p-4 text-sm text-stone-300 leading-relaxed">
-            <span className="text-xs uppercase tracking-wider text-stone-500">What a son of the diocese knows · </span>
+          <p className="rounded border rule bg-white/30 p-4 text-sm leading-relaxed">
+            <span className="heading">What a son of the diocese knows · </span>
             {reveal}
           </p>
         )}
 
         <div className="flex items-center gap-3 pt-2">
-          <button className="rounded border border-stone-700 px-4 py-2 text-sm text-stone-300 hover:bg-stone-800 disabled:opacity-40" onClick={back} disabled={idx === 0}>
+          <button className="pbtn" onClick={back} disabled={idx === 0}>
             Back
           </button>
           {step !== 'summary' ? (
             <button
-              className="rounded bg-amber-700 px-4 py-2 text-sm font-medium text-stone-50 hover:bg-amber-600 disabled:opacity-40"
+              className="pbtn pbtn-primary"
               onClick={() => {
                 if (step === 'diocese' && !worldChosen && dioceseChoice) chooseDiocese(dioceseChoice);
                 next();
@@ -180,14 +180,14 @@ export default function CreationScreen() {
             </button>
           ) : (
             <button
-              className="rounded bg-amber-700 px-4 py-2 text-sm font-medium text-stone-50 hover:bg-amber-600 disabled:opacity-40"
+              className="pbtn pbtn-primary"
               onClick={() => startGame(full)}
               disabled={errors.length > 0 || !worldChosen}
             >
               Enter the seminary
             </button>
           )}
-          {step === 'summary' && errors.length > 0 && <span className="text-sm text-red-400">{errors.join(' ')}</span>}
+          {step === 'summary' && errors.length > 0 && <span className="ink-wine text-sm">{errors.join(' ')}</span>}
         </div>
       </main>
     </div>
@@ -197,8 +197,8 @@ export default function CreationScreen() {
 function Input({ label, value, onChange }: { label: string; value: string; onChange: (v: string) => void }) {
   return (
     <label className="flex flex-col gap-1 text-sm">
-      <span className="text-stone-400">{label}</span>
-      <input className="rounded border border-stone-700 bg-stone-950 px-3 py-2 text-stone-100" value={value} onChange={(e) => onChange(e.target.value)} />
+      <span className="heading">{label}</span>
+      <input className="pinput" value={value} onChange={(e) => onChange(e.target.value)} />
     </label>
   );
 }
@@ -221,10 +221,10 @@ function CareerStep({
       />
       {answers.career && (
         <label className="flex items-center gap-4 text-sm">
-          <span className="text-stone-400 w-40">Years in that work</span>
+          <span className="ink-muted w-40">Years in that work</span>
           <input type="range" min={1} max={max} value={answers.yearsWorked} onChange={(e) => onChange({ yearsWorked: Number(e.target.value) })} className="w-64" />
           <span className="font-mono">{answers.yearsWorked}</span>
-          <span className="text-stone-500">entering at {entryAge(answers, content)}, ordained at {entryAge(answers, content) + 7}</span>
+          <span className="ink-faint">entering at {entryAge(answers, content)}, ordained at {entryAge(answers, content) + 7}</span>
         </label>
       )}
     </div>
@@ -235,7 +235,7 @@ function Summary({ answers, seen }: { answers: CreationAnswers; seen: Partial<Re
   const age = entryAge(answers, content);
   const paragraphs = (['origin', 'tie', 'path', 'field', 'career', 'motive', 'family', 'past'] as Step[]).map((k) => seen[k]).filter(Boolean);
   return (
-    <div className="flex flex-col gap-3 text-stone-200 leading-relaxed max-h-[480px] overflow-y-auto pr-2">
+    <div className="scroll-paper flex max-h-[480px] flex-col gap-3 overflow-y-auto pr-2 leading-relaxed">
       <p>
         <span className="font-semibold">{answers.firstName} {answers.lastName}</span>, entering at {age}, to be ordained at {age + 7} if all goes well.
       </p>

@@ -30,27 +30,24 @@ export default function DioceseCards({
                 setOpen(d.id);
                 onSelect(d.id);
               }}
-              className={
-                'w-full text-left rounded border px-3 py-2 ' +
-                (d.id === selected ? 'border-amber-600 bg-amber-950/30' : 'border-stone-800 bg-stone-900/50 hover:border-stone-600')
-              }
+              className={'choice border rule ' + (d.id === selected ? 'choice-chosen' : '')}
             >
               <div className="font-medium">{d.see}</div>
-              <div className="text-xs text-stone-500">
+              <div className="ink-faint text-xs">
                 {NEED_LABEL[d.clergyNeed]} · {TENSION_LABEL[d.tension]}
               </div>
             </button>
           </li>
         ))}
         <li>
-          <button onClick={onSurprise} className="w-full text-left rounded border border-dashed border-stone-700 px-3 py-2 text-sm text-stone-400 hover:border-stone-500">
+          <button onClick={onSurprise} className="choice border border-dashed rule text-sm ink-muted">
             Surprise me
-            <div className="text-xs text-stone-600">No preview. A small starting bonus.</div>
+            <div className="ink-faint text-xs">No preview. A small starting bonus.</div>
           </button>
         </li>
       </ul>
-      <div className="col-span-8 rounded border border-stone-800 bg-stone-900/50 p-4 min-h-[420px]">
-        {shown ? <Card d={shown} /> : <p className="text-stone-500">Choose a diocese to read about it.</p>}
+      <div className="col-span-8 min-h-[420px] rounded border rule bg-white/25 p-4">
+        {shown ? <Card d={shown} /> : <p className="ink-faint">Choose a diocese to read about it.</p>}
       </div>
     </div>
   );
@@ -61,17 +58,17 @@ function Card({ d }: { d: DioceseVisible }) {
   return (
     <div className="flex flex-col gap-3 text-sm">
       <div>
-        <h3 className="text-xl">{d.name}</h3>
-        <div className="text-stone-500">{d.region} · {d.size}</div>
+        <h3 className="title text-xl">{d.name}</h3>
+        <div className="ink-muted">{d.region} · {d.size}</div>
       </div>
       <div>
-        <div className="flex justify-between text-xs uppercase tracking-wider text-stone-500">
+        <div className="heading flex justify-between">
           <span>Traditional</span>
           <span>{TENSION_LABEL[d.tension]}</span>
           <span>Progressive</span>
         </div>
-        <div className="relative mt-1 h-2 rounded bg-stone-800">
-          <div className="absolute top-0 h-2 w-1 rounded bg-amber-500" style={{ left: `calc(${pct}% - 2px)` }} />
+        <div className="relative mt-1 h-2 rounded" style={{ background: '#d8ccae' }}>
+          <div className="absolute top-0 h-2 w-1 rounded" style={{ left: `calc(${pct}% - 2px)`, background: '#7a1f1f' }} />
         </div>
       </div>
       <Row label="Clergy need">{NEED_LABEL[d.clergyNeed]}</Row>
@@ -98,8 +95,8 @@ function Card({ d }: { d: DioceseVisible }) {
 function Row({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div>
-      <div className="text-xs uppercase tracking-wider text-stone-500">{label}</div>
-      <div className="text-stone-200 leading-relaxed">{children}</div>
+      <div className="heading">{label}</div>
+      <div className="leading-relaxed">{children}</div>
     </div>
   );
 }

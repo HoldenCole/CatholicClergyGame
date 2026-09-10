@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useGameStore } from '@/engine/store';
-import Panel from './Panel';
+import Sheet from './Sheet';
 
 export const AUTOSAVE_KEY = 'vocation.autosave';
 
@@ -55,35 +55,18 @@ export default function SavePanel() {
   };
 
   return (
-    <Panel title="Save">
+    <Sheet title="The save">
       <div className="flex flex-wrap gap-2">
-        <Button onClick={download}>Download</Button>
-        <Button onClick={() => void copy()}>Copy JSON</Button>
-        <Button onClick={() => fileRef.current?.click()}>Load file</Button>
-        <input
-          ref={fileRef}
-          type="file"
-          accept="application/json"
-          className="hidden"
-          onChange={(e) => void onFile(e.target.files?.[0])}
-        />
+        <button className="pbtn" onClick={download}>Download</button>
+        <button className="pbtn" onClick={() => void copy()}>Copy JSON</button>
+        <button className="pbtn" onClick={() => fileRef.current?.click()}>Load a file</button>
+        <input ref={fileRef} type="file" accept="application/json" className="hidden" onChange={(e) => void onFile(e.target.files?.[0])} />
       </div>
-      <p className="mt-3 text-xs text-stone-500">
-        Autosaves to this browser after every week. Saves are plain JSON.
+      <p className="ink-faint mt-3 text-xs">
+        Autosaves to this browser after every week. Seed <span className="font-mono">{game.seed}</span>. Saves are plain JSON.
       </p>
-      {note && <p className="mt-2 text-xs text-stone-400">{note}</p>}
-      {error && <p className="mt-2 text-xs text-red-400">Load failed: {error}</p>}
-    </Panel>
-  );
-}
-
-function Button({ children, onClick }: { children: string; onClick: () => void }) {
-  return (
-    <button
-      className="rounded border border-stone-700 px-3 py-1.5 text-sm text-stone-200 hover:bg-stone-800"
-      onClick={onClick}
-    >
-      {children}
-    </button>
+      {note && <p className="ink-muted mt-2 text-xs">{note}</p>}
+      {error && <p className="ink-wine mt-2 text-xs">Load failed: {error}</p>}
+    </Sheet>
   );
 }

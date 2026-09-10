@@ -15,15 +15,10 @@ export default function OptionList<T extends CreationOption>({
         <li key={o.id}>
           <button
             onClick={() => onSelect(o)}
-            className={
-              'w-full h-full text-left rounded border p-3 transition-colors ' +
-              (o.id === selected
-                ? 'border-amber-600 bg-amber-950/30'
-                : 'border-stone-800 bg-stone-900/50 hover:border-stone-600')
-            }
+            className={'choice h-full border rule ' + (o.id === selected ? 'choice-chosen' : '')}
           >
             <div className="font-medium">{o.label}</div>
-            <div className="mt-1 text-sm text-stone-400 leading-snug">{o.blurb}</div>
+            <div className="ink-muted mt-1 text-sm leading-snug">{o.blurb}</div>
           </button>
         </li>
       ))}

@@ -22,7 +22,7 @@ const SEASON_SKY: Record<Season, [string, string]> = {
  * room reads the state: the church its parish and furnishings, the office
  * its parish's means and the man's rank, every desk the man himself.
  */
-export default function SceneArt({ scene, season, state }: { scene: SceneId; season: Season; state: GameState }) {
+export default function SceneArt({ scene, season, state, plain = false }: { scene: SceneId; season: Season; state: GameState; plain?: boolean }) {
   const [skyTop, skyBottom] = SEASON_SKY[season];
   const parish = state.world?.parishes.find((p) => p.id === state.assignment?.parishId);
   const ambient = (place: Parameters<typeof ambientFor>[1]) => ambientFor(state, place);
@@ -40,7 +40,7 @@ export default function SceneArt({ scene, season, state }: { scene: SceneId; sea
       {scene === 'study' && <Study ambient={ambient('office')} />}
       {scene === 'seminary_room' && <SeminaryRoom ambient={ambient('seminary_room')} seminaryName={state.seminary?.name} />}
       {scene === 'chancery' && <Chancery ambient={ambient('chancery')} rank={chanceryRank(state) ?? 'modest'} bishopName={bishop ? `${bishop.title} ${bishop.name.first} ${bishop.name.last}` : 'The bishop'} />}
-      <Finish />
+      {!plain && <Finish />}
     </svg>
   );
 }

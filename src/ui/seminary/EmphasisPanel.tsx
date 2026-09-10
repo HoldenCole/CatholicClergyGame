@@ -32,13 +32,12 @@ export default function EmphasisPanel() {
   const error = validateEmphasis(alloc, points);
   const year = game.mode.year;
 
-  const bump = (p: Pillar, d: number) =>
-    setAlloc((a) => ({ ...a, [p]: Math.min(FORMATION.emphasisMax, Math.max(0, a[p] + d)) }));
+  const bump = (p: Pillar, d: number) => setAlloc((a) => ({ ...a, [p]: Math.min(FORMATION.emphasisMax, Math.max(0, a[p] + d)) }));
 
   return (
-    <Panel title={`Year ${year} · the year's emphasis`}>
-      <p className="text-stone-300 leading-relaxed">{YEAR_TEXT[year]}</p>
-      <p className="mt-2 text-sm text-stone-500">
+    <Panel title={`Year ${year} · the year's emphasis`} tilt="r">
+      <p className="leading-relaxed">{YEAR_TEXT[year]}</p>
+      <p className="ink-muted mt-2 text-sm">
         Where the year goes. You have {points} measures to give{points > FORMATION.emphasisPoints ? ', more than the boys, because you have studied before' : ''}. A pillar given nothing is noticed.
       </p>
       <ul className="mt-4 flex flex-col gap-2">
@@ -46,26 +45,22 @@ export default function EmphasisPanel() {
           <li key={p} className="flex items-center gap-4">
             <div className="w-28 font-medium">{PILLAR_TEXT[p].label}</div>
             <div className="flex items-center gap-1">
-              <button className="rounded border border-stone-700 px-2 text-sm hover:bg-stone-800" onClick={() => bump(p, -1)}>−</button>
-              <div className="w-24 flex gap-0.5">
+              <button className="pbtn px-2 py-0 text-sm" onClick={() => bump(p, -1)}>−</button>
+              <div className="flex w-24 gap-0.5">
                 {Array.from({ length: FORMATION.emphasisMax }, (_, i) => (
-                  <span key={i} className={'h-3 flex-1 rounded-sm ' + (i < alloc[p] ? 'bg-amber-600' : 'bg-stone-800')} />
+                  <span key={i} className="h-3 flex-1 rounded-sm" style={{ background: i < alloc[p] ? '#7a1f1f' : '#d8ccae' }} />
                 ))}
               </div>
-              <button className="rounded border border-stone-700 px-2 text-sm hover:bg-stone-800" onClick={() => bump(p, 1)}>+</button>
+              <button className="pbtn px-2 py-0 text-sm" onClick={() => bump(p, 1)}>+</button>
             </div>
-            <div className="text-sm text-stone-500">{PILLAR_TEXT[p].blurb}</div>
+            <div className="ink-muted text-sm">{PILLAR_TEXT[p].blurb}</div>
           </li>
         ))}
       </ul>
       <div className="mt-4 flex items-center gap-3">
-        <button className="rounded bg-amber-700 px-4 py-2 text-sm font-medium hover:bg-amber-600 disabled:opacity-40" disabled={!!error} onClick={() => choose(alloc)}>
-          Begin the year
-        </button>
-        <span className="text-sm text-stone-500">{error ?? `${used} of ${points} given`}</span>
-        <button className="ml-auto text-sm text-stone-500 hover:text-stone-300" onClick={() => confirm('Leave the seminary? This ends the run.') && leave()}>
-          Leave the seminary
-        </button>
+        <button className="pbtn pbtn-primary" disabled={!!error} onClick={() => choose(alloc)}>Begin the year</button>
+        <span className="ink-muted text-sm">{error ?? `${used} of ${points} given`}</span>
+        <button className="pbtn-link ml-auto" onClick={() => confirm('Leave the seminary? This ends the run.') && leave()}>Leave the seminary</button>
       </div>
     </Panel>
   );

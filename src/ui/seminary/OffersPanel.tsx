@@ -2,8 +2,9 @@ import { offerById } from '@/content/offers';
 import { useGameStore } from '@/engine/store';
 import { renderText } from '@/engine/text';
 import { evaluateAll } from '@/engine/conditions';
-import Panel from '../Panel';
+import Sheet from '../Sheet';
 
+/** Letters: open offers with their windows, and the commitments already made. */
 export default function OffersPanel() {
   const game = useGameStore((s) => s.game);
   const accept = useGameStore((s) => s.acceptOffer);
@@ -12,55 +13,53 @@ export default function OffersPanel() {
   if (!game) return null;
   const open = game.offers;
   const commitments = game.commitments;
-  if (open.length === 0 && commitments.length === 0 && !outcome) return null;
+  const pending = Object.values(game.permissions).filter((p) => p.status === 'pending');
 
   return (
-    <Panel title="Offers">
-      {outcome && <p className="mb-3 rounded border border-stone-800 bg-stone-900 p-3 text-sm text-stone-300 leading-relaxed">{outcome}</p>}
-      {open.map((o) => {
-        const def = offerById(o.offerId);
-        if (!def) return null;
-        const weeksLeft = o.expiresWeek - game.clock.week;
-        const stillQualified = evaluateAll(def.requires, game, o.bindings);
-        const r = (t: string) => renderText(t, game, o.bindings);
-        return (
-          <div key={o.offerId} className="mb-4">
-            <div className="flex items-baseline justify-between">
-              <h3 className="text-lg">{r(def.title)}</h3>
-              <span className="text-xs text-stone-500">
-                {def.windowWeeks === 0 ? 'decide now' : weeksLeft <= 0 ? 'last week' : `${weeksLeft} week${weeksLeft === 1 ? '' : 's'} to decide`}
-              </span>
+    <>
+      <Sheet title="Letters">
+        {outcome && <p className="mb-3 rounded border rule bg-white/30 px-3 py-2 text-sm leading-relaxed">{outcome}</p>}
+        {open.length === 0 && !outcome && <p className="ink-faint text-sm">Nothing in the mail today.</p>}
+        {open.map((o) => {
+          const def = offerById(o.offerId);
+          if (!def) return null;
+          const weeksLeft = o.expiresWeek - game.clock.week;
+          const stillQualified = evaluateAll(def.requires, game, o.bindings);
+          const r = (t: string) => renderText(t, game, o.bindings);
+          return (
+            <div key={o.offerId} className="mb-4 border-b rule pb-4 last:border-b-0 last:pb-0">
+              <div className="flex items-baseline justify-between">
+                <h3 className="title text-lg">{r(def.title)}</h3>
+                <span className="ink-faint text-xs">
+                  {def.windowWeeks === 0 ? 'decide now' : weeksLeft <= 0 ? 'last week' : `${weeksLeft} week${weeksLeft === 1 ? '' : 's'} to decide`}
+                </span>
+              </div>
+              <p className="mt-2 leading-relaxed">{r(def.body)}</p>
+              {def.accept.commitment && (
+                <p className="ink-muted mt-1 text-xs">
+                  A commitment of {Math.round(def.accept.commitment.weeks / 4)} months{def.accept.commitment.apPerWeek > 0 ? ', on top of everything else' : ''}.
+                </p>
+              )}
+              <div className="mt-3 flex gap-2">
+                <button className="pbtn pbtn-primary" disabled={!stillQualified} onClick={() => accept(o.offerId)}>Accept</button>
+                <button className="pbtn" onClick={() => decline(o.offerId)}>Decline</button>
+              </div>
             </div>
-            <p className="mt-2 text-stone-200 leading-relaxed">{r(def.body)}</p>
-            {def.accept.commitment && (
-              <p className="mt-1 text-xs text-stone-500">
-                A commitment of {Math.round(def.accept.commitment.weeks / 4)} months{def.accept.commitment.apPerWeek > 0 ? ', on top of everything else' : ''}.
-              </p>
-            )}
-            <div className="mt-3 flex gap-2">
-              <button
-                className="rounded bg-amber-700 px-3 py-1.5 text-sm font-medium hover:bg-amber-600 disabled:opacity-40"
-                disabled={!stillQualified}
-                onClick={() => accept(o.offerId)}
-              >
-                Accept
-              </button>
-              <button className="rounded border border-stone-700 px-3 py-1.5 text-sm hover:bg-stone-800" onClick={() => decline(o.offerId)}>
-                Decline
-              </button>
-            </div>
-          </div>
-        );
-      })}
-      {commitments.length > 0 && (
-        <ul className="text-sm text-stone-400">
-          {commitments.map((c) => (
-            <li key={c.offerId}>
-              {c.label}: {Math.max(0, c.endWeek - game.clock.week)} weeks remaining
-            </li>
-          ))}
-        </ul>
+          );
+        })}
+      </Sheet>
+      {(commitments.length > 0 || pending.length > 0) && (
+        <Sheet title="Standing">
+          <ul className="ink-muted text-sm">
+            {commitments.map((c) => (
+              <li key={c.offerId}>{c.label}: {Math.max(0, c.endWeek - game.clock.week)} weeks remaining</li>
+            ))}
+            {pending.map((p) => (
+              <li key={p.topic}>A letter to the chancery about {p.topic.replace('_', ' ')}, sent {game.clock.week - p.askedWeek} week{game.clock.week - p.askedWeek === 1 ? '' : 's'} ago. No answer yet.</li>
+            ))}
+          </ul>
+        </Sheet>
       )}
-    </Panel>
+    </>
   );
 }

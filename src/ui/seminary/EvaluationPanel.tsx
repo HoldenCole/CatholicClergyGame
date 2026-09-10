@@ -28,25 +28,25 @@ export default function EvaluationPanel() {
   const rec = game.mode.record;
   const text = RESULT_TEXT[rec.result];
   return (
-    <Panel title={`Annual evaluation · year ${rec.year}`}>
-      <h2 className="text-xl">{text.title}</h2>
-      <p className="mt-2 text-stone-300 leading-relaxed">{text.body}</p>
+    <Panel title={`Annual evaluation · year ${rec.year}`} tilt="r">
+      <h2 className="title text-xl">{text.title}</h2>
+      <p className="mt-2 leading-relaxed">{text.body}</p>
       <dl className="mt-4 grid grid-cols-4 gap-3">
         {PILLARS.map((p) => (
           <div key={p}>
-            <dt className="text-xs uppercase tracking-wider text-stone-500">{PILLAR_LABEL[p]}</dt>
+            <dt className="heading">{PILLAR_LABEL[p]}</dt>
             <dd className="text-lg">{pillarWord(rec.pillars[p])}</dd>
           </div>
         ))}
       </dl>
       {rec.notes.length > 0 && (
-        <ul className="mt-4 list-disc pl-5 text-sm text-stone-400">
+        <ul className="ink-muted mt-4 list-disc pl-5 text-sm">
           {rec.notes.map((n, i) => (
             <li key={i}>{n}</li>
           ))}
         </ul>
       )}
-      <button className="mt-4 rounded bg-amber-700 px-4 py-2 text-sm font-medium hover:bg-amber-600" onClick={ack}>
+      <button className="pbtn pbtn-primary mt-4" onClick={ack}>
         {rec.result === 'DISMISSED' ? 'Pack' : rec.year >= 7 && rec.result.startsWith('ADVANCED') ? 'To ordination' : 'Continue'}
       </button>
     </Panel>
