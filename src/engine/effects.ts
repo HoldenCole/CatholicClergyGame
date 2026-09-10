@@ -1,13 +1,17 @@
 import type {
   Archetype,
   ConstituencyKey,
+  DecorPlace,
+  DecorSlot,
   Effect,
   Ending,
   GameState,
+  LiturgicalTopic,
   NpcStatus,
   Pillar,
   StatKey,
 } from '@/types';
+import { currentDecor, placeKey } from '@/systems/decorState';
 import { applyReputation, clampSigned } from '@/systems/reputation';
 import { applyStat } from '@/systems/stats';
 import { resolveSelector } from './selectors';
@@ -133,6 +137,23 @@ export function applyEffect(
         speed: 'PAUSED',
         mode: { kind: 'ended', ending: effect.key as Ending, summary: String(effect.value ?? '') },
       };
+    case 'decor': {
+      const [place, slot] = effect.key.split(':') as [DecorPlace, DecorSlot];
+      if (!place || !slot || typeof effect.value !== 'string') throw new EffectError(`decor effect needs "<place>:<slot>" and an option id`);
+      const key = placeKey(state, place);
+      return { ...state, decor: { ...state.decor, [key]: { ...currentDecor(state, place), [slot]: effect.value } } };
+    }
+    case 'permission': {
+      const status = effect.value === 'granted' ? 'granted' : 'denied';
+      const topic = effect.key as LiturgicalTopic;
+      const bishopId = state.world?.diocese.hidden.bishop.npcId ?? 'bishop';
+      const week = state.clock.week;
+      return {
+        ...state,
+        permissions: { ...state.permissions, [topic]: { topic, status, bishopId, askedWeek: state.permissions[topic]?.askedWeek ?? week, answerWeek: week } },
+        flags: { ...state.flags, [`permission:${topic}`]: status === 'granted' },
+      };
+    }
     case 'thread':
     case 'position':
       // Handled by applyChoice via opensThread / resolvesThread / volume.

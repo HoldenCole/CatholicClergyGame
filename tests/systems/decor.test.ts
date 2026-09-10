@@ -3,6 +3,10 @@ import { achievements, ambientFor, currentDecor, decorOptions, defaultChurchDeco
 import { rollLiturgicalPolicy } from '@/generation/bishop';
 import { createRng } from '@/engine/rng';
 import { LITURGICAL_TOPICS, type LiturgicalPolicy } from '@/types';
+import { evaluateCondition as evaluate } from '@/engine/conditions';
+import { isEligible } from '@/engine/events';
+import { eventById } from '@/content';
+import { applyEffects } from '@/engine/effects';
 import { parishState } from './week.test';
 import type { GameState } from '@/types';
 
@@ -161,5 +165,58 @@ describe('systems/decor liturgical policy', () => {
     const preview = previewState(s, 'church', 'mass_tlm');
     expect(currentDecor(preview, 'church').mass_form).toBe('mass_tlm');
     expect(s.decor).toEqual({});
+  });
+});
+
+describe('events can read the church and the bishop, and set what the bishop asks for', () => {
+  it('decor and bishop conditions, decor and permission effects', () => {
+    const s = parishState('cond');
+    const bishop = s.world!.diocese.hidden.bishop;
+    expect(evaluate({ type: 'decor', place: 'church', slot: 'orientation', value: 'orient_populum' }, s)).toBe(true);
+    expect(evaluate({ type: 'decor', place: 'church', slot: 'orientation', value: 'orient_orientem' }, s)).toBe(false);
+    expect(evaluate({ type: 'bishop', key: 'management', value: bishop.management }, s)).toBe(true);
+    expect(evaluate({ type: 'bishop', key: 'priority', value: bishop.priorities[0] }, s)).toBe(true);
+    expect(evaluate({ type: 'bishop', key: 'stance', topic: 'ad_orientem', value: bishop.liturgy.ad_orientem }, s)).toBe(true);
+    expect(evaluate({ type: 'bishop', key: 'cannotTolerate', value: 'nothing' }, s)).toBe(false);
+    const turned = applyEffects(s, [{ target: 'decor', key: 'church:orientation', value: 'orient_orientem' }]);
+    expect(currentDecor(turned, 'church').orientation).toBe('orient_orientem');
+    expect(turned.parish!.finance.cash).toBe(s.parish!.finance.cash);
+    const withdrawn = applyEffects(turned, [{ target: 'permission', key: 'latin_mass', value: 'denied' }]);
+    expect(withdrawn.permissions.latin_mass?.status).toBe('denied');
+    expect(withdrawn.flags['permission:latin_mass']).toBe(false);
+    const tlm = decorOptions.find((o) => o.id === 'mass_tlm')!;
+    expect(gateFor({ ...withdrawn, assignment: { ...withdrawn.assignment!, role: 'pastor' } }, tlm).ok).toBe(false);
+  });
+});
+
+describe('the bishop leans on pastors', () => {
+  it('a request fires only against a church that is out of step with him, and demands are rarer than requests', () => {
+    const base = parishState('press');
+    const parishId = base.parish!.parishId;
+    const world = base.world!;
+    const bishop = { ...world.diocese.hidden.bishop, alignment: 45, management: 'micromanager' as const, liturgy: { ...world.diocese.hidden.bishop.liturgy } };
+    const pastor: GameState = {
+      ...base,
+      phase: 'pastor',
+      assignment: { ...base.assignment!, role: 'pastor' },
+      world: { ...world, diocese: { ...world.diocese, hidden: { ...world.diocese.hidden, bishop } } },
+      decor: { [`parish:${parishId}:church`]: { orientation: 'orient_orientem' } },
+    };
+    const request = eventById('bp_face_the_people')!;
+    const demand = eventById('bp_demand_face_people')!;
+    expect(isEligible(request, pastor)).toBe(true);
+    expect(isEligible(demand, pastor)).toBe(true);
+    expect(demand.baseWeight).toBeLessThan(request.baseWeight / 3);
+    const facing: GameState = { ...pastor, decor: {} };
+    expect(isEligible(request, facing)).toBe(false);
+    const tradBishop: GameState = { ...pastor, world: { ...pastor.world!, diocese: { ...pastor.world!.diocese, hidden: { ...pastor.world!.diocese.hidden, bishop: { ...bishop, alignment: -40 } } } } };
+    expect(isEligible(request, tradBishop)).toBe(false);
+    const asVicar: GameState = { ...pastor, assignment: { ...pastor.assignment!, role: 'parochial_vicar' } };
+    expect(isEligible(request, asVicar)).toBe(false);
+    // Complying turns the altar without spending parish cash.
+    const comply = request.choices.find((c) => c.id === 'turn_back')!;
+    const after = applyEffects(pastor, comply.effects);
+    expect(currentDecor(after, 'church').orientation).toBe('orient_populum');
+    expect(after.parish!.finance.cash).toBe(pastor.parish!.finance.cash);
   });
 });

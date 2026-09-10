@@ -287,3 +287,24 @@ option. The renderer reads `art` to pick a layer; drop a PNG at
   recorded as the flag `permission:<topic>`, so events can read it.
 - Church slots: sanctuary, altar_rail, orientation, confessionals, choir,
   statues, tabernacle, mass_form. Personal slots: wall, desk, corner.
+
+Events can read and write furnishings, and read the bishop's temper:
+
+```json
+{ "type": "decor", "place": "church", "slot": "orientation", "value": "orient_orientem" }
+{ "type": "bishop", "key": "management", "value": "micromanager" }   // delegator | micromanager | absentee | reformer
+{ "type": "bishop", "key": "priority", "value": "liturgy" }          // one of his two priorities
+{ "type": "bishop", "key": "cannotTolerate", "value": "freelancing" }
+{ "type": "bishop", "key": "stance", "topic": "ad_orientem", "value": "forbidden" }
+{ "target": "decor", "key": "church:orientation", "value": "orient_populum" }   // set outright: no cost, no computed reaction
+{ "target": "permission", "key": "latin_mass", "value": "denied" }              // the bishop's word, given or taken back
+```
+
+## The bishop's requests (`events/parish/bishop.json`)
+
+The bishop leans on his pastors through requests: a letter, a word after
+the deanery meeting, a diocesan grant with a purpose attached. Demands are
+rare and belong to a particular temper (a micromanager, a reformer, a man
+who cannot bear freelancing), carry a low `baseWeight`, and say plainly
+that they are not requests. Every request must leave the pastor a way to
+decline that costs something real and nothing that ends the run.

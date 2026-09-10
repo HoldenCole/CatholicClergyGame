@@ -1,6 +1,8 @@
 import type { Pillar } from './character';
 import type { ConstituencyKey, Phase, StatKey, Volume } from './stats';
 import type { Season } from './time';
+import type { DecorPlace, DecorSlot } from './decor';
+import type { LiturgicalStance, LiturgicalTopic } from './world';
 
 /** Drives interrupts. See DESIGN.md §12.3. */
 export type Severity = 'ROUTINE' | 'NOTABLE' | 'MAJOR' | 'CRITICAL';
@@ -78,6 +80,11 @@ export type Condition =
   | { type: 'years_ordained'; op: Op; value: number }
   /** Extension: the current bishop's alignment, −100 traditional .. +100 progressive. */
   | { type: 'bishop_alignment'; op: Op; value: number }
+  /** How the church or a room is furnished right now: the option id in a slot of the current parish's place. */
+  | { type: 'decor'; place: DecorPlace; slot: DecorSlot; value: string }
+  /** The bishop's temper: his management style, a priority, what he rewards or cannot bear, or his stance on a liturgical topic. */
+  | { type: 'bishop'; key: 'management' | 'priority' | 'rewards' | 'cannotTolerate'; value: string }
+  | { type: 'bishop'; key: 'stance'; topic: LiturgicalTopic; value: LiturgicalStance }
   /**
    * Extension: some group of the current parish matches. When an event
    * carries group conditions, @group_leader binds to a matching group.
@@ -124,7 +131,11 @@ export type EffectTarget =
   | 'concern'
   | 'risk'
   | 'npc'
-  | 'end';
+  | 'end'
+  /** key "<place>:<slot>", value: option id. Sets a furnishing outright, no cost, no computed reaction. */
+  | 'decor'
+  /** key: liturgical topic, value: 'granted' | 'denied'. The bishop's word, given or taken back. */
+  | 'permission';
 
 export interface Effect {
   target: EffectTarget;

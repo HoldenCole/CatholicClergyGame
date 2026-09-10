@@ -4,6 +4,7 @@ import { resolveSelector } from './selectors';
 
 import type { Group } from '@/types';
 import { vitalityBand } from '@/systems/groups';
+import { currentDecor } from '@/systems/decorState';
 
 function compare(op: '>=' | '<=', actual: number, value: number): boolean {
   return op === '>=' ? actual >= value : actual <= value;
@@ -69,6 +70,20 @@ export function evaluateCondition(
     }
     case 'bishop_alignment':
       return !!state.world && compare(cond.op, state.world.diocese.hidden.bishop.alignment, cond.value);
+    case 'decor':
+      return currentDecor(state, cond.place)[cond.slot] === cond.value;
+    case 'bishop': {
+      const b = state.world?.diocese.hidden.bishop;
+      if (!b) return false;
+      switch (cond.key) {
+        case 'management': return b.management === cond.value;
+        case 'priority': return b.priorities.includes(cond.value as (typeof b.priorities)[number]);
+        case 'rewards': return b.rewards === cond.value;
+        case 'cannotTolerate': return b.cannotTolerate === cond.value;
+        case 'stance': return b.liturgy[cond.topic] === cond.value;
+      }
+      return false;
+    }
     case 'group': {
       // Bound group first; otherwise any group of the current parish.
       const boundLeader = bindings['@group_leader'];

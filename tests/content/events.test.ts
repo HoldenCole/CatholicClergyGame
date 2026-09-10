@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { allEvents, eventFiles } from '@/content';
+import { decorOptions } from '@/systems/decorState';
 import { CONSTITUENCY_KEYS, EVENT_CATEGORIES, SEVERITIES, STAT_KEYS, PILLARS, ARCHETYPES } from '@/types';
 import type { Condition, Effect, GameEvent } from '@/types';
 
@@ -53,8 +54,13 @@ const ROLES = ['parochial_vicar', 'administrator', 'pastor'];
 const EFFECT_TARGETS = [
   'stat', 'reputation', 'relationship', 'flag', 'group', 'money', 'ap', 'thread', 'position',
   'pillar', 'alignment', 'outspokenness', 'honesty', 'credential', 'trait', 'archetype',
-  'concern', 'risk', 'npc', 'end',
+  'concern', 'risk', 'npc', 'end', 'decor', 'permission',
 ];
+const DECOR_PLACES = ['church', 'office', 'rectory', 'seminary_room', 'chancery'];
+const DECOR_SLOTS = ['sanctuary', 'altar_rail', 'orientation', 'confessionals', 'choir', 'statues', 'tabernacle', 'mass_form', 'wall', 'desk', 'floor', 'corner'];
+const LITURGICAL_TOPICS = ['ad_orientem', 'latin_mass', 'altar_rail', 'tabernacle', 'renovation'];
+const BISHOP_KEYS = ['management', 'priority', 'rewards', 'cannotTolerate', 'stance'];
+const DECOR_IDS = new Set(decorOptions.map((o) => o.id));
 
 type Problem = string;
 
@@ -111,6 +117,13 @@ function checkCondition(c: Condition, where: string, problems: Problem[]): void 
     case 'group':
       if (!GROUP_KEYS.includes(c.key) || c.value === undefined) problems.push(`${where}: bad group condition`);
       break;
+    case 'decor':
+      if (!DECOR_PLACES.includes(c.place) || !DECOR_SLOTS.includes(c.slot) || !DECOR_IDS.has(c.value)) problems.push(`${where}: bad decor condition ${JSON.stringify(c)}`);
+      break;
+    case 'bishop':
+      if (!BISHOP_KEYS.includes(c.key)) problems.push(`${where}: bad bishop key ${String(c.key)}`);
+      else if (c.key === 'stance' && (!LITURGICAL_TOPICS.includes(c.topic) || !['free', 'by_permission', 'forbidden'].includes(c.value))) problems.push(`${where}: bad bishop stance condition`);
+      break;
     case 'not':
       checkCondition(c.inner, where, problems);
       break;
@@ -153,6 +166,11 @@ function checkEffect(e: Effect, where: string, problems: Problem[]): void {
   if (e.target === 'group' && !GROUP_EFFECT_KEYS.includes(e.key)) problems.push(`${where}: bad group effect key ${e.key}`);
   if (e.target === 'group' && (e.key === 'vitality' || e.key === 'size') && typeof e.delta !== 'number') problems.push(`${where}: group ${e.key} needs delta`);
   if ((e.target === 'money' || e.target === 'ap') && typeof e.delta !== 'number') problems.push(`${where}: ${e.target} effect needs delta`);
+  if (e.target === 'decor') {
+    const [place, slot] = e.key.split(':');
+    if (!DECOR_PLACES.includes(place ?? '') || !DECOR_SLOTS.includes(slot ?? '') || !DECOR_IDS.has(String(e.value))) problems.push(`${where}: bad decor effect ${e.key}=${String(e.value)}`);
+  }
+  if (e.target === 'permission' && (!LITURGICAL_TOPICS.includes(e.key) || !['granted', 'denied'].includes(String(e.value)))) problems.push(`${where}: bad permission effect`);
 }
 
 function tokensIn(text: string): string[] {
