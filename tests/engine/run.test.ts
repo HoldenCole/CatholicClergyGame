@@ -96,7 +96,12 @@ describe('engine/store with real content', () => {
   it('startGame enters seminary and the first year plays with real events', () => {
     const s = useGameStore.getState();
     s.startGame(answers);
-    expect(useGameStore.getState().game?.mode).toEqual({ kind: 'year_start', year: 1 });
+    const started = useGameStore.getState().game!;
+    expect(started.mode).toEqual({ kind: 'year_start', year: 1 });
+    // The world's people survive character creation.
+    expect(started.npcs[started.world!.diocese.hidden.bishop.npcId]).toBeTruthy();
+    for (const p of started.world!.parishes) expect(started.npcs[p.pastorId]?.tags).toContain('pastor');
+    expect(Object.values(started.npcs).filter((n) => n.role === 'official').length).toBeGreaterThanOrEqual(6);
     s.chooseEmphasis({ human: 3, spiritual: 3, intellectual: 2, pastoral: 2 });
     useGameStore.getState().setSpeed('MANUAL');
     let fired = 0;

@@ -24,7 +24,8 @@ export function generateRun(state: GameState, answers: CreationAnswers, rng: Rng
     ...generateFormators(rng.derive('formators'), answers.entryYear, { includeBishop: !state.world }),
     ...generateClass(rng.derive('classmates'), answers.entryYear),
   ];
-  const map = Object.fromEntries(npcs.map((n) => [n.id, n]));
+  // Merge: the world's bishop, chancery, and pastors are already in the state.
+  const map = { ...state.npcs, ...Object.fromEntries(npcs.map((n) => [n.id, n])) };
   const classmateIds = npcs.filter((n) => n.role === 'classmate').map((n) => n.id);
   const hooks = character.hooks.map((h) => {
     const npc = npcs.find((n) => n.tags.includes(h.id));
