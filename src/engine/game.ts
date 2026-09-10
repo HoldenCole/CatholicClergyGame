@@ -31,6 +31,14 @@ export function newGame(options: NewGameOptions): { state: GameState; rng: Rng }
     history: [],
     beats: [],
     digest: [],
+    mode: { kind: 'creation' },
+    character: null,
+    npcs: {},
+    seminary: null,
+    flags: {},
+    threads: {},
+    suppressedUntil: {},
+    firedOnce: [],
   };
   return { state, rng };
 }
