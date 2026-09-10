@@ -86,6 +86,17 @@ describe('systems/openings and the board', () => {
     expect(wins).toBeLessThan(60);
   });
 
+  it('a man who took the hard parish is sent to the difficult one', () => {
+    let s = parishState('hard');
+    const current = s.parish!.parishId;
+    const difficult = s.world!.parishes.find((p) => p.kind === 'difficult')!;
+    if (difficult.id === current) return;
+    s = { ...s, flags: { ...s.flags, ordination_week: 0, took_the_hard_parish: true }, clock: { ...s.clock, week: 52 * 2 }, openings: [] };
+    const r = nextAssignment(s, createRng('h'));
+    expect(r.state.assignment!.parishId).toBe(difficult.id);
+    expect(r.state.flags.hard_parish_honored).toBe(true);
+  });
+
   it('nextAssignment produces a traceable letter either way', () => {
     let s = parishState('next');
     s = { ...s, flags: { ...s.flags, ordination_week: 0 }, clock: { ...s.clock, week: 52 * 8 }, openings: [{ id: 'x', kind: 'pastor', parishId: 'parish_2', urgency: 90, needsSpanish: false, needsAdmin: false, alignment: 0, week: 400, label: 'Pastor of St. X' }] };

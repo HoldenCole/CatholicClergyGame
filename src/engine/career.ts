@@ -148,8 +148,11 @@ export function nextAssignment(state: GameState, rng: Rng): { state: GameState; 
     next = note(next, 'promotion', `Appointed ${role.replace('_', ' ')} of ${openingBlurb(next, won.opening).split(':')[0]}. ${won.reasons.slice(0, 2).join('; ')}.`);
   } else {
     // Another vicar posting: a parish other than the current one, weighted by need.
+    // A man who told the chancery he would take the hard parish gets it (offer content sets the flag).
     const others = next.world!.parishes.filter((p) => p.id !== next.parish?.parishId);
-    const parish = rng.derive(`posting:${next.clock.week}`).weighted(others, (p) => 10 + (p.needsSpanish && next.flags.speaks_spanish ? 20 : 0));
+    const hard = next.flags.took_the_hard_parish && !next.flags.hard_parish_honored ? others.find((p) => p.kind === 'difficult') : undefined;
+    const parish = hard ?? rng.derive(`posting:${next.clock.week}`).weighted(others, (p) => 10 + (p.needsSpanish && next.flags.speaks_spanish ? 20 : 0));
+    if (hard) next = { ...next, flags: { ...next.flags, hard_parish_honored: true } };
     const opening: Opening = { id: `vicar_${next.clock.week}`, kind: 'parochial_vicar', parishId: parish.id, urgency: 50, needsSpanish: parish.needsSpanish, needsAdmin: false, alignment: parish.alignment, week: next.clock.week, label: `Parochial Vicar of ${parish.name}` };
     const lost = decisions.find((d) => d.opening.parishId) ?? decisions[0];
     const reasons = lost ? lost.reasons : ['The board had nothing else for you this year'];

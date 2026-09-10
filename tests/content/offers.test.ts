@@ -8,7 +8,8 @@ const CATEGORIES = ['academic', 'chancery', 'patronage', 'social', 'seminary'];
 const SELECTORS = [
   '@rector', '@spiritual_director', '@formation_advisor', '@vocation_director', '@professor_trad', '@professor_prog',
   '@bishop', '@mother', '@father', '@sibling', '@mentor_priest', '@home_pastor', '@closest_classmate', '@rival_classmate',
-  '@random_classmate',
+  '@random_classmate', '@pastor', '@secretary', '@dre', '@music_director', '@maintenance', '@parishioner', '@brother_priest',
+  '@vicar_general', '@chancellor', '@vicar_for_clergy', '@group_leader',
 ];
 const EFFECT_TARGETS = [
   'stat', 'reputation', 'relationship', 'flag', 'thread', 'position', 'pillar', 'alignment', 'outspokenness', 'honesty',
