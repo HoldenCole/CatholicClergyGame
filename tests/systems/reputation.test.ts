@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { consistency, emptyReputation, isFigure, recordPosition } from '@/systems/reputation';
+import { consistency, emptyReputation, fadeReputation, isFigure, recordPosition } from '@/systems/reputation';
+import { REPUTATION_REST } from '@/systems/tuning';
 import { emptyStats } from '@/systems/stats';
 import type { Character } from '@/types';
 
@@ -81,5 +82,34 @@ describe('systems/reputation', () => {
       reputation: { ...emptyReputation(), traditional_bloc: 60 },
     });
     expect(isFigure(figure)).toBe(true);
+  });
+});
+
+describe('reputation fades when nothing feeds it', () => {
+  it('drifts toward the resting point from above and below, and stops there', () => {
+    const c = character({ reputation: { ...emptyReputation(0), parishioners: 90, chancery: -80, brother_priests: 20, public: 35 }, outspokenness: 70 });
+    const after = fadeReputation(c);
+    expect(after.reputation.parishioners).toBeLessThan(90);
+    expect(after.reputation.parishioners).toBeGreaterThan(REPUTATION_REST.floor);
+    expect(after.reputation.chancery).toBeGreaterThan(-80);
+    expect(after.reputation.chancery).toBeLessThan(-REPUTATION_REST.floor);
+    expect(after.reputation.brother_priests).toBe(20);
+    expect(after.reputation.public).toBe(35);
+    expect(after.outspokenness).toBeLessThan(70);
+    let years = c;
+    for (let i = 0; i < 52 * 6; i++) years = fadeReputation(years);
+    expect(years.reputation.parishioners).toBeCloseTo(REPUTATION_REST.floor, 0);
+    expect(years.reputation.chancery).toBeCloseTo(-REPUTATION_REST.floor, 0);
+    expect(years.outspokenness).toBeLessThan(REPUTATION_REST.outspokennessFloor + 3);
+    expect(years.reputation.brother_priests).toBe(20);
+  });
+
+  it('a year of quiet costs about half of what stood above the floor', () => {
+    let c = character({ reputation: { ...emptyReputation(0), parishioners: 95 }, outspokenness: 15 });
+    for (let i = 0; i < 52; i++) c = fadeReputation(c);
+    const lost = 95 - c.reputation.parishioners;
+    expect(lost).toBeGreaterThan((95 - REPUTATION_REST.floor) * 0.4);
+    expect(lost).toBeLessThan((95 - REPUTATION_REST.floor) * 0.7);
+    expect(c.outspokenness).toBe(15);
   });
 });

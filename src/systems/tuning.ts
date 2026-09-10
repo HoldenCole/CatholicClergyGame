@@ -40,3 +40,18 @@ export const ALIGNMENT_DRIFT_PER_POSITION = 0.08;
 /** DESIGN.md §5.6: past this outspokenness, with bloc support, the priest becomes a figure. */
 export const FIGURE_OUTSPOKENNESS = 60;
 export const FIGURE_BLOC_SUPPORT = 40;
+
+/**
+ * Standing fades when nothing feeds it. Above the resting point a
+ * constituency's opinion of a man drifts back toward it every week; below
+ * it, nothing moves without an action. Outspokenness fades the same way:
+ * a man who stops talking is, in time, less loud. Invented.
+ */
+export const REPUTATION_REST = {
+  /** Absolute value a reputation settles toward on its own. */
+  floor: 35,
+  /** Fraction of the excess above the floor lost each week (half-life near a year). */
+  ratePerWeek: 0.015,
+  outspokennessFloor: 15,
+  outspokennessRatePerWeek: 0.01,
+} as const;

@@ -5,6 +5,7 @@ import { applyEffects } from '@/engine/effects';
 import { commitmentAp } from '@/engine/offers';
 import { seasonOf } from '@/engine/time';
 import { decayWeek } from './stats';
+import { fadeReputation } from './reputation';
 import { groupRelief, groupsWeek, finishFounding } from './groups';
 import type { Rng } from '@/engine/rng';
 
@@ -171,7 +172,7 @@ export function resolveWeek(state: GameState, rng: Rng): { state: GameState; led
 
   // Decay.
   const c = next.character!;
-  next = { ...next, character: { ...c, stats: decayWeek(c.stats, { adminAp, theologyUsed, knowledgeUsed }) } };
+  next = { ...next, character: fadeReputation({ ...c, stats: decayWeek(c.stats, { adminAp, theologyUsed, knowledgeUsed }) }) };
 
   // Finance.
   const world = next.world!;

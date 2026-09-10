@@ -4,6 +4,7 @@ import {
   FIGURE_BLOC_SUPPORT,
   FIGURE_OUTSPOKENNESS,
   OUTSPOKENNESS_PER_VOLUME,
+  REPUTATION_REST,
 } from './tuning';
 
 export function clampSigned(value: number): number {
@@ -12,6 +13,30 @@ export function clampSigned(value: number): number {
 
 export function applyReputation(rep: Reputation, key: ConstituencyKey, delta: number): Reputation {
   return { ...rep, [key]: clampSigned(rep[key] + delta) };
+}
+
+/** One value's weekly drift back toward ±floor. Below the floor it stays put. */
+function fadeToward(value: number, floor: number, rate: number): number {
+  const excess = Math.abs(value) - floor;
+  if (excess <= 0) return value;
+  return value - Math.sign(value) * excess * rate;
+}
+
+/**
+ * A week of nothing in particular. Every constituency's opinion fades toward
+ * the resting point, and a man who has stopped talking grows quieter. What
+ * sits at or under the floor does not move; it takes an action to change it.
+ */
+export function fadeReputation(character: Character): Character {
+  const rep = { ...character.reputation };
+  for (const key of Object.keys(rep) as ConstituencyKey[]) {
+    rep[key] = fadeToward(rep[key], REPUTATION_REST.floor, REPUTATION_REST.ratePerWeek);
+  }
+  return {
+    ...character,
+    reputation: rep,
+    outspokenness: fadeToward(character.outspokenness, REPUTATION_REST.outspokennessFloor, REPUTATION_REST.outspokennessRatePerWeek),
+  };
 }
 
 export function emptyReputation(value = 0): Reputation {
