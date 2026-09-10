@@ -308,3 +308,12 @@ rare and belong to a particular temper (a micromanager, a reformer, a man
 who cannot bear freelancing), carry a low `baseWeight`, and say plainly
 that they are not requests. Every request must leave the pastor a way to
 decline that costs something real and nothing that ends the run.
+
+## Family (`events/parish/family.json`)
+
+Family drama follows the family chosen at creation, through the flags
+`family:<id>` and the family selectors (`@mother`, `@father`, `@sibling`
+resolve only while that person is living). Keep these quiet: a
+`baseWeight` of 4 or less and `suppressYears` of 4 or more, deaths and
+the big turns `once`, so a career meets a handful and not a season of
+them. The estranged man gets fewer, because he would.
