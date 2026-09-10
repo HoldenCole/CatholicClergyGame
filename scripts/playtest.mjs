@@ -1,3 +1,4 @@
+/* eslint-env node */
 // Fold the playtest build into one HTML file: dist-playtest/vocation.html.
 // The result is a page fragment (no <html>/<head>/<body>) so it can be
 // published as-is or dropped into any host page.
