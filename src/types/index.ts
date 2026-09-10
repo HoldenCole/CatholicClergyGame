@@ -15,3 +15,4 @@ export * from './parish';
 export * from './groups';
 export * from './promotion';
 export * from './career';
+export * from './decor';

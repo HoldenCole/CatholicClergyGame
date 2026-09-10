@@ -5,7 +5,9 @@ import { seasonOf } from '@/engine/time';
 import { planWeek } from '@/systems/week';
 import type { Quality } from '@/types';
 import SceneArt from './SceneArt';
-import { SCENES, sceneById, type HotspotBinding, type SceneId } from './scenes';
+import { CHANCERY_SCENE, SCENES, SEMINARY_SCENE, sceneById, type HotspotBinding, type SceneId } from './scenes';
+import FurnishPanel from './FurnishPanel';
+import type { DecorPlace } from '@/types';
 
 const NEXT_QUALITY: Record<Quality, Quality> = { min: 'standard', standard: 'invested', invested: 'min' };
 
@@ -18,12 +20,16 @@ export default function SceneView({ onPanel }: { onPanel: (panel: string) => voi
   const game = useGameStore((s) => s.game);
   const setDiscretionary = useGameStore((s) => s.setDiscretionary);
   const setObligation = useGameStore((s) => s.setObligation);
-  const [sceneId, setSceneId] = useState<SceneId>('rectory');
+  const inSeminary = !!game?.seminary && !game?.parish;
+  const [sceneId, setSceneId] = useState<SceneId>(inSeminary ? 'seminary_room' : 'rectory');
   const [hover, setHover] = useState<string | null>(null);
-  if (!game?.parish) return null;
-  const scene = sceneById(sceneId);
-  const plan = planWeek(game);
-  const routine = game.parish.routine;
+  const [furnishing, setFurnishing] = useState<DecorPlace | null>(null);
+  if (!game || (!game.parish && !game.seminary)) return null;
+  const scene = sceneById(inSeminary ? 'seminary_room' : sceneId);
+  const plan = game.parish ? planWeek(game) : null;
+  const routine = game.parish?.routine ?? { obligations: {} as Record<string, never>, discretionary: {} as Record<string, number> };
+  const hasChancery = Object.keys(game.flags).some((k) => k.startsWith('office:') && game.flags[k]);
+  const rooms = inSeminary ? [SEMINARY_SCENE] : hasChancery ? [...SCENES, CHANCERY_SCENE] : SCENES;
 
   const describe = (binds: HotspotBinding): string => {
     switch (binds.kind) {
@@ -34,12 +40,14 @@ export default function SceneView({ onPanel }: { onPanel: (panel: string) => voi
       }
       case 'obligation': {
         const def = obligationDefs.find((o) => o.key === binds.key)!;
-        const q = routine.obligations[binds.key];
-        const actual = plan.obligations[binds.key];
+        const q = (routine.obligations as Record<string, Quality>)[binds.key] ?? 'standard';
+        const actual = plan?.obligations[binds.key] ?? q;
         return `${def.label}: ${q}${actual !== q ? `, cut to ${actual} this week` : ''}. ${def.blurb[q]} (click to change)`;
       }
       case 'panel':
         return `Open: ${binds.panel}`;
+      case 'furnish':
+        return binds.place === 'church' ? 'How the church looks. The pastor decides.' : 'How this room looks. Click to change it.';
       case 'scene':
         return sceneById(binds.scene).label;
     }
@@ -56,13 +64,16 @@ export default function SceneView({ onPanel }: { onPanel: (panel: string) => voi
       }
       case 'obligation': {
         const def = obligationDefs.find((o) => o.key === binds.key)!;
-        let next = NEXT_QUALITY[routine.obligations[binds.key]];
+        let next = NEXT_QUALITY[(routine.obligations as Record<string, Quality>)[binds.key] ?? 'standard'];
         if (next === 'invested' && def.ap.invested === null) next = 'min';
         setObligation(binds.key, next);
         break;
       }
       case 'panel':
         onPanel(binds.panel);
+        break;
+      case 'furnish':
+        setFurnishing(binds.place);
         break;
       case 'scene':
         setSceneId(binds.scene);
@@ -77,7 +88,7 @@ export default function SceneView({ onPanel }: { onPanel: (panel: string) => voi
       <div className="flex items-center justify-between border-b border-stone-800 px-4 py-2">
         <span className="text-xs uppercase tracking-widest text-stone-400">{scene.label}</span>
         <nav className="flex gap-1">
-          {SCENES.map((s) => (
+          {rooms.map((s) => (
             <button
               key={s.id}
               onClick={() => setSceneId(s.id)}
@@ -89,9 +100,9 @@ export default function SceneView({ onPanel }: { onPanel: (panel: string) => voi
         </nav>
       </div>
       <div className="relative aspect-[100/60] w-full overflow-hidden">
-        <SceneArt scene={sceneId} season={seasonOf(game.clock)} />
+        <SceneArt scene={scene.id} season={seasonOf(game.clock)} state={game} />
         {scene.hotspots.map((h) => {
-          const active = h.binds.kind === 'action' ? (routine.discretionary[h.binds.actionId] ?? 0) > 0 : h.binds.kind === 'obligation' ? routine.obligations[h.binds.key] !== 'standard' : false;
+          const active = h.binds.kind === 'action' ? (routine.discretionary[h.binds.actionId] ?? 0) > 0 : h.binds.kind === 'obligation' ? (routine.obligations as Record<string, Quality>)[h.binds.key] !== 'standard' : false;
           return (
             <button
               key={h.id}
@@ -110,9 +121,10 @@ export default function SceneView({ onPanel }: { onPanel: (panel: string) => voi
           );
         })}
         <div className="pointer-events-none absolute bottom-0 left-0 right-0 bg-gradient-to-t from-stone-950/90 to-transparent px-4 py-2 text-sm text-stone-200">
-          {hovered ? describe(hovered.binds) : 'Everything in the room is something you could do with the week.'}
+          {hovered ? describe(hovered.binds) : inSeminary ? 'Your room. The shelf fills with what you give the year to.' : 'Everything in the room is something you could do with the week.'}
         </div>
       </div>
+      {furnishing && <FurnishPanel place={furnishing} onClose={() => setFurnishing(null)} />}
     </div>
   );
 }

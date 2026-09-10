@@ -104,7 +104,8 @@ export function parishWeekHook(deps: EventDeps): WeekHook {
       if (next.mode.kind !== 'clock' || next.pending.length > 0) return next;
     }
     if (isPlayedWeek(next)) {
-      const [event] = drawEvents(deps.pool, next, rng, 1);
+      // Beat events (a succession) fire only through their beat, never on an ordinary played week.
+      const [event] = drawEvents(deps.pool.filter((e) => !e.beat), next, rng, 1);
       if (event) next = fireOrResolve(next, event, rng, deps);
     }
     if (reachedBeats.some((b) => b.kind === 'assignment') && next.mode.kind === 'clock') {

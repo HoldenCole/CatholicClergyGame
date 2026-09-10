@@ -9,6 +9,7 @@ import type { ParishState } from './parish';
 import type { Founding, Group } from './groups';
 import type { CareerEntry, Project } from './career';
 import type { Opening } from './promotion';
+import type { DecorState } from './decor';
 
 /** A rolled diocese the player may choose, held only during creation. */
 export interface DioceseCandidate {
@@ -85,6 +86,8 @@ export interface GameState {
   career: CareerEntry[];
   /** Rome's current temperament, −100..100, for successions. DESIGN 9.3 */
   romeTemperament: number;
+  /** How places look: chosen furnishings by place key. */
+  decor: DecorState;
 }
 
 export interface DigestWeek {

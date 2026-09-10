@@ -35,6 +35,8 @@ import { setDiscretionary as doSetDiscretionary, setObligation as doSetObligatio
 import { startFounding as doStartFounding, suppressGroup as doSuppress } from '@/systems/groups';
 import type { GroupType, ProjectType } from '@/types';
 import { startProject as doStartProject } from '@/systems/projects';
+import { furnish as doFurnish } from '@/systems/decor';
+import type { DecorPlace } from '@/types';
 import { anthropicProvider, type Provider } from '@/llm/provider';
 import { DEFAULT_LLM, loadLlmSettings, saveLlmSettings, type LlmSettings } from '@/llm/settings';
 import { skinArc, skinEvent, skinOutcome } from '@/llm/skin';
@@ -81,6 +83,8 @@ export interface GameStore {
   foundGroup(type: GroupType): void;
   suppressGroup(groupId: string, suppressed: boolean): void;
   startProject(type: ProjectType): void;
+  furnish(place: DecorPlace, optionId: string): void;
+  lastFurnishLine: string | null;
 
   /** The skinning layer. Off by default; the game is complete without it. */
   llm: LlmSettings;
@@ -164,6 +168,7 @@ export const useGameStore = create<GameStore>()((set, get) => ({
   running: false,
   error: null,
   lastOfferOutcome: null,
+  lastFurnishLine: null,
   llm: typeof window === 'undefined' ? DEFAULT_LLM : loadLlmSettings(),
 
   setLlm(patch) {
@@ -348,6 +353,13 @@ export const useGameStore = create<GameStore>()((set, get) => ({
   },
   startProject(type) {
     update(set, get, (game) => doStartProject(game, type));
+  },
+  furnish(place, optionId) {
+    update(set, get, (game) => {
+      const r = doFurnish(game, place, optionId);
+      set({ lastFurnishLine: r.line });
+      return r.state;
+    });
   },
   acceptOffer(offerId) {
     const def = offerById(offerId);

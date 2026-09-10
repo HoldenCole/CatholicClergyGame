@@ -5,12 +5,13 @@ import type { ActionLocation, ObligationKey } from '@/types';
  * systems already own: a discretionary action (by location), an obligation
  * dial, a panel, or another scene. Coordinates are percentages of the scene.
  */
-export type SceneId = 'church' | 'rectory' | 'office' | 'hall' | 'chapel' | 'street' | 'study';
+export type SceneId = 'church' | 'rectory' | 'office' | 'hall' | 'chapel' | 'street' | 'study' | 'seminary_room' | 'chancery';
 
 export type HotspotBinding =
   | { kind: 'action'; actionId: string }
   | { kind: 'obligation'; key: ObligationKey }
-  | { kind: 'panel'; panel: 'routine' | 'groups' | 'projects' | 'offers' | 'digest' | 'parish' }
+  | { kind: 'panel'; panel: 'routine' | 'groups' | 'projects' | 'offers' | 'digest' | 'parish' | 'formation' }
+  | { kind: 'furnish'; place: 'church' | 'office' | 'rectory' | 'seminary_room' | 'chancery' }
   | { kind: 'scene'; scene: SceneId };
 
 export interface Hotspot {
@@ -43,6 +44,7 @@ export const SCENES: SceneDef[] = [
       { id: 'confessions_hours', label: 'The posted confession hours', x: 78, y: 28, w: 14, h: 8, binds: { kind: 'obligation', key: 'confessions' } },
       { id: 'baptistery', label: 'The baptistery: sacramental preparation', x: 8, y: 60, w: 16, h: 18, binds: { kind: 'obligation', key: 'sacramental_prep' } },
       { id: 'sacristy', label: 'The sacristy door', x: 62, y: 30, w: 10, h: 24, binds: { kind: 'scene', scene: 'chapel' } },
+      { id: 'sanctuary', label: 'The sanctuary: how the church looks', x: 26, y: 4, w: 48, h: 16, binds: { kind: 'furnish', place: 'church' } },
       { id: 'doors', label: 'The doors: out to the street', x: 44, y: 78, w: 12, h: 18, binds: { kind: 'scene', scene: 'street' } },
     ],
   },
@@ -56,6 +58,7 @@ export const SCENES: SceneDef[] = [
       { id: 'office_door', label: 'The office', x: 78, y: 24, w: 12, h: 40, binds: { kind: 'scene', scene: 'office' } },
       { id: 'study_door', label: 'The study, upstairs', x: 58, y: 8, w: 18, h: 16, binds: { kind: 'scene', scene: 'study' } },
       { id: 'mail', label: 'The mail on the sideboard: offers', x: 8, y: 60, w: 14, h: 12, binds: { kind: 'panel', panel: 'offers' } },
+      { id: 'corner', label: 'The corner: how the rectory looks', x: 6, y: 8, w: 12, h: 20, binds: { kind: 'furnish', place: 'rectory' } },
       { id: 'front_door', label: 'The front door', x: 40, y: 80, w: 12, h: 16, binds: { kind: 'scene', scene: 'street' } },
     ],
   },
@@ -71,7 +74,7 @@ export const SCENES: SceneDef[] = [
       { id: 'chair_right', label: 'The chair where the visitor sits: offers', x: 65, y: 20, w: 11, h: 14, binds: { kind: 'panel', panel: 'offers' } },
       { id: 'window', label: 'The window: the week', x: 36, y: 4, w: 28, h: 24, binds: { kind: 'panel', panel: 'digest' } },
       { id: 'crucifix', label: 'The crucifix: personal prayer', x: 14, y: 8, w: 10, h: 16, binds: { kind: 'action', actionId: 'prayer' } },
-      { id: 'icon', label: 'The icon: the chapel', x: 72, y: 7, w: 10, h: 12, binds: { kind: 'scene', scene: 'chapel' } },
+      { id: 'wall', label: 'The wall: how your office looks', x: 72, y: 7, w: 10, h: 12, binds: { kind: 'furnish', place: 'office' } },
       { id: 'globe', label: 'The globe: out into the street', x: 8, y: 22, w: 13, h: 18, binds: { kind: 'scene', scene: 'street' } },
     ],
   },
@@ -122,6 +125,32 @@ export const SCENES: SceneDef[] = [
   },
 ];
 
+export const SEMINARY_SCENE: SceneDef = {
+  id: 'seminary_room',
+  label: 'Your room',
+  locations: [],
+  hotspots: [
+    { id: 'desk', label: 'The desk: your formation', x: 52, y: 30, w: 40, h: 16, binds: { kind: 'panel', panel: 'formation' } },
+    { id: 'window', label: 'The window: the week', x: 60, y: 6, w: 24, h: 18, binds: { kind: 'panel', panel: 'digest' } },
+    { id: 'mail', label: 'The mail on the bed: offers', x: 6, y: 34, w: 34, h: 12, binds: { kind: 'panel', panel: 'offers' } },
+    { id: 'shelf', label: 'The shelf', x: 6, y: 6, w: 30, h: 22, binds: { kind: 'furnish', place: 'seminary_room' } },
+  ],
+};
+
+export const CHANCERY_SCENE: SceneDef = {
+  id: 'chancery',
+  label: 'Your office at the chancery',
+  locations: ['chancery'],
+  hotspots: [
+    { id: 'desk', label: 'The desk: administrative catch-up', x: 26, y: 38, w: 48, h: 16, binds: { kind: 'action', actionId: 'admin' } },
+    { id: 'window', label: 'The window: the week', x: 36, y: 4, w: 28, h: 22, binds: { kind: 'panel', panel: 'digest' } },
+    { id: 'files', label: 'The files: the parish', x: 78, y: 10, w: 16, h: 30, binds: { kind: 'panel', panel: 'parish' } },
+    { id: 'door', label: 'Back to the parish', x: 4, y: 20, w: 12, h: 30, binds: { kind: 'scene', scene: 'office' } },
+  ],
+};
+
 export function sceneById(id: SceneId): SceneDef {
+  if (id === 'seminary_room') return SEMINARY_SCENE;
+  if (id === 'chancery') return CHANCERY_SCENE;
   return SCENES.find((s) => s.id === id)!;
 }

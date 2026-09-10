@@ -54,7 +54,7 @@ export default function App() {
       <main className="mx-auto max-w-6xl grid grid-cols-12 gap-6 p-6">
         <section className="col-span-8 flex flex-col gap-6">
           {decision}
-          {!decision && game.parish && <SceneView onPanel={jump} />}
+          {!decision && (game.parish || game.seminary) && <SceneView onPanel={jump} />}
           <div ref={(el) => { panels.current.offers = el; }}><OffersPanel /></div>
           <ClockPanel />
           {!decision && <SpeedControls />}
@@ -63,7 +63,7 @@ export default function App() {
         </section>
         <aside className="col-span-4 flex flex-col gap-6">
           {error && <p className="rounded border border-red-900 bg-red-950/30 p-3 text-sm text-red-300">{error}</p>}
-          <div ref={(el) => { panels.current.parish = el; }}>{game.parish ? <ParishPanel /> : game.seminary && <FormationPanel />}</div>
+          <div ref={(el) => { panels.current.parish = el; panels.current.formation = el; }}>{game.parish ? <ParishPanel /> : game.seminary && <FormationPanel />}</div>
           {game.parish && <div ref={(el) => { panels.current.groups = el; }}><GroupsPanel /></div>}
           {game.parish && <div ref={(el) => { panels.current.projects = el; }}><ProjectsPanel /></div>}
           <InterruptSettings />

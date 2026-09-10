@@ -1,5 +1,13 @@
-import type { Season } from '@/types';
+import type { AmbientItem, GameState, PlaceDecor, Season } from '@/types';
 import type { SceneId } from './scenes';
+import { ambientFor, currentDecor } from '@/systems/decor';
+import { AltarRail, Ambient, Choir, Confessionals, CornerItem, Orientation, Sanctuary, Statues, Tabernacle, WallItem } from './Layers';
+import { decorOptions } from '@/systems/decor';
+
+function art(decor: PlaceDecor, slot: keyof PlaceDecor, fallback: string): string {
+  const id = decor[slot];
+  return decorOptions.find((o) => o.id === id)?.art ?? fallback;
+}
 
 /**
  * Painted-room backdrops in SVG, drawn in a 100×60 box so hotspot
@@ -16,8 +24,12 @@ const SEASON_SKY: Record<Season, [string, string]> = {
   easter: ['#8fbce8', '#f3ecd8'],
 };
 
-export default function SceneArt({ scene, season }: { scene: SceneId; season: Season }) {
+export default function SceneArt({ scene, season, state }: { scene: SceneId; season: Season; state: GameState }) {
   const [skyTop, skyBottom] = SEASON_SKY[season];
+  const church = currentDecor(state, 'church');
+  const office = currentDecor(state, 'office');
+  const rectory = currentDecor(state, 'rectory');
+  const ambient = (place: Parameters<typeof ambientFor>[1]) => ambientFor(state, place);
   return (
     <svg viewBox="0 0 100 60" className="absolute inset-0 h-full w-full" preserveAspectRatio="none" aria-hidden>
       <defs>
@@ -69,13 +81,15 @@ export default function SceneArt({ scene, season }: { scene: SceneId; season: Se
           <stop offset="1" stopColor="#000" stopOpacity="0.55" />
         </radialGradient>
       </defs>
-      {scene === 'office' && <Office />}
-      {scene === 'rectory' && <Rectory />}
-      {scene === 'church' && <Church />}
+      {scene === 'office' && <Office decor={office} ambient={ambient('office')} />}
+      {scene === 'rectory' && <Rectory decor={rectory} ambient={ambient('rectory')} />}
+      {scene === 'church' && <Church decor={church} />}
       {scene === 'hall' && <Hall />}
       {scene === 'chapel' && <Chapel />}
       {scene === 'street' && <Street />}
       {scene === 'study' && <Study />}
+      {scene === 'seminary_room' && <SeminaryRoom ambient={ambient('seminary_room')} />}
+      {scene === 'chancery' && <Chancery ambient={ambient('chancery')} />}
       <rect width="100" height="60" fill="url(#vignette)" />
     </svg>
   );
@@ -193,29 +207,98 @@ function Desk({ x, y, w }: { x: number; y: number; w: number }) {
   );
 }
 
-function Office() {
+function Office({ decor, ambient }: { decor: PlaceDecor; ambient: AmbientItem[] }) {
+  const wall = art(decor, 'wall', 'crucifix');
+  const corner = art(decor, 'corner', 'files');
+  const desk = art(decor, 'desk', 'inherited');
   return (
     <g>
       <Room floorY={44} dadoY={31} />
       <Window x={37} y={4} w={26} h={22} />
       <Crucifix x={19} y={9} s={1.1} />
-      <Icon x={73} y={8} />
-      <Globe x={14} y={28} />
+      {wall === 'icon' && <Icon x={73} y={8} />}
+      {wall !== 'icon' && wall !== 'crucifix' && <WallItem scene="office" variant={wall} x={72} y={8} />}
+      {corner === 'globe' ? <Globe x={14} y={28} /> : <CornerItem scene="office" variant={corner} x={14} y={30} />}
       <Chair x={26} y={24} />
       <Chair x={66} y={24} />
       <rect x="16" y="46" width="68" height="14" fill="url(#rug)" />
       <rect x="16" y="46" width="68" height="14" fill="none" stroke="#c9a24a" strokeWidth="0.6" />
-      <Desk x={22} y={34} w={56} />
+      {desk === 'plain' ? (
+        <g>
+          <rect x="24" y="36" width="52" height="3" fill="#d6d3d1" />
+          <rect x="24" y="39" width="52" height="8" fill="#a8a29e" />
+          <rect x="26" y="47" width="2" height="5" fill="#57534e" />
+          <rect x="72" y="47" width="2" height="5" fill="#57534e" />
+        </g>
+      ) : (
+        <Desk x={22} y={34} w={56} />
+      )}
+      <Ambient scene="office" items={ambient} anchor={{ books: [2, 4], wall: [84, 8], desk: [24, 34] }} />
     </g>
   );
 }
 
-function Rectory() {
+function SeminaryRoom({ ambient }: { ambient: AmbientItem[] }) {
+  return (
+    <g>
+      <rect width="100" height="42" fill="#e8dcc0" />
+      <rect width="100" height="42" fill="url(#wallLight)" />
+      <rect y="42" width="100" height="18" fill="#8a6a3a" />
+      <rect y="42" width="100" height="18" fill="url(#wallLight)" />
+      <Window x={62} y={6} w={22} h={16} />
+      <Crucifix x={50} y={8} s={0.8} />
+      {/* bed */}
+      <rect x="6" y="34" width="34" height="10" fill="#f3eee0" stroke="#7a6a4a" strokeWidth="0.3" />
+      <rect x="6" y="30" width="34" height="4" fill="#7a1f1f" />
+      <rect x="8" y="31" width="8" height="3" fill="#f5f5f4" />
+      <rect x="4" y="28" width="2" height="18" fill="#5a3a12" />
+      {/* desk */}
+      <rect x="52" y="30" width="40" height="2.5" fill="url(#woodTop)" />
+      <rect x="54" y="32.5" width="2" height="12" fill="#3f1d0b" />
+      <rect x="88" y="32.5" width="2" height="12" fill="#3f1d0b" />
+      <rect x="56" y="27" width="8" height="3" fill="#f3eee0" />
+      <rect x="80" y="22" width="1" height="8" fill="#a8a29e" />
+      <polygon points="76,22 85,22 82,26 79,26" fill="#f5c542" opacity="0.6" />
+      {/* shelf */}
+      <rect x="6" y="6" width="30" height="20" fill="#7a3f19" opacity="0.4" />
+      <Ambient scene="seminary_room" items={ambient} anchor={{ books: [7, 7], wall: [10, 8], desk: [56, 30] }} />
+    </g>
+  );
+}
+
+function Chancery({ ambient }: { ambient: AmbientItem[] }) {
+  return (
+    <g>
+      <rect width="100" height="42" fill="#d9d3c5" />
+      <rect width="100" height="42" fill="url(#wallLight)" />
+      <rect y="42" width="100" height="18" fill="#3a3a3a" />
+      <rect y="42" width="100" height="18" fill="url(#wallLight)" />
+      <Window x={37} y={4} w={26} h={22} />
+      <Crucifix x={19} y={10} s={0.8} />
+      <rect x="78" y="10" width="16" height="30" fill="#57534e" stroke="#292524" strokeWidth="0.3" />
+      {[14, 20, 26, 32].map((y) => (
+        <rect key={y} x="79" y={y} width="14" height="0.8" fill="#292524" />
+      ))}
+      <rect x="26" y="38" width="48" height="3" fill="#d6d3d1" />
+      <rect x="26" y="41" width="48" height="8" fill="#a8a29e" />
+      <rect x="28" y="49" width="2" height="5" fill="#57534e" />
+      <rect x="70" y="49" width="2" height="5" fill="#57534e" />
+      <rect x="4" y="20" width="12" height="30" fill="#5a2a0e" stroke="#3f1d0b" strokeWidth="0.3" />
+      <Ambient scene="chancery" items={ambient} anchor={{ books: [2, 44], wall: [64, 6], desk: [28, 38] }} />
+    </g>
+  );
+}
+
+function Rectory({ decor, ambient }: { decor: PlaceDecor; ambient: AmbientItem[] }) {
+  const wall = art(decor, 'wall', 'crucifix');
+  const corner = art(decor, 'corner', 'tv');
   return (
     <g>
       <Room floorY={42} dadoY={30} />
       <Window x={56} y={6} w={18} h={14} />
-      <Crucifix x={10} y={8} s={0.8} />
+      {wall === 'crucifix' ? <Crucifix x={10} y={8} s={0.8} /> : <WallItem scene="rectory" variant={wall} x={6} y={8} />}
+      <CornerItem scene="rectory" variant={corner} x={12} y={26} />
+      <Ambient scene="rectory" items={ambient.filter((i) => i.layer === 'family' || i.layer === 'prayer')} anchor={{ books: [0, 0], wall: [20, 8], desk: [30, 33] }} />
       {/* sideboard with mail */}
       <rect x="4" y="34" width="16" height="7" fill="url(#wood)" stroke="#3f1d0b" strokeWidth="0.3" />
       <rect x="6" y="32.4" width="6" height="1.6" fill="#f3eee0" />
@@ -244,7 +327,8 @@ function Rectory() {
   );
 }
 
-function Church() {
+function Church({ decor }: { decor: PlaceDecor }) {
+  const sanctuary = art(decor, 'sanctuary', 'plain');
   return (
     <g>
       <rect width="100" height="60" fill="#2a2420" />
@@ -262,19 +346,16 @@ function Church() {
       {/* sanctuary */}
       <rect x="22" y="8" width="56" height="32" fill="#e8dcc0" />
       <path d="M36 8 Q50 -2 64 8 Z" fill="#c9a24a" opacity="0.5" />
-      <rect x="40" y="22" width="20" height="9" fill="#f3eee0" stroke="#c9a24a" strokeWidth="0.4" />
-      <rect x="44" y="12" width="12" height="10" fill="#b8892f" opacity="0.4" />
-      <Crucifix x={50} y={10} s={1.2} />
-      <rect x="47" y="19" width="6" height="3" fill="#c9a24a" />
-      {/* side altar */}
-      <rect x="24" y="24" width="12" height="7" fill="#e8dcc0" stroke="#c9a24a" strokeWidth="0.3" />
-      <rect x="28" y="20" width="4" height="4" fill="#1f3a6e" />
+      <Sanctuary variant={sanctuary} />
+      <Crucifix x={50} y={2} s={sanctuary === 'modern' ? 0.9 : 1.1} />
+      <Tabernacle variant={art(decor, 'tabernacle', 'center')} />
+      <Orientation variant={art(decor, 'orientation', 'populum')} />
+      <Statues variant={art(decor, 'statues', 'many')} />
+      <Choir variant={art(decor, 'choir', 'loft')} />
       {/* baptistery */}
       <ellipse cx="30" cy="42" rx="6" ry="2.5" fill="#d8c8a0" stroke="#7a6a4a" strokeWidth="0.3" />
-      {/* confessional */}
-      <rect x="64" y="24" width="12" height="16" fill="url(#wood)" stroke="#3f1d0b" strokeWidth="0.3" />
-      <rect x="68" y="27" width="4" height="12" fill="#1c1917" />
-      <rect x="64" y="21" width="12" height="3" fill="#7a3f19" />
+      <Confessionals variant={art(decor, 'confessionals', 'booths')} />
+      <AltarRail variant={art(decor, 'altar_rail', 'none')} />
       {/* pews */}
       {[44, 47.5, 51, 54.5].map((y) => (
         <g key={y}>
