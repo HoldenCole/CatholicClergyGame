@@ -3,6 +3,8 @@ import { dateOf, gameYearOf, seasonOf, weekOfYear } from '@/engine/time';
 import { formatDate, SEASON_LABELS } from '@/engine/calendar';
 import type { StopReason } from '@/engine/clock';
 import { SPEEDS, type Speed } from '@/types';
+import Portrait from './portraits/Portrait';
+import { portraitForCharacter, yearOf } from './portraits/spec';
 
 const PHASE_LABELS: Record<string, string> = {
   seminary: 'Seminarian',
@@ -53,8 +55,9 @@ export default function Hud() {
 
   return (
     <header className="plate flex items-center justify-between gap-6 px-5 py-2">
-      <div className="flex min-w-0 items-baseline gap-4">
+      <div className="flex min-w-0 items-center gap-4">
         <h1 className="title text-lg tracking-wide" style={{ color: '#e6c25a' }}>Vocation</h1>
+        {c && <Portrait portrait={portraitForCharacter(c, yearOf(clock.startDay, clock.week), game.phase)} size={34} title={`${c.name.first} ${c.name.last}`} />}
         <span className="truncate text-sm">
           {c ? `${c.name.first} ${c.name.last}, ` : ''}{PHASE_LABELS[game.phase] ?? game.phase}
         </span>

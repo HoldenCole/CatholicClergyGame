@@ -32,7 +32,9 @@ const SHELLS: Record<ParishKind, Shell> = {
  * glass, ceiling) comes from the parish's kind; everything the pastor can
  * change is a layer on top.
  */
-export function Church({ decor, parish }: { decor: PlaceDecor; parish: Parish | undefined }) {
+export interface PriestLook { skin: string; hair: string }
+
+export function Church({ decor, parish, priest }: { decor: PlaceDecor; parish: Parish | undefined; priest?: PriestLook }) {
   const shell = SHELLS[parish?.kind ?? 'rural'];
   const rich = (parish?.wealth ?? 3) >= 4;
   const tl = wallPoint('left', 0, 0);
@@ -76,7 +78,7 @@ export function Church({ decor, parish }: { decor: PlaceDecor; parish: Parish | 
       <Tabernacle variant={art(decor, 'tabernacle', 'center')} sanctuary={sanctuary} />
       <Altar sanctuary={sanctuary} rich={rich} />
       <MassForm variant={art(decor, 'mass_form', 'vernacular')} />
-      <Orientation variant={art(decor, 'orientation', 'populum')} />
+      <Orientation variant={art(decor, 'orientation', 'populum')} {...(priest ? { look: priest } : {})} />
       <Ambo />
       <Statues variant={art(decor, 'statues', 'many')} warmth={shell.warmth} />
       <Choir variant={art(decor, 'choir', 'loft')} />
@@ -261,22 +263,24 @@ function Tabernacle({ variant, sanctuary }: { variant: string; sanctuary: string
   );
 }
 
-function Priest({ x, y, facing }: { x: number; y: number; facing: 'away' | 'toward' }) {
+function Priest({ x, y, facing, look }: { x: number; y: number; facing: 'away' | 'toward'; look?: PriestLook }) {
+  const skin = look?.skin ?? '#e3c69c';
+  const hair = look?.hair ?? '#4a3020';
   return (
     <g>
       <ellipse cx={x} cy={y + 8.5} rx="2.2" ry="0.6" fill="#1a0f08" opacity="0.35" filter="url(#soft)" />
       <path d={`M${x - 2.2} ${y + 8.5} L${x - 1.6} ${y + 1.5} Q${x} ${y} ${x + 1.6} ${y + 1.5} L${x + 2.2} ${y + 8.5} Z`} fill="#3a8a4a" />
       <path d={`M${x - 0.7} ${y + 1.5} h1.4 v6.5 h-1.4 Z`} fill="#c9a24a" opacity="0.8" />
-      <circle cx={x} cy={y} r="1.1" fill={facing === 'toward' ? '#e3c69c' : '#4a3020'} />
-      {facing === 'toward' && <circle cx={x} cy={y - 0.9} r="0.9" fill="#4a3020" clipPath="inset(0 0 50% 0)" />}
+      <circle cx={x} cy={y} r="1.1" fill={facing === 'toward' ? skin : hair} />
+      {facing === 'toward' && <path d={`M${x - 1.1} ${y} a1.1 1.1 0 0 1 2.2 0 Z`} fill={hair} />}
     </g>
   );
 }
 
-function Orientation({ variant }: { variant: string }) {
+function Orientation({ variant, look }: { variant: string; look?: PriestLook }) {
   return (
     <Layer scene="church" layer="orientation" variant={variant}>
-      {variant === 'orientem' ? <Priest x={50} y={26} facing="away" /> : <Priest x={50} y={30.5} facing="toward" />}
+      {variant === 'orientem' ? <Priest x={50} y={26} facing="away" {...(look ? { look } : {})} /> : <Priest x={50} y={30.5} facing="toward" {...(look ? { look } : {})} />}
     </Layer>
   );
 }

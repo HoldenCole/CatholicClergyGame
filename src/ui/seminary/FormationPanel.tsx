@@ -4,6 +4,8 @@ import { FORMATION } from '@/systems/formation';
 import { PILLARS, STAT_KEYS, CONSTITUENCY_KEYS, type Pillar } from '@/types';
 import Sheet from '../Sheet';
 import { pillarWord } from './EvaluationPanel';
+import Portrait from '../portraits/Portrait';
+import { portraitForCharacter, portraitForNpc, yearOf } from '../portraits/spec';
 
 const PILLAR_LABEL: Record<Pillar, string> = { human: 'Human', spiritual: 'Spiritual', intellectual: 'Intellectual', pastoral: 'Pastoral' };
 
@@ -18,10 +20,15 @@ export default function FormationPanel() {
   // Mid-year, show where the pillar is heading at the current pace rather than the raw total so far.
   const elapsed = Math.max(1, Math.min(FORMATION.academicWeeks, game.clock.week - sem.yearStartWeek));
   const pace = (p: Pillar) => (sem.pillarScores[p] * FORMATION.academicWeeks) / elapsed;
+  const year = yearOf(game.clock.startDay, game.clock.week);
 
   return (
     <>
       <Sheet title={`${c.name.first} ${c.name.last} · year ${sem.year} · ${sem.name}`}>
+        <div className="mb-3 flex items-center gap-3">
+          <Portrait portrait={portraitForCharacter(c, year, game.phase)} size={72} title={`${c.name.first} ${c.name.last}`} />
+          <p className="ink-muted text-sm">Entered at {c.background.entryAge}. {sem.year <= 2 ? 'Philosophy.' : sem.year <= 5 ? 'Theology.' : 'The last stretch.'}</p>
+        </div>
         <dl className="grid grid-cols-2 gap-x-6 gap-y-1 text-sm">
           {PILLARS.map((p) => (
             <div key={p} className="flex justify-between">
@@ -35,8 +42,9 @@ export default function FormationPanel() {
       <Sheet title="Classmates">
         <ul className="scroll-paper flex max-h-48 flex-col gap-0.5 overflow-y-auto text-sm">
           {classmates.map((n) => (
-            <li key={n.id} className={'flex justify-between ' + (n.status !== 'active' ? 'ink-faint line-through' : '')}>
-              <span>{n.name.first} {n.name.last}</span>
+            <li key={n.id} className={'flex items-center gap-2 ' + (n.status !== 'active' ? 'ink-faint line-through' : '')}>
+              <Portrait portrait={portraitForNpc(n, year, true)} size={22} />
+              <span className="flex-1">{n.name.first} {n.name.last}</span>
               <span className="ink-muted">{relationshipWord(n.relationship)}</span>
             </li>
           ))}

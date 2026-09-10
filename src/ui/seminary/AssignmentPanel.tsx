@@ -1,6 +1,8 @@
 import { useGameStore } from '@/engine/store';
 import { PROBLEM_LABEL } from '@/generation/parishes';
 import Panel from '../Panel';
+import Portrait from '../portraits/Portrait';
+import { portraitForNpc, yearOf } from '../portraits/spec';
 
 export default function AssignmentPanel() {
   const game = useGameStore((s) => s.game);
@@ -20,9 +22,10 @@ export default function AssignmentPanel() {
             {parish.needsSpanish ? ' Spanish is needed.' : ''}
           </p>
           <p className="mt-1">{PROBLEM_LABEL[parish.problem] ?? parish.problem}</p>
-          {pastor && (
-            <p className="mt-1">
-              The pastor, {pastor.title} {pastor.name.last}, is {new Date((game.clock.startDay + game.clock.week * 7) * 86_400_000).getUTCFullYear() - pastor.birthYear}.
+          {pastor && a.role !== 'pastor' && (
+            <p className="mt-1 flex items-center gap-2">
+              <Portrait portrait={portraitForNpc(pastor, yearOf(game.clock.startDay, game.clock.week))} size={30} />
+              <span>The pastor, {pastor.title} {pastor.name.last}, is {yearOf(game.clock.startDay, game.clock.week) - pastor.birthYear}.</span>
             </p>
           )}
           <p className="ink-faint mt-2 text-xs">{a.role === 'pastor' ? 'Why you' : passedOver ? 'What the board decided' : 'Why you'}: {a.reasons.join('; ')}.</p>

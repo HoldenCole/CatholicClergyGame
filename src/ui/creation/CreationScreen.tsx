@@ -7,12 +7,15 @@ import OptionList from './OptionList';
 import DioceseCards from './DioceseCards';
 import { revealFieldForTie, revealFor } from '@/generation/world';
 import { createRng } from '@/engine/rng';
+import Portrait from '../portraits/Portrait';
+import { facesFor, parseSpec, serializeSpec } from '../portraits/spec';
 
-type Step = 'name' | 'diocese' | 'origin' | 'tie' | 'path' | 'field' | 'career' | 'motive' | 'family' | 'past' | 'summary';
-const ORDER: Step[] = ['name', 'diocese', 'origin', 'tie', 'path', 'field', 'career', 'motive', 'family', 'past', 'summary'];
+type Step = 'name' | 'face' | 'diocese' | 'origin' | 'tie' | 'path' | 'field' | 'career' | 'motive' | 'family' | 'past' | 'summary';
+const ORDER: Step[] = ['name', 'face', 'diocese', 'origin', 'tie', 'path', 'field', 'career', 'motive', 'family', 'past', 'summary'];
 
 const QUESTIONS: Record<Step, { title: string; prompt: string }> = {
   name: { title: 'Your name', prompt: 'The vocation director writes it at the top of a file that will follow you for forty years.' },
+  face: { title: 'Your face', prompt: 'The photograph clipped to the file. It will be taken again at ordination, and again when the hair goes.' },
   diocese: { title: 'Choosing a diocese', prompt: 'You visited. You talked to the vocations director. You read what people say. Incardination is for life, and seven years will pass before you are ordained into it.' },
   origin: { title: 'Where you are from', prompt: 'Not where you live now. Where you learned what a parish was.' },
   tie: { title: 'Your tie to the diocese', prompt: 'How much of a native you are. It matters for the whole career.' },
@@ -47,6 +50,7 @@ export default function CreationScreen() {
     past: null,
   });
   const [seen, setSeen] = useState<Partial<Record<Step, string>>>({});
+  const [facePage, setFacePage] = useState(0);
 
   const startYear = useMemo(() => {
     if (!game) return 2010;
@@ -99,6 +103,25 @@ export default function CreationScreen() {
           <div className="grid grid-cols-2 gap-4 max-w-lg">
             <Input label="First name" value={answers.firstName} onChange={(v) => setAnswers((a) => ({ ...a, firstName: v }))} />
             <Input label="Surname" value={answers.lastName} onChange={(v) => setAnswers((a) => ({ ...a, lastName: v }))} />
+          </div>
+        )}
+        {step === 'face' && game && (
+          <div>
+            <ul className="grid grid-cols-4 gap-3 max-w-2xl">
+              {facesFor(game.seed, facePage).map((spec) => {
+                const id = serializeSpec(spec);
+                const chosen = answers.portrait === id;
+                return (
+                  <li key={id}>
+                    <button onClick={() => setAnswers((a) => ({ ...a, portrait: id }))} className={'choice flex flex-col items-center border rule p-2 ' + (chosen ? 'choice-chosen' : '')}>
+                      <Portrait portrait={{ spec, dress: 'seminarian', age: entryAge(full, content), female: false }} size={88} />
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+            <button className="pbtn-link mt-3" onClick={() => setFacePage((p) => p + 1)}>Other faces</button>
+            {parseSpec(answers.portrait) && <span className="ink-faint ml-4 text-xs">A face is chosen.</span>}
           </div>
         )}
         {step === 'diocese' && !worldChosen && (
@@ -173,6 +196,7 @@ export default function CreationScreen() {
               }}
               disabled={
                 (step === 'name' && (!answers.firstName.trim() || !answers.lastName.trim())) ||
+                (step === 'face' && !parseSpec(answers.portrait)) ||
                 (step === 'diocese' && !worldChosen && !dioceseChoice)
               }
             >

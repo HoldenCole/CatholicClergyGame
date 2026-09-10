@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import type { DioceseVisible } from '@/types';
 import { NEED_LABEL, TENSION_LABEL, prioritiesLine } from '@/generation/diocese';
+import Portrait from '../portraits/Portrait';
+import { portraitFromParts } from '../portraits/spec';
 
 /**
  * The preview. CLAUDE.md rule 6: this component receives only the visible
@@ -73,6 +75,7 @@ function Card({ d }: { d: DioceseVisible }) {
       </div>
       <Row label="Clergy need">{NEED_LABEL[d.clergyNeed]}</Row>
       <Row label="The bishop">
+        <BishopFace d={d} />
         {d.bishop.name}, {d.bishop.age}, {d.bishop.yearsInOffice === 0 ? 'newly installed' : `${d.bishop.yearsInOffice} years in office`}. {d.bishop.temperamentLine} Says his priorities are {prioritiesLine(d.bishop.priorities)}.
       </Row>
       <Row label="Character">
@@ -89,6 +92,17 @@ function Card({ d }: { d: DioceseVisible }) {
       </Row>
       <Row label="Complication">{d.complication}</Row>
     </div>
+  );
+}
+
+function BishopFace({ d }: { d: DioceseVisible }) {
+  const parts = d.bishop.name.split(' ');
+  const first = parts[1] ?? parts[0] ?? '';
+  const last = parts.slice(2).join(' ') || (parts[1] ?? '');
+  return (
+    <span className="float-left mr-3 mb-1">
+      <Portrait portrait={portraitFromParts(d.bishop.npcId, first, last, d.bishop.age, 'bishop')} size={56} title={d.bishop.name} />
+    </span>
   );
 }
 
