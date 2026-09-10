@@ -1,4 +1,5 @@
-import type { Achievement, AmbientItem, Archetype, DecorOption, DecorPlace, DecorSlot, GameState, Parish, PlaceDecor } from '@/types';
+import type { Achievement, AmbientItem, Archetype, DecorOption, DecorPlace, DecorSlot, GameState, LiturgicalStance, LiturgicalTopic, Parish, Permission, PlaceDecor } from '@/types';
+import type { Rng } from '@/engine/rng';
 import decor from '@/content/parish/decor.json';
 import { evaluateAll } from '@/engine/conditions';
 import { applyEffects } from '@/engine/effects';
@@ -42,6 +43,7 @@ export function defaultChurchDecor(parish: Parish): PlaceDecor {
     choir: prog ? 'choir_front' : 'choir_loft',
     statues: parish.kind === 'struggling_urban' || parish.kind === 'immigrant_growing' || trad ? 'statues_many' : prog ? 'statues_few' : 'statues_many',
     tabernacle: prog && parish.wealth >= 3 ? 'tab_side' : 'tab_center',
+    mass_form: 'mass_vernacular',
   };
 }
 
@@ -76,6 +78,128 @@ export function mayFurnish(state: GameState, place: DecorPlace): { ok: boolean; 
   return { ok: true, why: null };
 }
 
+export const TOPIC_LABEL: Record<LiturgicalTopic, string> = {
+  ad_orientem: 'turning the altar east',
+  latin_mass: 'the older form of the Mass',
+  altar_rail: 'an altar rail',
+  tabernacle: 'moving the tabernacle',
+  renovation: 'a renovation of the sanctuary',
+};
+
+/** How long a refusal stands before the chancery will read a second letter. */
+export const PERMISSION = {
+  denialWeeks: 104,
+  minAnswerWeeks: 3,
+  maxAnswerWeeks: 8,
+  baseChance: 0.4,
+} as const;
+
+export interface Gate {
+  ok: boolean;
+  why: string | null;
+  stance: LiturgicalStance | null;
+  permission: Permission | null;
+  /** Whether a letter to the chancery is the next step. */
+  canAsk: boolean;
+}
+
+function bishopName(state: GameState): string {
+  const id = state.world?.diocese.hidden.bishop.npcId;
+  const b = id ? state.npcs[id] : undefined;
+  return b ? `${b.title} ${b.name.last}` : 'the bishop';
+}
+
+/** The bishop's standing on a topic, or null when there is no bishop yet. */
+export function stanceFor(state: GameState, topic: LiturgicalTopic): LiturgicalStance | null {
+  return state.world?.diocese.hidden.bishop.liturgy[topic] ?? null;
+}
+
+/**
+ * Whether the diocese lets this option happen. The pastor governs the
+ * parish, but the bishop governs the liturgy: some things he leaves to
+ * pastors, some he must be asked for, some are closed under him.
+ */
+export function gateFor(state: GameState, option: DecorOption): Gate {
+  const topic = option.policy;
+  if (!topic) return { ok: true, why: null, stance: null, permission: null, canAsk: false };
+  const stance = stanceFor(state, topic);
+  const permission = state.permissions[topic] ?? null;
+  if (stance === null || stance === 'free') return { ok: true, why: null, stance, permission, canAsk: false };
+  if (permission?.status === 'granted') return { ok: true, why: null, stance, permission, canAsk: false };
+  if (stance === 'forbidden') return { ok: false, why: `Not open in this diocese: ${bishopName(state)} does not permit ${TOPIC_LABEL[topic]}.`, stance, permission, canAsk: false };
+  if (permission?.status === 'pending') {
+    const weeks = state.clock.week - permission.askedWeek;
+    return { ok: false, why: `You wrote to the chancery ${weeks === 0 ? 'this week' : `${weeks} week${weeks === 1 ? '' : 's'} ago`} about ${TOPIC_LABEL[topic]}. No answer yet.`, stance, permission, canAsk: false };
+  }
+  if (permission?.status === 'denied' && state.clock.week - permission.answerWeek < PERMISSION.denialWeeks) {
+    const weeks = state.clock.week - permission.answerWeek;
+    return { ok: false, why: `${bishopName(state)} said no to ${TOPIC_LABEL[topic]} ${weeks < 8 ? 'recently' : `${Math.round(weeks / 4)} months ago`}. Asking again now would not help.`, stance, permission, canAsk: false };
+  }
+  return { ok: false, why: `Needs the bishop's leave. Write to the chancery about ${TOPIC_LABEL[topic]}.`, stance, permission, canAsk: true };
+}
+
+/** Send the letter. The answer comes back through the week hook some weeks later. */
+export function petition(state: GameState, topic: LiturgicalTopic, rng: Rng): FurnishResult {
+  if (state.assignment?.role !== 'pastor') throw new Error('Only the pastor writes to the chancery about the liturgy.');
+  const stance = stanceFor(state, topic);
+  if (stance === null) throw new Error('There is no bishop to ask.');
+  if (stance === 'forbidden') throw new Error(`${bishopName(state)} does not permit ${TOPIC_LABEL[topic]}.`);
+  const existing = state.permissions[topic];
+  if (existing?.status === 'pending') throw new Error('You have already written; wait for the answer.');
+  if (existing?.status === 'granted' || stance === 'free') return { state, line: 'You already have leave for that.' };
+  if (existing?.status === 'denied' && state.clock.week - existing.answerWeek < PERMISSION.denialWeeks) throw new Error('The chancery has answered that already.');
+  const bishopId = state.world!.diocese.hidden.bishop.npcId;
+  const permission: Permission = { topic, status: 'pending', bishopId, askedWeek: state.clock.week, answerWeek: state.clock.week + rng.int(PERMISSION.minAnswerWeeks, PERMISSION.maxAnswerWeeks) };
+  const next: GameState = {
+    ...state,
+    permissions: { ...state.permissions, [topic]: permission },
+    career: [...state.career, { week: state.clock.week, kind: 'note', text: `Wrote to the chancery for leave: ${TOPIC_LABEL[topic]}.` }],
+  };
+  return { state: next, line: `The letter goes out Monday. The chancery answers in its own time.` };
+}
+
+/** Topics that read as a traditional tilt when the bishop decides. */
+const TOPIC_TILT: Record<LiturgicalTopic, number> = { ad_orientem: -1, latin_mass: -1, altar_rail: -1, tabernacle: 0, renovation: 0 };
+
+/** The chance the bishop says yes: standing with him and the chancery, and how the ask sits with his own leanings. */
+export function grantChance(state: GameState, topic: LiturgicalTopic): number {
+  const profile = state.world!.diocese.hidden.bishop;
+  const rel = state.npcs[profile.npcId]?.relationship ?? 0;
+  const chancery = state.character?.reputation.chancery ?? 0;
+  const lean = TOPIC_TILT[topic] * -profile.alignment / 300; // a traditional bishop warms to a traditional ask
+  return Math.min(0.95, Math.max(0.05, PERMISSION.baseChance + rel / 250 + chancery / 250 + lean));
+}
+
+/** Answer any letters whose week has come. Called by the week hook. */
+export function resolvePermissions(state: GameState, rng: Rng): { state: GameState; lines: string[] } {
+  const lines: string[] = [];
+  let next = state;
+  for (const p of Object.values(state.permissions)) {
+    if (p.status !== 'pending' || p.answerWeek > state.clock.week || !next.world) continue;
+    const granted = rng.chance(grantChance(next, p.topic));
+    const answered: Permission = { ...p, status: granted ? 'granted' : 'denied', answerWeek: state.clock.week };
+    const line = granted
+      ? `A letter from the chancery: ${bishopName(next)} grants leave for ${TOPIC_LABEL[p.topic]}, "with the usual prudence."`
+      : `A letter from the chancery: ${bishopName(next)} declines ${TOPIC_LABEL[p.topic]} "at this time."`;
+    lines.push(line);
+    next = {
+      ...next,
+      permissions: { ...next.permissions, [p.topic]: answered },
+      flags: { ...next.flags, [`permission:${p.topic}`]: granted },
+      career: [...next.career, { week: state.clock.week, kind: 'note', text: line }],
+    };
+  }
+  return { state: next, lines };
+}
+
+/** The state as it would be with one option applied, for previews. Pure; costs nothing. */
+export function previewState(state: GameState, place: DecorPlace, optionId: string): GameState {
+  const option = decorOptions.find((o) => o.id === optionId);
+  if (!option) return state;
+  const key = placeKey(state, place);
+  return { ...state, decor: { ...state.decor, [key]: { ...currentDecor(state, place), [option.slot]: option.id } } };
+}
+
 export interface FurnishResult {
   state: GameState;
   line: string;
@@ -101,6 +225,8 @@ export function furnish(state: GameState, place: DecorPlace, optionId: string): 
   const allowed = mayFurnish(state, place);
   if (!allowed.ok) throw new Error(allowed.why ?? 'not allowed');
   if (!evaluateAll(option.requires, state)) throw new Error('That is not open to you yet.');
+  const gate = gateFor(state, option);
+  if (!gate.ok) throw new Error(gate.why ?? 'not permitted');
   const key = placeKey(state, place);
   const current = currentDecor(state, place);
   if (current[option.slot] === option.id) return { state, line: 'Nothing changed.' };

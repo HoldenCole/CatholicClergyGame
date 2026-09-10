@@ -54,6 +54,7 @@ export function newGame(options: NewGameOptions): { state: GameState; rng: Rng }
     career: [],
     romeTemperament: 0,
     decor: {},
+    permissions: {},
   };
   return { state, rng };
 }

@@ -111,6 +111,18 @@ export interface DioceseHidden {
   hiddenComplication: string;
 }
 
+/**
+ * What a bishop lets his pastors do with the liturgy and the building.
+ * 'free' needs no one's leave; 'by_permission' needs a letter to the
+ * chancery and an answer; 'forbidden' is not open in this diocese under
+ * this bishop. The Mass itself stays the Novus Ordo unless the bishop
+ * authorizes the older form, as the 2021 norms require.
+ */
+export type LiturgicalStance = 'free' | 'by_permission' | 'forbidden';
+export type LiturgicalTopic = 'ad_orientem' | 'latin_mass' | 'altar_rail' | 'tabernacle' | 'renovation';
+export const LITURGICAL_TOPICS: readonly LiturgicalTopic[] = ['ad_orientem', 'latin_mass', 'altar_rail', 'tabernacle', 'renovation'] as const;
+export type LiturgicalPolicy = Record<LiturgicalTopic, LiturgicalStance>;
+
 export interface BishopProfile {
   npcId: string;
   alignment: number;
@@ -124,6 +136,7 @@ export interface BishopProfile {
   knowsYou: BishopKnowsYou;
   /** Absolute year he took office. */
   installedYear: number;
+  liturgy: LiturgicalPolicy;
 }
 
 export interface Diocese {

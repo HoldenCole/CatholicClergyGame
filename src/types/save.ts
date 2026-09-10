@@ -9,7 +9,7 @@ import type { ParishState } from './parish';
 import type { Founding, Group } from './groups';
 import type { CareerEntry, Project } from './career';
 import type { Opening } from './promotion';
-import type { DecorState } from './decor';
+import type { DecorState, Permission } from './decor';
 
 /** A rolled diocese the player may choose, held only during creation. */
 export interface DioceseCandidate {
@@ -88,6 +88,8 @@ export interface GameState {
   romeTemperament: number;
   /** How places look: chosen furnishings by place key. */
   decor: DecorState;
+  /** Letters to the chancery about the liturgy, by topic. Answered by the week hook. */
+  permissions: Record<string, Permission>;
 }
 
 export interface DigestWeek {
@@ -101,7 +103,7 @@ export interface Snapshot {
   rngState: RngState;
 }
 
-export const SAVE_VERSION = 2;
+export const SAVE_VERSION = 3;
 
 export interface SaveFile {
   version: number;

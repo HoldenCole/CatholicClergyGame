@@ -1,6 +1,6 @@
 import { useGameStore } from '@/engine/store';
 import { evaluateAll } from '@/engine/conditions';
-import { currentDecor, mayFurnish, optionsFor, slotsFor } from '@/systems/decor';
+import { currentDecor, gateFor, mayFurnish, optionsFor, slotsFor } from '@/systems/decor';
 import type { DecorPlace, DecorSlot } from '@/types';
 
 const SLOT_LABEL: Record<DecorSlot, string> = {
@@ -11,6 +11,7 @@ const SLOT_LABEL: Record<DecorSlot, string> = {
   choir: 'The music',
   statues: 'The statues',
   tabernacle: 'The tabernacle',
+  mass_form: 'The Mass',
   wall: 'The wall',
   desk: 'The desk',
   floor: 'The floor',
@@ -28,6 +29,7 @@ const PLACE_LABEL: Record<DecorPlace, string> = {
 export default function FurnishPanel({ place, onClose }: { place: DecorPlace; onClose: () => void }) {
   const game = useGameStore((s) => s.game);
   const furnish = useGameStore((s) => s.furnish);
+  const petition = useGameStore((s) => s.petition);
   const line = useGameStore((s) => s.lastFurnishLine);
   const error = useGameStore((s) => s.error);
   if (!game) return null;
@@ -56,12 +58,20 @@ export default function FurnishPanel({ place, onClose }: { place: DecorPlace; on
                 const chosen = decor[slot] === o.id;
                 const meets = evaluateAll(o.requires, game);
                 const affordable = o.cost === 0 || cash >= o.cost;
-                const can = allowed.ok && meets && affordable && !chosen;
+                const gate = gateFor(game, o);
+                const can = allowed.ok && meets && affordable && gate.ok && !chosen;
+                if (allowed.ok && !chosen && gate.canAsk && o.policy) {
+                  return (
+                    <button key={o.id} title={`${o.blurb} ${gate.why}`} onClick={() => petition(o.policy!)} className="rounded border border-dashed border-amber-800 px-2 py-1 text-left text-xs text-amber-200/80 hover:border-amber-500">
+                      {o.label} <span className="text-stone-500">· write to the chancery</span>
+                    </button>
+                  );
+                }
                 return (
                   <button
                     key={o.id}
                     disabled={!can && !chosen}
-                    title={`${o.blurb}${!meets ? ' (not open to you yet)' : !affordable ? ' (the parish cannot pay for it)' : ''}`}
+                    title={`${o.blurb}${!meets ? ' (not open to you yet)' : !affordable ? ' (the parish cannot pay for it)' : !gate.ok ? ` (${gate.why})` : ''}`}
                     onClick={() => furnish(place, o.id)}
                     className={
                       'rounded border px-2 py-1 text-left text-xs ' +

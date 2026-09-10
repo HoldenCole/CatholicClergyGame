@@ -7,6 +7,7 @@ import { formationBeats, markBeatFired, weekPool } from './seminary';
 import { isPlayedWeek, parishWeek } from './parish';
 import { careerYear, isCareerYear, nextAssignment } from './career';
 import { projectWeek } from '@/systems/projects';
+import { resolvePermissions } from '@/systems/decor';
 import { renderText } from './text';
 import type { WeekHook } from './clock';
 
@@ -94,6 +95,9 @@ export function parishWeekHook(deps: EventDeps): WeekHook {
     const project = projectWeek(next);
     next = project.state;
     if (project.line) next = addDigestLine(next, project.line);
+    const letters = resolvePermissions(next, rng.derive(`permissions:${next.clock.week}`));
+    next = letters.state;
+    for (const line of letters.lines) next = addDigestLine(next, line);
     if (isCareerYear(next)) next = careerYear(next, rng);
     if (next.mode.kind !== 'clock') return next;
     if (next.flags.new_bishop_pending) {

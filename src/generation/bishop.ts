@@ -1,4 +1,4 @@
-import type { BishopFault, BishopPriority, BishopProfile, BishopTrait, DiocesePreset, ManagementStyle, Npc } from '@/types';
+import type { BishopFault, BishopPriority, BishopProfile, BishopTrait, DiocesePreset, LiturgicalPolicy, LiturgicalStance, ManagementStyle, Npc } from '@/types';
 import type { Rng } from '@/engine/rng';
 import { CLERGY_HERITAGE, eraForBirthYear, rollHeritage, rollMaleName } from './names';
 import { addStats, finishNpc, rollAlignment, rollBaseStats } from './npc';
@@ -43,6 +43,7 @@ export function generateBishop(rng: Rng, preset: DiocesePreset, year: number, id
   const priorities = rng.shuffle(PRIORITIES).slice(0, 2) as [BishopPriority, BishopPriority];
   const rewards = rng.pick(TRAITS);
   const cannotTolerate = rng.pick(FAULTS.filter((f) => !EXCLUDED_FAULTS[rewards].includes(f)));
+  const management = rng.pick(MANAGEMENT);
   const npc = finishNpc(rng, {
     id,
     name: rollMaleName(rng, heritage, eraForBirthYear(birthYear)),
@@ -61,14 +62,50 @@ export function generateBishop(rng: Rng, preset: DiocesePreset, year: number, id
     alignment,
     outspokenness: rng.int(5, 80),
     priorities,
-    management: rng.pick(MANAGEMENT),
+    management,
     rewards,
     cannotTolerate,
     ambition: npc.ambition,
     knowsYou: 'none',
     installedYear: year - yearsInOffice,
+    liturgy: rollLiturgicalPolicy(rng.derive('liturgy'), alignment, priorities, management),
   };
   return { npc, profile };
+}
+
+type StanceWeights = Record<LiturgicalStance, number>;
+
+function stance(rng: Rng, w: StanceWeights): LiturgicalStance {
+  return rng.weighted(['free', 'by_permission', 'forbidden'] as const, (k) => w[k]);
+}
+
+/**
+ * The bishop's standing policy on what a pastor may do without asking.
+ * Rolled from his alignment with a liturgy priority sharpening it either
+ * way and an absentee leaving more to the pastors. Independent of the
+ * rest of his profile beyond that, so two bishops of one temper differ.
+ */
+export function rollLiturgicalPolicy(rng: Rng, alignment: number, priorities: readonly BishopPriority[], management: ManagementStyle): LiturgicalPolicy {
+  const trad = alignment <= -30;
+  const prog = alignment >= 30;
+  const cares = priorities.includes('liturgy');
+  const loose = management === 'absentee' || management === 'delegator';
+  // Ad orientem in the Novus Ordo is licit but many bishops require leave or forbid it outright.
+  const adOrientem: StanceWeights = trad ? { free: cares ? 6 : 4, by_permission: 3, forbidden: 0 } : prog ? { free: 0, by_permission: cares ? 2 : 3, forbidden: cares ? 7 : 5 } : { free: loose ? 2 : 1, by_permission: 6, forbidden: 3 };
+  // The older form needs the bishop's authorization under the 2021 norms, and many will not give it.
+  const latin: StanceWeights = trad ? { free: 2, by_permission: 7, forbidden: 1 } : prog ? { free: 0, by_permission: 2, forbidden: 8 } : { free: 0, by_permission: 5, forbidden: 5 };
+  const rail: StanceWeights = prog ? { free: 4, by_permission: 5, forbidden: 1 } : { free: 8, by_permission: 2, forbidden: 0 };
+  // GIRM 315 leaves the tabernacle's place to the diocesan bishop's judgment.
+  const tabernacle: StanceWeights = { free: loose ? 3 : 1, by_permission: 8, forbidden: 0 };
+  // The building commission reviews any real renovation.
+  const renovation: StanceWeights = { free: loose ? 3 : 1, by_permission: 9, forbidden: 0 };
+  return {
+    ad_orientem: stance(rng, adOrientem),
+    latin_mass: stance(rng, latin),
+    altar_rail: stance(rng, rail),
+    tabernacle: stance(rng, tabernacle),
+    renovation: stance(rng, renovation),
+  };
 }
 
 function scaleHeritage(weights: Record<string, number>, factor: number): Record<string, number> {

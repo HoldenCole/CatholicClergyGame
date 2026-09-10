@@ -35,8 +35,8 @@ import { setDiscretionary as doSetDiscretionary, setObligation as doSetObligatio
 import { startFounding as doStartFounding, suppressGroup as doSuppress } from '@/systems/groups';
 import type { GroupType, ProjectType } from '@/types';
 import { startProject as doStartProject } from '@/systems/projects';
-import { furnish as doFurnish } from '@/systems/decor';
-import type { DecorPlace } from '@/types';
+import { furnish as doFurnish, petition as doPetition } from '@/systems/decor';
+import type { DecorPlace, LiturgicalTopic } from '@/types';
 import { anthropicProvider, type Provider } from '@/llm/provider';
 import { DEFAULT_LLM, loadLlmSettings, saveLlmSettings, type LlmSettings } from '@/llm/settings';
 import { skinArc, skinEvent, skinOutcome } from '@/llm/skin';
@@ -84,6 +84,8 @@ export interface GameStore {
   suppressGroup(groupId: string, suppressed: boolean): void;
   startProject(type: ProjectType): void;
   furnish(place: DecorPlace, optionId: string): void;
+  /** Write to the chancery for leave on a liturgical topic. */
+  petition(topic: LiturgicalTopic): void;
   lastFurnishLine: string | null;
 
   /** The skinning layer. Off by default; the game is complete without it. */
@@ -359,6 +361,13 @@ export const useGameStore = create<GameStore>()((set, get) => ({
       const r = doFurnish(game, place, optionId);
       set({ lastFurnishLine: r.line });
       return r.state;
+    });
+  },
+  petition(topic) {
+    update(set, get, (game, r) => {
+      const res = doPetition(game, topic, r);
+      set({ lastFurnishLine: res.line });
+      return res.state;
     });
   },
   acceptOffer(offerId) {
