@@ -1,0 +1,1807 @@
+{
+  "_notes": "Theology III (Y6) and the transitional diaconate (Y7). Flags defined here: diaconate_promised (set by the diaconate beat events; the ordination flow should read it), pref_urban / pref_rural / pref_latino / pref_academic / pref_wherever (assignment preferences; the Phase 2 assignment algorithm reads exactly one of these), y6_pastor_ally, y6_pastor_books, y6_pastor_reported (how the pastoral-year supervisor was handled; read by y7_pastoral_letter), y6_shortage_yes, y6_shortage_conditions, y6_shortage_no (answer to the vocation director's early ask; read by y7_shortage_returns), y7_shortage_placed (accepted a short-staffed diaconate placement). Threads opened and resolved within this file: y6_pastoral_supervisor (y6_pastoral_year_pastor -> y7_pastoral_letter), y6_shortage_ask (y6_shortage_reaches_in -> y7_shortage_returns). Family, mentor, and home-pastor variants are separate events because an event whose selector cannot resolve is skipped whole.",
+  "events": [
+    {
+      "id": "y6_promise_celibacy",
+      "phase": "seminary",
+      "yearGate": [6],
+      "pressure": ["body_vs_vow", "doubt"],
+      "severity": "CRITICAL",
+      "category": "personal",
+      "baseWeight": 12,
+      "suppressYears": 4,
+      "once": true,
+      "beat": "diaconate",
+      "bias": [
+        { "when": { "type": "flag", "key": "past:relationship", "value": true }, "multiplier": 1.5 },
+        { "when": { "type": "flag", "key": "late_vocation", "value": true }, "multiplier": 1.3 }
+      ],
+      "title": "The Declaration",
+      "body": "Before the diaconate the diocese requires a declaration in your own hand: that you are receiving the order freely, that you understand what it obliges, and that you take on celibacy for the sake of the kingdom. {@formation_advisor} gives you the template on a Tuesday and says there is no hurry, which is not true; the rector's office wants it by month's end. You take it back to your room. The rite itself will be public. The bishop will ask, in front of everyone who could get a seat in the cathedral, whether you are resolved to remain celibate as a sign of your dedication to Christ, and you will say that you are, and the rite will move on. But this page is private. It is your handwriting, it will sit in a file nobody opens unless something goes wrong, and it is the only version of the promise addressed to no one but yourself. You sit with it for an hour and write nothing. The window is open. Someone on the floor below is practicing the Exsultet, badly, starting over each time. You have known for six years that this was coming, and knowing is not the same as arriving. You think about the people you will not have. You think about the people you will.",
+      "flavorPrompt": "Slow, interior, unsentimental. A man alone with a blank form and an open window. No resolution offered by the room.",
+      "choices": [
+        {
+          "id": "sign_as_gift",
+          "label": "Write it, and mean it as a gift",
+          "outcome": "You write it in one sitting once you start. You do not use the template's phrasing. You write that you are giving something, not surrendering it, and that you expect it to cost what it costs. The Exsultet downstairs finally gets through the second paragraph. You sign, date it, and sleep better than you have in a month.",
+          "volume": "private",
+          "positionTopic": "celibacy_discipline",
+          "positionValue": -40,
+          "effects": [
+            { "target": "flag", "key": "diaconate_promised", "value": true },
+            { "target": "pillar", "key": "spiritual", "delta": 3 },
+            { "target": "stat", "key": "piety", "delta": 1 }
+          ]
+        },
+        {
+          "id": "sign_as_discipline",
+          "label": "Write it as a discipline you accept without romance",
+          "outcome": "You use the template's words because they are exact, and you add one sentence of your own: that you understand this to be the Church's discipline, that you will keep it, and that you are not pretending it is the only way a priest could live. It is the most honest paragraph you have written in six years. You sign it. It goes into the file and no one reads the extra sentence.",
+          "volume": "private",
+          "positionTopic": "celibacy_discipline",
+          "positionValue": 35,
+          "effects": [
+            { "target": "flag", "key": "diaconate_promised", "value": true },
+            { "target": "honesty", "key": "", "delta": 1 },
+            { "target": "pillar", "key": "human", "delta": 2 }
+          ]
+        },
+        {
+          "id": "talk_first",
+          "label": "Take the blank page to {@spiritual_director} before you write anything",
+          "outcome": "{@spiritual_director} does not look at the form. He asks what you were thinking about during the hour you wrote nothing, and you tell him, and he does not flinch or console. He asks whether you can carry it. You say you think so. He says that is the right answer and that anyone who says more is lying. You write it that night, in the internal forum's shadow, and it holds.",
+          "volume": "private",
+          "positionTopic": "celibacy_discipline",
+          "positionValue": -10,
+          "effects": [
+            { "target": "flag", "key": "diaconate_promised", "value": true },
+            { "target": "relationship", "key": "@spiritual_director", "delta": 10 },
+            { "target": "pillar", "key": "spiritual", "delta": 2 }
+          ]
+        },
+        {
+          "id": "leave",
+          "label": "Put the page in the drawer and go to the rector in the morning",
+          "outcome": "You tell {@rector} before breakfast. He asks whether you are sure and you say you have been sure since about two in the morning. He does not argue. The declaration was the door, and you have chosen not to walk through it, which is a thing the declaration exists to allow.",
+          "effects": [
+            {
+              "target": "end",
+              "key": "left_seminary",
+              "value": "He left in Theology III, weeks before the diaconate, with the declaration unsigned in a drawer. The seminary wrote him a fair reference. He had been honest with the one page that was addressed to himself, and he took that honesty with him into a life that had, after all, other ways of being good."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "y6_promise_obedience",
+      "phase": "seminary",
+      "yearGate": [6],
+      "pressure": ["loyalty_vs_honesty", "doubt"],
+      "severity": "CRITICAL",
+      "category": "personal",
+      "baseWeight": 12,
+      "suppressYears": 4,
+      "once": true,
+      "beat": "diaconate",
+      "bias": [
+        { "when": { "type": "flag", "key": "career:attorney", "value": true }, "multiplier": 1.5 },
+        { "when": { "type": "flag", "key": "career:military", "value": true }, "multiplier": 1.5 },
+        { "when": { "type": "flag", "key": "past:activism", "value": true }, "multiplier": 1.4 }
+      ],
+      "title": "Hands Between Hands",
+      "body": "The rehearsal is in the cathedral on a weekday, with the lights half on and a cleaner running a machine in the side aisle. The master of ceremonies stands in for {@bishop} and walks the class through it twice. You come forward when your name is called. You kneel. You put your joined hands between his, and he asks whether you promise respect and obedience to him and to his successors, and you say that you do. It takes eleven seconds. Someone times it. The class jokes on the way out, because the class jokes about everything now, and {@rival_classmate} says the clause about successors is the only part with teeth. He is right, and it is the part nobody talks about. The bishop you chose this diocese for is not young. The man whose hands you will actually answer to for most of your life has not been named, may not be a bishop yet, may be a man you would not cross the street to hear preach. You promise him too. That is the point: not obedience to a man you have measured, but to an office that will be filled without consulting you. You stand in the empty nave after the others leave and try to feel what that is. The machine in the side aisle stops.",
+      "flavorPrompt": "The bureaucratic flatness of a rehearsal against the weight of the clause. Keep the cathedral ordinary: cleaners, half-lights, a stopwatch.",
+      "choices": [
+        {
+          "id": "promise_fully",
+          "label": "Promise it, and decide to mean the successors too",
+          "outcome": "You decide, standing in the nave, that a promise with an exception is not one. Whoever he turns out to be, you will give him what the rite says, and you will argue with him inside that, not outside it. It is a narrower life than you had imagined at eighteen, or at whatever age you were when you imagined it. It is also, you notice, a relief to have decided.",
+          "volume": "private",
+          "positionTopic": "authority",
+          "positionValue": -35,
+          "effects": [
+            { "target": "flag", "key": "diaconate_promised", "value": true },
+            { "target": "pillar", "key": "human", "delta": 2 },
+            { "target": "pillar", "key": "spiritual", "delta": 1 },
+            { "target": "alignment", "key": "", "delta": -2 }
+          ]
+        },
+        {
+          "id": "promise_institution",
+          "label": "Promise it as an arrangement with an institution, not a man",
+          "outcome": "You will say the words and keep them. But you say to yourself, precisely, what you are promising: respect and obedience in the things the office can lawfully ask, to an office, with the law as the boundary on both sides. It is not cynicism. It is a reading of the text. You suspect it is the reading most priests arrive at eventually, and you would rather arrive on purpose.",
+          "volume": "private",
+          "positionTopic": "authority",
+          "positionValue": 30,
+          "effects": [
+            { "target": "flag", "key": "diaconate_promised", "value": true },
+            { "target": "honesty", "key": "", "delta": 1 },
+            { "target": "stat", "key": "knowledge", "delta": 1 },
+            { "target": "pillar", "key": "intellectual", "delta": 1 }
+          ]
+        },
+        {
+          "id": "ask_bishop",
+          "label": "Ask {@bishop}, when you next have him alone, what he thinks the promise is for",
+          "requires": [{ "type": "relationship", "npcId": "@bishop", "op": ">=", "value": 10 }],
+          "outcome": "He is surprised to be asked and then, you think, pleased. He says the promise is not for him; it is so that a priest never has to wonder whether the parish he was sent to is punishment or providence, because the answer is that it does not matter. He says he did not believe that at your age. You are not sure you believe it now, but you have heard it from the man who will say the words.",
+          "effects": [
+            { "target": "flag", "key": "diaconate_promised", "value": true },
+            { "target": "relationship", "key": "@bishop", "delta": 8 },
+            { "target": "pillar", "key": "spiritual", "delta": 1 },
+            { "target": "pillar", "key": "human", "delta": 1 }
+          ]
+        },
+        {
+          "id": "leave",
+          "label": "Tell {@rector} you cannot promise it to a man you have not met",
+          "outcome": "You go to him that week. You explain it as clearly as you can: not a loss of faith, not a scandal, an inability to promise the specific thing the rite asks. He says that is a more serious reason than most he hears. You are gone before the ordination. Nobody has to explain to the class what happened, because you told them yourself.",
+          "effects": [
+            {
+              "target": "end",
+              "key": "left_seminary",
+              "value": "He left before the diaconate, unable to promise obedience to a successor he could not see. It was the most carefully reasoned departure the rector had handled in years, and the rector said so. He went on to a life in which he answered to people he had chosen, and found that this too had its costs."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "y6_diaconate_retreat",
+      "phase": "seminary",
+      "yearGate": [6],
+      "pressure": ["doubt", "body_vs_vow"],
+      "severity": "CRITICAL",
+      "category": "personal",
+      "baseWeight": 12,
+      "suppressYears": 4,
+      "once": true,
+      "beat": "diaconate",
+      "bias": [
+        { "when": { "type": "flag", "key": "motive:grief", "value": true }, "multiplier": 1.6 },
+        { "when": { "type": "flag", "key": "motive:running", "value": true }, "multiplier": 1.6 },
+        { "when": { "type": "pillar", "key": "spiritual", "op": ">=", "value": 6 }, "multiplier": 1.3 }
+      ],
+      "title": "Five Days of Silence",
+      "body": "The law requires a retreat of at least five days before ordination, and the diocese sends the class to a house two hours north, run by an order that has been quiet for three centuries and is good at it. Phones go in a basket. The retreat master is old and does not know your name, which is restful. The first day is the ordinary difficulty of stopping. The second day you sleep. On the third afternoon, walking a gravel path that goes nowhere in particular, the thing arrives that you have been managing around for six years. It is not a doubt about God. It is a plain, physical picture of yourself at sixty in a rectory kitchen, and the question of whether the man in the picture is at peace or merely quiet. You cannot tell. You stand on the path a long time. At Vespers the class sings badly and you do not hear it. The retreat master's conference that evening is about the Book of the Gospels being placed in your hands: believe what you read, teach what you believe, practice what you teach. He says the third clause is the one that ordains you, and the other two are preparation. You have two days left and nobody to talk to, which is the design.",
+      "flavorPrompt": "Gravel, silence, a retreat house with good bones. The interior picture should be concrete and unglamorous. No epiphany; a decision made while walking.",
+      "choices": [
+        {
+          "id": "stay_in_it",
+          "label": "Stay on the path until the picture resolves, then go to Vespers",
+          "outcome": "It does not resolve. What happens instead is that you get tired of standing, and walk on, and find that you have been praying for some time without deciding to. The man in the kitchen is still there when you check. You decide you can live with not knowing which he is, because the alternative is to know by refusing. On the fifth day you go home and sign what needs signing.",
+          "effects": [
+            { "target": "flag", "key": "diaconate_promised", "value": true },
+            { "target": "pillar", "key": "spiritual", "delta": 4 },
+            { "target": "stat", "key": "piety", "delta": 2 }
+          ]
+        },
+        {
+          "id": "write_letters",
+          "label": "Spend the last two days writing the letters you have put off for six years",
+          "outcome": "You write to people you owe an account: the ones you left, the ones who did not understand, one you were not fair to. You do not send all of them. The writing is a way of walking through the door with the room behind you tidy. The retreat master notices the pile of envelopes at the end and says nothing, which you take as approval. You come home decided and slightly less afraid.",
+          "effects": [
+            { "target": "flag", "key": "diaconate_promised", "value": true },
+            { "target": "pillar", "key": "human", "delta": 3 },
+            { "target": "pillar", "key": "spiritual", "delta": 1 },
+            { "target": "honesty", "key": "", "delta": 1 }
+          ]
+        },
+        {
+          "id": "break_silence",
+          "label": "Break the silence once: find {@closest_classmate} on the gravel path",
+          "outcome": "You are not supposed to, and you both know it, and neither of you says anything for the first ten minutes. Then you describe the kitchen. {@closest_classmate} says he has a version of the same picture, except his has a dog in it, and you laugh in a way that is not quite laughter. It does not solve anything. It means you will not be alone in the kitchen, or not entirely.",
+          "effects": [
+            { "target": "flag", "key": "diaconate_promised", "value": true },
+            { "target": "relationship", "key": "@closest_classmate", "delta": 10 },
+            { "target": "pillar", "key": "human", "delta": 2 },
+            { "target": "pillar", "key": "spiritual", "delta": -1 }
+          ]
+        },
+        {
+          "id": "leave",
+          "label": "Ask for the basket, take your phone, and call the rector from the parking lot",
+          "outcome": "{@rector} answers on the second ring, which tells you he has had this call before. You tell him about the path and the kitchen. He listens all the way through, then asks whether you want a car sent. You drive yourself. It is a clear night the whole way south, and you do not turn the radio on.",
+          "effects": [
+            {
+              "target": "end",
+              "key": "left_seminary",
+              "value": "He left from the diaconate retreat, driving home alone on the fourth night. He had done the honest thing in the last week it could be done cleanly, and the seminary treated him accordingly. The picture of the man in the kitchen stayed with him, but it was a different kitchen, and there were other people in it."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "y6_pastoral_year_pastor",
+      "phase": "seminary",
+      "yearGate": [6],
+      "pressure": ["competence", "loyalty_vs_honesty"],
+      "severity": "MAJOR",
+      "category": "assignment",
+      "baseWeight": 11,
+      "suppressYears": 3,
+      "once": true,
+      "bias": [
+        { "when": { "type": "flag", "key": "field:business", "value": true }, "multiplier": 1.4 },
+        { "when": { "type": "pillar", "key": "pastoral", "op": ">=", "value": 5 }, "multiplier": 1.3 }
+      ],
+      "title": "The Pastor",
+      "body": "The diocese places you for the pastoral year with a pastor who has been alone in a three-church parish for eleven years. He forgot you were coming. The secretary, who has run the place since before he arrived, shows you a room over the garage and tells you within five minutes that he has not taken a day off since the last deacon left, that the bulletin has carried the same error for three weeks, and that he is loved. All of this proves true. He is a gifted preacher who cannot find his keys. He remembers every sick parishioner's name and none of the finance council's. He says grace over a microwaved dinner with more attention than most priests give the canon. By the end of the first month you understand that you have been sent to learn from a man who is, at once, the best pastor you have met and an administrative emergency in a collar, and that what you take from the year depends entirely on which of those you decide to look at. Nobody from the seminary will visit until spring. The vocation director's number is on the fridge.",
+      "flavorPrompt": "A real parish rectory: microwave, keys, a secretary who actually runs things. The pastor should be lovable and alarming in the same paragraph.",
+      "choices": [
+        {
+          "id": "attach",
+          "label": "Make yourself useful and learn everything he does well",
+          "outcome": "You go on the sick calls. You watch how he holds a hand, how he leaves a room, how he preaches without notes and never over twelve minutes. The bulletin error stays. You do not fix the keys. By Advent he is introducing you as his deacon a year early, and you have absorbed more about the care of souls in three months than in five years of classes.",
+          "opensThread": "y6_pastoral_supervisor",
+          "effects": [
+            { "target": "flag", "key": "y6_pastor_ally", "value": true },
+            { "target": "pillar", "key": "pastoral", "delta": 4 },
+            { "target": "archetype", "key": "pastoral", "delta": 2 },
+            { "target": "pillar", "key": "intellectual", "delta": -1 }
+          ]
+        },
+        {
+          "id": "distance",
+          "label": "Do the assignment and keep your own counsel",
+          "outcome": "You do what the placement requires: the hospital, the RCIA class, the funerals outside Mass. You are polite. You do not become his project or his rescuer. The secretary says you are the first one who has not tried to save him, and it is not clear whether she means it as praise. The year is quiet, and you keep your reading.",
+          "opensThread": "y6_pastoral_supervisor",
+          "effects": [
+            { "target": "flag", "key": "y6_pastor_ally", "value": false },
+            { "target": "pillar", "key": "intellectual", "delta": 2 },
+            { "target": "pillar", "key": "spiritual", "delta": 1 },
+            { "target": "pillar", "key": "pastoral", "delta": 1 }
+          ]
+        },
+        {
+          "id": "look_at_books",
+          "label": "Look at the books nobody has looked at",
+          "requires": [
+            { "type": "any", "inner": [
+              { "type": "flag", "key": "career:accountant", "value": true },
+              { "type": "flag", "key": "field:business", "value": true },
+              { "type": "stat", "key": "administration", "op": ">=", "value": 50 }
+            ] }
+          ],
+          "outcome": "The secretary lets you into the office with the look of a woman who has waited years for someone to ask. What you find is not theft. It is eleven years of nobody reconciling anything, a restricted fund used as a checking account, and a building loan the finance council does not know exists. You reconcile what you can and write a memo he will not read. You know something now that the diocese does not.",
+          "opensThread": "y6_pastoral_supervisor",
+          "effects": [
+            { "target": "flag", "key": "y6_pastor_books", "value": true },
+            { "target": "stat", "key": "administration", "delta": 2 },
+            { "target": "pillar", "key": "pastoral", "delta": 1 },
+            { "target": "archetype", "key": "administrative", "delta": 2 }
+          ]
+        },
+        {
+          "id": "tell_vocation_director",
+          "label": "Call {@vocation_director} and tell him what you have seen",
+          "outcome": "You keep it factual: the days off, the bulletin, the finance council, a man running on fumes. {@vocation_director} is quiet and then thanks you, and you understand that you have started something that will go into a file at the chancery with the pastor's name on it and yours. The parish does not know. The pastor does not know. You go back to the room over the garage.",
+          "opensThread": "y6_pastoral_supervisor",
+          "effects": [
+            { "target": "flag", "key": "y6_pastor_reported", "value": true },
+            { "target": "reputation", "key": "chancery", "delta": 2 },
+            { "target": "honesty", "key": "", "delta": 1 },
+            { "target": "pillar", "key": "human", "delta": -1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "y6_shortage_reaches_in",
+      "phase": "seminary",
+      "yearGate": [6],
+      "pressure": ["ambition_vs_integrity", "competence"],
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 10,
+      "suppressYears": 3,
+      "once": true,
+      "bias": [
+        { "when": { "type": "flag", "key": "late_vocation", "value": true }, "multiplier": 1.6 },
+        { "when": { "type": "flag", "key": "tie:son", "value": true }, "multiplier": 1.3 },
+        { "when": { "type": "flag", "key": "career:management", "value": true }, "multiplier": 1.3 }
+      ],
+      "title": "The Vocation Director's Arithmetic",
+      "body": "{@vocation_director} drives out to see you and does not pretend it is a pastoral visit. He has a printout. Next summer the diocese loses four pastors to retirement and one to a hospital, and there is nobody behind them; two parishes will be clustered and a third will have a priest driving in on Sundays. He is not asking whether you will be ordained. He is asking whether, once you are a deacon, you would be willing to live in one of those rectories alone, with a priest coming in for Mass, and hold the place together for a year: funerals outside Mass, baptisms, the office, the people. It is not formation as the program describes it. It is not what the seminary will recommend. It is what the diocese needs, and he is saying so to you before ordination because he wants to know now, and because he has learned which men to ask. He says the bishop knows he is here. He says there is no wrong answer, which is what men say when there is a preferred one.",
+      "flavorPrompt": "A chancery official with a printout and a real problem. Not sinister; tired. The player is being sized up as a resource for the first time.",
+      "choices": [
+        {
+          "id": "say_yes",
+          "label": "Say yes before he finishes the sentence",
+          "outcome": "He looks at you for a moment as if checking that you heard the question, then nods and writes something on the printout. He says the seminary will push back, and that he will handle the seminary. On the drive back to the house you feel the thing that will be the shape of your career: being needed, and being marked, in the same motion. The rector hears about it by Friday.",
+          "opensThread": "y6_shortage_ask",
+          "effects": [
+            { "target": "flag", "key": "y6_shortage_yes", "value": true },
+            { "target": "reputation", "key": "chancery", "delta": 4 },
+            { "target": "relationship", "key": "@vocation_director", "delta": 10 },
+            { "target": "relationship", "key": "@rector", "delta": -4 },
+            { "target": "pillar", "key": "spiritual", "delta": -1 }
+          ]
+        },
+        {
+          "id": "conditions",
+          "label": "Say yes, on conditions, and name them",
+          "requires": [
+            { "type": "any", "inner": [
+              { "type": "stat", "key": "knowledge", "op": ">=", "value": 50 },
+              { "type": "flag", "key": "career:attorney", "value": true },
+              { "type": "flag", "key": "career:management", "value": true }
+            ] }
+          ],
+          "outcome": "A named priest responsible for you, not a rota. A day off written down. A spiritual director within an hour's drive. He writes them down without arguing, which tells you they have been asked for before and not always given. He says he will bring the list to the bishop. You have said yes and kept something back, and both halves are true.",
+          "opensThread": "y6_shortage_ask",
+          "effects": [
+            { "target": "flag", "key": "y6_shortage_conditions", "value": true },
+            { "target": "reputation", "key": "chancery", "delta": 2 },
+            { "target": "relationship", "key": "@vocation_director", "delta": 5 },
+            { "target": "pillar", "key": "human", "delta": 2 },
+            { "target": "stat", "key": "administration", "delta": 1 }
+          ]
+        },
+        {
+          "id": "say_no",
+          "label": "Say the formation program exists for a reason",
+          "outcome": "You say it carefully, and he takes it carefully. You say that the diocese is short because it has been using deacons and new priests as plaster for twenty years, and that you would rather be formed properly and last. He does not disagree. He folds the printout. He says he will note that you were asked, which is not a threat and is not nothing. The rector, when he hears, is visibly relieved.",
+          "opensThread": "y6_shortage_ask",
+          "effects": [
+            { "target": "flag", "key": "y6_shortage_no", "value": true },
+            { "target": "reputation", "key": "chancery", "delta": -3 },
+            { "target": "relationship", "key": "@rector", "delta": 6 },
+            { "target": "honesty", "key": "", "delta": 1 },
+            { "target": "pillar", "key": "spiritual", "delta": 1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "y6_clerical_dress",
+      "phase": "seminary",
+      "yearGate": [6],
+      "pressure": ["belief_vs_safety"],
+      "severity": "NOTABLE",
+      "category": "formation",
+      "baseWeight": 9,
+      "suppressYears": 3,
+      "once": true,
+      "bias": [
+        { "when": { "type": "alignment", "op": "<=", "value": -25 }, "multiplier": 1.6 },
+        { "when": { "type": "alignment", "op": ">=", "value": 25 }, "multiplier": 1.4 },
+        { "when": { "type": "flag", "key": "origin:suburban", "value": true }, "multiplier": 1.2 }
+      ],
+      "title": "The Collar Question",
+      "body": "The seminary has a policy and the policy is clear about the building: clerical dress in chapel and class for theology men, and at the parish when serving. What the policy does not say is what you wear on the flight home, at your cousin's wedding, in the grocery store near the pastoral placement, or walking to the bar where the class goes on Thursdays. Two classmates have bought cassocks with their own money and wear them to dinner. {@professor_prog} has been heard to say that the collar is a uniform and uniforms are for work. {@professor_trad} wears his to the gym. {@rector} has said nothing, which everyone reads as a test. The question is small, and it is not. It is the first time the people who see you will decide what you are before you speak, and the first time you decide whether to let them. You have a wedding at home in three weeks and a suit that still fits. Your mother has already asked what you will be wearing, and the way she asked told you what she hopes.",
+      "flavorPrompt": "The politics of clothing in a formation house, treated seriously and without mockery. Small choice, long tail.",
+      "choices": [
+        {
+          "id": "collar_everywhere",
+          "label": "Wear clerics whenever you leave the building, wedding included",
+          "outcome": "The cousin's wedding is strange for an hour and then it is not; an uncle who has not been to Mass in a decade takes you aside in the parking lot and talks for forty minutes. That is the argument for it. The argument against is that you were not off duty for a single minute of the weekend, and you notice it on the flight back.",
+          "volume": "semi_public",
+          "positionTopic": "liturgy",
+          "positionValue": -30,
+          "effects": [
+            { "target": "alignment", "key": "", "delta": -3 },
+            { "target": "reputation", "key": "traditional_bloc", "delta": 2 },
+            { "target": "pillar", "key": "pastoral", "delta": 1 },
+            { "target": "pillar", "key": "human", "delta": -1 }
+          ]
+        },
+        {
+          "id": "clerics_when_working",
+          "label": "Clerics when you are working, a suit when you are a guest",
+          "outcome": "You wear the suit to the wedding and the collar to the placement, and nobody at either place has an opinion. It is the position most priests you admire seem to hold, and you suspect it is the one {@rector} holds, though he will never say. It commits you to deciding, every morning, what today is. Some mornings that is clarifying.",
+          "volume": "semi_public",
+          "positionTopic": "liturgy",
+          "positionValue": 10,
+          "effects": [
+            { "target": "pillar", "key": "human", "delta": 2 },
+            { "target": "relationship", "key": "@rector", "delta": 3 }
+          ]
+        },
+        {
+          "id": "cassock",
+          "label": "Buy the cassock",
+          "requires": [{ "type": "alignment", "op": "<=", "value": -25 }],
+          "outcome": "It arrives in a long box and fits after the second alteration. You wear it to dinner. Half the table approves, {@professor_prog} does not look up, and {@rector} asks you, mildly, the next day whether you have thought about how it reads at a hospital. You have. You are aware that you have declared something, and that the men who noticed will remember which side of the table you sat on.",
+          "volume": "semi_public",
+          "positionTopic": "liturgy",
+          "positionValue": -70,
+          "effects": [
+            { "target": "alignment", "key": "", "delta": -5 },
+            { "target": "reputation", "key": "traditional_bloc", "delta": 4 },
+            { "target": "reputation", "key": "progressive_bloc", "delta": -3 },
+            { "target": "relationship", "key": "@rector", "delta": -3 },
+            { "target": "relationship", "key": "@professor_trad", "delta": 6 }
+          ]
+        },
+        {
+          "id": "plain_clothes",
+          "label": "Plain clothes anywhere the policy does not reach",
+          "outcome": "You wear the suit to the wedding and jeans to the grocery store, and you notice what you can hear when people do not know. The placement's pastor says nothing; {@professor_trad} says something at lunch about men who are ashamed of the uniform, not to you but near you. You are not ashamed. You have decided the collar is for the people it is for, and you have accepted that some men will read that as weakness.",
+          "volume": "semi_public",
+          "positionTopic": "liturgy",
+          "positionValue": 40,
+          "effects": [
+            { "target": "alignment", "key": "", "delta": 3 },
+            { "target": "reputation", "key": "progressive_bloc", "delta": 2 },
+            { "target": "reputation", "key": "traditional_bloc", "delta": -2 },
+            { "target": "relationship", "key": "@professor_prog", "delta": 4 },
+            { "target": "pillar", "key": "human", "delta": 1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "y6_classmate_not_ordained",
+      "phase": "seminary",
+      "yearGate": [6],
+      "pressure": ["friendship_vs_duty", "loyalty_vs_honesty"],
+      "severity": "MAJOR",
+      "category": "classmate",
+      "baseWeight": 10,
+      "suppressYears": 3,
+      "once": true,
+      "title": "One Chair Fewer",
+      "body": "The list of men to be ordained deacon is posted on a Thursday and {@random_classmate} is not on it. The rector's letter to him, which he shows you in the parking lot because he has to show it to someone, says the formation faculty recommends a further year of growth in the human dimension before orders, which is the sentence they use when they will not say what the sentence means. He does not know what it means either, or says he does not. He has been in the class six years. He was going to be ordained beside you in May and now he will be watching from the nave, or from home, and he has to decide by Monday whether he is staying for the extra year. The class has already started to treat him carefully, which is worse than the letter. At dinner there is an empty chair that nobody took on purpose. He asks, in the parking lot, whether you will get a drink with him, and you can hear in the way he asks that he has already counted the men who said no.",
+      "flavorPrompt": "The formation system's opacity as experienced from the inside. The classmate should be a person, not a cautionary tale.",
+      "choices": [
+        {
+          "id": "sit_with_him",
+          "label": "Get the drink, and the next one, and drive him back",
+          "outcome": "He talks for two hours and does not once ask you to fix anything, which is when you understand what he needed. You do not tell him it will be fine. You tell him you will be at the ordination whether he is in the sanctuary or the pews, and that the chair is his. It is the right thing and it costs you the evening's reading, and a rumor that you are the one who takes the strays.",
+          "effects": [
+            { "target": "relationship", "key": "@random_classmate", "delta": 14 },
+            { "target": "pillar", "key": "human", "delta": 3 },
+            { "target": "pillar", "key": "intellectual", "delta": -1 }
+          ]
+        },
+        {
+          "id": "ask_rector",
+          "label": "Ask {@rector} what the sentence means, as a brother of the man",
+          "requires": [{ "type": "relationship", "npcId": "@rector", "op": ">=", "value": 15 }],
+          "outcome": "{@rector} tells you what he can, which is less than you wanted and more than the letter. There is nothing dishonorable in it; there is a pattern the faculty saw and the man could not, and a year is the mercy, not the punishment. You cannot repeat most of it. You tell your classmate that the faculty is not lying to him, and he believes you, mostly, because you asked.",
+          "effects": [
+            { "target": "relationship", "key": "@rector", "delta": -3 },
+            { "target": "relationship", "key": "@random_classmate", "delta": 8 },
+            { "target": "stat", "key": "knowledge", "delta": 1 },
+            { "target": "pillar", "key": "pastoral", "delta": 1 }
+          ]
+        },
+        {
+          "id": "keep_distance",
+          "label": "Tell him you have a paper due and mean it",
+          "outcome": "You do have a paper due. He says sure, and goes to find someone else, and you learn later that he found no one. The paper is good. Several men in the class note that when the faculty marked a man, you moved out of the blast radius, and some of them think that is prudence and one or two of them will remember it as something else.",
+          "effects": [
+            { "target": "relationship", "key": "@random_classmate", "delta": -12 },
+            { "target": "pillar", "key": "intellectual", "delta": 2 },
+            { "target": "pillar", "key": "human", "delta": -2 },
+            { "target": "relationship", "key": "@closest_classmate", "delta": -3 }
+          ]
+        },
+        {
+          "id": "organize_class",
+          "label": "Get the class to sign a letter asking the faculty to reconsider",
+          "requires": [{ "type": "relationship", "npcId": "@closest_classmate", "op": ">=", "value": 20 }],
+          "outcome": "{@closest_classmate} helps you draft it and eight men sign. The rector receives it courteously and it changes nothing, because it could not; the decision was not a vote. What it changes is the class, which now knows it can act as a body, and the faculty, which now knows who wrote the first sentence. Your classmate keeps the letter. He stays for the year.",
+          "effects": [
+            { "target": "relationship", "key": "@random_classmate", "delta": 10 },
+            { "target": "relationship", "key": "@closest_classmate", "delta": 6 },
+            { "target": "relationship", "key": "@rector", "delta": -8 },
+            { "target": "relationship", "key": "@formation_advisor", "delta": -4 },
+            { "target": "outspokenness", "key": "", "delta": 2 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "y6_doubt_last_time",
+      "phase": "seminary",
+      "yearGate": [6],
+      "pressure": ["doubt"],
+      "severity": "CRITICAL",
+      "category": "personal",
+      "baseWeight": 8,
+      "suppressYears": 4,
+      "once": true,
+      "bias": [
+        { "when": { "type": "flag", "key": "motive:running", "value": true }, "multiplier": 2.5 },
+        { "when": { "type": "flag", "key": "motive:grief", "value": true }, "multiplier": 2 },
+        { "when": { "type": "flag", "key": "past:relationship", "value": true }, "multiplier": 1.5 },
+        { "when": { "type": "pillar", "key": "spiritual", "op": "<=", "value": 2 }, "multiplier": 2 },
+        { "when": { "type": "flag", "key": "motive:certainty", "value": true }, "multiplier": 0.5 }
+      ],
+      "title": "The Last Open Door",
+      "body": "It is not dramatic. It is a Wednesday in Theology III and you are sitting on the edge of the bed with your shoes on, and you have not gone to Morning Prayer, and you are aware that you could not go tomorrow either, and the day after, and that the building would absorb it for a week before anyone said anything. Six years of certainty do not feel like certainty from here. They feel like momentum. You can name the men who were ordained on momentum and you have watched two of them since. The diaconate is weeks away and it is the last door that opens outward without a scandal on the other side. After it, leaving is a story. Before it, leaving is a decision. You know the arguments on both sides so well that they have stopped being arguments and become furniture. What you do not know is whether the thing you are feeling is the ordinary fear of a large promise or a true sentence you have refused to read. Your shoes are on. The bell for Lauds has stopped. Nobody is coming to ask.",
+      "flavorPrompt": "Flat, quiet, precise. A man on the edge of a bed with his shoes on. No music. Do not resolve it for him.",
+      "choices": [
+        {
+          "id": "stay_and_tell",
+          "label": "Stay, and take all of it to {@spiritual_director} today",
+          "outcome": "You tell him you did not go to Lauds and why. He asks whether it is fear or a sentence, and you say you cannot tell, and he says that is the most common thing he hears in the month before orders and the least often said aloud. He does not tell you to stay. He tells you to come back Friday. You go to Vespers. It is not resolved. It is being carried, by two people.",
+          "effects": [
+            { "target": "relationship", "key": "@spiritual_director", "delta": 12 },
+            { "target": "pillar", "key": "spiritual", "delta": 3 },
+            { "target": "honesty", "key": "", "delta": 2 }
+          ]
+        },
+        {
+          "id": "stay_silent",
+          "label": "Stay, and tell no one",
+          "outcome": "You go to the ten o'clock class. You go to Vespers. You do not miss Lauds again, and by the following Wednesday the morning on the bed has become something you can describe to yourself as a bad night. You have decided by not deciding, and the decision holds, and there is a small sealed room in you now with that morning in it. Priests have those. You have seen where they keep them.",
+          "effects": [
+            { "target": "pillar", "key": "spiritual", "delta": -1 },
+            { "target": "pillar", "key": "human", "delta": -1 },
+            { "target": "risk", "key": "y6_buried_doubt", "value": "A doubt sealed over in the weeks before the diaconate", "delta": 1 }
+          ]
+        },
+        {
+          "id": "ask_deferral",
+          "label": "Ask {@rector} to defer your diaconate by a season",
+          "requires": [{ "type": "relationship", "npcId": "@rector", "op": ">=", "value": 10 }],
+          "outcome": "{@rector} agrees to a deferral more easily than you expected; it is not rare, he says, and it is better than the alternative. It goes on the record as a request, in your words. The class notices the gap in the list and is kind about it, mostly. You have bought yourself a season to find out which thing you were feeling, at the price of being the man who asked.",
+          "effects": [
+            { "target": "relationship", "key": "@rector", "delta": 4 },
+            { "target": "concern", "key": "Requested deferral of the diaconate on his own initiative", "value": true },
+            { "target": "pillar", "key": "spiritual", "delta": 2 },
+            { "target": "honesty", "key": "", "delta": 1 },
+            { "target": "reputation", "key": "chancery", "delta": -2 }
+          ]
+        },
+        {
+          "id": "leave",
+          "label": "Take your shoes off, pack, and go to the rector's office at nine",
+          "outcome": "You are calm, which surprises you both. {@rector} asks whether there is anything the seminary could have done, and you say no, honestly, and he thanks you for that. It takes a week to arrange. The class walks you to your car. {@closest_classmate} says he will be at whatever you do next, and you believe him.",
+          "effects": [
+            {
+              "target": "end",
+              "key": "left_seminary",
+              "value": "He left in the spring of Theology III, weeks before the diaconate, having read the sentence he had been refusing to read and found that it was true. There was no scandal and no story. He had six years of formation, a good reference, and a clear conscience, and in time he found that all three were useful in a life."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "y6_christmas_pastoral_parish",
+      "phase": "seminary",
+      "yearGate": [6],
+      "pressure": ["competence", "body_vs_vow"],
+      "severity": "NOTABLE",
+      "category": "assignment",
+      "baseWeight": 10,
+      "suppressYears": 3,
+      "once": true,
+      "requires": [{ "type": "season", "value": "christmas" }],
+      "bias": [
+        { "when": { "type": "flag", "key": "career:management", "value": true }, "multiplier": 1.4 },
+        { "when": { "type": "flag", "key": "family:supportive", "value": true }, "multiplier": 1.2 }
+      ],
+      "title": "Four Masses and a Nap",
+      "body": "The retired priest who was going to take two of the Christmas Masses calls on the twenty-third with a chest infection and an apology. The pastor of your placement now has the Vigil, Midnight, Dawn, and the ten o'clock, with a nap between two of them, and there is nothing you can do about the Masses because you are not yet a deacon and could not preach at them if you were a priest tomorrow. What you can do is everything else. The lectors have not been confirmed. The choir director and the folk group have a dispute about the Midnight that has been running since October. The ushers need a count. Someone has to sit with the collection while the pastor sleeps, and the sacristy has one thurible and three Masses that want incense. Your family is a two-hour drive away and has set a place, and your mother has asked twice, gently, whether you will be there after the last Mass or whether this is what it is going to be like now. You have not answered. It is the twenty-fourth. The pastor has gone up to sleep for ninety minutes and left you the keys.",
+      "flavorPrompt": "The logistics of Christmas in a parish with one priest. Warm and exhausted. The first taste of the life's actual rhythm.",
+      "choices": [
+        {
+          "id": "run_everything",
+          "label": "Take the keys and run the building until the ten o'clock is over",
+          "outcome": "You settle the choir dispute by scheduling both groups and telling neither. You confirm the lectors, count with the ushers, light the thurible in time for each Mass. The pastor comes down from his nap and finds a parish that is working, and says so from the pulpit at Midnight, which the parish remembers. You drive home on the twenty-sixth. Your mother had kept the plate.",
+          "effects": [
+            { "target": "stat", "key": "administration", "delta": 2 },
+            { "target": "pillar", "key": "pastoral", "delta": 2 },
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "pillar", "key": "spiritual", "delta": -1 },
+            { "target": "archetype", "key": "administrative", "delta": 1 }
+          ]
+        },
+        {
+          "id": "pray_the_vigil",
+          "label": "Do what must be done, then put down the clipboard and sit in the nave for the Vigil",
+          "outcome": "The lectors are confirmed and the count is arranged, and at the Vigil you sit in a back pew with nothing in your hands and listen to the pastor preach on four hours' sleep about a child. It is the first Christmas Mass in six years at which you were not doing anything. The choir dispute goes unresolved; the folk group plays the Midnight and the choir director does not speak to you until Epiphany.",
+          "effects": [
+            { "target": "pillar", "key": "spiritual", "delta": 3 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "reputation", "key": "parishioners", "delta": -1 },
+            { "target": "stat", "key": "administration", "delta": -1 }
+          ]
+        },
+        {
+          "id": "drive_home",
+          "label": "Set up the Dawn Mass, leave the keys on the desk, and drive home at two in the morning",
+          "outcome": "You leave the sacristy ready for Dawn and the count locked in the safe, and you are on the highway by two, and at your mother's table by four, and asleep in your own bed with the sound of the house around you. The pastor says nothing when you return on the twenty-sixth. The secretary says he did the Dawn count himself, alone, and that he did not mind. You are not sure that is true.",
+          "effects": [
+            { "target": "pillar", "key": "human", "delta": 2 },
+            { "target": "pillar", "key": "pastoral", "delta": -2 },
+            { "target": "reputation", "key": "parishioners", "delta": -1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "y6_hours_burden",
+      "phase": "seminary",
+      "yearGate": [6, 7],
+      "pressure": ["doubt", "competence"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 10,
+      "suppressYears": 2,
+      "bias": [
+        { "when": { "type": "flag", "key": "motive:certainty", "value": true }, "multiplier": 1.3 },
+        { "when": { "type": "pillar", "key": "spiritual", "op": "<=", "value": 3 }, "multiplier": 1.5 },
+        { "when": { "type": "flag", "key": "field:philosophy", "value": true }, "multiplier": 1.2 }
+      ],
+      "title": "Vespers on a Tuesday",
+      "body": "At the diaconate the bishop asks whether you resolve to celebrate the Liturgy of the Hours faithfully, with and for the People of God, and once you have said yes it is no longer a devotion. It is an obligation, five times a day, for the rest of your life, in a four-volume set that weighs as much as a small dog. In the seminary it was easy because the bell rang and everyone went. Now it is a Tuesday in a rectory, or a hospital parking lot, or a car, and it is half past nine at night and you have not said Vespers and you are too tired to want to. Some evenings the psalms are exactly what happened to you that day, said better than you could have said it. Some evenings they are a wall of words about the enemies of Israel, and you are reading them to a lamp. The men who have kept it for forty years say the point is not the evenings when it speaks. The point is that you were there on the evenings it did not. You are beginning to understand what they mean and to suspect it is the whole of the spiritual life in one sentence.",
+      "flavorPrompt": "The Divine Office as daily, unglamorous fidelity. Concrete: a breviary, a lamp, a parking lot. No mysticism.",
+      "choices": [
+        {
+          "id": "keep_all",
+          "label": "Keep all five hours, at their hours, whatever the day is",
+          "outcome": "It costs you something every day, and most days the something is small: a conversation cut short, a text not answered, ten minutes in a car outside a hospital. You notice after a month that the day has a floor under it that it did not have before. You also notice that {@closest_classmate} has started calling you the monk, and that it is not entirely a joke.",
+          "effects": [
+            { "target": "pillar", "key": "spiritual", "delta": 4 },
+            { "target": "stat", "key": "piety", "delta": 2 },
+            { "target": "pillar", "key": "human", "delta": -1 }
+          ]
+        },
+        {
+          "id": "morning_evening",
+          "label": "Hold Lauds and Vespers as fixed points and let the little hours find their own time",
+          "outcome": "You keep the hinges of the day and let the rest fall where the day allows, which is what the General Instruction more or less permits and what most diocesan priests do. Some days the Office of Readings happens at midnight. It is honest and it is sustainable, and you are aware that sustainable is the word men use just before they stop.",
+          "effects": [
+            { "target": "pillar", "key": "spiritual", "delta": 2 },
+            { "target": "pillar", "key": "pastoral", "delta": 1 },
+            { "target": "stat", "key": "piety", "delta": 1 }
+          ]
+        },
+        {
+          "id": "pray_with_classmate",
+          "label": "Make a standing arrangement to pray Vespers with {@closest_classmate}, in person or by phone",
+          "outcome": "It works because neither of you wants to be the one who does not show up. Some evenings it is two men in a chapel; more often it is two phones on speaker and a psalm read across a diocese. It is not the way the Office was designed to be said and it is exactly what it was designed for. You will not always have him. You have him now.",
+          "effects": [
+            { "target": "relationship", "key": "@closest_classmate", "delta": 10 },
+            { "target": "pillar", "key": "spiritual", "delta": 2 },
+            { "target": "pillar", "key": "human", "delta": 1 }
+          ]
+        },
+        {
+          "id": "app_in_car",
+          "label": "Let the app read it aloud while you drive",
+          "outcome": "It gets said. That is the argument for it and it is a real argument. The argument against is that you are not sure you are praying so much as being in the presence of prayer, the way you are in the presence of the radio. Some days that is enough. On the days the psalm turns out to be about you, you pull over.",
+          "effects": [
+            { "target": "pillar", "key": "human", "delta": 1 },
+            { "target": "stat", "key": "piety", "delta": -1 },
+            { "target": "pillar", "key": "pastoral", "delta": 1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "y6_called_father",
+      "phase": "seminary",
+      "yearGate": [6, 7],
+      "pressure": ["competence"],
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 8,
+      "suppressYears": 3,
+      "once": true,
+      "bias": [
+        { "when": { "type": "flag", "key": "late_vocation", "value": true }, "multiplier": 1.5 },
+        { "when": { "type": "flag", "key": "origin:urban_ethnic", "value": true }, "multiplier": 1.2 }
+      ],
+      "title": "Father, by Mistake",
+      "body": "It happens in a hospital corridor. A woman about your mother's age, holding a paper cup of coffee she has not drunk, sees the collar and the way you are standing outside a room and says, Father, could you come in for a minute, it's my husband. You are a seminarian in clerics on a pastoral visit. You cannot anoint him. You cannot absolve him. You cannot do the one thing she has just asked for by the only name she has for it. She is already turning toward the door. What you can do is go in and sit down and hold a hand and pray with him, and none of that requires the title, and all of it is what she wants, and the title is the only false thing in the room. You have perhaps four seconds. The correction will cost her nothing and something. The silence will cost you nothing and something. The nurse at the station has looked up, because she knows what you are and is waiting to see what you do.",
+      "flavorPrompt": "A small moment, weighted. Hospital light, a paper cup, four seconds.",
+      "choices": [
+        {
+          "id": "correct_gently",
+          "label": "\"Not yet, ma'am. But I'll come in.\"",
+          "default": true,
+          "outcome": "She looks confused for half a second and then does not care, and you go in and sit with him, and it is what she wanted. On the way out she calls you Father again and you let that one go. The nurse gives you a small nod, which is how you learn that the ones who know are watching the ones who do not.",
+          "effects": [
+            { "target": "pillar", "key": "human", "delta": 1 },
+            { "target": "pillar", "key": "pastoral", "delta": 1 },
+            { "target": "honesty", "key": "", "delta": 1 }
+          ]
+        },
+        {
+          "id": "let_it_pass",
+          "label": "Say nothing and go in",
+          "outcome": "You sit with him for twenty minutes. He is not dying, it turns out, and she is grateful, and when she says thank you Father on the way out you say you're welcome. It was the kind thing. It was also the first time you accepted something that was not yours because correcting it was awkward, and you notice yourself filing it, and you notice that the nurse did too.",
+          "effects": [
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "pillar", "key": "pastoral", "delta": 1 },
+            { "target": "honesty", "key": "", "delta": -1 }
+          ]
+        },
+        {
+          "id": "explain_and_fetch",
+          "label": "Explain what you are, go in, and then find the chaplain to anoint him",
+          "requires": [{ "type": "stat", "key": "knowledge", "op": ">=", "value": 45 }],
+          "outcome": "You tell her plainly what you can and cannot do, sit with him, and then walk to the chaplain's office and come back with a priest who anoints him while you hold the oil stock. She gets what she asked for by its right name. It takes an hour you did not have. The chaplain, afterward, asks which seminary you are at, and remembers it.",
+          "effects": [
+            { "target": "pillar", "key": "pastoral", "delta": 2 },
+            { "target": "stat", "key": "theology", "delta": 1 },
+            { "target": "reputation", "key": "brother_priests", "delta": 2 },
+            { "target": "pillar", "key": "intellectual", "delta": -1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "y6_rival_ordination",
+      "phase": "seminary",
+      "yearGate": [6, 7],
+      "pressure": ["ambition_vs_integrity", "friendship_vs_duty"],
+      "severity": "NOTABLE",
+      "category": "classmate",
+      "baseWeight": 10,
+      "suppressYears": 2,
+      "bias": [
+        { "when": { "type": "relationship", "npcId": "@rival_classmate", "op": "<=", "value": -10 }, "multiplier": 1.8 },
+        { "when": { "type": "flag", "key": "motive:intellectual", "value": true }, "multiplier": 1.2 }
+      ],
+      "title": "Order of Precedence",
+      "body": "As ordination comes closer the class discovers it has a pecking order, and that the bishop's office keeps one too. Who is being sent to the cathedral parish. Who the bishop greeted by name at the last visit. Who preached the Sunday when the vocation director was in the pews. {@rival_classmate} has been counting these things for a year and has started, in a way that is deniable, to tell people about your pastoral year: nothing false, just a version in which the pastor carried you and the parish noticed. It reaches you through {@random_classmate}, who is embarrassed to be the messenger. You have perhaps eleven months of daily contact with this man left, and then thirty or forty years in the same presbyterate, at the same convocations, on the same lists. The class of a given year is a unit the diocese remembers as a unit. What you do about him now is what the unit will remember, and in a small diocese the unit is most of the men your age.",
+      "flavorPrompt": "Seminary politics with a long horizon. Petty, real, and consequential. Nobody is a villain.",
+      "choices": [
+        {
+          "id": "confront",
+          "label": "Ask him directly, in private, to stop",
+          "outcome": "He denies it with the exact ease of a man who has rehearsed the denial, and then, because you do not argue, he stops. You have not made a friend. You have made a man who knows you will say a thing to his face, which in a presbyterate is worth more than a friend and less than an ally. {@random_classmate} is relieved to be out of it.",
+          "effects": [
+            { "target": "relationship", "key": "@rival_classmate", "delta": -3 },
+            { "target": "outspokenness", "key": "", "delta": 1 },
+            { "target": "pillar", "key": "human", "delta": 2 },
+            { "target": "relationship", "key": "@random_classmate", "delta": 4 }
+          ]
+        },
+        {
+          "id": "let_it_go",
+          "label": "Let it go and say something generous about him where it will get back",
+          "outcome": "You tell the vocation director, unprompted, that {@rival_classmate} is the best homilist in the class, which is nearly true. It gets back to him within the week, as things do, and it confuses him, which is the intent, and then it shames him a little, which was not. He does not stop entirely. He stops being enthusiastic about it.",
+          "effects": [
+            { "target": "relationship", "key": "@rival_classmate", "delta": 6 },
+            { "target": "pillar", "key": "spiritual", "delta": 2 },
+            { "target": "reputation", "key": "brother_priests", "delta": 1 }
+          ]
+        },
+        {
+          "id": "outwork",
+          "label": "Say nothing and make the story impossible to believe",
+          "outcome": "You take the Sunday preaching whenever it is offered. You take the hospital nights. You write the paper {@professor_trad} said no one would finish. By spring the version of the pastoral year in circulation has been overwritten by a version of you that is harder to talk about. It is effective and it is tiring, and you notice that he taught you to compete, which you will not thank him for.",
+          "effects": [
+            { "target": "pillar", "key": "pastoral", "delta": 2 },
+            { "target": "pillar", "key": "intellectual", "delta": 2 },
+            { "target": "relationship", "key": "@rival_classmate", "delta": -5 },
+            { "target": "pillar", "key": "spiritual", "delta": -1 }
+          ]
+        },
+        {
+          "id": "closest_intervenes",
+          "label": "Let {@closest_classmate} handle it, the way he offered to",
+          "requires": [{ "type": "relationship", "npcId": "@closest_classmate", "op": ">=", "value": 25 }],
+          "outcome": "{@closest_classmate} has a conversation you are not part of and do not ask about. The story stops. What you have learned is that you have a man who will do that for you, and what {@rival_classmate} has learned is that you have one, and neither of you will forget either fact in the decades you have left in the same diocese.",
+          "effects": [
+            { "target": "relationship", "key": "@closest_classmate", "delta": 6 },
+            { "target": "relationship", "key": "@rival_classmate", "delta": -10 },
+            { "target": "reputation", "key": "brother_priests", "delta": -1 },
+            { "target": "pillar", "key": "human", "delta": -1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "y7_assignment_preferences",
+      "phase": "seminary",
+      "yearGate": [7],
+      "pressure": ["ambition_vs_integrity"],
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 14,
+      "suppressYears": 4,
+      "once": true,
+      "beat": "ordination_eve",
+      "title": "The Preference Form",
+      "body": "It arrives from the office of clergy personnel in an envelope with the diocesan seal and a cover letter that runs to one paragraph. The form has three lines. You may indicate, in order, the kinds of assignment in which you believe you could best serve; the bishop, the letter reminds you, reserves the assignment of clergy to himself and takes the preferences of the newly ordained into consideration. Everyone in the class knows the stories: the man who wrote urban and was sent to a farm town for six years, the man who wrote wherever and was sent to the cathedral because the bishop read wherever as a virtue, the man who wrote Spanish-speaking and got exactly that and was drowning by Advent. {@vocation_director} says, when asked, that the form is read, which is not the same as followed, and that the men who write the truth do better over ten years than the men who write what they think the bishop wants, because the bishop has been doing this longer than they have and can tell. The form is due Friday. You have been thinking about this line for seven years and now it has to be a sentence.",
+      "flavorPrompt": "An institutional form as a moment of self-definition. The player's first act of career positioning. Dry, exact.",
+      "choices": [
+        {
+          "id": "urban",
+          "label": "A city parish: the poor, the noise, the parish that never closes",
+          "outcome": "You write it in one line and add nothing. {@vocation_director} reads it and says the city parishes will be glad of a man who asked for them, and that you should sleep now while you can. The class assumes you are ambitious. You are not sure they are wrong, and you are sure it is not the only reason.",
+          "effects": [
+            { "target": "flag", "key": "pref_urban", "value": true },
+            { "target": "archetype", "key": "pastoral", "delta": 2 },
+            { "target": "pillar", "key": "pastoral", "delta": 1 }
+          ]
+        },
+        {
+          "id": "rural",
+          "label": "A country parish, or three: long drives, small churches, everyone known",
+          "outcome": "You write it and feel a small dread, which tells you it is true. {@vocation_director} says the rural deanery is where the diocese is shortest and where a young man is least supervised, and that he will make sure there is a pastor within thirty minutes who answers his phone. You believe him about the first part.",
+          "effects": [
+            { "target": "flag", "key": "pref_rural", "value": true },
+            { "target": "archetype", "key": "pastoral", "delta": 1 },
+            { "target": "archetype", "key": "missionary", "delta": 1 },
+            { "target": "pillar", "key": "human", "delta": 1 }
+          ]
+        },
+        {
+          "id": "latino",
+          "label": "A Spanish-speaking community, where the diocese is growing and is short of men who can preach",
+          "requires": [
+            { "type": "any", "inner": [
+              { "type": "flag", "key": "speaks_spanish", "value": true },
+              { "type": "flag", "key": "origin:latino_immigrant", "value": true },
+              { "type": "credential", "key": "spanish" }
+            ] }
+          ],
+          "outcome": "You write it, and {@vocation_director} reads it and does not hide his relief. There are four parishes he could name and he names two. He also says, carefully, that the men who ask for this get it and then get everything else the diocese cannot staff in that language, and that you should learn to say no in two languages. You have already noticed.",
+          "effects": [
+            { "target": "flag", "key": "pref_latino", "value": true },
+            { "target": "archetype", "key": "missionary", "delta": 2 },
+            { "target": "reputation", "key": "chancery", "delta": 2 },
+            { "target": "pillar", "key": "pastoral", "delta": 1 }
+          ]
+        },
+        {
+          "id": "academic",
+          "label": "A parish near the university, with a view to further study",
+          "requires": [
+            { "type": "any", "inner": [
+              { "type": "stat", "key": "theology", "op": ">=", "value": 55 },
+              { "type": "stat", "key": "knowledge", "op": ">=", "value": 55 },
+              { "type": "flag", "key": "career:professor", "value": true }
+            ] }
+          ],
+          "outcome": "You write it and you hear it: a man not yet ordained a priest asking for the track that leads out of parishes. {@vocation_director} says nothing for a moment and then says the diocese needs men who can teach, and that it needs them in ten years, and that in the meantime you will be a curate like everyone else. You knew that. You wrote it anyway. It is on the record now.",
+          "effects": [
+            { "target": "flag", "key": "pref_academic", "value": true },
+            { "target": "archetype", "key": "teaching", "delta": 2 },
+            { "target": "archetype", "key": "theological", "delta": 1 },
+            { "target": "reputation", "key": "brother_priests", "delta": -1 }
+          ]
+        },
+        {
+          "id": "wherever",
+          "label": "Wherever the bishop needs a priest",
+          "outcome": "You write it and mean it, mostly, and you are aware that it is also the answer that cannot be held against you. {@vocation_director} reads it and says that some men write this because it is true and some write it because it is safe, and that the bishop assumes the first and tests for the second. The assignment, when it comes, will be the test.",
+          "effects": [
+            { "target": "flag", "key": "pref_wherever", "value": true },
+            { "target": "reputation", "key": "chancery", "delta": 3 },
+            { "target": "pillar", "key": "spiritual", "delta": 1 },
+            { "target": "pillar", "key": "human", "delta": 1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "y7_ordination_eve_family",
+      "phase": "seminary",
+      "yearGate": [7],
+      "pressure": ["friendship_vs_duty", "doubt"],
+      "severity": "CRITICAL",
+      "category": "personal",
+      "baseWeight": 12,
+      "suppressYears": 4,
+      "once": true,
+      "beat": "ordination_eve",
+      "bias": [
+        { "when": { "type": "flag", "key": "family:opposed", "value": true }, "multiplier": 1.6 },
+        { "when": { "type": "flag", "key": "family:supportive", "value": true }, "multiplier": 1.4 },
+        { "when": { "type": "flag", "key": "family:large", "value": true }, "multiplier": 1.3 }
+      ],
+      "title": "The Night Before",
+      "body": "Your family has taken rooms at a hotel near the cathedral, and {@mother} has laid out the clothes she will wear tomorrow on the second bed as if she were the one being ordained. {@father} has read the program four times and asked you twice what the prostration is for. There is a dinner. Relatives you have not seen since the diaconate have driven in and are telling each other stories about you at eleven, and the stories are affectionate and mostly wrong. Tomorrow you will lie face down on the cathedral floor while the litany is sung over you, the bishop will lay his hands on your head in silence, your palms will be anointed with chrism, and a priest will vest you in the chasuble. The night before is the last night you are the version of yourself these people know. {@closest_classmate} has texted to say the class is at the seminary chapel and then the usual place, if you want. {@mother} has asked whether you will stay for dessert. Everyone is being careful with you, and you cannot decide whether you want to be handled or left alone, and the evening is running out.",
+      "flavorPrompt": "A hotel, a family dinner, the last ordinary evening. Tender without sentiment. Let the family be specific and slightly awkward.",
+      "choices": [
+        {
+          "id": "stay_with_family",
+          "label": "Stay for dessert and for the stories, all of them",
+          "outcome": "You stay until the restaurant closes. {@father} tells the story about the bicycle, and {@mother} corrects it, and you let her. At the end {@father} shakes your hand and then, unexpectedly, does not let go for a moment. You go up to your room and sleep four hours. It was the right night to give them, because tomorrow you belong to other people.",
+          "effects": [
+            { "target": "relationship", "key": "@mother", "delta": 10 },
+            { "target": "relationship", "key": "@father", "delta": 10 },
+            { "target": "pillar", "key": "human", "delta": 3 }
+          ]
+        },
+        {
+          "id": "chapel_then_class",
+          "label": "Leave after the main course and go to the chapel, and then to the class",
+          "outcome": "You kiss your mother and shake your father's hand and walk the six blocks to the seminary. The chapel is dark and has four men in it. The usual place afterward has the rest. Nobody says anything about tomorrow. {@closest_classmate} buys the last round and says it is the last round he will ever buy for a layman, and you note that your mother did not ask why you were leaving, which is its own gift.",
+          "effects": [
+            { "target": "relationship", "key": "@closest_classmate", "delta": 8 },
+            { "target": "pillar", "key": "spiritual", "delta": 2 },
+            { "target": "relationship", "key": "@mother", "delta": -3 },
+            { "target": "pillar", "key": "human", "delta": 1 }
+          ]
+        },
+        {
+          "id": "vigil_alone",
+          "label": "Excuse yourself early and keep a vigil alone in the cathedral",
+          "outcome": "The sacristan lets you in because he has done this before. You kneel in the dark in the place where you will lie down tomorrow and try to pray and mostly succeed. It is the only hour of the weekend that belongs to you. {@mother} is hurt and hides it well; {@father} understands better than you expected and says so, once, in the morning.",
+          "effects": [
+            { "target": "pillar", "key": "spiritual", "delta": 4 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "relationship", "key": "@mother", "delta": -4 },
+            { "target": "relationship", "key": "@father", "delta": 3 }
+          ]
+        },
+        {
+          "id": "say_it_to_father",
+          "label": "Take {@father} outside and say the thing that has waited seven years",
+          "hidden": true,
+          "requires": [{ "type": "relationship", "npcId": "@father", "op": "<=", "value": 10 }],
+          "outcome": "You say it in the hotel parking lot, badly, and he listens with his hands in his pockets. He does not say what you hoped. He says he is here, which is the thing he has, and that he read the program four times because he wanted to know what it would do to you. It is not a reconciliation. It is a door left ajar by two men who have not done this before.",
+          "effects": [
+            { "target": "relationship", "key": "@father", "delta": 16 },
+            { "target": "honesty", "key": "", "delta": 2 },
+            { "target": "pillar", "key": "human", "delta": 3 },
+            { "target": "pillar", "key": "spiritual", "delta": 1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "y7_ordination_eve_vigil",
+      "phase": "seminary",
+      "yearGate": [7],
+      "pressure": ["friendship_vs_duty", "doubt"],
+      "severity": "CRITICAL",
+      "category": "personal",
+      "baseWeight": 12,
+      "suppressYears": 4,
+      "once": true,
+      "beat": "ordination_eve",
+      "bias": [
+        { "when": { "type": "flag", "key": "family:estranged", "value": true }, "multiplier": 1.6 },
+        { "when": { "type": "flag", "key": "tie:seminary", "value": true }, "multiplier": 1.3 },
+        { "when": { "type": "relationship", "npcId": "@rival_classmate", "op": "<=", "value": 0 }, "multiplier": 1.3 }
+      ],
+      "title": "The Last Night in the House",
+      "body": "The seminary keeps the chapel open all night before an ordination, and the rooms of the men being ordained are already half packed. Tomorrow the bishop will lay hands on you in silence, the class will file up to do the same, your hands will be anointed with chrism, and you will concelebrate the rest of the Mass as a priest, standing where you have knelt for seven years. Tonight the house is quiet and strange. {@spiritual_director} has said he will be in his office until eleven and not to knock unless you want to. {@closest_classmate} has been in the chapel since Compline. {@rival_classmate} is in the corridor outside your room, apparently on his way somewhere, apparently not, and it occurs to you that he has no more idea than you do what to do with the fact that after tomorrow you are brothers whether you like it or not. There will be photographs in the morning and the class will stand together for them for the rest of its life. The night is long and has nothing scheduled in it, which is the first such night in seven years, and you do not know what to do with it.",
+      "flavorPrompt": "A formation house on its last night. Half-packed rooms, an open chapel, a rival in a corridor. Quiet, exact, no speeches.",
+      "choices": [
+        {
+          "id": "chapel",
+          "label": "Go to the chapel and stay until it is light",
+          "outcome": "It is not a vigil so much as a long sitting. Men come and go. {@closest_classmate} does not speak to you and does not leave. At some point the windows start to grey and you realize you have been praying for the diocese by name, parish after parish, without meaning to. You are not tired in the morning. You are something else.",
+          "effects": [
+            { "target": "pillar", "key": "spiritual", "delta": 4 },
+            { "target": "stat", "key": "piety", "delta": 2 },
+            { "target": "relationship", "key": "@closest_classmate", "delta": 4 }
+          ]
+        },
+        {
+          "id": "spiritual_director",
+          "label": "Knock on {@spiritual_director}'s door at ten to eleven",
+          "outcome": "He has a bottle open and two glasses, which answers the question of whether you were expected. He does not give advice. He tells you about his own ordination, which he has never done, and about the man who preached at it, who left the priesthood eight years later, and what that did and did not mean. At eleven he stands up. It is the last conversation in the internal forum, and you both know it.",
+          "effects": [
+            { "target": "relationship", "key": "@spiritual_director", "delta": 10 },
+            { "target": "pillar", "key": "spiritual", "delta": 2 },
+            { "target": "pillar", "key": "human", "delta": 2 }
+          ]
+        },
+        {
+          "id": "the_class",
+          "label": "Gather whoever is awake and go to the usual place",
+          "outcome": "Nine of you, in the back room, for the last time as a class of seminarians. Nobody makes a speech and then {@closest_classmate} makes a short one. It is mostly the same as any Thursday, and that is the point; you needed to know the thing you had was ordinary and would survive. You are in bed by one and asleep by three.",
+          "effects": [
+            { "target": "relationship", "key": "@closest_classmate", "delta": 6 },
+            { "target": "relationship", "key": "@rival_classmate", "delta": 4 },
+            { "target": "relationship", "key": "@random_classmate", "delta": 4 },
+            { "target": "pillar", "key": "human", "delta": 3 },
+            { "target": "pillar", "key": "spiritual", "delta": -1 }
+          ]
+        },
+        {
+          "id": "the_rival",
+          "label": "Ask {@rival_classmate} what he is doing in the corridor, and then ask him in",
+          "outcome": "He sits on the packed boxes because there is nowhere else. It takes twenty minutes to get past the weather. Then he says a thing about the pastoral year that is close to an apology, and you say a thing that is close to accepting it, and neither of you names it. In the morning you stand next to each other for the photograph without anyone arranging it.",
+          "effects": [
+            { "target": "relationship", "key": "@rival_classmate", "delta": 14 },
+            { "target": "pillar", "key": "human", "delta": 3 },
+            { "target": "honesty", "key": "", "delta": 1 },
+            { "target": "reputation", "key": "brother_priests", "delta": 1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "y7_pastoral_letter",
+      "phase": "seminary",
+      "yearGate": [7],
+      "pressure": ["loyalty_vs_honesty", "ambition_vs_integrity"],
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 12,
+      "suppressYears": 3,
+      "once": true,
+      "requires": [{ "type": "thread", "key": "y6_pastoral_supervisor", "open": true }],
+      "title": "The Pastor's Letter",
+      "body": "The pastor of your pastoral-year placement was asked, as supervisors are, to write to the diocese about you before ordination, and he did, late, by hand. {@vocation_director} has it on his desk when you come in and reads you parts of it because, he says, you should know what is in your file, and because the parts are interesting. The pastor writes about your preaching and your hospital visits with real warmth. He writes that you are a man the parish trusted. Then there is a paragraph, which the vocation director reads slowly, about whether you are the sort who would tell a pastor an uncomfortable thing to his face or go around him, and the paragraph does not answer its own question. It is being sent to the bishop with the rest. {@vocation_director} says the bishop reads these letters more carefully than the seminary evaluations, because seminaries write about seminarians and pastors write about priests. He asks whether there is anything you would like to add before it goes over. He is offering you the last word. He is also, you realize, watching what you do with it.",
+      "flavorPrompt": "A file, a letter read aloud, a question the letter does not answer. The player's pastoral year comes home to the chancery.",
+      "choices": [
+        {
+          "id": "accept",
+          "label": "Say the letter is fair and let it go over as it is",
+          "resolvesThread": "y6_pastoral_supervisor",
+          "outcome": "{@vocation_director} nods, folds it, and it goes to the bishop unannotated. The paragraph stays a question, which the bishop will answer for himself over the next decade. You learn later that the pastor sent a second note, unasked, saying he had been unfair, and that it arrived after the assignment was made.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": 2 },
+            { "target": "pillar", "key": "human", "delta": 2 },
+            { "target": "pillar", "key": "pastoral", "delta": 1 }
+          ]
+        },
+        {
+          "id": "go_and_ask",
+          "label": "Drive to the parish and ask him what the paragraph means, to his face",
+          "resolvesThread": "y6_pastoral_supervisor",
+          "outcome": "He is in the kitchen and not surprised. He says he wrote the paragraph to see whether you would come, and that the fact you came is the answer, and that he will call the vocation director and say so. He does. The letter that reaches the bishop has a postscript. You have also, without meaning to, made an old pastor your first friend in the presbyterate.",
+          "effects": [
+            { "target": "pillar", "key": "human", "delta": 3 },
+            { "target": "reputation", "key": "brother_priests", "delta": 3 },
+            { "target": "reputation", "key": "chancery", "delta": 1 },
+            { "target": "honesty", "key": "", "delta": 1 }
+          ]
+        },
+        {
+          "id": "name_the_report",
+          "label": "Point out, quietly, that the letter is from a man you reported to this office",
+          "hidden": true,
+          "requires": [{ "type": "flag", "key": "y6_pastor_reported", "value": true }],
+          "resolvesThread": "y6_pastoral_supervisor",
+          "outcome": "{@vocation_director} says that he knows, that the bishop knows, and that the paragraph is in the file next to your phone call. He says the bishop will read both and draw his own conclusion about which of you is the more reliable witness, and that in his experience the bishop usually decides both were. The letter goes over. So does the note about the call.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": 1 },
+            { "target": "reputation", "key": "brother_priests", "delta": -2 },
+            { "target": "honesty", "key": "", "delta": 1 },
+            { "target": "pillar", "key": "human", "delta": -1 }
+          ]
+        },
+        {
+          "id": "hand_over_books",
+          "label": "Hand him the memo you wrote about the parish's books",
+          "hidden": true,
+          "requires": [{ "type": "flag", "key": "y6_pastor_books", "value": true }],
+          "resolvesThread": "y6_pastoral_supervisor",
+          "outcome": "He reads it twice and puts it in a different folder. He says the diocese has been trying to find a reason to send a finance review to that parish for four years and that you have just given it one, and that the pastor will know within a month where it came from. The letter goes to the bishop with your memo behind it. You have been useful, and it has cost a man who trusted you.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": 5 },
+            { "target": "reputation", "key": "brother_priests", "delta": -4 },
+            { "target": "stat", "key": "administration", "delta": 1 },
+            { "target": "archetype", "key": "administrative", "delta": 2 },
+            { "target": "pillar", "key": "human", "delta": -2 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "y7_shortage_returns",
+      "phase": "seminary",
+      "yearGate": [7],
+      "pressure": ["ambition_vs_integrity", "competence"],
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 12,
+      "suppressYears": 3,
+      "once": true,
+      "requires": [{ "type": "thread", "key": "y6_shortage_ask", "open": true }],
+      "title": "The Placement",
+      "body": "{@vocation_director} comes back, this time with a letter rather than a printout, and this time the bishop's name is at the bottom of it. The parish he described last year has lost its pastor two months early. A priest from the neighboring town will drive in for the Sunday Masses and one weekday. The rectory is empty. The diocese would like its transitional deacon to live in it from now until priestly ordination and to do everything a deacon can do, which in a parish with no priest turns out to be nearly everything the people will notice: the funerals outside Mass, the baptisms, the marriage preparations, the office, the visiting, the phone. {@vocation_director} says the bishop remembers your answer from last year and has written the letter accordingly. He says that the seminary has been informed and has, in the rector's word, concerns. He says that you can still say no and that it will be noted, and you can say yes and that will be noted too, and that he is sorry to be the one who keeps bringing the diocese to your door before you have finished being formed. You believe him. You also notice he has brought the keys.",
+      "flavorPrompt": "The diocese's need arriving as a letter with the bishop's signature. The player is offered responsibility before he is ready and knows it.",
+      "choices": [
+        {
+          "id": "go",
+          "label": "Take the keys",
+          "resolvesThread": "y6_shortage_ask",
+          "outcome": "You move into the rectory on a Tuesday with two boxes and the breviary. The first funeral is Thursday. By Lent you can run a parish office, preach four times a week, and fall asleep sitting up. The parish adopts you with the speed of people who have been frightened of being forgotten. The seminary's concerns are noted in your file, next to the bishop's letter, and the bishop's letter is on top.",
+          "effects": [
+            { "target": "flag", "key": "y7_shortage_placed", "value": true },
+            { "target": "reputation", "key": "chancery", "delta": 4 },
+            { "target": "reputation", "key": "parishioners", "delta": 3 },
+            { "target": "pillar", "key": "pastoral", "delta": 3 },
+            { "target": "stat", "key": "administration", "delta": 1 },
+            { "target": "pillar", "key": "spiritual", "delta": -2 },
+            { "target": "relationship", "key": "@rector", "delta": -3 }
+          ]
+        },
+        {
+          "id": "decline",
+          "label": "Say no, and say why, and let it be noted",
+          "resolvesThread": "y6_shortage_ask",
+          "outcome": "You tell him a parish with no priest should not be held together by a man who cannot celebrate Mass or hear a confession, and that the people would be better served by knowing what they have lost than by being given a deacon to pretend otherwise. He does not argue. He writes it down. The rector, when he hears, says it is the most sensible thing a deacon has said to that office in years, and that it will cost you.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": -4 },
+            { "target": "relationship", "key": "@rector", "delta": 6 },
+            { "target": "honesty", "key": "", "delta": 2 },
+            { "target": "pillar", "key": "spiritual", "delta": 2 },
+            { "target": "outspokenness", "key": "", "delta": 1 }
+          ]
+        },
+        {
+          "id": "hold_conditions",
+          "label": "Ask whether the conditions you named are in the letter, and go only if they are",
+          "hidden": true,
+          "requires": [{ "type": "flag", "key": "y6_shortage_conditions", "value": true }],
+          "resolvesThread": "y6_shortage_ask",
+          "outcome": "Two of the three are in the letter. The third, the day off, is not, and you say so, and {@vocation_director} says that he will get it added and that he is not sure the bishop will remember agreeing. You take the keys with the letter amended in the vocation director's hand. It is not a guarantee. It is a piece of paper, which in a chancery is the next best thing.",
+          "effects": [
+            { "target": "flag", "key": "y7_shortage_placed", "value": true },
+            { "target": "reputation", "key": "chancery", "delta": 2 },
+            { "target": "relationship", "key": "@vocation_director", "delta": 6 },
+            { "target": "pillar", "key": "pastoral", "delta": 2 },
+            { "target": "pillar", "key": "human", "delta": 2 },
+            { "target": "stat", "key": "administration", "delta": 1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "deacon_first_sermon",
+      "phase": "seminary",
+      "yearGate": [7],
+      "pressure": ["competence"],
+      "severity": "NOTABLE",
+      "category": "assignment",
+      "baseWeight": 12,
+      "suppressYears": 3,
+      "once": true,
+      "bias": [
+        { "when": { "type": "flag", "key": "field:classics", "value": true }, "multiplier": 1.4 },
+        { "when": { "type": "flag", "key": "career:teacher", "value": true }, "multiplier": 1.3 },
+        { "when": { "type": "stat", "key": "charisma", "op": ">=", "value": 55 }, "multiplier": 1.3 }
+      ],
+      "title": "The Woman in the Third Pew",
+      "body": "Your first homily as a deacon is at the eight o'clock on an ordinary Sunday, which the pastor chose on purpose because the eight o'clock is the Mass that forgives nothing and remembers everything. You have written it four times. It is nine minutes. It has a story, a turn, and a sentence at the end that you are proud of. You preach it well enough that a man in the back says amen out loud, which does not happen at the eight o'clock. Afterward, at the door, a woman in her seventies who has been in the third pew of that church since before you were born waits until the line clears and tells you, pleasantly and without preamble, that the story you told about the saint in the second paragraph is not what happened, that she has read the primary source, and that the point you drew from it was therefore not the point. She is right. You checked the story on a website at eleven the night before. She has not raised her voice and does not intend to; she simply thought you would want to know. The pastor is standing three feet away and has heard every word.",
+      "flavorPrompt": "The first correction. She is not a crank; she is the parish's memory. The pastor watches how the new man takes it.",
+      "choices": [
+        {
+          "id": "thank_her",
+          "label": "Thank her, ask for the source, and mean both",
+          "outcome": "She brings the book to the ten o'clock and you read the chapter that week. The following Sunday you say, in one sentence from the pulpit, that a parishioner had corrected something you got wrong and that you were grateful. The eight o'clock notices. The pastor tells you later that she has buried three deacons' homilies before yours and that you are the first one she has lent a book.",
+          "effects": [
+            { "target": "pillar", "key": "human", "delta": 3 },
+            { "target": "reputation", "key": "parishioners", "delta": 3 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "pillar", "key": "intellectual", "delta": 1 }
+          ]
+        },
+        {
+          "id": "defend",
+          "label": "Explain that the version you used is the one in the common tradition",
+          "outcome": "It is true, and it is not the point, and she knows both. She says that the common tradition is what people say when they have not read the book, smiles, and goes to her car. The pastor says nothing on the walk back to the rectory, which is worse than anything he could have said. You do not use a website at eleven at night again.",
+          "effects": [
+            { "target": "stat", "key": "theology", "delta": 1 },
+            { "target": "reputation", "key": "parishioners", "delta": -2 },
+            { "target": "pillar", "key": "human", "delta": -1 },
+            { "target": "outspokenness", "key": "", "delta": 1 }
+          ]
+        },
+        {
+          "id": "rewrite_for_ten",
+          "label": "Go back to the sacristy and fix the paragraph before the ten o'clock",
+          "outcome": "You have forty minutes and use them. The ten o'clock hears a homily with a different story in the second paragraph and a slightly less elegant turn, and it is a better homily because the story is true. She does not stay for the ten o'clock. She hears about it anyway, as she hears about everything, and the next week she nods to you at the door, once, which the pastor says is her highest honor.",
+          "effects": [
+            { "target": "pillar", "key": "intellectual", "delta": 2 },
+            { "target": "pillar", "key": "pastoral", "delta": 1 },
+            { "target": "honesty", "key": "", "delta": 1 },
+            { "target": "stat", "key": "charisma", "delta": -1 }
+          ]
+        },
+        {
+          "id": "ask_pastor",
+          "label": "Ask the pastor, on the walk back, how he would have taken it",
+          "outcome": "He says she corrected him in his first month, twenty years ago, about a date, and that he has checked every date since. He says the parish has three or four of her and that the trick is to find out who they are early. He says you did fine, and that fine is not the standard, and that you know that, and that he will be at the ten o'clock.",
+          "effects": [
+            { "target": "pillar", "key": "pastoral", "delta": 2 },
+            { "target": "reputation", "key": "brother_priests", "delta": 2 },
+            { "target": "pillar", "key": "human", "delta": 1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "deacon_baptism",
+      "phase": "seminary",
+      "yearGate": [7],
+      "pressure": ["belief_vs_safety", "competence"],
+      "severity": "NOTABLE",
+      "category": "assignment",
+      "baseWeight": 11,
+      "suppressYears": 3,
+      "once": true,
+      "bias": [
+        { "when": { "type": "flag", "key": "origin:lapsed", "value": true }, "multiplier": 1.6 },
+        { "when": { "type": "flag", "key": "origin:convert", "value": true }, "multiplier": 1.3 },
+        { "when": { "type": "flag", "key": "career:attorney", "value": true }, "multiplier": 1.2 }
+      ],
+      "title": "Water and a Form",
+      "body": "The pastor hands you the baptism because he has a wedding and because, he says, it is time. The parents come in on a Wednesday evening with the baby asleep in a carrier and a form half filled in. They were married outdoors by a friend. They come to Mass at Christmas and when the grandmother is in town. They want the baby baptized because it is what you do, and because the grandmother has not stopped asking, and because, the mother says after a silence, she would feel wrong not doing it, and she cannot say why. The godfather they have named was baptized Catholic and has not been inside a church since his own confirmation, if he was confirmed, which he is not sure about. The law is not obscure: the ordinary minister of baptism includes the deacon; there must be a founded hope that the child will be raised in the faith; a sponsor must be a confirmed Catholic living the faith, and a baptized non-Catholic may stand as a witness but not as a sponsor. None of that tells you what to do with the people in front of you, who are frightened of being judged and have come anyway. The baby wakes up.",
+      "flavorPrompt": "A rectory office, a sleeping baby, two nervous parents. The law and the people, both real. No lecture.",
+      "choices": [
+        {
+          "id": "baptize_and_invite",
+          "label": "Set the date, and spend the rest of the hour asking them about the thing she could not say why",
+          "outcome": "The mother cries, briefly, and talks for twenty minutes about her grandmother's rosary. You set the date, sort the godfather quietly by adding a confirmed aunt as sponsor and keeping him as a witness, and do not use the word lapsed. They come to Mass the Sunday before the baptism and the Sunday after, and then not for a while, and then at Easter. The pastor says that is what a founded hope looks like from the ground.",
+          "effects": [
+            { "target": "pillar", "key": "pastoral", "delta": 3 },
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "reputation", "key": "traditional_bloc", "delta": -1 }
+          ]
+        },
+        {
+          "id": "require_prep",
+          "label": "Baptize, but not before they have done the parish's preparation and found a proper sponsor",
+          "outcome": "You explain it kindly and they take it less kindly than you meant it. They do the two evenings of preparation; the godfather is replaced by a cousin who is confirmed and practicing and whom the parents barely know. The baptism happens six weeks later and is correct in every particular. The grandmother is delighted. The mother does not quite look at you at the font, and you do not see them again until Christmas.",
+          "effects": [
+            { "target": "pillar", "key": "pastoral", "delta": 1 },
+            { "target": "stat", "key": "theology", "delta": 1 },
+            { "target": "reputation", "key": "parishioners", "delta": -1 },
+            { "target": "reputation", "key": "traditional_bloc", "delta": 2 },
+            { "target": "alignment", "key": "", "delta": -2 }
+          ]
+        },
+        {
+          "id": "send_to_pastor",
+          "label": "Tell them the pastor will need to see them, and pass it back",
+          "outcome": "The pastor handles it in fifteen minutes the following week, sets the date, sorts the godfather, and does not say anything to you about it, which he does not need to. He gave you the baptism because it was time and you gave it back. It is a small thing. It is the kind of small thing a pastor uses to decide how much of the parish to hand a man.",
+          "effects": [
+            { "target": "pillar", "key": "pastoral", "delta": -2 },
+            { "target": "pillar", "key": "human", "delta": -1 },
+            { "target": "reputation", "key": "brother_priests", "delta": -1 }
+          ]
+        },
+        {
+          "id": "canon_and_care",
+          "label": "Walk them through what the law actually asks, and show them it is on their side",
+          "requires": [
+            { "type": "any", "inner": [
+              { "type": "stat", "key": "knowledge", "op": ">=", "value": 50 },
+              { "type": "flag", "key": "career:attorney", "value": true }
+            ] }
+          ],
+          "outcome": "You explain founded hope as what it is: not a test they have to pass but a judgment you are permitted to make in their favor, and you make it, out loud. You explain the sponsor rule as protecting the child, not excluding the friend, and they find an aunt. The father says it is the first time anyone in a church has told him what the rule was for. They come back. Not every Sunday. Enough.",
+          "effects": [
+            { "target": "pillar", "key": "pastoral", "delta": 3 },
+            { "target": "stat", "key": "knowledge", "delta": 1 },
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "pillar", "key": "intellectual", "delta": 1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "deacon_marriage_wrong",
+      "phase": "seminary",
+      "yearGate": [7],
+      "pressure": ["loyalty_vs_honesty", "competence"],
+      "severity": "MAJOR",
+      "category": "assignment",
+      "baseWeight": 10,
+      "suppressYears": 3,
+      "once": true,
+      "bias": [
+        { "when": { "type": "flag", "key": "career:social_work", "value": true }, "multiplier": 1.6 },
+        { "when": { "type": "flag", "key": "career:physician", "value": true }, "multiplier": 1.3 },
+        { "when": { "type": "flag", "key": "career:attorney", "value": true }, "multiplier": 1.3 },
+        { "when": { "type": "pillar", "key": "pastoral", "op": ">=", "value": 5 }, "multiplier": 1.2 }
+      ],
+      "title": "The Rehearsal",
+      "body": "The pastor has delegated you to witness the marriage, which a deacon may do, and the preparation was done months ago by someone else. You meet the couple for the first time at the rehearsal on the Friday. The bride's mother answers every question you put to the bride. The groom answers the ones the mother does not. The bride herself says perhaps eleven words in forty minutes, stands where she is placed, and at one point, when the mother is arranging the bridesmaids, looks at you with an expression you cannot read and do not like. It may be nerves. Brides are nervous. It may be a family in which the mother runs everything and always has. It may be something else, and the something else has a name in the canons, which are clear that a marriage entered through force or grave fear is no marriage, and clearer still that you are the last person standing between this couple and the register. The wedding is at two tomorrow. There are a hundred and forty guests, a hall, a band. You have one evening and a rehearsal dinner to which you are invited and at which the mother will sit next to you.",
+      "flavorPrompt": "Unease, not melodrama. The deacon's first exposure to being the last check on something. Do not resolve what is actually going on.",
+      "choices": [
+        {
+          "id": "speak_to_bride",
+          "label": "Find five minutes alone with the bride before the dinner ends and ask her one plain question",
+          "outcome": "You ask her in the sacristy corridor whether she wants to do this tomorrow, and you wait. She says yes, after a pause, and then says it again, and then tells you about her mother in a rush that lasts three minutes. It was nerves, and a family, and nothing the canons name, or that is what you decide with the information you have. The mother notices the absence and is cold to you at the altar. You witness the marriage.",
+          "effects": [
+            { "target": "pillar", "key": "pastoral", "delta": 3 },
+            { "target": "pillar", "key": "human", "delta": 2 },
+            { "target": "reputation", "key": "parishioners", "delta": -1 },
+            { "target": "honesty", "key": "", "delta": 1 }
+          ]
+        },
+        {
+          "id": "proceed",
+          "label": "Witness the marriage as prepared; the preparation was someone else's job and it was done",
+          "outcome": "The wedding is beautiful and the band is loud and the bride smiles in the photographs. You sign the register. You do not know, and will not know, whether the look in the rehearsal meant anything, and there is a version of this in which it did not. There is also a version in which a tribunal reads the file in nine years and finds the deacon's name and no note. You did what the paperwork asked.",
+          "effects": [
+            { "target": "pillar", "key": "pastoral", "delta": -2 },
+            { "target": "stat", "key": "administration", "delta": 1 },
+            { "target": "risk", "key": "deacon_doubtful_marriage", "value": "Witnessed a marriage after noticing, and not acting on, signs of pressure", "delta": 1 }
+          ]
+        },
+        {
+          "id": "bring_pastor",
+          "label": "Call the pastor tonight and put it in his hands",
+          "outcome": "He listens, asks two questions, and drives over. He speaks with the couple together and then with the bride alone for ten minutes, and comes out and says the wedding will go ahead and that you were right to call. He witnesses it himself. You are in the sanctuary beside him. You have learned when to hand something up, and he has learned that you will.",
+          "effects": [
+            { "target": "pillar", "key": "pastoral", "delta": 1 },
+            { "target": "reputation", "key": "brother_priests", "delta": 3 },
+            { "target": "pillar", "key": "human", "delta": 1 },
+            { "target": "stat", "key": "charisma", "delta": -1 }
+          ]
+        },
+        {
+          "id": "recognize_it",
+          "label": "Recognize what you are looking at from your old work, and act on it",
+          "hidden": true,
+          "requires": [
+            { "type": "any", "inner": [
+              { "type": "flag", "key": "career:social_work", "value": true },
+              { "type": "flag", "key": "career:physician", "value": true },
+              { "type": "flag", "key": "career:teacher", "value": true }
+            ] }
+          ],
+          "outcome": "You have seen that expression across a desk before, and you do what you would have done then: you separate her from the room, you ask the questions in the order you were trained to, and you give her a number and a card. You tell the pastor everything. The wedding is postponed by the couple, not by you, the next morning. The mother makes a complaint to the chancery. The bride writes to you in August.",
+          "effects": [
+            { "target": "pillar", "key": "pastoral", "delta": 4 },
+            { "target": "pillar", "key": "human", "delta": 2 },
+            { "target": "reputation", "key": "parishioners", "delta": -3 },
+            { "target": "reputation", "key": "chancery", "delta": -1 },
+            { "target": "honesty", "key": "", "delta": 2 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "deacon_contested_homily",
+      "phase": "seminary",
+      "yearGate": [7],
+      "pressure": ["belief_vs_safety"],
+      "severity": "MAJOR",
+      "category": "assignment",
+      "baseWeight": 11,
+      "suppressYears": 3,
+      "once": true,
+      "bias": [
+        { "when": { "type": "outspokenness", "op": ">=", "value": 3 }, "multiplier": 1.6 },
+        { "when": { "type": "flag", "key": "origin:latino_immigrant", "value": true }, "multiplier": 1.6 },
+        { "when": { "type": "flag", "key": "past:activism", "value": true }, "multiplier": 1.5 },
+        { "when": { "type": "alignment", "op": ">=", "value": 30 }, "multiplier": 1.3 },
+        { "when": { "type": "alignment", "op": "<=", "value": -30 }, "multiplier": 1.3 }
+      ],
+      "title": "On the Record",
+      "body": "You have the Sunday homily, and on the Tuesday before it there is an immigration raid at a plant twenty minutes from the parish, and eleven men do not come home, and three of them have children in the parish school. The Gospel that Sunday is the one about the stranger. The pastor says, when you ask, that you should preach the Gospel, and then, when you ask again, that he means it and is not telling you what to say. The parish is not of one mind. There are families at the ten o'clock whose fathers were taken and there are families at the ten o'clock who think the law is the law and would say so if asked, and some of them will be asked, because the local paper has been calling churches. Everything you have said until now has been said in a classroom or a chapel or a rectory kitchen. This will be said from an ambo, to four hundred people, one of whom will write it down. The diocese does not have a policy on what deacons say about raids. It has a bishop, who reads the paper. You have five days and a text that does not have an ambiguous reading, whatever you decide to do with it.",
+      "flavorPrompt": "The first public position. A raid, a Gospel, a parish split, a reporter. The choice is what to say and how loudly, not whether the Gospel is clear.",
+      "choices": [
+        {
+          "id": "name_it",
+          "label": "Name the raid, name the families, and say what the Gospel says about strangers",
+          "outcome": "You say it in nine minutes and do not raise your voice. Half the church is very still and a few people leave before Communion. The paper quotes two sentences accurately. The pastor says nothing at the door and then, in the kitchen, says that he would have said it and that he is glad it was you, and that the bishop will have read it by Tuesday, and that you should not expect a phone call, which is its own kind of message.",
+          "volume": "public",
+          "positionTopic": "immigration",
+          "positionValue": 65,
+          "effects": [
+            { "target": "reputation", "key": "progressive_bloc", "delta": 5 },
+            { "target": "reputation", "key": "traditional_bloc", "delta": -3 },
+            { "target": "reputation", "key": "public", "delta": 3 },
+            { "target": "reputation", "key": "chancery", "delta": -2 },
+            { "target": "outspokenness", "key": "", "delta": 2 },
+            { "target": "alignment", "key": "", "delta": 3 },
+            { "target": "pillar", "key": "pastoral", "delta": 2 }
+          ]
+        },
+        {
+          "id": "prudence",
+          "label": "Preach on the stranger, and also on the law, and refuse to say which side the parish should take",
+          "outcome": "You preach that a Christian owes the stranger welcome and the state obedience and that the two are in tension, and that the tension is where the parish lives. It is careful and true and it is what the paper prints as the parish declining to comment. The families whose fathers are gone hear that you did not say their names. The families who think the law is the law hear a man who did not lecture them. Both are right.",
+          "volume": "public",
+          "positionTopic": "immigration",
+          "positionValue": -25,
+          "effects": [
+            { "target": "reputation", "key": "traditional_bloc", "delta": 3 },
+            { "target": "reputation", "key": "progressive_bloc", "delta": -3 },
+            { "target": "reputation", "key": "chancery", "delta": 2 },
+            { "target": "outspokenness", "key": "", "delta": 1 },
+            { "target": "pillar", "key": "intellectual", "delta": 1 }
+          ]
+        },
+        {
+          "id": "gospel_only",
+          "label": "Preach the Gospel of the day as if there had been no raid",
+          "outcome": "It is a competent homily on hospitality with no proper nouns in it. Nobody leaves. Nobody writes it down. The pastor says nothing, twice. The mother of one of the schoolchildren stops you at the door and asks whether you had heard, and you say yes, and she nods and goes. You have kept yourself off the record and you have found out what that costs, which is that the record is not the only thing keeping score.",
+          "volume": "public",
+          "positionTopic": "immigration",
+          "positionValue": 0,
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": 1 },
+            { "target": "reputation", "key": "parishioners", "delta": -2 },
+            { "target": "outspokenness", "key": "", "delta": -1 },
+            { "target": "honesty", "key": "", "delta": -1 },
+            { "target": "pillar", "key": "spiritual", "delta": -1 }
+          ]
+        },
+        {
+          "id": "both_languages",
+          "label": "Preach it in both languages, and say it plainer in Spanish",
+          "requires": [
+            { "type": "any", "inner": [
+              { "type": "flag", "key": "speaks_spanish", "value": true },
+              { "type": "credential", "key": "spanish" }
+            ] }
+          ],
+          "outcome": "The English is measured and the Spanish is not, and everyone in the church who has both languages hears the difference, and so does the reporter, who has one. The families whose fathers are gone weep openly. The paper quotes the English. The pastor says, in the kitchen, that he has been doing that for twenty years and that someone will eventually notice, and that he hopes it is not the bishop, and that it probably will be.",
+          "volume": "public",
+          "positionTopic": "immigration",
+          "positionValue": 55,
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 4 },
+            { "target": "reputation", "key": "progressive_bloc", "delta": 3 },
+            { "target": "reputation", "key": "traditional_bloc", "delta": -2 },
+            { "target": "outspokenness", "key": "", "delta": 2 },
+            { "target": "pillar", "key": "pastoral", "delta": 2 },
+            { "target": "archetype", "key": "missionary", "delta": 1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "deacon_bishop_conversation",
+      "phase": "seminary",
+      "yearGate": [7],
+      "pressure": ["loyalty_vs_honesty", "ambition_vs_integrity"],
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 12,
+      "suppressYears": 4,
+      "once": true,
+      "bias": [
+        { "when": { "type": "flag", "key": "tie:son", "value": true }, "multiplier": 1.3 },
+        { "when": { "type": "flag", "key": "career:journalism", "value": true }, "multiplier": 1.3 }
+      ],
+      "title": "Twenty Minutes with the Bishop",
+      "body": "Before he ordains a class the bishop sees each deacon alone, twenty minutes apiece, in the study at the residence with the door closed and a secretary outside with a clock. {@bishop} has your file on the desk and does not open it. He asks about your family and listens to the answer. He asks about the diaconate year and listens to that. Then he asks what you think of the diocese, and there is a pause in which you understand that this is the question and the others were the approach. He has been bishop here long enough to have a record: the listening sessions two years ago that produced a document nobody has read since, the parish clusters, the two pastors he moved and the one he did not. He knows the presbyterate talks about him. He is asking a man who will be his priest in six weeks what the presbyterate says, or what the seminary says, or what you say, and it is not clear which, and it is not clear whether an honest answer will be remembered as honesty or as something else. The secretary's clock is audible. He waits well. Bishops learn to.",
+      "flavorPrompt": "A study, a closed door, a man who waits well. The player's first reading of the bishop, and the bishop's first reading of him.",
+      "choices": [
+        {
+          "id": "say_what_he_wants",
+          "label": "Say the diocese is in good hands and mean the parts of it you can",
+          "outcome": "He smiles, which may mean he believes you or may mean he has heard it from every deacon this week. He asks nothing further and stands up two minutes early. Walking out past the secretary you feel that you have passed something and that it was not a test of honesty. What he has written on the file, in pencil, you will not see for years.",
+          "effects": [
+            { "target": "relationship", "key": "@bishop", "delta": 8 },
+            { "target": "reputation", "key": "chancery", "delta": 3 },
+            { "target": "honesty", "key": "", "delta": -1 },
+            { "target": "pillar", "key": "human", "delta": -1 }
+          ]
+        },
+        {
+          "id": "listening_sessions_theater",
+          "label": "Say the listening sessions were theater and the presbyterate knows it",
+          "outcome": "He does not react and then he says that is the first useful thing a deacon has told him in a decade, and asks what you would have done, and listens for eleven minutes while you tell him, and then the clock runs out. He does not say whether he agrees. The secretary looks at you differently on the way out. Something has been written in pencil. You do not know which way it cuts.",
+          "volume": "semi_public",
+          "positionTopic": "synodality",
+          "positionValue": -40,
+          "effects": [
+            { "target": "relationship", "key": "@bishop", "delta": 4 },
+            { "target": "reputation", "key": "chancery", "delta": -2 },
+            { "target": "honesty", "key": "", "delta": 2 },
+            { "target": "outspokenness", "key": "", "delta": 2 },
+            { "target": "reputation", "key": "traditional_bloc", "delta": 2 }
+          ]
+        },
+        {
+          "id": "presbyterate_should_listen",
+          "label": "Say the sessions were the right idea and that the presbyterate never wanted to hear the answer",
+          "outcome": "He looks at you for a while. He says that is what he thought too, and that it is a lonely thing to think, and that you should not say it at the deanery meetings until you have been a pastor. He does not say it is true. He says it is what he thought. When you leave he shakes your hand for a second longer than the deacon before you got, which the deacon before you notices.",
+          "volume": "semi_public",
+          "positionTopic": "synodality",
+          "positionValue": 45,
+          "effects": [
+            { "target": "relationship", "key": "@bishop", "delta": 6 },
+            { "target": "reputation", "key": "chancery", "delta": 1 },
+            { "target": "reputation", "key": "brother_priests", "delta": -2 },
+            { "target": "reputation", "key": "progressive_bloc", "delta": 2 },
+            { "target": "honesty", "key": "", "delta": 1 }
+          ]
+        },
+        {
+          "id": "ask_him",
+          "label": "Turn it around: ask him what he thinks of the diocese, after all these years",
+          "requires": [{ "type": "stat", "key": "charisma", "op": ">=", "value": 50 }],
+          "outcome": "He is startled and then he answers, at length, and you learn more about the diocese in fifteen minutes than in seven years: which pastors he trusts, what he regrets, which parish he still drives past. He does not learn what you think. He learns that you can get a man to talk, which he files under a heading of its own. The secretary knocks. He waves her off, once.",
+          "effects": [
+            { "target": "relationship", "key": "@bishop", "delta": 10 },
+            { "target": "stat", "key": "knowledge", "delta": 2 },
+            { "target": "pillar", "key": "human", "delta": 2 },
+            { "target": "reputation", "key": "chancery", "delta": 1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "deacon_father_illness",
+      "phase": "seminary",
+      "yearGate": [7],
+      "pressure": ["friendship_vs_duty", "money"],
+      "severity": "MAJOR",
+      "category": "personal",
+      "baseWeight": 10,
+      "suppressYears": 4,
+      "once": true,
+      "bias": [
+        { "when": { "type": "flag", "key": "family:dependent", "value": true }, "multiplier": 2 },
+        { "when": { "type": "flag", "key": "late_vocation", "value": true }, "multiplier": 1.4 },
+        { "when": { "type": "flag", "key": "family:large", "value": true }, "multiplier": 0.8 }
+      ],
+      "title": "A Call from Home",
+      "body": "{@mother} calls on a Wednesday during the office hours you keep at the parish and says that {@father} is in the hospital, that it is his heart, that it is not an emergency, and then, in the same breath, that the doctor wants to talk to a family member in person and she does not want to be the only one in the room. You are three hours away. You have a funeral Thursday, a baptism Saturday, a wedding rehearsal Friday, a homily to write, and a pastor who has already told the parish you are the reason he can take his first week off in two years. Ordination is in eleven weeks. Your mother does not ask you to come. She has never once asked you for anything since you entered, which is its own kind of asking. In the background you can hear the hospital: a cart, a page, a man laughing at something on a television. She says he is asking whether you are all right, which means he does not want you to come and would like it very much. You have the afternoon to decide and a car with a quarter tank.",
+      "flavorPrompt": "A phone call with a hospital behind it. The deacon's first collision between the parish's claim and the family's. Nobody is asking; everyone is.",
+      "choices": [
+        {
+          "id": "go_now",
+          "label": "Hand the pastor the week and drive home tonight",
+          "outcome": "The pastor says go and cancels his week off without mentioning it. You are in the room with the doctor Thursday morning. It is serious and it is manageable, and your mother holds your sleeve while he explains it. {@father} says you did not need to come and holds your hand while he says it. You are gone six days. The parish has a funeral without its deacon and forgives you sooner than you forgive yourself.",
+          "effects": [
+            { "target": "relationship", "key": "@father", "delta": 12 },
+            { "target": "relationship", "key": "@mother", "delta": 12 },
+            { "target": "pillar", "key": "human", "delta": 3 },
+            { "target": "pillar", "key": "pastoral", "delta": -2 },
+            { "target": "reputation", "key": "parishioners", "delta": -1 },
+            { "target": "reputation", "key": "brother_priests", "delta": 1 }
+          ]
+        },
+        {
+          "id": "weekend",
+          "label": "Do the funeral and the rehearsal, and drive home Saturday after the baptism",
+          "outcome": "You are in the hospital by Saturday night. The doctor has already spoken to your mother alone, and she managed, and says so, and you hear what it cost. {@father} is better and glad and does not ask why it took three days. You have kept faith with the parish and with something else, and your mother has learned how the arithmetic of your life will go from here, and has decided to bear it.",
+          "effects": [
+            { "target": "relationship", "key": "@father", "delta": 5 },
+            { "target": "relationship", "key": "@mother", "delta": 2 },
+            { "target": "pillar", "key": "pastoral", "delta": 2 },
+            { "target": "pillar", "key": "human", "delta": -1 },
+            { "target": "reputation", "key": "parishioners", "delta": 1 }
+          ]
+        },
+        {
+          "id": "ask_bishop",
+          "label": "Call the bishop's office and ask for a week, properly",
+          "requires": [{ "type": "relationship", "npcId": "@bishop", "op": ">=", "value": 10 }],
+          "outcome": "The secretary puts you through, which surprises you, and {@bishop} asks two questions about your father and then says a week, and that he will call the pastor himself. He does. The pastor is relieved to have been told by the bishop rather than asked by the deacon. You go home with the diocese's blessing on paper, which your mother frames, and which the pastor does not resent nearly as much as you feared.",
+          "effects": [
+            { "target": "relationship", "key": "@father", "delta": 10 },
+            { "target": "relationship", "key": "@mother", "delta": 10 },
+            { "target": "relationship", "key": "@bishop", "delta": 3 },
+            { "target": "reputation", "key": "chancery", "delta": 2 },
+            { "target": "pillar", "key": "human", "delta": 2 },
+            { "target": "stat", "key": "administration", "delta": 1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "deacon_holy_week",
+      "phase": "seminary",
+      "yearGate": [7],
+      "pressure": ["belief_vs_safety", "competence"],
+      "severity": "NOTABLE",
+      "category": "assignment",
+      "baseWeight": 12,
+      "suppressYears": 3,
+      "once": true,
+      "requires": [{ "type": "season", "value": "holy_week" }],
+      "bias": [
+        { "when": { "type": "flag", "key": "field:classics", "value": true }, "multiplier": 1.4 },
+        { "when": { "type": "credential", "key": "latin" }, "multiplier": 1.4 },
+        { "when": { "type": "alignment", "op": "<=", "value": -25 }, "multiplier": 1.2 },
+        { "when": { "type": "alignment", "op": ">=", "value": 25 }, "multiplier": 1.2 }
+      ],
+      "title": "Exsultet",
+      "body": "Holy Week as a deacon is the week the rite was built around you. On Palm Sunday you proclaim the Passion. On Thursday you carry the Blessed Sacrament to the altar of repose. On Friday you carry in the cross and unveil it. At the Vigil you carry the paschal candle into the dark church singing Lumen Christi three times, and then, alone at the ambo, you chant the Exsultet, which is the longest and most exposed piece of singing a diocesan cleric ever does, and which you have been practicing in the car for a month. The pastor is unbothered by all of this and bothered by one thing: the list for Thursday's washing of feet. He has always chosen twelve men. Since the decree a few years ago he has been free to include women, and last year a group of parishioners asked, in writing, and he said he would think about it, and he has thought about it for a year. He asks you, on the Monday, while you are marking the Exsultet for breaths, what you would do. He is not delegating it. He is asking. The parish will notice whichever way it goes, and it will notice who was consulted, because the sacristan was in the room.",
+      "flavorPrompt": "The deacon's liturgical week: candle, cross, chant. The foot-washing question treated as the real, small, contested thing it is in a parish.",
+      "choices": [
+        {
+          "id": "twelve_men",
+          "label": "Say: twelve men, as the parish has always done, and change nothing in Holy Week",
+          "outcome": "He nods as if you have confirmed something. The twelve men are washed on Thursday and the parishioners who wrote the letter sit together and are seen to. At the Vigil the Exsultet goes well; you breathe where you marked. You have given your first liturgical opinion in a parish and it was the sacristan who carried it out the door, and it will be at the deanery meeting before Easter Monday.",
+          "volume": "semi_public",
+          "positionTopic": "women_roles",
+          "positionValue": -50,
+          "effects": [
+            { "target": "reputation", "key": "traditional_bloc", "delta": 3 },
+            { "target": "reputation", "key": "progressive_bloc", "delta": -3 },
+            { "target": "alignment", "key": "", "delta": -3 },
+            { "target": "pillar", "key": "spiritual", "delta": 2 },
+            { "target": "stat", "key": "charisma", "delta": 1 }
+          ]
+        },
+        {
+          "id": "whoever_the_parish_is",
+          "label": "Say: whoever the parish is, and let the letter-writers be among them",
+          "outcome": "He says he thought you would say that, and does it, and the parish is briefly loud about it in both directions and then it is Good Friday and nobody has time. The Exsultet goes well. The women who wrote the letter sit in the front pew at the Vigil. A man who has counted the collection for thirty years does not come to the ten o'clock on Easter, and the pastor notices, and so do you.",
+          "volume": "semi_public",
+          "positionTopic": "women_roles",
+          "positionValue": 50,
+          "effects": [
+            { "target": "reputation", "key": "progressive_bloc", "delta": 3 },
+            { "target": "reputation", "key": "traditional_bloc", "delta": -3 },
+            { "target": "alignment", "key": "", "delta": 3 },
+            { "target": "pillar", "key": "pastoral", "delta": 2 },
+            { "target": "stat", "key": "charisma", "delta": 1 }
+          ]
+        },
+        {
+          "id": "his_call",
+          "label": "Say it is his call and go back to marking the breaths",
+          "outcome": "He says that is what the last deacon said too, and goes to make the list himself, and you do not learn what is on it until Thursday. The Exsultet goes very well; you have had the extra hour. You have kept yourself out of the parish's argument for one more year and you have told a pastor who asked you a straight question that you did not have an answer, which he will remember at least as long as an answer.",
+          "effects": [
+            { "target": "pillar", "key": "spiritual", "delta": 3 },
+            { "target": "stat", "key": "charisma", "delta": 2 },
+            { "target": "honesty", "key": "", "delta": -1 },
+            { "target": "reputation", "key": "brother_priests", "delta": -1 }
+          ]
+        },
+        {
+          "id": "latin_exsultet",
+          "label": "Answer him, and then offer to chant the Exsultet in Latin",
+          "requires": [
+            { "type": "any", "inner": [
+              { "type": "credential", "key": "latin" },
+              { "type": "flag", "key": "field:classics", "value": true }
+            ] }
+          ],
+          "outcome": "You tell him to keep the twelve men this year and answer the letter properly next year, which he takes as an answer. Then you ask about the Latin; he laughs, says the parish has not heard it since the Council, and says yes. The church is dark and the candle is lit and you sing it in the language it was written in, and at the door afterward an old man weeps and a young woman asks why. You will be known for this.",
+          "volume": "semi_public",
+          "positionTopic": "liturgy",
+          "positionValue": -45,
+          "effects": [
+            { "target": "reputation", "key": "traditional_bloc", "delta": 4 },
+            { "target": "reputation", "key": "progressive_bloc", "delta": -2 },
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "stat", "key": "charisma", "delta": 2 },
+            { "target": "pillar", "key": "spiritual", "delta": 2 },
+            { "target": "alignment", "key": "", "delta": -2 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "deacon_first_mass_planning",
+      "phase": "seminary",
+      "yearGate": [7],
+      "pressure": ["friendship_vs_duty", "belief_vs_safety"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 11,
+      "suppressYears": 4,
+      "once": true,
+      "requires": [{ "type": "not", "inner": { "type": "flag", "key": "tie:son", "value": true } }],
+      "bias": [
+        { "when": { "type": "alignment", "op": "<=", "value": -25 }, "multiplier": 1.3 },
+        { "when": { "type": "alignment", "op": ">=", "value": 25 }, "multiplier": 1.3 },
+        { "when": { "type": "flag", "key": "tie:seminary", "value": true }, "multiplier": 1.3 }
+      ],
+      "title": "The Mass of Thanksgiving",
+      "body": "The day after ordination a new priest celebrates a Mass of Thanksgiving, and by custom it is his: his choice of church, his choice of preacher, his music, and a great deal of attention paid to all three by men who will draw conclusions. You are not a son of this diocese and have no home parish here to default to. That is a freedom and it is a small exposure; where you choose to say your first Mass will be read as a statement about whose man you are. The parish where you served as deacon would have you and the pastor has hinted. The seminary chapel is available and {@rector} has said so. As for the preacher, {@spiritual_director} cannot preach it in his capacity as director, but a priest may preach at a Mass, and he has let you know, obliquely, that he would be honored. {@professor_trad} and {@professor_prog} have each mentioned, separately, that they have preached first Masses before. There is also the question of Latin in the ordinary, ad orientem, the hymns, all of which the class has opinions about. It is one Mass. It is the one everyone will remember.",
+      "flavorPrompt": "The first Mass as a set of small public choices. Church, preacher, music: each one legible to the men watching.",
+      "choices": [
+        {
+          "id": "director_preaches",
+          "label": "The seminary chapel, with {@spiritual_director} preaching",
+          "outcome": "He preaches for eight minutes and says nothing about you that the internal forum would forbid, and everything about you that it would not, and the class understands that you chose the man who knew you best. It is a quiet Mass in a familiar chapel. Nobody draws a conclusion about your liturgics, because there was nothing to draw one from. That was, partly, the point.",
+          "effects": [
+            { "target": "relationship", "key": "@spiritual_director", "delta": 10 },
+            { "target": "pillar", "key": "spiritual", "delta": 3 },
+            { "target": "relationship", "key": "@rector", "delta": 3 }
+          ]
+        },
+        {
+          "id": "trad_professor",
+          "label": "The seminary chapel, the ordinary in Latin, {@professor_trad} preaching",
+          "requires": [{ "type": "alignment", "op": "<=", "value": -20 }],
+          "outcome": "The chant is good because the class has been practicing it for years without admitting why. {@professor_trad} preaches on the priesthood as sacrifice and does not mention you at all, which is the highest compliment he pays. Half the men who attend have understood what you have said about yourself; the other half have understood it too, and will remember. The vocation director is among them.",
+          "volume": "semi_public",
+          "positionTopic": "liturgy",
+          "positionValue": -55,
+          "effects": [
+            { "target": "relationship", "key": "@professor_trad", "delta": 10 },
+            { "target": "reputation", "key": "traditional_bloc", "delta": 4 },
+            { "target": "reputation", "key": "progressive_bloc", "delta": -3 },
+            { "target": "alignment", "key": "", "delta": -3 },
+            { "target": "pillar", "key": "spiritual", "delta": 2 }
+          ]
+        },
+        {
+          "id": "prog_professor",
+          "label": "The deacon parish, the parish's own musicians, {@professor_prog} preaching",
+          "requires": [{ "type": "alignment", "op": ">=", "value": 20 }],
+          "outcome": "The choir and the folk group both play, having been asked in the same sentence. {@professor_prog} preaches on the priest as servant and mentions you three times, warmly, and the parish loves it. The men who watch these things have watched, and have noted the preacher, the music, and the fact that you chose a parish over the seminary. The pastor of that parish embraces you at the sign of peace.",
+          "volume": "semi_public",
+          "positionTopic": "liturgy",
+          "positionValue": 45,
+          "effects": [
+            { "target": "relationship", "key": "@professor_prog", "delta": 10 },
+            { "target": "reputation", "key": "progressive_bloc", "delta": 4 },
+            { "target": "reputation", "key": "traditional_bloc", "delta": -3 },
+            { "target": "reputation", "key": "parishioners", "delta": 3 },
+            { "target": "alignment", "key": "", "delta": 3 }
+          ]
+        },
+        {
+          "id": "deacon_parish_pastor",
+          "label": "The parish where you served as deacon, with its pastor preaching, and the parish's usual Sunday music",
+          "outcome": "It is the parish's Mass more than yours, which is what you wanted. The pastor preaches about the year you spent in his rectory and gets one detail wrong in a way that makes the church laugh. The music is what they sing every Sunday. Nobody at the chancery reads anything into it except that you chose the people over the house, which is a reading, and a good one to be given.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 4 },
+            { "target": "reputation", "key": "brother_priests", "delta": 3 },
+            { "target": "pillar", "key": "pastoral", "delta": 2 },
+            { "target": "archetype", "key": "pastoral", "delta": 1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "deacon_first_mass_home_pastor",
+      "phase": "seminary",
+      "yearGate": [7],
+      "pressure": ["friendship_vs_duty", "loyalty_vs_honesty"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 12,
+      "suppressYears": 4,
+      "once": true,
+      "requires": [{ "type": "flag", "key": "tie:son", "value": true }],
+      "bias": [
+        { "when": { "type": "relationship", "npcId": "@home_pastor", "op": ">=", "value": 20 }, "multiplier": 1.4 },
+        { "when": { "type": "flag", "key": "motive:priest", "value": true }, "multiplier": 1.3 }
+      ],
+      "title": "The Home Parish",
+      "body": "{@home_pastor} calls before you have called him, which is characteristic, and says the parish has already assumed your Mass of Thanksgiving will be there and that the ladies have started on the reception. He is not asking. He has known you since you served his Masses in a cassock two sizes too big, and in his mind the first Mass of a son of the parish is a parish event before it is yours, and he is not entirely wrong. He would like to preach it. He says this lightly and it is not light. He has preached the first Masses of three men from that parish and has buried two of them, and he is not young, and you both know that the arithmetic of the diocese makes it unlikely he will preach a fourth. There are other claims. {@spiritual_director} has hinted. Your classmates have assumed the seminary chapel. And there is the matter of the ordination itself, at which a priest vests the new priest in stole and chasuble, and that priest is chosen by the ordinand, and {@home_pastor} has not asked about that, carefully, in a way that makes it clear he would like to be asked.",
+      "flavorPrompt": "An old pastor's claim on a boy he watched grow up. Affection with an edge of possession. The home parish as a place with expectations.",
+      "choices": [
+        {
+          "id": "home_pastor_preaches",
+          "label": "The home parish, with {@home_pastor} preaching",
+          "outcome": "He preaches for fourteen minutes and tells the parish two stories about you that you had forgotten and one you had not, and the church is full to the doors with people who knew you before you were anything. It is the parish's day, and his. Your classmates drive out and are kind about the length. You have given him the fourth first Mass, and he knows it, and says nothing, and puts a hand on your shoulder at the door.",
+          "effects": [
+            { "target": "relationship", "key": "@home_pastor", "delta": 14 },
+            { "target": "reputation", "key": "parishioners", "delta": 4 },
+            { "target": "pillar", "key": "spiritual", "delta": 1 },
+            { "target": "pillar", "key": "human", "delta": 2 }
+          ]
+        },
+        {
+          "id": "home_parish_director_preaches",
+          "label": "The home parish, but ask {@spiritual_director} to preach",
+          "outcome": "{@home_pastor} says of course, at once, and hosts the Mass with a graciousness that is entirely sincere and slightly too complete. {@spiritual_director} preaches beautifully to a church that does not know him. The reception is warm. You have chosen the man who knew your interior over the man who knew your childhood, and the parish, which knows only the second, is a little puzzled, and will say so to him, not to you.",
+          "effects": [
+            { "target": "relationship", "key": "@spiritual_director", "delta": 10 },
+            { "target": "relationship", "key": "@home_pastor", "delta": -5 },
+            { "target": "pillar", "key": "spiritual", "delta": 2 },
+            { "target": "reputation", "key": "parishioners", "delta": 1 }
+          ]
+        },
+        {
+          "id": "elsewhere",
+          "label": "Tell him, gently, that the Mass will be at the seminary and the parish can have the second Sunday",
+          "outcome": "He takes it well on the phone and less well in the parish, where the ladies had started on the reception. You say your first Mass in the seminary chapel with the class, and the second Sunday at home, and the second Sunday is fuller than the first and he preaches it, and it is nearly the same. Nearly. Something has been said to him about whose you are, and he heard it, and he is old enough not to say so.",
+          "effects": [
+            { "target": "relationship", "key": "@home_pastor", "delta": -8 },
+            { "target": "reputation", "key": "parishioners", "delta": -2 },
+            { "target": "relationship", "key": "@closest_classmate", "delta": 5 },
+            { "target": "honesty", "key": "", "delta": 1 },
+            { "target": "pillar", "key": "human", "delta": 1 }
+          ]
+        },
+        {
+          "id": "ask_him_to_vest",
+          "label": "Ask him to vest you at the ordination, and to preach the first Mass, both",
+          "requires": [{ "type": "relationship", "npcId": "@home_pastor", "op": ">=", "value": 25 }],
+          "outcome": "He is quiet on the phone for long enough that you think the line has dropped. At the ordination his hands shake putting the chasuble over your head and the bishop waits. The next day he preaches at the home parish and does not finish the third story, and the church waits for that too. You have given an old priest the thing he could not ask for, and the diocese has watched you do it, and understood something about you.",
+          "effects": [
+            { "target": "relationship", "key": "@home_pastor", "delta": 18 },
+            { "target": "reputation", "key": "parishioners", "delta": 3 },
+            { "target": "reputation", "key": "brother_priests", "delta": 3 },
+            { "target": "pillar", "key": "spiritual", "delta": 2 },
+            { "target": "pillar", "key": "human", "delta": 2 }
+          ]
+        }
+      ]
+    }
+  ]
+}
