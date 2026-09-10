@@ -1,9 +1,30 @@
 import { create } from 'zustand';
-import type { EventCategory, GameState, InterruptLevel, Snapshot, Speed } from '@/types';
-import { noDraw, runClock, type StopReason, type WeekDraw } from './clock';
+import type {
+  CreationAnswers,
+  EventCategory,
+  GameState,
+  InterruptLevel,
+  Pillar,
+  Snapshot,
+  Speed,
+  SummerAssignment,
+} from '@/types';
+import { noDraw, noHook, runClock, type StopReason, type WeekDraw, type WeekHook } from './clock';
 import { newGame as buildNewGame, type NewGameOptions } from './game';
 import type { Rng } from './rng';
 import { buildSave, deserialize, rngFromSave, SaveError, serialize } from './save';
+import { eventById, eventsForPhase } from '@/content';
+import { offerById, offersForPhase } from '@/content/offers';
+import { acceptOffer as doAccept, declineOffer as doDecline } from './offers';
+import { generateRun } from '@/generation';
+import {
+  acknowledgeEvaluation as ackEvaluation,
+  chooseEmphasis as pickEmphasis,
+  chooseSummer as pickSummer,
+  leaveSeminary as leave,
+  ordain as doOrdain,
+} from './seminary';
+import { resolvePending, seminaryWeekHook, type EventDeps } from './weekHook';
 
 /** Weeks per synchronous batch when running to the next stop. */
 export const BATCH_WEEKS: Record<Speed, number> = {
@@ -36,16 +57,57 @@ export interface GameStore {
   exportSave(): string;
   importSave(json: string): void;
   clearError(): void;
+
+  /** Character creation is done; generate the run and enter seminary. */
+  startGame(answers: CreationAnswers): void;
+  chooseEmphasis(emphasis: Record<Pillar, number>): void;
+  chooseSummer(id: SummerAssignment): void;
+  /** Resolve the event at the head of the pending queue. */
+  resolveEvent(choiceId: string): void;
+  acknowledgeEvaluation(): void;
+  leaveSeminary(): void;
+  ordain(): void;
+  acceptOffer(offerId: string): void;
+  declineOffer(offerId: string): void;
+  /** Prose from the last offer decision, for the UI. */
+  lastOfferOutcome: string | null;
 }
 
 // The live RNG is deliberately kept out of the reactive state: it is mutable,
 // non-serializable, and its state is captured on demand by exportSave.
 let rng: Rng | null = null;
 let draw: WeekDraw = noDraw;
+let hookOverride: WeekHook | null = null;
 
-/** Later phases install the event engine here. Tests use it to inject fixtures. */
+/** Tests inject a synthetic draw here. */
 export function setWeekDraw(next: WeekDraw): void {
   draw = next;
+}
+
+/** Tests may replace the phase hook; pass null to restore the real one. */
+export function setWeekHook(next: WeekHook | null): void {
+  hookOverride = next;
+}
+
+function depsFor(state: GameState): EventDeps {
+  return { pool: eventsForPhase(state.phase), lookup: eventById, offers: offersForPhase(state.phase), offerLookup: offerById };
+}
+
+/** The per-week hook for the current phase. */
+function hookFor(state: GameState): WeekHook {
+  if (hookOverride) return hookOverride;
+  if (state.phase === 'seminary') return seminaryWeekHook(depsFor(state));
+  return noHook;
+}
+
+function update(set: (partial: Partial<GameStore>) => void, get: () => GameStore, fn: (game: GameState, rng: Rng) => GameState): void {
+  const { game } = get();
+  if (!game || !rng) return;
+  try {
+    set({ game: fn(game, rng), error: null });
+  } catch (err) {
+    set({ error: err instanceof Error ? err.message : String(err) });
+  }
 }
 
 /** Test hook: the live RNG, or null before a game exists. */
@@ -60,6 +122,7 @@ export const useGameStore = create<GameStore>()((set, get) => ({
   lastStop: null,
   running: false,
   error: null,
+  lastOfferOutcome: null,
 
   newGame(options) {
     const built = buildNewGame(options);
@@ -77,7 +140,7 @@ export const useGameStore = create<GameStore>()((set, get) => ({
     const { game } = get();
     if (!game || !rng || game.speed === 'PAUSED') return null;
     const maxWeeks = game.speed === 'MANUAL' ? 1 : weeks;
-    const result = runClock(game, rng, { maxWeeks, draw });
+    const result = runClock(game, rng, { maxWeeks, draw, hook: hookFor(game) });
     const autoResolved = game.speed === 'AUTO' || game.speed === 'SKIP';
     // A one-week timer tick that simply kept going has no stop worth reporting.
     const keptGoing = result.stop.kind === 'cap' && maxWeeks === 1;
@@ -148,5 +211,50 @@ export const useGameStore = create<GameStore>()((set, get) => ({
 
   clearError() {
     set({ error: null });
+  },
+
+  startGame(answers) {
+    update(set, get, (game, r) => generateRun(game, answers, r));
+  },
+  chooseEmphasis(emphasis) {
+    update(set, get, (game, r) => pickEmphasis(game, emphasis, r));
+  },
+  chooseSummer(id) {
+    update(set, get, (game) => pickSummer(game, id));
+  },
+  resolveEvent(choiceId) {
+    update(set, get, (game, r) => {
+      const pending = game.pending[0];
+      if (!pending) return game;
+      return resolvePending(game, pending, choiceId, r, depsFor(game));
+    });
+    set({ previous: null });
+  },
+  acknowledgeEvaluation() {
+    update(set, get, (game) => ackEvaluation(game));
+  },
+  leaveSeminary() {
+    update(set, get, (game) => leave(game));
+    set({ running: false });
+  },
+  ordain() {
+    update(set, get, (game) => doOrdain(game));
+  },
+  acceptOffer(offerId) {
+    const def = offerById(offerId);
+    if (!def) return;
+    update(set, get, (game, r) => {
+      const result = doAccept(game, def, r);
+      set({ lastOfferOutcome: result.failed && def.failure ? `${def.accept.outcome} ${def.failure.outcome}` : def.accept.outcome });
+      return result.state;
+    });
+  },
+  declineOffer(offerId) {
+    const def = offerById(offerId);
+    if (!def) return;
+    update(set, get, (game) => {
+      set({ lastOfferOutcome: def.decline.outcome });
+      return doDecline(game, def);
+    });
   },
 }));
