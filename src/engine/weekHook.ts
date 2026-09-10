@@ -1,6 +1,7 @@
-import type { Beat, GameEvent, GameState, PendingEvent } from '@/types';
+import type { Beat, GameEvent, GameState, OfferDef, PendingEvent } from '@/types';
 import { applyChoice, defaultChoice, drawEvents, fireEvent } from './events';
 import { shouldInterrupt } from './interrupts';
+import { offersWeek } from './offers';
 import type { Rng } from './rng';
 import { formationBeats, markBeatFired, weekPool } from './seminary';
 import { renderText } from './text';
@@ -9,6 +10,14 @@ import type { WeekHook } from './clock';
 export interface EventDeps {
   pool: GameEvent[];
   lookup: (id: string) => GameEvent | undefined;
+  offers?: OfferDef[];
+  offerLookup?: (id: string) => OfferDef | undefined;
+}
+
+/** Offers tick after everything else in the week. */
+export function offersStep(state: GameState, rng: Rng, deps: EventDeps): GameState {
+  if (!deps.offers || !deps.offerLookup) return state;
+  return offersWeek(state, rng, deps.offers, deps.offerLookup);
 }
 
 /** Whether a fired event reaches the player or resolves itself at the current speed. */

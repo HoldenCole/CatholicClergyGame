@@ -147,3 +147,52 @@ Abuse, scandal, celibacy, doubt, burnout, and drink are in scope and must be
 written with care. The player is never a perpetrator of abuse. Leaving the
 seminary is always available during a doubt event and always written with
 respect: an `end` effect with a closing summary in `value`.
+
+## Offers (DESIGN.md §7.5)
+
+Files under `src/content/offers/*.json`: `{ "_notes": "...", "offers": [ ... ] }`.
+Types in `src/types/offers.ts`. Offers are evaluated against state every
+week; an eligible offer arrives with roughly `weight` chances in 1,000 per
+week, opens a window, and lapses as a decline.
+
+```json
+{
+  "id": "sem_latin_tutor",
+  "category": "seminary",              // academic | chancery | patronage | social | seminary
+  "phase": ["seminary"],
+  "yearGate": [2, 3],
+  "title": "...",
+  "body": "60–140 words: the offer as it is made, by whom, and what it would cost. {tokens} allowed.",
+  "from": "@professor_trad",           // who offers; declining costs this relationship
+  "requires": [ ...conditions ],       // hard gates: this is how a build earns the offer
+  "weight": 40,                        // 1..200
+  "bias": [ { "when": condition, "multiplier": 2 } ],
+  "windowWeeks": 3,                    // 0 = decide now
+  "once": true,
+  "cluster": "academic",               // accepting raises siblings' weight
+  "accept": {
+    "effects": [ ...effects ],
+    "outcome": "prose",
+    "commitment": {                    // optional background commitment
+      "label": "Tutoring Latin",
+      "weeks": 30,
+      "apPerWeek": 1,
+      "onComplete": [ ...effects ],
+      "completeOutcome": "prose"
+    }
+  },
+  "decline": { "effects": [ ...effects ], "outcome": "prose" },
+  "failure": {                         // optional: risk if accepted underqualified
+    "chance": 0.5,
+    "unless": [ ...conditions ],       // qualified players never fail
+    "effects": [ ...effects ],
+    "outcome": "prose"
+  }
+}
+```
+
+Rules from DESIGN.md §7.5: offers must be legible in hindsight (the
+`requires` should name the thing the player did); roughly half should be
+visibly bad fits; anything that takes the player away from formation or
+parish life must cost something; declining always has a consequence
+(`decline.effects` or `from`). Offers may not end the run.

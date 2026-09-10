@@ -36,6 +36,11 @@ function def(overrides: Partial<OfferDef> = {}): OfferDef {
 
 const lookupOf = (defs: OfferDef[]) => (id: string) => defs.find((d) => d.id === id);
 
+function withoutFailure(d: OfferDef): OfferDef {
+  const { failure: _failure, ...rest } = d;
+  return rest;
+}
+
 function atWeek(state: GameState, week: number): GameState {
   return { ...state, clock: { ...state.clock, week } };
 }
@@ -95,7 +100,7 @@ describe('engine/offers', () => {
   });
 
   it('accepting starts a commitment that pays out when it ends and counts against AP', () => {
-    const defs = [def({ failure: undefined })];
+    const defs = [withoutFailure(def())];
     const open = offersWeek(atWeek(base, 10), createRng('arrive'), defs, lookupOf(defs));
     const { state: accepted, failed } = acceptOffer(open, defs[0]!, createRng('ok'));
     expect(failed).toBe(false);
@@ -125,7 +130,7 @@ describe('engine/offers', () => {
   });
 
   it('a commitment survives save and load mid-way and completes on schedule', () => {
-    const defs = [def({ failure: undefined })];
+    const defs = [withoutFailure(def())];
     const open = offersWeek(atWeek(base, 10), createRng('arrive'), defs, lookupOf(defs));
     const rng = createRng('save');
     const { state: accepted } = acceptOffer(open, defs[0]!, rng);
