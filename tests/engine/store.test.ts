@@ -8,6 +8,7 @@ describe('engine/store', () => {
   beforeEach(() => {
     setWeekDraw(noDraw);
     useGameStore.getState().newGame({ seed: 'store-test', start });
+    useGameStore.setState((s) => ({ game: { ...s.game!, mode: { kind: 'clock' } } }));
   });
 
   it('starts paused at week 0 in seminary', () => {
@@ -113,6 +114,9 @@ describe('engine/store timer ticks', () => {
   it('a one-week AUTO tick that keeps going reports no stop', () => {
     setWeekDraw(noDraw);
     useGameStore.getState().newGame({ seed: 'timer', start });
+    useGameStore.setState((st) => ({
+      game: { ...st.game!, mode: { kind: 'clock' }, beats: [{ kind: 'evaluation', week: 20, label: 'Evaluation' }] },
+    }));
     const s = useGameStore.getState();
     s.setSpeed('AUTO');
     s.setRunning(true);

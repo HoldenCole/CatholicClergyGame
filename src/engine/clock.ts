@@ -9,6 +9,7 @@ export type StopReason =
   | { kind: 'manual' }
   | { kind: 'event'; event: PendingEvent }
   | { kind: 'beat'; beat: Beat }
+  | { kind: 'mode'; mode: GameState['mode']['kind'] }
   | { kind: 'cap' };
 
 /**
@@ -19,6 +20,17 @@ export type StopReason =
 export type WeekDraw = (state: GameState, rng: Rng) => PendingEvent[];
 
 export const noDraw: WeekDraw = () => [];
+
+/**
+ * A general per-week hook run after the clock moves and events are drawn.
+ * The seminary and parish loops install theirs here. Must be deterministic.
+ */
+export type WeekHook = (state: GameState, rng: Rng, reachedBeats: Beat[]) => GameState;
+
+export const noHook: WeekHook = (state) => state;
+
+/** Beats that only mark the digest; the clock does not stop for them. */
+const INFORMATIONAL_BEATS: ReadonlySet<Beat['kind']> = new Set(['year_end']);
 
 /** How many digest weeks the state retains. */
 export const DIGEST_RETENTION = 52;
@@ -34,7 +46,12 @@ export interface WeekResult {
  * Order within the week: move the clock, cross any year boundary, consume
  * scheduled beats, draw events, write the digest line.
  */
-export function advanceWeek(state: GameState, rng: Rng, draw: WeekDraw = noDraw): WeekResult {
+export function advanceWeek(
+  state: GameState,
+  rng: Rng,
+  draw: WeekDraw = noDraw,
+  hook: WeekHook = noHook,
+): WeekResult {
   const clock = advanceClock(state.clock, 1);
   const week = clock.week;
 
@@ -55,15 +72,15 @@ export function advanceWeek(state: GameState, rng: Rng, draw: WeekDraw = noDraw)
   const drawState: GameState = { ...state, clock, gameYear: gameYearOf(clock), beats: remaining };
   const fired = draw(drawState, rng);
 
-  const digestEntry: DigestWeek = { week, lines: [describeWeek(clock)] };
+  const digestEntry: DigestWeek = {
+    week,
+    lines: [describeWeek(clock), ...reachedBeats.map((b) => b.label)],
+  };
   const digest = [...state.digest, digestEntry].slice(-DIGEST_RETENTION);
 
+  const afterDraw: GameState = { ...drawState, pending: [...state.pending, ...fired], digest };
   return {
-    state: {
-      ...drawState,
-      pending: [...state.pending, ...fired],
-      digest,
-    },
+    state: hook(afterDraw, rng, reachedBeats),
     reachedBeats,
     fired,
   };
@@ -84,8 +101,10 @@ export function stopAfterWeek(speed: Speed, state: GameState, reachedBeats: Beat
     if (event.severity === 'CRITICAL') return { kind: 'event', event };
     if (speed === 'AUTO' && shouldInterrupt(state.interrupts, event)) return { kind: 'event', event };
   }
-  const beat = reachedBeats[0];
+  const beat = reachedBeats.find((b) => !INFORMATIONAL_BEATS.has(b.kind));
   if (beat) return { kind: 'beat', beat };
+  // A decision the player must make always stops the clock.
+  if (state.mode.kind !== 'clock') return { kind: 'mode', mode: state.mode.kind };
   return null;
 }
 
@@ -93,6 +112,7 @@ export interface RunOptions {
   /** Hard cap on weeks advanced in one call, so a quiet AUTO run cannot spin forever. */
   maxWeeks?: number;
   draw?: WeekDraw;
+  hook?: WeekHook;
 }
 
 export interface RunResult {
@@ -110,9 +130,13 @@ export interface RunResult {
 export function runClock(state: GameState, rng: Rng, options: RunOptions = {}): RunResult {
   const maxWeeks = options.maxWeeks ?? 52;
   const draw = options.draw ?? noDraw;
+  const hook = options.hook ?? noHook;
 
   if (state.speed === 'PAUSED') {
     return { state, weeksAdvanced: 0, stop: { kind: 'paused' }, beforeLast: null };
+  }
+  if (state.mode.kind !== 'clock' || state.pending.length > 0) {
+    return { state, weeksAdvanced: 0, stop: { kind: 'mode', mode: state.mode.kind }, beforeLast: null };
   }
 
   let current = state;
@@ -121,7 +145,7 @@ export function runClock(state: GameState, rng: Rng, options: RunOptions = {}): 
 
   while (weeksAdvanced < maxWeeks) {
     beforeLast = { state: current, rngState: rng.getState() };
-    const result = advanceWeek(current, rng, draw);
+    const result = advanceWeek(current, rng, draw, hook);
     current = result.state;
     weeksAdvanced++;
     const stop = stopAfterWeek(current.speed, current, result.reachedBeats);

@@ -96,6 +96,7 @@ export function seminaryState(seed = 'fixture'): GameState {
     ...state,
     mode: { kind: 'clock' },
     character: testCharacter(),
+    flags: { 'tie:son': true, 'origin:urban_ethnic': true, 'field:philosophy': true, 'motive:priest': true },
     npcs,
     seminary: testSeminary({ classmateIds: ['c1', 'c2', 'c3'] }),
   };

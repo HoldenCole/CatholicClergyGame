@@ -17,6 +17,7 @@ function play(seed: string, weeks: number): { state: GameState; json: string } {
   const g = newGame({ seed, start: { year: 2010, month: 8, day: 20 } });
   let state: GameState = {
     ...g.state,
+    mode: { kind: 'clock' },
     speed: 'AUTO',
     beats: [{ kind: 'evaluation', week: 40, label: 'Annual evaluation' }],
   };

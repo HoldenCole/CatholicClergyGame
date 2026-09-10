@@ -5,7 +5,7 @@ import type { GameState, PendingEvent, Severity } from '@/types';
 
 function fresh(speed: GameState['speed'] = 'MANUAL'): ReturnType<typeof newGame> {
   const g = newGame({ seed: 'clock-test', start: { year: 2021, month: 8, day: 22 } });
-  return { ...g, state: { ...g.state, speed } };
+  return { ...g, state: { ...g.state, speed, mode: { kind: 'clock' } } };
 }
 
 const fireAt =
@@ -101,9 +101,30 @@ describe('engine/clock', () => {
     expect(r2.stop.kind).toBe('event');
 
     const { state: s3, rng: rng3 } = fresh('SKIP');
-    const r3 = runClock(s3, rng3, { maxWeeks: 60 });
-    expect(r3.stop).toMatchObject({ kind: 'beat', beat: { kind: 'year_end' } });
-    expect(r3.weeksAdvanced).toBe(53);
+    const withBeat: GameState = { ...s3, beats: [{ kind: 'evaluation', week: 50, label: 'Evaluation' }] };
+    const r3 = runClock(withBeat, rng3, { maxWeeks: 60 });
+    expect(r3.stop).toMatchObject({ kind: 'beat', beat: { kind: 'evaluation' } });
+    expect(r3.weeksAdvanced).toBe(50);
+  });
+
+  it('the year boundary is informational: it is logged but does not stop the clock', () => {
+    const { state, rng } = fresh('AUTO');
+    const r = runClock(state, rng, { maxWeeks: 60 });
+    expect(r.stop.kind).toBe('cap');
+    expect(r.state.digest.find((d) => d.week === 53)?.lines).toContain('Year 2 begins');
+  });
+
+  it('refuses to run while a decision is pending and runs the week hook', () => {
+    const { state, rng } = fresh('AUTO');
+    const paused = runClock({ ...state, mode: { kind: 'year_start', year: 1 } }, rng);
+    expect(paused.weeksAdvanced).toBe(0);
+    expect(paused.stop).toEqual({ kind: 'mode', mode: 'year_start' });
+    const hooked = runClock(state, rng, {
+      maxWeeks: 5,
+      hook: (s) => (s.clock.week === 3 ? { ...s, mode: { kind: 'summer', year: 1 } } : s),
+    });
+    expect(hooked.weeksAdvanced).toBe(3);
+    expect(hooked.stop).toEqual({ kind: 'mode', mode: 'summer' });
   });
 
   it('returns the snapshot before the last week for rewind', () => {
