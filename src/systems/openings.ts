@@ -1,0 +1,173 @@
+import type { Candidate, GameState, Npc, Opening, Parish } from '@/types';
+import type { Rng } from '@/engine/rng';
+import { CLERGY_HERITAGE, eraForBirthYear, rollHeritage, rollMaleName } from '@/generation/names';
+import { addStats, finishNpc, rollAlignment, rollBaseStats } from '@/generation/npc';
+import { PROBLEM_LABEL } from '@/generation/parishes';
+
+/** Invented. */
+export const OPENINGS = {
+  retirementAge: 75,
+  retireChancePerYear: 0.45,
+  transferChancePerYear: 0.07,
+  deathChancePerYearOver70: 0.03,
+  /** Abstract openings elsewhere in the diocese per year, scaled by shortage. */
+  elsewherePerYear: [0, 2] as [number, number],
+  /** NPC rivals considered for each opening. */
+  rivals: [2, 4] as [number, number],
+  openingLifeWeeks: 60,
+} as const;
+
+function calendarYear(state: GameState): number {
+  return new Date((state.clock.startDay + state.clock.week * 7) * 86_400_000).getUTCFullYear();
+}
+
+/**
+ * Once a year: pastors retire, die, or move, and their parishes open; the
+ * wider diocese produces openings the player never sees the inside of.
+ */
+export function refreshOpenings(state: GameState, rng: Rng): { state: GameState; lines: string[] } {
+  const world = state.world;
+  if (!world) return { state, lines: [] };
+  const year = calendarYear(state);
+  const lines: string[] = [];
+  const npcs = { ...state.npcs };
+  let openings = state.openings.filter((o) => state.clock.week - o.week < OPENINGS.openingLifeWeeks);
+  const shortage = world.diocese.hidden.shortage;
+
+  const parishes = world.parishes.map((p) => {
+    if (openings.some((o) => o.parishId === p.id)) return p;
+    if (p.id === state.parish?.parishId && state.assignment?.role === 'pastor') return p;
+    const pastor = npcs[p.pastorId];
+    if (!pastor || pastor.status !== 'active') return p;
+    const age = year - pastor.birthYear;
+    let why: string | null = null;
+    if (age >= OPENINGS.retirementAge && rng.chance(OPENINGS.retireChancePerYear)) why = 'retired';
+    else if (age >= 70 && rng.chance(OPENINGS.deathChancePerYearOver70)) why = 'died';
+    else if (rng.chance(OPENINGS.transferChancePerYear)) why = 'moved';
+    if (!why) return p;
+    npcs[pastor.id] = { ...pastor, status: why === 'died' ? 'dead' : why === 'retired' ? 'retired' : 'active', tags: why === 'moved' ? pastor.tags.filter((t) => !t.startsWith('pastor:')) : pastor.tags };
+    lines.push(`${pastor.title} ${pastor.name.last} of ${p.name} has ${why === 'moved' ? 'been moved' : why}.`);
+    openings.push({
+      id: `open_${p.id}_${state.clock.week}`,
+      kind: 'pastor',
+      parishId: p.id,
+      urgency: Math.min(100, 40 + shortage * 10 + (why === 'died' ? 15 : 0)),
+      needsSpanish: p.needsSpanish,
+      needsAdmin: p.debt >= 1_000_000 || p.problem === 'staff_theft' || p.problem === 'lawsuit',
+      alignment: p.alignment,
+      week: state.clock.week,
+      label: `Pastor of ${p.name}, ${p.place}`,
+    });
+    return p;
+  });
+
+  const elsewhere = rng.int(OPENINGS.elsewherePerYear[0], Math.min(OPENINGS.elsewherePerYear[1], shortage));
+  for (let i = 0; i < elsewhere; i++) {
+    openings.push({
+      id: `open_else_${state.clock.week}_${i}`,
+      kind: rng.chance(0.75) ? 'pastor' : 'administrator',
+      parishId: null,
+      urgency: Math.min(100, 30 + shortage * 12 + rng.int(0, 20)),
+      needsSpanish: rng.chance(world.diocese.presetId === 'los_angeles' || world.diocese.presetId === 'houston' ? 0.6 : 0.3),
+      needsAdmin: rng.chance(0.3),
+      alignment: rollAlignment(rng, world.diocese.visible.disposition * 0.3, 30),
+      week: state.clock.week,
+      label: rng.pick(['A parish across the diocese', 'A cluster of three churches', 'A parish with a school', 'A parish nobody asked for']),
+    });
+  }
+  openings = openings.slice(-8);
+  return { state: { ...state, npcs, openings, world: { ...world, parishes } }, lines };
+}
+
+/** The player as the board sees him. */
+export function playerCandidate(state: GameState): Candidate {
+  const c = state.character!;
+  const year = calendarYear(state);
+  const ordinationWeek = Number(state.flags.ordination_week ?? state.clock.week);
+  const bishopId = state.world?.diocese.hidden.bishop.npcId;
+  const bishop = bishopId ? state.npcs[bishopId] : undefined;
+  const vouchers = Object.values(state.npcs).filter((n) => n.status === 'active' && n.tags.includes('chancery') && n.relationship >= 25).length;
+  const parish = state.world?.parishes.find((p) => p.id === state.parish?.parishId);
+  const affiliation = state.flags['affiliation:trad_fraternity'] ? -1 : state.flags['affiliation:prog_caucus'] ? 1 : 0;
+  return {
+    id: 'player',
+    isPlayer: true,
+    name: `Fr. ${c.name.last}`,
+    stats: c.stats,
+    credentials: c.credentials,
+    yearsOrdained: (state.clock.week - ordinationWeek) / 52,
+    ordinationAge: c.background.entryAge + 7,
+    age: year - (c.entryYear - c.background.entryAge),
+    alignment: c.alignment,
+    outspokenness: c.outspokenness,
+    chancery: c.reputation.chancery,
+    bishopRelationship: bishop?.relationship ?? 0,
+    vouchers,
+    results: c.reputation.parishioners,
+    speaksSpanish: !!state.flags.speaks_spanish,
+    affiliation,
+    indispensable: !!parish && c.stats.administration >= 70 && (parish.debt >= 1_000_000 || parish.problem === 'staff_theft'),
+    currentRole: state.assignment?.role ?? null,
+  };
+}
+
+/** An NPC priest as a candidate; classmates use their real records, others are rolled. */
+export function npcCandidate(npc: Npc, year: number, rng: Rng): Candidate {
+  const yearsOrdained = Math.max(1, year - (npc.birthYear + (npc.formation?.entryAge ?? 26) + 7));
+  return {
+    id: npc.id,
+    isPlayer: false,
+    name: `${npc.title || 'Fr.'} ${npc.name.last}`,
+    stats: npc.stats,
+    credentials: npc.tags.includes('rome_alumnus') ? ['STL'] : [],
+    yearsOrdained,
+    ordinationAge: (npc.formation?.entryAge ?? 26) + 7,
+    age: year - npc.birthYear,
+    alignment: npc.alignment,
+    outspokenness: rng.int(0, 60),
+    chancery: Math.round(rng.gaussian() * 25 + npc.ambition * 0.3),
+    bishopRelationship: Math.round(rng.gaussian() * 20),
+    vouchers: npc.tags.includes('chancery') ? 2 : rng.chance(0.3) ? 1 : 0,
+    results: Math.round(rng.gaussian() * 20 + 20),
+    speaksSpanish: npc.origin === 'latino_immigrant' || rng.chance(0.3),
+    affiliation: 0,
+    indispensable: false,
+    currentRole: npc.tags.includes('pastor') ? 'pastor' : 'parochial_vicar',
+  };
+}
+
+/** Rivals for an opening: classmates still in the diocese plus rolled diocesan priests. */
+export function rivalsFor(state: GameState, opening: Opening, rng: Rng): Candidate[] {
+  const year = calendarYear(state);
+  const classmates = Object.values(state.npcs).filter((n) => n.role === 'classmate' && n.status === 'active' && !n.tags.includes('on_leave'));
+  const count = rng.int(OPENINGS.rivals[0], OPENINGS.rivals[1]);
+  const out: Candidate[] = [];
+  const picked = rng.shuffle(classmates).slice(0, Math.min(count, classmates.length, 2));
+  for (const n of picked) out.push(npcCandidate(n, year, rng.derive(`cand:${n.id}:${opening.id}`)));
+  while (out.length < count) {
+    const birthYear = year - rng.int(34, 66);
+    const heritage = rollHeritage(rng, CLERGY_HERITAGE);
+    const npc = finishNpc(rng, {
+      id: `rival_${opening.id}_${out.length}`,
+      name: rollMaleName(rng, heritage, eraForBirthYear(birthYear)),
+      role: 'priest',
+      title: 'Fr.',
+      birthYear,
+      origin: 'suburban',
+      stats: addStats(rollBaseStats(rng, 30, 60), {}),
+      relationship: 0,
+    });
+    out.push(npcCandidate(npc, year, rng.derive(`cand:${npc.id}`)));
+  }
+  return out;
+}
+
+export function openingParish(state: GameState, opening: Opening): Parish | undefined {
+  return opening.parishId ? state.world?.parishes.find((p) => p.id === opening.parishId) : undefined;
+}
+
+export function openingBlurb(state: GameState, opening: Opening): string {
+  const p = openingParish(state, opening);
+  if (!p) return opening.label;
+  return `${p.name}, ${p.place}: ${PROBLEM_LABEL[p.problem] ?? p.problem}`;
+}

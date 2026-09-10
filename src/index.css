@@ -1,0 +1,161 @@
+@import "tailwindcss";
+
+:root {
+  color-scheme: dark;
+  --ink: #2b2116;
+  --ink-muted: #6b5a45;
+  --ink-faint: #9a8b74;
+  --rule: #b9a98a;
+  --paper: #f1e8d3;
+  --paper-deep: #e4d8bd;
+  --wine: #7a1f1f;
+  --gold: #c9a24a;
+  --felt: #17110c;
+}
+
+body {
+  background: var(--felt);
+  font-family: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Palatino, Georgia, "Times New Roman", serif;
+}
+
+/* The table everything sits on. */
+.felt {
+  background:
+    radial-gradient(ellipse at 50% 20%, rgba(120, 80, 30, 0.22), transparent 60%),
+    linear-gradient(180deg, #1c1410 0%, #120d09 100%);
+}
+
+/* A sheet of paper. */
+.paper {
+  position: relative;
+  color: var(--ink);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0) 40%),
+    linear-gradient(135deg, #f4ecd8 0%, #ece1c6 55%, #e6d9ba 100%);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.5) inset,
+    0 0 40px rgba(110, 80, 30, 0.12) inset,
+    0 14px 30px rgba(0, 0, 0, 0.55),
+    0 2px 4px rgba(0, 0, 0, 0.4);
+  border-radius: 2px;
+}
+.paper::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  opacity: 0.5;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' seed='3'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='linear' slope='0.18'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.paper > * { position: relative; }
+.paper-tilt-l { transform: rotate(-0.35deg); }
+.paper-tilt-r { transform: rotate(0.3deg); }
+
+.ink { color: var(--ink); }
+.ink-muted { color: var(--ink-muted); }
+.ink-faint { color: var(--ink-faint); }
+.ink-wine { color: var(--wine); }
+.rule { border-color: var(--rule); }
+
+.heading {
+  font-variant: small-caps;
+  letter-spacing: 0.08em;
+  color: var(--ink-muted);
+  font-size: 0.8rem;
+}
+.title {
+  font-family: "Iowan Old Style", Palatino, Georgia, serif;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+/* Buttons drawn on paper. */
+.pbtn {
+  border: 1px solid var(--ink-muted);
+  color: var(--ink);
+  padding: 0.3rem 0.7rem;
+  border-radius: 2px;
+  font-size: 0.85rem;
+  line-height: 1.2;
+  background: rgba(255, 255, 255, 0.18);
+  transition: background 120ms, border-color 120ms;
+}
+.pbtn:hover:not(:disabled) { background: rgba(122, 31, 31, 0.08); border-color: var(--wine); }
+.pbtn:disabled { opacity: 0.4; cursor: not-allowed; }
+.pbtn-primary { background: var(--wine); color: #f5ecd8; border-color: #4a120e; }
+.pbtn-primary:hover:not(:disabled) { background: #8f2a2a; border-color: #4a120e; }
+.pbtn-active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.pbtn-active:hover:not(:disabled) { background: #3a2c1e; border-color: var(--ink); }
+.pbtn-link { border: none; background: none; padding: 0; color: var(--ink-muted); text-decoration: underline; text-decoration-color: var(--rule); text-underline-offset: 3px; font-size: 0.8rem; }
+.pbtn-link:hover { color: var(--wine); }
+
+/* A choice written as a line on the paper. */
+.choice {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 0.45rem 0.7rem;
+  border: 1px solid transparent;
+  border-bottom: 1px dotted var(--rule);
+  border-radius: 2px;
+}
+.choice:hover:not(:disabled) { background: rgba(122, 31, 31, 0.07); border-color: var(--rule); }
+.choice:disabled { color: var(--ink-faint); cursor: not-allowed; }
+.choice-chosen { background: rgba(201, 162, 74, 0.18); border-color: var(--gold); }
+
+.pinput {
+  border: 1px solid var(--rule);
+  background: rgba(255, 255, 255, 0.4);
+  color: var(--ink);
+  padding: 0.3rem 0.5rem;
+  border-radius: 2px;
+  font-size: 0.85rem;
+}
+.pinput:focus { outline: none; border-color: var(--wine); }
+select.pinput { appearance: auto; color-scheme: light; }
+
+/* Folder tabs along the top of the desk. */
+.tab {
+  padding: 0.3rem 0.55rem;
+  font-size: 0.78rem;
+  font-variant: small-caps;
+  letter-spacing: 0.06em;
+  color: #cbbfa4;
+  background: #3a2c1e;
+  border: 1px solid #241a11;
+  border-bottom: none;
+  border-radius: 4px 4px 0 0;
+  box-shadow: 0 -1px 0 rgba(255, 255, 255, 0.08) inset;
+}
+.tab:hover { color: #f1e8d3; }
+.tab-active, .tab-active:hover { background: var(--paper); color: var(--ink); border-color: #b9a98a; }
+.tab-dot { display: inline-block; width: 0.45rem; height: 0.45rem; border-radius: 999px; background: var(--wine); margin-left: 0.35rem; vertical-align: middle; box-shadow: 0 0 6px rgba(200, 60, 40, 0.8); }
+
+/* The brass plate under the scene. */
+.plate {
+  background: linear-gradient(180deg, #4a3520, #2c1e12);
+  color: #e8d9b8;
+  border-top: 1px solid rgba(201, 162, 74, 0.35);
+  font-size: 0.85rem;
+}
+
+/* Hotspots in the scene. */
+.hotspot { position: absolute; border-radius: 3px; transition: box-shadow 120ms, background 120ms; }
+.hotspot:hover, .hotspot:focus-visible { background: rgba(255, 220, 140, 0.12); box-shadow: 0 0 0 1px rgba(255, 220, 140, 0.55), 0 0 18px rgba(255, 200, 100, 0.35); outline: none; }
+.hotspot-active { box-shadow: 0 0 0 1px rgba(255, 200, 100, 0.35); }
+
+/* A dark scrim behind a letter on the desk. */
+.scrim { background: rgba(12, 8, 5, 0.55); backdrop-filter: blur(1.5px); }
+
+.scroll-paper { scrollbar-color: #b9a98a #eadfc6; scrollbar-width: thin; }
+
+/* Narrow screens: the desk drops under the room; nothing scrolls sideways. */
+@media (max-width: 1100px) {
+  .layout { flex-direction: column; }
+  .layout > aside { width: 100% !important; }
+  .desk { height: auto !important; min-height: 0 !important; }
+  .plate.hud { flex-wrap: wrap; }
+}
+html, body { overflow-x: hidden; }

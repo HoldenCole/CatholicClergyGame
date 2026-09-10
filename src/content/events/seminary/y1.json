@@ -1,0 +1,931 @@
+{
+  "_notes": "Propaedeutic year (Y1). Flags set here: y1_kept_phone (kept a second phone through the year), y1_heard_why_he_left (asked the first man who left why), y1_psych_minimized (brushed off the psychological follow-up; read by sem_running_found), y1_asked_prefect_cover (asked the prefect not to record an absence), y1_doubt_unspoken (sat on the first doubt without telling anyone), y1_doubt_studied, y1_bore_silence (the beat, borne alone), y1_broke_silence_with_friend, y1_home_served_christmas, y1_wrote_to_departed. Threads opened here: y1_withheld_in_direction (gave the spiritual director the presentable version; resolved in personal.json by sem_direction_reckoning), y1_promised_to_write (promised to write to the classmate who left in the first month; resolved here by y1_spring_retreat). NPC effects: the @random_classmate bound by y1_man_leaves is set to left.",
+  "events": [
+    {
+      "id": "y1_phone_box",
+      "phase": "seminary",
+      "yearGate": [1],
+      "pressure": ["friendship_vs_duty"],
+      "severity": "NOTABLE",
+      "category": "formation",
+      "baseWeight": 12,
+      "bias": [
+        { "when": { "type": "flag", "key": "family:dependent", "value": true }, "multiplier": 3 },
+        { "when": { "type": "flag", "key": "family:widowed_mother", "value": true }, "multiplier": 2 },
+        { "when": { "type": "flag", "key": "late_vocation", "value": true }, "multiplier": 2 },
+        { "when": { "type": "flag", "key": "career:management", "value": true }, "multiplier": 1.5 }
+      ],
+      "suppressYears": 4,
+      "once": true,
+      "title": "The basket in the front hall",
+      "body": "There is a wicker basket on the table inside the front door of {seminary}, the kind a parish uses for the second collection, and {@formation_advisor} is standing beside it with his hands folded. The rule was in the letter you received in June. Phones go in the basket on the first Sunday and come back out at Christmas. The house phone is in the corridor outside the refectory, and your family has the number, and if there is an emergency the rector will find you wherever you are. He says all this quietly, to each man in turn, as if for the first time. Ahead of you a man in a golf shirt takes a long last look at his screen before he drops it in. Behind you someone laughs too loudly at nothing. You have the phone in your hand. The weather app is open. You do not remember opening it. {@formation_advisor} waits without looking at you, which is a kindness, and the basket is already half full of other men's lives.",
+      "flavorPrompt": "Arrival day. The formation advisor is patient and has done this before. Small physical details, no moralizing.",
+      "choices": [
+        {
+          "id": "hand_over",
+          "label": "Drop it in and keep walking",
+          "outcome": "It lands with a soft click on the others. For three days you reach for your pocket every few minutes, and on the fourth you stop. The silence that arrives in its place is not peaceful yet, but it is honest, and you notice that {@formation_advisor} noticed you did not hesitate.",
+          "effects": [
+            { "target": "pillar", "key": "spiritual", "delta": 2 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "relationship", "key": "@formation_advisor", "delta": 3 }
+          ]
+        },
+        {
+          "id": "ask_emergency",
+          "label": "Ask him exactly how an emergency would reach you",
+          "outcome": "He tells you: the corridor phone, the rector's office line, the night porter. He asks whom you are worried about, and you tell him, and he writes the name on a card he keeps in his breast pocket. It is not much. It is more than you expected. You put the phone in the basket with something like trust.",
+          "effects": [
+            { "target": "relationship", "key": "@formation_advisor", "delta": 6 },
+            { "target": "pillar", "key": "human", "delta": 1 },
+            { "target": "pillar", "key": "spiritual", "delta": 1 }
+          ]
+        },
+        {
+          "id": "second_phone",
+          "label": "Hand over this one. The older phone stays in your bag.",
+          "outcome": "The old phone lives in a sock at the bottom of your suitcase. You check it at night with the blanket over your head like a boy. Nobody has written. You learn that the silence you are avoiding is not in the house at all, and that you now have one thing here you cannot mention to anyone.",
+          "effects": [
+            { "target": "flag", "key": "y1_kept_phone", "value": true },
+            { "target": "pillar", "key": "spiritual", "delta": -2 },
+            { "target": "risk", "key": "y1_hidden_phone", "value": "kept a second phone through the propaedeutic year", "delta": 1 }
+          ]
+        },
+        {
+          "id": "wind_down",
+          "label": "Explain that you ran a working life off this thing and ask for three days to close it out",
+          "requires": [{ "type": "flag", "key": "late_vocation", "value": true }],
+          "hidden": true,
+          "outcome": "He grants it, and tells you it is the last exception you will get from him. You spend three evenings in the corridor sending the messages an adult sends when he leaves: the accountant, the landlord, two people who deserve a real goodbye. On Wednesday you put the phone in his hand yourself.",
+          "effects": [
+            { "target": "stat", "key": "administration", "delta": 1 },
+            { "target": "pillar", "key": "human", "delta": 2 },
+            { "target": "relationship", "key": "@formation_advisor", "delta": -2 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "y1_no_news",
+      "phase": "seminary",
+      "yearGate": [1],
+      "pressure": ["belief_vs_safety"],
+      "severity": "ROUTINE",
+      "category": "formation",
+      "baseWeight": 10,
+      "bias": [
+        { "when": { "type": "flag", "key": "career:journalism", "value": true }, "multiplier": 3 },
+        { "when": { "type": "flag", "key": "past:activism", "value": true }, "multiplier": 2 },
+        { "when": { "type": "flag", "key": "origin:latino_immigrant", "value": true }, "multiplier": 2 },
+        { "when": { "type": "flag", "key": "field:history_law", "value": true }, "multiplier": 1.5 }
+      ],
+      "suppressYears": 3,
+      "once": true,
+      "title": "What the visitor let slip",
+      "body": "Six weeks without a headline. The rule is that a formator reads a summary of the week's news aloud on Friday after supper, four minutes, no questions, and it has been mostly weather and a bridge closure. Then a priest passing through {diocese} on his way somewhere else eats with the community and, between the soup and the chicken, mentions the enforcement raids and what the bishop said about them from the cathedral pulpit. The table goes quiet. He looks around and understands that nobody here knew there had been raids, or a statement, and he apologizes to the rector with his eyes. That night a copy of the diocesan paper appears in the common room, folded to the page, and no one admits to bringing it. {@random_classmate} reads it twice and then asks you, in front of four other men, what you think of a bishop who says that kind of thing out loud.",
+      "flavorPrompt": "The seminary's isolation from news, punctured by accident at supper. The bishop has publicly defended immigrants against enforcement raids. Classmates are testing each other.",
+      "choices": [
+        {
+          "id": "let_it_go",
+          "label": "Say you have not read it and go to Compline",
+          "default": true,
+          "outcome": "You do not read the paper. The psalms that night are the same psalms, and in the morning the bridge is still closed. It occurs to you in the dark that the world has gone on without your opinion for six weeks and will manage six more. That is either humility or its imitation, and you cannot yet tell which.",
+          "effects": [
+            { "target": "pillar", "key": "spiritual", "delta": 1 },
+            { "target": "stat", "key": "piety", "delta": 1 }
+          ]
+        },
+        {
+          "id": "bishop_right",
+          "label": "Say the bishop was right, and that a pulpit is exactly the place for it",
+          "volume": "semi_public",
+          "positionTopic": "immigration",
+          "positionValue": 55,
+          "outcome": "Two men nod. {@random_classmate} says nothing, which is its own answer. By Sunday you notice you have been sorted: the men who share your view sit with you, and the others are polite. You said what you think, and it cost you something you did not know you were spending.",
+          "effects": [
+            { "target": "alignment", "key": "", "delta": 3 },
+            { "target": "outspokenness", "key": "", "delta": 1 },
+            { "target": "relationship", "key": "@random_classmate", "delta": -4 }
+          ]
+        },
+        {
+          "id": "not_his_place",
+          "label": "Say a bishop should preach the Gospel and leave enforcement policy to the people elected for it",
+          "volume": "semi_public",
+          "positionTopic": "immigration",
+          "positionValue": -40,
+          "outcome": "{@random_classmate} agrees with you warmly, which is not entirely comfortable, and one of the quieter men leaves the room. You have taken a side in a house you have known for six weeks. It will be remembered in the way things are remembered here: without comment, and for years.",
+          "effects": [
+            { "target": "alignment", "key": "", "delta": -3 },
+            { "target": "outspokenness", "key": "", "delta": 1 },
+            { "target": "relationship", "key": "@random_classmate", "delta": 6 }
+          ]
+        },
+        {
+          "id": "ask_rector",
+          "label": "Go to the rector and tell him four minutes of weather is not a news summary",
+          "requires": [{ "type": "flag", "key": "career:journalism", "value": true }],
+          "outcome": "{@rector} listens with the expression of a man who has been told how to run his house before. Then, unexpectedly, he asks how you would do it. You draft him a page. The Friday summary improves, slightly, and nobody knows why, and he remembers that you asked properly instead of sulking.",
+          "effects": [
+            { "target": "relationship", "key": "@rector", "delta": 5 },
+            { "target": "stat", "key": "knowledge", "delta": 1 },
+            { "target": "pillar", "key": "human", "delta": 1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "y1_first_impressions",
+      "phase": "seminary",
+      "yearGate": [1],
+      "pressure": ["friendship_vs_duty"],
+      "severity": "NOTABLE",
+      "category": "classmate",
+      "baseWeight": 12,
+      "bias": [
+        { "when": { "type": "flag", "key": "path:high_school", "value": true }, "multiplier": 1.5 },
+        { "when": { "type": "flag", "key": "late_vocation", "value": true }, "multiplier": 1.5 },
+        { "when": { "type": "alignment", "op": "<=", "value": -25 }, "multiplier": 1.5 },
+        { "when": { "type": "alignment", "op": ">=", "value": 25 }, "multiplier": 1.5 }
+      ],
+      "suppressYears": 4,
+      "once": true,
+      "title": "The refectory sorts itself",
+      "body": "By the end of the first week the refectory has arranged itself into tables, and nobody assigned them. {@random_classmate} holds the loud one. He came from a parish where the Mass is ad orientem and half in Latin and the average age at the eight o'clock is thirty, and he can describe it for as long as anyone lets him. Tonight he is describing it. Across from you {@closest_classmate} eats without speaking, and when your eyes meet he raises his eyebrows a quarter of an inch. You are trying to work out whether you like these men or only need them when {@random_classmate} turns and asks, pleasantly, what your home parish was like. Whether it had, as he puts it, any life in it. Every man at the table hears the question, and every man at the table is going to remember your answer longer than you will.",
+      "flavorPrompt": "First week, the refectory. A talkative traditionalist classmate has just asked the player a loaded question about his home parish. Others are listening.",
+      "choices": [
+        {
+          "id": "agree_old_rite",
+          "label": "Say your parish was tired, and that his sounds like the future",
+          "volume": "semi_public",
+          "positionTopic": "tlm",
+          "positionValue": -50,
+          "outcome": "He is delighted, and from then on there is a place for you at his table. {@closest_classmate} looks at his plate. You have said a true thing about your parish and a thing you are not sure of about his, and the second one has been filed under your name.",
+          "effects": [
+            { "target": "relationship", "key": "@random_classmate", "delta": 9 },
+            { "target": "relationship", "key": "@closest_classmate", "delta": -3 },
+            { "target": "alignment", "key": "", "delta": -3 }
+          ]
+        },
+        {
+          "id": "push_back",
+          "label": "Say you have seen plenty of life in a parish that sang in English",
+          "volume": "semi_public",
+          "positionTopic": "tlm",
+          "positionValue": 40,
+          "outcome": "The table goes carefully neutral. {@random_classmate} smiles and moves on, and does not ask you anything again for a month, which is its own kind of answer. {@closest_classmate} catches you in the corridor afterward and says, without preamble, that he was glad someone had said it, and that he had not been going to.",
+          "effects": [
+            { "target": "relationship", "key": "@random_classmate", "delta": -6 },
+            { "target": "relationship", "key": "@closest_classmate", "delta": 6 },
+            { "target": "alignment", "key": "", "delta": 3 }
+          ]
+        },
+        {
+          "id": "describe_plainly",
+          "label": "Describe the parish as it actually was and let him make of it what he likes",
+          "outcome": "You tell them about the building, the pastor, the woman who ran the food pantry, the noise at the sign of peace. Nobody can argue with a description. {@random_classmate} loses interest, gently. {@closest_classmate} asks a question about the food pantry, and it is the first real conversation you have had here.",
+          "effects": [
+            { "target": "pillar", "key": "human", "delta": 1 },
+            { "target": "relationship", "key": "@closest_classmate", "delta": 6 },
+            { "target": "relationship", "key": "@random_classmate", "delta": 2 }
+          ]
+        },
+        {
+          "id": "draw_him_out",
+          "label": "Turn it around and ask him what he actually loves about it",
+          "requires": [{ "type": "stat", "key": "charisma", "op": ">=", "value": 45 }],
+          "outcome": "It turns out to be his grandmother, and a particular Holy Saturday, and he becomes for ten minutes a person rather than a position. The table relaxes. You have given nothing away and learned a great deal, and {@random_classmate} will think of you, from now on, as the one who listened.",
+          "effects": [
+            { "target": "relationship", "key": "@random_classmate", "delta": 10 },
+            { "target": "pillar", "key": "human", "delta": 2 },
+            { "target": "stat", "key": "charisma", "delta": 1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "y1_first_direction",
+      "phase": "seminary",
+      "yearGate": [1],
+      "pressure": ["loyalty_vs_honesty"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 12,
+      "bias": [
+        { "when": { "type": "flag", "key": "motive:running", "value": true }, "multiplier": 2 },
+        { "when": { "type": "flag", "key": "past:relationship", "value": true }, "multiplier": 2 },
+        { "when": { "type": "flag", "key": "past:breakdown", "value": true }, "multiplier": 2 },
+        { "when": { "type": "flag", "key": "past:fathered_child", "value": true }, "multiplier": 2 },
+        { "when": { "type": "flag", "key": "past:drinking", "value": true }, "multiplier": 2 },
+        { "when": { "type": "flag", "key": "past:debt", "value": true }, "multiplier": 1.5 }
+      ],
+      "suppressYears": 4,
+      "once": true,
+      "title": "The internal forum",
+      "body": "{@spiritual_director} has a room on the second floor with two chairs that do not match and a window that looks at the parking lot. He explains the arrangement before you sit down, because the Church requires that he explain it: what you say in this room stays in this room. He does not write your evaluation. He does not speak to the men who do. If the rector asked him whether you were fit for orders he would decline to answer, and the rector would not ask. Then he sits, and folds his hands, and says, tell me how you got here. You have told the story before. You told it to the vocation director and to the admissions board and to the psychologist, and each time it got a little smoother, and you know exactly which parts have been sanded down. He waits. He is very good at waiting. There is a version of this story that is true and a version that is presentable, and you have about four seconds to decide which one you are going to be here.",
+      "flavorPrompt": "First meeting with the spiritual director. Internal forum explained. He asks for the player's story. The temptation is to tell the polished admissions version.",
+      "choices": [
+        {
+          "id": "everything",
+          "label": "Tell him the whole of it, including the parts that were sanded off",
+          "outcome": "It takes forty minutes and you do not enjoy any of them. When you finish he says only that he is glad you started there, because most men do not, and that they usually get around to it in the third year with a great deal more damage done. You leave lighter than you have been since June.",
+          "effects": [
+            { "target": "honesty", "key": "", "delta": 2 },
+            { "target": "pillar", "key": "spiritual", "delta": 2 },
+            { "target": "relationship", "key": "@spiritual_director", "delta": 10 }
+          ]
+        },
+        {
+          "id": "presentable",
+          "label": "Give him the version that got you admitted",
+          "outcome": "He nods through it. He has heard admissions versions before and he does not call yours one, but toward the end he asks a small question about a year you skipped, and you answer it in a way that closes the door. He lets you. You walk downstairs knowing precisely what you left in that room unsaid, and that it is still yours to carry.",
+          "opensThread": "y1_withheld_in_direction",
+          "effects": [
+            { "target": "pillar", "key": "spiritual", "delta": -1 },
+            { "target": "relationship", "key": "@spiritual_director", "delta": 3 }
+          ]
+        },
+        {
+          "id": "ask_forum",
+          "label": "Ask him first what happens if you tell him something and the rector later asks",
+          "outcome": "He answers with a patience that suggests he thinks it a fair question and a slightly late one. The rector will not ask. If the rector did ask, he would say that he does not discuss what he hears in this room, and the rector would accept that, because the rector was once a seminarian with a director of his own. Then he says, again, tell me how you got here.",
+          "effects": [
+            { "target": "relationship", "key": "@spiritual_director", "delta": 5 },
+            { "target": "stat", "key": "knowledge", "delta": 1 },
+            { "target": "pillar", "key": "spiritual", "delta": 1 }
+          ]
+        },
+        {
+          "id": "name_the_thing",
+          "label": "Skip the story. Name the one thing from before, first, before anything else.",
+          "requires": [{ "type": "any", "inner": [
+            { "type": "flag", "key": "past:relationship", "value": true },
+            { "type": "flag", "key": "past:drinking", "value": true },
+            { "type": "flag", "key": "past:debt", "value": true },
+            { "type": "flag", "key": "past:activism", "value": true },
+            { "type": "flag", "key": "past:breakdown", "value": true },
+            { "type": "flag", "key": "past:fathered_child", "value": true }
+          ] }],
+          "hidden": true,
+          "outcome": "You say it in one sentence and then cannot say anything else for a while. He does not flinch and does not console you. He asks how long you have been carrying it alone, and when you tell him, he says that is over now, at least in here. It is the first time anyone in the Church has heard it without a form in front of them.",
+          "effects": [
+            { "target": "honesty", "key": "", "delta": 3 },
+            { "target": "pillar", "key": "spiritual", "delta": 3 },
+            { "target": "relationship", "key": "@spiritual_director", "delta": 14 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "y1_psych_followup",
+      "phase": "seminary",
+      "yearGate": [1],
+      "pressure": ["loyalty_vs_honesty"],
+      "severity": "NOTABLE",
+      "category": "formation",
+      "baseWeight": 10,
+      "bias": [
+        { "when": { "type": "flag", "key": "past:breakdown", "value": true }, "multiplier": 4 },
+        { "when": { "type": "flag", "key": "motive:running", "value": true }, "multiplier": 2 },
+        { "when": { "type": "flag", "key": "family:estranged", "value": true }, "multiplier": 2 },
+        { "when": { "type": "flag", "key": "past:relationship", "value": true }, "multiplier": 1.5 },
+        { "when": { "type": "flag", "key": "career:physician", "value": true }, "multiplier": 1.5 }
+      ],
+      "suppressYears": 4,
+      "once": true,
+      "title": "A line in the report",
+      "body": "The psychological evaluation was in the spring, in an office with a box of tissues placed at an angle that suggested design. Ninety minutes, an inventory with five hundred questions, a woman who wrote while you talked. You had assumed it was over. It is on {@formation_advisor}'s desk now, in a manila folder, and he has it open. He tells you at once that this is the external forum, that what you say here can and will inform his evaluation, because the Church requires that he tell you. Then he reads you one line. It is a careful line, written by a professional who has met you once, about a tendency to manage how you are seen by people in authority. He puts the folder down. He asks whether that sounds like you. It is the kind of question that answers itself either way, and he knows it, and he is watching to see whether you know it too.",
+      "flavorPrompt": "The formation advisor follows up on a line from the pre-admission psychological evaluation. External forum. He is fair, and is watching the player's reaction as much as the answer.",
+      "choices": [
+        {
+          "id": "plainly",
+          "label": "Say yes, it sounds like you, and give him an example he could not have known",
+          "outcome": "He writes nothing down while you speak, which you learn later is a sign. When you finish he says the psychologist was probably right and that it is not disqualifying; half the priests he knows manage how they are seen, and the good ones know they do it. The folder closes. You have made your first honest deposit with the man who will grade you.",
+          "effects": [
+            { "target": "honesty", "key": "", "delta": 2 },
+            { "target": "pillar", "key": "human", "delta": 2 },
+            { "target": "relationship", "key": "@formation_advisor", "delta": 8 }
+          ]
+        },
+        {
+          "id": "minimize",
+          "label": "Say everyone is a little careful in a ninety-minute interview with a stranger",
+          "outcome": "He agrees that everyone is. He says it mildly and lets the silence run, and you fill it with two more sentences than you meant to. The folder closes. You have done exactly what the line said you would do, in front of the man who read it to you, and you both know it, and neither of you says so.",
+          "effects": [
+            { "target": "pillar", "key": "human", "delta": -1 },
+            { "target": "relationship", "key": "@formation_advisor", "delta": -4 },
+            { "target": "flag", "key": "y1_psych_minimized", "value": true }
+          ]
+        },
+        {
+          "id": "ask_to_read",
+          "label": "Ask to read the report yourself. You are entitled to see it.",
+          "requires": [{ "type": "any", "inner": [
+            { "type": "flag", "key": "career:attorney", "value": true },
+            { "type": "flag", "key": "career:physician", "value": true },
+            { "type": "flag", "key": "career:social_work", "value": true }
+          ] }],
+          "outcome": "He hands it across without argument, which tells you the diocese has a policy and he knows it. You read all six pages. The line is one of a dozen and not the harshest. You give it back and say which sentence you think is actually true, and he raises an eyebrow, and the conversation becomes a real one.",
+          "effects": [
+            { "target": "stat", "key": "knowledge", "delta": 1 },
+            { "target": "relationship", "key": "@formation_advisor", "delta": 4 },
+            { "target": "pillar", "key": "human", "delta": 1 }
+          ]
+        },
+        {
+          "id": "push_back",
+          "label": "Say she met you once, for ninety minutes, and you are not sure that entitles her to a tendency",
+          "outcome": "He does not disagree. He says the report is one data point and he has thirty more weeks of you, and that he will trust the weeks. Then he says, gently, that objecting to the diagnosis is a very natural thing for a man with that diagnosis to do. You leave with your dignity and without the last word.",
+          "effects": [
+            { "target": "outspokenness", "key": "", "delta": 1 },
+            { "target": "pillar", "key": "human", "delta": 1 },
+            { "target": "relationship", "key": "@formation_advisor", "delta": -2 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "y1_first_advent",
+      "phase": "seminary",
+      "yearGate": [1],
+      "pressure": ["friendship_vs_duty"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 12,
+      "requires": [{ "type": "season", "value": "advent" }],
+      "bias": [
+        { "when": { "type": "flag", "key": "family:large", "value": true }, "multiplier": 3 },
+        { "when": { "type": "flag", "key": "origin:latino_immigrant", "value": true }, "multiplier": 2 },
+        { "when": { "type": "flag", "key": "origin:urban_ethnic", "value": true }, "multiplier": 1.5 },
+        { "when": { "type": "flag", "key": "late_vocation", "value": true }, "multiplier": 1.5 }
+      ],
+      "suppressYears": 4,
+      "once": true,
+      "title": "First Sunday of Advent",
+      "body": "The wreath goes up in the chapel on Saturday evening, four candles on a hoop of greens, and the first one is lit at Vespers by the youngest man in the house. At home this is the week the season starts in earnest: the particular food, the particular relatives, the argument about when the tree goes up, the parish's own habits that you never noticed were habits until you were somewhere they do not have them. You are not there for it. You will not be there for any of it until the tenth day of Christmas. Meanwhile the house has its own argument. The classmate who plays the organ wants the Advent Masses sung in chant, unaccompanied, the proper texts. The classmate who led music at his home parish wants the hymns everyone actually knows. {@rector} has told the class to settle it among themselves by Wednesday, which is either trust or an experiment, and the class has been told this in your hearing, so you are in it.",
+      "flavorPrompt": "First Advent away from home, the ache of a familiar season in an unfamiliar place, and a small liturgical argument in the house the rector has delegated to the class.",
+      "choices": [
+        {
+          "id": "chant",
+          "label": "Back the chant. Advent is supposed to be spare.",
+          "volume": "semi_public",
+          "positionTopic": "liturgy",
+          "positionValue": -40,
+          "outcome": "The chant carries it, narrowly. The first Mass of Advent is quiet in a way you did not know a Mass could be, and one of the men who wanted hymns says afterward, not unkindly, that it was beautiful and that nobody sang. Both things are true. You are now, in the memory of the house, one of the chant men.",
+          "effects": [
+            { "target": "pillar", "key": "spiritual", "delta": 2 },
+            { "target": "alignment", "key": "", "delta": -2 },
+            { "target": "stat", "key": "piety", "delta": 1 }
+          ]
+        },
+        {
+          "id": "hymns",
+          "label": "Back the hymns. The point is that people sing.",
+          "volume": "semi_public",
+          "positionTopic": "liturgy",
+          "positionValue": 30,
+          "outcome": "The hymns carry it, narrowly. The chapel sounds like a parish for four weeks, which is what you wanted and also what you miss, and the organist takes it graciously and plays them well. You have declared for the congregation over the choir, and men who care about such things have noted it.",
+          "effects": [
+            { "target": "pillar", "key": "human", "delta": 1 },
+            { "target": "pillar", "key": "pastoral", "delta": 1 },
+            { "target": "alignment", "key": "", "delta": 2 }
+          ]
+        },
+        {
+          "id": "write_home",
+          "label": "Abstain, and spend the evening writing letters home instead",
+          "outcome": "The argument settles itself without you and the men on both sides forget you were asked. You write four letters by hand, which you have not done since you were a child, and describe the wreath, the food, the sound of the radiator. The letters are the first thing you have made here that belongs to your old life.",
+          "effects": [
+            { "target": "pillar", "key": "human", "delta": 2 },
+            { "target": "pillar", "key": "spiritual", "delta": 1 },
+            { "target": "relationship", "key": "@closest_classmate", "delta": -2 }
+          ]
+        },
+        {
+          "id": "chapel_after_compline",
+          "label": "Stay in the dark chapel after Compline and let the season be what it is",
+          "outcome": "You stay until the sanctuary lamp is the only light. The homesickness does not go away; it becomes, for half an hour, something that can be prayed. You do not settle the argument. You settle something smaller and yours, and on Wednesday you vote with whichever side asks you first.",
+          "effects": [
+            { "target": "pillar", "key": "spiritual", "delta": 3 },
+            { "target": "stat", "key": "piety", "delta": 1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "y1_man_leaves",
+      "phase": "seminary",
+      "yearGate": [1],
+      "pressure": ["friendship_vs_duty", "doubt"],
+      "severity": "NOTABLE",
+      "category": "classmate",
+      "baseWeight": 12,
+      "bias": [
+        { "when": { "type": "flag", "key": "motive:running", "value": true }, "multiplier": 1.5 },
+        { "when": { "type": "flag", "key": "motive:certainty", "value": true }, "multiplier": 1.5 },
+        { "when": { "type": "pillar", "key": "spiritual", "op": "<=", "value": 2 }, "multiplier": 1.5 }
+      ],
+      "suppressYears": 4,
+      "once": true,
+      "title": "Street clothes at breakfast",
+      "body": "In the fourth week {@random_classmate} comes to breakfast in jeans and a sweater, which is how everyone knows before anyone is told. His bag is by the front door. The rector already knows; he must have known last night, because there is a car coming at ten and cars do not come to {seminary} by accident. Nobody dismissed him. He says so himself, to the three men nearest him, in the tone of a man who has decided to say it once: he asked to go, it is the silence, he cannot do the silence, he has tried for four weeks and he would rather find out now than in the fourth year. Then he eats his eggs. The refectory does the thing a refectory does, which is watch without watching. At a quarter to ten he stands up and looks around the room, not at anyone, at all of it, and picks up his bag, and there is a stretch of hallway between him and the door that someone could walk with him, or not.",
+      "flavorPrompt": "The first man to leave, in the first month, by his own choice. Breakfast, a bag by the door, a car at ten. No drama from him. The class does not know how to behave.",
+      "choices": [
+        {
+          "id": "walk_him_out",
+          "label": "Carry his bag to the car and tell him you will write",
+          "outcome": "The car is his brother's. You put the bag in the back and shake his hand and say you will write, and he says he would like that, and it is clear neither of you knows whether you mean it. He goes. You stand in the driveway longer than makes sense. Behind you a curtain moves in the common room.",
+          "opensThread": "y1_promised_to_write",
+          "effects": [
+            { "target": "npc", "key": "@random_classmate", "value": "left" },
+            { "target": "relationship", "key": "@random_classmate", "delta": 10 },
+            { "target": "pillar", "key": "human", "delta": 2 }
+          ]
+        },
+        {
+          "id": "say_nothing",
+          "label": "Let him go the way he seems to want to go: quietly",
+          "outcome": "He leaves. Nobody walks with him, and afterward everyone agrees, without saying it, that this was discretion. His place at table is gone by supper. You tell yourself he wanted no fuss, which is probably true, and that you were respecting it, which is partly true, and the part that is not true stays with you into the evening.",
+          "effects": [
+            { "target": "npc", "key": "@random_classmate", "value": "left" },
+            { "target": "pillar", "key": "human", "delta": -1 },
+            { "target": "pillar", "key": "spiritual", "delta": 1 }
+          ]
+        },
+        {
+          "id": "ask_why",
+          "label": "Catch him at the door and ask him what the silence was actually like",
+          "outcome": "He tells you, because you asked and no one else did. It is not what you expected. It was not boredom or loneliness; it was that in the quiet he heard, very clearly, that he did not want this, and could not un-hear it. He gets in the car. You go back to your room and sit on the bed and, for the first time, listen for the same thing.",
+          "effects": [
+            { "target": "npc", "key": "@random_classmate", "value": "left" },
+            { "target": "flag", "key": "y1_heard_why_he_left", "value": true },
+            { "target": "pillar", "key": "human", "delta": 1 },
+            { "target": "pillar", "key": "spiritual", "delta": -1 },
+            { "target": "relationship", "key": "@random_classmate", "delta": 6 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "y1_rector_conference",
+      "phase": "seminary",
+      "yearGate": [1],
+      "pressure": ["belief_vs_safety"],
+      "severity": "NOTABLE",
+      "category": "formation",
+      "baseWeight": 12,
+      "bias": [
+        { "when": { "type": "flag", "key": "motive:intellectual", "value": true }, "multiplier": 2 },
+        { "when": { "type": "flag", "key": "field:philosophy", "value": true }, "multiplier": 1.5 },
+        { "when": { "type": "flag", "key": "career:professor", "value": true }, "multiplier": 1.5 },
+        { "when": { "type": "alignment", "op": "<=", "value": -30 }, "multiplier": 1.5 },
+        { "when": { "type": "alignment", "op": ">=", "value": 30 }, "multiplier": 1.5 }
+      ],
+      "suppressYears": 4,
+      "once": true,
+      "title": "You do not form yourself",
+      "body": "Tuesday evenings the whole house sits in the lecture hall for the rector's conference. {@rector} does not use notes. Tonight his subject is a sentence he repeats four times so that nobody can claim to have missed it: you do not form yourself. A man who arrives at {seminary} with a program for his own priesthood, a liturgy he intends to celebrate and a theology he intends to hold and a kind of priest he has already decided to be, will find that program taken from him, and should be grateful, because the Church is older than his taste. He says it without heat. He looks at no one in particular, which in a room of thirty men means everyone. Afterward, on the stairs, one classmate says it was aimed at the men who came in wanting Latin; another says it was aimed at the men with degrees who think they have already read everything; a third says it was aimed at nobody and that is the point. They all look at you, because you have not said anything yet.",
+      "flavorPrompt": "The rector's first conference, on obedience and being formed by the Church rather than forming oneself. Classmates parse it on the stairs afterward.",
+      "choices": [
+        {
+          "id": "take_it",
+          "label": "Say he is right, and that it stung, and that both of those are probably the point",
+          "volume": "private",
+          "positionTopic": "authority",
+          "positionValue": -30,
+          "outcome": "The stairwell goes quiet in the way that means the argument is over. You did not defend anyone's program, including your own, and something in you that had been braced since September lets go a little. It is not surrender. It is closer to the beginning of consent, and you are not sure yet whether you like the feeling.",
+          "effects": [
+            { "target": "pillar", "key": "spiritual", "delta": 2 },
+            { "target": "relationship", "key": "@rector", "delta": 4 },
+            { "target": "stat", "key": "piety", "delta": 1 }
+          ]
+        },
+        {
+          "id": "question_after",
+          "label": "Go back down and ask him how that squares with the seminarian's obligation to form his own conscience",
+          "requires": [{ "type": "stat", "key": "knowledge", "op": ">=", "value": 45 }],
+          "volume": "semi_public",
+          "positionTopic": "authority",
+          "positionValue": 30,
+          "outcome": "{@rector} is putting on his coat. He takes it off again. He gives you twelve minutes and a distinction between conscience and preference that you will be quoting for years, and does not concede your point, and clearly enjoys being asked. Two men who lingered on the landing report the exchange, accurately, to the whole house.",
+          "effects": [
+            { "target": "pillar", "key": "intellectual", "delta": 2 },
+            { "target": "relationship", "key": "@rector", "delta": 3 },
+            { "target": "outspokenness", "key": "", "delta": 1 }
+          ]
+        },
+        {
+          "id": "mutter",
+          "label": "Say, on the stairs, that a shorter version of the talk would have been the word obey",
+          "volume": "semi_public",
+          "positionTopic": "authority",
+          "positionValue": 45,
+          "outcome": "It gets the laugh you wanted, and {@closest_classmate} repeats it at breakfast, and by Thursday it has reached the faculty in the way things do. Nobody says anything. {@rector} is exactly as courteous to you as before, which is how you learn that courtesy here is not information.",
+          "effects": [
+            { "target": "relationship", "key": "@closest_classmate", "delta": 4 },
+            { "target": "relationship", "key": "@rector", "delta": -4 },
+            { "target": "outspokenness", "key": "", "delta": 2 },
+            { "target": "pillar", "key": "human", "delta": -1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "y1_schedule_rebellion",
+      "phase": "seminary",
+      "yearGate": [1],
+      "pressure": ["competence"],
+      "severity": "ROUTINE",
+      "category": "formation",
+      "baseWeight": 12,
+      "bias": [
+        { "when": { "type": "flag", "key": "path:high_school", "value": true }, "multiplier": 2 },
+        { "when": { "type": "flag", "key": "late_vocation", "value": true }, "multiplier": 1.5 },
+        { "when": { "type": "flag", "key": "motive:running", "value": true }, "multiplier": 1.5 },
+        { "when": { "type": "pillar", "key": "human", "op": "<=", "value": 2 }, "multiplier": 1.5 }
+      ],
+      "suppressYears": 2,
+      "once": true,
+      "title": "The bell at six",
+      "body": "Lauds is at six thirty and the bell is at six, and for nine weeks you have gotten up on the bell like everyone else. It is November now. The mornings are black. This morning you hear the bell and lie there, and the next thing you hear is the door of the chapel closing under you, which means the psalms have started, which means the prefect of the corridor has already looked at your empty stall. The prefect is {@random_classmate}, who was appointed to it three weeks ago and takes it seriously. Absences from the common prayer are recorded and go to {@formation_advisor} at the end of the month, not as accusation but as data. One absence is nothing. Everyone knows one absence is nothing. You lie in the dark and understand for the first time that the schedule of this house is not a schedule at all but a question, asked every morning at six, and that it will go on being asked for seven years, and that today you have answered it with silence.",
+      "flavorPrompt": "First missed Lauds. November dark. A classmate is corridor prefect and records absences. Small stakes, and the player knows the real stake is the pattern.",
+      "choices": [
+        {
+          "id": "get_up",
+          "label": "Get up now, late, and slip into the back for the second psalm",
+          "default": true,
+          "outcome": "You arrive at the second psalm and stand in the back rather than cross to your stall. Nobody turns. Afterward {@random_classmate} says nothing and writes nothing down, since you were, technically, there. The bell tomorrow is the same bell. You will get up for it, and the day after, and the fact that you know that is the only thing that changed.",
+          "effects": [
+            { "target": "pillar", "key": "spiritual", "delta": 1 },
+            { "target": "stat", "key": "piety", "delta": 1 }
+          ]
+        },
+        {
+          "id": "own_it",
+          "label": "Stay in bed, and go tell the formation advisor yourself before the prefect does",
+          "outcome": "{@formation_advisor} is amused, briefly, and then not. He says that every man in the house has done it and that fewer than half have come to tell him. He writes it down anyway, because that is his job, and adds a note beside it that you will not see for three years, and that helps you when you do.",
+          "effects": [
+            { "target": "honesty", "key": "", "delta": 1 },
+            { "target": "relationship", "key": "@formation_advisor", "delta": 3 },
+            { "target": "pillar", "key": "spiritual", "delta": -1 }
+          ]
+        },
+        {
+          "id": "ask_cover",
+          "label": "Stay in bed, and ask the prefect at breakfast to leave it off the sheet",
+          "outcome": "{@random_classmate} looks at you for a long moment and then says fine, once. You are now two men with a small secret, which is the beginning of either a friendship or a debt, and in this house it is not always possible to tell them apart. The sheet goes in clean. You do not feel clean, exactly.",
+          "effects": [
+            { "target": "flag", "key": "y1_asked_prefect_cover", "value": true },
+            { "target": "relationship", "key": "@random_classmate", "delta": 5 },
+            { "target": "pillar", "key": "human", "delta": -1 },
+            { "target": "pillar", "key": "spiritual", "delta": -1 }
+          ]
+        },
+        {
+          "id": "negotiate",
+          "label": "Go to the formation advisor and ask, as an adult who managed his own time for a decade, for a modified first term",
+          "requires": [{ "type": "flag", "key": "late_vocation", "value": true }],
+          "outcome": "{@formation_advisor} hears you out and says no. He says it kindly and completely: the schedule is not a policy to be negotiated but the shape of the life you are asking to be given, and the men who cannot bend to it in the first year do not bend to a parish in the twentieth. He records the conversation. You suspect he respects the asking and dislikes the premise, and that both will be in the file.",
+          "effects": [
+            { "target": "relationship", "key": "@formation_advisor", "delta": -2 },
+            { "target": "pillar", "key": "human", "delta": 1 },
+            { "target": "outspokenness", "key": "", "delta": 1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "y1_manual_work",
+      "phase": "seminary",
+      "yearGate": [1],
+      "pressure": ["competence"],
+      "severity": "ROUTINE",
+      "category": "formation",
+      "baseWeight": 10,
+      "bias": [
+        { "when": { "type": "flag", "key": "career:trades", "value": true }, "multiplier": 3 },
+        { "when": { "type": "flag", "key": "origin:rural", "value": true }, "multiplier": 2 },
+        { "when": { "type": "flag", "key": "origin:suburban", "value": true }, "multiplier": 1.5 },
+        { "when": { "type": "flag", "key": "career:management", "value": true }, "multiplier": 1.5 },
+        { "when": { "type": "flag", "key": "career:military", "value": true }, "multiplier": 1.5 }
+      ],
+      "suppressYears": 3,
+      "once": true,
+      "title": "Wednesday afternoon, the retaining wall",
+      "body": "Wednesday afternoons the propaedeutic class is the grounds crew of {seminary}. It is in the program, under the human pillar, and the formators speak of it the way they speak of everything: as formation. This week it is the retaining wall behind the garage, thirty feet of dry stone that has been leaning toward the parking lot since before anyone here was ordained. The supervising priest is a kind man who knows nothing about walls. He has brought gloves. Around you, eight men with a combined eleven degrees are pulling stones out of the base in an order that will bring the whole thing down on somebody, and arguing about it in the vocabulary of men who have read Aristotle on causes. One of them has already dropped a rock on his foot and is being brave about it. Someone should probably say something. The priest is looking at the wall with his head on one side, the way people look at modern art, and it is, you realize, not going to be him.",
+      "flavorPrompt": "Manual labor as formation. Educated young men making a hash of a stone wall; a supervising priest who means well and knows nothing. Gently comic, never contemptuous.",
+      "choices": [
+        {
+          "id": "work",
+          "label": "Pick up a stone, keep your mouth shut, and stay until it is done",
+          "default": true,
+          "outcome": "The wall goes back up, slowly and not straight, and nobody is crushed. By four o'clock your hands are ruined and you are happier than you have been in a fortnight, and {@closest_classmate}, sitting on the tailgate beside you, says he had forgotten what it was like to be tired for a reason.",
+          "effects": [
+            { "target": "pillar", "key": "human", "delta": 1 },
+            { "target": "pillar", "key": "pastoral", "delta": 1 },
+            { "target": "relationship", "key": "@closest_classmate", "delta": 4 }
+          ]
+        },
+        {
+          "id": "show_them",
+          "label": "Stop them before someone loses a foot, and show them how a dry wall actually goes together",
+          "requires": [{ "type": "flag", "key": "career:trades", "value": true }],
+          "outcome": "You take the crew apart and put it back together in ten minutes: two men on the base, two feeding stone, one on the batter, the rest hauling. The wall goes up straight. The philosophers are quiet and grateful, and for the first time since September you are the man in the room who knows the most about the thing in front of him.",
+          "effects": [
+            { "target": "pillar", "key": "human", "delta": 2 },
+            { "target": "relationship", "key": "@random_classmate", "delta": 8 },
+            { "target": "relationship", "key": "@closest_classmate", "delta": 5 },
+            { "target": "stat", "key": "administration", "delta": 1 }
+          ]
+        },
+        {
+          "id": "organize",
+          "label": "Take charge of the crew, assign jobs, and run it like a job site",
+          "requires": [{ "type": "any", "inner": [
+            { "type": "flag", "key": "career:management", "value": true },
+            { "type": "flag", "key": "career:military", "value": true }
+          ] }],
+          "outcome": "It works, mostly. The wall goes up faster and nobody is hurt, and the priest thanks you, and {@random_classmate} says on the walk back that he did not come to seminary to be managed. He says it lightly. You notice that you did not know how to do this any other way, and that it was noticed.",
+          "effects": [
+            { "target": "stat", "key": "administration", "delta": 1 },
+            { "target": "pillar", "key": "human", "delta": 1 },
+            { "target": "relationship", "key": "@random_classmate", "delta": -4 },
+            { "target": "archetype", "key": "administrative", "delta": 1 }
+          ]
+        },
+        {
+          "id": "complain",
+          "label": "Tell the priest, politely, that this is not what men with degrees came here to do",
+          "outcome": "He is not offended. He says, mildly, that it is precisely what men with degrees came here to do, and that the Church has plenty of clever priests and rather fewer who can be told to move a rock. Then he hands you the gloves. {@random_classmate}, who has been waiting for someone to say it, is grateful it was you and not him.",
+          "effects": [
+            { "target": "relationship", "key": "@formation_advisor", "delta": -3 },
+            { "target": "pillar", "key": "human", "delta": -2 },
+            { "target": "relationship", "key": "@random_classmate", "delta": 3 },
+            { "target": "outspokenness", "key": "", "delta": 1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "y1_first_doubt",
+      "phase": "seminary",
+      "yearGate": [1],
+      "pressure": ["doubt"],
+      "severity": "CRITICAL",
+      "category": "personal",
+      "baseWeight": 12,
+      "bias": [
+        { "when": { "type": "flag", "key": "motive:running", "value": true }, "multiplier": 2 },
+        { "when": { "type": "flag", "key": "motive:grief", "value": true }, "multiplier": 2 },
+        { "when": { "type": "flag", "key": "motive:intellectual", "value": true }, "multiplier": 1.5 },
+        { "when": { "type": "flag", "key": "motive:certainty", "value": true }, "multiplier": 0.7 },
+        { "when": { "type": "flag", "key": "y1_heard_why_he_left", "value": true }, "multiplier": 2 },
+        { "when": { "type": "pillar", "key": "spiritual", "op": "<=", "value": 2 }, "multiplier": 2 }
+      ],
+      "suppressYears": 4,
+      "once": true,
+      "title": "A Thursday in January",
+      "body": "It is not dramatic, which is the first surprise. You had imagined doubt as a storm, if you imagined it at all, and instead it is a Thursday, and the holy hour, and the monstrance on the altar with the afternoon coming sideways through the clerestory. You are kneeling where you always kneel. The thought arrives with no more weight than a thought about lunch: none of this may be true. And then, following it closely, a second thought that is somehow worse: or it is all true, and it is not for you. You examine them the way you would examine a chipped tooth with your tongue. They do not go away. They are not frightening, exactly. They are patient, and they seem to have been there for some time, and they are entirely uninterested in the fact that you have given up a phone and a life and a woman's phone number to be in this chapel. Twenty minutes remain of the hour. You are aware, distantly, of {@closest_classmate} two stalls down, perfectly still, and of the fact that you have no idea what is happening inside anyone else in this room either.",
+      "flavorPrompt": "The first real doubt, quiet and undramatic, during adoration. Two forms: it may not be true; it may be true and not for me. The player must decide what to do with it. Never resolve the doubt in prose.",
+      "choices": [
+        {
+          "id": "bring_to_direction",
+          "label": "Take it to spiritual direction on Monday, in exactly those words",
+          "outcome": "{@spiritual_director} does not look worried, which you find both reassuring and slightly insulting. He says the second thought is the more interesting one and that it will keep. He gives you nothing to do about it, which is itself a kind of instruction. The doubt does not leave. It becomes, in his room, something that has a place to go.",
+          "effects": [
+            { "target": "relationship", "key": "@spiritual_director", "delta": 8 },
+            { "target": "pillar", "key": "spiritual", "delta": 2 },
+            { "target": "honesty", "key": "", "delta": 1 }
+          ]
+        },
+        {
+          "id": "sit_with_it",
+          "label": "Tell no one. Keep kneeling. See whether it is still there in a month.",
+          "outcome": "It is still there in a month. It is quieter, or you are louder; you cannot tell. You go on getting up at six and singing the psalms with a small cold stone in your chest, and you learn that a man can carry that and still say the words. Whether that is faith or stubbornness is a question you have decided not to ask yet.",
+          "effects": [
+            { "target": "flag", "key": "y1_doubt_unspoken", "value": true },
+            { "target": "pillar", "key": "spiritual", "delta": 1 },
+            { "target": "stat", "key": "piety", "delta": -1 }
+          ]
+        },
+        {
+          "id": "study_it",
+          "label": "Treat it as a question with a literature, and go to the library",
+          "requires": [{ "type": "any", "inner": [
+            { "type": "stat", "key": "knowledge", "op": ">=", "value": 50 },
+            { "type": "flag", "key": "field:philosophy", "value": true }
+          ] }],
+          "outcome": "You read for three weeks: Newman on assent, a little Pascal, a great deal you do not finish. The first thought yields somewhat to argument. The second does not, because it was never an argument. You come out of the library with a sharper mind and the same question, and a suspicion that you have just done to your doubt what the psychologist said you do to everything.",
+          "effects": [
+            { "target": "flag", "key": "y1_doubt_studied", "value": true },
+            { "target": "pillar", "key": "intellectual", "delta": 3 },
+            { "target": "stat", "key": "theology", "delta": 1 },
+            { "target": "pillar", "key": "spiritual", "delta": -1 }
+          ]
+        },
+        {
+          "id": "leave",
+          "label": "Take the second thought at its word. Go and see the rector.",
+          "outcome": "{@rector} does not try to talk you out of it. He asks whether you have told your director; he asks whether you would like to finish the week or go tomorrow; he asks whether there is anything the house owes you. You go on Saturday. The men line the front steps without being asked, and it is the kindest thing they have done for you.",
+          "effects": [
+            { "target": "end", "key": "left_seminary", "value": "You left in the January of the propaedeutic year, honestly and without rancor, after a Thursday in the chapel when the question became too plain to kneel through. The diocese wrote you a fair letter. What you had learned about silence went with you, and so did the men on the steps." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "y1_christmas_home",
+      "phase": "seminary",
+      "yearGate": [1],
+      "pressure": ["friendship_vs_duty"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 12,
+      "requires": [{ "type": "season", "value": "christmas" }],
+      "bias": [
+        { "when": { "type": "flag", "key": "family:opposed", "value": true }, "multiplier": 2 },
+        { "when": { "type": "flag", "key": "family:widowed_mother", "value": true }, "multiplier": 2 },
+        { "when": { "type": "flag", "key": "family:supportive", "value": true }, "multiplier": 1.5 },
+        { "when": { "type": "flag", "key": "origin:urban_ethnic", "value": true }, "multiplier": 1.5 },
+        { "when": { "type": "flag", "key": "tie:son", "value": true }, "multiplier": 1.5 }
+      ],
+      "suppressYears": 4,
+      "once": true,
+      "title": "Ten days with a phone",
+      "body": "They give the phones back on the morning you leave, and yours has three hundred and eleven notifications, and you look at perhaps nine of them. Then you are home. It is the strangest thing that has happened to you this year, stranger than the silence: the house is exactly where you left it and you are not. {@mother} watches you at Mass on Christmas morning the way she used to watch you at school plays, and afterward at the coffee people ask how it is going in a tone that expects one of two answers, and neither of them is the true one. The true one is that it has been the hardest four months of your life and you are not sure you have done anything but survive them. An uncle asks, as a joke, whether you have met any nice girls up there. Your old room has a bed that is too soft. On the third night {@mother} knocks, and comes in, and sits on the end of it, and says, so, and waits, in a way that is not so different from how {@spiritual_director} waits.",
+      "flavorPrompt": "Christmas visit home after the first four months. The player's mother asks, gently, how it really is. Family gatherings, the old room, the awkwardness of being a guest in one's own house.",
+      "choices": [
+        {
+          "id": "tell_her_true",
+          "label": "Tell her how hard it has actually been",
+          "outcome": "She listens the way she always could and then says the thing you had not known you needed, which is that hard is not the same as wrong. You talk until one. In the morning she does not mention it and makes the breakfast you liked at twelve. You go back with something you did not bring home: her actual blessing, rather than her permission.",
+          "effects": [
+            { "target": "relationship", "key": "@mother", "delta": 12 },
+            { "target": "honesty", "key": "", "delta": 1 },
+            { "target": "pillar", "key": "human", "delta": 2 }
+          ]
+        },
+        {
+          "id": "keep_it_smooth",
+          "label": "Tell her it is going well, because she needs it to be",
+          "outcome": "She says good, and pats the blanket, and goes to bed, and you are fairly sure she did not believe a word of it. The visit stays pleasant. You are the good son at every table for ten days, and it is a role you know how to play, and you get back to {seminary} more tired than when you left, having rested from nothing.",
+          "effects": [
+            { "target": "relationship", "key": "@mother", "delta": 3 },
+            { "target": "pillar", "key": "human", "delta": -1 },
+            { "target": "pillar", "key": "spiritual", "delta": -1 }
+          ]
+        },
+        {
+          "id": "return_early",
+          "label": "Cut the visit short and go back three days early",
+          "outcome": "You tell her the house has a retreat, which is not quite a lie. She drives you to the station and does not ask, and her not asking is the loudest thing in the car. The seminary is nearly empty and the chapel is cold and you are, to your own surprise, relieved. You have started to belong to the wrong address.",
+          "effects": [
+            { "target": "relationship", "key": "@mother", "delta": -7 },
+            { "target": "pillar", "key": "spiritual", "delta": 3 },
+            { "target": "stat", "key": "piety", "delta": 1 }
+          ]
+        },
+        {
+          "id": "serve_at_home",
+          "label": "Ask the pastor if you can serve the Christmas Masses at your home parish, and let her see you at the altar",
+          "requires": [{ "type": "flag", "key": "tie:son", "value": true }],
+          "hidden": true,
+          "outcome": "The pastor puts you in a cassock and surplice and on the sanctuary for three Masses, and the parish, which has known you since you could not sit still through one, watches you carry the book. {@mother} cries at the Midnight Mass and pretends it is the incense. The uncles stop making jokes. You have been seen, at home, as what you are trying to become.",
+          "effects": [
+            { "target": "flag", "key": "y1_home_served_christmas", "value": true },
+            { "target": "relationship", "key": "@mother", "delta": 8 },
+            { "target": "pillar", "key": "pastoral", "delta": 2 },
+            { "target": "pillar", "key": "human", "delta": 1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "y1_spring_retreat",
+      "phase": "seminary",
+      "yearGate": [1],
+      "pressure": ["doubt"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 12,
+      "requires": [{ "type": "season", "value": "lent" }],
+      "bias": [
+        { "when": { "type": "stat", "key": "piety", "op": ">=", "value": 55 }, "multiplier": 1.5 },
+        { "when": { "type": "thread", "key": "y1_promised_to_write", "open": true }, "multiplier": 2 },
+        { "when": { "type": "flag", "key": "y1_doubt_unspoken", "value": true }, "multiplier": 1.5 }
+      ],
+      "suppressYears": 4,
+      "once": true,
+      "title": "Eight days at the retreat house",
+      "body": "The propaedeutic year makes its Lenten retreat at a religious house two hours from {seminary}, eight days, full silence, one conference each morning and one meeting with the retreat master in the afternoon. The retreat master is an old religious with a bad hip and a way of looking at you that suggests he has already forgiven whatever you are about to say. There is a lake. There are crows. By the third day the silence you have spent seven months learning to bear at home has a different quality here, thinner and closer, and things you have set aside during the year come up through it in no particular order: the man who left in the first month, the letter you told him you would write and have not written; the Thursday in the chapel; your mother's face at the station; the exact sound of the bell at six. The retreat master says, on the fourth morning, that a retreat is not for deciding anything. It is for finding out what has already been decided in you. Then he leaves you alone with it for four more days.",
+      "flavorPrompt": "The Lenten silent retreat at a religious house. A wise, tired old retreat master. Things set aside during the year surface. No resolutions offered in prose.",
+      "choices": [
+        {
+          "id": "write_letter",
+          "label": "Write, at last, the letter you promised the man who left",
+          "requires": [{ "type": "thread", "key": "y1_promised_to_write", "open": true }],
+          "hidden": true,
+          "outcome": "It takes two afternoons and is four pages long and does not contain a single piece of advice. You tell him what the year has been. You mail it from the retreat house post box on the last morning, and whether he answers is not the point; the point is that you have kept a small promise in a year that has mostly been about keeping large ones.",
+          "resolvesThread": "y1_promised_to_write",
+          "effects": [
+            { "target": "flag", "key": "y1_wrote_to_departed", "value": true },
+            { "target": "pillar", "key": "human", "delta": 2 },
+            { "target": "honesty", "key": "", "delta": 1 },
+            { "target": "pillar", "key": "spiritual", "delta": 1 }
+          ]
+        },
+        {
+          "id": "full_silence",
+          "label": "Keep the silence absolutely, all eight days, whatever comes up through it",
+          "outcome": "Nothing is resolved and something is settled, which the old man had told you was the distinction. On the last evening you realize you have not thought about the phone, the news, or the wall in five days, and that the psalms at Vespers have stopped being a text and become a place you go. It does not last. You now know it exists.",
+          "effects": [
+            { "target": "pillar", "key": "spiritual", "delta": 3 },
+            { "target": "stat", "key": "piety", "delta": 2 }
+          ]
+        },
+        {
+          "id": "walk_the_grounds",
+          "label": "Let the retreat fray a little: walk the lake every afternoon and let your mind go where it wants",
+          "outcome": "The retreat master does not object; he says the lake is also part of the retreat house. You walk twelve miles in four days and think about nothing holy and come back to the chapel each evening a little more like a person and a little less like a project. It is not the retreat they intended. It may be the one you needed.",
+          "effects": [
+            { "target": "pillar", "key": "spiritual", "delta": 1 },
+            { "target": "pillar", "key": "human", "delta": 2 }
+          ]
+        },
+        {
+          "id": "general_confession",
+          "label": "Ask the retreat master to hear a general confession of the whole year",
+          "outcome": "He hears it sitting on a bench by the lake because his hip will not take the confessional. It takes an hour. He gives you a penance of one Our Father, which seems disproportionate until you understand that he means it, and absolves you in a voice like gravel, and you walk back up the hill to the house with no idea what you weigh.",
+          "effects": [
+            { "target": "pillar", "key": "spiritual", "delta": 2 },
+            { "target": "honesty", "key": "", "delta": 1 },
+            { "target": "stat", "key": "piety", "delta": 1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "y1_bearing_silence",
+      "phase": "seminary",
+      "yearGate": [1],
+      "pressure": ["doubt"],
+      "severity": "CRITICAL",
+      "category": "personal",
+      "baseWeight": 14,
+      "beat": "propaedeutic",
+      "bias": [
+        { "when": { "type": "flag", "key": "motive:running", "value": true }, "multiplier": 1.5 },
+        { "when": { "type": "flag", "key": "family:large", "value": true }, "multiplier": 1.5 },
+        { "when": { "type": "flag", "key": "path:high_school", "value": true }, "multiplier": 1.5 },
+        { "when": { "type": "flag", "key": "y1_kept_phone", "value": true }, "multiplier": 1.5 }
+      ],
+      "suppressYears": 4,
+      "once": true,
+      "title": "The grand silence",
+      "body": "The house keeps the grand silence from Compline until after Lauds, and in February it is the longest silence of the year, because the days are short and the dark comes down at half past four and there is nothing after supper but the corridor and the chapel and your room. You have been here five months. The radiator ticks. Somewhere on the floor a man is crying, quietly and with discipline, the way men cry who do not want to be heard, and there is no rule that says you cannot go to him and every rule that says you should not. You have learned by now what the silence is. It is not the absence of the phone or the news or your mother's voice. It is the absence of anything that will rescue you from yourself. At home there was always a next thing. Here the next thing is Lauds, and it is nine hours away, and the only company in between is whatever you brought in with you, and you are beginning to see what that is. This is the year's question. It is being asked tonight, plainly, with the light off, and you are the only one who can hear it.",
+      "flavorPrompt": "The propaedeutic beat: the grand silence in February, alone in a cold room, a classmate crying down the hall. Whether the player can bear being left with himself. Interior, unhurried, without consolation.",
+      "choices": [
+        {
+          "id": "bear_it",
+          "label": "Lie still. Let it ask. Do not answer with anything but staying.",
+          "outcome": "You do not sleep much. Toward four the radiator stops and the cold comes into the room, and something in you that had been waiting to be rescued stops waiting, not in despair but as a man stops waiting for a bus he has decided to walk past. At Lauds your voice is hoarse. {@rector}, passing in the sacristy afterward, looks at you a half-second longer than usual and says nothing at all.",
+          "effects": [
+            { "target": "flag", "key": "y1_bore_silence", "value": true },
+            { "target": "pillar", "key": "spiritual", "delta": 4 },
+            { "target": "stat", "key": "piety", "delta": 2 },
+            { "target": "pillar", "key": "human", "delta": 1 }
+          ]
+        },
+        {
+          "id": "go_to_him",
+          "label": "Break the silence. Go down the corridor and knock.",
+          "outcome": "It is {@closest_classmate}. He lets you in and does not pretend, and you sit on his floor with your backs against the bed for two hours saying almost nothing, which is not the silence the house had in mind and is, you both suspect, closer to what it is for. In the morning neither of you mentions it. You have broken a rule and kept a man, and you would do it again.",
+          "effects": [
+            { "target": "flag", "key": "y1_broke_silence_with_friend", "value": true },
+            { "target": "relationship", "key": "@closest_classmate", "delta": 14 },
+            { "target": "pillar", "key": "human", "delta": 3 },
+            { "target": "pillar", "key": "spiritual", "delta": -1 }
+          ]
+        },
+        {
+          "id": "tell_director",
+          "label": "Bear the night, and take the whole of it to your director in the morning",
+          "outcome": "{@spiritual_director} hears it through, the radiator and the man crying and the question with the light off, and says that you have described the propaedeutic year more exactly than the program does. He does not tell you what the answer is. He tells you that you heard the question, and that some men here never do, and that hearing it is the work.",
+          "effects": [
+            { "target": "relationship", "key": "@spiritual_director", "delta": 7 },
+            { "target": "pillar", "key": "spiritual", "delta": 3 },
+            { "target": "honesty", "key": "", "delta": 1 }
+          ]
+        },
+        {
+          "id": "leave",
+          "label": "Answer it honestly. You cannot bear this, and you would rather know now.",
+          "outcome": "You tell {@rector} in the morning and he does not argue. He says the propaedeutic year exists so that this can be found out at the cost of a year and not a life, and that you have used it for what it is for. The house sees you off on Saturday. The silence you carry out with you is a different one, and it is yours.",
+          "effects": [
+            { "target": "end", "key": "left_seminary", "value": "You left in the February of the propaedeutic year, having answered the year's one question honestly: you could not bear the silence, and you were not willing to pretend for six more years that you could. The rector shook your hand at the door and told you it was a good use of a year. It was." }
+          ]
+        }
+      ]
+    }
+  ]
+}

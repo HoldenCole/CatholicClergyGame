@@ -1,0 +1,776 @@
+{
+  "_notes": "Family drama for the parish years, keyed to the family chosen at creation (flags family:*) and to the family NPCs (@mother, @father, @sibling resolve only while that person is living). Weights are a third of an ordinary event's and suppression runs four to six years, so a career meets a handful of these, not a season of them. Deaths are once. Sensitive matters (addiction, doubt, estrangement) are authored only; no flavorPrompt. Flags: fam_annulment_helped, fam_sibling_lapsed, fam_father_came, fam_father_reconciled, fam_mother_near, fam_mother_home, fam_mother_remarried, fam_bailed_sibling, fam_sibling_seen, fam_went_to_deathbed, fam_house_sold, fam_missed_wedding, fam_missed_confirmation, fam_reunion_mass, fam_went_as_brother, fam_stayed_away, fam_parent_placed, fam_could_leave.",
+  "events": [
+    {
+      "id": "fam_sibling_divorce",
+      "phase": ["parochial_vicar", "pastor"],
+      "pressure": ["friendship_vs_duty", "belief_vs_safety"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 4,
+      "suppressYears": 5,
+      "requires": [
+        { "type": "any", "inner": [
+          { "type": "flag", "key": "family:supportive", "value": true },
+          { "type": "flag", "key": "family:large", "value": true },
+          { "type": "flag", "key": "family:opposed", "value": true },
+          { "type": "flag", "key": "family:dependent", "value": true }
+        ] }
+      ],
+      "title": "The Marriage Is Over",
+      "body": "{@sibling} calls on a Tuesday and says it in the first sentence, the way people say the thing they have rehearsed. The marriage is over. There was no one else, or there was, and it does not matter which. The children are staying in the house. Then the question, which is the reason for the call: is there anything you can do. Not about the marriage; about the Church. Whether there is a way to have it never have been, which is what an annulment sounds like to someone who has not studied it, and whether a priest in the family can hurry it, which is what everyone believes and no one will say. You know the tribunal. You know the judicial vicar. You know exactly how it works and exactly how it does not, and your brother or sister is crying on the phone.",
+      "choices": [
+        {
+          "id": "walk_them_through",
+          "label": "Explain the process honestly and help with the petition, and nothing more",
+          "default": true,
+          "outcome": "You explain what a declaration of nullity is and is not, and that it takes a year and sometimes two, and that you cannot sit on the case and would not. You help with the petition on three evenings. It is granted, eventually, on grounds you would have guessed. The family says the priest fixed it. You let them.",
+          "effects": [
+            { "target": "relationship", "key": "@sibling", "delta": 10 },
+            { "target": "stat", "key": "knowledge", "delta": 1 },
+            { "target": "flag", "key": "fam_annulment_helped", "value": true }
+          ]
+        },
+        {
+          "id": "call_the_judicial_vicar",
+          "label": "Call the judicial vicar and ask him, as a favor, to look at it himself",
+          "requires": [{ "type": "reputation", "key": "chancery", "op": ">=", "value": 15 }],
+          "outcome": "He says of course, in the voice of a man who has been asked before. The case moves faster than cases move. Your sibling is grateful. The judicial vicar is not, exactly, and the next time you need something from the tribunal you will remember that you have already spent it.",
+          "effects": [
+            { "target": "relationship", "key": "@sibling", "delta": 14 },
+            { "target": "reputation", "key": "chancery", "delta": -3 },
+            { "target": "honesty", "key": "", "delta": -1 },
+            { "target": "flag", "key": "fam_annulment_helped", "value": true }
+          ]
+        },
+        {
+          "id": "just_the_brother",
+          "label": "Say you cannot be their priest in this, only their brother, and drive over",
+          "outcome": "You do not talk about the tribunal. You sit at the kitchen table until midnight and fix the thing on the porch that has been broken since Easter. The petition gets filed by someone else, later, and takes as long as it takes. You were not useful. You were there.",
+          "effects": [
+            { "target": "relationship", "key": "@sibling", "delta": 8 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "ap", "key": "", "delta": -1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fam_sibling_leaves",
+      "phase": ["parochial_vicar", "pastor"],
+      "pressure": ["belief_vs_safety", "friendship_vs_duty"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 4,
+      "suppressYears": 6,
+      "once": true,
+      "requires": [
+        { "type": "any", "inner": [
+          { "type": "flag", "key": "family:large", "value": true },
+          { "type": "flag", "key": "family:supportive", "value": true }
+        ] }
+      ],
+      "title": "They Have Stopped Going",
+      "body": "It comes out at Christmas dinner, the way these things do, sideways: the baby was not baptized. {@sibling} says it plainly when your mother goes quiet, and then says the rest, which is that they have not been to Mass in two years and are not going back, and that it is nothing you did, and that it is not a phase, and that they would rather you did not try. Your mother looks at you. Everyone at the table looks at you, because you are the priest, and a priest in the family is supposed to be good for exactly this. Your sibling is looking at you too, and the look says please do not.",
+      "choices": [
+        {
+          "id": "let_it_be",
+          "label": "Say nothing at the table, and nothing after, and keep calling on Sundays",
+          "default": true,
+          "outcome": "You do not try. You call every Sunday about nothing, the way you always have. Years later, at a funeral, your sibling stands next to you at the graveside and says, quietly, that you were the only one who did not make it a thing. It is not a return. It is not nothing.",
+          "effects": [
+            { "target": "relationship", "key": "@sibling", "delta": 6 },
+            { "target": "flag", "key": "fam_sibling_lapsed", "value": true }
+          ]
+        },
+        {
+          "id": "make_the_case",
+          "label": "Make the case, gently, over the dishes",
+          "outcome": "You say what you believe, which is your job, and you say it as well as you have ever said it. Your sibling listens and dries the plates and says thank you, and means it, and does not come back. The next Christmas is a little more careful.",
+          "effects": [
+            { "target": "relationship", "key": "@sibling", "delta": -4 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "flag", "key": "fam_sibling_lapsed", "value": true }
+          ]
+        },
+        {
+          "id": "take_your_mother_aside",
+          "label": "Take your mother aside and tell her to leave it alone",
+          "outcome": "Your mother does not leave it alone, because she cannot, but she leaves it alone in front of you, which is what you asked. Your sibling notices that the pressure stopped and guesses why. Nobody thanks you. Christmas is Christmas.",
+          "effects": [
+            { "target": "relationship", "key": "@sibling", "delta": 4 },
+            { "target": "relationship", "key": "@mother", "delta": -3 },
+            { "target": "flag", "key": "fam_sibling_lapsed", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fam_opposed_father_visits",
+      "phase": ["parochial_vicar", "pastor"],
+      "pressure": ["friendship_vs_duty"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 4,
+      "suppressYears": 4,
+      "requires": [
+        { "type": "flag", "key": "family:opposed", "value": true },
+        { "type": "years_ordained", "op": ">=", "value": 1 }
+      ],
+      "title": "The Man in the Back",
+      "body": "You see him during the homily. {@father} is in the last pew, in the coat he wears to funerals, alone. He did not come to the ordination. He came to the first Mass, for twenty minutes, and left before the reception. He has not been in a church of yours since, and he has not been asked, and now he is in the back of this one, on an ordinary Sunday, with no one to have brought him. You lose your place in the homily and find it. At Communion he does not come up. After Mass he is in the parking lot by his truck, not leaving, not coming over.",
+      "choices": [
+        {
+          "id": "go_to_him",
+          "label": "Walk out to the truck in your vestments and ask him to lunch",
+          "default": true,
+          "outcome": "He says he was in the area, which he was not. Lunch is an hour at a diner and you talk about the Bears. He does not say why he came and you do not ask. He comes again, some months later, and sits in the same pew, and this becomes a thing that happens.",
+          "effects": [
+            { "target": "relationship", "key": "@father", "delta": 14 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "flag", "key": "fam_father_came", "value": true }
+          ]
+        },
+        {
+          "id": "let_him_come_to_you",
+          "label": "Stand at the door and greet everyone, and let him decide",
+          "outcome": "He gets in the truck. He does not drive away for a long time. Then he does. You do not hear about it from your mother for a month, and when you do, she says he was glad he went, and you have to take her word for it.",
+          "effects": [
+            { "target": "relationship", "key": "@father", "delta": 4 },
+            { "target": "relationship", "key": "@mother", "delta": 2 }
+          ]
+        },
+        {
+          "id": "preach_to_him",
+          "label": "Finish the homily to the last pew and let him hear what you do",
+          "requires": [{ "type": "stat", "key": "charisma", "op": ">=", "value": 50 }],
+          "outcome": "You do not change a word, but you say it to him, and a homily said to one man is a different thing. He looks at his hands. He is gone before the last hymn. Your mother says he came home and did not turn on the television, which in that house is a sign.",
+          "effects": [
+            { "target": "relationship", "key": "@father", "delta": 8 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "flag", "key": "fam_father_came", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fam_opposed_father_stroke",
+      "phase": ["parochial_vicar", "pastor"],
+      "pressure": ["friendship_vs_duty", "doubt"],
+      "severity": "MAJOR",
+      "category": "personal",
+      "baseWeight": 3,
+      "suppressYears": 6,
+      "once": true,
+      "requires": [
+        { "type": "flag", "key": "family:opposed", "value": true },
+        { "type": "years_ordained", "op": ">=", "value": 3 }
+      ],
+      "bias": [{ "when": { "type": "flag", "key": "fam_father_came", "value": true }, "multiplier": 1.5 }],
+      "title": "His Right Side",
+      "body": "Your mother calls from the hospital and says the word stroke and then says he is asking for you, which she has never said in any sentence before. {@father} is in a bed with the right side of him gone quiet and his speech coming out in the wrong order, and he is angry at the nurse and at the ceiling and at the fact that you are standing there in a collar, which is the first thing he sees. He is going to live. He is going to need a year, and someone to drive him, and a ramp on the porch, and he is going to be a worse man for a while before he is a better one, and your mother cannot do it alone, and your sibling has children, and you have a parish.",
+      "choices": [
+        {
+          "id": "anoint_him",
+          "label": "Anoint him, whether he wants it or not, and stay the night",
+          "default": true,
+          "outcome": "He does not stop you. That is the whole of it: he does not stop you. In the morning he says, in the wrong order, something that might be about the ramp. You build the ramp on your day off with your sibling's husband. It is the first thing you have built together.",
+          "effects": [
+            { "target": "relationship", "key": "@father", "delta": 18 },
+            { "target": "relationship", "key": "@mother", "delta": 8 },
+            { "target": "stat", "key": "piety", "delta": 2 },
+            { "target": "flag", "key": "fam_father_reconciled", "value": true }
+          ]
+        },
+        {
+          "id": "take_a_month",
+          "label": "Ask the pastor, or the chancery, for a month to get him home",
+          "outcome": "You get three weeks and it costs you something in the office. You drive him to therapy and he curses you in the car, and then one day he does not. The parish notices you were gone. The chancery writes it down as a family leave, which is what it was.",
+          "effects": [
+            { "target": "relationship", "key": "@father", "delta": 12 },
+            { "target": "relationship", "key": "@mother", "delta": 10 },
+            { "target": "reputation", "key": "chancery", "delta": -3 },
+            { "target": "reputation", "key": "parishioners", "delta": -2 },
+            { "target": "ap", "key": "", "delta": -3 },
+            { "target": "flag", "key": "fam_father_reconciled", "value": true }
+          ]
+        },
+        {
+          "id": "weekends",
+          "label": "Come on your day off and every Sunday night, and let your sibling carry the rest",
+          "outcome": "It is what a priest can do and your sibling knows it and does not forgive it entirely. Your father recovers most of what he lost. He does not say anything about the collar again, which you take as the best he can do, and it may be.",
+          "effects": [
+            { "target": "relationship", "key": "@father", "delta": 6 },
+            { "target": "relationship", "key": "@sibling", "delta": -6 },
+            { "target": "stat", "key": "piety", "delta": -1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fam_widowed_mother_move",
+      "phase": ["parochial_vicar", "pastor"],
+      "pressure": ["friendship_vs_duty", "money"],
+      "severity": "MAJOR",
+      "category": "personal",
+      "baseWeight": 4,
+      "suppressYears": 6,
+      "once": true,
+      "requires": [
+        { "type": "flag", "key": "family:widowed_mother", "value": true },
+        { "type": "years_ordained", "op": ">=", "value": 2 }
+      ],
+      "title": "The House Is Too Much",
+      "body": "{@mother} falls on the back steps and is fine, and then falls in the kitchen and is fine, and the third time the neighbor calls you instead of her. The house is the house you grew up in. It has a furnace older than you and stairs she takes one at a time now and a garden she cannot kneel in. She will not say the word, so you say it: it is too much. There is no one else. That is what a widowed mother of a priest means, and you knew it at ordination and it did not feel like this. There is a rectory with a spare room and a pastor who would say yes and mean maybe. There is a place with a chapel and a waiting list. There is her chair, which she is sitting in, saying she is fine.",
+      "choices": [
+        {
+          "id": "near_the_parish",
+          "label": "Find her an apartment ten minutes from the parish and drive her to Mass",
+          "default": true,
+          "outcome": "The apartment is small and she hates it for a month and then she has the Rosary group over. You see her more than you have since seminary. The next assignment, when it comes, will be a question the chancery does not know it is asking.",
+          "effects": [
+            { "target": "relationship", "key": "@mother", "delta": 12 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "ap", "key": "", "delta": -1 },
+            { "target": "flag", "key": "fam_mother_near", "value": true }
+          ]
+        },
+        {
+          "id": "the_home",
+          "label": "The place with the chapel, and visit on Thursdays",
+          "outcome": "The sisters run it well. She has a room with a window and a priest who is not her son says Mass on Sundays, and she tells him about you. On Thursdays she asks when she is going home. You have learned what to say. It does not get easier to say.",
+          "effects": [
+            { "target": "relationship", "key": "@mother", "delta": -4 },
+            { "target": "stat", "key": "piety", "delta": -1 },
+            { "target": "money", "key": "cash", "delta": 0 },
+            { "target": "flag", "key": "fam_mother_home", "value": true }
+          ]
+        },
+        {
+          "id": "the_rectory",
+          "label": "Ask the pastor for the spare room in the rectory",
+          "requires": [{ "type": "relationship", "npcId": "@pastor", "op": ">=", "value": 15 }],
+          "outcome": "The pastor says yes and means it, and the rectory has a woman in it for the first time in forty years, and the housekeeper resigns. Your mother irons his shirts. The chancery hears and says nothing, which is permission. When you are moved, she will have to be moved too.",
+          "effects": [
+            { "target": "relationship", "key": "@mother", "delta": 15 },
+            { "target": "relationship", "key": "@pastor", "delta": 4 },
+            { "target": "relationship", "key": "@secretary", "delta": -5 },
+            { "target": "reputation", "key": "brother_priests", "delta": -2 },
+            { "target": "flag", "key": "fam_mother_near", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fam_widowed_mother_suitor",
+      "phase": ["parochial_vicar", "pastor"],
+      "pressure": ["friendship_vs_duty"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 3,
+      "suppressYears": 8,
+      "once": true,
+      "requires": [
+        { "type": "flag", "key": "family:widowed_mother", "value": true },
+        { "type": "years_ordained", "op": ">=", "value": 1 }
+      ],
+      "title": "A Widower From the Nine O'Clock",
+      "body": "{@mother} has mentioned a man three times, each time as if for the first, and the fourth time she says his name and then says she would like you to meet him. He is a widower from her parish, a retired plumber, a daily communicant, and he has asked her to marry him. She is seventy. She is embarrassed and she is happy and she is asking you, in the order she asks everything, for permission and then for the wedding: would you witness it, in your father's parish, in front of your father's friends. You have not thought about your father's chair at the table in years. You think about it now.",
+      "choices": [
+        {
+          "id": "witness_it",
+          "label": "Witness the marriage yourself, and mean the blessing",
+          "default": true,
+          "outcome": "The church is a third full and every woman in it cries, and the plumber's hands shake, and you get through the vows because you have done a hundred and this is the hundred and first. At the lunch your mother is someone you have not met, a woman with a husband. You like her. The house is not too much anymore; it has two people in it.",
+          "effects": [
+            { "target": "relationship", "key": "@mother", "delta": 15 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "flag", "key": "fam_mother_remarried", "value": true }
+          ]
+        },
+        {
+          "id": "bless_but_not_witness",
+          "label": "Give the blessing, but ask her pastor to witness it; you could not get through it",
+          "outcome": "She understands, or says she does. Her pastor does it well. You sit in the front pew in a collar and are, for an hour, only her son, which is what she wanted the first time and did not get. It is a good marriage. You see her less.",
+          "effects": [
+            { "target": "relationship", "key": "@mother", "delta": 6 },
+            { "target": "flag", "key": "fam_mother_remarried", "value": true }
+          ]
+        },
+        {
+          "id": "not_yet",
+          "label": "Ask her to wait a year, for your father's sake",
+          "outcome": "She waits, because you asked, and the plumber waits, because he is a patient man. A year later she does not ask again; she tells you the date. You witness it, and it is fine, and you know what the year cost her and who charged it.",
+          "effects": [
+            { "target": "relationship", "key": "@mother", "delta": -8 },
+            { "target": "honesty", "key": "", "delta": -1 },
+            { "target": "flag", "key": "fam_mother_remarried", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fam_dependent_jail",
+      "phase": ["parochial_vicar", "pastor"],
+      "pressure": ["friendship_vs_duty", "money"],
+      "severity": "MAJOR",
+      "category": "personal",
+      "baseWeight": 4,
+      "suppressYears": 4,
+      "requires": [{ "type": "flag", "key": "family:dependent", "value": true }],
+      "bias": [{ "when": { "type": "flag", "key": "fam_bailed_sibling", "value": true }, "multiplier": 1.5 }],
+      "title": "County",
+      "body": "The number on the phone is the county jail's and the voice is {@sibling}'s, and it is three in the morning and there is a Mass at seven. Possession, or a bar, or a car; the charge changes and the call does not. Bail is two thousand dollars. There is a public defender who has not called back. There is a job that will be gone by Monday if nobody is at it Monday. Your sibling is not crying this time, which is worse, and is saying your name the way it was said when you were both small and something had been broken and someone had to be told. You have two thousand dollars, roughly, in the account the diocese does not see. You have said, more than once, never again.",
+      "choices": [
+        {
+          "id": "post_bail",
+          "label": "Post the bail before the seven o'clock and say nothing to anyone",
+          "default": true,
+          "outcome": "You are at the jail at five and at the altar at seven and nobody knows but the desk sergeant, who has seen collars before. Your sibling is out. The job is not. The two thousand dollars is gone, and you have said never again again, and you both know what that is worth.",
+          "effects": [
+            { "target": "relationship", "key": "@sibling", "delta": 8 },
+            { "target": "stat", "key": "piety", "delta": -1 },
+            { "target": "flag", "key": "fam_bailed_sibling", "value": true },
+            { "target": "risk", "key": "fam_jail", "value": "A sibling with a record, and a priest who keeps posting bail", "delta": 1 }
+          ]
+        },
+        {
+          "id": "the_lawyer_not_the_bail",
+          "label": "Call a lawyer from the parish instead of paying, and let the weekend happen",
+          "requires": [{ "type": "reputation", "key": "parishioners", "op": ">=", "value": 10 }],
+          "outcome": "The lawyer goes Monday morning and gets it reduced and does not send a bill. Your sibling spends a weekend in county and does not forgive you for it for a year, and then, in the second year, says it was the weekend that did it. You do not believe that. You want to.",
+          "effects": [
+            { "target": "relationship", "key": "@sibling", "delta": -6 },
+            { "target": "reputation", "key": "parishioners", "delta": 1 },
+            { "target": "stat", "key": "administration", "delta": 1 }
+          ]
+        },
+        {
+          "id": "not_this_time",
+          "label": "Say no, and stay on the phone until they hang up",
+          "outcome": "You say no and you do not hang up, and the call goes on for an hour of things that are hard to hear. They hang up. Somebody else posts it, or nobody does. You say the seven o'clock and you do not remember it afterward. The next call is a long time coming, and when it comes it is different.",
+          "effects": [
+            { "target": "relationship", "key": "@sibling", "delta": -12 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "honesty", "key": "", "delta": 1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fam_dependent_clean_year",
+      "phase": ["parochial_vicar", "pastor"],
+      "pressure": ["friendship_vs_duty"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 3,
+      "suppressYears": 5,
+      "requires": [
+        { "type": "flag", "key": "family:dependent", "value": true },
+        { "type": "years_ordained", "op": ">=", "value": 2 }
+      ],
+      "title": "A Year",
+      "body": "{@sibling} has a year. A chip, an actual chip, from a church basement in a town you have never visited, and a job that has lasted long enough to have a boss's name in it, and a voice on the phone you had forgotten. The ask is small and it is enormous: to come to your parish on a Sunday and sit in the front, and be introduced to nobody, and have a brother who is a priest in a place where nobody knows what the last ten years were. Just to be seen, once, as someone's family and not someone's problem. There is a Knights breakfast after that Mass. There are people in the parish who know exactly what a year looks like and what it looks like when it ends.",
+      "choices": [
+        {
+          "id": "front_pew",
+          "label": "The front pew, and the breakfast, and your arm around them at the door",
+          "default": true,
+          "outcome": "They sit in the front and you say nothing from the pulpit and everything at the door. The Knights feed them pancakes. An old man at the breakfast, who has thirty years, shakes their hand a beat too long and says nothing, and they understand each other. It is the best Sunday you have had in the parish.",
+          "effects": [
+            { "target": "relationship", "key": "@sibling", "delta": 14 },
+            { "target": "stat", "key": "piety", "delta": 2 },
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "flag", "key": "fam_sibling_seen", "value": true }
+          ]
+        },
+        {
+          "id": "quietly",
+          "label": "Yes, but the back pew, and lunch somewhere else",
+          "outcome": "They come and sit in the back and leave before the breakfast, and lunch is at a place two towns over, and it is a good lunch. They do not say anything about the back pew. Six months later, when the year is eighteen months, they mention it, once, and let it go.",
+          "effects": [
+            { "target": "relationship", "key": "@sibling", "delta": 4 },
+            { "target": "honesty", "key": "", "delta": -1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fam_estranged_letter",
+      "phase": ["parochial_vicar", "pastor"],
+      "pressure": ["friendship_vs_duty", "doubt"],
+      "severity": "MAJOR",
+      "category": "personal",
+      "baseWeight": 3,
+      "suppressYears": 8,
+      "once": true,
+      "requires": [
+        { "type": "flag", "key": "family:estranged", "value": true },
+        { "type": "years_ordained", "op": ">=", "value": 2 }
+      ],
+      "title": "A Letter With the Old Address",
+      "body": "It has been forwarded twice and it is from {@sibling}, who has not written since the card that said you were making a mistake. Your father is dying, in a hospital in the city you left, and he has asked, in the way he asks things, whether the priest would come. Your sibling writes that they are only passing it along. Your sibling writes that they do not know what he wants from you and that it is probably nothing good and that they will understand if you do not come, and then writes a phone number, and then, at the bottom, in different ink, that it would help them if you came. That last line is the first thing your sibling has asked of you in fifteen years.",
+      "choices": [
+        {
+          "id": "go",
+          "label": "Go, tonight, in the collar",
+          "default": true,
+          "outcome": "He is smaller than you remember and he does not say anything you had hoped for. You anoint him because you are a priest and he does not stop you. Your sibling is in the hallway and you sit on the floor together for an hour and do not talk about him. That is what the letter was for.",
+          "effects": [
+            { "target": "relationship", "key": "@sibling", "delta": 18 },
+            { "target": "stat", "key": "piety", "delta": 2 },
+            { "target": "ap", "key": "", "delta": -2 },
+            { "target": "flag", "key": "fam_went_to_deathbed", "value": true }
+          ]
+        },
+        {
+          "id": "send_a_priest",
+          "label": "Call the hospital chaplain, and write to your sibling instead",
+          "outcome": "The chaplain goes and does it properly and calls you afterward, kindly, with nothing to report. Your letter to your sibling is the longest you have written to anyone. There is no answer for a year, and then a card at Christmas, which is one more than before.",
+          "effects": [
+            { "target": "relationship", "key": "@sibling", "delta": 5 },
+            { "target": "stat", "key": "piety", "delta": -1 }
+          ]
+        },
+        {
+          "id": "do_not_go",
+          "label": "Do not go. Some doors were closed by the man who is dying behind them",
+          "outcome": "You do not go, and he dies, and your sibling does not write again. You tell your spiritual director and he does not tell you it was wrong, which you had wanted him to. You will think about the hallway you were not in for the rest of your life.",
+          "effects": [
+            { "target": "relationship", "key": "@sibling", "delta": -15 },
+            { "target": "stat", "key": "piety", "delta": -2 },
+            { "target": "honesty", "key": "", "delta": 1 },
+            { "target": "flag", "key": "fam_stayed_away", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fam_estranged_house",
+      "phase": ["parochial_vicar", "pastor"],
+      "pressure": ["money", "friendship_vs_duty"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 3,
+      "suppressYears": 8,
+      "once": true,
+      "requires": [
+        { "type": "flag", "key": "family:estranged", "value": true },
+        { "type": "years_ordained", "op": ">=", "value": 4 }
+      ],
+      "bias": [{ "when": { "type": "flag", "key": "fam_went_to_deathbed", "value": true }, "multiplier": 2 }],
+      "title": "The Estate",
+      "body": "A lawyer you have never heard of writes that you are a named heir, which is news, to a house you have not entered in twenty years, which is not. {@sibling} is the other heir. The house is worth something, in the way of houses in that neighborhood now, and it is full of things nobody wants and one or two things you do. Your sibling wants to sell and has said so through the lawyer, which is how your sibling says things. Half is a great deal of money for a priest. Half is also the exact shape of every argument that family ever had. The lawyer would like a decision in thirty days and does not care which one.",
+      "choices": [
+        {
+          "id": "sell_and_split",
+          "label": "Sell it, split it, and put your half toward the parish's debt",
+          "default": true,
+          "outcome": "It sells in a month. Your half is more than you have ever had at once and it goes to the parish in a check with no name on it, which the finance council spends a meeting guessing about. Your sibling hears what you did with it and does not know what to make of that, and calls, once, to ask.",
+          "effects": [
+            { "target": "money", "key": "cash", "delta": 45000 },
+            { "target": "relationship", "key": "@sibling", "delta": 6 },
+            { "target": "reputation", "key": "parishioners", "delta": 3 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "flag", "key": "fam_house_sold", "value": true }
+          ]
+        },
+        {
+          "id": "give_your_half",
+          "label": "Sign your half over to your sibling and ask for the photographs",
+          "outcome": "The lawyer does not understand and does it anyway. Your sibling sends the photographs, in a box, with no note, and then, a month later, a note. It says thank you. It says nothing else. It is the first thing your sibling has ever given you, and it cost you a house.",
+          "effects": [
+            { "target": "relationship", "key": "@sibling", "delta": 14 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "flag", "key": "fam_house_sold", "value": true }
+          ]
+        },
+        {
+          "id": "fight_it",
+          "label": "Hire your own lawyer; the house should not be sold from under you by letter",
+          "requires": [{ "type": "stat", "key": "administration", "op": ">=", "value": 45 }],
+          "outcome": "It takes two years and both lawyers. You win something and lose the rest, and the house sells anyway, for less, and the money that reaches you is smaller than the other choice would have made it. Your sibling does not write again. You were right, and it was the wrong hill.",
+          "effects": [
+            { "target": "money", "key": "cash", "delta": 20000 },
+            { "target": "relationship", "key": "@sibling", "delta": -20 },
+            { "target": "stat", "key": "piety", "delta": -1 },
+            { "target": "flag", "key": "fam_house_sold", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fam_large_wedding_vs_confirmation",
+      "phase": ["parochial_vicar", "pastor"],
+      "pressure": ["friendship_vs_duty", "ambition_vs_integrity"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 4,
+      "suppressYears": 4,
+      "requires": [
+        { "type": "flag", "key": "family:large", "value": true },
+        { "type": "years_ordained", "op": ">=", "value": 2 }
+      ],
+      "title": "The Same Saturday",
+      "body": "{@sibling}'s oldest is getting married and the date is the Saturday in May, and the family has assumed since the engagement that you will do the wedding, because there is a priest in the family and that is what he is for. The Saturday in May is also Confirmation, with the bishop, who confirms at {parish} once every three years and does not move the date for anyone, and who notices which priests are on the altar with him. You could get another priest to take the wedding. You could ask the pastor to make your excuses to the bishop. Your sibling has already told the bride you said yes, which you did, two years ago, before there was a date.",
+      "choices": [
+        {
+          "id": "the_wedding",
+          "label": "The wedding. The bishop will be back in three years; the bride will not",
+          "default": true,
+          "outcome": "You do the wedding and it is a good wedding and your mother cries at the right part. The bishop confirms without you and asks, lightly, where you were, and is told, and says family comes first in a voice that files it. The bride names the first child after you.",
+          "effects": [
+            { "target": "relationship", "key": "@sibling", "delta": 12 },
+            { "target": "relationship", "key": "@mother", "delta": 5 },
+            { "target": "reputation", "key": "chancery", "delta": -3 },
+            { "target": "relationship", "key": "@bishop", "delta": -3 },
+            { "target": "flag", "key": "fam_missed_confirmation", "value": true }
+          ]
+        },
+        {
+          "id": "the_confirmation",
+          "label": "Confirmation. Find the bride a good priest and send a long letter",
+          "outcome": "A classmate does the wedding and does it well. You are on the altar with the bishop and he says your name at the reception. Your sibling says it is fine. Your mother says it is fine. It is not fine, and it is not mentioned, and at Thanksgiving you sit at the far end.",
+          "effects": [
+            { "target": "relationship", "key": "@sibling", "delta": -10 },
+            { "target": "relationship", "key": "@mother", "delta": -4 },
+            { "target": "reputation", "key": "chancery", "delta": 3 },
+            { "target": "relationship", "key": "@bishop", "delta": 2 },
+            { "target": "flag", "key": "fam_missed_wedding", "value": true }
+          ]
+        },
+        {
+          "id": "both",
+          "label": "Both: the wedding at eleven, Confirmation at four, and a fast car",
+          "requires": [{ "type": "stat", "key": "administration", "op": ">=", "value": 55 }],
+          "outcome": "You arrive at Confirmation with rice in your hair and vest in the sacristy while the procession forms. The bishop notices the rice and says nothing, which for him is a smile. You miss the wedding lunch. Everyone got what they wanted and you got a speeding ticket in a county you cannot name.",
+          "effects": [
+            { "target": "relationship", "key": "@sibling", "delta": 8 },
+            { "target": "reputation", "key": "chancery", "delta": 1 },
+            { "target": "stat", "key": "piety", "delta": -1 },
+            { "target": "ap", "key": "", "delta": -1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fam_large_reunion",
+      "phase": ["parochial_vicar", "pastor"],
+      "pressure": ["friendship_vs_duty"],
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 4,
+      "suppressYears": 5,
+      "requires": [{ "type": "flag", "key": "family:large", "value": true }],
+      "title": "The Reunion Mass",
+      "body": "The family reunion is at the lake in August and there are ninety people and a Mass on Sunday morning under the pavilion, and you are the Mass. This is understood. What is also understood, by everyone but you until {@sibling} tells you Friday night, is that two of your sisters have not spoken since Easter over something involving a will, a casserole dish, and a thing said about a husband, and that the family expects you to fix it, because a priest can, and because the homily is the only time both of them will be in the same place and unable to leave. Your mother has asked you to say something. Your sisters have each asked you to say nothing.",
+      "choices": [
+        {
+          "id": "say_something",
+          "label": "Preach about forgiveness to ninety people and two in particular",
+          "outcome": "You do it well enough that half the pavilion thinks it was about them. Your sisters hug afterward, stiffly, in front of everyone, because they have been left no exit. They speak again by Christmas, and each of them tells you privately that you took the other one's side.",
+          "effects": [
+            { "target": "relationship", "key": "@sibling", "delta": 3 },
+            { "target": "relationship", "key": "@mother", "delta": 8 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "flag", "key": "fam_reunion_mass", "value": true }
+          ]
+        },
+        {
+          "id": "say_nothing",
+          "label": "Say Mass, and preach on the Gospel of the day, and let them be grown women",
+          "default": true,
+          "outcome": "The Gospel is the laborers in the vineyard, which is about nothing and about everything, and you leave it there. Your mother is disappointed. Your sisters are relieved. They work it out in October without you, which is how it should have been done, and neither of them says so.",
+          "effects": [
+            { "target": "relationship", "key": "@mother", "delta": -3 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "flag", "key": "fam_reunion_mass", "value": true }
+          ]
+        },
+        {
+          "id": "the_dock",
+          "label": "Skip the homily and take the two of them out on the dock before Mass",
+          "requires": [{ "type": "stat", "key": "charisma", "op": ">=", "value": 55 }],
+          "outcome": "Twenty minutes on the dock with your feet in the water and no one else, and you do not say much, and you are their brother and not their priest. It is not fixed. It is started. Mass is ten minutes late and nobody minds.",
+          "effects": [
+            { "target": "relationship", "key": "@sibling", "delta": 8 },
+            { "target": "relationship", "key": "@mother", "delta": 4 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "flag", "key": "fam_reunion_mass", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fam_sibling_wedding_outside",
+      "phase": ["parochial_vicar", "pastor"],
+      "pressure": ["friendship_vs_duty", "belief_vs_safety"],
+      "severity": "MAJOR",
+      "category": "personal",
+      "baseWeight": 3,
+      "suppressYears": 8,
+      "once": true,
+      "requires": [
+        { "type": "any", "inner": [
+          { "type": "flag", "key": "family:supportive", "value": true },
+          { "type": "flag", "key": "family:large", "value": true },
+          { "type": "flag", "key": "family:opposed", "value": true }
+        ] },
+        { "type": "relationship", "npcId": "@sibling", "op": ">=", "value": 5 }
+      ],
+      "title": "As a Brother",
+      "body": "{@sibling} tells you at the kitchen table, with your mother out of the room on purpose, that there is someone, and has been for years, and that they are getting married in the spring, and that it will not be in a church because it cannot be, and you understand before the sentence ends what is being said. Your sibling is not asking you to bless anything. Your sibling is asking whether you will come, as a brother, and sit in a chair, and whether you will still come to Christmas after. Your mother knows. Your mother is in the next room waiting to see what the priest does, because whatever the priest does, the family will do.",
+      "choices": [
+        {
+          "id": "go_as_brother",
+          "label": "Go, sit in a chair, and be a brother; wear the collar to Christmas as always",
+          "default": true,
+          "outcome": "You sit in the third row in a jacket and tie and clap when people clap. Someone photographs it and someone else, in time, sends the photograph somewhere. Your sibling holds your hand at the table afterward for a second too long. Christmas is Christmas, and everyone comes.",
+          "effects": [
+            { "target": "relationship", "key": "@sibling", "delta": 18 },
+            { "target": "relationship", "key": "@mother", "delta": 4 },
+            { "target": "reputation", "key": "traditional_bloc", "delta": -4 },
+            { "target": "risk", "key": "fam_photo", "value": "A photograph from a family wedding the Church could not bless", "delta": 1 },
+            { "target": "flag", "key": "fam_went_as_brother", "value": true }
+          ]
+        },
+        {
+          "id": "not_the_wedding",
+          "label": "Not the wedding; dinner the night before, with both of them, and Christmas always",
+          "outcome": "Dinner is long and good and the partner is someone you would have liked in any other life. You are not in the photographs. Your sibling understands and does not, in the way people do, and comes to Christmas, and the empty chair at the wedding is a thing neither of you brings up for a very long time.",
+          "effects": [
+            { "target": "relationship", "key": "@sibling", "delta": 2 },
+            { "target": "relationship", "key": "@mother", "delta": 2 },
+            { "target": "stat", "key": "piety", "delta": 1 }
+          ]
+        },
+        {
+          "id": "cannot",
+          "label": "Say you cannot go, and that you love them, and mean both",
+          "outcome": "You say it as well as it can be said and it lands as it was always going to land. Your sibling does not come to Christmas. Your mother goes to the wedding without you and does not tell you about it, and the family learns to have two Christmases, and you have made that.",
+          "effects": [
+            { "target": "relationship", "key": "@sibling", "delta": -22 },
+            { "target": "relationship", "key": "@mother", "delta": -6 },
+            { "target": "reputation", "key": "traditional_bloc", "delta": 3 },
+            { "target": "stat", "key": "piety", "delta": -1 },
+            { "target": "flag", "key": "fam_stayed_away", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fam_parent_forgetting",
+      "phase": ["parochial_vicar", "pastor"],
+      "pressure": ["friendship_vs_duty", "money"],
+      "severity": "MAJOR",
+      "category": "personal",
+      "baseWeight": 3,
+      "suppressYears": 8,
+      "once": true,
+      "requires": [
+        { "type": "any", "inner": [
+          { "type": "flag", "key": "family:supportive", "value": true },
+          { "type": "flag", "key": "family:large", "value": true }
+        ] },
+        { "type": "years_ordained", "op": ">=", "value": 6 }
+      ],
+      "title": "She Called You by His Name",
+      "body": "{@mother} called you by your father's name on the phone and laughed and then did it again, and {@sibling} says it has been happening for a year and nobody told you because you had the parish. The doctor says the word. Your father cannot manage her and will not say so. There are five of you, or three, and a spreadsheet your sibling has made of who can take which week, and your name is on it in a different color because everyone knows the priest cannot really take a week, and everyone is a little tired of knowing it. Your sibling says this kindly and then says it less kindly. There is a place near the parish. There is your sibling's spare room. There is the cost.",
+      "choices": [
+        {
+          "id": "take_the_weeks",
+          "label": "Take your weeks like everyone else, and let the parish see less of you",
+          "default": true,
+          "outcome": "You take your weeks. You learn what a night is like with someone who does not know where she is, and you preach differently afterward. The parish notices the absences and the pastor covers, and the chancery notes it, and your sibling changes the color of your name on the spreadsheet.",
+          "effects": [
+            { "target": "relationship", "key": "@sibling", "delta": 12 },
+            { "target": "relationship", "key": "@mother", "delta": 6 },
+            { "target": "reputation", "key": "parishioners", "delta": -3 },
+            { "target": "reputation", "key": "chancery", "delta": -2 },
+            { "target": "ap", "key": "", "delta": -2 },
+            { "target": "stat", "key": "piety", "delta": 2 }
+          ]
+        },
+        {
+          "id": "pay_instead",
+          "label": "Pay for the place near the parish, and visit every day for ten minutes",
+          "outcome": "The place is good and it costs what a priest's savings are, and then more. You visit at four every day between the hospital and the office, and she is glad to see you most days and knows you some of them. Your sibling is grateful for the money and says, once, that money was the easy part.",
+          "effects": [
+            { "target": "relationship", "key": "@sibling", "delta": 4 },
+            { "target": "relationship", "key": "@mother", "delta": 4 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "flag", "key": "fam_parent_placed", "value": true }
+          ]
+        },
+        {
+          "id": "the_priest_cannot",
+          "label": "Say the priest cannot, and mean it, and let the spreadsheet be what it is",
+          "outcome": "The spreadsheet is what it is. Your siblings carry her for three years and you come at Christmas and she knows you until the last one. At the funeral you preach and it is beautiful and your sibling, afterward, says it was beautiful in a voice you will hear for a long time.",
+          "effects": [
+            { "target": "relationship", "key": "@sibling", "delta": -14 },
+            { "target": "relationship", "key": "@mother", "delta": -3 },
+            { "target": "stat", "key": "piety", "delta": -1 },
+            { "target": "honesty", "key": "", "delta": 1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fam_you_could_leave",
+      "phase": ["parochial_vicar", "pastor"],
+      "pressure": ["doubt", "friendship_vs_duty"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 3,
+      "suppressYears": 6,
+      "requires": [
+        { "type": "not", "inner": { "type": "flag", "key": "family:estranged", "value": true } },
+        { "type": "years_ordained", "op": ">=", "value": 5 },
+        { "type": "relationship", "npcId": "@sibling", "op": ">=", "value": 15 }
+      ],
+      "bias": [
+        { "when": { "type": "stat", "key": "piety", "op": "<=", "value": 40 }, "multiplier": 2 },
+        { "when": { "type": "reputation", "key": "parishioners", "op": "<=", "value": 0 }, "multiplier": 1.5 }
+      ],
+      "title": "You Could Still Leave",
+      "body": "It is late and the children are in bed and {@sibling} has had two glasses of wine and says it, not unkindly: you could still leave. You are not old. You have a degree. You are good with people, and there are people who would want a man who is good with people, and one in particular, your sibling says, who asked about you at the last party, and your sibling is not joking. You look tired, your sibling says. You have looked tired for years. Nobody in this family would think less of you. Your mother would get over it. It is said with love, which is the only way it could be said, and it sits on the table between you like a thing that has been there for a while.",
+      "choices": [
+        {
+          "id": "no_and_why",
+          "label": "Say no, and say why, in words you have not used since the diaconate",
+          "default": true,
+          "outcome": "You say it and it surprises you: it comes out whole. Your sibling listens and pours a third glass and says all right, then. It was not a test and you did not pass it, exactly, but you heard yourself, and it was true, and you drive home lighter.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 3 },
+            { "target": "relationship", "key": "@sibling", "delta": 6 },
+            { "target": "flag", "key": "fam_could_leave", "value": true }
+          ]
+        },
+        {
+          "id": "not_tonight",
+          "label": "Say you do not want to talk about it, and mean that you do",
+          "outcome": "Your sibling lets it go, because it was said with love and love knows when to stop. You do not sleep. The thing stays on the table for a long time, and you will pick it up again, alone, more than once.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": -2 },
+            { "target": "relationship", "key": "@sibling", "delta": 2 },
+            { "target": "risk", "key": "fam_doubt", "value": "A sibling who thinks you could still leave, and a night you did not answer", "delta": 1 },
+            { "target": "flag", "key": "fam_could_leave", "value": true }
+          ]
+        },
+        {
+          "id": "ask_who",
+          "label": "Ask who asked about you",
+          "outcome": "Your sibling tells you, and you remember her, and you do not say anything for a while. Then you say you should go. You do not call her and you do not forget the name, and neither does your sibling, who watches you for a year after and is kinder than before.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": -3 },
+            { "target": "relationship", "key": "@sibling", "delta": 4 },
+            { "target": "honesty", "key": "", "delta": 1 },
+            { "target": "risk", "key": "fam_doubt", "value": "A name you did not call, and did not forget", "delta": 2 },
+            { "target": "flag", "key": "fam_could_leave", "value": true }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,869 @@
+{
+  "_notes": "Personal-pool seminary events that can fire in most years. Keyed heavily to creation flags (family:*, past:*, motive:*, late_vocation, origin:*). Flags set here: sem_mother_stayed_away, sem_mother_leave_taken, sem_father_visited, sem_father_letter, sem_sibling_refused, sem_sibling_rescued, sem_answered_her, sem_her_contact_kept, sem_drank_once, sem_drank_too_much, sem_child_visited, sem_child_letter, sem_child_stayed_away, sem_child_disclosed, sem_grief_examined, sem_running_disclosed, sem_running_buried, sem_health_ignored, sem_health_seen, sem_christmas_called_her, sem_friend_kept, sem_attraction_hidden, sem_attraction_named, sem_direction_kept_withheld, sem_direction_told. Threads: resolves y1_withheld_in_direction (opened in y1.json by y1_first_direction) via sem_direction_reckoning. Risks: sem_relationship_contact, sem_drinking_seen, sem_child_seen, sem_running_history, sem_attraction_unaddressed.",
+  "events": [
+    {
+      "id": "sem_mother_decline",
+      "phase": "seminary",
+      "yearGate": [2, 3, 4, 5, 6, 7],
+      "pressure": ["friendship_vs_duty"],
+      "severity": "MAJOR",
+      "category": "personal",
+      "baseWeight": 12,
+      "requires": [{ "type": "flag", "key": "family:widowed_mother", "value": true }],
+      "bias": [
+        { "when": { "type": "flag", "key": "tie:seminary", "value": true }, "multiplier": 1.5 },
+        { "when": { "type": "flag", "key": "late_vocation", "value": true }, "multiplier": 1.5 },
+        { "when": { "type": "year", "op": ">=", "value": 5 }, "multiplier": 1.5 }
+      ],
+      "suppressYears": 3,
+      "once": true,
+      "title": "The neighbor's phone call",
+      "body": "It is not {@mother} who calls; it is the neighbor, which is how you know. {@mother} has been managing since your father died, and managing is her word, and for two years the calls on Sunday evenings have been about the parish and the weather and the price of things. The neighbor says she found her on the kitchen floor on Tuesday and she would not let anyone call you, and that she is home now and fine and not fine, and that somebody should know. There is no one else to be the somebody. You stand in the corridor with the house phone in your hand and the schedule of {seminary} on the wall beside it, and the two things do not fit together, and they are not going to. The rector can grant leave. The rector can also, at the end of the year, write that a man's family situation makes him a doubtful candidate for the life of a diocesan priest, who goes where he is sent. Both of those are in the same pen.",
+      "flavorPrompt": "A widowed mother's decline, reported by a neighbor because she would not call herself. The player is the only child who can act. The seminary schedule and the vocation itself are in tension with the duty.",
+      "choices": [
+        {
+          "id": "go_home",
+          "label": "Ask the rector for two weeks and go home tonight",
+          "outcome": "{@rector} grants it and does not pretend it will not cost you. You miss a fortnight of lectures and a paper and the house's Forty Hours. {@mother} is furious that you came and does not let go of your arm for the first hour. You arrange a chair lift, a cleaner, and the neighbor's daughter for Thursdays, and come back with the family suddenly, permanently, on the record.",
+          "effects": [
+            { "target": "flag", "key": "sem_mother_leave_taken", "value": true },
+            { "target": "relationship", "key": "@mother", "delta": 14 },
+            { "target": "pillar", "key": "intellectual", "delta": -2 },
+            { "target": "pillar", "key": "human", "delta": 2 },
+            { "target": "relationship", "key": "@rector", "delta": -2 }
+          ]
+        },
+        {
+          "id": "arrange_from_here",
+          "label": "Stay, and spend a week of evenings on the phone building her a system of care from two hundred miles away",
+          "requires": [{ "type": "any", "inner": [
+            { "type": "flag", "key": "career:social_work", "value": true },
+            { "type": "flag", "key": "career:physician", "value": true },
+            { "type": "flag", "key": "career:attorney", "value": true },
+            { "type": "flag", "key": "career:management", "value": true }
+          ] }],
+          "outcome": "You know which agency to call and what to say to it, and by Friday there is a visiting nurse, a medical alert pendant she will refuse to wear, and a power of attorney in the mail. {@mother} is relieved and hurt in equal measure. You have solved the problem the way you were trained to, from a distance, and you know that she noticed the distance.",
+          "effects": [
+            { "target": "relationship", "key": "@mother", "delta": 5 },
+            { "target": "stat", "key": "administration", "delta": 1 },
+            { "target": "pillar", "key": "pastoral", "delta": 1 }
+          ]
+        },
+        {
+          "id": "ask_rector_help",
+          "label": "Go to the rector not for leave but for advice, and let the house carry some of it",
+          "outcome": "{@rector} listens, and then does something you did not expect: he telephones the pastor of her parish himself, priest to priest, and by evening there is a woman from the Legion of Mary at her door with a casserole. It is not a solution. It is a Church doing what it says it is for, and it lets you stay, and you are not sure the staying was the right choice.",
+          "effects": [
+            { "target": "relationship", "key": "@rector", "delta": 5 },
+            { "target": "relationship", "key": "@mother", "delta": 6 },
+            { "target": "pillar", "key": "pastoral", "delta": 2 }
+          ]
+        },
+        {
+          "id": "stay_and_call",
+          "label": "Stay. Call every night. Trust the neighbor.",
+          "outcome": "You call every night at nine from the corridor, and she tells you she is fine, and the neighbor tells you separately that she is not. You finish the term. The evaluation says nothing about family and everything about diligence. There is a version of a priest who goes where he is sent, and you have just become it, and it will be some time before you know what you paid for the fitting.",
+          "effects": [
+            { "target": "flag", "key": "sem_mother_stayed_away", "value": true },
+            { "target": "relationship", "key": "@mother", "delta": -8 },
+            { "target": "pillar", "key": "intellectual", "delta": 1 },
+            { "target": "pillar", "key": "spiritual", "delta": -2 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sem_father_illness",
+      "phase": "seminary",
+      "yearGate": [2, 3, 4, 5, 6, 7],
+      "pressure": ["loyalty_vs_honesty", "friendship_vs_duty"],
+      "severity": "MAJOR",
+      "category": "personal",
+      "baseWeight": 12,
+      "requires": [{ "type": "flag", "key": "family:opposed", "value": true }],
+      "bias": [
+        { "when": { "type": "flag", "key": "origin:lapsed", "value": true }, "multiplier": 1.5 },
+        { "when": { "type": "flag", "key": "late_vocation", "value": true }, "multiplier": 1.5 },
+        { "when": { "type": "relationship", "npcId": "@father", "op": "<=", "value": 10 }, "multiplier": 2 }
+      ],
+      "suppressYears": 3,
+      "once": true,
+      "title": "A bed by the window",
+      "body": "{@father} has never set foot in {seminary} and has said, in your hearing, that he never will. He had other plans for you, and when you told him you were entering he treated it as a bereavement and then as a betrayal and then, for two years, as a subject that does not come up. Now he is in a hospital with something the surgeons describe in a tone you recognize from the sacristy, and it is a message from home on the corridor phone that tells you, not one from him. The message is short. He does not want you to come. He has said so. That is either a wish or a test, and you have known him long enough to be unsure which, and the schedule of the house goes on around you as if nothing has happened, because from the house's point of view nothing has. The hospital is four hours away. There is a bed by the window, apparently, and he watches the parking lot from it, and would see anyone who came.",
+      "flavorPrompt": "The father who opposed the vocation is seriously ill and has said he does not want the player to come. A test or a wish. The player must decide whether to go, write, or wait.",
+      "choices": [
+        {
+          "id": "go_sit",
+          "label": "Go anyway. Sit in the chair by the window and say nothing about God.",
+          "outcome": "He sees you cross the parking lot and does not look away. You sit for two days and talk about the car and the roof and a baseball season you have not followed, and he does not ask about the seminary, and on the second evening he says, looking at the ceiling, that he had not thought you would come, and that the chair suits you, and it is the most he has ever given you.",
+          "effects": [
+            { "target": "flag", "key": "sem_father_visited", "value": true },
+            { "target": "relationship", "key": "@father", "delta": 16 },
+            { "target": "pillar", "key": "human", "delta": 2 },
+            { "target": "pillar", "key": "intellectual", "delta": -1 }
+          ]
+        },
+        {
+          "id": "write_him",
+          "label": "Respect the wish, and write him the letter you have owed him for two years",
+          "outcome": "Four pages, no theology in it, about why you went and what he was to you before you went. You mail it to the hospital. He does not answer. A month later a nurse mentions, when you call, that he keeps it in the drawer of the bedside table and has read it more than once, and that he would rather die than admit it, which, given the circumstances, is not a figure of speech.",
+          "effects": [
+            { "target": "flag", "key": "sem_father_letter", "value": true },
+            { "target": "relationship", "key": "@father", "delta": 8 },
+            { "target": "honesty", "key": "", "delta": 2 },
+            { "target": "pillar", "key": "spiritual", "delta": 1 }
+          ]
+        },
+        {
+          "id": "wait_for_him",
+          "label": "Take him at his word. Stay, and wait to be asked.",
+          "outcome": "He does not ask. He recovers, slowly, and the not-asking becomes the shape of the next year, and you are aware that you obeyed him in the one thing he did not actually want you to obey him in. The house does not know any of this. Your evaluation is excellent. You have stopped being able to pray for him without the prayer turning into an argument.",
+          "effects": [
+            { "target": "relationship", "key": "@father", "delta": -6 },
+            { "target": "pillar", "key": "spiritual", "delta": -2 },
+            { "target": "pillar", "key": "intellectual", "delta": 1 }
+          ]
+        },
+        {
+          "id": "send_rector",
+          "label": "Ask the rector to telephone him, priest to father, and say what you cannot",
+          "requires": [{ "type": "relationship", "npcId": "@rector", "op": ">=", "value": 20 }],
+          "outcome": "{@rector} makes the call from his office with the door closed and afterward tells you only that your father is a difficult man and that he liked him. Something is different the next time you speak. It is not reconciliation. It is that a priest he did not raise has told him his son is doing well, and he has decided, provisionally, to believe a stranger.",
+          "effects": [
+            { "target": "relationship", "key": "@father", "delta": 9 },
+            { "target": "relationship", "key": "@rector", "delta": 4 },
+            { "target": "pillar", "key": "human", "delta": 1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sem_sibling_relapse",
+      "phase": "seminary",
+      "yearGate": [1, 2, 3, 4, 5, 6, 7],
+      "pressure": ["friendship_vs_duty"],
+      "severity": "MAJOR",
+      "category": "personal",
+      "baseWeight": 12,
+      "requires": [{ "type": "flag", "key": "family:dependent", "value": true }],
+      "bias": [
+        { "when": { "type": "flag", "key": "career:social_work", "value": true }, "multiplier": 2 },
+        { "when": { "type": "flag", "key": "past:drinking", "value": true }, "multiplier": 1.5 },
+        { "when": { "type": "flag", "key": "origin:urban_ethnic", "value": true }, "multiplier": 1.5 },
+        { "when": { "type": "relationship", "npcId": "@sibling", "op": ">=", "value": 20 }, "multiplier": 1.5 }
+      ],
+      "suppressYears": 2,
+      "title": "The call at two in the morning",
+      "body": "The night porter knocks at two and says there is a call, and you know before you reach the corridor who it is, because there is only one person who calls at two. {@sibling} is somewhere you can hear traffic. The voice is the voice you know from before, the one that comes back when the eighteen months of good are over, and it is asking for what it always asks for: money, a ride, a place, somebody to talk to the person who is angry. You have been the somebody since you were old enough to drive. You came here, in part, because you could not go on being the somebody, and you have told yourself that {seminary} is a reason now and not an excuse, and you are standing in a cold corridor at two in the morning finding out whether that is true. There is a car you can borrow. There is a lecture at eight. There is a rector who has said, in general terms, that a seminarian's family is not his parish, and a Lord who said something about the least of these, and the traffic on the line goes on.",
+      "flavorPrompt": "A dependent sibling relapses and calls the seminary at two in the morning. The player has been the family's fixer for years. Addiction handled plainly; no melodrama.",
+      "choices": [
+        {
+          "id": "drive_out",
+          "label": "Borrow the car and go now",
+          "outcome": "You find {@sibling} where the traffic was and bring the night to some kind of end, the way you have before, and you are back for the eleven o'clock lecture with an hour's sleep and the smell of the car on your clothes. Nothing is fixed. Something is held. Your paper is late and your advisor notices, and you are not sure that you did the right thing, only the thing you are.",
+          "effects": [
+            { "target": "flag", "key": "sem_sibling_rescued", "value": true },
+            { "target": "relationship", "key": "@sibling", "delta": 12 },
+            { "target": "pillar", "key": "intellectual", "delta": -2 },
+            { "target": "pillar", "key": "spiritual", "delta": -1 },
+            { "target": "pillar", "key": "human", "delta": 1 }
+          ]
+        },
+        {
+          "id": "call_agency",
+          "label": "Stay on the line and get {@sibling} to the people whose job this is, by name",
+          "requires": [{ "type": "flag", "key": "career:social_work", "value": true }],
+          "outcome": "You know which line takes a call at two and which bed is open on a Wednesday, and you make three calls from the corridor and stay on the phone until the van arrives. {@sibling} is furious and goes. You have done, from four hours away, what you did for strangers for a living, and it is the first time it has been for family, and it works, this time.",
+          "effects": [
+            { "target": "relationship", "key": "@sibling", "delta": 8 },
+            { "target": "pillar", "key": "pastoral", "delta": 2 },
+            { "target": "stat", "key": "administration", "delta": 1 }
+          ]
+        },
+        {
+          "id": "tell_rector",
+          "label": "Wake the rector. Let the house know what your family is.",
+          "outcome": "{@rector} comes down in a cardigan and listens, and then does the practical things you were too tired to think of, and then tells you to go to bed. In the morning it is not a secret. It becomes, over the year, something the house simply knows about you, and you find that being known is not the same thing as being judged, though it took you a long time to learn that.",
+          "effects": [
+            { "target": "relationship", "key": "@rector", "delta": 5 },
+            { "target": "relationship", "key": "@sibling", "delta": 4 },
+            { "target": "pillar", "key": "human", "delta": 2 },
+            { "target": "honesty", "key": "", "delta": 1 }
+          ]
+        },
+        {
+          "id": "say_no",
+          "label": "Say no. Say it gently and completely, and hang up, and go back to bed.",
+          "outcome": "You do not sleep. In the morning you do not know whether {@sibling} is alive, and you go to Lauds and sing the psalms with that in your mouth. The call comes at four in the afternoon; alive, angry, in someone else's kitchen. You have set a limit that every counselor would have told you to set years ago, and it feels exactly like abandonment, and it may be both.",
+          "effects": [
+            { "target": "flag", "key": "sem_sibling_refused", "value": true },
+            { "target": "relationship", "key": "@sibling", "delta": -12 },
+            { "target": "honesty", "key": "", "delta": 1 },
+            { "target": "pillar", "key": "human", "delta": 1 },
+            { "target": "pillar", "key": "spiritual", "delta": -2 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sem_letter_from_her",
+      "phase": "seminary",
+      "yearGate": [1, 2, 3, 4, 5, 6],
+      "pressure": ["body_vs_vow"],
+      "severity": "MAJOR",
+      "category": "personal",
+      "baseWeight": 12,
+      "requires": [{ "type": "flag", "key": "past:relationship", "value": true }],
+      "bias": [
+        { "when": { "type": "pillar", "key": "spiritual", "op": "<=", "value": 2 }, "multiplier": 2 },
+        { "when": { "type": "pillar", "key": "human", "op": "<=", "value": 2 }, "multiplier": 1.5 },
+        { "when": { "type": "flag", "key": "late_vocation", "value": true }, "multiplier": 1.5 },
+        { "when": { "type": "year", "op": "<=", "value": 3 }, "multiplier": 1.5 }
+      ],
+      "suppressYears": 3,
+      "once": true,
+      "title": "Her handwriting",
+      "body": "The mail is put out on the hall table after lunch, and you see the envelope from the stairs, because you would know that handwriting on a wall in the dark. She has not written since you entered. That was the arrangement, made in a car outside her building with the engine running, and you have kept it on your side by not thinking about her more than once a day. The letter is two pages. It is not a plea. She is well; she has moved; she saw your mother at the supermarket and your mother looked tired; she has thought about writing a dozen times and has done it now because she has a decision of her own to make and wanted, before she made it, to know whether you are happy. That is the word she uses. She does not say what the decision is. She gives a return address. You read it twice in the corridor and once more in your room, and then you sit with it on the desk beside the breviary, and the two of them do not look at each other.",
+      "flavorPrompt": "A letter from the woman the player left to enter seminary. Restrained, adult, not a plea. She asks whether he is happy before making a decision of her own. Interior struggle, no titillation.",
+      "choices": [
+        {
+          "id": "answer_once",
+          "label": "Write back, once, and tell her the truth as far as you know it",
+          "outcome": "It takes four drafts. You tell her that happy is not the word you would use and that you are where you are supposed to be, and that both of those are true on the same day. You wish her well in the decision without asking what it is. You mail it and do not write again. It is, you think, the most honest thing you have done with her, and it came two years too late to matter to either of you.",
+          "effects": [
+            { "target": "flag", "key": "sem_answered_her", "value": true },
+            { "target": "honesty", "key": "", "delta": 2 },
+            { "target": "pillar", "key": "human", "delta": 2 },
+            { "target": "pillar", "key": "spiritual", "delta": -1 }
+          ]
+        },
+        {
+          "id": "dont_answer",
+          "label": "Do not answer. Put the letter in the breviary at the psalm for Tuesday and leave it there.",
+          "outcome": "You do not answer. The letter lives at Tuesday Vespers for a month and then in the back of a drawer. You have kept the arrangement and she will read your silence as the answer it is, and you do not know whether it was fidelity or cowardice, and you have decided that in this case the distinction is a luxury. Something closes. It does not close cleanly.",
+          "effects": [
+            { "target": "pillar", "key": "spiritual", "delta": 1 },
+            { "target": "pillar", "key": "human", "delta": -2 },
+            { "target": "stat", "key": "piety", "delta": 1 }
+          ]
+        },
+        {
+          "id": "bring_to_direction",
+          "label": "Take the letter, unanswered, to your director and read it to him",
+          "outcome": "{@spiritual_director} listens to both pages without moving. He asks you to say her name aloud in the room, which you have not done in two years, and then asks what you would want for her if you could want anything. The answer surprises you. He does not tell you whether to write. He tells you that the answer is the thing to pray with, and it is.",
+          "effects": [
+            { "target": "relationship", "key": "@spiritual_director", "delta": 9 },
+            { "target": "pillar", "key": "spiritual", "delta": 3 },
+            { "target": "honesty", "key": "", "delta": 1 }
+          ]
+        },
+        {
+          "id": "keep_writing",
+          "label": "Write back, and keep writing",
+          "outcome": "A letter a month, then a fortnight. Nothing in them a rector could object to and everything in them a director would. You tell yourself it is friendship, and it may be, and the envelopes on the hall table have been noticed by men who notice such things. You have opened a door you spent two years closing and are standing in it, telling yourself you are only looking out.",
+          "effects": [
+            { "target": "flag", "key": "sem_her_contact_kept", "value": true },
+            { "target": "risk", "key": "sem_relationship_contact", "value": "kept up a correspondence with a former partner during formation", "delta": 1 },
+            { "target": "pillar", "key": "spiritual", "delta": -3 },
+            { "target": "pillar", "key": "human", "delta": 1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sem_celebration_drink",
+      "phase": "seminary",
+      "yearGate": [2, 3, 4, 5, 6, 7],
+      "pressure": ["body_vs_vow", "friendship_vs_duty"],
+      "severity": "MAJOR",
+      "category": "personal",
+      "baseWeight": 10,
+      "requires": [{ "type": "flag", "key": "past:drinking", "value": true }],
+      "bias": [
+        { "when": { "type": "pillar", "key": "human", "op": "<=", "value": 2 }, "multiplier": 2 },
+        { "when": { "type": "relationship", "npcId": "@random_classmate", "op": ">=", "value": 25 }, "multiplier": 1.5 },
+        { "when": { "type": "flag", "key": "origin:urban_ethnic", "value": true }, "multiplier": 1.5 },
+        { "when": { "type": "flag", "key": "late_vocation", "value": true }, "multiplier": 1.5 }
+      ],
+      "suppressYears": 3,
+      "once": true,
+      "title": "A bottle in the common room",
+      "body": "{@random_classmate} has been admitted to candidacy, or turned thirty, or had a paper accepted; the occasion matters less than the fact that his uncle sent a bottle of something Irish and old and it is on the common-room table with a stack of paper cups. The rector permits this. The house is not a monastery and the men are not children, and a drink at a celebration is, as {@rector} once said in a conference, one of the ordinary goods of a human life. Everyone knows that. You know something else, which is what a drink was for you, for the years before you came, and how it stopped being one drink, and what it took to stop. Nobody in this room knows that. It is not in your file in any form you have read. {@random_classmate} is pouring and holding out a cup, and the room is warm, and he is a friend, and it is one drink, and it has been three years and four months, and you have not told anyone here the number.",
+      "flavorPrompt": "A classmate's celebration with a bottle of good whiskey, permitted by the house. The player is in recovery and nobody here knows. Interior, honest about what a drink is for him. No melodrama.",
+      "choices": [
+        {
+          "id": "one",
+          "label": "Take the cup. One. You are an adult and it is a celebration.",
+          "outcome": "It is one, and it is good, and you put the cup down and do not take another, and you go to bed with the taste of it and lie awake doing the thing you used to do, which is count. It was one. The number that was three years and four months is now nine hours. Nobody in the house saw anything. You saw the whole of it.",
+          "effects": [
+            { "target": "flag", "key": "sem_drank_once", "value": true },
+            { "target": "pillar", "key": "spiritual", "delta": -2 },
+            { "target": "relationship", "key": "@random_classmate", "delta": 4 },
+            { "target": "stat", "key": "piety", "delta": -1 }
+          ]
+        },
+        {
+          "id": "say_why",
+          "label": "Decline, and tell him quietly why",
+          "outcome": "You say it in a sentence, at the side of the room, and {@random_classmate} takes the cup back without a flicker and gets you a ginger ale and does not make a thing of it, then or ever. He is a better man than you had credited. Two others notice you are not drinking and draw their own conclusions and, this being a seminary, keep them.",
+          "effects": [
+            { "target": "honesty", "key": "", "delta": 2 },
+            { "target": "relationship", "key": "@random_classmate", "delta": 8 },
+            { "target": "pillar", "key": "human", "delta": 2 },
+            { "target": "pillar", "key": "spiritual", "delta": 1 }
+          ]
+        },
+        {
+          "id": "leave_quietly",
+          "label": "Say you have an early morning and go upstairs",
+          "outcome": "You leave before the toast. Nobody minds much. {@random_classmate} says later, without edge, that he had hoped you would stay, and you do not explain. You spent the evening in your room with the door shut, listening to the laughter come up through the floor, keeping the number. It was the right thing and it was lonely, and you have begun to suspect those will often coincide.",
+          "effects": [
+            { "target": "pillar", "key": "spiritual", "delta": 1 },
+            { "target": "pillar", "key": "human", "delta": -1 },
+            { "target": "relationship", "key": "@random_classmate", "delta": -3 }
+          ]
+        },
+        {
+          "id": "too_many",
+          "label": "Take the cup, and the next one, and stop deciding",
+          "outcome": "You do not remember going up. In the morning there is a paper cup on your desk and a silence at breakfast that is not the house's silence, and {@random_classmate} will not quite meet your eye, and you know with the old, exact knowledge what the men saw. It was one night. It is the first thing in this house that anyone could ever hold over you, and you handed it to them.",
+          "effects": [
+            { "target": "flag", "key": "sem_drank_too_much", "value": true },
+            { "target": "risk", "key": "sem_drinking_seen", "value": "seen drunk in the house by classmates", "delta": 2 },
+            { "target": "pillar", "key": "spiritual", "delta": -3 },
+            { "target": "pillar", "key": "human", "delta": -2 },
+            { "target": "relationship", "key": "@random_classmate", "delta": -5 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sem_child_milestone",
+      "phase": "seminary",
+      "yearGate": [2, 3, 4, 5, 6, 7],
+      "pressure": ["friendship_vs_duty", "loyalty_vs_honesty"],
+      "severity": "MAJOR",
+      "category": "personal",
+      "baseWeight": 12,
+      "requires": [{ "type": "flag", "key": "past:fathered_child", "value": true }],
+      "bias": [
+        { "when": { "type": "pillar", "key": "human", "op": "<=", "value": 2 }, "multiplier": 1.5 },
+        { "when": { "type": "relationship", "npcId": "@formation_advisor", "op": ">=", "value": 15 }, "multiplier": 1.5 },
+        { "when": { "type": "year", "op": ">=", "value": 5 }, "multiplier": 1.5 }
+      ],
+      "suppressYears": 3,
+      "once": true,
+      "title": "A white card with a date on it",
+      "body": "The child's mother has always had your address. That was part of what you agreed, in the year before you entered, along with the money and the silence and the understanding that you would not be a father in any way the child would recognize. She has kept the agreement better than you have deserved. The envelope holds a card from a parish two hundred miles away: a First Communion, a Saturday in May, a time. There is no note. There does not need to be. She is not asking you to come. She is telling you that you may, and leaving to you what that means, which is the fairest thing anyone has done to you in years and the hardest. The diocese knows. It is in your file, disclosed at application, and the vocation director said at the time that it was not disqualifying, and looked at you for a long moment after saying so. The rector has read the file. The house has not. You stand at the hall table with the card in your hand and the date is nineteen days away.",
+      "flavorPrompt": "The player fathered a child before entering. The mother sends a First Communion card without a note. Disclosed at application, unknown to classmates. Write with restraint and dignity; the child is a real person, not a plot device.",
+      "choices": [
+        {
+          "id": "go_quietly",
+          "label": "Ask the rector for the day, and go, and sit at the back",
+          "outcome": "{@rector} says yes, and says it without hesitation, and asks only that you go in a jacket and not a collar. You sit in the last pew of a parish you have never seen. You do not go up for the photographs. Afterward, in the parking lot, the child's mother nods to you once across forty feet, and you nod back, and that is all, and it is the whole of what you are for that child, and it was worth the drive.",
+          "effects": [
+            { "target": "flag", "key": "sem_child_visited", "value": true },
+            { "target": "pillar", "key": "human", "delta": 3 },
+            { "target": "honesty", "key": "", "delta": 1 },
+            { "target": "relationship", "key": "@rector", "delta": 3 },
+            { "target": "risk", "key": "sem_child_seen", "value": "seen at his child's First Communion in another parish", "delta": 1 }
+          ]
+        },
+        {
+          "id": "send_letter",
+          "label": "Do not go. Send a letter to be kept for the child, and a gift, and stay away.",
+          "outcome": "The letter is for a person who is seven and will read it, if ever, at seventeen. You write it four times. It does not explain. It says that the child is loved by someone who was not able to be there, and that this is a fact about the someone and not about the child. You send a rosary you were given at your own First Communion. You keep the day of the Mass in the chapel, alone.",
+          "effects": [
+            { "target": "flag", "key": "sem_child_letter", "value": true },
+            { "target": "pillar", "key": "human", "delta": 1 },
+            { "target": "pillar", "key": "spiritual", "delta": 2 },
+            { "target": "honesty", "key": "", "delta": 1 }
+          ]
+        },
+        {
+          "id": "stay_away",
+          "label": "Keep the agreement exactly. No visit, no letter. The child has a life without you in it.",
+          "outcome": "You put the card in the drawer with the other things you do not look at. You keep the Saturday like any Saturday. It is the choice you made three years ago, made again, and you tell yourself that constancy is a virtue, and it is; and you also know that you did not pray that morning because you could not find a way to do it that did not include the child, and you did not want to.",
+          "effects": [
+            { "target": "flag", "key": "sem_child_stayed_away", "value": true },
+            { "target": "pillar", "key": "spiritual", "delta": -2 },
+            { "target": "pillar", "key": "human", "delta": -2 },
+            { "target": "stat", "key": "piety", "delta": -1 }
+          ]
+        },
+        {
+          "id": "tell_advisor",
+          "label": "Bring the card to your formation advisor and ask, on the record, what a priest owes a child he does not raise",
+          "requires": [{ "type": "relationship", "npcId": "@formation_advisor", "op": ">=", "value": 15 }],
+          "outcome": "{@formation_advisor} already knew, and says so, and then does not treat it as a problem to be managed but as a question to be answered, which it is. He writes it into the year's evaluation as an ongoing obligation, honestly stated, and tells you he would rather ordain a man who carries this openly than one who has buried it. It will follow you. It was always going to.",
+          "effects": [
+            { "target": "flag", "key": "sem_child_disclosed", "value": true },
+            { "target": "relationship", "key": "@formation_advisor", "delta": 9 },
+            { "target": "honesty", "key": "", "delta": 3 },
+            { "target": "pillar", "key": "human", "delta": 2 },
+            { "target": "concern", "key": "An ongoing obligation to a child born before entry, openly acknowledged", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sem_grief_anniversary",
+      "phase": "seminary",
+      "yearGate": [1, 2, 3, 4, 5, 6, 7],
+      "pressure": ["doubt"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 10,
+      "requires": [{ "type": "flag", "key": "motive:grief", "value": true }],
+      "bias": [
+        { "when": { "type": "pillar", "key": "spiritual", "op": "<=", "value": 2 }, "multiplier": 1.5 },
+        { "when": { "type": "flag", "key": "tie:son", "value": true }, "multiplier": 1.5 },
+        { "when": { "type": "year", "op": "<=", "value": 2 }, "multiplier": 1.5 }
+      ],
+      "suppressYears": 2,
+      "title": "The date comes round",
+      "body": "You did not put it in the calendar. You have never needed to. It arrives the way it arrives every year, a week early, in the body first: a heaviness on waking, an impatience with small things, the sense of a door somewhere in the house left open. Then the date itself, on a Wednesday this year, an ordinary Wednesday of the ordinary time, with a lecture and a holy hour and the grounds crew. Nobody at {seminary} knows what it is. You could have said, at some point, and did not, because the loss is the reason you are here and you have never been sure the reason would survive being told. The Mass that morning is for the intentions of a benefactor. You kneel through it thinking of a different Mass, in a different church, with a casket at the head of the aisle and a priest who said the right words in the wrong voice, and a version of you who decided, listening to him, that he could do it better. That version is here now. He has been here for years. You are still not certain he came for the right reasons, and the date is the day each year when he asks.",
+      "flavorPrompt": "The anniversary of the death that brought the player to seminary. Nobody in the house knows the date. The question underneath: did he come for them or for himself. Understated.",
+      "choices": [
+        {
+          "id": "ask_mass",
+          "label": "Ask the rector to have the community Mass offered for them, by name, and let the house hear it",
+          "outcome": "{@rector} says of course, and asks the name, and asks the relationship, and says he is sorry, and the next morning the name is read in the intentions in front of eighty men. Three of them find you afterward. One of them lost a father the same year. You have given the house a piece of yourself it can hold, and it turns out that it can.",
+          "effects": [
+            { "target": "relationship", "key": "@rector", "delta": 4 },
+            { "target": "pillar", "key": "spiritual", "delta": 2 },
+            { "target": "pillar", "key": "human", "delta": 2 },
+            { "target": "stat", "key": "piety", "delta": 1 }
+          ]
+        },
+        {
+          "id": "keep_private",
+          "label": "Keep it as you always have: a candle, a name in the heart, no one told",
+          "outcome": "You light a candle in the side chapel before Lauds and it burns down by noon. The day passes. Nobody notices anything, which is what you wanted and what you find, by evening, you do not want. The grief is intact. It is the most private thing you own, and you have begun to wonder whether that is why you have kept it.",
+          "effects": [
+            { "target": "pillar", "key": "spiritual", "delta": 1 },
+            { "target": "pillar", "key": "human", "delta": -1 }
+          ]
+        },
+        {
+          "id": "go_to_grave",
+          "label": "Ask for the afternoon, and drive to the grave",
+          "requires": [{ "type": "flag", "key": "tie:son", "value": true }],
+          "hidden": true,
+          "outcome": "It is forty minutes each way and you miss the holy hour. The cemetery is the same and the stone has weathered and someone has left flowers, which you had not expected. You stand there in a jacket and say the prayers you now know by heart and did not then. Driving back, you understand that you are further from that day than you had thought, and not in the way you feared.",
+          "effects": [
+            { "target": "pillar", "key": "human", "delta": 2 },
+            { "target": "pillar", "key": "spiritual", "delta": 2 },
+            { "target": "pillar", "key": "intellectual", "delta": -1 }
+          ]
+        },
+        {
+          "id": "question_it",
+          "label": "Stop pretending the question is not there. Ask it, honestly, in the chapel.",
+          "outcome": "You kneel in the empty chapel after Compline and ask whether you came here for them or for yourself, and whether it matters, and you get the answer the chapel usually gives, which is nothing you can quote. Something shifts. The loss is still the reason. It has stopped being the only one, and you are not sure when that happened, and you are not sure you are glad.",
+          "effects": [
+            { "target": "flag", "key": "sem_grief_examined", "value": true },
+            { "target": "honesty", "key": "", "delta": 1 },
+            { "target": "pillar", "key": "spiritual", "delta": 1 },
+            { "target": "stat", "key": "piety", "delta": -1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sem_running_found",
+      "phase": "seminary",
+      "yearGate": [2, 3, 4, 5, 6],
+      "pressure": ["loyalty_vs_honesty", "doubt"],
+      "severity": "CRITICAL",
+      "category": "personal",
+      "baseWeight": 12,
+      "requires": [{ "type": "flag", "key": "motive:running", "value": true }],
+      "bias": [
+        { "when": { "type": "thread", "key": "y1_withheld_in_direction", "open": true }, "multiplier": 2 },
+        { "when": { "type": "flag", "key": "y1_psych_minimized", "value": true }, "multiplier": 1.5 },
+        { "when": { "type": "pillar", "key": "spiritual", "op": "<=", "value": 2 }, "multiplier": 1.5 },
+        { "when": { "type": "year", "op": ">=", "value": 4 }, "multiplier": 1.5 }
+      ],
+      "suppressYears": 4,
+      "once": true,
+      "title": "What you left has your address",
+      "body": "{@vocation_director} visits the house three times a year and takes each of the diocese's men to lunch, and the lunches are pleasant and mostly about the bishop's health and who is getting which parish. This one is pleasant until the coffee. Then he says, in the tone of a man raising something small, that someone got in touch with the chancery last month asking about you. Not a complaint. A question, from a person and a place you have not spoken of since you came, and he names the place, and the coffee goes cold. He does not know what it means. He would like to. He says, carefully, that the diocese does not need to know everything about a man, only whether there is anything that would embarrass the bishop on the day of ordination, and that he is asking now, in a restaurant, so that it need not be asked later, in an office. You came to {seminary} in part because it was somewhere the thing could not follow you. It has taken three years to prove that nowhere is.",
+      "flavorPrompt": "The player entered running from something unnamed. The vocation director reports that someone from that past has contacted the chancery. Not an accusation, a question. Keep the past unnamed; the player decides whom to tell.",
+      "choices": [
+        {
+          "id": "tell_director",
+          "label": "Tell the vocation director it belongs in the internal forum, and take the whole of it to your spiritual director that night",
+          "outcome": "{@vocation_director} accepts that, because he has to. {@spiritual_director} hears the whole thing for the first time, place and name and year, and at the end says only that he wishes you had not carried it alone this long. It is not resolved. It is now held by someone bound by the Church to hold it, and the chancery has a note that says the matter was raised and that you did not evade it.",
+          "effects": [
+            { "target": "relationship", "key": "@spiritual_director", "delta": 10 },
+            { "target": "pillar", "key": "spiritual", "delta": 2 },
+            { "target": "honesty", "key": "", "delta": 1 },
+            { "target": "relationship", "key": "@vocation_director", "delta": 2 }
+          ]
+        },
+        {
+          "id": "tell_advisor",
+          "label": "Tell him everything, and then tell your formation advisor, on the record, before anyone else can",
+          "outcome": "It goes into the external forum by your own hand, which is the only way it could have gone in without becoming something else. {@formation_advisor} reads what you have written and asks two questions and says that he would rather have this on paper in your words than in anyone else's. The evaluation will mention it, once. It will never be a surprise again.",
+          "effects": [
+            { "target": "flag", "key": "sem_running_disclosed", "value": true },
+            { "target": "relationship", "key": "@formation_advisor", "delta": 8 },
+            { "target": "relationship", "key": "@vocation_director", "delta": 6 },
+            { "target": "honesty", "key": "", "delta": 3 },
+            { "target": "pillar", "key": "human", "delta": 2 }
+          ]
+        },
+        {
+          "id": "let_it_pass",
+          "label": "Say it is an old acquaintance and nothing, and finish your coffee",
+          "outcome": "{@vocation_director} nods and pays and does not believe you, and writes down, presumably, that you said it was nothing. The thing you ran from has your address now and the chancery's, and you have told the diocese a small untruth in a restaurant, and both of those are facts that will keep, in a file and in a person, for as long as it takes.",
+          "effects": [
+            { "target": "flag", "key": "sem_running_buried", "value": true },
+            { "target": "risk", "key": "sem_running_history", "value": "an undisclosed matter from before entry, once raised with the chancery and denied", "delta": 2 },
+            { "target": "pillar", "key": "spiritual", "delta": -2 },
+            { "target": "honesty", "key": "", "delta": -2 },
+            { "target": "relationship", "key": "@vocation_director", "delta": -4 }
+          ]
+        },
+        {
+          "id": "leave",
+          "label": "Tell him the truth: you came here to get away from it, and a seminary should not be a hiding place",
+          "outcome": "He is quiet for a long time and then says that it is the most honest thing a man has said to him at one of these lunches in years. You see the rector the next morning. The house is kind. You go back to the place you left, not because it wants you, but because you have decided to stop being the kind of man who leaves.",
+          "effects": [
+            { "target": "end", "key": "left_seminary", "value": "You left in your own time and for the truest reason available: you had entered running from something, and when it found you, you chose to turn and face it outside rather than hide from it inside. The diocese let you go with a fair letter and, from the vocation director, a private word of respect." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sem_health_scare",
+      "phase": "seminary",
+      "yearGate": [1, 2, 3, 4, 5, 6, 7],
+      "pressure": ["competence", "body_vs_vow"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 8,
+      "bias": [
+        { "when": { "type": "flag", "key": "late_vocation", "value": true }, "multiplier": 2.5 },
+        { "when": { "type": "flag", "key": "career:physician", "value": true }, "multiplier": 1.5 },
+        { "when": { "type": "pillar", "key": "human", "op": "<=", "value": 2 }, "multiplier": 1.5 },
+        { "when": { "type": "flag", "key": "past:drinking", "value": true }, "multiplier": 1.5 }
+      ],
+      "suppressYears": 3,
+      "once": true,
+      "title": "Something in the chest",
+      "body": "It happens at the Gloria. The chapel tilts a quarter turn and rights itself, and there is a pressure under the breastbone that is not pain exactly, and you sit down in the middle of the hymn, which nobody does, and {@closest_classmate} looks across at you and then looks away, because staring is not done. It passes in a minute. You finish the Mass. Then it happens again on the stairs after lunch, and once in the night, and by Thursday you have a list: the tightness, the sweat, the way your left hand goes strange on the rail. You are not old. You are also not as young as the men around you, and your father's side has a history you have never mentioned to anyone in a clerical shirt. The house has a doctor it sends men to, in town, and going means a note to {@formation_advisor} and a line in a file, and the seminary judges a man's fitness for a life that will ask him to be on his feet for forty years. Not going means finding out what it is the hard way, at the altar, with a congregation watching.",
+      "flavorPrompt": "A health scare, probably cardiac, during Mass. The player fears both the diagnosis and what the record will make of it. No diagnosis given in prose.",
+      "choices": [
+        {
+          "id": "doctor_now",
+          "label": "Go to the doctor this week and let the note go where it goes",
+          "outcome": "The doctor is brisk and runs the tests and says a word you were not expecting, which is anxiety, and another, which is arrhythmia, and refers you on. It is not nothing and it is not the end. {@formation_advisor} reads the note and asks how you are, and means it, and the file says that you attended to it promptly, which is the only thing a file can say that helps.",
+          "effects": [
+            { "target": "flag", "key": "sem_health_seen", "value": true },
+            { "target": "pillar", "key": "human", "delta": 2 },
+            { "target": "relationship", "key": "@formation_advisor", "delta": 3 },
+            { "target": "pillar", "key": "intellectual", "delta": -1 }
+          ]
+        },
+        {
+          "id": "wait_for_break",
+          "label": "Wait for the next break and see your own doctor, at home, off the record",
+          "outcome": "Six weeks of stairs taken slowly and Masses got through. Your own doctor, in your own town, sends you for tests that come back ambiguous, and you carry the ambiguity back to the house without a note. Nothing is in the file. Something is in your chest. You have kept the seminary out of your body and are not certain that was the right thing to keep it out of.",
+          "effects": [
+            { "target": "pillar", "key": "human", "delta": -1 },
+            { "target": "pillar", "key": "spiritual", "delta": 1 },
+            { "target": "flag", "key": "sem_health_ignored", "value": true }
+          ]
+        },
+        {
+          "id": "tell_no_one",
+          "label": "Tell no one. Sit down when you need to. Offer it up.",
+          "outcome": "You get through the term. The episodes come and go and then, mostly, go, and you decide that you were right, and you may have been. {@closest_classmate} asks once, on the stairs, whether you are all right, and you say yes, and he lets it stand. You have added one more thing to the list of things nobody here knows, and the list is getting long.",
+          "effects": [
+            { "target": "flag", "key": "sem_health_ignored", "value": true },
+            { "target": "pillar", "key": "human", "delta": -2 },
+            { "target": "pillar", "key": "spiritual", "delta": -1 },
+            { "target": "stat", "key": "piety", "delta": 1 }
+          ]
+        },
+        {
+          "id": "read_it_yourself",
+          "label": "You have seen this presentation a hundred times. Work it up yourself, then decide.",
+          "requires": [{ "type": "flag", "key": "career:physician", "value": true }],
+          "hidden": true,
+          "outcome": "You take your own history in the mirror and know, within reason, what it is and what it is not, and you know exactly which of your former colleagues to call. The cardiologist sees you on a Saturday as a favor. The report is clean enough, and you hand it to {@formation_advisor} yourself, already read, and he is faintly startled to be given a document by a man who understood it before he did.",
+          "effects": [
+            { "target": "flag", "key": "sem_health_seen", "value": true },
+            { "target": "pillar", "key": "human", "delta": 2 },
+            { "target": "stat", "key": "knowledge", "delta": 1 },
+            { "target": "relationship", "key": "@formation_advisor", "delta": 3 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sem_christmas_loneliness",
+      "phase": "seminary",
+      "yearGate": [1, 2, 3, 4, 5, 6, 7],
+      "pressure": ["doubt", "body_vs_vow"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 10,
+      "requires": [{ "type": "season", "value": "christmas" }],
+      "bias": [
+        { "when": { "type": "flag", "key": "family:estranged", "value": true }, "multiplier": 4 },
+        { "when": { "type": "flag", "key": "tie:seminary", "value": true }, "multiplier": 2 },
+        { "when": { "type": "flag", "key": "tie:transfer", "value": true }, "multiplier": 1.5 },
+        { "when": { "type": "flag", "key": "late_vocation", "value": true }, "multiplier": 1.5 },
+        { "when": { "type": "flag", "key": "family:large", "value": true }, "multiplier": 0.5 },
+        { "when": { "type": "flag", "key": "family:supportive", "value": true }, "multiplier": 0.6 }
+      ],
+      "suppressYears": 3,
+      "title": "The house at Christmas",
+      "body": "The house empties on the twenty-third. Cars in the drive, bags on the steps, men shouting to each other about Epiphany. By evening there are six of you left: two foreign students whose families are an ocean away, an older man whose parents are dead, a man who has said nothing about why he is staying, a priest on the faculty who volunteered, and you. The chapel is lit for six. Christmas Eve supper is good and quiet and slightly too careful, and afterward there is nothing to do, in a house built for eighty, but walk the corridors and hear your own steps. You could not go home, or would not, or there is no home to go to in the sense the word usually carries. The difference matters less tonight than you expected. Midnight Mass is at the cathedral and {@rector} has arranged that you may go. {@closest_classmate} said, on the steps with his bag in his hand, that his mother would set a place if you wanted it, and meant it, and you said you would think about it, and now it is Christmas Eve and the house is very large.",
+      "flavorPrompt": "Christmas in a nearly empty seminary. The player has no home to go to, or has chosen not to. Loneliness handled plainly. The closest classmate's family has offered a place at table.",
+      "choices": [
+        {
+          "id": "stay",
+          "label": "Stay. Keep the feast with the five men who have nowhere else, and the priest who chose them.",
+          "outcome": "The faculty priest cooks. It is not good. The foreign students teach the room a carol in a language nobody else has, and the older man weeps once, briefly, and no one minds, and by Compline the six of you have become, for one night, a house. You go to bed with the sense of having chosen a family rather than lacked one, and it holds until about the twenty-seventh.",
+          "effects": [
+            { "target": "pillar", "key": "spiritual", "delta": 2 },
+            { "target": "pillar", "key": "human", "delta": 1 },
+            { "target": "stat", "key": "piety", "delta": 1 }
+          ]
+        },
+        {
+          "id": "accept_invitation",
+          "label": "Telephone {@closest_classmate} and say yes",
+          "requires": [{ "type": "relationship", "npcId": "@closest_classmate", "op": ">=", "value": 20 }],
+          "outcome": "He drives back for you on Christmas morning, an hour each way, and his mother has set the place. There is a small niece who decides you are hers. You are a stranger at a family table and, by the pie, you are less of one, and you watch him with his father and understand something about him you had not known. You owe him one now. He would say you do not.",
+          "effects": [
+            { "target": "relationship", "key": "@closest_classmate", "delta": 12 },
+            { "target": "pillar", "key": "human", "delta": 3 }
+          ]
+        },
+        {
+          "id": "shelter",
+          "label": "Ask the faculty priest whether the shelter downtown needs hands on Christmas Day",
+          "outcome": "It does. You serve four hundred dinners in a church hall with a shelter director who has no time for your vocation and every use for your arms. Nobody there knows you are anyone. On the walk back through the empty streets you are tired and cold and, for the first time in the season, not sorry for yourself, and you notice that the second thing came from the first.",
+          "effects": [
+            { "target": "pillar", "key": "pastoral", "delta": 3 },
+            { "target": "pillar", "key": "human", "delta": 1 },
+            { "target": "archetype", "key": "pastoral", "delta": 1 }
+          ]
+        },
+        {
+          "id": "call_her",
+          "label": "Go to the corridor phone and call a number you have not dialed in years",
+          "requires": [{ "type": "flag", "key": "past:relationship", "value": true }],
+          "hidden": true,
+          "outcome": "She answers on the third ring and is not surprised, which is worse than if she had been. You talk for twenty minutes about nothing and it is the warmest twenty minutes of the season and you hang up knowing exactly what you did and why. Nobody saw. The house is empty. You go to Midnight Mass at the cathedral with her voice in your ear the whole way through.",
+          "effects": [
+            { "target": "flag", "key": "sem_christmas_called_her", "value": true },
+            { "target": "pillar", "key": "spiritual", "delta": -3 },
+            { "target": "pillar", "key": "human", "delta": 1 },
+            { "target": "risk", "key": "sem_relationship_contact", "value": "renewed contact with a former partner during formation", "delta": 1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sem_friend_left_faith",
+      "phase": "seminary",
+      "yearGate": [2, 3, 4, 5, 6, 7],
+      "pressure": ["belief_vs_safety"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 10,
+      "bias": [
+        { "when": { "type": "flag", "key": "origin:lapsed", "value": true }, "multiplier": 2 },
+        { "when": { "type": "flag", "key": "origin:convert", "value": true }, "multiplier": 2 },
+        { "when": { "type": "flag", "key": "motive:intellectual", "value": true }, "multiplier": 2 },
+        { "when": { "type": "flag", "key": "field:stem", "value": true }, "multiplier": 1.5 },
+        { "when": { "type": "flag", "key": "career:professor", "value": true }, "multiplier": 1.5 },
+        { "when": { "type": "flag", "key": "tie:school", "value": true }, "multiplier": 1.5 }
+      ],
+      "suppressYears": 3,
+      "once": true,
+      "title": "Coffee with an old friend",
+      "body": "He was the closest friend you had before this, and for a while you were altar servers together, or in the same dorm, or the two Catholics in a department that thought it was quaint. He is passing through {diocese} and writes to ask if you have an afternoon, and you do, and you meet in a coffee shop in town in a shirt without a collar. He looks well. He is married now; there is a photo. And then, over the second cup, he tells you that he is done, that he stopped going three years ago after the reports came out and has not missed it, and that he wanted to tell you to your face rather than let you find out from someone else. He is not angry. He is not trying to argue you out of anything. He says he has one question, and it is not about God: it is whether you have read what the bishops knew and when they knew it, and whether you can put on that collar knowing it. He asks it kindly. He waits, the way people who know you wait.",
+      "flavorPrompt": "An old friend, now out of the Church over the abuse reports, asks the player how he can wear the collar knowing what the bishops did. Kind, not hostile. The player's answer is a position on bishop conduct.",
+      "choices": [
+        {
+          "id": "agree",
+          "label": "Say yes, you have read it, and that men who did that should have gone to prison, and that you are going in anyway",
+          "volume": "semi_public",
+          "positionTopic": "bishop_conduct",
+          "positionValue": 60,
+          "outcome": "He looks at you for a long moment and then nods, and says that is the first answer he has gotten from anyone in a collar that was not a press release. You talk for another hour. You have not brought him back and did not try. You have kept him, which was the thing that was actually on the table, and said aloud something you will have to stand behind someday in a room with a bishop in it.",
+          "effects": [
+            { "target": "flag", "key": "sem_friend_kept", "value": true },
+            { "target": "honesty", "key": "", "delta": 2 },
+            { "target": "pillar", "key": "human", "delta": 2 },
+            { "target": "outspokenness", "key": "", "delta": 1 }
+          ]
+        },
+        {
+          "id": "defend",
+          "label": "Say the Church is larger than its worst bishops, and that leaving punishes the wrong people",
+          "volume": "semi_public",
+          "positionTopic": "bishop_conduct",
+          "positionValue": -35,
+          "outcome": "It is true and it lands as a lecture, and you hear it land. He is polite about it. He pays for the coffee and says he is glad you are well, and the next letter is a Christmas card with no note, and the one after that does not come. You said what you believe. You have begun to learn that this is not always the same as saying what will keep a friend.",
+          "effects": [
+            { "target": "pillar", "key": "human", "delta": -2 },
+            { "target": "pillar", "key": "intellectual", "delta": 1 },
+            { "target": "alignment", "key": "", "delta": -2 }
+          ]
+        },
+        {
+          "id": "listen",
+          "label": "Say you do not have an answer yet, and ask him to tell you the whole of it",
+          "outcome": "He tells you. It takes two hours and involves his parish, his mother, a priest he had liked, and the particular page of the report that finished it. You do not defend anyone. You do not agree with everything. At the end he says he did not expect to be listened to and had rehearsed for an argument, and you walk him to his car. It is the best pastoral work you have done, and no one will grade it.",
+          "effects": [
+            { "target": "flag", "key": "sem_friend_kept", "value": true },
+            { "target": "pillar", "key": "pastoral", "delta": 2 },
+            { "target": "pillar", "key": "human", "delta": 2 },
+            { "target": "archetype", "key": "pastoral", "delta": 1 }
+          ]
+        },
+        {
+          "id": "argue",
+          "label": "Take the question seriously as an argument and answer it as one",
+          "requires": [{ "type": "stat", "key": "theology", "op": ">=", "value": 50 }],
+          "outcome": "You give him the distinction between the holiness of the Church and the sin of its members, and its history, and the places where it has been abused as an excuse, and where it has not. He is impressed and unmoved, which is the usual result of a good argument. You part well. You notice, driving back, that you were arguing partly with yourself and had not known there was a self to argue with.",
+          "effects": [
+            { "target": "pillar", "key": "intellectual", "delta": 3 },
+            { "target": "stat", "key": "theology", "delta": 1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sem_attraction",
+      "phase": "seminary",
+      "yearGate": [2, 3, 4, 5, 6, 7],
+      "pressure": ["body_vs_vow"],
+      "severity": "MAJOR",
+      "category": "personal",
+      "baseWeight": 12,
+      "bias": [
+        { "when": { "type": "pillar", "key": "human", "op": "<=", "value": 2 }, "multiplier": 1.5 },
+        { "when": { "type": "pillar", "key": "spiritual", "op": "<=", "value": 2 }, "multiplier": 1.5 },
+        { "when": { "type": "flag", "key": "past:relationship", "value": true }, "multiplier": 1.5 },
+        { "when": { "type": "year", "op": ">=", "value": 5 }, "multiplier": 1.5 }
+      ],
+      "suppressYears": 3,
+      "once": true,
+      "title": "Tuesdays",
+      "body": "The apostolate is Tuesday afternoons at a parish in town, and she runs the religious education office there, and she is good at it, which is the first thing you noticed and, you have told yourself, the only thing. That was in October. It is Lent now and you have started, without deciding to, choosing the shirt on Tuesday mornings. Nothing has happened. Nothing has been said. She is kind to every seminarian who comes through and you are almost sure you are not treated differently, and the almost is where you live. You catch yourself rehearsing sentences for her on the drive over and editing them on the drive back. You have not mentioned it to {@spiritual_director}, because there is nothing to mention, which you recognize as exactly what a man would say who did not want to mention it. You are not a boy. You know what this is. You also know that the diaconate is a promise made in public with the bishop's hands on your head, and that the promise does not ask whether you feel this. It asks what you will do with it, and Tuesday is tomorrow.",
+      "flavorPrompt": "Attraction to a lay colleague at the apostolate, handled as interior struggle. Nothing has happened. The question is what the player does with the feeling. No titillation, no melodrama.",
+      "choices": [
+        {
+          "id": "bring_to_direction",
+          "label": "Say it aloud to your director on Monday, before Tuesday",
+          "outcome": "{@spiritual_director} does not look surprised, which you had feared, or amused, which you had feared more. He asks what you like about her and lets you answer at length, and then asks what you would be giving her if you gave her anything, and the answer, thought through, is smaller than the feeling. Tuesday happens. It is a Tuesday. You have not been cured of anything. You have been accompanied.",
+          "effects": [
+            { "target": "relationship", "key": "@spiritual_director", "delta": 9 },
+            { "target": "pillar", "key": "spiritual", "delta": 3 },
+            { "target": "pillar", "key": "human", "delta": 1 }
+          ]
+        },
+        {
+          "id": "change_placement",
+          "label": "Ask the formation office to move you to a different apostolate, and give a reason that is true but not the reason",
+          "outcome": "The office moves you to a hospital on Thursdays without asking why, because seminarians ask for such things and it is easier not to. You do not see her again. It is clean, and it is cowardly, and you have handled the thing by removing it rather than by facing it, and you are aware that a parish will not let you do that, and that you have simply postponed the lesson.",
+          "effects": [
+            { "target": "pillar", "key": "spiritual", "delta": 1 },
+            { "target": "pillar", "key": "pastoral", "delta": -1 },
+            { "target": "pillar", "key": "human", "delta": 1 }
+          ]
+        },
+        {
+          "id": "keep_going",
+          "label": "Go on Tuesday. Say nothing to anyone. It is nothing.",
+          "outcome": "You go, and it is nothing, and the next week it is nothing, and by Easter you have a small locked room in yourself that you visit on Tuesdays and do not describe to your director, and it is furnished with sentences you have not said. Nobody knows. It is entirely interior and entirely yours, and you have learned that a man can keep a promise and still keep a room.",
+          "effects": [
+            { "target": "flag", "key": "sem_attraction_hidden", "value": true },
+            { "target": "pillar", "key": "spiritual", "delta": -2 },
+            { "target": "pillar", "key": "human", "delta": -1 },
+            { "target": "risk", "key": "sem_attraction_unaddressed", "value": "an attachment formed at the apostolate, never brought to direction", "delta": 1 }
+          ]
+        },
+        {
+          "id": "name_it",
+          "label": "Admit it to yourself, plainly: the discipline costs more than the pamphlets say, and you will pay it anyway",
+          "volume": "private",
+          "positionTopic": "celibacy_discipline",
+          "positionValue": 35,
+          "outcome": "You say it, alone, in the car in the parish lot on Tuesday before you go in: that this is what the promise is for, that it is not free, and that the men who told you it would be easy were either lying or lucky. Then you go in and do the job. She is kind. You are kind. The cost is real and you have decided, privately and for the first time as an adult, to pay it.",
+          "effects": [
+            { "target": "flag", "key": "sem_attraction_named", "value": true },
+            { "target": "honesty", "key": "", "delta": 2 },
+            { "target": "pillar", "key": "human", "delta": 2 },
+            { "target": "pillar", "key": "spiritual", "delta": 1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sem_direction_reckoning",
+      "phase": "seminary",
+      "yearGate": [2, 3, 4],
+      "pressure": ["loyalty_vs_honesty"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 12,
+      "requires": [{ "type": "thread", "key": "y1_withheld_in_direction", "open": true }],
+      "bias": [
+        { "when": { "type": "relationship", "npcId": "@spiritual_director", "op": ">=", "value": 20 }, "multiplier": 1.5 },
+        { "when": { "type": "year", "op": ">=", "value": 4 }, "multiplier": 2 }
+      ],
+      "suppressYears": 2,
+      "once": true,
+      "title": "The year you skipped",
+      "body": "{@spiritual_director} has not forgotten. You had thought he might have; the first year's meetings were about the silence and the schedule and a long stretch about your mother, and the thing you left out of that first afternoon has sat unmentioned in the corner of the room like a chair nobody uses. Today he closes the door and does not sit down at once. He says he has been thinking about the first time you met, and about a year you passed over quickly, and that he asked a small question then and let you close the door on it, and that he has wondered since whether he should have. He is not accusing you. He is telling you that he saw it, and has been waiting, and that the waiting has a limit because the year of candidacy is coming and after it the Church will begin asking you for promises, and he would rather you made them as a man who has said everything once, in this room, than as one who has not. Then he sits down. He has nowhere else to be.",
+      "flavorPrompt": "The spiritual director returns to what the player withheld in their first meeting. Internal forum. Gentle, direct. Candidacy is approaching. The player decides whether to say it now.",
+      "choices": [
+        {
+          "id": "tell_now",
+          "label": "Tell him now. All of it, in the order it happened.",
+          "outcome": "It comes out in a rush and then in pieces. He does not interrupt. When you finish he says that it is not the worst thing he has heard in that chair and that you have carried it two years longer than you needed to, and asks why, and the why is the actual conversation. You leave the room with the corner empty. It is a strange feeling, having nothing left in reserve.",
+          "resolvesThread": "y1_withheld_in_direction",
+          "effects": [
+            { "target": "flag", "key": "sem_direction_told", "value": true },
+            { "target": "honesty", "key": "", "delta": 3 },
+            { "target": "pillar", "key": "spiritual", "delta": 3 },
+            { "target": "relationship", "key": "@spiritual_director", "delta": 12 }
+          ]
+        },
+        {
+          "id": "tell_partial",
+          "label": "Tell him the shape of it without the details, and ask him to let that be enough for now",
+          "outcome": "He accepts the shape. He says that he will not ask for the rest, because the forum is yours and not his, and that you should know that the rest is what would help. It is more than you gave him the first time and less than he asked for, and the corner of the room is smaller, and not empty, and you both know where the chair is.",
+          "resolvesThread": "y1_withheld_in_direction",
+          "effects": [
+            { "target": "honesty", "key": "", "delta": 1 },
+            { "target": "pillar", "key": "spiritual", "delta": 1 },
+            { "target": "relationship", "key": "@spiritual_director", "delta": 4 }
+          ]
+        },
+        {
+          "id": "keep_it",
+          "label": "Tell him there is nothing there, and that you would rather talk about candidacy",
+          "outcome": "He talks about candidacy. He is as attentive as ever and something in the room has changed, not his warmth but his expectation, and you understand that he has stopped waiting, which is not the same as having stopped knowing. The thing is still yours. You will take it into the Rite of Admission with you, and past it, and it does not get lighter for being carried alone.",
+          "resolvesThread": "y1_withheld_in_direction",
+          "effects": [
+            { "target": "flag", "key": "sem_direction_kept_withheld", "value": true },
+            { "target": "pillar", "key": "spiritual", "delta": -2 },
+            { "target": "relationship", "key": "@spiritual_director", "delta": -5 },
+            { "target": "honesty", "key": "", "delta": -1 }
+          ]
+        }
+      ]
+    }
+  ]
+}

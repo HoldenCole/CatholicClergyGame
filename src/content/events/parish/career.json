@@ -1,0 +1,167 @@
+{
+  "_notes": "Career-wide events for both parish tiers. Succession beats fire the week a new bishop is named (flag new_bishop_pending, set by the career engine). Flags: career_wrote_new_bishop, career_went_to_see_new_bishop, career_waited_out_new_bishop, career_retirement_letter_meant, career_retirement_letter_formal.",
+  "events": [
+    {
+      "id": "career_new_bishop_letter",
+      "phase": ["parochial_vicar", "pastor"],
+      "pressure": ["ambition_vs_integrity"],
+      "severity": "CRITICAL",
+      "category": "chancery",
+      "baseWeight": 10,
+      "suppressYears": 1,
+      "beat": "succession",
+      "title": "A new bishop",
+      "body": "The announcement comes at six in the morning, Rome time, and by the time you have said the seven o'clock Mass the presbyterate has read it twice and begun to sort itself. {@bishop.full} will be installed in six weeks. The photograph in the diocesan paper shows a man you have never met, in a see you have never visited, smiling the way men smile when they have been told to. Everyone who has been anyone under the last bishop is on the phone by noon, and everyone who was not is being careful not to look pleased. You know, because it is your job to know, what you have said in public and to whom, and you know that all of it will now be read by a stranger. The vicar general sends round a note asking the priests not to speculate. The priests speculate. What you do in the next six weeks will be remembered by a man who does not yet know your name, and by the men who intend to tell him.",
+      "flavorPrompt": "The morning a diocese finds out who it belongs to now.",
+      "choices": [
+        {
+          "id": "write",
+          "label": "Write him a letter of welcome, brief and unfussy, and say nothing else",
+          "outcome": "You write four sentences and mean them. It goes in the pile with two hundred others, and his secretary reads it, and it is the kind of letter a secretary remembers. You do not mention the last bishop. The vicar general notices that you did not call.",
+          "effects": [
+            { "target": "flag", "key": "new_bishop_pending", "value": false },
+            { "target": "flag", "key": "career_wrote_new_bishop", "value": true },
+            { "target": "relationship", "key": "@bishop", "delta": 4 },
+            { "target": "reputation", "key": "chancery", "delta": 2 }
+          ]
+        },
+        {
+          "id": "go",
+          "label": "Ask for ten minutes with him in the first month, and use them",
+          "outcome": "You get eight. He is tired and courteous and wants to know what the parishes actually need, and you tell him, and he writes one thing down. You will never know which. Brother priests hear that you went and draw their own conclusions about why.",
+          "requires": [{ "type": "reputation", "key": "chancery", "op": ">=", "value": 10 }],
+          "effects": [
+            { "target": "flag", "key": "new_bishop_pending", "value": false },
+            { "target": "flag", "key": "career_went_to_see_new_bishop", "value": true },
+            { "target": "relationship", "key": "@bishop", "delta": 8 },
+            { "target": "reputation", "key": "brother_priests", "delta": -3 },
+            { "target": "outspokenness", "key": "", "delta": 2 }
+          ]
+        },
+        {
+          "id": "wait",
+          "label": "Do nothing. Let him find you where you are, or not",
+          "outcome": "You say your Masses and answer no phones about it. It is either the most dignified thing you have done or a decision you will regret in two years, and you will not know which for two years. The men who went to see him will know your name before he does.",
+          "default": true,
+          "effects": [
+            { "target": "flag", "key": "new_bishop_pending", "value": false },
+            { "target": "flag", "key": "career_waited_out_new_bishop", "value": true },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "honesty", "key": "", "delta": 1 }
+          ]
+        },
+        {
+          "id": "declare",
+          "label": "Preach on obedience to the new shepherd the Sunday after the installation, by name",
+          "outcome": "The homily is repeated to him within the week, which you knew it would be. If he is the kind of man who wanted that, you have made a friend at the top; if he is not, you have told him exactly what you think a bishop is for. Either way the parish knows where you stand, and so does the diocesan paper.",
+          "volume": "public",
+          "positionTopic": "authority",
+          "positionValue": -40,
+          "effects": [
+            { "target": "flag", "key": "new_bishop_pending", "value": false },
+            { "target": "relationship", "key": "@bishop", "delta": 6 },
+            { "target": "reputation", "key": "traditional_bloc", "delta": 5 },
+            { "target": "reputation", "key": "progressive_bloc", "delta": -4 },
+            { "target": "reputation", "key": "public", "delta": 3 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "career_new_bishop_reversal",
+      "phase": ["parochial_vicar", "pastor"],
+      "pressure": ["ambition_vs_integrity", "belief_vs_safety"],
+      "severity": "CRITICAL",
+      "category": "chancery",
+      "baseWeight": 10,
+      "suppressYears": 1,
+      "beat": "succession",
+      "requires": [{ "type": "outspokenness", "op": ">=", "value": 40 }],
+      "title": "The revaluation",
+      "body": "Within a month of the installation you understand the new arithmetic. Men who were exiled to the county's far end under the last bishop are having lunch on the second floor of the chancery. Men who were on every committee have stopped being asked. You are one or the other, and everyone knows which, because you have said things in public for years and the things are written down. A classmate calls to say, kindly, that your name came up. He will not say in what tone. The vicar for clergy, who has survived three bishops by having no opinions, asks whether you would like to talk about your future, which is what he says to men who are about to be moved and to men who are about to be promoted, and he says it in the same voice to both. You could recant nothing and let the record stand. You could find a way to be useful that has nothing to do with what you believe. Or you could write to {@bishop} directly and tell him what you think he has heard, and what you would say to it.",
+      "flavorPrompt": "The moment a man with a public record learns what it is worth under the new bishop.",
+      "choices": [
+        {
+          "id": "stand",
+          "label": "Let the record stand, say nothing, and be what you have been",
+          "outcome": "Consistency has a price and a value and you have chosen to pay the one for the other. Brother priests on both sides note that you did not trim. Whether the bishop notices depends on whether anyone tells him, and the men who would tell him are not your friends.",
+          "default": true,
+          "effects": [
+            { "target": "flag", "key": "new_bishop_pending", "value": false },
+            { "target": "honesty", "key": "", "delta": 3 },
+            { "target": "reputation", "key": "brother_priests", "delta": 4 },
+            { "target": "stat", "key": "piety", "delta": 1 }
+          ]
+        },
+        {
+          "id": "useful",
+          "label": "Make yourself useful in a way that has nothing to do with belief: volunteer for the thing nobody wants",
+          "outcome": "You take the assignment that has no politics in it, the one with the debt and the boiler, and you do it well, and the new bishop learns your name as a man who fixes things. It is not who you are. It is who you can afford to be for a few years.",
+          "requires": [{ "type": "stat", "key": "administration", "op": ">=", "value": 45 }],
+          "effects": [
+            { "target": "flag", "key": "new_bishop_pending", "value": false },
+            { "target": "reputation", "key": "chancery", "delta": 8 },
+            { "target": "stat", "key": "administration", "delta": 2 },
+            { "target": "stat", "key": "piety", "delta": -2 },
+            { "target": "ap", "key": "next_week", "delta": -2 }
+          ]
+        },
+        {
+          "id": "write",
+          "label": "Write to him directly: here is what you have heard about me, and here is what I would say to it",
+          "outcome": "Two pages, no adjectives. He answers in three lines, by hand, which is either a kindness or a warning. Men who write to bishops uninvited are either brave or foolish and the bishop decides which; you have made it his decision, at least, rather than the vicar for clergy's.",
+          "volume": "semi_public",
+          "positionTopic": "bishop_conduct",
+          "positionValue": 0,
+          "effects": [
+            { "target": "flag", "key": "new_bishop_pending", "value": false },
+            { "target": "relationship", "key": "@bishop", "delta": 5 },
+            { "target": "honesty", "key": "", "delta": 2 },
+            { "target": "reputation", "key": "chancery", "delta": -3 },
+            { "target": "outspokenness", "key": "", "delta": 3 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "career_retirement_letter",
+      "phase": ["parochial_vicar", "pastor"],
+      "pressure": ["doubt", "competence"],
+      "severity": "MAJOR",
+      "category": "personal",
+      "baseWeight": 10,
+      "suppressYears": 3,
+      "once": true,
+      "requires": [{ "type": "flag", "key": "retirement_letter", "value": true }],
+      "title": "The letter at seventy-five",
+      "body": "Canon law requires it and the chancellor's office sends a reminder in case you forgot, which you did not. You are to write to the bishop offering your resignation from your office, and he is to accept it or not, and everyone knows that in this diocese he will not, not this year, because there is no one to replace you. So the letter is a form. You sit down to write the form. What comes out is not a form. You find you have things to say about forty-odd years, about the parishes and the men who ran them and the two or three people who taught you the job, and about what it has cost, and the page fills. You will not send that version. But you have written it now, and it is in the drawer, and it is the truest account of your life that exists.",
+      "flavorPrompt": "An old priest writing the letter that will not be accepted.",
+      "choices": [
+        {
+          "id": "form",
+          "label": "Send the form. Keep the other page in the drawer",
+          "outcome": "Three sentences, correct and cold, go to the chancery. The other page stays. Someone will find it after you, and it will explain more than the sacramental registers do.",
+          "default": true,
+          "effects": [
+            { "target": "flag", "key": "career_retirement_letter_formal", "value": true },
+            { "target": "stat", "key": "piety", "delta": 2 }
+          ]
+        },
+        {
+          "id": "truth",
+          "label": "Send the true version",
+          "outcome": "It is read, which surprises you, and quoted back to you at the next clergy day by a bishop who is not usually sentimental. Men come up afterward. Whether it hastens or delays your going, you have said what you had to say to the institution that had you, and it heard.",
+          "volume": "public",
+          "positionTopic": "authority",
+          "positionValue": 10,
+          "effects": [
+            { "target": "flag", "key": "career_retirement_letter_meant", "value": true },
+            { "target": "honesty", "key": "", "delta": 4 },
+            { "target": "reputation", "key": "brother_priests", "delta": 8 },
+            { "target": "relationship", "key": "@bishop", "delta": 6 }
+          ]
+        }
+      ]
+    }
+  ]
+}
