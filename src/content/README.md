@@ -206,6 +206,17 @@ the parish sheet, and `parish/ambient.json` has a pool per preset id that
 the digest draws from twice as often as the general pool. No diocese rolls
 a shortage below 3 (`stretched`): there is always a shortage.
 
+### Clubs and circles (`content/clubs/`)
+
+`seminary.json` and `priests.json` define societies: hours a week (free hours in
+seminary, blocks in a parish), `requires` for open ones, `inviteOnly` for those
+that arrive as offers (the offer's accept effect is `{ "target": "club", "key":
+"<id>", "value": "join" }`), `weekly` effects, `onJoin` / `onLeave`, `fellows`
+(classmates or brother priests who warm each week), `stamina` (strain eased a
+week), and `credentialAfter`. Each writes `club:<id>`; content and the engine
+read it (`club:tlm_society` and `can_celebrate_tlm` point the first assignment
+at a parish with a Latin Mass faction). Seminary clubs end at ordination.
+
 ### The player's dials
 
 `state.settings` holds the work-week length (`light` 10, `standard` 12,

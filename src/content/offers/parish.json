@@ -4939,6 +4939,191 @@
         ],
         "outcome": "You write back that you have a parish, which the editor, who has heard it from better men, accepts with grace. The column goes to a priest who says less and is read more. You are, for a while, quieter, and something in the chapel is easier for it."
       }
+    },
+    {
+      "id": "pv_priests_tlm",
+      "category": "social",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "title": "A Tuesday Forty Miles Out",
+      "body": "A pastor you barely know calls the rectory and asks, in the voice of a man who has rehearsed it, whether you would drive out on a Tuesday to say Mass with a few of them in the older form. He knows you can. He does not say how. They meet monthly at his church, six or seven priests, and say Mass together and eat afterward and talk about the diocese in a way that would not survive being repeated. Where the bishop allows the older Mass they say it in their parishes; where he does not, they say it for each other. To belong is to be counted, by the chancery and by the other wing, as one of them.",
+      "from": "@brother_priest",
+      "requires": [
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "club:priests_tlm",
+            "value": true
+          }
+        },
+        {
+          "type": "any",
+          "inner": [
+            {
+              "type": "credential",
+              "key": "latin"
+            },
+            {
+              "type": "flag",
+              "key": "can_celebrate_tlm",
+              "value": true
+            },
+            {
+              "type": "flag",
+              "key": "affiliation:trad_fraternity",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "weight": 22,
+      "windowWeeks": 3,
+      "once": true,
+      "cluster": "social",
+      "accept": {
+        "effects": [
+          {
+            "target": "club",
+            "key": "priests_tlm",
+            "value": "join"
+          }
+        ],
+        "outcome": "You drive out. The Mass is beautiful and slow and the dinner is long, and by the drive home you have six brother priests who will speak for you, and a name in a file at the chancery."
+      },
+      "decline": {
+        "effects": [
+          {
+            "target": "reputation",
+            "key": "traditional_bloc",
+            "delta": -5
+          }
+        ],
+        "outcome": "You say you cannot on Tuesdays. He says he understands, and does not call again, and the men who might have been yours are polite to you at the Chrism Mass."
+      }
+    },
+    {
+      "id": "pv_liturgical_commission",
+      "category": "social",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "title": "A Seat on the Commission",
+      "body": "The director of the Office of Worship writes to say {@bishop} would like you on the diocesan liturgical commission, which meets monthly and decides what the diocese sings, how the cathedral is arranged, what the norms say about the altar rail and the guitar, and which every pastor in the diocese resents by reflex. The bishop reads its minutes. The members are known, and blamed, and asked to dinner. You would have a hand on the liturgy of two hundred parishes, and every one of them would know your name for the wrong reasons before the right ones.",
+      "from": "@bishop",
+      "requires": [
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "club:liturgical_commission",
+            "value": true
+          }
+        },
+        {
+          "type": "reputation",
+          "key": "chancery",
+          "op": ">=",
+          "value": 25
+        },
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 2
+        }
+      ],
+      "weight": 24,
+      "windowWeeks": 3,
+      "once": true,
+      "cluster": "social",
+      "accept": {
+        "effects": [
+          {
+            "target": "club",
+            "key": "liturgical_commission",
+            "value": "join"
+          }
+        ],
+        "outcome": "The first meeting is four hours on the placement of the tabernacle in a church you have never seen. You say one useful thing and the director writes it down. The bishop nods to you at the next deanery Mass."
+      },
+      "decline": {
+        "effects": [
+          {
+            "target": "reputation",
+            "key": "chancery",
+            "delta": -3
+          }
+        ],
+        "outcome": "You write that the parish needs you on the nights it meets. The director is understanding and the bishop is not told, or is told and says nothing, which is worse."
+      }
+    },
+    {
+      "id": "pv_canon_lawyers",
+      "category": "social",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "title": "The First Friday Lunch",
+      "body": "The chancellor mentions, after a meeting at the chancery, that some of them eat at a diner near the chancery on the first Friday, the tribunal's priests and two pastors who read canon law for the pleasure of it, and that you would be welcome. What is said at that table is every marriage case in the diocese with the names half-hidden, every pastor's mistake as it reaches the chancery, and what the bishop will do about it before he knows himself. A man who eats there knows things. A man who knows things is asked for them.",
+      "from": "@chancellor",
+      "requires": [
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "club:canon_lawyers",
+            "value": true
+          }
+        },
+        {
+          "type": "any",
+          "inner": [
+            {
+              "type": "credential",
+              "key": "JCL"
+            },
+            {
+              "type": "credential",
+              "key": "partial_jcl"
+            },
+            {
+              "type": "flag",
+              "key": "tribunal_ready",
+              "value": true
+            },
+            {
+              "type": "flag",
+              "key": "office:tribunal",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "weight": 22,
+      "windowWeeks": 3,
+      "once": true,
+      "cluster": "social",
+      "accept": {
+        "effects": [
+          {
+            "target": "club",
+            "key": "canon_lawyers",
+            "value": "join"
+          }
+        ],
+        "outcome": "The diner has a booth in the back that has been the tribunal's since before you were born. You learn three things at the first lunch that you will never repeat and one that you will."
+      },
+      "decline": {
+        "effects": [],
+        "outcome": "You have a funeral that Friday, and the next, and the chancellor stops mentioning it. What is said at that table is said without you."
+      }
     }
   ]
 }

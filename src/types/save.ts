@@ -21,6 +21,7 @@ export interface DioceseCandidate {
 import type { SeminaryState } from './seminary';
 import type { Phase } from './stats';
 import type { StudyState } from './study';
+import type { ClubsState } from './clubs';
 import type { Beat, Clock, Speed } from './time';
 
 export type FlagValue = boolean | number | string;
@@ -63,6 +64,8 @@ export interface GameState {
   strain: number;
   /** The player's own dials, kept in the save so a replay is byte-identical. */
   settings?: GameSettings;
+  /** Societies he belongs to. Absent in older saves. */
+  clubs?: ClubsState;
   flags: Record<string, FlagValue>;
   threads: Record<string, ThreadState>;
   /** eventId -> absolute week before which it may not fire again. */

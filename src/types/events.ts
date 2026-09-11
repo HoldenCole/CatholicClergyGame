@@ -153,7 +153,9 @@ export type EffectTarget =
   /** Move the man now: key is a parish kind (or 'difficult'), value the role. The letter arrives the next week. */
   | 'transfer'
   /** Building condition of the current parish: key church | rectory | hall | school, delta. */
-  | 'building';
+  | 'building'
+  /** Join or leave a society: key is the club id, value 'join' | 'leave'. content/clubs. */
+  | 'club';
 
 export interface Effect {
   target: EffectTarget;

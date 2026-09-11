@@ -4,6 +4,7 @@ import { evaluateAll } from './conditions';
 import { applyEffects } from './effects';
 import type { Rng } from './rng';
 import { gameYearOf, yearStartDay } from './time';
+import { leaveSeminaryClubs } from '@/systems/clubs';
 import { evaluate, formationWeek, nameArchetype, setEmphasis, zeroPillars } from '@/systems/formation';
 import { summerOptions } from '@/content/seminary';
 import { renderText } from './text';
@@ -272,6 +273,7 @@ export function leaveSeminary(state: GameState, reason?: string): GameState {
 
 /** DESIGN.md §6.6: the exit payload. Names the archetype, then the bishop assigns. */
 export function ordain(state: GameState, rng: Rng): GameState {
+  state = leaveSeminaryClubs(state);
   if (!state.character || !state.seminary) return state;
   const archetype = nameArchetype(state);
   const ordained: GameState = {

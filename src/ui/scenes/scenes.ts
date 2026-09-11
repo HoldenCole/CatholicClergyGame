@@ -14,7 +14,7 @@ export type HotspotBinding =
   /** A priest-student's free hour, by id in content/study/activities.json. */
   | { kind: 'study_action'; activityId: string }
   | { kind: 'obligation'; key: ObligationKey }
-  | { kind: 'panel'; panel: 'routine' | 'groups' | 'projects' | 'offers' | 'digest' | 'parish' | 'formation' }
+  | { kind: 'panel'; panel: 'routine' | 'groups' | 'projects' | 'offers' | 'digest' | 'parish' | 'formation' | 'clubs' }
   | { kind: 'furnish'; place: 'church' | 'office' | 'rectory' | 'seminary_room' | 'chancery' }
   | { kind: 'scene'; scene: SceneId };
 
@@ -153,7 +153,7 @@ export const SEMINARY_HALL: SceneDef = {
     { id: 'library', label: 'The library: study', x: 3, y: 18, w: 11, h: 44, binds: { kind: 'seminary_action', activityId: 'study' } },
     { id: 'director', label: "The spiritual director's door", x: 15, y: 20, w: 8, h: 38, binds: { kind: 'seminary_action', activityId: 'direction' } },
     { id: 'rector', label: "The rector's office: the sacristan's job", x: 77, y: 20, w: 8, h: 38, binds: { kind: 'seminary_action', activityId: 'sacristan' } },
-    { id: 'common', label: 'The common room', x: 86, y: 18, w: 11, h: 44, binds: { kind: 'seminary_action', activityId: 'common_room' } },
+    { id: 'common', label: 'The common room: the clubs', x: 86, y: 18, w: 11, h: 44, binds: { kind: 'panel', panel: 'clubs' } },
     { id: 'gym', label: 'The gym: basketball at four', x: 4, y: 66, w: 22, h: 26, binds: { kind: 'seminary_action', activityId: 'sports' } },
     { id: 'language', label: 'The language lab: Spanish', x: 74, y: 66, w: 22, h: 26, binds: { kind: 'seminary_action', activityId: 'spanish' } },
     { id: 'out', label: 'The front door: a parish weekend', x: 40, y: 70, w: 20, h: 26, binds: { kind: 'seminary_action', activityId: 'parish_weekend' } },

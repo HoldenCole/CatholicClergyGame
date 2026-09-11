@@ -55,7 +55,7 @@ const ROLES = ['parochial_vicar', 'administrator', 'pastor'];
 const EFFECT_TARGETS = [
   'stat', 'reputation', 'relationship', 'flag', 'group', 'money', 'ap', 'thread', 'position',
   'pillar', 'alignment', 'outspokenness', 'honesty', 'credential', 'trait', 'archetype',
-  'concern', 'risk', 'npc', 'end', 'decor', 'permission', 'trait_known', 'transfer', 'building',
+  'concern', 'risk', 'npc', 'end', 'decor', 'permission', 'trait_known', 'transfer', 'building', 'club',
 ];
 const DECOR_PLACES = ['church', 'office', 'rectory', 'seminary_room', 'chancery'];
 const DECOR_SLOTS = ['sanctuary', 'altar_rail', 'orientation', 'confessionals', 'choir', 'statues', 'tabernacle', 'mass_form', 'wall', 'desk', 'floor', 'corner'];

@@ -14,7 +14,7 @@ import { CHANCERY_SCENE, SCENES, SEMINARY_HALL, SEMINARY_SCENE, STUDY_CITY, STUD
 import { useUiStore, type Sheet } from '../uiStore';
 
 const NEXT_QUALITY: Record<Quality, Quality> = { min: 'standard', standard: 'invested', invested: 'min' };
-const PANEL_SHEET: Record<string, Sheet> = { routine: 'week', groups: 'people', projects: 'people', offers: 'letters', digest: 'record', parish: 'parish', formation: 'formation' };
+const PANEL_SHEET: Record<string, Sheet> = { routine: 'week', groups: 'people', projects: 'people', offers: 'letters', digest: 'record', parish: 'parish', formation: 'formation', clubs: 'clubs' };
 const PLACE_SCENE: Record<DecorPlace, SceneId> = { church: 'church', office: 'office', rectory: 'rectory', seminary_room: 'seminary_room', chancery: 'chancery' };
 
 /**

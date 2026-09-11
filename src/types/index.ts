@@ -17,3 +17,4 @@ export * from './promotion';
 export * from './career';
 export * from './decor';
 export * from './study';
+export * from './clubs';

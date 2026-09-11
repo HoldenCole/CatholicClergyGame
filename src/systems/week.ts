@@ -3,6 +3,7 @@ import { OBLIGATION_KEYS } from '@/types';
 import { actionDefs, obligationDefs, sacrificeDefs, SEASONAL_LOAD } from '@/content/parish';
 import { takeSnapshot, TRAJECTORY } from './trajectory';
 import { extraBlocks, parishBlocks, wearOf } from './workweek';
+import { clubHours, staminaOf } from './clubs';
 import { applyEffects } from '@/engine/effects';
 import { commitmentAp } from '@/engine/offers';
 import { seasonOf } from '@/engine/time';
@@ -105,9 +106,9 @@ export function strainOf(state: GameState): number {
  * past a standard week add strain at the wear rate; a plain week rests him.
  */
 export function strainAfterWeek(state: GameState, sacrificed: number, extra: number): number {
-  const gained = (sacrificed + extra * WEEK.strainPerExtraBlock) * wearOf(state);
+  const gained = Math.max(0, (sacrificed + extra * WEEK.strainPerExtraBlock) * wearOf(state) - staminaOf(state));
   const before = strainOf(state);
-  return Math.max(0, Math.min(100, before + (gained > 0 ? gained : -WEEK.strainRecovery)));
+  return Math.max(0, Math.min(100, before + (gained > 0 ? gained : -(WEEK.strainRecovery + staminaOf(state)))));
 }
 
 export function strainWord(strain: number): string {
@@ -139,7 +140,7 @@ export interface Plan {
 export function planWeek(state: GameState): Plan {
   const parish = state.parish!;
   const budget = weekBudget(state);
-  const fixed = seasonalLoad(state) + adminFloorFor(state) + commitmentAp(state) + (state.founding?.apPerWeek ?? 0) + (state.parish?.work?.apPerWeek ?? 0);
+  const fixed = seasonalLoad(state) + adminFloorFor(state) + commitmentAp(state) + (state.founding?.apPerWeek ?? 0) + (state.parish?.work?.apPerWeek ?? 0) + clubHours(state);
   const relief = groupRelief(state);
   const obligations = { ...parish.routine.obligations };
   const mandatoryOf = () => fixed + OBLIGATION_KEYS.reduce((n, k) => n + obligationAp(k, obligations[k], (relief as Record<string, number>)[k] ?? 0), 0);

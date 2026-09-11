@@ -6,6 +6,7 @@ import { applyStat } from './stats';
 import { applyReputation } from './reputation';
 import { renderText } from '@/engine/text';
 import { freeHourShift } from './workweek';
+import { clubHours } from './clubs';
 import { strainAfterWeek, strainOf, WEEK } from './week';
 
 /** DESIGN §6: the weekly loop at low stakes, with fewer hours than a parish. Invented. */
@@ -60,7 +61,7 @@ export function setSeminaryActivity(state: GameState, id: string, ap: number): G
   const def = seminaryActivity(id);
   if (!sem || !def) throw new Error(`no such activity ${id}`);
   const routine = { ...routineOf(sem) };
-  const others = routineHours(sem) - (routine[id] ?? 0);
+  const others = routineHours(sem) - (routine[id] ?? 0) + clubHours(state);
   const next = Math.max(0, Math.min(def.maxAp, Math.floor(ap), seminaryBudget(state) - others));
   if (next === 0) delete routine[id];
   else routine[id] = next;
