@@ -7,6 +7,7 @@ import { driftRome, successionYear } from '@/systems/succession';
 import { handoffProject } from '@/systems/projects';
 import { ARC } from './parish';
 import { renderText } from './text';
+import { deliverLetter, yearInReview } from '@/systems/review';
 
 /** Invented. DESIGN 7.3: retirement letters go in at 75 and are often not accepted for years. */
 export const CAREER = {
@@ -68,10 +69,12 @@ export function careerYear(state: GameState, rng: Rng): GameState {
     next = addDigest(next, succession.lines);
     next = note(next, 'succession', succession.lines.join(' '));
     next = { ...next, flags: { ...next.flags, new_bishop_pending: true }, beats: [...next.beats, { kind: 'succession', week: next.clock.week, label: 'A new bishop' }] };
+    if (succession.letter) next = deliverLetter(next, succession.letter);
   }
 
   const traj = advanceTrajectories(next, years);
   next = addDigest(traj.state, traj.lines);
+  for (const line of traj.lines) next = note(next, 'note', line);
 
   const openings = refreshOpenings(next, rng.derive(`openings:${state.clock.week}`));
   next = addDigest(openings.state, openings.lines);
@@ -80,6 +83,11 @@ export function careerYear(state: GameState, rng: Rng): GameState {
   if (next.assignment?.role === 'pastor' && next.parish && next.parish.weeksServed >= CAREER.pastorTermYears * 52 && !next.flags.term_renewed) {
     next = { ...next, flags: { ...next.flags, term_renewed: true } };
     next = addDigest(note(next, 'note', 'Renewed for a second term as pastor.'), ['A letter from the chancery: your term as pastor is renewed for six years. No one asked you.']);
+  }
+  // The year in review: a letter the man must read before the clock moves on. Not while he is being moved.
+  if (next.mode.kind === 'clock' || next.mode.kind === 'letter') {
+    const review = yearInReview(next);
+    next = deliverLetter({ ...next, reviewBaseline: review.baseline }, review.letter);
   }
   const age = playerAge(next);
   if (age >= CAREER.retirementAge) {
@@ -201,6 +209,7 @@ export function beginCareer(state: GameState, rng: Rng): GameState {
   const age = playerAge(next);
   // DESIGN §7.2: the maturity curve is read by content as well as by the board.
   next = { ...next, flags: { ...next.flags, ...(age >= 32 ? { ordained_late: true } : {}), ...(age < 30 ? { ordained_young: true } : {}) } };
+  next = { ...next, reviewBaseline: { week: next.clock.week, reputation: { ...next.character!.reputation }, stats: { ...next.character!.stats }, strain: next.strain ?? 0 } };
   return note(next, 'note', `Ordained at ${age} for ${next.world?.diocese.visible.name ?? 'the diocese'}.`);
 }
 

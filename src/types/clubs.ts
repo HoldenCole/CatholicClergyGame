@@ -29,6 +29,8 @@ export interface ClubDef {
   credentialAfter?: { weeks: number; credential?: string; flag?: string; line: string };
   /** What it builds, in words, for the sheet. */
   builds: string;
+  /** How a bishop reads membership: −1 the traditional wing .. +1 the progressive wing. Absent means nobody reads anything into it. */
+  leaning?: number;
 }
 
 export interface ClubMembership {

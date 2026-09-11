@@ -12,7 +12,7 @@ describe('a whole career with real content', () => {
 
   it('runs from creation through seminary and thirty years of parish life without errors', () => {
     const end = playCareer('career-run', 'chicago', 52 * 37);
-    expect(['clock', 'ended', 'assignment']).toContain(end.mode.kind);
+    expect(['clock', 'ended', 'assignment', 'letter']).toContain(end.mode.kind);
     expect(end.flags.ordained).toBe(true);
     expect(end.history.length).toBeGreaterThan(30);
     expect(end.career.length).toBeGreaterThan(2);

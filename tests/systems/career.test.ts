@@ -7,6 +7,7 @@ import { startAssignment } from '@/engine/parish';
 import { advanceTrajectories, rollTrajectory, rollTrajectories } from '@/systems/trajectories';
 import { refreshOpenings, playerCandidate } from '@/systems/openings';
 import { revalue, successionYear } from '@/systems/succession';
+import { readLetter } from '@/systems/review';
 import { availableProjects, projectWeek, startProject } from '@/systems/projects';
 import { parishState } from './week.test';
 import { testNpc } from '../helpers/fixtures';
@@ -211,6 +212,8 @@ describe('engine/career', () => {
         if (s.mode.kind === 'assignment') {
           boards++;
           s = startAssignment({ ...s, mode: { kind: 'clock' } }, rng);
+        } else if (s.mode.kind === 'letter') {
+          s = readLetter(s);
         } else if (s.pending.length) {
           s = { ...s, pending: [] };
         }
