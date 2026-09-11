@@ -5,6 +5,8 @@ import { resolveSelector } from '@/engine/selectors';
 import { applyStat } from './stats';
 import { applyReputation } from './reputation';
 import { renderText } from '@/engine/text';
+import { freeHourShift } from './workweek';
+import { strainAfterWeek, strainOf, WEEK } from './week';
 
 /** DESIGN §6: the weekly loop at low stakes, with fewer hours than a parish. Invented. */
 export const SEMINARY_WEEK = {
@@ -18,7 +20,9 @@ export const SEMINARY_WEEK = {
 
 export function seminaryBudget(state: GameState): number {
   const year = state.seminary?.year ?? 2;
-  return year === 1 ? SEMINARY_WEEK.propaedeuticHours : year >= 7 ? SEMINARY_WEEK.deaconHours : SEMINARY_WEEK.freeHours;
+  const base = year === 1 ? SEMINARY_WEEK.propaedeuticHours : year >= 7 ? SEMINARY_WEEK.deaconHours : SEMINARY_WEEK.freeHours;
+  const sick = strainOf(state) >= WEEK.strainSick ? 1 : 0;
+  return Math.max(1, base + freeHourShift(state) - sick);
 }
 
 export function routineOf(sem: SeminaryState): Record<string, number> {
@@ -129,10 +133,14 @@ export function seminaryWeek(state: GameState, rng: Rng): SeminaryWeekResult {
     const phrase = def.digest[(state.clock.week + def.digest.length) % def.digest.length]!;
     phrases.push(hours > 1 ? `${phrase} (${hours} hours)` : phrase);
   }
+  // A longer week than the house keeps wears on a seminarian too.
+  const strain = strainAfterWeek(state, 0, Math.max(0, freeHourShift(state)));
+  if (strain >= WEEK.strainWorn) stats = applyStat(stats, 'piety', -WEEK.strainPietyDrain);
   const next: GameState = {
     ...state,
     npcs,
     flags,
+    strain,
     character: { ...c, stats, reputation, credentials },
     seminary: { ...sem, pillarScores, hoursLogged, hoursGains },
   };

@@ -59,6 +59,10 @@ export interface GameState {
   seminary: SeminaryState | null;
   /** Away for a degree. Null unless the phase is 'study'. */
   study: StudyState | null;
+  /** 0..100. How worn the man is, from long weeks and what he has cut from his own life. Carried through every phase. */
+  strain: number;
+  /** The player's own dials, kept in the save so a replay is byte-identical. */
+  settings?: GameSettings;
   flags: Record<string, FlagValue>;
   threads: Record<string, ThreadState>;
   /** eventId -> absolute week before which it may not fire again. */
@@ -106,7 +110,14 @@ export interface Snapshot {
   rngState: RngState;
 }
 
-export const SAVE_VERSION = 4;
+export type WorkWeek = 'light' | 'standard' | 'long' | 'punishing';
+export interface GameSettings {
+  workWeek: WorkWeek;
+  /** Multiplier on strain gained: 0 (none) .. 2 (brutal). */
+  wear: number;
+}
+
+export const SAVE_VERSION = 5;
 
 export interface SaveFile {
   version: number;

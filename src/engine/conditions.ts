@@ -95,7 +95,7 @@ export function evaluateCondition(
     case 'figure':
       return !!c && isFigure(c);
     case 'strain':
-      return compare(cond.op, state.parish?.strain ?? 0, cond.value);
+      return compare(cond.op, state.strain ?? 0, cond.value);
     case 'bishop': {
       const b = state.world?.diocese.hidden.bishop;
       if (!b) return false;

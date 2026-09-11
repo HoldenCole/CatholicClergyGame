@@ -15,6 +15,11 @@ export const STANDING = {
   pillarSteady: 9,
   rectorPerPoint: 0.12,
   summer: 4,
+  rectorRecommends: 12,
+  rectorDoubts: -12,
+  leader: 6,
+  noticed: 8,
+  wary: -10,
   cap: [0, 100] as [number, number],
 } as const;
 
@@ -51,6 +56,12 @@ export function formationStanding(state: GameState): Standing {
   if (rector) value += rector.relationship * STANDING.rectorPerPoint;
   const summers = Object.values(sem.summers).filter((s) => s !== 'home_parish').length;
   value += summers * STANDING.summer;
+  // What the seminary years wrote in the file (events/seminary/career.json).
+  if (state.flags.rector_recommends) value += STANDING.rectorRecommends;
+  if (state.flags.rector_doubts) value += STANDING.rectorDoubts;
+  if (state.flags.seminary_leader) value += STANDING.leader;
+  if (state.flags.noticed_by_bishop) value += STANDING.noticed;
+  if (state.flags.bishop_wary) value += STANDING.wary;
   value = Math.max(STANDING.cap[0], Math.min(STANDING.cap[1], value));
 
   if (advanced >= 4 && concerns === 0) reasons.push('every evaluation clean');
@@ -60,6 +71,11 @@ export function formationStanding(state: GameState): Standing {
   if (rector && rector.relationship >= 30) reasons.push('the rector spoke for you');
   if (rector && rector.relationship <= -20) reasons.push('the rector did not');
   if (summers >= 3) reasons.push('the summers were used well');
+  if (state.flags.rector_recommends) reasons.push('the rector will write for you');
+  if (state.flags.rector_doubts) reasons.push("the rector's letter will be careful");
+  if (state.flags.seminary_leader) reasons.push('the house followed you');
+  if (state.flags.noticed_by_bishop) reasons.push('the bishop knows your name, and likes it');
+  if (state.flags.bishop_wary) reasons.push('the bishop has a reservation');
   return { value, word: standingWord(value), reasons };
 }
 

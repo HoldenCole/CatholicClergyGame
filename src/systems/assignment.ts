@@ -22,6 +22,10 @@ export const ASSIGNMENT = {
   summerChancery: 8,
   summerRome: 8,
   summerMission: 6,
+  /** What the seminary said he was for, when a posting matches it. */
+  known: 14,
+  noticed: 8,
+  wary: -10,
   noise: 10,
 } as const;
 
@@ -39,7 +43,7 @@ export function terrainOf(state: GameState): string | null {
 }
 
 /** Score one parish for the newly ordained man. Fit is amplified by outspokenness (DESIGN §7.1). */
-export function scoreParish(state: GameState, world: World, parish: Parish): ParishScore {
+export function scoreParish(state: GameState, world: World, parish: Parish, opts: { hidden: boolean } = { hidden: true }): ParishScore {
   const c = state.character!;
   const reasons: string[] = [];
   let need = 0;
@@ -50,7 +54,8 @@ export function scoreParish(state: GameState, world: World, parish: Parish): Par
     need += ASSIGNMENT.needProblem;
     reasons.push(`${parish.name} needed a body: ${PROBLEM_LABEL[parish.problem] ?? parish.problem}`);
   }
-  need += world.diocese.hidden.shortage * ASSIGNMENT.needPerShortage * (parish.households / 3000);
+  // The preview at creation may not read the hidden half (CLAUDE.md rule 6); the bishop does.
+  if (opts.hidden) need += world.diocese.hidden.shortage * ASSIGNMENT.needPerShortage * (parish.households / 3000);
 
   const terrain = terrainOf(state);
   if (terrain && terrain !== 'none') {
@@ -95,6 +100,22 @@ export function scoreParish(state: GameState, world: World, parish: Parish): Par
   if (pull >= 0.3 && prestige >= 0.6) reasons.push(`${capital(standing.word)}, and the bishop sends those men where they will be seen`);
   if (pull >= 0.3 && prestige <= 0.3) reasons.push(`${capital(standing.word)}, spent on a place that needed a good man more than it deserved one`);
   if (pull <= -0.3 && prestige <= 0.35) reasons.push(`${capital(standing.word)}; the bishop chose somewhere quiet to season you`);
+
+  // What the diocese thinks he is for, from the seminary years.
+  if (state.flags.known_administrator && (parish.debt >= 500_000 || parish.problem === 'staff_theft' || parish.problem === 'school_tuition')) {
+    fit += ASSIGNMENT.known;
+    reasons.push('The diocese has you down as a man for the books');
+  }
+  if (state.flags.known_pastoral && (parish.kind === 'struggling_urban' || parish.kind === 'immigrant_growing' || parish.kind === 'difficult')) {
+    fit += ASSIGNMENT.known;
+    reasons.push('The diocese has you down as a pastor, and sends you where one is needed');
+  }
+  if (state.flags.known_scholar && parish.kind === 'flagship_suburban') {
+    fit += ASSIGNMENT.known;
+    reasons.push('The diocese has you down as a scholar, and the flagship has the lecture series');
+  }
+  if (state.flags.noticed_by_bishop) trust += ASSIGNMENT.noticed;
+  if (state.flags.bishop_wary) trust += ASSIGNMENT.wary;
 
   // The summers are remembered.
   if (state.flags['summer:hard_parish'] && parish.kind === 'difficult') {

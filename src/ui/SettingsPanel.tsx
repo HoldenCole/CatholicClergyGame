@@ -1,11 +1,41 @@
 import { useGameStore } from '@/engine/store';
 import { LLM_MODELS } from '@/llm/settings';
+import { settingsOf, WEAR_LEVELS, WORK_WEEKS } from '@/systems/workweek';
+import { strainOf, strainWord } from '@/systems/week';
+import type { WorkWeek } from '@/types';
 import Sheet from './Sheet';
 
 export default function SettingsPanel() {
   const llm = useGameStore((s) => s.llm);
   const setLlm = useGameStore((s) => s.setLlm);
+  const game = useGameStore((s) => s.game);
+  const setSettings = useGameStore((s) => s.setSettings);
+  const settings = game ? settingsOf(game) : null;
   return (
+    <>
+    {game && settings && (
+      <Sheet title="The week">
+        <label className="flex flex-col gap-1 text-sm">
+          <span>How long a week you work</span>
+          <select className="pinput" value={settings.workWeek} onChange={(e) => setSettings({ workWeek: e.target.value as WorkWeek })}>
+            {(Object.keys(WORK_WEEKS) as WorkWeek[]).map((k) => (
+              <option key={k} value={k}>{WORK_WEEKS[k].label}</option>
+            ))}
+          </select>
+          <span className="ink-faint text-xs">{WORK_WEEKS[settings.workWeek].blurb}</span>
+        </label>
+        <label className="mt-3 flex flex-col gap-1 text-sm">
+          <span>How much a long week wears on you</span>
+          <select className="pinput" value={String(settings.wear)} onChange={(e) => setSettings({ wear: Number(e.target.value) })}>
+            {WEAR_LEVELS.map((w) => (
+              <option key={w.value} value={String(w.value)}>{w.label}</option>
+            ))}
+          </select>
+          <span className="ink-faint text-xs">{WEAR_LEVELS.find((w) => w.value === settings.wear)?.blurb ?? ''} You are {strainWord(strainOf(game))}.</span>
+        </label>
+        <p className="ink-faint mt-2 text-xs">Both change the seminary's free hours, the hours away, and the parish week alike, and are kept in the save.</p>
+      </Sheet>
+    )}
     <Sheet title="Prose">
       <label className="flex items-center gap-2 text-sm">
         <input type="checkbox" checked={llm.enabled} onChange={(e) => setLlm({ enabled: e.target.checked })} />
@@ -25,5 +55,6 @@ export default function SettingsPanel() {
         </div>
       )}
     </Sheet>
+    </>
   );
 }

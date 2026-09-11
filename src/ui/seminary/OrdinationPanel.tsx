@@ -4,6 +4,7 @@ import { ordinationAge } from '@/systems/creation';
 import type { Archetype } from '@/types';
 import Panel from '../Panel';
 import { currentPreference, PREFERENCES, PREFERENCE_LABEL } from '@/systems/assignment';
+import { formationStanding, summersOnRecord } from '@/systems/standing';
 
 const ARCHETYPE_TEXT: Record<Archetype, string> = {
   pastoral: 'a pastor: the man people come to, and stay with',
@@ -30,7 +31,20 @@ export default function OrdinationPanel() {
         {bishop ? `${bishop.title} ${bishop.name.last}` : 'The bishop'} lays hands on you in the cathedral. You are {ordinationAge(c)}. The seminary
         names you {ARCHETYPE_TEXT[archetype]}. {ordainedWith.length} of the {classmates.length} men you entered with are ordained beside you.
       </p>
-      {c.credentials.length > 0 && <p className="ink-muted mt-2 text-sm">You leave with: {c.credentials.join(', ')}.</p>}
+      {(() => {
+        const standing = formationStanding(game);
+        const summers = summersOnRecord(game.seminary);
+        const known = [game.flags.known_pastoral && 'a pastor', game.flags.known_scholar && 'a scholar', game.flags.known_administrator && 'a man for the books'].filter((x): x is string => !!x);
+        return (
+          <div className="mt-3 rounded border rule bg-white/30 p-3 text-sm leading-relaxed">
+            <div className="heading mb-1">What the seminary made of you</div>
+            <p>The file reads as <span className="font-medium">{standing.word}</span>{standing.reasons.length ? `: ${standing.reasons.join(', ')}` : ''}.{known.length ? ` The diocese has you down as ${known.join(' and ')}.` : ''}</p>
+            {c.traits.length > 0 && <p className="ink-muted mt-1">They say of you: {c.traits.slice(-6).join('; ')}.</p>}
+            {summers.length > 0 && <p className="ink-muted mt-1">The summers: {summers.map((x) => x.label.toLowerCase()).join(', ')}.</p>}
+            {c.credentials.length > 0 && <p className="ink-muted mt-1">You leave with: {c.credentials.join(', ')}.</p>}
+          </div>
+        );
+      })()}
       <p className="ink-muted mt-2 text-sm">
         Positions on the record: {c.positions.filter((p) => p.volume !== 'private').length}. Concerns in the file: {game.seminary?.concerns.length ?? 0}.
       </p>

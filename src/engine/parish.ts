@@ -91,7 +91,6 @@ export function startAssignment(state: GameState, rng: Rng): GameState {
     apNextWeek: 0,
     recycledHomilyStreak: 0,
     weeksServed: 0,
-    strain: state.parish?.strain ?? 0,
     work: null,
     snapshots: [],
   };
@@ -139,6 +138,8 @@ function ambientLine(state: GameState, rng: Rng): string {
   const season = seasonOf(state.clock);
   if (lines[season]) pools.push(lines[season]!);
   if (parish && lines[parish.kind]) pools.push(lines[parish.kind]!);
+  const presetId = state.world?.diocese.presetId;
+  if (presetId && lines[presetId]) pools.push(lines[presetId]!, lines[presetId]!);
   const pool = rng.pick(pools);
   return rng.pick(pool.length ? pool : lines.any ?? ['A quiet week.']);
 }

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { DioceseVisible } from '@/types';
+import { KIND_WORD, type Placement } from '@/systems/placement';
 import { NEED_LABEL, TENSION_LABEL, prioritiesLine } from '@/generation/diocese';
 import Portrait from '../portraits/Portrait';
 import { portraitFromParts } from '../portraits/spec';
@@ -10,11 +11,14 @@ import { portraitFromParts } from '../portraits/spec';
  */
 export default function DioceseCards({
   dioceses,
+  placements = {},
   selected,
   onSelect,
   onSurprise,
 }: {
   dioceses: DioceseVisible[];
+  /** Where a man like this would probably be sent, by diocese id; computed from visible facts only. */
+  placements?: Record<string, Placement | null>;
   selected: string | null;
   onSelect: (id: string) => void;
   onSurprise: () => void;
@@ -49,13 +53,13 @@ export default function DioceseCards({
         </li>
       </ul>
       <div className="col-span-8 min-h-[420px] rounded border rule bg-white/25 p-4">
-        {shown ? <Card d={shown} /> : <p className="ink-faint">Choose a diocese to read about it.</p>}
+        {shown ? <Card d={shown} placement={placements[shown.id] ?? null} /> : <p className="ink-faint">Choose a diocese to read about it.</p>}
       </div>
     </div>
   );
 }
 
-function Card({ d }: { d: DioceseVisible }) {
+function Card({ d, placement }: { d: DioceseVisible; placement: Placement | null }) {
   const pct = Math.round(((d.disposition + 100) / 200) * 100);
   return (
     <div className="flex flex-col gap-3 text-sm">
@@ -91,6 +95,17 @@ function Card({ d }: { d: DioceseVisible }) {
         </ul>
       </Row>
       <Row label="Complication">{d.complication}</Row>
+      {placement && (
+        <Row label="Where you would likely land">
+          <p>
+            {placement.parish.name}, {placement.parish.place}: {KIND_WORD[placement.parish.kind]}
+            {placement.parish.needsSpanish ? ', where Spanish is needed' : ''}. {placement.reasons.length ? placement.reasons.join('; ') + '.' : 'Nothing about you points anywhere in particular yet; the seminary years will.'}
+          </p>
+          <p className="ink-faint mt-1 text-xs">
+            The parishes: {placement.ranked.map((r) => `${r.parish.name} (${KIND_WORD[r.parish.kind].replace('the ', '').replace('a ', '')})`).join(', ')}. A guess from what you have said so far; the record you make in seminary and the diocese's need decide.
+          </p>
+        </Row>
+      )}
     </div>
   );
 }
