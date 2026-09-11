@@ -1,0 +1,1012 @@
+{
+  "_notes": "Bonds pool: the same families across years. Every scene is gated on a bond condition and keeps @bonded_parishioner as the person throughout, so it only comes to a priest who has already baptized, married, buried, anointed, confirmed, counseled, helped, or quarreled with the people of this parish. Ids prefixed bd_. Phases parochial_vicar, administrator, pastor; scenes that need a pastor over the man carry a role gate. Most choices write a new bond so the thread continues. Flags defined here (all bd_): bd_let_server_go, bd_server_kept_on, bd_separation_named_annulment, bd_wears_the_watch, bd_funeral_ceded, bd_funeral_taken_over_pastor, bd_recommended_deacon, bd_deacon_told_to_wait, bd_quarrel_wedding_done, bd_quarrel_wedding_refused, bd_petition_stopped, bd_petition_went_in, bd_told_daughter_the_truth, bd_fortieth_preached, bd_godfather, bd_godfather_declined, bd_returned_the_envelope, bd_kept_the_envelope, bd_wrote_parole_letter, bd_anniversary_kept, bd_promised_visits, bd_admitted_absence, bd_left_well, bd_said_why_leaving, bd_story_corrected, bd_story_let_stand, bd_sent_a_seminarian, bd_told_mother_the_life, bd_bequest_to_parish, bd_kept_bequest, bd_quarrel_healed, bd_quarrel_stood. Risks: bd_envelope, bd_bequest. Reads the engine flag vocation_seed (bias only). Sensitive scenes (bd_separating, bd_story_told_wrong, bd_repaid) are authored only and must not be skinned by the LLM layer.",
+  "events": [
+    {
+      "id": "bd_altar_server",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["friendship_vs_duty", "competence"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 10,
+      "suppressYears": 3,
+      "requires": [
+        { "type": "bond", "kind": "baptized", "op": ">=", "value": 1 },
+        { "type": "weeks_served", "op": ">=", "value": 200 }
+      ],
+      "bias": [
+        { "when": { "type": "parish", "key": "generational", "value": "young" }, "multiplier": 1.5 },
+        { "when": { "type": "parish", "key": "generational", "value": "aging" }, "multiplier": 0.6 }
+      ],
+      "title": "The Boy You Baptized",
+      "body": "He was not an infant when you baptized him. The family came late to it, and he was old enough to be furious about the water, and {@bonded_parishioner} apologized for him in the vestibule afterward while he sulked by the holy water font he had just been dunked over. Now he serves the 10:30, or is supposed to. He has missed three Sundays running. {@bonded_parishioner} comes to the sacristy after Mass with the boy a step behind, and says, in front of him, that he will be here next week, and that Father should tell him why it matters. The boy looks at the floor tiles. He is eleven. He has the face of a child who has been told that the priest is on his parents' side and has come to have it confirmed. {@dre} is folding albs in the corner and has stopped folding. You baptized this child. {@bonded_parishioner} is asking you to use that.",
+      "flavorPrompt": "A sacristy after Mass, a parent using the priest as leverage, a boy who has decided the priest is the enemy. Concrete, no sermon.",
+      "choices": [
+        {
+          "id": "release_him",
+          "label": "Tell {@bonded_parishioner}, in front of the boy, that he can stop",
+          "outcome": "You say it to the parent and not to the boy: that serving is a gift, not a sentence, and that a server who does not want to be there is worse for the Mass than an empty spot on the schedule. The boy looks up for the first time. {@bonded_parishioner} goes red and says nothing in front of {@dre}, and does not stay for coffee. The boy is at Mass the next Sunday, in the pew, unforced.",
+          "effects": [
+            { "target": "relationship", "key": "@bonded_parishioner", "delta": -8 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "bond", "key": "@bonded_parishioner", "value": "quarreled:the family" },
+            { "target": "flag", "key": "bd_let_server_go", "value": true }
+          ]
+        },
+        {
+          "id": "finish_the_year",
+          "label": "Ask him to finish the year, and give him thurible for it",
+          "outcome": "You make him a deal: through Pentecost, and he carries the incense, which no one his age has been allowed near. He agrees because the alternative was worse. {@bonded_parishioner} is satisfied. He is good at it, and careful, and by Easter he is teaching the eight-year-olds how to swing without hitting the lectern. Whether he will be back in September no one asks, including you.",
+          "effects": [
+            { "target": "relationship", "key": "@bonded_parishioner", "delta": 6 },
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "bond", "key": "@bonded_parishioner", "value": "helped:their son" },
+            { "target": "flag", "key": "bd_server_kept_on", "value": true }
+          ]
+        },
+        {
+          "id": "ask_the_boy",
+          "label": "Send the parent to the hall and ask the boy what is actually wrong",
+          "requires": [{ "type": "stat", "key": "charisma", "op": ">=", "value": 50 }],
+          "outcome": "Door open, {@dre} within earshot, as the policy says. It takes four minutes. It is not the Mass. An older server has been calling him something in the sacristy and {@bonded_parishioner} told him to toughen up. You fix the sacristy that afternoon. He serves the next Sunday without being asked, and {@bonded_parishioner} thanks you without knowing what for.",
+          "effects": [
+            { "target": "relationship", "key": "@bonded_parishioner", "delta": 8 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "reputation", "key": "parishioners", "delta": 3 },
+            { "target": "ap", "key": "next_week", "delta": -1 },
+            { "target": "bond", "key": "@bonded_parishioner", "value": "counseled:their son" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bd_separating",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["loyalty_vs_honesty", "doubt"],
+      "severity": "MAJOR",
+      "category": "personal",
+      "baseWeight": 9,
+      "suppressYears": 4,
+      "requires": [{ "type": "bond", "kind": "married", "op": ">=", "value": 1 }],
+      "title": "One of the Two",
+      "body": "You married them. You remember the rehearsal more than the wedding: the groom's brother could not find the rings and {@bonded_parishioner} laughed instead of panicking, and you thought, this one will be fine. {@bonded_parishioner} is in your office on a Thursday afternoon, alone, and has been sitting in the car in the lot for forty minutes before coming in. They have separated. There is an apartment already. There is no one else, {@bonded_parishioner} says, and then says it again, which is how you know you are meant to believe it. What {@bonded_parishioner} wants from you is not clear, and you suspect it is not clear to the person in the chair either: permission, or a verdict, or for you to say that the vows you witnessed did not mean what everyone in that church understood them to mean. The other one has not called you. That, too, is information.",
+      "flavorPrompt": "Sensitive: authored only. An office, one half of a marriage the priest witnessed. The priest cannot take sides and is being asked to.",
+      "choices": [
+        {
+          "id": "listen_and_refer",
+          "label": "Listen, and give the name of a counselor who is good",
+          "outcome": "You do not offer a verdict. You ask questions and you let the silences run, and at the end you write a name on a card, a marriage counselor the diocese trusts, and you say you will see either of them, or both, whenever they like. {@bonded_parishioner} takes the card. Whether it is ever used you do not learn for a long time.",
+          "effects": [
+            { "target": "relationship", "key": "@bonded_parishioner", "delta": 8 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "bond", "key": "@bonded_parishioner", "value": "counseled:them" }
+          ]
+        },
+        {
+          "id": "hold_the_vow",
+          "label": "Say plainly that you witnessed a vow, and that you are not free to unwitness it",
+          "outcome": "You say it gently and it lands hard: that you stood there, that the Church stood there, and that you will not tell one half of it that the thing is over. {@bonded_parishioner} leaves angry, which you expected, and comes back three weeks later, which you did not, with the other one. Neither of them thanks you. They are seen at the 10:30 together through Lent.",
+          "effects": [
+            { "target": "relationship", "key": "@bonded_parishioner", "delta": -6 },
+            { "target": "honesty", "key": "", "delta": 1 },
+            { "target": "reputation", "key": "traditional_bloc", "delta": 2 },
+            { "target": "bond", "key": "@bonded_parishioner", "value": "counseled:them" }
+          ]
+        },
+        {
+          "id": "name_the_process",
+          "label": "Explain, carefully, what the tribunal would and would not look at",
+          "requires": [{ "type": "stat", "key": "knowledge", "op": ">=", "value": 55 }],
+          "outcome": "You do it properly, because you can: what a declaration of nullity is and is not, what consent means, why the tribunal will not care whose fault it was. It is accurate. It is also the thing {@bonded_parishioner} came for, and you have given it on the first visit, and you both know it. The card with the counselor's name stays in your drawer.",
+          "effects": [
+            { "target": "stat", "key": "knowledge", "delta": 1 },
+            { "target": "relationship", "key": "@bonded_parishioner", "delta": 5 },
+            { "target": "stat", "key": "piety", "delta": -1 },
+            { "target": "flag", "key": "bd_separation_named_annulment", "value": true },
+            { "target": "bond", "key": "@bonded_parishioner", "value": "counseled:them" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bd_the_watch",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["friendship_vs_duty"],
+      "severity": "NOTABLE",
+      "category": "parish_death",
+      "baseWeight": 10,
+      "suppressYears": 4,
+      "requires": [{ "type": "bond", "kind": "buried", "op": ">=", "value": 1 }],
+      "bias": [
+        { "when": { "type": "parish", "key": "generational", "value": "aging" }, "multiplier": 1.5 }
+      ],
+      "title": "His Watch",
+      "body": "{@bonded_parishioner} comes to the office on a weekday, which is unusual, and sets a box on the desk, which is more unusual, and does not sit down. Inside is the husband's watch. You buried him; you remember the coffin at the door and the way {@bonded_parishioner} did not touch it. The watch is a good one, steel, thirty years old, the kind a man buys once. {@bonded_parishioner} says he wore it to every Mass and that he wanted Father to have it, and that this was said in the hospital, in front of the children, and that the children have been asking whether it has been done yet. There are policies about gifts. There is also a person standing in your office who has been carrying a box for a week. {@bonded_parishioner} is not going to sit down until you say something, and what you say will be repeated to the children tonight.",
+      "flavorPrompt": "A widow's errand, a good watch, a diocesan gift policy nobody in the room has read. Say nothing sentimental.",
+      "choices": [
+        {
+          "id": "accept_and_wear",
+          "label": "Take it, and put it on, there",
+          "outcome": "You put it on in front of {@bonded_parishioner}, and it needs a link taken out, and that is what you talk about instead of what you are both thinking. You wear it. People notice it in the sacristy and are told, by {@bonded_parishioner}, whose it was. It becomes a thing that is known about you here, and later somewhere else, where no one knows the story.",
+          "effects": [
+            { "target": "relationship", "key": "@bonded_parishioner", "delta": 12 },
+            { "target": "reputation", "key": "parishioners", "delta": 4 },
+            { "target": "flag", "key": "bd_wears_the_watch", "value": true },
+            { "target": "bond", "key": "@bonded_parishioner", "value": "helped:the family" }
+          ]
+        },
+        {
+          "id": "decline_kindly",
+          "label": "Say it should stay in the family, and mean it as a kindness",
+          "outcome": "You say the eldest son should have it, and that the husband would have understood. {@bonded_parishioner} nods and takes the box back and does not argue, which is the worst of the possible responses. The son gets the watch. He does not wear it. {@bonded_parishioner} is at Mass every Sunday and does not come to the office again for a long time.",
+          "effects": [
+            { "target": "relationship", "key": "@bonded_parishioner", "delta": -10 },
+            { "target": "stat", "key": "administration", "delta": 1 },
+            { "target": "reputation", "key": "chancery", "delta": 2 }
+          ]
+        },
+        {
+          "id": "ask_about_him",
+          "label": "Leave the box closed and ask what he was like at thirty",
+          "requires": [{ "type": "stat", "key": "charisma", "op": ">=", "value": 45 }],
+          "outcome": "{@bonded_parishioner} sits down after all. It takes an hour and a half, and you miss a meeting, and you learn things about the man you buried that would have made a better homily than the one you gave. At the end you take the watch, because by then it is obvious you should. {@bonded_parishioner} leaves lighter than the box was.",
+          "effects": [
+            { "target": "relationship", "key": "@bonded_parishioner", "delta": 15 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "ap", "key": "next_week", "delta": -1 },
+            { "target": "flag", "key": "bd_wears_the_watch", "value": true },
+            { "target": "bond", "key": "@bonded_parishioner", "value": "counseled:them" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bd_funeral_the_pastor_wants",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["friendship_vs_duty", "ambition_vs_integrity"],
+      "severity": "MAJOR",
+      "category": "parish_death",
+      "baseWeight": 9,
+      "suppressYears": 3,
+      "requires": [
+        { "type": "bond", "kind": "anointed", "op": ">=", "value": 1 },
+        { "type": "role", "value": "parochial_vicar" }
+      ],
+      "title": "Whose Funeral",
+      "body": "You anointed the father in the front room, with the hospital bed against the window and the whole family standing, and {@bonded_parishioner} held the oil stock for you because your hands were full. He died on Sunday night. On Monday morning {@pastor} tells you at breakfast that he will take the funeral: the family has been here sixty years, there is a plaque, the deanery will come, and he says this in the voice that means it is already arranged. On Monday afternoon {@bonded_parishioner} calls you, not the office, and asks whether you will do it. You, specifically. The father asked for you by name in the last week, and {@bonded_parishioner} says the family does not want to offend {@pastor} but will, if it has to. You have not told the family what {@pastor} said. You have not told {@pastor} the family called. Both of those silences are about to end.",
+      "flavorPrompt": "A rectory breakfast and a phone call, the pastor's prerogative against a dying man's request. The vicar has no standing and is being given some.",
+      "choices": [
+        {
+          "id": "cede_to_pastor",
+          "label": "Tell {@bonded_parishioner} that it is the pastor's to give, and concelebrate",
+          "outcome": "You say it is his parish and his funeral, and you will be on the altar. {@bonded_parishioner} is quiet and then says, all right, Father. {@pastor} preaches well enough. You give the final commendation because he hands it to you at the last minute, which is his way of acknowledging something without saying it. The family thanks you at the door with a particular carefulness.",
+          "effects": [
+            { "target": "relationship", "key": "@pastor", "delta": 8 },
+            { "target": "relationship", "key": "@bonded_parishioner", "delta": -8 },
+            { "target": "reputation", "key": "brother_priests", "delta": 2 },
+            { "target": "flag", "key": "bd_funeral_ceded", "value": true }
+          ]
+        },
+        {
+          "id": "tell_the_pastor",
+          "label": "Tell {@pastor} the family asked for you, and let him decide with that in front of him",
+          "outcome": "You tell him at supper, plainly, that the father asked for you by name and the family has called. He is silent long enough for the soup to go cold. Then he says the family may have what the father wanted, and that you will give him the homily to read beforehand. You do. He changes one sentence. It is a fair sentence. You bury the man.",
+          "effects": [
+            { "target": "relationship", "key": "@pastor", "delta": -5 },
+            { "target": "relationship", "key": "@bonded_parishioner", "delta": 10 },
+            { "target": "honesty", "key": "", "delta": 1 },
+            { "target": "reputation", "key": "parishioners", "delta": 4 },
+            { "target": "ap", "key": "next_week", "delta": -1 },
+            { "target": "bond", "key": "@bonded_parishioner", "value": "buried:the father" }
+          ]
+        },
+        {
+          "id": "let_family_ask",
+          "label": "Say nothing to {@pastor}; let the family go over your head to him",
+          "requires": [{ "type": "relationship", "npcId": "@bonded_parishioner", "op": ">=", "value": 15 }],
+          "outcome": "{@bonded_parishioner} goes to the rectory door and asks {@pastor} in person, and he cannot refuse a family with a plaque. You get the funeral. You also get {@pastor} looking at you across the sacristy afterward with the expression of a man who has worked out how the conversation on his doorstep came to happen, and who will not raise it, and will not forget it.",
+          "effects": [
+            { "target": "relationship", "key": "@bonded_parishioner", "delta": 8 },
+            { "target": "relationship", "key": "@pastor", "delta": -12 },
+            { "target": "reputation", "key": "parishioners", "delta": 5 },
+            { "target": "flag", "key": "bd_funeral_taken_over_pastor", "value": true },
+            { "target": "bond", "key": "@bonded_parishioner", "value": "buried:the father" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bd_deacon_inquiry",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["loyalty_vs_honesty", "competence"],
+      "severity": "NOTABLE",
+      "category": "admin",
+      "baseWeight": 9,
+      "suppressYears": 4,
+      "requires": [{ "type": "bond", "kind": "counseled", "op": ">=", "value": 1 }],
+      "bias": [
+        { "when": { "type": "flag", "key": "known_pastoral", "value": true }, "multiplier": 1.4 }
+      ],
+      "title": "The Permanent Diaconate",
+      "body": "{@bonded_parishioner} came to you two years ago with something that took three meetings to say, and you said what you could, and it seems to have held. Now {@bonded_parishioner} is in the office with a folder from the diocesan office for the permanent diaconate: the inquiry form, the pastor's letter, the wife's consent, a reading list. The application asks for a letter from a priest who knows the applicant. {@bonded_parishioner} wants it from you, not because you are the closest priest, but because you are the one who knows what the last two years cost. That is the problem. You know exactly what they cost. The formation director will read your letter looking for the things a man does not put in his own account of himself, and you are being asked to write, in the diocese's file, about someone whose worst month you sat through. {@bonded_parishioner} is not asking you to lie. It is not obvious what the truth is.",
+      "flavorPrompt": "An office and a folder, a man's second vocation, a priest who knows too much to write easily. No triumph.",
+      "choices": [
+        {
+          "id": "write_honest",
+          "label": "Write the letter with the hard year in it, as evidence for, not against",
+          "requires": [{ "type": "stat", "key": "knowledge", "op": ">=", "value": 50 }],
+          "outcome": "You write two pages, and the hard year is on the second one, framed as what it was: a man who came for help, took it, and did the work. You show {@bonded_parishioner} the draft before it goes. There is a long silence and then a nod. The formation director calls you about it, which they do not usually do. He is admitted to aspirancy.",
+          "effects": [
+            { "target": "relationship", "key": "@bonded_parishioner", "delta": 10 },
+            { "target": "honesty", "key": "", "delta": 1 },
+            { "target": "reputation", "key": "chancery", "delta": 3 },
+            { "target": "flag", "key": "bd_recommended_deacon", "value": true },
+            { "target": "bond", "key": "@bonded_parishioner", "value": "helped:them" }
+          ]
+        },
+        {
+          "id": "write_warm",
+          "label": "Write the warm letter and leave the last two years out of it",
+          "outcome": "One page, all of it true, none of it the part that matters. {@bonded_parishioner} is grateful and does not know to be anything else. It goes in the file. Eighteen months into formation the director rings you with a question that your letter should have answered, and you answer it then, on the phone, which is not the same.",
+          "effects": [
+            { "target": "relationship", "key": "@bonded_parishioner", "delta": 8 },
+            { "target": "honesty", "key": "", "delta": -1 },
+            { "target": "reputation", "key": "chancery", "delta": -3 },
+            { "target": "flag", "key": "bd_recommended_deacon", "value": true },
+            { "target": "bond", "key": "@bonded_parishioner", "value": "helped:them" }
+          ]
+        },
+        {
+          "id": "wait_a_year",
+          "label": "Say, honestly, that it is a year too soon, and that you will write it then",
+          "outcome": "You say it in the office, with the folder closed. It goes badly for about a week. Then {@bonded_parishioner} comes back and says you were right, or says it was unfair, and either way keeps coming to Mass. You put a date in your own calendar. Whether you will still be here on that date is not something you can promise.",
+          "effects": [
+            { "target": "relationship", "key": "@bonded_parishioner", "delta": -7 },
+            { "target": "honesty", "key": "", "delta": 1 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "flag", "key": "bd_deacon_told_to_wait", "value": true },
+            { "target": "bond", "key": "@bonded_parishioner", "value": "counseled:them" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bd_wedding_after_the_quarrel",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["friendship_vs_duty", "ambition_vs_integrity"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 10,
+      "suppressYears": 3,
+      "requires": [{ "type": "bond", "kind": "quarreled", "op": ">=", "value": 1 }],
+      "title": "At Your Altar",
+      "body": "The last real conversation you had with {@bonded_parishioner} ended with a door, and the parish knows it, because the parish knows everything that happens in the parking lot. Now the daughter is engaged. She has been away at college and does not know, or has decided not to know, that her parent and the priest are not speaking, and she has come to the office with the fiancé and the diocesan marriage-prep booklet and a date in June. She wants it here. She was confirmed here. She wants you, because you are the priest of the parish where she grew up and that is how she thinks of it. {@bonded_parishioner} has not come to the meeting. {@secretary}, who booked it, made sure you saw the surname before you walked in. The daughter is waiting for you to say yes the way any priest says yes to a parish wedding, and the fiancé, who is not Catholic, is watching to see what kind of place this is.",
+      "flavorPrompt": "A marriage-prep meeting with a family feud in the next room. The daughter is innocent of it; the priest is not.",
+      "choices": [
+        {
+          "id": "say_yes_plainly",
+          "label": "Say yes the way you would say yes to anyone, and prepare them well",
+          "outcome": "Six sessions, the booklet, the FOCCUS inventory, the rehearsal. {@bonded_parishioner} attends the rehearsal and stands at the back and does not speak to you and you do not require it. The wedding is good. At the reception {@bonded_parishioner} sends a plate to your table by way of the fiancé's mother. It is not an apology. It is not nothing.",
+          "effects": [
+            { "target": "relationship", "key": "@bonded_parishioner", "delta": 8 },
+            { "target": "reputation", "key": "parishioners", "delta": 4 },
+            { "target": "ap", "key": "next_week", "delta": -1 },
+            { "target": "flag", "key": "bd_quarrel_wedding_done", "value": true },
+            { "target": "bond", "key": "@bonded_parishioner", "value": "married:their daughter" }
+          ]
+        },
+        {
+          "id": "clear_it_first",
+          "label": "Tell the daughter you will do it, and go to {@bonded_parishioner}'s door first",
+          "requires": [{ "type": "stat", "key": "charisma", "op": ">=", "value": 50 }],
+          "outcome": "You go that evening. It is not warm. You say you will marry the daughter and that you would rather do it with the family than around it. {@bonded_parishioner} says, after a while, that the argument stands and the wedding is separate. You agree. You shake hands on the porch. It is the most either of you will manage, and it is enough to get through June.",
+          "effects": [
+            { "target": "relationship", "key": "@bonded_parishioner", "delta": 12 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "reputation", "key": "parishioners", "delta": 3 },
+            { "target": "flag", "key": "bd_quarrel_wedding_done", "value": true },
+            { "target": "bond", "key": "@bonded_parishioner", "value": "married:their daughter" }
+          ]
+        },
+        {
+          "id": "hand_it_off",
+          "label": "Prepare them, but ask {@brother_priest} to witness the vows",
+          "outcome": "You tell the daughter, without the reason, that a brother priest will do the wedding and you will be in the pew. She is puzzled and accepts it. {@bonded_parishioner} hears the reason from someone else within the week and takes it as the insult it was not quite meant to be. The wedding is fine. You are at it. You are not in the photographs.",
+          "effects": [
+            { "target": "relationship", "key": "@bonded_parishioner", "delta": -10 },
+            { "target": "reputation", "key": "parishioners", "delta": -3 },
+            { "target": "reputation", "key": "brother_priests", "delta": 2 },
+            { "target": "flag", "key": "bd_quarrel_wedding_refused", "value": true },
+            { "target": "bond", "key": "@bonded_parishioner", "value": "quarreled:the family" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bd_petition",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["ambition_vs_integrity", "loyalty_vs_honesty"],
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 7,
+      "suppressYears": 5,
+      "once": true,
+      "requires": [
+        { "type": "bond", "kind": "any", "op": ">=", "value": 6 },
+        { "type": "relationship", "npcId": "@bonded_parishioner", "op": ">=", "value": 20 }
+      ],
+      "title": "Signatures",
+      "body": "{@secretary} puts it on your desk without comment, which is how {@secretary} comments. It is a petition. Four pages of signatures, the first page headed in {@bonded_parishioner}'s handwriting, addressed to the bishop, asking that Father be kept at {parish}, or made pastor of it, or both, depending on which paragraph you read. You had not known there was a rumor you were leaving. There may not have been one; petitions sometimes make the thing they fear. {@bonded_parishioner} is behind it, plainly, and has gathered the families you have buried and married and baptized over the years, and their signatures are in the order you would have guessed. The chancery does not like petitions. The chancery has never, in your memory, done what a petition asked, and has sometimes done the opposite to make the point. {@bonded_parishioner} is coming to the office at four to ask whether it can be mailed this week.",
+      "flavorPrompt": "A petition on a desk, made out of love and about to do harm. The priest knows how the chancery reads these things; the parishioners do not.",
+      "choices": [
+        {
+          "id": "stop_it",
+          "label": "Ask {@bonded_parishioner} not to send it, and explain why",
+          "outcome": "You say it as plainly as you can: the bishop will read it as pressure, and the surest way to be moved is to have the parish demand that you stay. {@bonded_parishioner} is hurt and then, slowly, persuaded, and the pages go into a drawer. Some of the signers hear that Father stopped it and take it as modesty, and some take it as the other thing.",
+          "effects": [
+            { "target": "relationship", "key": "@bonded_parishioner", "delta": -6 },
+            { "target": "reputation", "key": "chancery", "delta": 3 },
+            { "target": "reputation", "key": "parishioners", "delta": -2 },
+            { "target": "stat", "key": "administration", "delta": 1 },
+            { "target": "flag", "key": "bd_petition_stopped", "value": true }
+          ]
+        },
+        {
+          "id": "let_it_go",
+          "label": "Say it is theirs to send, and do not touch it",
+          "volume": "semi_public",
+          "positionTopic": "authority",
+          "positionValue": 35,
+          "outcome": "You say that the parish may write to its bishop about whatever it likes and that you will neither help nor hinder. It goes in on Thursday with four hundred names. The chancery acknowledges it in a two-line letter. {@vicar_for_clergy} mentions it to you at the next deanery meeting, lightly, in front of others. The parish is proud of itself for a season.",
+          "effects": [
+            { "target": "relationship", "key": "@bonded_parishioner", "delta": 8 },
+            { "target": "reputation", "key": "parishioners", "delta": 6 },
+            { "target": "reputation", "key": "chancery", "delta": -7 },
+            { "target": "reputation", "key": "brother_priests", "delta": -3 },
+            { "target": "flag", "key": "bd_petition_went_in", "value": true },
+            { "target": "bond", "key": "@bonded_parishioner", "value": "helped:the parish" }
+          ]
+        },
+        {
+          "id": "turn_it_into_a_letter",
+          "label": "Ask {@bonded_parishioner} to make it a letter of thanks instead, with no request in it",
+          "requires": [{ "type": "stat", "key": "charisma", "op": ">=", "value": 55 }],
+          "outcome": "You suggest a different document: the same signatures, under a paragraph that thanks the bishop for the priests he has sent and asks nothing. {@bonded_parishioner} sees the point faster than you expected. It goes in. The bishop, who receives few letters that ask for nothing, replies by hand. The parish has said what it meant, in a form the chancery cannot hold against anyone.",
+          "effects": [
+            { "target": "relationship", "key": "@bonded_parishioner", "delta": 10 },
+            { "target": "reputation", "key": "chancery", "delta": 4 },
+            { "target": "reputation", "key": "parishioners", "delta": 3 },
+            { "target": "relationship", "key": "@bishop", "delta": 5 },
+            { "target": "bond", "key": "@bonded_parishioner", "value": "helped:the parish" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bd_what_she_was_like",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["loyalty_vs_honesty", "doubt"],
+      "severity": "NOTABLE",
+      "category": "parish_death",
+      "baseWeight": 8,
+      "suppressYears": 5,
+      "once": true,
+      "requires": [
+        { "type": "bond", "kind": "baptized", "op": ">=", "value": 1 },
+        { "type": "years_ordained", "op": ">=", "value": 12 }
+      ],
+      "bias": [
+        { "when": { "type": "flag", "key": "motive:grief", "value": true }, "multiplier": 1.6 }
+      ],
+      "title": "What Her Mother Was Like",
+      "body": "You baptized the girl. Her mother held her over the font and the water went in her eyes and the mother laughed, and that is nearly all you remember, because the mother was dead within two years and the funeral crowded out the baptism. {@bonded_parishioner} raised the girl alone after that and has been at the 8:00 every Sunday since, in the same pew, and never speaks of it. The girl is nineteen now. She comes to the office on her own, from college, and asks you what her mother was like, because {@bonded_parishioner} cannot answer the question, has never been able to, and she has stopped asking at home. She has a photograph. She wants a priest's version, which she imagines is a truer one. What you have is a baptism, a funeral, and a handful of conversations, and a strong sense that {@bonded_parishioner} would not want you having this one. She has asked you not to say she came.",
+      "flavorPrompt": "A grown child and a dead mother the priest barely knew. The living parent is the one with the real story and cannot tell it.",
+      "choices": [
+        {
+          "id": "tell_her_true_things",
+          "label": "Tell her the two or three true things you have, and no more",
+          "outcome": "You tell her about the laugh at the font. You tell her about a conversation in the parking lot about the school. You do not embroider, and she can tell you are not embroidering, and it is worth more to her than a eulogy would have been. She keeps her secret. You keep it too. {@bonded_parishioner} is in the same pew on Sunday and knows nothing.",
+          "effects": [
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "honesty", "key": "", "delta": 1 },
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "flag", "key": "bd_told_daughter_the_truth", "value": true },
+            { "target": "bond", "key": "@bonded_parishioner", "value": "counseled:their daughter" }
+          ]
+        },
+        {
+          "id": "send_her_home",
+          "label": "Tell her the person who knows is {@bonded_parishioner}, and offer to be in the room",
+          "requires": [{ "type": "relationship", "npcId": "@bonded_parishioner", "op": ">=", "value": 10 }],
+          "outcome": "You say you will sit with them both, if she wants, and that you think {@bonded_parishioner} has been waiting to be asked in the right way for seventeen years. She is afraid of it and agrees. It takes place in your office on a Saturday. You say almost nothing. {@bonded_parishioner} talks for two hours. You are not sure either of them will forgive you for having been there.",
+          "effects": [
+            { "target": "relationship", "key": "@bonded_parishioner", "delta": 15 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "ap", "key": "next_week", "delta": -1 },
+            { "target": "bond", "key": "@bonded_parishioner", "value": "counseled:the family" }
+          ]
+        },
+        {
+          "id": "the_register",
+          "label": "Show her the baptismal register and the funeral file, and let the paper talk",
+          "outcome": "You take her to the sacristy and find the entry, her mother's signature as sponsor at someone else's baptism, the funeral intention cards, a note in your own hand from the year she died. It is thin material and she reads all of it twice. It is not what she asked for. It is, she says at the door, more than she has ever been given.",
+          "effects": [
+            { "target": "stat", "key": "administration", "delta": 1 },
+            { "target": "reputation", "key": "parishioners", "delta": 3 },
+            { "target": "bond", "key": "@bonded_parishioner", "value": "helped:their daughter" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bd_fortieth_anniversary",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["friendship_vs_duty"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 8,
+      "suppressYears": 5,
+      "once": true,
+      "requires": [
+        { "type": "bond", "kind": "married", "op": ">=", "value": 1 },
+        { "type": "years_ordained", "op": ">=", "value": 25 }
+      ],
+      "title": "Forty Years",
+      "body": "You married them when you were young enough to be nervous about it. You remember the homily, because it was your third wedding homily and you had not yet learned to leave things out. {@bonded_parishioner} comes to the office with the children, three of them, all grown, all with the look of people who have organized something, and asks whether Father will say the fortieth anniversary Mass. They want the Sunday 10:30, with a renewal of vows after the homily, and the same reading as the wedding, which one of the daughters has found in a shoebox with the program. The marriage has not been easy. You know that from the years in between, from the things said in this office by one of them and not the other, from a winter in which they sat in separate pews. None of that is in the shoebox. {@bonded_parishioner} is asking you to stand up in front of the parish and say what forty years was. They know you know.",
+      "flavorPrompt": "A couple the priest married as a young man, forty years on. He knows the marriage from the inside; the parish will see the outside.",
+      "choices": [
+        {
+          "id": "preach_it_true",
+          "label": "Preach the marriage as it was, difficulty and all, without naming anything",
+          "requires": [{ "type": "stat", "key": "charisma", "op": ">=", "value": 55 }],
+          "outcome": "You do not say what you know. You preach that a vow is kept in the years no one photographs, and that a marriage is not the wedding, and the parish hears a good homily and {@bonded_parishioner} hears the other thing, and the daughter with the shoebox cries for reasons she does not have. They renew the vows. Your voice does not hold on the last line and no one minds.",
+          "effects": [
+            { "target": "relationship", "key": "@bonded_parishioner", "delta": 15 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "reputation", "key": "parishioners", "delta": 5 },
+            { "target": "flag", "key": "bd_fortieth_preached", "value": true },
+            { "target": "bond", "key": "@bonded_parishioner", "value": "helped:them" }
+          ]
+        },
+        {
+          "id": "the_shoebox_homily",
+          "label": "Give them the wedding reading and the wedding homily, and let the years be theirs",
+          "outcome": "You find your old notes, or reconstruct them, and preach a young priest's homily in an old priest's voice. It is a little embarrassing. It is exactly what {@bonded_parishioner} wanted. The renewal of vows is short and the hall is full afterward, and the children give you a framed photograph of the first wedding in which you have hair.",
+          "effects": [
+            { "target": "relationship", "key": "@bonded_parishioner", "delta": 10 },
+            { "target": "reputation", "key": "parishioners", "delta": 4 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "flag", "key": "bd_fortieth_preached", "value": true },
+            { "target": "bond", "key": "@bonded_parishioner", "value": "helped:them" }
+          ]
+        },
+        {
+          "id": "weekday_mass",
+          "label": "Offer a weekday Mass for them instead, with the family, and no renewal in front of the parish",
+          "outcome": "You say the Sunday belongs to the parish and that a fortieth is a family's own, and you offer the Wednesday 8:00 with the family in the front pews. {@bonded_parishioner} accepts it without pleasure. It is a quiet, correct Mass. The daughter with the shoebox thinks you were unkind and says so at the door. You are not sure she is wrong.",
+          "effects": [
+            { "target": "relationship", "key": "@bonded_parishioner", "delta": -5 },
+            { "target": "reputation", "key": "parishioners", "delta": -2 },
+            { "target": "stat", "key": "administration", "delta": 1 },
+            { "target": "bond", "key": "@bonded_parishioner", "value": "helped:them" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bd_godfather",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["friendship_vs_duty"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 10,
+      "suppressYears": 4,
+      "requires": [{ "type": "bond", "kind": "any", "op": ">=", "value": 2 }],
+      "title": "Godfather",
+      "body": "{@bonded_parishioner} asks it after the 10:30, at the door, with the baby in a carrier and the whole family in a half-circle the way families arrange themselves when they have rehearsed a question. Will Father be the godfather. Not the celebrant; they assume that, and they know a priest cannot be both the minister and the sponsor at the same baptism. They want you to stand at the font as one of the two people the child will call by name. You have done things for this family that they count, and they are counting them now. It is permitted. It is not usual, and some bishops discourage it, and you have heard {@pastor} say once that a priest who is godfather to a parish child is a priest who has picked a family, and that the parish will notice which. The baby is asleep. {@bonded_parishioner} is not going to be able to ask twice.",
+      "flavorPrompt": "A question at the church door, a family that has chosen the priest for something a priest is rarely asked. Canon law allows it; prudence has opinions.",
+      "choices": [
+        {
+          "id": "accept",
+          "label": "Say yes, and ask {@brother_priest} to baptize",
+          "outcome": "You stand at the font on the side of the family, without a stole, and {@brother_priest} pours the water, and you answer the questions as a sponsor and are surprised by how it feels. The parish notices. {@bonded_parishioner} sends a photograph of you holding the child at Christmas for years afterward, wherever you are. You have, as {@pastor} said, picked a family.",
+          "effects": [
+            { "target": "relationship", "key": "@bonded_parishioner", "delta": 18 },
+            { "target": "reputation", "key": "parishioners", "delta": 3 },
+            { "target": "reputation", "key": "brother_priests", "delta": -2 },
+            { "target": "flag", "key": "bd_godfather", "value": true },
+            { "target": "bond", "key": "@bonded_parishioner", "value": "helped:their child" }
+          ]
+        },
+        {
+          "id": "decline_and_baptize",
+          "label": "Say you would rather be the one who baptizes, and mean it as the greater gift",
+          "outcome": "You say the priest at the font is already the child's, and that a godfather ought to be someone who will be at the birthdays, which you will not, because the diocese will move you. {@bonded_parishioner} takes it well enough. You baptize the child yourself in March, with an uncle as sponsor, and it is a good baptism. It is not what they asked.",
+          "effects": [
+            { "target": "relationship", "key": "@bonded_parishioner", "delta": -5 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "reputation", "key": "brother_priests", "delta": 2 },
+            { "target": "flag", "key": "bd_godfather_declined", "value": true },
+            { "target": "bond", "key": "@bonded_parishioner", "value": "baptized:their child" }
+          ]
+        },
+        {
+          "id": "check_the_policy",
+          "label": "Say you will look at the diocesan policy first, and do",
+          "requires": [{ "type": "stat", "key": "knowledge", "op": ">=", "value": 55 }],
+          "outcome": "The policy exists, which you suspected, and discourages it without forbidding it, which you also suspected. You go back to {@bonded_parishioner} with that and let the family decide. They ask anyway. You say yes with the policy in your pocket, and if anyone at the chancery raises it you have the paragraph ready. No one does.",
+          "effects": [
+            { "target": "relationship", "key": "@bonded_parishioner", "delta": 12 },
+            { "target": "stat", "key": "knowledge", "delta": 1 },
+            { "target": "stat", "key": "administration", "delta": 1 },
+            { "target": "flag", "key": "bd_godfather", "value": true },
+            { "target": "bond", "key": "@bonded_parishioner", "value": "helped:their child" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bd_repaid",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["ambition_vs_integrity", "money"],
+      "severity": "MAJOR",
+      "category": "scandal",
+      "baseWeight": 8,
+      "suppressYears": 5,
+      "once": true,
+      "requires": [{ "type": "bond", "kind": "helped", "op": ">=", "value": 1 }],
+      "title": "Repayment",
+      "body": "When {@bonded_parishioner} needed help you gave it, and did not make a note of it, and assumed that was the end. It is not. There is an envelope on your desk on Monday, thick, unsealed, with your name on it and not the parish's, and inside is three thousand dollars in used bills and a card that says, for Father, for everything. {@bonded_parishioner} does not have three thousand dollars to spare; you know the family's situation better than they think. On Wednesday {@bonded_parishioner} is in the office with a different request. A brother is up for parole. The board accepts letters from clergy. Would Father write one. The two things have not been connected by anyone out loud, and {@bonded_parishioner} may honestly not have connected them. You have. The envelope is in your desk drawer, where it has been for two days, which is two days too long for a thing that should have gone somewhere immediately.",
+      "flavorPrompt": "Sensitive: authored only. An envelope, a favor, and a request, in that order. The priest is compromised by having waited two days.",
+      "choices": [
+        {
+          "id": "return_it",
+          "label": "Give the envelope back, unopened as far as anyone will know, and write no letter",
+          "outcome": "You put it in {@bonded_parishioner}'s hands and say you cannot take it and cannot write for a man you have never met. It is received as a rebuke. {@bonded_parishioner} is at Mass the next Sunday and does not look at you during the sign of peace. The brother's hearing goes the way it goes. You are clean, and you have lost something you did not measure.",
+          "effects": [
+            { "target": "relationship", "key": "@bonded_parishioner", "delta": -12 },
+            { "target": "honesty", "key": "", "delta": 1 },
+            { "target": "reputation", "key": "chancery", "delta": 2 },
+            { "target": "flag", "key": "bd_returned_the_envelope", "value": true },
+            { "target": "bond", "key": "@bonded_parishioner", "value": "quarreled:them" }
+          ]
+        },
+        {
+          "id": "to_the_parish",
+          "label": "Put it in the collection as a gift to {parish}, tell {@bonded_parishioner} so, and write the letter on its own merits",
+          "requires": [{ "type": "stat", "key": "administration", "op": ">=", "value": 45 }],
+          "outcome": "You have {@secretary} write a receipt in the parish's name and you hand it to {@bonded_parishioner} with the explanation. Then you meet the brother at the county facility, twice, and write a letter that says exactly what you saw and no more. {@bonded_parishioner} is hurt by the receipt and grateful for the letter and the two cancel roughly out. The books are clean.",
+          "effects": [
+            { "target": "money", "key": "cash", "delta": 3000 },
+            { "target": "relationship", "key": "@bonded_parishioner", "delta": 5 },
+            { "target": "stat", "key": "administration", "delta": 1 },
+            { "target": "ap", "key": "next_week", "delta": -2 },
+            { "target": "flag", "key": "bd_wrote_parole_letter", "value": true },
+            { "target": "bond", "key": "@bonded_parishioner", "value": "helped:their brother" }
+          ]
+        },
+        {
+          "id": "keep_it",
+          "label": "Keep it, quietly, and write the letter",
+          "volume": "private",
+          "positionTopic": "money",
+          "positionValue": 20,
+          "outcome": "You tell yourself it was a gift freely given, which is true, and that priests are allowed to receive gifts, which is also true, and you write the letter without meeting the brother, which is the part that is not. {@bonded_parishioner} is devoted to you from that week on. The envelope stays in your memory as a date. Someone at the county saw a priest's letter that read like a favor.",
+          "effects": [
+            { "target": "relationship", "key": "@bonded_parishioner", "delta": 15 },
+            { "target": "honesty", "key": "", "delta": -2 },
+            { "target": "stat", "key": "piety", "delta": -2 },
+            { "target": "risk", "key": "bd_envelope", "value": "took cash from a parishioner and wrote a parole letter the same month", "delta": 2 },
+            { "target": "flag", "key": "bd_kept_the_envelope", "value": true },
+            { "target": "flag", "key": "bd_wrote_parole_letter", "value": true },
+            { "target": "bond", "key": "@bonded_parishioner", "value": "helped:their brother" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bd_anniversary_mass",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["friendship_vs_duty"],
+      "severity": "ROUTINE",
+      "category": "parish_death",
+      "baseWeight": 11,
+      "suppressYears": 2,
+      "requires": [{ "type": "bond", "kind": "buried", "op": ">=", "value": 2 }],
+      "bias": [
+        { "when": { "type": "stat", "key": "piety", "op": ">=", "value": 60 }, "multiplier": 1.5 }
+      ],
+      "title": "The Date in the Book",
+      "body": "You keep the dates. It is a habit from your first parish, a small notebook of the people you have buried and the day you buried them, and you do not know why you started it except that no one else seemed to. This week one of the dates comes round. {@bonded_parishioner}'s family; you remember the church, the weather, the reading they chose that did not quite work. There is no Mass intention booked for it. {@secretary} checked, when you asked, and there is nothing, and there has been nothing for the last two years. The family has not forgotten. Families do not. They have simply stopped expecting the parish to remember, which is a different thing, and a thing that happens to a parish one date at a time. The Thursday 8:00 is unbooked. {@bonded_parishioner} will be at work at that hour, and would not come, and would know.",
+      "flavorPrompt": "A quiet week, a notebook of the dead, a priest who is the only one who remembers. The smallest of the bond scenes.",
+      "choices": [
+        {
+          "id": "say_it_and_call",
+          "label": "Book the intention, say the Mass, and call {@bonded_parishioner} the night before",
+          "default": true,
+          "outcome": "You call and say only that Thursday's Mass is for the family, and that there is no need to come. {@bonded_parishioner} is quiet on the line for long enough that you wonder about the connection. Three of them come, in work clothes, and sit at the back. Afterward no one says anything about it. The date is booked the next year without your asking.",
+          "effects": [
+            { "target": "relationship", "key": "@bonded_parishioner", "delta": 10 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "flag", "key": "bd_anniversary_kept", "value": true },
+            { "target": "bond", "key": "@bonded_parishioner", "value": "helped:the family" }
+          ]
+        },
+        {
+          "id": "say_it_alone",
+          "label": "Say the Mass for them and tell no one",
+          "requires": [{ "type": "stat", "key": "piety", "op": ">=", "value": 55 }],
+          "outcome": "Thursday, 8:00, six people, the name in the intention as it should be. You do not tell the family. It is between you and the person you buried. That is enough, and it is also a way of not making the phone call, and you know which of those it mostly was by the time you have unvested.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 2 },
+            { "target": "flag", "key": "bd_anniversary_kept", "value": true }
+          ]
+        },
+        {
+          "id": "let_it_pass",
+          "label": "Let it pass; the week is full",
+          "outcome": "You close the notebook. The Thursday Mass has another intention or none. It is a reasonable thing to have done and it costs nothing anyone will see. The date is still in the book. Next year it will come round again, and you will be a year further from the funeral, and so will they.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": -1 },
+            { "target": "ap", "key": "next_week", "delta": 1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bd_hospital_not_called",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["competence", "friendship_vs_duty"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 10,
+      "suppressYears": 2,
+      "requires": [
+        { "type": "bond", "kind": "any", "op": ">=", "value": 3 },
+        { "type": "routine", "key": "visits", "op": "<=", "value": 0 }
+      ],
+      "bias": [
+        { "when": { "type": "strain", "op": ">=", "value": 50 }, "multiplier": 1.4 }
+      ],
+      "title": "Nobody Called",
+      "body": "You hear it from {@secretary}, who heard it from the woman who does the flowers, who heard it at the hospital where she volunteers: {@bonded_parishioner} has been in for nine days. Surgery, then a complication, then intensive care for two of the nine. The family did not call the rectory. The hospital chaplain, a religious sister, anointed on the fourth day, and she did not call either, because the family told her that their parish priest was very busy. You have known this family through three sacraments. You have not been to the hospital, any hospital, in a long time, and the reason is the reason it always is, and it does not sound like much when you say it to yourself in the car. The family did not call because they had learned, somewhere, that you were hard to find. You are on your way there now, and you do not know what you will say to {@bonded_parishioner} when you get there.",
+      "flavorPrompt": "A car on the way to a hospital, a priest who has been absent and knows it. The family were being kind; that is the wound.",
+      "choices": [
+        {
+          "id": "go_now",
+          "label": "Go, sit, say nothing about why you were not called",
+          "outcome": "You sit for an hour. {@bonded_parishioner} is glad to see you and says so, and the family is polite and a little surprised, and no one raises the nine days. You bring Communion. You come back twice more that week. It is the right thing and it is also late, and both are true, and {@bonded_parishioner} is home by Sunday.",
+          "effects": [
+            { "target": "relationship", "key": "@bonded_parishioner", "delta": 8 },
+            { "target": "ap", "key": "next_week", "delta": -1 },
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "bond", "key": "@bonded_parishioner", "value": "anointed:them" }
+          ]
+        },
+        {
+          "id": "admit_it",
+          "label": "Say to the family, plainly, that they should have been able to call, and that it is your fault they did not",
+          "requires": [{ "type": "stat", "key": "charisma", "op": ">=", "value": 45 }],
+          "outcome": "You say it in the corridor to the eldest, and then, when {@bonded_parishioner} is awake, in the room. It is not comfortable. The eldest says, after a pause, that yes, they had thought Father would not come. You say that was fair. You visit every day until discharge. The story that gets told afterward is that Father came and apologized, which is a better story than the other one.",
+          "effects": [
+            { "target": "relationship", "key": "@bonded_parishioner", "delta": 12 },
+            { "target": "honesty", "key": "", "delta": 1 },
+            { "target": "reputation", "key": "parishioners", "delta": 4 },
+            { "target": "ap", "key": "next_week", "delta": -2 },
+            { "target": "flag", "key": "bd_admitted_absence", "value": true },
+            { "target": "bond", "key": "@bonded_parishioner", "value": "anointed:them" }
+          ]
+        },
+        {
+          "id": "promise_the_week",
+          "label": "Visit once, and put the hospital back in your week from now on",
+          "outcome": "One visit, brief, the Communion and a blessing. On the drive home you rework the week on the back of a bulletin, and Thursday afternoons are the hospital and the homebound from now on, and you write it on the office calendar where {@secretary} can point to it. Whether it holds is up to you. {@bonded_parishioner} is home in a fortnight.",
+          "effects": [
+            { "target": "relationship", "key": "@bonded_parishioner", "delta": 5 },
+            { "target": "stat", "key": "administration", "delta": 1 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "flag", "key": "bd_promised_visits", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bd_last_mass",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["friendship_vs_duty", "loyalty_vs_honesty"],
+      "severity": "MAJOR",
+      "category": "assignment",
+      "baseWeight": 12,
+      "suppressYears": 3,
+      "requires": [
+        { "type": "bond", "kind": "any", "op": ">=", "value": 5 },
+        { "type": "arc_weeks_left", "op": "<=", "value": 8 }
+      ],
+      "title": "The Last Sunday",
+      "body": "The letter of appointment has been read at every Mass, and the parish has done what parishes do, which is to arrange a reception in the hall without asking you and to argue about the cake. {@bonded_parishioner} comes to the office on the Tuesday before your last Sunday to say that the families will be there, at the 10:30, all of them: the ones you baptized into, married into, buried into, the ones you sat with. {@bonded_parishioner} has made a list, and it is long, and reads it to you, and you have to look at the window. What they want is to hear you say something. Not a homily, {@bonded_parishioner} says, though it will have to be a homily. They want to know that you know who they were to you. Behind that is a question no one will ask out loud, which is why you are being moved, and whether you asked for it. {@bonded_parishioner} has heard something. Everyone has heard something.",
+      "flavorPrompt": "A last Sunday, a parish that wants to be told it mattered. The priest knows why he is leaving and the parish half-knows.",
+      "choices": [
+        {
+          "id": "preach_them",
+          "label": "Preach the families, by what you did with them and not by name",
+          "requires": [{ "type": "stat", "key": "charisma", "op": ">=", "value": 50 }],
+          "outcome": "You preach the font, the ring, the grave, the oil, and the office chair, and every family in the church knows which sentence is theirs. It is eleven minutes and you have never been that quiet for that long in front of that many people. {@bonded_parishioner} is in the third pew and does not look up until the end. The hall afterward is too much. You stay for all of it.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 8 },
+            { "target": "stat", "key": "charisma", "delta": 2 },
+            { "target": "relationship", "key": "@bonded_parishioner", "delta": 12 },
+            { "target": "ap", "key": "next_week", "delta": -2 },
+            { "target": "flag", "key": "bd_left_well", "value": true },
+            { "target": "bond", "key": "@bonded_parishioner", "value": "helped:the parish" }
+          ]
+        },
+        {
+          "id": "ordinary_sunday",
+          "label": "Preach the Gospel of the day, say thank you at the end, and let the hall do the rest",
+          "outcome": "You preach the readings, as you have every Sunday, and you say two sentences of thanks before the final blessing and get through them. It is what a priest is supposed to do and some of the parish is disappointed by it and some is relieved. {@bonded_parishioner} says at the door that it was very like you, which is meant kindly, and is.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 3 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "relationship", "key": "@bonded_parishioner", "delta": 5 },
+            { "target": "flag", "key": "bd_left_well", "value": true }
+          ]
+        },
+        {
+          "id": "say_why",
+          "label": "Tell them, from the pulpit, why you are being moved",
+          "volume": "public",
+          "positionTopic": "authority",
+          "positionValue": 30,
+          "outcome": "You say it in one paragraph and without heat: what the diocese needed, what you asked for, what you did not. The church is very still. {@bonded_parishioner} nods slowly, the way people do when a rumor is confirmed by the person it is about. It is on the parish grapevine by noon and at the chancery by Tuesday. You have told the truth to the people who deserved it, and it will be remembered by the people who did not.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 6 },
+            { "target": "reputation", "key": "chancery", "delta": -6 },
+            { "target": "honesty", "key": "", "delta": 2 },
+            { "target": "outspokenness", "key": "", "delta": 2 },
+            { "target": "relationship", "key": "@bonded_parishioner", "delta": 10 },
+            { "target": "flag", "key": "bd_said_why_leaving", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bd_story_told_wrong",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["loyalty_vs_honesty", "belief_vs_safety"],
+      "severity": "MAJOR",
+      "category": "scandal",
+      "baseWeight": 8,
+      "suppressYears": 4,
+      "requires": [{ "type": "bond", "kind": "counseled", "op": ">=", "value": 1 }],
+      "title": "The Version Going Round",
+      "body": "{@dre} tells you, because {@dre} decided someone should, and it is the kind of thing {@dre} decides. {@bonded_parishioner} has been telling a story at the Tuesday coffee and the Thursday adoration and, apparently, the Knights' fish fry. The story is about a conversation in your office. You remember the conversation. It was not confession, and nothing in it is sealed, but it was said in confidence and you have treated it that way. In the version going round you said something you did not say: that the marriage was over, or that the mother was in hell, or that the Church would not miss the son who left, depending on who is repeating it. {@bonded_parishioner} is not lying, exactly. People remember what they needed to hear. But your name is in the story, and the story is now the parish's, and {@pastor} has heard a version of it and has not said so yet. You cannot correct it without saying what was actually said, and you will not do that.",
+      "flavorPrompt": "Sensitive: authored only. A pastoral confidence mangled in retelling. The priest cannot defend himself without breaking the very trust that is being misused.",
+      "choices": [
+        {
+          "id": "say_nothing",
+          "label": "Let it stand; you will not repeat what was said to you, even to correct it",
+          "outcome": "You say nothing to anyone. The story circulates for a season and then is replaced by another story, as stories are. A few people think less of you, and you cannot tell which. {@bonded_parishioner} goes on coming to Mass and greets you warmly and has no idea. You carry the version going round as one more thing not to be put down.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": -4 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "honesty", "key": "", "delta": 1 },
+            { "target": "flag", "key": "bd_story_let_stand", "value": true }
+          ]
+        },
+        {
+          "id": "go_to_them",
+          "label": "Go to {@bonded_parishioner} privately and say what you have heard, without saying what you said",
+          "requires": [{ "type": "stat", "key": "charisma", "op": ">=", "value": 50 }],
+          "outcome": "You say only that a story is going round with your name in it and that it is not what happened, and that you are not going to say in a coffee hour what was said in an office. {@bonded_parishioner} is mortified, and then defensive, and then quiet. The story stops. Whether it has been corrected or only stopped you will not know. Something between you is more careful now.",
+          "effects": [
+            { "target": "relationship", "key": "@bonded_parishioner", "delta": -6 },
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "flag", "key": "bd_story_corrected", "value": true },
+            { "target": "bond", "key": "@bonded_parishioner", "value": "quarreled:them" }
+          ]
+        },
+        {
+          "id": "tell_the_pastor",
+          "label": "Tell {@pastor} what you can, before he asks",
+          "requires": [{ "type": "role", "value": "parochial_vicar" }],
+          "outcome": "You go to him and say that there is a story, that it is wrong, and that you will not say what is right. He looks at you for a while and says that is the correct answer, and that he will say so if it comes to him. It does. He says so. {@bonded_parishioner} hears that the pastor has taken Father's side, and stops telling it, and is puzzled about why.",
+          "effects": [
+            { "target": "relationship", "key": "@pastor", "delta": 8 },
+            { "target": "reputation", "key": "parishioners", "delta": 1 },
+            { "target": "honesty", "key": "", "delta": 1 },
+            { "target": "flag", "key": "bd_story_corrected", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bd_vocation_from_a_family",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["loyalty_vs_honesty", "doubt"],
+      "severity": "MAJOR",
+      "category": "personal",
+      "baseWeight": 8,
+      "suppressYears": 5,
+      "once": true,
+      "requires": [
+        { "type": "any", "inner": [
+          { "type": "bond", "kind": "confirmed", "op": ">=", "value": 1 },
+          { "type": "bond", "kind": "baptized", "op": ">=", "value": 1 }
+        ] },
+        { "type": "years_ordained", "op": ">=", "value": 15 }
+      ],
+      "bias": [
+        { "when": { "type": "flag", "key": "vocation_seed", "value": true }, "multiplier": 1.5 },
+        { "when": { "type": "stat", "key": "piety", "op": ">=", "value": 60 }, "multiplier": 1.3 }
+      ],
+      "title": "One of Yours",
+      "body": "The son is twenty-two and has been serving the 7:00 on weekdays since he came home from college, which you noticed and did not remark on, because you have learned what happens when a priest remarks on it. {@bonded_parishioner} comes to the office without him. He wants to apply to the seminary. He has not told his father. He has told his mother, who is {@bonded_parishioner}, and {@bonded_parishioner} has come to ask you the question a mother asks, which is not whether he has a vocation but what the life is. What it is actually like. Whether he will be lonely. Whether the men are good. Whether the thing that was in the newspapers is over. {@bonded_parishioner} has known you for a long time and has watched you across a lot of Sundays and is asking, underneath the questions, whether you would do it again. The son is in the parking lot. He does not know his mother is here. He is going to want to talk to you next.",
+      "flavorPrompt": "A mother asking a priest the true price of the life before her son pays it. The priest's own answer is the whole scene.",
+      "choices": [
+        {
+          "id": "tell_her_the_life",
+          "label": "Answer her honestly, all of it, including the parts you would not say from the pulpit",
+          "requires": [{ "type": "stat", "key": "piety", "op": ">=", "value": 50 }],
+          "outcome": "You tell her about the loneliness and the good men and the bad ones and the years when you did not know. You tell her you would do it again and you tell her why, and it takes a while, and she does not interrupt. At the end she says, thank you, Father, and goes out to the car, and you do not know what she will say in it. The son comes to see you the next week.",
+          "effects": [
+            { "target": "relationship", "key": "@bonded_parishioner", "delta": 15 },
+            { "target": "honesty", "key": "", "delta": 2 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "flag", "key": "bd_told_mother_the_life", "value": true },
+            { "target": "bond", "key": "@bonded_parishioner", "value": "counseled:them" }
+          ]
+        },
+        {
+          "id": "send_to_vocations",
+          "label": "Say the diocese has a man for exactly this, and make the call to {@vocation_director} yourself",
+          "outcome": "You say the vocations office exists for this and that you will make the introduction, and you do, that afternoon. The son goes to the discernment weekend. {@bonded_parishioner} is grateful and a little put off, having asked you a question and been given a phone number. The son applies. Whether he stays is a matter for years you will not see from here.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": 4 },
+            { "target": "relationship", "key": "@bonded_parishioner", "delta": 5 },
+            { "target": "stat", "key": "administration", "delta": 1 },
+            { "target": "flag", "key": "bd_sent_a_seminarian", "value": true },
+            { "target": "bond", "key": "@bonded_parishioner", "value": "helped:their son" }
+          ]
+        },
+        {
+          "id": "walk_with_him_a_year",
+          "label": "Ask for a year: the son meets you weekly, and applies next fall if he still wants to",
+          "outcome": "You propose it to {@bonded_parishioner} and then to the son, who agrees too fast. Wednesdays at four, the Office, a book, a walk. It costs you an hour a week you did not have, for a year. By spring he is either surer or not, and either way he is more honest about it than the discernment weekend would have made him. You write the letter yourself.",
+          "effects": [
+            { "target": "relationship", "key": "@bonded_parishioner", "delta": 10 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "stat", "key": "theology", "delta": 1 },
+            { "target": "ap", "key": "next_week", "delta": -1 },
+            { "target": "flag", "key": "bd_sent_a_seminarian", "value": true },
+            { "target": "bond", "key": "@bonded_parishioner", "value": "counseled:their son" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bd_bequest",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["money", "ambition_vs_integrity"],
+      "severity": "MAJOR",
+      "category": "finance",
+      "baseWeight": 7,
+      "suppressYears": 5,
+      "once": true,
+      "requires": [
+        { "type": "bond", "kind": "buried", "op": ">=", "value": 1 },
+        { "type": "years_ordained", "op": ">=", "value": 10 }
+      ],
+      "bias": [
+        { "when": { "type": "parish", "key": "wealth", "value": 4 }, "multiplier": 1.4 },
+        { "when": { "type": "parish", "key": "wealth", "value": 5 }, "multiplier": 1.6 }
+      ],
+      "title": "The Will",
+      "body": "The letter is from a lawyer in town, and {@bonded_parishioner} brings it to you in person rather than let it come in the mail, which is how you know the family has read it first. The parent you buried left a bequest. Not to {parish}. To you, by name, with your title, five thousand dollars, and a line in the will that says it is for Father's own use, because Father was good to us. {@bonded_parishioner} says the family is glad of it, and says it in a way that means the family has discussed it and is mostly glad. There is a diocesan policy on this. There is a line in it about bequests to clergy from parishioners, and you have read it, and it does not say what you would like it to say either way. The parish has a roof. You have a car with a hundred and ninety thousand miles on it. {@bonded_parishioner} is waiting to be told that it is all right.",
+      "flavorPrompt": "A bequest to the priest personally, from a family he buried into. The policy is ambiguous and the family is watching.",
+      "choices": [
+        {
+          "id": "to_the_parish",
+          "label": "Sign it over to {parish}, and tell {@bonded_parishioner} it will go where the family can see it",
+          "volume": "semi_public",
+          "positionTopic": "money",
+          "positionValue": -25,
+          "outcome": "You do it at the lawyer's office and you tell {@bonded_parishioner} that it will be the north window, or the roof, or whatever the family chooses, with the name on it. {@bonded_parishioner} is proud and a little disappointed for you. It is in the bulletin. The chancery, which reads bulletins, notes it. Your car makes it through another winter.",
+          "effects": [
+            { "target": "money", "key": "cash", "delta": 5000 },
+            { "target": "reputation", "key": "parishioners", "delta": 5 },
+            { "target": "reputation", "key": "chancery", "delta": 4 },
+            { "target": "relationship", "key": "@bonded_parishioner", "delta": 8 },
+            { "target": "flag", "key": "bd_bequest_to_parish", "value": true },
+            { "target": "bond", "key": "@bonded_parishioner", "value": "helped:the family" }
+          ]
+        },
+        {
+          "id": "keep_it",
+          "label": "Accept it as the family meant it, and tell the chancery in writing",
+          "requires": [{ "type": "stat", "key": "administration", "op": ">=", "value": 50 }],
+          "outcome": "You write to the chancellor the same week, enclosing the clause, and receive a two-line reply that says the policy permits it and that the letter will be kept. You keep the money. The car is replaced. {@bonded_parishioner} is happy. Somewhere in the diocese there is a file with your name and a sum in it, and someday someone will read it looking for something.",
+          "effects": [
+            { "target": "relationship", "key": "@bonded_parishioner", "delta": 12 },
+            { "target": "stat", "key": "administration", "delta": 1 },
+            { "target": "reputation", "key": "chancery", "delta": -2 },
+            { "target": "risk", "key": "bd_bequest", "value": "accepted a bequest from a parishioner's estate, on file at the chancery", "delta": 1 },
+            { "target": "flag", "key": "bd_kept_bequest", "value": true }
+          ]
+        },
+        {
+          "id": "keep_it_quietly",
+          "label": "Accept it, and see no reason to trouble the chancery",
+          "outcome": "The lawyer sends a check and you deposit it and that is the end of it, as far as you can see. {@bonded_parishioner} tells the family Father was grateful. Nobody writes to anybody. It is probably within the policy. You did not check, and you notice that you did not check, and you buy the car.",
+          "effects": [
+            { "target": "relationship", "key": "@bonded_parishioner", "delta": 10 },
+            { "target": "honesty", "key": "", "delta": -1 },
+            { "target": "stat", "key": "piety", "delta": -1 },
+            { "target": "risk", "key": "bd_bequest", "value": "accepted a bequest from a parishioner's estate without telling the chancery", "delta": 2 },
+            { "target": "flag", "key": "bd_kept_bequest", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bd_quarrel_healed_at_a_funeral",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["friendship_vs_duty", "competence"],
+      "severity": "NOTABLE",
+      "category": "parish_death",
+      "baseWeight": 9,
+      "suppressYears": 4,
+      "requires": [
+        { "type": "bond", "kind": "quarreled", "op": ">=", "value": 1 },
+        { "type": "bond", "kind": "buried", "op": ">=", "value": 1 }
+      ],
+      "bias": [
+        { "when": { "type": "parish", "key": "kind", "value": "rural" }, "multiplier": 1.4 }
+      ],
+      "title": "The Funeral Rota",
+      "body": "{@bonded_parishioner}'s mother dies on a Friday, and on Saturday morning the funeral home calls the rectory, and the priest on the rota that week is you. There is no other priest to be had; there never is. You and {@bonded_parishioner} have not spoken since the argument, which the parish remembers better than either of you would like, and which was, you still think, about something that mattered. {@secretary} takes the call and comes to your door with the look of someone bringing a problem she did not make. The family has not asked for anyone else. They may not have thought to. They may be waiting to see whether you will do it, or whether you will find a reason to hand it to someone who has to drive forty minutes. The wake is Sunday evening. The Mass is Monday at ten. The mother was at every Saturday vigil for fifty years and always sat where she could see the tabernacle, and you know that because {@bonded_parishioner} told you once, before.",
+      "flavorPrompt": "A funeral that lands on the priest's week for a family he is not speaking to. Nobody says the argument's name; the dead woman is the whole subject.",
+      "choices": [
+        {
+          "id": "do_it_plainly",
+          "label": "Take the funeral as the rota gives it, and say nothing about the rest",
+          "outcome": "You meet the family at the funeral home and plan the Mass as you would for anyone, and {@bonded_parishioner} is civil and you are civil. You preach the mother, the vigil, the seat with the view of the tabernacle. At the graveside {@bonded_parishioner} takes your hand and holds it a second longer than the line requires. Nothing is said. Something is over.",
+          "effects": [
+            { "target": "relationship", "key": "@bonded_parishioner", "delta": 15 },
+            { "target": "reputation", "key": "parishioners", "delta": 4 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "flag", "key": "bd_quarrel_healed", "value": true },
+            { "target": "bond", "key": "@bonded_parishioner", "value": "buried:the mother" }
+          ]
+        },
+        {
+          "id": "go_to_the_wake_first",
+          "label": "Go to the wake early, before the crowd, and say the thing that needs saying",
+          "requires": [{ "type": "stat", "key": "charisma", "op": ">=", "value": 50 }],
+          "outcome": "You are there at five, before the doors open, and you say to {@bonded_parishioner} in the empty room that the argument is still the argument and that it can wait, and that this week you are the family's priest and nothing else. {@bonded_parishioner} cries, which you had not expected, and then tells you about the mother for an hour. The funeral is the best you have preached in years.",
+          "effects": [
+            { "target": "relationship", "key": "@bonded_parishioner", "delta": 20 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "reputation", "key": "parishioners", "delta": 5 },
+            { "target": "ap", "key": "next_week", "delta": -1 },
+            { "target": "flag", "key": "bd_quarrel_healed", "value": true },
+            { "target": "bond", "key": "@bonded_parishioner", "value": "buried:the mother" }
+          ]
+        },
+        {
+          "id": "find_another_priest",
+          "label": "Call {@brother_priest} and ask him to drive the forty minutes",
+          "outcome": "You tell yourself the family would be more at ease, and it may be true. {@brother_priest} comes and does a competent funeral for a woman he never met. You concelebrate and are grateful for the rubrics. {@bonded_parishioner} thanks him at the door and does not thank you, and the parish, which knew about the argument, now knows something else about you, and has an opinion.",
+          "effects": [
+            { "target": "relationship", "key": "@bonded_parishioner", "delta": -10 },
+            { "target": "reputation", "key": "parishioners", "delta": -5 },
+            { "target": "reputation", "key": "brother_priests", "delta": 2 },
+            { "target": "stat", "key": "charisma", "delta": -1 },
+            { "target": "flag", "key": "bd_quarrel_stood", "value": true },
+            { "target": "bond", "key": "@bonded_parishioner", "value": "quarreled:the family" }
+          ]
+        }
+      ]
+    }
+  ]
+}
