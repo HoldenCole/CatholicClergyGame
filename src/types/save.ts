@@ -24,6 +24,7 @@ import type { StudyState } from './study';
 import type { ClubsState } from './clubs';
 import type { TalksState } from './talks';
 import type { Tenure } from './tenure';
+import type { SeeState } from './see';
 import type { Letter } from './mode';
 import type { Beat, Clock, Speed } from './time';
 
@@ -69,6 +70,8 @@ export interface GameState {
   settings?: GameSettings;
   /** Societies he belongs to. Absent in older saves. */
   clubs?: ClubsState;
+  /** The see he holds as bishop, in the last act. Absent or null otherwise. */
+  see?: SeeState | null;
   /** Every post held, in order, written as each ends. Absent in older saves. */
   tenures?: Tenure[];
   /** Words had with people: cooldowns and the exchanges. Absent in older saves. */

@@ -1171,5 +1171,408 @@
       "a pastor who needed the vicar general to say it was all right to ask for help",
       "forty miles out and forty back for a meeting that mattered"
     ]
+  },
+  {
+    "id": "confirmation_circuit",
+    "kind": "work",
+    "city": "auxiliary",
+    "label": "The confirmation circuit",
+    "blurb": "Forty parishes a year, a homily that must be new each time and is not, a dinner with the pastor after. The people meet the diocese as you.",
+    "maxAp": 2,
+    "location": "field",
+    "stats": {
+      "charisma": 0.05,
+      "piety": 0.02
+    },
+    "reputation": [
+      {
+        "key": "parishioners",
+        "delta": 0.06
+      },
+      {
+        "key": "brother_priests",
+        "delta": 0.04
+      }
+    ],
+    "digest": [
+      "confirmations in a parish you had never seen, and a pastor who wanted to talk after",
+      "the same homily, a different gym",
+      "a sacristan who told you how the last auxiliary did it"
+    ]
+  },
+  {
+    "id": "the_vicariate",
+    "kind": "work",
+    "city": "auxiliary",
+    "label": "The vicariate",
+    "blurb": "A third of the diocese is yours to visit, hear, and report on. The pastors learn quickly whether you carry their complaints up or bury them.",
+    "maxAp": 2,
+    "location": "curia",
+    "stats": {
+      "administration": 0.05,
+      "knowledge": 0.02
+    },
+    "reputation": [
+      {
+        "key": "brother_priests",
+        "delta": 0.06
+      },
+      {
+        "key": "chancery",
+        "delta": 0.03
+      }
+    ],
+    "relationships": [
+      {
+        "selector": "@brother_priest",
+        "delta": 0.1
+      }
+    ],
+    "onFirst": [
+      {
+        "target": "flag",
+        "key": "aux_vicariate",
+        "value": true
+      }
+    ],
+    "digest": [
+      "the vicariate's deans, and what they said when the recorder was off",
+      "a rectory visit that ran to midnight",
+      "a pastor's complaint carried up, and the bishop's face when he heard it"
+    ]
+  },
+  {
+    "id": "standing_in",
+    "kind": "work",
+    "city": "auxiliary",
+    "label": "Standing in for the bishop",
+    "blurb": "Where he cannot be, you are: the funeral, the fundraiser, the meeting with the mayor. The diocese learns whether you can be trusted with his voice.",
+    "maxAp": 2,
+    "location": "curia",
+    "stats": {
+      "charisma": 0.04,
+      "administration": 0.03
+    },
+    "reputation": [
+      {
+        "key": "chancery",
+        "delta": 0.06
+      },
+      {
+        "key": "public",
+        "delta": 0.04
+      }
+    ],
+    "relationships": [
+      {
+        "selector": "@bishop",
+        "delta": 0.1
+      }
+    ],
+    "digest": [
+      "the mayor's breakfast, in the bishop's chair",
+      "a funeral he could not reach, and the family's thanks addressed to him",
+      "a decision announced in his name that you had made"
+    ]
+  },
+  {
+    "id": "seminary_board",
+    "kind": "work",
+    "city": "auxiliary",
+    "label": "The seminary board",
+    "blurb": "The men in formation pass across the table twice a year. The rector wants a bishop who will back him; the men want one who will hear them.",
+    "maxAp": 1,
+    "location": "library",
+    "stats": {
+      "theology": 0.03,
+      "knowledge": 0.03
+    },
+    "reputation": [
+      {
+        "key": "rome",
+        "delta": 0.03
+      }
+    ],
+    "onFirst": [
+      {
+        "target": "flag",
+        "key": "aux_seminary_board",
+        "value": true
+      }
+    ],
+    "digest": [
+      "the seminary board, and one name the rector would not say aloud",
+      "a formation report read twice",
+      "an afternoon with the men who will be the presbyterate"
+    ]
+  },
+  {
+    "id": "spanish_parishes",
+    "kind": "work",
+    "city": "auxiliary",
+    "label": "The Spanish-speaking parishes",
+    "blurb": "The bishop has given you the growing half of the diocese, which is also the half without money. Confirmations of three hundred at a time, and a quinceañera every Saturday.",
+    "maxAp": 2,
+    "location": "field",
+    "stats": {
+      "charisma": 0.04,
+      "piety": 0.03
+    },
+    "reputation": [
+      {
+        "key": "parishioners",
+        "delta": 0.08
+      }
+    ],
+    "requires": [
+      {
+        "type": "credential",
+        "key": "spanish"
+      }
+    ],
+    "onFirst": [
+      {
+        "target": "flag",
+        "key": "aux_hispanic",
+        "value": true
+      }
+    ],
+    "digest": [
+      "three hundred confirmations, a mariachi, and a pastor near tears",
+      "a parish hall that is also a legal clinic on Tuesdays",
+      "a family who asked you to bless a truck"
+    ]
+  },
+  {
+    "id": "auxiliary_press",
+    "kind": "work",
+    "city": "auxiliary",
+    "label": "The press and the town",
+    "blurb": "The bishop does not like cameras and you are the one who is sent. Every sentence is the diocese's now.",
+    "maxAp": 1,
+    "location": "curia",
+    "stats": {
+      "charisma": 0.04
+    },
+    "reputation": [
+      {
+        "key": "public",
+        "delta": 0.08
+      },
+      {
+        "key": "chancery",
+        "delta": -0.02
+      }
+    ],
+    "onFirst": [
+      {
+        "target": "flag",
+        "key": "aux_spokesman",
+        "value": true
+      }
+    ],
+    "digest": [
+      "a television interview cut to eleven seconds",
+      "the editorial board, and a question about the bishop you did not answer",
+      "a quote in the paper that the chancellor called about"
+    ]
+  },
+  {
+    "id": "cathedral_and_confirmations",
+    "kind": "work",
+    "city": "see",
+    "label": "The cathedral and the circuit",
+    "blurb": "The chair is in the cathedral and the diocese is in the car. Confirmations in every parish, the Chrism Mass, the ordinations if there are any. The people know their bishop by whether he comes.",
+    "maxAp": 3,
+    "location": "field",
+    "stats": {
+      "charisma": 0.04,
+      "piety": 0.03
+    },
+    "reputation": [
+      {
+        "key": "parishioners",
+        "delta": 0.04
+      }
+    ],
+    "see": {
+      "people": 0.5
+    },
+    "digest": [
+      "confirmations two hundred miles from the cathedral, and a potluck",
+      "the Chrism Mass, every priest of the diocese in one room",
+      "a mission church with eleven people and a stove"
+    ]
+  },
+  {
+    "id": "see_personnel",
+    "kind": "work",
+    "city": "see",
+    "label": "The priests",
+    "blurb": "Forty-odd men, every one of whom you must know, move, and keep. The personnel board is yours now, and every assignment has your name on the letter.",
+    "maxAp": 3,
+    "location": "curia",
+    "stats": {
+      "administration": 0.04,
+      "charisma": 0.02
+    },
+    "reputation": [
+      {
+        "key": "brother_priests",
+        "delta": 0.04
+      }
+    ],
+    "relationships": [
+      {
+        "selector": "@brother_priest",
+        "delta": 0.12
+      }
+    ],
+    "see": {
+      "presbyterate": 0.6
+    },
+    "digest": [
+      "a priest in your study for an hour, and what he finally said",
+      "the assignment list, and the one man who will not understand it",
+      "a deanery dinner where nobody mentioned the letter"
+    ]
+  },
+  {
+    "id": "see_closings",
+    "kind": "work",
+    "city": "see",
+    "label": "The closings and the mergers",
+    "blurb": "Eighty parishes and forty priests: the arithmetic every bishop of this see has faced and most have put off. The towns will remember which ones you closed.",
+    "maxAp": 2,
+    "location": "desk",
+    "stats": {
+      "administration": 0.05
+    },
+    "reputation": [
+      {
+        "key": "public",
+        "delta": -0.03
+      },
+      {
+        "key": "chancery",
+        "delta": 0.02
+      }
+    ],
+    "see": {
+      "money": 0.4,
+      "people": -0.3,
+      "shortage": -0.02
+    },
+    "onFirst": [
+      {
+        "target": "flag",
+        "key": "bp_began_closings",
+        "value": true
+      }
+    ],
+    "digest": [
+      "the map on the study wall with the pins moved",
+      "a town hall that ran three hours",
+      "a merger decree signed, and a phone that rang until midnight"
+    ]
+  },
+  {
+    "id": "see_money",
+    "kind": "work",
+    "city": "see",
+    "label": "The money",
+    "blurb": "The annual appeal, the insurer, the pension fund, the cathedral roof. Nobody else in the diocese reads the whole ledger and the finance council would rather you did not either.",
+    "maxAp": 2,
+    "location": "desk",
+    "stats": {
+      "administration": 0.05
+    },
+    "reputation": [
+      {
+        "key": "chancery",
+        "delta": 0.03
+      }
+    ],
+    "see": {
+      "money": 0.6
+    },
+    "digest": [
+      "the appeal letter, signed forty thousand times by machine",
+      "the insurer's man, and the number he would not put in writing",
+      "the pension fund, and a question the auditor could not answer"
+    ]
+  },
+  {
+    "id": "see_seminary",
+    "kind": "work",
+    "city": "see",
+    "label": "Vocations and the seminary",
+    "blurb": "Three men in formation at a seminary two states away, and a diocese that needs twenty. Every dinner with a college student is recruiting. The one you ordain will be the presbyterate for forty years.",
+    "maxAp": 2,
+    "location": "library",
+    "stats": {
+      "piety": 0.03,
+      "theology": 0.02
+    },
+    "reputation": [
+      {
+        "key": "rome",
+        "delta": 0.02
+      }
+    ],
+    "see": {
+      "shortage": -0.03,
+      "presbyterate": 0.1
+    },
+    "onFirst": [
+      {
+        "target": "flag",
+        "key": "bp_vocations",
+        "value": true
+      }
+    ],
+    "digest": [
+      "a Newman Center dinner, and one young man who stayed after",
+      "the seminary's report on your three",
+      "an ordination retreat where you were the only bishop and the only cook"
+    ]
+  },
+  {
+    "id": "see_rome",
+    "kind": "work",
+    "city": "see",
+    "label": "Rome and the conference",
+    "blurb": "The quinquennial report, the ad limina, the nunciature's questions, and the bishops' conference twice a year in a hotel. The see is small; the letters are not.",
+    "maxAp": 2,
+    "location": "curia",
+    "stats": {
+      "knowledge": 0.04,
+      "administration": 0.02
+    },
+    "reputation": [
+      {
+        "key": "rome",
+        "delta": 0.06
+      },
+      {
+        "key": "chancery",
+        "delta": 0.04
+      }
+    ],
+    "see": {
+      "rome": 0.6
+    },
+    "onFirst": [
+      {
+        "target": "flag",
+        "key": "bp_conference",
+        "value": true
+      }
+    ],
+    "digest": [
+      "the quinquennial report, three hundred pages nobody in Rome will read",
+      "the conference in a hotel ballroom, and a cardinal who knew your name",
+      "a letter from the nunciature answered the same day"
+    ]
   }
 ]

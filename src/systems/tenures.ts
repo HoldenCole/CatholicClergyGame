@@ -24,8 +24,8 @@ export function openTenure(state: GameState): Tenure | null {
     const program = studyProgram(state.study.program);
     return {
       kind: 'away',
-      label: state.study.label,
-      place: program?.kind === 'post' ? state.study.residence : state.study.school,
+      label: state.see ? `Bishop of ${state.see.see}` : state.study.label,
+      place: state.see ? `${state.see.name}, ${state.see.region}` : program?.kind === 'post' ? state.study.residence : state.study.school,
       startWeek: state.study.startWeek,
       endWeek: state.clock.week,
     };

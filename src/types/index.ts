@@ -20,3 +20,4 @@ export * from './study';
 export * from './clubs';
 export * from './talks';
 export * from './tenure';
+export * from './see';

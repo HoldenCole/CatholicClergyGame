@@ -1,0 +1,424 @@
+{
+  "_notes": "The road to the mitre: the nuncio's questionnaire about the man (ep_questionnaire_about_you sets terna_named, which both episcopal offers require), and the auxiliary's years (study:auxiliary). Flags: terna_named, asked_off_the_terna, aux_knows_names, aux_told_the_truth, aux_ran_the_errand, aux_refused_errand. The bishop's own scenes are in study/see.json.",
+  "events": [
+    {
+      "id": "ep_questionnaire_about_you",
+      "phase": [
+        "pastor",
+        "administrator",
+        "study"
+      ],
+      "pressure": [
+        "ambition_vs_integrity"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 8,
+      "suppressYears": 4,
+      "once": true,
+      "requires": [
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 16
+        },
+        {
+          "type": "reputation",
+          "key": "chancery",
+          "op": ">=",
+          "value": 45
+        },
+        {
+          "type": "reputation",
+          "key": "rome",
+          "op": ">=",
+          "value": 10
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "terna_named",
+            "value": true
+          }
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "ordained_bishop",
+            "value": true
+          }
+        }
+      ],
+      "bias": [
+        {
+          "when": {
+            "type": "flag",
+            "key": "vg_served",
+            "value": true
+          },
+          "multiplier": 2.0
+        },
+        {
+          "when": {
+            "type": "flag",
+            "key": "office:bishops_secretary",
+            "value": true
+          },
+          "multiplier": 1.5
+        },
+        {
+          "when": {
+            "type": "outspokenness",
+            "op": ">=",
+            "value": 50
+          },
+          "multiplier": 0.5
+        },
+        {
+          "when": {
+            "type": "figure"
+          },
+          "multiplier": 0.6
+        }
+      ],
+      "title": "The Questionnaire",
+      "body": "{@closest_classmate} calls on a Sunday night, which he never does, and talks for ten minutes about nothing, and then says that he has had a letter from the nunciature. Twenty-seven questions about a priest of the diocese. Orthodoxy, prudence, health, family, finances, whether the priest has ever been the subject of an allegation, whether he is known to have friendships with women or men that could cause scandal, whether he can be trusted with money, whether he is loyal to the Holy See. He is not permitted to say who the priest is, and he does not, and he has called you on a Sunday night to say so. You understand. Somewhere in a chancery in Washington a file with your name on it is being assembled from the answers of men who were told to keep the secret and have not, quite. Nothing will come of it, probably. Most names on a terna go nowhere. But it means that someone has said your name in a room you have never been in, and the room wrote it down.",
+      "flavorPrompt": "A priest learns, sideways, that Rome is asking about him.",
+      "choices": [
+        {
+          "id": "say_nothing",
+          "label": "Thank him, say nothing, and tell no one",
+          "outcome": "You thank him for the call about nothing, and he says any time, and you sit in the study until midnight. You tell no one, which is what the questionnaire itself asks of the men who answer it, and it is the first test. The file grows in Washington. You say the Monday Mass with the odd, weightless feeling of a man who has heard his own name spoken behind a door.",
+          "effects": [
+            {
+              "target": "flag",
+              "key": "terna_named",
+              "value": true
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "ask_bishop",
+          "label": "Ask the bishop, privately, whether he put your name forward",
+          "outcome": "{@bishop} looks at you for a while and says that he is not permitted to discuss the terna, which is an answer. He says that if a man were on it, the worst thing that man could do is behave as though he were. You have behaved as though you were, once, by asking. He does not hold it against you, exactly. The nunciature hears, as it hears everything, that you asked.",
+          "effects": [
+            {
+              "target": "flag",
+              "key": "terna_named",
+              "value": true
+            },
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": -3
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": -2
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "tell_classmate_no",
+          "label": "Tell him to write that you would make a poor bishop, and mean it",
+          "requires": [
+            {
+              "type": "stat",
+              "key": "piety",
+              "op": ">=",
+              "value": 55
+            }
+          ],
+          "outcome": "He laughs, and then hears that you are not joking, and stops. He says he will write what he thinks is true, which is what the form asks. What he thinks is true is not what you asked him to write. The file grows anyway. But the brother priests hear, in the way they hear things, that you tried to stop it, and it does you no harm with them at all.",
+          "effects": [
+            {
+              "target": "flag",
+              "key": "terna_named",
+              "value": true
+            },
+            {
+              "target": "flag",
+              "key": "asked_off_the_terna",
+              "value": true
+            },
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": -3
+            },
+            {
+              "target": "relationship",
+              "key": "@closest_classmate",
+              "delta": 6
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ep_aux_first_confirmation",
+      "phase": "study",
+      "pressure": [
+        "competence"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 10,
+      "suppressYears": 5,
+      "once": true,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:auxiliary",
+          "value": true
+        }
+      ],
+      "title": "The First Confirmation",
+      "body": "The first confirmation as a bishop is in a parish gym in the far end of the diocese, ninety-two candidates, a pastor who has confirmed with three bishops and says so, and a folding chair with a cushion that someone's grandmother made for the last one. The pastor tells you, kindly, how the last auxiliary did it: the homily short, the chrism on the thumb not the whole hand, the sponsor's hand on the shoulder and not the head, the photographs after and not during. The candidates are fifteen and terrified and bored in equal parts. Their parents are watching the first bishop most of them have seen up close to see whether he is a person. The homily is yours, and it is the same homily you will give forty times this year, and it is not written yet.",
+      "flavorPrompt": "A new bishop learns the confirmation circuit from a pastor who has seen better.",
+      "choices": [
+        {
+          "id": "their_names",
+          "label": "Learn the ninety-two names from the list in the car, and use them",
+          "requires": [
+            {
+              "type": "stat",
+              "key": "charisma",
+              "op": ">=",
+              "value": 45
+            }
+          ],
+          "outcome": "You confirm ninety-two teenagers by name, without the card, and the gym notices by the twentieth. The pastor stops telling you how the last one did it. A mother tells you at the reception that her son said the bishop was all right, which in this parish is the highest thing said of anyone since the last war.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 6
+            },
+            {
+              "target": "flag",
+              "key": "aux_knows_names",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "the_pastor_way",
+          "label": "Do it exactly as the pastor says the last one did",
+          "outcome": "Short homily, chrism on the thumb, photographs after. The pastor is pleased, and tells the deanery that the new auxiliary can be told things, which is worth more in a presbyterate than being liked. The gym does not remember you. That is also a kind of success, this year.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": 5
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "long_homily",
+          "label": "Give the homily you would have given at your own parish, all of it",
+          "outcome": "Eighteen minutes. The candidates' eyes glaze at four and come back at eleven for a story about a man you buried. The pastor looks at his watch twice. The parents talk about it in the parking lot, which is where the diocese actually happens. The chancery hears that the new auxiliary preaches long, and files it.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": -3
+            },
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": 3
+            },
+            {
+              "target": "outspokenness",
+              "key": "outspokenness",
+              "delta": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ep_aux_the_bishops_shadow",
+      "phase": "study",
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 8,
+      "suppressYears": 4,
+      "once": true,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:auxiliary",
+          "value": true
+        },
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 19
+        }
+      ],
+      "bias": [
+        {
+          "when": {
+            "type": "relationship",
+            "npcId": "@bishop",
+            "op": "<=",
+            "value": 10
+          },
+          "multiplier": 1.5
+        }
+      ],
+      "title": "The Bishop's Shadow",
+      "body": "{@bishop} has begun to send you to the things he does not want to do, which is the job, and to the things he does not want to be seen doing, which is something else. This week it is a meeting with a pastor he intends to remove and has not told, and you are to take the man's temperature without saying why. The pastor knows why. He has been a priest for thirty years and he can read a chancery calendar. He gives you coffee and asks after your mother and then asks whether you have come to tell him or to find out how he would take it. He says that he would rather hear it from the bishop, who ordained him, than from an auxiliary, who did not. He says this without malice. He says that the last auxiliary did the same errand for the last bishop, and is a bishop somewhere now, and that he supposes that is how it works.",
+      "flavorPrompt": "An auxiliary is used as the bishop's instrument and a pastor names it.",
+      "choices": [
+        {
+          "id": "tell_him",
+          "label": "Tell him the truth: the bishop means to move him, and you were sent to see how he would take it",
+          "outcome": "He nods for a long time and thanks you, and the coffee goes cold. He takes it well, as it happens, better than the bishop feared. {@bishop} is angry for a week that you said what you were sent not to say, and then is not, because the removal goes quietly, which is all he wanted. The presbyterate hears that the auxiliary tells the truth. It is a reputation that will cost you and pay you for the rest of your life.",
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "honesty",
+              "delta": 6
+            },
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": -8
+            },
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": 8
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": -3
+            },
+            {
+              "target": "flag",
+              "key": "aux_told_the_truth",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "errand",
+          "label": "Do the errand as given: coffee, his mother, the temperature, and nothing said",
+          "outcome": "You ask after his health and his vicar and his roof, and he answers, and both of you know. You report to {@bishop} that the man will take it, and he does, in a letter the following week. The pastor does not speak to you again for a year, and then does, at a funeral, and is kind about it, which is worse. The chancery notes that the auxiliary can be sent.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": 8
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": -4
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": -1
+            },
+            {
+              "target": "flag",
+              "key": "aux_ran_the_errand",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "refuse",
+          "label": "Go back to the bishop and tell him to do his own removing",
+          "requires": [
+            {
+              "type": "relationship",
+              "npcId": "@bishop",
+              "op": ">=",
+              "value": 20
+            }
+          ],
+          "outcome": "{@bishop} listens, and says that he had wondered when you would say that, and that his own auxiliary said it to him thirty years ago. He does the errand himself, badly, the following week. The pastor takes it worse from him than he would have from you. Nobody thanks you. But you are not the man the last auxiliary was, and the presbyterate, which keeps a ledger, writes that down.",
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "honesty",
+              "delta": 4
+            },
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": -2
+            },
+            {
+              "target": "flag",
+              "key": "aux_refused_errand",
+              "value": true
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

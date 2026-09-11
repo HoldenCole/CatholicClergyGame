@@ -58,9 +58,9 @@ export default function Hud() {
     <header className="plate hud flex items-center justify-between gap-6 px-5 py-2">
       <div className="flex min-w-0 items-center gap-4">
         <h1 className="title text-lg tracking-wide" style={{ color: '#e6c25a' }}>Vocation</h1>
-        {c && <Portrait portrait={portraitForCharacter(c, yearOf(clock.startDay, clock.week), game.phase)} size={34} title={`${c.name.first} ${c.name.last}`} />}
+        {c && <Portrait portrait={portraitForCharacter(c, yearOf(clock.startDay, clock.week), game.flags.ordained_bishop ? 'bishop' : game.phase)} size={34} title={`${c.name.first} ${c.name.last}`} />}
         <span className="truncate text-sm">
-          {c ? `${c.name.first} ${c.name.last}, ` : ''}{game.study ? `${game.study.city === 'rome' || game.study.city === 'washington' ? `Studying in ${game.study.city === 'rome' ? 'Rome' : 'Washington'}` : game.study.label}, year ${Math.floor((clock.week - game.study.startWeek) / 52) + 1}` : (PHASE_LABELS[game.phase] ?? game.phase)}
+          {c ? `${c.name.first} ${c.name.last}, ` : ''}{game.study ? `${game.see ? `Bishop of ${game.see.see}` : game.study.city === 'rome' || game.study.city === 'washington' ? `Studying in ${game.study.city === 'rome' ? 'Rome' : 'Washington'}` : game.study.label}, year ${Math.floor((clock.week - game.study.startWeek) / 52) + 1}` : (PHASE_LABELS[game.phase] ?? game.phase)}
         </span>
         <span className="truncate text-sm opacity-80">
           Week of {formatDate(dateOf(clock))} · {SEASON_LABELS[seasonOf(clock)]} · year {gameYearOf(clock)}, week {weekOfYear(clock)}

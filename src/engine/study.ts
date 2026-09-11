@@ -7,9 +7,11 @@ import { refreshOpenings } from '@/systems/openings';
 import { closeTenure } from '@/systems/tenures';
 import { nextAssignment } from './career';
 import { ARC } from './parish';
+import { generateSee } from './see';
+import { retire } from './career';
 
 /** How a place is named in prose. */
-export const CITY_WORD: Record<StudyState['city'], string> = { rome: 'Rome', washington: 'Washington', residence: "the bishop's residence", campus: 'the Newman Center', hospital: 'the hospital', seminary: 'the seminary', chancery: 'the chancery' };
+export const CITY_WORD: Record<StudyState['city'], string> = { rome: 'Rome', washington: 'Washington', residence: "the bishop's residence", campus: 'the Newman Center', hospital: 'the hospital', seminary: 'the seminary', chancery: 'the chancery', auxiliary: 'the chancery', see: 'the see' };
 
 /** Invented: what leaving costs the man's standing with the people he leaves. DESIGN §7.5 rule 3. */
 export const STUDY = { leaveParishioners: -8 } as const;
@@ -51,7 +53,16 @@ export function beginStudy(state: GameState, def: OfferDef, failed: boolean, rng
   const flags: GameState['flags'] = { ...next.flags, [`study:${program.city}`]: true };
   for (const k of Object.keys(flags)) if (k.startsWith('parish:') || k.startsWith('role:')) delete flags[k];
   const beats = [...next.beats.filter((b) => b.kind !== 'assignment'), { kind: 'assignment' as const, week: study.endWeek, label: program.kind === 'post' ? (program.city === 'residence' ? 'The bishop lets you go' : `The years at ${CITY_WORD[program.city]} end`) : `Home from ${CITY_WORD[program.city]}` }].sort((a, b) => a.week - b.week);
-  next = { ...next, phase: 'study', study, parish: null, assignment: null, founding: null, project: null, flags, beats, mode: { kind: 'clock' } };
+  next = { ...next, phase: program.kind === 'see' ? 'bishop' : 'study', study, parish: null, assignment: null, founding: null, project: null, flags, beats, mode: { kind: 'clock' } };
+  if (program.kind === 'see') {
+    // The last act: a see of his own, held until the letter at seventy-five.
+    const see = generateSee(next, rng.derive(`see:${next.clock.week}`));
+    const year = new Date((next.clock.startDay + next.clock.week * 7) * 86_400_000).getUTCFullYear();
+    const age = year - (next.character!.entryYear - next.character!.background.entryAge);
+    const endWeek = next.clock.week + Math.max(52, (75 - age) * 52);
+    next = { ...next, see, study: { ...study, endWeek, school: see.name, residence: `the bishop's house in ${see.see}` }, beats: [...next.beats.filter((b) => b.kind !== 'assignment'), { kind: 'assignment' as const, week: endWeek, label: 'The letter at seventy-five' }].sort((a, b) => a.week - b.week), flags: { ...next.flags, [`see:${see.id}`]: true } };
+    return note(next, 'promotion', `Named Bishop of ${see.see}, ${see.region}: ${see.name}, ${program.label.toLowerCase()} of forty priests and more parishes than that.`);
+  }
   const years = Math.round(c.weeks / 52);
   return note(next, 'offer', program.kind === 'post' ? `Moved into ${program.residence} as ${program.label.toLowerCase()}, ${years} years.` : `Left for ${CITY_WORD[program.city]}: ${program.label.toLowerCase()} at ${program.school}, ${years} years.`);
 }
@@ -77,6 +88,10 @@ export function endStudy(state: GameState, def: OfferDef, rng: Rng): GameState {
   }
   const flags: GameState['flags'] = { ...next.flags };
   delete flags[`study:${study.city}`];
+  if (studyProgram(study.program)?.kind === 'see') {
+    // The letter at seventy-five: a bishop does not come home to a parish.
+    return retire({ ...next, flags });
+  }
   next = { ...next, flags, study: null, phase: 'parochial_vicar', beats: next.beats.filter((b) => b.kind !== 'assignment') };
   next = refreshOpenings(next, rng.derive(`openings:home:${next.clock.week}`)).state;
   return nextAssignment(next, rng).state;

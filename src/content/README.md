@@ -277,6 +277,32 @@ regard; its week is the bishop's door, the personnel board, the closings,
 the tribunal, the money, and deanery visits, and `events/study/chancery.json`
 is gated on `study:chancery`.
 
+### A parish that remembers you (`systems/bonds.ts`, `events/parish/bonds.json`)
+
+Every parish has six to nine named parishioners, two of them kin. At
+sacramental care the week may write a **bond** on one of them (`baptized`,
+`married`, `buried`, `anointed`, `confirmed`, `counseled`, `helped`,
+`quarreled`, with a `who`): the digest says so, the People sheet lists what
+you have done for each family, the year in review counts them, and the
+ending reads them back. Content reaches them through the selector
+`@bonded_parishioner`, the `bond` condition (`kind` or `any`, counted in the
+current parish), and the `bond` effect (`value` is `<kind>:<who>`).
+
+### The episcopal tier (`sees.json`, `events/parish/episcopal.json`, `events/study/see.json`)
+
+The last act. `ep_questionnaire_about_you` tells the man, sideways, that the
+nunciature is asking about him and sets `terna_named`; both episcopal offers
+require it. `ep_auxiliary_bishop` is a six-year posting (city `auxiliary`)
+that ends with a parish again and `served_auxiliary`; `ep_diocesan_bishop`
+is a program of kind `see`: the man is named to a small see drawn from
+`sees.json` (real dioceses; the dials roll from `leans`), `state.see` holds
+its five dials (`presbyterate`, `people`, `rome`, `money`, `shortage`) and
+its counts, the bishop's activities carry `see` deltas per hour, every year
+`engine/see.ts` ordains and closes and writes a letter, and the years run to
+the letter at seventy-five, which retires him. The `age` and `see` conditions
+exist for these scenes; `phase: "bishop"` for the see, `study:auxiliary` for
+the auxiliary's years.
+
 ### The player's dials
 
 `state.settings` holds the work-week length (`light` 10, `standard` 12,

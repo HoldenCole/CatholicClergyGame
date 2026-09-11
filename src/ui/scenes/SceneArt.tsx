@@ -45,7 +45,7 @@ export default function SceneArt({ scene, season, state, plain = false }: { scen
       {scene === 'seminary_room' && <SeminaryRoom ambient={ambient('seminary_room')} seminaryName={state.seminary?.name} />}
       {scene === 'seminary_hall' && <SeminaryHall />}
       {scene === 'study_room' && <StudyRoom city={state.study?.city ?? 'rome'} school={state.study?.school ?? 'the Gregorian'} />}
-      {scene === 'study_city' && (state.study?.city === 'residence' || state.study?.city === 'chancery') && <Chancery ambient={ambient('chancery')} rank="corner" bishopName={bishop ? `${bishop.title} ${bishop.name.first} ${bishop.name.last}` : 'The bishop'} />}
+      {scene === 'study_city' && (state.study?.city === 'residence' || state.study?.city === 'chancery' || state.study?.city === 'auxiliary' || state.study?.city === 'see') && <Chancery ambient={ambient('chancery')} rank="corner" bishopName={bishop ? `${bishop.title} ${bishop.name.first} ${bishop.name.last}` : 'The bishop'} />}
       {scene === 'study_city' && state.study?.city === 'seminary' && <SeminaryHall />}
       {scene === 'study_city' && state.study?.city === 'hospital' && <Chapel />}
       {scene === 'study_city' && state.study?.city === 'campus' && <Hall />}

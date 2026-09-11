@@ -141,7 +141,7 @@ export function studyWeekHook(deps: EventDeps): WeekHook {
     if (next.mode.kind !== 'clock') return next;
     if (next.study && next.clock.week >= next.study.endWeek) {
       const def = deps.offerLookup?.(next.study.offerId);
-      if (def) return addDigestLine(endStudy(next, def, rng.derive(`study-end:${next.clock.week}`)), next.study.city === 'residence' ? 'The bishop thanks you at dinner, in front of the sisters, and names your successor before dessert. The board has a parish for you.' : next.study.city === 'rome' || next.study.city === 'washington' ? 'The degree is defended, the room is packed, and the plane home is full of people going somewhere else.' : 'The appointment ends the way they do: a dinner, a card signed by everyone, and a letter from the personnel board that was in the mail before the dinner.');
+      if (def) return addDigestLine(endStudy(next, def, rng.derive(`study-end:${next.clock.week}`)), next.study.city === 'see' ? 'The letter went to Rome on your seventy-fifth birthday, as the canon requires, and Rome, for once, answered quickly.' : next.study.city === 'residence' ? 'The bishop thanks you at dinner, in front of the sisters, and names your successor before dessert. The board has a parish for you.' : next.study.city === 'rome' || next.study.city === 'washington' ? 'The degree is defended, the room is packed, and the plane home is full of people going somewhere else.' : 'The appointment ends the way they do: a dinner, a card signed by everyone, and a letter from the personnel board that was in the mail before the dinner.');
     }
     if (rng.derive(`study-scene:${next.clock.week}`).chance(STUDY_EVENT_CHANCE)) {
       const [event] = drawEvents(deps.pool.filter((e) => !e.beat), next, rng, 1);
