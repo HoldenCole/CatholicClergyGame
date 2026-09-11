@@ -20,4 +20,17 @@ export type Mode =
   | { kind: 'evaluation'; record: EvaluationRecord }
   | { kind: 'ordination' }
   | { kind: 'assignment'; assignment: Assignment }
+  /** A letter that stops the clock until read: the year in review, a new bishop's reading of the file. */
+  | { kind: 'letter'; letter: Letter }
   | { kind: 'ended'; ending: Ending; summary: string };
+
+export interface Letter {
+  /** What kind of letter, for the sheet's heading and the record. */
+  sort: 'review' | 'bishop';
+  title: string;
+  /** Prose paragraphs. */
+  body: string[];
+  /** Short rows the sheet can print, label and value. */
+  rows?: { label: string; value: string }[];
+  week: number;
+}

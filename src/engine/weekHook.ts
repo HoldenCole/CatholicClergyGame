@@ -7,6 +7,7 @@ import type { Rng } from './rng';
 import { formationBeats, markBeatFired, weekPool } from './seminary';
 import { isPlayedWeek, parishWeek } from './parish';
 import { careerYear, directedTransfer, isCareerYear, nextAssignment } from './career';
+import { openMail } from '@/systems/review';
 import { projectWeek } from '@/systems/projects';
 import { workWeek } from '@/systems/problems';
 import { clubsWeek, joinClub, leaveClub } from '@/systems/clubs';
@@ -147,7 +148,7 @@ export function studyWeekHook(deps: EventDeps): WeekHook {
       if (event) next = fireOrResolve(next, event, rng, deps);
     }
     if (next.mode.kind !== 'clock' || next.pending.length > 0) return next;
-    return offersStep(next, rng, deps);
+    return openMail(offersStep(next, rng, deps));
   };
 }
 
@@ -200,6 +201,6 @@ export function parishWeekHook(deps: EventDeps): WeekHook {
       next = nextAssignment(next, rng).state;
     }
     if (next.mode.kind !== 'clock' || next.pending.length > 0) return next;
-    return offersStep(next, rng, deps);
+    return openMail(offersStep(next, rng, deps));
   };
 }

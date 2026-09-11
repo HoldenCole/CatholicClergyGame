@@ -5,6 +5,7 @@ import SeminaryRoutinePanel from './seminary/SeminaryRoutinePanel';
 import StudyRoutinePanel from './study/StudyRoutinePanel';
 import ParishPanel from './parish/ParishPanel';
 import GroupsPanel from './parish/GroupsPanel';
+import ClassmatesPanel from './parish/ClassmatesPanel';
 import ProjectsPanel from './parish/ProjectsPanel';
 import OffersPanel from './seminary/OffersPanel';
 import FormationPanel from './seminary/FormationPanel';
@@ -63,6 +64,7 @@ export default function Desk() {
           <>
             <GroupsPanel />
             <ProjectsPanel />
+            <ClassmatesPanel />
           </>
         )}
         {open === 'jobs' && <JobsPanel />}

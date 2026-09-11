@@ -80,7 +80,7 @@ function checkOffer(o: OfferDef, file: string, problems: string[], ids: Set<stri
       if (!Array.isArray(c.weekly)) problems.push(`${where}: commitment.weekly`);
       else c.weekly.forEach((e) => checkEffect(e, `${where} › weekly`, problems));
     }
-    if (c.away !== undefined && !['rome_stl', 'cua_jcl', 'bishops_secretary', 'university_chaplain', 'hospital_chaplain', 'seminary_faculty'].includes(c.away)) problems.push(`${where}: unknown away program ${c.away}`);
+    if (c.away !== undefined && !['rome_stl', 'cua_jcl', 'bishops_secretary', 'university_chaplain', 'hospital_chaplain', 'seminary_faculty', 'vicar_general'].includes(c.away)) problems.push(`${where}: unknown away program ${c.away}`);
     if (typeof c.completeOutcome !== 'string' || c.completeOutcome.length < 20) problems.push(`${where}: commitment.completeOutcome`);
   }
   if (o.failure) {

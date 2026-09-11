@@ -1,0 +1,572 @@
+{
+  "_notes": "Having a word: one hour with one person of the parish or diocese, and a short authored exchange. `who` is the person (pastor, secretary, dre, music_director, maintenance, bishop, brother_priest, classmate, or a group leader by agenda: leader_saintly, leader_empire, leader_political, leader_tired, leader_new, leader_grieving). `band` is the relationship at the time: cold (below -15), neutral, warm (above 30). `text` is three variants; the engine draws one. Tokens: {@who} (the person, bound by the engine; the bishop too), {parish}, {diocese}, {name}. No other selectors. `effects` apply whichever variant is drawn (cold: a hard-won +3 and sometimes a cost; neutral: +2 and occasionally a point of stat or reputation; warm: +2). Schema extension: `variantEffects` is an optional array aligned with `text`; the entry at the drawn variant's index is applied in addition to `effects`. It is used for the one warm variant per staff member, pastor, or leader in which the person lets something slip ({ target: trait_known, key: @who }). Pronouns follow the convention of the staff files (secretary and DRE she, music director and maintenance he, clergy he); leaders vary by entry, since the engine has no pronoun token.",
+  "talks": [
+    {
+      "who": "pastor",
+      "band": "cold",
+      "text": [
+        "You knock on the study door and {@who} says come in without looking up. You tell him you would like ten minutes. He gives you eight and spends the first three on the boiler. When you say that you think the two of you got off on the wrong foot he says he had not noticed a foot. But he closes the folder. That is something. Neither of you mentions the Sunday homily, which is the actual subject.",
+        "He is in the sacristy after the 8:30, unvesting, and you help him with the chasuble, which you have not done before. {@who} lets you. You ask how his knees are. He says they are the same knees. You say the funeral on Thursday went well, and he says he heard, in the tone of a man who has heard other things too. He hangs the stole. You are still there. He says, all right, sit.",
+        "Dinner is the one place he cannot leave, so you bring it up at dinner. You say that whatever he has been told about you, you would rather he asked you. {@who} eats. He says he does not need to ask; he has eyes. Then, after a while, he says the last one was worse, and that this is not a compliment, and passes the salt without being asked."
+      ],
+      "effects": [
+        { "target": "relationship", "key": "@who", "delta": 3 },
+        { "target": "stat", "key": "piety", "delta": -0.5 }
+      ]
+    },
+    {
+      "who": "pastor",
+      "band": "neutral",
+      "text": [
+        "You catch {@who} between the noon Mass and the funeral home and ask whether he has a minute for something that is not a problem. He looks relieved. You ask how he came to {parish}, and he tells you: a phone call, a Tuesday, a bishop who is dead now. He talks for twenty minutes about the man who built the hall. He does not talk about himself. You did not expect him to.",
+        "He is doing the intention book at the kitchen table and you sit across from him with your own coffee. You ask what he wishes someone had told him at your age. {@who} thinks about it longer than the question deserves. Keep your day off, he says. Then: and learn the names of the ushers before the names of the council. He goes back to the book. It is more than he has said in a week.",
+        "You walk with {@who} to the car after the vigil Mass and ask him, plainly, how he thinks you are doing. He says fine. You wait. He says the people like you and the staff are not sure, and that this is the normal order and the reverse would worry him. He gets in the car. He winds the window down and says the eight o'clock is yours on Sunday, and drives off."
+      ],
+      "effects": [
+        { "target": "relationship", "key": "@who", "delta": 2 }
+      ]
+    },
+    {
+      "who": "pastor",
+      "band": "warm",
+      "text": [
+        "The two of you have fallen into the habit of the porch after dinner, and tonight {@who} talks about his first pastor, a man who ran a parish like a ship and died in the sacristy. He says he still hears him whenever he is about to be unfair. You say nothing; there is nothing to add. He says he has put a word in for you somewhere and will not say where. You do not ask.",
+        "He has had the second glass, which is his limit, and {@who} tells you the thing he does not tell vicars: why he has never asked for a bigger parish, and what he said to the bishop the one time it was offered. It is not the story the housekeeper tells. You understand him better afterward, and you understand that you are now carrying something of his, and that he knows it.",
+        "You bring {@who} the draft of Sunday's homily, which you have never done, and he reads it standing at the window with his glasses down his nose. He cuts a paragraph and tells you why. He is right. He says that at your age he could not have written the third page, and then, because that was too much, that the second page is dull. You leave lighter than you came."
+      ],
+      "effects": [
+        { "target": "relationship", "key": "@who", "delta": 2 }
+      ],
+      "variantEffects": [
+        [],
+        [ { "target": "trait_known", "key": "@who" } ],
+        []
+      ]
+    },
+    {
+      "who": "secretary",
+      "band": "cold",
+      "text": [
+        "You bring {@who} a coffee, which is transparent, and she says so. You sit anyway. You say you know you have made her job harder and you would like to know how. She tells you, item by item, in a level voice: the calendar, the funeral home, the Tuesday you took a call that was not yours to take. You write it down. That surprises her. She does not soften. She does move your mail to the right box.",
+        "The office is empty at four and you ask {@who} whether she has a minute. She has, she says, exactly one. You ask her to tell you the thing she has been telling everyone else. There is a silence in which the printer finishes. Then she tells you, and it is fair, mostly, and it is not the whole of what she has been saying. You thank her. She says Father is on line two.",
+        "You ask {@who} about the photograph on her desk, the one with the boat. She tells you it is her brother, and that he is dead, and that is the end of that. You say you are sorry. She says everyone is. Then, after a minute, while stapling, she tells you what year, and where the funeral was, and which priest said it, and that he was kind. The stapler is very loud."
+      ],
+      "effects": [
+        { "target": "relationship", "key": "@who", "delta": 3 }
+      ]
+    },
+    {
+      "who": "secretary",
+      "band": "neutral",
+      "text": [
+        "{@who} keeps the intention book and you ask her to show you how it works, though you already know. She shows you. Somewhere on the second page she starts telling you which families ask for the anniversary Mass and never come, and which come and never ask, and by the end you have a map of {parish} that nobody at the chancery could draw. You take the book back to your desk to copy the map.",
+        "You ask {@who} how long she has been here and she says the number, and then the pastors, in order, like the kings of England. You ask which one she liked. She says that is not a fair question, and then answers it. It is not the one you expected. She says he wrote his own thank-you notes. You make a note of the note.",
+        "It is the quiet hour after the bulletin goes to the printer and {@who} is doing the thing she does with the Mass count sheets. You ask her what the numbers looked like ten years ago. She tells you without looking anything up. Then she tells you which Sunday it turned and what happened that year, and she does not say the pastor's name, and you do not ask her to."
+      ],
+      "effects": [
+        { "target": "relationship", "key": "@who", "delta": 2 },
+        { "target": "stat", "key": "administration", "delta": 1 }
+      ]
+    },
+    {
+      "who": "secretary",
+      "band": "warm",
+      "text": [
+        "{@who} has started saving the good stapler for you, and today she closes the office door, which she never does, to tell you which member of the finance council has been asking about you and what she told him. It was kind and it was accurate. You thank her. She says she has done it for three priests and two of them deserved it, and lets you decide where that leaves you.",
+        "She is packing up and you are locking the safe and {@who} says, in passing, why she really stayed through the pastor before this one, the one nobody talks about. It is not the reason the housekeeper gives. It is private, and now you have it. She says she is telling you so that when you hear the other version you will already know. Then she says goodnight, and the office is just an office.",
+        "You bring her the draft of the parish letter and {@who} reads it with the pencil already moving. She takes out a sentence that would have cost you a family and puts back a comma you never learned. She says the last vicar could not write and the one before could not stop. You ask which you are. She says you are the one who asked, and goes back to the phone."
+      ],
+      "effects": [
+        { "target": "relationship", "key": "@who", "delta": 2 }
+      ],
+      "variantEffects": [
+        [],
+        [ { "target": "trait_known", "key": "@who" } ],
+        []
+      ]
+    },
+    {
+      "who": "dre",
+      "band": "cold",
+      "text": [
+        "You find {@who} in the religious education office among the catechist binders and ask whether you can sit. She says the chair is broken, and then that the other chair is fine. You say you know she thinks you came into her program with a red pen. She says she thinks you came in with a seminary. There is a difference and she explains it. You do not agree, and you do not say so yet.",
+        "The first communion parents are gone and {@who} is stacking chairs and you stack the other side of the hall. Neither of you speaks for eleven chairs. Then you say that whatever you said in September about the textbook, you said it badly. She says you said it clearly, which was the problem. She lets you carry the last stack. It is not forgiveness. It is chairs.",
+        "You ask {@who} to walk you through the confirmation calendar and she does, at speed, as though testing whether you will keep up. You keep up. At the end you ask what she needs from a priest that she has not been getting. She looks at you a long moment and says a priest who shows up to the parent meeting. You were not at the parent meeting. You say you will be at the next one."
+      ],
+      "effects": [
+        { "target": "relationship", "key": "@who", "delta": 3 }
+      ]
+    },
+    {
+      "who": "dre",
+      "band": "neutral",
+      "text": [
+        "{@who} has been at {parish} through three textbook series and tells you about each with the fairness of a historian. You ask which she would use if it were up to her. She says it is not up to her. You say you know. She names one, and it is not the one on the shelf, and she tells you why in a sentence you could not have written after six years of theology.",
+        "You stop by the catechist meeting at the end, when the parents have gone, and ask {@who} which of her volunteers is carrying the program. She says all of them, which is what she has to say, and then, walking to the parking lot, names two, and the one who is about to quit, and why. You say you will call the one who is about to quit. She says do not call, visit.",
+        "You ask {@who} what the confirmation class actually believes, as opposed to what they say on the form. She laughs, which you had not heard her do. She says about four of them believe it and six are there for the grandmother and the rest are watching to see what the four do. She says that is roughly the ratio for adults. You do not argue."
+      ],
+      "effects": [
+        { "target": "relationship", "key": "@who", "delta": 2 }
+      ]
+    },
+    {
+      "who": "dre",
+      "band": "warm",
+      "text": [
+        "{@who} has begun leaving the door open when you pass, and today she waves you in to show you a letter from a girl who made her first communion here nine years ago and is entering a convent. She reads it aloud and stops in the middle. She says this is the whole job, this letter, and the other nine years are the price. You say you know. She says you are starting to.",
+        "She tells you, over the coffee that has become a Thursday thing, why she took this job when she could have stayed teaching, and what happened at the school that year. It is not a story she tells. {@who} tells it flatly, the way people tell true things, and at the end she says she has not said that to a priest before, and you understand you are being trusted with more than a story.",
+        "You show {@who} the outline of the parent talk and she tells you it is too long and too clever. You cut it. She says the parents at {parish} want to know two things: that their child is safe and that you know their child's name. Everything else is theology. She says it kindly, and the talk goes well, and afterward she catches your eye across the hall and nods once."
+      ],
+      "effects": [
+        { "target": "relationship", "key": "@who", "delta": 2 }
+      ],
+      "variantEffects": [
+        [],
+        [ { "target": "trait_known", "key": "@who" } ],
+        []
+      ]
+    },
+    {
+      "who": "music_director",
+      "band": "cold",
+      "text": [
+        "The loft is empty after practice and you climb up. {@who} is putting the hymnals in order and does not stop. You say you are aware that you cut the Gloria last Sunday without a word to him. He says he is aware too. You say it will not happen that way again. He says the organ needs tuning and the diocese will not pay. It is not an answer. It is a subject you could both agree on.",
+        "You sit at the back of the church during rehearsal and stay until the singers have gone. {@who} closes the organ and comes down the aisle and says, Father, if this is about the Mass setting, he has heard. You say it is about the psalm on Sunday, which was beautiful, and that you had not said so. He waits for the rest. There is no rest. He says thank you as though it were a foreign word.",
+        "You ask {@who} whether the two of you might talk about the parish music like adults. He says he has been trying to for some years. You take that. You ask what he would change if nobody was watching. He tells you, and it is not what the traditionalists think he wants and not what the folk group thinks either, and you understand you have been arguing with the wrong man."
+      ],
+      "effects": [
+        { "target": "relationship", "key": "@who", "delta": 3 }
+      ]
+    },
+    {
+      "who": "music_director",
+      "band": "neutral",
+      "text": [
+        "{@who} is running through the Sunday hymns at the piano in the hall and you sit on the edge of the stage and listen to one. You ask why that one. He tells you about the text, and the man who wrote it, and the year it came into the hymnal, and which of the three verses everybody sings wrong. You had not known any of it. He seems pleased that you asked and unwilling to show it.",
+        "You ask {@who} what the choir needs. He says tenors. You say beyond tenors. He says a director who is paid for the hours he works, and then, because that was sharper than he meant, that the choir needs to be sung to at the Easter Vigil like a choir and not like a delay. You tell him you will remember it at the Vigil. He says they all say that.",
+        "The organ has a cipher on the D and {@who} shows you where the pipe is and how he silences it with a folded card during the consecration. You ask how long it has been like that. He says four pastors. He plays the D. It sounds. You both listen to it sound. He says it is a good instrument underneath, and you realise he means it as a description of the parish."
+      ],
+      "effects": [
+        { "target": "relationship", "key": "@who", "delta": 2 }
+      ]
+    },
+    {
+      "who": "music_director",
+      "band": "warm",
+      "text": [
+        "{@who} has begun asking which readings you are preaching on so he can find the psalm setting that fits, and today he plays you two and asks you to choose. You choose the plainer one. He says good, and that the last priest always took the one with the flourish. You understand you have passed something. He says the choir has started calling you by your first name, which is either a warning or an honour.",
+        "After the funeral, packing the music, {@who} tells you why he really left the cathedral, which is not the reason in the bulletin biography. It concerns a person, and a decision, and he tells it without asking for anything. You listen. At the end he says he has told you because you did not cut the Gloria today, which is a joke, and also is not. You say the Gloria stays.",
+        "You go up to the loft after the Vigil and {@who} is sitting with the lights off. You sit. He says the Exsultet was the best he has heard in this building. You say the choir carried it. He says no, and that you should learn to take a compliment before somebody at the chancery teaches you to. You thank him. It is easier the second time."
+      ],
+      "effects": [
+        { "target": "relationship", "key": "@who", "delta": 2 }
+      ],
+      "variantEffects": [
+        [],
+        [ { "target": "trait_known", "key": "@who" } ],
+        []
+      ]
+    },
+    {
+      "who": "maintenance",
+      "band": "cold",
+      "text": [
+        "{@who} is on the roof of the hall when you find him and he does not come down. You go up the ladder, which he watches with interest. You say you know that the work order you wrote in October was a work order and not a conversation. He says work orders are fine; he has had priests give him work orders for thirty years. He shows you the flashing. You look at the flashing. It is a start.",
+        "You bring {@who} the coffee he takes and the doughnut he does not, and sit on the bucket in the boiler room. You ask him what is wrong with the buildings that nobody has asked him about. He says everything and nothing, and then, when you do not leave, he takes you to the one thing. It is the sewer line. He has known for four years. Nobody asked.",
+        "You tell {@who} that the sacristy outlet he fixed last week is working and that the last one was not his fault. He says he knows. You say you know he knows. There is a pause in which the furnace cycles. He says the outlet was the easy one and there is a breaker behind it that is not to code, and if you want to know about it, come down in the morning. You come down in the morning."
+      ],
+      "effects": [
+        { "target": "relationship", "key": "@who", "delta": 3 }
+      ]
+    },
+    {
+      "who": "maintenance",
+      "band": "neutral",
+      "text": [
+        "You walk the property with {@who} and he shows you what he sees: the crack in the retaining wall that was there when he came, the gutter replaced in a year he names, the one window in the school that opens. He does not editorialise. At the end you know more about {parish} than the pastor does, and he knows you know, and he lights a cigarette behind the garage where the pastor cannot see.",
+        "{@who} keeps a notebook in the truck and you ask to see it. He hesitates and hands it over. It is every repair since he started, in pencil, with the price. You turn the pages. It is a history of the parish written in furnaces and gutters and the year the boiler went. You give it back carefully. He says nobody has ever asked to see it. You believe him.",
+        "You ask {@who} what he does when he is not here. He says fish. You ask where. He tells you the lake, and the road, and which turn, and how the last pastor came out once and could not sit still. He says it without judgement. You say you can sit still. He looks at you as though he intends to test that, and goes back under the sink."
+      ],
+      "effects": [
+        { "target": "relationship", "key": "@who", "delta": 2 },
+        { "target": "stat", "key": "knowledge", "delta": 1 }
+      ]
+    },
+    {
+      "who": "maintenance",
+      "band": "warm",
+      "text": [
+        "{@who} has begun leaving the truck keys where you can find them, which is a form of speech. Today he takes you up the bell tower to show you the mechanism and stands back while you work it out. He says the last man who understood it died in ninety-four. He says it as though handing you the man's job. You take the tower keys. He says do not lose them; there are no others.",
+        "Under the hall stage, looking for the folding tables, {@who} tells you about the year he nearly left {parish} and where he was going to go and why he stayed. It is not a small story. It involves a pastor, and a check, and something he saw and never said. He tells it to the tables, not to you. At the end he says that is between the two of you and the stage, and you say it is.",
+        "You bring {@who} the bulletin with his name in it, for the roof, and he reads it and folds it into his shirt pocket without comment. He says his wife will want it. Then he says that if you ever want the honest condition of the school building, before the chancery people come with clipboards, he has it written down, and the number is not the number the pastor uses. You say you want it."
+      ],
+      "effects": [
+        { "target": "relationship", "key": "@who", "delta": 2 }
+      ],
+      "variantEffects": [
+        [],
+        [ { "target": "trait_known", "key": "@who" } ],
+        []
+      ]
+    },
+    {
+      "who": "bishop",
+      "band": "cold",
+      "text": [
+        "The bishop's secretary gives you eleven minutes. {@who} does not stand. You say you asked for the meeting because you would rather hear his concern from him. He says he was not aware he had expressed one. You say that is why you came. He looks at you over the desk a while. He says the deanery meeting is on the ninth and he expects to see you. It is the first thing he has ever asked you directly.",
+        "You catch {@who} in the cathedral sacristy after the Chrism Mass, which is not where one catches a bishop. He unvests. You say you know your name has been on his desk and you would like it there for a better reason. He says names are on his desk for all sorts of reasons and most are not his idea. He hands you his mitre to hold. Then he takes it back. That is the whole of it.",
+        "{@who} takes the call himself, which you had not expected. You say your piece, which you have practised: what happened at {parish}, what you should have done, what you did. He listens without a sound. He asks one question and it is the right one. You answer it. He says he will remember that you called and not that you were right. That is the sentence you carry back to the car."
+      ],
+      "effects": [
+        { "target": "relationship", "key": "@who", "delta": 3 },
+        { "target": "reputation", "key": "chancery", "delta": -1 }
+      ]
+    },
+    {
+      "who": "bishop",
+      "band": "neutral",
+      "text": [
+        "The confirmation is over and {@who} has twenty minutes before the drive, and he spends them in the rectory kitchen at {parish} with a cup of the parish coffee, asking about the school. You tell him the truth in the version you can afford. He listens. He asks after your mother, whom he has never met. He remembers her name from somewhere. Then the driver is at the door.",
+        "You are at the chancery for something else and the secretary says he has a minute. {@who} asks how {parish} is. You say it is a parish. He laughs, which surprises you both. He tells you about the parish he had at your age, in a diocese he does not name, and the pastor there, and stops before the end of the story. You see that there is an end and that you have not earned it.",
+        "{@who} asks you, after the priests' study day, to walk him to the car. He wants to know what the younger men are saying about the assignment board. You tell him some of it. He nods as if it matched something. He says the board is the board, and that he was a curate under it too, and that patience is a virtue nobody prays for. He gets into the back seat and reads."
+      ],
+      "effects": [
+        { "target": "relationship", "key": "@who", "delta": 2 }
+      ]
+    },
+    {
+      "who": "bishop",
+      "band": "warm",
+      "text": [
+        "{@who} keeps you after the deanery meeting and asks how you really are, and when you give the short answer he waits for the long one. You give some of it. He tells you a thing about his own second assignment that he plainly does not tell many people. He says the diocese needs men who last, not men who shine. He says it as advice. You take it as a description of what he thinks you might be.",
+        "The bishop's dinner ends and {@who} walks you to the door himself, which the vicar general notices. He asks whether you have thought about further study. You say you have thought about it. He says think about it more, and that nothing is promised and he would like to hear what you decide before the chancery does. There is no envelope. There is only the door, and the vicar general's face.",
+        "{@who} comes to {parish} on a Wednesday, unannounced, and sits at the back of the noon Mass, and afterward comes into the sacristy and helps you fold the alb, badly. He says he wanted to see the place without a confirmation around it. He asks what you would do with the school if it were yours. You tell him. He says that is what he would do too, and that you should not tell anyone he said so."
+      ],
+      "effects": [
+        { "target": "relationship", "key": "@who", "delta": 2 },
+        { "target": "reputation", "key": "chancery", "delta": 1 }
+      ]
+    },
+    {
+      "who": "brother_priest",
+      "band": "cold",
+      "text": [
+        "You call {@who} and ask whether he will let you buy him lunch, and he says he will let you buy. At the diner he does not take off his jacket. You say that whatever was said at the deanery meeting, you would rather have it between the two of you. He says it already is; that was the problem. He eats. Then he tells you the real thing, and it is smaller and older than you thought.",
+        "{@who} is on the far side of the vesting room before the funeral and you cross it. You say you have been told he thinks you went over his head in March. He says he does not think it, he knows it. You tell him the version you have. He listens with his back to you, tying the cincture. When he turns he says that is not the version he was told. Neither of you knows who told him.",
+        "You ask {@who} for the loan of his Spanish lectionary, which is a pretext, and he knows it. He gives you the book. You stand in his sacristy holding it. You say the presbyterate is small and you would rather not spend it not speaking. He says the presbyterate is small and that was your mistake in the first place. He says it without heat. You bring the book back the next week, and he offers coffee."
+      ],
+      "effects": [
+        { "target": "relationship", "key": "@who", "delta": 3 }
+      ]
+    },
+    {
+      "who": "brother_priest",
+      "band": "neutral",
+      "text": [
+        "{@who} and you have the deanery lunch to yourselves because the others have a funeral. He tells you about his pastor, who is dying, and about the parish council, which is not. He asks about {parish} and listens with the particular attention of a man who was a vicar there once, or somewhere like it. He pays. He says the next one is yours, which is the first commitment either of you has made.",
+        "You run into {@who} at the hospital, both of you there for different beds, and you sit in the chapel for ten minutes after. He tells you which nurse to ask for at night and which floor to avoid during the shift change. He says the chaplain is good and overworked. You say the same is true of everyone. He says yes, but the chaplain does not get a rectory. You both laugh, once, the tired way.",
+        "{@who} tells you, over the phone, about the vicar for clergy's new form, and what it asks, and what it is actually for. You say you had wondered. He says every man in {diocese} has wondered and three of them have asked. He says he is not one of the three. It is a lesson in something, and you are not sure he intended it as one."
+      ],
+      "effects": [
+        { "target": "relationship", "key": "@who", "delta": 2 },
+        { "target": "reputation", "key": "brother_priests", "delta": 0.5 }
+      ]
+    },
+    {
+      "who": "brother_priest",
+      "band": "warm",
+      "text": [
+        "The two of you have fallen into a Tuesday supper, and tonight {@who} tells you which of the pastors in {diocese} you can trust with a confidence and which will have it at the chancery by Friday. It is a short list and a longer one. He says he has been wrong once and it cost him a parish. He says it plainly. You understand that you are now on the short list, and what that costs him.",
+        "{@who} calls to ask whether you will cover his Saturday Masses in Lent so he can go and see his father, and when you say yes without asking why he tells you why anyway. It is the kind of thing a man tells one person. You say the Masses are covered. He says he knows what it costs to give up a Saturday in Lent at {parish}. You say it is a Saturday. It is not just a Saturday.",
+        "You sit in {@who}'s kitchen after the evening Mass and he pours the second cup and tells you what the bishop said about you at the personnel board, which he is not supposed to know and you are not supposed to hear. It is not bad. It is not what you expected either. He says to do nothing with it. You say you will do nothing. You both know what nothing looks like."
+      ],
+      "effects": [
+        { "target": "relationship", "key": "@who", "delta": 2 },
+        { "target": "reputation", "key": "brother_priests", "delta": 0.5 }
+      ]
+    },
+    {
+      "who": "classmate",
+      "band": "cold",
+      "text": [
+        "{@who} was in your year and you have not spoken since the ordination lunch, which was not an accident. You call. He answers on the sixth ring. You say you would like to see him. He says why. You say because there are eleven of you left in the class and that seems a bad number to be down one more. There is a long silence in which you can hear his television. He says Thursday, and where.",
+        "You find {@who} at the priests' retreat, at the far table, and take the seat. He does not move his tray. You say that what you said in fourth year was true and unkind, and that you have not found a way to say the first part without the second. He says the second part is what he remembers. You say you know. He eats. Later, at the holy hour, he kneels one pew closer.",
+        "{@who} sends the class email every Christmas and your name has not been in it for two years. You write to him. Not the group; him. You say you have been a bad correspondent and a worse classmate. He writes back after a week, three lines, the last of which is a question about your mother. You answer it at length. The next Christmas your name is in the email, near the bottom."
+      ],
+      "effects": [
+        { "target": "relationship", "key": "@who", "delta": 3 }
+      ]
+    },
+    {
+      "who": "classmate",
+      "band": "neutral",
+      "text": [
+        "{@who} has the parish two towns over and you meet at the halfway diner, which is a custom neither of you has named. He tells you about his pastor, who reads the bulletin for errors, and you tell him about yours. You compare bishops as if you had different ones. You talk about the man in your class who left. Neither of you says what you actually think. The coffee is bad and you both drink it.",
+        "You call {@who} on his day off, which you are allowed to do because you were in the same room when you were both frightened, and he tells you about the wedding he has on Saturday and the family that is going to be trouble. You tell him what you would do. He says that is what he thought too. Neither of you was sure. Now you are both sure, which is the point of a classmate.",
+        "{@who} says, over the phone, that he has been asked to consider Rome, and that he has not told anyone, and that he is telling you. You ask whether he wants it. He says he does not know and that this is why he called. You say the thing you would want said to you. He is quiet. He says thanks for not telling him what to do, and that everyone else has."
+      ],
+      "effects": [
+        { "target": "relationship", "key": "@who", "delta": 2 }
+      ]
+    },
+    {
+      "who": "classmate",
+      "band": "warm",
+      "text": [
+        "{@who} comes for the night on his way back from his sister's and you sit up too late in the rectory kitchen at {parish}, and he tells you about the confession he heard last month that he cannot tell you about, and you tell him about the one you cannot tell him about, and you both know the shape of the other's without the words. He says this is what the class is for. You say yes.",
+        "You drive to {@who}'s parish for his tenth anniversary Mass and he puts you in the concelebrant's chair nearest him, which his pastor notices. Afterward, in the hall, he introduces you to his mother as the man who kept him in the seminary. You had not known that was the story. You had thought it was the other way round. You do not correct either of you.",
+        "{@who} tells you, on the phone at eleven, that he has been thinking about leaving. Not this week. He says he is telling you because you will not tell him he is wrong. You do not tell him he is wrong. You ask what he would do. He says he does not know. You say call tomorrow, and he says he will, and he does. It is the beginning of something, and it is not the end."
+      ],
+      "effects": [
+        { "target": "relationship", "key": "@who", "delta": 2 }
+      ]
+    },
+    {
+      "who": "leader_saintly",
+      "band": "cold",
+      "text": [
+        "{@who} does not think you are a bad priest; she thinks you are an absent one, and she says so when you sit down with her after the meeting, not unkindly. You say you have been absent. She says the group has prayed for you every week, including the weeks she was angry, and that the two were not separate. You ask what the group needs. She says it needs you to come. Just that.",
+        "You ask {@who} to walk with you after the rosary and she does, at her own pace. You say you know the group has felt overlooked. She says overlooked is a word for the chancery; the group has felt unloved, and that is a different word. She does not raise her voice. You say you would like to change that. She says the changing is not the wanting, Father, and stops at her car.",
+        "{@who} is setting out the chairs and you take the other stack, and you say that you were wrong about what the group was for. She says you were not wrong, only early. She says most priests take three years to see it and you have taken a year and a half, and that is the nearest thing to praise she has for you. She says she will not say it again. She means it."
+      ],
+      "effects": [
+        { "target": "relationship", "key": "@who", "delta": 3 }
+      ]
+    },
+    {
+      "who": "leader_saintly",
+      "band": "neutral",
+      "text": [
+        "{@who} tells you about the woman the group buried in February, whom nobody else in {parish} knew, and about the six weeks of meals before it. She tells it as a report, not a story. You say the group did what the parish is for. She says the parish did not notice. You say you noticed. She says that is a beginning, and that she has seen beginnings before.",
+        "You ask {@who} what she wants for the group, and she says nothing; then she says she would like the group to outlive her, and that the young ones come and go. You ask who the next leader is. She names someone, without hesitation, and you realise she has been training that person for two years without the person knowing. You say you will help. She says help by staying out of the way.",
+        "{@who} asks you, after the meeting, whether you pray. You say you do. She says she did not mean the Office. You understand what she means and you tell her, a little. She listens as though it were the most ordinary thing to ask a priest. She says she asks all of them. She says most of them tell her. You wonder about the ones who do not."
+      ],
+      "effects": [
+        { "target": "relationship", "key": "@who", "delta": 2 },
+        { "target": "stat", "key": "piety", "delta": 1 }
+      ]
+    },
+    {
+      "who": "leader_saintly",
+      "band": "warm",
+      "text": [
+        "{@who} brings you a list, handwritten, of the eight people in {parish} she thinks nobody is visiting, with the reasons. You read it in front of her. Three of them you did not know existed. She says she is not telling you what to do. She is telling you what she has seen. She has been seeing it for thirty years. You put the list in your breviary, where it will stay.",
+        "She tells you, walking to the cars, why she started the group: what it was in her own life that she was trying to answer. {@who} has never said this to a priest. It is not the story anyone in {parish} tells about her. She says it in a few sentences and does not look at you. At the car she says you may do what you like with it, and that she will not mention it again.",
+        "{@who} asks whether you will come on Thursday to bless the new members, and then says that she knows you are tired and that the blessing can wait. You say it cannot. She looks at you and says something quietly in the language her mother spoke, and then translates it: he is learning. You say who. She says you, Father, and goes to get the holy water."
+      ],
+      "effects": [
+        { "target": "relationship", "key": "@who", "delta": 2 }
+      ],
+      "variantEffects": [
+        [],
+        [ { "target": "trait_known", "key": "@who" } ],
+        []
+      ]
+    },
+    {
+      "who": "leader_empire",
+      "band": "cold",
+      "text": [
+        "{@who} receives you in the group's room as though it were his, which in every practical sense it is. You say you have not been fair to the work he does. He agrees. You say the room is nonetheless the parish's. He says the parish never bought a chair for it. True. You say you will look into the chairs. He says that would be a first, and shows you out through the door that bears his name.",
+        "You ask {@who} whether the two of you can start again, and he says he did not know you had started. You take it. You say the group's numbers are the best in {parish} and that you have not said so. He says he has noticed you have not said so. He waits. You say it now. He accepts it the way a man accepts an overdue invoice, and offers you the guest chair, which is lower than his.",
+        "{@who} shows you the group's ledger, which you did not ask to see, and which is immaculate, and which does not pass through the parish office. You look at it. You say it is very well kept. He says it has been kept for fourteen years and three pastors and no one has found a dollar wrong. You say you are not looking for a dollar. He says everyone is looking for a dollar, Father, and closes it."
+      ],
+      "effects": [
+        { "target": "relationship", "key": "@who", "delta": 3 }
+      ]
+    },
+    {
+      "who": "leader_empire",
+      "band": "neutral",
+      "text": [
+        "{@who} walks you through the group's calendar, which is busier than the parish's, and shows you the photographs from the founding, in which he is thinner and the pastor is someone else. He tells you which pastor gave him the room and which one tried to take it. You listen. He asks which sort you are. You say you do not know yet. He says everyone says that at first.",
+        "You ask {@who} what the group would do without him and he says the question is rude and then answers it: fall apart in a year. He says it without pride, or with the kind of pride that has stopped noticing itself. You ask whether that worries him. He says it worries his wife. He looks at the door with his name on it. He says he built that door. You believe him.",
+        "{@who} asks you to bless the group's new banner and you do, and afterward he asks, in the quiet, whether the pastor has said anything about the group's money. You say the pastor has not. He says good. Then he says that if the pastor does, you should hear his side first. You say you will hear it. He says that is all he asks. It is not, but you both let it stand."
+      ],
+      "effects": [
+        { "target": "relationship", "key": "@who", "delta": 2 }
+      ]
+    },
+    {
+      "who": "leader_empire",
+      "band": "warm",
+      "text": [
+        "{@who} has begun calling you first, before the pastor, which is a promotion of a kind. Today he asks what you think the group should do with the surplus. You tell him. He listens, which you had not seen him do. He says the last priest who told him what to do with the money is in another diocese, and that he is asking you because you have not told him yet. You take the point and keep it.",
+        "{@who} tells you, at the end of the group's dinner, why the group matters to him, which is not the reason on the banner. It is his son, and a year, and a thing the group did that he has never been able to repay. He tells it looking at the tablecloth. He says the room and the door and the ledger are all that: a debt. Then he says that is enough of that, and pours you a coffee.",
+        "You tell {@who} that the group's Christmas drive was the best in the deanery and he says he knows, and then, unexpectedly, that it was better because you were at the loading dock at six in the morning. He says the men saw that. He says he saw it. He does not say thank you, because he does not, but he puts your name on the banner for next year, in smaller letters than his."
+      ],
+      "effects": [
+        { "target": "relationship", "key": "@who", "delta": 2 }
+      ],
+      "variantEffects": [
+        [],
+        [ { "target": "trait_known", "key": "@who" } ],
+        []
+      ]
+    },
+    {
+      "who": "leader_political",
+      "band": "cold",
+      "text": [
+        "{@who} has a folder ready when you sit down, and it is about you. You say you have not come to argue. He says everyone says that and then argues. You ask what he wants from a priest at {parish}. He says a priest who preaches what the Church teaches, and names the teaching, and you say the Church teaches that and also the other thing, and he says they all say that. But he closes the folder.",
+        "You go to the group's meeting and sit at the back, which {@who} notices and does not acknowledge. Afterward you say you would like to know what you did to earn the letter. She says you know. You say you would rather hear it from her. She tells you, and there is a sentence in it that is true, and you say so. She was not expecting that. She does not know what to do with a priest who concedes.",
+        "{@who} says the group does not need the parish's approval, only its room, and you say the room is the parish's approval. He does not like it. You say you did not come to take the room. He says then why did you come. You say to hear him out. He looks at you the way a man looks at a trick, and then, slowly, tells you what the group is for. It is not what the bulletin says."
+      ],
+      "effects": [
+        { "target": "relationship", "key": "@who", "delta": 3 }
+      ]
+    },
+    {
+      "who": "leader_political",
+      "band": "neutral",
+      "text": [
+        "{@who} has a copy of the bishop's letter with the passages underlined and wants to know what you think of paragraph four. You tell her what you think of paragraph four. She writes it down. You ask whether she is going to quote you. She says only if you were right. You are not sure you were. She says that is the risk of being asked.",
+        "{@who} tells you the history of the group at {parish} as a history of the parish's pastors: who stood with them and who did not, in a list going back to a bishop you have only seen in a photograph. You realise you are being placed in the list. You ask where. He says it is early. You say you would rather be judged on the whole. He says that is what the list is.",
+        "You ask {@who} what she would do if the group won. She stops. She says nobody has asked her that. She says she supposes they would start another group. You say that is honest. She says it is the only thing that has ever worked, and that the priests who understand that are the ones the group can work with. She has not said you are one. She has not said you are not."
+      ],
+      "effects": [
+        { "target": "relationship", "key": "@who", "delta": 2 }
+      ]
+    },
+    {
+      "who": "leader_political",
+      "band": "warm",
+      "text": [
+        "{@who} tells you, off the record, which two families in {parish} fund the group and what they expect for it, and that he has not given it to them. He says he is telling you because you will hear it from them next. You say you have already heard it from them. He laughs. He says then you know what he is dealing with, and you say yes, and for once neither of you has a point to make.",
+        "{@who} tells you, in the parking lot, when the group's cause began for her: the thing that happened, and to whom. It is a private history and it has a name in it you know. She says she has never told the group. She says the cause is easier to carry than the reason. Then she says goodnight and drives off before you can say the wrong thing, which was kind of her.",
+        "{@who} says that the homily on Sunday was the first time in twelve years that a priest at {parish} said the word from the pulpit, and that three people in the group wept, and that he did not, but nearly. You say you said what the readings said. He says that is what makes it dangerous. He says it as a compliment. You are not sure it is one, and you keep it anyway."
+      ],
+      "effects": [
+        { "target": "relationship", "key": "@who", "delta": 2 }
+      ],
+      "variantEffects": [
+        [],
+        [ { "target": "trait_known", "key": "@who" } ],
+        []
+      ]
+    },
+    {
+      "who": "leader_tired",
+      "band": "cold",
+      "text": [
+        "{@who} has been running the group for nineteen years and is, when you sit down with her, too tired to be angry with you for long. You say you know you have leaned on her. She says everyone leans on her; you are only the latest. You ask what would help. She says a priest who does not ask what would help, and does it. You say all right. She says she will believe it in a month.",
+        "You bring {@who} the year's calendar so he can see what the group has been asked to do, and he sees it and says nothing for a long time. You say you can cut it. He says cut it, then, and you cut three things, in pencil, in front of him. He watches. He says that is the first time a priest has cut something in his presence rather than adding. It is not warmth. It is less cold.",
+        "{@who} says, with the chairs still out, that she has been meaning to tell you she is finished after Easter. You say you had heard. She says of course you had. You ask whether she means it. She says she has meant it four times. You ask what would make this the fifth. She says a priest who lets her go without a speech. You say there will be no speech. She almost smiles."
+      ],
+      "effects": [
+        { "target": "relationship", "key": "@who", "delta": 3 }
+      ]
+    },
+    {
+      "who": "leader_tired",
+      "band": "neutral",
+      "text": [
+        "{@who} tells you about the group's best year, which was the year the school closed and everyone needed something to do, and about the worst year, which she does not name. She says the group is neither now. She says that is fine. You say you can tell it is not fine. She says that is not your business, Father, and then, after a while, tells you why it is.",
+        "You ask {@who} who could take over, and he says nobody, which is the tired answer, and then, when you wait, gives you two names and the reasons each will say no. You say you will ask them. He says ask the second first. You ask why. He says because if she says yes he can stop, and if she says no he will know it is him for another year. He is not sure which he wants.",
+        "{@who} keeps the group's minutes in a binder that is nearly full and you ask what happens when it is. She says she buys another binder. She says it as though it were a joke and it is not. You ask how many binders. She says four. You do the arithmetic. She sees you do it. She says it is not the binders, Father, it is the meetings, and gets up to lock the hall."
+      ],
+      "effects": [
+        { "target": "relationship", "key": "@who", "delta": 2 }
+      ]
+    },
+    {
+      "who": "leader_tired",
+      "band": "warm",
+      "text": [
+        "{@who} has begun letting you close the hall, which she has not let a priest do since the one who left the lights on for a week. Tonight she sits while you do it and says she will stay a year, for the new ones, and that she is telling you so you will not make her say it in front of the group. You say you will not. She says that is all she ever wanted from a priest.",
+        "{@who} tells you, over the last of the coffee, why he really keeps going: the promise, and to whom, and how long ago. It is not what the group thinks. The group thinks he likes it. He says he did, once. He says he is telling you because someone should know before he stops, and because you asked what would help and then did it. You say you will remember. He says that is the job.",
+        "You tell {@who} that the group can miss a month and the parish will survive, and she says you do not know that, and you say you do, and she takes the month. When she comes back she says she slept. She says it as if reporting a cure at Lourdes. She says the group missed her and also managed, and that she is not sure which she minded more. You say both. She says yes, both."
+      ],
+      "effects": [
+        { "target": "relationship", "key": "@who", "delta": 2 }
+      ],
+      "variantEffects": [
+        [],
+        [ { "target": "trait_known", "key": "@who" } ],
+        []
+      ]
+    },
+    {
+      "who": "leader_new",
+      "band": "cold",
+      "text": [
+        "{@who} took the group over in September and has decided, by November, that you are not on his side. You say you would like to be. He says you had the chance at the first meeting and spent it on the phone. That is true. You say it is true. He does not know what to do with that. He says the next meeting is Tuesday. You say you will be there and you will not have the phone.",
+        "You find {@who} after the meeting and she is putting the sign-in sheet in a folder that is already too organised. You say you can tell she has worked hard. She says she can tell you have not noticed. You take that. You ask what the previous leader left her. She says a folder and a grudge. You say the grudge was not yours. She says it is now, and then, less certainly, maybe.",
+        "{@who} says he has read everything about how to run a parish group and none of it mentions the priest not coming. You say the books are wrong about several things. He asks which. You tell him two. He writes them down, which no one in the group has ever done. He says he is still angry. You say that is allowed. He says he did not need permission. But he has the two things."
+      ],
+      "effects": [
+        { "target": "relationship", "key": "@who", "delta": 3 }
+      ]
+    },
+    {
+      "who": "leader_new",
+      "band": "neutral",
+      "text": [
+        "{@who} asks you how the last leader did it, and you tell her the truth: you do not know, you were not here. She looks relieved. She says everyone talks about the last leader as if she were a saint. You say the last leader was a person. She says she needed to hear that from someone with a collar. You had not known the collar counted for that. It does, this year.",
+        "{@who} brings you a plan for the group, six pages, with headings. You read it. It is good and it is too much. You say so, the second part gently. He asks what to cut. You say the last three pages, and the first paragraph, which apologises for the plan. He is quiet. He says the last leader never wrote anything down. You say the last leader had thirty years. Four months is enough for three pages.",
+        "{@who} asks whether it is normal for half the group to stop coming when a new leader starts. You say yes. She asks whether they come back. You say some. She asks which. You say the ones who stayed for the group and not for the last leader, and that she will find out which are which by Lent. She says that is a long time. You say it is a season."
+      ],
+      "effects": [
+        { "target": "relationship", "key": "@who", "delta": 2 }
+      ]
+    },
+    {
+      "who": "leader_new",
+      "band": "warm",
+      "text": [
+        "{@who} has started saving you a chair at the front, which the old members notice, and tonight she tells you that the group's numbers are back to what they were and that she has not told the pastor yet because she wanted to tell you first. You say tell the pastor. She says she will. She says she is telling you because you came on the Tuesday you said you would. You had forgotten that Tuesday. She has not.",
+        "{@who} tells you, folding the last table, why he volunteered for a job nobody wanted: the thing that happened to him last spring, and what he promised in the hospital. He has not said it to the group. He says it to you quickly, like a man getting rid of something. Then he says he does not want it to change how you treat him. You say it will not. That is not quite true, and he knows it.",
+        "{@who} asks you, after the group's first anniversary supper, whether she is doing it right. You say the group is still here and it did not have to be. She says that is not an answer. You say it is the only one there is at a year. She says the last leader would have said something warmer. You say the last leader had thirty years to learn to. She takes the plate and says good night, and means it."
+      ],
+      "effects": [
+        { "target": "relationship", "key": "@who", "delta": 2 }
+      ],
+      "variantEffects": [
+        [],
+        [ { "target": "trait_known", "key": "@who" } ],
+        []
+      ]
+    },
+    {
+      "who": "leader_grieving",
+      "band": "cold",
+      "text": [
+        "{@who} has led the group since his wife died, and you did not go to the funeral, because you were not here yet, and he has not forgiven the parish for that, and you are the parish. You say you were not here. He says he knows. You say you are here now. He says the group meets on Thursdays. It is not an invitation and it is not not one. You go on Thursday.",
+        "You sit with {@who} after the meeting and she does not want to talk about the group. She wants to talk about the anointing that did not happen in time, and she wants to say it to a priest, and you are the priest. You listen. You do not explain. At the end she says she knows it was not you. She says it as though she has only just decided to know it.",
+        "{@who} tells you he has kept the group going for her and that it is the only thing he does with his week that she would recognise. You say you understand. He says you do not. You say he is right, you do not, and that you will come to the group anyway. He says the group does not need a priest. You say you will come anyway. He says fine. Fine is a great deal from him."
+      ],
+      "effects": [
+        { "target": "relationship", "key": "@who", "delta": 3 }
+      ]
+    },
+    {
+      "who": "leader_grieving",
+      "band": "neutral",
+      "text": [
+        "{@who} tells you which of the group's members are grieving something and which are grieving her, and that the second is harder to run. You ask how she runs it. She says she does not; she makes coffee. She has been making coffee for a year. You say the coffee is the running. She says she knows, but it helps to have it said, and to have it said by someone with no reason to.",
+        "You ask {@who} what the group was like before, and he tells you, and halfway through he stops being able to and looks at the chairs. You wait. He says that is the trouble with before. You say you can come back. He says no, stay, and finishes the story, and it is a good story, and it has her in it, and he tells it all the way through as if he had decided to.",
+        "{@who} asks you, quietly, whether the group is still the group if the reason for it is gone. You say the reason is not gone; it changed hands. She says that is a priest's answer. You say it is also true. She looks at the sign-in sheet, which still has her husband's handwriting on the top line. She says she will keep that page. You say keep the page."
+      ],
+      "effects": [
+        { "target": "relationship", "key": "@who", "delta": 2 }
+      ]
+    },
+    {
+      "who": "leader_grieving",
+      "band": "warm",
+      "text": [
+        "{@who} brings you the group's Christmas card, which he has had the members sign, and which has a space at the bottom where his wife used to sign, and he asks you to sign there. You do. It takes you a moment. He watches you take the moment. He says she would have liked you, which is the highest thing he says, and you know it, and you say you would have liked her.",
+        "{@who} tells you, at last, the thing about the last months that she has not told the group or her children: what was said in the hospital room and what was not. It is not a confession. It is worse, in a way, because it does not need absolving; it needs hearing. You hear it. She says she has never said it aloud. You say it is safe with you. She says she knows. That is why.",
+        "{@who} says the group has asked him to step back, gently, because they can see he is tired, and that he wanted to tell you before he told them yes. You say they are right and it is also his choice. He says he knows. He says he is going to say yes and he would like you there when he does. You say you will be there. He nods and looks at the empty chair, and then not."
+      ],
+      "effects": [
+        { "target": "relationship", "key": "@who", "delta": 2 }
+      ],
+      "variantEffects": [
+        [],
+        [ { "target": "trait_known", "key": "@who" } ],
+        []
+      ]
+    }
+  ]
+}

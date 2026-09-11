@@ -46,6 +46,7 @@ export function playCareer(seed: string, diocese: string, maxWeeks: number, a: C
       case 'evaluation': s.getState().acknowledgeEvaluation(); break;
       case 'ordination': s.getState().ordain(); break;
       case 'assignment': s.getState().acceptAssignment(); break;
+      case 'letter': s.getState().readLetter(); break;
       case 'clock':
         if (game.parish && (game.parish.routine.discretionary.groups ?? 0) === 0) s.getState().setDiscretionary('groups', 1);
         s.getState().setSpeed('SKIP');

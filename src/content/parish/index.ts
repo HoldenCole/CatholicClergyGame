@@ -1,10 +1,11 @@
-import type { ActionDef, GroupTypeDef, ObligationDef, ProblemFixDef, SacrificeDef, SeasonalLoad, SpendDef } from '@/types';
+import type { ActionDef, GroupTypeDef, ObligationDef, ProblemFixDef, SacrificeDef, SeasonalLoad, SpendDef, TalkDef } from '@/types';
 import obligations from './obligations.json';
 import actions from './actions.json';
 import groups from './groups.json';
 import sacrifices from './sacrifices.json';
 import problems from './problems.json';
 import spending from './spending.json';
+import talks from './talks.json';
 
 export const obligationDefs = obligations as ObligationDef[];
 export const actionDefs = actions as ActionDef[];
@@ -12,6 +13,7 @@ export const groupTypeDefs = groups as GroupTypeDef[];
 export const sacrificeDefs = sacrifices as SacrificeDef[];
 export const problemFixes = (problems as { fixes: ProblemFixDef[] }).fixes;
 export const spendDefs = (spending as { spends: SpendDef[] }).spends;
+export const talkDefs = (talks as { talks: TalkDef[] }).talks;
 
 export function spendDef(id: string): SpendDef | undefined {
   return spendDefs.find((s) => s.id === id);

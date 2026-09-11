@@ -22,6 +22,8 @@ import type { SeminaryState } from './seminary';
 import type { Phase } from './stats';
 import type { StudyState } from './study';
 import type { ClubsState } from './clubs';
+import type { TalksState } from './talks';
+import type { Letter } from './mode';
 import type { Beat, Clock, Speed } from './time';
 
 export type FlagValue = boolean | number | string;
@@ -66,6 +68,14 @@ export interface GameState {
   settings?: GameSettings;
   /** Societies he belongs to. Absent in older saves. */
   clubs?: ClubsState;
+  /** Words had with people: cooldowns and the exchanges. Absent in older saves. */
+  talks?: TalksState;
+  /** Letters read, most recent last: the year in review, the new bishop's reading. */
+  letters?: Letter[];
+  /** Letters waiting behind the one in hand. */
+  letterQueue?: Letter[];
+  /** Where the man stood at the last review, so the next can say what moved. */
+  reviewBaseline?: { week: number; reputation: Record<string, number>; stats: Record<string, number>; strain: number };
   flags: Record<string, FlagValue>;
   threads: Record<string, ThreadState>;
   /** eventId -> absolute week before which it may not fire again. */

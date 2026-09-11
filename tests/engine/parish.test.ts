@@ -5,6 +5,7 @@ import { parishWeekHook, resolvePending, type EventDeps } from '@/engine/weekHoo
 import { setDiscretionary, setObligation, startAssignment } from '@/engine/parish';
 import { buildSave, deserialize, rngFromSave, serialize } from '@/engine/save';
 import { testEvent } from '../helpers/fixtures';
+import { readLetter } from '@/systems/review';
 import { parishState } from '../systems/week.test';
 import type { GameEvent, GameState } from '@/types';
 
@@ -79,8 +80,9 @@ describe('engine/parish', () => {
     s = { ...s, character: { ...s.character!, reputation: { ...s.character!.reputation, parishioners: 40 } } };
     const rng = createRng('skip-arc');
     const end = s.parish!.arcEndWeek;
-    for (let guard = 0; guard < 40 && s.mode.kind === 'clock'; guard++) {
+    for (let guard = 0; guard < 40 && (s.mode.kind === 'clock' || s.mode.kind === 'letter'); guard++) {
       s = runClock(s, rng, { maxWeeks: 520, hook: parishWeekHook(d) }).state;
+      if (s.mode.kind === 'letter') s = readLetter(s);
     }
     expect(s.mode.kind).toBe('assignment');
     expect(s.clock.week).toBe(end);

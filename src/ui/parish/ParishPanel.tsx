@@ -12,6 +12,7 @@ import { STAT_KEYS, CONSTITUENCY_KEYS } from '@/types';
 import { useState } from 'react';
 import { arcKey } from '@/llm/skin';
 import Sheet from '../Sheet';
+import TalkButton, { LastTalk } from './TalkButton';
 import { currentPreference, PREFERENCES, PREFERENCE_LABEL } from '@/systems/assignment';
 import { TRAIT_LABEL } from '../portraits/traits';
 import Portrait from '../portraits/Portrait';
@@ -226,6 +227,7 @@ export default function ParishPanel() {
                 {n.traitKnown && <span className="ink-faint ml-2 text-xs">{TRAIT_LABEL[n.hiddenTrait]}</span>}
               </span>
               <span className="ink-muted">{word(n.relationship)}</span>
+              <TalkButton npcId={n.id} />
             </li>
           ))}
           {bishop && (
@@ -233,9 +235,11 @@ export default function ParishPanel() {
               <Portrait portrait={portraitForNpc(bishop, year)} size={26} />
               <span className="min-w-0 flex-1 truncate">{bishop.title} {bishop.name.first} {bishop.name.last}, the bishop</span>
               <span className="ink-muted">{word(bishop.relationship)}</span>
+              <TalkButton npcId={bishop.id} />
             </li>
           )}
         </ul>
+        <LastTalk npcIds={[...staff.map((n) => n.id), ...(pastor ? [pastor.id] : []), ...(bishop ? [bishop.id] : [])]} />
         {game.commitments.length > 0 && <p className="ink-muted mt-2 text-xs">Also on your plate: {game.commitments.map((x) => x.label).join(', ')}.</p>}
         <div className="mt-3 flex items-center gap-2 text-sm">
           <span className="ink-muted">What you have asked the chancery for</span>

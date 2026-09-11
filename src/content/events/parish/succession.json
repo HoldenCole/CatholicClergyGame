@@ -1,0 +1,247 @@
+{
+  "_notes": "Three more succession scenes, alongside career_new_bishop_letter and career_new_bishop_reversal in career.json: beat succession, fired the week a new bishop is named (flag new_bishop_pending, set by the career engine; every choice here clears it). Each is gated so the pool differs by the man: succ_other_side_trad_bishop fires for a progressive priest (alignment >= 20) under a traditional bishop (bishop_alignment <= -20); succ_other_side_prog_bishop is the mirror; succ_affiliated_priest fires for a man who carries a club or affiliation (club:priests_tlm, affiliation:trad_fraternity, affiliation:prog_caucus, club:liturgical_commission). @bishop is the NEW bishop. The choices are about how he presents himself: keep the record, soften it, ask for a meeting, write a letter, say nothing. Flags written: succ_kept_record (let the record stand under a bishop who reads it the other way), succ_softened (trimmed his public voice for the new man), succ_asked_meeting (asked for a meeting in the first month), succ_wrote_letter (a letter that names the difference plainly), succ_named_affiliation (told the new bishop about his society himself), succ_stepped_back (went quiet in the society for a year without leaving it), succ_said_nothing (let the affiliation be found).",
+  "events": [
+    {
+      "id": "succ_other_side_trad_bishop",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["belief_vs_safety", "ambition_vs_integrity"],
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 10,
+      "suppressYears": 1,
+      "beat": "succession",
+      "requires": [
+        { "type": "bishop_alignment", "op": "<=", "value": -20 },
+        { "type": "alignment", "op": ">=", "value": 20 }
+      ],
+      "title": "A bishop from the other side",
+      "body": "The photograph in the diocesan paper shows {@bishop.full} in choir dress, and the biography under it is the one you would have written if you had wanted to worry yourself: the doctoral thesis, the seminary rectorship, the pastoral letter on the liturgy that was passed around your circle three years ago with the good parts underlined in anger. He is not a fool and he is not a bully, by every account, and every account agrees he knows exactly what he thinks. You know what you think too, and you have said it, in homilies and at deanery meetings and once in a letter to the paper that someone in the chancery has certainly kept. The men who share your views are on the phone to each other by noon, sorting themselves into those who will bend and those who will not and those who will pretend there is a third way. The vicar general's note asks the priests not to speculate. You do not need to speculate. You know what a man like this reads first, and it is the file, and the file is you.",
+      "flavorPrompt": "The morning a progressive priest meets, in a photograph, the traditional bishop who will now read his file.",
+      "choices": [
+        {
+          "id": "keep_record",
+          "label": "Keep the record as it is and be, on Sunday, exactly who you were on Saturday",
+          "default": true,
+          "outcome": "You preach the homily you had already written and change nothing in it, and the men who are watching to see who trims see that you did not. Whether the bishop reads that as integrity or obstinacy depends on the man, and on who tells him first. Your friends are proud of you. Your friends are not the ones who sign things.",
+          "effects": [
+            { "target": "flag", "key": "new_bishop_pending", "value": false },
+            { "target": "flag", "key": "succ_kept_record", "value": true },
+            { "target": "reputation", "key": "progressive_bloc", "delta": 5 },
+            { "target": "reputation", "key": "brother_priests", "delta": 2 },
+            { "target": "relationship", "key": "@bishop", "delta": -3 },
+            { "target": "honesty", "key": "", "delta": 2 }
+          ]
+        },
+        {
+          "id": "soften",
+          "label": "Soften it: preach the rubrics for a season, and let the letter to the paper grow old",
+          "outcome": "For a season your homilies are about the readings and nothing else, and you wear the vestments the sacristan lays out without comment, and no one can point to a thing you have said. The bishop, if he hears of you at all, hears of a quiet pastor. The men who shared your views notice the quiet and draw the conclusion that men draw. You tell yourself it is prudence, and some of it is.",
+          "effects": [
+            { "target": "flag", "key": "new_bishop_pending", "value": false },
+            { "target": "flag", "key": "succ_softened", "value": true },
+            { "target": "reputation", "key": "chancery", "delta": 3 },
+            { "target": "reputation", "key": "progressive_bloc", "delta": -5 },
+            { "target": "relationship", "key": "@bishop", "delta": 2 },
+            { "target": "alignment", "key": "", "delta": -3 },
+            { "target": "stat", "key": "piety", "delta": -1 }
+          ]
+        },
+        {
+          "id": "ask_meeting",
+          "label": "Ask for twenty minutes with him in the first month, and go in as yourself",
+          "requires": [
+            { "type": "reputation", "key": "chancery", "op": ">=", "value": 10 }
+          ],
+          "outcome": "You get fifteen. He has read the file, and says so, and asks one question about the letter to the paper that shows he read it twice. You answer it without apology and without heat. He nods, and thanks you for coming, and you cannot tell whether you have made a friend of an honest opponent or given a careful man a closer look at what he will move first.",
+          "effects": [
+            { "target": "flag", "key": "new_bishop_pending", "value": false },
+            { "target": "flag", "key": "succ_asked_meeting", "value": true },
+            { "target": "relationship", "key": "@bishop", "delta": 6 },
+            { "target": "reputation", "key": "chancery", "delta": 2 },
+            { "target": "reputation", "key": "progressive_bloc", "delta": -2 },
+            { "target": "outspokenness", "key": "", "delta": 1 }
+          ]
+        },
+        {
+          "id": "write_letter",
+          "label": "Write to him: here is what I have said, here is why, and here is what I will always do when you ask",
+          "volume": "semi_public",
+          "positionTopic": "authority",
+          "positionValue": -20,
+          "outcome": "Two pages, and the last paragraph is the one that matters: that you will disagree with him in his study and obey him in his diocese, and that he may rely on both. He answers in his own hand, briefly. Men who write to bishops uninvited are remembered, and you have chosen to be remembered on your own terms, which is the most a man can arrange.",
+          "effects": [
+            { "target": "flag", "key": "new_bishop_pending", "value": false },
+            { "target": "flag", "key": "succ_wrote_letter", "value": true },
+            { "target": "relationship", "key": "@bishop", "delta": 4 },
+            { "target": "honesty", "key": "", "delta": 2 },
+            { "target": "reputation", "key": "chancery", "delta": -2 },
+            { "target": "outspokenness", "key": "", "delta": 2 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "succ_other_side_prog_bishop",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["belief_vs_safety", "ambition_vs_integrity"],
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 10,
+      "suppressYears": 1,
+      "beat": "succession",
+      "requires": [
+        { "type": "bishop_alignment", "op": ">=", "value": 20 },
+        { "type": "alignment", "op": "<=", "value": -20 }
+      ],
+      "title": "A bishop from the other side",
+      "body": "The photograph in the diocesan paper shows {@bishop.full} without a zucchetto, in a parish hall, with his sleeves rolled, and the biography under it is the one you would have written if you had wanted to worry yourself: the years in the social-justice office, the pastoral letter on welcome that was passed around your circle two years ago with the weak parts underlined, the interview in which he said the word 'rigid' about no one in particular. He is not a fool and he is not a persecutor, by every account, and every account agrees he knows exactly what he thinks. You know what you think too, and you have said it: from the pulpit, at the deanery, in the way your church is furnished and the way you say the Mass. The men who share your views are on the phone to each other by noon. The vicar general's note asks the priests not to speculate. You do not need to. You know what a man like this reads first, and it is the file, and the file has your name on the letter that someone kept.",
+      "flavorPrompt": "The morning a traditional priest meets, in a photograph, the progressive bishop who will now read his file.",
+      "choices": [
+        {
+          "id": "keep_record",
+          "label": "Keep the record as it is and be, on Sunday, exactly who you were on Saturday",
+          "default": true,
+          "outcome": "You say the Mass as you have always said it and preach what you had already written, and the men who are watching to see who trims see that you did not. Whether the bishop reads that as fidelity or defiance depends on the man, and on who tells him first. Your friends are proud of you. Your friends are not the ones who sign things.",
+          "effects": [
+            { "target": "flag", "key": "new_bishop_pending", "value": false },
+            { "target": "flag", "key": "succ_kept_record", "value": true },
+            { "target": "reputation", "key": "traditional_bloc", "delta": 5 },
+            { "target": "reputation", "key": "brother_priests", "delta": 2 },
+            { "target": "relationship", "key": "@bishop", "delta": -3 },
+            { "target": "honesty", "key": "", "delta": 2 }
+          ]
+        },
+        {
+          "id": "soften",
+          "label": "Soften it: preach the readings for a season, and let the sharper things go unsaid",
+          "outcome": "For a season your homilies are about the Gospel and nothing beside it, and the things you would once have said about the state of the Church stay in the notebook, and no one can point to a thing. The bishop, if he hears of you at all, hears of a quiet pastor. The men who shared your views notice the quiet and draw the conclusion that men draw. You tell yourself it is prudence, and some of it is.",
+          "effects": [
+            { "target": "flag", "key": "new_bishop_pending", "value": false },
+            { "target": "flag", "key": "succ_softened", "value": true },
+            { "target": "reputation", "key": "chancery", "delta": 3 },
+            { "target": "reputation", "key": "traditional_bloc", "delta": -5 },
+            { "target": "relationship", "key": "@bishop", "delta": 2 },
+            { "target": "alignment", "key": "", "delta": 3 },
+            { "target": "stat", "key": "piety", "delta": -1 }
+          ]
+        },
+        {
+          "id": "ask_meeting",
+          "label": "Ask for twenty minutes with him in the first month, and go in as yourself",
+          "requires": [
+            { "type": "reputation", "key": "chancery", "op": ">=", "value": 10 }
+          ],
+          "outcome": "You get fifteen. He has read the file, and says so, and asks one question about how you say the Mass that shows he has seen the photographs. You answer it without apology and without heat. He nods, and thanks you for coming, and you cannot tell whether you have made a friend of an honest opponent or given a careful man a closer look at what he will move first.",
+          "effects": [
+            { "target": "flag", "key": "new_bishop_pending", "value": false },
+            { "target": "flag", "key": "succ_asked_meeting", "value": true },
+            { "target": "relationship", "key": "@bishop", "delta": 6 },
+            { "target": "reputation", "key": "chancery", "delta": 2 },
+            { "target": "reputation", "key": "traditional_bloc", "delta": -2 },
+            { "target": "outspokenness", "key": "", "delta": 1 }
+          ]
+        },
+        {
+          "id": "write_letter",
+          "label": "Write to him: here is what I have said, here is why, and here is what I will always do when you ask",
+          "volume": "semi_public",
+          "positionTopic": "authority",
+          "positionValue": -20,
+          "outcome": "Two pages, and the last paragraph is the one that matters: that you will disagree with him in his study and obey him in his diocese, and that he may rely on both. He answers in his own hand, briefly. Men who write to bishops uninvited are remembered, and you have chosen to be remembered on your own terms, which is the most a man can arrange.",
+          "effects": [
+            { "target": "flag", "key": "new_bishop_pending", "value": false },
+            { "target": "flag", "key": "succ_wrote_letter", "value": true },
+            { "target": "relationship", "key": "@bishop", "delta": 4 },
+            { "target": "honesty", "key": "", "delta": 2 },
+            { "target": "reputation", "key": "chancery", "delta": -2 },
+            { "target": "outspokenness", "key": "", "delta": 2 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "succ_affiliated_priest",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["loyalty_vs_honesty", "friendship_vs_duty"],
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 10,
+      "suppressYears": 1,
+      "beat": "succession",
+      "requires": [
+        {
+          "type": "any",
+          "inner": [
+            { "type": "flag", "key": "club:priests_tlm", "value": true },
+            { "type": "flag", "key": "affiliation:trad_fraternity", "value": true },
+            { "type": "flag", "key": "affiliation:prog_caucus", "value": true },
+            { "type": "flag", "key": "club:liturgical_commission", "value": true }
+          ]
+        }
+      ],
+      "title": "The company you keep",
+      "body": "The announcement comes at six in the morning, Rome time, and by the time you have said the seven o'clock Mass the men you meet with have read it twice and begun to sort out what it means for them. {@bishop.full} will be installed in six weeks. Nobody in your circle knows him, which is the problem: a bishop who knows you can dislike you on the evidence, but a bishop who does not will have you described, and the description will come from whoever gets to him first. What you belong to is not a secret. It has a name and a mailing list, and there are men in the chancery who have kept the list, and there is a photograph from a dinner. Under the last bishop it was a fact about you, like where you were born. Under this one it will be the first fact, until he learns a second. Your circle is on the phone by noon, agreeing to say nothing and to say it together. You are a member of it. You are also a priest of {diocese} with a file, and the file does not know the difference.",
+      "flavorPrompt": "The mailing list, the dinner photograph, and a new bishop who will have him described before he is met.",
+      "choices": [
+        {
+          "id": "name_it",
+          "label": "Write to him yourself, in the first week, and name it: what it is, why you joined, what it has made of you",
+          "volume": "semi_public",
+          "positionTopic": "authority",
+          "positionValue": -15,
+          "outcome": "A page and a half, and you put the name of the thing in the second sentence so that he need not look for it. He answers by hand in a week and does not mention it, which is either courtesy or a note taken. Your circle hears that you wrote, and is divided, and the men who think you broke ranks are the same men who would have let you be described by strangers.",
+          "effects": [
+            { "target": "flag", "key": "new_bishop_pending", "value": false },
+            { "target": "flag", "key": "succ_named_affiliation", "value": true },
+            { "target": "relationship", "key": "@bishop", "delta": 5 },
+            { "target": "reputation", "key": "chancery", "delta": 2 },
+            { "target": "reputation", "key": "brother_priests", "delta": -2 },
+            { "target": "honesty", "key": "", "delta": 2 }
+          ]
+        },
+        {
+          "id": "step_back",
+          "label": "Keep the membership and step back from it for a year: no dinners, no letters, no name on anything",
+          "outcome": "You send your apologies to the next dinner and the one after, and stop signing things, and the mailing list keeps mailing you. The new bishop hears your name, if he hears it, from a list that is a year out of date. The men you meet with notice the empty chair and are kind about it, mostly. You have kept the thing and set it down, which is possible for a year and not for two.",
+          "effects": [
+            { "target": "flag", "key": "new_bishop_pending", "value": false },
+            { "target": "flag", "key": "succ_stepped_back", "value": true },
+            { "target": "reputation", "key": "chancery", "delta": 2 },
+            { "target": "reputation", "key": "traditional_bloc", "delta": -3 },
+            { "target": "reputation", "key": "progressive_bloc", "delta": -3 },
+            { "target": "reputation", "key": "brother_priests", "delta": -1 }
+          ]
+        },
+        {
+          "id": "ask_meeting",
+          "label": "Ask for a meeting in the first month and go in with the circle's case, not only your own",
+          "requires": [
+            { "type": "reputation", "key": "brother_priests", "op": ">=", "value": 15 }
+          ],
+          "outcome": "He gives you twenty minutes and you spend ten of them on the men you meet with: who they are, what they want, what they are afraid of. He listens the way a man listens to a witness. Whether he uses it for them or against them is now his, and your circle knows that you were the one who spoke, and will either thank you for it or never quite trust the minutes again.",
+          "effects": [
+            { "target": "flag", "key": "new_bishop_pending", "value": false },
+            { "target": "flag", "key": "succ_asked_meeting", "value": true },
+            { "target": "relationship", "key": "@bishop", "delta": 6 },
+            { "target": "reputation", "key": "brother_priests", "delta": 3 },
+            { "target": "reputation", "key": "chancery", "delta": 1 },
+            { "target": "outspokenness", "key": "", "delta": 2 }
+          ]
+        },
+        {
+          "id": "say_nothing",
+          "label": "Say nothing, keep the dinners, and let him find it in the file with everything else",
+          "default": true,
+          "outcome": "You keep your appointments and your friends. He finds it in the file, in the first month, in whatever words the chancery has for it, and you will never know which words. Your circle counts you loyal. Some of the men who went to see him in the first weeks were describing you while you were at dinner, and you chose that, with your eyes open, which is worth something.",
+          "effects": [
+            { "target": "flag", "key": "new_bishop_pending", "value": false },
+            { "target": "flag", "key": "succ_said_nothing", "value": true },
+            { "target": "reputation", "key": "brother_priests", "delta": 3 },
+            { "target": "relationship", "key": "@bishop", "delta": -2 },
+            { "target": "stat", "key": "piety", "delta": 1 }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -18,7 +18,7 @@ export default function StudyRoutinePanel() {
   const work = all.filter((a) => a.def.kind === 'work');
   const post = !['rome', 'washington'].includes(study.city);
   const where = study.city === 'rome' ? 'Rome' : study.city === 'washington' ? 'Washington' : 'the diocese';
-  const POST_DAY: Record<string, string> = { residence: "The bishop's day", campus: "The Center's week", hospital: "The hospital's week", seminary: "The seminary's week" };
+  const POST_DAY: Record<string, string> = { residence: "The bishop's day", campus: "The Center's week", hospital: "The hospital's week", seminary: "The seminary's week", chancery: "The vicar general's week" };
 
   const row = ({ def, available, why }: (typeof all)[number]) => {
     const ap = study.routine[def.id] ?? 0;

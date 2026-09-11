@@ -35,6 +35,8 @@ import { setDiscretionary as doSetDiscretionary, setObligation as doSetObligatio
 import { focusGroup as doFocus, replaceLeader as doReplaceLeader, startFounding as doStartFounding, suppressGroup as doSuppress } from '@/systems/groups';
 import { startWork as doStartWork, stopWork as doStopWork } from '@/systems/problems';
 import { joinClub as doJoinClub, leaveClub as doLeaveClub } from '@/systems/clubs';
+import { readLetter as doReadLetter } from '@/systems/review';
+import { haveAWord as doHaveAWord } from '@/systems/talks';
 import { closeFund as doCloseFund, fundGroup as doFundGroup, invest as doInvest, spend as doSpend, withdraw as doWithdraw } from '@/systems/spending';
 import { yearOf } from '@/ui/portraits/spec';
 import { payDebt as doPayDebt } from '@/systems/finance';
@@ -108,6 +110,11 @@ export interface GameStore {
   applyForOpening(openingId: string): void;
   /** The player's own dials: the length of the week and how much it wears. Kept in the save. */
   setSettings(partial: Partial<GameSettings>): void;
+  /** The man has read the letter in his hands; the clock may move. */
+  readLetter(): void;
+  /** An hour with one person of the parish or diocese. */
+  haveAWord(npcId: string): void;
+  lastTalk: { npcId: string; text: string; week: number } | null;
   /** What a pastor does with money that is not owed. */
   spend(id: string): void;
   closeFund(id: string): void;
@@ -213,6 +220,7 @@ export const useGameStore = create<GameStore>()((set, get) => ({
   running: false,
   error: null,
   lastOfferOutcome: null,
+  lastTalk: null,
   lastFurnishLine: null,
   llm: typeof window === 'undefined' ? DEFAULT_LLM : loadLlmSettings(),
 
@@ -421,6 +429,16 @@ export const useGameStore = create<GameStore>()((set, get) => ({
       const settings = { ...(game.settings ?? DEFAULT_SETTINGS), ...partial };
       if (!settings.hours) delete settings.hours;
       return { ...game, settings };
+    });
+  },
+  readLetter() {
+    update(set, get, (game) => doReadLetter(game));
+  },
+  haveAWord(npcId) {
+    update(set, get, (game, r) => {
+      const result = doHaveAWord(game, npcId, r.derive(`talk:${npcId}:${game.clock.week}`));
+      set({ lastTalk: { npcId, text: result.text, week: game.clock.week } });
+      return result.state;
     });
   },
   spend(id) {

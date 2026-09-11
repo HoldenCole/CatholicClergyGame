@@ -5086,6 +5086,202 @@
         "effects": [],
         "outcome": "You have a funeral that Friday, and the next, and the chancellor stops mentioning it. What is said at that table is said without you."
       }
+    },
+    {
+      "id": "pa_vicar_general",
+      "category": "chancery",
+      "phase": [
+        "pastor",
+        "administrator"
+      ],
+      "title": "Vicar General",
+      "body": "{@bishop} asks you to dinner at the residence, alone, and does not get to it until the plates are cleared. His vicar general is going to Rome, or to a parish, or to his grave; he does not say which and it does not matter. He wants you in the office next to his: the man who signs when he is away, who chairs the personnel board, who writes the closings list and reads the whole ledger and opens the mail nobody else will. Five years. You would leave your parish and live at the cathedral rectory. Every priest of the diocese would learn your name in a new way, and some of them would never forgive you for what the office makes you do. The men who have held it have become bishops. The men who have held it have also become the one everyone blames, and been right to be blamed.",
+      "from": "@bishop",
+      "requires": [
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 12
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "vg_served",
+            "value": true
+          }
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "refused_vicar_general",
+            "value": true
+          }
+        },
+        {
+          "type": "relationship",
+          "npcId": "@bishop",
+          "op": ">=",
+          "value": 25
+        },
+        {
+          "type": "reputation",
+          "key": "chancery",
+          "op": ">=",
+          "value": 45
+        }
+      ],
+      "weight": 30,
+      "bias": [
+        {
+          "when": {
+            "type": "flag",
+            "key": "office:bishops_secretary",
+            "value": true
+          },
+          "multiplier": 1.6
+        },
+        {
+          "when": {
+            "type": "credential",
+            "key": "JCL"
+          },
+          "multiplier": 1.4
+        },
+        {
+          "when": {
+            "type": "stat",
+            "key": "administration",
+            "op": ">=",
+            "value": 60
+          },
+          "multiplier": 1.4
+        },
+        {
+          "when": {
+            "type": "flag",
+            "key": "hard_parish_turned",
+            "value": true
+          },
+          "multiplier": 1.3
+        },
+        {
+          "when": {
+            "type": "reputation",
+            "key": "brother_priests",
+            "op": "<",
+            "value": 0
+          },
+          "multiplier": 0.5
+        }
+      ],
+      "windowWeeks": 3,
+      "once": true,
+      "cluster": "chancery",
+      "accept": {
+        "effects": [
+          {
+            "target": "flag",
+            "key": "office:vicar_general",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "parishioners",
+            "delta": -8
+          },
+          {
+            "target": "reputation",
+            "key": "brother_priests",
+            "delta": -4
+          },
+          {
+            "target": "reputation",
+            "key": "chancery",
+            "delta": 8
+          },
+          {
+            "target": "stat",
+            "key": "piety",
+            "delta": -1
+          }
+        ],
+        "outcome": "The decree is a paragraph and a seal. You move into the cathedral rectory and an office with a second door that opens into his. The first week is the mail: four resignations, a lawsuit, a pastor who wants a different pastor, and a note from your old parish council that reads as a farewell and is one. By the second month every priest who calls the chancery asks for you first, and half of them are sorry they did.",
+        "commitment": {
+          "label": "Vicar general",
+          "weeks": 260,
+          "apPerWeek": 0,
+          "onComplete": [
+            {
+              "target": "flag",
+              "key": "vg_served",
+              "value": true
+            },
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": 20
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 15
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 6
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 5
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 2
+            },
+            {
+              "target": "trait",
+              "key": "knows where the diocese keeps its money"
+            },
+            {
+              "target": "archetype",
+              "key": "administrative",
+              "delta": 6
+            }
+          ],
+          "completeOutcome": "Five years, two closings lists, one succession scare and a pension fund put back where it belonged. The bishop names your successor at a dinner and thanks you in words he did not write. The board has a parish for you, a large one, and the priests of the diocese greet you at the deanery dinner with a respect that has fear in it.",
+          "away": "vicar_general"
+        }
+      },
+      "decline": {
+        "effects": [
+          {
+            "target": "flag",
+            "key": "refused_vicar_general",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "chancery",
+            "delta": -8
+          },
+          {
+            "target": "reputation",
+            "key": "brother_priests",
+            "delta": 4
+          },
+          {
+            "target": "relationship",
+            "key": "@bishop",
+            "delta": -6
+          }
+        ],
+        "outcome": "You tell {@bishop} that the parish is where you are a priest. He looks at you for a while and says that he asked because he thought you were the one who would say no, and that this is not the compliment it sounds like. He names a canonist you have met twice. The presbyterate hears within the week that you turned it down, and a few of them buy you a drink for it."
+      }
     }
   ]
 }

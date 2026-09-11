@@ -217,6 +217,33 @@ week), and `credentialAfter`. Each writes `club:<id>`; content and the engine
 read it (`club:tlm_society` and `can_celebrate_tlm` point the first assignment
 at a parish with a Latin Mass faction). Seminary clubs end at ordination.
 
+A club may carry `leaning` (−1 the traditional wing .. +1 the progressive
+wing): a new bishop reads membership by it at a succession, alongside the
+`affiliation:*` flags the offers set.
+
+### Having a word (`parish/talks.json`)
+
+`talks` are authored exchanges an hour long: `who` (pastor, secretary, dre,
+music_director, maintenance, bishop, brother_priest, classmate, or
+`leader_<agenda>` for a group's leader), `band` (cold below −15, warm above
+30, neutral between), three `text` variants with `{@who}` bound to the person,
+`effects` (small: relationship, a stat, a reputation), and optional
+`variantEffects` aligned with `text` for the telling in which a friend lets
+something slip (`trait_known`). The engine (`systems/talks.ts`) picks the
+band from the relationship, takes a block off the coming week, keeps an
+eight-week cooldown per person and two conversations a week, and writes the
+exchange to the record.
+
+### Letters (`systems/review.ts`, `systems/succession.ts`)
+
+Two letters stop the clock the way an event does, at the tail of a quiet
+week: the year in review on every anniversary of ordination (the parish's
+trajectory, each constituency against last year's baseline, what the file
+noticed, what the parish says, and what is open ahead), and the new bishop's
+letter after a succession (his priorities and liturgical policy, leave he
+withdraws, how he reads the man's stands and circles). Both are kept in
+`letters`; a second waits in `letterQueue` behind the first.
+
 ### The parish's money (`parish/spending.json`)
 
 Once the debt is paid a pastor spends: `once` spends apply their effects when
@@ -230,9 +257,14 @@ costs are always kept back.
 ### Postings away
 
 Programs of kind `post` (`study/programs.json`: the bishop's secretary, the
-Newman Center, the hospital, the seminary faculty) are full-time: the man
-leaves his parish and lives there, with that place's activities, until the
-years end and the board finds him a parish. Their offers carry `away`.
+Newman Center, the hospital, the seminary faculty, the vicar general) are
+full-time: the man leaves his parish and lives there, with that place's
+activities, until the years end and the board finds him a parish. Their
+offers carry `away`. The chancery tier (`pa_vicar_general`, city `chancery`)
+opens to a pastor twelve years in with the bishop's trust and the chancery's
+regard; its week is the bishop's door, the personnel board, the closings,
+the tribunal, the money, and deanery visits, and `events/study/chancery.json`
+is gated on `study:chancery`.
 
 ### The player's dials
 
@@ -243,6 +275,10 @@ game state and accrues in every phase from blocks past a standard week and
 from sacrifices, at the wear rate.
 
 ## Offers (DESIGN.md §7.5)
+
+Under every open letter the sheet says what it came because of, in words
+(`whyOffered` in `systems/doors.ts` reads the met `requires`): the man learns
+which doors his record opened, not only which it shut.
 
 Files under `src/content/offers/*.json`: `{ "_notes": "...", "offers": [ ... ] }`.
 Types in `src/types/offers.ts`. Offers are evaluated against state every
