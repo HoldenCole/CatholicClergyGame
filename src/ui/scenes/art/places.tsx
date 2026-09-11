@@ -86,15 +86,76 @@ export function Chapel() {
 }
 
 /** The street outside: church, hall, rectory, the car, and the hospital down the block. */
-export function Street({ terrain }: { terrain: string | undefined }) {
+/** What stands on the horizon in each see, so the street says where it is. */
+function Skyline({ see, urban }: { see: string | undefined; urban: boolean }) {
+  switch (see) {
+    case 'chicago':
+      return (
+        <g opacity="0.85">
+          {[36, 42, 47, 53, 58, 64].map((x, i) => <rect key={x} x={x} y={[8, 4, 12, 2, 10, 6][i]} width={[5, 4, 5, 6, 4, 5][i]} height="34" fill={i % 2 ? '#4d4a55' : '#5e5b66'} />)}
+          <rect x="53.5" y="-2" width="1" height="5" fill="#4d4a55" />
+          <rect x="56.5" y="-2" width="1" height="5" fill="#4d4a55" />
+          <rect x="30" y="30" width="44" height="1.2" fill="#3a3a3a" />
+          {[32, 40, 48, 56, 64].map((x) => <rect key={x} x={x} y="31.2" width="1" height="6" fill="#3a3a3a" />)}
+        </g>
+      );
+    case 'new_york':
+      return (
+        <g opacity="0.85">
+          {[34, 39, 43, 48, 52, 57, 62, 66].map((x, i) => <rect key={x} x={x} y={[10, 6, 14, 0, 9, 5, 12, 8][i]} width={[4, 3.5, 4.5, 4, 5, 3.5, 4, 4][i]} height="36" fill={i % 3 ? '#5a5f6b' : '#6e737f'} />)}
+          <polygon points="48,0 50,-6 52,0" fill="#5a5f6b" />
+          {[34, 39, 43, 48, 52, 57, 62].map((x) => [0, 1, 2, 3].map((r) => <rect key={`${x}-${r}`} x={x + 1} y={16 + r * 4} width="0.8" height="1.2" fill="#f5e6b0" opacity="0.6" />))}
+        </g>
+      );
+    case 'los_angeles':
+      return (
+        <g opacity="0.9">
+          <path d="M0 26 Q20 14 40 22 T80 18 T100 24 V38 H0 Z" fill="#b9a27a" />
+          <path d="M20 30 Q40 22 60 28 T100 27 V38 H20 Z" fill="#cbb68d" opacity="0.8" />
+          {[36, 44, 58, 70].map((x) => (
+            <g key={x}>
+              <rect x={x} y="16" width="0.7" height="18" fill="#5a4a2a" />
+              <path d={`M${x + 0.35} 16 q-4 -1 -6 2 M${x + 0.35} 16 q4 -1 6 2 M${x + 0.35} 16 q-3 -3 -2 -5 M${x + 0.35} 16 q3 -3 2 -5 M${x + 0.35} 16 q0 -4 1 -5`} stroke="#4f7a3f" strokeWidth="0.9" fill="none" />
+            </g>
+          ))}
+        </g>
+      );
+    case 'houston':
+      return (
+        <g opacity="0.85">
+          <path d="M0 30 H100 V38 H0 Z" fill="#8fa06a" />
+          {[38, 45, 52, 60].map((x, i) => <rect key={x} x={x} y={[12, 8, 14, 10][i]} width={[4, 5, 4, 5][i]} height="26" fill={i % 2 ? '#6b7b8a' : '#7d8c9a'} />)}
+          <rect x="30" y="29" width="50" height="1.6" fill="#7a7a72" />
+          {[33, 41, 49, 57, 65, 73].map((x) => <rect key={x} x={x} y="30.6" width="0.9" height="4" fill="#7a7a72" />)}
+          <ellipse cx="50" cy="8" rx="30" ry="4" fill="#fff" opacity="0.25" filter="url(#softer)" />
+        </g>
+      );
+    case 'washington':
+      return (
+        <g opacity="0.85">
+          <rect x="40" y="22" width="20" height="14" fill="#e6e0d0" />
+          <path d="M43 22 Q50 8 57 22 Z" fill="#e6e0d0" />
+          <rect x="49.4" y="6" width="1.2" height="4" fill="#e6e0d0" />
+          {[42, 46, 50, 54, 58].map((x) => <rect key={x} x={x} y="26" width="1.2" height="8" fill="#d9d0b6" />)}
+          <rect x="74" y="4" width="1.6" height="32" fill="#e6e0d0" />
+          <polygon points="74,4 74.8,2 75.6,4" fill="#e6e0d0" />
+          <path d="M0 30 Q20 24 40 28 V38 H0 Z" fill="#6f7f5a" />
+        </g>
+      );
+    default:
+      return urban ? <g>{[40, 48, 56, 64].map((x, i) => <rect key={x} x={x} y={10 - (i % 2) * 4} width="8" height="28" fill={i % 2 ? '#6e6a70' : '#7d7a80'} />)}</g> : <path d="M0 30 Q25 22 50 28 T100 26 V38 H0 Z" fill="#6f7f5a" />;
+  }
+}
+
+export function Street({ terrain, see }: { terrain: string | undefined; see?: string }) {
   const urban = terrain === 'urban' || terrain === 'latino';
   return (
     <g>
       <rect width="100" height="38" fill="url(#sky)" />
       <ellipse cx="80" cy="6" rx="14" ry="3" fill="#fff" opacity="0.35" filter="url(#softer)" />
       <ellipse cx="30" cy="10" rx="10" ry="2.4" fill="#fff" opacity="0.28" filter="url(#softer)" />
-      {urban && [40, 48, 56, 64].map((x, i) => <rect key={x} x={x} y={10 - (i % 2) * 4} width="8" height="28" fill={i % 2 ? '#6e6a70' : '#7d7a80'} />)}
-      {!urban && <path d="M0 30 Q25 22 50 28 T100 26 V38 H0 Z" fill="#6f7f5a" />}
+      <Skyline see={see} urban={urban} />
+      {!urban && see === undefined && <path d="M0 30 Q25 22 50 28 T100 26 V38 H0 Z" fill="#6f7f5a" />}
       {/* church */}
       <polygon points="4,36 4,16 17,7 30,16 30,36" fill={urban ? 'url(#stone)' : '#efe8d8'} stroke="#7a6a4a" strokeWidth="0.3" />
       <polygon points="4,16 17,7 30,16" fill="#5a4a3a" />

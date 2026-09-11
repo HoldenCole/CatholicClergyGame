@@ -70,7 +70,8 @@ export function generateDiocese(rng: Rng, preset: DiocesePreset, year: number): 
     mainstream = 0.1;
   }
   const hostility = rng.int(0, 100);
-  const shortage = Math.min(5, Math.max(1, Math.round(preset.shortageBias + rng.gaussian() * 1.1)));
+  // There is always a shortage: no diocese rolls below 'stretched'. Playtesting asked for it; the presets' bias still spreads 3..5.
+  const shortage = Math.min(5, Math.max(3, Math.round(preset.shortageBias + rng.gaussian() * 1.1)));
   const financial = rng.weighted(Object.keys(preset.financialWeights) as FinancialState[], (f) => preset.financialWeights[f]);
   const scandalHandling = rng.weighted(['transparent', 'defensive', 'concealing'] as ScandalHandling[], (h) => ({ transparent: 2, defensive: 3, concealing: 1 })[h]);
   const need = clergyNeedOf(shortage);

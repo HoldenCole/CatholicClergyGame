@@ -2,6 +2,7 @@ import type { Effect, GameState, ObligationKey, Quality, Role, Season, WeekLedge
 import { OBLIGATION_KEYS } from '@/types';
 import { actionDefs, obligationDefs, sacrificeDefs, SEASONAL_LOAD } from '@/content/parish';
 import { takeSnapshot, TRAJECTORY } from './trajectory';
+import { extraBlocks, parishBlocks, wearOf } from './workweek';
 import { applyEffects } from '@/engine/effects';
 import { commitmentAp } from '@/engine/offers';
 import { seasonOf } from '@/engine/time';
@@ -52,6 +53,8 @@ export const WEEK = {
   careProblemRelief: 0.4,
   /** Strain recovered a week with nothing sacrificed. */
   strainRecovery: 1.5,
+  /** Strain a week per block worked past a standard week, before the wear dial. */
+  strainPerExtraBlock: 1,
   /** Past this, the body takes an hour back: the budget drops by one. */
   strainSick: 80,
   /** Past this, piety drains a little extra each week: tired in a way sleep does not fix. */
@@ -94,7 +97,17 @@ export function sacrificeAp(state: GameState): number {
 }
 
 export function strainOf(state: GameState): number {
-  return state.parish?.strain ?? 0;
+  return state.strain ?? 0;
+}
+
+/**
+ * One week of wear, any phase: what he cut from his own life and the blocks
+ * past a standard week add strain at the wear rate; a plain week rests him.
+ */
+export function strainAfterWeek(state: GameState, sacrificed: number, extra: number): number {
+  const gained = (sacrificed + extra * WEEK.strainPerExtraBlock) * wearOf(state);
+  const before = strainOf(state);
+  return Math.max(0, Math.min(100, before + (gained > 0 ? gained : -WEEK.strainRecovery)));
 }
 
 export function strainWord(strain: number): string {
@@ -105,7 +118,8 @@ export function strainWord(strain: number): string {
 export function weekBudget(state: GameState): number {
   const role = state.assignment?.role ?? 'parochial_vicar';
   const sick = strainOf(state) >= WEEK.strainSick ? 1 : 0;
-  return Math.max(1, WEEK.baseAp[role] + (state.parish?.apNextWeek ?? 0) + sacrificeAp(state) - sick);
+  const base = parishBlocks(state) + (WEEK.baseAp[role] - WEEK.baseAp.parochial_vicar);
+  return Math.max(1, base + (state.parish?.apNextWeek ?? 0) + sacrificeAp(state) - sick);
 }
 
 export interface Plan {
@@ -239,8 +253,7 @@ export function resolveWeek(state: GameState, rng: Rng): { state: GameState; led
   const sacrificed = sacrificesOf(state);
   for (const d of sacrificed) next = applyEffects(next, d.effectsPerWeek);
   const strainBefore = strainOf(state);
-  const strainAdded = sacrificed.reduce((n, d) => n + d.strain, 0);
-  const strain = Math.max(0, Math.min(100, strainBefore + (strainAdded > 0 ? strainAdded : -WEEK.strainRecovery)));
+  const strain = strainAfterWeek(state, sacrificed.reduce((n, d) => n + d.strain, 0), extraBlocks(state));
   if (strain >= WEEK.strainWorn) next = applyEffects(next, [{ target: 'stat', key: 'piety', delta: -WEEK.strainPietyDrain }]);
   if (strainBefore < WEEK.strainWorn && strain >= WEEK.strainWorn) lines.push('You are tired in a way sleep does not fix.');
   if (strainBefore < WEEK.strainSick && strain >= WEEK.strainSick) lines.push('You were sick for two days and said Mass anyway. Something has to give.');
@@ -310,12 +323,12 @@ export function resolveWeek(state: GameState, rng: Rng): { state: GameState; led
   const result: { state: GameState; ledger: WeekLedger } = {
     state: {
       ...next,
+      strain,
       world: { ...world, parishes },
       parish: {
         ...parish,
         attendance,
         care,
-        strain,
         recycledHomilyStreak: streak,
         apNextWeek: 0,
         weeksServed: parish.weeksServed + 1,

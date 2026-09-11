@@ -189,6 +189,31 @@ and speak in hours. A parish week is 12 blocks, about 48 hours after the
 daily Mass, the Office, meals and sleep. Content that sets `ap` or
 `apPerWeek` speaks in blocks.
 
+### Flags the seminary writes for the career
+
+`events/seminary/career.json` writes flags the engine reads at ordination
+and after: `noticed_by_bishop`, `bishop_wary`, `rector_recommends`,
+`rector_doubts`, `seminary_leader` (formation standing, `systems/standing.ts`),
+`known_pastoral` / `known_scholar` / `known_administrator` (the first
+assignment matches them to a posting, `systems/assignment.ts`), and
+`chancery_favor_owed` (for content). Any seminary event may write them; keep
+them rare and earned.
+
+### The diocese as a place
+
+Each preset carries a `voice` (weather, Sunday, the presbyterate) shown on
+the parish sheet, and `parish/ambient.json` has a pool per preset id that
+the digest draws from twice as often as the general pool. No diocese rolls
+a shortage below 3 (`stretched`): there is always a shortage.
+
+### The player's dials
+
+`state.settings` holds the work-week length (`light` 10, `standard` 12,
+`long` 14, `punishing` 16 blocks; the seminary and study weeks shift by
+−1/0/+1/+2 free hours) and the wear multiplier (0..2). Strain lives on the
+game state and accrues in every phase from blocks past a standard week and
+from sacrifices, at the wear rate.
+
 ## Offers (DESIGN.md §7.5)
 
 Files under `src/content/offers/*.json`: `{ "_notes": "...", "offers": [ ... ] }`.

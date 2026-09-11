@@ -36,6 +36,7 @@ export function newGame(options: NewGameOptions): { state: GameState; rng: Rng }
     npcs: {},
     seminary: null,
     study: null,
+    strain: 0,
     flags: {},
     threads: {},
     suppressedUntil: {},

@@ -91,6 +91,16 @@ export function deserialize(json: string): SaveFile {
     // v3 → v4: the study-away phase added a field.
     if (isRecord(raw.state) && raw.state.study === undefined) raw.state.study = null;
     if (isRecord(raw.previous) && isRecord(raw.previous.state) && raw.previous.state.study === undefined) raw.previous.state.study = null;
+    raw.version = 4;
+  }
+  if (raw.version === 4) {
+    // v4 → v5: strain moved from the parish to the game; settings added.
+    const lift = (st: unknown) => {
+      if (!isRecord(st)) return;
+      if (st.strain === undefined) st.strain = isRecord(st.parish) && typeof st.parish.strain === 'number' ? st.parish.strain : 0;
+    };
+    lift(raw.state);
+    if (isRecord(raw.previous)) lift(raw.previous.state);
     raw.version = SAVE_VERSION;
   }
   if (raw.version !== SAVE_VERSION) {

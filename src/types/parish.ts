@@ -158,8 +158,6 @@ export interface ParishState {
    * collections, and a well-tended parish has fewer fires. Absent in older saves.
    */
   care?: number;
-  /** 0..100. Rises with each sacrifice a week, falls with rest. Carried between assignments. */
-  strain?: number;
   /** The parish as it was when he arrived, and each quarter since. */
   arrival?: ParishSnapshot;
   snapshots?: ParishSnapshot[];

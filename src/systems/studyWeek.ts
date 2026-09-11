@@ -8,10 +8,14 @@ import { renderText } from '@/engine/text';
 import { applyStat } from './stats';
 import { applyReputation } from './reputation';
 import { describeUnmet } from './doors';
+import { freeHourShift } from './workweek';
+import { strainAfterWeek, strainOf, WEEK } from './week';
 
 /** Free hours a week away: lectures, the chapel, and the house rule take the rest. */
 export function studyBudget(state: GameState): number {
-  return studyProgram(state.study?.program ?? '')?.hours ?? 6;
+  const base = studyProgram(state.study?.program ?? '')?.hours ?? 6;
+  const sick = strainOf(state) >= WEEK.strainSick ? 1 : 0;
+  return Math.max(1, base + freeHourShift(state) - sick);
 }
 
 export function studyHours(study: StudyState): number {
@@ -97,8 +101,10 @@ export function studyWeek(state: GameState, rng: Rng): { state: GameState; line:
     phrases.push(hours > 1 ? `${phrase} (${hours} hours)` : phrase);
   }
   // onFirst effects are flags and traits (never stats or reputation), so the tallies above can go on top of them.
+  const strain = strainAfterWeek(state, 0, Math.max(0, freeHourShift(state)));
+  if (strain >= WEEK.strainWorn) stats = applyStat(stats, 'piety', -WEEK.strainPietyDrain);
   const character = { ...next.character!, stats, reputation, credentials };
-  const result: GameState = { ...next, npcs: { ...next.npcs, ...npcs }, flags: { ...next.flags, ...flags }, character, study: { ...study, hoursLogged, taken } };
+  const result: GameState = { ...next, strain, npcs: { ...next.npcs, ...npcs }, flags: { ...next.flags, ...flags }, character, study: { ...study, hoursLogged, taken } };
   const head = studyProgram(study.program)?.classes ?? 'Lectures';
   const body = phrases.length ? `${head}; ${phrases.join(', ')}.` : `${head}, and the free hours went to the city.`;
   return { state: result, line: renderText([body, ...earned].join(' '), result, bindings) };

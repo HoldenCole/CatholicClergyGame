@@ -22,7 +22,8 @@ describe('generation/world', () => {
   it('every preset keeps its character while the state varies', () => {
     for (const presetId of ['new_york', 'houston']) {
       const dioceses = runs.map((r) => r.find((c) => c.presetId === presetId)!.diocese);
-      expect(new Set(dioceses.map((d) => d.visible.clergyNeed)).size).toBeGreaterThanOrEqual(3);
+      // There is always a shortage: only 'stretched' and 'critically_short' can roll now.
+      expect(new Set(dioceses.map((d) => d.visible.clergyNeed)).size).toBe(2);
       expect(new Set(dioceses.map((d) => d.visible.tension)).size).toBe(3);
       expect(new Set(dioceses.map((d) => d.hidden.financial)).size).toBe(3);
       expect(new Set(dioceses.map((d) => d.visible.bishop.name)).size).toBeGreaterThan(200);
@@ -33,7 +34,7 @@ describe('generation/world', () => {
     const houston = runs.map((r) => r.find((c) => c.presetId === 'houston')!.diocese);
     const dc = runs.map((r) => r.find((c) => c.presetId === 'washington')!.diocese);
     const mean = (xs: number[]) => xs.reduce((a, b) => a + b, 0) / xs.length;
-    expect(mean(houston.map((d) => d.hidden.shortage))).toBeGreaterThan(mean(dc.map((d) => d.hidden.shortage)) + 1.5);
+    expect(mean(houston.map((d) => d.hidden.shortage))).toBeGreaterThan(mean(dc.map((d) => d.hidden.shortage)) + 0.8);
   });
 
   it('the visible half never carries hidden fields', () => {

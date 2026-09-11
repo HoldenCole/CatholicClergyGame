@@ -43,6 +43,8 @@ import { furnish as doFurnish, petition as doPetition } from '@/systems/decor';
 import { setSeminaryActivity as doSetSeminaryActivity } from '@/systems/seminaryWeek';
 import { setStudyActivity as doSetStudyActivity } from '@/systems/studyWeek';
 import { hoursOf } from '@/systems/week';
+import { DEFAULT_SETTINGS } from '@/systems/workweek';
+import type { GameSettings } from '@/types';
 import { setPreference, type Preference } from '@/systems/assignment';
 import type { DecorPlace, LiturgicalTopic } from '@/types';
 import { anthropicProvider, type Provider } from '@/llm/provider';
@@ -102,6 +104,8 @@ export interface GameStore {
   payDebt(amount: number): void;
   /** Put your name forward for an opening. */
   applyForOpening(openingId: string): void;
+  /** The player's own dials: the length of the week and how much it wears. Kept in the save. */
+  setSettings(partial: Partial<GameSettings>): void;
   /** Cut something from your own week for an hour, or take it back. */
   toggleSacrifice(id: string): void;
   /** Begin, or abandon, the work on the parish's problem. */
@@ -400,6 +404,9 @@ export const useGameStore = create<GameStore>()((set, get) => ({
   },
   applyForOpening(openingId) {
     update(set, get, (game) => doApply(game, openingId));
+  },
+  setSettings(partial) {
+    update(set, get, (game) => ({ ...game, settings: { ...(game.settings ?? DEFAULT_SETTINGS), ...partial } }));
   },
   toggleSacrifice(id) {
     update(set, get, (game) => {

@@ -2,6 +2,8 @@ import { useGameStore } from '@/engine/store';
 import { controlsMoney, debtPayable } from '@/systems/finance';
 import { sinceArrival } from '@/systems/trajectory';
 import { hoursOf } from '@/systems/week';
+import { NEED_LABEL } from '@/generation/diocese';
+import { diocesePresets } from '@/content/dioceses';
 import { workAvailability } from '@/systems/problems';
 import { useUiStore } from '../uiStore';
 import { PROBLEM_LABEL } from '@/generation/parishes';
@@ -87,6 +89,24 @@ export default function ParishPanel() {
           </div>
         )}
         {portrait && <p className="mt-3 whitespace-pre-line text-sm leading-relaxed">{portrait}</p>}
+      </Sheet>
+      <Sheet title={game.world.diocese.visible.name}>
+        {(() => {
+          const v = game.world!.diocese.visible;
+          const preset = diocesePresets.find((p) => p.id === game.world!.diocese.presetId);
+          const voice = preset?.voice;
+          const week = game.clock.week;
+          return (
+            <>
+              <p className="ink-muted text-xs leading-relaxed">{v.region}. {NEED_LABEL[v.clergyNeed]}. {v.character[0]}</p>
+              {voice && (
+                <p className="ink-faint mt-1 text-xs leading-relaxed">
+                  {voice.weather[Math.floor(((week % 52) / 52) * voice.weather.length) % voice.weather.length]} {voice.sunday[week % voice.sunday.length]} {voice.presbyterate[Math.floor(week / 52) % voice.presbyterate.length]}
+                </p>
+              )}
+            </>
+          );
+        })()}
       </Sheet>
       <Sheet title={traj ? `Since you arrived: ${traj.verdict.toLowerCase()}` : 'Since you arrived'}>
         {traj ? (

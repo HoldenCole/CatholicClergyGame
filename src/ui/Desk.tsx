@@ -69,9 +69,9 @@ export default function Desk() {
         {open === 'formation' && <FormationPanel />}
         {open === 'settings' && (
           <>
+            <SettingsPanel />
             <InterruptSettings />
             <SavePanel />
-            <SettingsPanel />
           </>
         )}
         {open === 'furnish' && furnishing && <FurnishPanel place={furnishing} />}

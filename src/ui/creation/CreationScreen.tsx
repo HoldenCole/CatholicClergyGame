@@ -6,12 +6,14 @@ import type { CreationAnswers, CreationOption } from '@/types';
 import OptionList from './OptionList';
 import DioceseCards from './DioceseCards';
 import { revealFieldForTie, revealFor } from '@/generation/world';
+import { likelyPlacement } from '@/systems/placement';
 import { createRng } from '@/engine/rng';
 import Portrait from '../portraits/Portrait';
 import { adjustSpec, facesFor, parseSpec, serializeSpec, SPEC_KEYS, SPEC_LABELS } from '../portraits/spec';
 
 type Step = 'name' | 'face' | 'diocese' | 'origin' | 'tie' | 'path' | 'field' | 'career' | 'motive' | 'family' | 'past' | 'summary';
-const ORDER: Step[] = ['name', 'face', 'diocese', 'origin', 'tie', 'path', 'field', 'career', 'motive', 'family', 'past', 'summary'];
+/** The diocese comes after the background so its cards can say where a man like this would be sent. */
+const ORDER: Step[] = ['name', 'face', 'origin', 'path', 'field', 'career', 'motive', 'family', 'past', 'diocese', 'tie', 'summary'];
 
 const QUESTIONS: Record<Step, { title: string; prompt: string }> = {
   name: { title: 'Your name', prompt: 'The vocation director writes it at the top of a file that will follow you for forty years.' },
@@ -78,6 +80,7 @@ export default function CreationScreen() {
   const q = QUESTIONS[step];
   const errors = validateAnswers(full, content);
   const candidates = game?.candidates ?? [];
+  const placements = step === 'diocese' && game ? Object.fromEntries(candidates.map((c) => [c.presetId, likelyPlacement(game, full, c, content, full.entryYear)])) : {};
   const worldChosen = !!game?.world;
   const revealField = revealFieldForTie(full.tie);
   const reveal =
@@ -111,6 +114,7 @@ export default function CreationScreen() {
         {step === 'diocese' && (
           <DioceseCards
             dioceses={candidates.map((c) => c.diocese.visible)}
+            placements={placements}
             selected={dioceseChoice ?? (game?.flags.surprise_me ? null : (game?.world?.diocese.presetId ?? null))}
             onSelect={setDioceseChoice}
             onSurprise={() => {

@@ -72,14 +72,14 @@ describe('levers on a parish', () => {
     const cut: GameState = { ...s, parish: { ...s.parish!, routine: { ...s.parish!.routine, sacrifices: ['sleep', 'day_off'] } } };
     expect(weekBudget(cut)).toBe(base + 2);
     const worn = weeks(cut, 20, 'worn');
-    expect(worn.parish!.strain!).toBeGreaterThanOrEqual(WEEK.strainWorn);
+    expect(worn.strain).toBeGreaterThanOrEqual(WEEK.strainWorn);
     expect(worn.character!.reputation.brother_priests).toBeLessThan(s.character!.reputation.brother_priests);
     expect(evaluateCondition({ type: 'strain', op: '>=', value: 50 }, worn)).toBe(true);
     const sick = weeks(worn, 14, 'sick');
-    expect(sick.parish!.strain!).toBeGreaterThanOrEqual(WEEK.strainSick);
+    expect(sick.strain).toBeGreaterThanOrEqual(WEEK.strainSick);
     expect(weekBudget(sick)).toBe(base + 1);
     const rested = weeks({ ...sick, parish: { ...sick.parish!, routine: { ...sick.parish!.routine, sacrifices: [] } } }, 30, 'rest');
-    expect(rested.parish!.strain!).toBeLessThan(sick.parish!.strain! - 30);
+    expect(rested.strain).toBeLessThan(sick.strain - 30);
     expect(weekBudget(rested)).toBe(base);
   });
 

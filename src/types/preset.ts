@@ -4,7 +4,16 @@ import type { DioceseSize, FinancialState, Institution, ParishKind } from './wor
  * A diocese preset: the layer that keeps its character across runs. Custom
  * dioceses (post-V1) use this same schema. CLAUDE.md rule 5.
  */
+/** The place as it sounds: lines the parish sheet and the digest can use. Authored per preset. */
+export interface DioceseVoice {
+  weather: string[];
+  sunday: string[];
+  presbyterate: string[];
+}
+
 export interface DiocesePreset {
+  /** Optional until every preset carries one. */
+  voice?: DioceseVoice;
   id: string;
   name: string;
   see: string;
