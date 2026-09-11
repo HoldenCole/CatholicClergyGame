@@ -8,6 +8,7 @@ import ProjectsPanel from './parish/ProjectsPanel';
 import OffersPanel from './seminary/OffersPanel';
 import FormationPanel from './seminary/FormationPanel';
 import DigestPanel from './DigestPanel';
+import JobsPanel from './JobsPanel';
 import InterruptSettings from './InterruptSettings';
 import SavePanel from './SavePanel';
 import SettingsPanel from './SettingsPanel';
@@ -17,6 +18,7 @@ const LABEL: Record<Sheet, string> = {
   week: 'Week',
   parish: 'Parish',
   people: 'People',
+  jobs: 'Jobs',
   letters: 'Letters',
   record: 'Record',
   formation: 'Formation',
@@ -35,7 +37,7 @@ export default function Desk() {
   const furnishing = useUiStore((s) => s.furnishing);
   if (!game) return null;
   const inParish = !!game.parish;
-  const tabs: Sheet[] = inParish ? ['week', 'parish', 'people', 'letters', 'record', 'settings'] : ['week', 'formation', 'letters', 'record', 'settings'];
+  const tabs: Sheet[] = inParish ? ['week', 'parish', 'people', 'jobs', 'letters', 'record', 'settings'] : ['week', 'formation', 'jobs', 'letters', 'record', 'settings'];
   if (furnishing) tabs.push('furnish');
   const open = sheet ?? 'week';
   const letters = game.offers.length;
@@ -59,6 +61,7 @@ export default function Desk() {
             <ProjectsPanel />
           </>
         )}
+        {open === 'jobs' && <JobsPanel />}
         {open === 'letters' && <OffersPanel />}
         {open === 'record' && <DigestPanel />}
         {open === 'formation' && <FormationPanel />}

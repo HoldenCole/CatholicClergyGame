@@ -34,6 +34,7 @@ import { parishWeekHook, resolvePending, seminaryWeekHook, type EventDeps } from
 import { setDiscretionary as doSetDiscretionary, setObligation as doSetObligation, startAssignment } from './parish';
 import { focusGroup as doFocus, startFounding as doStartFounding, suppressGroup as doSuppress } from '@/systems/groups';
 import { payDebt as doPayDebt } from '@/systems/finance';
+import { applyForOpening as doApply } from '@/systems/openings';
 import type { GroupType, ProjectType } from '@/types';
 import { startProject as doStartProject } from '@/systems/projects';
 import { furnish as doFurnish, petition as doPetition } from '@/systems/decor';
@@ -93,6 +94,8 @@ export interface GameStore {
   focusGroup(groupId: string, focus: boolean): void;
   /** Pay down the parish debt from cash in hand. Pastor or administrator only. */
   payDebt(amount: number): void;
+  /** Put your name forward for an opening. */
+  applyForOpening(openingId: string): void;
   startProject(type: ProjectType): void;
   furnish(place: DecorPlace, optionId: string): void;
   /** Write to the chancery for leave on a liturgical topic. */
@@ -377,6 +380,9 @@ export const useGameStore = create<GameStore>()((set, get) => ({
   },
   payDebt(amount) {
     update(set, get, (game) => doPayDebt(game, amount));
+  },
+  applyForOpening(openingId) {
+    update(set, get, (game) => doApply(game, openingId));
   },
   startProject(type) {
     update(set, get, (game) => doStartProject(game, type));

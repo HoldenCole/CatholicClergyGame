@@ -1,6 +1,7 @@
 import type { Assignment, GameState, Parish, World } from '@/types';
 import type { Rng } from '@/engine/rng';
 import { PROBLEM_LABEL } from '@/generation/parishes';
+import { formationStanding, parishPrestige } from './standing';
 
 /** Weights for the first assignment. Invented, following DESIGN.md §7.1 and §7.4. */
 export const ASSIGNMENT = {
@@ -14,6 +15,13 @@ export const ASSIGNMENT = {
   alignmentPerPoint: -0.2,
   preference: 15,
   trustPerChancery: 0.2,
+  /** The record against the posting's prestige: the top of the class is sent where he will be seen. */
+  standingWeight: 44,
+  /** Summers the chancery remembers. */
+  summerHardParish: 18,
+  summerChancery: 8,
+  summerRome: 8,
+  summerMission: 6,
   noise: 10,
 } as const;
 
@@ -79,8 +87,39 @@ export function scoreParish(state: GameState, world: World, parish: Parish): Par
   if (state.flags.pref_wherever) trust += 5;
   trust += c.reputation.chancery * ASSIGNMENT.trustPerChancery;
 
+  // DESIGN §6.6: the formation record is the exit payload, and the bishop reads it.
+  const standing = formationStanding(state);
+  const prestige = parishPrestige(parish);
+  const pull = (standing.value - 50) / 50;
+  fit += pull * (prestige - 0.35) * ASSIGNMENT.standingWeight;
+  if (pull >= 0.3 && prestige >= 0.6) reasons.push(`${capital(standing.word)}, and the bishop sends those men where they will be seen`);
+  if (pull >= 0.3 && prestige <= 0.3) reasons.push(`${capital(standing.word)}, spent on a place that needed a good man more than it deserved one`);
+  if (pull <= -0.3 && prestige <= 0.35) reasons.push(`${capital(standing.word)}; the bishop chose somewhere quiet to season you`);
+
+  // The summers are remembered.
+  if (state.flags['summer:hard_parish'] && parish.kind === 'difficult') {
+    fit += ASSIGNMENT.summerHardParish;
+    reasons.push('You asked for the hard parish once, and they remembered');
+  }
+  if (state.flags['summer:chancery']) {
+    trust += ASSIGNMENT.summerChancery;
+    if (prestige >= 0.6) reasons.push('The chancery knew your name from the summer you spent there');
+  }
+  if (state.flags['summer:rome'] && parish.kind === 'flagship_suburban') {
+    fit += ASSIGNMENT.summerRome;
+    reasons.push('The Roman summer suits a parish with a lecture series');
+  }
+  if (state.flags['summer:mission'] && parish.needsSpanish) {
+    fit += ASSIGNMENT.summerMission;
+    reasons.push('The mission summer');
+  }
+
   const fitEffective = fit * (1 + c.outspokenness / 100);
   return { parish, score: need + fitEffective + trust, reasons };
+}
+
+function capital(text: string): string {
+  return text.charAt(0).toUpperCase() + text.slice(1);
 }
 
 /** The bishop decides. DESIGN.md §7.4: mismatch is content, not failure. */

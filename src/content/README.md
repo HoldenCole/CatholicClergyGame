@@ -148,6 +148,14 @@ written with care. The player is never a perpetrator of abuse. Leaving the
 seminary is always available during a doubt event and always written with
 respect: an `end` effect with a closing summary in `value`.
 
+### The jobs sheet reads offers before they arrive
+
+`systems/doors.ts` shows the player every offer of his phase he qualifies
+for ("may come your way") and, for the rest, the first unmet requirement
+in words. Write `requires` with the gating condition first, so the sheet
+names the real obstacle. Flags are only explained when `FLAG_WORD` in
+`doors.ts` knows them; add a phrase there for any new gating flag.
+
 ## Offers (DESIGN.md §7.5)
 
 Files under `src/content/offers/*.json`: `{ "_notes": "...", "offers": [ ... ] }`.
@@ -278,6 +286,16 @@ Group types: young_adult, youth, pro_life, svdp (St. Vincent de Paul),
 knights (Knights of Columbus), womens_guild, bible_study, adoration, choir,
 rcia, marriage_prep, school_parents, ethnic_community, tlm_society,
 social_justice, mens_group, grief_support, recovery.
+
+## Summers (`seminary/summers.json`)
+
+A summer sets a `summer:<id>` flag, moves pillars, stats, and reputation,
+and goes in the career file. The first assignment reads the flags
+(`systems/assignment.ts`: the hard-parish summer points at the difficult
+parish, the chancery summer buys trust, Rome suits the flagship, the
+mission suits a Spanish parish), and offers bias on them. The formation
+record as a whole is read as *standing* (`systems/standing.ts`): the top of
+the class is sent where he will be seen, a thin record somewhere quiet.
 
 ## Furnishings (`parish/decor.json`)
 
