@@ -15,6 +15,8 @@ export interface CommitmentDef {
   apPerWeek: number;
   /** Years away from the diocese: the man leaves his parish and lives where he studies (content/study/programs.json). */
   away?: string;
+  /** Applied every week the commitment runs: what the job does to a man while he holds it. */
+  weekly?: Effect[];
   onComplete: Effect[];
   completeOutcome: string;
 }

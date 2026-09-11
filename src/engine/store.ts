@@ -42,6 +42,7 @@ import { startProject as doStartProject } from '@/systems/projects';
 import { furnish as doFurnish, petition as doPetition } from '@/systems/decor';
 import { setSeminaryActivity as doSetSeminaryActivity } from '@/systems/seminaryWeek';
 import { setStudyActivity as doSetStudyActivity } from '@/systems/studyWeek';
+import { hoursOf } from '@/systems/week';
 import { setPreference, type Preference } from '@/systems/assignment';
 import type { DecorPlace, LiturgicalTopic } from '@/types';
 import { anthropicProvider, type Provider } from '@/llm/provider';
@@ -446,7 +447,7 @@ export const useGameStore = create<GameStore>()((set, get) => ({
       const result = doAccept(game, def, r);
       set({ lastOfferOutcome: result.failed && def.failure ? `${def.accept.outcome} ${def.failure.outcome}` : def.accept.outcome });
       const c = def.accept.commitment;
-      const text = c ? `Accepted: ${def.title}. ${c.label}, ${c.apPerWeek} hours a week for ${Math.round(c.weeks / 52) || 1} ${c.weeks >= 78 ? 'years' : 'year'}, alongside the parish.` : `Accepted: ${def.title}.`;
+      const text = c?.away ? `Accepted: ${def.title}.` : c ? `Accepted: ${def.title}. ${c.label}, ${hoursOf(c.apPerWeek)} hours a week for ${Math.round(c.weeks / 52) || 1} ${c.weeks >= 78 ? 'years' : 'year'}, alongside the parish.` : `Accepted: ${def.title}.`;
       return { ...result.state, career: [...result.state.career, { week: game.clock.week, kind: 'offer', text }] };
     });
   },

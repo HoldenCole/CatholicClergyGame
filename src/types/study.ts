@@ -2,7 +2,8 @@ import type { Condition, Effect } from './events';
 import type { Pillar } from './character';
 import type { StatKey, ConstituencyKey } from './stats';
 
-export type StudyCity = 'rome' | 'washington';
+/** Where he lives while away: a city for a degree, or the bishop's residence for a post. */
+export type StudyCity = 'rome' | 'washington' | 'residence';
 
 /** A course of study away from the diocese. content/study/programs.json */
 export interface StudyProgramDef {
@@ -13,6 +14,8 @@ export interface StudyProgramDef {
   school: string;
   /** Where he lives: "the North American College" */
   residence: string;
+  /** A degree, or a post held away from any parish. */
+  kind: 'study' | 'post';
   /** Free hours a week after lectures, the chapel, and the house rule. */
   hours: number;
   /** The class line for the digest. */
@@ -28,8 +31,8 @@ export interface StudyActivityDef {
   blurb: string;
   maxAp: number;
   location: StudyLocation;
-  /** Only in this city, if set. */
-  city?: StudyCity;
+  /** Only in these places, if set. */
+  city?: StudyCity | StudyCity[];
   /** Studies, or work on the side. The sheet groups them. */
   kind: 'study' | 'work';
   requires?: Condition[];

@@ -1,5 +1,6 @@
 import type { Beat, GameEvent, GameState, OfferDef, PendingEvent, Role } from '@/types';
 import { applyChoice, defaultChoice, drawEvents, fireEvent } from './events';
+import { evaluateAll } from './conditions';
 import { shouldInterrupt } from './interrupts';
 import { offersWeek } from './offers';
 import type { Rng } from './rng';
@@ -115,7 +116,7 @@ export function studyWeekHook(deps: EventDeps): WeekHook {
     if (next.mode.kind !== 'clock') return next;
     if (next.study && next.clock.week >= next.study.endWeek) {
       const def = deps.offerLookup?.(next.study.offerId);
-      if (def) return addDigestLine(endStudy(next, def, rng.derive(`study-end:${next.clock.week}`)), 'The degree is defended, the room is packed, and the plane home is full of people going somewhere else.');
+      if (def) return addDigestLine(endStudy(next, def, rng.derive(`study-end:${next.clock.week}`)), next.study.city === 'residence' ? 'The bishop thanks you at dinner, in front of the sisters, and names your successor before dessert. The board has a parish for you.' : 'The degree is defended, the room is packed, and the plane home is full of people going somewhere else.');
     }
     if (rng.derive(`study-scene:${next.clock.week}`).chance(STUDY_EVENT_CHANCE)) {
       const [event] = drawEvents(deps.pool.filter((e) => !e.beat), next, rng, 1);
@@ -152,7 +153,12 @@ export function parishWeekHook(deps: EventDeps): WeekHook {
     if (next.mode.kind !== 'clock') return next;
     if (next.flags.new_bishop_pending) {
       // A succession always gets its scene, played week or not. DESIGN 5.3
-      const [event] = drawEvents(deps.pool.filter((e) => e.beat === 'succession'), next, rng, 1);
+      let [event] = drawEvents(deps.pool.filter((e) => e.beat === 'succession'), next, rng, 1);
+      if (!event) {
+        // Suppression must not swallow a beat: any succession scene whose conditions hold will do.
+        const any = deps.pool.filter((e) => e.beat === 'succession' && evaluateAll(e.requires ?? [], next));
+        if (any.length) event = rng.derive(`succession-any:${next.clock.week}`).pick(any);
+      }
       next = { ...next, flags: { ...next.flags, new_bishop_pending: false } };
       if (event) next = fireOrResolve(next, event, rng, deps);
       if (next.mode.kind !== 'clock' || next.pending.length > 0) return next;

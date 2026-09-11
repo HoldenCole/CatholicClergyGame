@@ -45,7 +45,8 @@ export default function SceneArt({ scene, season, state, plain = false }: { scen
       {scene === 'seminary_room' && <SeminaryRoom ambient={ambient('seminary_room')} seminaryName={state.seminary?.name} />}
       {scene === 'seminary_hall' && <SeminaryHall />}
       {scene === 'study_room' && <StudyRoom city={state.study?.city ?? 'rome'} school={state.study?.school ?? 'the Gregorian'} />}
-      {scene === 'study_city' && <StudyCity city={state.study?.city ?? 'rome'} />}
+      {scene === 'study_city' && state.study?.city === 'residence' && <Chancery ambient={ambient('chancery')} rank="corner" bishopName={bishop ? `${bishop.title} ${bishop.name.first} ${bishop.name.last}` : 'The bishop'} />}
+      {scene === 'study_city' && state.study?.city !== 'residence' && <StudyCity city={state.study?.city ?? 'rome'} />}
       {scene === 'chancery' && <Chancery ambient={ambient('chancery')} rank={chanceryRank(state) ?? 'modest'} bishopName={bishop ? `${bishop.title} ${bishop.name.first} ${bishop.name.last}` : 'The bishop'} />}
       {!plain && <Finish />}
     </svg>

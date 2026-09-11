@@ -29,7 +29,7 @@ export interface StudyActivityAvailability {
 export function studyActivitiesFor(state: GameState): StudyActivityAvailability[] {
   const city = state.study?.city;
   return studyActivities
-    .filter((a) => !a.city || a.city === city)
+    .filter((a) => !a.city || (Array.isArray(a.city) ? a.city.includes(city!) : a.city === city))
     .map((def) => {
       if (!def.requires || evaluateAll(def.requires, state)) return { def, available: true, why: null };
       const why = def.requires.map((c) => describeUnmet(c, state)).find((w): w is string => !!w) ?? 'not yet';

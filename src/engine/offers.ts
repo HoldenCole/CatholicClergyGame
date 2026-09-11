@@ -56,6 +56,11 @@ export function offersWeek(state: GameState, rng: Rng, defs: OfferDef[], lookup:
     const def = lookup(open.offerId);
     next = def ? settleDecline(next, def, open, 'expired') : { ...next, offers: next.offers.filter((o) => o !== open) };
   }
+  // A job does something to a man every week he holds it.
+  for (const c of next.commitments.filter((c) => c.endWeek > week)) {
+    const weekly = lookup(c.offerId)?.accept.commitment?.weekly;
+    if (weekly?.length) next = applyEffects(next, weekly);
+  }
   for (const c of next.commitments.filter((c) => c.endWeek <= week)) {
     const def = lookup(c.offerId);
     next = { ...next, commitments: next.commitments.filter((x) => x !== c) };

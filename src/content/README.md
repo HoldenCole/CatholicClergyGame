@@ -172,6 +172,23 @@ traits only) and `credentialAfter`. Events for the phase live in
 When the years end the commitment's `onComplete` (or the offer's `failure`)
 applies and the board finds him a post at home.
 
+### Jobs alongside the parish
+
+A commitment's `weekly` effects apply every week it is held, so a job is
+never inert: the vocations office builds chancery standing and the bishop's
+regard, the spokesman's desk builds the town's, a chaplaincy builds piety
+and the people's. Every parish commitment that keeps the parish carries one
+(the validator does not require it, the test suite does). The bishop's
+secretary is not a commitment but a posting (`away: bishops_secretary`,
+program kind `post`): he moves into the residence and its own activities.
+
+### The week in hours
+
+The engine counts action points; the sheets multiply by `HOURS_PER_AP` (4)
+and speak in hours. A parish week is 12 blocks, about 48 hours after the
+daily Mass, the Office, meals and sleep. Content that sets `ap` or
+`apPerWeek` speaks in blocks.
+
 ## Offers (DESIGN.md §7.5)
 
 Files under `src/content/offers/*.json`: `{ "_notes": "...", "offers": [ ... ] }`.

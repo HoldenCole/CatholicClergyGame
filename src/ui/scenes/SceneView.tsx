@@ -6,11 +6,11 @@ import { routineHours, routineOf, seminaryBudget } from '@/systems/seminaryWeek'
 import { studyActivity } from '@/content/study';
 import { studyActivitiesFor, studyBudget, studyHours } from '@/systems/studyWeek';
 import { seasonOf } from '@/engine/time';
-import { planWeek } from '@/systems/week';
+import { hoursOf, planWeek } from '@/systems/week';
 import { previewState } from '@/systems/decor';
 import type { DecorPlace, Quality } from '@/types';
 import SceneArt from './SceneArt';
-import { CHANCERY_SCENE, SCENES, SEMINARY_HALL, SEMINARY_SCENE, STUDY_CITY, STUDY_CITY_DC, STUDY_ROOM, sceneById, type HotspotBinding, type SceneId } from './scenes';
+import { CHANCERY_SCENE, SCENES, SEMINARY_HALL, SEMINARY_SCENE, STUDY_CITY, STUDY_CITY_DC, STUDY_HOUSE, STUDY_ROOM, STUDY_ROOM_RESIDENCE, sceneById, type HotspotBinding, type SceneId } from './scenes';
 import { useUiStore, type Sheet } from '../uiStore';
 
 const NEXT_QUALITY: Record<Quality, Quality> = { min: 'standard', standard: 'invested', invested: 'min' };
@@ -49,7 +49,7 @@ export default function SceneView() {
   const plan = game.parish ? planWeek(game) : null;
   const routine = game.parish?.routine ?? { obligations: {} as Record<string, never>, discretionary: {} as Record<string, number> };
   const hasChancery = Object.keys(game.flags).some((k) => k.startsWith('office:') && game.flags[k]);
-  const rooms = away ? [STUDY_ROOM, game.study?.city === 'washington' ? STUDY_CITY_DC : STUDY_CITY] : inSeminary ? [SEMINARY_SCENE, SEMINARY_HALL] : hasChancery ? [...SCENES, CHANCERY_SCENE] : SCENES;
+  const rooms = away ? (game.study?.city === 'residence' ? [STUDY_ROOM_RESIDENCE, STUDY_HOUSE] : [STUDY_ROOM, game.study?.city === 'washington' ? STUDY_CITY_DC : STUDY_CITY]) : inSeminary ? [SEMINARY_SCENE, SEMINARY_HALL] : hasChancery ? [...SCENES, CHANCERY_SCENE] : SCENES;
   const semRoutine = game.seminary ? routineOf(game.seminary) : {};
   const shown = preview ? previewState(game, preview.place, preview.optionId) : game;
 
@@ -58,7 +58,7 @@ export default function SceneView() {
       case 'action': {
         const def = actionById(binds.actionId);
         const ap = routine.discretionary[binds.actionId] ?? 0;
-        return def ? `${def.label}: ${ap} hour${ap === 1 ? '' : 's'} a week${ap >= def.maxAp ? ' (as much as does any good; click to clear)' : ' (click for one more)'}` : binds.actionId;
+        return def ? `${def.label}: ${hoursOf(ap)} hours a week${ap >= def.maxAp ? ' (as much as does any good; click to clear)' : ' (click for four more)'}` : binds.actionId;
       }
       case 'seminary_action': {
         const def = seminaryActivity(binds.activityId);

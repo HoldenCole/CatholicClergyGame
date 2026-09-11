@@ -26,9 +26,9 @@ export function actionById(id: string): ActionDef | undefined {
 /** DESIGN.md §2.5: extra mandatory AP by season. Invented values. */
 export const SEASONAL_LOAD: SeasonalLoad = {
   advent: 1,
-  christmas: 2,
+  christmas: 3,
   ordinary: 0,
   lent: 1,
-  holy_week: 3,
-  easter: 1,
+  holy_week: 6,
+  easter: 2,
 };

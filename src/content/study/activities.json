@@ -1,61 +1,575 @@
 [
-  { "id": "thesis", "kind": "study", "label": "The thesis", "blurb": "The reading nobody assigned and the chapter that will not come. The degree lives or dies here.", "maxAp": 3, "location": "library",
-    "stats": { "theology": 0.06, "knowledge": 0.04 },
-    "digest": ["the thesis, a page at a time", "the library until the bells", "a chapter drafted and torn up"] },
-  { "id": "italian", "kind": "study", "label": "Italian", "blurb": "The city's own language, and the lectures are in it. Forty hours to follow a sermon; a lifetime to argue in one.", "maxAp": 2, "location": "language", "city": "rome",
-    "stats": { "knowledge": 0.04 },
-    "credentialAfter": { "hours": 40, "credential": "italian", "flag": "speaks_italian", "line": "You dream in Italian now, badly. The Romans have stopped switching to English for you." },
-    "digest": ["Italian with the Sisters", "the subjunctive, in Italian this time", "a newspaper read with a dictionary"] },
-  { "id": "holy_hour", "kind": "study", "label": "The chapel", "blurb": "The college chapel before the city wakes. Rome is loud; this is not.", "maxAp": 2, "location": "chapel",
-    "stats": { "piety": 0.1 },
-    "digest": ["the chapel at six", "an hour before the tabernacle, with the traffic outside", "the holy hour nobody saw"] },
-  { "id": "hospital", "kind": "work", "label": "Hospital chaplaincy", "blurb": "The Gemelli wants an English-speaking priest for the foreigners who die there. In Washington, Georgetown does.", "maxAp": 2, "location": "hospital",
-    "stats": { "charisma": 0.04, "piety": 0.03 },
-    "reputation": [{ "key": "parishioners", "delta": 0.08 }],
-    "digest": ["the hospital wards", "a death in a language you barely have", "the night pager, again"] },
-  { "id": "parish_supply", "kind": "work", "label": "Sunday supply at a parish", "blurb": "An English-speaking parish needs a priest for the noon Mass and the baptisms. The pastor pays in dinners.", "maxAp": 2, "location": "parish",
-    "stats": { "charisma": 0.05 },
-    "reputation": [{ "key": "parishioners", "delta": 0.12 }],
-    "digest": ["the noon Mass for the expatriates", "a baptism in three languages", "Sunday supply, and lunch after"] },
-  { "id": "confessions", "kind": "work", "label": "Confessions at the basilica", "blurb": "The Penitentiary keeps a box for every language. Yours is English, until your Italian is good enough for the box next door.", "maxAp": 2, "location": "basilica", "city": "rome",
-    "requires": [{ "type": "any", "inner": [{ "type": "credential", "key": "italian" }, { "type": "stat", "key": "piety", "op": ">=", "value": 45 }] }],
-    "stats": { "piety": 0.06, "charisma": 0.02 },
-    "reputation": [{ "key": "rome", "delta": 0.1 }],
-    "digest": ["the box at St. Peter's", "confessions for the pilgrims, in two languages", "an afternoon in the basilica hearing the world"] },
-  { "id": "shrine_confessions", "kind": "work", "label": "Confessions at the Shrine", "blurb": "The Basilica of the National Shrine keeps its confessionals busy, and a canon lawyer in training is still a priest.", "maxAp": 2, "location": "basilica", "city": "washington",
-    "stats": { "piety": 0.06, "charisma": 0.02 },
-    "reputation": [{ "key": "parishioners", "delta": 0.08 }],
-    "digest": ["the confessionals at the Shrine", "an afternoon of pilgrims' confessions"] },
-  { "id": "college_office", "kind": "work", "label": "The college office", "blurb": "The rector needs someone who can run a calendar and a budget. It is not glamorous and the rector writes to bishops.", "maxAp": 2, "location": "college_office",
-    "stats": { "administration": 0.08 },
-    "reputation": [{ "key": "chancery", "delta": 0.06 }],
-    "digest": ["the rector's calendar, kept", "a budget reconciled for the college", "letters to bishops, drafted for the rector"] },
-  { "id": "curia", "kind": "work", "label": "Work at the Holy See", "blurb": "A dicastery wants an American who can write a memo. It is the most watched desk a student can sit at, and the men who sit at it are remembered.", "maxAp": 2, "location": "curia", "city": "rome",
-    "requires": [{ "type": "reputation", "key": "chancery", "op": ">=", "value": 30 }, { "type": "any", "inner": [{ "type": "stat", "key": "knowledge", "op": ">=", "value": 55 }, { "type": "stat", "key": "administration", "op": ">=", "value": 55 }, { "type": "credential", "key": "partial_jcl" }] }],
-    "stats": { "administration": 0.06, "knowledge": 0.04 },
-    "reputation": [{ "key": "rome", "delta": 0.2 }, { "key": "chancery", "delta": 0.08 }],
-    "onFirst": [{ "target": "flag", "key": "worked_at_the_holy_see", "value": true }, { "target": "trait", "key": "sat at a desk in the Curia" }],
-    "digest": ["a memo for the dicastery", "the Curia's corridors, which are longer than they look", "an afternoon at the Holy See"] },
-  { "id": "tribunal", "kind": "work", "label": "The tribunal internship", "blurb": "The archdiocesan tribunal takes students for the case files. Every marriage in the city passes through in paper.", "maxAp": 2, "location": "curia", "city": "washington",
-    "stats": { "knowledge": 0.06, "administration": 0.04 },
-    "reputation": [{ "key": "chancery", "delta": 0.1 }],
-    "onFirst": [{ "target": "flag", "key": "tribunal_intern", "value": true }],
-    "digest": ["case files at the tribunal", "a defender of the bond's afternoon", "the tribunal, and a marriage on paper"] },
-  { "id": "pilgrims", "kind": "work", "label": "Guiding pilgrims", "blurb": "Groups from home want a priest who knows the city. You know the city. They tip in gratitude and in gossip.", "maxAp": 2, "location": "piazza", "city": "rome",
-    "stats": { "charisma": 0.05, "knowledge": 0.02 },
-    "reputation": [{ "key": "public", "delta": 0.1 }, { "key": "parishioners", "delta": 0.05 }],
-    "digest": ["pilgrims from home, and the Scavi tour", "a group from {diocese} at the Holy Door", "guiding pilgrims, and hearing the news from home"] },
-  { "id": "conference", "kind": "work", "label": "The bishops' conference", "blurb": "The USCCB takes a student for the committee memos. You will meet every bishop's secretary in the country.", "maxAp": 2, "location": "curia", "city": "washington",
-    "requires": [{ "type": "reputation", "key": "chancery", "op": ">=", "value": 25 }],
-    "stats": { "knowledge": 0.05, "administration": 0.04 },
-    "reputation": [{ "key": "chancery", "delta": 0.12 }, { "key": "public", "delta": 0.04 }],
-    "onFirst": [{ "target": "flag", "key": "worked_at_the_conference", "value": true }],
-    "digest": ["committee memos at the conference", "an afternoon on Fourth Street", "the bishops' conference, and its secretaries"] },
-  { "id": "table", "kind": "work", "label": "The Roman table", "blurb": "Dinner with the men who will be bishops, and the monsignori who decide which. The address book fills. So does the waistline.", "maxAp": 1, "location": "piazza",
-    "stats": { "charisma": 0.03 },
-    "reputation": [{ "key": "rome", "delta": 0.15 }, { "key": "brother_priests", "delta": 0.1 }],
-    "digest": ["dinner with the future", "a trattoria and an archbishop's secretary", "the long table, and who was at it"] },
-  { "id": "calcio", "kind": "study", "label": "Calcio and the walk", "blurb": "The college pitch on Saturdays, and the long walk back over the river. The body keeps its own accounts here too.", "maxAp": 1, "location": "field",
-    "stats": { "charisma": 0.02, "piety": 0.01 },
-    "digest": ["calcio, lost to the Irish", "the long walk home over the Tiber", "a run before the heat"] }
+  {
+    "id": "thesis",
+    "kind": "study",
+    "label": "The thesis",
+    "blurb": "The reading nobody assigned and the chapter that will not come. The degree lives or dies here.",
+    "maxAp": 3,
+    "location": "library",
+    "stats": {
+      "theology": 0.06,
+      "knowledge": 0.04
+    },
+    "digest": [
+      "the thesis, a page at a time",
+      "the library until the bells",
+      "a chapter drafted and torn up"
+    ],
+    "city": [
+      "rome",
+      "washington"
+    ]
+  },
+  {
+    "id": "italian",
+    "kind": "study",
+    "label": "Italian",
+    "blurb": "The city's own language, and the lectures are in it. Forty hours to follow a sermon; a lifetime to argue in one.",
+    "maxAp": 2,
+    "location": "language",
+    "city": "rome",
+    "stats": {
+      "knowledge": 0.04
+    },
+    "credentialAfter": {
+      "hours": 40,
+      "credential": "italian",
+      "flag": "speaks_italian",
+      "line": "You dream in Italian now, badly. The Romans have stopped switching to English for you."
+    },
+    "digest": [
+      "Italian with the Sisters",
+      "the subjunctive, in Italian this time",
+      "a newspaper read with a dictionary"
+    ]
+  },
+  {
+    "id": "holy_hour",
+    "kind": "study",
+    "label": "The chapel",
+    "blurb": "The college chapel before the city wakes. Rome is loud; this is not.",
+    "maxAp": 2,
+    "location": "chapel",
+    "stats": {
+      "piety": 0.1
+    },
+    "digest": [
+      "the chapel at six",
+      "an hour before the tabernacle, with the traffic outside",
+      "the holy hour nobody saw"
+    ],
+    "city": [
+      "rome",
+      "washington"
+    ]
+  },
+  {
+    "id": "hospital",
+    "kind": "work",
+    "label": "Hospital chaplaincy",
+    "blurb": "The Gemelli wants an English-speaking priest for the foreigners who die there. In Washington, Georgetown does.",
+    "maxAp": 2,
+    "location": "hospital",
+    "stats": {
+      "charisma": 0.04,
+      "piety": 0.03
+    },
+    "reputation": [
+      {
+        "key": "parishioners",
+        "delta": 0.08
+      }
+    ],
+    "digest": [
+      "the hospital wards",
+      "a death in a language you barely have",
+      "the night pager, again"
+    ],
+    "city": [
+      "rome",
+      "washington"
+    ]
+  },
+  {
+    "id": "parish_supply",
+    "kind": "work",
+    "label": "Sunday supply at a parish",
+    "blurb": "An English-speaking parish needs a priest for the noon Mass and the baptisms. The pastor pays in dinners.",
+    "maxAp": 2,
+    "location": "parish",
+    "stats": {
+      "charisma": 0.05
+    },
+    "reputation": [
+      {
+        "key": "parishioners",
+        "delta": 0.12
+      }
+    ],
+    "digest": [
+      "the noon Mass for the expatriates",
+      "a baptism in three languages",
+      "Sunday supply, and lunch after"
+    ],
+    "city": [
+      "rome",
+      "washington"
+    ]
+  },
+  {
+    "id": "confessions",
+    "kind": "work",
+    "label": "Confessions at the basilica",
+    "blurb": "The Penitentiary keeps a box for every language. Yours is English, until your Italian is good enough for the box next door.",
+    "maxAp": 2,
+    "location": "basilica",
+    "city": "rome",
+    "requires": [
+      {
+        "type": "any",
+        "inner": [
+          {
+            "type": "credential",
+            "key": "italian"
+          },
+          {
+            "type": "stat",
+            "key": "piety",
+            "op": ">=",
+            "value": 45
+          }
+        ]
+      }
+    ],
+    "stats": {
+      "piety": 0.06,
+      "charisma": 0.02
+    },
+    "reputation": [
+      {
+        "key": "rome",
+        "delta": 0.1
+      }
+    ],
+    "digest": [
+      "the box at St. Peter's",
+      "confessions for the pilgrims, in two languages",
+      "an afternoon in the basilica hearing the world"
+    ]
+  },
+  {
+    "id": "shrine_confessions",
+    "kind": "work",
+    "label": "Confessions at the Shrine",
+    "blurb": "The Basilica of the National Shrine keeps its confessionals busy, and a canon lawyer in training is still a priest.",
+    "maxAp": 2,
+    "location": "basilica",
+    "city": "washington",
+    "stats": {
+      "piety": 0.06,
+      "charisma": 0.02
+    },
+    "reputation": [
+      {
+        "key": "parishioners",
+        "delta": 0.08
+      }
+    ],
+    "digest": [
+      "the confessionals at the Shrine",
+      "an afternoon of pilgrims' confessions"
+    ]
+  },
+  {
+    "id": "college_office",
+    "kind": "work",
+    "label": "The college office",
+    "blurb": "The rector needs someone who can run a calendar and a budget. It is not glamorous and the rector writes to bishops.",
+    "maxAp": 2,
+    "location": "college_office",
+    "stats": {
+      "administration": 0.08
+    },
+    "reputation": [
+      {
+        "key": "chancery",
+        "delta": 0.06
+      }
+    ],
+    "digest": [
+      "the rector's calendar, kept",
+      "a budget reconciled for the college",
+      "letters to bishops, drafted for the rector"
+    ],
+    "city": [
+      "rome",
+      "washington"
+    ]
+  },
+  {
+    "id": "curia",
+    "kind": "work",
+    "label": "Work at the Holy See",
+    "blurb": "A dicastery wants an American who can write a memo. It is the most watched desk a student can sit at, and the men who sit at it are remembered.",
+    "maxAp": 2,
+    "location": "curia",
+    "city": "rome",
+    "requires": [
+      {
+        "type": "reputation",
+        "key": "chancery",
+        "op": ">=",
+        "value": 30
+      },
+      {
+        "type": "any",
+        "inner": [
+          {
+            "type": "stat",
+            "key": "knowledge",
+            "op": ">=",
+            "value": 55
+          },
+          {
+            "type": "stat",
+            "key": "administration",
+            "op": ">=",
+            "value": 55
+          },
+          {
+            "type": "credential",
+            "key": "partial_jcl"
+          }
+        ]
+      }
+    ],
+    "stats": {
+      "administration": 0.06,
+      "knowledge": 0.04
+    },
+    "reputation": [
+      {
+        "key": "rome",
+        "delta": 0.2
+      },
+      {
+        "key": "chancery",
+        "delta": 0.08
+      }
+    ],
+    "onFirst": [
+      {
+        "target": "flag",
+        "key": "worked_at_the_holy_see",
+        "value": true
+      },
+      {
+        "target": "trait",
+        "key": "sat at a desk in the Curia"
+      }
+    ],
+    "digest": [
+      "a memo for the dicastery",
+      "the Curia's corridors, which are longer than they look",
+      "an afternoon at the Holy See"
+    ]
+  },
+  {
+    "id": "tribunal",
+    "kind": "work",
+    "label": "The tribunal internship",
+    "blurb": "The archdiocesan tribunal takes students for the case files. Every marriage in the city passes through in paper.",
+    "maxAp": 2,
+    "location": "curia",
+    "city": "washington",
+    "stats": {
+      "knowledge": 0.06,
+      "administration": 0.04
+    },
+    "reputation": [
+      {
+        "key": "chancery",
+        "delta": 0.1
+      }
+    ],
+    "onFirst": [
+      {
+        "target": "flag",
+        "key": "tribunal_intern",
+        "value": true
+      }
+    ],
+    "digest": [
+      "case files at the tribunal",
+      "a defender of the bond's afternoon",
+      "the tribunal, and a marriage on paper"
+    ]
+  },
+  {
+    "id": "pilgrims",
+    "kind": "work",
+    "label": "Guiding pilgrims",
+    "blurb": "Groups from home want a priest who knows the city. You know the city. They tip in gratitude and in gossip.",
+    "maxAp": 2,
+    "location": "piazza",
+    "city": "rome",
+    "stats": {
+      "charisma": 0.05,
+      "knowledge": 0.02
+    },
+    "reputation": [
+      {
+        "key": "public",
+        "delta": 0.1
+      },
+      {
+        "key": "parishioners",
+        "delta": 0.05
+      }
+    ],
+    "digest": [
+      "pilgrims from home, and the Scavi tour",
+      "a group from {diocese} at the Holy Door",
+      "guiding pilgrims, and hearing the news from home"
+    ]
+  },
+  {
+    "id": "conference",
+    "kind": "work",
+    "label": "The bishops' conference",
+    "blurb": "The USCCB takes a student for the committee memos. You will meet every bishop's secretary in the country.",
+    "maxAp": 2,
+    "location": "curia",
+    "city": "washington",
+    "requires": [
+      {
+        "type": "reputation",
+        "key": "chancery",
+        "op": ">=",
+        "value": 25
+      }
+    ],
+    "stats": {
+      "knowledge": 0.05,
+      "administration": 0.04
+    },
+    "reputation": [
+      {
+        "key": "chancery",
+        "delta": 0.12
+      },
+      {
+        "key": "public",
+        "delta": 0.04
+      }
+    ],
+    "onFirst": [
+      {
+        "target": "flag",
+        "key": "worked_at_the_conference",
+        "value": true
+      }
+    ],
+    "digest": [
+      "committee memos at the conference",
+      "an afternoon on Fourth Street",
+      "the bishops' conference, and its secretaries"
+    ]
+  },
+  {
+    "id": "table",
+    "kind": "work",
+    "label": "The Roman table",
+    "blurb": "Dinner with the men who will be bishops, and the monsignori who decide which. The address book fills. So does the waistline.",
+    "maxAp": 1,
+    "location": "piazza",
+    "stats": {
+      "charisma": 0.03
+    },
+    "reputation": [
+      {
+        "key": "rome",
+        "delta": 0.15
+      },
+      {
+        "key": "brother_priests",
+        "delta": 0.1
+      }
+    ],
+    "digest": [
+      "dinner with the future",
+      "a trattoria and an archbishop's secretary",
+      "the long table, and who was at it"
+    ],
+    "city": [
+      "rome",
+      "washington"
+    ]
+  },
+  {
+    "id": "calcio",
+    "kind": "study",
+    "label": "Calcio and the walk",
+    "blurb": "The college pitch on Saturdays, and the long walk back over the river. The body keeps its own accounts here too.",
+    "maxAp": 1,
+    "location": "field",
+    "stats": {
+      "charisma": 0.02,
+      "piety": 0.01
+    },
+    "digest": [
+      "calcio, lost to the Irish",
+      "the long walk home over the Tiber",
+      "a run before the heat"
+    ],
+    "city": [
+      "rome",
+      "washington"
+    ]
+  },
+  {
+    "id": "calendar",
+    "kind": "study",
+    "label": "The bishop's calendar",
+    "blurb": "Who sees him, when, and for how long. The most powerful ten minutes in the diocese are the ones you decide to give.",
+    "maxAp": 3,
+    "location": "college_office",
+    "city": "residence",
+    "stats": {
+      "administration": 0.08,
+      "knowledge": 0.02
+    },
+    "reputation": [
+      {
+        "key": "chancery",
+        "delta": 0.12
+      }
+    ],
+    "digest": [
+      "the calendar, kept",
+      "a pastor who did not get his ten minutes",
+      "the week planned to the quarter hour"
+    ]
+  },
+  {
+    "id": "driving",
+    "kind": "study",
+    "label": "The car and the door",
+    "blurb": "You drive him, you wait outside the door, and you know who was inside. He talks in the car, or does not.",
+    "maxAp": 2,
+    "location": "piazza",
+    "city": "residence",
+    "stats": {
+      "knowledge": 0.03
+    },
+    "relationships": [
+      {
+        "selector": "@bishop",
+        "delta": 0.5
+      }
+    ],
+    "onFirst": [
+      {
+        "target": "flag",
+        "key": "knows_the_bishops_car",
+        "value": true
+      }
+    ],
+    "digest": [
+      "four hundred miles with the bishop",
+      "the door, and who came through it",
+      "the long drive back, and what he said"
+    ]
+  },
+  {
+    "id": "mc",
+    "kind": "study",
+    "label": "Master of ceremonies",
+    "blurb": "Every pontifical Mass, every ordination, every funeral of a priest. The rubrics, the mitre, the crozier, and the man who hands them over.",
+    "maxAp": 2,
+    "location": "basilica",
+    "city": "residence",
+    "stats": {
+      "piety": 0.05,
+      "charisma": 0.03
+    },
+    "reputation": [
+      {
+        "key": "brother_priests",
+        "delta": 0.08
+      },
+      {
+        "key": "traditional_bloc",
+        "delta": 0.04
+      }
+    ],
+    "digest": [
+      "the mitre and the crozier, handed over",
+      "an ordination run to the minute",
+      "a priest's funeral, managed"
+    ]
+  },
+  {
+    "id": "residence_chapel",
+    "kind": "study",
+    "label": "The residence chapel",
+    "blurb": "Mass for the sisters who cook, and an hour of your own in a chapel with nobody in it.",
+    "maxAp": 2,
+    "location": "chapel",
+    "city": "residence",
+    "stats": {
+      "piety": 0.1
+    },
+    "digest": [
+      "Mass for the sisters",
+      "the chapel at the residence, alone",
+      "an hour before the tabernacle nobody else uses"
+    ]
+  },
+  {
+    "id": "phone",
+    "kind": "work",
+    "label": "The phone",
+    "blurb": "Every priest of the diocese calls you to reach him. How you answer is what they think of you for thirty years.",
+    "maxAp": 2,
+    "location": "college_office",
+    "city": "residence",
+    "stats": {
+      "charisma": 0.03
+    },
+    "reputation": [
+      {
+        "key": "brother_priests",
+        "delta": 0.15
+      }
+    ],
+    "digest": [
+      "the phone, answered kindly",
+      "a pastor talked down before he reached the bishop",
+      "calls returned, all of them"
+    ]
+  },
+  {
+    "id": "weekend_supply",
+    "kind": "work",
+    "label": "Weekend supply",
+    "blurb": "A parish somewhere needs Sunday Masses, and you are still a priest. It is the only pew you see.",
+    "maxAp": 2,
+    "location": "parish",
+    "city": "residence",
+    "stats": {
+      "charisma": 0.04
+    },
+    "reputation": [
+      {
+        "key": "parishioners",
+        "delta": 0.12
+      }
+    ],
+    "digest": [
+      "Sunday supply, somewhere in the diocese",
+      "three Masses in a parish that does not know you",
+      "a weekend in a pulpit"
+    ]
+  }
 ]

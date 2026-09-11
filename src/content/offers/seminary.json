@@ -4,28 +4,62 @@
     {
       "id": "sem_head_sacristan",
       "category": "seminary",
-      "phase": ["seminary"],
-      "yearGate": [3, 4, 5],
+      "phase": [
+        "seminary"
+      ],
+      "yearGate": [
+        3,
+        4,
+        5
+      ],
       "title": "The Keys to the Sacristy",
       "body": "{@formation_advisor} catches you after Vespers and says the head sacristan is graduating and the rector has asked for a name. It is not an honor, he says, and then describes it as one: keys to the sacristy, the vestment press, the thurible at every Mass with the bishop, and the job of finding out which first-year man keeps putting out the wrong lectionary. It means being in the chapel forty minutes before anyone else and staying after. It means the rector sees you every day and forms an opinion. It also means that in the weeks before exams, when every other man is at his desk, you are counting hosts and checking the sanctuary lamp. He says you would be good at it. He says that about very few things.",
       "from": "@formation_advisor",
       "requires": [
-        { "type": "any", "inner": [
-          { "type": "pillar", "key": "spiritual", "op": ">=", "value": 3 },
-          { "type": "stat", "key": "piety", "op": ">=", "value": 40 }
-        ] }
+        {
+          "type": "any",
+          "inner": [
+            {
+              "type": "pillar",
+              "key": "spiritual",
+              "op": ">=",
+              "value": 3
+            },
+            {
+              "type": "stat",
+              "key": "piety",
+              "op": ">=",
+              "value": 40
+            }
+          ]
+        }
       ],
       "weight": 45,
       "bias": [
-        { "when": { "type": "flag", "key": "y1_bore_silence", "value": true }, "multiplier": 1.3 }
+        {
+          "when": {
+            "type": "flag",
+            "key": "y1_bore_silence",
+            "value": true
+          },
+          "multiplier": 1.3
+        }
       ],
       "windowWeeks": 2,
       "once": true,
       "cluster": "chancery",
       "accept": {
         "effects": [
-          { "target": "flag", "key": "sem_sacristan", "value": true },
-          { "target": "pillar", "key": "intellectual", "delta": -1 }
+          {
+            "target": "flag",
+            "key": "sem_sacristan",
+            "value": true
+          },
+          {
+            "target": "pillar",
+            "key": "intellectual",
+            "delta": -1
+          }
         ],
         "outcome": "You take the keys the next morning. The sacristy at six is cold and very quiet, and you learn its smells: beeswax, brass polish, the particular damp of the vestment press. {@rector} passes through most days and says nothing, which you learn is how he says that he has noticed.",
         "commitment": {
@@ -33,12 +67,35 @@
           "weeks": 30,
           "apPerWeek": 1,
           "onComplete": [
-            { "target": "relationship", "key": "@rector", "delta": 8 },
-            { "target": "pillar", "key": "spiritual", "delta": 2 },
-            { "target": "stat", "key": "administration", "delta": 1 },
-            { "target": "stat", "key": "piety", "delta": 1 }
+            {
+              "target": "relationship",
+              "key": "@rector",
+              "delta": 8
+            },
+            {
+              "target": "pillar",
+              "key": "spiritual",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
           ],
-          "completeOutcome": "By the end of the year the sacristy runs the way you set it up, and the first-year men know your name before they know most of the faculty's. {@rector} writes something about reliability in your file. You will never see it, but you will feel it later."
+          "completeOutcome": "By the end of the year the sacristy runs the way you set it up, and the first-year men know your name before they know most of the faculty's. {@rector} writes something about reliability in your file. You will never see it, but you will feel it later.",
+          "weekly": [
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 0.03
+            }
+          ]
         }
       },
       "decline": {
@@ -49,36 +106,92 @@
     {
       "id": "sem_retreat_notable",
       "category": "seminary",
-      "phase": ["seminary"],
-      "yearGate": [3, 4, 5, 6, 7],
+      "phase": [
+        "seminary"
+      ],
+      "yearGate": [
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
       "title": "Eight Days at the Abbey",
       "body": "{@spiritual_director} has an old friend, a Trappist who was once a diocesan priest and who takes four or five men a year for an eight-day directed retreat at his abbey. He does not advertise. He asks directors he trusts for names, and {@spiritual_director} has given him yours, which he tells you plainly and without ceremony. The dates fall in term. You would miss two weeks of lectures and a seminar paper, and the faculty would be told you were on retreat, which some of them will read as a euphemism. What you would get is eight days of silence with a man who has spent forty years on the thing you are trying to learn to do, and who is, by every account, not gentle.",
       "from": "@spiritual_director",
       "requires": [
-        { "type": "stat", "key": "piety", "op": ">=", "value": 50 },
-        { "type": "relationship", "npcId": "@spiritual_director", "op": ">=", "value": 15 }
+        {
+          "type": "stat",
+          "key": "piety",
+          "op": ">=",
+          "value": 50
+        },
+        {
+          "type": "relationship",
+          "npcId": "@spiritual_director",
+          "op": ">=",
+          "value": 15
+        }
       ],
       "weight": 30,
       "bias": [
-        { "when": { "type": "flag", "key": "motive:certainty", "value": true }, "multiplier": 1.4 },
-        { "when": { "type": "flag", "key": "sem_direction_told", "value": true }, "multiplier": 1.5 }
+        {
+          "when": {
+            "type": "flag",
+            "key": "motive:certainty",
+            "value": true
+          },
+          "multiplier": 1.4
+        },
+        {
+          "when": {
+            "type": "flag",
+            "key": "sem_direction_told",
+            "value": true
+          },
+          "multiplier": 1.5
+        }
       ],
       "windowWeeks": 2,
       "once": true,
       "cluster": "patronage",
       "accept": {
         "effects": [
-          { "target": "stat", "key": "piety", "delta": 3 },
-          { "target": "pillar", "key": "spiritual", "delta": 3 },
-          { "target": "pillar", "key": "intellectual", "delta": -1 },
-          { "target": "relationship", "key": "@spiritual_director", "delta": 6 },
-          { "target": "flag", "key": "sem_retreat_notable", "value": true }
+          {
+            "target": "stat",
+            "key": "piety",
+            "delta": 3
+          },
+          {
+            "target": "pillar",
+            "key": "spiritual",
+            "delta": 3
+          },
+          {
+            "target": "pillar",
+            "key": "intellectual",
+            "delta": -1
+          },
+          {
+            "target": "relationship",
+            "key": "@spiritual_director",
+            "delta": 6
+          },
+          {
+            "target": "flag",
+            "key": "sem_retreat_notable",
+            "value": true
+          }
         ],
         "outcome": "The abbey is colder than you expected and the old monk is exactly as advertised. He gives you a psalm on the first day and nothing else until the fourth. By the seventh you have stopped waiting to be told anything. You come back to a seminar paper three days late and a professor who says nothing, pointedly. Something in you has gone quiet in a way that holds."
       },
       "decline": {
         "effects": [
-          { "target": "flag", "key": "sem_refused_retreat", "value": true }
+          {
+            "target": "flag",
+            "key": "sem_refused_retreat",
+            "value": true
+          }
         ],
         "outcome": "You say you cannot lose two weeks in term. {@spiritual_director} says he understands, and that the offer was made once, by a man who does not repeat himself. The place goes to someone from another diocese. You catch yourself, some weeks later, wondering what the fourth day would have been."
       }
@@ -86,33 +199,90 @@
     {
       "id": "sem_chancery_summer",
       "category": "chancery",
-      "phase": ["seminary"],
-      "yearGate": [3, 4, 5],
+      "phase": [
+        "seminary"
+      ],
+      "yearGate": [
+        3,
+        4,
+        5
+      ],
       "title": "The Second Floor",
       "body": "{@vocation_director} calls you in between classes and closes the door, which he does not usually do. The chancellor has asked for a seminarian for the summer, someone who can be trusted with the personnel files and will not talk. He has read your background and thinks you are that man. It is not the summer assignment the formation office will give you; it is an arrangement made around it, and the formation office will know. You would spend ten weeks in an office on the second floor learning how the diocese actually runs: who signs what, whose letters get answered, which pastors are on the list nobody admits exists. It is not parish work. You will not baptize anyone. You will meet everyone.",
       "from": "@vocation_director",
       "requires": [
-        { "type": "not", "inner": { "type": "flag", "key": "summer:chancery", "value": true } },
-        { "type": "any", "inner": [
-          { "type": "stat", "key": "administration", "op": ">=", "value": 35 },
-          { "type": "flag", "key": "career:accountant", "value": true },
-          { "type": "flag", "key": "career:management", "value": true },
-          { "type": "flag", "key": "career:attorney", "value": true },
-          { "type": "flag", "key": "field:business", "value": true }
-        ] }
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "summer:chancery",
+            "value": true
+          }
+        },
+        {
+          "type": "any",
+          "inner": [
+            {
+              "type": "stat",
+              "key": "administration",
+              "op": ">=",
+              "value": 35
+            },
+            {
+              "type": "flag",
+              "key": "career:accountant",
+              "value": true
+            },
+            {
+              "type": "flag",
+              "key": "career:management",
+              "value": true
+            },
+            {
+              "type": "flag",
+              "key": "career:attorney",
+              "value": true
+            },
+            {
+              "type": "flag",
+              "key": "field:business",
+              "value": true
+            }
+          ]
+        }
       ],
       "weight": 40,
       "bias": [
-        { "when": { "type": "relationship", "npcId": "@vocation_director", "op": ">=", "value": 15 }, "multiplier": 1.5 }
+        {
+          "when": {
+            "type": "relationship",
+            "npcId": "@vocation_director",
+            "op": ">=",
+            "value": 15
+          },
+          "multiplier": 1.5
+        }
       ],
       "windowWeeks": 4,
       "once": true,
       "cluster": "chancery",
       "accept": {
         "effects": [
-          { "target": "pillar", "key": "pastoral", "delta": -2 },
-          { "target": "stat", "key": "piety", "delta": -1 },
-          { "target": "relationship", "key": "@formation_advisor", "delta": -3 }
+          {
+            "target": "pillar",
+            "key": "pastoral",
+            "delta": -2
+          },
+          {
+            "target": "stat",
+            "key": "piety",
+            "delta": -1
+          },
+          {
+            "target": "relationship",
+            "key": "@formation_advisor",
+            "delta": -3
+          }
         ],
         "outcome": "The second floor is quieter than you expected and busier. You are given a desk, a badge, and a warning about the copier. By the third week you know the diocese as a map of names, and by the eighth you have learned which of them the chancellor says with a pause in front.",
         "commitment": {
@@ -120,18 +290,49 @@
           "weeks": 10,
           "apPerWeek": 2,
           "onComplete": [
-            { "target": "stat", "key": "administration", "delta": 3 },
-            { "target": "reputation", "key": "chancery", "delta": 6 },
-            { "target": "relationship", "key": "@vocation_director", "delta": 8 },
-            { "target": "archetype", "key": "administrative", "delta": 2 },
-            { "target": "flag", "key": "summer:chancery", "value": true }
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 6
+            },
+            {
+              "target": "relationship",
+              "key": "@vocation_director",
+              "delta": 8
+            },
+            {
+              "target": "archetype",
+              "key": "administrative",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "summer:chancery",
+              "value": true
+            }
           ],
-          "completeOutcome": "You go back to the house in August knowing things about your future presbyterate that you cannot say aloud and will not forget. The chancellor shakes your hand on the last day and says he will remember, which in that building is a currency."
+          "completeOutcome": "You go back to the house in August knowing things about your future presbyterate that you cannot say aloud and will not forget. The chancellor shakes your hand on the last day and says he will remember, which in that building is a currency.",
+          "weekly": [
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 0.15
+            }
+          ]
         }
       },
       "decline": {
         "effects": [
-          { "target": "reputation", "key": "chancery", "delta": -2 }
+          {
+            "target": "reputation",
+            "key": "chancery",
+            "delta": -2
+          }
         ],
         "outcome": "You tell him you would rather spend the summer in a parish. He does not argue; he writes a name on a pad that is not yours. You hear later that {@rival_classmate} spent the summer on the second floor and came back knowing things."
       }
@@ -139,29 +340,67 @@
     {
       "id": "sem_tutor_first_years",
       "category": "seminary",
-      "phase": ["seminary"],
-      "yearGate": [3, 4, 5],
+      "phase": [
+        "seminary"
+      ],
+      "yearGate": [
+        3,
+        4,
+        5
+      ],
       "title": "Two Evenings a Week",
       "body": "{@professor_trad} keeps you after class and says the philosophy men are drowning. Half of them arrived with no Latin at all and the other half with the wrong kind, and the faculty has neither the hours nor, he says with some heat, the patience. He wants you to run two evenings a week: declensions, the Vulgate, and enough Aristotle in translation that they stop being afraid of him. He can pay nothing. He can put your name in front of the dean and the rector as the man who kept a year from failing. It will take your evenings for most of the year, and the men you tutor will be your brother priests for the next forty.",
       "from": "@professor_trad",
       "requires": [
-        { "type": "any", "inner": [
-          { "type": "credential", "key": "latin" },
-          { "type": "flag", "key": "field:philosophy", "value": true },
-          { "type": "flag", "key": "field:classics", "value": true }
-        ] }
+        {
+          "type": "any",
+          "inner": [
+            {
+              "type": "credential",
+              "key": "latin"
+            },
+            {
+              "type": "flag",
+              "key": "field:philosophy",
+              "value": true
+            },
+            {
+              "type": "flag",
+              "key": "field:classics",
+              "value": true
+            }
+          ]
+        }
       ],
       "weight": 40,
       "bias": [
-        { "when": { "type": "flag", "key": "career:teacher", "value": true }, "multiplier": 1.5 },
-        { "when": { "type": "flag", "key": "career:professor", "value": true }, "multiplier": 1.5 }
+        {
+          "when": {
+            "type": "flag",
+            "key": "career:teacher",
+            "value": true
+          },
+          "multiplier": 1.5
+        },
+        {
+          "when": {
+            "type": "flag",
+            "key": "career:professor",
+            "value": true
+          },
+          "multiplier": 1.5
+        }
       ],
       "windowWeeks": 3,
       "once": true,
       "cluster": "academic",
       "accept": {
         "effects": [
-          { "target": "pillar", "key": "human", "delta": 1 }
+          {
+            "target": "pillar",
+            "key": "human",
+            "delta": 1
+          }
         ],
         "outcome": "The first evening six men come and two of them can read. You start with the alphabet, which is humbling for everyone, and by Advent the six are eight and the two are five. You find that explaining the ablative absolute teaches you what you actually know about it, which is less than you had assumed.",
         "commitment": {
@@ -169,19 +408,54 @@
           "weeks": 28,
           "apPerWeek": 1,
           "onComplete": [
-            { "target": "stat", "key": "knowledge", "delta": 2 },
-            { "target": "pillar", "key": "intellectual", "delta": 2 },
-            { "target": "relationship", "key": "@professor_trad", "delta": 8 },
-            { "target": "reputation", "key": "brother_priests", "delta": 3 },
-            { "target": "archetype", "key": "teaching", "delta": 2 },
-            { "target": "flag", "key": "sem_tutor", "value": true }
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 2
+            },
+            {
+              "target": "pillar",
+              "key": "intellectual",
+              "delta": 2
+            },
+            {
+              "target": "relationship",
+              "key": "@professor_trad",
+              "delta": 8
+            },
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": 3
+            },
+            {
+              "target": "archetype",
+              "key": "teaching",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "sem_tutor",
+              "value": true
+            }
           ],
-          "completeOutcome": "All eight pass. {@professor_trad} tells the dean, in your hearing, that it was you and not him. Two of the men will remember it at ordination and say so, and one will be a pastor in the same deanery as you in twenty years."
+          "completeOutcome": "All eight pass. {@professor_trad} tells the dean, in your hearing, that it was you and not him. Two of the men will remember it at ordination and say so, and one will be a pastor in the same deanery as you in twenty years.",
+          "weekly": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 0.02
+            }
+          ]
         }
       },
       "decline": {
         "effects": [
-          { "target": "reputation", "key": "brother_priests", "delta": -1 }
+          {
+            "target": "reputation",
+            "key": "brother_priests",
+            "delta": -1
+          }
         ],
         "outcome": "You say your own load is too heavy. He says every man's is, and takes it to the dean as a problem with no solution, which is how it is recorded. Three of the first-years repeat the year, and one of them knows you were asked."
       }
@@ -189,18 +463,46 @@
     {
       "id": "sem_spanish_evenings",
       "category": "academic",
-      "phase": ["seminary"],
-      "yearGate": [2, 3, 4],
+      "phase": [
+        "seminary"
+      ],
+      "yearGate": [
+        2,
+        3,
+        4
+      ],
       "title": "Twenty-Six Weeks of Spanish",
       "body": "A note comes from {@vocation_director} to every man without Spanish: the diocese will pay for a tutor two evenings a week through the winter, and it would like you to take it. The note does not say that a third of the diocese's Masses are now in Spanish and that a priest who cannot preach in it will be assigned around, but everyone reads the note that way. The tutor is a retired schoolteacher from the cathedral parish who takes attendance and does not accept excuses. It is not hard, exactly. It is twenty-six weeks of evenings you would otherwise spend on the reading list, or in the common room, or in the chapel, and at the end you will be able to hear a confession in a language you did not grow up in.",
       "from": "@vocation_director",
       "requires": [
-        { "type": "not", "inner": { "type": "flag", "key": "speaks_spanish", "value": true } }
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "speaks_spanish",
+            "value": true
+          }
+        }
       ],
       "weight": 55,
       "bias": [
-        { "when": { "type": "pillar", "key": "pastoral", "op": ">=", "value": 3 }, "multiplier": 1.5 },
-        { "when": { "type": "flag", "key": "summer:hard_parish", "value": true }, "multiplier": 1.4 }
+        {
+          "when": {
+            "type": "pillar",
+            "key": "pastoral",
+            "op": ">=",
+            "value": 3
+          },
+          "multiplier": 1.5
+        },
+        {
+          "when": {
+            "type": "flag",
+            "key": "summer:hard_parish",
+            "value": true
+          },
+          "multiplier": 1.4
+        }
       ],
       "windowWeeks": 3,
       "once": true,
@@ -213,34 +515,90 @@
           "weeks": 26,
           "apPerWeek": 1,
           "onComplete": [
-            { "target": "credential", "key": "spanish" },
-            { "target": "flag", "key": "speaks_spanish", "value": true },
-            { "target": "pillar", "key": "pastoral", "delta": 2 },
-            { "target": "stat", "key": "charisma", "delta": 1 },
-            { "target": "relationship", "key": "@vocation_director", "delta": 4 }
+            {
+              "target": "credential",
+              "key": "spanish"
+            },
+            {
+              "target": "flag",
+              "key": "speaks_spanish",
+              "value": true
+            },
+            {
+              "target": "pillar",
+              "key": "pastoral",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "relationship",
+              "key": "@vocation_director",
+              "delta": 4
+            }
           ],
-          "completeOutcome": "By spring you can preach a short homily and hear a simple confession, and the tutor, who has never said anything kind, says you will do. {@vocation_director} moves your name to a different column in whatever it is he keeps."
+          "completeOutcome": "By spring you can preach a short homily and hear a simple confession, and the tutor, who has never said anything kind, says you will do. {@vocation_director} moves your name to a different column in whatever it is he keeps.",
+          "weekly": [
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 0.03
+            }
+          ]
         }
       },
       "decline": {
         "effects": [
-          { "target": "flag", "key": "sem_declined_spanish", "value": true },
-          { "target": "reputation", "key": "chancery", "delta": -1 }
+          {
+            "target": "flag",
+            "key": "sem_declined_spanish",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "chancery",
+            "delta": -1
+          }
         ],
         "outcome": "You write back that your load is full. It is a reasonable answer and it is filed. Years later, when assignments are made, someone will look for the Spanish on your record and not find it, and will not ask why."
       },
       "failure": {
         "chance": 0.35,
         "unless": [
-          { "type": "any", "inner": [
-            { "type": "stat", "key": "knowledge", "op": ">=", "value": 40 },
-            { "type": "credential", "key": "latin" },
-            { "type": "flag", "key": "field:classics", "value": true }
-          ] }
+          {
+            "type": "any",
+            "inner": [
+              {
+                "type": "stat",
+                "key": "knowledge",
+                "op": ">=",
+                "value": 40
+              },
+              {
+                "type": "credential",
+                "key": "latin"
+              },
+              {
+                "type": "flag",
+                "key": "field:classics",
+                "value": true
+              }
+            ]
+          }
         ],
         "effects": [
-          { "target": "concern", "key": "Enrolled in the diocesan Spanish course and let it lapse" },
-          { "target": "relationship", "key": "@vocation_director", "delta": -4 }
+          {
+            "target": "concern",
+            "key": "Enrolled in the diocesan Spanish course and let it lapse"
+          },
+          {
+            "target": "relationship",
+            "key": "@vocation_director",
+            "delta": -4
+          }
         ],
         "outcome": "You miss two weeks for exams and never quite catch the class again. By Lent you are attending; by Easter you are not. The tutor marks it, and so does the vocation director, who had put your name in a column."
       }
@@ -248,31 +606,82 @@
     {
       "id": "sem_thursday_latin",
       "category": "academic",
-      "phase": ["seminary"],
-      "yearGate": [2, 3],
+      "phase": [
+        "seminary"
+      ],
+      "yearGate": [
+        2,
+        3
+      ],
       "title": "Thursdays in His Rooms",
       "body": "{@professor_trad} runs a Latin reading group in his rooms on Thursday nights: Augustine, the Vulgate, a little Cicero to keep the Church honest. It is by invitation, and he is inviting you. It is not for credit. It runs until Easter and it will take your Thursdays and most of the reading before them. He says, without embarrassment, that a priest who cannot read the Church's own language is taking the tradition on hearsay. He does not say that the men who go to his rooms on Thursdays are known by the rest of the house as his men, and that {@professor_prog} keeps a list, but you have been here long enough to know it.",
       "from": "@professor_trad",
       "requires": [
-        { "type": "not", "inner": { "type": "credential", "key": "latin" } },
-        { "type": "any", "inner": [
-          { "type": "stat", "key": "theology", "op": ">=", "value": 35 },
-          { "type": "stat", "key": "knowledge", "op": ">=", "value": 40 },
-          { "type": "flag", "key": "field:philosophy", "value": true },
-          { "type": "flag", "key": "field:classics", "value": true }
-        ] }
+        {
+          "type": "not",
+          "inner": {
+            "type": "credential",
+            "key": "latin"
+          }
+        },
+        {
+          "type": "any",
+          "inner": [
+            {
+              "type": "stat",
+              "key": "theology",
+              "op": ">=",
+              "value": 35
+            },
+            {
+              "type": "stat",
+              "key": "knowledge",
+              "op": ">=",
+              "value": 40
+            },
+            {
+              "type": "flag",
+              "key": "field:philosophy",
+              "value": true
+            },
+            {
+              "type": "flag",
+              "key": "field:classics",
+              "value": true
+            }
+          ]
+        }
       ],
       "weight": 45,
       "bias": [
-        { "when": { "type": "alignment", "op": "<=", "value": -20 }, "multiplier": 1.6 },
-        { "when": { "type": "relationship", "npcId": "@professor_trad", "op": ">=", "value": 10 }, "multiplier": 1.4 }
+        {
+          "when": {
+            "type": "alignment",
+            "op": "<=",
+            "value": -20
+          },
+          "multiplier": 1.6
+        },
+        {
+          "when": {
+            "type": "relationship",
+            "npcId": "@professor_trad",
+            "op": ">=",
+            "value": 10
+          },
+          "multiplier": 1.4
+        }
       ],
       "windowWeeks": 3,
       "once": true,
       "cluster": "academic",
       "accept": {
         "effects": [
-          { "target": "relationship", "key": "@professor_prog", "delta": -3 }
+          {
+            "target": "relationship",
+            "key": "@professor_prog",
+            "delta": -3
+          }
         ],
         "outcome": "The first Thursday there are five of you and a bottle of something he calls medicinal. He reads a sentence aloud and waits. The waiting is the method. By November you are parsing in your sleep and answering, when asked what you did last night, that you were reading.",
         "commitment": {
@@ -280,34 +689,92 @@
           "weeks": 24,
           "apPerWeek": 1,
           "onComplete": [
-            { "target": "credential", "key": "latin" },
-            { "target": "stat", "key": "theology", "delta": 1 },
-            { "target": "stat", "key": "knowledge", "delta": 1 },
-            { "target": "relationship", "key": "@professor_trad", "delta": 6 },
-            { "target": "alignment", "key": "", "delta": -3 },
-            { "target": "flag", "key": "sem_latin_group", "value": true }
+            {
+              "target": "credential",
+              "key": "latin"
+            },
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 1
+            },
+            {
+              "target": "relationship",
+              "key": "@professor_trad",
+              "delta": 6
+            },
+            {
+              "target": "alignment",
+              "key": "",
+              "delta": -3
+            },
+            {
+              "target": "flag",
+              "key": "sem_latin_group",
+              "value": true
+            }
           ],
-          "completeOutcome": "By Easter you can read the Office in Latin without a crib, and you have picked up, without noticing, a way of talking about the Church that {@professor_prog} recognizes from across a room."
+          "completeOutcome": "By Easter you can read the Office in Latin without a crib, and you have picked up, without noticing, a way of talking about the Church that {@professor_prog} recognizes from across a room.",
+          "weekly": [
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 0.02
+            }
+          ]
         }
       },
       "decline": {
         "effects": [
-          { "target": "flag", "key": "sem_declined_latin", "value": true }
+          {
+            "target": "flag",
+            "key": "sem_declined_latin",
+            "value": true
+          }
         ],
         "outcome": "You say Thursdays are spoken for. He looks at you as if a question has been answered, and does not invite you again. The men who go are, for the rest of your years in the house, faintly a group you are not in."
       },
       "failure": {
         "chance": 0.4,
         "unless": [
-          { "type": "any", "inner": [
-            { "type": "stat", "key": "knowledge", "op": ">=", "value": 45 },
-            { "type": "flag", "key": "field:classics", "value": true },
-            { "type": "flag", "key": "field:philosophy", "value": true }
-          ] }
+          {
+            "type": "any",
+            "inner": [
+              {
+                "type": "stat",
+                "key": "knowledge",
+                "op": ">=",
+                "value": 45
+              },
+              {
+                "type": "flag",
+                "key": "field:classics",
+                "value": true
+              },
+              {
+                "type": "flag",
+                "key": "field:philosophy",
+                "value": true
+              }
+            ]
+          }
         ],
         "effects": [
-          { "target": "relationship", "key": "@professor_trad", "delta": -5 },
-          { "target": "pillar", "key": "intellectual", "delta": -1 }
+          {
+            "target": "relationship",
+            "key": "@professor_trad",
+            "delta": -5
+          },
+          {
+            "target": "pillar",
+            "key": "intellectual",
+            "delta": -1
+          }
         ],
         "outcome": "By January the Thursdays have become a place you dread, and by February you have stopped going. {@professor_trad} does not ask why; he simply stops seeing you, which in a man of his kind is the sanction."
       }
@@ -315,30 +782,79 @@
     {
       "id": "sem_journal_paper",
       "category": "academic",
-      "phase": ["seminary"],
-      "yearGate": [4, 5, 6],
+      "phase": [
+        "seminary"
+      ],
+      "yearGate": [
+        4,
+        5,
+        6
+      ],
       "title": "Three Months and a Referee",
       "body": "{@professor_prog} hands your seminar paper back with almost nothing written on it and asks you to stay. He sits on the board of a journal, a real one, peer-reviewed and read in Rome by people who matter, and he thinks the paper could go there with three months of work. He is careful to say three months: a proper literature review, two rounds with the referees, a rewrite that will feel like an amputation. Seminarians do not usually publish. The ones who do are noticed, by the kind of people who later sit on boards that decide who goes to Rome. He does not say that the same people also notice the ones who tried and were returned, but you can see him deciding not to.",
       "from": "@professor_prog",
       "requires": [
-        { "type": "not", "inner": { "type": "flag", "key": "published", "value": true } },
-        { "type": "any", "inner": [
-          { "type": "stat", "key": "theology", "op": ">=", "value": 55 },
-          { "type": "stat", "key": "knowledge", "op": ">=", "value": 55 }
-        ] }
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "published",
+            "value": true
+          }
+        },
+        {
+          "type": "any",
+          "inner": [
+            {
+              "type": "stat",
+              "key": "theology",
+              "op": ">=",
+              "value": 55
+            },
+            {
+              "type": "stat",
+              "key": "knowledge",
+              "op": ">=",
+              "value": 55
+            }
+          ]
+        }
       ],
       "weight": 35,
       "bias": [
-        { "when": { "type": "flag", "key": "motive:intellectual", "value": true }, "multiplier": 1.6 },
-        { "when": { "type": "pillar", "key": "intellectual", "op": ">=", "value": 4 }, "multiplier": 1.5 }
+        {
+          "when": {
+            "type": "flag",
+            "key": "motive:intellectual",
+            "value": true
+          },
+          "multiplier": 1.6
+        },
+        {
+          "when": {
+            "type": "pillar",
+            "key": "intellectual",
+            "op": ">=",
+            "value": 4
+          },
+          "multiplier": 1.5
+        }
       ],
       "windowWeeks": 4,
       "once": true,
       "cluster": "academic",
       "accept": {
         "effects": [
-          { "target": "pillar", "key": "pastoral", "delta": -1 },
-          { "target": "pillar", "key": "human", "delta": -1 }
+          {
+            "target": "pillar",
+            "key": "pastoral",
+            "delta": -1
+          },
+          {
+            "target": "pillar",
+            "key": "human",
+            "delta": -1
+          }
         ],
         "outcome": "The literature review takes a month and teaches you how little you had read. The first referee is kind; the second is not, and is right. You miss the house's Advent concert and two evenings you had promised to {@closest_classmate}, and you notice that you do not mind.",
         "commitment": {
@@ -346,36 +862,103 @@
           "weeks": 12,
           "apPerWeek": 2,
           "onComplete": [
-            { "target": "flag", "key": "published", "value": true },
-            { "target": "reputation", "key": "rome", "delta": 3 },
-            { "target": "pillar", "key": "intellectual", "delta": 2 },
-            { "target": "stat", "key": "theology", "delta": 1 },
-            { "target": "relationship", "key": "@professor_prog", "delta": 8 },
-            { "target": "archetype", "key": "theological", "delta": 2 }
+            {
+              "target": "flag",
+              "key": "published",
+              "value": true
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 3
+            },
+            {
+              "target": "pillar",
+              "key": "intellectual",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 1
+            },
+            {
+              "target": "relationship",
+              "key": "@professor_prog",
+              "delta": 8
+            },
+            {
+              "target": "archetype",
+              "key": "theological",
+              "delta": 2
+            }
           ],
-          "completeOutcome": "The offprint arrives in a brown envelope. Your name, in a typeface, above an argument that is now fixed in the record and cannot be unsaid. {@professor_prog} pins the table of contents to the faculty board. Someone in Rome reads it."
+          "completeOutcome": "The offprint arrives in a brown envelope. Your name, in a typeface, above an argument that is now fixed in the record and cannot be unsaid. {@professor_prog} pins the table of contents to the faculty board. Someone in Rome reads it.",
+          "weekly": [
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 0.04
+            }
+          ]
         }
       },
       "decline": {
         "effects": [
-          { "target": "flag", "key": "sem_declined_paper", "value": true }
+          {
+            "target": "flag",
+            "key": "sem_declined_paper",
+            "value": true
+          }
         ],
         "outcome": "You tell him you would rather keep the term for formation. He says that is what the formation office would want you to say, and gives the paper back with a note that you keep: 'Good. Do something with it someday.' You do not."
       },
       "failure": {
         "chance": 0.5,
         "unless": [
-          { "type": "any", "inner": [
-            { "type": "stat", "key": "theology", "op": ">=", "value": 65 },
-            { "type": "stat", "key": "knowledge", "op": ">=", "value": 65 },
-            { "type": "flag", "key": "field:philosophy", "value": true },
-            { "type": "flag", "key": "career:professor", "value": true }
-          ] }
+          {
+            "type": "any",
+            "inner": [
+              {
+                "type": "stat",
+                "key": "theology",
+                "op": ">=",
+                "value": 65
+              },
+              {
+                "type": "stat",
+                "key": "knowledge",
+                "op": ">=",
+                "value": 65
+              },
+              {
+                "type": "flag",
+                "key": "field:philosophy",
+                "value": true
+              },
+              {
+                "type": "flag",
+                "key": "career:professor",
+                "value": true
+              }
+            ]
+          }
         ],
         "effects": [
-          { "target": "concern", "key": "Submitted a paper to a journal that the referees returned" },
-          { "target": "relationship", "key": "@professor_prog", "delta": -5 },
-          { "target": "pillar", "key": "intellectual", "delta": -1 }
+          {
+            "target": "concern",
+            "key": "Submitted a paper to a journal that the referees returned"
+          },
+          {
+            "target": "relationship",
+            "key": "@professor_prog",
+            "delta": -5
+          },
+          {
+            "target": "pillar",
+            "key": "intellectual",
+            "delta": -1
+          }
         ],
         "outcome": "The second referee's report runs four pages and does not use your name. {@professor_prog} tells you the paper is not ready and, more quietly, that it may not be a paper. He is disappointed in a way that is mostly with himself. It goes into a drawer, and the fact that it was sent goes into the record."
       }
@@ -383,45 +966,125 @@
     {
       "id": "sem_rome_track",
       "category": "academic",
-      "phase": ["seminary"],
-      "yearGate": [5, 6],
+      "phase": [
+        "seminary"
+      ],
+      "yearGate": [
+        5,
+        6
+      ],
       "title": "A Place at the Gregorian",
       "body": "{@rector} asks you to his office at a civilized hour and does not offer coffee, which means it is business. The bishop has a place at the Gregorian in two years, after ordination, for one man from this class: a licentiate, possibly a doctorate, four years on the far side of the Tiber, and after it a life spent in classrooms and chanceries rather than rectories. He would like to put your name forward now, so the bishop can plan around it. He is honest about what it means. A newly ordained priest who goes straight to Rome does not learn a parish. He comes back credentialed and a little foreign, and the men who stayed will treat him as such for a decade. The bishop, he adds, tends to trust such men with things.",
       "from": "@rector",
       "requires": [
-        { "type": "any", "inner": [
-          { "type": "flag", "key": "steered_academic", "value": true },
-          { "type": "all", "inner": [
-            { "type": "stat", "key": "theology", "op": ">=", "value": 60 },
-            { "type": "pillar", "key": "intellectual", "op": ">=", "value": 4 },
-            { "type": "relationship", "npcId": "@rector", "op": ">=", "value": 15 }
-          ] }
-        ] }
+        {
+          "type": "any",
+          "inner": [
+            {
+              "type": "flag",
+              "key": "steered_academic",
+              "value": true
+            },
+            {
+              "type": "all",
+              "inner": [
+                {
+                  "type": "stat",
+                  "key": "theology",
+                  "op": ">=",
+                  "value": 60
+                },
+                {
+                  "type": "pillar",
+                  "key": "intellectual",
+                  "op": ">=",
+                  "value": 4
+                },
+                {
+                  "type": "relationship",
+                  "npcId": "@rector",
+                  "op": ">=",
+                  "value": 15
+                }
+              ]
+            }
+          ]
+        }
       ],
       "weight": 30,
       "bias": [
-        { "when": { "type": "flag", "key": "published", "value": true }, "multiplier": 1.8 },
-        { "when": { "type": "flag", "key": "summer:rome", "value": true }, "multiplier": 1.5 }
+        {
+          "when": {
+            "type": "flag",
+            "key": "published",
+            "value": true
+          },
+          "multiplier": 1.8
+        },
+        {
+          "when": {
+            "type": "flag",
+            "key": "summer:rome",
+            "value": true
+          },
+          "multiplier": 1.5
+        }
       ],
       "windowWeeks": 4,
       "once": true,
       "cluster": "academic",
       "accept": {
         "effects": [
-          { "target": "flag", "key": "rome_track", "value": true },
-          { "target": "reputation", "key": "rome", "delta": 5 },
-          { "target": "reputation", "key": "parishioners", "delta": -4 },
-          { "target": "reputation", "key": "brother_priests", "delta": -2 },
-          { "target": "pillar", "key": "pastoral", "delta": -2 },
-          { "target": "archetype", "key": "theological", "delta": 2 },
-          { "target": "relationship", "key": "@rector", "delta": 6 }
+          {
+            "target": "flag",
+            "key": "rome_track",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "rome",
+            "delta": 5
+          },
+          {
+            "target": "reputation",
+            "key": "parishioners",
+            "delta": -4
+          },
+          {
+            "target": "reputation",
+            "key": "brother_priests",
+            "delta": -2
+          },
+          {
+            "target": "pillar",
+            "key": "pastoral",
+            "delta": -2
+          },
+          {
+            "target": "archetype",
+            "key": "theological",
+            "delta": 2
+          },
+          {
+            "target": "relationship",
+            "key": "@rector",
+            "delta": 6
+          }
         ],
         "outcome": "You say yes and he writes it down while you watch. Word travels through the house in a day. {@closest_classmate} is glad for you in the way one is glad about a train someone else is taking. The pastoral-year supervisor, when he hears, stops teaching you the parts of the job he thinks you will not need."
       },
       "decline": {
         "effects": [
-          { "target": "flag", "key": "sem_refused_rome", "value": true },
-          { "target": "reputation", "key": "rome", "delta": -2 }
+          {
+            "target": "flag",
+            "key": "sem_refused_rome",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "rome",
+            "delta": -2
+          }
         ],
         "outcome": "You tell him you want a parish first. He says that is the right answer for most men and the wrong one for you, and that he will not ask again. The place goes to a man from another diocese. Years later a priest with a Roman degree is made a monsignor, and you remember the hour."
       }
@@ -429,42 +1092,114 @@
     {
       "id": "sem_canon_law_track",
       "category": "academic",
-      "phase": ["seminary"],
-      "yearGate": [5, 6],
+      "phase": [
+        "seminary"
+      ],
+      "yearGate": [
+        5,
+        6
+      ],
       "title": "Two Canonists Short",
       "body": "The judicial vicar has a problem that {@vocation_director} explains to you over lunch: the tribunal is two canonists short, the one it has is seventy, and Rome does not let a diocese run marriage cases on goodwill. The bishop wants to send a priest for a licentiate in canon law, three years, after his first assignment. Your file suggests you could do it. It is not glamorous. It is annulments, faculties, letters that begin with the words It has come to the attention of this office. It is also the room where the diocese's real decisions are read for legality before they are made, and the men who sit in it are consulted for the rest of their lives. He says the bishop would take a yes now as a promise, and would remember it.",
       "from": "@vocation_director",
       "requires": [
-        { "type": "any", "inner": [
-          { "type": "flag", "key": "steered_canon_law", "value": true },
-          { "type": "flag", "key": "field:history_law", "value": true },
-          { "type": "flag", "key": "career:attorney", "value": true },
-          { "type": "stat", "key": "knowledge", "op": ">=", "value": 60 }
-        ] }
+        {
+          "type": "any",
+          "inner": [
+            {
+              "type": "flag",
+              "key": "steered_canon_law",
+              "value": true
+            },
+            {
+              "type": "flag",
+              "key": "field:history_law",
+              "value": true
+            },
+            {
+              "type": "flag",
+              "key": "career:attorney",
+              "value": true
+            },
+            {
+              "type": "stat",
+              "key": "knowledge",
+              "op": ">=",
+              "value": 60
+            }
+          ]
+        }
       ],
       "weight": 30,
       "bias": [
-        { "when": { "type": "flag", "key": "summer:chancery", "value": true }, "multiplier": 1.6 },
-        { "when": { "type": "stat", "key": "administration", "op": ">=", "value": 50 }, "multiplier": 1.4 }
+        {
+          "when": {
+            "type": "flag",
+            "key": "summer:chancery",
+            "value": true
+          },
+          "multiplier": 1.6
+        },
+        {
+          "when": {
+            "type": "stat",
+            "key": "administration",
+            "op": ">=",
+            "value": 50
+          },
+          "multiplier": 1.4
+        }
       ],
       "windowWeeks": 4,
       "once": true,
       "cluster": "chancery",
       "accept": {
         "effects": [
-          { "target": "flag", "key": "canon_law_track", "value": true },
-          { "target": "reputation", "key": "chancery", "delta": 4 },
-          { "target": "archetype", "key": "administrative", "delta": 2 },
-          { "target": "stat", "key": "knowledge", "delta": 1 },
-          { "target": "reputation", "key": "brother_priests", "delta": -2 },
-          { "target": "pillar", "key": "pastoral", "delta": -1 }
+          {
+            "target": "flag",
+            "key": "canon_law_track",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "chancery",
+            "delta": 4
+          },
+          {
+            "target": "archetype",
+            "key": "administrative",
+            "delta": 2
+          },
+          {
+            "target": "stat",
+            "key": "knowledge",
+            "delta": 1
+          },
+          {
+            "target": "reputation",
+            "key": "brother_priests",
+            "delta": -2
+          },
+          {
+            "target": "pillar",
+            "key": "pastoral",
+            "delta": -1
+          }
         ],
         "outcome": "You say yes before the coffee comes. He looks relieved, which tells you how few men say it. Within the month the judicial vicar has invited you to observe a hearing, and you learn that a marriage case is a story with the tenderness cut out and the dates left in."
       },
       "decline": {
         "effects": [
-          { "target": "flag", "key": "sem_refused_canon_law", "value": true },
-          { "target": "reputation", "key": "chancery", "delta": -2 }
+          {
+            "target": "flag",
+            "key": "sem_refused_canon_law",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "chancery",
+            "delta": -2
+          }
         ],
         "outcome": "You say you would rather be a pastor. He says the diocese would rather you were a canonist, and that you will both probably get what you want, which is not the same as being happy about it. The tribunal stays two short."
       }
@@ -472,54 +1207,138 @@
     {
       "id": "sem_cathedral_mc",
       "category": "chancery",
-      "phase": ["seminary"],
-      "yearGate": [4, 5, 6, 7],
+      "phase": [
+        "seminary"
+      ],
+      "yearGate": [
+        4,
+        5,
+        6,
+        7
+      ],
       "title": "Nine Days to the Chrism Mass",
       "body": "A phone call on a Tuesday from the bishop's office: the cathedral's master of ceremonies has broken his ankle and the Chrism Mass is in nine days. {@bishop} has asked {@rector} for a seminarian who knows where a mitre goes and will not panic when the deacons go the wrong way, and the rector has given your name. It is one Mass, in front of every priest of the diocese and most of the chancery, with a bishop who is known to be particular about the placement of the crozier. The rehearsals will eat the week before your exams. The bishop's secretary is on the line now and would like an answer while he has you.",
       "from": "@bishop",
       "requires": [
-        { "type": "any", "inner": [
-          { "type": "flag", "key": "sem_sacristan", "value": true },
-          { "type": "pillar", "key": "spiritual", "op": ">=", "value": 3 },
-          { "type": "relationship", "npcId": "@rector", "op": ">=", "value": 15 },
-          { "type": "stat", "key": "administration", "op": ">=", "value": 45 }
-        ] }
+        {
+          "type": "any",
+          "inner": [
+            {
+              "type": "flag",
+              "key": "sem_sacristan",
+              "value": true
+            },
+            {
+              "type": "pillar",
+              "key": "spiritual",
+              "op": ">=",
+              "value": 3
+            },
+            {
+              "type": "relationship",
+              "npcId": "@rector",
+              "op": ">=",
+              "value": 15
+            },
+            {
+              "type": "stat",
+              "key": "administration",
+              "op": ">=",
+              "value": 45
+            }
+          ]
+        }
       ],
       "weight": 35,
       "bias": [
-        { "when": { "type": "flag", "key": "sem_sacristan", "value": true }, "multiplier": 2 }
+        {
+          "when": {
+            "type": "flag",
+            "key": "sem_sacristan",
+            "value": true
+          },
+          "multiplier": 2
+        }
       ],
       "windowWeeks": 0,
       "once": true,
       "cluster": "chancery",
       "accept": {
         "effects": [
-          { "target": "flag", "key": "sem_cathedral_mc", "value": true },
-          { "target": "reputation", "key": "chancery", "delta": 4 },
-          { "target": "relationship", "key": "@bishop", "delta": 6 },
-          { "target": "stat", "key": "administration", "delta": 1 },
-          { "target": "pillar", "key": "intellectual", "delta": -1 },
-          { "target": "relationship", "key": "@rival_classmate", "delta": -3 }
+          {
+            "target": "flag",
+            "key": "sem_cathedral_mc",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "chancery",
+            "delta": 4
+          },
+          {
+            "target": "relationship",
+            "key": "@bishop",
+            "delta": 6
+          },
+          {
+            "target": "stat",
+            "key": "administration",
+            "delta": 1
+          },
+          {
+            "target": "pillar",
+            "key": "intellectual",
+            "delta": -1
+          },
+          {
+            "target": "relationship",
+            "key": "@rival_classmate",
+            "delta": -3
+          }
         ],
         "outcome": "You spend a week walking the cathedral with a floor plan and the injured man's notes, which are in a hand nobody else can read. On the day the deacons go the wrong way and you correct them with your eyes. {@bishop} says nothing in the sacristy afterward, then, at the door, 'Thank you, Father,' and corrects himself, which is a kind of promise."
       },
       "decline": {
         "effects": [
-          { "target": "reputation", "key": "chancery", "delta": -3 }
+          {
+            "target": "reputation",
+            "key": "chancery",
+            "delta": -3
+          }
         ],
         "outcome": "You tell the secretary you cannot lose the week before exams. He says he understands in a voice that does not. {@rival_classmate} does it, and does it well, and the bishop learns his name instead of yours."
       },
       "failure": {
         "chance": 0.3,
         "unless": [
-          { "type": "any", "inner": [
-            { "type": "flag", "key": "sem_sacristan", "value": true },
-            { "type": "stat", "key": "administration", "op": ">=", "value": 40 }
-          ] }
+          {
+            "type": "any",
+            "inner": [
+              {
+                "type": "flag",
+                "key": "sem_sacristan",
+                "value": true
+              },
+              {
+                "type": "stat",
+                "key": "administration",
+                "op": ">=",
+                "value": 40
+              }
+            ]
+          }
         ],
         "effects": [
-          { "target": "reputation", "key": "chancery", "delta": -3 },
-          { "target": "relationship", "key": "@bishop", "delta": -4 }
+          {
+            "target": "reputation",
+            "key": "chancery",
+            "delta": -3
+          },
+          {
+            "target": "relationship",
+            "key": "@bishop",
+            "delta": -4
+          }
         ],
         "outcome": "The oils go out in the wrong order and the bishop, who notices everything, notices. Nobody says anything at the reception. The bishop's secretary is polite to you afterward in the way that closes a file."
       }
@@ -527,37 +1346,96 @@
     {
       "id": "sem_discernment_weekend",
       "category": "chancery",
-      "phase": ["seminary"],
-      "yearGate": [3, 4, 5, 6, 7],
+      "phase": [
+        "seminary"
+      ],
+      "yearGate": [
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
       "title": "Three Men Telling Their Stories",
       "body": "{@vocation_director} runs a discernment weekend twice a year for men considering the seminary: forty of them in a retreat house, a night of adoration, and three seminarians telling their stories. He wants you to be one of the three. He is direct about why: you can talk, and the men who come are watching the speakers to see whether they are being sold something. It is a weekend away from the house in the middle of term. The formation office does not love these weekends; it thinks the vocation director collects seminarians. He probably does. But the diocese's next ten years of priests are in that retreat house deciding, and you would be one of the reasons some of them decide.",
       "from": "@vocation_director",
       "requires": [
-        { "type": "stat", "key": "charisma", "op": ">=", "value": 45 }
+        {
+          "type": "stat",
+          "key": "charisma",
+          "op": ">=",
+          "value": 45
+        }
       ],
       "weight": 45,
       "bias": [
-        { "when": { "type": "flag", "key": "motive:conversion", "value": true }, "multiplier": 1.5 },
-        { "when": { "type": "flag", "key": "vocations_helper", "value": true }, "multiplier": 0.5 }
+        {
+          "when": {
+            "type": "flag",
+            "key": "motive:conversion",
+            "value": true
+          },
+          "multiplier": 1.5
+        },
+        {
+          "when": {
+            "type": "flag",
+            "key": "vocations_helper",
+            "value": true
+          },
+          "multiplier": 0.5
+        }
       ],
       "windowWeeks": 3,
       "once": true,
       "cluster": "chancery",
       "accept": {
         "effects": [
-          { "target": "flag", "key": "vocations_helper", "value": true },
-          { "target": "reputation", "key": "chancery", "delta": 3 },
-          { "target": "relationship", "key": "@vocation_director", "delta": 8 },
-          { "target": "stat", "key": "charisma", "delta": 1 },
-          { "target": "pillar", "key": "human", "delta": 1 },
-          { "target": "pillar", "key": "intellectual", "delta": -1 },
-          { "target": "relationship", "key": "@formation_advisor", "delta": -2 }
+          {
+            "target": "flag",
+            "key": "vocations_helper",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "chancery",
+            "delta": 3
+          },
+          {
+            "target": "relationship",
+            "key": "@vocation_director",
+            "delta": 8
+          },
+          {
+            "target": "stat",
+            "key": "charisma",
+            "delta": 1
+          },
+          {
+            "target": "pillar",
+            "key": "human",
+            "delta": 1
+          },
+          {
+            "target": "pillar",
+            "key": "intellectual",
+            "delta": -1
+          },
+          {
+            "target": "relationship",
+            "key": "@formation_advisor",
+            "delta": -2
+          }
         ],
         "outcome": "You tell your story to forty men in a room that smells of coffee and floor wax, and you find, halfway through, that you have never said it aloud in one piece before. Four of them apply. One of them, years later, will tell you it was the part where you said you were not sure."
       },
       "decline": {
         "effects": [
-          { "target": "flag", "key": "sem_declined_discernment", "value": true }
+          {
+            "target": "flag",
+            "key": "sem_declined_discernment",
+            "value": true
+          }
         ],
         "outcome": "You say the weekend falls badly. He says all of them do, and asks someone else, who is fine. The formation office notices that you kept the weekend for study and approves, in the mild way it approves of anything."
       }
@@ -565,31 +1443,87 @@
     {
       "id": "sem_prominent_priest",
       "category": "patronage",
-      "phase": ["seminary"],
-      "yearGate": [3, 4, 5, 6],
+      "phase": [
+        "seminary"
+      ],
+      "yearGate": [
+        3,
+        4,
+        5,
+        6
+      ],
       "title": "The Room Over the Garage",
       "body": "Every diocese has one priest whose name people outside it know. In yours he is a pastor across the city with a radio hour, a church that fills three times on Sunday, and a way of being on first-name terms with the mayor and the auxiliary bishop at once. He has heard about you from a priest who speaks well of you, and he asks whether you would spend your summers at his rectory: preaching practice, the radio hour, the funerals that draw a thousand people. It is a formation of a kind no seminary offers. It is also his. Men who work for him become his men; they inherit his friends and his enemies, and when a man of that size falls, as they sometimes do, the men around him fall partway with him.",
       "requires": [
-        { "type": "any", "inner": [
-          { "type": "relationship", "npcId": "@mentor_priest", "op": ">=", "value": 20 },
-          { "type": "relationship", "npcId": "@home_pastor", "op": ">=", "value": 20 },
-          { "type": "stat", "key": "charisma", "op": ">=", "value": 55 }
-        ] }
+        {
+          "type": "any",
+          "inner": [
+            {
+              "type": "relationship",
+              "npcId": "@mentor_priest",
+              "op": ">=",
+              "value": 20
+            },
+            {
+              "type": "relationship",
+              "npcId": "@home_pastor",
+              "op": ">=",
+              "value": 20
+            },
+            {
+              "type": "stat",
+              "key": "charisma",
+              "op": ">=",
+              "value": 55
+            }
+          ]
+        }
       ],
       "weight": 30,
       "bias": [
-        { "when": { "type": "flag", "key": "motive:priest", "value": true }, "multiplier": 1.5 },
-        { "when": { "type": "outspokenness", "op": ">=", "value": 30 }, "multiplier": 1.3 }
+        {
+          "when": {
+            "type": "flag",
+            "key": "motive:priest",
+            "value": true
+          },
+          "multiplier": 1.5
+        },
+        {
+          "when": {
+            "type": "outspokenness",
+            "op": ">=",
+            "value": 30
+          },
+          "multiplier": 1.3
+        }
       ],
       "windowWeeks": 4,
       "once": true,
       "cluster": "patronage",
       "accept": {
         "effects": [
-          { "target": "flag", "key": "patron:prominent_priest", "value": true },
-          { "target": "risk", "key": "sem_patron_exposure", "value": "Bound to a prominent priest's fortunes", "delta": 1 },
-          { "target": "relationship", "key": "@formation_advisor", "delta": -3 },
-          { "target": "pillar", "key": "spiritual", "delta": -1 }
+          {
+            "target": "flag",
+            "key": "patron:prominent_priest",
+            "value": true
+          },
+          {
+            "target": "risk",
+            "key": "sem_patron_exposure",
+            "value": "Bound to a prominent priest's fortunes",
+            "delta": 1
+          },
+          {
+            "target": "relationship",
+            "key": "@formation_advisor",
+            "delta": -3
+          },
+          {
+            "target": "pillar",
+            "key": "spiritual",
+            "delta": -1
+          }
         ],
         "outcome": "He gives you a room over the garage and the eight o'clock Mass on weekdays. You learn to preach to three hundred people who came because of him and stayed, a little, because of you. His enemies begin, politely, to include you.",
         "commitment": {
@@ -597,19 +1531,54 @@
           "weeks": 12,
           "apPerWeek": 2,
           "onComplete": [
-            { "target": "reputation", "key": "brother_priests", "delta": 5 },
-            { "target": "reputation", "key": "public", "delta": 3 },
-            { "target": "stat", "key": "charisma", "delta": 2 },
-            { "target": "pillar", "key": "pastoral", "delta": 2 },
-            { "target": "archetype", "key": "pastoral", "delta": 1 }
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "pillar",
+              "key": "pastoral",
+              "delta": 2
+            },
+            {
+              "target": "archetype",
+              "key": "pastoral",
+              "delta": 1
+            }
           ],
-          "completeOutcome": "By August you have a way of walking into a room that you did not have in June, and a set of friends across the diocese who all know each other. Priests you have never met know whose seminarian you are. It will help until it does not."
+          "completeOutcome": "By August you have a way of walking into a room that you did not have in June, and a set of friends across the diocese who all know each other. Priests you have never met know whose seminarian you are. It will help until it does not.",
+          "weekly": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 0.03
+            }
+          ]
         }
       },
       "decline": {
         "effects": [
-          { "target": "reputation", "key": "brother_priests", "delta": -2 },
-          { "target": "flag", "key": "sem_refused_patron", "value": true }
+          {
+            "target": "reputation",
+            "key": "brother_priests",
+            "delta": -2
+          },
+          {
+            "target": "flag",
+            "key": "sem_refused_patron",
+            "value": true
+          }
         ],
         "outcome": "You write a careful letter declining. He does not reply, which you learn is how he replies. The priest who recommended you is embarrassed on your behalf, and another seminarian takes the room over the garage."
       }
@@ -617,36 +1586,90 @@
     {
       "id": "sem_chancery_mentor",
       "category": "patronage",
-      "phase": ["seminary"],
-      "yearGate": [4, 5, 6, 7],
+      "phase": [
+        "seminary"
+      ],
+      "yearGate": [
+        4,
+        5,
+        6,
+        7
+      ],
       "title": "An Interest",
       "body": "It has become a pattern that you have not named: {@vocation_director} calls when he is in the neighborhood, takes you to lunch, asks what you are reading, and mentions, in passing, what the bishop said at Tuesday's staff meeting. Now he makes it explicit. He would like to take an interest in you. He says it in those words, and you both know what they mean: introductions, a word in the right ear at assignment time, a chair at the table when the chancery has the seminarians to dinner. He will expect things in return. He will expect loyalty, and discretion, and your being available when he needs a face. The house will read it as ambition, because it is, partly. {@closest_classmate} has already noticed the lunches and has stopped asking about them.",
       "from": "@vocation_director",
       "requires": [
-        { "type": "relationship", "npcId": "@vocation_director", "op": ">=", "value": 25 }
+        {
+          "type": "relationship",
+          "npcId": "@vocation_director",
+          "op": ">=",
+          "value": 25
+        }
       ],
       "weight": 30,
       "bias": [
-        { "when": { "type": "flag", "key": "summer:chancery", "value": true }, "multiplier": 1.6 },
-        { "when": { "type": "flag", "key": "vocations_helper", "value": true }, "multiplier": 1.5 }
+        {
+          "when": {
+            "type": "flag",
+            "key": "summer:chancery",
+            "value": true
+          },
+          "multiplier": 1.6
+        },
+        {
+          "when": {
+            "type": "flag",
+            "key": "vocations_helper",
+            "value": true
+          },
+          "multiplier": 1.5
+        }
       ],
       "windowWeeks": 3,
       "once": true,
       "cluster": "chancery",
       "accept": {
         "effects": [
-          { "target": "flag", "key": "mentor:chancery", "value": true },
-          { "target": "reputation", "key": "chancery", "delta": 5 },
-          { "target": "relationship", "key": "@vocation_director", "delta": 6 },
-          { "target": "stat", "key": "administration", "delta": 1 },
-          { "target": "relationship", "key": "@closest_classmate", "delta": -6 },
-          { "target": "reputation", "key": "brother_priests", "delta": -2 }
+          {
+            "target": "flag",
+            "key": "mentor:chancery",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "chancery",
+            "delta": 5
+          },
+          {
+            "target": "relationship",
+            "key": "@vocation_director",
+            "delta": 6
+          },
+          {
+            "target": "stat",
+            "key": "administration",
+            "delta": 1
+          },
+          {
+            "target": "relationship",
+            "key": "@closest_classmate",
+            "delta": -6
+          },
+          {
+            "target": "reputation",
+            "key": "brother_priests",
+            "delta": -2
+          }
         ],
         "outcome": "You say yes and he pays for lunch, which he had not been doing. Within a month you have met the chancellor twice and the bishop's secretary knows your name unprompted. {@closest_classmate} is friendly and a little more formal, and you understand that you have paid for something with him and cannot ask for it back."
       },
       "decline": {
         "effects": [
-          { "target": "flag", "key": "sem_refused_chancery_mentor", "value": true }
+          {
+            "target": "flag",
+            "key": "sem_refused_chancery_mentor",
+            "value": true
+          }
         ],
         "outcome": "You tell him you would rather come up the ordinary way. He says there is no ordinary way and that you will find that out, and the lunches stop. {@closest_classmate} does not mention it, and is, you notice, easier with you again."
       }
@@ -654,39 +1677,106 @@
     {
       "id": "sem_trad_fraternity",
       "category": "social",
-      "phase": ["seminary"],
-      "yearGate": [3, 4, 5, 6, 7],
+      "phase": [
+        "seminary"
+      ],
+      "yearGate": [
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
       "title": "Once a Month, in a Rectory",
       "body": "{@professor_trad} mentions it in the corridor as if it were nothing: a fraternity of diocesan priests, about thirty across three dioceses, who meet quarterly for the older form of the Mass, a conference, and dinner, and who have a circle for seminarians that meets in a rectory once a month. He can bring you. He is careful: it is not a society, it is not a movement, it has no rule, and it is not the sort of thing one puts in a file. People know about it, and they will know you are in it. Under this bishop it is a mild asset. Under another it might be the first line of your reputation. The men in it will be your brothers for life, and the men outside it will know exactly which brothers you chose.",
       "from": "@professor_trad",
       "requires": [
-        { "type": "alignment", "op": "<=", "value": -30 }
+        {
+          "type": "alignment",
+          "op": "<=",
+          "value": -30
+        }
       ],
       "weight": 40,
       "bias": [
-        { "when": { "type": "relationship", "npcId": "@professor_trad", "op": ">=", "value": 15 }, "multiplier": 1.5 },
-        { "when": { "type": "flag", "key": "sem_latin_group", "value": true }, "multiplier": 1.5 }
+        {
+          "when": {
+            "type": "relationship",
+            "npcId": "@professor_trad",
+            "op": ">=",
+            "value": 15
+          },
+          "multiplier": 1.5
+        },
+        {
+          "when": {
+            "type": "flag",
+            "key": "sem_latin_group",
+            "value": true
+          },
+          "multiplier": 1.5
+        }
       ],
       "windowWeeks": 4,
       "once": true,
       "cluster": "social",
       "accept": {
         "effects": [
-          { "target": "flag", "key": "affiliation:trad_fraternity", "value": true },
-          { "target": "reputation", "key": "traditional_bloc", "delta": 8 },
-          { "target": "reputation", "key": "progressive_bloc", "delta": -6 },
-          { "target": "reputation", "key": "chancery", "delta": -2 },
-          { "target": "relationship", "key": "@professor_trad", "delta": 5 },
-          { "target": "relationship", "key": "@formation_advisor", "delta": -3 },
-          { "target": "stat", "key": "piety", "delta": 1 },
-          { "target": "alignment", "key": "", "delta": -4 }
+          {
+            "target": "flag",
+            "key": "affiliation:trad_fraternity",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "traditional_bloc",
+            "delta": 8
+          },
+          {
+            "target": "reputation",
+            "key": "progressive_bloc",
+            "delta": -6
+          },
+          {
+            "target": "reputation",
+            "key": "chancery",
+            "delta": -2
+          },
+          {
+            "target": "relationship",
+            "key": "@professor_trad",
+            "delta": 5
+          },
+          {
+            "target": "relationship",
+            "key": "@formation_advisor",
+            "delta": -3
+          },
+          {
+            "target": "stat",
+            "key": "piety",
+            "delta": 1
+          },
+          {
+            "target": "alignment",
+            "key": "",
+            "delta": -4
+          }
         ],
         "outcome": "The rectory is full of cassocks and a smell of cigars, and a pastor you recognize from the diocesan directory pours you a drink and asks what you think of the new lectionary. You have found a room where the things you believe are assumed. You also notice, on the way out, a car you recognize from the chancery lot, and wonder who else keeps lists."
       },
       "decline": {
         "effects": [
-          { "target": "reputation", "key": "traditional_bloc", "delta": -3 },
-          { "target": "flag", "key": "sem_refused_trad_fraternity", "value": true }
+          {
+            "target": "reputation",
+            "key": "traditional_bloc",
+            "delta": -3
+          },
+          {
+            "target": "flag",
+            "key": "sem_refused_trad_fraternity",
+            "value": true
+          }
         ],
         "outcome": "You say you would rather not be identified with a group yet. He says that not choosing is also a choice and that the men in that rectory will remember who came. He is right; some of them will be a little cool with you for a decade, without ever saying why."
       }
@@ -694,39 +1784,106 @@
     {
       "id": "sem_prog_caucus",
       "category": "social",
-      "phase": ["seminary"],
-      "yearGate": [3, 4, 5, 6, 7],
+      "phase": [
+        "seminary"
+      ],
+      "yearGate": [
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
       "title": "A Pastor's House with a Bad Piano",
       "body": "{@professor_prog} asks you to stay after a seminar and, once the room is empty, tells you about a caucus: forty or so priests of the diocese, some pastors, a couple of chancery men, who meet to talk about the Council, the synod, and the things the bishop does not want raised at the presbyteral council. There is a seminarians' evening once a month at a pastor's house. He would like to bring you. It is not secret, exactly; it is discreet, which in a diocese is the same thing with better manners. Under this bishop it will cost you a little in the chancery. Under the next it might be the reason you are asked to do something. The men in it will trust you before you have earned it, and everyone else will assume you have been counted.",
       "from": "@professor_prog",
       "requires": [
-        { "type": "alignment", "op": ">=", "value": 30 }
+        {
+          "type": "alignment",
+          "op": ">=",
+          "value": 30
+        }
       ],
       "weight": 40,
       "bias": [
-        { "when": { "type": "relationship", "npcId": "@professor_prog", "op": ">=", "value": 15 }, "multiplier": 1.5 },
-        { "when": { "type": "flag", "key": "past:activism", "value": true }, "multiplier": 1.5 }
+        {
+          "when": {
+            "type": "relationship",
+            "npcId": "@professor_prog",
+            "op": ">=",
+            "value": 15
+          },
+          "multiplier": 1.5
+        },
+        {
+          "when": {
+            "type": "flag",
+            "key": "past:activism",
+            "value": true
+          },
+          "multiplier": 1.5
+        }
       ],
       "windowWeeks": 4,
       "once": true,
       "cluster": "social",
       "accept": {
         "effects": [
-          { "target": "flag", "key": "affiliation:prog_caucus", "value": true },
-          { "target": "reputation", "key": "progressive_bloc", "delta": 8 },
-          { "target": "reputation", "key": "traditional_bloc", "delta": -6 },
-          { "target": "reputation", "key": "chancery", "delta": -2 },
-          { "target": "relationship", "key": "@professor_prog", "delta": 5 },
-          { "target": "relationship", "key": "@rector", "delta": -3 },
-          { "target": "stat", "key": "knowledge", "delta": 1 },
-          { "target": "alignment", "key": "", "delta": 4 }
+          {
+            "target": "flag",
+            "key": "affiliation:prog_caucus",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "progressive_bloc",
+            "delta": 8
+          },
+          {
+            "target": "reputation",
+            "key": "traditional_bloc",
+            "delta": -6
+          },
+          {
+            "target": "reputation",
+            "key": "chancery",
+            "delta": -2
+          },
+          {
+            "target": "relationship",
+            "key": "@professor_prog",
+            "delta": 5
+          },
+          {
+            "target": "relationship",
+            "key": "@rector",
+            "delta": -3
+          },
+          {
+            "target": "stat",
+            "key": "knowledge",
+            "delta": 1
+          },
+          {
+            "target": "alignment",
+            "key": "",
+            "delta": 4
+          }
         ],
         "outcome": "The pastor's house has a good kitchen and a bad piano and a chancery official you have met, who is surprised to see you and then, visibly, not. The talk is franker than anything you have heard in the house. You leave with three phone numbers and the sense that {@rector} will hear about the evening before you are home."
       },
       "decline": {
         "effects": [
-          { "target": "reputation", "key": "progressive_bloc", "delta": -3 },
-          { "target": "flag", "key": "sem_refused_prog_caucus", "value": true }
+          {
+            "target": "reputation",
+            "key": "progressive_bloc",
+            "delta": -3
+          },
+          {
+            "target": "flag",
+            "key": "sem_refused_prog_caucus",
+            "value": true
+          }
         ],
         "outcome": "You tell him you would rather not be counted yet. He says that is prudent and looks, for a moment, tired. The men who go will be a little slower to trust you when you are a priest, and you will never be able to prove that this is why."
       }
@@ -734,42 +1891,123 @@
     {
       "id": "sem_cursillo",
       "category": "social",
-      "phase": ["seminary"],
-      "yearGate": [3, 4, 5, 6, 7],
+      "phase": [
+        "seminary"
+      ],
+      "yearGate": [
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
       "title": "The Handshake in the Parking Lot",
       "body": "A layman you have met twice, the diocesan coordinator of the Cursillo movement, writes to ask whether you would make a weekend in the spring and, if it takes, serve as the spiritual director's assistant on the men's weekends after that. Cursillo in this diocese is large, Spanish-speaking in two of its three centers, loyal to its own, and has produced, by its own count, a third of the deacons and a fair number of the pastors. It is also a family with its own vocabulary and its own quarrels, and once you have made a weekend you belong to it; people will greet you with the handshake in parking lots for thirty years. The weekends fall in term. The formation office will not object, and the faculty will not understand.",
       "requires": [
-        { "type": "any", "inner": [
-          { "type": "flag", "key": "origin:latino_immigrant", "value": true },
-          { "type": "flag", "key": "origin:urban_ethnic", "value": true },
-          { "type": "pillar", "key": "pastoral", "op": ">=", "value": 3 }
-        ] }
+        {
+          "type": "any",
+          "inner": [
+            {
+              "type": "flag",
+              "key": "origin:latino_immigrant",
+              "value": true
+            },
+            {
+              "type": "flag",
+              "key": "origin:urban_ethnic",
+              "value": true
+            },
+            {
+              "type": "pillar",
+              "key": "pastoral",
+              "op": ">=",
+              "value": 3
+            }
+          ]
+        }
       ],
       "weight": 35,
       "bias": [
-        { "when": { "type": "flag", "key": "origin:latino_immigrant", "value": true }, "multiplier": 2 },
-        { "when": { "type": "flag", "key": "origin:urban_ethnic", "value": true }, "multiplier": 1.5 },
-        { "when": { "type": "flag", "key": "speaks_spanish", "value": true }, "multiplier": 1.4 }
+        {
+          "when": {
+            "type": "flag",
+            "key": "origin:latino_immigrant",
+            "value": true
+          },
+          "multiplier": 2
+        },
+        {
+          "when": {
+            "type": "flag",
+            "key": "origin:urban_ethnic",
+            "value": true
+          },
+          "multiplier": 1.5
+        },
+        {
+          "when": {
+            "type": "flag",
+            "key": "speaks_spanish",
+            "value": true
+          },
+          "multiplier": 1.4
+        }
       ],
       "windowWeeks": 3,
       "once": true,
       "cluster": "social",
       "accept": {
         "effects": [
-          { "target": "flag", "key": "affiliation:cursillo", "value": true },
-          { "target": "reputation", "key": "parishioners", "delta": 5 },
-          { "target": "reputation", "key": "brother_priests", "delta": -1 },
-          { "target": "stat", "key": "charisma", "delta": 1 },
-          { "target": "stat", "key": "piety", "delta": 1 },
-          { "target": "pillar", "key": "pastoral", "delta": 1 },
-          { "target": "pillar", "key": "intellectual", "delta": -1 }
+          {
+            "target": "flag",
+            "key": "affiliation:cursillo",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "parishioners",
+            "delta": 5
+          },
+          {
+            "target": "reputation",
+            "key": "brother_priests",
+            "delta": -1
+          },
+          {
+            "target": "stat",
+            "key": "charisma",
+            "delta": 1
+          },
+          {
+            "target": "stat",
+            "key": "piety",
+            "delta": 1
+          },
+          {
+            "target": "pillar",
+            "key": "pastoral",
+            "delta": 1
+          },
+          {
+            "target": "pillar",
+            "key": "intellectual",
+            "delta": -1
+          }
         ],
         "outcome": "The weekend is three days of talks, tears, and singing in a retreat house that smells of coffee, and by Sunday you have been embraced by more men than in the previous decade. You come back to the house with a cross on a cord and a hundred people who now expect to see you at their Ultreyas. Some of the faculty look at the cord."
       },
       "decline": {
         "effects": [
-          { "target": "reputation", "key": "parishioners", "delta": -2 },
-          { "target": "flag", "key": "sem_refused_cursillo", "value": true }
+          {
+            "target": "reputation",
+            "key": "parishioners",
+            "delta": -2
+          },
+          {
+            "target": "flag",
+            "key": "sem_refused_cursillo",
+            "value": true
+          }
         ],
         "outcome": "You write a polite letter declining. The coordinator writes back that the door is open, which in Cursillo it always is, and the parking-lot handshakes go to another man. A few of the pastors who came up through the movement will place you, later, as one who did not."
       }

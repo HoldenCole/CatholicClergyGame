@@ -1,6 +1,7 @@
 import { useGameStore } from '@/engine/store';
 import { controlsMoney, debtPayable } from '@/systems/finance';
 import { sinceArrival } from '@/systems/trajectory';
+import { hoursOf } from '@/systems/week';
 import { workAvailability } from '@/systems/problems';
 import { useUiStore } from '../uiStore';
 import { PROBLEM_LABEL } from '@/generation/parishes';
@@ -110,12 +111,12 @@ export default function ParishPanel() {
         <p className="text-sm">{parish.problem === 'none' ? 'Nothing is on fire. It will not last.' : (PROBLEM_LABEL[parish.problem] ?? parish.problem)}</p>
         {work && workAv.fix ? (
           <p className="ink-muted mt-2 text-xs">
-            In hand: {workAv.fix.label.toLowerCase()}, {Math.max(0, work.endWeek - game.clock.week)} weeks to go at {work.apPerWeek} {work.apPerWeek === 1 ? 'hour' : 'hours'} a week.
+            In hand: {workAv.fix.label.toLowerCase()}, {Math.max(0, work.endWeek - game.clock.week)} weeks to go at {hoursOf(work.apPerWeek)} hours a week.
             <button className="pbtn-link ml-2" onClick={stopWork}>let it drop</button>
           </p>
         ) : workAv.fix ? (
           <div className="mt-2 text-xs">
-            <p className="ink-muted">{workAv.fix.label}: {workAv.fix.blurb} {workAv.fix.weeks} weeks at {workAv.fix.apPerWeek} {workAv.fix.apPerWeek === 1 ? 'hour' : 'hours'} a week{workAv.fix.cost > 0 ? `, about $${workAv.fix.cost.toLocaleString()} from the parish` : ''}.</p>
+            <p className="ink-muted">{workAv.fix.label}: {workAv.fix.blurb} {workAv.fix.weeks} weeks at {hoursOf(workAv.fix.apPerWeek)} hours a week{workAv.fix.cost > 0 ? `, about $${workAv.fix.cost.toLocaleString()} from the parish` : ''}.</p>
             {workAv.available ? (
               <button className="pbtn mt-1" onClick={startWork}>Take it on</button>
             ) : (
