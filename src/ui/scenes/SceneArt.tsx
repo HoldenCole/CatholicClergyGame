@@ -6,6 +6,7 @@ import { Church } from './art/church';
 import { Chancery, chanceryRank, Office } from './art/office';
 import { Rectory, SeminaryHall, SeminaryRoom, Study } from './art/home';
 import { Chapel, Hall, Street } from './art/places';
+import { StudyCity, StudyRoom } from './art/away';
 import { portraitForCharacter, yearOf } from '../portraits/spec';
 import { lookFor } from '../portraits/Portrait';
 
@@ -43,6 +44,8 @@ export default function SceneArt({ scene, season, state, plain = false }: { scen
       {scene === 'study' && <Study ambient={ambient('office')} />}
       {scene === 'seminary_room' && <SeminaryRoom ambient={ambient('seminary_room')} seminaryName={state.seminary?.name} />}
       {scene === 'seminary_hall' && <SeminaryHall />}
+      {scene === 'study_room' && <StudyRoom city={state.study?.city ?? 'rome'} school={state.study?.school ?? 'the Gregorian'} />}
+      {scene === 'study_city' && <StudyCity city={state.study?.city ?? 'rome'} />}
       {scene === 'chancery' && <Chancery ambient={ambient('chancery')} rank={chanceryRank(state) ?? 'modest'} bishopName={bishop ? `${bishop.title} ${bishop.name.first} ${bishop.name.last}` : 'The bishop'} />}
       {!plain && <Finish />}
     </svg>

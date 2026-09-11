@@ -3,6 +3,7 @@ import { evaluateAll, evaluateCondition } from './conditions';
 import { applyEffects } from './effects';
 import type { Rng } from './rng';
 import { resolveSelector, selectorsIn } from './selectors';
+import { beginStudy } from './study';
 
 /** Tunables. Invented. */
 export const OFFERS = {
@@ -125,6 +126,10 @@ export function acceptOffer(state: GameState, def: OfferDef, rng: Rng): AcceptRe
   next = record(next, def.id, 'accepted');
 
   const c = def.accept.commitment;
+  if (c?.away) {
+    // Years away are not a background commitment: he goes. DESIGN §7.5.
+    return { state: beginStudy(next, def, failed, rng), failed };
+  }
   if (c) {
     const commitment: Commitment = {
       offerId: def.id,

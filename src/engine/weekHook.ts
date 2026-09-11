@@ -10,6 +10,8 @@ import { projectWeek } from '@/systems/projects';
 import { workWeek } from '@/systems/problems';
 import { resolvePermissions } from '@/systems/decor';
 import { seminaryWeek } from '@/systems/seminaryWeek';
+import { studyWeek } from '@/systems/studyWeek';
+import { endStudy } from './study';
 import { careOf, WEEK } from '@/systems/week';
 import { renderText } from './text';
 import type { WeekHook } from './clock';
@@ -99,6 +101,30 @@ export function careRelief(state: GameState): (e: GameEvent) => number {
   return (e) => (FIRE_CATEGORIES.has(e.category) ? 1 - relief : 1);
 }
 const FIRE_CATEGORIES = new Set<GameEvent['category']>(['finance', 'admin', 'group']);
+
+/** Roughly how often a week away carries a scene. Invented. */
+const STUDY_EVENT_CHANCE = 0.1;
+
+/** The week away: the hours resolve, a scene may come, the years end with the board. */
+export function studyWeekHook(deps: EventDeps): WeekHook {
+  return (state: GameState, rng: Rng) => {
+    if (!state.study) return state;
+    const week = studyWeek(state, rng.derive(`study-week:${state.clock.week}`));
+    let next = week.line ? addDigestLine(week.state, week.line) : week.state;
+    if (isCareerYear(next)) next = careerYear(next, rng);
+    if (next.mode.kind !== 'clock') return next;
+    if (next.study && next.clock.week >= next.study.endWeek) {
+      const def = deps.offerLookup?.(next.study.offerId);
+      if (def) return addDigestLine(endStudy(next, def, rng.derive(`study-end:${next.clock.week}`)), 'The degree is defended, the room is packed, and the plane home is full of people going somewhere else.');
+    }
+    if (rng.derive(`study-scene:${next.clock.week}`).chance(STUDY_EVENT_CHANCE)) {
+      const [event] = drawEvents(deps.pool.filter((e) => !e.beat), next, rng, 1);
+      if (event) next = fireOrResolve(next, event, rng, deps);
+    }
+    if (next.mode.kind !== 'clock' || next.pending.length > 0) return next;
+    return offersStep(next, rng, deps);
+  };
+}
 
 /** The parish week: the routine resolves, a played week may fire an event, the arc may end, offers tick. */
 export function parishWeekHook(deps: EventDeps): WeekHook {

@@ -1,0 +1,77 @@
+import type { GameState, OfferDef, StudyState } from '@/types';
+import type { Rng } from './rng';
+import { studyProgram } from '@/content/study';
+import { applyEffects } from './effects';
+import { handoffProject } from '@/systems/projects';
+import { refreshOpenings } from '@/systems/openings';
+import { nextAssignment } from './career';
+import { ARC } from './parish';
+
+/** Invented: what leaving costs the man's standing with the people he leaves. DESIGN §7.5 rule 3. */
+export const STUDY = { leaveParishioners: -8 } as const;
+
+function note(state: GameState, kind: GameState['career'][number]['kind'], text: string): GameState {
+  return { ...state, career: [...state.career, { week: state.clock.week, kind, text }] };
+}
+
+/**
+ * The man leaves for a degree: the parish is handed on, the project with it,
+ * and he lives where he studies until the years are up. The offer's
+ * commitment carries `away: <program>`.
+ */
+export function beginStudy(state: GameState, def: OfferDef, failed: boolean, rng: Rng): GameState {
+  const c = def.accept.commitment;
+  const program = c?.away ? studyProgram(c.away) : undefined;
+  if (!c || !program) throw new Error(`offer ${def.id} is not a course of study`);
+  let next = state.parish ? handoffProject(state, rng.derive(`handoff:${state.clock.week}`)).state : state;
+  const ch = next.character!;
+  const carried = Math.round(ch.reputation.parishioners * ARC.parishionersCarryover);
+  next = { ...next, character: { ...ch, reputation: { ...ch.reputation, parishioners: carried } } };
+  next = applyEffects(next, [{ target: 'reputation', key: 'parishioners', delta: STUDY.leaveParishioners }]);
+  const study: StudyState = {
+    offerId: def.id,
+    program: program.id,
+    city: program.city,
+    label: program.label,
+    school: program.school,
+    residence: program.residence,
+    startWeek: next.clock.week,
+    endWeek: next.clock.week + c.weeks,
+    failed,
+    routine: {},
+    hoursLogged: {},
+    taken: [],
+    fromParishId: next.parish?.parishId ?? null,
+  };
+  const flags: GameState['flags'] = { ...next.flags, [`study:${program.city}`]: true };
+  for (const k of Object.keys(flags)) if (k.startsWith('parish:') || k.startsWith('role:')) delete flags[k];
+  const beats = [...next.beats.filter((b) => b.kind !== 'assignment'), { kind: 'assignment' as const, week: study.endWeek, label: `Home from ${program.city === 'rome' ? 'Rome' : 'Washington'}` }].sort((a, b) => a.week - b.week);
+  next = { ...next, phase: 'study', study, parish: null, assignment: null, founding: null, project: null, flags, beats, mode: { kind: 'clock' } };
+  const where = program.city === 'rome' ? 'Rome' : 'Washington';
+  return note(next, 'offer', `Left for ${where}: ${program.label.toLowerCase()} at ${program.school}, ${Math.round(c.weeks / 52)} years.`);
+}
+
+/**
+ * The years are up. He graduates or washes out, the offer is recorded, the
+ * diocese's openings are refreshed, and the board finds him a post.
+ */
+export function endStudy(state: GameState, def: OfferDef, rng: Rng): GameState {
+  const study = state.study;
+  if (!study) return state;
+  let next: GameState = state;
+  const c = def.accept.commitment!;
+  if (study.failed && def.failure) {
+    next = applyEffects(next, def.failure.effects);
+    next = { ...next, offerHistory: [...next.offerHistory, { offerId: def.id, week: next.clock.week, decision: 'failed' }] };
+    next = note(next, 'offer', `Came home from ${study.city === 'rome' ? 'Rome' : 'Washington'} without the degree.`);
+  } else {
+    next = applyEffects(next, c.onComplete);
+    next = { ...next, offerHistory: [...next.offerHistory, { offerId: def.id, week: next.clock.week, decision: 'completed' }] };
+    next = note(next, 'offer', `Came home from ${study.city === 'rome' ? 'Rome' : 'Washington'} with ${study.label.toLowerCase()}.`);
+  }
+  const flags: GameState['flags'] = { ...next.flags };
+  delete flags[`study:${study.city}`];
+  next = { ...next, flags, study: null, phase: 'parochial_vicar', beats: next.beats.filter((b) => b.kind !== 'assignment') };
+  next = refreshOpenings(next, rng.derive(`openings:home:${next.clock.week}`)).state;
+  return nextAssignment(next, rng).state;
+}

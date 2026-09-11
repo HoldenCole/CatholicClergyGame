@@ -13,6 +13,8 @@ export interface CommitmentDef {
   label: string;
   weeks: number;
   apPerWeek: number;
+  /** Years away from the diocese: the man leaves his parish and lives where he studies (content/study/programs.json). */
+  away?: string;
   onComplete: Effect[];
   completeOutcome: string;
 }

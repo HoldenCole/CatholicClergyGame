@@ -90,7 +90,7 @@ describe('engine/store', () => {
 
   it('a bad import sets an error and leaves the game untouched', () => {
     const s = useGameStore.getState();
-    s.importSave('{"version":3}');
+    s.importSave('{"version":4}');
     const after = useGameStore.getState();
     expect(after.error).toMatch(/state/);
     expect(after.game?.seed).toBe('store-test');

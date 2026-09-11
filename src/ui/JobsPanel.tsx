@@ -38,7 +38,8 @@ export default function JobsPanel() {
   const affiliations = Object.keys(game.flags).filter((k) => k.startsWith('affiliation:') && game.flags[k]).map((k) => AFFILIATION_WORD[k] ?? k.slice('affiliation:'.length));
   const summers = summersOnRecord(game.seminary);
   const standing = formationStanding(game);
-  const canAsk = inParish || (game.seminary?.year ?? 0) >= 5;
+  const away = !!game.study;
+  const canAsk = inParish || away || (game.seminary?.year ?? 0) >= 5;
   const applications = game.career.filter((e) => e.text.startsWith('Put your name in')).slice(-4);
 
   return (
@@ -47,7 +48,7 @@ export default function JobsPanel() {
         {canAsk ? (
           <>
             <p className="ink-muted text-xs leading-relaxed">
-              {inParish ? 'The personnel board reads this when your arc ends.' : 'The vicar for clergy asks the deacons where they would go. The bishop decides.'}
+              {inParish ? 'The personnel board reads this when your arc ends.' : away ? 'The board will find you a post when you come home, and reads this when it does.' : 'The vicar for clergy asks the deacons where they would go. The bishop decides.'}
               {pref ? '' : ' You have not said.'}
             </p>
             <div className="mt-2 flex flex-wrap gap-1">
@@ -61,7 +62,7 @@ export default function JobsPanel() {
         ) : (
           <p className="ink-faint text-xs">The chancery does not ask a man in the early years. From the fifth year on, it will.</p>
         )}
-        {!inParish && (
+        {!inParish && !away && (
           <p className="ink-muted mt-3 text-xs leading-relaxed">
             The bishop will read your file as <span className="ink">{standing.word}</span>{standing.reasons.length ? `: ${standing.reasons.join(', ')}` : ''}. The flagship and the growing parishes go to the men he wants seen; the rural posts and the hard parish are where he seasons the rest, or spends a good man where one is needed.
           </p>
