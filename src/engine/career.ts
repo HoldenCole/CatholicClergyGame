@@ -204,7 +204,7 @@ export function nextAssignment(state: GameState, rng: Rng): { state: GameState; 
     next = note(next, 'assignment', `Sent as parochial vicar to ${parish.name}, ${parish.place}.`);
   }
   return {
-    state: { ...next, assignment, parish: null, founding: null, project: null, mode: { kind: 'assignment', assignment }, flags: { ...next.flags, transfers: Number(next.flags.transfers ?? 0) + 1 } },
+    state: { ...next, assignment, parish: null, founding: null, project: null, projects: [], mode: { kind: 'assignment', assignment }, flags: { ...next.flags, transfers: Number(next.flags.transfers ?? 0) + 1 } },
     decisions,
   };
 }
@@ -286,7 +286,7 @@ export function directedTransfer(state: GameState, rng: Rng, kind: string, role:
   const flags: GameState['flags'] = { ...next.flags, transfers: Number(next.flags.transfers ?? 0) + 1, hard_parish_honored: true };
   delete flags.transfer_pending;
   return {
-    state: { ...next, assignment, parish: null, founding: null, project: null, mode: { kind: 'assignment', assignment }, flags },
+    state: { ...next, assignment, parish: null, founding: null, project: null, projects: [], mode: { kind: 'assignment', assignment }, flags },
     moved: true,
   };
 }

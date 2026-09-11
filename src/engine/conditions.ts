@@ -1,3 +1,4 @@
+import { frictionOf, leanOf } from '@/systems/liturgy';
 import type { Condition, GameState } from '@/types';
 import { seasonOf } from './time';
 import { resolveSelector } from './selectors';
@@ -78,6 +79,15 @@ export function evaluateCondition(
       if (!c) return false;
       const year = new Date((state.clock.startDay + state.clock.week * 7) * 86_400_000).getUTCFullYear();
       return compare(cond.op, year - (c.entryYear - c.background.entryAge), cond.value);
+    }
+    case 'liturgy': {
+      const parish = state.world && state.assignment ? state.world.parishes.find((p) => p.id === state.assignment!.parishId) : undefined;
+      if (!parish?.liturgy) return false;
+      if (cond.key === 'changes') return compare(cond.op ?? '>=', Object.keys(parish.liturgyChanged ?? {}).length, cond.amount ?? 1);
+      if (cond.key === 'friction') return compare(cond.op ?? '>=', frictionOf(parish), cond.amount ?? 0.3);
+      if (cond.key === 'lean') return compare(cond.op ?? '>=', leanOf(parish), cond.amount ?? 0);
+      if (cond.key === 'fresh') return compare(cond.op ?? '>=', Object.values(parish.liturgyChanged ?? {}).filter((w) => state.clock.week - w < 26).length, cond.amount ?? 1);
+      return parish.liturgy[cond.key] === cond.value;
     }
     case 'bond': {
       const pid = state.assignment?.parishId;

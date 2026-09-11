@@ -133,6 +133,32 @@ export interface SpendDef {
   requires?: Condition[];
   effects: Effect[];
   weekly?: Effect[];
+  /** Standing programs: what a fund does to the parish every week while it runs. */
+  pull?: number;
+  growth?: number;
+  school?: number;
+  groups?: number;
+  relief?: number;
+  collections?: number;
+}
+
+/** One dial of the pastor's Mass. parish/liturgy.json */
+export interface LiturgyOptionDef {
+  id: string;
+  label: string;
+  /** −1 traditional .. +1 progressive. */
+  lean: number;
+  /** Weekly cost while chosen. */
+  cost?: number;
+  /** Only where the parish has the people for it. */
+  needs?: { ethnic: string; share: number };
+}
+
+export interface LiturgyDialDef {
+  id: string;
+  label: string;
+  blurb: string;
+  options: LiturgyOptionDef[];
 }
 
 export interface ParishFinance {

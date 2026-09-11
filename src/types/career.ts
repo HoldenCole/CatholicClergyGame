@@ -39,6 +39,8 @@ export interface Project {
   costPerWeek: number;
   /** Weeks the parish could not pay; slows completion. */
   stalledWeeks: number;
+  /** Pushed: double the weekly draw and half the time left. */
+  pace?: 1 | 2;
 }
 
 /** One line of the career record, for the summary. */

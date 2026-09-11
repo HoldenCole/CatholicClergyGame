@@ -53,6 +53,7 @@ export function newGame(options: NewGameOptions): { state: GameState; rng: Rng }
     founding: null,
     openings: [],
     project: null,
+    projects: [],
     career: [],
     romeTemperament: 0,
     decor: {},

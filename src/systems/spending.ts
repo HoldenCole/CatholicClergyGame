@@ -48,7 +48,7 @@ export function spendAvailability(state: GameState): SpendAvailability[] {
     const standing = !!parish?.finance.funds?.[def.id];
     if (!parish || !controlsMoney(state)) return { def, standing, available: false, why: "The pastor's to spend" };
     if (standing) return { def, standing, available: false, why: 'Standing' };
-    if (parish.finance.debt > 0) return { def, standing, available: false, why: 'The debt comes first' };
+    if (parish.finance.debt > 0 && def.kind === 'once') return { def, standing, available: false, why: 'The debt comes first' };
     if (def.requires && !evaluateAll(def.requires, state)) {
       const why = def.requires.map((c) => describeUnmet(c, state)).find((w): w is string => !!w) ?? 'not here';
       return { def, standing, available: false, why: `needs ${why}` };
@@ -144,6 +144,7 @@ export function spendingWeek(state: GameState, rng: Rng): { state: GameState; li
     }
     f = { ...f, cash: f.cash - upkeep };
     if (def.weekly?.length) next = applyEffects(next, def.weekly);
+    next = fundWork(next, def, funds[id]!);
   }
   f.funds = funds;
   if ((f.endowment ?? 0) > 0) {
@@ -151,6 +152,38 @@ export function spendingWeek(state: GameState, rng: Rng): { state: GameState; li
     f.endowment = Math.max(0, Math.round((f.endowment ?? 0) * (1 + yearly / 52)));
   }
   return { state: { ...next, parish: { ...next.parish!, finance: f } }, lines };
+}
+
+/** What a standing program does to the parish besides its effects: households, the school, the groups. */
+function fundWork(state: GameState, def: SpendDef, since: number): GameState {
+  let next = state;
+  const pid = state.parish!.parishId;
+  const weeks = state.clock.week - since;
+  if (def.growth && weeks > 0 && weeks % 13 === 0) {
+    next = { ...next, world: { ...next.world!, parishes: next.world!.parishes.map((p) => (p.id === pid ? { ...p, households: p.households + Math.max(1, Math.round((p.households * def.growth!) / 4)) } : p)) } };
+  }
+  if (def.school) {
+    next = { ...next, world: { ...next.world!, parishes: next.world!.parishes.map((p) => (p.id === pid && p.buildings.school !== null ? { ...p, buildings: { ...p.buildings, school: Math.min(100, p.buildings.school + def.school!) } } : p)) } };
+  }
+  if (def.groups) {
+    const groups = { ...next.groups };
+    for (const g of parishGroups(next)) if (!g.suppressed && !g.hostile) groups[g.id] = { ...g, vitality: Math.min(100, g.vitality + def.groups) };
+    next = { ...next, groups };
+  }
+  return next;
+}
+
+/** The standing programs' pull on the pews, share on the plate, and the block of the week the staff carry. */
+export function fundBonuses(state: GameState): { pull: number; collections: number; relief: number } {
+  const out = { pull: 0, collections: 0, relief: 0 };
+  for (const id of Object.keys(state.parish?.finance.funds ?? {})) {
+    const def = spendDef(id);
+    if (!def) continue;
+    out.pull += def.pull ?? 0;
+    out.collections += def.collections ?? 0;
+    out.relief += def.relief ?? 0;
+  }
+  return out;
 }
 
 /** Groups of the parish a pastor could put money behind. */

@@ -1,34 +1,456 @@
 {
-  "_notes": "What a pastor can do with money that is not owed (DESIGN §8.2, playtesting). 'once' spends apply their effects when bought; 'fund' spends stand, draw their upkeep from cash each week and apply their weekly effects while the cash lasts. Conditions use the ordinary schema; 'parish' conditions read the current parish. The investment is engine-side (systems/spending.ts, endowment).",
+  "_notes": "What a pastor can do with money that is not owed (DESIGN §8.2, playtesting). 'once' spends apply their effects when bought; 'fund' spends stand, draw their upkeep from cash each week and apply their weekly effects while the cash lasts. Conditions use the ordinary schema; 'parish' conditions read the current parish. The investment is engine-side (systems/spending.ts, endowment). Standing programs (marketing, the school, the staff, formation, online) are funds too: they run every week until wound up and can be set up again; besides `weekly` effects a fund may carry `pull` (attendance target while it stands), `growth` (households a year, as a share), `school` (school condition a week), `groups` (vitality a week to every supported group), `relief` (a block of the week the staff carry), and `collections` (a share on every collection).",
   "spends": [
-    { "id": "tuition_fund", "kind": "fund", "label": "A tuition assistance fund", "blurb": "Families who cannot pay the school's tuition, paid for by the parish. Enrollment steadies and the school stops being a thing only the comfortable can use.", "cost": 40000, "upkeep": 600,
-      "requires": [{ "type": "parish", "key": "school", "value": "open" }],
-      "effects": [{ "target": "reputation", "key": "parishioners", "delta": 5 }, { "target": "flag", "key": "fund:tuition", "value": true }],
-      "weekly": [{ "target": "reputation", "key": "parishioners", "delta": 0.06 }] },
-    { "id": "medical_fund", "kind": "fund", "label": "A medical assistance fund", "blurb": "Prescriptions, a clinic visit, the bill that would have ended a family. Run through the parish nurse or the St. Vincent de Paul conference, quietly.", "cost": 25000, "upkeep": 500,
-      "requires": [{ "type": "parish", "key": "wealth", "op": "<=", "value": 3 }],
-      "effects": [{ "target": "reputation", "key": "parishioners", "delta": 6 }, { "target": "flag", "key": "fund:medical", "value": true }],
-      "weekly": [{ "target": "reputation", "key": "parishioners", "delta": 0.08 }, { "target": "stat", "key": "piety", "delta": 0.01 }] },
-    { "id": "poor_fund", "kind": "fund", "label": "A fund for the poor", "blurb": "Rent, groceries, a bus ticket home. The pastor's discretionary fund made large enough to matter, and the people who come to the door know it.", "cost": 20000, "upkeep": 400,
-      "effects": [{ "target": "reputation", "key": "parishioners", "delta": 4 }, { "target": "reputation", "key": "public", "delta": 3 }, { "target": "flag", "key": "fund:poor", "value": true }],
-      "weekly": [{ "target": "reputation", "key": "parishioners", "delta": 0.05 }, { "target": "reputation", "key": "public", "delta": 0.03 }] },
-    { "id": "parish_mission", "kind": "once", "label": "A parish mission", "blurb": "A week of preaching by a visiting order, every evening, with confessions until the church empties. The parish talks about it for a year.", "cost": 15000,
-      "effects": [{ "target": "reputation", "key": "parishioners", "delta": 8 }, { "target": "stat", "key": "piety", "delta": 1 }, { "target": "flag", "key": "held:mission", "value": true }] },
-    { "id": "feast_festival", "kind": "once", "label": "A feast-day festival", "blurb": "Three nights on the lot: food, a band, a procession, the whole neighborhood. The groups run the booths and remember that they are a parish.", "cost": 12000,
-      "effects": [{ "target": "reputation", "key": "parishioners", "delta": 5 }, { "target": "reputation", "key": "public", "delta": 6 }, { "target": "flag", "key": "held:festival", "value": true }] },
-    { "id": "expand_church", "kind": "once", "label": "Expand the church", "blurb": "A transept, a wider nave, a hundred more seats and a narthex people can gather in. Two years of dust, and a building that fits the parish it has become.", "cost": 450000,
-      "requires": [{ "type": "role", "value": "pastor" }],
-      "effects": [{ "target": "building", "key": "church", "delta": 30 }, { "target": "reputation", "key": "parishioners", "delta": 6 }, { "target": "flag", "key": "expanded_church", "value": true }] },
-    { "id": "new_hall", "kind": "once", "label": "Build a parish hall", "blurb": "A hall the parish has never had, or one that holds the parish it now is. Every group in the parish will want Tuesday night in it.", "cost": 300000,
-      "effects": [{ "target": "building", "key": "hall", "delta": 40 }, { "target": "reputation", "key": "parishioners", "delta": 5 }, { "target": "flag", "key": "built_hall", "value": true }] },
-    { "id": "adoration_chapel", "kind": "once", "label": "An adoration chapel", "blurb": "A room with a door that locks, a monstrance, and a schedule of people who come at three in the morning. Nothing else in the parish will change it as much.", "cost": 60000,
-      "requires": [{ "type": "not", "inner": { "type": "flag", "key": "built_adoration_chapel", "value": true } }],
-      "effects": [{ "target": "stat", "key": "piety", "delta": 2 }, { "target": "reputation", "key": "parishioners", "delta": 4 }, { "target": "reputation", "key": "traditional_bloc", "delta": 4 }, { "target": "flag", "key": "built_adoration_chapel", "value": true }] },
-    { "id": "youth_minister", "kind": "fund", "label": "Hire a youth minister", "blurb": "A salary the parish has never paid, for the young people it has been losing. The groups feel it first.", "cost": 10000, "upkeep": 900,
-      "effects": [{ "target": "flag", "key": "fund:youth_minister", "value": true }],
-      "weekly": [{ "target": "reputation", "key": "parishioners", "delta": 0.04 }] },
-    { "id": "music_program", "kind": "fund", "label": "Fund the music", "blurb": "A paid cantor, a repaired organ, a choir that rehearses. The Mass sounds like somebody meant it.", "cost": 15000, "upkeep": 500,
-      "effects": [{ "target": "reputation", "key": "parishioners", "delta": 3 }, { "target": "flag", "key": "fund:music", "value": true }],
-      "weekly": [{ "target": "reputation", "key": "parishioners", "delta": 0.04 }, { "target": "stat", "key": "charisma", "delta": 0.01 }] }
+    {
+      "id": "tuition_fund",
+      "kind": "fund",
+      "label": "A tuition assistance fund",
+      "blurb": "Families who cannot pay the school's tuition, paid for by the parish. Enrollment steadies and the school stops being a thing only the comfortable can use.",
+      "cost": 40000,
+      "upkeep": 600,
+      "requires": [
+        {
+          "type": "parish",
+          "key": "school",
+          "value": "open"
+        }
+      ],
+      "effects": [
+        {
+          "target": "reputation",
+          "key": "parishioners",
+          "delta": 5
+        },
+        {
+          "target": "flag",
+          "key": "fund:tuition",
+          "value": true
+        }
+      ],
+      "weekly": [
+        {
+          "target": "reputation",
+          "key": "parishioners",
+          "delta": 0.06
+        }
+      ]
+    },
+    {
+      "id": "medical_fund",
+      "kind": "fund",
+      "label": "A medical assistance fund",
+      "blurb": "Prescriptions, a clinic visit, the bill that would have ended a family. Run through the parish nurse or the St. Vincent de Paul conference, quietly.",
+      "cost": 25000,
+      "upkeep": 500,
+      "requires": [
+        {
+          "type": "parish",
+          "key": "wealth",
+          "op": "<=",
+          "value": 3
+        }
+      ],
+      "effects": [
+        {
+          "target": "reputation",
+          "key": "parishioners",
+          "delta": 6
+        },
+        {
+          "target": "flag",
+          "key": "fund:medical",
+          "value": true
+        }
+      ],
+      "weekly": [
+        {
+          "target": "reputation",
+          "key": "parishioners",
+          "delta": 0.08
+        },
+        {
+          "target": "stat",
+          "key": "piety",
+          "delta": 0.01
+        }
+      ]
+    },
+    {
+      "id": "poor_fund",
+      "kind": "fund",
+      "label": "A fund for the poor",
+      "blurb": "Rent, groceries, a bus ticket home. The pastor's discretionary fund made large enough to matter, and the people who come to the door know it.",
+      "cost": 20000,
+      "upkeep": 400,
+      "effects": [
+        {
+          "target": "reputation",
+          "key": "parishioners",
+          "delta": 4
+        },
+        {
+          "target": "reputation",
+          "key": "public",
+          "delta": 3
+        },
+        {
+          "target": "flag",
+          "key": "fund:poor",
+          "value": true
+        }
+      ],
+      "weekly": [
+        {
+          "target": "reputation",
+          "key": "parishioners",
+          "delta": 0.05
+        },
+        {
+          "target": "reputation",
+          "key": "public",
+          "delta": 0.03
+        }
+      ]
+    },
+    {
+      "id": "parish_mission",
+      "kind": "once",
+      "label": "A parish mission",
+      "blurb": "A week of preaching by a visiting order, every evening, with confessions until the church empties. The parish talks about it for a year.",
+      "cost": 15000,
+      "effects": [
+        {
+          "target": "reputation",
+          "key": "parishioners",
+          "delta": 8
+        },
+        {
+          "target": "stat",
+          "key": "piety",
+          "delta": 1
+        },
+        {
+          "target": "flag",
+          "key": "held:mission",
+          "value": true
+        }
+      ]
+    },
+    {
+      "id": "feast_festival",
+      "kind": "once",
+      "label": "A feast-day festival",
+      "blurb": "Three nights on the lot: food, a band, a procession, the whole neighborhood. The groups run the booths and remember that they are a parish.",
+      "cost": 12000,
+      "effects": [
+        {
+          "target": "reputation",
+          "key": "parishioners",
+          "delta": 5
+        },
+        {
+          "target": "reputation",
+          "key": "public",
+          "delta": 6
+        },
+        {
+          "target": "flag",
+          "key": "held:festival",
+          "value": true
+        }
+      ]
+    },
+    {
+      "id": "expand_church",
+      "kind": "once",
+      "label": "Expand the church",
+      "blurb": "A transept, a wider nave, a hundred more seats and a narthex people can gather in. Two years of dust, and a building that fits the parish it has become.",
+      "cost": 450000,
+      "requires": [
+        {
+          "type": "role",
+          "value": "pastor"
+        }
+      ],
+      "effects": [
+        {
+          "target": "building",
+          "key": "church",
+          "delta": 30
+        },
+        {
+          "target": "reputation",
+          "key": "parishioners",
+          "delta": 6
+        },
+        {
+          "target": "flag",
+          "key": "expanded_church",
+          "value": true
+        }
+      ]
+    },
+    {
+      "id": "new_hall",
+      "kind": "once",
+      "label": "Build a parish hall",
+      "blurb": "A hall the parish has never had, or one that holds the parish it now is. Every group in the parish will want Tuesday night in it.",
+      "cost": 300000,
+      "effects": [
+        {
+          "target": "building",
+          "key": "hall",
+          "delta": 40
+        },
+        {
+          "target": "reputation",
+          "key": "parishioners",
+          "delta": 5
+        },
+        {
+          "target": "flag",
+          "key": "built_hall",
+          "value": true
+        }
+      ]
+    },
+    {
+      "id": "adoration_chapel",
+      "kind": "once",
+      "label": "An adoration chapel",
+      "blurb": "A room with a door that locks, a monstrance, and a schedule of people who come at three in the morning. Nothing else in the parish will change it as much.",
+      "cost": 60000,
+      "requires": [
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "built_adoration_chapel",
+            "value": true
+          }
+        }
+      ],
+      "effects": [
+        {
+          "target": "stat",
+          "key": "piety",
+          "delta": 2
+        },
+        {
+          "target": "reputation",
+          "key": "parishioners",
+          "delta": 4
+        },
+        {
+          "target": "reputation",
+          "key": "traditional_bloc",
+          "delta": 4
+        },
+        {
+          "target": "flag",
+          "key": "built_adoration_chapel",
+          "value": true
+        }
+      ]
+    },
+    {
+      "id": "youth_minister",
+      "kind": "fund",
+      "label": "Hire a youth minister",
+      "blurb": "A salary the parish has never paid, for the young people it has been losing. The groups feel it first.",
+      "cost": 10000,
+      "upkeep": 900,
+      "effects": [
+        {
+          "target": "flag",
+          "key": "fund:youth_minister",
+          "value": true
+        }
+      ],
+      "weekly": [
+        {
+          "target": "reputation",
+          "key": "parishioners",
+          "delta": 0.04
+        }
+      ]
+    },
+    {
+      "id": "music_program",
+      "kind": "fund",
+      "label": "Fund the music",
+      "blurb": "A paid cantor, a repaired organ, a choir that rehearses. The Mass sounds like somebody meant it.",
+      "cost": 15000,
+      "upkeep": 500,
+      "effects": [
+        {
+          "target": "reputation",
+          "key": "parishioners",
+          "delta": 3
+        },
+        {
+          "target": "flag",
+          "key": "fund:music",
+          "value": true
+        }
+      ],
+      "weekly": [
+        {
+          "target": "reputation",
+          "key": "parishioners",
+          "delta": 0.04
+        },
+        {
+          "target": "stat",
+          "key": "charisma",
+          "delta": 0.01
+        }
+      ]
+    },
+    {
+      "id": "marketing",
+      "kind": "fund",
+      "label": "Make the parish known",
+      "blurb": "A sign that can be read from the road, a bulletin people keep, the website, the welcome desk, a man at the diocesan paper who knows your name. Families from two towns over start to register.",
+      "cost": 6000,
+      "upkeep": 350,
+      "effects": [
+        {
+          "target": "flag",
+          "key": "fund:marketing",
+          "value": true
+        }
+      ],
+      "weekly": [
+        {
+          "target": "reputation",
+          "key": "public",
+          "delta": 0.05
+        }
+      ],
+      "pull": 0.02,
+      "growth": 0.025
+    },
+    {
+      "id": "school_quality",
+      "kind": "fund",
+      "label": "Raise the school",
+      "blurb": "Teachers paid nearer what the public schools pay, a reading specialist, the science room, the principal's list. Enrollment follows quality, slowly, and the diocese notices a school that is not a problem.",
+      "cost": 25000,
+      "upkeep": 900,
+      "requires": [
+        {
+          "type": "parish",
+          "key": "school",
+          "value": "open"
+        }
+      ],
+      "effects": [
+        {
+          "target": "flag",
+          "key": "fund:school_quality",
+          "value": true
+        }
+      ],
+      "weekly": [
+        {
+          "target": "reputation",
+          "key": "chancery",
+          "delta": 0.03
+        },
+        {
+          "target": "reputation",
+          "key": "parishioners",
+          "delta": 0.03
+        }
+      ],
+      "school": 0.15,
+      "growth": 0.012
+    },
+    {
+      "id": "staff_bonuses",
+      "kind": "fund",
+      "label": "Pay the staff properly",
+      "blurb": "A raise, a Christmas bonus, health insurance that covers something. The secretary stops looking, the DRE stays, and the office runs without you in it.",
+      "cost": 8000,
+      "upkeep": 400,
+      "effects": [
+        {
+          "target": "flag",
+          "key": "fund:staff",
+          "value": true
+        }
+      ],
+      "weekly": [
+        {
+          "target": "relationship",
+          "key": "@secretary",
+          "delta": 0.25
+        },
+        {
+          "target": "relationship",
+          "key": "@dre",
+          "delta": 0.25
+        },
+        {
+          "target": "relationship",
+          "key": "@music_director",
+          "delta": 0.2
+        },
+        {
+          "target": "relationship",
+          "key": "@maintenance",
+          "delta": 0.2
+        }
+      ],
+      "relief": 1
+    },
+    {
+      "id": "adult_formation",
+      "kind": "fund",
+      "label": "Adult formation",
+      "blurb": "A speaker a month, a Bible study that does not die in Lent, a paid coordinator. The people who come become the people who run things.",
+      "cost": 5000,
+      "upkeep": 250,
+      "effects": [
+        {
+          "target": "flag",
+          "key": "fund:formation",
+          "value": true
+        }
+      ],
+      "weekly": [
+        {
+          "target": "reputation",
+          "key": "parishioners",
+          "delta": 0.04
+        }
+      ],
+      "groups": 0.15
+    },
+    {
+      "id": "parish_online",
+      "kind": "fund",
+      "label": "The parish online",
+      "blurb": "The Mass streamed, the bulletin emailed, the giving done by phone. The homebound see you; the young give from the car.",
+      "cost": 4000,
+      "upkeep": 150,
+      "effects": [
+        {
+          "target": "flag",
+          "key": "fund:online",
+          "value": true
+        }
+      ],
+      "weekly": [
+        {
+          "target": "reputation",
+          "key": "public",
+          "delta": 0.03
+        }
+      ],
+      "pull": 0.01,
+      "collections": 0.02
+    }
   ]
 }

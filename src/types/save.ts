@@ -107,7 +107,9 @@ export interface GameState {
   /** Openings the personnel board currently has. Refreshed each career year. */
   openings: Opening[];
   /** The pastor's current project, if any. DESIGN 8.3 */
+  /** The pastor's projects, several at once. `project` is kept for older saves and mirrors the first. */
   project: Project | null;
+  projects?: Project[];
   /** The record the career summary is written from. */
   career: CareerEntry[];
   /** Rome's current temperament, −100..100, for successions. DESIGN 9.3 */
@@ -138,7 +140,7 @@ export interface GameSettings {
   hours?: number;
 }
 
-export const SAVE_VERSION = 5;
+export const SAVE_VERSION = 6;
 
 export interface SaveFile {
   version: number;

@@ -255,6 +255,27 @@ letter after a succession (his priorities and liturgical policy, leave he
 withdraws, how he reads the man's stands and circles). Both are kept in
 `letters`; a second waits in `letterQueue` behind the first.
 
+### The pastor's Mass (`parish/liturgy.json`)
+
+Seven dials a pastor sets: language, incense, candles, servers, music,
+homily, communion posture. Each option carries a `lean` (−1 traditional ..
++1 progressive), an optional weekly `cost`, and optional `needs` (an ethnic
+share). Every parish rolls a `taste` per dial from its alignment and
+generation at generation and a Mass near it; `systems/liturgy.ts` scores the
+distance as friction. A change shocks lay support and writes a semi-public
+stand on the liturgy; each week friction above a tolerance drains lay
+support and the pews, a fitting Mass fills them, and the blocs read the
+lean. Content reaches it with the `liturgy` condition (a dial set to an
+option, or `changes` / `fresh` / `friction` / `lean` against an amount).
+Only a pastor or administrator turns the dials; a vicar says the Mass as he
+finds it, and his visits, confessions, and groups count for more while his
+desk work counts for less (`WEEK.vicarCare`, `WEEK.vicarAdmin`).
+
+A well-run parish is noticed (`systems/notice.ts`): once a quarter, when the
+trajectory, the care, the Mass, and the pews all read well, households
+register from a neighbouring parish, the town and the chancery hear of it,
+and `parish_noticed` counts the quarters.
+
 ### The parish's money (`parish/spending.json`)
 
 Once the debt is paid a pastor spends: `once` spends apply their effects when
@@ -413,6 +434,13 @@ week: visits, extra confessions, the groups, and an invested homily. Care
 lifts attendance, attendance lifts collections, and at high care events in
 the `finance`, `admin`, and `group` categories draw less often (up to 40%).
 Authors need not gate on it; it is the reward for a tended parish.
+
+### Projects in parallel
+
+A pastor carries one project, and one more for every forty points of
+administration (`projectCap`); each can be pushed (`pace: 2`: double the
+weekly draw, half the time left) and eased off again. `state.projects` holds
+them; `project` mirrors the first for older code and saves (v6 migration).
 
 ### Levers on a parish
 
