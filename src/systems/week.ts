@@ -1,6 +1,7 @@
 import type { Effect, GameState, ObligationKey, Quality, Role, Season, WeekLedger } from '@/types';
 import { OBLIGATION_KEYS } from '@/types';
-import { actionDefs, obligationDefs, SEASONAL_LOAD } from '@/content/parish';
+import { actionDefs, obligationDefs, sacrificeDefs, SEASONAL_LOAD } from '@/content/parish';
+import { takeSnapshot, TRAJECTORY } from './trajectory';
 import { applyEffects } from '@/engine/effects';
 import { commitmentAp } from '@/engine/offers';
 import { seasonOf } from '@/engine/time';
@@ -17,7 +18,8 @@ export const WEEK = {
   terrainMismatchPerWeek: -0.04,
   baseAp: { parochial_vicar: 10, administrator: 10, pastor: 10 } as Record<Role, number>,
   /** Extra administrative floor by role, reducible by Administration. */
-  adminFloor: { parochial_vicar: 0, administrator: 1, pastor: 2 } as Record<Role, number>,
+  /** DESIGN §8.1 puts the pastor at ~6 mandatory; the obligation table alone sums to 7 at standard, so the floor stays at one. */
+  adminFloor: { parochial_vicar: 0, administrator: 1, pastor: 1 } as Record<Role, number>,
   /** One AP of floor forgiven per this much Administration. */
   adminPerFloorAp: 45,
   /** Order in which obligations are cut when the week does not fit. */
@@ -44,6 +46,13 @@ export const WEEK = {
   attendanceFollow: 0.2,
   /** At full care, finance, admin, and group fires draw this much less often. */
   careProblemRelief: 0.4,
+  /** Strain recovered a week with nothing sacrificed. */
+  strainRecovery: 1.5,
+  /** Past this, the body takes an hour back: the budget drops by one. */
+  strainSick: 80,
+  /** Past this, piety drains a little extra each week: tired in a way sleep does not fix. */
+  strainWorn: 50,
+  strainPietyDrain: 0.08,
 } as const;
 
 const NEXT_DOWN: Record<Quality, Quality | null> = { invested: 'standard', standard: 'min', min: null };
@@ -64,10 +73,29 @@ export function seasonalLoad(state: GameState): number {
   return SEASONAL_LOAD[seasonOf(state.clock)];
 }
 
-/** Total AP the week has to give. */
+/** What he has cut out of his own week, and the hours it buys. */
+export function sacrificesOf(state: GameState): typeof sacrificeDefs {
+  const ids = new Set(state.parish?.routine.sacrifices ?? []);
+  return sacrificeDefs.filter((d) => ids.has(d.id));
+}
+
+export function sacrificeAp(state: GameState): number {
+  return sacrificesOf(state).reduce((n, d) => n + d.ap, 0);
+}
+
+export function strainOf(state: GameState): number {
+  return state.parish?.strain ?? 0;
+}
+
+export function strainWord(strain: number): string {
+  return strain >= WEEK.strainSick ? 'burning out' : strain >= WEEK.strainWorn ? 'worn thin' : strain >= 25 ? 'tired' : 'rested';
+}
+
+/** Total AP the week has to give: the base, what an event took or gave, what he has cut from his own life, less what the body takes back. */
 export function weekBudget(state: GameState): number {
   const role = state.assignment?.role ?? 'parochial_vicar';
-  return WEEK.baseAp[role] + (state.parish?.apNextWeek ?? 0);
+  const sick = strainOf(state) >= WEEK.strainSick ? 1 : 0;
+  return Math.max(1, WEEK.baseAp[role] + (state.parish?.apNextWeek ?? 0) + sacrificeAp(state) - sick);
 }
 
 export interface Plan {
@@ -87,7 +115,7 @@ export interface Plan {
 export function planWeek(state: GameState): Plan {
   const parish = state.parish!;
   const budget = weekBudget(state);
-  const fixed = seasonalLoad(state) + adminFloorFor(state) + commitmentAp(state) + (state.founding?.apPerWeek ?? 0);
+  const fixed = seasonalLoad(state) + adminFloorFor(state) + commitmentAp(state) + (state.founding?.apPerWeek ?? 0) + (state.parish?.work?.apPerWeek ?? 0);
   const relief = groupRelief(state);
   const obligations = { ...parish.routine.obligations };
   const mandatoryOf = () => fixed + OBLIGATION_KEYS.reduce((n, k) => n + obligationAp(k, obligations[k], (relief as Record<string, number>)[k] ?? 0), 0);
@@ -197,6 +225,17 @@ export function resolveWeek(state: GameState, rng: Rng): { state: GameState; led
   }
   if (plan.slack > 0) next = applyEffects(next, [{ target: 'stat', key: 'piety', delta: WEEK.restPietyPerAp * plan.slack }]);
 
+  // What he cut from his own week costs him, and wears him. DESIGN §2.6 extension.
+  const sacrificed = sacrificesOf(state);
+  for (const d of sacrificed) next = applyEffects(next, d.effectsPerWeek);
+  const strainBefore = strainOf(state);
+  const strainAdded = sacrificed.reduce((n, d) => n + d.strain, 0);
+  const strain = Math.max(0, Math.min(100, strainBefore + (strainAdded > 0 ? strainAdded : -WEEK.strainRecovery)));
+  if (strain >= WEEK.strainWorn) next = applyEffects(next, [{ target: 'stat', key: 'piety', delta: -WEEK.strainPietyDrain }]);
+  if (strainBefore < WEEK.strainWorn && strain >= WEEK.strainWorn) lines.push('You are tired in a way sleep does not fix.');
+  if (strainBefore < WEEK.strainSick && strain >= WEEK.strainSick) lines.push('You were sick for two days and said Mass anyway. Something has to give.');
+  if (strainBefore >= WEEK.strainWorn && strain < WEEK.strainWorn) lines.push('You slept, and it showed.');
+
   // Groups: the sustaining AP goes to them; founding projects resolve.
   const groupResult = groupsWeek(next, plan.discretionary.groups ?? 0, rng);
   next = groupResult.state;
@@ -243,6 +282,9 @@ export function resolveWeek(state: GameState, rng: Rng): { state: GameState; led
   if (buildings.school !== null) buildings.school = Math.max(0, buildings.school - WEEK.buildingDecayPerWeek);
   const parishes = world.parishes.map((p) => (p.id === record.id ? { ...p, buildings } : p));
 
+  // A quarterly reading, so he can tell whether the place is turning.
+  const dueSnapshot = (parish.weeksServed + 1) % TRAJECTORY.everyWeeks === 0;
+
   const ledger: WeekLedger = {
     week: next.clock.week,
     apTotal: weekBudget(state),
@@ -255,7 +297,7 @@ export function resolveWeek(state: GameState, rng: Rng): { state: GameState; led
     debtService,
     lines,
   };
-  return {
+  const result: { state: GameState; ledger: WeekLedger } = {
     state: {
       ...next,
       world: { ...world, parishes },
@@ -263,6 +305,7 @@ export function resolveWeek(state: GameState, rng: Rng): { state: GameState; led
         ...parish,
         attendance,
         care,
+        strain,
         recycledHomilyStreak: streak,
         apNextWeek: 0,
         weeksServed: parish.weeksServed + 1,
@@ -271,4 +314,9 @@ export function resolveWeek(state: GameState, rng: Rng): { state: GameState; led
     },
     ledger,
   };
+  if (dueSnapshot) {
+    const snap = takeSnapshot(result.state);
+    if (snap) result.state = { ...result.state, parish: { ...result.state.parish!, snapshots: [...(parish.snapshots ?? []), snap].slice(-TRAJECTORY.keep) } };
+  }
+  return result;
 }

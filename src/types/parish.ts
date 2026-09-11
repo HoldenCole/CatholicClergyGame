@@ -46,6 +46,29 @@ export type ActionLocation =
   | 'study'
   | 'chapel';
 
+/** Something a man cuts out of his own week to make an hour. parish/sacrifices.json */
+export interface SacrificeDef {
+  id: string;
+  label: string;
+  blurb: string;
+  ap: number;
+  /** Strain added a week while it stands. */
+  strain: number;
+  effectsPerWeek: Effect[];
+}
+
+/** The work that answers a parish's live problem. parish/problems.json */
+export interface ProblemFixDef {
+  problem: string;
+  label: string;
+  blurb: string;
+  weeks: number;
+  apPerWeek: number;
+  cost: number;
+  outcome: string;
+  effects: Effect[];
+}
+
 export interface ActionDef {
   id: string;
   label: string;
@@ -70,6 +93,29 @@ export interface Routine {
   obligations: Record<ObligationKey, Quality>;
   /** Action id -> AP per week. Scaled down when the week's mandatory floor eats into it. */
   discretionary: Record<string, number>;
+  /** What he has cut out of his own week to make hours: ids from parish/sacrifices.json. */
+  sacrifices?: string[];
+}
+
+/** A quarterly reading of the parish, so the man can tell whether it is turning. */
+export interface ParishSnapshot {
+  week: number;
+  attendance: number;
+  collections: number;
+  debt: number;
+  /** Mean vitality of supported groups. */
+  groups: number;
+  /** Mean building condition. */
+  buildings: number;
+  households: number;
+}
+
+/** Work on the parish's one live problem. */
+export interface ProblemWork {
+  problem: string;
+  startWeek: number;
+  endWeek: number;
+  apPerWeek: number;
 }
 
 /** Seasonal AP floors. DESIGN.md §2.5 */
@@ -112,6 +158,13 @@ export interface ParishState {
    * collections, and a well-tended parish has fewer fires. Absent in older saves.
    */
   care?: number;
+  /** 0..100. Rises with each sacrifice a week, falls with rest. Carried between assignments. */
+  strain?: number;
+  /** The parish as it was when he arrived, and each quarter since. */
+  arrival?: ParishSnapshot;
+  snapshots?: ParishSnapshot[];
+  /** Work in hand on the parish's problem. */
+  work?: ProblemWork | null;
 }
 
 /** What the week resolved to, for the digest and for tests. */

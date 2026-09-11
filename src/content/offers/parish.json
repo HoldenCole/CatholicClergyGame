@@ -4,23 +4,57 @@
     {
       "id": "pv_rome_study",
       "category": "academic",
-      "phase": ["parochial_vicar", "pastor"],
+      "phase": [
+        "parochial_vicar",
+        "pastor"
+      ],
       "title": "A Letter About Rome",
       "body": "{@bishop} asks you to the residence, which he does not do for vicars, and hands you a letter from the Gregorian. He has one place for a licentiate in theology this autumn and he has been thinking about whose name goes on it. Three years, he says, maybe four with the language year. The diocese pays. You would live at the Casa Santa Maria with men from forty dioceses, sit examinations in Italian, and come home with a degree that opens doors in this building for the rest of your life. He is also honest about the other side. The parish will get a replacement, and the people who have learned your name will learn his. Some of the priests will call it a reward. Some will use a different word.",
       "from": "@bishop",
       "requires": [
-        { "type": "years_ordained", "op": ">=", "value": 2 },
-        { "type": "not", "inner": { "type": "flag", "key": "rome_alumnus", "value": true } },
-        { "type": "not", "inner": { "type": "credential", "key": "STL" } },
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 2
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "rome_alumnus",
+            "value": true
+          }
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "credential",
+            "key": "STL"
+          }
+        },
         {
           "type": "any",
           "inner": [
-            { "type": "flag", "key": "rome_track", "value": true },
+            {
+              "type": "flag",
+              "key": "rome_track",
+              "value": true
+            },
             {
               "type": "all",
               "inner": [
-                { "type": "stat", "key": "theology", "op": ">=", "value": 60 },
-                { "type": "reputation", "key": "chancery", "op": ">=", "value": 20 }
+                {
+                  "type": "stat",
+                  "key": "theology",
+                  "op": ">=",
+                  "value": 60
+                },
+                {
+                  "type": "reputation",
+                  "key": "chancery",
+                  "op": ">=",
+                  "value": 20
+                }
               ]
             }
           ]
@@ -28,17 +62,43 @@
       ],
       "weight": 30,
       "bias": [
-        { "when": { "type": "flag", "key": "summer:rome", "value": true }, "multiplier": 1.5 },
-        { "when": { "type": "flag", "key": "rome_track", "value": true }, "multiplier": 1.4 }
+        {
+          "when": {
+            "type": "flag",
+            "key": "summer:rome",
+            "value": true
+          },
+          "multiplier": 1.5
+        },
+        {
+          "when": {
+            "type": "flag",
+            "key": "rome_track",
+            "value": true
+          },
+          "multiplier": 1.4
+        }
       ],
       "windowWeeks": 6,
       "once": true,
       "cluster": "academic",
       "accept": {
         "effects": [
-          { "target": "reputation", "key": "parishioners", "delta": -15 },
-          { "target": "reputation", "key": "brother_priests", "delta": -5 },
-          { "target": "stat", "key": "piety", "delta": -1 }
+          {
+            "target": "reputation",
+            "key": "parishioners",
+            "delta": -15
+          },
+          {
+            "target": "reputation",
+            "key": "brother_priests",
+            "delta": -5
+          },
+          {
+            "target": "stat",
+            "key": "piety",
+            "delta": -1
+          }
         ],
         "outcome": "The announcement is made at the Sunday Masses three weeks before you leave. Some people cry, which surprises you, and some stop coming to your line for Communion, which does not. {@rival_classmate} sends a card that reads as congratulations if you do not look too closely. Then the plane, and a city that does not know you.",
         "commitment": {
@@ -46,36 +106,107 @@
           "weeks": 156,
           "apPerWeek": 10,
           "onComplete": [
-            { "target": "credential", "key": "STL" },
-            { "target": "flag", "key": "rome_alumnus", "value": true },
-            { "target": "reputation", "key": "rome", "delta": 20 },
-            { "target": "reputation", "key": "chancery", "delta": 8 },
-            { "target": "stat", "key": "theology", "delta": 6 },
-            { "target": "stat", "key": "knowledge", "delta": 2 },
-            { "target": "credential", "key": "italian" },
-            { "target": "archetype", "key": "theological", "delta": 3 },
-            { "target": "trait", "key": "came home from Rome slightly a stranger" }
+            {
+              "target": "credential",
+              "key": "STL"
+            },
+            {
+              "target": "flag",
+              "key": "rome_alumnus",
+              "value": true
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 20
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 8
+            },
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 6
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 2
+            },
+            {
+              "target": "credential",
+              "key": "italian"
+            },
+            {
+              "target": "archetype",
+              "key": "theological",
+              "delta": 3
+            },
+            {
+              "target": "trait",
+              "key": "came home from Rome slightly a stranger"
+            }
           ],
           "completeOutcome": "You defend in a room with a fresco on the ceiling and fly home with a degree, an address book full of men who will be bishops, and the habit of looking for a bar that serves espresso standing up. The chancery treats you differently. The first parish you walk into does not know what to do with you."
         }
       },
       "decline": {
         "effects": [
-          { "target": "flag", "key": "refused_rome", "value": true },
-          { "target": "reputation", "key": "chancery", "delta": -4 },
-          { "target": "reputation", "key": "parishioners", "delta": 4 }
+          {
+            "target": "flag",
+            "key": "refused_rome",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "chancery",
+            "delta": -4
+          },
+          {
+            "target": "reputation",
+            "key": "parishioners",
+            "delta": 4
+          }
         ],
         "outcome": "You tell him you would rather stay where you are. He looks at you for a moment as if reassessing a file, then says that is a good answer too, in a tone that means it is not the one he wanted. The place goes to another man. Your people never learn how close they came to losing you."
       },
       "failure": {
         "chance": 0.35,
-        "unless": [{ "type": "stat", "key": "theology", "op": ">=", "value": 60 }],
+        "unless": [
+          {
+            "type": "stat",
+            "key": "theology",
+            "op": ">=",
+            "value": 60
+          }
+        ],
         "effects": [
-          { "target": "flag", "key": "rome_washed_out", "value": true },
-          { "target": "reputation", "key": "rome", "delta": -6 },
-          { "target": "reputation", "key": "chancery", "delta": -8 },
-          { "target": "stat", "key": "theology", "delta": 2 },
-          { "target": "credential", "key": "italian" }
+          {
+            "target": "flag",
+            "key": "rome_washed_out",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "rome",
+            "delta": -6
+          },
+          {
+            "target": "reputation",
+            "key": "chancery",
+            "delta": -8
+          },
+          {
+            "target": "stat",
+            "key": "theology",
+            "delta": 2
+          },
+          {
+            "target": "credential",
+            "key": "italian"
+          }
         ],
         "outcome": "The second-year examinations are in Italian and in a theology you were never quite prepared for. You fail the comprehensive twice. The rector of the Casa writes to {@bishop}; the letter is kind and the outcome is not. You come home with the language, a good tailor, and no degree, and the diocese has paid for three years of that."
       }
@@ -83,35 +214,90 @@
     {
       "id": "pv_canon_law_licentiate",
       "category": "academic",
-      "phase": ["parochial_vicar", "pastor"],
+      "phase": [
+        "parochial_vicar",
+        "pastor"
+      ],
       "title": "The Judicial Vicar Needs a Successor",
       "body": "The chancellor's letter is two paragraphs. The judicial vicar is sixty-eight, the tribunal is behind on annulment cases by fourteen months, and the diocese has no priest under fifty with a canon law degree. {@bishop} would like to send one for the licentiate: two years at the Catholic University in Washington, or at Santa Croce in Rome if your Italian will stand it. Your background is why the letter came to you. It is not glamorous work. The men who do it spend their lives reading depositions about marriages that failed, and the chancery comes to depend on them in a way that is hard to leave. You would be gone from the parish for two full years, and the people would be told you were away studying, which is true and never sounds it.",
       "requires": [
-        { "type": "years_ordained", "op": ">=", "value": 2 },
-        { "type": "not", "inner": { "type": "credential", "key": "JCL" } },
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 2
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "credential",
+            "key": "JCL"
+          }
+        },
         {
           "type": "any",
           "inner": [
-            { "type": "flag", "key": "canon_law_track", "value": true },
-            { "type": "flag", "key": "field:history_law", "value": true },
-            { "type": "flag", "key": "career:attorney", "value": true },
-            { "type": "credential", "key": "partial_jcl" }
+            {
+              "type": "flag",
+              "key": "canon_law_track",
+              "value": true
+            },
+            {
+              "type": "flag",
+              "key": "field:history_law",
+              "value": true
+            },
+            {
+              "type": "flag",
+              "key": "career:attorney",
+              "value": true
+            },
+            {
+              "type": "credential",
+              "key": "partial_jcl"
+            }
           ]
         }
       ],
       "weight": 35,
       "bias": [
-        { "when": { "type": "flag", "key": "summer:chancery", "value": true }, "multiplier": 1.4 },
-        { "when": { "type": "stat", "key": "knowledge", "op": ">=", "value": 60 }, "multiplier": 1.3 }
+        {
+          "when": {
+            "type": "flag",
+            "key": "summer:chancery",
+            "value": true
+          },
+          "multiplier": 1.4
+        },
+        {
+          "when": {
+            "type": "stat",
+            "key": "knowledge",
+            "op": ">=",
+            "value": 60
+          },
+          "multiplier": 1.3
+        }
       ],
       "windowWeeks": 5,
       "once": true,
       "cluster": "academic",
       "accept": {
         "effects": [
-          { "target": "reputation", "key": "parishioners", "delta": -12 },
-          { "target": "reputation", "key": "brother_priests", "delta": -4 },
-          { "target": "reputation", "key": "chancery", "delta": 4 }
+          {
+            "target": "reputation",
+            "key": "parishioners",
+            "delta": -12
+          },
+          {
+            "target": "reputation",
+            "key": "brother_priests",
+            "delta": -4
+          },
+          {
+            "target": "reputation",
+            "key": "chancery",
+            "delta": 4
+          }
         ],
         "outcome": "You pack the rectory room into a car. The parish secretary gives you a card signed by the staff and by nobody in the pews, which tells you something about how the announcement landed. The first seminar is on the Roman Rota's jurisprudence on consent, and you understand, by the second hour, why nobody wants this degree and everybody wants the man who has it.",
         "commitment": {
@@ -119,21 +305,56 @@
           "weeks": 104,
           "apPerWeek": 10,
           "onComplete": [
-            { "target": "credential", "key": "JCL" },
-            { "target": "flag", "key": "tribunal_ready", "value": true },
-            { "target": "reputation", "key": "chancery", "delta": 12 },
-            { "target": "reputation", "key": "rome", "delta": 6 },
-            { "target": "stat", "key": "knowledge", "delta": 4 },
-            { "target": "stat", "key": "administration", "delta": 3 },
-            { "target": "archetype", "key": "administrative", "delta": 3 }
+            {
+              "target": "credential",
+              "key": "JCL"
+            },
+            {
+              "target": "flag",
+              "key": "tribunal_ready",
+              "value": true
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 12
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 6
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 4
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 3
+            },
+            {
+              "target": "archetype",
+              "key": "administrative",
+              "delta": 3
+            }
           ],
           "completeOutcome": "You come home with the licentiate and a working knowledge of how marriages fail, which is more than most priests know and less than you expected. The chancellor telephones the week you are back. The tribunal is now sixteen months behind, he says, and your name is already on the door."
         }
       },
       "decline": {
         "effects": [
-          { "target": "flag", "key": "refused_canon_law", "value": true },
-          { "target": "reputation", "key": "chancery", "delta": -5 }
+          {
+            "target": "flag",
+            "key": "refused_canon_law",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "chancery",
+            "delta": -5
+          }
         ],
         "outcome": "You write back that you are not the man for it. The chancellor replies in one sentence acknowledging receipt. A priest from another diocese is borrowed for the tribunal at a cost the finance council notices. Nobody blames you aloud, but the letter is in your file, and files are what that building is made of."
       },
@@ -143,16 +364,40 @@
           {
             "type": "any",
             "inner": [
-              { "type": "stat", "key": "knowledge", "op": ">=", "value": 55 },
-              { "type": "credential", "key": "partial_jcl" },
-              { "type": "flag", "key": "career:attorney", "value": true }
+              {
+                "type": "stat",
+                "key": "knowledge",
+                "op": ">=",
+                "value": 55
+              },
+              {
+                "type": "credential",
+                "key": "partial_jcl"
+              },
+              {
+                "type": "flag",
+                "key": "career:attorney",
+                "value": true
+              }
             ]
           }
         ],
         "effects": [
-          { "target": "flag", "key": "jcl_washed_out", "value": true },
-          { "target": "reputation", "key": "chancery", "delta": -7 },
-          { "target": "stat", "key": "knowledge", "delta": 2 }
+          {
+            "target": "flag",
+            "key": "jcl_washed_out",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "chancery",
+            "delta": -7
+          },
+          {
+            "target": "stat",
+            "key": "knowledge",
+            "delta": 2
+          }
         ],
         "outcome": "The Latin of the Code and the Latin of the seminary turn out to be different animals, and the second year's examinations catch you. You are advised, gently, to withdraw before the results are formal. You come back with credit hours, no degree, and a reputation in the chancery for having been sent and not returned."
       }
@@ -160,34 +405,90 @@
     {
       "id": "pv_dissertation",
       "category": "academic",
-      "phase": ["parochial_vicar", "pastor"],
+      "phase": [
+        "parochial_vicar",
+        "pastor"
+      ],
       "title": "Something Worth Writing Down",
       "body": "A professor you studied under writes to say a journal editor asked him for names, and he gave yours. He has an idea for a book-length study, or a series of articles that would become one, on a question you argued with him about in your fourth year and apparently never stopped thinking about. He would read drafts. The editor would look at chapters. It takes three years of evenings and days off, the ones you would otherwise spend with people, and at the end of it there would be something with your name on it that the men who assemble ternae actually read. Or there would not be, and you would have spent three years of evenings on a manuscript in a drawer. Pastors, he notes, have written good books. Not many, and not while they were good pastors.",
       "requires": [
-        { "type": "years_ordained", "op": ">=", "value": 1 },
-        { "type": "not", "inner": { "type": "flag", "key": "published", "value": true } },
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 1
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "published",
+            "value": true
+          }
+        },
         {
           "type": "any",
           "inner": [
-            { "type": "stat", "key": "theology", "op": ">=", "value": 60 },
-            { "type": "stat", "key": "knowledge", "op": ">=", "value": 60 }
+            {
+              "type": "stat",
+              "key": "theology",
+              "op": ">=",
+              "value": 60
+            },
+            {
+              "type": "stat",
+              "key": "knowledge",
+              "op": ">=",
+              "value": 60
+            }
           ]
         }
       ],
       "weight": 35,
       "bias": [
-        { "when": { "type": "flag", "key": "motive:intellectual", "value": true }, "multiplier": 1.5 },
-        { "when": { "type": "flag", "key": "path:doctoral", "value": true }, "multiplier": 1.4 },
-        { "when": { "type": "credential", "key": "STL" }, "multiplier": 1.4 }
+        {
+          "when": {
+            "type": "flag",
+            "key": "motive:intellectual",
+            "value": true
+          },
+          "multiplier": 1.5
+        },
+        {
+          "when": {
+            "type": "flag",
+            "key": "path:doctoral",
+            "value": true
+          },
+          "multiplier": 1.4
+        },
+        {
+          "when": {
+            "type": "credential",
+            "key": "STL"
+          },
+          "multiplier": 1.4
+        }
       ],
       "windowWeeks": 4,
       "once": true,
       "cluster": "academic",
       "accept": {
         "effects": [
-          { "target": "flag", "key": "research_project", "value": true },
-          { "target": "reputation", "key": "parishioners", "delta": -4 },
-          { "target": "stat", "key": "piety", "delta": -1 }
+          {
+            "target": "flag",
+            "key": "research_project",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "parishioners",
+            "delta": -4
+          },
+          {
+            "target": "stat",
+            "key": "piety",
+            "delta": -1
+          }
         ],
         "outcome": "You clear the second desk in the rectory and begin. The first chapter takes a winter. People notice the light on in your window at midnight and draw their own conclusions, most of them wrong. You stop going to the Thursday potluck, and the woman who runs it asks whether you are all right, in a tone that is not quite a question.",
         "commitment": {
@@ -195,21 +496,57 @@
           "weeks": 156,
           "apPerWeek": 2,
           "onComplete": [
-            { "target": "flag", "key": "published", "value": true },
-            { "target": "reputation", "key": "rome", "delta": 8 },
-            { "target": "reputation", "key": "public", "delta": 6 },
-            { "target": "reputation", "key": "chancery", "delta": 3 },
-            { "target": "stat", "key": "theology", "delta": 4 },
-            { "target": "stat", "key": "knowledge", "delta": 2 },
-            { "target": "archetype", "key": "theological", "delta": 2 }
+            {
+              "target": "flag",
+              "key": "published",
+              "value": true
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 8
+            },
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 4
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 2
+            },
+            {
+              "target": "archetype",
+              "key": "theological",
+              "delta": 2
+            }
           ],
           "completeOutcome": "The book appears in the autumn from a press nobody in the parish has heard of and everybody in the chancery has. Two reviews, one of them serious. A copy in the seminary library with your name on the spine. {@bishop} mentions it once, in passing, in front of the wrong people."
         }
       },
       "decline": {
         "effects": [
-          { "target": "flag", "key": "refused_research", "value": true },
-          { "target": "reputation", "key": "rome", "delta": -2 }
+          {
+            "target": "flag",
+            "key": "refused_research",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "rome",
+            "delta": -2
+          }
         ],
         "outcome": "You write back that the parish has all of you right now. He replies warmly and does not write again about it. Two years later a younger priest publishes something on the same question, and it is not as good as yours would have been, and it is the one that exists."
       },
@@ -219,17 +556,46 @@
           {
             "type": "any",
             "inner": [
-              { "type": "stat", "key": "theology", "op": ">=", "value": 65 },
-              { "type": "stat", "key": "knowledge", "op": ">=", "value": 65 },
-              { "type": "credential", "key": "STL" }
+              {
+                "type": "stat",
+                "key": "theology",
+                "op": ">=",
+                "value": 65
+              },
+              {
+                "type": "stat",
+                "key": "knowledge",
+                "op": ">=",
+                "value": 65
+              },
+              {
+                "type": "credential",
+                "key": "STL"
+              }
             ]
           }
         ],
         "effects": [
-          { "target": "flag", "key": "abandoned_research", "value": true },
-          { "target": "reputation", "key": "rome", "delta": -2 },
-          { "target": "reputation", "key": "chancery", "delta": -2 },
-          { "target": "stat", "key": "theology", "delta": 2 }
+          {
+            "target": "flag",
+            "key": "abandoned_research",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "rome",
+            "delta": -2
+          },
+          {
+            "target": "reputation",
+            "key": "chancery",
+            "delta": -2
+          },
+          {
+            "target": "stat",
+            "key": "theology",
+            "delta": 2
+          }
         ],
         "outcome": "The manuscript reaches four chapters and stops. The editor stops answering. Your professor, when you finally admit it, says that most of them end this way and that the reading was not wasted, which is true and does not help. The drawer holds it."
       }
@@ -237,30 +603,86 @@
     {
       "id": "pv_seminary_faculty",
       "category": "academic",
-      "phase": ["parochial_vicar", "pastor"],
+      "phase": [
+        "parochial_vicar",
+        "pastor"
+      ],
       "title": "A Chair at the Seminary",
       "body": "The rector of the seminary has lost his dogmatics man to a diocese in Texas and has asked {@bishop} for a priest who can teach, and {@bishop} has said your name before the rector finished the sentence. Two courses a semester, a weekly seminar, and the formation reports for a dozen men a year. You would keep your parish, on paper; the truth is that every future priest of this diocese would pass through your classroom, and the parish would get whatever was left at the end of a week of lectures. The men who have done this well have shaped a presbyterate. The men who have done it badly are remembered by a hundred priests for the rest of their careers, in stories told at dinner.",
       "from": "@bishop",
       "requires": [
-        { "type": "years_ordained", "op": ">=", "value": 3 },
-        { "type": "not", "inner": { "type": "flag", "key": "seminary_faculty", "value": true } },
-        { "type": "stat", "key": "theology", "op": ">=", "value": 65 },
-        { "type": "reputation", "key": "chancery", "op": ">=", "value": 15 }
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 3
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "seminary_faculty",
+            "value": true
+          }
+        },
+        {
+          "type": "stat",
+          "key": "theology",
+          "op": ">=",
+          "value": 65
+        },
+        {
+          "type": "reputation",
+          "key": "chancery",
+          "op": ">=",
+          "value": 15
+        }
       ],
       "weight": 30,
       "bias": [
-        { "when": { "type": "credential", "key": "STL" }, "multiplier": 1.8 },
-        { "when": { "type": "flag", "key": "published", "value": true }, "multiplier": 1.5 },
-        { "when": { "type": "flag", "key": "career:professor", "value": true }, "multiplier": 1.4 }
+        {
+          "when": {
+            "type": "credential",
+            "key": "STL"
+          },
+          "multiplier": 1.8
+        },
+        {
+          "when": {
+            "type": "flag",
+            "key": "published",
+            "value": true
+          },
+          "multiplier": 1.5
+        },
+        {
+          "when": {
+            "type": "flag",
+            "key": "career:professor",
+            "value": true
+          },
+          "multiplier": 1.4
+        }
       ],
       "windowWeeks": 4,
       "once": true,
       "cluster": "academic",
       "accept": {
         "effects": [
-          { "target": "flag", "key": "seminary_faculty", "value": true },
-          { "target": "reputation", "key": "parishioners", "delta": -8 },
-          { "target": "stat", "key": "piety", "delta": -1 }
+          {
+            "target": "flag",
+            "key": "seminary_faculty",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "parishioners",
+            "delta": -8
+          },
+          {
+            "target": "stat",
+            "key": "piety",
+            "delta": -1
+          }
         ],
         "outcome": "The first lecture is to twenty-two men who have already decided what they think of you from the way you walked in. You teach. By November the parish has learned that Tuesday and Thursday are not days to call the rectory, and the head of the choir says so at a meeting, and it goes into a minute that nobody reads and everybody remembers.",
         "commitment": {
@@ -268,20 +690,52 @@
           "weeks": 104,
           "apPerWeek": 3,
           "onComplete": [
-            { "target": "stat", "key": "theology", "delta": 3 },
-            { "target": "reputation", "key": "chancery", "delta": 6 },
-            { "target": "reputation", "key": "brother_priests", "delta": 8 },
-            { "target": "reputation", "key": "rome", "delta": 3 },
-            { "target": "archetype", "key": "teaching", "delta": 4 },
-            { "target": "relationship", "key": "@bishop", "delta": 5 }
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": 8
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 3
+            },
+            {
+              "target": "archetype",
+              "key": "teaching",
+              "delta": 4
+            },
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": 5
+            }
           ],
           "completeOutcome": "Two years and forty men. Some of them will be pastors in this diocese for the next thirty years and will remember which of them you thought were serious. The rector asks for you again. The parish has learned to live without Tuesdays, which is not the same as being glad of it."
         }
       },
       "decline": {
         "effects": [
-          { "target": "flag", "key": "refused_faculty", "value": true },
-          { "target": "reputation", "key": "chancery", "delta": -4 }
+          {
+            "target": "flag",
+            "key": "refused_faculty",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "chancery",
+            "delta": -4
+          }
         ],
         "outcome": "You tell {@bishop} that you would be a worse pastor for it. He says that the seminary would have been the better for it and that both things can be true. The rector hires a religious from out of state. The seminarians of the next decade form their theology under a man you have never met."
       }
@@ -289,26 +743,67 @@
     {
       "id": "pv_college_adjunct",
       "category": "academic",
-      "phase": ["parochial_vicar", "pastor"],
+      "phase": [
+        "parochial_vicar",
+        "pastor"
+      ],
       "title": "An Evening Section",
       "body": "The chair of theology at the Catholic college across the county calls the rectory. An adjunct has quit in the second week of September and there is a section of Introduction to Catholic Theology with thirty-one students and nobody in front of it. Monday and Wednesday evenings, one semester, a fee that would barely cover the gas. The students are twenty and have not been to Mass since Confirmation. It would keep your mind on the books, put you in front of a generation the parish never sees, and cost two evenings a week that you currently give to the people who pay for the roof. The chair says he asked around and yours was the name that came back twice.",
       "requires": [
-        { "type": "years_ordained", "op": ">=", "value": 1 },
-        { "type": "not", "inner": { "type": "flag", "key": "seminary_faculty", "value": true } },
-        { "type": "stat", "key": "theology", "op": ">=", "value": 50 }
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 1
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "seminary_faculty",
+            "value": true
+          }
+        },
+        {
+          "type": "stat",
+          "key": "theology",
+          "op": ">=",
+          "value": 50
+        }
       ],
       "weight": 40,
       "bias": [
-        { "when": { "type": "flag", "key": "career:teacher", "value": true }, "multiplier": 1.5 },
-        { "when": { "type": "flag", "key": "career:professor", "value": true }, "multiplier": 1.5 }
+        {
+          "when": {
+            "type": "flag",
+            "key": "career:teacher",
+            "value": true
+          },
+          "multiplier": 1.5
+        },
+        {
+          "when": {
+            "type": "flag",
+            "key": "career:professor",
+            "value": true
+          },
+          "multiplier": 1.5
+        }
       ],
       "windowWeeks": 2,
       "once": true,
       "cluster": "academic",
       "accept": {
         "effects": [
-          { "target": "flag", "key": "adjunct_faculty", "value": true },
-          { "target": "reputation", "key": "parishioners", "delta": -3 }
+          {
+            "target": "flag",
+            "key": "adjunct_faculty",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "parishioners",
+            "delta": -3
+          }
         ],
         "outcome": "The classroom has a broken projector and a radiator that bangs. Six of the thirty-one are awake at the first session. By the midterm eleven are, and one of them stays after to ask a question nobody has asked you in years, badly phrased and entirely serious.",
         "commitment": {
@@ -316,18 +811,42 @@
           "weeks": 16,
           "apPerWeek": 2,
           "onComplete": [
-            { "target": "stat", "key": "theology", "delta": 2 },
-            { "target": "stat", "key": "charisma", "delta": 1 },
-            { "target": "reputation", "key": "public", "delta": 3 },
-            { "target": "archetype", "key": "teaching", "delta": 2 }
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": 3
+            },
+            {
+              "target": "archetype",
+              "key": "teaching",
+              "delta": 2
+            }
           ],
           "completeOutcome": "The evaluations are mixed and two of them are the best thing anyone has written about you. The chair asks whether you would take a section every autumn. The Wednesday Bible study, which moved to Thursday for you, has decided it prefers Thursday."
         }
       },
       "decline": {
         "effects": [
-          { "target": "flag", "key": "refused_adjunct", "value": true },
-          { "target": "reputation", "key": "public", "delta": -1 }
+          {
+            "target": "flag",
+            "key": "refused_adjunct",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "public",
+            "delta": -1
+          }
         ],
         "outcome": "You say your evenings belong to the parish. He thanks you and finds a graduate student. The college does not call again. Your Monday and Wednesday evenings continue as before, which is to say meetings, and one of the meetings is about the projector in the parish hall."
       }
@@ -335,33 +854,83 @@
     {
       "id": "pv_spanish_immersion",
       "category": "academic",
-      "phase": ["parochial_vicar", "pastor"],
+      "phase": [
+        "parochial_vicar",
+        "pastor"
+      ],
       "title": "Ten Weeks in Cuernavaca",
       "body": "The vicar for clergy sends a memo, not a letter, which is how the diocese speaks when it has already decided. There is a place at a language institute in Cuernavaca for ten weeks this summer: total immersion, a host family, Mass in Spanish every morning with a priest who corrects your pronunciation from the sacristy. The diocese will pay. {parish} already has a Spanish Mass that somebody else says, and a growing part of the congregation who nod politely at you and go to him for confession. You would come back able to hear those confessions. You would also be gone the whole summer, which is when the parish schedules everything it cannot fit into the year, and the pastor would have that to say about it.",
       "requires": [
-        { "type": "not", "inner": { "type": "flag", "key": "speaks_spanish", "value": true } },
-        { "type": "not", "inner": { "type": "credential", "key": "spanish" } },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "speaks_spanish",
+            "value": true
+          }
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "credential",
+            "key": "spanish"
+          }
+        },
         {
           "type": "any",
           "inner": [
-            { "type": "parish", "key": "needsSpanish", "value": true },
-            { "type": "parish", "key": "terrain", "value": "latino" },
-            { "type": "parish", "key": "kind", "value": "immigrant_growing" }
+            {
+              "type": "parish",
+              "key": "needsSpanish",
+              "value": true
+            },
+            {
+              "type": "parish",
+              "key": "terrain",
+              "value": "latino"
+            },
+            {
+              "type": "parish",
+              "key": "kind",
+              "value": "immigrant_growing"
+            }
           ]
         }
       ],
       "weight": 50,
       "bias": [
-        { "when": { "type": "flag", "key": "summer:language", "value": true }, "multiplier": 1.3 },
-        { "when": { "type": "flag", "key": "sem_declined_spanish", "value": true }, "multiplier": 0.6 }
+        {
+          "when": {
+            "type": "flag",
+            "key": "summer:language",
+            "value": true
+          },
+          "multiplier": 1.3
+        },
+        {
+          "when": {
+            "type": "flag",
+            "key": "sem_declined_spanish",
+            "value": true
+          },
+          "multiplier": 0.6
+        }
       ],
       "windowWeeks": 3,
       "once": true,
       "cluster": "parish",
       "accept": {
         "effects": [
-          { "target": "reputation", "key": "parishioners", "delta": -3 },
-          { "target": "stat", "key": "administration", "delta": -1 }
+          {
+            "target": "reputation",
+            "key": "parishioners",
+            "delta": -3
+          },
+          {
+            "target": "stat",
+            "key": "administration",
+            "delta": -1
+          }
         ],
         "outcome": "The host family has four children and a grandmother who decides on the second day that you will learn or she will know why. You are wrong at every meal for a month. Somewhere in the seventh week you dream in it. The summer festival at home is run without you, and the pastor mentions this in a way that will keep.",
         "commitment": {
@@ -369,20 +938,51 @@
           "weeks": 10,
           "apPerWeek": 8,
           "onComplete": [
-            { "target": "credential", "key": "spanish" },
-            { "target": "flag", "key": "speaks_spanish", "value": true },
-            { "target": "reputation", "key": "parishioners", "delta": 8 },
-            { "target": "stat", "key": "charisma", "delta": 1 },
-            { "target": "archetype", "key": "missionary", "delta": 2 }
+            {
+              "target": "credential",
+              "key": "spanish"
+            },
+            {
+              "target": "flag",
+              "key": "speaks_spanish",
+              "value": true
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 8
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "archetype",
+              "key": "missionary",
+              "delta": 2
+            }
           ],
           "completeOutcome": "You say the Spanish Mass the first Sunday you are back, badly, and afterward an old man takes both your hands and says something you understand. The confession line changes shape over the next month. The diocese has a new column in its personnel spreadsheet and your name is in it."
         }
       },
       "decline": {
         "effects": [
-          { "target": "flag", "key": "declined_spanish_study", "value": true },
-          { "target": "reputation", "key": "parishioners", "delta": -3 },
-          { "target": "reputation", "key": "chancery", "delta": -2 }
+          {
+            "target": "flag",
+            "key": "declined_spanish_study",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "parishioners",
+            "delta": -3
+          },
+          {
+            "target": "reputation",
+            "key": "chancery",
+            "delta": -2
+          }
         ],
         "outcome": "You reply that the summer is not a good time, which the vicar for clergy has heard before and files under the heading it deserves. The Spanish-speaking half of {parish} continues to go to someone else. When they need a priest at three in the morning and only you are there, you both discover what you cannot say."
       }
@@ -390,33 +990,82 @@
     {
       "id": "pv_italian_lessons",
       "category": "academic",
-      "phase": ["parochial_vicar", "pastor"],
+      "phase": [
+        "parochial_vicar",
+        "pastor"
+      ],
       "title": "Wednesday Nights With a Grammar",
       "body": "A retired professor of Romance languages who attends the early Mass offers, unprompted, to teach you Italian. She has done it for two other priests of the diocese, one of whom is now in Rome. An hour a week at her kitchen table, a grammar she has used since 1974, and homework she will check. It costs almost nothing. It is also almost nothing, unless the Roman road is one you are on or want to be, in which case it is the difference between being sent and being sent ready. She says most priests give up after Lent. She says it as a challenge, and you both know it.",
       "requires": [
-        { "type": "not", "inner": { "type": "credential", "key": "italian" } },
-        { "type": "not", "inner": { "type": "flag", "key": "rome_alumnus", "value": true } },
+        {
+          "type": "not",
+          "inner": {
+            "type": "credential",
+            "key": "italian"
+          }
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "rome_alumnus",
+            "value": true
+          }
+        },
         {
           "type": "any",
           "inner": [
-            { "type": "flag", "key": "rome_track", "value": true },
-            { "type": "reputation", "key": "rome", "op": ">=", "value": 5 },
-            { "type": "stat", "key": "theology", "op": ">=", "value": 55 },
-            { "type": "credential", "key": "italian_basic" }
+            {
+              "type": "flag",
+              "key": "rome_track",
+              "value": true
+            },
+            {
+              "type": "reputation",
+              "key": "rome",
+              "op": ">=",
+              "value": 5
+            },
+            {
+              "type": "stat",
+              "key": "theology",
+              "op": ">=",
+              "value": 55
+            },
+            {
+              "type": "credential",
+              "key": "italian_basic"
+            }
           ]
         }
       ],
       "weight": 40,
       "bias": [
-        { "when": { "type": "credential", "key": "latin" }, "multiplier": 1.3 },
-        { "when": { "type": "credential", "key": "italian_basic" }, "multiplier": 1.5 }
+        {
+          "when": {
+            "type": "credential",
+            "key": "latin"
+          },
+          "multiplier": 1.3
+        },
+        {
+          "when": {
+            "type": "credential",
+            "key": "italian_basic"
+          },
+          "multiplier": 1.5
+        }
       ],
       "windowWeeks": 3,
       "once": true,
       "cluster": "academic",
       "accept": {
         "effects": [
-          { "target": "reputation", "key": "parishioners", "delta": 1 }
+          {
+            "target": "reputation",
+            "key": "parishioners",
+            "delta": 1
+          }
         ],
         "outcome": "Her kitchen smells of coffee and pencil shavings. The subjunctive arrives in February and nearly ends it. You persist mostly because she expects you not to, and by Pentecost you can read a paragraph of L'Osservatore Romano and know which sentences to distrust.",
         "commitment": {
@@ -424,18 +1073,41 @@
           "weeks": 40,
           "apPerWeek": 1,
           "onComplete": [
-            { "target": "credential", "key": "italian" },
-            { "target": "flag", "key": "speaks_italian", "value": true },
-            { "target": "reputation", "key": "rome", "delta": 3 },
-            { "target": "stat", "key": "knowledge", "delta": 1 }
+            {
+              "target": "credential",
+              "key": "italian"
+            },
+            {
+              "target": "flag",
+              "key": "speaks_italian",
+              "value": true
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 1
+            }
           ],
           "completeOutcome": "She declares you competent, which from her is a decoration. You can order a meal, follow a lecture, and read a curial letter for what it does not say. She adds your name to the short list of priests she has taught, and someone in the chancery apparently keeps a copy."
         }
       },
       "decline": {
         "effects": [
-          { "target": "flag", "key": "declined_italian", "value": true },
-          { "target": "reputation", "key": "rome", "delta": -1 }
+          {
+            "target": "flag",
+            "key": "declined_italian",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "rome",
+            "delta": -1
+          }
         ],
         "outcome": "You thank her and say there is no time. She says there never is and goes back to her pew. The next priest she teaches is younger than you, and three years later he is in Rome, and she does not say anything about it, which is how you know she thinks it."
       }
@@ -443,29 +1115,79 @@
     {
       "id": "pv_vocations_office",
       "category": "chancery",
-      "phase": ["parochial_vicar", "pastor"],
+      "phase": [
+        "parochial_vicar",
+        "pastor"
+      ],
       "title": "The Vocations Office",
       "body": "{@vocation_director} takes you to lunch and does not order. He is moving to a parish next summer, and {@bishop} has asked him who should follow him, and he has watched you with the young men at {parish} and thinks it is you. Three years, part time on paper and full time in truth: college campuses, discernment weekends, the phone calls from mothers, the seminary visits, the annual report to the presbyteral council on why the numbers are what they are. You keep the parish. You would be in the bishop's office every month, which is where careers are noticed, and you would be shaping the presbyterate you will grow old in. You would also be the man whose job it is to say no to boys who are certain God has said yes.",
       "from": "@vocation_director",
       "requires": [
-        { "type": "years_ordained", "op": ">=", "value": 2 },
-        { "type": "not", "inner": { "type": "flag", "key": "office:vocations", "value": true } },
-        { "type": "stat", "key": "charisma", "op": ">=", "value": 55 }
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 2
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "office:vocations",
+            "value": true
+          }
+        },
+        {
+          "type": "stat",
+          "key": "charisma",
+          "op": ">=",
+          "value": 55
+        }
       ],
       "weight": 35,
       "bias": [
-        { "when": { "type": "flag", "key": "vocations_helper", "value": true }, "multiplier": 1.8 },
-        { "when": { "type": "relationship", "npcId": "@vocation_director", "op": ">=", "value": 15 }, "multiplier": 1.4 }
+        {
+          "when": {
+            "type": "flag",
+            "key": "vocations_helper",
+            "value": true
+          },
+          "multiplier": 1.8
+        },
+        {
+          "when": {
+            "type": "relationship",
+            "npcId": "@vocation_director",
+            "op": ">=",
+            "value": 15
+          },
+          "multiplier": 1.4
+        }
       ],
       "windowWeeks": 4,
       "once": true,
       "cluster": "chancery",
       "accept": {
         "effects": [
-          { "target": "flag", "key": "office:vocations", "value": true },
-          { "target": "reputation", "key": "chancery", "delta": 6 },
-          { "target": "reputation", "key": "parishioners", "delta": -4 },
-          { "target": "relationship", "key": "@vocation_director", "delta": 6 }
+          {
+            "target": "flag",
+            "key": "office:vocations",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "chancery",
+            "delta": 6
+          },
+          {
+            "target": "reputation",
+            "key": "parishioners",
+            "delta": -4
+          },
+          {
+            "target": "relationship",
+            "key": "@vocation_director",
+            "delta": 6
+          }
         ],
         "outcome": "The office is a desk and a filing cabinet and a phone that rings with hope on one end. The first man you interview is more certain than you were at his age and less ready. You write a report on him that is kind and does not lie. It takes you a whole evening you owed to the parish council.",
         "commitment": {
@@ -473,20 +1195,52 @@
           "weeks": 156,
           "apPerWeek": 3,
           "onComplete": [
-            { "target": "reputation", "key": "chancery", "delta": 10 },
-            { "target": "reputation", "key": "brother_priests", "delta": 4 },
-            { "target": "relationship", "key": "@vocation_director", "delta": 8 },
-            { "target": "relationship", "key": "@bishop", "delta": 8 },
-            { "target": "stat", "key": "charisma", "delta": 2 },
-            { "target": "stat", "key": "administration", "delta": 2 }
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 10
+            },
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": 4
+            },
+            {
+              "target": "relationship",
+              "key": "@vocation_director",
+              "delta": 8
+            },
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": 8
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 2
+            }
           ],
           "completeOutcome": "Three years, eleven men sent, four of whom will be ordained. The seminary knows your name; the bishop knows your handwriting. Two of the men you turned away write to say you were right. One does not write and you think about him more than about the four."
         }
       },
       "decline": {
         "effects": [
-          { "target": "flag", "key": "refused_vocations_office", "value": true },
-          { "target": "reputation", "key": "chancery", "delta": -3 }
+          {
+            "target": "flag",
+            "key": "refused_vocations_office",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "chancery",
+            "delta": -3
+          }
         ],
         "outcome": "You say you are not ready to be the man with the clipboard. He says that is what he said too, and orders finally, and does not press. The office goes to {@random_classmate}, who takes a call from the bishop's office every month for three years and is seen to."
       }
@@ -494,36 +1248,94 @@
     {
       "id": "pv_tribunal",
       "category": "chancery",
-      "phase": ["parochial_vicar", "pastor"],
+      "phase": [
+        "parochial_vicar",
+        "pastor"
+      ],
       "title": "The Third Floor of the Chancery",
       "body": "The judicial vicar writes to ask whether you would serve on the marriage tribunal, as defender of the bond to begin with and, if it suits, as a judge. Two afternoons a week reading the depositions of people whose marriages ended, arguing in the Church's name that they should not have. It is the least visible work in the diocese. It is also the room in which every priest's mistakes eventually surface, because the tribunal reads everything: who witnessed what, who prepared which couple badly, whose name is in whose testimony. Men who have done it say nothing about what they know, and that silence is worth something. The parish would lose you on those afternoons and would not understand what for.",
       "requires": [
-        { "type": "years_ordained", "op": ">=", "value": 2 },
-        { "type": "not", "inner": { "type": "flag", "key": "office:tribunal", "value": true } },
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 2
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "office:tribunal",
+            "value": true
+          }
+        },
         {
           "type": "any",
           "inner": [
-            { "type": "credential", "key": "JCL" },
-            { "type": "credential", "key": "partial_jcl" },
-            { "type": "flag", "key": "tribunal_ready", "value": true },
-            { "type": "stat", "key": "knowledge", "op": ">=", "value": 60 }
+            {
+              "type": "credential",
+              "key": "JCL"
+            },
+            {
+              "type": "credential",
+              "key": "partial_jcl"
+            },
+            {
+              "type": "flag",
+              "key": "tribunal_ready",
+              "value": true
+            },
+            {
+              "type": "stat",
+              "key": "knowledge",
+              "op": ">=",
+              "value": 60
+            }
           ]
         }
       ],
       "weight": 40,
       "bias": [
-        { "when": { "type": "credential", "key": "JCL" }, "multiplier": 2 },
-        { "when": { "type": "flag", "key": "canon_law_track", "value": true }, "multiplier": 1.5 }
+        {
+          "when": {
+            "type": "credential",
+            "key": "JCL"
+          },
+          "multiplier": 2
+        },
+        {
+          "when": {
+            "type": "flag",
+            "key": "canon_law_track",
+            "value": true
+          },
+          "multiplier": 1.5
+        }
       ],
       "windowWeeks": 4,
       "once": true,
       "cluster": "chancery",
       "accept": {
         "effects": [
-          { "target": "flag", "key": "office:tribunal", "value": true },
-          { "target": "flag", "key": "knows_secrets", "value": true },
-          { "target": "reputation", "key": "parishioners", "delta": -3 },
-          { "target": "reputation", "key": "chancery", "delta": 4 }
+          {
+            "target": "flag",
+            "key": "office:tribunal",
+            "value": true
+          },
+          {
+            "target": "flag",
+            "key": "knows_secrets",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "parishioners",
+            "delta": -3
+          },
+          {
+            "target": "reputation",
+            "key": "chancery",
+            "delta": 4
+          }
         ],
         "outcome": "The files are beige and the coffee is worse. The first case you read involves a couple prepared for marriage by a priest you know, and the deposition describes his preparation in some detail. You say nothing to him. You will say nothing to anyone. That, you begin to understand, is the whole job.",
         "commitment": {
@@ -531,19 +1343,46 @@
           "weeks": 156,
           "apPerWeek": 2,
           "onComplete": [
-            { "target": "reputation", "key": "chancery", "delta": 8 },
-            { "target": "stat", "key": "knowledge", "delta": 3 },
-            { "target": "stat", "key": "administration", "delta": 2 },
-            { "target": "archetype", "key": "administrative", "delta": 2 },
-            { "target": "trait", "key": "has read everyone's file" }
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 8
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 2
+            },
+            {
+              "target": "archetype",
+              "key": "administrative",
+              "delta": 2
+            },
+            {
+              "target": "trait",
+              "key": "has read everyone's file"
+            }
           ],
           "completeOutcome": "Three years and some hundreds of cases. You know things about half the presbyterate that they do not know you know. The judicial vicar tells the chancellor you are sound, which in that building is the highest word. Nobody in the parish has any idea what you did on Tuesday afternoons."
         }
       },
       "decline": {
         "effects": [
-          { "target": "flag", "key": "refused_tribunal", "value": true },
-          { "target": "reputation", "key": "chancery", "delta": -3 }
+          {
+            "target": "flag",
+            "key": "refused_tribunal",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "chancery",
+            "delta": -3
+          }
         ],
         "outcome": "You write that your Tuesdays are spoken for. The judicial vicar replies that he understands and finds a religious sister with a licentiate who is, everyone later agrees, better at it than you would have been. The room where everyone's mistakes surface goes on without you, and so do the mistakes."
       }
@@ -551,35 +1390,91 @@
     {
       "id": "pv_finance_council",
       "category": "chancery",
-      "phase": ["parochial_vicar", "pastor"],
+      "phase": [
+        "parochial_vicar",
+        "pastor"
+      ],
       "title": "A Seat on the Finance Council",
       "body": "The diocesan finance officer, a layman with a CPA and no patience, asks {@bishop} for a priest on the finance council who can read a balance sheet without moving his lips, and {@bishop} passes your name along with a note about your background. Quarterly meetings, a stack of statements before each, and the audit in the spring. You would see every parish's numbers, which means every pastor's. You would be in the room when the diocese decides which schools close. Priests who sit on the finance council are trusted by the chancery and mistrusted by their brothers, who suspect them of knowing which parishes are on the list, and are right.",
       "requires": [
-        { "type": "years_ordained", "op": ">=", "value": 2 },
-        { "type": "not", "inner": { "type": "flag", "key": "office:finance_council", "value": true } },
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 2
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "office:finance_council",
+            "value": true
+          }
+        },
         {
           "type": "any",
           "inner": [
-            { "type": "flag", "key": "career:accountant", "value": true },
-            { "type": "flag", "key": "field:business", "value": true },
-            { "type": "flag", "key": "career:management", "value": true },
-            { "type": "stat", "key": "administration", "op": ">=", "value": 60 }
+            {
+              "type": "flag",
+              "key": "career:accountant",
+              "value": true
+            },
+            {
+              "type": "flag",
+              "key": "field:business",
+              "value": true
+            },
+            {
+              "type": "flag",
+              "key": "career:management",
+              "value": true
+            },
+            {
+              "type": "stat",
+              "key": "administration",
+              "op": ">=",
+              "value": 60
+            }
           ]
         }
       ],
       "weight": 40,
       "bias": [
-        { "when": { "type": "credential", "key": "partial_cpa" }, "multiplier": 1.6 },
-        { "when": { "type": "flag", "key": "summer:chancery", "value": true }, "multiplier": 1.3 }
+        {
+          "when": {
+            "type": "credential",
+            "key": "partial_cpa"
+          },
+          "multiplier": 1.6
+        },
+        {
+          "when": {
+            "type": "flag",
+            "key": "summer:chancery",
+            "value": true
+          },
+          "multiplier": 1.3
+        }
       ],
       "windowWeeks": 4,
       "once": true,
       "cluster": "chancery",
       "accept": {
         "effects": [
-          { "target": "flag", "key": "office:finance_council", "value": true },
-          { "target": "reputation", "key": "chancery", "delta": 5 },
-          { "target": "reputation", "key": "brother_priests", "delta": -4 }
+          {
+            "target": "flag",
+            "key": "office:finance_council",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "chancery",
+            "delta": 5
+          },
+          {
+            "target": "reputation",
+            "key": "brother_priests",
+            "delta": -4
+          }
         ],
         "outcome": "The first packet is two hundred pages and you read all of it, which the finance officer notices because nobody else did. Three parishes are technically insolvent. One of them is run by a man who was kind to you in seminary. You learn to keep your face still in meetings.",
         "commitment": {
@@ -587,19 +1482,47 @@
           "weeks": 104,
           "apPerWeek": 1,
           "onComplete": [
-            { "target": "reputation", "key": "chancery", "delta": 8 },
-            { "target": "stat", "key": "administration", "delta": 3 },
-            { "target": "stat", "key": "knowledge", "delta": 1 },
-            { "target": "archetype", "key": "administrative", "delta": 3 },
-            { "target": "relationship", "key": "@bishop", "delta": 4 }
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 8
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 1
+            },
+            {
+              "target": "archetype",
+              "key": "administrative",
+              "delta": 3
+            },
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": 4
+            }
           ],
           "completeOutcome": "Two years of quarterly packets and one school closed on a vote you did not dissent from. The finance officer says you are the only priest he has met who understands depreciation, and means it as praise. At the deanery meeting someone calls you the chancery's accountant and it is only half a joke."
         }
       },
       "decline": {
         "effects": [
-          { "target": "flag", "key": "refused_finance_council", "value": true },
-          { "target": "reputation", "key": "chancery", "delta": -3 }
+          {
+            "target": "flag",
+            "key": "refused_finance_council",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "chancery",
+            "delta": -3
+          }
         ],
         "outcome": "You tell {@bishop} that a priest in that room becomes a different kind of priest. He says that is precisely why he wanted one who noticed. The seat goes to a monsignor who does not read the packets. The school closes anyway, a year later, on worse numbers."
       }
@@ -607,33 +1530,101 @@
     {
       "id": "pv_bishops_secretary",
       "category": "chancery",
-      "phase": ["parochial_vicar"],
+      "phase": [
+        "parochial_vicar"
+      ],
       "title": "The Bishop's Secretary",
       "body": "{@bishop} asks without preamble. His secretary is going to a parish and he wants you: driver, scheduler, master of ceremonies at every pontifical Mass, the man who sits outside the door and knows who is inside. Three years. You would live at the residence and celebrate Mass for the sisters who cook. You would stop being a parish priest in every way but the collar. Every priest of the diocese would call you to reach him, and every one of them would think you had chosen the fast road, and they would be right. Men who have held this job have become bishops. Men who have held it have also become nothing else, and been forty and unable to say what a parish is for.",
       "from": "@bishop",
       "requires": [
-        { "type": "role", "value": "parochial_vicar" },
-        { "type": "years_ordained", "op": ">=", "value": 2 },
-        { "type": "not", "inner": { "type": "flag", "key": "office:bishops_secretary", "value": true } },
-        { "type": "relationship", "npcId": "@bishop", "op": ">=", "value": 20 },
-        { "type": "reputation", "key": "chancery", "op": ">=", "value": 25 }
+        {
+          "type": "role",
+          "value": "parochial_vicar"
+        },
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 2
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "office:bishops_secretary",
+            "value": true
+          }
+        },
+        {
+          "type": "relationship",
+          "npcId": "@bishop",
+          "op": ">=",
+          "value": 20
+        },
+        {
+          "type": "reputation",
+          "key": "chancery",
+          "op": ">=",
+          "value": 25
+        }
       ],
       "weight": 25,
       "bias": [
-        { "when": { "type": "flag", "key": "sem_cathedral_mc", "value": true }, "multiplier": 1.6 },
-        { "when": { "type": "flag", "key": "summer:chancery", "value": true }, "multiplier": 1.4 },
-        { "when": { "type": "stat", "key": "administration", "op": ">=", "value": 50 }, "multiplier": 1.3 }
+        {
+          "when": {
+            "type": "flag",
+            "key": "sem_cathedral_mc",
+            "value": true
+          },
+          "multiplier": 1.6
+        },
+        {
+          "when": {
+            "type": "flag",
+            "key": "summer:chancery",
+            "value": true
+          },
+          "multiplier": 1.4
+        },
+        {
+          "when": {
+            "type": "stat",
+            "key": "administration",
+            "op": ">=",
+            "value": 50
+          },
+          "multiplier": 1.3
+        }
       ],
       "windowWeeks": 3,
       "once": true,
       "cluster": "chancery",
       "accept": {
         "effects": [
-          { "target": "flag", "key": "office:bishops_secretary", "value": true },
-          { "target": "reputation", "key": "parishioners", "delta": -10 },
-          { "target": "reputation", "key": "brother_priests", "delta": -6 },
-          { "target": "stat", "key": "piety", "delta": -2 },
-          { "target": "reputation", "key": "chancery", "delta": 6 }
+          {
+            "target": "flag",
+            "key": "office:bishops_secretary",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "parishioners",
+            "delta": -10
+          },
+          {
+            "target": "reputation",
+            "key": "brother_priests",
+            "delta": -6
+          },
+          {
+            "target": "stat",
+            "key": "piety",
+            "delta": -2
+          },
+          {
+            "target": "reputation",
+            "key": "chancery",
+            "delta": 6
+          }
         ],
         "outcome": "You move into a room at the residence with a crucifix and a view of the parking lot. The first month is learning what he takes in his coffee and which pastors he will not see before ten. The parish sends a card. By Advent you have driven him four thousand miles and heard him say things about the diocese that you will carry to your grave.",
         "commitment": {
@@ -641,21 +1632,56 @@
           "weeks": 156,
           "apPerWeek": 5,
           "onComplete": [
-            { "target": "relationship", "key": "@bishop", "delta": 25 },
-            { "target": "reputation", "key": "chancery", "delta": 15 },
-            { "target": "stat", "key": "administration", "delta": 4 },
-            { "target": "stat", "key": "knowledge", "delta": 2 },
-            { "target": "archetype", "key": "administrative", "delta": 3 },
-            { "target": "trait", "key": "knows how the bishop thinks" }
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": 25
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 15
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 4
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 2
+            },
+            {
+              "target": "archetype",
+              "key": "administrative",
+              "delta": 3
+            },
+            {
+              "target": "trait",
+              "key": "knows how the bishop thinks"
+            }
           ],
           "completeOutcome": "Three years and you can finish his sentences. He gives you a parish, which is the customary reward, and a chalice, which is not. Every priest in the diocese has your cell number and half of them resent it. You go back to a rectory and, the first Sunday, have to remember how to preach to people who do not report to anyone."
         }
       },
       "decline": {
         "effects": [
-          { "target": "flag", "key": "refused_secretary", "value": true },
-          { "target": "reputation", "key": "chancery", "delta": -5 },
-          { "target": "reputation", "key": "brother_priests", "delta": 3 }
+          {
+            "target": "flag",
+            "key": "refused_secretary",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "chancery",
+            "delta": -5
+          },
+          {
+            "target": "reputation",
+            "key": "brother_priests",
+            "delta": 3
+          }
         ],
         "outcome": "You tell him you became a priest for the parish. He nods slowly and says he had hoped you would say something else, and that he respects it, and both are true. He takes {@rival_classmate} instead. The priests of the diocese, who mistrust secretaries, think a little better of you for it and will forget why."
       }
@@ -663,34 +1689,89 @@
     {
       "id": "pv_communications",
       "category": "chancery",
-      "phase": ["parochial_vicar", "pastor"],
+      "phase": [
+        "parochial_vicar",
+        "pastor"
+      ],
       "title": "The Voice of the Diocese",
       "body": "The chancellor calls on a Tuesday, which means it is not routine. The diocesan director of communications has resigned and there is a television reporter outside the chancery about a story you have not been told. {@bishop} wants a priest as spokesman: the newspaper, the diocesan paper's column, the radio, the statements when something goes wrong. Two years. You would be the face of the diocese at the best moments and the worst, and there are more of the second kind. Your name would be in print every week. When the next scandal breaks, and one will, you would be the one standing at the microphone explaining it, and the explanation would be yours to live with.",
       "requires": [
-        { "type": "years_ordained", "op": ">=", "value": 2 },
-        { "type": "not", "inner": { "type": "flag", "key": "office:communications", "value": true } },
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 2
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "office:communications",
+            "value": true
+          }
+        },
         {
           "type": "any",
           "inner": [
-            { "type": "flag", "key": "career:journalism", "value": true },
-            { "type": "stat", "key": "charisma", "op": ">=", "value": 60 }
+            {
+              "type": "flag",
+              "key": "career:journalism",
+              "value": true
+            },
+            {
+              "type": "stat",
+              "key": "charisma",
+              "op": ">=",
+              "value": 60
+            }
           ]
         }
       ],
       "weight": 30,
       "bias": [
-        { "when": { "type": "reputation", "key": "public", "op": ">=", "value": 15 }, "multiplier": 1.5 },
-        { "when": { "type": "outspokenness", "op": ">=", "value": 40 }, "multiplier": 1.3 }
+        {
+          "when": {
+            "type": "reputation",
+            "key": "public",
+            "op": ">=",
+            "value": 15
+          },
+          "multiplier": 1.5
+        },
+        {
+          "when": {
+            "type": "outspokenness",
+            "op": ">=",
+            "value": 40
+          },
+          "multiplier": 1.3
+        }
       ],
       "windowWeeks": 2,
       "once": true,
       "cluster": "chancery",
       "accept": {
         "effects": [
-          { "target": "flag", "key": "office:communications", "value": true },
-          { "target": "reputation", "key": "chancery", "delta": 5 },
-          { "target": "reputation", "key": "parishioners", "delta": -4 },
-          { "target": "risk", "key": "pv_spokesman_exposure", "value": "The public face of the diocese when it goes wrong", "delta": 2 }
+          {
+            "target": "flag",
+            "key": "office:communications",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "chancery",
+            "delta": 5
+          },
+          {
+            "target": "reputation",
+            "key": "parishioners",
+            "delta": -4
+          },
+          {
+            "target": "risk",
+            "key": "pv_spokesman_exposure",
+            "value": "The public face of the diocese when it goes wrong",
+            "delta": 2
+          }
         ],
         "outcome": "The first statement you give is about a school closing and the second is about a priest, and you learn the difference between them in the reporter's eyes. Your column runs on Thursdays. People at {parish} begin to say they read you, in the tone they use for the weather.",
         "commitment": {
@@ -698,19 +1779,47 @@
           "weeks": 104,
           "apPerWeek": 3,
           "onComplete": [
-            { "target": "reputation", "key": "public", "delta": 15 },
-            { "target": "reputation", "key": "chancery", "delta": 6 },
-            { "target": "stat", "key": "charisma", "delta": 3 },
-            { "target": "outspokenness", "key": "", "delta": 5 },
-            { "target": "relationship", "key": "@bishop", "delta": 5 }
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": 15
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 6
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 3
+            },
+            {
+              "target": "outspokenness",
+              "key": "",
+              "delta": 5
+            },
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": 5
+            }
           ],
           "completeOutcome": "Two years and your face is known in three counties. You have said the diocese regrets things you did not do and defended decisions you did not make. The bishop trusts you with the microphone, which is a kind of trust. Some of the priests wonder aloud what you would say about them, if asked."
         }
       },
       "decline": {
         "effects": [
-          { "target": "flag", "key": "refused_communications", "value": true },
-          { "target": "reputation", "key": "chancery", "delta": -3 }
+          {
+            "target": "flag",
+            "key": "refused_communications",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "chancery",
+            "delta": -3
+          }
         ],
         "outcome": "You tell the chancellor you would rather be quoted less. He says that is the wisest thing anyone has said to him this week and hires a layman from a public relations firm. The layman is competent and nobody in the pews knows his name, which is, you decide, the point."
       },
@@ -720,16 +1829,41 @@
           {
             "type": "any",
             "inner": [
-              { "type": "stat", "key": "charisma", "op": ">=", "value": 60 },
-              { "type": "flag", "key": "career:journalism", "value": true }
+              {
+                "type": "stat",
+                "key": "charisma",
+                "op": ">=",
+                "value": 60
+              },
+              {
+                "type": "flag",
+                "key": "career:journalism",
+                "value": true
+              }
             ]
           }
         ],
         "effects": [
-          { "target": "reputation", "key": "public", "delta": -10 },
-          { "target": "reputation", "key": "chancery", "delta": -8 },
-          { "target": "relationship", "key": "@bishop", "delta": -6 },
-          { "target": "stat", "key": "charisma", "delta": 1 }
+          {
+            "target": "reputation",
+            "key": "public",
+            "delta": -10
+          },
+          {
+            "target": "reputation",
+            "key": "chancery",
+            "delta": -8
+          },
+          {
+            "target": "relationship",
+            "key": "@bishop",
+            "delta": -6
+          },
+          {
+            "target": "stat",
+            "key": "charisma",
+            "delta": 1
+          }
         ],
         "outcome": "A reporter asks a question about a pastor's finances and you answer it, which was the mistake. The clip runs for a week. {@bishop} does not shout; he simply stops routing the calls to you, and the layman from the public relations firm arrives quietly the next month. Your column is discontinued for reasons of space."
       }
@@ -737,34 +1871,86 @@
     {
       "id": "pv_assist_prominent_priest",
       "category": "patronage",
-      "phase": ["parochial_vicar", "pastor"],
+      "phase": [
+        "parochial_vicar",
+        "pastor"
+      ],
       "title": "The Great Man Needs a Second",
       "body": "The best-known priest in the diocese, a preacher whose retreats fill and whose name opens checkbooks, has asked {@bishop} to let you assist him: eighteen months of driving to his parish missions, running the books for his retreat house, sitting at the far end of the table at dinners with people who matter. Everyone who has done it has come out with his phone numbers. He is generous, brilliant, and not altogether careful, and the priests who dislike him are exactly the ones you would be seen with less. It would be understood by everyone that you were his man. The advantage of that lasts exactly as long as he does.",
       "requires": [
-        { "type": "years_ordained", "op": ">=", "value": 1 },
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 1
+        },
         {
           "type": "any",
           "inner": [
-            { "type": "flag", "key": "patron:prominent_priest", "value": true },
-            { "type": "reputation", "key": "brother_priests", "op": ">=", "value": 20 }
+            {
+              "type": "flag",
+              "key": "patron:prominent_priest",
+              "value": true
+            },
+            {
+              "type": "reputation",
+              "key": "brother_priests",
+              "op": ">=",
+              "value": 20
+            }
           ]
         }
       ],
       "weight": 30,
       "bias": [
-        { "when": { "type": "flag", "key": "patron:prominent_priest", "value": true }, "multiplier": 1.8 },
-        { "when": { "type": "stat", "key": "charisma", "op": ">=", "value": 50 }, "multiplier": 1.3 }
+        {
+          "when": {
+            "type": "flag",
+            "key": "patron:prominent_priest",
+            "value": true
+          },
+          "multiplier": 1.8
+        },
+        {
+          "when": {
+            "type": "stat",
+            "key": "charisma",
+            "op": ">=",
+            "value": 50
+          },
+          "multiplier": 1.3
+        }
       ],
       "windowWeeks": 3,
       "once": true,
       "cluster": "patronage",
       "accept": {
         "effects": [
-          { "target": "flag", "key": "patron:prominent_priest", "value": true },
-          { "target": "risk", "key": "sem_patron_exposure", "value": "Bound to a prominent priest's fortunes", "delta": 1 },
-          { "target": "reputation", "key": "brother_priests", "delta": 5 },
-          { "target": "reputation", "key": "public", "delta": 4 },
-          { "target": "reputation", "key": "parishioners", "delta": -4 }
+          {
+            "target": "flag",
+            "key": "patron:prominent_priest",
+            "value": true
+          },
+          {
+            "target": "risk",
+            "key": "sem_patron_exposure",
+            "value": "Bound to a prominent priest's fortunes",
+            "delta": 1
+          },
+          {
+            "target": "reputation",
+            "key": "brother_priests",
+            "delta": 5
+          },
+          {
+            "target": "reputation",
+            "key": "public",
+            "delta": 4
+          },
+          {
+            "target": "reputation",
+            "key": "parishioners",
+            "delta": -4
+          }
         ],
         "outcome": "The first mission is in a parish of two thousand and he fills it, and afterward the pastor shakes your hand as though you had done something. You did the sound system. In the car home he tells you what he really thinks of the chancery and you realize you are now a man who knows that.",
         "commitment": {
@@ -772,20 +1958,51 @@
           "weeks": 78,
           "apPerWeek": 2,
           "onComplete": [
-            { "target": "reputation", "key": "public", "delta": 6 },
-            { "target": "reputation", "key": "brother_priests", "delta": 4 },
-            { "target": "reputation", "key": "chancery", "delta": 3 },
-            { "target": "stat", "key": "charisma", "delta": 2 },
-            { "target": "trait", "key": "carries a great man's name" }
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "trait",
+              "key": "carries a great man's name"
+            }
           ],
           "completeOutcome": "Eighteen months, forty missions, and a Christmas card list you did not build. People you have never met know who you are. He gives you a chalice and a word to the bishop. What he has given you that you cannot give back is the association, and it will hold as long as he does."
         }
       },
       "decline": {
         "effects": [
-          { "target": "flag", "key": "refused_patron", "value": true },
-          { "target": "reputation", "key": "brother_priests", "delta": -3 },
-          { "target": "reputation", "key": "public", "delta": -1 }
+          {
+            "target": "flag",
+            "key": "refused_patron",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "brother_priests",
+            "delta": -3
+          },
+          {
+            "target": "reputation",
+            "key": "public",
+            "delta": -1
+          }
         ],
         "outcome": "You tell him you belong to your parish, and he smiles the smile he uses from the pulpit and takes {@random_classmate} instead. For a year and a half your classmate is at every dinner and you are not. Some of the older priests, who have watched the great man for years, nod at you a little differently."
       }
@@ -793,34 +2010,85 @@
     {
       "id": "pv_chancery_mentor",
       "category": "patronage",
-      "phase": ["parochial_vicar", "pastor"],
+      "phase": [
+        "parochial_vicar",
+        "pastor"
+      ],
       "title": "An Interest Taken",
       "body": "The vicar general asks you to lunch, alone, at a restaurant with tablecloths. He says he has been watching you, which in his mouth is neither a compliment nor a threat, only information. He would like to have you at the chancery on Fridays: not a job, an education. Sit in on the things he can let you sit in on. Read what he reads. Learn the diocese as a machine. He has done this for four priests; two are pastors of the largest parishes, one is a bishop in another state, one is not spoken of. He says nothing about what he expects in return, which is how you know that he expects something, and that you will be told what when it is time.",
       "requires": [
-        { "type": "years_ordained", "op": ">=", "value": 2 },
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 2
+        },
         {
           "type": "any",
           "inner": [
-            { "type": "flag", "key": "mentor:chancery", "value": true },
-            { "type": "reputation", "key": "chancery", "op": ">=", "value": 25 },
-            { "type": "flag", "key": "summer:chancery", "value": true }
+            {
+              "type": "flag",
+              "key": "mentor:chancery",
+              "value": true
+            },
+            {
+              "type": "reputation",
+              "key": "chancery",
+              "op": ">=",
+              "value": 25
+            },
+            {
+              "type": "flag",
+              "key": "summer:chancery",
+              "value": true
+            }
           ]
         }
       ],
       "weight": 30,
       "bias": [
-        { "when": { "type": "flag", "key": "mentor:chancery", "value": true }, "multiplier": 1.8 },
-        { "when": { "type": "stat", "key": "administration", "op": ">=", "value": 50 }, "multiplier": 1.3 }
+        {
+          "when": {
+            "type": "flag",
+            "key": "mentor:chancery",
+            "value": true
+          },
+          "multiplier": 1.8
+        },
+        {
+          "when": {
+            "type": "stat",
+            "key": "administration",
+            "op": ">=",
+            "value": 50
+          },
+          "multiplier": 1.3
+        }
       ],
       "windowWeeks": 2,
       "once": true,
       "cluster": "patronage",
       "accept": {
         "effects": [
-          { "target": "flag", "key": "mentor:chancery", "value": true },
-          { "target": "reputation", "key": "chancery", "delta": 8 },
-          { "target": "reputation", "key": "brother_priests", "delta": -3 },
-          { "target": "reputation", "key": "parishioners", "delta": -2 }
+          {
+            "target": "flag",
+            "key": "mentor:chancery",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "chancery",
+            "delta": 8
+          },
+          {
+            "target": "reputation",
+            "key": "brother_priests",
+            "delta": -3
+          },
+          {
+            "target": "reputation",
+            "key": "parishioners",
+            "delta": -2
+          }
         ],
         "outcome": "Fridays, then, at a desk outside his office. You read personnel memoranda with the names redacted and learn to guess them. He explains why a pastor was moved and what the letter said and what it meant. Your brother priests learn where you are on Fridays. One of them stops telling you things.",
         "commitment": {
@@ -828,19 +2096,47 @@
           "weeks": 52,
           "apPerWeek": 1,
           "onComplete": [
-            { "target": "reputation", "key": "chancery", "delta": 8 },
-            { "target": "stat", "key": "administration", "delta": 3 },
-            { "target": "stat", "key": "knowledge", "delta": 2 },
-            { "target": "relationship", "key": "@bishop", "delta": 6 },
-            { "target": "archetype", "key": "administrative", "delta": 2 }
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 8
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 2
+            },
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": 6
+            },
+            {
+              "target": "archetype",
+              "key": "administrative",
+              "delta": 2
+            }
           ],
           "completeOutcome": "A year of Fridays, and you understand the diocese in a way that cannot be untaught. He introduces you to {@bishop} as one of his, in those words. What he wants in return has not been named. You suspect that it will be a vote one day, or a silence, and that you will give it."
         }
       },
       "decline": {
         "effects": [
-          { "target": "flag", "key": "refused_chancery_mentor", "value": true },
-          { "target": "reputation", "key": "chancery", "delta": -5 }
+          {
+            "target": "flag",
+            "key": "refused_chancery_mentor",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "chancery",
+            "delta": -5
+          }
         ],
         "outcome": "You say your Fridays are for hospital calls. He does not argue. He pays the bill and says he hopes the hospital appreciates it. The next time you need something from the second floor, the letter is answered in the ordinary way, which is to say in eight weeks, by a secretary."
       }
@@ -848,36 +2144,96 @@
     {
       "id": "pv_substitute_for_bishop",
       "category": "patronage",
-      "phase": ["parochial_vicar", "pastor"],
+      "phase": [
+        "parochial_vicar",
+        "pastor"
+      ],
       "title": "In the Bishop's Place",
       "body": "{@bishop} is on the phone and it is Saturday morning. He is supposed to give the keynote at the diocesan catechetical conference in four hours and he is in an emergency room with a kidney stone. Four hundred teachers, a bishop-shaped hole in the program, and a stack of notes in his office that his secretary can bring you. He does not ask whether you can. He asks whether you will, and there is a difference, and you have until the end of this call to know which answer you are giving. If it goes well, four hundred catechists and the chancery staff will remember who stood up. If it goes badly, so will they.",
       "from": "@bishop",
       "requires": [
-        { "type": "years_ordained", "op": ">=", "value": 1 },
-        { "type": "relationship", "npcId": "@bishop", "op": ">=", "value": 10 },
-        { "type": "reputation", "key": "chancery", "op": ">=", "value": 10 }
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 1
+        },
+        {
+          "type": "relationship",
+          "npcId": "@bishop",
+          "op": ">=",
+          "value": 10
+        },
+        {
+          "type": "reputation",
+          "key": "chancery",
+          "op": ">=",
+          "value": 10
+        }
       ],
       "weight": 25,
       "bias": [
-        { "when": { "type": "flag", "key": "office:bishops_secretary", "value": true }, "multiplier": 2 },
-        { "when": { "type": "stat", "key": "charisma", "op": ">=", "value": 55 }, "multiplier": 1.4 }
+        {
+          "when": {
+            "type": "flag",
+            "key": "office:bishops_secretary",
+            "value": true
+          },
+          "multiplier": 2
+        },
+        {
+          "when": {
+            "type": "stat",
+            "key": "charisma",
+            "op": ">=",
+            "value": 55
+          },
+          "multiplier": 1.4
+        }
       ],
       "windowWeeks": 0,
       "cluster": "patronage",
       "accept": {
         "effects": [
-          { "target": "flag", "key": "substituted_for_bishop", "value": true },
-          { "target": "reputation", "key": "chancery", "delta": 6 },
-          { "target": "reputation", "key": "public", "delta": 4 },
-          { "target": "relationship", "key": "@bishop", "delta": 6 },
-          { "target": "stat", "key": "charisma", "delta": 1 }
+          {
+            "target": "flag",
+            "key": "substituted_for_bishop",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "chancery",
+            "delta": 6
+          },
+          {
+            "target": "reputation",
+            "key": "public",
+            "delta": 4
+          },
+          {
+            "target": "relationship",
+            "key": "@bishop",
+            "delta": 6
+          },
+          {
+            "target": "stat",
+            "key": "charisma",
+            "delta": 1
+          }
         ],
         "outcome": "The notes are in his handwriting and half of them are illegible, so you speak from what you know. Four hundred people who came to hear a bishop hear you instead and, after a stiff first ten minutes, decide it will do. The chancellor is in the second row, writing something down."
       },
       "decline": {
         "effects": [
-          { "target": "flag", "key": "declined_substitution", "value": true },
-          { "target": "reputation", "key": "chancery", "delta": -3 }
+          {
+            "target": "flag",
+            "key": "declined_substitution",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "chancery",
+            "delta": -3
+          }
         ],
         "outcome": "You tell him you have three weddings and a funeral and cannot. There is a pause on the line that lasts longer than the words did. The vicar general does it instead, from the notes, badly. On Monday the bishop is fine. He does not mention it, and neither, for a long time, does anyone else."
       },
@@ -887,17 +2243,47 @@
           {
             "type": "any",
             "inner": [
-              { "type": "stat", "key": "charisma", "op": ">=", "value": 50 },
-              { "type": "stat", "key": "knowledge", "op": ">=", "value": 55 }
+              {
+                "type": "stat",
+                "key": "charisma",
+                "op": ">=",
+                "value": 50
+              },
+              {
+                "type": "stat",
+                "key": "knowledge",
+                "op": ">=",
+                "value": 55
+              }
             ]
           }
         ],
         "effects": [
-          { "target": "flag", "key": "failed_substitution", "value": true },
-          { "target": "reputation", "key": "chancery", "delta": -6 },
-          { "target": "reputation", "key": "public", "delta": -3 },
-          { "target": "relationship", "key": "@bishop", "delta": -6 },
-          { "target": "stat", "key": "charisma", "delta": 1 }
+          {
+            "target": "flag",
+            "key": "failed_substitution",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "chancery",
+            "delta": -6
+          },
+          {
+            "target": "reputation",
+            "key": "public",
+            "delta": -3
+          },
+          {
+            "target": "relationship",
+            "key": "@bishop",
+            "delta": -6
+          },
+          {
+            "target": "stat",
+            "key": "charisma",
+            "delta": 1
+          }
         ],
         "outcome": "You read the notes, which was the mistake, and lose the room by the tenth minute. A woman in the fourth row does a crossword. The chancellor is in the second row, writing something down. On Monday the bishop is fine, and thanks you in a way that closes the subject, and the subject stays closed for a long time."
       }
@@ -905,40 +2291,123 @@
     {
       "id": "pv_opus_dei",
       "category": "social",
-      "phase": ["parochial_vicar", "pastor"],
+      "phase": [
+        "parochial_vicar",
+        "pastor"
+      ],
       "title": "The Priestly Society of the Holy Cross",
       "body": "A priest of the diocese you have always found impeccably turned out asks you to a monthly evening of recollection at a house in the city. It takes you two visits to understand what you are being invited into: the Priestly Society of the Holy Cross, the diocesan priests attached to Opus Dei. Spiritual direction of a rigor you have not had since seminary, a plan of life, a circle of priests who will know exactly where you are every day. It is not secret and it is not spoken of. Under some bishops it is an asset; under others it is the first thing said about you when your name comes up, and not kindly. He says the door is open and does not say for how long.",
       "requires": [
-        { "type": "years_ordained", "op": ">=", "value": 1 },
-        { "type": "not", "inner": { "type": "flag", "key": "affiliation:opus_dei", "value": true } },
-        { "type": "not", "inner": { "type": "flag", "key": "affiliation:prog_caucus", "value": true } },
-        { "type": "alignment", "op": "<=", "value": -10 },
-        { "type": "stat", "key": "piety", "op": ">=", "value": 45 }
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 1
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "affiliation:opus_dei",
+            "value": true
+          }
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "affiliation:prog_caucus",
+            "value": true
+          }
+        },
+        {
+          "type": "alignment",
+          "op": "<=",
+          "value": -10
+        },
+        {
+          "type": "stat",
+          "key": "piety",
+          "op": ">=",
+          "value": 45
+        }
       ],
       "weight": 25,
       "bias": [
-        { "when": { "type": "flag", "key": "sem_retreat_notable", "value": true }, "multiplier": 1.3 },
-        { "when": { "type": "flag", "key": "career:attorney", "value": true }, "multiplier": 1.3 },
-        { "when": { "type": "alignment", "op": "<=", "value": -40 }, "multiplier": 1.4 }
+        {
+          "when": {
+            "type": "flag",
+            "key": "sem_retreat_notable",
+            "value": true
+          },
+          "multiplier": 1.3
+        },
+        {
+          "when": {
+            "type": "flag",
+            "key": "career:attorney",
+            "value": true
+          },
+          "multiplier": 1.3
+        },
+        {
+          "when": {
+            "type": "alignment",
+            "op": "<=",
+            "value": -40
+          },
+          "multiplier": 1.4
+        }
       ],
       "windowWeeks": 6,
       "once": true,
       "cluster": "social",
       "accept": {
         "effects": [
-          { "target": "flag", "key": "affiliation:opus_dei", "value": true },
-          { "target": "stat", "key": "piety", "delta": 3 },
-          { "target": "reputation", "key": "traditional_bloc", "delta": 8 },
-          { "target": "reputation", "key": "progressive_bloc", "delta": -10 },
-          { "target": "reputation", "key": "brother_priests", "delta": -3 },
-          { "target": "alignment", "key": "", "delta": -5 }
+          {
+            "target": "flag",
+            "key": "affiliation:opus_dei",
+            "value": true
+          },
+          {
+            "target": "stat",
+            "key": "piety",
+            "delta": 3
+          },
+          {
+            "target": "reputation",
+            "key": "traditional_bloc",
+            "delta": 8
+          },
+          {
+            "target": "reputation",
+            "key": "progressive_bloc",
+            "delta": -10
+          },
+          {
+            "target": "reputation",
+            "key": "brother_priests",
+            "delta": -3
+          },
+          {
+            "target": "alignment",
+            "key": "",
+            "delta": -5
+          }
         ],
         "outcome": "The plan of life is a grid and you keep it. Your director is a man who has heard everything and reacts to nothing. Within a year your interior life is more ordered than it has been since your diaconate. Within a year, too, a priest at a deanery meeting says the word about you across the table, and the conversation moves on around it."
       },
       "decline": {
         "effects": [
-          { "target": "flag", "key": "refused_opus_dei", "value": true },
-          { "target": "reputation", "key": "traditional_bloc", "delta": -3 }
+          {
+            "target": "flag",
+            "key": "refused_opus_dei",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "traditional_bloc",
+            "delta": -3
+          }
         ],
         "outcome": "You thank him and do not go back. He is entirely gracious. You notice, over the next year, that a particular kind of invitation stops arriving, and that a particular kind of priest is a shade cooler at the cathedral, and that the ones who are warmer do not say why."
       }
@@ -946,44 +2415,121 @@
     {
       "id": "pv_cursillo",
       "category": "social",
-      "phase": ["parochial_vicar", "pastor"],
+      "phase": [
+        "parochial_vicar",
+        "pastor"
+      ],
       "title": "De Colores",
       "body": "Three men from the parish's Cursillo group corner you after the ten o'clock and ask you to serve as spiritual director on the spring weekend. Thursday night to Sunday night at a retreat center with forty men, five talks, a lot of singing, and a kind of emotional openness you were trained to be careful about. The men who come back from it are changed, mostly for the better, and they form the backbone of the parishes that have them. They also form a movement, with its own leaders and its own expectations of its priests, and a spiritual director is theirs afterward in a way that is not easily undone. The weekend is in six weeks. You would be gone from the parish for a Sunday.",
       "requires": [
-        { "type": "years_ordained", "op": ">=", "value": 1 },
-        { "type": "not", "inner": { "type": "flag", "key": "affiliation:cursillo", "value": true } },
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 1
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "affiliation:cursillo",
+            "value": true
+          }
+        },
         {
           "type": "any",
           "inner": [
-            { "type": "stat", "key": "charisma", "op": ">=", "value": 45 },
-            { "type": "stat", "key": "piety", "op": ">=", "value": 45 }
+            {
+              "type": "stat",
+              "key": "charisma",
+              "op": ">=",
+              "value": 45
+            },
+            {
+              "type": "stat",
+              "key": "piety",
+              "op": ">=",
+              "value": 45
+            }
           ]
         }
       ],
       "weight": 40,
       "bias": [
-        { "when": { "type": "flag", "key": "sem_refused_cursillo", "value": true }, "multiplier": 0.6 },
-        { "when": { "type": "parish", "key": "terrain", "value": "latino" }, "multiplier": 1.5 },
-        { "when": { "type": "flag", "key": "origin:urban_ethnic", "value": true }, "multiplier": 1.3 }
+        {
+          "when": {
+            "type": "flag",
+            "key": "sem_refused_cursillo",
+            "value": true
+          },
+          "multiplier": 0.6
+        },
+        {
+          "when": {
+            "type": "parish",
+            "key": "terrain",
+            "value": "latino"
+          },
+          "multiplier": 1.5
+        },
+        {
+          "when": {
+            "type": "flag",
+            "key": "origin:urban_ethnic",
+            "value": true
+          },
+          "multiplier": 1.3
+        }
       ],
       "windowWeeks": 4,
       "once": true,
       "cluster": "social",
       "accept": {
         "effects": [
-          { "target": "flag", "key": "affiliation:cursillo", "value": true },
-          { "target": "reputation", "key": "parishioners", "delta": 6 },
-          { "target": "stat", "key": "charisma", "delta": 2 },
-          { "target": "stat", "key": "piety", "delta": 1 },
-          { "target": "reputation", "key": "traditional_bloc", "delta": -2 },
-          { "target": "stat", "key": "theology", "delta": -1 }
+          {
+            "target": "flag",
+            "key": "affiliation:cursillo",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "parishioners",
+            "delta": 6
+          },
+          {
+            "target": "stat",
+            "key": "charisma",
+            "delta": 2
+          },
+          {
+            "target": "stat",
+            "key": "piety",
+            "delta": 1
+          },
+          {
+            "target": "reputation",
+            "key": "traditional_bloc",
+            "delta": -2
+          },
+          {
+            "target": "stat",
+            "key": "theology",
+            "delta": -1
+          }
         ],
         "outcome": "Forty men, a Saturday night that ends with grown men weeping in a gymnasium, and a Sunday morning on which one of them, a contractor, tells you he has not been to confession in twenty-six years. You hear it. You come home hoarse and belong, now, to something with a song."
       },
       "decline": {
         "effects": [
-          { "target": "flag", "key": "refused_cursillo", "value": true },
-          { "target": "reputation", "key": "parishioners", "delta": -3 }
+          {
+            "target": "flag",
+            "key": "refused_cursillo",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "parishioners",
+            "delta": -3
+          }
         ],
         "outcome": "You say the weekend is too much to give. The three men take it well and ask a priest from the next parish, who says yes. Their group meets on Wednesdays in your hall, and the priest they speak of on Wednesdays is him. You hear them singing sometimes through the wall."
       }
@@ -991,45 +2537,127 @@
     {
       "id": "pv_trad_society",
       "category": "social",
-      "phase": ["parochial_vicar", "pastor"],
+      "phase": [
+        "parochial_vicar",
+        "pastor"
+      ],
       "title": "The Confraternity",
       "body": "An invitation arrives on heavy paper from a confraternity of diocesan priests attached to the older form of the Mass. They meet quarterly for a sung Mass in the usus antiquior, a conference, and a dinner at which the state of the Church is discussed with some heat. They would like you to join. Membership is a public fact; the bishop's office keeps an informal list. Under the present bishop it is tolerated. Under the next it may be a credential or a charge, and no one can tell you which. The men are serious, learned, and not all of them are wise, and once you have been seen at the dinner, you will not be seen otherwise by the priests who were not there.",
       "requires": [
-        { "type": "years_ordained", "op": ">=", "value": 1 },
-        { "type": "not", "inner": { "type": "flag", "key": "affiliation:trad_fraternity", "value": true } },
-        { "type": "not", "inner": { "type": "flag", "key": "affiliation:prog_caucus", "value": true } },
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 1
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "affiliation:trad_fraternity",
+            "value": true
+          }
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "affiliation:prog_caucus",
+            "value": true
+          }
+        },
         {
           "type": "any",
           "inner": [
-            { "type": "alignment", "op": "<=", "value": -30 },
-            { "type": "reputation", "key": "traditional_bloc", "op": ">=", "value": 15 }
+            {
+              "type": "alignment",
+              "op": "<=",
+              "value": -30
+            },
+            {
+              "type": "reputation",
+              "key": "traditional_bloc",
+              "op": ">=",
+              "value": 15
+            }
           ]
         }
       ],
       "weight": 30,
       "bias": [
-        { "when": { "type": "credential", "key": "latin" }, "multiplier": 1.5 },
-        { "when": { "type": "flag", "key": "sem_latin_group", "value": true }, "multiplier": 1.4 },
-        { "when": { "type": "flag", "key": "sem_refused_trad_fraternity", "value": true }, "multiplier": 0.6 }
+        {
+          "when": {
+            "type": "credential",
+            "key": "latin"
+          },
+          "multiplier": 1.5
+        },
+        {
+          "when": {
+            "type": "flag",
+            "key": "sem_latin_group",
+            "value": true
+          },
+          "multiplier": 1.4
+        },
+        {
+          "when": {
+            "type": "flag",
+            "key": "sem_refused_trad_fraternity",
+            "value": true
+          },
+          "multiplier": 0.6
+        }
       ],
       "windowWeeks": 5,
       "once": true,
       "cluster": "social",
       "accept": {
         "effects": [
-          { "target": "flag", "key": "affiliation:trad_fraternity", "value": true },
-          { "target": "reputation", "key": "traditional_bloc", "delta": 12 },
-          { "target": "reputation", "key": "progressive_bloc", "delta": -12 },
-          { "target": "reputation", "key": "chancery", "delta": -3 },
-          { "target": "alignment", "key": "", "delta": -6 },
-          { "target": "outspokenness", "key": "", "delta": 3 }
+          {
+            "target": "flag",
+            "key": "affiliation:trad_fraternity",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "traditional_bloc",
+            "delta": 12
+          },
+          {
+            "target": "reputation",
+            "key": "progressive_bloc",
+            "delta": -12
+          },
+          {
+            "target": "reputation",
+            "key": "chancery",
+            "delta": -3
+          },
+          {
+            "target": "alignment",
+            "key": "",
+            "delta": -6
+          },
+          {
+            "target": "outspokenness",
+            "key": "",
+            "delta": 3
+          }
         ],
         "outcome": "The Mass is sung by men who mean it, and the dinner goes on until midnight and covers the bishop, the seminary, and Rome, in descending order of charity. You are welcomed as a brother. A week later a priest you like says he heard you were there, in the voice one uses for a diagnosis."
       },
       "decline": {
         "effects": [
-          { "target": "flag", "key": "refused_trad_fraternity", "value": true },
-          { "target": "reputation", "key": "traditional_bloc", "delta": -5 }
+          {
+            "target": "flag",
+            "key": "refused_trad_fraternity",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "traditional_bloc",
+            "delta": -5
+          }
         ],
         "outcome": "You do not answer, which is an answer. The next invitation does not come. The men of the confraternity, who had counted you, conclude that you are careful, and say so among themselves with the particular contempt that word carries at that dinner."
       }
@@ -1037,46 +2665,136 @@
     {
       "id": "pv_prog_caucus",
       "category": "social",
-      "phase": ["parochial_vicar", "pastor"],
+      "phase": [
+        "parochial_vicar",
+        "pastor"
+      ],
       "title": "The Tuesday Group",
       "body": "A priest twenty years your senior, who marched in things you have only read about, asks you to a supper at his rectory. Eight priests, a bottle of wine, and a conversation that turns out to be an organization: they draft letters to the presbyteral council, they meet the bishop as a group twice a year, they keep a lawyer's number for priests in trouble with the chancery. He is asking you in. It is not a secret and it is not advertised, and the chancery knows the names. Under this bishop it is a nuisance to him. Under the next, it could be a resume or a reason. He says the Church needs priests who will say things, and looks at you as though he already knows you are one.",
       "requires": [
-        { "type": "years_ordained", "op": ">=", "value": 1 },
-        { "type": "not", "inner": { "type": "flag", "key": "affiliation:prog_caucus", "value": true } },
-        { "type": "not", "inner": { "type": "flag", "key": "affiliation:trad_fraternity", "value": true } },
-        { "type": "not", "inner": { "type": "flag", "key": "affiliation:opus_dei", "value": true } },
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 1
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "affiliation:prog_caucus",
+            "value": true
+          }
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "affiliation:trad_fraternity",
+            "value": true
+          }
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "affiliation:opus_dei",
+            "value": true
+          }
+        },
         {
           "type": "any",
           "inner": [
-            { "type": "alignment", "op": ">=", "value": 30 },
-            { "type": "reputation", "key": "progressive_bloc", "op": ">=", "value": 15 }
+            {
+              "type": "alignment",
+              "op": ">=",
+              "value": 30
+            },
+            {
+              "type": "reputation",
+              "key": "progressive_bloc",
+              "op": ">=",
+              "value": 15
+            }
           ]
         }
       ],
       "weight": 30,
       "bias": [
-        { "when": { "type": "flag", "key": "past:activism", "value": true }, "multiplier": 1.5 },
-        { "when": { "type": "outspokenness", "op": ">=", "value": 40 }, "multiplier": 1.4 },
-        { "when": { "type": "flag", "key": "sem_refused_prog_caucus", "value": true }, "multiplier": 0.6 }
+        {
+          "when": {
+            "type": "flag",
+            "key": "past:activism",
+            "value": true
+          },
+          "multiplier": 1.5
+        },
+        {
+          "when": {
+            "type": "outspokenness",
+            "op": ">=",
+            "value": 40
+          },
+          "multiplier": 1.4
+        },
+        {
+          "when": {
+            "type": "flag",
+            "key": "sem_refused_prog_caucus",
+            "value": true
+          },
+          "multiplier": 0.6
+        }
       ],
       "windowWeeks": 5,
       "once": true,
       "cluster": "social",
       "accept": {
         "effects": [
-          { "target": "flag", "key": "affiliation:prog_caucus", "value": true },
-          { "target": "reputation", "key": "progressive_bloc", "delta": 12 },
-          { "target": "reputation", "key": "traditional_bloc", "delta": -12 },
-          { "target": "reputation", "key": "chancery", "delta": -4 },
-          { "target": "alignment", "key": "", "delta": 6 },
-          { "target": "outspokenness", "key": "", "delta": 4 }
+          {
+            "target": "flag",
+            "key": "affiliation:prog_caucus",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "progressive_bloc",
+            "delta": 12
+          },
+          {
+            "target": "reputation",
+            "key": "traditional_bloc",
+            "delta": -12
+          },
+          {
+            "target": "reputation",
+            "key": "chancery",
+            "delta": -4
+          },
+          {
+            "target": "alignment",
+            "key": "",
+            "delta": 6
+          },
+          {
+            "target": "outspokenness",
+            "key": "",
+            "delta": 4
+          }
         ],
         "outcome": "The letters are well drafted and get answered late. Twice a year you sit across from {@bishop} with seven other men and watch him be patient. Somebody in the chancery adds your name to a list that does not officially exist. The priests who do not come to the suppers know exactly who does."
       },
       "decline": {
         "effects": [
-          { "target": "flag", "key": "refused_prog_caucus", "value": true },
-          { "target": "reputation", "key": "progressive_bloc", "delta": -5 }
+          {
+            "target": "flag",
+            "key": "refused_prog_caucus",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "progressive_bloc",
+            "delta": -5
+          }
         ],
         "outcome": "You tell him you would rather say things on your own. He says that is what everyone says until they need the lawyer's number. The suppers continue without you. The men who attend them, who had thought you one of them, revise the thought and do not tell you."
       }
@@ -1084,32 +2802,98 @@
     {
       "id": "pv_diocesan_fraternity",
       "category": "social",
-      "phase": ["parochial_vicar", "pastor"],
+      "phase": [
+        "parochial_vicar",
+        "pastor"
+      ],
       "title": "A Fraternity of Priests",
       "body": "{@closest_classmate} has been meeting monthly with five other priests of the diocese for two years: a day together, a holy hour, a meal, a review of life in which each man says how it is actually going, and the others listen. It follows the pattern of the Jesus Caritas fraternities, though nobody is precious about the name. One of the six is moving away and they have a chair. It is not a faction; it has no letterhead. What it has is six men who will know when you are drinking too much or preaching too little, and say so, and a day a month that the parish does not get. Priests who have this tend to last. Priests who do not tend to think they do not need it.",
       "from": "@closest_classmate",
       "requires": [
-        { "type": "years_ordained", "op": ">=", "value": 2 },
-        { "type": "not", "inner": { "type": "flag", "key": "affiliation:diocesan_fraternity", "value": true } },
-        { "type": "relationship", "npcId": "@closest_classmate", "op": ">=", "value": 15 },
-        { "type": "reputation", "key": "brother_priests", "op": ">=", "value": 5 }
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 2
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "affiliation:diocesan_fraternity",
+            "value": true
+          }
+        },
+        {
+          "type": "relationship",
+          "npcId": "@closest_classmate",
+          "op": ">=",
+          "value": 15
+        },
+        {
+          "type": "reputation",
+          "key": "brother_priests",
+          "op": ">=",
+          "value": 5
+        }
       ],
       "weight": 45,
       "bias": [
-        { "when": { "type": "flag", "key": "past:drinking", "value": true }, "multiplier": 1.4 },
-        { "when": { "type": "flag", "key": "family:estranged", "value": true }, "multiplier": 1.3 },
-        { "when": { "type": "stat", "key": "piety", "op": "<=", "value": 35 }, "multiplier": 1.4 }
+        {
+          "when": {
+            "type": "flag",
+            "key": "past:drinking",
+            "value": true
+          },
+          "multiplier": 1.4
+        },
+        {
+          "when": {
+            "type": "flag",
+            "key": "family:estranged",
+            "value": true
+          },
+          "multiplier": 1.3
+        },
+        {
+          "when": {
+            "type": "stat",
+            "key": "piety",
+            "op": "<=",
+            "value": 35
+          },
+          "multiplier": 1.4
+        }
       ],
       "windowWeeks": 4,
       "once": true,
       "cluster": "social",
       "accept": {
         "effects": [
-          { "target": "flag", "key": "affiliation:diocesan_fraternity", "value": true },
-          { "target": "reputation", "key": "brother_priests", "delta": 6 },
-          { "target": "relationship", "key": "@closest_classmate", "delta": 8 },
-          { "target": "stat", "key": "piety", "delta": 2 },
-          { "target": "reputation", "key": "parishioners", "delta": -2 }
+          {
+            "target": "flag",
+            "key": "affiliation:diocesan_fraternity",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "brother_priests",
+            "delta": 6
+          },
+          {
+            "target": "relationship",
+            "key": "@closest_classmate",
+            "delta": 8
+          },
+          {
+            "target": "stat",
+            "key": "piety",
+            "delta": 2
+          },
+          {
+            "target": "reputation",
+            "key": "parishioners",
+            "delta": -2
+          }
         ],
         "outcome": "The first review of life you say almost nothing, and the men do not push. The third time you say something true and nobody flinches. A day a month vanishes from the parish calendar and the secretary learns not to book it. You start to notice that you are sleeping.",
         "commitment": {
@@ -1117,18 +2901,41 @@
           "weeks": 104,
           "apPerWeek": 1,
           "onComplete": [
-            { "target": "stat", "key": "piety", "delta": 3 },
-            { "target": "reputation", "key": "brother_priests", "delta": 5 },
-            { "target": "honesty", "key": "", "delta": 3 },
-            { "target": "trait", "key": "has men who will tell him the truth" }
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": 5
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 3
+            },
+            {
+              "target": "trait",
+              "key": "has men who will tell him the truth"
+            }
           ],
           "completeOutcome": "Two years in and the six of you have buried one man's mother and talked another off leaving. You know the shape of each other's days. When the diocese does something to one of you, six priests know it by nightfall, and that, it turns out, is a kind of power the chancery counts."
         }
       },
       "decline": {
         "effects": [
-          { "target": "flag", "key": "refused_diocesan_fraternity", "value": true },
-          { "target": "reputation", "key": "brother_priests", "delta": -2 }
+          {
+            "target": "flag",
+            "key": "refused_diocesan_fraternity",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "brother_priests",
+            "delta": -2
+          }
         ],
         "outcome": "You say you cannot lose a day a month. {@closest_classmate} says that is what the man who is leaving said when he came, and lets it drop. The chair goes to someone else. You keep the day and cannot, later, say what you did with it."
       }
@@ -1136,35 +2943,100 @@
     {
       "id": "pa_donor_fundraiser",
       "category": "social",
-      "phase": ["administrator", "pastor"],
+      "phase": [
+        "administrator",
+        "pastor"
+      ],
       "title": "The Long Table",
       "body": "A parishioner whose name is on a hospital wing invites you to dinner and, over the second course, proposes that you be the priest at a table of twelve she will assemble: people who give to the diocese, the university, the arts, and who would like to know a pastor who can talk. Four dinners over the spring. You would say grace and then earn it. Some of these people will fund a roof or a school someday if they know your name. Some will expect to be listened to when the parish makes a decision, and will remember what they gave. The other pastors will call it what it is. Your parish council will wonder why you are eating with people who do not sit in your pews.",
       "requires": [
-        { "type": "years_ordained", "op": ">=", "value": 3 },
-        { "type": "not", "inner": { "type": "flag", "key": "donor:named", "value": true } },
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 3
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "donor:named",
+            "value": true
+          }
+        },
         {
           "type": "any",
           "inner": [
-            { "type": "stat", "key": "knowledge", "op": ">=", "value": 55 },
-            { "type": "stat", "key": "charisma", "op": ">=", "value": 55 }
+            {
+              "type": "stat",
+              "key": "knowledge",
+              "op": ">=",
+              "value": 55
+            },
+            {
+              "type": "stat",
+              "key": "charisma",
+              "op": ">=",
+              "value": 55
+            }
           ]
         }
       ],
       "weight": 35,
       "bias": [
-        { "when": { "type": "parish", "key": "wealth", "value": 4 }, "multiplier": 1.4 },
-        { "when": { "type": "parish", "key": "wealth", "value": 5 }, "multiplier": 1.6 },
-        { "when": { "type": "parish", "key": "problem", "value": "roof" }, "multiplier": 1.4 },
-        { "when": { "type": "parish", "key": "school", "value": "at_risk" }, "multiplier": 1.4 }
+        {
+          "when": {
+            "type": "parish",
+            "key": "wealth",
+            "value": 4
+          },
+          "multiplier": 1.4
+        },
+        {
+          "when": {
+            "type": "parish",
+            "key": "wealth",
+            "value": 5
+          },
+          "multiplier": 1.6
+        },
+        {
+          "when": {
+            "type": "parish",
+            "key": "problem",
+            "value": "roof"
+          },
+          "multiplier": 1.4
+        },
+        {
+          "when": {
+            "type": "parish",
+            "key": "school",
+            "value": "at_risk"
+          },
+          "multiplier": 1.4
+        }
       ],
       "windowWeeks": 3,
       "once": true,
       "cluster": "social",
       "accept": {
         "effects": [
-          { "target": "reputation", "key": "parishioners", "delta": -3 },
-          { "target": "reputation", "key": "brother_priests", "delta": -3 },
-          { "target": "risk", "key": "pa_donor_expectations", "value": "Donors who remember what they gave", "delta": 1 }
+          {
+            "target": "reputation",
+            "key": "parishioners",
+            "delta": -3
+          },
+          {
+            "target": "reputation",
+            "key": "brother_priests",
+            "delta": -3
+          },
+          {
+            "target": "risk",
+            "key": "pa_donor_expectations",
+            "value": "Donors who remember what they gave",
+            "delta": 1
+          }
         ],
         "outcome": "The first dinner is a lesson in which fork. By the third you have learned that a man who gives a million dollars wants, more than thanks, to be asked what he thinks. You ask. Someone gives you a card and says to call when the school needs something, and does not say what it will cost.",
         "commitment": {
@@ -1172,20 +3044,52 @@
           "weeks": 16,
           "apPerWeek": 2,
           "onComplete": [
-            { "target": "flag", "key": "donor:named", "value": true },
-            { "target": "reputation", "key": "chancery", "delta": 4 },
-            { "target": "reputation", "key": "public", "delta": 4 },
-            { "target": "stat", "key": "charisma", "delta": 1 },
-            { "target": "stat", "key": "administration", "delta": 1 }
+            {
+              "target": "flag",
+              "key": "donor:named",
+              "value": true
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": 4
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            }
           ],
           "completeOutcome": "Four dinners and you have five phone numbers that answer. The development office at the chancery is suddenly friendly. One of the five sends a check to the parish unasked, and a note about the choir, and the note is longer than the check."
         }
       },
       "decline": {
         "effects": [
-          { "target": "flag", "key": "refused_donor", "value": true },
-          { "target": "reputation", "key": "chancery", "delta": -2 },
-          { "target": "reputation", "key": "parishioners", "delta": 2 }
+          {
+            "target": "flag",
+            "key": "refused_donor",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "chancery",
+            "delta": -2
+          },
+          {
+            "target": "reputation",
+            "key": "parishioners",
+            "delta": 2
+          }
         ],
         "outcome": "You tell her the parish has your evenings. She is gracious and a little surprised, and invites a monsignor from the cathedral, who is very good at it. Two years later the roof needs a hundred thousand dollars and you find out what a pastor does who does not have the numbers."
       }
@@ -1193,35 +3097,96 @@
     {
       "id": "pv_civic_board",
       "category": "social",
-      "phase": ["parochial_vicar", "pastor"],
+      "phase": [
+        "parochial_vicar",
+        "pastor"
+      ],
       "title": "A Seat at the Community Foundation",
       "body": "The chair of the county's community foundation writes on foundation letterhead. Their board has had a clergy seat since 1961 and it has been empty since the Methodist retired. They would like a Catholic, and someone at the hospital or the paper suggested you. Six meetings a year, grant applications to read, a dinner where the mayor speaks. It is the room where the county decides what it cares about, and a priest in it is heard on things the parish cannot reach: housing, the food bank, the shelter. It is also the room where the mayor speaks, and a priest who is seen at his table is assumed, by half the pews, to have voted for him.",
       "requires": [
-        { "type": "years_ordained", "op": ">=", "value": 2 },
-        { "type": "not", "inner": { "type": "flag", "key": "board:civic", "value": true } },
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 2
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "board:civic",
+            "value": true
+          }
+        },
         {
           "type": "any",
           "inner": [
-            { "type": "stat", "key": "knowledge", "op": ">=", "value": 55 },
-            { "type": "reputation", "key": "public", "op": ">=", "value": 20 }
+            {
+              "type": "stat",
+              "key": "knowledge",
+              "op": ">=",
+              "value": 55
+            },
+            {
+              "type": "reputation",
+              "key": "public",
+              "op": ">=",
+              "value": 20
+            }
           ]
         }
       ],
       "weight": 35,
       "bias": [
-        { "when": { "type": "flag", "key": "career:management", "value": true }, "multiplier": 1.4 },
-        { "when": { "type": "flag", "key": "career:social_work", "value": true }, "multiplier": 1.4 },
-        { "when": { "type": "flag", "key": "tie:son", "value": true }, "multiplier": 1.3 }
+        {
+          "when": {
+            "type": "flag",
+            "key": "career:management",
+            "value": true
+          },
+          "multiplier": 1.4
+        },
+        {
+          "when": {
+            "type": "flag",
+            "key": "career:social_work",
+            "value": true
+          },
+          "multiplier": 1.4
+        },
+        {
+          "when": {
+            "type": "flag",
+            "key": "tie:son",
+            "value": true
+          },
+          "multiplier": 1.3
+        }
       ],
       "windowWeeks": 4,
       "once": true,
       "cluster": "social",
       "accept": {
         "effects": [
-          { "target": "flag", "key": "board:civic", "value": true },
-          { "target": "reputation", "key": "public", "delta": 5 },
-          { "target": "stat", "key": "piety", "delta": -1 },
-          { "target": "reputation", "key": "traditional_bloc", "delta": -2 }
+          {
+            "target": "flag",
+            "key": "board:civic",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "public",
+            "delta": 5
+          },
+          {
+            "target": "stat",
+            "key": "piety",
+            "delta": -1
+          },
+          {
+            "target": "reputation",
+            "key": "traditional_bloc",
+            "delta": -2
+          }
         ],
         "outcome": "The first meeting is about a grant to a clinic and you are the only person at the table who has been inside it. You say so. The chair writes something down. At the dinner the mayor calls you Father in front of a photographer, and the picture runs, and a man at the eight o'clock Mass asks you about it in a voice that is not friendly.",
         "commitment": {
@@ -1229,18 +3194,42 @@
           "weeks": 156,
           "apPerWeek": 1,
           "onComplete": [
-            { "target": "reputation", "key": "public", "delta": 10 },
-            { "target": "stat", "key": "knowledge", "delta": 2 },
-            { "target": "stat", "key": "administration", "delta": 1 },
-            { "target": "reputation", "key": "progressive_bloc", "delta": 3 }
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": 10
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "progressive_bloc",
+              "delta": 3
+            }
           ],
           "completeOutcome": "Three years of grant cycles and one shelter that exists because you said a sentence at the right meeting. The paper calls you for a quote when religion comes up. The county knows your name, which is a thing the diocese notices and does not entirely like."
         }
       },
       "decline": {
         "effects": [
-          { "target": "flag", "key": "refused_civic_board", "value": true },
-          { "target": "reputation", "key": "public", "delta": -3 }
+          {
+            "target": "flag",
+            "key": "refused_civic_board",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "public",
+            "delta": -3
+          }
         ],
         "outcome": "You reply that a pastor's place is in his parish, and the chair, who has heard it before, appoints a Lutheran. The Lutheran is good. When the shelter debate comes to the foundation two years later, the Catholic position is put by a man who has read about it."
       }
@@ -1248,36 +3237,101 @@
     {
       "id": "pv_interfaith_council",
       "category": "social",
-      "phase": ["parochial_vicar", "pastor"],
+      "phase": [
+        "parochial_vicar",
+        "pastor"
+      ],
       "title": "The Interfaith Council",
       "body": "The rabbi of the reform congregation and the imam of the mosque on the highway come to the rectory together, which has plainly been planned. The county's interfaith council has lost its Catholic and they are asking for you by name; the rabbi read something you said at a funeral. Monthly meetings, a Thanksgiving service, a statement whenever something terrible happens somewhere. You would be the Church's face to every other congregation in the county, and to the newspaper when it wants a religious voice that is not shouting. The priests of the confraternity will call it indifferentism. Your own more traditional parishioners will ask what you were doing in a synagogue on a Sunday afternoon, and will not like any answer.",
       "requires": [
-        { "type": "years_ordained", "op": ">=", "value": 2 },
-        { "type": "not", "inner": { "type": "flag", "key": "board:interfaith", "value": true } },
-        { "type": "alignment", "op": ">=", "value": -40 },
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 2
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "board:interfaith",
+            "value": true
+          }
+        },
+        {
+          "type": "alignment",
+          "op": ">=",
+          "value": -40
+        },
         {
           "type": "any",
           "inner": [
-            { "type": "stat", "key": "knowledge", "op": ">=", "value": 55 },
-            { "type": "reputation", "key": "public", "op": ">=", "value": 15 }
+            {
+              "type": "stat",
+              "key": "knowledge",
+              "op": ">=",
+              "value": 55
+            },
+            {
+              "type": "reputation",
+              "key": "public",
+              "op": ">=",
+              "value": 15
+            }
           ]
         }
       ],
       "weight": 30,
       "bias": [
-        { "when": { "type": "flag", "key": "origin:convert", "value": true }, "multiplier": 1.4 },
-        { "when": { "type": "alignment", "op": ">=", "value": 20 }, "multiplier": 1.4 },
-        { "when": { "type": "parish", "key": "terrain", "value": "urban" }, "multiplier": 1.3 }
+        {
+          "when": {
+            "type": "flag",
+            "key": "origin:convert",
+            "value": true
+          },
+          "multiplier": 1.4
+        },
+        {
+          "when": {
+            "type": "alignment",
+            "op": ">=",
+            "value": 20
+          },
+          "multiplier": 1.4
+        },
+        {
+          "when": {
+            "type": "parish",
+            "key": "terrain",
+            "value": "urban"
+          },
+          "multiplier": 1.3
+        }
       ],
       "windowWeeks": 4,
       "once": true,
       "cluster": "social",
       "accept": {
         "effects": [
-          { "target": "flag", "key": "board:interfaith", "value": true },
-          { "target": "reputation", "key": "public", "delta": 4 },
-          { "target": "reputation", "key": "traditional_bloc", "delta": -4 },
-          { "target": "reputation", "key": "parishioners", "delta": -2 }
+          {
+            "target": "flag",
+            "key": "board:interfaith",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "public",
+            "delta": 4
+          },
+          {
+            "target": "reputation",
+            "key": "traditional_bloc",
+            "delta": -4
+          },
+          {
+            "target": "reputation",
+            "key": "parishioners",
+            "delta": -2
+          }
         ],
         "outcome": "The first meeting is in a church basement with better coffee than yours. The rabbi is funnier than you and the imam is more serious, and by the third meeting you have argued with both of them and been invited to dinner by both. A letter arrives at the chancery from a parishioner, with a photograph, and the chancellor forwards it without comment.",
         "commitment": {
@@ -1285,20 +3339,52 @@
           "weeks": 104,
           "apPerWeek": 1,
           "onComplete": [
-            { "target": "reputation", "key": "public", "delta": 8 },
-            { "target": "reputation", "key": "progressive_bloc", "delta": 4 },
-            { "target": "reputation", "key": "traditional_bloc", "delta": -3 },
-            { "target": "stat", "key": "knowledge", "delta": 2 },
-            { "target": "stat", "key": "charisma", "delta": 1 }
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": 8
+            },
+            {
+              "target": "reputation",
+              "key": "progressive_bloc",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": -3
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            }
           ],
           "completeOutcome": "Two years, one vandalized mosque, one statement you drafted at two in the morning that the paper ran in full. The rabbi calls you his priest. The county thinks of the Catholic Church, when it thinks of it, as you, which is more weight than it sounds and less than the confraternity thinks."
         }
       },
       "decline": {
         "effects": [
-          { "target": "flag", "key": "refused_interfaith", "value": true },
-          { "target": "reputation", "key": "public", "delta": -2 },
-          { "target": "reputation", "key": "progressive_bloc", "delta": -2 }
+          {
+            "target": "flag",
+            "key": "refused_interfaith",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "public",
+            "delta": -2
+          },
+          {
+            "target": "reputation",
+            "key": "progressive_bloc",
+            "delta": -2
+          }
         ],
         "outcome": "You say the parish cannot spare you. The rabbi says he understands and does not; the imam says nothing and shakes your hand. The council finds a deacon. When the mosque is vandalized two winters later, the Catholic statement is a paragraph from the chancery, and the rabbi does not call."
       }
@@ -1306,35 +3392,90 @@
     {
       "id": "pv_hospital_chaplain",
       "category": "social",
-      "phase": ["parochial_vicar", "pastor"],
+      "phase": [
+        "parochial_vicar",
+        "pastor"
+      ],
       "title": "The Hospital Rota",
       "body": "The director of pastoral care at the regional hospital, a Lutheran with a clinical background, asks the diocese for a priest on the on-call rota: two nights a week and one weekend a month, the emergency room and the intensive care unit and the room where families are told things. Your background is why she asked for you by name. The priests who do this well are the ones people remember when a diocese is choosing who to trust with the dying. It is also three in the morning, twice a week, in a building that smells of bleach, and the parish will have a priest on Wednesday mornings who did not sleep on Tuesday.",
       "requires": [
-        { "type": "years_ordained", "op": ">=", "value": 1 },
-        { "type": "not", "inner": { "type": "flag", "key": "chaplain:hospital", "value": true } },
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 1
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "chaplain:hospital",
+            "value": true
+          }
+        },
         {
           "type": "any",
           "inner": [
-            { "type": "flag", "key": "career:physician", "value": true },
-            { "type": "flag", "key": "career:social_work", "value": true },
-            { "type": "credential", "key": "cpe_unit" },
-            { "type": "flag", "key": "summer:hospital", "value": true }
+            {
+              "type": "flag",
+              "key": "career:physician",
+              "value": true
+            },
+            {
+              "type": "flag",
+              "key": "career:social_work",
+              "value": true
+            },
+            {
+              "type": "credential",
+              "key": "cpe_unit"
+            },
+            {
+              "type": "flag",
+              "key": "summer:hospital",
+              "value": true
+            }
           ]
         }
       ],
       "weight": 45,
       "bias": [
-        { "when": { "type": "flag", "key": "career:physician", "value": true }, "multiplier": 1.5 },
-        { "when": { "type": "flag", "key": "motive:grief", "value": true }, "multiplier": 1.3 }
+        {
+          "when": {
+            "type": "flag",
+            "key": "career:physician",
+            "value": true
+          },
+          "multiplier": 1.5
+        },
+        {
+          "when": {
+            "type": "flag",
+            "key": "motive:grief",
+            "value": true
+          },
+          "multiplier": 1.3
+        }
       ],
       "windowWeeks": 3,
       "once": true,
       "cluster": "parish",
       "accept": {
         "effects": [
-          { "target": "flag", "key": "chaplain:hospital", "value": true },
-          { "target": "reputation", "key": "public", "delta": 3 },
-          { "target": "stat", "key": "administration", "delta": -1 }
+          {
+            "target": "flag",
+            "key": "chaplain:hospital",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "public",
+            "delta": 3
+          },
+          {
+            "target": "stat",
+            "key": "administration",
+            "delta": -1
+          }
         ],
         "outcome": "The first call is a motorcycle and a mother. You anoint a boy who is not going to wake up and sit with her for two hours and drive home at five and say the seven o'clock Mass. Nobody at the seven o'clock knows. The director of pastoral care, who does, sends a note that says only that she was right.",
         "commitment": {
@@ -1342,20 +3483,51 @@
           "weeks": 156,
           "apPerWeek": 2,
           "onComplete": [
-            { "target": "stat", "key": "piety", "delta": 2 },
-            { "target": "stat", "key": "charisma", "delta": 2 },
-            { "target": "reputation", "key": "public", "delta": 5 },
-            { "target": "reputation", "key": "parishioners", "delta": 4 },
-            { "target": "archetype", "key": "pastoral", "delta": 3 },
-            { "target": "trait", "key": "has sat with the dying" }
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 4
+            },
+            {
+              "target": "archetype",
+              "key": "pastoral",
+              "delta": 3
+            },
+            {
+              "target": "trait",
+              "key": "has sat with the dying"
+            }
           ],
           "completeOutcome": "Three years and some hundreds of deaths. You have stopped being afraid of the room where families are told things. The nurses call you by your first name. When the bishop needs a priest who can be trusted at a bedside, the hospital gives him yours, and it goes into the file that matters."
         }
       },
       "decline": {
         "effects": [
-          { "target": "flag", "key": "refused_hospital_chaplaincy", "value": true },
-          { "target": "reputation", "key": "public", "delta": -2 }
+          {
+            "target": "flag",
+            "key": "refused_hospital_chaplaincy",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "public",
+            "delta": -2
+          }
         ],
         "outcome": "You tell her the parish cannot lose your nights. She finds a retired priest who sleeps through the pager. Six months later a parishioner dies at that hospital at four in the morning without a priest, and the family, who know you are on the diocese's list, ask you at the funeral why."
       }
@@ -1363,36 +3535,97 @@
     {
       "id": "pv_prison_chaplain",
       "category": "social",
-      "phase": ["parochial_vicar", "pastor"],
+      "phase": [
+        "parochial_vicar",
+        "pastor"
+      ],
       "title": "Mass at the County Jail",
       "body": "The deacon who has said the Communion service at the county jail for eleven years has had a stroke, and the sheriff's chaplain, a Baptist, calls the rectory to ask whether a priest could come Thursday afternoons. Mass in a room with a bolted-down table for whoever signs up, confessions through a grille that is actually a grille, and the walk out past the visitors' line. Nobody will see you do it. It counts for nothing in the chancery and slightly less at the deanery. Some of the men will be lying to you, and you will not always know which. It is also the Gospel in the plainest form the county offers, and the priests who have done it tend to preach differently afterward.",
       "requires": [
-        { "type": "years_ordained", "op": ">=", "value": 1 },
-        { "type": "not", "inner": { "type": "flag", "key": "chaplain:prison", "value": true } },
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 1
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "chaplain:prison",
+            "value": true
+          }
+        },
         {
           "type": "any",
           "inner": [
-            { "type": "flag", "key": "origin:urban_ethnic", "value": true },
-            { "type": "flag", "key": "past:activism", "value": true },
-            { "type": "flag", "key": "career:social_work", "value": true },
-            { "type": "flag", "key": "past:drinking", "value": true },
-            { "type": "stat", "key": "piety", "op": ">=", "value": 50 }
+            {
+              "type": "flag",
+              "key": "origin:urban_ethnic",
+              "value": true
+            },
+            {
+              "type": "flag",
+              "key": "past:activism",
+              "value": true
+            },
+            {
+              "type": "flag",
+              "key": "career:social_work",
+              "value": true
+            },
+            {
+              "type": "flag",
+              "key": "past:drinking",
+              "value": true
+            },
+            {
+              "type": "stat",
+              "key": "piety",
+              "op": ">=",
+              "value": 50
+            }
           ]
         }
       ],
       "weight": 40,
       "bias": [
-        { "when": { "type": "parish", "key": "terrain", "value": "urban" }, "multiplier": 1.4 },
-        { "when": { "type": "alignment", "op": ">=", "value": 20 }, "multiplier": 1.2 }
+        {
+          "when": {
+            "type": "parish",
+            "key": "terrain",
+            "value": "urban"
+          },
+          "multiplier": 1.4
+        },
+        {
+          "when": {
+            "type": "alignment",
+            "op": ">=",
+            "value": 20
+          },
+          "multiplier": 1.2
+        }
       ],
       "windowWeeks": 3,
       "once": true,
       "cluster": "parish",
       "accept": {
         "effects": [
-          { "target": "flag", "key": "chaplain:prison", "value": true },
-          { "target": "reputation", "key": "parishioners", "delta": -3 },
-          { "target": "reputation", "key": "progressive_bloc", "delta": 3 }
+          {
+            "target": "flag",
+            "key": "chaplain:prison",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "parishioners",
+            "delta": -3
+          },
+          {
+            "target": "reputation",
+            "key": "progressive_bloc",
+            "delta": 3
+          }
         ],
         "outcome": "Seven men the first Thursday, one of whom is there for the air conditioning and says so. You say Mass on the bolted table. In the confessional a man tells you a thing that has no absolution in it, only the telling, and you give him what you can. The parish council asks why Thursday afternoons are gone now.",
         "commitment": {
@@ -1400,21 +3633,57 @@
           "weeks": 104,
           "apPerWeek": 2,
           "onComplete": [
-            { "target": "stat", "key": "piety", "delta": 3 },
-            { "target": "stat", "key": "charisma", "delta": 1 },
-            { "target": "reputation", "key": "public", "delta": 4 },
-            { "target": "reputation", "key": "progressive_bloc", "delta": 3 },
-            { "target": "honesty", "key": "", "delta": 2 },
-            { "target": "archetype", "key": "pastoral", "delta": 2 }
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "progressive_bloc",
+              "delta": 3
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "archetype",
+              "key": "pastoral",
+              "delta": 2
+            }
           ],
           "completeOutcome": "Two years of Thursdays. Three of the men have come to Mass at {parish} since they got out, and one has not, and you buried him. You preach differently now, shorter and with fewer words that mean nothing. The sheriff's chaplain calls you brother and means it, and the chancery has no idea."
         }
       },
       "decline": {
         "effects": [
-          { "target": "flag", "key": "refused_prison_chaplaincy", "value": true },
-          { "target": "reputation", "key": "progressive_bloc", "delta": -2 },
-          { "target": "stat", "key": "piety", "delta": -1 }
+          {
+            "target": "flag",
+            "key": "refused_prison_chaplaincy",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "progressive_bloc",
+            "delta": -2
+          },
+          {
+            "target": "stat",
+            "key": "piety",
+            "delta": -1
+          }
         ],
         "outcome": "You tell the chaplain the parish takes all your Thursdays. He thanks you and calls the next parish, and the next. The jail goes without Mass for seven months. You notice, at the Judgment discourse in the lectionary that autumn, that you preach on it a little faster than you used to."
       }
@@ -1422,28 +3691,81 @@
     {
       "id": "pv_university_chaplain",
       "category": "social",
-      "phase": ["parochial_vicar", "pastor"],
+      "phase": [
+        "parochial_vicar",
+        "pastor"
+      ],
       "title": "The Newman Center",
       "body": "The Newman Center at the state university has lost its priest to a religious order's reshuffle and the campus ministry director, a laywoman who has run it through three chaplains, has asked {@bishop} for someone who can hold a room of twenty-year-olds. Three evenings a week during term, Sunday night Mass, and the discussion series that has to be able to take any question. You would keep the parish and lose your evenings and every Sunday night. The students who come are the best and most difficult Catholics in the diocese. The ones who leave the Church will leave from your chapel, and the ones who become priests will say your name at their ordination.",
       "requires": [
-        { "type": "years_ordained", "op": ">=", "value": 2 },
-        { "type": "not", "inner": { "type": "flag", "key": "chaplain:university", "value": true } },
-        { "type": "stat", "key": "knowledge", "op": ">=", "value": 60 }
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 2
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "chaplain:university",
+            "value": true
+          }
+        },
+        {
+          "type": "stat",
+          "key": "knowledge",
+          "op": ">=",
+          "value": 60
+        }
       ],
       "weight": 35,
       "bias": [
-        { "when": { "type": "flag", "key": "career:professor", "value": true }, "multiplier": 1.5 },
-        { "when": { "type": "flag", "key": "field:philosophy", "value": true }, "multiplier": 1.3 },
-        { "when": { "type": "stat", "key": "charisma", "op": ">=", "value": 50 }, "multiplier": 1.3 }
+        {
+          "when": {
+            "type": "flag",
+            "key": "career:professor",
+            "value": true
+          },
+          "multiplier": 1.5
+        },
+        {
+          "when": {
+            "type": "flag",
+            "key": "field:philosophy",
+            "value": true
+          },
+          "multiplier": 1.3
+        },
+        {
+          "when": {
+            "type": "stat",
+            "key": "charisma",
+            "op": ">=",
+            "value": 50
+          },
+          "multiplier": 1.3
+        }
       ],
       "windowWeeks": 3,
       "once": true,
       "cluster": "academic",
       "accept": {
         "effects": [
-          { "target": "flag", "key": "chaplain:university", "value": true },
-          { "target": "reputation", "key": "parishioners", "delta": -5 },
-          { "target": "reputation", "key": "chancery", "delta": 2 }
+          {
+            "target": "flag",
+            "key": "chaplain:university",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "parishioners",
+            "delta": -5
+          },
+          {
+            "target": "reputation",
+            "key": "chancery",
+            "delta": 2
+          }
         ],
         "outcome": "The Sunday night Mass has ninety students and a guitar you cannot get rid of. The first discussion series question is about Hell and the second is about the priest before you. You answer both. At {parish}, the Sunday evening rosary group learns to lead itself, and does, and is a little proud of it.",
         "commitment": {
@@ -1451,21 +3773,57 @@
           "weeks": 156,
           "apPerWeek": 3,
           "onComplete": [
-            { "target": "stat", "key": "knowledge", "delta": 3 },
-            { "target": "stat", "key": "theology", "delta": 2 },
-            { "target": "stat", "key": "charisma", "delta": 2 },
-            { "target": "reputation", "key": "public", "delta": 6 },
-            { "target": "reputation", "key": "chancery", "delta": 4 },
-            { "target": "archetype", "key": "teaching", "delta": 2 }
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 4
+            },
+            {
+              "target": "archetype",
+              "key": "teaching",
+              "delta": 2
+            }
           ],
           "completeOutcome": "Three years and two of them are in the seminary, and one of the two says it was you. Six left the Church in your chapel and you know each name. The campus ministry director says you were the best of the four, which she has said before, and the bishop, who has heard the numbers, believes it."
         }
       },
       "decline": {
         "effects": [
-          { "target": "flag", "key": "refused_university_chaplaincy", "value": true },
-          { "target": "reputation", "key": "chancery", "delta": -2 },
-          { "target": "reputation", "key": "public", "delta": -1 }
+          {
+            "target": "flag",
+            "key": "refused_university_chaplaincy",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "chancery",
+            "delta": -2
+          },
+          {
+            "target": "reputation",
+            "key": "public",
+            "delta": -1
+          }
         ],
         "outcome": "You tell {@bishop} the parish has your evenings. He accepts it and sends a newly ordained man who is out of his depth within a semester. The Newman Center shrinks. Two years later you meet a young man from the university who says he stopped going, and you cannot say it would have been different."
       }
@@ -1473,36 +3831,99 @@
     {
       "id": "pv_police_fire_chaplain",
       "category": "social",
-      "phase": ["parochial_vicar", "pastor"],
+      "phase": [
+        "parochial_vicar",
+        "pastor"
+      ],
       "title": "The Department Chaplain",
       "body": "The fire chief and a police captain, both of them parishioners, come to the rectory on a weekday with their hats in their hands. The department chaplain, a Monsignor who did it for thirty years, has died, and the two departments want a priest. Ride-alongs, the funerals, the call at three in the morning when an officer does not come home, the picnic in August, the annual blue Mass. It is the most visible priestly role in the county outside the cathedral, and half the county will love you for it. The other half will see a priest in a squad car and think what they think. You have the background for it. That is why they came to you and not to the pastor.",
       "requires": [
-        { "type": "years_ordained", "op": ">=", "value": 1 },
-        { "type": "not", "inner": { "type": "flag", "key": "chaplain:police_fire", "value": true } },
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 1
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "chaplain:police_fire",
+            "value": true
+          }
+        },
         {
           "type": "any",
           "inner": [
-            { "type": "flag", "key": "career:military", "value": true },
-            { "type": "flag", "key": "origin:urban_ethnic", "value": true },
-            { "type": "flag", "key": "career:trades", "value": true }
+            {
+              "type": "flag",
+              "key": "career:military",
+              "value": true
+            },
+            {
+              "type": "flag",
+              "key": "origin:urban_ethnic",
+              "value": true
+            },
+            {
+              "type": "flag",
+              "key": "career:trades",
+              "value": true
+            }
           ]
         }
       ],
       "weight": 40,
       "bias": [
-        { "when": { "type": "flag", "key": "career:military", "value": true }, "multiplier": 1.5 },
-        { "when": { "type": "flag", "key": "tie:son", "value": true }, "multiplier": 1.4 },
-        { "when": { "type": "alignment", "op": ">=", "value": 40 }, "multiplier": 0.6 }
+        {
+          "when": {
+            "type": "flag",
+            "key": "career:military",
+            "value": true
+          },
+          "multiplier": 1.5
+        },
+        {
+          "when": {
+            "type": "flag",
+            "key": "tie:son",
+            "value": true
+          },
+          "multiplier": 1.4
+        },
+        {
+          "when": {
+            "type": "alignment",
+            "op": ">=",
+            "value": 40
+          },
+          "multiplier": 0.6
+        }
       ],
       "windowWeeks": 3,
       "once": true,
       "cluster": "parish",
       "accept": {
         "effects": [
-          { "target": "flag", "key": "chaplain:police_fire", "value": true },
-          { "target": "reputation", "key": "public", "delta": 5 },
-          { "target": "reputation", "key": "progressive_bloc", "delta": -4 },
-          { "target": "stat", "key": "piety", "delta": -1 }
+          {
+            "target": "flag",
+            "key": "chaplain:police_fire",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "public",
+            "delta": 5
+          },
+          {
+            "target": "reputation",
+            "key": "progressive_bloc",
+            "delta": -4
+          },
+          {
+            "target": "stat",
+            "key": "piety",
+            "delta": -1
+          }
         ],
         "outcome": "The first ride-along is a Friday night and involves a domestic call you will not describe from the pulpit. The blue Mass fills the church with uniforms and the collection is the largest of the year. A woman from the social justice committee asks, carefully, whether you have thought about what the badge means to everyone.",
         "commitment": {
@@ -1510,20 +3931,51 @@
           "weeks": 156,
           "apPerWeek": 1,
           "onComplete": [
-            { "target": "reputation", "key": "public", "delta": 8 },
-            { "target": "reputation", "key": "traditional_bloc", "delta": 3 },
-            { "target": "stat", "key": "charisma", "delta": 2 },
-            { "target": "reputation", "key": "parishioners", "delta": 3 },
-            { "target": "trait", "key": "the departments' priest" }
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": 8
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 3
+            },
+            {
+              "target": "trait",
+              "key": "the departments' priest"
+            }
           ],
           "completeOutcome": "Three years, two line-of-duty funerals, and a fire captain's daughter's wedding. Every cop and firefighter in the county knows your name and half of them have your number. The chief says you are theirs now, and he is right, and it is in the paper often enough that the chancery has noticed."
         }
       },
       "decline": {
         "effects": [
-          { "target": "flag", "key": "refused_police_fire_chaplaincy", "value": true },
-          { "target": "reputation", "key": "public", "delta": -3 },
-          { "target": "reputation", "key": "parishioners", "delta": -2 }
+          {
+            "target": "flag",
+            "key": "refused_police_fire_chaplaincy",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "public",
+            "delta": -3
+          },
+          {
+            "target": "reputation",
+            "key": "parishioners",
+            "delta": -2
+          }
         ],
         "outcome": "You tell them you are not the right man. They are polite about it and find a priest two parishes over. The next blue Mass is at his church. The fire chief still comes to yours, in the last pew, and does not linger afterward the way he used to."
       }
@@ -1531,29 +3983,81 @@
     {
       "id": "pv_military_reserve",
       "category": "social",
-      "phase": ["parochial_vicar", "pastor"],
+      "phase": [
+        "parochial_vicar",
+        "pastor"
+      ],
       "title": "A Commission in the Reserve",
       "body": "A colonel from the Archdiocese for the Military Services calls, having got your name from the records that show you served. The reserve is short of Catholic chaplains by some hundreds and he can have you commissioned within the year with {@bishop}'s endorsement, which he says he already has. One weekend a month, two weeks a summer, and the standing possibility of a deployment that would take you from the parish for most of a year with a month's notice. You would be a captain. You would say Mass for men who have no one else. You would also be a priest the diocese cannot fully count on, and your parish would be the one that learned to expect the phone call.",
       "requires": [
-        { "type": "years_ordained", "op": ">=", "value": 1 },
-        { "type": "not", "inner": { "type": "flag", "key": "chaplain:military", "value": true } },
-        { "type": "flag", "key": "career:military", "value": true }
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 1
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "chaplain:military",
+            "value": true
+          }
+        },
+        {
+          "type": "flag",
+          "key": "career:military",
+          "value": true
+        }
       ],
       "weight": 45,
       "bias": [
-        { "when": { "type": "flag", "key": "chaplain:police_fire", "value": true }, "multiplier": 1.3 },
-        { "when": { "type": "flag", "key": "late_vocation", "value": true }, "multiplier": 0.7 }
+        {
+          "when": {
+            "type": "flag",
+            "key": "chaplain:police_fire",
+            "value": true
+          },
+          "multiplier": 1.3
+        },
+        {
+          "when": {
+            "type": "flag",
+            "key": "late_vocation",
+            "value": true
+          },
+          "multiplier": 0.7
+        }
       ],
       "windowWeeks": 6,
       "once": true,
       "cluster": "parish",
       "accept": {
         "effects": [
-          { "target": "flag", "key": "chaplain:military", "value": true },
-          { "target": "reputation", "key": "parishioners", "delta": -8 },
-          { "target": "reputation", "key": "brother_priests", "delta": -2 },
-          { "target": "reputation", "key": "chancery", "delta": 3 },
-          { "target": "reputation", "key": "public", "delta": 3 }
+          {
+            "target": "flag",
+            "key": "chaplain:military",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "parishioners",
+            "delta": -8
+          },
+          {
+            "target": "reputation",
+            "key": "brother_priests",
+            "delta": -2
+          },
+          {
+            "target": "reputation",
+            "key": "chancery",
+            "delta": 3
+          },
+          {
+            "target": "reputation",
+            "key": "public",
+            "delta": 3
+          }
         ],
         "outcome": "The uniform fits differently over a collar. The first drill weekend is a chaplain's course in a classroom and a Mass in a motor pool for eleven soldiers, one of whom cries. You miss a First Communion at {parish} and the mothers do not entirely forgive it. The pastor says nothing, which is what he says when he is keeping count.",
         "commitment": {
@@ -1561,22 +4065,61 @@
           "weeks": 208,
           "apPerWeek": 3,
           "onComplete": [
-            { "target": "reputation", "key": "public", "delta": 6 },
-            { "target": "reputation", "key": "chancery", "delta": 4 },
-            { "target": "reputation", "key": "traditional_bloc", "delta": 3 },
-            { "target": "stat", "key": "administration", "delta": 2 },
-            { "target": "stat", "key": "charisma", "delta": 2 },
-            { "target": "archetype", "key": "missionary", "delta": 2 },
-            { "target": "trait", "key": "Captain, Chaplain Corps" }
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "archetype",
+              "key": "missionary",
+              "delta": 2
+            },
+            {
+              "target": "trait",
+              "key": "Captain, Chaplain Corps"
+            }
           ],
           "completeOutcome": "Four years and one mobilization that did not come. You have said Mass on a tailgate in the rain and buried a nineteen-year-old with a flag on the box. The soldiers call you Chaplain and the parish calls you Father and it has taken you four years to be both. The chancery lists you with an asterisk."
         }
       },
       "decline": {
         "effects": [
-          { "target": "flag", "key": "refused_reserve", "value": true },
-          { "target": "reputation", "key": "public", "delta": -1 },
-          { "target": "reputation", "key": "parishioners", "delta": 2 }
+          {
+            "target": "flag",
+            "key": "refused_reserve",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "public",
+            "delta": -1
+          },
+          {
+            "target": "reputation",
+            "key": "parishioners",
+            "delta": 2
+          }
         ],
         "outcome": "You tell the colonel that you left the service once and meant it. He is used to that answer. The reserve stays short by some hundreds. A soldier from the parish, deployed the next year, writes to say there is no priest where he is, and you read it twice."
       }
@@ -1584,39 +4127,122 @@
     {
       "id": "pv_hard_parish",
       "category": "social",
-      "phase": ["parochial_vicar", "pastor"],
+      "phase": [
+        "parochial_vicar",
+        "pastor"
+      ],
       "title": "The Parish Nobody Wants",
       "body": "The vicar for clergy asks you to come to the chancery and does not say why, which means it is an assignment. There is a parish that has run through three pastors in seven years, with a school that is closing, a roof that is failing, a council that has driven off two of the three, and a debt to the diocese that has stopped being discussed. Nobody has asked for it. {@bishop} would like to send someone who will stay. He is asking you, he says, because you have not yet learned to say no to him and because he thinks you might be the kind who stays. There is no honor in it and no money. Everyone in the presbyterate will know why you are there, and half of them will pity you.",
       "requires": [
-        { "type": "years_ordained", "op": ">=", "value": 2 },
-        { "type": "not", "inner": { "type": "flag", "key": "took_the_hard_parish", "value": true } },
-        { "type": "not", "inner": { "type": "flag", "key": "refused_hard_parish", "value": true } }
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 2
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "took_the_hard_parish",
+            "value": true
+          }
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "refused_hard_parish",
+            "value": true
+          }
+        }
       ],
       "weight": 40,
       "bias": [
-        { "when": { "type": "flag", "key": "summer:hard_parish", "value": true }, "multiplier": 1.6 },
-        { "when": { "type": "reputation", "key": "chancery", "op": "<=", "value": 10 }, "multiplier": 1.5 },
-        { "when": { "type": "flag", "key": "speaks_spanish", "value": true }, "multiplier": 1.3 }
+        {
+          "when": {
+            "type": "flag",
+            "key": "summer:hard_parish",
+            "value": true
+          },
+          "multiplier": 1.6
+        },
+        {
+          "when": {
+            "type": "reputation",
+            "key": "chancery",
+            "op": "<=",
+            "value": 10
+          },
+          "multiplier": 1.5
+        },
+        {
+          "when": {
+            "type": "flag",
+            "key": "speaks_spanish",
+            "value": true
+          },
+          "multiplier": 1.3
+        }
       ],
       "windowWeeks": 3,
       "once": true,
       "cluster": "parish",
       "accept": {
         "effects": [
-          { "target": "flag", "key": "took_the_hard_parish", "value": true },
-          { "target": "reputation", "key": "chancery", "delta": 12 },
-          { "target": "reputation", "key": "brother_priests", "delta": 4 },
-          { "target": "reputation", "key": "parishioners", "delta": -6 },
-          { "target": "relationship", "key": "@bishop", "delta": 6 },
-          { "target": "stat", "key": "piety", "delta": -1 }
+          {
+            "target": "flag",
+            "key": "took_the_hard_parish",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "chancery",
+            "delta": 12
+          },
+          {
+            "target": "reputation",
+            "key": "brother_priests",
+            "delta": 4
+          },
+          {
+            "target": "reputation",
+            "key": "parishioners",
+            "delta": -6
+          },
+          {
+            "target": "relationship",
+            "key": "@bishop",
+            "delta": 6
+          },
+          {
+            "target": "stat",
+            "key": "piety",
+            "delta": -1
+          },
+          {
+            "target": "transfer",
+            "key": "difficult"
+          }
         ],
-        "outcome": "You say yes before you have thought about it, which the vicar for clergy notes with something like respect. The letter of appointment arrives the next week. The rectory has a leak over the bed. The council meets you at the door with a list, and the first item on the list is the last pastor, and you understand that you have been given a parish and a lawsuit."
+        "outcome": "You say yes before you have thought about it, which the vicar for clergy notes with something like respect. The letter of appointment arrives the next week, and you go. The rectory has a leak over the bed. The council meets you at the door with a list, and the first item on the list is the last pastor, and you understand that you have been given a parish and a lawsuit."
       },
       "decline": {
         "effects": [
-          { "target": "flag", "key": "refused_hard_parish", "value": true },
-          { "target": "reputation", "key": "chancery", "delta": -6 },
-          { "target": "relationship", "key": "@bishop", "delta": -5 }
+          {
+            "target": "flag",
+            "key": "refused_hard_parish",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "chancery",
+            "delta": -6
+          },
+          {
+            "target": "relationship",
+            "key": "@bishop",
+            "delta": -5
+          }
         ],
         "outcome": "You tell him you are not ready. He says nobody is, and writes something down, and the interview is over sooner than you expected. The parish gets a priest from the next diocese on loan. Your file has acquired a sentence, and you will not see it, and you will feel it the next time a name is being chosen."
       }
@@ -1624,41 +4250,122 @@
     {
       "id": "pa_hard_parish_turned",
       "category": "social",
-      "phase": ["administrator", "pastor"],
+      "phase": [
+        "administrator",
+        "pastor"
+      ],
       "title": "The Parish Everyone Wrote Off",
       "body": "The chancellor calls, and for once it is not a problem. {@bishop} has been reading the reports from {parish}: the collections, the school enrollment, the fact that the council has not written to him in a year. He wants to come for the parish's feast day, say the Mass, and have dinner afterward with the council and the finance committee and whoever you think should be there. He wants, the chancellor says with unusual directness, to see it. The vicar for clergy will be there and so will two priests who said it could not be done. It is one Sunday. It is also the moment at which a parish nobody wanted becomes the parish you turned, in front of the people who decide what you are next.",
       "requires": [
-        { "type": "flag", "key": "took_the_hard_parish", "value": true },
-        { "type": "not", "inner": { "type": "flag", "key": "hard_parish_turned", "value": true } },
-        { "type": "years_ordained", "op": ">=", "value": 4 },
-        { "type": "reputation", "key": "parishioners", "op": ">=", "value": 40 }
+        {
+          "type": "flag",
+          "key": "took_the_hard_parish",
+          "value": true
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "hard_parish_turned",
+            "value": true
+          }
+        },
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 4
+        },
+        {
+          "type": "reputation",
+          "key": "parishioners",
+          "op": ">=",
+          "value": 40
+        }
       ],
       "weight": 50,
       "bias": [
-        { "when": { "type": "reputation", "key": "parishioners", "op": ">=", "value": 55 }, "multiplier": 1.5 },
-        { "when": { "type": "parish", "key": "school", "value": "open" }, "multiplier": 1.3 }
+        {
+          "when": {
+            "type": "reputation",
+            "key": "parishioners",
+            "op": ">=",
+            "value": 55
+          },
+          "multiplier": 1.5
+        },
+        {
+          "when": {
+            "type": "parish",
+            "key": "school",
+            "value": "open"
+          },
+          "multiplier": 1.3
+        }
       ],
       "windowWeeks": 2,
       "once": true,
       "cluster": "parish",
       "accept": {
         "effects": [
-          { "target": "flag", "key": "hard_parish_turned", "value": true },
-          { "target": "reputation", "key": "chancery", "delta": 12 },
-          { "target": "reputation", "key": "brother_priests", "delta": 8 },
-          { "target": "reputation", "key": "parishioners", "delta": 6 },
-          { "target": "reputation", "key": "public", "delta": 5 },
-          { "target": "relationship", "key": "@bishop", "delta": 12 },
-          { "target": "stat", "key": "administration", "delta": 2 },
-          { "target": "trait", "key": "turned the parish nobody wanted" }
+          {
+            "target": "flag",
+            "key": "hard_parish_turned",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "chancery",
+            "delta": 12
+          },
+          {
+            "target": "reputation",
+            "key": "brother_priests",
+            "delta": 8
+          },
+          {
+            "target": "reputation",
+            "key": "parishioners",
+            "delta": 6
+          },
+          {
+            "target": "reputation",
+            "key": "public",
+            "delta": 5
+          },
+          {
+            "target": "relationship",
+            "key": "@bishop",
+            "delta": 12
+          },
+          {
+            "target": "stat",
+            "key": "administration",
+            "delta": 2
+          },
+          {
+            "target": "trait",
+            "key": "turned the parish nobody wanted"
+          }
         ],
         "outcome": "The church is full and the choir has learned a Mass setting for the occasion, badly and with enormous feeling. {@bishop} preaches on perseverance and does not look at you, which is how you know it is about you. At dinner the council chairman, who drove off two pastors, tells the bishop you are not to be moved, and the bishop laughs, and writes it down."
       },
       "decline": {
         "effects": [
-          { "target": "reputation", "key": "chancery", "delta": -4 },
-          { "target": "reputation", "key": "parishioners", "delta": -3 },
-          { "target": "relationship", "key": "@bishop", "delta": -6 }
+          {
+            "target": "reputation",
+            "key": "chancery",
+            "delta": -4
+          },
+          {
+            "target": "reputation",
+            "key": "parishioners",
+            "delta": -3
+          },
+          {
+            "target": "relationship",
+            "key": "@bishop",
+            "delta": -6
+          }
         ],
         "outcome": "You tell the chancellor the parish is not ready to be shown, which the council, when it hears, takes as an insult, and the bishop, when he hears, takes as a lack of confidence in his judgment. The feast day passes with the usual Mass and a potluck. The reports keep going to the chancery, and are read, and nobody comes."
       }

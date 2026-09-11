@@ -32,7 +32,9 @@ import {
 } from './seminary';
 import { parishWeekHook, resolvePending, seminaryWeekHook, type EventDeps } from './weekHook';
 import { setDiscretionary as doSetDiscretionary, setObligation as doSetObligation, startAssignment } from './parish';
-import { focusGroup as doFocus, startFounding as doStartFounding, suppressGroup as doSuppress } from '@/systems/groups';
+import { focusGroup as doFocus, replaceLeader as doReplaceLeader, startFounding as doStartFounding, suppressGroup as doSuppress } from '@/systems/groups';
+import { startWork as doStartWork, stopWork as doStopWork } from '@/systems/problems';
+import { yearOf } from '@/ui/portraits/spec';
 import { payDebt as doPayDebt } from '@/systems/finance';
 import { applyForOpening as doApply } from '@/systems/openings';
 import type { GroupType, ProjectType } from '@/types';
@@ -96,6 +98,13 @@ export interface GameStore {
   payDebt(amount: number): void;
   /** Put your name forward for an opening. */
   applyForOpening(openingId: string): void;
+  /** Cut something from your own week for an hour, or take it back. */
+  toggleSacrifice(id: string): void;
+  /** Begin, or abandon, the work on the parish's problem. */
+  startWork(): void;
+  stopWork(): void;
+  /** Put a new leader over a group. */
+  replaceLeader(groupId: string): void;
   startProject(type: ProjectType): void;
   furnish(place: DecorPlace, optionId: string): void;
   /** Write to the chancery for leave on a liturgical topic. */
@@ -384,6 +393,28 @@ export const useGameStore = create<GameStore>()((set, get) => ({
   applyForOpening(openingId) {
     update(set, get, (game) => doApply(game, openingId));
   },
+  toggleSacrifice(id) {
+    update(set, get, (game) => {
+      if (!game.parish) return game;
+      const have = game.parish.routine.sacrifices ?? [];
+      const sacrifices = have.includes(id) ? have.filter((x) => x !== id) : [...have, id];
+      return { ...game, parish: { ...game.parish, routine: { ...game.parish.routine, sacrifices } } };
+    });
+  },
+  startWork() {
+    update(set, get, (game) => doStartWork(game));
+  },
+  stopWork() {
+    update(set, get, (game) => doStopWork(game));
+  },
+  replaceLeader(groupId) {
+    update(set, get, (game, r) => {
+      const result = doReplaceLeader(game, groupId, r.derive(`replace:${groupId}:${game.clock.week}`), yearOf(game.clock.startDay, game.clock.week));
+      const last = result.state.digest[result.state.digest.length - 1];
+      const digest = last && last.week === game.clock.week ? [...result.state.digest.slice(0, -1), { ...last, lines: [...last.lines, result.line] }] : [...result.state.digest, { week: game.clock.week, lines: [result.line] }];
+      return { ...result.state, digest };
+    });
+  },
   startProject(type) {
     update(set, get, (game) => doStartProject(game, type));
   },
@@ -407,7 +438,9 @@ export const useGameStore = create<GameStore>()((set, get) => ({
     update(set, get, (game, r) => {
       const result = doAccept(game, def, r);
       set({ lastOfferOutcome: result.failed && def.failure ? `${def.accept.outcome} ${def.failure.outcome}` : def.accept.outcome });
-      return result.state;
+      const c = def.accept.commitment;
+      const text = c ? `Accepted: ${def.title}. ${c.label}, ${c.apPerWeek} hours a week for ${Math.round(c.weeks / 52) || 1} ${c.weeks >= 78 ? 'years' : 'year'}, alongside the parish.` : `Accepted: ${def.title}.`;
+      return { ...result.state, career: [...result.state.career, { week: game.clock.week, kind: 'offer', text }] };
     });
   },
   declineOffer(offerId) {
@@ -415,7 +448,8 @@ export const useGameStore = create<GameStore>()((set, get) => ({
     if (!def) return;
     update(set, get, (game) => {
       set({ lastOfferOutcome: def.decline.outcome });
-      return doDecline(game, def);
+      const next = doDecline(game, def);
+      return { ...next, career: [...next.career, { week: game.clock.week, kind: 'offer', text: `Declined: ${def.title}.` }] };
     });
   },
 }));

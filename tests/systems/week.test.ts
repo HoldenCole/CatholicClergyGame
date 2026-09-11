@@ -67,7 +67,7 @@ describe('systems/week', () => {
     expect(s.character!.stats.charisma).toBeGreaterThan(before.stats.charisma);
     expect(s.character!.reputation.parishioners).toBeGreaterThan(before.reputation.parishioners);
     const pastor: GameState = { ...s, assignment: { ...s.assignment!, role: 'pastor' } };
-    expect(adminFloorFor(pastor)).toBe(2);
+    expect(adminFloorFor(pastor)).toBe(1);
     const able: GameState = { ...pastor, character: { ...pastor.character!, stats: { ...pastor.character!.stats, administration: 90 } } };
     expect(adminFloorFor(able)).toBe(0);
   });

@@ -3,6 +3,7 @@ import type { Rng } from './rng';
 import { generateParishPeople } from '@/generation/parishPeople';
 import { generateGroups } from '@/systems/groups';
 import { resolveWeek } from '@/systems/week';
+import { takeSnapshot } from '@/systems/trajectory';
 import { seasonOf } from './time';
 import { fromDayNumber } from './calendar';
 import ambient from '@/content/parish/ambient.json';
@@ -90,6 +91,9 @@ export function startAssignment(state: GameState, rng: Rng): GameState {
     apNextWeek: 0,
     recycledHomilyStreak: 0,
     weeksServed: 0,
+    strain: state.parish?.strain ?? 0,
+    work: null,
+    snapshots: [],
   };
   const beats: Beat[] = [
     ...state.beats.filter((b) => b.kind !== 'assignment'),
@@ -101,7 +105,7 @@ export function startAssignment(state: GameState, rng: Rng): GameState {
   flags[`parish:kind:${parish.kind}`] = true;
   if (parish.needsSpanish) flags['parish:needs_spanish'] = true;
 
-  return {
+  const started: GameState = {
     ...state,
     phase: assignment.role,
     npcs,
@@ -112,6 +116,8 @@ export function startAssignment(state: GameState, rng: Rng): GameState {
     flags,
     mode: { kind: 'clock' },
   };
+  const arrival = takeSnapshot(started);
+  return arrival ? { ...started, parish: { ...parishState, arrival } } : started;
 }
 
 export function isPlayedWeek(state: GameState): boolean {

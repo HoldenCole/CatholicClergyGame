@@ -1,5 +1,8 @@
 import { useGameStore } from '@/engine/store';
 import { controlsMoney, debtPayable } from '@/systems/finance';
+import { sinceArrival } from '@/systems/trajectory';
+import { workAvailability } from '@/systems/problems';
+import { useUiStore } from '../uiStore';
 import { PROBLEM_LABEL } from '@/generation/parishes';
 import { STAT_KEYS, CONSTITUENCY_KEYS } from '@/types';
 import { useState } from 'react';
@@ -23,6 +26,9 @@ export default function ParishPanel() {
   const prose = useGameStore((s) => s.prose);
   const setPreference = useGameStore((s) => s.setPreference);
   const payDebt = useGameStore((s) => s.payDebt);
+  const startWork = useGameStore((s) => s.startWork);
+  const stopWork = useGameStore((s) => s.stopWork);
+  const furnish = useUiStore((s) => s.furnish);
   const [inspect, setInspect] = useState(false);
   if (!game?.parish || !game.world || !game.character) return null;
   const portraitKey = arcKey(game);
@@ -36,6 +42,9 @@ export default function ParishPanel() {
   const bishop = game.npcs[game.world.diocese.hidden.bishop.npcId];
   const fin = p.finance;
   const payable = debtPayable(game);
+  const traj = sinceArrival(game);
+  const workAv = workAvailability(game);
+  const work = p.work;
   const year = yearOf(game.clock.startDay, game.clock.week);
 
   return (
@@ -76,8 +85,49 @@ export default function ParishPanel() {
             )}
           </div>
         )}
-        <p className="ink-muted mt-3 text-xs">{PROBLEM_LABEL[parish.problem] ?? parish.problem}</p>
         {portrait && <p className="mt-3 whitespace-pre-line text-sm leading-relaxed">{portrait}</p>}
+      </Sheet>
+      <Sheet title={traj ? `Since you arrived: ${traj.verdict.toLowerCase()}` : 'Since you arrived'}>
+        {traj ? (
+          <table className="w-full text-sm">
+            <tbody>
+              {traj.rows.map((r) => (
+                <tr key={r.label}>
+                  <td className="ink-muted py-0.5 pr-2">{r.label}</td>
+                  <td className="ink-faint py-0.5 pr-2 text-xs">{r.then}</td>
+                  <td className="py-0.5 pr-2">{r.now}</td>
+                  <td className={'py-0.5 text-xs ' + (r.sign > 0 ? 'text-emerald-800' : r.sign < 0 ? 'ink-wine' : 'ink-faint')}>{r.sign > 0 ? 'better' : r.sign < 0 ? 'worse' : 'the same'}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <p className="ink-faint text-sm">No reading yet.</p>
+        )}
+        {traj && <p className="ink-faint mt-2 text-xs">{Math.floor(traj.weeks / 52) > 0 ? `${Math.floor(traj.weeks / 52)} years and ` : ''}{traj.weeks % 52} weeks in. A quarter at a time is how a parish turns.</p>}
+      </Sheet>
+      <Sheet title="The problem">
+        <p className="text-sm">{parish.problem === 'none' ? 'Nothing is on fire. It will not last.' : (PROBLEM_LABEL[parish.problem] ?? parish.problem)}</p>
+        {work && workAv.fix ? (
+          <p className="ink-muted mt-2 text-xs">
+            In hand: {workAv.fix.label.toLowerCase()}, {Math.max(0, work.endWeek - game.clock.week)} weeks to go at {work.apPerWeek} {work.apPerWeek === 1 ? 'hour' : 'hours'} a week.
+            <button className="pbtn-link ml-2" onClick={stopWork}>let it drop</button>
+          </p>
+        ) : workAv.fix ? (
+          <div className="mt-2 text-xs">
+            <p className="ink-muted">{workAv.fix.label}: {workAv.fix.blurb} {workAv.fix.weeks} weeks at {workAv.fix.apPerWeek} {workAv.fix.apPerWeek === 1 ? 'hour' : 'hours'} a week{workAv.fix.cost > 0 ? `, about $${workAv.fix.cost.toLocaleString()} from the parish` : ''}.</p>
+            {workAv.available ? (
+              <button className="pbtn mt-1" onClick={startWork}>Take it on</button>
+            ) : (
+              <p className="ink-faint mt-1">{workAv.why}</p>
+            )}
+          </div>
+        ) : workAv.why ? (
+          <p className="ink-faint mt-1 text-xs">{workAv.why}</p>
+        ) : null}
+        <p className="ink-muted mt-3 text-xs">
+          What the parish sings, how the altar stands, where the choir is: <button className="pbtn-link" onClick={() => furnish('church')}>the church</button> is yours to change, within what the bishop allows.
+        </p>
       </Sheet>
       <Sheet title="The rectory and the office">
         <ul className="flex flex-col gap-1.5 text-sm">

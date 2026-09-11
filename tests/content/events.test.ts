@@ -55,7 +55,7 @@ const ROLES = ['parochial_vicar', 'administrator', 'pastor'];
 const EFFECT_TARGETS = [
   'stat', 'reputation', 'relationship', 'flag', 'group', 'money', 'ap', 'thread', 'position',
   'pillar', 'alignment', 'outspokenness', 'honesty', 'credential', 'trait', 'archetype',
-  'concern', 'risk', 'npc', 'end', 'decor', 'permission', 'trait_known',
+  'concern', 'risk', 'npc', 'end', 'decor', 'permission', 'trait_known', 'transfer', 'building',
 ];
 const DECOR_PLACES = ['church', 'office', 'rectory', 'seminary_room', 'chancery'];
 const DECOR_SLOTS = ['sanctuary', 'altar_rail', 'orientation', 'confessionals', 'choir', 'statues', 'tabernacle', 'mass_form', 'wall', 'desk', 'floor', 'corner'];
@@ -133,6 +133,9 @@ function checkCondition(c: Condition, where: string, problems: Problem[]): void 
       break;
     case 'figure':
       break;
+    case 'strain':
+      if (!hasOp(c.op) || typeof c.value !== 'number') problems.push(`${where}: bad strain condition`);
+      break;
     case 'bishop':
       if (!BISHOP_KEYS.includes(c.key)) problems.push(`${where}: bad bishop key ${String(c.key)}`);
       else if (c.key === 'stance' && (!LITURGICAL_TOPICS.includes(c.topic) || !['free', 'by_permission', 'forbidden'].includes(c.value))) problems.push(`${where}: bad bishop stance condition`);
@@ -183,6 +186,8 @@ function checkEffect(e: Effect, where: string, problems: Problem[]): void {
     const [place, slot] = e.key.split(':');
     if (!DECOR_PLACES.includes(place ?? '') || !DECOR_SLOTS.includes(slot ?? '') || !DECOR_IDS.has(String(e.value))) problems.push(`${where}: bad decor effect ${e.key}=${String(e.value)}`);
   }
+  if (e.target === 'transfer' && !['flagship_suburban', 'struggling_urban', 'immigrant_growing', 'rural', 'difficult'].includes(e.key)) problems.push(`${where}: transfer key must be a parish kind`);
+  if (e.target === 'building' && (!['church', 'rectory', 'hall', 'school'].includes(e.key) || typeof e.delta !== 'number')) problems.push(`${where}: bad building effect`);
   if (e.target === 'permission' && (!LITURGICAL_TOPICS.includes(e.key) || !['granted', 'denied'].includes(String(e.value)))) problems.push(`${where}: bad permission effect`);
 }
 

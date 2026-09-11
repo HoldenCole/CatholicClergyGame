@@ -1,12 +1,13 @@
-import type { Beat, GameEvent, GameState, OfferDef, PendingEvent } from '@/types';
+import type { Beat, GameEvent, GameState, OfferDef, PendingEvent, Role } from '@/types';
 import { applyChoice, defaultChoice, drawEvents, fireEvent } from './events';
 import { shouldInterrupt } from './interrupts';
 import { offersWeek } from './offers';
 import type { Rng } from './rng';
 import { formationBeats, markBeatFired, weekPool } from './seminary';
 import { isPlayedWeek, parishWeek } from './parish';
-import { careerYear, isCareerYear, nextAssignment } from './career';
+import { careerYear, directedTransfer, isCareerYear, nextAssignment } from './career';
 import { projectWeek } from '@/systems/projects';
+import { workWeek } from '@/systems/problems';
 import { resolvePermissions } from '@/systems/decor';
 import { seminaryWeek } from '@/systems/seminaryWeek';
 import { careOf, WEEK } from '@/systems/week';
@@ -103,10 +104,21 @@ const FIRE_CATEGORIES = new Set<GameEvent['category']>(['finance', 'admin', 'gro
 export function parishWeekHook(deps: EventDeps): WeekHook {
   return (state: GameState, rng: Rng, reachedBeats: Beat[]) => {
     if (!state.parish) return state;
+    // A move he said yes to last week: the letter arrives, and the week is spent packing.
+    const pending = state.flags.transfer_pending;
+    if (typeof pending === 'string') {
+      const [kind, role] = pending.split(':');
+      const asRole: Role = role === 'pastor' || role === 'administrator' ? role : 'parochial_vicar';
+      const moved = directedTransfer(state, rng, kind ?? 'difficult', asRole);
+      if (moved.moved) return addDigestLine(moved.state, 'The letter of appointment came, as the vicar for clergy said it would. You packed.');
+    }
     let next = parishWeek(state, rng);
     const project = projectWeek(next);
     next = project.state;
     if (project.line) next = addDigestLine(next, project.line);
+    const work = workWeek(next);
+    next = work.state;
+    if (work.line) next = addDigestLine(next, work.line);
     const letters = resolvePermissions(next, rng.derive(`permissions:${next.clock.week}`));
     next = letters.state;
     for (const line of letters.lines) next = addDigestLine(next, line);

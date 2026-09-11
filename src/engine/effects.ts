@@ -154,6 +154,23 @@ export function applyEffect(
         flags: { ...state.flags, [`permission:${topic}`]: status === 'granted' },
       };
     }
+    case 'transfer': {
+      // Resolved by the parish week hook next week, so the letter arrives after the scene.
+      const role = typeof effect.value === 'string' ? effect.value : (state.assignment?.role ?? 'parochial_vicar');
+      return { ...state, flags: { ...state.flags, transfer_pending: `${effect.key}:${role}` } };
+    }
+    case 'building': {
+      const pid = state.parish?.parishId;
+      if (!pid || !state.world || effect.delta === undefined) return state;
+      const k = effect.key as 'church' | 'rectory' | 'hall' | 'school';
+      const parishes = state.world.parishes.map((p) => {
+        if (p.id !== pid) return p;
+        const current = p.buildings[k];
+        if (current === null || current === undefined) return p;
+        return { ...p, buildings: { ...p.buildings, [k]: Math.max(0, Math.min(100, current + effect.delta!)) } };
+      });
+      return { ...state, world: { ...state.world, parishes } };
+    }
     case 'trait_known': {
       const npc = resolveSelector(state, bindings[effect.key] ?? effect.key);
       if (!npc) return state;
