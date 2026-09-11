@@ -158,7 +158,7 @@ export default function JobsPanel() {
                 <li key={p.id}>
                   <div>
                     {p.name}, {p.place}
-                    <span className="ink-faint ml-2 text-xs">{parishKindWord(p)}{here ? ' · you are here' : open ? ' · open' : ''}</span>
+                    <span className="ink-faint ml-2 text-xs">{parishKindWord(p)}{p.founded ? ` · founded ${p.founded}` : ''}{here ? ' · you are here' : open ? ' · open' : ''}</span>
                   </div>
                   <div className="ink-muted text-xs">
                     {pastor && !here ? `${pastor.title} ${pastor.name.last}, ${age}, ${p.cathedral ? 'rector' : 'pastor'}` : here ? `${p.cathedral ? 'Rector' : 'Pastor'}: ${game.parish?.role === 'parochial_vicar' && pastor ? `${pastor.title} ${pastor.name.last}` : 'you'}` : 'no pastor'}

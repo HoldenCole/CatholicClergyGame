@@ -199,6 +199,17 @@ assignment matches them to a posting, `systems/assignment.ts`), and
 `chancery_favor_owed` (for content). Any seminary event may write them; keep
 them rare and earned.
 
+### Real churches (`dioceses/*.json`, `parishSeeds[].real`)
+
+Each preset carries a dozen or more actual parishes of that diocese as seeds
+with `real: { name, place, founded }`: the name, the neighborhood, and the
+year are fixed; the pastor, the households, the money, the buildings, the
+problem, and the alignment roll like any other parish (rule 4: generation
+over selection). Parishes staffed by religious orders were left out where
+that was known, since the game assigns diocesan priests. Founding years are
+from memory and may be a year or two off; the rolled seeds still fill in
+the kinds so every diocese has one of each.
+
 ### The diocese as a place
 
 Each preset carries a `voice` (weather, Sunday, the presbyterate) shown on

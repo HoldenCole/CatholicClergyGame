@@ -165,6 +165,8 @@ export interface Parish {
   id: string;
   name: string;
   place: string;
+  /** The year the parish was founded, when it is a real church of the diocese. */
+  founded?: number;
   kind: ParishKind;
   terrain: HomeTerrain;
   /** Registered households. */

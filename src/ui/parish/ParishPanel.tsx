@@ -59,7 +59,7 @@ export default function ParishPanel() {
 
   return (
     <>
-      <Sheet title={`${parish.name}, ${parish.place}`}>
+      <Sheet title={`${parish.name}, ${parish.place}${parish.founded ? ` (${parish.founded})` : ''}`}>
         <div className="flex items-start gap-4">
           <Portrait portrait={portraitForCharacter(c, year, game.phase)} size={72} title={`${c.name.first} ${c.name.last}`} />
           <p className="text-sm leading-relaxed">
