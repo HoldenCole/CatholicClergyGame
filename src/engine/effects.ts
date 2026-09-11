@@ -171,6 +171,11 @@ export function applyEffect(
       });
       return { ...state, world: { ...state.world, parishes } };
     }
+    case 'club': {
+      // Joining needs a die for the fellows; the hook resolves it next week from this flag.
+      const verb = effect.value === 'leave' ? 'leave' : 'join';
+      return { ...state, flags: { ...state.flags, [`club_pending:${effect.key}`]: verb } };
+    }
     case 'trait_known': {
       const npc = resolveSelector(state, bindings[effect.key] ?? effect.key);
       if (!npc) return state;

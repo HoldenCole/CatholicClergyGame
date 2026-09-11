@@ -2011,6 +2011,130 @@
         ],
         "outcome": "You write a polite letter declining. The coordinator writes back that the door is open, which in Cursillo it always is, and the parking-lot handshakes go to another man. A few of the pastors who came up through the movement will place you, later, as one who did not."
       }
+    },
+    {
+      "id": "sem_tlm_society",
+      "category": "social",
+      "phase": [
+        "seminary"
+      ],
+      "yearGate": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "title": "The Stairs to the Crypt",
+      "body": "A fourth-year man you have nodded to in the corridor stops you after Vespers and says, without looking at you, that some of the men go down to the crypt chapel on Thursdays with a priest from the country who knows the older Mass, and that they have room for one more, and that he thought of you. He does not say why. The house has an opinion about the men who go down those stairs, and so does the rector, and neither opinion is entirely fair. What is learned down there is a Mass most priests of the diocese cannot say, and a way of standing at an altar that people notice from the back of a church. What is also learned is a loyalty, and a language, and a set of enemies you did not choose.",
+      "from": "@random_classmate",
+      "requires": [
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "club:tlm_society",
+            "value": true
+          }
+        },
+        {
+          "type": "alignment",
+          "op": "<=",
+          "value": 10
+        },
+        {
+          "type": "year",
+          "op": ">=",
+          "value": 2
+        }
+      ],
+      "weight": 28,
+      "windowWeeks": 3,
+      "once": true,
+      "cluster": "social",
+      "accept": {
+        "effects": [
+          {
+            "target": "club",
+            "key": "tlm_society",
+            "value": "join"
+          }
+        ],
+        "outcome": "You go down the stairs on Thursday. The priest from the country corrects your Latin without unkindness and hands you a card with the prayers at the foot of the altar. The men do not ask why you came."
+      },
+      "decline": {
+        "effects": [
+          {
+            "target": "reputation",
+            "key": "traditional_bloc",
+            "delta": -3
+          }
+        ],
+        "outcome": "You thank him and do not go. He nods as if he expected it. In the corridor afterward you are, for a while, a man who was asked."
+      }
+    },
+    {
+      "id": "sem_rectors_table",
+      "category": "social",
+      "phase": [
+        "seminary"
+      ],
+      "yearGate": [
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "title": "Four Places at the Rector's Table",
+      "body": "The rector's secretary leaves a card in your box: dinner, the second Thursday of the month, the rector's dining room, coat and tie. Four seminarians are asked each year and the rest of the house knows the four by the end of the first week. His guests are the auxiliary bishop, a donor who has paid for the chapel roof twice, a visiting theologian, a monsignor from the nunciature once. You would be expected to talk, and to listen more, and to be the kind of man the rector is proud to have at his table, which is a different thing from being the kind of man you are.",
+      "from": "@rector",
+      "requires": [
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "club:rectors_table",
+            "value": true
+          }
+        },
+        {
+          "type": "relationship",
+          "npcId": "@rector",
+          "op": ">=",
+          "value": 20
+        },
+        {
+          "type": "year",
+          "op": ">=",
+          "value": 3
+        }
+      ],
+      "weight": 26,
+      "windowWeeks": 3,
+      "once": true,
+      "cluster": "social",
+      "accept": {
+        "effects": [
+          {
+            "target": "club",
+            "key": "rectors_table",
+            "value": "join"
+          }
+        ],
+        "outcome": "The first dinner is a donor who asks what you think of the bishop and a rector who watches you answer. You answer well enough. The auxiliary bishop remembers your name at the door."
+      },
+      "decline": {
+        "effects": [
+          {
+            "target": "relationship",
+            "key": "@rector",
+            "delta": -6
+          }
+        ],
+        "outcome": "You send a note to the rector's secretary, courteous, brief. The rector is gracious about it and asks someone else, and the house draws its own conclusion."
+      }
     }
   ]
 }

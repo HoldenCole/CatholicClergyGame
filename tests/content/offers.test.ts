@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { allOffers, offerFiles } from '@/content/offers';
+import { clubDefs } from '@/content/clubs';
 import { CONSTITUENCY_KEYS, STAT_KEYS, PILLARS, ARCHETYPES } from '@/types';
 import type { Condition, Effect, OfferDef } from '@/types';
 
@@ -11,9 +12,10 @@ const SELECTORS = [
   '@random_classmate', '@pastor', '@secretary', '@dre', '@music_director', '@maintenance', '@parishioner', '@brother_priest',
   '@vicar_general', '@chancellor', '@vicar_for_clergy', '@group_leader',
 ];
+const CLUB_IDS = new Set(clubDefs.map((c) => c.id));
 const EFFECT_TARGETS = [
   'stat', 'reputation', 'relationship', 'flag', 'thread', 'position', 'pillar', 'alignment', 'outspokenness', 'honesty',
-  'credential', 'trait', 'archetype', 'concern', 'risk', 'npc', 'end', 'transfer',
+  'credential', 'trait', 'archetype', 'concern', 'risk', 'npc', 'end', 'transfer', 'club',
 ];
 
 function checkCondition(c: Condition, where: string, problems: string[]): void {
@@ -37,6 +39,7 @@ function checkEffect(e: Effect, where: string, problems: string[]): void {
   if (e.target === 'archetype' && !ARCHETYPES.includes(e.key as never)) problems.push(`${where}: bad archetype ${e.key}`);
   if ((e.target === 'relationship' || e.target === 'npc') && e.key.startsWith('@') && !SELECTORS.includes(e.key)) problems.push(`${where}: unknown selector ${e.key}`);
   if (e.target === 'end') problems.push(`${where}: offers may not end the run`);
+  if (e.target === 'club' && (!['join', 'leave'].includes(String(e.value)) || !CLUB_IDS.has(e.key))) problems.push(`${where}: bad club effect ${e.key}`);
   if (e.target === 'transfer' && !['flagship_suburban', 'struggling_urban', 'immigrant_growing', 'rural', 'difficult'].includes(e.key)) problems.push(`${where}: transfer key must be a parish kind`);
 }
 

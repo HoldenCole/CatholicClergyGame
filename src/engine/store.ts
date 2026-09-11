@@ -34,6 +34,7 @@ import { parishWeekHook, resolvePending, seminaryWeekHook, studyWeekHook, type E
 import { setDiscretionary as doSetDiscretionary, setObligation as doSetObligation, startAssignment } from './parish';
 import { focusGroup as doFocus, replaceLeader as doReplaceLeader, startFounding as doStartFounding, suppressGroup as doSuppress } from '@/systems/groups';
 import { startWork as doStartWork, stopWork as doStopWork } from '@/systems/problems';
+import { joinClub as doJoinClub, leaveClub as doLeaveClub } from '@/systems/clubs';
 import { yearOf } from '@/ui/portraits/spec';
 import { payDebt as doPayDebt } from '@/systems/finance';
 import { applyForOpening as doApply } from '@/systems/openings';
@@ -106,6 +107,9 @@ export interface GameStore {
   applyForOpening(openingId: string): void;
   /** The player's own dials: the length of the week and how much it wears. Kept in the save. */
   setSettings(partial: Partial<GameSettings>): void;
+  /** Societies: join an open one from the sheet, or leave one. */
+  joinClub(id: string): void;
+  leaveClub(id: string): void;
   /** Cut something from your own week for an hour, or take it back. */
   toggleSacrifice(id: string): void;
   /** Begin, or abandon, the work on the parish's problem. */
@@ -407,6 +411,12 @@ export const useGameStore = create<GameStore>()((set, get) => ({
   },
   setSettings(partial) {
     update(set, get, (game) => ({ ...game, settings: { ...(game.settings ?? DEFAULT_SETTINGS), ...partial } }));
+  },
+  joinClub(id) {
+    update(set, get, (game, r) => doJoinClub(game, id, r.derive(`club:${id}:${game.clock.week}`)));
+  },
+  leaveClub(id) {
+    update(set, get, (game) => doLeaveClub(game, id));
   },
   toggleSacrifice(id) {
     update(set, get, (game) => {

@@ -10,6 +10,7 @@ import OffersPanel from './seminary/OffersPanel';
 import FormationPanel from './seminary/FormationPanel';
 import DigestPanel from './DigestPanel';
 import JobsPanel from './JobsPanel';
+import ClubsPanel from './ClubsPanel';
 import InterruptSettings from './InterruptSettings';
 import SavePanel from './SavePanel';
 import SettingsPanel from './SettingsPanel';
@@ -20,6 +21,7 @@ const LABEL: Record<Sheet, string> = {
   parish: 'Parish',
   people: 'People',
   jobs: 'Jobs',
+  clubs: 'Clubs',
   letters: 'Letters',
   record: 'Record',
   formation: 'Formation',
@@ -39,7 +41,7 @@ export default function Desk() {
   if (!game) return null;
   const inParish = !!game.parish;
   const away = !!game.study;
-  const tabs: Sheet[] = inParish ? ['week', 'parish', 'people', 'jobs', 'letters', 'record', 'settings'] : away ? ['week', 'jobs', 'letters', 'record', 'settings'] : ['week', 'formation', 'jobs', 'letters', 'record', 'settings'];
+  const tabs: Sheet[] = inParish ? ['week', 'parish', 'people', 'jobs', 'clubs', 'letters', 'record', 'settings'] : away ? ['week', 'jobs', 'letters', 'record', 'settings'] : ['week', 'formation', 'jobs', 'clubs', 'letters', 'record', 'settings'];
   if (furnishing) tabs.push('furnish');
   const open = sheet ?? 'week';
   const letters = game.offers.length;
@@ -64,6 +66,7 @@ export default function Desk() {
           </>
         )}
         {open === 'jobs' && <JobsPanel />}
+        {open === 'clubs' && <ClubsPanel />}
         {open === 'letters' && <OffersPanel />}
         {open === 'record' && <DigestPanel />}
         {open === 'formation' && <FormationPanel />}

@@ -114,6 +114,10 @@ export function scoreParish(state: GameState, world: World, parish: Parish, opts
     fit += ASSIGNMENT.known;
     reasons.push('The diocese has you down as a scholar, and the flagship has the lecture series');
   }
+  if ((state.flags['club:tlm_society'] || state.flags.can_celebrate_tlm) && parish.problem === 'tlm_faction') {
+    fit += ASSIGNMENT.known;
+    reasons.push('The parish has a Latin Mass community, and you can say that Mass');
+  }
   if (state.flags.noticed_by_bishop) trust += ASSIGNMENT.noticed;
   if (state.flags.bishop_wary) trust += ASSIGNMENT.wary;
 

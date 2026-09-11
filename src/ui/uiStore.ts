@@ -3,7 +3,7 @@ import type { DecorPlace } from '@/types';
 import type { SceneId } from './scenes/scenes';
 
 /** The sheets on the desk. One is open at a time. */
-export type Sheet = 'week' | 'parish' | 'people' | 'jobs' | 'letters' | 'record' | 'formation' | 'settings' | 'furnish';
+export type Sheet = 'week' | 'parish' | 'people' | 'jobs' | 'clubs' | 'letters' | 'record' | 'formation' | 'settings' | 'furnish';
 
 interface UiState {
   sheet: Sheet | null;

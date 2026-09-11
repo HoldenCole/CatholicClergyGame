@@ -9,6 +9,7 @@ import { isPlayedWeek, parishWeek } from './parish';
 import { careerYear, directedTransfer, isCareerYear, nextAssignment } from './career';
 import { projectWeek } from '@/systems/projects';
 import { workWeek } from '@/systems/problems';
+import { clubsWeek, joinClub, leaveClub } from '@/systems/clubs';
 import { resolvePermissions } from '@/systems/decor';
 import { seminaryWeek } from '@/systems/seminaryWeek';
 import { studyWeek } from '@/systems/studyWeek';
@@ -88,6 +89,7 @@ export function seminaryWeekHook(deps: EventDeps): WeekHook {
     // What he did with the week, whether or not anything else happens in it.
     const week = seminaryWeek(next, rng.derive(`seminary-week:${next.clock.week}`));
     next = week.line ? addDigestLine(week.state, week.line) : week.state;
+    next = clubsStep(next, rng);
     const pool = weekPool(deps.pool, next);
     if (pool.length === 0) return next;
     const [event] = drawEvents(pool, next, rng, 1);
@@ -102,6 +104,27 @@ export function careRelief(state: GameState): (e: GameEvent) => number {
   return (e) => (FIRE_CATEGORIES.has(e.category) ? 1 - relief : 1);
 }
 const FIRE_CATEGORIES = new Set<GameEvent['category']>(['finance', 'admin', 'group']);
+
+/** Invitations accepted and clubs left through effects resolve here; then the week of belonging. */
+function clubsStep(state: GameState, rng: Rng): GameState {
+  let next = state;
+  for (const [key, verb] of Object.entries(state.flags)) {
+    if (!key.startsWith('club_pending:')) continue;
+    const id = key.slice('club_pending:'.length);
+    const flags = { ...next.flags };
+    delete flags[key];
+    next = { ...next, flags };
+    try {
+      next = verb === 'leave' ? leaveClub(next, id) : joinClub(next, id, rng.derive(`club:${id}:${next.clock.week}`), true);
+    } catch {
+      // A club that cannot be joined is simply not joined.
+    }
+  }
+  const week = clubsWeek(next);
+  next = week.state;
+  for (const line of week.lines) next = addDigestLine(next, line);
+  return next;
+}
 
 /** Roughly how often a week away carries a scene. Invented. */
 const STUDY_EVENT_CHANCE = 0.1;
@@ -146,6 +169,7 @@ export function parishWeekHook(deps: EventDeps): WeekHook {
     const work = workWeek(next);
     next = work.state;
     if (work.line) next = addDigestLine(next, work.line);
+    next = clubsStep(next, rng);
     const letters = resolvePermissions(next, rng.derive(`permissions:${next.clock.week}`));
     next = letters.state;
     for (const line of letters.lines) next = addDigestLine(next, line);
