@@ -1,0 +1,1041 @@
+{
+  "_notes": "The see: the last act, a bishop of a small diocese far from home, phase bishop, gated on the engine's flag study:see. Every scene reads the SeeState through see conditions (presbyterate, people, rome, money, shortage, years) and the bishop's age. Selectors: @brother_priest (one of his own priests), @closest_classmate, @vicar_general, @chancellor, @vicar_for_clergy; the nuncio, the metropolitan, the rector, the insurer and the press are named by role, not bound. There is no token for the see; {diocese} is the home diocese. The removal (bp_priest_removed) and the lawsuit (bp_lawsuit_insurer) are authored only, with no flavorPrompt, per DESIGN §11. Flags written, all bp_*: bp_dinner_open_book / bp_dinner_listened / bp_dinner_owned_record / bp_dinner_deferred (the first priests' dinner); bp_removal_protocol / bp_removal_treatment_first / bp_removal_in_person (the priest removed); bp_closed_the_town / bp_town_a_mission / bp_town_clustered (the only parish in a town); bp_vg_the_friend / bp_vg_the_presbyterate_man / bp_vg_romes_man (the vicar general); bp_ad_limina_plain / bp_ad_limina_polished / bp_ad_limina_asked / bp_ad_limina_spoke_for_priests (the ad limina); bp_settled_on_terms / bp_met_the_plaintiff / bp_settled_in_the_open (the lawsuit); bp_seminarian_delayed / bp_seminarian_ordained / bp_seminarian_dismissed / bp_seminarian_examined (the seminarian); bp_questionnaire_in_full / bp_questionnaire_kept_him / bp_questionnaire_told_him (the nuncio's questionnaire); bp_metropolitan_gave / bp_metropolitan_refused / bp_metropolitan_traded (the archbishop's call); bp_record_stood / bp_record_grown / bp_record_silent / bp_record_reprinted (the clipping); bp_asked_for_coadjutor / bp_carried_the_tremor / bp_told_the_presbyterate (his health); bp_chose_the_roof / bp_chose_the_pension / bp_campaign_for_both (the money); bp_raid_stood_in_the_door / bp_raid_statement / bp_raid_opened_the_door / bp_raid_negotiated (the raid); bp_took_the_classmate / bp_refused_the_classmate / bp_classmate_on_loan (the classmate's letter); bp_letter_four_lines / bp_letter_asked_to_stay / bp_letter_going_home / bp_letter_asked_the_priests (the letter at seventy-five); bp_stayed_for_the_rosary / bp_left_for_the_council / bp_knelt_in_the_back (the consolation).",
+  "events": [
+    {
+      "id": "bp_first_dinner",
+      "phase": "bishop",
+      "pressure": ["loyalty_vs_honesty", "ambition_vs_integrity"],
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 12,
+      "suppressYears": 5,
+      "once": true,
+      "requires": [
+        { "type": "flag", "key": "study:see", "value": true },
+        { "type": "see", "key": "years", "op": "<=", "value": 1 }
+      ],
+      "title": "They Have Read Your File",
+      "body": "The presbyterate dines at the retreat house on the Tuesday after your installation, forty-one priests at six tables, the oldest ordained before you were born. You have read their files, all of them, in the fortnight since the bull was read out: the pastor with the drinking history, the canonist who wanted the chancery and did not get it, the three men on the northern edge who cover eleven churches between them. What you learn over the soup is that they have read yours. Not the file in the nunciature, but the one a presbyterate keeps: the parishes you had, the things you said in {diocese} and how loudly, which bishop favored you and which did not, the year you were passed over and what you did about it. {@vicar_general}, who ran the diocese for eleven months of vacancy and did it well, raises a glass to you with the exact warmth of a man who is not sure yet. Someone will ask a question after the coffee. It will be about you, and it will be framed as a question about them. Everyone at the table already knows the answer they want.",
+      "flavorPrompt": "Six tables at the retreat house, the file a presbyterate keeps, and the vicar general's exact warmth.",
+      "choices": [
+        {
+          "id": "open_book",
+          "label": "Say that you have read their files and that they may read yours: ask the questions",
+          "outcome": "There is a silence and then a pastor from the north asks the one about the year you were passed over, and you answer it, and the next one, and the next. It takes an hour. Nobody at the nunciature would have advised it. When you leave, {@vicar_general} walks you to the car and says the presbyterate has not been spoken to like that in twenty years, and does not say whether that was praise.",
+          "effects": [
+            { "target": "honesty", "key": "honesty", "delta": 2 },
+            { "target": "outspokenness", "key": "outspokenness", "delta": 2 },
+            { "target": "reputation", "key": "brother_priests", "delta": 4 },
+            { "target": "reputation", "key": "rome", "delta": -2 },
+            { "target": "flag", "key": "bp_dinner_open_book", "value": true }
+          ]
+        },
+        {
+          "id": "listen",
+          "label": "Speak about them and the diocese, and say nothing about yourself at all",
+          "default": true,
+          "outcome": "You ask the three men from the north how eleven churches are covered, and let them tell you, and the coffee comes and goes and the question about you is never asked because you have not left a gap for it. They go home knowing nothing they did not know at noon, except that you listened. That is a reputation too, and a quieter one, and it will be tested.",
+          "effects": [
+            { "target": "reputation", "key": "brother_priests", "delta": 2 },
+            { "target": "reputation", "key": "chancery", "delta": 2 },
+            { "target": "stat", "key": "administration", "delta": 1 },
+            { "target": "flag", "key": "bp_dinner_listened", "value": true }
+          ]
+        },
+        {
+          "id": "own_the_record",
+          "label": "Own the record: what you said in {diocese}, you say here, tonight, before anyone asks",
+          "requires": [{ "type": "outspokenness", "op": ">=", "value": 30 }],
+          "outcome": "You stand before the coffee and tell them what you have said in public for thirty years and that you will not be a different man here. Half the room is relieved and half is braced, and both halves now know exactly where the line is. By Friday it has been repeated in three deaneries and reached the nunciature by the usual road. Nobody can say you hid it.",
+          "effects": [
+            { "target": "honesty", "key": "honesty", "delta": 2 },
+            { "target": "outspokenness", "key": "outspokenness", "delta": 3 },
+            { "target": "reputation", "key": "brother_priests", "delta": 2 },
+            { "target": "reputation", "key": "public", "delta": 2 },
+            { "target": "reputation", "key": "rome", "delta": -3 },
+            { "target": "flag", "key": "bp_dinner_owned_record", "value": true }
+          ]
+        },
+        {
+          "id": "defer_to_vg",
+          "label": "Let {@vicar_general} answer for you; he ran the place for a year and they trust him",
+          "requires": [{ "type": "relationship", "npcId": "@vicar_general", "op": ">=", "value": 10 }],
+          "outcome": "He does it gracefully, saying that the bishop will be judged by what he does and that the presbyterate has never been wrong about a man in the long run, and the table laughs and the moment passes. He has bought you a year and spent some of his own standing to do it. A few of the older men note that the new bishop let another man speak, and file it.",
+          "effects": [
+            { "target": "relationship", "key": "@vicar_general", "delta": 8 },
+            { "target": "reputation", "key": "brother_priests", "delta": -3 },
+            { "target": "reputation", "key": "chancery", "delta": 1 },
+            { "target": "flag", "key": "bp_dinner_deferred", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bp_priest_removed",
+      "phase": "bishop",
+      "pressure": ["loyalty_vs_honesty", "friendship_vs_duty"],
+      "severity": "MAJOR",
+      "category": "scandal",
+      "baseWeight": 8,
+      "suppressYears": 5,
+      "once": true,
+      "requires": [{ "type": "flag", "key": "study:see", "value": true }],
+      "title": "The Man on the County Line",
+      "body": "{@brother_priest} has been pastor of three churches on the county line for nine years, and for at least four of them he has been drinking in a way that his people have covered for: a deacon who takes the eight o'clock when the car is not in the lot, a sacristan who waters the cruets. You knew this from his file. What you did not know until Thursday is in a letter from the mother of a confirmation candidate, which says that at the retreat in March he was drunk by nine, that he sat with the boys in the bunkhouse until late, that her son will not say what was said and will not go back. She does not allege a thing. She describes an evening. The protocol on your office wall, which your predecessor's review board wrote and you have promised to keep, is not built for descriptions. It says: the county, the board, withdrawn from ministry that day, a letter to the writer within the week. {@vicar_for_clergy} says it is the drink, that it has always been the drink, and that a bed is open at the treatment center on Monday. He may be right. The county will not ask whether he is.",
+      "choices": [
+        {
+          "id": "protocol_in_full",
+          "label": "The protocol, all of it, today: the county, the board, and the man withdrawn",
+          "volume": "semi_public",
+          "positionTopic": "abuse_handling",
+          "positionValue": 45,
+          "outcome": "The county is told by noon and the board convenes by Friday and {@brother_priest} is withdrawn from the three churches by a letter you sign yourself. The investigation takes a season and finds an evening and a bottle and nothing else, and says so, and he does not return to ministry anyway, because he cannot. The presbyterate divides over whether you had a choice. The mother receives an answer within the week, in your hand.",
+          "effects": [
+            { "target": "reputation", "key": "public", "delta": 4 },
+            { "target": "reputation", "key": "rome", "delta": 2 },
+            { "target": "reputation", "key": "brother_priests", "delta": -4 },
+            { "target": "relationship", "key": "@brother_priest", "delta": -15 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "trait", "key": "kept the protocol when it cost him a priest" },
+            { "target": "flag", "key": "bp_removal_protocol", "value": true }
+          ]
+        },
+        {
+          "id": "treatment_first",
+          "label": "Treatment on Monday, the letter answered by hand, and the board told when he is sober enough to be heard",
+          "volume": "semi_public",
+          "positionTopic": "abuse_handling",
+          "positionValue": -35,
+          "outcome": "He goes on Monday, and is grateful, and the three churches are told he is on medical leave, which is true. The mother is written to and is not satisfied, and says so to the county herself in the autumn. The board learns of the letter from the county and not from you, and the chair, a retired judge, asks in writing what the protocol on your wall is for. The presbyterate is quietly relieved and will not say so where it counts.",
+          "effects": [
+            { "target": "reputation", "key": "brother_priests", "delta": 3 },
+            { "target": "relationship", "key": "@brother_priest", "delta": 5 },
+            { "target": "reputation", "key": "public", "delta": -4 },
+            { "target": "reputation", "key": "rome", "delta": -3 },
+            { "target": "stat", "key": "piety", "delta": -2 },
+            { "target": "flag", "key": "bp_removal_treatment_first", "value": true }
+          ]
+        },
+        {
+          "id": "in_person",
+          "label": "Drive north yourself. Withdraw him in his own kitchen, report it from the car, and take him to the center on the way back",
+          "requires": [{ "type": "stat", "key": "piety", "op": ">=", "value": 50 }],
+          "outcome": "It is a two-hour drive each way and you do it in a day. He does not argue in the kitchen; he has been waiting for someone to come. You telephone the county from the lot and the board chair from the highway, and leave him at the center at dusk with his bag. The protocol is kept to the letter and the hour. Nobody in the presbyterate says you were cruel, and nobody in the county says you were slow, and you say the evening Mass alone.",
+          "effects": [
+            { "target": "reputation", "key": "public", "delta": 2 },
+            { "target": "reputation", "key": "brother_priests", "delta": 2 },
+            { "target": "reputation", "key": "rome", "delta": 1 },
+            { "target": "relationship", "key": "@brother_priest", "delta": -5 },
+            { "target": "stat", "key": "piety", "delta": 2 },
+            { "target": "stat", "key": "administration", "delta": -1 },
+            { "target": "flag", "key": "bp_removal_in_person", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bp_closing_only_parish",
+      "phase": "bishop",
+      "pressure": ["money", "loyalty_vs_honesty"],
+      "severity": "MAJOR",
+      "category": "admin",
+      "baseWeight": 9,
+      "suppressYears": 4,
+      "once": true,
+      "requires": [
+        { "type": "flag", "key": "study:see", "value": true },
+        { "type": "see", "key": "shortage", "op": ">=", "value": 3 }
+      ],
+      "bias": [{ "when": { "type": "see", "key": "money", "op": "<=", "value": -20 }, "multiplier": 1.5 }],
+      "title": "The Only Church in Town",
+      "body": "Holy Family in a town of nine hundred, forty miles from the cathedral, was built by railroad men in 1911 and has had a resident pastor for all but six of the years since. It has none now. The priest who covers it drives eighty miles on Sunday to say three Masses in three towns and is sixty-eight. The finance council's paper is on your desk and it does not argue; it counts. Sixty-one at Mass on an average Sunday. A boiler that will not pass another inspection. A cemetery that will need tending whatever you decide. The nearest church is twenty-two minutes on a good road, and there are four months a year in which the road is not good. The town has already lost the school, the bank, and the grain elevator, and the mayor, who is Lutheran, has written to say that if the Catholic church goes the town will have lost the last building anyone drives to. A closing is a decree with your name on it. The alternative is also a decree, and it has your name on it too, and the priest who is sixty-eight will be reading it in his car.",
+      "flavorPrompt": "Railroad men in 1911, the boiler, the Lutheran mayor's letter, and the priest who is sixty-eight reading a decree in his car.",
+      "choices": [
+        {
+          "id": "close",
+          "label": "Sign the decree and merge the parish into the next town",
+          "default": true,
+          "outcome": "You go for the last Mass yourself, in February, because someone must and it should be the man whose name is on the decree. Eighty people come, more than have come in years, and the mayor stands at the back. Afterward a woman hands you the key to the sacristy and does not say anything. The town does not forgive it, and will not, and the priest who is sixty-eight sleeps on Sunday for the first time in a decade.",
+          "effects": [
+            { "target": "reputation", "key": "public", "delta": -4 },
+            { "target": "reputation", "key": "parishioners", "delta": -5 },
+            { "target": "reputation", "key": "brother_priests", "delta": 3 },
+            { "target": "stat", "key": "administration", "delta": 1 },
+            { "target": "stat", "key": "piety", "delta": -1 },
+            { "target": "flag", "key": "bp_closed_the_town", "value": true }
+          ]
+        },
+        {
+          "id": "mission",
+          "label": "Keep it open as a mission: a lay-led Sunday celebration and Mass once a month",
+          "outcome": "The decree makes Holy Family a mission of the next town, with a trained lay leader for a Sunday celebration in the absence of a priest and a Mass on the first Sunday. The town takes it as a reprieve. The priest who is sixty-eight takes it as a schedule. The dicastery, when it hears, sends a letter reminding you that such celebrations are provisional, and you write back that so is everything in the diocese.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 3 },
+            { "target": "reputation", "key": "public", "delta": 2 },
+            { "target": "reputation", "key": "rome", "delta": -3 },
+            { "target": "reputation", "key": "brother_priests", "delta": -3 },
+            { "target": "flag", "key": "bp_town_a_mission", "value": true }
+          ]
+        },
+        {
+          "id": "cluster",
+          "label": "Cluster three towns under one pastor with a deacon resident in Holy Family's rectory, and fix the boiler from the reserve",
+          "requires": [{ "type": "stat", "key": "administration", "op": ">=", "value": 55 }],
+          "outcome": "It takes a winter of meetings in three church halls and one deacon willing to move his family forty miles. The pastor of the cluster is not the priest who is sixty-eight, who is retired at last with a dinner, but a younger man who asked for it and will be worn out by it in six years. The boiler passes. The finance council notes the reserve. The mayor writes again, to say thank you, which the diocese frames.",
+          "effects": [
+            { "target": "stat", "key": "administration", "delta": 2 },
+            { "target": "reputation", "key": "parishioners", "delta": 3 },
+            { "target": "reputation", "key": "public", "delta": 3 },
+            { "target": "reputation", "key": "brother_priests", "delta": -2 },
+            { "target": "flag", "key": "bp_town_clustered", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bp_vicar_general_choice",
+      "phase": "bishop",
+      "pressure": ["friendship_vs_duty", "ambition_vs_integrity"],
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 9,
+      "suppressYears": 5,
+      "once": true,
+      "requires": [
+        { "type": "flag", "key": "study:see", "value": true },
+        { "type": "see", "key": "years", "op": ">=", "value": 1 }
+      ],
+      "title": "Three Names",
+      "body": "{@vicar_general} has asked to go back to a parish, and he means it; he ran the diocese through the vacancy and he is tired in the way of a man who has been the bishop without being one. You owe him a parish, and you owe the diocese a vicar general. You write three names on a card, the way you were taught. {@closest_classmate}, whom you have known since the philosophy years and who would come from {diocese} on a loan of five years if you asked, and whom you trust in the room the way you trust no one else here. {@brother_priest}, who is not your friend and is not anyone's, who has the canon law, the temper, and the presbyterate's respect, and who was passed over for the chancery under your predecessor for reasons that are in his file and that you think were wrong. And the young canonist the nuncio's office mentioned in a sentence that was not quite a sentence, who would please Rome and would be reporting to it. Whoever you pick will be the man in the next room for the rest of your episcopate. The other two will know.",
+      "flavorPrompt": "Three names on a card, the tired vicar general, and the sentence from the nunciature that was not quite a sentence.",
+      "choices": [
+        {
+          "id": "the_friend",
+          "label": "Bring {@closest_classmate} from {diocese} on loan",
+          "requires": [{ "type": "relationship", "npcId": "@closest_classmate", "op": ">=", "value": 30 }],
+          "outcome": "His bishop signs the loan with a speed that tells you something about how he was valued at home, and he arrives in August with two boxes and no furniture. The presbyterate is correct and cold for a year: the bishop's friend, from away, in the chair their own men wanted. He knows it and works twice as hard for it. In the room, when the door is shut, you have someone to think out loud with, and you had forgotten what that was.",
+          "effects": [
+            { "target": "relationship", "key": "@closest_classmate", "delta": 15 },
+            { "target": "reputation", "key": "brother_priests", "delta": -6 },
+            { "target": "reputation", "key": "chancery", "delta": -2 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "flag", "key": "bp_vg_the_friend", "value": true }
+          ]
+        },
+        {
+          "id": "the_competent",
+          "label": "Name {@brother_priest}, and tell him why he was passed over and that you disagree",
+          "default": true,
+          "outcome": "He listens to the reasons in his file without expression and says that two of them are true and one is not, and which. He takes the office. He is not warm and he is not yours, and the presbyterate, which has watched him be overlooked for a decade, reads the appointment as the first thing you have done for them rather than to them. The nunciature notes the name and asks nothing. He runs the second floor as if he had always meant to.",
+          "effects": [
+            { "target": "relationship", "key": "@brother_priest", "delta": 12 },
+            { "target": "reputation", "key": "brother_priests", "delta": 5 },
+            { "target": "reputation", "key": "rome", "delta": -2 },
+            { "target": "flag", "key": "bp_vg_the_presbyterate_man", "value": true }
+          ]
+        },
+        {
+          "id": "romes_man",
+          "label": "Name the canonist the nunciature mentioned",
+          "outcome": "He is thirty-nine and very good and writes a clean decree, and within a month the nuncio's office has thanked you for your prudence in a letter you did not need. The older pastors call him the little monsignor before he is one. You are aware, in the next room, of a man taking notes for two readers. The diocese is well governed and every letter from Rome now arrives already knowing what it will find.",
+          "effects": [
+            { "target": "reputation", "key": "rome", "delta": 5 },
+            { "target": "reputation", "key": "chancery", "delta": 3 },
+            { "target": "reputation", "key": "brother_priests", "delta": -4 },
+            { "target": "stat", "key": "piety", "delta": -1 },
+            { "target": "flag", "key": "bp_vg_romes_man", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bp_ad_limina",
+      "phase": "bishop",
+      "pressure": ["loyalty_vs_honesty", "ambition_vs_integrity"],
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 8,
+      "suppressYears": 5,
+      "requires": [
+        { "type": "flag", "key": "study:see", "value": true },
+        { "type": "see", "key": "years", "op": ">=", "value": 3 }
+      ],
+      "title": "Ad Limina",
+      "body": "The quinquennial report went to Rome in the spring, one hundred and forty pages that {@chancellor} wrote and you signed, and now you are in it: the province's bishops in a row of black in a corridor of the Apostolic Palace, and the dicasteries one after another in the week that follows, Bishops, Clergy, Divine Worship, each with a monsignor who has read your report and has questions in the margin. The pope will give the province an hour and you perhaps three minutes of it. What the report says is true. It says the diocese has a shortage, a deficit, a seminary count of three, and a presbyterate that is, as the phrase goes, faithful. What it does not say is which parishes have a Sunday without a priest, which of your pastors you would not have ordained, what the settlement cost, and what you actually think of the questions the dicastery for Clergy asks in the same words every five years. There is a version of the week in which you say all of it in three minutes. There is another in which you go home with a photograph and nothing changed.",
+      "flavorPrompt": "A row of black in a corridor, questions in the margin, and three minutes with the pope.",
+      "choices": [
+        {
+          "id": "plain",
+          "label": "Say all of it: the Sundays without a priest, the money, and what you think of the questions",
+          "outcome": "The monsignor at Clergy stops writing halfway through and simply listens, which you are told afterward is rare. The pope asks one question and it is a good one. You come home with the photograph and a reputation in two dicasteries as a bishop who says what is so, which is not always an advantage, and your priests, who hear a version of it within a month, are surprised and then something better than surprised.",
+          "effects": [
+            { "target": "honesty", "key": "honesty", "delta": 2 },
+            { "target": "reputation", "key": "rome", "delta": -3 },
+            { "target": "reputation", "key": "brother_priests", "delta": 3 },
+            { "target": "stat", "key": "piety", "delta": 2 },
+            { "target": "trait", "key": "told Rome the whole diocese" },
+            { "target": "flag", "key": "bp_ad_limina_plain", "value": true }
+          ]
+        },
+        {
+          "id": "polished",
+          "label": "Give them the report and the photograph, and keep the rest for your own priests",
+          "default": true,
+          "outcome": "The week goes as such weeks go: the questions in the margin are answered from the report, the photograph is taken, the monsignori are gracious, and the province's bishops dine together on the last night and compare notes on which dicastery was hardest. Yours was easy. You fly home with the diocese exactly as described and a small, specific knowledge of what you did not say, and to whom.",
+          "effects": [
+            { "target": "reputation", "key": "rome", "delta": 4 },
+            { "target": "reputation", "key": "chancery", "delta": 1 },
+            { "target": "stat", "key": "piety", "delta": -2 },
+            { "target": "flag", "key": "bp_ad_limina_polished", "value": true }
+          ]
+        },
+        {
+          "id": "ask_for_priests",
+          "label": "Ask for one thing by name: two priests from a diocese that has too many, on a five-year agreement, and leave the philosophy out",
+          "requires": [{ "type": "stat", "key": "administration", "op": ">=", "value": 50 }],
+          "outcome": "The dicastery for Clergy has a desk for exactly this, and the monsignor at it is pleased to be asked something he can do. By Advent there is a letter from a diocese in another hemisphere, and by the following summer two priests with good English and no winter coats. It is not a solution. It is two Sundays a week with a priest that did not have one, and the northern deanery notices who went to Rome and asked.",
+          "effects": [
+            { "target": "reputation", "key": "rome", "delta": 2 },
+            { "target": "reputation", "key": "chancery", "delta": 2 },
+            { "target": "reputation", "key": "brother_priests", "delta": 2 },
+            { "target": "stat", "key": "administration", "delta": 2 },
+            { "target": "flag", "key": "bp_ad_limina_asked", "value": true }
+          ]
+        },
+        {
+          "id": "speak_for_priests",
+          "label": "Use the three minutes to tell the pope what your priests say about the way Rome writes to them",
+          "requires": [{ "type": "outspokenness", "op": ">=", "value": 40 }],
+          "outcome": "You say it in three minutes, without notes, and the pope nods and says something in Italian to the secretary that you are not given the sense of. The dicasteries are cooler for the rest of the week. It is in the Catholic press by the time you land, from someone in the province, and your priests read it on their phones at the deanery meeting, and one of the old men says, to no one, that it was about time somebody did.",
+          "effects": [
+            { "target": "outspokenness", "key": "outspokenness", "delta": 3 },
+            { "target": "reputation", "key": "rome", "delta": -5 },
+            { "target": "reputation", "key": "brother_priests", "delta": 5 },
+            { "target": "reputation", "key": "public", "delta": 2 },
+            { "target": "flag", "key": "bp_ad_limina_spoke_for_priests", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bp_lawsuit_insurer",
+      "phase": "bishop",
+      "pressure": ["money", "loyalty_vs_honesty"],
+      "severity": "MAJOR",
+      "category": "scandal",
+      "baseWeight": 7,
+      "suppressYears": 5,
+      "once": true,
+      "requires": [{ "type": "flag", "key": "study:see", "value": true }],
+      "bias": [{ "when": { "type": "see", "key": "money", "op": "<=", "value": -20 }, "multiplier": 1.5 }],
+      "title": "The Insurer's Counsel",
+      "body": "The suit was filed under the window the legislature opened last year, and it concerns a priest who died in 2004 and a parish you have visited twice, and a plaintiff who is now fifty-three. The insurer's counsel comes down from the city with a folder and a number. The number is one the diocese can survive if it is the last such number, which no one will promise. Counsel's advice is what it has been in every diocese in the country: settle, without admission, with a confidentiality clause, and do not meet him, because a meeting is a deposition with no lawyer in the room. The plaintiff's lawyer has said that his client wants three things, and the money is third. He wants the file. He wants the bishop to say the word, in a room, to his face. The insurer will pay the number under its terms and, if you change the terms, will reserve its rights and write to you in a language that means the diocese pays. {@chancellor} has the reserve figures. They do not stretch that far. The plaintiff, through his lawyer, has said he is not in a hurry. He has waited forty years.",
+      "choices": [
+        {
+          "id": "settle",
+          "label": "Settle on the insurer's terms",
+          "default": true,
+          "outcome": "The papers are signed in a conference room in the city with no one from the diocese present but counsel. The number is paid. The clause holds. The plaintiff's lawyer issues a statement that says his client is relieved the matter is concluded, and the plaintiff issues nothing, because he cannot. {@chancellor} closes the file. You say Mass the next morning for a man you have never met and will not, now, and it does not feel like enough, because it is not.",
+          "effects": [
+            { "target": "reputation", "key": "public", "delta": -4 },
+            { "target": "reputation", "key": "chancery", "delta": 2 },
+            { "target": "stat", "key": "piety", "delta": -3 },
+            { "target": "flag", "key": "bp_settled_on_terms", "value": true }
+          ]
+        },
+        {
+          "id": "meet_him",
+          "label": "Meet him, with the file, and say the word, and let the insurer write its letter",
+          "volume": "semi_public",
+          "positionTopic": "abuse_handling",
+          "positionValue": 50,
+          "outcome": "The meeting is in a parish hall he chose, with his lawyer and his sister and no one from the insurer. You give him the file and he reads it in front of you, which takes twenty minutes, and then you say it, and he does not say anything back for a long time. The insurer's letter arrives the following week and means what counsel said it would. The diocese pays for years. The presbyteral council asks what it cost, and you tell them, and what it bought.",
+          "effects": [
+            { "target": "reputation", "key": "public", "delta": 5 },
+            { "target": "reputation", "key": "chancery", "delta": -3 },
+            { "target": "reputation", "key": "brother_priests", "delta": -2 },
+            { "target": "stat", "key": "piety", "delta": 3 },
+            { "target": "trait", "key": "said the word to a man's face" },
+            { "target": "flag", "key": "bp_met_the_plaintiff", "value": true }
+          ]
+        },
+        {
+          "id": "negotiate",
+          "label": "Negotiate: no confidentiality, the file to him, a meeting after signing, and the insurer's number unchanged",
+          "requires": [{ "type": "stat", "key": "administration", "op": ">=", "value": 55 }],
+          "volume": "semi_public",
+          "positionTopic": "abuse_handling",
+          "positionValue": 30,
+          "outcome": "It takes {@chancellor} and you a month of calls, and counsel two tries, to accept that the clause is the one thing on the table you will not sign. The insurer pays, reluctantly and in full. The file goes across in a box. The meeting is after the signing, which his lawyer calls a formality and he does not. He says, when it is over, that it was the file that mattered. The reserve is untouched and the paper prints the number.",
+          "effects": [
+            { "target": "stat", "key": "administration", "delta": 2 },
+            { "target": "reputation", "key": "public", "delta": 3 },
+            { "target": "reputation", "key": "chancery", "delta": 1 },
+            { "target": "relationship", "key": "@chancellor", "delta": 4 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "flag", "key": "bp_settled_in_the_open", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bp_seminarian_question",
+      "phase": "bishop",
+      "pressure": ["competence", "belief_vs_safety"],
+      "severity": "MAJOR",
+      "category": "formation",
+      "baseWeight": 8,
+      "suppressYears": 5,
+      "once": true,
+      "requires": [
+        { "type": "flag", "key": "study:see", "value": true },
+        { "type": "see", "key": "shortage", "op": ">=", "value": 3 }
+      ],
+      "bias": [{ "when": { "type": "see", "key": "shortage", "op": ">=", "value": 4 }, "multiplier": 1.5 }],
+      "title": "Three Men in Formation",
+      "body": "The rector's letter about the third-year theologian is two pages, which is one more than he writes about anyone, and the second page is the one you read twice. The man is thirty-one, a convert, pious in a way that impresses the older pastors, and he cannot be corrected. Not will not: cannot. A summer assignment ended with the pastor asking that he not return, and the reason, when you called, was that the man had told a woman in the RCIA class, in front of the class, that her marriage was invalid, which it may be, and that it was not his to say, which it was not. The rector recommends a year's delay before the diaconate, and says in the last line that he would understand another decision. You have three men in formation. One is a deacon this spring. One is nineteen. If this one goes, the diocese ordains one priest in the next four years, and the men on the northern edge know it, and so does he. He has asked to see you. He will say, with perfect sincerity, that he is being punished for orthodoxy.",
+      "flavorPrompt": "The rector's second page, the woman in the RCIA class, and a diocese that counts its seminarians on one hand.",
+      "choices": [
+        {
+          "id": "delay",
+          "label": "The rector's year. Tell him why, in words he cannot mistake for persecution",
+          "default": true,
+          "outcome": "You see him for an hour and say the thing about the woman in the class plainly, three times, in three different ways, and on the third he hears it or pretends to. He takes the year. Half the older pastors think you have been hard on a good man and say so at the deanery. The rector writes to thank you, in one line. Whether the year does anything, you will know in a year.",
+          "effects": [
+            { "target": "reputation", "key": "brother_priests", "delta": 2 },
+            { "target": "reputation", "key": "traditional_bloc", "delta": -3 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "flag", "key": "bp_seminarian_delayed", "value": true }
+          ]
+        },
+        {
+          "id": "ordain",
+          "label": "Ordain him on schedule and put him under the toughest pastor you have",
+          "outcome": "He is ordained a deacon in the spring in front of a full cathedral and every pastor from the north, and assigned to the one man in the diocese who has never let a curate finish a sentence. The pastor telephones {@vicar_for_clergy} within a month to ask what he has done to deserve this. The northern deanery has its priest in two years. Whether it has its priest in twenty is the part of the file you will not be here to read.",
+          "effects": [
+            { "target": "reputation", "key": "traditional_bloc", "delta": 4 },
+            { "target": "reputation", "key": "brother_priests", "delta": -3 },
+            { "target": "relationship", "key": "@vicar_for_clergy", "delta": -5 },
+            { "target": "stat", "key": "piety", "delta": -2 },
+            { "target": "flag", "key": "bp_seminarian_ordained", "value": true }
+          ]
+        },
+        {
+          "id": "dismiss",
+          "label": "Send him home. A diocese with three men is not so poor it can afford this one",
+          "outcome": "He takes it as he was always going to take it, and within the month there is a letter in a Catholic weekly, unsigned but not hard to trace, about a bishop who dismisses the orthodox. The older pastors are angry and the pastor of the summer assignment is not, and the rector, who did not recommend it, writes to say he thinks you were right. The count in formation is two. The northern deanery does its own arithmetic.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 2 },
+            { "target": "reputation", "key": "traditional_bloc", "delta": -6 },
+            { "target": "reputation", "key": "brother_priests", "delta": 2 },
+            { "target": "reputation", "key": "public", "delta": -2 },
+            { "target": "trait", "key": "sent a man home in a shortage" },
+            { "target": "flag", "key": "bp_seminarian_dismissed", "value": true }
+          ]
+        },
+        {
+          "id": "examine",
+          "label": "Examine him yourself, an afternoon a week for Lent, before you decide",
+          "requires": [{ "type": "stat", "key": "theology", "op": ">=", "value": 55 }],
+          "outcome": "Six afternoons in your study with the Summa and the Catechism and the pastoral letters of two popes, and by the fourth you have found the thing under the rigidity, which is a man who was received into the Church alone at twenty-six and has never once been told he belongs to it. It does not fix him. It tells you what to write to the rector, and the rector, reading it, tries something he had not tried. The diocesan calendar has lost six afternoons of a bishop.",
+          "effects": [
+            { "target": "stat", "key": "theology", "delta": 1 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "stat", "key": "administration", "delta": -1 },
+            { "target": "reputation", "key": "brother_priests", "delta": 2 },
+            { "target": "reputation", "key": "rome", "delta": 1 },
+            { "target": "flag", "key": "bp_seminarian_examined", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bp_nuncio_questionnaire",
+      "phase": "bishop",
+      "pressure": ["ambition_vs_integrity", "friendship_vs_duty"],
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 7,
+      "suppressYears": 5,
+      "once": true,
+      "requires": [
+        { "type": "flag", "key": "study:see", "value": true },
+        { "type": "see", "key": "years", "op": ">=", "value": 2 }
+      ],
+      "title": "The Plain Envelope",
+      "body": "You have seen the plain envelope from the other side; now it is addressed to you as Ordinary, and the name on the second page is {@brother_priest}, who is yours. The questions are the century's questions and you know them by heart. What is different is the arithmetic. A small diocese does not produce bishops often, and when it does, it loses one. He is the pastor who carries the cathedral deanery, sits on the finance council, and is the only man in the presbyterate who could walk into the chancery tomorrow and run it. If you write what you know, Rome will read a man who should be a bishop, and in eighteen months he will be one, somewhere else, and you will be short a priest you cannot replace. If you write him smaller than he is, the nuncio, who has read ten thousand of these, may not notice, and he stays, and never knows what he was not asked. He has not been told the envelope came. He would tell you, if it were about you. Twenty days, by hand, under the pontifical secret.",
+      "flavorPrompt": "The envelope from the other side of the desk, and the arithmetic of a small diocese that cannot spare its best man.",
+      "choices": [
+        {
+          "id": "in_full",
+          "label": "Write him as he is, and lose him",
+          "outcome": "Four pages, and every one of them true, and you post it yourself. Fourteen months later the nuncio telephones on a Tuesday to tell you, as a courtesy, what will be announced on Thursday, and on Thursday {@brother_priest} sits in your study with the letter in his hand and does not know what to say. You tell him it was the easiest thing you have written here, which is not true, and the cathedral deanery goes to a man who is not ready.",
+          "effects": [
+            { "target": "reputation", "key": "rome", "delta": 4 },
+            { "target": "reputation", "key": "brother_priests", "delta": 2 },
+            { "target": "relationship", "key": "@brother_priest", "delta": 5 },
+            { "target": "stat", "key": "piety", "delta": 2 },
+            { "target": "stat", "key": "administration", "delta": -1 },
+            { "target": "flag", "key": "bp_questionnaire_in_full", "value": true }
+          ]
+        },
+        {
+          "id": "keep_him",
+          "label": "Write him true and smaller, and keep him",
+          "default": true,
+          "outcome": "Nothing in the four pages is false. Several things are absent, and the adjectives are the adjectives of a good pastor rather than a bishop, and the nuncio files it where such letters go. He stays. He carries the deanery and the finance council for years and never asks why the envelope did not come, because he does not know it did. You know. You watch him at the chrism Mass and know exactly what you kept, and from whom.",
+          "effects": [
+            { "target": "reputation", "key": "rome", "delta": -2 },
+            { "target": "honesty", "key": "honesty", "delta": -2 },
+            { "target": "stat", "key": "piety", "delta": -3 },
+            { "target": "reputation", "key": "brother_priests", "delta": 1 },
+            { "target": "flag", "key": "bp_questionnaire_kept_him", "value": true }
+          ]
+        },
+        {
+          "id": "tell_him",
+          "label": "Tell him the envelope came, and ask him what he wants written",
+          "requires": [{ "type": "relationship", "npcId": "@brother_priest", "op": ">=", "value": 20 }],
+          "outcome": "It is a breach of the secret and you both know it, and he is silent for a while in your study and then says: write what is true, and add that he has asked to stay. You do both. Whether the second line is read, or believed, you are not told. He is not named that year, or the next. He knows now what you think of him, in four pages, which is a thing most men never learn from their bishop.",
+          "effects": [
+            { "target": "relationship", "key": "@brother_priest", "delta": 12 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "reputation", "key": "rome", "delta": -1 },
+            { "target": "flag", "key": "bp_questionnaire_told_him", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bp_metropolitan_call",
+      "phase": "bishop",
+      "pressure": ["friendship_vs_duty", "loyalty_vs_honesty"],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 8,
+      "suppressYears": 3,
+      "requires": [{ "type": "flag", "key": "study:see", "value": true }],
+      "bias": [{ "when": { "type": "reputation", "key": "chancery", "op": ">=", "value": 20 }, "multiplier": 1.5 }],
+      "title": "The Archbishop Wants Something",
+      "body": "The metropolitan telephones on a Sunday evening, which he does when he wants something and does not want a letter about it. He is gracious for four minutes. Then he says that the provincial seminary has lost its moral theologian to a hospital bed and will not open in August without one, and that the only man in the province with the degree and the age and no chancery job is {@brother_priest}, who is your pastor of a parish with a school. He would like him for five years. He says, in the voice of a man who has done this before, that a suffragan who helps the province is remembered by the province, and that the seminary is where your own three men are being formed. He does not say that he sat on the terna that named you, because he does not have to. {@brother_priest} does not know he is being discussed. His parish does not know. You have forty priests and a schedule that already has holes in it, and a seminary that forms your men and could, if the archbishop wished, form them more slowly. He is waiting on the line.",
+      "flavorPrompt": "The Sunday evening call, four gracious minutes, and the thing the archbishop does not need to say.",
+      "choices": [
+        {
+          "id": "give",
+          "label": "Give him the man for five years, and ask nothing for it",
+          "default": true,
+          "outcome": "{@brother_priest} takes the news as a promotion and his parish takes it as a theft, and both are right. The school gets an administrator and the parish gets a pastor from the next deanery on Sundays. The archbishop says, at the next provincial meeting, that the province owes you one, in front of the others, which is the coin such things are paid in. Your presbyterate counts forty priests and finds thirty-nine.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": 6 },
+            { "target": "reputation", "key": "brother_priests", "delta": -4 },
+            { "target": "reputation", "key": "parishioners", "delta": -2 },
+            { "target": "flag", "key": "bp_metropolitan_gave", "value": true }
+          ]
+        },
+        {
+          "id": "refuse",
+          "label": "Say no, plainly: the province can find a moral theologian who is not carrying a school",
+          "outcome": "There is a pause on the line of the exact length of a man deciding not to say something, and then he is gracious again for two minutes and rings off. The seminary opens in August with a Jesuit on loan. Nothing happens to your three men. Nothing happens at the provincial meeting either, except that the archbishop asks the bishop beside you about his diocese and does not ask about yours. Your priests hear you said no, and to whom.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": -5 },
+            { "target": "reputation", "key": "brother_priests", "delta": 5 },
+            { "target": "honesty", "key": "honesty", "delta": 1 },
+            { "target": "flag", "key": "bp_metropolitan_refused", "value": true }
+          ]
+        },
+        {
+          "id": "trade",
+          "label": "Trade: the man for five years, against two of his newly ordained on loan for the same five and the seminary's fees for your three",
+          "requires": [{ "type": "stat", "key": "charisma", "op": ">=", "value": 50 }],
+          "outcome": "He laughs, which is a good sign, and negotiates, which is a better one, and by the end of the call you have one newly ordained for three years and the fees waived for two of your three. {@brother_priest} goes to the seminary in August and learns from a classmate there how the arrangement was made, and is quiet with you for a season about having been a term in it. The northern deanery gets a young priest with a bad accent and a good heart.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": 2 },
+            { "target": "reputation", "key": "brother_priests", "delta": 2 },
+            { "target": "stat", "key": "administration", "delta": 2 },
+            { "target": "relationship", "key": "@brother_priest", "delta": -5 },
+            { "target": "flag", "key": "bp_metropolitan_traded", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bp_record_read_back",
+      "phase": "bishop",
+      "pressure": ["loyalty_vs_honesty", "belief_vs_safety"],
+      "severity": "MAJOR",
+      "category": "personal",
+      "baseWeight": 7,
+      "suppressYears": 5,
+      "once": true,
+      "requires": [
+        { "type": "flag", "key": "study:see", "value": true },
+        { "type": "outspokenness", "op": ">=", "value": 30 },
+        {
+          "type": "any",
+          "inner": [
+            { "type": "position", "topic": "any", "op": ">=", "value": 30 },
+            { "type": "position", "topic": "any", "op": "<=", "value": -30 }
+          ]
+        }
+      ],
+      "title": "The Clipping",
+      "body": "The diocesan paper of {diocese} kept its archive, and someone with time has been reading it. The piece is thirty years old, from your first years in a collar: a homily reprinted, or a letter, or an interview given to a reporter who has since retired, and it says something you meant then in a voice you no longer have. It is on a website by Monday and in the local paper by Thursday, under a headline that asks whether the bishop still believes it, and on the desk of {@chancellor}, who has drafted three responses and would like to know which one is true. Your priests have read it. Some of them are pleased; it explains you. Some of them are pleased for the opposite reason. The people at the cathedral, who have known you two years, read it as news, and the nunciature, which had it in your file before you did, reads nothing at all. You were not wrong then, or you were, and it does not matter which: a man who has spoken in public for thirty years has a record, and the record has come to the small see to find him.",
+      "flavorPrompt": "A thirty-year-old clipping, a headline that asks a question, and the chancellor's three drafts.",
+      "choices": [
+        {
+          "id": "stand",
+          "label": "Stand by it, in your own words, in the diocesan paper",
+          "outcome": "Six hundred words under your own name, saying that you said it, that you meant it, and what you would add now, which is not a retraction. The local paper runs an excerpt. The nunciature adds a clipping to a file that already had one. Your priests, whichever side they took, now know that the man in the chair does not run from his own voice, and some of them find that they are glad of it even where they disagree.",
+          "effects": [
+            { "target": "honesty", "key": "honesty", "delta": 3 },
+            { "target": "outspokenness", "key": "outspokenness", "delta": 3 },
+            { "target": "reputation", "key": "public", "delta": 3 },
+            { "target": "reputation", "key": "brother_priests", "delta": 2 },
+            { "target": "reputation", "key": "rome", "delta": -3 },
+            { "target": "flag", "key": "bp_record_stood", "value": true }
+          ]
+        },
+        {
+          "id": "grown",
+          "label": "Say that you were a young man and have learned some things since, and name one of them",
+          "outcome": "{@chancellor}'s second draft, with a paragraph of your own in it that names the thing you learned and who taught it to you. It reads well. The paper prints it in full. The nunciature is satisfied and the cathedral is reassured, and a certain number of your priests, on both sides, read the paragraph twice and decide that the bishop is a man who can be moved, which is a useful thing to know about a bishop.",
+          "effects": [
+            { "target": "honesty", "key": "honesty", "delta": 1 },
+            { "target": "outspokenness", "key": "outspokenness", "delta": -1 },
+            { "target": "reputation", "key": "rome", "delta": 2 },
+            { "target": "reputation", "key": "public", "delta": 1 },
+            { "target": "reputation", "key": "brother_priests", "delta": -3 },
+            { "target": "flag", "key": "bp_record_grown", "value": true }
+          ]
+        },
+        {
+          "id": "silent",
+          "label": "No comment. Let {@chancellor} file the three drafts",
+          "default": true,
+          "outcome": "The chancery says the bishop does not comment on thirty-year-old homilies and the paper prints that, which is a kind of comment. It is gone in a fortnight from the paper and not from anywhere else. {@chancellor} files the drafts. Your priests, who wanted to know which of them was you, draw their own conclusions, and the conclusions are not the same, and you have let them stand.",
+          "effects": [
+            { "target": "reputation", "key": "public", "delta": -2 },
+            { "target": "reputation", "key": "chancery", "delta": 2 },
+            { "target": "honesty", "key": "honesty", "delta": -1 },
+            { "target": "flag", "key": "bp_record_silent", "value": true }
+          ]
+        },
+        {
+          "id": "reprint",
+          "label": "Reprint it yourself, beside what you would say now, and let them compare",
+          "requires": [{ "type": "outspokenness", "op": ">=", "value": 50 }],
+          "outcome": "Two columns on the same page of the diocesan paper: the young priest and the old bishop, unedited, with a line at the foot that says the reader may judge the distance. It is reprinted in two national outlets and one that is unkind. The nunciature is not amused. The presbyterate, which has never seen a bishop do this, argues about it in every rectory for a month, and the arguments are, for once, about the thing itself.",
+          "effects": [
+            { "target": "reputation", "key": "public", "delta": 5 },
+            { "target": "outspokenness", "key": "outspokenness", "delta": 2 },
+            { "target": "honesty", "key": "honesty", "delta": 2 },
+            { "target": "reputation", "key": "rome", "delta": -4 },
+            { "target": "reputation", "key": "brother_priests", "delta": 3 },
+            { "target": "trait", "key": "printed his own record beside his present mind" },
+            { "target": "flag", "key": "bp_record_reprinted", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bp_health",
+      "phase": "bishop",
+      "pressure": ["body_vs_vow", "loyalty_vs_honesty"],
+      "severity": "MAJOR",
+      "category": "personal",
+      "baseWeight": 7,
+      "suppressYears": 5,
+      "once": true,
+      "requires": [
+        { "type": "flag", "key": "study:see", "value": true },
+        { "type": "age", "op": ">=", "value": 68 }
+      ],
+      "title": "The Tremor",
+      "body": "You saw it in your own hand before anyone else did, the way you once saw it in a bishop's: the pen not quite steady over the decree, the chalice held a little lower at the elevation than you used to hold it. The master of ceremonies has noticed and has begun to stand nearer. {@vicar_general} has not said anything, which is how you know that he has. The diocesan doctor, who is a parishioner and has known you two years, would see you on a Tuesday and would tell no one, and would write a letter if you asked him, and would write another if you did not. The law says a bishop who cannot carry the office is earnestly requested to lay it down; it does not say what to do with a bishop who can carry it, and would rather not be watched while he does. A coadjutor is a letter to Washington and a year's wait and a younger man in the next room who will be told, kindly, that he is not to interfere. Seventy-five is some years off. The people do not see it yet. Your priests, who see everything, have begun to time your homilies.",
+      "flavorPrompt": "The pen over the decree, the master of ceremonies standing nearer, and the priests timing the homilies.",
+      "choices": [
+        {
+          "id": "coadjutor",
+          "label": "See the doctor, and whatever he says, write to the nuncio asking for a coadjutor",
+          "volume": "semi_public",
+          "positionTopic": "bishop_conduct",
+          "positionValue": 30,
+          "outcome": "The doctor says what doctors say, that it is manageable and progressive and that you should have come a year ago. The letter to Washington is three paragraphs and takes you a week. The nuncio answers within the month, warmly, and the year's wait begins. The paper has it before the presbyterate does, which you had not intended. Your priests read it as honesty and as an ending, and both readings are correct.",
+          "effects": [
+            { "target": "reputation", "key": "rome", "delta": 4 },
+            { "target": "reputation", "key": "brother_priests", "delta": 4 },
+            { "target": "reputation", "key": "chancery", "delta": 2 },
+            { "target": "reputation", "key": "public", "delta": -2 },
+            { "target": "stat", "key": "piety", "delta": 2 },
+            { "target": "stat", "key": "administration", "delta": -1 },
+            { "target": "flag", "key": "bp_asked_for_coadjutor", "value": true }
+          ]
+        },
+        {
+          "id": "carry_on",
+          "label": "See the doctor, and no one else, and carry it as long as it can be carried",
+          "default": true,
+          "outcome": "Tuesday, and a prescription, and a letter you do not ask for and he does not write. The master of ceremonies learns to hold the book higher. {@vicar_general} takes the confirmations in the north without being asked. The people see a bishop who keeps going and like him for it. The priests see the same thing and are less sure, because they have watched this before, in another man, and know how it ends and who carries it.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "reputation", "key": "brother_priests", "delta": -2 },
+            { "target": "reputation", "key": "rome", "delta": -1 },
+            { "target": "stat", "key": "piety", "delta": -1 },
+            { "target": "flag", "key": "bp_carried_the_tremor", "value": true }
+          ]
+        },
+        {
+          "id": "tell_the_priests",
+          "label": "Tell your priests yourself at the presbyteral council, before they tell each other",
+          "requires": [{ "type": "see", "key": "presbyterate", "op": ">=", "value": 20 }],
+          "volume": "semi_public",
+          "positionTopic": "bishop_conduct",
+          "positionValue": 40,
+          "outcome": "You say it at the end of the agenda in two sentences: the doctor's word, and that you will write to the nuncio when the doctor says to and not before, and that they will hear it from you. Nobody speaks for a moment and then the oldest man on the council says that in forty-four years no bishop has told him anything first. It reaches the paper anyway, but later, and softer, and from a presbyterate that has decided to protect you.",
+          "effects": [
+            { "target": "reputation", "key": "brother_priests", "delta": 6 },
+            { "target": "honesty", "key": "honesty", "delta": 2 },
+            { "target": "reputation", "key": "rome", "delta": 1 },
+            { "target": "reputation", "key": "public", "delta": -1 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "flag", "key": "bp_told_the_presbyterate", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bp_roof_or_pension",
+      "phase": "bishop",
+      "pressure": ["money", "loyalty_vs_honesty"],
+      "severity": "MAJOR",
+      "category": "finance",
+      "baseWeight": 9,
+      "suppressYears": 4,
+      "once": true,
+      "requires": [
+        { "type": "flag", "key": "study:see", "value": true },
+        { "type": "see", "key": "money", "op": "<=", "value": 20 }
+      ],
+      "bias": [{ "when": { "type": "see", "key": "money", "op": "<=", "value": -30 }, "multiplier": 2 }],
+      "title": "The Roof or the Pension",
+      "body": "The cathedral roof is copper laid in 1938 and the engineer's report has photographs. The priests' pension fund is a number on the second page of the auditor's letter, and the number is what actuaries call underfunded and what your retired priests, eleven of them in the residence and in rooms around the diocese, call the check. The finance council has done the arithmetic honestly and there is enough in the reserve for one of them. Not both, not this year, and the diocese has borrowed against the reserve before and been told by the bank, politely, that it would rather not do it again. The cathedral is where the people see the diocese, where the chrism Mass is, where the ordination will be if there is one; and a cathedral with tarps on it is a photograph in the paper. The pension fund is where your priests see you, and a shortfall in it is a letter from the presbyteral council to the nuncio, which has happened in two dioceses you could name. Both are due. {@chancellor} would like a decision before the finance council meets on Thursday, and has stopped saying which one he prefers.",
+      "flavorPrompt": "Copper from 1938, the check eleven old men wait for, and the chancellor who has stopped saying which.",
+      "choices": [
+        {
+          "id": "roof",
+          "label": "The roof. The pension fund can be built back over five years and the copper cannot wait",
+          "default": true,
+          "outcome": "The scaffolding goes up in May and the paper photographs it, and it is a good photograph. The retired priests are told, in a letter you sign, that the fund will be restored over five years by a levy on the parishes, and eleven old men read the letter and calculate their ages. The presbyteral council does not write to the nuncio. It writes to you, and the letter is polite and long and is kept.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 4 },
+            { "target": "reputation", "key": "public", "delta": 3 },
+            { "target": "reputation", "key": "brother_priests", "delta": -6 },
+            { "target": "flag", "key": "bp_chose_the_roof", "value": true }
+          ]
+        },
+        {
+          "id": "pension",
+          "label": "The pension. Tarp the roof and let the paper photograph it",
+          "outcome": "The fund is made whole in a single transfer and the cathedral wears blue tarps through two winters, and the paper photographs them, and a columnist asks whether the diocese has a bishop or a caretaker. The retired priests say nothing, because they are old and it is their check, but the pastor of the cathedral says a great deal. Your priests understand what was chosen and by whom, and some of them will remember it in your last year.",
+          "effects": [
+            { "target": "reputation", "key": "brother_priests", "delta": 6 },
+            { "target": "reputation", "key": "parishioners", "delta": -3 },
+            { "target": "reputation", "key": "public", "delta": -3 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "flag", "key": "bp_chose_the_pension", "value": true }
+          ]
+        },
+        {
+          "id": "campaign",
+          "label": "A campaign for both, in your own voice, at every parish in the diocese for a year",
+          "requires": [{ "type": "stat", "key": "charisma", "op": ">=", "value": 55 }],
+          "outcome": "Fifty-two Sundays and fifty-two church halls and the same twelve minutes in each about copper and old men. It works, mostly, because the diocese has not been asked in a generation and does not know yet that it minds. The roof is done in the second summer and the fund is half restored by the third. You have spent a year saying the same thing to people who had come for something else, and you have not preached a homily you would keep in all that time.",
+          "effects": [
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "stat", "key": "administration", "delta": 1 },
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "reputation", "key": "brother_priests", "delta": 2 },
+            { "target": "stat", "key": "piety", "delta": -2 },
+            { "target": "flag", "key": "bp_campaign_for_both", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bp_immigration_raid",
+      "phase": "bishop",
+      "pressure": ["belief_vs_safety", "loyalty_vs_honesty"],
+      "severity": "MAJOR",
+      "category": "admin",
+      "baseWeight": 8,
+      "suppressYears": 4,
+      "once": true,
+      "requires": [
+        { "type": "flag", "key": "study:see", "value": true },
+        {
+          "type": "any",
+          "inner": [
+            { "type": "position", "topic": "immigration", "op": ">=", "value": 25 },
+            { "type": "position", "topic": "immigration", "op": "<=", "value": -25 }
+          ]
+        }
+      ],
+      "title": "The Parish on the Highway",
+      "body": "The call comes from the pastor at eleven on a Wednesday, and he is not calm: federal agents at the plant on the highway, forty men taken in two hours, and now a bus in the church lot because the women came to the church and the agents followed them to the door and stopped there. They have stopped there. They are asking the pastor, who is your priest and has been in the country nine years himself, whether they may come in. The sheriff has called your office to say he was not told. The plant's owner has called to say he was not told. A reporter is on her way from the city and has already telephoned {@chancellor} to ask what the bishop has said on immigration before, and {@chancellor}, who has read your file, has told her he will get back to her. You have a record on this. It is in the archive of {diocese} and in the nunciature and in the minds of half your priests. Whatever you say in the next hour will be set beside it. What you do not say will be set beside it too.",
+      "flavorPrompt": "The bus in the church lot, the agents stopped at the door, and the file the reporter has already read.",
+      "choices": [
+        {
+          "id": "stand_in_the_door",
+          "label": "Drive there. Stand in the door of the church with your priest, and let them photograph it",
+          "volume": "public",
+          "positionTopic": "immigration",
+          "positionValue": 70,
+          "outcome": "Fifty minutes on the highway with the pectoral cross on, and then the door, and the photograph, which is on the wire by evening: a bishop and a pastor and behind them thirty women and a great many children. The agents leave without the women; the men from the plant are not so lucky. The sheriff does not speak to you for a year. Half the diocese sends you letters, and the halves are not equal, and neither is quiet.",
+          "effects": [
+            { "target": "reputation", "key": "public", "delta": 4 },
+            { "target": "reputation", "key": "progressive_bloc", "delta": 6 },
+            { "target": "reputation", "key": "traditional_bloc", "delta": -4 },
+            { "target": "reputation", "key": "parishioners", "delta": 3 },
+            { "target": "reputation", "key": "rome", "delta": -2 },
+            { "target": "reputation", "key": "chancery", "delta": -2 },
+            { "target": "outspokenness", "key": "outspokenness", "delta": 3 },
+            { "target": "stat", "key": "piety", "delta": 2 },
+            { "target": "flag", "key": "bp_raid_stood_in_the_door", "value": true }
+          ]
+        },
+        {
+          "id": "statement",
+          "label": "A statement from the chancery on the dignity of families and the rule of law, and a call to the sheriff",
+          "volume": "semi_public",
+          "positionTopic": "immigration",
+          "positionValue": 15,
+          "outcome": "{@chancellor} has the statement out by two and it is the statement every chancery has issued: both halves of the sentence, neither with a verb. The sheriff, when you reach him, is grateful to be called and does nothing. The agents leave at four, without the women, for reasons that were never yours. The pastor reads the statement that night and telephones to ask, very carefully, whether you were coming, and you say you were not, and he says he understands, and does.",
+          "effects": [
+            { "target": "reputation", "key": "public", "delta": 1 },
+            { "target": "reputation", "key": "chancery", "delta": 2 },
+            { "target": "reputation", "key": "progressive_bloc", "delta": -3 },
+            { "target": "stat", "key": "piety", "delta": -1 },
+            { "target": "flag", "key": "bp_raid_statement", "value": true }
+          ]
+        },
+        {
+          "id": "open_the_door",
+          "label": "Tell the pastor to open the door. The church is not a sanctuary in law and you will not pretend it is",
+          "volume": "public",
+          "positionTopic": "immigration",
+          "positionValue": -50,
+          "outcome": "He does as he is told, because he is your priest, and the agents come in and take four women whose papers are wrong and leave the rest, and the parish never quite forgives him for a thing you decided. The sheriff and the plant's owner and a columnist commend the bishop's respect for law. The pastor asks, in the spring, for a transfer, and you give it. The letters come from the other half of the diocese, and they are not quiet either.",
+          "effects": [
+            { "target": "reputation", "key": "traditional_bloc", "delta": 5 },
+            { "target": "reputation", "key": "progressive_bloc", "delta": -8 },
+            { "target": "reputation", "key": "public", "delta": -3 },
+            { "target": "reputation", "key": "parishioners", "delta": -4 },
+            { "target": "reputation", "key": "brother_priests", "delta": -3 },
+            { "target": "honesty", "key": "honesty", "delta": 1 },
+            { "target": "flag", "key": "bp_raid_opened_the_door", "value": true }
+          ]
+        },
+        {
+          "id": "negotiate",
+          "label": "Call the field office director yourself, and get the women home before the reporter arrives",
+          "requires": [{ "type": "stat", "key": "charisma", "op": ">=", "value": 50 }],
+          "outcome": "It takes four calls to find the number and one to use it. You are a bishop and the director is a Catholic, or was, and the conversation is short and courteous and ends with the bus leaving the lot with nobody on it. The reporter arrives to a church with the doors open and nothing to photograph. No one knows what you did except the pastor, the director, and the presbyterate, which always knows, and is impressed the way men are by a thing they could not have done.",
+          "effects": [
+            { "target": "reputation", "key": "public", "delta": 2 },
+            { "target": "reputation", "key": "brother_priests", "delta": 2 },
+            { "target": "reputation", "key": "progressive_bloc", "delta": 2 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "stat", "key": "administration", "delta": 1 },
+            { "target": "outspokenness", "key": "outspokenness", "delta": -1 },
+            { "target": "flag", "key": "bp_raid_negotiated", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bp_classmate_letter",
+      "phase": "bishop",
+      "pressure": ["friendship_vs_duty"],
+      "severity": "NOTABLE",
+      "category": "classmate",
+      "baseWeight": 7,
+      "suppressYears": 5,
+      "once": true,
+      "requires": [
+        { "type": "flag", "key": "study:see", "value": true },
+        { "type": "relationship", "npcId": "@closest_classmate", "op": ">=", "value": 10 },
+        { "type": "see", "key": "years", "op": ">=", "value": 1 }
+      ],
+      "bias": [{ "when": { "type": "see", "key": "shortage", "op": ">=", "value": 4 }, "multiplier": 1.5 }],
+      "title": "A Letter From Home",
+      "body": "{@closest_classmate} writes by hand, which he does when he does not want it in a chancery's email, and the letter is four pages and the request is on the third. The new bishop of {diocese} has moved him, twice in three years, and the second time was to a place that is either a punishment or a mistake, and he does not know which is worse. He is tired and would like to be a pastor somewhere quiet where a bishop knows his name, and he has noticed that you are a bishop and that you have holes in your schedule. He is honest about it. He says he would need excardination or a loan of years, that his bishop would sign either with relief, and that he knows what it looks like to your priests: the bishop's friend from home, given a parish over the heads of men who have waited. He says you should say no if you have to, and that he will not hold it. You know him well enough to know that he means it, and that it would cost him, and that the last thing on the fourth page, which is about a walk you took in the third year, is there to make it harder.",
+      "flavorPrompt": "Four handwritten pages, the request on the third, and the walk from the third year on the fourth.",
+      "choices": [
+        {
+          "id": "take_him",
+          "label": "Take him. Give him the parish on the county line that nobody wanted",
+          "outcome": "The paperwork takes a season and his bishop signs it in a week. He arrives in the autumn to three churches and a rectory with a bad furnace and is, within a year, the best pastor the county line has had in living memory, which does not prevent the presbyterate from calling him the bishop's man for the rest of your episcopate. He comes to dinner on Sundays. You had not known how much you needed someone to come to dinner on Sundays.",
+          "effects": [
+            { "target": "relationship", "key": "@closest_classmate", "delta": 15 },
+            { "target": "reputation", "key": "brother_priests", "delta": -5 },
+            { "target": "reputation", "key": "parishioners", "delta": 1 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "flag", "key": "bp_took_the_classmate", "value": true }
+          ]
+        },
+        {
+          "id": "refuse",
+          "label": "Write back that you cannot, and why, and that the walk was real",
+          "default": true,
+          "outcome": "Three pages, by hand, the way he wrote. You tell him about the men who have waited and the thing a presbyterate does to a bishop's friend, and that you would not do that to him or to them, and that you remember the walk. He writes back in a fortnight, briefly and kindly, and does not write again for a long time. Your priests never learn what you refused. That was the point, and it is a cold one.",
+          "effects": [
+            { "target": "relationship", "key": "@closest_classmate", "delta": -8 },
+            { "target": "reputation", "key": "brother_priests", "delta": 3 },
+            { "target": "honesty", "key": "honesty", "delta": 1 },
+            { "target": "stat", "key": "piety", "delta": -1 },
+            { "target": "flag", "key": "bp_refused_the_classmate", "value": true }
+          ]
+        },
+        {
+          "id": "on_loan",
+          "label": "A loan of three years, posted where the shortage is worst, with the presbyteral council told first",
+          "requires": [{ "type": "reputation", "key": "brother_priests", "op": ">=", "value": 10 }],
+          "outcome": "You put it to the council before you answer him, as a proposal and not a decision: a priest on loan from {diocese}, three years, the northern deanery, no parish of his own. They discuss it for an hour and approve it, because the north is the north and nobody in the room wants to go there. He comes. The men who waited did not want that assignment, and know it, and the presbyterate has been consulted, which it had forgotten was possible.",
+          "effects": [
+            { "target": "relationship", "key": "@closest_classmate", "delta": 10 },
+            { "target": "reputation", "key": "brother_priests", "delta": -1 },
+            { "target": "stat", "key": "administration", "delta": 1 },
+            { "target": "flag", "key": "bp_classmate_on_loan", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bp_letter_at_seventy_five",
+      "phase": "bishop",
+      "pressure": ["ambition_vs_integrity", "doubt"],
+      "severity": "MAJOR",
+      "category": "personal",
+      "baseWeight": 10,
+      "suppressYears": 5,
+      "once": true,
+      "requires": [
+        { "type": "flag", "key": "study:see", "value": true },
+        { "type": "age", "op": ">=", "value": 74 }
+      ],
+      "title": "The Letter, Drafted Early",
+      "body": "The canon asks a bishop who has completed his seventy-fifth year to offer his resignation to the pope, and the pope, having considered the circumstances, provides. Every bishop knows the sentence. You have a year before it applies to you and you have begun the letter anyway, at night, in longhand, because the drafting is the part nobody sees and the sending is the part everybody does. There are three letters in the drawer. One is four lines: the canon, the date, the offer, the thanks, and it would be accepted within months and a successor named within the year, and you would be bishop emeritus in a room at the residence, or in a rectory at home in {diocese} if a pastor there would have you. One is a page, and it is the same offer with a paragraph about the diocese's circumstances, the shortage, the succession, and it asks, without asking, to be left in place a while; such letters are answered nunc pro tunc and a man can be left for years. One you have not finished, because it asks for something you are not sure you want. {@vicar_general} has noticed the light under the door.",
+      "flavorPrompt": "Three letters in a drawer, longhand at night, and the light under the door.",
+      "choices": [
+        {
+          "id": "four_lines",
+          "label": "The four lines. Send it the morning of the birthday and mean it",
+          "default": true,
+          "outcome": "It goes in the post the morning of the day, before Mass, and the nuncio's acknowledgment comes in a week and the acceptance in five months, and the name of the man who will follow you in nine. You have a year to hand him a diocese in order. Your priests read the speed of it as a kind of respect, for the canon and for them, and the ones who fought you say so first.",
+          "effects": [
+            { "target": "reputation", "key": "rome", "delta": 4 },
+            { "target": "reputation", "key": "brother_priests", "delta": 3 },
+            { "target": "stat", "key": "piety", "delta": 2 },
+            { "target": "trait", "key": "went when the canon said" },
+            { "target": "flag", "key": "bp_letter_four_lines", "value": true }
+          ]
+        },
+        {
+          "id": "ask_to_stay",
+          "label": "The page. Name the shortage and the succession and ask, without asking, to be left",
+          "outcome": "It is answered as such letters are answered: accepted, nunc pro tunc, the bishop to remain until further provision. Further provision takes three years. The people are glad, because they know you. The priests are less sure, because they know the phrase, and have watched other bishops use it, and have begun in their own minds to count the men who might follow you and to wonder which of them you are keeping the chair warm for.",
+          "effects": [
+            { "target": "reputation", "key": "rome", "delta": -2 },
+            { "target": "reputation", "key": "brother_priests", "delta": -2 },
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "stat", "key": "piety", "delta": -1 },
+            { "target": "flag", "key": "bp_letter_asked_to_stay", "value": true }
+          ]
+        },
+        {
+          "id": "going_home",
+          "label": "Finish the third: ask to go home to {diocese}, to a rectory and a Sunday Mass, and nothing else",
+          "requires": [{ "type": "relationship", "npcId": "@closest_classmate", "op": ">=", "value": 15 }],
+          "outcome": "The third letter is a page and a half and the last paragraph asks the Holy Father, if he sees fit, to let an old man go home. {@closest_classmate} has already said there is a room. The acceptance comes with a line, in the nuncio's own hand, that the request was noted and is unusual and is granted. The cathedral learns, when you go, that you had always meant to, and some of the people mind that more than the going.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 3 },
+            { "target": "reputation", "key": "rome", "delta": 1 },
+            { "target": "reputation", "key": "brother_priests", "delta": 1 },
+            { "target": "reputation", "key": "parishioners", "delta": -2 },
+            { "target": "relationship", "key": "@closest_classmate", "delta": 6 },
+            { "target": "flag", "key": "bp_letter_going_home", "value": true }
+          ]
+        },
+        {
+          "id": "ask_the_priests",
+          "label": "Ask the presbyteral council, in confidence, which letter they would have you send",
+          "requires": [{ "type": "see", "key": "presbyterate", "op": ">=", "value": 25 }],
+          "outcome": "You put the three letters on the table and leave the room for an hour, which no bishop they have served has done, and when you come back {@vicar_general} tells you what they said, which was not what you expected and was, on reflection, right. You send that one. It is not kept in confidence; nothing is; and the nunciature hears that a bishop asked his priests how to resign, and does not know what to make of it, and files it.",
+          "effects": [
+            { "target": "reputation", "key": "brother_priests", "delta": 5 },
+            { "target": "honesty", "key": "honesty", "delta": 1 },
+            { "target": "reputation", "key": "rome", "delta": -1 },
+            { "target": "relationship", "key": "@vicar_general", "delta": 5 },
+            { "target": "flag", "key": "bp_letter_asked_the_priests", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bp_consolation",
+      "phase": "bishop",
+      "pressure": ["doubt"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 8,
+      "suppressYears": 2,
+      "requires": [
+        { "type": "flag", "key": "study:see", "value": true },
+        { "type": "see", "key": "people", "op": ">=", "value": 10 }
+      ],
+      "bias": [{ "when": { "type": "see", "key": "presbyterate", "op": ">=", "value": 20 }, "multiplier": 1.5 }],
+      "title": "Beyond the Reservoir",
+      "body": "It is a confirmation in a parish of ninety families on the far side of the reservoir, and there are fourteen candidates, which is every child in the parish between fourteen and seventeen, because that is how it is done there. The pastor is one of the men from the county line, sober two years, and he has cut his own hair for the occasion. The hall afterward has been cooked for since Thursday. Nobody asks you about the roof, or the fund, or the closing, or the letter in the paper. A grandmother asks whether you were a farm boy, and accepts that you were not, and gives you a second plate. A boy you confirmed an hour ago wants to know whether the ring is real gold. The pastor stands at your elbow for the whole of the meal and says, once, very quietly, that they had not had a bishop out here in nine years, and then goes to get you coffee before you can answer. There is a finance council in the morning, and the driver has been asked to have you back by nine. The pastor has just asked whether you would stay for the rosary in the church, which is the parish's own custom, and takes forty minutes.",
+      "flavorPrompt": "Fourteen candidates, the pastor's own haircut, the second plate, and the rosary that takes forty minutes.",
+      "choices": [
+        {
+          "id": "stay",
+          "label": "Stay for the rosary, and the coffee after it, and be late",
+          "default": true,
+          "outcome": "Forty minutes on a kneeler at the front with fourteen teenagers behind you and their grandmothers behind them, and the pastor leading in a voice that has not been steady for long. Coffee after, and the drive home in the dark, and the finance council at nine with the bishop yawning. Nobody at the council knows why. Everyone beyond the reservoir does, and will tell it for years, and it is the only thing they will remember about you.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 2 },
+            { "target": "reputation", "key": "parishioners", "delta": 3 },
+            { "target": "reputation", "key": "brother_priests", "delta": 2 },
+            { "target": "stat", "key": "administration", "delta": -1 },
+            { "target": "flag", "key": "bp_stayed_for_the_rosary", "value": true }
+          ]
+        },
+        {
+          "id": "go",
+          "label": "Thank them, bless the hall, and go: the council is in the morning",
+          "outcome": "You bless the hall and the kitchen and the fourteen and the grandmother, who gives you a third plate wrapped in foil for the car. The pastor walks you out and says it was a good day and means it. The council at nine is well prepared and you are awake for it. On the drive back the reservoir is black and the plate is warm on the seat beside you, and you find that you have been happy for six hours and are not sure when that last happened.",
+          "effects": [
+            { "target": "stat", "key": "administration", "delta": 1 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "reputation", "key": "brother_priests", "delta": -1 },
+            { "target": "flag", "key": "bp_left_for_the_council", "value": true }
+          ]
+        },
+        {
+          "id": "kneel_in_the_back",
+          "label": "Ask the pastor to lead it, and kneel in the back with the grandmothers",
+          "requires": [{ "type": "stat", "key": "piety", "op": ">=", "value": 50 }],
+          "outcome": "He is startled and then he is not, and leads it from the front in the parish's own way, with the mysteries announced by the children and a hymn nobody printed. You kneel at the back beside the woman with the plates. It is the first rosary in some years that you have prayed rather than presided at. The pastor tells it, afterward, to every priest on the county line, and the county line, which does not trust bishops, begins to make an exception.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 3 },
+            { "target": "reputation", "key": "brother_priests", "delta": 3 },
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "stat", "key": "administration", "delta": -1 },
+            { "target": "flag", "key": "bp_knelt_in_the_back", "value": true }
+          ]
+        }
+      ]
+    }
+  ]
+}
