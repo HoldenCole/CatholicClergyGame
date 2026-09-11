@@ -3,7 +3,7 @@ import type { Pillar } from './character';
 import type { StatKey, ConstituencyKey } from './stats';
 
 /** Where he lives while away: a city for a degree, or the bishop's residence for a post. */
-export type StudyCity = 'rome' | 'washington' | 'residence' | 'campus' | 'hospital' | 'seminary' | 'chancery';
+export type StudyCity = 'rome' | 'washington' | 'residence' | 'campus' | 'hospital' | 'seminary' | 'chancery' | 'auxiliary' | 'see';
 
 /** A course of study away from the diocese. content/study/programs.json */
 export interface StudyProgramDef {
@@ -14,8 +14,8 @@ export interface StudyProgramDef {
   school: string;
   /** Where he lives: "the North American College" */
   residence: string;
-  /** A degree, or a post held away from any parish. */
-  kind: 'study' | 'post';
+  /** A degree, a post held away from any parish, or a see of his own: the last act. */
+  kind: 'study' | 'post' | 'see';
   /** Free hours a week after lectures, the chapel, and the house rule. */
   hours: number;
   /** The class line for the digest. */
@@ -43,6 +43,8 @@ export interface StudyActivityDef {
   credentialAfter?: { hours: number; credential: string; flag?: string; line: string };
   /** Applied once, the first week it is taken. */
   onFirst?: Effect[];
+  /** For a bishop: what an hour a week does to the see's dials. */
+  see?: Partial<Record<'presbyterate' | 'people' | 'rome' | 'money' | 'shortage', number>>;
   digest: string[];
 }
 

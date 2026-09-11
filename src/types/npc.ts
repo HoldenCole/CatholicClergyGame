@@ -87,4 +87,16 @@ export interface Npc {
   };
   /** Rolled at ordination for classmates; simulated forward each year. */
   trajectory?: Milestone[];
+  /** Parishioners: what the priest has done for this person and their family, in order. */
+  bonds?: Bond[];
+}
+
+/** One thing a priest did for a parishioner that the parish remembers. */
+export type BondKind = 'baptized' | 'married' | 'buried' | 'anointed' | 'confirmed' | 'counseled' | 'helped' | 'quarreled';
+
+export interface Bond {
+  kind: BondKind;
+  week: number;
+  /** "her daughter", "his father", "the two of them" */
+  who: string;
 }

@@ -37,6 +37,8 @@ export function describeUnmet(cond: Condition, state: GameState): string | null 
     case 'alignment': return cond.op === '>=' ? 'a more progressive record' : 'a more traditional record';
     case 'outspokenness': return cond.op === '>=' ? 'a louder public record' : 'a quieter public record';
     case 'years_ordained': return cond.op === '>=' ? `${cond.value} years ordained` : 'fewer years ordained';
+    case 'age': return cond.op === '<=' ? 'to be younger' : 'more years';
+    case 'see': return `the see's ${cond.key === 'years' ? 'years' : cond.key}`;
     case 'year': return cond.op === '>=' ? `year ${cond.value} of seminary` : null;
     case 'pillar': return `a stronger ${cond.key} pillar this year`;
     case 'role': return cond.value === 'pastor' ? 'a pastorate' : `to be ${cond.value.replace('_', ' ')}`;

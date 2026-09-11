@@ -48,7 +48,13 @@ describe('generation/world', () => {
 
   it('parishes are spread across the five kinds, plus the cathedral, with pastors and one live problem each', () => {
     const c = runs[0]![1]!;
-    expect(c.parishes.map((p) => p.kind)).toEqual(['flagship_suburban', 'struggling_urban', 'immigrant_growing', 'rural', 'difficult', 'flagship_suburban']);
+    const kinds = new Set(c.parishes.map((p) => p.kind));
+    for (const k of ['flagship_suburban', 'struggling_urban', 'immigrant_growing', 'rural', 'difficult']) expect(kinds.has(k as typeof c.parishes[number]['kind']), k).toBe(true);
+    expect(c.parishes.length).toBeGreaterThanOrEqual(18);
+    // The real churches keep their names and years; the rolled ones roll; no two share a name in one place.
+    const real = c.parishes.filter((p) => p.founded);
+    expect(real.length).toBeGreaterThanOrEqual(12);
+    expect(new Set(c.parishes.map((p) => `${p.name}|${p.place}`)).size).toBe(c.parishes.length);
     const cathedral = c.parishes.find((p) => p.cathedral)!;
     expect(cathedral.terrain).toBe('urban');
     expect(cathedral.school).toBe('none');
@@ -58,7 +64,7 @@ describe('generation/world', () => {
       expect(p.problem).toBeTruthy();
       expect(p.weeklyCollections).toBeGreaterThan(0);
     }
-    const immigrant = runs.map((r) => r[2]!.parishes[2]!);
+    const immigrant = runs.map((r) => r[2]!.parishes.find((p) => p.kind === 'immigrant_growing' && !p.founded)!);
     expect(immigrant.filter((p) => p.needsSpanish).length).toBeGreaterThan(immigrant.length * 0.8);
     const chanceries = runs.map((r) => r[0]!.npcs.filter((n) => n.role === 'official').length);
     expect(Math.min(...chanceries)).toBe(6);

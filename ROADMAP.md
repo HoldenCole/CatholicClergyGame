@@ -16,3 +16,11 @@ Strain wears the man but nothing ever breaks. Age and strain together should pro
 - Several named save slots beside the autosave, with the seed and the week shown; export and import already exist.
 - A shelf of finished careers: the summary the ending screen writes, the diocese, the years, the posts held, kept in the browser and exportable, so replaying different men is part of the game.
 - A "play this man again" from the shelf: same seed and creation answers, a fresh run.
+
+## Custom dioceses
+
+The five presets are plain data files in the schema a custom diocese would use (CLAUDE.md rule 5), so an in-game editor is mostly UI: name, see, region, size, wealth, media exposure, Rome connection, Latino share, growth, disposition and shortage biases, institutions, a flavor pool, and a dozen real parishes with `real` seeds. Save the result as a preset in the browser and offer it on the diocese cards beside the five. Kept on the roadmap; real churches for the five went in first.
+
+## A word with the people
+
+"Have a word" reaches the pastor, the staff, the bishop, group leaders, and classmates. The named parishioners the parish now remembers (bonds) should be next: three bands of exchanges for `parishioner`, with the bond phrase in the prose, so the widow whose husband you buried can be sat with.

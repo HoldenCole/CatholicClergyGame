@@ -120,8 +120,9 @@ export function generateParish(rng: Rng, preset: DiocesePreset, seed: DiocesePre
 
   const parish: Parish = {
     id,
-    name: rng.pick(seed.patrons),
-    place: rng.pick(seed.places),
+    name: seed.real?.name ?? rng.pick(seed.patrons),
+    place: seed.real?.place ?? rng.pick(seed.places),
+    ...(seed.real ? { founded: seed.real.founded } : {}),
     kind: seed.kind,
     terrain: seed.cathedral ? 'urban' : shape.terrain,
     households: seed.cathedral ? Math.max(households, 2400) : households,
@@ -164,9 +165,21 @@ function round2(x: number): number {
   return Math.round(x * 100) / 100;
 }
 
-/** The five parishes, spread deliberately across the kinds. DESIGN.md §9.1 */
+/**
+ * The parishes of the diocese: the real churches by name, and the rolled ones
+ * spread across the kinds, no two with the same name in the same place.
+ * DESIGN.md §9.1
+ */
 export function generateParishes(rng: Rng, preset: DiocesePreset, year: number): GeneratedParish[] {
-  return preset.parishSeeds.map((seed, i) => generateParish(rng, preset, seed, i, year));
+  const taken = new Set(preset.parishSeeds.filter((s) => s.real).map((s) => `${s.real!.name}|${s.real!.place}`));
+  return preset.parishSeeds.map((seed, i) => {
+    let made = generateParish(rng, preset, seed, i, year);
+    for (let tries = 0; !seed.real && taken.has(`${made.parish.name}|${made.parish.place}`) && tries < 6; tries++) {
+      made = { ...made, parish: { ...made.parish, name: rng.pick(seed.patrons), place: rng.pick(seed.places) } };
+    }
+    taken.add(`${made.parish.name}|${made.parish.place}`);
+    return made;
+  });
 }
 
 export const PROBLEM_LABEL: Record<string, string> = {

@@ -9,8 +9,14 @@ export const defaultAnswers: CreationAnswers = {
   path: 'college', field: 'philosophy', career: null, yearsWorked: 0, motive: 'priest', family: 'widowed_mother', past: null,
 };
 
-/** Play through everything with safe choices until the run ends or the week cap is reached. */
-export function playCareer(seed: string, diocese: string, maxWeeks: number, a: CreationAnswers = defaultAnswers): GameState {
+export type Policy = 'first' | 'last';
+
+/**
+ * Play through everything with safe choices until the run ends or the week
+ * cap is reached. `policy` picks the first or the last safe choice, the
+ * cautious man or the other one, so two runs from one seed can differ.
+ */
+export function playCareer(seed: string, diocese: string, maxWeeks: number, a: CreationAnswers = defaultAnswers, policy: Policy = 'first'): GameState {
   const s = useGameStore;
   s.getState().newGame({ seed, start: { year: 2010, month: 8, day: 20 } });
   s.getState().chooseDiocese(diocese);
@@ -24,7 +30,8 @@ export function playCareer(seed: string, diocese: string, maxWeeks: number, a: C
       const p = game.pending[0]!;
       const ev = eventById(p.eventId)!;
       const views = visibleChoices(ev, game, p.bindings);
-      const safe = views.find((v) => v.available && !v.choice.effects.some((e) => e.target === 'end')) ?? views.find((v) => v.available);
+      const safeAll = views.filter((v) => v.available && !v.choice.effects.some((e) => e.target === 'end'));
+      const safe = (policy === 'last' ? safeAll[safeAll.length - 1] : safeAll[0]) ?? views.find((v) => v.available);
       if (!safe) throw new Error(`no available choice for ${ev.id}`);
       s.getState().resolveEvent(safe.choice.id);
       continue;
@@ -39,10 +46,10 @@ export function playCareer(seed: string, diocese: string, maxWeeks: number, a: C
     switch (game.mode.kind) {
       case 'year_start': {
         const x = emphasisPointsFor(game) - 10;
-        s.getState().chooseEmphasis({ human: 3, spiritual: 3, intellectual: 2 + x, pastoral: 2 });
+        s.getState().chooseEmphasis(policy === 'last' ? { human: 2, spiritual: 2 + x, intellectual: 3, pastoral: 3 } : { human: 3, spiritual: 3, intellectual: 2 + x, pastoral: 2 });
         break;
       }
-      case 'summer': s.getState().chooseSummer('hard_parish'); break;
+      case 'summer': s.getState().chooseSummer(policy === 'last' ? 'chancery' : 'hard_parish'); break;
       case 'evaluation': s.getState().acknowledgeEvaluation(); break;
       case 'ordination': s.getState().ordain(); break;
       case 'assignment': s.getState().acceptAssignment(); break;

@@ -4,12 +4,12 @@ import { clubDefs } from '@/content/clubs';
 import { CONSTITUENCY_KEYS, STAT_KEYS, PILLARS, ARCHETYPES } from '@/types';
 import type { Condition, Effect, OfferDef } from '@/types';
 
-const PHASES = ['seminary', 'parochial_vicar', 'administrator', 'pastor', 'chancery', 'bishop'];
+const PHASES = ['seminary', 'parochial_vicar', 'administrator', 'pastor', 'chancery', 'bishop', 'study'];
 const CATEGORIES = ['academic', 'chancery', 'patronage', 'social', 'seminary'];
 const SELECTORS = [
   '@rector', '@spiritual_director', '@formation_advisor', '@vocation_director', '@professor_trad', '@professor_prog',
   '@bishop', '@mother', '@father', '@sibling', '@mentor_priest', '@home_pastor', '@closest_classmate', '@rival_classmate',
-  '@random_classmate', '@pastor', '@secretary', '@dre', '@music_director', '@maintenance', '@parishioner', '@brother_priest',
+  '@random_classmate', '@pastor', '@secretary', '@dre', '@music_director', '@maintenance', '@parishioner', '@bonded_parishioner', '@brother_priest',
   '@vicar_general', '@chancellor', '@vicar_for_clergy', '@group_leader',
 ];
 const CLUB_IDS = new Set(clubDefs.map((c) => c.id));
@@ -80,7 +80,7 @@ function checkOffer(o: OfferDef, file: string, problems: string[], ids: Set<stri
       if (!Array.isArray(c.weekly)) problems.push(`${where}: commitment.weekly`);
       else c.weekly.forEach((e) => checkEffect(e, `${where} › weekly`, problems));
     }
-    if (c.away !== undefined && !['rome_stl', 'cua_jcl', 'bishops_secretary', 'university_chaplain', 'hospital_chaplain', 'seminary_faculty', 'vicar_general'].includes(c.away)) problems.push(`${where}: unknown away program ${c.away}`);
+    if (c.away !== undefined && !['rome_stl', 'cua_jcl', 'bishops_secretary', 'university_chaplain', 'hospital_chaplain', 'seminary_faculty', 'vicar_general', 'auxiliary_bishop', 'diocesan_bishop'].includes(c.away)) problems.push(`${where}: unknown away program ${c.away}`);
     if (typeof c.completeOutcome !== 'string' || c.completeOutcome.length < 20) problems.push(`${where}: commitment.completeOutcome`);
   }
   if (o.failure) {

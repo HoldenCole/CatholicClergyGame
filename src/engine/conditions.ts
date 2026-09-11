@@ -73,6 +73,24 @@ export function evaluateCondition(
     }
     case 'weeks_served':
       return !!state.parish && compare(cond.op, state.parish.weeksServed, cond.value);
+    case 'age': {
+      const c = state.character;
+      if (!c) return false;
+      const year = new Date((state.clock.startDay + state.clock.week * 7) * 86_400_000).getUTCFullYear();
+      return compare(cond.op, year - (c.entryYear - c.background.entryAge), cond.value);
+    }
+    case 'bond': {
+      const pid = state.assignment?.parishId;
+      if (!pid) return false;
+      const n = Object.values(state.npcs).filter((x) => x.tags.includes(`parish:${pid}`)).reduce((sum, x) => sum + (x.bonds ?? []).filter((b) => cond.kind === 'any' || b.kind === cond.kind).length, 0);
+      return compare(cond.op, n, cond.value);
+    }
+    case 'see': {
+      const see = state.see;
+      if (!see) return false;
+      const v = cond.key === 'years' ? (state.clock.week - see.installedWeek) / 52 : see[cond.key];
+      return compare(cond.op, v, cond.value);
+    }
     case 'arc_weeks_left':
       return !!state.parish && compare(cond.op, state.parish.arcEndWeek - state.clock.week, cond.value);
     case 'bishop_alignment':

@@ -7,6 +7,7 @@ import { resolveSelector } from '@/engine/selectors';
 import { renderText } from '@/engine/text';
 import { applyStat } from './stats';
 import { applyReputation } from './reputation';
+import { applySeeHours } from '@/engine/see';
 import { describeUnmet } from './doors';
 import { freeHourShift } from './workweek';
 import { strainAfterWeek, strainOf, WEEK } from './week';
@@ -71,10 +72,12 @@ export function studyWeek(state: GameState, rng: Rng): { state: GameState; line:
   const phrases: string[] = [];
   const earned: string[] = [];
   let next: GameState = state;
+  let see = state.see ?? null;
   const bindings: Record<string, string> = {};
   for (const def of studyActivities) {
     const hours = study.routine[def.id] ?? 0;
     if (hours <= 0) continue;
+    if (def.see && see) see = applySeeHours(see, def.see, hours);
     for (const [k, rate] of Object.entries(def.stats) as [StatKey, number][]) stats = applyStat(stats, k, rate * hours);
     for (const r of def.reputation ?? []) reputation = applyReputation(reputation, r.key, r.delta * hours);
     for (const r of def.relationships ?? []) {
@@ -104,7 +107,7 @@ export function studyWeek(state: GameState, rng: Rng): { state: GameState; line:
   const strain = strainAfterWeek(state, 0, Math.max(0, freeHourShift(state)));
   if (strain >= WEEK.strainWorn) stats = applyStat(stats, 'piety', -WEEK.strainPietyDrain);
   const character = { ...next.character!, stats, reputation, credentials };
-  const result: GameState = { ...next, strain, npcs: { ...next.npcs, ...npcs }, flags: { ...next.flags, ...flags }, character, study: { ...study, hoursLogged, taken } };
+  const result: GameState = { ...next, ...(see ? { see } : {}), strain, npcs: { ...next.npcs, ...npcs }, flags: { ...next.flags, ...flags }, character, study: { ...study, hoursLogged, taken } };
   const head = studyProgram(study.program)?.classes ?? 'Lectures';
   const body = phrases.length ? `${head}; ${phrases.join(', ')}.` : `${head}, and the free hours went to the city.`;
   return { state: result, line: renderText([body, ...earned].join(' '), result, bindings) };

@@ -43,9 +43,13 @@ export interface DiocesePreset {
   complications: string[];
   /** Hidden complications the generator draws one of. */
   hiddenComplications: string[];
-  /** The five parish seeds: kind, place names, and patron pools. */
-  /** The parishes of the diocese; the one marked cathedral is the bishop's own church, downtown, with a rector. */
-  parishSeeds: { kind: ParishKind; places: string[]; patrons: string[]; cathedral?: boolean }[];
+  /**
+   * The parishes of the diocese. A seed with `real` is an actual church of
+   * that diocese, fixed by name and place and year; everything else about it
+   * rolls. A seed without one rolls its patron and place from the pools. The
+   * one marked cathedral is the bishop's own church, downtown, with a rector.
+   */
+  parishSeeds: { kind: ParishKind; places: string[]; patrons: string[]; cathedral?: boolean; real?: { name: string; place: string; founded: number } }[];
   /** Heritage weights for the presbyterate and laity. */
   heritage: Record<string, number>;
   seminaryName: string;

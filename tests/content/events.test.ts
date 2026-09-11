@@ -42,6 +42,7 @@ const SELECTORS = [
   '@music_director',
   '@maintenance',
   '@parishioner',
+  '@bonded_parishioner',
   '@brother_priest',
   '@vicar_general',
   '@chancellor',
@@ -55,7 +56,7 @@ const ROLES = ['parochial_vicar', 'administrator', 'pastor'];
 const EFFECT_TARGETS = [
   'stat', 'reputation', 'relationship', 'flag', 'group', 'money', 'ap', 'thread', 'position',
   'pillar', 'alignment', 'outspokenness', 'honesty', 'credential', 'trait', 'archetype',
-  'concern', 'risk', 'npc', 'end', 'decor', 'permission', 'trait_known', 'transfer', 'building', 'club',
+  'concern', 'risk', 'npc', 'end', 'decor', 'permission', 'trait_known', 'transfer', 'building', 'club', 'bond',
 ];
 const DECOR_PLACES = ['church', 'office', 'rectory', 'seminary_room', 'chancery'];
 const DECOR_SLOTS = ['sanctuary', 'altar_rail', 'orientation', 'confessionals', 'choir', 'statues', 'tabernacle', 'mass_form', 'wall', 'desk', 'floor', 'corner'];
@@ -116,7 +117,14 @@ function checkCondition(c: Condition, where: string, problems: Problem[]): void 
     case 'years_ordained':
     case 'weeks_served':
     case 'arc_weeks_left':
+    case 'age':
       if (!hasOp(c.op) || typeof c.value !== 'number') problems.push(`${where}: bad ${c.type} condition`);
+      break;
+    case 'bond':
+      if (!['any', 'baptized', 'married', 'buried', 'anointed', 'confirmed', 'counseled', 'helped', 'quarreled'].includes(c.kind) || !hasOp(c.op) || typeof c.value !== 'number') problems.push(`${where}: bad bond condition`);
+      break;
+    case 'see':
+      if (!['presbyterate', 'people', 'rome', 'money', 'shortage', 'years'].includes(c.key) || !hasOp(c.op) || typeof c.value !== 'number') problems.push(`${where}: bad see condition`);
       break;
     case 'group':
       if (!GROUP_KEYS.includes(c.key) || c.value === undefined) problems.push(`${where}: bad group condition`);

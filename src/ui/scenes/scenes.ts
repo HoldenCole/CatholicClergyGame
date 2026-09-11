@@ -267,11 +267,13 @@ function postScene(label: string, room: string, ids: [string, string, string, st
 export const STUDY_CAMPUS = postScene('The Newman Center', 'Back to your rooms', ['campus_door', 'campus_mass', 'campus_series', 'campus_parish', 'campus_faculty', 'campus_door']);
 export const STUDY_HOSPITAL = postScene('The hospital', 'Back to your quarters', ['wards', 'hospital_chapel', 'ethics_committee', 'hospital_supply', 'night_pager', 'wards']);
 export const STUDY_CHANCERY = postScene('The chancery', 'Back to the rectory', ['bishops_door', 'personnel_board', 'closings_list', 'tribunal_desk', 'the_money', 'deanery_visits']);
+export const STUDY_AUXILIARY = postScene('The chancery', 'Back to the rectory', ['confirmation_circuit', 'the_vicariate', 'standing_in', 'seminary_board', 'spanish_parishes', 'auxiliary_press']);
+export const STUDY_SEE = postScene('The see', "Back to the bishop's house", ['cathedral_and_confirmations', 'see_personnel', 'see_closings', 'see_money', 'see_seminary', 'see_rome']);
 export const STUDY_SEMINARY = postScene('The seminary', 'Back to your rooms', ['lectures', 'seminary_direction', 'formation_reports', 'seminary_supply', 'seminary_writing', 'lectures']);
 
-export function sceneById(id: SceneId, city: 'rome' | 'washington' | 'residence' | 'campus' | 'hospital' | 'seminary' | 'chancery' = 'rome'): SceneDef {
-  if (id === 'study_room') return city === 'rome' || city === 'washington' ? STUDY_ROOM : { ...STUDY_ROOM_RESIDENCE, label: city === 'residence' ? STUDY_ROOM_RESIDENCE.label : 'Your rooms', hotspots: STUDY_ROOM_RESIDENCE.hotspots.map((h) => (h.binds.kind === 'study_action' ? { ...h, binds: { kind: 'panel', panel: 'routine' } as const, label: 'The desk: the week' } : h)) };
-  if (id === 'study_city') return city === 'residence' ? STUDY_HOUSE : city === 'campus' ? STUDY_CAMPUS : city === 'hospital' ? STUDY_HOSPITAL : city === 'seminary' ? STUDY_SEMINARY : city === 'chancery' ? STUDY_CHANCERY : city === 'washington' ? STUDY_CITY_DC : STUDY_CITY;
+export function sceneById(id: SceneId, city: 'rome' | 'washington' | 'residence' | 'campus' | 'hospital' | 'seminary' | 'chancery' | 'auxiliary' | 'see' = 'rome'): SceneDef {
+  if (id === 'study_room') return city === 'rome' || city === 'washington' ? STUDY_ROOM : { ...STUDY_ROOM_RESIDENCE, label: city === 'residence' ? STUDY_ROOM_RESIDENCE.label : city === 'see' ? "The bishop's house" : 'Your rooms', hotspots: STUDY_ROOM_RESIDENCE.hotspots.map((h) => (h.binds.kind === 'study_action' ? { ...h, binds: { kind: 'panel', panel: 'routine' } as const, label: 'The desk: the week' } : h)) };
+  if (id === 'study_city') return city === 'residence' ? STUDY_HOUSE : city === 'campus' ? STUDY_CAMPUS : city === 'hospital' ? STUDY_HOSPITAL : city === 'seminary' ? STUDY_SEMINARY : city === 'chancery' ? STUDY_CHANCERY : city === 'auxiliary' ? STUDY_AUXILIARY : city === 'see' ? STUDY_SEE : city === 'washington' ? STUDY_CITY_DC : STUDY_CITY;
   if (id === 'seminary_room') return SEMINARY_SCENE;
   if (id === 'seminary_hall') return SEMINARY_HALL;
   if (id === 'chancery') return CHANCERY_SCENE;

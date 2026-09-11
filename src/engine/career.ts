@@ -8,6 +8,8 @@ import { handoffProject } from '@/systems/projects';
 import { ARC } from './parish';
 import { renderText } from './text';
 import { deliverLetter, yearInReview } from '@/systems/review';
+import { closeTenure } from '@/systems/tenures';
+import { seeYear } from './see';
 
 /** Invented. DESIGN 7.3: retirement letters go in at 75 and are often not accepted for years. */
 export const CAREER = {
@@ -63,7 +65,7 @@ export function careerYear(state: GameState, rng: Rng): GameState {
   let next = driftRome(state, rng.derive(`rome:${state.clock.week}`));
   const years = Math.round(yearsOrdained(next));
 
-  const succession = successionYear(next, rng.derive(`succession:${state.clock.week}`));
+  const succession = next.see ? { state: next, newBishop: null, lines: [] as string[], letter: undefined } : successionYear(next, rng.derive(`succession:${state.clock.week}`));
   next = succession.state;
   if (succession.newBishop) {
     next = addDigest(next, succession.lines);
@@ -85,7 +87,11 @@ export function careerYear(state: GameState, rng: Rng): GameState {
     next = addDigest(note(next, 'note', 'Renewed for a second term as pastor.'), ['A letter from the chancery: your term as pastor is renewed for six years. No one asked you.']);
   }
   // The year in review: a letter the man must read before the clock moves on. Not while he is being moved.
-  if (next.mode.kind === 'clock' || next.mode.kind === 'letter') {
+  if (next.see) {
+    const year = seeYear(next, rng.derive(`see-year:${state.clock.week}`));
+    next = deliverLetter(year.state, year.letter);
+    next = addDigest(next, [year.state.see!.years[year.state.see!.years.length - 1]!]);
+  } else if (next.mode.kind === 'clock' || next.mode.kind === 'letter') {
     const review = yearInReview(next);
     next = deliverLetter({ ...next, reviewBaseline: review.baseline }, review.letter);
   }
@@ -104,7 +110,7 @@ export function careerYear(state: GameState, rng: Rng): GameState {
 
 export function retire(state: GameState): GameState {
   return {
-    ...state,
+    ...closeTenure(state, 'retired'),
     speed: 'PAUSED',
     mode: { kind: 'ended', ending: 'retired', summary: careerSummary(state, 'retired') },
   };
@@ -112,7 +118,7 @@ export function retire(state: GameState): GameState {
 
 export function die(state: GameState): GameState {
   return {
-    ...state,
+    ...closeTenure(state, 'died in harness'),
     speed: 'PAUSED',
     mode: { kind: 'ended', ending: 'died', summary: careerSummary(state, 'died') },
   };
@@ -150,7 +156,8 @@ function letterFor(state: GameState, opening: Opening, role: Assignment['role'])
  */
 export function nextAssignment(state: GameState, rng: Rng): { state: GameState; decisions: Decision[] } {
   const { decisions, won } = boardDecision(state, rng);
-  let next = handoffProject(state, rng.derive(`handoff:${state.clock.week}`)).state;
+  let next = closeTenure(state, state.study ? 'the years ended' : won ? (won.opening.kind === 'pastor' ? 'appointed pastor elsewhere' : 'moved by the board') : 'moved by the board');
+  next = handoffProject(next, rng.derive(`handoff:${state.clock.week}`)).state;
   next = leaveCollapse(next);
   const c = next.character!;
   const carried = Math.round(c.reputation.parishioners * ARC.parishionersCarryover);
@@ -244,7 +251,9 @@ export function careerSummary(state: GameState, ending: 'retired' | 'died' | 'le
     ending === 'retired' ? `You retired at ${age}, ${years} years a priest.` :
     ending === 'died' ? `You died at ${age}, ${years} years a priest, ${state.assignment?.role === 'pastor' ? 'still pastor' : 'still in harness'}.` :
     `You left the priesthood at ${age}, after ${years} years.`;
+  const see = state.see;
   const arc =
+    see ? `You were named Bishop of ${see.see} and held ${see.name} for ${Math.max(1, Math.round((state.clock.week - see.installedWeek) / 52))} years: ${see.ordinations} ordained, ${see.closings} parish${see.closings === 1 ? '' : 'es'} closed, the priests ${see.presbyterate >= 20 ? 'with you' : see.presbyterate <= -20 ? 'against you' : 'watching'} at the end.` :
     promotions === 0 ? 'You were never made a pastor.' :
     `You were appointed ${promotions === 1 ? 'once' : `${promotions} times`}${passed ? ` and passed over ${passed === 1 ? 'once' : `${passed} times`}` : ''}.`;
   const bishops = successions === 0 ? 'You served one bishop.' : `You served ${successions + 1} bishops, and each read you differently.`;
@@ -263,7 +272,8 @@ export function careerSummary(state: GameState, ending: 'retired' | 'died' | 'le
  */
 export function directedTransfer(state: GameState, rng: Rng, kind: string, role: Assignment['role']): { state: GameState; moved: boolean } {
   if (!state.world) return { state, moved: false };
-  let next = handoffProject(state, rng.derive(`handoff:${state.clock.week}`)).state;
+  let next = closeTenure(state, "moved at the bishop's asking");
+  next = handoffProject(next, rng.derive(`handoff:${state.clock.week}`)).state;
   next = leaveCollapse(next);
   const c = next.character!;
   const carried = Math.round(c.reputation.parishioners * ARC.parishionersCarryover);

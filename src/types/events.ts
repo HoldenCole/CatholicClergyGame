@@ -97,6 +97,12 @@ export type Condition =
   | { type: 'figure' }
   /** How worn the man is, 0..100, from what he has cut out of his week to make hours. */
   | { type: 'strain'; op: Op; value: number }
+  /** Extension: the man's age in years. */
+  | { type: 'age'; op: Op; value: number }
+  /** Extension: how many bonds of a kind ('any' for all) he has with the people of the current parish. */
+  | { type: 'bond'; kind: string; op: Op; value: number }
+  /** Extension: the see he holds as bishop, one of its dials. */
+  | { type: 'see'; key: 'presbyterate' | 'people' | 'rome' | 'money' | 'shortage' | 'years'; op: Op; value: number }
   /**
    * Extension: some group of the current parish matches. When an event
    * carries group conditions, @group_leader binds to a matching group.
@@ -150,6 +156,8 @@ export type EffectTarget =
   | 'permission'
   /** key: selector or npc id. The player has seen through to that person's hidden trait. DESIGN §9.2. */
   | 'trait_known'
+  /** Extension: write a bond on a parishioner (key: selector or binding; value: the bond kind). */
+  | 'bond'
   /** Move the man now: key is a parish kind (or 'difficult'), value the role. The letter arrives the next week. */
   | 'transfer'
   /** Building condition of the current parish: key church | rectory | hall | school, delta. */

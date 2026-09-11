@@ -50,15 +50,20 @@ export function generateParishPeople(rng: Rng, parish: Parish, presetId: string,
     );
   }
   const count = rng.int(6, 9);
+  // Two of them are family: a parish remembers by surname.
+  const kin: string[] = [];
   for (let i = 0; i < count; i++) {
     const age = rng.int(19, 88);
     const birthYear = year - age;
     const heritage = heritageFor(rng, parish, presetId);
     const woman = rng.chance(0.55);
+    const rolled = woman ? rollFemaleName(rng, heritage) : rollMaleName(rng, heritage, eraForBirthYear(birthYear));
+    const name = i > 0 && i <= 2 && kin[0] ? { ...rolled, last: kin[0] } : rolled;
+    if (i === 0) kin.push(rolled.last);
     out.push(
       finishNpc(rng, {
         id: `${parish.id}_lay_${i + 1}`,
-        name: woman ? rollFemaleName(rng, heritage) : rollMaleName(rng, heritage, eraForBirthYear(birthYear)),
+        name,
         role: 'lay',
         title: '',
         birthYear,
