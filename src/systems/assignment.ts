@@ -25,7 +25,7 @@ export interface ParishScore {
   reasons: string[];
 }
 
-function terrainOf(state: GameState): string | null {
+export function terrainOf(state: GameState): string | null {
   for (const key of Object.keys(state.flags)) if (key.startsWith('home_terrain:') && state.flags[key]) return key.slice('home_terrain:'.length);
   return null;
 }
@@ -108,4 +108,28 @@ export function assignFirstParish(state: GameState, rng: Rng): Assignment {
     letter,
     reasons: best.reasons.length ? best.reasons : ['Someone had to go there, and the list was short'],
   };
+}
+
+/** The five things a man can ask the chancery for. DESIGN §7.4: he submits preferences; the bishop decides. */
+export type Preference = 'urban' | 'rural' | 'latino' | 'academic' | 'wherever';
+export const PREFERENCES: readonly Preference[] = ['urban', 'rural', 'latino', 'academic', 'wherever'] as const;
+export const PREFERENCE_LABEL: Record<Preference, { label: string; blurb: string }> = {
+  urban: { label: 'A city parish', blurb: 'Old stone, old families, the neighborhood that was a nation once.' },
+  rural: { label: 'A country parish', blurb: 'Two churches forty miles apart and a truck.' },
+  latino: { label: 'A Spanish-speaking parish', blurb: 'Where the diocese is growing and the pews are full at noon.' },
+  academic: { label: 'Somewhere with a school and a library', blurb: 'The flagship, the university parish, the place with a lecture series.' },
+  wherever: { label: 'Wherever the bishop needs me', blurb: 'The answer they hope for. It is remembered, and it is used.' },
+};
+
+export function currentPreference(state: GameState): Preference | null {
+  for (const p of PREFERENCES) if (state.flags[`pref_${p}`]) return p;
+  return null;
+}
+
+/** Set one preference and clear the others; a man asks for one thing. */
+export function setPreference(state: GameState, pref: Preference): GameState {
+  const flags = { ...state.flags };
+  for (const p of PREFERENCES) delete flags[`pref_${p}`];
+  flags[`pref_${pref}`] = true;
+  return { ...state, flags, career: [...state.career, { week: state.clock.week, kind: 'note', text: `Told the chancery: ${PREFERENCE_LABEL[pref].label.toLowerCase()}.` }] };
 }

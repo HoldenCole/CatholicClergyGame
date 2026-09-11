@@ -1,4 +1,5 @@
-import type { GameState, Project, ProjectDef, ProjectType } from '@/types';
+import type { GameState, Parish, Project, ProjectDef, ProjectType } from '@/types';
+import type { Rng } from '@/engine/rng';
 import { applyEffects } from '@/engine/effects';
 import projects from '@/content/parish/projects.json';
 import type { Effect } from '@/types';
@@ -77,25 +78,7 @@ export function projectWeek(state: GameState): { state: GameState; line: string 
   const def = projectDef(p.type);
   next = applyEffects(next, completionEffects(p.type));
   const world = next.world!;
-  const parishes = world.parishes.map((parish) => {
-    if (parish.id !== p.parishId) return parish;
-    switch (p.type) {
-      case 'renovation':
-        return { ...parish, buildings: { ...parish.buildings, church: 95, hall: Math.max(parish.buildings.hall, 70) } };
-      case 'restoration':
-        return { ...parish, buildings: { ...parish.buildings, church: 100 }, alignment: Math.max(-100, parish.alignment - 10) };
-      case 'save_school':
-        return { ...parish, school: 'open' as const, buildings: { ...parish.buildings, school: Math.max(parish.buildings.school ?? 0, 70) } };
-      case 'close_school':
-        return { ...parish, school: 'none' as const, buildings: { ...parish.buildings, school: null } };
-      case 'liturgical_change':
-        return { ...parish, alignment: Math.max(-100, Math.min(100, parish.alignment + Math.sign(next.character!.alignment) * 15)) };
-      case 'found_mission':
-        return { ...parish, households: parish.households + 150 };
-      default:
-        return parish;
-    }
-  });
+  const parishes = applyProjectToParishes(world.parishes, p, next.character!.alignment);
   const debt = p.type === 'debt_retirement' ? 0 : next.parish!.finance.debt;
   return {
     state: {
@@ -107,4 +90,48 @@ export function projectWeek(state: GameState): { state: GameState; line: string 
     },
     line: `${def.label} is done.`,
   };
+}
+
+/** What a finished project does to the parish record, whoever finishes it. */
+function applyProjectToParishes(parishes: Parish[], p: Project, alignment: number): Parish[] {
+  return parishes.map((parish) => {
+    if (parish.id !== p.parishId) return parish;
+    switch (p.type) {
+      case 'renovation':
+        return { ...parish, buildings: { ...parish.buildings, church: 95, hall: Math.max(parish.buildings.hall, 70) } };
+      case 'restoration':
+        return { ...parish, buildings: { ...parish.buildings, church: 100 }, alignment: Math.max(-100, parish.alignment - 10) };
+      case 'save_school':
+        return { ...parish, school: 'open' as const, buildings: { ...parish.buildings, school: Math.max(parish.buildings.school ?? 0, 70) } };
+      case 'close_school':
+        return { ...parish, school: 'none' as const, buildings: { ...parish.buildings, school: null } };
+      case 'liturgical_change':
+        return { ...parish, alignment: Math.max(-100, Math.min(100, parish.alignment + Math.sign(alignment) * 15)) };
+      case 'found_mission':
+        return { ...parish, households: parish.households + 150 };
+      default:
+        return parish;
+    }
+  });
+}
+
+/** DESIGN 8.3: how likely a successor is to keep a project, invented. */
+export const HANDOFF = { base: 0.35, perProgress: 0.45 } as const;
+
+/**
+ * On transfer, a project survives only if the successor keeps it. The
+ * further along it is, the likelier; if kept, he finishes it and the
+ * parish gets the building, the school, or the mission, though not the
+ * standing the man who began it would have had.
+ */
+export function handoffProject(state: GameState, rng: Rng): { state: GameState; kept: boolean | null } {
+  const p = state.project;
+  if (!p || !state.world || !state.parish || p.parishId !== state.parish.parishId) return { state, kept: null };
+  const def = projectDef(p.type);
+  const progress = Math.min(1, Math.max(0, (state.clock.week - p.startWeek) / Math.max(1, p.endWeek - p.startWeek)));
+  const kept = rng.chance(HANDOFF.base + HANDOFF.perProgress * progress);
+  const note = (text: string): GameState => ({ ...state, career: [...state.career, { week: state.clock.week, kind: 'project', text }] });
+  if (!kept) return { state: { ...note(`Abandoned by your successor: ${def.label.toLowerCase()} at {parish}.`), project: null }, kept };
+  const parishes = applyProjectToParishes(state.world.parishes, p, state.character!.alignment);
+  return { state: { ...note(`Your successor kept ${def.label.toLowerCase()} at {parish} and finished it.`), world: { ...state.world, parishes }, project: null }, kept };
 }

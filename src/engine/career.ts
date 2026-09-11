@@ -4,6 +4,7 @@ import { decide } from '@/systems/promotion';
 import { openingBlurb, playerCandidate, refreshOpenings, rivalsFor } from '@/systems/openings';
 import { advanceTrajectories, rollTrajectories } from '@/systems/trajectories';
 import { driftRome, successionYear } from '@/systems/succession';
+import { handoffProject } from '@/systems/projects';
 import { ARC } from './parish';
 import { renderText } from './text';
 
@@ -73,6 +74,11 @@ export function careerYear(state: GameState, rng: Rng): GameState {
   const openings = refreshOpenings(next, rng.derive(`openings:${state.clock.week}`));
   next = addDigest(openings.state, openings.lines);
 
+  // A pastor's six-year term, renewed without ceremony unless content says otherwise. DESIGN §8.1
+  if (next.assignment?.role === 'pastor' && next.parish && next.parish.weeksServed >= CAREER.pastorTermYears * 52 && !next.flags.term_renewed) {
+    next = { ...next, flags: { ...next.flags, term_renewed: true } };
+    next = addDigest(note(next, 'note', 'Renewed for a second term as pastor.'), ['A letter from the chancery: your term as pastor is renewed for six years. No one asked you.']);
+  }
   const age = playerAge(next);
   if (age >= CAREER.retirementAge) {
     const accepted = age >= CAREER.forcedRetirementAge || rng.chance(CAREER.retirementAcceptedPerYear);
@@ -134,7 +140,8 @@ function letterFor(state: GameState, opening: Opening, role: Assignment['role'])
  */
 export function nextAssignment(state: GameState, rng: Rng): { state: GameState; decisions: Decision[] } {
   const { decisions, won } = boardDecision(state, rng);
-  let next = state;
+  let next = handoffProject(state, rng.derive(`handoff:${state.clock.week}`)).state;
+  next = leaveCollapse(next);
   const c = next.character!;
   const carried = Math.round(c.reputation.parishioners * ARC.parishionersCarryover);
   next = { ...next, character: { ...c, reputation: { ...c.reputation, parishioners: carried } } };
@@ -157,7 +164,10 @@ export function nextAssignment(state: GameState, rng: Rng): { state: GameState; 
     const lost = decisions.find((d) => d.opening.parishId) ?? decisions[0];
     const reasons = lost ? lost.reasons : ['The board had nothing else for you this year'];
     assignment = { parishId: parish.id, role: 'parochial_vicar', startWeek: next.clock.week, letter: letterFor(next, opening, 'parochial_vicar'), reasons };
-    if (lost) next = note(next, 'passed_over', `Passed over for ${openingBlurb(next, lost.opening).split(':')[0]}: ${lost.reasons.slice(0, 2).join('; ')}.`);
+    if (lost) {
+      next = note(next, 'passed_over', `Passed over for ${openingBlurb(next, lost.opening).split(':')[0]}: ${lost.reasons.slice(0, 2).join('; ')}.`);
+      next = { ...next, flags: { ...next.flags, passed_over: true } };
+    }
     next = note(next, 'assignment', `Sent as parochial vicar to ${parish.name}, ${parish.place}.`);
   }
   return {
@@ -170,7 +180,25 @@ export function nextAssignment(state: GameState, rng: Rng): { state: GameState; 
 export function beginCareer(state: GameState, rng: Rng): GameState {
   let next = rollTrajectories(state, rng.derive('trajectories'));
   next = { ...next, romeTemperament: Math.round(rng.derive('rome').gaussian() * 30) };
-  return note(next, 'note', `Ordained at ${playerAge(next)} for ${next.world?.diocese.visible.name ?? 'the diocese'}.`);
+  const age = playerAge(next);
+  // DESIGN §7.2: the maturity curve is read by content as well as by the board.
+  next = { ...next, flags: { ...next.flags, ...(age >= 32 ? { ordained_late: true } : {}), ...(age < 30 ? { ordained_young: true } : {}) } };
+  return note(next, 'note', `Ordained at ${age} for ${next.world?.diocese.visible.name ?? 'the diocese'}.`);
+}
+
+/** DESIGN §4.3: a parish that depended on a charismatic man personally collapses a little when he leaves. */
+export const COLLAPSE = { charisma: 70, support: 40, households: 0.08, collections: 0.1 } as const;
+
+function leaveCollapse(state: GameState): GameState {
+  const c = state.character;
+  const pid = state.parish?.parishId;
+  if (!c || !pid || !state.world) return state;
+  if (c.stats.charisma < COLLAPSE.charisma || c.reputation.parishioners < COLLAPSE.support) return state;
+  const parishes = state.world.parishes.map((p) =>
+    p.id === pid ? { ...p, households: Math.round(p.households * (1 - COLLAPSE.households)), weeklyCollections: Math.round(p.weeklyCollections * (1 - COLLAPSE.collections)) } : p,
+  );
+  const name = state.world.parishes.find((p) => p.id === pid)?.name ?? 'the parish';
+  return note({ ...state, world: { ...state.world, parishes }, flags: { ...state.flags, left_a_collapse: true } }, 'note', `${name} was yours in a way a parish should not be; the pews thin after you go.`);
 }
 
 /** DESIGN 15: a career summary that reads like a life rather than a score. */

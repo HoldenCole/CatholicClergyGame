@@ -5,12 +5,16 @@ import { applyEffects } from '@/engine/effects';
 import { commitmentAp } from '@/engine/offers';
 import { seasonOf } from '@/engine/time';
 import { decayWeek } from './stats';
-import { fadeReputation } from './reputation';
+import { applyReputation, fadeReputation } from './reputation';
+import { terrainOf } from './assignment';
 import { groupRelief, groupsWeek, finishFounding } from './groups';
 import type { Rng } from '@/engine/rng';
 
 /** Tunables for the weekly loop. DESIGN 2.6 and 8.1; numbers not in the design are invented. */
 export const WEEK = {
+  /** Lay support drifts a little each week toward or away from a man from that kind of place. Invented. */
+  terrainMatchPerWeek: 0.06,
+  terrainMismatchPerWeek: -0.04,
   baseAp: { parochial_vicar: 10, administrator: 10, pastor: 10 } as Record<Role, number>,
   /** Extra administrative floor by role, reducible by Administration. */
   adminFloor: { parochial_vicar: 0, administrator: 1, pastor: 2 } as Record<Role, number>,
@@ -173,6 +177,13 @@ export function resolveWeek(state: GameState, rng: Rng): { state: GameState; led
   // Decay.
   const c = next.character!;
   next = { ...next, character: fadeReputation({ ...c, stats: decayWeek(c.stats, { adminAp, theologyUsed, knowledgeUsed }) }) };
+  // DESIGN §3.2: home terrain is a standing pull on lay support, for or against.
+  const terrain = terrainOf(next);
+  const here = next.world!.parishes.find((p) => p.id === parish.parishId)!;
+  if (terrain && terrain !== 'none') {
+    const pull = terrain === here.terrain ? WEEK.terrainMatchPerWeek : WEEK.terrainMismatchPerWeek;
+    next = { ...next, character: { ...next.character!, reputation: applyReputation(next.character!.reputation, 'parishioners', pull) } };
+  }
 
   // Finance.
   const world = next.world!;

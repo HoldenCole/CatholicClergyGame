@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { allEvents, eventFiles } from '@/content';
 import { decorOptions } from '@/systems/decorState';
+import { actionDefs, obligationDefs } from '@/content/parish';
 import { CONSTITUENCY_KEYS, EVENT_CATEGORIES, SEVERITIES, STAT_KEYS, PILLARS, ARCHETYPES } from '@/types';
 import type { Condition, Effect, GameEvent } from '@/types';
 
@@ -54,13 +55,14 @@ const ROLES = ['parochial_vicar', 'administrator', 'pastor'];
 const EFFECT_TARGETS = [
   'stat', 'reputation', 'relationship', 'flag', 'group', 'money', 'ap', 'thread', 'position',
   'pillar', 'alignment', 'outspokenness', 'honesty', 'credential', 'trait', 'archetype',
-  'concern', 'risk', 'npc', 'end', 'decor', 'permission',
+  'concern', 'risk', 'npc', 'end', 'decor', 'permission', 'trait_known',
 ];
 const DECOR_PLACES = ['church', 'office', 'rectory', 'seminary_room', 'chancery'];
 const DECOR_SLOTS = ['sanctuary', 'altar_rail', 'orientation', 'confessionals', 'choir', 'statues', 'tabernacle', 'mass_form', 'wall', 'desk', 'floor', 'corner'];
 const LITURGICAL_TOPICS = ['ad_orientem', 'latin_mass', 'altar_rail', 'tabernacle', 'renovation'];
 const BISHOP_KEYS = ['management', 'priority', 'rewards', 'cannotTolerate', 'stance'];
 const DECOR_IDS = new Set(decorOptions.map((o) => o.id));
+const ROUTINE_KEYS = new Set([...actionDefs.map((a) => a.id), ...obligationDefs.map((o) => o.key)]);
 
 type Problem = string;
 
@@ -112,13 +114,24 @@ function checkCondition(c: Condition, where: string, problems: Problem[]): void 
       if (!ROLES.includes(c.value)) problems.push(`${where}: bad role ${c.value}`);
       break;
     case 'years_ordained':
-      if (!hasOp(c.op) || typeof c.value !== 'number') problems.push(`${where}: bad years_ordained condition`);
+    case 'weeks_served':
+    case 'arc_weeks_left':
+      if (!hasOp(c.op) || typeof c.value !== 'number') problems.push(`${where}: bad ${c.type} condition`);
       break;
     case 'group':
       if (!GROUP_KEYS.includes(c.key) || c.value === undefined) problems.push(`${where}: bad group condition`);
       break;
     case 'decor':
       if (!DECOR_PLACES.includes(c.place) || !DECOR_SLOTS.includes(c.slot) || !DECOR_IDS.has(c.value)) problems.push(`${where}: bad decor condition ${JSON.stringify(c)}`);
+      break;
+    case 'position':
+      if (typeof c.topic !== 'string' || !hasOp(c.op) || typeof c.value !== 'number') problems.push(`${where}: bad position condition`);
+      break;
+    case 'routine':
+      if (typeof c.key !== 'string' || !hasOp(c.op) || typeof c.value !== 'number') problems.push(`${where}: bad routine condition`);
+      else if (!ROUTINE_KEYS.has(c.key)) problems.push(`${where}: unknown routine key ${c.key}`);
+      break;
+    case 'figure':
       break;
     case 'bishop':
       if (!BISHOP_KEYS.includes(c.key)) problems.push(`${where}: bad bishop key ${String(c.key)}`);
@@ -149,7 +162,7 @@ function checkEffect(e: Effect, where: string, problems: Problem[]): void {
   if (e.target === 'pillar' && !PILLARS.includes(e.key as never)) problems.push(`${where}: bad pillar key ${e.key}`);
   if (e.target === 'reputation' && !CONSTITUENCY_KEYS.includes(e.key as never)) problems.push(`${where}: bad reputation key ${e.key}`);
   if (e.target === 'archetype' && !ARCHETYPES.includes(e.key as never)) problems.push(`${where}: bad archetype ${e.key}`);
-  if ((e.target === 'relationship' || e.target === 'npc') && e.key.startsWith('@') && !SELECTORS.includes(e.key)) {
+  if ((e.target === 'relationship' || e.target === 'npc' || e.target === 'trait_known') && e.key.startsWith('@') && !SELECTORS.includes(e.key)) {
     problems.push(`${where}: unknown selector ${e.key}`);
   }
   if (e.target === 'npc' && !NPC_STATUSES.includes(String(e.value))) problems.push(`${where}: npc effect needs a status value`);

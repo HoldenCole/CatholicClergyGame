@@ -103,6 +103,7 @@ export function startAssignment(state: GameState, rng: Rng): GameState {
 
   return {
     ...state,
+    phase: assignment.role,
     npcs,
     groups,
     world: { ...world, parishes },
