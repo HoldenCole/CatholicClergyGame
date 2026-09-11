@@ -14,6 +14,7 @@ import type {
 import { currentDecor, placeKey } from '@/systems/decorState';
 import { applyReputation, clampSigned } from '@/systems/reputation';
 import { applyStat } from '@/systems/stats';
+import { closeTenure } from '@/systems/tenures';
 import { resolveSelector } from './selectors';
 
 export class EffectError extends Error {
@@ -133,7 +134,7 @@ export function applyEffect(
     }
     case 'end':
       return {
-        ...state,
+        ...closeTenure(state, effect.key === 'left_priesthood' ? 'left the priesthood' : effect.key.replace(/_/g, ' ')),
         speed: 'PAUSED',
         mode: { kind: 'ended', ending: effect.key as Ending, summary: String(effect.value ?? '') },
       };

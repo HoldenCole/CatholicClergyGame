@@ -248,3 +248,52 @@ describe('the chancery tier', () => {
     expect(eventById('vg_board_friend')).toBeDefined();
   });
 });
+
+describe('the ending as a life', () => {
+  it('closes a tenure when a post ends and reads the life back', async () => {
+    const { closeTenure, allTenures, openTenure } = await import('@/systems/tenures');
+    const { lifeOf } = await import('@/systems/life');
+    const { die } = await import('@/engine/career');
+    const s = parishState('life');
+    const open = openTenure(s)!;
+    expect(open.kind).toBe('parish');
+    expect(open.label).toBe('Parochial vicar');
+    const closed = closeTenure(s, 'moved by the board');
+    expect(closed.tenures).toHaveLength(1);
+    expect(closed.tenures![0]!.left).toBe('moved by the board');
+    // The open post is listed once, even after the ending closed it.
+    const dead = die({ ...s, flags: { ...s.flags, ordination_week: s.clock.week - 52 * 20 } });
+    expect(dead.mode.kind).toBe('ended');
+    expect(allTenures(dead)).toHaveLength(1);
+    expect(allTenures(dead)[0]!.left).toBe('died in harness');
+    const life = lifeOf(dead);
+    expect(life.years).toBe(20);
+    expect(life.posts[0]!.years).toMatch(/months|year/);
+    expect(life.bishops.length).toBeGreaterThanOrEqual(1);
+    expect(life.bishops[0]!.reading).toMatch(/ordained you/);
+    expect(life.record.standing).toBeTruthy();
+  });
+});
+
+describe('the digest, read', () => {
+  it('sorts lines into lanes and pulls the numbers out of the money line', async () => {
+    const { laneOf, numbersOf, readDigest } = await import('@/systems/digest');
+    expect(laneOf('Week of 12 May 2024 · Easter')).toBe('header');
+    expect(laneOf('Collections $8,889, above the usual $7,665. Attendance 44%.')).toBe('money');
+    expect(laneOf('Knights of Columbus Council is fading.')).toBe('people');
+    expect(laneOf('The quarterly assessment went to the chancery.')).toBe('money');
+    expect(laneOf('You are tired in a way sleep does not fix.')).toBe('you');
+    expect(laneOf('Rome has named Bishop X Y to Chicago.')).toBe('diocese');
+    expect(numbersOf({ week: 1, lines: ['Collections $8,889, above the usual $7,665. Attendance 44%, up.'] })).toEqual({ collections: 8889, usual: 7665, attendance: 44 });
+    const weeks = readDigest([
+      { week: 1, lines: ['Week of 1 May 2024 · Easter', 'Collections $7,000, about the usual $7,000. Attendance 44%.'] },
+      { week: 2, lines: ['Week of 8 May 2024 · Easter', 'Collections $8,000, above the usual $7,000. Attendance 45%, up.', 'The Trust: Report it to the diocesan finance office and let them tell you what it is.'] },
+    ], 5);
+    expect(weeks[0]!.week).toBe(2);
+    expect(weeks[0]!.moneySign).toBe(1);
+    expect(weeks[0]!.pewsSign).toBe(1);
+    expect(weeks[0]!.lanes.decided).toHaveLength(1);
+    expect(weeks[0]!.eventful).toBe(true);
+    expect(weeks[1]!.eventful).toBe(false);
+  });
+});

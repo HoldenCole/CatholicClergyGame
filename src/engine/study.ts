@@ -4,6 +4,7 @@ import { studyProgram } from '@/content/study';
 import { applyEffects } from './effects';
 import { handoffProject } from '@/systems/projects';
 import { refreshOpenings } from '@/systems/openings';
+import { closeTenure } from '@/systems/tenures';
 import { nextAssignment } from './career';
 import { ARC } from './parish';
 
@@ -26,7 +27,8 @@ export function beginStudy(state: GameState, def: OfferDef, failed: boolean, rng
   const c = def.accept.commitment;
   const program = c?.away ? studyProgram(c.away) : undefined;
   if (!c || !program) throw new Error(`offer ${def.id} is not a course of study`);
-  let next = state.parish ? handoffProject(state, rng.derive(`handoff:${state.clock.week}`)).state : state;
+  let next = closeTenure(state, program.kind === 'post' ? `left for ${program.label.toLowerCase()}` : `sent to ${CITY_WORD[program.city]}`);
+  next = next.parish ? handoffProject(next, rng.derive(`handoff:${state.clock.week}`)).state : next;
   const ch = next.character!;
   const carried = Math.round(ch.reputation.parishioners * ARC.parishionersCarryover);
   next = { ...next, character: { ...ch, reputation: { ...ch.reputation, parishioners: carried } } };

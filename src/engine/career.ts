@@ -8,6 +8,7 @@ import { handoffProject } from '@/systems/projects';
 import { ARC } from './parish';
 import { renderText } from './text';
 import { deliverLetter, yearInReview } from '@/systems/review';
+import { closeTenure } from '@/systems/tenures';
 
 /** Invented. DESIGN 7.3: retirement letters go in at 75 and are often not accepted for years. */
 export const CAREER = {
@@ -104,7 +105,7 @@ export function careerYear(state: GameState, rng: Rng): GameState {
 
 export function retire(state: GameState): GameState {
   return {
-    ...state,
+    ...closeTenure(state, 'retired'),
     speed: 'PAUSED',
     mode: { kind: 'ended', ending: 'retired', summary: careerSummary(state, 'retired') },
   };
@@ -112,7 +113,7 @@ export function retire(state: GameState): GameState {
 
 export function die(state: GameState): GameState {
   return {
-    ...state,
+    ...closeTenure(state, 'died in harness'),
     speed: 'PAUSED',
     mode: { kind: 'ended', ending: 'died', summary: careerSummary(state, 'died') },
   };
@@ -150,7 +151,8 @@ function letterFor(state: GameState, opening: Opening, role: Assignment['role'])
  */
 export function nextAssignment(state: GameState, rng: Rng): { state: GameState; decisions: Decision[] } {
   const { decisions, won } = boardDecision(state, rng);
-  let next = handoffProject(state, rng.derive(`handoff:${state.clock.week}`)).state;
+  let next = closeTenure(state, state.study ? 'the years ended' : won ? (won.opening.kind === 'pastor' ? 'appointed pastor elsewhere' : 'moved by the board') : 'moved by the board');
+  next = handoffProject(next, rng.derive(`handoff:${state.clock.week}`)).state;
   next = leaveCollapse(next);
   const c = next.character!;
   const carried = Math.round(c.reputation.parishioners * ARC.parishionersCarryover);
@@ -263,7 +265,8 @@ export function careerSummary(state: GameState, ending: 'retired' | 'died' | 'le
  */
 export function directedTransfer(state: GameState, rng: Rng, kind: string, role: Assignment['role']): { state: GameState; moved: boolean } {
   if (!state.world) return { state, moved: false };
-  let next = handoffProject(state, rng.derive(`handoff:${state.clock.week}`)).state;
+  let next = closeTenure(state, "moved at the bishop's asking");
+  next = handoffProject(next, rng.derive(`handoff:${state.clock.week}`)).state;
   next = leaveCollapse(next);
   const c = next.character!;
   const carried = Math.round(c.reputation.parishioners * ARC.parishionersCarryover);

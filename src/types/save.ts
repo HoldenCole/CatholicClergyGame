@@ -23,6 +23,7 @@ import type { Phase } from './stats';
 import type { StudyState } from './study';
 import type { ClubsState } from './clubs';
 import type { TalksState } from './talks';
+import type { Tenure } from './tenure';
 import type { Letter } from './mode';
 import type { Beat, Clock, Speed } from './time';
 
@@ -68,6 +69,8 @@ export interface GameState {
   settings?: GameSettings;
   /** Societies he belongs to. Absent in older saves. */
   clubs?: ClubsState;
+  /** Every post held, in order, written as each ends. Absent in older saves. */
+  tenures?: Tenure[];
   /** Words had with people: cooldowns and the exchanges. Absent in older saves. */
   talks?: TalksState;
   /** Letters read, most recent last: the year in review, the new bishop's reading. */
