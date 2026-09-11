@@ -5,6 +5,7 @@ import { groupTrend, mayReplaceLeader, parishGroups, vitalityBand } from '@/syst
 import { hoursOf } from '@/systems/week';
 import type { GroupType } from '@/types';
 import Sheet from '../Sheet';
+import TalkButton, { LastTalk } from './TalkButton';
 
 const AGENDA_TEXT: Record<string, string> = {
   saintly: 'does it for the right reasons',
@@ -67,6 +68,8 @@ export default function GroupsPanel() {
                         replace
                       </button>
                     )}
+                    <span className="ml-2"><TalkButton npcId={leader.id} /></span>
+                    <LastTalk npcIds={[leader.id]} />
                   </div>
                 )}
               </div>

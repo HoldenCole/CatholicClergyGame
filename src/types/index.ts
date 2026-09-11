@@ -18,3 +18,4 @@ export * from './career';
 export * from './decor';
 export * from './study';
 export * from './clubs';
+export * from './talks';
