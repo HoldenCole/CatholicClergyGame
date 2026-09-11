@@ -25,7 +25,7 @@ export function laneOf(line: string): Lane {
   if (colon > 0 && TITLES.has(line.slice(0, colon))) return 'decided';
   if (AMBIENT.has(line)) return 'around';
   if (/Collections \$|assessment|\bdebt\b|\$[\d,]+|the fund|reserve|bequest|paid down|invested|withdrew/i.test(line)) return 'money';
-  if (/is fading|is thriving|is withering|steady again|has folded|coming back|A word with|has been made|has been named|has left|has died|left the priesthood|leads it|new leader|\bwedding|\bfuneral|baptism/i.test(line)) return 'people';
+  if (/^You (baptized|married|buried|anointed|sat with|prepared|helped|quarreled)|is fading|is thriving|is withering|steady again|has folded|coming back|A word with|has been made|has been named|has left|has died|left the priesthood|leads it|new leader|\bwedding|\bfuneral|baptism/i.test(line)) return 'people';
   if (/chancery|bishop|Rome has|the see|diocese|the board|vicar for clergy|chancellor|personnel|letter of appointment|renewed/i.test(line)) return 'diocese';
   if (/^You |^Your |tired in a way|slept, and|sick for two days|not enough of you|ran over|homily was from the file|the club|the circle|at the gym|ran with|hours? at|\bstudy\b|prayer|retreat/i.test(line)) return 'you';
   return 'parish';

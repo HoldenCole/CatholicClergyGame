@@ -14,6 +14,7 @@ import type { Rng } from './rng';
  *   @pastor                                       pastor of the current parish
  *   @secretary @dre @music_director @maintenance  parish staff by tag
  *   @parishioner                                  a random lay NPC of the current parish
+ *   @bonded_parishioner                           one of them the priest has already done something for
  *   @brother_priest                               a random active priest of the diocese, not the pastor
  *   @vicar_general @chancellor @vicar_for_clergy  chancery officials by office tag
  */
@@ -41,6 +42,12 @@ export function resolveSelector(state: GameState, key: string, rng?: Rng): Npc |
     case 'pastor': {
       const pid = state.assignment?.parishId;
       return pid ? (Object.values(state.npcs).find((n) => n.status === 'active' && n.tags.includes(`pastor:${pid}`)) ?? null) : null;
+    }
+    case 'bonded_parishioner': {
+      const pid = state.assignment?.parishId;
+      const lay = pid ? Object.values(state.npcs).filter((n) => n.status === 'active' && n.role === 'lay' && n.tags.includes(`parish:${pid}`) && (n.bonds?.length ?? 0) > 0) : [];
+      const sorted = lay.sort((a, b) => (a.id < b.id ? -1 : 1));
+      return sorted.length && rng ? rng.pick(sorted) : (sorted[0] ?? null);
     }
     case 'parishioner': {
       const pid = state.assignment?.parishId;

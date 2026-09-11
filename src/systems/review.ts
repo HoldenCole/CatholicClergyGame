@@ -3,6 +3,7 @@ import { sinceArrival } from './trajectory';
 import { careOf, strainOf, strainWord } from './week';
 import { chancesFor } from './openings';
 import { isFigure } from './reputation';
+import { bondWord } from './bonds';
 
 /** The reputation and stat words the sheets use. */
 function word(v: number): string {
@@ -58,6 +59,8 @@ export function yearInReview(state: GameState): { letter: Letter; baseline: NonN
     const said = care >= 0.7 ? 'that they see you, in the hospital and at the door, and that it shows on Sunday' : care >= 0.4 ? 'that you are around, mostly, and that the homilies are yours' : care >= 0.15 ? 'that you are a hard man to find outside Mass' : 'that they see you at Mass and nowhere else';
     body.push(`The parish says ${said}. ${state.parish.recycledHomilyStreak >= 3 ? 'The homily has come from the file for weeks, and people have begun to say so.' : ''}`.trim());
   }
+  const bondsThisYear = Object.values(state.npcs).flatMap((n) => (n.bonds ?? []).filter((b) => b.week > week - 52 && b.week <= week).map((b) => ({ n, b })));
+  if (bondsThisYear.length) rows.push({ label: 'The people this year', value: bondsThisYear.slice(0, 4).map(({ n, b }) => `${bondWord(b)} (${n.name.last})`).join('; ') + (bondsThisYear.length > 4 ? `; and ${bondsThisYear.length - 4} more` : '') });
   rows.push({ label: 'You', value: `${strainWord(strainOf(state))}, ${Math.round(years)} years a priest` });
 
   // Where he is headed.

@@ -4,6 +4,7 @@ import { actionDefs, obligationDefs, sacrificeDefs, SEASONAL_LOAD } from '@/cont
 import { takeSnapshot, TRAJECTORY } from './trajectory';
 import { extraBlocks, parishBlocks, wearOf } from './workweek';
 import { clubHours, staminaOf } from './clubs';
+import { bondsWeek } from './bonds';
 import { applyEffects } from '@/engine/effects';
 import { commitmentAp } from '@/engine/offers';
 import { seasonOf } from '@/engine/time';
@@ -264,6 +265,10 @@ export function resolveWeek(state: GameState, rng: Rng): { state: GameState; led
   const groupResult = groupsWeek(next, plan.discretionary.groups ?? 0, rng);
   next = groupResult.state;
   lines.push(...groupResult.lines);
+  // The people: at sacramental care, something happens to someone you know, and the parish keeps it.
+  const bonded = bondsWeek(next, plan.obligations.sacramental_prep ?? 'standard', rng.derive(`bonds:${state.clock.week}`));
+  next = bonded.state;
+  if (bonded.line) lines.push(bonded.line);
   const day = new Date((next.clock.startDay + next.clock.week * 7) * 86_400_000);
   const founded = finishFounding(next, rng, day.getUTCFullYear());
   next = founded.state;

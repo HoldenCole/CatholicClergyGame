@@ -1,3 +1,4 @@
+import type { Bond } from '@/types';
 import type {
   Archetype,
   ConstituencyKey,
@@ -176,6 +177,13 @@ export function applyEffect(
       // Joining needs a die for the fellows; the hook resolves it next week from this flag.
       const verb = effect.value === 'leave' ? 'leave' : 'join';
       return { ...state, flags: { ...state.flags, [`club_pending:${effect.key}`]: verb } };
+    }
+    case 'bond': {
+      const npc = resolveSelector(state, bindings[effect.key] ?? effect.key);
+      if (!npc || typeof effect.value !== 'string') return state;
+      const [kind, who] = effect.value.split(':') as [Bond['kind'], string | undefined];
+      const bond: Bond = { kind, week: state.clock.week, who: who ?? 'them' };
+      return { ...state, npcs: { ...state.npcs, [npc.id]: { ...npc, bonds: [...(npc.bonds ?? []), bond], relationship: Math.max(-100, Math.min(100, npc.relationship + (kind === 'quarreled' ? -6 : 4))) } } };
     }
     case 'trait_known': {
       const npc = resolveSelector(state, bindings[effect.key] ?? effect.key);

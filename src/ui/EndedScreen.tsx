@@ -45,7 +45,7 @@ export default function EndedScreen() {
     <div className="felt min-h-screen p-6">
       <div className="paper paper-tilt-r mx-auto flex w-full max-w-3xl flex-col gap-4 px-8 py-8">
         <div className="flex items-start gap-4">
-          {c && <Portrait portrait={portraitForCharacter(c, year, game.phase)} size={72} />}
+          {c && <Portrait portrait={portraitForCharacter(c, year, game.flags.ordained_bishop ? 'bishop' : game.phase)} size={72} />}
           <div className="min-w-0 flex-1">
             <h1 className="title text-2xl">{ENDING_TITLE[ending] ?? ending}</h1>
             {c && <p className="ink-muted text-sm">{c.name.first} {c.name.last}{life ? `, ${life.age}, ${life.years} years a priest` : game.seminary ? `, year ${game.seminary.year} of formation` : ''}.</p>}
@@ -116,6 +116,19 @@ export default function EndedScreen() {
               ))}
             </ul>
             {life.founded.length > 0 && <p className="ink-muted mt-1 text-sm">You founded {life.founded.join(', ')}; some of it outlived your leaving.</p>}
+          </Section>
+        )}
+
+        {life && (life.sacraments.baptized + life.sacraments.married + life.sacraments.buried + life.sacraments.anointed > 0) && (
+          <Section title="The parish remembers">
+            <p className="text-sm">
+              You baptized {life.sacraments.baptized}, married {life.sacraments.married}, buried {life.sacraments.buried}, and anointed {life.sacraments.anointed} of the people whose names you knew.
+            </p>
+            {life.remembered.length > 0 && (
+              <ul className="mt-1 flex flex-col gap-0.5 text-sm">
+                {life.remembered.map((r) => <li key={r.npc.id} className="ink-muted">{r.npc.name.first} {r.npc.name.last}, {r.phrase}.</li>)}
+              </ul>
+            )}
           </Section>
         )}
 

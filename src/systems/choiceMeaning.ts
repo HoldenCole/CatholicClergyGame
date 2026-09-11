@@ -30,7 +30,7 @@ const SELECTOR: Record<string, string> = {
   '@vocation_director': 'the vocation director', '@closest_classmate': 'your closest friend', '@random_classmate': 'a classmate', '@rival_classmate': 'your rival',
   '@mother': 'your mother', '@father': 'your father', '@sibling': 'your sibling', '@group_leader': 'the group\'s leader', '@vicar_general': 'the vicar general',
   '@chancellor': 'the chancellor', '@vicar_for_clergy': 'the vicar for clergy', '@brother_priest': 'a brother priest', '@mentor_priest': 'your mentor',
-  '@home_pastor': 'your home pastor', '@secretary': 'the secretary', '@dre': 'the DRE', '@music_director': 'the music director', '@parishioner': 'a parishioner',
+  '@home_pastor': 'your home pastor', '@secretary': 'the secretary', '@dre': 'the DRE', '@music_director': 'the music director', '@parishioner': 'a parishioner', '@bonded_parishioner': 'someone you know',
 };
 const STAT: Record<string, string> = { piety: 'piety', theology: 'theology', knowledge: 'learning', charisma: 'presence', administration: 'order' };
 
