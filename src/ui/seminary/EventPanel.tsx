@@ -4,6 +4,7 @@ import { useGameStore } from '@/engine/store';
 import { renderText } from '@/engine/text';
 import { eventKey } from '@/llm/skin';
 import Panel from '../Panel';
+import { choiceMeaning } from '@/systems/choiceMeaning';
 import Portrait from '../portraits/Portrait';
 import { portraitForNpc, yearOf } from '../portraits/spec';
 
@@ -46,6 +47,10 @@ export default function EventPanel() {
                 <span className="heading ml-2 ink-wine">{choice.volume === 'public' ? 'on the record' : 'said aloud'}</span>
               )}
               {!available && <span className="ink-faint ml-2 text-xs">not open to you</span>}
+              {(() => {
+                const meaning = choiceMeaning(choice);
+                return meaning ? <span className="ink-faint mt-0.5 block text-xs font-normal">{meaning}</span> : null;
+              })()}
             </button>
           </li>
         ))}
