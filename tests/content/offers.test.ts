@@ -13,7 +13,7 @@ const SELECTORS = [
 ];
 const EFFECT_TARGETS = [
   'stat', 'reputation', 'relationship', 'flag', 'thread', 'position', 'pillar', 'alignment', 'outspokenness', 'honesty',
-  'credential', 'trait', 'archetype', 'concern', 'risk', 'npc', 'end',
+  'credential', 'trait', 'archetype', 'concern', 'risk', 'npc', 'end', 'transfer',
 ];
 
 function checkCondition(c: Condition, where: string, problems: string[]): void {
@@ -37,6 +37,7 @@ function checkEffect(e: Effect, where: string, problems: string[]): void {
   if (e.target === 'archetype' && !ARCHETYPES.includes(e.key as never)) problems.push(`${where}: bad archetype ${e.key}`);
   if ((e.target === 'relationship' || e.target === 'npc') && e.key.startsWith('@') && !SELECTORS.includes(e.key)) problems.push(`${where}: unknown selector ${e.key}`);
   if (e.target === 'end') problems.push(`${where}: offers may not end the run`);
+  if (e.target === 'transfer' && !['flagship_suburban', 'struggling_urban', 'immigrant_growing', 'rural', 'difficult'].includes(e.key)) problems.push(`${where}: transfer key must be a parish kind`);
 }
 
 function tokensIn(text: string): string[] {

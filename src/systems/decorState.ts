@@ -32,6 +32,7 @@ export function defaultChurchDecor(parish: Parish): PlaceDecor {
     statues: parish.kind === 'struggling_urban' || parish.kind === 'immigrant_growing' || trad ? 'statues_many' : prog ? 'statues_few' : 'statues_many',
     tabernacle: prog && parish.wealth >= 3 ? 'tab_side' : 'tab_center',
     mass_form: 'mass_vernacular',
+    music: parish.needsSpanish ? 'music_bilingual' : prog ? 'music_contemporary' : 'music_organ',
   };
 }
 

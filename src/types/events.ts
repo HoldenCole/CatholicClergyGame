@@ -95,6 +95,8 @@ export type Condition =
   | { type: 'routine'; key: string; op: Op; value: number }
   /** Whether the man has become a figure. DESIGN §5.6. */
   | { type: 'figure' }
+  /** How worn the man is, 0..100, from what he has cut out of his week to make hours. */
+  | { type: 'strain'; op: Op; value: number }
   /**
    * Extension: some group of the current parish matches. When an event
    * carries group conditions, @group_leader binds to a matching group.
@@ -147,7 +149,11 @@ export type EffectTarget =
   /** key: liturgical topic, value: 'granted' | 'denied'. The bishop's word, given or taken back. */
   | 'permission'
   /** key: selector or npc id. The player has seen through to that person's hidden trait. DESIGN §9.2. */
-  | 'trait_known';
+  | 'trait_known'
+  /** Move the man now: key is a parish kind (or 'difficult'), value the role. The letter arrives the next week. */
+  | 'transfer'
+  /** Building condition of the current parish: key church | rectory | hall | school, delta. */
+  | 'building';
 
 export interface Effect {
   target: EffectTarget;

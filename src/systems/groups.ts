@@ -253,3 +253,48 @@ export function finishFounding(state: GameState, rng: Rng, year: number): { stat
     line: `${group.name} met for the first time; ${leader.name.first} ${leader.name.last} agreed to lead it.`,
   };
 }
+
+/** Replacing a leader costs the parish something and the old leader more. Invented. */
+export const REPLACE = { vitalityDip: 10, oldLeaderRelationship: -35, hostileChance: { empire: 0.6, political: 0.45, saintly: 0.25, grieving: 0.2, new: 0.15, tired: 0.05 } as Record<LeaderAgenda, number>, peopleCost: -2, pull: 0.4 } as const;
+
+/** Who may replace a leader: the pastor, or a vicar the pastor trusts with the groups. */
+export function mayReplaceLeader(state: GameState): { ok: boolean; why: string | null } {
+  if (!state.parish) return { ok: false, why: null };
+  if (state.parish.role !== 'parochial_vicar') return { ok: true, why: null };
+  const rec = state.world?.parishes.find((p) => p.id === state.parish!.parishId);
+  const pastor = rec ? state.npcs[rec.pastorId] : undefined;
+  if (pastor && pastor.relationship < 30) return { ok: false, why: `The groups are ${pastor.title} ${pastor.name.last}'s to staff, not yours. Earn his trust first.` };
+  return { ok: true, why: null };
+}
+
+/**
+ * Put a new leader over a group. The old one is hurt and may turn; the
+ * group dips, then follows the new leader, who is nearer to the pastor's
+ * own mind. Some people liked the old one.
+ */
+export function replaceLeader(state: GameState, groupId: string, rng: Rng, year: number): { state: GameState; line: string } {
+  const g = state.groups[groupId];
+  const parish = state.world?.parishes.find((p) => p.id === g?.parishId);
+  const c = state.character;
+  if (!g || !parish || !c) throw new Error('no such group');
+  const may = mayReplaceLeader(state);
+  if (!may.ok) throw new Error(may.why ?? 'not yours to do');
+  const old = state.npcs[g.leaderId];
+  const alignment = Math.round(g.alignment + (c.alignment - g.alignment) * REPLACE.pull);
+  const fresh = makeLeader(rng, state, parish, { id: `${g.id}_${state.clock.week}`, alignment }, year);
+  const leader: Npc = { ...fresh, id: `${g.id}_leader_${state.clock.week}`, relationship: 15 };
+  const hostile = old ? rng.chance(REPLACE.hostileChance[g.agenda]) : false;
+  const npcs = { ...state.npcs, [leader.id]: leader };
+  if (old) npcs[old.id] = { ...old, relationship: Math.max(-100, old.relationship + REPLACE.oldLeaderRelationship), tags: old.tags.filter((t) => !t.startsWith('leader:')) };
+  const group: Group = { ...g, leaderId: leader.id, agenda: 'new', alignment, vitality: Math.max(0, g.vitality - REPLACE.vitalityDip), hostile: g.hostile || hostile };
+  let next: GameState = { ...state, npcs, groups: { ...state.groups, [g.id]: group } };
+  if (g.agenda !== 'empire' && g.agenda !== 'tired') next = applyEffects(next, [{ target: 'reputation', key: 'parishioners', delta: REPLACE.peopleCost }]);
+  const oldName = old ? `${old.name.first} ${old.name.last}` : 'the old leader';
+  const line = hostile
+    ? `${oldName} was thanked for years of service to ${g.name} and did not take it well. ${leader.name.first} ${leader.name.last} has the keys; ${oldName} has the phone tree.`
+    : g.agenda === 'tired'
+      ? `${oldName} handed ${g.name} to ${leader.name.first} ${leader.name.last} with something like relief.`
+      : `${leader.name.first} ${leader.name.last} leads ${g.name} now. ${oldName} was thanked from the pulpit and sat very still.`;
+  next = { ...next, career: [...next.career, { week: next.clock.week, kind: 'note', text: `Put ${leader.name.first} ${leader.name.last} over ${g.name}.` }] };
+  return { state: next, line };
+}

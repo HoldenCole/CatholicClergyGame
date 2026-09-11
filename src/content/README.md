@@ -255,6 +255,24 @@ lifts attendance, attendance lifts collections, and at high care events in
 the `finance`, `admin`, and `group` categories draw less often (up to 40%).
 Authors need not gate on it; it is the reward for a tended parish.
 
+### Levers on a parish
+
+- `parish/problems.json`: one fix per live problem (weeks, hours a week,
+  cost, outcome, effects). A vicar begins only with the pastor's leave. On
+  completion the parish's `problem` becomes `none` and `fixed:<problem>` is
+  flagged; content may read either.
+- `parish/sacrifices.json`: what a man can cut from his own week for an
+  hour (sleep, the day off, exercise, reading), each with a weekly cost and
+  a strain. Strain (0..100) is readable by content as `{ "type": "strain",
+  "op": ">=", "value": 50 }`; at 50 he is worn, at 80 the body takes an
+  hour back.
+- Effects `transfer` (key: parish kind; value: role, default the current
+  one) move the man the next week: an offer that promises a parish must
+  carry it. `building` (key: church | rectory | hall | school, delta)
+  changes a building's condition.
+- The church's `music` slot (organ, contemporary, chant, bilingual) is a
+  decor slot like the others; its alignment drives reactions.
+
 ## Group events (DESIGN.md §10)
 
 Files under `src/content/events/parish/groups*.json`. Same schema, phase

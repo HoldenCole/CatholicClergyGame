@@ -1,49 +1,487 @@
 [
-  { "id": "sanct_high_altar", "place": "church", "slot": "sanctuary", "label": "The old high altar", "blurb": "Reredos, tabernacle at the center, six candles, the marble the parish paid for in 1924.", "cost": 0, "alignment": -60, "art": "high_altar" },
-  { "id": "sanct_plain", "place": "church", "slot": "sanctuary", "label": "The 1970s sanctuary", "blurb": "A freestanding altar, carpet, a plain wooden cross, the reredos long gone.", "cost": 0, "alignment": 20, "art": "plain" },
-  { "id": "sanct_modern", "policy": "renovation", "place": "church", "slot": "sanctuary", "label": "A modern sanctuary", "blurb": "Stone, glass, a single line of light. Architects will photograph it; the old guard will not forgive it.", "cost": 180000, "alignment": 70, "art": "modern" },
-  { "id": "sanct_restored", "policy": "renovation", "place": "church", "slot": "sanctuary", "label": "A restored sanctuary", "blurb": "Put back what was taken out, with the marble found in the basement. A long argument and a beautiful result.", "cost": 240000, "alignment": -70, "art": "restored", "requires": [{ "type": "any", "inner": [{ "type": "flag", "key": "restoration_done", "value": true }, { "type": "stat", "key": "administration", "op": ">=", "value": 55 }] }] },
-  { "id": "sanct_gothic", "policy": "renovation", "place": "church", "slot": "sanctuary", "label": "Gothic revival", "blurb": "Pointed arches painted on, a carved wooden reredos, blue and gold. A choice that tells everyone what you read.", "cost": 120000, "alignment": -40, "art": "gothic" },
-
-  { "id": "rail_none", "place": "church", "slot": "altar_rail", "label": "No altar rail", "blurb": "Removed in 1971 and not missed by everyone.", "cost": 0, "alignment": 30, "art": "none" },
-  { "id": "rail_wood", "policy": "altar_rail", "place": "church", "slot": "altar_rail", "label": "A wooden altar rail", "blurb": "Oak, kneelers, a gate. People will kneel for Communion whether you ask them to or not.", "cost": 9000, "alignment": -45, "art": "wood" },
-  { "id": "rail_marble", "policy": "altar_rail", "place": "church", "slot": "altar_rail", "label": "A marble altar rail", "blurb": "Salvaged from a closed church across the diocese. Heavy, permanent, and a statement.", "cost": 42000, "alignment": -65, "art": "marble" },
-
-  { "id": "orient_populum", "place": "church", "slot": "orientation", "label": "Facing the people", "blurb": "The freestanding altar, the priest facing the nave. What everyone under sixty grew up with.", "cost": 0, "alignment": 25, "art": "populum" },
-  { "id": "orient_orientem", "policy": "ad_orientem", "place": "church", "slot": "orientation", "label": "Ad orientem", "blurb": "Priest and people facing the same way. Cheap in money, expensive in everything else; the chancery will hear within the week.", "cost": 2000, "alignment": -75, "art": "orientem", "effects": [{ "target": "outspokenness", "key": "", "delta": 6 }, { "target": "reputation", "key": "chancery", "delta": -3 }] },
-
-  { "id": "conf_booths", "place": "church", "slot": "confessionals", "label": "The old booths", "blurb": "Two dark boxes with a screen and a kneeler. Anonymous, and the line is longer for it.", "cost": 0, "alignment": -30, "art": "booths" },
-  { "id": "conf_room", "place": "church", "slot": "confessionals", "label": "A reconciliation room", "blurb": "Two chairs, a screen you can ignore, a box of tissues. Some will never use it.", "cost": 15000, "alignment": 40, "art": "room" },
-  { "id": "conf_both", "place": "church", "slot": "confessionals", "label": "Both", "blurb": "A booth for those who want the screen and a room for those who want a face. Costs a side aisle.", "cost": 22000, "alignment": 0, "art": "both" },
-
-  { "id": "choir_loft", "place": "church", "slot": "choir", "label": "The choir loft", "blurb": "Up and behind, with the organ. Heard, not seen.", "cost": 0, "alignment": -35, "art": "loft" },
-  { "id": "choir_front", "place": "church", "slot": "choir", "label": "An ensemble up front", "blurb": "Guitars and a keyboard beside the ambo, microphones, a leader who waves.", "cost": 6000, "alignment": 50, "art": "front" },
-  { "id": "choir_schola", "place": "church", "slot": "choir", "label": "A schola in the side chapel", "blurb": "Six voices, chant, no instruments. The music director will need to be someone else.", "cost": 4000, "alignment": -60, "art": "schola" },
-
-  { "id": "statues_many", "place": "church", "slot": "statues", "label": "The statues, all of them", "blurb": "Every saint the founding families brought with them, with candles.", "cost": 0, "alignment": -30, "art": "many" },
-  { "id": "statues_few", "place": "church", "slot": "statues", "label": "Mary and Joseph only", "blurb": "The rest to the basement or the side chapel. Cleaner, and someone will cry.", "cost": 3000, "alignment": 20, "art": "few" },
-  { "id": "statues_none", "place": "church", "slot": "statues", "label": "Bare walls", "blurb": "Nothing but the cross. The building becomes a room.", "cost": 5000, "alignment": 60, "art": "none" },
-
-  { "id": "tab_center", "policy": "tabernacle", "place": "church", "slot": "tabernacle", "label": "Tabernacle at the center", "blurb": "Behind the altar, where the eye goes first.", "cost": 0, "alignment": -40, "art": "center" },
-  { "id": "tab_side", "policy": "tabernacle", "place": "church", "slot": "tabernacle", "label": "Tabernacle in a side chapel", "blurb": "A chapel of reservation, quiet, with its own door. The sanctuary is for the Mass.", "cost": 12000, "alignment": 35, "art": "side" },
-
-  { "id": "mass_vernacular", "place": "church", "slot": "mass_form", "label": "The Mass as it is", "blurb": "The Novus Ordo in English, or Spanish at ten, the hymns the parish knows. What the diocese expects.", "cost": 0, "alignment": 15, "art": "vernacular" },
-  { "id": "mass_latin_novus", "place": "church", "slot": "mass_form", "label": "One Sunday Mass in Latin", "blurb": "The same Novus Ordo, sung in Latin with chant, at the early Mass. Licit anywhere; noticed everywhere.", "cost": 2500, "alignment": -45, "art": "latin_novus", "effects": [{ "target": "outspokenness", "key": "", "delta": 3 }] },
-  { "id": "mass_tlm", "place": "church", "slot": "mass_form", "label": "The older Mass on Sunday", "blurb": "The 1962 Missal at one Sunday Mass. The bishop must authorize it, and since 2021 Rome looks over his shoulder. Families will drive an hour for it, and letters will go the other way.", "cost": 6000, "alignment": -85, "policy": "latin_mass", "art": "tlm", "effects": [{ "target": "outspokenness", "key": "", "delta": 8 }, { "target": "reputation", "key": "chancery", "delta": -4 }] },
-
-  { "id": "owall_crucifix", "place": "office", "slot": "wall", "label": "A crucifix", "blurb": "The one from ordination, and nothing else.", "cost": 0, "alignment": null, "art": "crucifix" },
-  { "id": "owall_icon", "place": "office", "slot": "wall", "label": "A crucifix and an icon", "blurb": "Byzantine, gold ground, a gift from someone who knew what you liked.", "cost": 0, "alignment": -10, "art": "icon" },
-  { "id": "owall_pope", "place": "office", "slot": "wall", "label": "The Holy Father's portrait", "blurb": "Framed, signed by no one, and read by every visitor as a position.", "cost": 0, "alignment": 0, "art": "pope" },
-  { "id": "owall_photos", "place": "office", "slot": "wall", "label": "Photographs of the parish", "blurb": "First Communions, the festival, the men who built the hall.", "cost": 0, "alignment": 15, "art": "photos" },
-  { "id": "odesk_inherited", "place": "office", "slot": "desk", "label": "The desk you were given", "blurb": "Scarred, enormous, older than the diocese.", "cost": 0, "alignment": null, "art": "inherited" },
-  { "id": "odesk_plain", "place": "office", "slot": "desk", "label": "A plain desk", "blurb": "From the catalog. Nothing to interpret.", "cost": 0, "alignment": null, "art": "plain" },
-  { "id": "ocorner_globe", "place": "office", "slot": "corner", "label": "A globe", "blurb": "For the missions, or for looking at.", "cost": 0, "alignment": null, "art": "globe" },
-  { "id": "ocorner_plant", "place": "office", "slot": "corner", "label": "A plant the secretary waters", "blurb": "It will outlive your assignment.", "cost": 0, "alignment": null, "art": "plant" },
-  { "id": "ocorner_files", "place": "office", "slot": "corner", "label": "Filing cabinets", "blurb": "Three, locked, the parish's memory.", "cost": 0, "alignment": null, "art": "files" },
-
-  { "id": "rwall_crucifix", "place": "rectory", "slot": "wall", "label": "A crucifix over the table", "blurb": "As in every rectory in the diocese.", "cost": 0, "alignment": null, "art": "crucifix" },
-  { "id": "rwall_family", "place": "rectory", "slot": "wall", "label": "Family photographs", "blurb": "Your people, on the wall where you eat.", "cost": 0, "alignment": null, "art": "family" },
-  { "id": "rcorner_chapel", "place": "rectory", "slot": "corner", "label": "A prayer corner", "blurb": "A kneeler, an icon, a lamp. The pastor pretends not to notice.", "cost": 0, "alignment": -15, "art": "chapel" },
-  { "id": "rcorner_tv", "place": "rectory", "slot": "corner", "label": "A television", "blurb": "The game on Sunday afternoons, the news you should not watch.", "cost": 0, "alignment": null, "art": "tv" },
-  { "id": "rcorner_books", "place": "rectory", "slot": "corner", "label": "A reading chair and a lamp", "blurb": "Where the evenings go.", "cost": 0, "alignment": null, "art": "books" }
+  {
+    "id": "sanct_high_altar",
+    "place": "church",
+    "slot": "sanctuary",
+    "label": "The old high altar",
+    "blurb": "Reredos, tabernacle at the center, six candles, the marble the parish paid for in 1924.",
+    "cost": 0,
+    "alignment": -60,
+    "art": "high_altar"
+  },
+  {
+    "id": "sanct_plain",
+    "place": "church",
+    "slot": "sanctuary",
+    "label": "The 1970s sanctuary",
+    "blurb": "A freestanding altar, carpet, a plain wooden cross, the reredos long gone.",
+    "cost": 0,
+    "alignment": 20,
+    "art": "plain"
+  },
+  {
+    "id": "sanct_modern",
+    "policy": "renovation",
+    "place": "church",
+    "slot": "sanctuary",
+    "label": "A modern sanctuary",
+    "blurb": "Stone, glass, a single line of light. Architects will photograph it; the old guard will not forgive it.",
+    "cost": 180000,
+    "alignment": 70,
+    "art": "modern"
+  },
+  {
+    "id": "sanct_restored",
+    "policy": "renovation",
+    "place": "church",
+    "slot": "sanctuary",
+    "label": "A restored sanctuary",
+    "blurb": "Put back what was taken out, with the marble found in the basement. A long argument and a beautiful result.",
+    "cost": 240000,
+    "alignment": -70,
+    "art": "restored",
+    "requires": [
+      {
+        "type": "any",
+        "inner": [
+          {
+            "type": "flag",
+            "key": "restoration_done",
+            "value": true
+          },
+          {
+            "type": "stat",
+            "key": "administration",
+            "op": ">=",
+            "value": 55
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "sanct_gothic",
+    "policy": "renovation",
+    "place": "church",
+    "slot": "sanctuary",
+    "label": "Gothic revival",
+    "blurb": "Pointed arches painted on, a carved wooden reredos, blue and gold. A choice that tells everyone what you read.",
+    "cost": 120000,
+    "alignment": -40,
+    "art": "gothic"
+  },
+  {
+    "id": "rail_none",
+    "place": "church",
+    "slot": "altar_rail",
+    "label": "No altar rail",
+    "blurb": "Removed in 1971 and not missed by everyone.",
+    "cost": 0,
+    "alignment": 30,
+    "art": "none"
+  },
+  {
+    "id": "rail_wood",
+    "policy": "altar_rail",
+    "place": "church",
+    "slot": "altar_rail",
+    "label": "A wooden altar rail",
+    "blurb": "Oak, kneelers, a gate. People will kneel for Communion whether you ask them to or not.",
+    "cost": 9000,
+    "alignment": -45,
+    "art": "wood"
+  },
+  {
+    "id": "rail_marble",
+    "policy": "altar_rail",
+    "place": "church",
+    "slot": "altar_rail",
+    "label": "A marble altar rail",
+    "blurb": "Salvaged from a closed church across the diocese. Heavy, permanent, and a statement.",
+    "cost": 42000,
+    "alignment": -65,
+    "art": "marble"
+  },
+  {
+    "id": "orient_populum",
+    "place": "church",
+    "slot": "orientation",
+    "label": "Facing the people",
+    "blurb": "The freestanding altar, the priest facing the nave. What everyone under sixty grew up with.",
+    "cost": 0,
+    "alignment": 25,
+    "art": "populum"
+  },
+  {
+    "id": "orient_orientem",
+    "policy": "ad_orientem",
+    "place": "church",
+    "slot": "orientation",
+    "label": "Ad orientem",
+    "blurb": "Priest and people facing the same way. Cheap in money, expensive in everything else; the chancery will hear within the week.",
+    "cost": 2000,
+    "alignment": -75,
+    "art": "orientem",
+    "effects": [
+      {
+        "target": "outspokenness",
+        "key": "",
+        "delta": 6
+      },
+      {
+        "target": "reputation",
+        "key": "chancery",
+        "delta": -3
+      }
+    ]
+  },
+  {
+    "id": "conf_booths",
+    "place": "church",
+    "slot": "confessionals",
+    "label": "The old booths",
+    "blurb": "Two dark boxes with a screen and a kneeler. Anonymous, and the line is longer for it.",
+    "cost": 0,
+    "alignment": -30,
+    "art": "booths"
+  },
+  {
+    "id": "conf_room",
+    "place": "church",
+    "slot": "confessionals",
+    "label": "A reconciliation room",
+    "blurb": "Two chairs, a screen you can ignore, a box of tissues. Some will never use it.",
+    "cost": 15000,
+    "alignment": 40,
+    "art": "room"
+  },
+  {
+    "id": "conf_both",
+    "place": "church",
+    "slot": "confessionals",
+    "label": "Both",
+    "blurb": "A booth for those who want the screen and a room for those who want a face. Costs a side aisle.",
+    "cost": 22000,
+    "alignment": 0,
+    "art": "both"
+  },
+  {
+    "id": "choir_loft",
+    "place": "church",
+    "slot": "choir",
+    "label": "The choir loft",
+    "blurb": "Up and behind, with the organ. Heard, not seen.",
+    "cost": 0,
+    "alignment": -35,
+    "art": "loft"
+  },
+  {
+    "id": "choir_front",
+    "place": "church",
+    "slot": "choir",
+    "label": "An ensemble up front",
+    "blurb": "Guitars and a keyboard beside the ambo, microphones, a leader who waves.",
+    "cost": 6000,
+    "alignment": 50,
+    "art": "front"
+  },
+  {
+    "id": "choir_schola",
+    "place": "church",
+    "slot": "choir",
+    "label": "A schola in the side chapel",
+    "blurb": "Six voices, chant, no instruments. The music director will need to be someone else.",
+    "cost": 4000,
+    "alignment": -60,
+    "art": "schola"
+  },
+  {
+    "id": "statues_many",
+    "place": "church",
+    "slot": "statues",
+    "label": "The statues, all of them",
+    "blurb": "Every saint the founding families brought with them, with candles.",
+    "cost": 0,
+    "alignment": -30,
+    "art": "many"
+  },
+  {
+    "id": "statues_few",
+    "place": "church",
+    "slot": "statues",
+    "label": "Mary and Joseph only",
+    "blurb": "The rest to the basement or the side chapel. Cleaner, and someone will cry.",
+    "cost": 3000,
+    "alignment": 20,
+    "art": "few"
+  },
+  {
+    "id": "statues_none",
+    "place": "church",
+    "slot": "statues",
+    "label": "Bare walls",
+    "blurb": "Nothing but the cross. The building becomes a room.",
+    "cost": 5000,
+    "alignment": 60,
+    "art": "none"
+  },
+  {
+    "id": "tab_center",
+    "policy": "tabernacle",
+    "place": "church",
+    "slot": "tabernacle",
+    "label": "Tabernacle at the center",
+    "blurb": "Behind the altar, where the eye goes first.",
+    "cost": 0,
+    "alignment": -40,
+    "art": "center"
+  },
+  {
+    "id": "tab_side",
+    "policy": "tabernacle",
+    "place": "church",
+    "slot": "tabernacle",
+    "label": "Tabernacle in a side chapel",
+    "blurb": "A chapel of reservation, quiet, with its own door. The sanctuary is for the Mass.",
+    "cost": 12000,
+    "alignment": 35,
+    "art": "side"
+  },
+  {
+    "id": "mass_vernacular",
+    "place": "church",
+    "slot": "mass_form",
+    "label": "The Mass as it is",
+    "blurb": "The Novus Ordo in English, or Spanish at ten, the hymns the parish knows. What the diocese expects.",
+    "cost": 0,
+    "alignment": 15,
+    "art": "vernacular"
+  },
+  {
+    "id": "mass_latin_novus",
+    "place": "church",
+    "slot": "mass_form",
+    "label": "One Sunday Mass in Latin",
+    "blurb": "The same Novus Ordo, sung in Latin with chant, at the early Mass. Licit anywhere; noticed everywhere.",
+    "cost": 2500,
+    "alignment": -45,
+    "art": "latin_novus",
+    "effects": [
+      {
+        "target": "outspokenness",
+        "key": "",
+        "delta": 3
+      }
+    ]
+  },
+  {
+    "id": "mass_tlm",
+    "place": "church",
+    "slot": "mass_form",
+    "label": "The older Mass on Sunday",
+    "blurb": "The 1962 Missal at one Sunday Mass. The bishop must authorize it, and since 2021 Rome looks over his shoulder. Families will drive an hour for it, and letters will go the other way.",
+    "cost": 6000,
+    "alignment": -85,
+    "policy": "latin_mass",
+    "art": "tlm",
+    "effects": [
+      {
+        "target": "outspokenness",
+        "key": "",
+        "delta": 8
+      },
+      {
+        "target": "reputation",
+        "key": "chancery",
+        "delta": -4
+      }
+    ]
+  },
+  {
+    "id": "owall_crucifix",
+    "place": "office",
+    "slot": "wall",
+    "label": "A crucifix",
+    "blurb": "The one from ordination, and nothing else.",
+    "cost": 0,
+    "alignment": null,
+    "art": "crucifix"
+  },
+  {
+    "id": "owall_icon",
+    "place": "office",
+    "slot": "wall",
+    "label": "A crucifix and an icon",
+    "blurb": "Byzantine, gold ground, a gift from someone who knew what you liked.",
+    "cost": 0,
+    "alignment": -10,
+    "art": "icon"
+  },
+  {
+    "id": "owall_pope",
+    "place": "office",
+    "slot": "wall",
+    "label": "The Holy Father's portrait",
+    "blurb": "Framed, signed by no one, and read by every visitor as a position.",
+    "cost": 0,
+    "alignment": 0,
+    "art": "pope"
+  },
+  {
+    "id": "owall_photos",
+    "place": "office",
+    "slot": "wall",
+    "label": "Photographs of the parish",
+    "blurb": "First Communions, the festival, the men who built the hall.",
+    "cost": 0,
+    "alignment": 15,
+    "art": "photos"
+  },
+  {
+    "id": "odesk_inherited",
+    "place": "office",
+    "slot": "desk",
+    "label": "The desk you were given",
+    "blurb": "Scarred, enormous, older than the diocese.",
+    "cost": 0,
+    "alignment": null,
+    "art": "inherited"
+  },
+  {
+    "id": "odesk_plain",
+    "place": "office",
+    "slot": "desk",
+    "label": "A plain desk",
+    "blurb": "From the catalog. Nothing to interpret.",
+    "cost": 0,
+    "alignment": null,
+    "art": "plain"
+  },
+  {
+    "id": "ocorner_globe",
+    "place": "office",
+    "slot": "corner",
+    "label": "A globe",
+    "blurb": "For the missions, or for looking at.",
+    "cost": 0,
+    "alignment": null,
+    "art": "globe"
+  },
+  {
+    "id": "ocorner_plant",
+    "place": "office",
+    "slot": "corner",
+    "label": "A plant the secretary waters",
+    "blurb": "It will outlive your assignment.",
+    "cost": 0,
+    "alignment": null,
+    "art": "plant"
+  },
+  {
+    "id": "ocorner_files",
+    "place": "office",
+    "slot": "corner",
+    "label": "Filing cabinets",
+    "blurb": "Three, locked, the parish's memory.",
+    "cost": 0,
+    "alignment": null,
+    "art": "files"
+  },
+  {
+    "id": "rwall_crucifix",
+    "place": "rectory",
+    "slot": "wall",
+    "label": "A crucifix over the table",
+    "blurb": "As in every rectory in the diocese.",
+    "cost": 0,
+    "alignment": null,
+    "art": "crucifix"
+  },
+  {
+    "id": "rwall_family",
+    "place": "rectory",
+    "slot": "wall",
+    "label": "Family photographs",
+    "blurb": "Your people, on the wall where you eat.",
+    "cost": 0,
+    "alignment": null,
+    "art": "family"
+  },
+  {
+    "id": "rcorner_chapel",
+    "place": "rectory",
+    "slot": "corner",
+    "label": "A prayer corner",
+    "blurb": "A kneeler, an icon, a lamp. The pastor pretends not to notice.",
+    "cost": 0,
+    "alignment": -15,
+    "art": "chapel"
+  },
+  {
+    "id": "rcorner_tv",
+    "place": "rectory",
+    "slot": "corner",
+    "label": "A television",
+    "blurb": "The game on Sunday afternoons, the news you should not watch.",
+    "cost": 0,
+    "alignment": null,
+    "art": "tv"
+  },
+  {
+    "id": "rcorner_books",
+    "place": "rectory",
+    "slot": "corner",
+    "label": "A reading chair and a lamp",
+    "blurb": "Where the evenings go.",
+    "cost": 0,
+    "alignment": null,
+    "art": "books"
+  },
+  {
+    "id": "music_organ",
+    "place": "church",
+    "slot": "music",
+    "label": "Organ and the hymnal",
+    "blurb": "The hymns the parish knows, the organ the parish paid for, a cantor who does not embellish.",
+    "cost": 0,
+    "alignment": -15,
+    "art": "organ"
+  },
+  {
+    "id": "music_contemporary",
+    "place": "church",
+    "slot": "music",
+    "label": "A contemporary ensemble",
+    "blurb": "Guitars, a keyboard, songs written in this century. The young stay for it; the old guard writes to the bishop about it.",
+    "cost": 4000,
+    "alignment": 50,
+    "art": "contemporary"
+  },
+  {
+    "id": "music_chant",
+    "place": "church",
+    "slot": "music",
+    "label": "Chant and polyphony",
+    "blurb": "The propers sung, Latin on the feasts, a schola that rehearses on Thursdays. Beautiful, and a statement.",
+    "cost": 3000,
+    "alignment": -60,
+    "art": "chant"
+  },
+  {
+    "id": "music_bilingual",
+    "place": "church",
+    "slot": "music",
+    "label": "Bilingual music",
+    "blurb": "Spanish and English in the same Mass, a choir from both communities, hymns that half the church learns each year.",
+    "cost": 2500,
+    "alignment": 20,
+    "art": "bilingual",
+    "requires": [
+      {
+        "type": "parish",
+        "key": "needsSpanish",
+        "value": true
+      }
+    ]
+  }
 ]

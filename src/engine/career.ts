@@ -229,3 +229,27 @@ export function careerSummary(state: GameState, ending: 'retired' | 'died' | 'le
   const lines = entries.filter((e) => e.kind !== 'note').slice(-6).map((e) => renderText(e.text, state));
   return [opening, arc, bishops, record + legacy + cohort, '', ...lines].join('\n');
 }
+
+/**
+ * A transfer the man said yes to (an offer's `transfer` effect): the bishop
+ * moves him now, to a parish of the kind named, other than his own.
+ */
+export function directedTransfer(state: GameState, rng: Rng, kind: string, role: Assignment['role']): { state: GameState; moved: boolean } {
+  if (!state.world) return { state, moved: false };
+  let next = handoffProject(state, rng.derive(`handoff:${state.clock.week}`)).state;
+  next = leaveCollapse(next);
+  const c = next.character!;
+  const carried = Math.round(c.reputation.parishioners * ARC.parishionersCarryover);
+  next = { ...next, character: { ...c, reputation: { ...c.reputation, parishioners: carried } } };
+  const others = next.world!.parishes.filter((p) => p.id !== next.parish?.parishId);
+  const parish = others.find((p) => p.kind === kind) ?? rng.derive(`directed:${next.clock.week}`).pick(others);
+  const opening: Opening = { id: `directed_${next.clock.week}`, kind: role === 'pastor' ? 'pastor' : role === 'administrator' ? 'administrator' : 'parochial_vicar', parishId: parish.id, urgency: 70, needsSpanish: parish.needsSpanish, needsAdmin: false, alignment: parish.alignment, week: next.clock.week, label: `${parish.name}, ${parish.place}` };
+  const assignment: Assignment = { parishId: parish.id, role, startWeek: next.clock.week, letter: letterFor(next, opening, role), reasons: ['You said yes when the vicar for clergy asked', 'Nobody else had'] };
+  next = note(next, 'assignment', `Sent as ${role.replace('_', ' ')} to ${parish.name}, ${parish.place}, at the bishop's asking.`);
+  const flags: GameState['flags'] = { ...next.flags, transfers: Number(next.flags.transfers ?? 0) + 1, hard_parish_honored: true };
+  delete flags.transfer_pending;
+  return {
+    state: { ...next, assignment, parish: null, founding: null, project: null, mode: { kind: 'assignment', assignment }, flags },
+    moved: true,
+  };
+}

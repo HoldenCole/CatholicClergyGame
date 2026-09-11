@@ -1,6 +1,7 @@
 import { useGameStore } from '@/engine/store';
 import { actionDefs, obligationDefs } from '@/content/parish';
-import { adminFloorFor, careOf, careOfPlan, planWeek, seasonalLoad, weekBudget } from '@/systems/week';
+import { adminFloorFor, careOf, careOfPlan, planWeek, sacrificeAp, seasonalLoad, strainOf, strainWord, weekBudget, WEEK } from '@/systems/week';
+import { sacrificeDefs, problemFix } from '@/content/parish';
 import type { Effect } from '@/types';
 import { commitmentAp } from '@/engine/offers';
 import { OBLIGATION_KEYS, type Quality } from '@/types';
@@ -28,6 +29,7 @@ export default function RoutinePanel() {
   const game = useGameStore((s) => s.game);
   const setObligation = useGameStore((s) => s.setObligation);
   const setDiscretionary = useGameStore((s) => s.setDiscretionary);
+  const toggleSacrifice = useGameStore((s) => s.toggleSacrifice);
   if (!game?.parish) return null;
   const plan = planWeek(game);
   const budget = weekBudget(game);
@@ -39,15 +41,58 @@ export default function RoutinePanel() {
   const care = careOf(game);
   const careWord = careNow >= 0.8 ? 'The people see a great deal of you' : careNow >= 0.45 ? 'The people see a fair amount of you' : careNow >= 0.2 ? 'The people see a little of you' : 'The people see almost nothing of you outside Mass';
   const careTrend = careNow > care + 0.05 ? ', and it is beginning to show in the pews' : careNow < care - 0.05 ? ', less than they did' : '';
+  const strain = strainOf(game);
+  const extra = sacrificeAp(game);
+  const sacrificed = new Set(routine.sacrifices ?? []);
+  const work = game.parish.work ? problemFix(game.parish.work.problem) : undefined;
+  // The week as a bar: every hour accounted for.
+  const segments: { label: string; ap: number; kind: 'season' | 'desk' | 'promise' | 'obligation' | 'action' | 'slack' }[] = [];
+  const season = seasonalLoad(game);
+  if (season > 0) segments.push({ label: 'The season', ap: season, kind: 'season' });
+  const desk = adminFloorFor(game);
+  if (desk > 0) segments.push({ label: 'The desk', ap: desk, kind: 'desk' });
+  for (const cm of game.commitments) segments.push({ label: cm.label, ap: cm.apPerWeek, kind: 'promise' });
+  if (game.founding) segments.push({ label: 'Founding a group', ap: game.founding.apPerWeek, kind: 'promise' });
+  if (game.parish.work && work) segments.push({ label: work.label, ap: game.parish.work.apPerWeek, kind: 'promise' });
+  for (const key of OBLIGATION_KEYS) {
+    const def = obligationDefs.find((o) => o.key === key)!;
+    const ap = def.ap[plan.obligations[key]] ?? def.ap.standard;
+    segments.push({ label: def.label, ap, kind: 'obligation' });
+  }
+  for (const [id, ap] of Object.entries(plan.discretionary)) if (ap > 0) segments.push({ label: actionDefs.find((a) => a.id === id)?.label ?? id, ap, kind: 'action' });
+  if (plan.slack > 0) segments.push({ label: 'Unspoken for', ap: plan.slack, kind: 'slack' });
+  const barTotal = segments.reduce((n, x) => n + x.ap, 0) || 1;
+  const COLOR: Record<(typeof segments)[number]['kind'], string> = { season: '#8a5a3c', desk: '#6b5a4a', promise: '#7a6a8a', obligation: '#3f5f7a', action: '#4f7a4f', slack: '#c9bfa8' };
 
   return (
     <>
-      <Sheet title="The standing routine">
+      <Sheet title="The week">
         <p className="ink-muted text-xs leading-relaxed">
-          {budget} hours of you this week. Obligations take {plan.mandatory}
-          {fixed > 0 ? ` (${fixed} of that is the season, the desk, and what you have promised elsewhere)` : ''}, leaving {available} for
-          everything else{requested > available ? `; you have asked for ${requested}, so it will be trimmed` : ''}.
+          Mass, the Office, meals, sleep, and the day off are the shape of a priest's week and are not counted here. What is counted is the {budget} hours that are yours to point
+          {extra > 0 ? ` (${WEEK.baseAp[game.parish.role]} of them, and ${extra} you have taken from your own life)` : ''}. Obligations take {plan.mandatory}
+          {fixed > 0 ? ` (${fixed} of that is the season, the desk, and what you have promised elsewhere)` : ''}, leaving {available} for everything else
+          {requested > available ? `; you have asked for ${requested}, so it will be trimmed` : ''}.
         </p>
+        {requested > available && (
+          <p className="ink-wine mt-1 text-xs">
+            The week is full before you get to it: {requested - available} {requested - available === 1 ? 'hour' : 'hours'} short. Go minimum on an obligation, drop something you promised, or take an hour from your own life below.
+          </p>
+        )}
+        <div className="mt-2 flex h-5 w-full overflow-hidden rounded border rule" title="The week, hour by hour">
+          {segments.map((x, i) => (
+            <div key={i} style={{ width: `${(x.ap / barTotal) * 100}%`, background: COLOR[x.kind] }} className="h-full border-r border-black/20 last:border-r-0" title={`${x.label}: ${x.ap}`} />
+          ))}
+        </div>
+        <ul className="mt-1 flex flex-wrap gap-x-3 gap-y-0.5 text-xs">
+          {segments.map((x, i) => (
+            <li key={i} className="flex items-center gap-1">
+              <span className="inline-block h-2 w-2 rounded-sm" style={{ background: COLOR[x.kind] }} />
+              <span className="ink-muted">{x.label}</span> <span className="font-mono">{x.ap}</span>
+            </li>
+          ))}
+        </ul>
+      </Sheet>
+      <Sheet title="The standing routine">
         <ul className="mt-3 flex flex-col gap-2">
           {OBLIGATION_KEYS.map((key) => {
             const def = obligationDefs.find((o) => o.key === key)!;
@@ -98,6 +143,27 @@ export default function RoutinePanel() {
           })}
         </ul>
         <p className="ink-muted mt-3 text-xs">{careWord}{careTrend}. Hours with the people fill the pews, and full pews fill the basket; a parish that is looked after has fewer fires.</p>
+      </Sheet>
+      <Sheet title="The rest of your life">
+        <p className="ink-muted text-xs leading-relaxed">
+          An hour more for the parish comes from somewhere. You are {strainWord(strain)}{strain >= WEEK.strainSick ? ', and the body has started taking an hour back' : strain >= WEEK.strainWorn ? ', and it is beginning to cost you' : ''}.
+        </p>
+        <ul className="mt-2 flex flex-col gap-1.5">
+          {sacrificeDefs.map((d) => {
+            const on = sacrificed.has(d.id);
+            return (
+              <li key={d.id} className="flex items-center justify-between gap-2 text-sm">
+                <span className="min-w-0" title={d.blurb}>
+                  {d.label}
+                  <span className="ink-faint ml-2 text-xs">+{d.ap} hour · wears on you</span>
+                </span>
+                <button className={'pbtn shrink-0 px-2 py-0 text-xs ' + (on ? 'pbtn-active' : '')} onClick={() => toggleSacrifice(d.id)}>
+                  {on ? 'take it back' : 'give it up'}
+                </button>
+              </li>
+            );
+          })}
+        </ul>
       </Sheet>
     </>
   );

@@ -15,6 +15,7 @@ export type DecorSlot =
   | 'statues'
   | 'tabernacle'
   | 'mass_form'
+  | 'music'
   // office and rectory and room
   | 'wall'
   | 'desk'

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useGameStore } from '@/engine/store';
 import { groupTypeDefs } from '@/content/parish';
-import { groupTrend, parishGroups, vitalityBand } from '@/systems/groups';
+import { groupTrend, mayReplaceLeader, parishGroups, vitalityBand } from '@/systems/groups';
 import type { GroupType } from '@/types';
 import Sheet from '../Sheet';
 
@@ -19,6 +19,7 @@ export default function GroupsPanel() {
   const found = useGameStore((s) => s.foundGroup);
   const suppress = useGameStore((s) => s.suppressGroup);
   const focus = useGameStore((s) => s.focusGroup);
+  const replace = useGameStore((s) => s.replaceLeader);
   const [picking, setPicking] = useState(false);
   if (!game?.parish) return null;
   const groups = parishGroups(game);
@@ -26,6 +27,7 @@ export default function GroupsPanel() {
   const sustain = game.parish.routine.discretionary.groups ?? 0;
   const founding = game.founding;
   const focused = groups.filter((g) => g.focus && !g.suppressed && !g.hostile);
+  const mayReplace = mayReplaceLeader(game);
   const trendWord = (d: number) => (d >= 1.5 ? 'coming back fast' : d >= 0.3 ? 'gaining' : d > -0.3 ? 'holding' : d > -1.5 ? 'fading' : 'withering');
 
   return (
@@ -59,6 +61,11 @@ export default function GroupsPanel() {
                 {leader && (
                   <div className="ink-muted text-xs">
                     {leader.name.first} {leader.name.last} leads it and {AGENDA_TEXT[g.agenda]}.
+                    {!g.suppressed && (
+                      <button className="pbtn-link ml-2" disabled={!mayReplace.ok} title={mayReplace.ok ? 'Thank them and put someone else over it. The group dips, then follows the new leader; the old one may not take it well.' : mayReplace.why ?? ''} onClick={() => replace(g.id)}>
+                        replace
+                      </button>
+                    )}
                   </div>
                 )}
               </div>
