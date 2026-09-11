@@ -20,6 +20,7 @@ export interface DioceseCandidate {
 }
 import type { SeminaryState } from './seminary';
 import type { Phase } from './stats';
+import type { StudyState } from './study';
 import type { Beat, Clock, Speed } from './time';
 
 export type FlagValue = boolean | number | string;
@@ -56,6 +57,8 @@ export interface GameState {
   character: Character | null;
   npcs: Record<string, Npc>;
   seminary: SeminaryState | null;
+  /** Away for a degree. Null unless the phase is 'study'. */
+  study: StudyState | null;
   flags: Record<string, FlagValue>;
   threads: Record<string, ThreadState>;
   /** eventId -> absolute week before which it may not fire again. */
@@ -103,7 +106,7 @@ export interface Snapshot {
   rngState: RngState;
 }
 
-export const SAVE_VERSION = 3;
+export const SAVE_VERSION = 4;
 
 export interface SaveFile {
   version: number;

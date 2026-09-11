@@ -5,7 +5,7 @@ import { actionDefs, obligationDefs } from '@/content/parish';
 import { CONSTITUENCY_KEYS, EVENT_CATEGORIES, SEVERITIES, STAT_KEYS, PILLARS, ARCHETYPES } from '@/types';
 import type { Condition, Effect, GameEvent } from '@/types';
 
-const PHASES = ['seminary', 'parochial_vicar', 'administrator', 'pastor', 'chancery', 'bishop'];
+const PHASES = ['seminary', 'study', 'parochial_vicar', 'administrator', 'pastor', 'chancery', 'bishop'];
 const PRESSURES = [
   'loyalty_vs_honesty',
   'ambition_vs_integrity',
@@ -223,7 +223,7 @@ function checkEvent(ev: GameEvent, file: string, problems: Problem[], ids: Set<s
   });
   for (const token of tokensIn(ev.title + ' ' + ev.body)) {
     if (token.startsWith('@') && !SELECTORS.includes(token)) problems.push(`${where}: unknown selector ${token}`);
-    if (!token.startsWith('@') && !['name', 'first_name', 'surname', 'diocese', 'parish', 'seminary'].includes(token)) {
+    if (!token.startsWith('@') && !['name', 'first_name', 'surname', 'diocese', 'parish', 'seminary', 'school', 'city', 'residence'].includes(token)) {
       problems.push(`${where}: unknown token {${token}}`);
     }
   }

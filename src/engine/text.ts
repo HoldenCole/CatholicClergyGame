@@ -5,6 +5,11 @@ import { resolveSelector } from './selectors';
 export function textExtras(state: GameState): Record<string, string> {
   const out: Record<string, string> = {};
   if (state.seminary) out.seminary = state.seminary.name;
+  if (state.study) {
+    out.school = state.study.school;
+    out.residence = state.study.residence;
+    out.city = state.study.city === 'rome' ? 'Rome' : 'Washington';
+  }
   if (state.world) out.diocese = state.world.diocese.visible.name;
   if (state.world && state.assignment) {
     const parish = state.world.parishes.find((p) => p.id === state.assignment!.parishId);

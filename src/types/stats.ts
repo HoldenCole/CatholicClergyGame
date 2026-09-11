@@ -39,6 +39,8 @@ export type Volume = 'private' | 'semi_public' | 'public';
 /** Career phase. See DESIGN.md §12.3. */
 export type Phase =
   | 'seminary'
+  /** Away for a degree: Rome or Washington. DESIGN §7.5, academic. */
+  | 'study'
   | 'parochial_vicar'
   | 'administrator'
   | 'pastor'

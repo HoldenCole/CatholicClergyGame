@@ -5,12 +5,14 @@ import type { ActionLocation, ObligationKey } from '@/types';
  * systems already own: a discretionary action (by location), an obligation
  * dial, a panel, or another scene. Coordinates are percentages of the scene.
  */
-export type SceneId = 'church' | 'rectory' | 'office' | 'hall' | 'chapel' | 'street' | 'study' | 'seminary_room' | 'seminary_hall' | 'chancery';
+export type SceneId = 'church' | 'rectory' | 'office' | 'hall' | 'chapel' | 'street' | 'study' | 'seminary_room' | 'seminary_hall' | 'chancery' | 'study_room' | 'study_city';
 
 export type HotspotBinding =
   | { kind: 'action'; actionId: string }
   /** A seminarian's free-hour activity, by id in content/seminary/activities.json. */
   | { kind: 'seminary_action'; activityId: string }
+  /** A priest-student's free hour, by id in content/study/activities.json. */
+  | { kind: 'study_action'; activityId: string }
   | { kind: 'obligation'; key: ObligationKey }
   | { kind: 'panel'; panel: 'routine' | 'groups' | 'projects' | 'offers' | 'digest' | 'parish' | 'formation' }
   | { kind: 'furnish'; place: 'church' | 'office' | 'rectory' | 'seminary_room' | 'chancery' }
@@ -171,7 +173,55 @@ export const CHANCERY_SCENE: SceneDef = {
   ],
 };
 
-export function sceneById(id: SceneId): SceneDef {
+/** The room at the college: a desk, a bed, a window on the city. */
+export const STUDY_ROOM: SceneDef = {
+  id: 'study_room',
+  label: 'Your room at the college',
+  locations: [],
+  hotspots: [
+    { id: 'desk', label: 'The desk: the thesis', x: 48, y: 44, w: 44, h: 26, binds: { kind: 'study_action', activityId: 'thesis' } },
+    { id: 'crucifix', label: 'The crucifix: the chapel', x: 44, y: 8, w: 12, h: 26, binds: { kind: 'study_action', activityId: 'holy_hour' } },
+    { id: 'window', label: 'The window: the city', x: 60, y: 6, w: 24, h: 28, binds: { kind: 'scene', scene: 'study_city' } },
+    { id: 'shelf', label: 'The shelf: the language', x: 6, y: 8, w: 30, h: 26, binds: { kind: 'study_action', activityId: 'italian' } },
+    { id: 'bed', label: 'The bed: the week', x: 4, y: 46, w: 38, h: 22, binds: { kind: 'panel', panel: 'routine' } },
+    { id: 'door', label: 'The door: the city', x: 88, y: 46, w: 10, h: 30, binds: { kind: 'scene', scene: 'study_city' } },
+  ],
+};
+
+/** The city: the university, the hospital, a parish, the basilica, the office, the table. */
+export const STUDY_CITY: SceneDef = {
+  id: 'study_city',
+  label: 'The city',
+  locations: [],
+  hotspots: [
+    { id: 'university', label: 'The university: lectures and the thesis', x: 2, y: 14, w: 22, h: 48, binds: { kind: 'study_action', activityId: 'thesis' } },
+    { id: 'basilica', label: 'The basilica: confessions', x: 36, y: 4, w: 28, h: 50, binds: { kind: 'study_action', activityId: 'confessions' } },
+    { id: 'hospital', label: 'The hospital: chaplaincy', x: 70, y: 18, w: 16, h: 40, binds: { kind: 'study_action', activityId: 'hospital' } },
+    { id: 'parish', label: 'A parish: Sunday supply', x: 86, y: 22, w: 12, h: 36, binds: { kind: 'study_action', activityId: 'parish_supply' } },
+    { id: 'curia', label: 'The offices: work at the Holy See', x: 24, y: 24, w: 12, h: 30, binds: { kind: 'study_action', activityId: 'curia' } },
+    { id: 'college', label: 'The college office', x: 64, y: 26, w: 7, h: 28, binds: { kind: 'study_action', activityId: 'college_office' } },
+    { id: 'table', label: 'The trattoria: the Roman table', x: 62, y: 62, w: 20, h: 22, binds: { kind: 'study_action', activityId: 'table' } },
+    { id: 'pilgrims', label: 'The piazza: pilgrims from home', x: 30, y: 62, w: 26, h: 22, binds: { kind: 'study_action', activityId: 'pilgrims' } },
+    { id: 'field', label: 'The pitch: calcio', x: 4, y: 66, w: 20, h: 20, binds: { kind: 'study_action', activityId: 'calcio' } },
+    { id: 'back', label: 'Back to your room', x: 86, y: 64, w: 12, h: 22, binds: { kind: 'scene', scene: 'study_room' } },
+  ],
+};
+
+/** The Washington version binds the same spots to the city's own work. */
+export const STUDY_CITY_DC: SceneDef = {
+  ...STUDY_CITY,
+  hotspots: STUDY_CITY.hotspots.map((h) =>
+    h.id === 'basilica' ? { ...h, label: 'The Shrine: confessions', binds: { kind: 'study_action', activityId: 'shrine_confessions' } }
+    : h.id === 'curia' ? { ...h, label: 'The tribunal', binds: { kind: 'study_action', activityId: 'tribunal' } }
+    : h.id === 'pilgrims' ? { ...h, label: 'Fourth Street: the bishops\' conference', binds: { kind: 'study_action', activityId: 'conference' } }
+    : h.id === 'table' ? { ...h, label: 'Dinner: the table' }
+    : h,
+  ),
+};
+
+export function sceneById(id: SceneId, city: 'rome' | 'washington' = 'rome'): SceneDef {
+  if (id === 'study_room') return STUDY_ROOM;
+  if (id === 'study_city') return city === 'washington' ? STUDY_CITY_DC : STUDY_CITY;
   if (id === 'seminary_room') return SEMINARY_SCENE;
   if (id === 'seminary_hall') return SEMINARY_HALL;
   if (id === 'chancery') return CHANCERY_SCENE;

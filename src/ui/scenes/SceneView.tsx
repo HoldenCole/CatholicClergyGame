@@ -3,12 +3,14 @@ import { useGameStore } from '@/engine/store';
 import { actionById, obligationDefs } from '@/content/parish';
 import { seminaryActivity } from '@/content/seminary';
 import { routineHours, routineOf, seminaryBudget } from '@/systems/seminaryWeek';
+import { studyActivity } from '@/content/study';
+import { studyActivitiesFor, studyBudget, studyHours } from '@/systems/studyWeek';
 import { seasonOf } from '@/engine/time';
 import { planWeek } from '@/systems/week';
 import { previewState } from '@/systems/decor';
 import type { DecorPlace, Quality } from '@/types';
 import SceneArt from './SceneArt';
-import { CHANCERY_SCENE, SCENES, SEMINARY_HALL, SEMINARY_SCENE, sceneById, type HotspotBinding, type SceneId } from './scenes';
+import { CHANCERY_SCENE, SCENES, SEMINARY_HALL, SEMINARY_SCENE, STUDY_CITY, STUDY_CITY_DC, STUDY_ROOM, sceneById, type HotspotBinding, type SceneId } from './scenes';
 import { useUiStore, type Sheet } from '../uiStore';
 
 const NEXT_QUALITY: Record<Quality, Quality> = { min: 'standard', standard: 'invested', invested: 'min' };
@@ -25,6 +27,7 @@ export default function SceneView() {
   const setDiscretionary = useGameStore((s) => s.setDiscretionary);
   const setObligation = useGameStore((s) => s.setObligation);
   const setSeminaryActivity = useGameStore((s) => s.setSeminaryActivity);
+  const setStudyActivity = useGameStore((s) => s.setStudyActivity);
   const chosenScene = useUiStore((s) => s.scene);
   const setScene = useUiStore((s) => s.setScene);
   const openSheet = useUiStore((s) => s.openSheet);
@@ -33,15 +36,20 @@ export default function SceneView() {
   const selected = useUiStore((s) => s.selected);
   const preview = selected ?? hoverPreview;
   const [hover, setHover] = useState<string | null>(null);
-  if (!game || (!game.parish && !game.seminary)) return null;
-  const inSeminary = !!game.seminary && !game.parish;
+  if (!game || (!game.parish && !game.seminary && !game.study)) return null;
+  const away = !!game.study;
+  const inSeminary = !away && !!game.seminary && !game.parish;
   const seminaryScenes: SceneId[] = ['seminary_room', 'seminary_hall'];
-  const sceneId: SceneId = inSeminary ? (chosenScene && seminaryScenes.includes(chosenScene) ? chosenScene : 'seminary_room') : chosenScene && !seminaryScenes.includes(chosenScene) ? chosenScene : 'rectory';
-  const scene = sceneById(sceneId);
+  const studyScenes: SceneId[] = ['study_room', 'study_city'];
+  const sceneId: SceneId = away
+    ? (chosenScene && studyScenes.includes(chosenScene) ? chosenScene : 'study_room')
+    : inSeminary ? (chosenScene && seminaryScenes.includes(chosenScene) ? chosenScene : 'seminary_room') : chosenScene && !seminaryScenes.includes(chosenScene) && !studyScenes.includes(chosenScene) ? chosenScene : 'rectory';
+  const scene = sceneById(sceneId, game.study?.city ?? 'rome');
+  const studyRoutine = game.study?.routine ?? {};
   const plan = game.parish ? planWeek(game) : null;
   const routine = game.parish?.routine ?? { obligations: {} as Record<string, never>, discretionary: {} as Record<string, number> };
   const hasChancery = Object.keys(game.flags).some((k) => k.startsWith('office:') && game.flags[k]);
-  const rooms = inSeminary ? [SEMINARY_SCENE, SEMINARY_HALL] : hasChancery ? [...SCENES, CHANCERY_SCENE] : SCENES;
+  const rooms = away ? [STUDY_ROOM, game.study?.city === 'washington' ? STUDY_CITY_DC : STUDY_CITY] : inSeminary ? [SEMINARY_SCENE, SEMINARY_HALL] : hasChancery ? [...SCENES, CHANCERY_SCENE] : SCENES;
   const semRoutine = game.seminary ? routineOf(game.seminary) : {};
   const shown = preview ? previewState(game, preview.place, preview.optionId) : game;
 
@@ -57,6 +65,15 @@ export default function SceneView() {
         if (!def || !game.seminary) return binds.activityId;
         const ap = semRoutine[binds.activityId] ?? 0;
         const left = seminaryBudget(game) - routineHours(game.seminary);
+        return `${def.label}: ${ap} hour${ap === 1 ? '' : 's'} a week. ${def.blurb} (${ap >= def.maxAp ? 'click to clear' : left > 0 ? 'click for one more' : 'no hours left; take one from something else'})`;
+      }
+      case 'study_action': {
+        const def = studyActivity(binds.activityId);
+        if (!def || !game.study) return binds.activityId;
+        const ap = studyRoutine[binds.activityId] ?? 0;
+        const av = studyActivitiesFor(game).find((a) => a.def.id === binds.activityId);
+        const left = studyBudget(game) - studyHours(game.study);
+        if (av && !av.available) return `${def.label}: not yet; it needs ${av.why}. ${def.blurb}`;
         return `${def.label}: ${ap} hour${ap === 1 ? '' : 's'} a week. ${def.blurb} (${ap >= def.maxAp ? 'click to clear' : left > 0 ? 'click for one more' : 'no hours left; take one from something else'})`;
       }
       case 'obligation': {
@@ -89,6 +106,16 @@ export default function SceneView() {
         if (!def) return;
         const ap = semRoutine[binds.activityId] ?? 0;
         setSeminaryActivity(binds.activityId, ap >= def.maxAp ? 0 : ap + 1);
+        openSheet('week');
+        break;
+      }
+      case 'study_action': {
+        const def = studyActivity(binds.activityId);
+        if (!def) return;
+        const av = studyActivitiesFor(game).find((a) => a.def.id === binds.activityId);
+        if (av && !av.available) { openSheet('week'); return; }
+        const ap = studyRoutine[binds.activityId] ?? 0;
+        setStudyActivity(binds.activityId, ap >= def.maxAp ? 0 : ap + 1);
         openSheet('week');
         break;
       }
@@ -135,7 +162,7 @@ export default function SceneView() {
         <SceneArt scene={scene.id} season={seasonOf(game.clock)} state={shown} />
         {preview && <div className="pointer-events-none absolute left-3 top-3 rounded bg-[#2b2116]/80 px-2 py-1 text-xs text-[#e6c25a]">As it would look</div>}
         {scene.hotspots.map((h) => {
-          const active = h.binds.kind === 'action' ? (routine.discretionary[h.binds.actionId] ?? 0) > 0 : h.binds.kind === 'seminary_action' ? (semRoutine[h.binds.activityId] ?? 0) > 0 : h.binds.kind === 'obligation' ? (routine.obligations as Record<string, Quality>)[h.binds.key] !== 'standard' : false;
+          const active = h.binds.kind === 'action' ? (routine.discretionary[h.binds.actionId] ?? 0) > 0 : h.binds.kind === 'seminary_action' ? (semRoutine[h.binds.activityId] ?? 0) > 0 : h.binds.kind === 'study_action' ? (studyRoutine[h.binds.activityId] ?? 0) > 0 : h.binds.kind === 'obligation' ? (routine.obligations as Record<string, Quality>)[h.binds.key] !== 'standard' : false;
           return (
             <button
               key={h.id}
@@ -152,7 +179,7 @@ export default function SceneView() {
         })}
       </div>
       <div className="plate px-4 py-2">
-        {hovered ? describe(hovered.binds) : inSeminary ? 'Your room. The shelf fills with what you give the year to.' : 'Everything in the room is something you could do with the week.'}
+        {hovered ? describe(hovered.binds) : away ? 'A room in a city that does not know you. The hours are yours; the years are the diocese\'s.' : inSeminary ? 'Your room. The shelf fills with what you give the year to.' : 'Everything in the room is something you could do with the week.'}
       </div>
     </div>
   );

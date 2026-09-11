@@ -156,6 +156,22 @@ in words. Write `requires` with the gating condition first, so the sheet
 names the real obstacle. Flags are only explained when `FLAG_WORD` in
 `doors.ts` knows them; add a phrase there for any new gating flag.
 
+## Study away (`content/study/`, `events/study/`)
+
+An offer whose commitment carries `away: <program id>` (programs in
+`study/programs.json`: `rome_stl`, `cua_jcl`) does not run in the background:
+the man leaves his parish, the phase becomes `study`, and he lives where he
+studies until the weeks are up. Each week he points his free hours at the
+activities in `study/activities.json` (studies and work on the side: the
+hospital, Sunday supply, confessions, the college office, the Holy See or
+the tribunal, pilgrims, the table); each has stats, reputation, an optional
+`requires` (the sheet says what is missing), `onFirst` effects (flags and
+traits only) and `credentialAfter`. Events for the phase live in
+`events/study/away.json` with phase `"study"`, gated by the flags
+`study:rome` / `study:washington`; tokens `{school}`, `{city}`, `{residence}`.
+When the years end the commitment's `onComplete` (or the offer's `failure`)
+applies and the board finds him a post at home.
+
 ## Offers (DESIGN.md §7.5)
 
 Files under `src/content/offers/*.json`: `{ "_notes": "...", "offers": [ ... ] }`.

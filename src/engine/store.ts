@@ -30,7 +30,7 @@ import {
   leaveSeminary as leave,
   ordain as doOrdain,
 } from './seminary';
-import { parishWeekHook, resolvePending, seminaryWeekHook, type EventDeps } from './weekHook';
+import { parishWeekHook, resolvePending, seminaryWeekHook, studyWeekHook, type EventDeps } from './weekHook';
 import { setDiscretionary as doSetDiscretionary, setObligation as doSetObligation, startAssignment } from './parish';
 import { focusGroup as doFocus, replaceLeader as doReplaceLeader, startFounding as doStartFounding, suppressGroup as doSuppress } from '@/systems/groups';
 import { startWork as doStartWork, stopWork as doStopWork } from '@/systems/problems';
@@ -41,6 +41,7 @@ import type { GroupType, ProjectType } from '@/types';
 import { startProject as doStartProject } from '@/systems/projects';
 import { furnish as doFurnish, petition as doPetition } from '@/systems/decor';
 import { setSeminaryActivity as doSetSeminaryActivity } from '@/systems/seminaryWeek';
+import { setStudyActivity as doSetStudyActivity } from '@/systems/studyWeek';
 import { setPreference, type Preference } from '@/systems/assignment';
 import type { DecorPlace, LiturgicalTopic } from '@/types';
 import { anthropicProvider, type Provider } from '@/llm/provider';
@@ -87,6 +88,8 @@ export interface GameStore {
   setObligation(key: ObligationKey, quality: Quality): void;
   /** Hours a week a seminarian gives an activity. */
   setSeminaryActivity(id: string, ap: number): void;
+  /** A priest-student's free hours. */
+  setStudyActivity(id: string, ap: number): void;
   /** What the man has asked the chancery for, read by the assignment algorithm. DESIGN §7.4 */
   setPreference(pref: Preference): void;
   setDiscretionary(actionId: string, ap: number): void;
@@ -165,6 +168,7 @@ function depsFor(state: GameState): EventDeps {
 function hookFor(state: GameState): WeekHook {
   if (hookOverride) return hookOverride;
   if (state.phase === 'seminary') return seminaryWeekHook(depsFor(state));
+  if (state.phase === 'study' && state.study) return studyWeekHook(depsFor(state));
   if (state.parish) return parishWeekHook(depsFor(state));
   return noHook;
 }
@@ -371,6 +375,9 @@ export const useGameStore = create<GameStore>()((set, get) => ({
   },
   setSeminaryActivity(id, ap) {
     update(set, get, (game) => doSetSeminaryActivity(game, id, ap));
+  },
+  setStudyActivity(id, ap) {
+    update(set, get, (game) => doSetStudyActivity(game, id, ap));
   },
   setPreference(pref) {
     update(set, get, (game) => setPreference(game, pref));

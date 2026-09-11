@@ -87,6 +87,12 @@ export function deserialize(json: string): SaveFile {
     throw new SaveError('not valid JSON');
   }
   if (!isRecord(raw)) throw new SaveError('save is not an object');
+  if (raw.version === 3) {
+    // v3 → v4: the study-away phase added a field.
+    if (isRecord(raw.state) && raw.state.study === undefined) raw.state.study = null;
+    if (isRecord(raw.previous) && isRecord(raw.previous.state) && raw.previous.state.study === undefined) raw.previous.state.study = null;
+    raw.version = SAVE_VERSION;
+  }
   if (raw.version !== SAVE_VERSION) {
     throw new SaveError(`unsupported save version ${String(raw.version)} (expected ${SAVE_VERSION})`);
   }
