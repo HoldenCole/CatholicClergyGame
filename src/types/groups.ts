@@ -50,6 +50,8 @@ export interface Group {
   suppressed: boolean;
   /** The leader has turned against the player. */
   hostile: boolean;
+  /** The player has singled this group out: sustaining hours go to focused groups first. */
+  focus?: boolean;
 }
 
 export interface GroupTypeDef {

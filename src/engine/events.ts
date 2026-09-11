@@ -80,9 +80,9 @@ export function eventSelectors(event: GameEvent): string[] {
  * Draw up to `count` distinct eligible events, weighted, without replacement.
  * Consumes the RNG once per pick.
  */
-export function drawEvents(pool: GameEvent[], state: GameState, rng: Rng, count: number): GameEvent[] {
+export function drawEvents(pool: GameEvent[], state: GameState, rng: Rng, count: number, modifier?: (e: GameEvent) => number): GameEvent[] {
   let candidates = pool.filter((e) => isEligible(e, state));
-  const weights = new Map(candidates.map((e) => [e.id, eventWeight(e, state)]));
+  const weights = new Map(candidates.map((e) => [e.id, eventWeight(e, state) * (modifier ? modifier(e) : 1)]));
   candidates = candidates.filter((e) => (weights.get(e.id) ?? 0) > 0);
   const picked: GameEvent[] = [];
   while (picked.length < count && candidates.length > 0) {

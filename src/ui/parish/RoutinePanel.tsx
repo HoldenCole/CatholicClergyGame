@@ -1,11 +1,25 @@
 import { useGameStore } from '@/engine/store';
 import { actionDefs, obligationDefs } from '@/content/parish';
-import { adminFloorFor, planWeek, seasonalLoad, weekBudget } from '@/systems/week';
+import { adminFloorFor, careOf, careOfPlan, planWeek, seasonalLoad, weekBudget } from '@/systems/week';
+import type { Effect } from '@/types';
 import { commitmentAp } from '@/engine/offers';
 import { OBLIGATION_KEYS, type Quality } from '@/types';
 import Sheet from '../Sheet';
 
 const QUALITIES: Quality[] = ['min', 'standard', 'invested'];
+const FEEDS: Record<string, string> = {
+  'reputation:parishioners': 'the people', 'reputation:chancery': 'the chancery', 'reputation:brother_priests': 'brother priests', 'reputation:public': 'the town',
+  'stat:piety': 'piety', 'stat:charisma': 'presence', 'stat:theology': 'theology', 'stat:knowledge': 'learning', 'stat:administration': 'order',
+};
+const PEWS = new Set(['visits', 'extra_confessions', 'groups']);
+
+/** What an hour here feeds, in words. */
+function feeds(id: string, effects: Effect[]): string {
+  const words = effects.filter((e) => (e.delta ?? 0) > 0).map((e) => FEEDS[`${e.target}:${e.key}`]).filter((w): w is string => !!w);
+  if (id === 'groups') words.unshift('the groups');
+  if (PEWS.has(id)) words.push('the pews');
+  return words.join(', ');
+}
 const QUALITY_LABEL: Record<Quality, string> = { min: 'Minimum', standard: 'Standard', invested: 'Invested' };
 const QUALITY_SHORT: Record<Quality, string> = { min: 'Min', standard: 'Std', invested: 'Full' };
 
@@ -21,6 +35,10 @@ export default function RoutinePanel() {
   const routine = game.parish.routine;
   const requested = Object.values(routine.discretionary).reduce((a, b) => a + b, 0);
   const available = Math.max(0, budget - plan.mandatory);
+  const careNow = careOfPlan(plan);
+  const care = careOf(game);
+  const careWord = careNow >= 0.8 ? 'The people see a great deal of you' : careNow >= 0.45 ? 'The people see a fair amount of you' : careNow >= 0.2 ? 'The people see a little of you' : 'The people see almost nothing of you outside Mass';
+  const careTrend = careNow > care + 0.05 ? ', and it is beginning to show in the pews' : careNow < care - 0.05 ? ', less than they did' : '';
 
   return (
     <>
@@ -66,9 +84,9 @@ export default function RoutinePanel() {
             const planned = plan.discretionary[a.id] ?? 0;
             return (
               <li key={a.id} className="flex items-center justify-between gap-2 text-sm">
-                <span title={a.blurb}>
+                <span className="min-w-0" title={a.blurb}>
                   {a.label}
-                  <span className="ink-faint ml-2 text-xs">{a.location}{ap > 0 && planned < ap ? ` · trimmed to ${planned}` : ''}</span>
+                  <span className="ink-faint ml-2 text-xs">{feeds(a.id, a.effectsPerAp)}{ap > 0 && planned < ap ? ` · trimmed to ${planned}` : ''}</span>
                 </span>
                 <div className="flex items-center gap-1">
                   <button className="pbtn px-2 py-0 text-xs" onClick={() => setDiscretionary(a.id, ap - 1)}>−</button>
@@ -79,6 +97,7 @@ export default function RoutinePanel() {
             );
           })}
         </ul>
+        <p className="ink-muted mt-3 text-xs">{careWord}{careTrend}. Hours with the people fill the pews, and full pews fill the basket; a parish that is looked after has fewer fires.</p>
       </Sheet>
     </>
   );

@@ -29,6 +29,27 @@ export function routineHours(sem: SeminaryState): number {
   return Object.values(routineOf(sem)).reduce((a, b) => a + b, 0);
 }
 
+const STAT_WORD: Record<StatKey, string> = { piety: 'piety', theology: 'theology', knowledge: 'learning', charisma: 'presence', administration: 'order' };
+
+/** What an activity builds, in words: the sheet shows no numbers in seminary. */
+export function activityBuilds(id: string): string {
+  const def = seminaryActivity(id);
+  if (!def) return '';
+  const keys = (Object.keys(def.stats) as StatKey[]).sort((a, b) => (def.stats[b] ?? 0) - (def.stats[a] ?? 0));
+  return keys.map((k) => STAT_WORD[k]).join(', ');
+}
+
+/** A sentence for the evaluation about what the year's free hours did, or null if they did nothing. */
+export function hoursGainsSentence(sem: SeminaryState): string | null {
+  const gains = Object.entries(sem.hoursGains ?? {}).filter(([, v]) => (v ?? 0) >= 1) as [StatKey, number][];
+  if (!gains.length) return null;
+  gains.sort((a, b) => b[1] - a[1]);
+  const word = (v: number) => (v >= 8 ? 'a great deal of' : v >= 4 ? 'a good deal of' : 'some');
+  const parts = gains.map(([k, v]) => `${word(v)} ${STAT_WORD[k]}`);
+  const list = parts.length > 1 ? `${parts.slice(0, -1).join(', ')} and ${parts[parts.length - 1]}` : parts[0]!;
+  return `Your own hours this year built ${list}.`;
+}
+
 /** Give an activity so many hours a week; clamped to its maximum and to what is left of the week. */
 export function setSeminaryActivity(state: GameState, id: string, ap: number): GameState {
   const sem = state.seminary;
@@ -73,6 +94,7 @@ export function seminaryWeek(state: GameState, rng: Rng): SeminaryWeekResult {
   let credentials = c.credentials;
   const pillarScores = { ...sem.pillarScores };
   const hoursLogged = { ...(sem.hoursLogged ?? {}) };
+  const hoursGains: Partial<Record<StatKey, number>> = { ...(sem.hoursGains ?? {}) };
   const npcs = { ...state.npcs };
   const flags = { ...state.flags };
   const phrases: string[] = [];
@@ -82,7 +104,11 @@ export function seminaryWeek(state: GameState, rng: Rng): SeminaryWeekResult {
     const hours = routine[def.id] ?? 0;
     if (hours <= 0) continue;
     for (const [p, rate] of Object.entries(def.pillars) as [Pillar, number][]) pillarScores[p] += rate * hours;
-    for (const [k, rate] of Object.entries(def.stats) as [StatKey, number][]) stats = applyStat(stats, k, rate * hours);
+    for (const [k, rate] of Object.entries(def.stats) as [StatKey, number][]) {
+      const before = stats[k];
+      stats = applyStat(stats, k, rate * hours);
+      hoursGains[k] = (hoursGains[k] ?? 0) + (stats[k] - before);
+    }
     if (def.reputation) reputation = applyReputation(reputation, def.reputation.key, def.reputation.delta * hours);
     for (const r of def.relationships ?? []) {
       const npc = resolveSelector({ ...state, npcs }, r.selector, rng.derive(`${def.id}:${state.clock.week}`));
@@ -108,7 +134,7 @@ export function seminaryWeek(state: GameState, rng: Rng): SeminaryWeekResult {
     npcs,
     flags,
     character: { ...c, stats, reputation, credentials },
-    seminary: { ...sem, pillarScores, hoursLogged },
+    seminary: { ...sem, pillarScores, hoursLogged, hoursGains },
   };
   const head = CLASSES[sem.year] ?? 'Classes';
   const body = phrases.length ? `${head}; ${phrases.join(', ')}.` : `${head}, and the free hours went nowhere in particular.`;

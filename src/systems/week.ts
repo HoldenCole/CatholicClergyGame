@@ -7,7 +7,7 @@ import { seasonOf } from '@/engine/time';
 import { decayWeek } from './stats';
 import { applyReputation, fadeReputation } from './reputation';
 import { terrainOf } from './assignment';
-import { groupRelief, groupsWeek, finishFounding } from './groups';
+import { averageVitality, groupRelief, groupsWeek, finishFounding } from './groups';
 import type { Rng } from '@/engine/rng';
 
 /** Tunables for the weekly loop. DESIGN 2.6 and 8.1; numbers not in the design are invented. */
@@ -33,6 +33,17 @@ export const WEEK = {
   runningCostShare: 0.82,
   debtRateAnnual: 0.05,
   buildingDecayPerWeek: 0.04,
+  /** Hours a week of presence (visits, confessions, the groups, a real homily) that count as full care. Invented. */
+  careFullHours: 6,
+  /** How fast the rolling care score follows the week. */
+  careFollow: 0.15,
+  /** Attendance added at full care, and at thriving groups across the board. Invented. */
+  careAttendance: 0.12,
+  groupsAttendance: 0.08,
+  /** How fast attendance follows its target. */
+  attendanceFollow: 0.2,
+  /** At full care, finance, admin, and group fires draw this much less often. */
+  careProblemRelief: 0.4,
 } as const;
 
 const NEXT_DOWN: Record<Quality, Quality | null> = { invested: 'standard', standard: 'min', min: null };
@@ -113,6 +124,27 @@ function scaled(effects: Effect[], factor: number): Effect[] {
   return effects.map((e) => (e.delta !== undefined ? { ...e, delta: e.delta * factor } : e));
 }
 
+/** Presence hours in the week as a 0..1 share of full care. */
+export function careOfPlan(plan: Plan): number {
+  const d = plan.discretionary;
+  const homily = plan.obligations.sunday_masses === 'invested' ? 2 : plan.obligations.sunday_masses === 'min' ? -1 : 0;
+  const hours = (d.visits ?? 0) + 0.6 * (d.extra_confessions ?? 0) + 0.6 * (d.groups ?? 0) + homily;
+  return Math.max(0, Math.min(1, hours / WEEK.careFullHours));
+}
+
+/** The rolling care score, 0..1; older saves start at nothing. */
+export function careOf(state: GameState): number {
+  return state.parish?.care ?? 0;
+}
+
+/** Where attendance is heading under the current routine and standing. */
+export function attendanceTarget(state: GameState, care: number): number {
+  const c = state.character!;
+  const groups = (averageVitality(state) - 50) / 50;
+  const raw = 0.4 + c.reputation.parishioners / 400 + c.stats.charisma / 600 + WEEK.careAttendance * care + WEEK.groupsAttendance * groups;
+  return Math.min(0.9, Math.max(0.15, raw));
+}
+
 function isSummer(state: GameState): boolean {
   const day = new Date((state.clock.startDay + state.clock.week * 7) * 86_400_000);
   const m = day.getUTCMonth();
@@ -185,11 +217,14 @@ export function resolveWeek(state: GameState, rng: Rng): { state: GameState; led
     next = { ...next, character: { ...next.character!, reputation: applyReputation(next.character!.reputation, 'parishioners', pull) } };
   }
 
+  // Presence and attendance. Hours with the people show up in the pews, slowly.
+  const care = careOf(state) + (careOfPlan(plan) - careOf(state)) * WEEK.careFollow;
+  const target = attendanceTarget(next, care);
+  const attendance = parish.attendance + (target - parish.attendance) * WEEK.attendanceFollow;
+
   // Finance.
   const world = next.world!;
   const record = world.parishes.find((p) => p.id === parish.parishId)!;
-  const support = next.character!.reputation.parishioners;
-  const attendance = Math.min(0.9, Math.max(0.15, 0.4 + support / 400 + next.character!.stats.charisma / 600));
   const season = seasonOf(next.clock);
   const seasonal = WEEK.collectionSeason[season] * (season === 'ordinary' && isSummer(next) ? WEEK.summerCollection : 1);
   const collection = Math.round(record.weeklyCollections * (attendance / 0.45) * seasonal * rng.float(0.92, 1.08));
@@ -215,6 +250,9 @@ export function resolveWeek(state: GameState, rng: Rng): { state: GameState; led
     apDiscretionary: plan.discretionary,
     obligations: plan.obligations,
     collection,
+    attendance,
+    attendanceDelta: attendance - parish.attendance,
+    debtService,
     lines,
   };
   return {
@@ -224,6 +262,7 @@ export function resolveWeek(state: GameState, rng: Rng): { state: GameState; led
       parish: {
         ...parish,
         attendance,
+        care,
         recycledHomilyStreak: streak,
         apNextWeek: 0,
         weeksServed: parish.weeksServed + 1,

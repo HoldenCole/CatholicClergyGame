@@ -239,6 +239,14 @@ next week. Flags set by the parish loop: `role:parochial_vicar`,
 `affiliation:*` and `patron:*` (from offers), `late_vocation`.
 Tokens: `{parish}` (the parish's name), `{diocese}`.
 
+### Care and fires
+
+The engine keeps a rolling 0..1 `care` score on the parish from the planned
+week: visits, extra confessions, the groups, and an invested homily. Care
+lifts attendance, attendance lifts collections, and at high care events in
+the `finance`, `admin`, and `group` categories draw less often (up to 40%).
+Authors need not gate on it; it is the reward for a tended parish.
+
 ## Group events (DESIGN.md §10)
 
 Files under `src/content/events/parish/groups*.json`. Same schema, phase
@@ -260,6 +268,11 @@ effects land on that group.
 { "target": "group", "key": "dissolve" }
 { "target": "relationship", "key": "@group_leader", "delta": -10 }
 ```
+
+Sustaining hours (the `groups` action) go to the groups the player has
+singled out (`focus`) and are spread across all supported groups otherwise;
+the sheet shows each group's expected weekly trend. Mean group vitality
+feeds attendance.
 
 Group types: young_adult, youth, pro_life, svdp (St. Vincent de Paul),
 knights (Knights of Columbus), womens_guild, bible_study, adoration, choir,

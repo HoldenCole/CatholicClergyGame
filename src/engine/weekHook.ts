@@ -9,6 +9,7 @@ import { careerYear, isCareerYear, nextAssignment } from './career';
 import { projectWeek } from '@/systems/projects';
 import { resolvePermissions } from '@/systems/decor';
 import { seminaryWeek } from '@/systems/seminaryWeek';
+import { careOf, WEEK } from '@/systems/week';
 import { renderText } from './text';
 import type { WeekHook } from './clock';
 
@@ -91,6 +92,13 @@ export function seminaryWeekHook(deps: EventDeps): WeekHook {
   };
 }
 
+/** A well-tended parish has fewer fires: finance, admin, and group problems draw less often at high care. */
+export function careRelief(state: GameState): (e: GameEvent) => number {
+  const relief = WEEK.careProblemRelief * careOf(state);
+  return (e) => (FIRE_CATEGORIES.has(e.category) ? 1 - relief : 1);
+}
+const FIRE_CATEGORIES = new Set<GameEvent['category']>(['finance', 'admin', 'group']);
+
 /** The parish week: the routine resolves, a played week may fire an event, the arc may end, offers tick. */
 export function parishWeekHook(deps: EventDeps): WeekHook {
   return (state: GameState, rng: Rng, reachedBeats: Beat[]) => {
@@ -113,7 +121,7 @@ export function parishWeekHook(deps: EventDeps): WeekHook {
     }
     if (isPlayedWeek(next)) {
       // Beat events (a succession) fire only through their beat, never on an ordinary played week.
-      const [event] = drawEvents(deps.pool.filter((e) => !e.beat), next, rng, 1);
+      const [event] = drawEvents(deps.pool.filter((e) => !e.beat), next, rng, 1, careRelief(next));
       if (event) next = fireOrResolve(next, event, rng, deps);
     }
     if (reachedBeats.some((b) => b.kind === 'assignment') && next.mode.kind === 'clock') {

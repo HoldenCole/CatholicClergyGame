@@ -1,6 +1,7 @@
 import { useGameStore } from '@/engine/store';
 import { PILLARS, type EvaluationResult, type Pillar } from '@/types';
 import { FORMATION } from '@/systems/formation';
+import { hoursGainsSentence } from '@/systems/seminaryWeek';
 import Panel from '../Panel';
 
 const RESULT_TEXT: Record<EvaluationResult, { title: string; body: string }> = {
@@ -27,6 +28,7 @@ export default function EvaluationPanel() {
   if (!game || game.mode.kind !== 'evaluation') return null;
   const rec = game.mode.record;
   const text = RESULT_TEXT[rec.result];
+  const hours = game.seminary ? hoursGainsSentence(game.seminary) : null;
   return (
     <Panel title={`Annual evaluation · year ${rec.year}`} tilt="r">
       <h2 className="title text-xl">{text.title}</h2>
@@ -39,6 +41,7 @@ export default function EvaluationPanel() {
           </div>
         ))}
       </dl>
+      {hours && <p className="ink-muted mt-3 text-sm">{hours}</p>}
       {rec.notes.length > 0 && (
         <ul className="ink-muted mt-4 list-disc pl-5 text-sm">
           {rec.notes.map((n, i) => (

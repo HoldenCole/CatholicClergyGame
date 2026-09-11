@@ -8,9 +8,9 @@ import { generateParishPeople } from '@/generation/parishPeople';
 export const GROUPS = {
   perParish: [3, 6] as [number, number],
   /** Vitality lost per week with no attention. */
-  decayPerWeek: 0.6,
+  decayPerWeek: 0.5,
   /** Vitality gained per AP of sustaining, before friction. */
-  vitalityPerAp: 2.5,
+  vitalityPerAp: 4,
   /** Alignment gap beyond which sustaining is half as effective and the leader cools. */
   frictionGap: 50,
   suppressedDecay: 3,
@@ -93,6 +93,47 @@ export function parishGroups(state: GameState): Group[] {
   return Object.values(state.groups).filter((g) => g.parishId === pid).sort((a, b) => (a.id < b.id ? -1 : 1));
 }
 
+/** Mean vitality of the groups the player still supports, or 50 with none. */
+export function averageVitality(state: GameState): number {
+  const live = parishGroups(state).filter((g) => !g.suppressed);
+  if (live.length === 0) return 50;
+  return live.reduce((n, g) => n + g.vitality, 0) / live.length;
+}
+
+/**
+ * How the sustaining hours are shared out: focused groups take all of it
+ * between them; with none focused, every group the player still supports
+ * gets an equal share.
+ */
+export function sustainShares(state: GameState, sustainAp: number): Record<string, number> {
+  const active = parishGroups(state).filter((g) => !g.suppressed && !g.hostile);
+  const focused = active.filter((g) => g.focus);
+  const takers = focused.length ? focused : active;
+  const out: Record<string, number> = {};
+  if (!takers.length || sustainAp <= 0) return out;
+  for (const g of takers) out[g.id] = sustainAp / takers.length;
+  return out;
+}
+
+function frictionFor(g: Group, playerAlignment: number): number {
+  return Math.abs(g.alignment - playerAlignment) > GROUPS.frictionGap ? 0.5 : 1;
+}
+
+/** Expected vitality change a week for a group under the current routine; what the sheet shows. */
+export function groupTrend(state: GameState, g: Group, sustainAp: number): number {
+  if (g.suppressed) return -(GROUPS.decayPerWeek + GROUPS.suppressedDecay);
+  if (g.hostile || !state.character) return -GROUPS.decayPerWeek;
+  const share = sustainShares(state, sustainAp)[g.id] ?? 0;
+  return share * GROUPS.vitalityPerAp * frictionFor(g, state.character.alignment) - GROUPS.decayPerWeek;
+}
+
+/** Single a group out for the sustaining hours, or stop. */
+export function focusGroup(state: GameState, groupId: string, focus = true): GameState {
+  const g = state.groups[groupId];
+  if (!g) return state;
+  return { ...state, groups: { ...state.groups, [groupId]: { ...g, focus } } };
+}
+
 /** AP of obligation relief thriving groups provide. DESIGN §10.2 */
 export function groupRelief(state: GameState): Partial<Record<'sacramental_prep' | 'confessions' | 'meetings', number>> {
   const out: Partial<Record<'sacramental_prep' | 'confessions' | 'meetings', number>> = {};
@@ -117,8 +158,7 @@ export function groupsWeek(state: GameState, sustainAp: number, rng: Rng): { sta
   if (groups.length === 0 || !state.character) return { state, lines: [] };
   const lines: string[] = [];
   let next = state;
-  const active = groups.filter((g) => !g.suppressed && !g.hostile);
-  const perGroup = active.length ? sustainAp / active.length : 0;
+  const shares = sustainShares(state, sustainAp);
   const updated: Record<string, Group> = { ...state.groups };
   const playerAlignment = state.character.alignment;
 
@@ -133,10 +173,9 @@ export function groupsWeek(state: GameState, sustainAp: number, rng: Rng): { sta
         ]);
         lines.push(`${g.name}: its leader has written to the chancery about you.`);
       }
-    } else if (!g.hostile && perGroup > 0) {
+    } else if (!g.hostile && (shares[g.id] ?? 0) > 0) {
       const gap = Math.abs(g.alignment - playerAlignment);
-      const friction = gap > GROUPS.frictionGap ? 0.5 : 1;
-      v += perGroup * GROUPS.vitalityPerAp * friction;
+      v += shares[g.id]! * GROUPS.vitalityPerAp * frictionFor(g, playerAlignment);
       if (gap > GROUPS.frictionGap) {
         const leader = next.npcs[g.leaderId];
         if (leader) next = { ...next, npcs: { ...next.npcs, [leader.id]: { ...leader, relationship: Math.max(-100, leader.relationship - 0.3) } } };
