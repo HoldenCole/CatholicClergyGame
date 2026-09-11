@@ -1,0 +1,357 @@
+{
+  "_notes": "The Washington pool: six events that could only happen in the Archdiocese of Washington, drawn for any parish role once the engine sets diocese:washington. Named people are invented; the senator in dio_dc_the_rail is unnamed and fictional. Flags written: dio_dc_menjivar_ally / dio_dc_menjivar_reined / dio_dc_menjivar_promoted (Deacon Wilfredo Menjívar, the Salvadoran permanent deacon who runs the Spanish community in Langley Park; later content may read whether the man let him run it), dio_dc_pilgrim_host / dio_dc_parish_first / dio_dc_pilgrim_mass (the cherry blossoms and the tourists), dio_dc_nunciature_guest / dio_dc_spoke_at_nunciature / dio_dc_declined_nunciature (the reception on Massachusetts Avenue and the monsignor who decides what the nuncio hears), dio_dc_opened_the_reserve / dio_dc_second_collection / dio_dc_asked_bethesda (the federal shutdown; parish cash moves only for a pastor), dio_dc_geez_in_church / dio_dc_geez_in_hall (the Ge'ez-rite Eritreans and Ethiopians on Sunday afternoons), dio_dc_gave_communion / dio_dc_wrote_the_senator / dio_dc_refused_at_the_rail (a Catholic senator at the rail; authored only, no flavorPrompt). Positions recorded: immigration (the deacon's letter), social_justice (the rail).",
+  "events": [
+    {
+      "id": "dio_dc_menjivar",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["friendship_vs_duty", "competence"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 8,
+      "suppressYears": 4,
+      "once": true,
+      "requires": [
+        { "type": "flag", "key": "diocese:washington", "value": true },
+        { "type": "parish", "key": "needsSpanish", "value": true }
+      ],
+      "bias": [
+        { "when": { "type": "parish", "key": "kind", "value": "immigrant_growing" }, "multiplier": 1.6 }
+      ],
+      "title": "Deacon Menjívar",
+      "body": "Wilfredo Menjívar came from Chalatenango in 1991, has driven a landscaping truck in Montgomery County ever since, and was ordained a permanent deacon nine years ago in the cathedral with his wife and five children in the front pew. He runs the Spanish community at {parish}. That is not an exaggeration: forty baptisms a month, the quinceañera preparation, the Divino Salvador del Mundo feast in August with the pupusa tent that funds the youth group for the year, the men's group that meets at six in the morning before the trucks go out. Priests come and go from this parish and the deacon does not. He comes to the office on a Tuesday with two requests, one written and one not. His lawyer needs a letter from a community leader for the renewal of his protected status, which has been renewed every eighteen months for twenty years and which the news says may not be this time; he has drafted it himself, and it is good. The second request he makes standing up. He would like things to go on being done as they are done. He says it kindly, as a man who has trained several priests.",
+      "flavorPrompt": "A permanent deacon who has outlasted every priest, a letter for his own papers drafted in his own hand, and the request he makes standing up.",
+      "choices": [
+        {
+          "id": "sign_and_let_him_run_it",
+          "label": "Sign the letter, and let him go on running the Spanish community as he runs it",
+          "default": true,
+          "volume": "semi_public",
+          "positionTopic": "immigration",
+          "positionValue": 20,
+          "outcome": "The letter goes to the lawyer with your signature and the parish seal, and the deacon's status is renewed in the spring. The baptisms go on at forty a month and the pupusa tent makes its number. You learn to ask him before you decide anything on the Spanish side, and the Spanish side runs. When the pastoral center asks who leads Hispanic ministry at {parish}, you say the deacon, and they write it down, and it is true.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 4 },
+            { "target": "flag", "key": "dio_dc_menjivar_ally", "value": true }
+          ]
+        },
+        {
+          "id": "sign_and_take_back",
+          "label": "Sign the letter, and begin taking the baptism preparation back into your own hands",
+          "outcome": "The letter goes and the status is renewed. You take the baptism classes yourself, in a Spanish that is not his, and the numbers drop to thirty a month and then come back to forty, because the families come for the sacrament and not the teacher. The deacon is correct with you and continues to run everything else. The men's group at six in the morning does not invite you, which you notice in the second year.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 1 },
+            { "target": "stat", "key": "administration", "delta": 1 },
+            { "target": "flag", "key": "dio_dc_menjivar_reined", "value": true }
+          ]
+        },
+        {
+          "id": "sign_and_promote",
+          "label": "Sign the letter, and write a second one to {@bishop} saying the deacon should be the archdiocese's voice on Hispanic ministry",
+          "requires": [ { "type": "reputation", "key": "chancery", "op": ">=", "value": 15 } ],
+          "outcome": "The archbishop's office reads the second letter and, in the fall, the deacon is on the archdiocesan council for Hispanic ministry and at a table in Hyattsville with people who have degrees. He goes in his work boots the first time and in shoes after. At {parish} nothing changes, because he still runs it, but the pastoral center now knows the name, and so does the nunciature, which reads everything.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": 2 },
+            { "target": "reputation", "key": "parishioners", "delta": 3 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "flag", "key": "dio_dc_menjivar_promoted", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dio_dc_blossoms",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["competence"],
+      "severity": "ROUTINE",
+      "category": "admin",
+      "baseWeight": 8,
+      "suppressYears": 3,
+      "requires": [
+        { "type": "flag", "key": "diocese:washington", "value": true },
+        { "type": "any", "inner": [
+          { "type": "season", "value": "lent" },
+          { "type": "season", "value": "holy_week" },
+          { "type": "season", "value": "easter" }
+        ] },
+        { "type": "any", "inner": [
+          { "type": "parish", "key": "kind", "value": "difficult" },
+          { "type": "parish", "key": "terrain", "value": "urban" }
+        ] }
+      ],
+      "title": "Peak Bloom",
+      "body": "The Park Service announces peak bloom a week ahead, and from that morning the city belongs to other people: the Tidal Basin is a slow river of strollers and selfie sticks, the Metro is full of families holding maps upside down, and the eleven o'clock at {parish}, which is fourteen blocks from the Mall, doubles. Some of them are Catholics looking for a Mass. Some are looking for a bathroom. A tour company's email arrives on Monday: fifty-five pilgrims from a parish in Cincinnati, their pastor with them, would like the eleven o'clock on Sunday, a group photograph on the steps, and a few words from Father about the history of the parish, and a place to park the bus, and they will be generous. The ushers, who leave a pew empty every Sunday for the member of the Cabinet who sometimes comes with his detail, want to know where the pilgrims will sit. The collection in April is the best of the year and everyone at {parish} knows why, and pretends not to. The parish's own people, the ones who are here in February, have opinions about the eleven o'clock in April, and say them at the door.",
+      "flavorPrompt": "Peak bloom in the District: the Tidal Basin, the tour buses, a Cabinet member's empty pew, and a parish deciding who its Sunday is for.",
+      "choices": [
+        {
+          "id": "host_the_pilgrims",
+          "label": "Give them the eleven o'clock, the photograph, and a homily written for people who leave on Tuesday",
+          "default": true,
+          "outcome": "The bus parks where the ushers say and the Cincinnati pastor concelebrates and the photograph on the steps has the dome in it. Your homily is about pilgrims and the people who stay, and it is good, and the basket is generous. The parish's own people sit where they can. One of them tells you at the door that it was very nice and that she will see you in May, when the church is theirs again.",
+          "effects": [
+            { "target": "reputation", "key": "public", "delta": 2 },
+            { "target": "reputation", "key": "parishioners", "delta": -1 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "flag", "key": "dio_dc_pilgrim_host", "value": true }
+          ]
+        },
+        {
+          "id": "parish_first",
+          "label": "Say the eleven o'clock for the parish as always, and let the tourists find it if they can",
+          "outcome": "You write the tour company a courteous line saying that the Mass is at eleven and everyone is welcome, and the bus comes anyway, and the pilgrims stand in the side aisle while the parish sits. No photograph. No words about the history. The Cincinnati pastor is gracious and slightly puzzled. The basket is what it is in April. The woman who sees you in May tells you at the door that she noticed.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 3 },
+            { "target": "reputation", "key": "public", "delta": -1 },
+            { "target": "flag", "key": "dio_dc_parish_first", "value": true }
+          ]
+        },
+        {
+          "id": "noon_in_the_crypt",
+          "label": "Add a noon Mass in the lower church for the pilgrims, and tell the secretary to charge nothing and accept everything",
+          "requires": [ { "type": "stat", "key": "administration", "op": ">=", "value": 45 } ],
+          "outcome": "The lower church holds sixty and the pilgrims fill it, and the eleven o'clock stays the parish's. You say two Masses and give two homilies and the second one is better because you know who is in front of you. The tour company puts {parish} on its list for next year, and the year after, and {@secretary} opens a line in the ledger for April that nobody discusses and everybody watches.",
+          "effects": [
+            { "target": "reputation", "key": "public", "delta": 3 },
+            { "target": "reputation", "key": "parishioners", "delta": 1 },
+            { "target": "stat", "key": "administration", "delta": 1 },
+            { "target": "flag", "key": "dio_dc_pilgrim_mass", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dio_dc_nunciature",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["loyalty_vs_honesty", "ambition_vs_integrity"],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 8,
+      "suppressYears": 4,
+      "requires": [
+        { "type": "flag", "key": "diocese:washington", "value": true }
+      ],
+      "bias": [
+        { "when": { "type": "reputation", "key": "rome", "op": ">=", "value": 10 }, "multiplier": 1.5 }
+      ],
+      "title": "Massachusetts Avenue",
+      "body": "The card is engraved and comes by mail, which nothing else does anymore: the Apostolic Nuncio requests the pleasure of your company at the nunciature on Massachusetts Avenue on the anniversary of the Holy Father's election, six to eight, clerical dress. Every priest of the archdiocese under ten years ordained gets one eventually, and what he does with it is noticed. The house is a mansion across from the vice president's residence, with a garden that has been photographed. The nuncio shakes your hand and says your parish's name, which means he has been briefed, which means someone briefs him. You learn who within the hour: a monsignor from the bishops' conference, the one the presbyterate says decides which priests the nuncio hears about, finds you by the window with a glass of something Italian and asks, pleasantly, how the priests are finding the archbishop these days. The archbishop is said to be in line for a red hat. The monsignor is said to be in line to say whether he should be. Everyone in the room is a careful talker. The monsignor waits, with the patience of a man who has all evening.",
+      "flavorPrompt": "A reception at the nunciature, a monsignor by the window who decides what Rome hears, and a question about the archbishop asked pleasantly and once.",
+      "choices": [
+        {
+          "id": "speak_well",
+          "label": "Tell the monsignor the priests think well of the archbishop, and say it warmly",
+          "default": true,
+          "outcome": "He nods as if you have confirmed a rumor, and asks about your parish, and moves on to a bishop from Ohio. What you said travels: within the month the archbishop knows you were at the nunciature and what was said there, and finds a reason to be at {parish} for a confirmation. You are on the list for the next reception, and the one after, which the presbyterate reads correctly.",
+          "effects": [
+            { "target": "reputation", "key": "rome", "delta": 3 },
+            { "target": "reputation", "key": "chancery", "delta": 3 },
+            { "target": "relationship", "key": "@bishop", "delta": 4 },
+            { "target": "flag", "key": "dio_dc_nunciature_guest", "value": true }
+          ]
+        },
+        {
+          "id": "the_mixed_truth",
+          "label": "Tell him the truth as you know it, which is mixed, and name nothing",
+          "outcome": "You say that the presbyterate is loyal and tired and divided on some things, and that the archbishop is a good man in a hard chair, and the monsignor listens with his head on one side and says that is fair. It is repeated, in that form, to people who repeat it. The archbishop hears a version in which you were candid, and is cool for a season. The nuncio's office remembers you as a man who does not perform.",
+          "effects": [
+            { "target": "reputation", "key": "rome", "delta": 2 },
+            { "target": "reputation", "key": "chancery", "delta": -3 },
+            { "target": "honesty", "key": "", "delta": 1 },
+            { "target": "flag", "key": "dio_dc_spoke_at_nunciature", "value": true }
+          ]
+        },
+        {
+          "id": "decline_the_card",
+          "label": "Send regrets, and spend the evening at the wake the parish has that night",
+          "outcome": "The wake is in Langley Park and runs until ten, and you know everyone there. The card goes in a drawer. The presbyterate notices, because someone always counts who was at the nunciature, and the older men approve in the way they approve of anything that is not ambition. A second card does not come for three years. The monsignor by the window asks someone else about the archbishop, and whoever it was says something.",
+          "effects": [
+            { "target": "reputation", "key": "rome", "delta": -2 },
+            { "target": "reputation", "key": "brother_priests", "delta": 3 },
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "flag", "key": "dio_dc_declined_nunciature", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dio_dc_shutdown",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["money", "competence"],
+      "severity": "NOTABLE",
+      "category": "finance",
+      "baseWeight": 8,
+      "suppressYears": 3,
+      "requires": [
+        { "type": "flag", "key": "diocese:washington", "value": true }
+      ],
+      "bias": [
+        { "when": { "type": "parish", "key": "terrain", "value": "suburban" }, "multiplier": 1.5 }
+      ],
+      "title": "The Shutdown",
+      "body": "The government closed at midnight on the first, and by the second Sunday everyone at {parish} can feel it. A third of the parish works for the federal government or for the companies that work for it, and the difference matters: the employees will be paid when it ends, whenever that is, and the contractors will not, and the contractors are the ones with the newer mortgages. The collection is down a third the second week and the finance council chair, a retired budget analyst who has seen four of these, says it will be down by half by the fourth. The St. Vincent de Paul conference has thirty requests it has never had before, from people it has never seen, some of whom sat on the parish council. A woman who has been a GS-13 for twenty years comes to the office on a Wednesday and cannot say what she came for, and you both understand that she has never asked anyone for anything. The parish has a reserve, which the council calls the roof fund. The rich parish in Bethesda has a bigger one. Nobody knows when it ends. The television says three weeks. The chair says nine.",
+      "flavorPrompt": "A furloughed parish: the collection falling by the week, a budget analyst counting the weeks, and a GS-13 in the office who cannot say what she came for.",
+      "choices": [
+        {
+          "id": "open_the_reserve",
+          "label": "As pastor, open the roof fund for a parish emergency fund, and say so from the pulpit",
+          "requires": [ { "type": "role", "value": "pastor" } ],
+          "outcome": "You say it at every Mass: the parish has money, and it belongs to the parish, and anyone who cannot make the mortgage this month should see the secretary and no one else. Sixty families do. The roof fund is a third of what it was when the government reopens in the seventh week, and the finance council chair says nothing, and puts a line in the minutes. Half the sixty pay it back. The other half never forget.",
+          "effects": [
+            { "target": "money", "key": "cash", "delta": -25000 },
+            { "target": "reputation", "key": "parishioners", "delta": 6 },
+            { "target": "reputation", "key": "public", "delta": 2 },
+            { "target": "flag", "key": "dio_dc_opened_the_reserve", "value": true }
+          ]
+        },
+        {
+          "id": "second_collection",
+          "label": "Take a second collection for the St. Vincent de Paul conference, and tell the furloughed to come to the office",
+          "default": true,
+          "outcome": "The second collection is taken by the same people it is for, which is the strange arithmetic of a shutdown, and it raises enough for the conference to cover four weeks of the worst cases. The GS-13 comes back and this time says what she came for. The roof fund stays a roof fund. The chair approves. When the government reopens in the seventh week the parish has managed, which is what this parish does.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 3 },
+            { "target": "stat", "key": "administration", "delta": 1 },
+            { "target": "flag", "key": "dio_dc_second_collection", "value": true }
+          ]
+        },
+        {
+          "id": "call_bethesda",
+          "label": "Call the pastor in Bethesda and ask the rich parish to carry this one for a month",
+          "requires": [ { "type": "reputation", "key": "brother_priests", "op": ">=", "value": 15 } ],
+          "outcome": "He says yes before you have finished, because his people are lawyers and lobbyists and are being paid, and because he has been waiting to be asked something by someone. A check comes with a note that says no need. The conference covers everyone through the seventh week. The deanery hears about it, and it is the kind of thing the deanery likes to hear, and the pastor in Bethesda mentions it to the archbishop, once, at the right moment.",
+          "effects": [
+            { "target": "reputation", "key": "brother_priests", "delta": 3 },
+            { "target": "reputation", "key": "parishioners", "delta": 4 },
+            { "target": "reputation", "key": "chancery", "delta": 1 },
+            { "target": "flag", "key": "dio_dc_asked_bethesda", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dio_dc_geez_afternoon",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["competence", "belief_vs_safety"],
+      "severity": "NOTABLE",
+      "category": "admin",
+      "baseWeight": 8,
+      "suppressYears": 4,
+      "requires": [
+        { "type": "flag", "key": "diocese:washington", "value": true },
+        { "type": "not", "inner": { "type": "parish", "key": "terrain", "value": "rural" } }
+      ],
+      "title": "Sunday Afternoons in Ge'ez",
+      "body": "Abba Tesfay is a priest of the Eritrean Catholic Church, one of the Eastern churches in communion with Rome that Latin priests learn about for a week in seminary and forget, and he has been serving the Eritreans and Ethiopians of Silver Spring and Takoma Park out of a rented room for six years. There are four hundred of them now. He comes to the rectory in a black cassock and a white turban and asks, with great formality, for the church at {parish} on Sunday afternoons. The Divine Liturgy in Ge'ez takes three hours. There are drums, and the sistrum, and the prayer staffs the men lean on, and incense of a kind that stays in the curtains, and the women in white shawls who stand for the whole of it. The five o'clock English Mass would have to move to the chapel. The sacristan has already said what he thinks of drums in a church. The ushers want to know who will clean. You know, because you looked it up on Tuesday night, that a Latin pastor may lend his church to an Eastern Catholic community and that nothing else is required but his yes, or his no.",
+      "flavorPrompt": "An Eritrean Catholic priest in a white turban asking for a Latin church on Sunday afternoons: drums, incense, three hours, and a sacristan with views.",
+      "choices": [
+        {
+          "id": "give_them_the_church",
+          "label": "Give them the church every Sunday afternoon, and move the five o'clock to the chapel",
+          "default": true,
+          "outcome": "The first Sunday the drums can be heard from the rectory and the incense stays in the curtains until Wednesday. The five o'clock's people grumble about the chapel for a month and then find they like it. Abba Tesfay brings you injera every week and, at Christmas, which is in January for him, invites you to stand through the liturgy, and you do, all three hours, and understand nothing and everything.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": -2 },
+            { "target": "reputation", "key": "public", "delta": 2 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "flag", "key": "dio_dc_geez_in_church", "value": true }
+          ]
+        },
+        {
+          "id": "offer_the_hall",
+          "label": "Offer them the hall, with the altar they would bring, and keep the church schedule as it is",
+          "outcome": "Abba Tesfay accepts with the same formality and the hall becomes, on Sunday afternoons, something the parish does not recognize: carpets, curtains, a table for the altar, the drums. The sacristan is content. The five o'clock stays. After a year the Eritreans have found a closed church in Prince George's County that the archdiocese will lease them, and they go, and the hall is a hall, and the injera stops.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 1 },
+            { "target": "flag", "key": "dio_dc_geez_in_hall", "value": true }
+          ]
+        },
+        {
+          "id": "church_and_a_class",
+          "label": "Give them the church, and ask Abba Tesfay to teach the parish's RCIA class one night about his rite",
+          "requires": [ { "type": "stat", "key": "knowledge", "op": ">=", "value": 45 } ],
+          "outcome": "He teaches for two hours with a slide of the Church at Axum and the catechumens do not move. The sacristan comes to that class, to see, and afterward is heard telling an usher that the drums are in the Psalms. The five o'clock moves to the chapel and the church smells of frankincense from Sunday to Wednesday. You learn to say the greeting of peace in Ge'ez, badly, and Abba Tesfay corrects you every week.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "reputation", "key": "public", "delta": 2 },
+            { "target": "stat", "key": "knowledge", "delta": 1 },
+            { "target": "trait", "key": "lent his church to the Ge'ez rite and stood through the liturgy" },
+            { "target": "flag", "key": "dio_dc_geez_in_church", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dio_dc_the_rail",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["belief_vs_safety", "loyalty_vs_honesty"],
+      "severity": "MAJOR",
+      "category": "personal",
+      "baseWeight": 7,
+      "suppressYears": 5,
+      "requires": [
+        { "type": "flag", "key": "diocese:washington", "value": true },
+        { "type": "any", "inner": [
+          { "type": "parish", "key": "kind", "value": "flagship_suburban" },
+          { "type": "parish", "key": "kind", "value": "difficult" },
+          { "type": "parish", "key": "terrain", "value": "suburban" }
+        ] }
+      ],
+      "bias": [
+        { "when": { "type": "parish", "key": "wealth", "value": 5 }, "multiplier": 1.5 }
+      ],
+      "title": "The Senator at the Rail",
+      "body": "The senator sits in the fourth pew on the left at the ten-thirty most Sundays he is in town, without a detail, with his wife, and comes to Communion like anyone. He was raised in this parish. He came to confession once, in the first month, and asked you to pray for his wife, who is ill. He is also on the record, in votes and in interviews, on the side of a question the bishops have called grave, and everyone in the church knows it, and a letter arrived on Tuesday from a parishioner citing canon 915 by number and asking, in the register of a man who has already written to the nuncio, whether Father intends to give Holy Communion to a public sinner. Twelve people signed it. The archdiocese has never refused anyone at the rail and has said so in print, and the archbishop has said so in his own voice, and the same twelve people know that too. There will be phones at the ten-thirty on Sunday. There may be a camera outside. The senator, who reads the same papers, will come up the aisle as he always does, and look at you.",
+      "choices": [
+        {
+          "id": "give_communion",
+          "label": "Give him Communion as you give it to anyone, and tell the letter-writers that canon 915 belongs to the archbishop",
+          "default": true,
+          "volume": "semi_public",
+          "positionTopic": "social_justice",
+          "positionValue": 40,
+          "outcome": "He comes up the aisle and you give him the Host and he says amen and goes back to his pew, and the phones get a picture of nothing. Your reply to the twelve is two paragraphs and cites the archbishop by name. Four of them go to a parish in Virginia. A column in a Catholic weekly names you, not kindly. The archbishop's office sends a one-line note that says thank you, and you keep it.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": 3 },
+            { "target": "reputation", "key": "traditional_bloc", "delta": -5 },
+            { "target": "reputation", "key": "progressive_bloc", "delta": 4 },
+            { "target": "reputation", "key": "public", "delta": 1 },
+            { "target": "flag", "key": "dio_dc_gave_communion", "value": true }
+          ]
+        },
+        {
+          "id": "write_to_him",
+          "label": "Write to him privately before Sunday, asking him not to present himself while the matter stands",
+          "volume": "semi_public",
+          "positionTopic": "social_justice",
+          "positionValue": -40,
+          "outcome": "He does not come to Communion on Sunday, and sits with his hands folded while his wife goes up, and the phones get a picture of that. Your letter is in a newspaper by Thursday, because everything in this city is. The twelve are satisfied and say so at the door. The archbishop's office calls, and the call is polite, and you are asked to explain, and you do. He does not come back to the ten-thirty. His wife does.",
+          "effects": [
+            { "target": "reputation", "key": "traditional_bloc", "delta": 4 },
+            { "target": "reputation", "key": "progressive_bloc", "delta": -3 },
+            { "target": "reputation", "key": "chancery", "delta": -3 },
+            { "target": "reputation", "key": "public", "delta": -1 },
+            { "target": "flag", "key": "dio_dc_wrote_the_senator", "value": true }
+          ]
+        },
+        {
+          "id": "refuse_at_the_rail",
+          "label": "Refuse him at the rail, on Sunday, in front of whoever is there",
+          "requires": [ { "type": "outspokenness", "op": ">=", "value": 50 } ],
+          "volume": "public",
+          "positionTopic": "social_justice",
+          "positionValue": -70,
+          "outcome": "You say it quietly and he hears it and stands there a second longer than a man should, and goes back to his pew, and the picture is on every screen in the country by noon. The twelve are on the steps. The archbishop's office is on the phone before you have unvested. There is a meeting in Hyattsville on Tuesday, and it is short, and the ten-thirty is someone else's the following Sunday.",
+          "effects": [
+            { "target": "reputation", "key": "traditional_bloc", "delta": 8 },
+            { "target": "reputation", "key": "progressive_bloc", "delta": -8 },
+            { "target": "reputation", "key": "chancery", "delta": -6 },
+            { "target": "reputation", "key": "public", "delta": -3 },
+            { "target": "reputation", "key": "rome", "delta": -2 },
+            { "target": "relationship", "key": "@bishop", "delta": -8 },
+            { "target": "flag", "key": "dio_dc_refused_at_the_rail", "value": true }
+          ]
+        }
+      ]
+    }
+  ]
+}

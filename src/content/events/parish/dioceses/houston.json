@@ -1,0 +1,352 @@
+{
+  "_notes": "The Houston pool: six events that could only happen in the Archdiocese of Galveston-Houston, drawn for any parish role once the engine sets diocese:houston. Named people are invented. Flags written: dio_hou_kessler_patron / dio_hou_kessler_refused / dio_hou_kessler_reported (Wade Kessler, the oilman on the finance council, and whether the man took his money and his word downtown; patronage and assignment content may read it), dio_hou_stayed_for_storm / dio_hou_evacuated / dio_hou_drove_them_out (hurricane season), dio_hou_took_his_masses / dio_hou_stood_with_brother / dio_hou_pulpit_exchange (the letters about a Nigerian brother priest's accent; the presbyterate from five continents), dio_hou_flood_cash_job / dio_hou_flood_loan / dio_hou_flood_waited (flood repair), dio_hou_tet_table_in_church / dio_hou_tet_in_hall (Tết and the ancestors' table), dio_hou_spoke_for_the_lot / dio_hou_quiet_word / dio_hou_told_them_the_law (the watched parking lot). Positions recorded: immigration (the accent, the lot).",
+  "events": [
+    {
+      "id": "dio_hou_kessler",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["money", "ambition_vs_integrity"],
+      "severity": "NOTABLE",
+      "category": "finance",
+      "baseWeight": 8,
+      "suppressYears": 4,
+      "once": true,
+      "requires": [
+        { "type": "flag", "key": "diocese:houston", "value": true }
+      ],
+      "bias": [
+        { "when": { "type": "parish", "key": "kind", "value": "flagship_suburban" }, "multiplier": 2 },
+        { "when": { "type": "parish", "key": "wealth", "value": 4 }, "multiplier": 1.4 },
+        { "when": { "type": "parish", "key": "wealth", "value": 5 }, "multiplier": 1.4 }
+      ],
+      "title": "Mr. Kessler's Check",
+      "body": "Wade Kessler spent thirty years finding oil for one of the majors, in the Permian and off the coast of Angola and in places he does not name, and retired with the stock at the right moment. He has been on the finance council of {parish} since the church was a metal building on a cow pasture, and he still calls it the pasture. He asks you to lunch at the club in Memorial, orders for you, and comes to it before the iced tea. The hall roof: eighty thousand. He will write the check this week. He does not want his name on anything. What he wants, he says, folding his napkin, is for the archbishop to leave the parish alone, meaning its priests; he was consulted on the last two assignments and would like to be consulted on the next one, and he has said so downtown, and he would say so about you. He is not asking for anything improper. He is telling you how the parish has been paid for, and by whom, and that he expects it to go on. The iced tea comes.",
+      "flavorPrompt": "A country club in Memorial, a man who paid for the building and knows it, and a check with no name on it and a condition that is not written down.",
+      "choices": [
+        {
+          "id": "take_the_check",
+          "label": "Take the check, thank him, and let him say what he likes downtown",
+          "default": true,
+          "outcome": "The roof is done by Advent and the check clears without a plaque. In the spring a man at the pastoral center mentions, in passing, that Mr. Kessler speaks well of you, and you understand that the sentence has been filed. He orders for you again at the next lunch. It is understood, without anyone saying so, that {parish} now has a patron, and that the patron has you.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": 2 },
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "flag", "key": "dio_hou_kessler_patron", "value": true }
+          ]
+        },
+        {
+          "id": "refuse_the_terms",
+          "label": "Tell him assignments are the archbishop's, and that the parish will raise its own roof",
+          "outcome": "He looks at you the way he looked at a dry hole in 1991 and signs for the lunch. The check does not come. The roof takes two festivals and a second collection and is done, patched, by the following fall. He stays on the council and is courteous. Downtown someone notes that {parish} had a difficulty with a donor, and does not say whose fault it was.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": -2 },
+            { "target": "reputation", "key": "brother_priests", "delta": 2 },
+            { "target": "reputation", "key": "parishioners", "delta": -1 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "flag", "key": "dio_hou_kessler_refused", "value": true }
+          ]
+        },
+        {
+          "id": "take_and_tell",
+          "label": "Take the check as pastor, fix the roof, and tell {@vicar_general} yourself what came with it",
+          "requires": [
+            { "type": "role", "value": "pastor" },
+            { "type": "relationship", "npcId": "@vicar_general", "op": ">=", "value": 10 }
+          ],
+          "outcome": "The vicar general listens to the whole lunch, iced tea and all, and says that he has heard the name before, in that context, and that he is glad to have heard it from you first. The roof is done. Nothing changes at the club. But when the next assignment is made, it is made by the archbishop, and Mr. Kessler learns of it from the bulletin, and looks at you at the next lunch for a long moment.",
+          "effects": [
+            { "target": "money", "key": "cash", "delta": 80000 },
+            { "target": "reputation", "key": "chancery", "delta": 3 },
+            { "target": "relationship", "key": "@vicar_general", "delta": 5 },
+            { "target": "stat", "key": "administration", "delta": 1 },
+            { "target": "flag", "key": "dio_hou_kessler_reported", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dio_hou_the_storm",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["body_vs_vow", "competence"],
+      "severity": "MAJOR",
+      "category": "admin",
+      "baseWeight": 8,
+      "suppressYears": 3,
+      "requires": [
+        { "type": "flag", "key": "diocese:houston", "value": true }
+      ],
+      "title": "The Cone",
+      "body": "On Wednesday the storm is a Category 3 in the middle of the Gulf and the cone on every television in the parish has {parish} inside it. Landfall is Friday night. The county has ordered the coastal zones out and asked everyone else to shelter, and the pastoral center's email, sent to every pastor at once, says that priests are to use their judgment and that the archdiocese's insurer would prefer the buildings locked. The hall sits on the highest ground for a mile, which is not saying much, and it has a generator the Knights bought after the last one. The apartments on the bayou behind the church are full of families without cars, and by Thursday morning some of them are in the vestibule asking, not for anything in particular, just asking. Your own car is in the lot. The chalice and the registers are in the safe, which is on the floor. The highway north is already a parking lot to Conroe. You have until about six on Friday to decide where you will be when the wind comes, and everyone in the vestibule is waiting to hear it.",
+      "flavorPrompt": "Hurricane season on the Gulf: the cone on the television, the generator in the hall, the families from the bayou apartments in the vestibule, and a priest deciding where to be when it hits.",
+      "choices": [
+        {
+          "id": "stay_and_open",
+          "label": "Stay, open the hall, and ride it out with whoever comes",
+          "default": true,
+          "outcome": "Sixty people sleep in the hall on Friday, and the generator runs, and the roof holds except over the kitchen. The bayou comes up to the second step of the church and stops. You say Mass on Saturday morning with the wind still going, by flashlight, for people in borrowed blankets, and nobody who was there forgets it. The insurer writes a letter afterward. The archbishop writes a different one.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 6 },
+            { "target": "reputation", "key": "public", "delta": 3 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "reputation", "key": "chancery", "delta": -1 },
+            { "target": "flag", "key": "dio_hou_stayed_for_storm", "value": true }
+          ]
+        },
+        {
+          "id": "lock_and_go",
+          "label": "Follow the county's order: lock the church, take the registers and the vestments north, and go",
+          "outcome": "The registers ride to the seminary on the passenger seat and the vestments in the trunk, and you spend Friday night in a guest room in Montrose listening to the rain. The church takes four inches and the hall none. The bayou families sheltered in the school gym down the road, which the district opened. Nobody blames you. Some of them look at you differently at the first Mass back, and that is all.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": 2 },
+            { "target": "reputation", "key": "parishioners", "delta": -3 },
+            { "target": "stat", "key": "administration", "delta": 1 },
+            { "target": "flag", "key": "dio_hou_evacuated", "value": true }
+          ]
+        },
+        {
+          "id": "drive_them_out",
+          "label": "Load the bayou families into the parish van, drive them north yourself, and come back before the wind",
+          "requires": [ { "type": "stat", "key": "charisma", "op": ">=", "value": 50 } ],
+          "outcome": "Three trips to a cousin's house in Huntsville and a church gym in Conroe, the last one with the sky already green. You are back at the rectory at half past five with the van on fumes. The hall stays locked and dry. The families come home on Sunday to apartments with two feet of water in them and find you already there with the Knights and the shop vac, and that is what the parish tells about you afterward.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 6 },
+            { "target": "reputation", "key": "public", "delta": 2 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "flag", "key": "dio_hou_drove_them_out", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dio_hou_the_accent",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["friendship_vs_duty", "loyalty_vs_honesty"],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 8,
+      "suppressYears": 3,
+      "requires": [
+        { "type": "flag", "key": "diocese:houston", "value": true }
+      ],
+      "title": "Letters About an Accent",
+      "body": "{@brother_priest} was ordained in Enugu and has been in Houston three years, the last one as pastor of the parish up the highway, which had been without a pastor for eleven months before he came. He says Mass in English, Igbo, and a Spanish he learned from a workbook and the parish secretary. The letters started in Lent: to the pastoral center, four or five, from the old guard of his parish, saying they cannot understand him. They do not say anything else. {@vicar_for_clergy} calls you on a Tuesday and asks, in the voice of a man who does not like what he is doing, whether you could take the two English Masses at that parish through Easter, as a cover, quietly, so that things can settle. Nobody would have to be told why. At the deanery lunch on Thursday, at the pho place on Bellaire, {@brother_priest} sits across from you with the Vietnamese pastor and the Colombian and the one Anglo left in the deanery, and talks about his building committee, and does not know about the letters, or knows and is not saying. He has the best laugh at the table.",
+      "flavorPrompt": "A presbyterate from five continents at a noodle shop, a brother priest with the best laugh at the table, and a phone call about the letters he has not been shown.",
+      "choices": [
+        {
+          "id": "take_the_masses",
+          "label": "Take his two English Masses through Easter, as asked, and say nothing about why",
+          "default": true,
+          "outcome": "You drive up the highway on Sundays and preach to the old guard, who are grateful in a way that makes you uneasy. The letters stop. {@brother_priest} thanks you for the help with the schedule and is, you think, not fooled. After Easter the vicar for clergy says the parish is calmer, and it is, in the way of a parish that has been told its complaint worked.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": 3 },
+            { "target": "relationship", "key": "@brother_priest", "delta": -6 },
+            { "target": "reputation", "key": "brother_priests", "delta": -1 },
+            { "target": "flag", "key": "dio_hou_took_his_masses", "value": true }
+          ]
+        },
+        {
+          "id": "stand_with_him",
+          "label": "Tell the vicar no, and go up the highway to tell the letter-writers, from his pulpit, to listen harder",
+          "volume": "semi_public",
+          "positionTopic": "immigration",
+          "positionValue": 35,
+          "outcome": "{@brother_priest} invites you to preach at the ten o'clock once he understands what you want to say, and you say it: that a man who learned three languages to serve them can be met halfway in one. Two families leave. The rest, slowly, learn to hear him. The vicar for clergy is cool for a season. At the pho place the Vietnamese pastor pays for your lunch without comment.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": -2 },
+            { "target": "relationship", "key": "@brother_priest", "delta": 10 },
+            { "target": "reputation", "key": "brother_priests", "delta": 3 },
+            { "target": "reputation", "key": "public", "delta": -1 },
+            { "target": "flag", "key": "dio_hou_stood_with_brother", "value": true }
+          ]
+        },
+        {
+          "id": "pulpit_exchange",
+          "label": "Propose a monthly exchange: you preach at his parish and he at {parish}, in the open",
+          "requires": [ { "type": "relationship", "npcId": "@brother_priest", "op": ">=", "value": 10 } ],
+          "outcome": "He agrees at once and preaches at {parish} the following Sunday on the Good Samaritan, slowly, in an English that gets better each month because he is working at it, and your people take to him. His people take to you. The vicar for clergy calls it a creative solution, which is chancery for a thing he did not think of. The letters stop because there is nothing left to write.",
+          "effects": [
+            { "target": "relationship", "key": "@brother_priest", "delta": 8 },
+            { "target": "reputation", "key": "brother_priests", "delta": 3 },
+            { "target": "reputation", "key": "chancery", "delta": 1 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "flag", "key": "dio_hou_pulpit_exchange", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dio_hou_flood_repair",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["money", "competence"],
+      "severity": "NOTABLE",
+      "category": "finance",
+      "baseWeight": 8,
+      "suppressYears": 4,
+      "requires": [
+        { "type": "flag", "key": "diocese:houston", "value": true }
+      ],
+      "bias": [
+        { "when": { "type": "parish", "key": "wealth", "value": 1 }, "multiplier": 1.5 },
+        { "when": { "type": "parish", "key": "wealth", "value": 2 }, "multiplier": 1.3 }
+      ],
+      "title": "The Four-Foot Line",
+      "body": "The last big storm put fourteen inches of water in the hall and four in the sacristy, and the drywall was cut out at four feet the week after and never put back. That was years ago. The hall has been a room with studs since: the Guadalupe supper is eaten looking at insulation, and the youth group has written its name on the framing. The federal money came in the end, three years late, and covered a third. The archdiocesan insurance has a named-storm deductible of five percent of the building's value, which is the same as having no insurance. Two offers are on the desk. A parishioner, a drywall contractor from Pasadena whose crew did half the East End after the storm, will do the whole hall for twenty thousand, cash, on weekends, no permit, and he means it kindly. The pastoral center will lend the parish the bonded contractor's price at four percent over ten years, and send a man to inspect. And the hall could stay a room with studs another year, because it has, and the people have stopped seeing it.",
+      "flavorPrompt": "A parish hall that has been studs and insulation since the water went down; a contractor with a cash price, a chancery with a loan, and a people who have stopped seeing the wall.",
+      "choices": [
+        {
+          "id": "cash_job",
+          "label": "As pastor, pay the parishioner's crew in cash from the reserve, and get the hall back by Advent",
+          "requires": [ { "type": "role", "value": "pastor" } ],
+          "outcome": "The crew works four weekends and the hall is a hall by the first Sunday of Advent, painted, with a plaque the crew made themselves. The Guadalupe supper is eaten looking at a wall. The pastoral center's inspector, when he comes for something else, notices the new drywall and asks about the permit, and you tell him, and he writes it down, and nothing more is said, which is not the same as nothing having been recorded.",
+          "effects": [
+            { "target": "money", "key": "cash", "delta": -20000 },
+            { "target": "reputation", "key": "parishioners", "delta": 4 },
+            { "target": "reputation", "key": "chancery", "delta": -2 },
+            { "target": "flag", "key": "dio_hou_flood_cash_job", "value": true }
+          ]
+        },
+        {
+          "id": "the_loan",
+          "label": "As pastor, take the archdiocesan loan and the bonded contractor, and add ten years to the note",
+          "requires": [ { "type": "role", "value": "pastor" } ],
+          "outcome": "The bonded contractor takes five months and pulls every permit, and the hall comes back with a fire door it did not have before. The note is a line in the budget for ten years, and every finance council after you will read your name beside it. The pastoral center's inspector signs off and says the parish did it right, which in this diocese is said less often than you would think.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": 3 },
+            { "target": "stat", "key": "administration", "delta": 1 },
+            { "target": "reputation", "key": "parishioners", "delta": 1 },
+            { "target": "flag", "key": "dio_hou_flood_loan", "value": true }
+          ]
+        },
+        {
+          "id": "another_year",
+          "label": "Leave the studs another year, hold the suppers in the church, and raise the money at the fall festival",
+          "default": true,
+          "outcome": "The festival makes eleven thousand, which is not twenty and not the bonded price, and goes in an account with the hall's name on it. The Guadalupe supper is eaten in the church, with the pews pushed back, and the old Anglo sacristan says nothing and mops afterward. The youth group adds another year to the framing. The wall is still there. So is the line.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 1 },
+            { "target": "stat", "key": "administration", "delta": -1 },
+            { "target": "flag", "key": "dio_hou_flood_waited", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dio_hou_tet_table",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["belief_vs_safety", "competence"],
+      "severity": "NOTABLE",
+      "category": "admin",
+      "baseWeight": 8,
+      "suppressYears": 3,
+      "requires": [
+        { "type": "flag", "key": "diocese:houston", "value": true },
+        { "type": "not", "inner": { "type": "parish", "key": "terrain", "value": "rural" } }
+      ],
+      "title": "The Ancestors' Table",
+      "body": "The Vietnamese community of {parish} is two hundred families who drive in from Alief and have never asked for anything except the seven o'clock on Saturdays. This year they ask. Mr. Trần, the catechist, a man of seventy who was a seminarian in Đà Lạt before 1975 and a fisherman in Galveston after, comes to the office with a drawing. For Tết they would like the evening Mass, and before the altar a table: photographs of the dead, incense, a plate of fruit, red paper, candles. The children will receive red envelopes after the blessing and the lion will dance at the doors. He explains, without being asked, that this is not worship of the dead but honor to them, that the bishops of Vietnam obtained Rome's permission for it sixty years ago, and that every Vietnamese parish in Houston does it. He is right on all three counts. By Wednesday the old Anglo usher who has had the eight o'clock since the church opened has come to say that he will not stand in a church with a pagan altar in it, and that others feel the same, and that he thought Father should know.",
+      "flavorPrompt": "Tết at a Houston parish: a catechist's drawing, an usher's objection, and the long history of a Church that has said yes to this before.",
+      "choices": [
+        {
+          "id": "table_before_the_altar",
+          "label": "Set the ancestors' table before the altar and bless it yourself, as the bishops of Vietnam permitted",
+          "default": true,
+          "outcome": "The church is full at seven with people in áo dài and the incense stays in the drapes until Lent. You bless the photographs and the fruit and hand the red envelopes to two hundred children, and the lion dances at the door in the rain. The usher takes the eight o'clock at another parish for a month and then comes back, and does not mention it, which is his apology. Mr. Trần brings bánh chưng all week.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 4 },
+            { "target": "relationship", "key": "@parishioner", "delta": -4 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "flag", "key": "dio_hou_tet_table_in_church", "value": true }
+          ]
+        },
+        {
+          "id": "table_in_the_hall",
+          "label": "Keep the sanctuary as it is, and give the ancestors' table and the lion the hall afterward",
+          "outcome": "The Mass is a Mass and the hall afterward is Tết, with the table against the far wall and the lion in the parking lot. Mr. Trần thanks you with great courtesy, and the community comes, and the usher is content. In the spring three of the Vietnamese families are at the parish on Bellaire that does it in the church, and Mr. Trần does not say why, and does not need to.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": -2 },
+            { "target": "relationship", "key": "@parishioner", "delta": 4 },
+            { "target": "reputation", "key": "traditional_bloc", "delta": 1 },
+            { "target": "flag", "key": "dio_hou_tet_in_hall", "value": true }
+          ]
+        },
+        {
+          "id": "invite_the_vietnamese_pastor",
+          "label": "Set the table, and invite the Vietnamese pastor from the deanery to concelebrate and preach what it means",
+          "requires": [ { "type": "stat", "key": "knowledge", "op": ">=", "value": 45 } ],
+          "outcome": "He preaches in Vietnamese and then in English, on the fourth commandment and the communion of saints and the fishing boats of Galveston, and the usher, who came to see the pagan altar, sits through it with his hat in his hands. The table stays. The lion dances. Afterward the Vietnamese pastor tells you, at the pho place, that most Anglo priests would not have asked, and that the ones who do are remembered.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 5 },
+            { "target": "reputation", "key": "brother_priests", "delta": 2 },
+            { "target": "stat", "key": "knowledge", "delta": 1 },
+            { "target": "flag", "key": "dio_hou_tet_table_in_church", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dio_hou_parking_lot",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["belief_vs_safety", "loyalty_vs_honesty"],
+      "severity": "MAJOR",
+      "category": "admin",
+      "baseWeight": 7,
+      "suppressYears": 4,
+      "requires": [
+        { "type": "flag", "key": "diocese:houston", "value": true },
+        { "type": "parish", "key": "needsSpanish", "value": true }
+      ],
+      "bias": [
+        { "when": { "type": "parish", "key": "problem", "value": "immigration_fear" }, "multiplier": 2 }
+      ],
+      "title": "The SUV in the Lot",
+      "body": "The state's new law lets any officer ask, and two Sundays running there has been an unmarked SUV at the far end of the lot during the one o'clock Spanish Mass, engine running, two men inside. Nobody has been approached. The Mass, which was standing room, is two-thirds full the second week and half the third, and the ones who come park four streets away and walk. A deputy sheriff who ushers the eleven o'clock says the SUV is probably nothing, a county car, and that people should not be so nervous. The youth minister has a box of cards from Catholic Charities that say what to say and what not to say if you are stopped, in Spanish, and wants them at every door. The archbishop's statement on the law, careful and pastoral and a page long, has been in the bulletin twice. The men who work the refineries in Pasadena come to you after Mass, hats in hand, and ask a question that is not a question: is the lot the parish's, or is it not? They want to hear it from the pulpit. So does the deputy, for the opposite reason.",
+      "flavorPrompt": "An unmarked car at the edge of a church parking lot, a Spanish Mass thinning week by week, and a pulpit where every sentence will be repeated.",
+      "choices": [
+        {
+          "id": "the_lot_is_ours",
+          "label": "Hand out the cards, read the archbishop's letter again, and say from the pulpit that the lot belongs to the parish",
+          "volume": "public",
+          "positionTopic": "immigration",
+          "positionValue": 50,
+          "outcome": "You say it at every Mass in both languages, and at the one o'clock they stand and clap, which you did not want and cannot stop. The SUV is gone the next Sunday, for whatever reason SUVs go. The deputy ushers one more month and then does not. Someone sends the homily to a radio host. The Spanish Mass is standing room by Pentecost, and the collection at the eleven o'clock is a little lighter, and stays that way.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 4 },
+            { "target": "reputation", "key": "traditional_bloc", "delta": -3 },
+            { "target": "reputation", "key": "public", "delta": -2 },
+            { "target": "reputation", "key": "chancery", "delta": 1 },
+            { "target": "flag", "key": "dio_hou_spoke_for_the_lot", "value": true }
+          ]
+        },
+        {
+          "id": "quiet_word",
+          "label": "Say nothing from the pulpit, and ask the deputy to find out whose car it is and have it moved along",
+          "default": true,
+          "volume": "private",
+          "positionTopic": "immigration",
+          "positionValue": -10,
+          "outcome": "The deputy makes a call and the SUV is not there the next Sunday, and he tells you it was a county car after all, watching the pawnshop across the road. Maybe so. The one o'clock comes back slowly, to three-quarters, and stops there. The cards stay in the box. The refinery men do not ask again, and you notice that they do not, and that they have stopped bringing their sons to serve.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": -1 },
+            { "target": "reputation", "key": "public", "delta": 1 },
+            { "target": "stat", "key": "administration", "delta": 1 },
+            { "target": "flag", "key": "dio_hou_quiet_word", "value": true }
+          ]
+        },
+        {
+          "id": "the_law_is_the_law",
+          "label": "Tell the one o'clock that the law is the law, that the parish cannot promise them the lot, and that they should come anyway",
+          "volume": "semi_public",
+          "positionTopic": "immigration",
+          "positionValue": -40,
+          "outcome": "You say it in Spanish and mean the last part most, and they hear the middle part. The one o'clock does not recover that year. A third of the families go to the parish in Gulfton whose pastor said the other thing, and the deputy tells you at the door that it took guts, which is not the compliment you wanted. The archbishop's office does not comment. The eleven o'clock collection goes up.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": -5 },
+            { "target": "reputation", "key": "traditional_bloc", "delta": 3 },
+            { "target": "reputation", "key": "public", "delta": 1 },
+            { "target": "reputation", "key": "chancery", "delta": -1 },
+            { "target": "flag", "key": "dio_hou_told_them_the_law", "value": true }
+          ]
+        }
+      ]
+    }
+  ]
+}

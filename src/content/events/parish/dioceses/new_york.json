@@ -1,0 +1,361 @@
+{
+  "_notes": "The New York pool: six events that could only happen in the Archdiocese of New York, drawn for any parish role once the engine sets diocese:new_york. Named people are invented; the seminary is St. Joseph's, Dunwoodie. Flags written: dio_ny_captain_friend / dio_ny_captain_cooled / dio_ny_captain_ally (Captain Dellacroce, the precinct commander who ushers the nine o'clock; later content may read which way the man went on the car outside the Spanish Mass), dio_ny_marched / dio_ny_stayed_home / dio_ny_marched_with_councilman (the St. Patrick's Day parade), dio_ny_monsignor_patron / dio_ny_class_loyal / dio_ny_spoke_for_classmate (the old monsignor who ranks seminary classes), dio_ny_sold_air_rights / dio_ny_kept_the_light / dio_ny_sold_on_terms (the air rights; pastor only, parish cash moves), dio_ny_cisne_novena / dio_ny_adopted_families / dio_ny_one_table (the families from the shelter hotel at the Spanish Mass), dio_ny_petitioned_for_tlm / dio_ny_sent_them_to_the_chapel / dio_ny_latin_novus_ordo (the Latin Mass in a divided parish; the third choice reads the bishop's stance on ad orientem). Positions recorded: immigration (the captain's car, the hotel families), social_justice (the parade), tlm (the Latin Mass).",
+  "events": [
+    {
+      "id": "dio_ny_captain",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["friendship_vs_duty", "belief_vs_safety"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 8,
+      "suppressYears": 4,
+      "once": true,
+      "requires": [
+        { "type": "flag", "key": "diocese:new_york", "value": true },
+        { "type": "any", "inner": [
+          { "type": "parish", "key": "terrain", "value": "urban" },
+          { "type": "parish", "key": "terrain", "value": "latino" },
+          { "type": "parish", "key": "kind", "value": "struggling_urban" }
+        ] }
+      ],
+      "title": "The Captain at the Nine",
+      "body": "Frank Dellacroce is the commanding officer of the precinct, which means {parish} is on his ground, known to him the way the bodega on the corner is. He ushers the nine o'clock in a blazer, passing the basket with a hand that has carried a shield for twenty-eight years, and he has never once mentioned the job inside the building. His mother is buried from here. Since the robbery on the corner in Lent there has been a marked car outside the church on Sunday afternoons, which is to say during the Spanish Mass, which he does not usher and does not attend. The car is for their safety, he says, and means it. The Dominican grandmother who runs the Legion of Mary comes to the sacristy to tell you that half the families now park four blocks off and walk, and that the Mexicans from the building on the avenue have stopped coming at all, and that she would like Father to make the car go away. The captain, the same week, asks whether you would bless the precinct's memorial wall next month, with the commissioner present. He asks it as one parishioner to his priest.",
+      "flavorPrompt": "A precinct commander passing the basket in a blazer, a marked car outside the Spanish Mass, and a grandmother who wants it gone: two kinds of safety on one block.",
+      "choices": [
+        {
+          "id": "move_it_a_block",
+          "label": "Ask him to move the car a block over, and tell him you will bless the wall",
+          "default": true,
+          "outcome": "He looks at you a moment, then says that a block is a block, and the car is on the avenue the next Sunday, visible and not at the door. The grandmother says it is something. The Mexican families come back by Pentecost. You bless the wall with the commissioner beside you and the captain in dress blues, and he introduces you as his pastor, which you are not, technically, and which you let stand.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 3 },
+            { "target": "reputation", "key": "public", "delta": 2 },
+            { "target": "flag", "key": "dio_ny_captain_friend", "value": true }
+          ]
+        },
+        {
+          "id": "car_goes",
+          "label": "Tell him plainly that the car goes, and that you will bless the wall regardless",
+          "outcome": "He does not argue. The car is gone the next Sunday and so is he, from the nine o'clock, for a month, and when he comes back he ushers the seven instead. You bless the wall. He does not introduce you to the commissioner. The grandmother brings you a cake. The Mexican families come back. On the corner, in the fall, there is another robbery, and nobody says anything to you about it, and that is its own sentence.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 4 },
+            { "target": "reputation", "key": "public", "delta": -1 },
+            { "target": "flag", "key": "dio_ny_captain_cooled", "value": true }
+          ]
+        },
+        {
+          "id": "car_stays",
+          "label": "Let the car stay, thank him for it, and tell the grandmother the block is safer for it",
+          "volume": "semi_public",
+          "positionTopic": "immigration",
+          "positionValue": -30,
+          "outcome": "The grandmother hears you out and says that Father is young, and goes back to her rosary. The car stays. The Spanish Mass settles at two-thirds of what it was and the Mexicans from the avenue do not return; the pastor in Inwood tells you at a deanery meeting that he has some of them now. The captain has you to the precinct's Christmas party and seats you at his table, and the commissioner remembers your name.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": -3 },
+            { "target": "reputation", "key": "public", "delta": 3 },
+            { "target": "reputation", "key": "traditional_bloc", "delta": 2 },
+            { "target": "flag", "key": "dio_ny_captain_ally", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dio_ny_parade",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["belief_vs_safety", "friendship_vs_duty"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 8,
+      "suppressYears": 3,
+      "requires": [
+        { "type": "flag", "key": "diocese:new_york", "value": true },
+        { "type": "any", "inner": [
+          { "type": "season", "value": "lent" },
+          { "type": "season", "value": "holy_week" }
+        ] }
+      ],
+      "bias": [
+        { "when": { "type": "flag", "key": "origin:urban_ethnic", "value": true }, "multiplier": 1.4 }
+      ],
+      "title": "Fifth Avenue",
+      "body": "The parish's division of the Ancient Order of Hibernians is eleven men, the youngest of them sixty, and they have marched up Fifth Avenue on the seventeenth of March every year since the division was founded, past the cathedral steps where the archbishop stands in the cold and reviews them. Their chaplain died in January. They come to the rectory in a body to ask if you will march with them, in the collar, under the banner, and to explain the politics, which take an hour: which unit marches ahead of them and why they will not stand near it, which councilman has asked to walk with the division and why half of them would rather not, and what the parade committee did in the year the whole thing nearly ended, which they describe as if it were the Famine. The parish is now two-thirds Dominican and Mexican and regards the day as a Tuesday. The archbishop expects the marching clergy at the cathedral Mass that morning. The councilman's office has called separately, to ask if Father would be photographed. The Hibernians would like an answer by Sunday, and they would like it to be yes.",
+      "flavorPrompt": "Eleven old Hibernians in a rectory parlor, an hour of parade politics explained like the Famine, and a parish that regards the day as a Tuesday.",
+      "choices": [
+        {
+          "id": "march_with_them",
+          "label": "March with the Hibernians as their chaplain, in the collar, and decline the councilman's photograph",
+          "default": true,
+          "outcome": "It is thirty degrees, the bagpipes are relentless, and you walk fifty blocks between two men talking about their fathers. At the cathedral the archbishop lifts a hand. The councilman marches with another division and the photograph does not happen. At the dinner afterward the oldest of them tells you his chaplain was a good man and that you will do. The Dominicans ask on Sunday whether you had a nice day off.",
+          "effects": [
+            { "target": "reputation", "key": "public", "delta": 3 },
+            { "target": "reputation", "key": "traditional_bloc", "delta": 2 },
+            { "target": "reputation", "key": "parishioners", "delta": 1 },
+            { "target": "flag", "key": "dio_ny_marched", "value": true }
+          ]
+        },
+        {
+          "id": "stay_and_say_mass",
+          "label": "Say the parish's Masses and let the Hibernians march without a chaplain this year",
+          "outcome": "The eleven march behind their banner with the chaplain's place empty and someone at the cathedral steps notices. You say the noon Mass for forty people and hear confessions in Spanish until three. The Hibernians are polite about it and find a chaplain from a parish in Yonkers by the following year, and the banner goes to that parish's festival, and then everything to do with the division goes there too. Nobody at {parish} minds but you.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "reputation", "key": "traditional_bloc", "delta": -3 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "flag", "key": "dio_ny_stayed_home", "value": true }
+          ]
+        },
+        {
+          "id": "march_with_the_councilman",
+          "label": "March, and walk beside the councilman the Hibernians will not stand beside",
+          "requires": [ { "type": "outspokenness", "op": ">=", "value": 40 } ],
+          "volume": "public",
+          "positionTopic": "social_justice",
+          "positionValue": 40,
+          "outcome": "The photograph is in the tabloid on Wednesday with a caption that gets your name right. Six of the Hibernians do not speak to you again. Five do, and one of those says quietly that his brother would have appreciated it. The archbishop, at the steps, lifts his hand exactly as he does for everyone. At the Catholic Center someone clips it and files it, without comment, in the folder with your name on it.",
+          "effects": [
+            { "target": "reputation", "key": "public", "delta": 3 },
+            { "target": "reputation", "key": "progressive_bloc", "delta": 3 },
+            { "target": "reputation", "key": "traditional_bloc", "delta": -4 },
+            { "target": "reputation", "key": "chancery", "delta": -2 },
+            { "target": "flag", "key": "dio_ny_marched_with_councilman", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dio_ny_class_ranking",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["ambition_vs_integrity", "friendship_vs_duty"],
+      "severity": "NOTABLE",
+      "category": "classmate",
+      "baseWeight": 8,
+      "suppressYears": 4,
+      "requires": [
+        { "type": "flag", "key": "diocese:new_york", "value": true }
+      ],
+      "title": "A Thin Year",
+      "body": "At the deanery dinner the old monsignor sits at the head of the table because he has sat there since before the dean was ordained, and he ranks men the way other men rank ballplayers: by seminary class, by first parish, by which archbishop made them. He was Dunwoodie in a year he names as if you should know it. He has decided tonight to explain your class to you. It is, he says, a thin year: seven men, one of whom has left already, two of whom will be made, meaning pastors of parishes that matter and then something after. He names {@closest_classmate} as one of the two. He does not name you. He says this without cruelty, as a man reads a box score, and then he says that he still has friends on First Avenue, and that a word from him has been known to move a name from one column to another, and that he has liked what he has seen of you, and he would be glad to say so. He waits. Down the table {@closest_classmate} is laughing at something the dean said, and has not heard any of it.",
+      "flavorPrompt": "An old monsignor reading a seminary class like a box score, and an offer to move one name between columns, made over the second bottle.",
+      "choices": [
+        {
+          "id": "accept_the_word",
+          "label": "Accept his word, thank him, and be at his table the next time",
+          "outcome": "He says it on First Avenue and it is heard, because he is still heard there, and the next time the personnel board looks at your name there is a line beside it in the vicar general's hand. You sit at his end of the table now. {@closest_classmate} notices, because everyone notices, and says nothing about it, and the thing between you is a degree cooler, in the way of two men who have been ranked.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": 3 },
+            { "target": "reputation", "key": "brother_priests", "delta": 1 },
+            { "target": "relationship", "key": "@closest_classmate", "delta": -3 },
+            { "target": "flag", "key": "dio_ny_monsignor_patron", "value": true }
+          ]
+        },
+        {
+          "id": "class_speaks_for_itself",
+          "label": "Tell him the class can speak for itself, and go down the table to sit with {@closest_classmate}",
+          "default": true,
+          "outcome": "He raises his glass an inch, which from him is a shrug, and turns to the man on his other side. You sit with {@closest_classmate} and the dean and talk about nothing until midnight. The monsignor does not say your name on First Avenue, or anywhere. The younger men at the table saw you get up, and in this presbyterate that is a thing that is also filed, in a different drawer, by different men.",
+          "effects": [
+            { "target": "relationship", "key": "@closest_classmate", "delta": 6 },
+            { "target": "reputation", "key": "brother_priests", "delta": 2 },
+            { "target": "reputation", "key": "chancery", "delta": -1 },
+            { "target": "flag", "key": "dio_ny_class_loyal", "value": true }
+          ]
+        },
+        {
+          "id": "spend_it_on_a_friend",
+          "label": "Ask him to spend the word on {@closest_classmate} instead, since he is the one who will be made",
+          "requires": [ { "type": "relationship", "npcId": "@closest_classmate", "op": ">=", "value": 30 } ],
+          "outcome": "The monsignor looks at you for a long moment over the rim of his glass and says that in fifty years nobody has asked him that, and that he will do it, and that he will also remember who asked. He does both. {@closest_classmate} is made a pastor a year early and does not know why, and you never tell him. The monsignor nods to you at every dinner after, which the table reads correctly.",
+          "effects": [
+            { "target": "relationship", "key": "@closest_classmate", "delta": 10 },
+            { "target": "reputation", "key": "chancery", "delta": 1 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "trait", "key": "gave a patron's word away to a friend" },
+            { "target": "flag", "key": "dio_ny_spoke_for_classmate", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dio_ny_air_rights",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["money", "loyalty_vs_honesty"],
+      "severity": "MAJOR",
+      "category": "finance",
+      "baseWeight": 7,
+      "suppressYears": 5,
+      "once": true,
+      "requires": [
+        { "type": "flag", "key": "diocese:new_york", "value": true },
+        { "type": "role", "value": "pastor" },
+        { "type": "not", "inner": { "type": "parish", "key": "terrain", "value": "rural" } }
+      ],
+      "title": "The Air Above the Church",
+      "body": "The developer's lawyer explains it in the rectory parlor as if to a child, which is fair, because it exists only in this city. The church at {parish} is four stories tall on a lot zoned for twenty, and the sixteen stories that were never built are a commodity: sixty thousand square feet of air that can be sold to the lot next door, where a tower is planned, and the tower would go up higher for it. Nine million dollars. The archdiocese's real estate office must approve any sale, and above a certain figure the permission goes to Rome, and the archdiocese takes its share for the assessment before the parish sees a dollar; the lawyer has done this with six parishes. The parish's share would fix the school roof, the boiler, and the bells, and fund the pantry for a decade. What the parish would lose is the light: the tower would put the north windows in shadow after ten in the morning for the rest of time. The reporter at the tabloid already has the lawyer's name. The finance council has asked what Father thinks. So has the woman who cleans the windows.",
+      "flavorPrompt": "Sixty thousand square feet of nothing, worth nine million dollars, and the north windows that would go dark for it: a New York parish decides what it owns.",
+      "choices": [
+        {
+          "id": "sell",
+          "label": "Sell the air rights, and take what the archdiocese leaves the parish",
+          "default": true,
+          "outcome": "Rome's permission takes eleven months and the archdiocese's share is larger than the lawyer estimated, but the parish's share fixes the roof and the boiler and the bells and endows the pantry. The tower goes up over two years. The north windows are in shadow from ten o'clock on, as promised, and the woman who cleans them tells you they are harder to see now. The tabloid runs the figure. The Catholic Center is pleased with you.",
+          "effects": [
+            { "target": "money", "key": "cash", "delta": 150000 },
+            { "target": "reputation", "key": "chancery", "delta": 5 },
+            { "target": "reputation", "key": "parishioners", "delta": -3 },
+            { "target": "reputation", "key": "public", "delta": -2 },
+            { "target": "flag", "key": "dio_ny_sold_air_rights", "value": true }
+          ]
+        },
+        {
+          "id": "keep_the_light",
+          "label": "Refuse to sell, and keep the light on the north windows",
+          "outcome": "The developer builds lower and the lawyer is not unpleasant about it. The school roof is patched again. The real estate office sends a letter noting that the parish declined a transaction of significant value and asks you to explain your reasoning for the file, and you do, in a page, and the page is filed. The windows are what they were. Some of the old people thank you. The finance council chair does not.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": -4 },
+            { "target": "reputation", "key": "parishioners", "delta": 4 },
+            { "target": "reputation", "key": "traditional_bloc", "delta": 2 },
+            { "target": "flag", "key": "dio_ny_kept_the_light", "value": true }
+          ]
+        },
+        {
+          "id": "sell_on_terms",
+          "label": "Sell, on condition the archdiocese puts the parish's share in writing first, and the developer buys the school new windows",
+          "requires": [ { "type": "stat", "key": "administration", "op": ">=", "value": 55 } ],
+          "outcome": "The real estate office does not like being asked for a number in writing and gives you one anyway, because the lawyer wants the deal. The developer, who wants it more, pays for windows in the school and a setback on the north side that leaves the good windows an hour more of light. The tower goes up. The tabloid runs the figure and a photograph of the setback and calls you, for one day, shrewd.",
+          "effects": [
+            { "target": "money", "key": "cash", "delta": 220000 },
+            { "target": "reputation", "key": "chancery", "delta": 2 },
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "stat", "key": "administration", "delta": 2 },
+            { "target": "flag", "key": "dio_ny_sold_on_terms", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dio_ny_hotel_families",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["friendship_vs_duty", "belief_vs_safety"],
+      "severity": "NOTABLE",
+      "category": "admin",
+      "baseWeight": 8,
+      "suppressYears": 3,
+      "requires": [
+        { "type": "flag", "key": "diocese:new_york", "value": true },
+        { "type": "parish", "key": "needsSpanish", "value": true }
+      ],
+      "title": "The Hotel on the Avenue",
+      "body": "The city has rented the hotel on the avenue for the families coming up from the border, and since the spring the back three pews at the Spanish Mass have been Ecuadorians and Venezuelans, standing when the pews are full, with children who have not been to school in a year. The Spanish Mass at {parish} has belonged for forty years to the Puerto Ricans and the Dominicans: the Cursillo, the Legion of Mary, the Altagracia novena in January that fills the church. They built it. Their leader, a retired transit worker named Doña Carmen who has run the Cursillo since before you were ordained, comes to the office to say two things. The pantry has doubled and the Cursillo cannot keep it going. And the Ecuadorians have asked, through her, for a novena to the Virgen del Cisne in August with the church, the hall, and a band, and she does not see why people who arrived in March should have what took her people twenty years to get. She says it without heat. Then she says that her own mother came on a plane in 1962 with nothing, and looks at the window for a while.",
+      "flavorPrompt": "A shelter hotel's families in the back pews of a Spanish Mass that older immigrants built, and the woman who built it deciding what she owes them.",
+      "choices": [
+        {
+          "id": "cisne_novena",
+          "label": "Give the Ecuadorians the church for the Cisne novena, and stand at the door for every night of it",
+          "volume": "semi_public",
+          "positionTopic": "immigration",
+          "positionValue": 40,
+          "outcome": "Nine nights in August with a band from Queens and the Virgin carried in under an arch of flowers by men who have known each other four months. You are at the door each night. Doña Carmen comes on the ninth and sits at the back with her arms folded and her lips moving. The Cursillo's numbers are thinner in the fall, and the pantry is not, and the Ecuadorians take a shift at it without being asked.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "reputation", "key": "progressive_bloc", "delta": 3 },
+            { "target": "reputation", "key": "traditional_bloc", "delta": -2 },
+            { "target": "flag", "key": "dio_ny_cisne_novena", "value": true }
+          ]
+        },
+        {
+          "id": "adopt_them",
+          "label": "Keep the calendar as it is, and ask the Cursillo to adopt the new families one by one",
+          "default": true,
+          "volume": "semi_public",
+          "positionTopic": "immigration",
+          "positionValue": 10,
+          "outcome": "Doña Carmen takes this as the thing she was waiting to be asked, which it may have been. Each Cursillo family takes a hotel family: school forms, the clinic, a winter coat, a Sunday dinner. The Cisne novena does not happen that year. By Advent the back three pews have moved forward, and two Ecuadorian men are in the Cursillo, and Doña Carmen refers to them as her boys.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 3 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "flag", "key": "dio_ny_adopted_families", "value": true }
+          ]
+        },
+        {
+          "id": "one_table",
+          "label": "Put the Cursillo leaders and the Ecuadorians at one table on a Tuesday night, and let them settle it",
+          "requires": [ { "type": "stat", "key": "charisma", "op": ">=", "value": 50 } ],
+          "outcome": "It takes three Tuesdays and one of them is loud. What comes out of it is the Cisne novena in the hall, not the church, with the Cursillo running the kitchen and the Ecuadorians running the band, and a pantry schedule with both names on it. Doña Carmen and the Ecuadorians' spokesman, a former schoolteacher from Loja, do not like each other and work together, which is most of what a parish is.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 4 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "flag", "key": "dio_ny_one_table", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dio_ny_latin_mass",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["belief_vs_safety", "loyalty_vs_honesty"],
+      "severity": "NOTABLE",
+      "category": "admin",
+      "baseWeight": 8,
+      "suppressYears": 4,
+      "requires": [
+        { "type": "flag", "key": "diocese:new_york", "value": true }
+      ],
+      "bias": [
+        { "when": { "type": "group", "key": "type", "value": "tlm_society" }, "multiplier": 1.6 },
+        { "when": { "type": "alignment", "op": "<=", "value": -30 }, "multiplier": 1.3 }
+      ],
+      "title": "The Seven-Thirty",
+      "body": "Until the decree the 1962 Mass was said at {parish} at seven-thirty by a retired priest, and forty families came to it, some from Westchester and one from Connecticut. When Rome spoke and the archdiocese moved the old Mass out of parish churches and into a chapel in another borough, the forty did not go to the chapel. They came to the seven-thirty anyway, in veils and with hand missals, and knelt for Communion, and they have been there every Sunday since. They are courteous and organized, with a lawyer among them, and they have asked you for two things: that you petition the chancery for the old Mass to return, in writing, with their signatures; or, failing that, that the seven-thirty be said in Latin and facing east within the Missal everyone uses, which no decree forbids. The ten-thirty, with the folk group and the woman who has run it since 1979, has noticed the veils and has begun to say so. The reporter from the tabloid, who has a source in the chancery, has attended both Masses in the same month, sat at the back each time, and took no notes, which is how he takes notes.",
+      "flavorPrompt": "Forty families in veils at a seven-thirty that used to be theirs, a folk group at ten-thirty that has noticed, and a reporter at the back of both.",
+      "choices": [
+        {
+          "id": "petition_with_them",
+          "label": "Petition the chancery with them for the old Mass, and say from the pulpit that you have",
+          "volume": "public",
+          "positionTopic": "tlm",
+          "positionValue": -60,
+          "outcome": "The petition goes to the Catholic Center with forty signatures and yours, and the answer comes in three weeks, and the answer is no, in a paragraph that cites Rome. The forty are grateful in a way that will last for years. The ten-thirty's leader asks at the door whether the parish is going backward. The tabloid runs a paragraph. The vicar general's office notes that you took a public position on a matter the archbishop had settled.",
+          "effects": [
+            { "target": "reputation", "key": "traditional_bloc", "delta": 5 },
+            { "target": "reputation", "key": "progressive_bloc", "delta": -4 },
+            { "target": "reputation", "key": "chancery", "delta": -3 },
+            { "target": "flag", "key": "dio_ny_petitioned_for_tlm", "value": true }
+          ]
+        },
+        {
+          "id": "send_them_to_the_chapel",
+          "label": "Tell them the chapel is where the archbishop put the old Mass, and offer to drive them there yourself the first Sunday",
+          "default": true,
+          "volume": "semi_public",
+          "positionTopic": "tlm",
+          "positionValue": 40,
+          "outcome": "You drive four of them the first Sunday, forty minutes on the expressway, and sit at the back of the chapel through a Mass you have not attended since seminary. The rest do not go. Half stay at the seven-thirty in their veils and the other half find a parish in Connecticut that reads the decree differently. The ten-thirty's leader is satisfied. The chancery is satisfied. The lawyer among them sends a courteous letter that you keep.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": 3 },
+            { "target": "reputation", "key": "traditional_bloc", "delta": -4 },
+            { "target": "reputation", "key": "progressive_bloc", "delta": 2 },
+            { "target": "flag", "key": "dio_ny_sent_them_to_the_chapel", "value": true }
+          ]
+        },
+        {
+          "id": "latin_facing_east",
+          "label": "Offer the seven-thirty in Latin, facing east, within the Missal everyone uses",
+          "requires": [
+            { "type": "credential", "key": "latin" },
+            { "type": "not", "inner": { "type": "bishop", "key": "stance", "topic": "ad_orientem", "value": "forbidden" } }
+          ],
+          "volume": "semi_public",
+          "positionTopic": "tlm",
+          "positionValue": -20,
+          "outcome": "The forty take it, most of them, and within a season there are sixty at the seven-thirty, and a schola. The ten-thirty's leader comes once, out of suspicion, and admits the Sanctus was well sung. The chancery asks one question, in writing, and accepts the answer. The tabloid's reporter comes a third time and, having found nothing that is against any rule, does not write, which in this archdiocese is the best review a Mass can get.",
+          "effects": [
+            { "target": "reputation", "key": "traditional_bloc", "delta": 3 },
+            { "target": "reputation", "key": "progressive_bloc", "delta": -2 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "flag", "key": "dio_ny_latin_novus_ordo", "value": true }
+          ]
+        }
+      ]
+    }
+  ]
+}

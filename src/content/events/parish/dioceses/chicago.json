@@ -1,0 +1,373 @@
+{
+  "_notes": "The Chicago pool: six events that could only happen in the Archdiocese of Chicago, drawn for any parish role once the engine sets diocese:chicago. Named people are invented. Flags written: dio_chi_sobczak_ally / dio_chi_sobczak_crossed / dio_chi_sobczak_pupil (Pani Sobczak, the Polish grandmother who runs the parish; later content may read which side of her he landed on), dio_chi_walked_18th / dio_chi_preached_18th / dio_chi_kept_three_oclock (the Pilsen Via Crucis), dio_chi_pastor_first / dio_chi_company_man / dio_chi_asked_in_writing (the Mass-schedule letter nobody implements: the presbyterate's independence), dio_chi_took_casimirs_money / dio_chi_took_casimirs_people / dio_chi_turned_casimir_away (the closed church next door), dio_chi_opened_hall / dio_chi_kept_the_hall / dio_chi_mass_at_the_station (the buses from Texas), dio_chi_signed_for_school / dio_chi_backed_the_closure / dio_chi_school_committee (the schools). Positions recorded: authority (the letter), immigration (the buses), money (the schools).",
+  "events": [
+    {
+      "id": "dio_chi_pani_sobczak",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["competence", "friendship_vs_duty"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 8,
+      "suppressYears": 4,
+      "once": true,
+      "requires": [
+        { "type": "flag", "key": "diocese:chicago", "value": true },
+        { "type": "any", "inner": [
+          { "type": "parish", "key": "terrain", "value": "urban" },
+          { "type": "parish", "key": "kind", "value": "difficult" },
+          { "type": "parish", "key": "kind", "value": "struggling_urban" }
+        ] }
+      ],
+      "bias": [
+        { "when": { "type": "flag", "key": "origin:urban_ethnic", "value": true }, "multiplier": 1.4 }
+      ],
+      "title": "Pani Sobczak",
+      "body": "Everyone calls her Pani Sobczak, including the pastor, and she has the keys to everything: the counting room, the sacristy, the cabinets of the Saturday Polish school, the Forty Hours schedule that has not changed since 1994. She came from Nowy Sącz in 1979 and has buried two husbands from this church. She does not sit on the parish council because the parish council sits on her. This week she comes to the rectory with a plate of pierogi and a schedule she has typed herself. The Polish Mass moves from nine to half past ten, starting Sunday, because the choir's driver has changed jobs. Half past ten is the English Mass. The English Mass is forty old Irish and a growing number of Mexican families who found the nine o'clock too early. She has already told the ushers, she says, and the choir, and Mrs. Nowak who does the bulletin. She would like you to announce it. She says this the way weather is announced. The pierogi are still warm. It occurs to you that {parish} has been run this way for thirty years and that it has, on the whole, been run.",
+      "flavorPrompt": "A rectory kitchen, a plate of pierogi, and an eighty-one-year-old woman who has outlasted four pastors and expects to outlast a fifth.",
+      "choices": [
+        {
+          "id": "let_her_run_it",
+          "label": "Announce it as she typed it, and let her go on running the parish",
+          "default": true,
+          "outcome": "You read her schedule from the pulpit in her words, and the English Mass moves to nine without a vote. Two Mexican families go to the parish in Cicero and do not come back. The Polish choir sings the Ascension like a cathedral. Pani Sobczak leaves a second plate on Tuesday, and the sacristan tells you that in thirty years she has never done that for anyone.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": -2 },
+            { "target": "reputation", "key": "traditional_bloc", "delta": 3 },
+            { "target": "flag", "key": "dio_chi_sobczak_ally", "value": true }
+          ]
+        },
+        {
+          "id": "take_it_back",
+          "label": "Tell her the schedule is the priest's to set, and keep the Polish Mass at nine",
+          "outcome": "She hears you out with her hands folded and says that of course Father knows best, in a tone that has ended arguments in three languages. The choir finds another driver within the week, which tells you something. For a month the Polish envelopes are thin and the counting room is cold. Then it passes, mostly. She still has the keys. Nobody has suggested otherwise.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "reputation", "key": "traditional_bloc", "delta": -3 },
+            { "target": "stat", "key": "administration", "delta": 1 },
+            { "target": "flag", "key": "dio_chi_sobczak_crossed", "value": true }
+          ]
+        },
+        {
+          "id": "her_kitchen",
+          "label": "Go to her kitchen on Thursday and work out a third schedule with her over the pierogi",
+          "requires": [ { "type": "stat", "key": "charisma", "op": ">=", "value": 50 } ],
+          "outcome": "Her kitchen is a shrine with a stove in it. You eat what you are given and listen for an hour before you say anything, and at the end of it the Polish Mass is at ten, the English at half past eleven, and the coffee hour, for the first time, is one coffee hour. She tells the choir it was her idea. You let her. You learned more about {parish} in that hour than in the year before it.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 4 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "trait", "key": "learned the parish in Pani Sobczak's kitchen" },
+            { "target": "flag", "key": "dio_chi_sobczak_pupil", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dio_chi_via_crucis_18th",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["competence", "belief_vs_safety"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 8,
+      "suppressYears": 3,
+      "requires": [
+        { "type": "flag", "key": "diocese:chicago", "value": true },
+        { "type": "season", "value": "holy_week" },
+        { "type": "any", "inner": [
+          { "type": "parish", "key": "needsSpanish", "value": true },
+          { "type": "parish", "key": "terrain", "value": "latino" },
+          { "type": "parish", "key": "kind", "value": "immigrant_growing" }
+        ] }
+      ],
+      "title": "Eighteenth Street on Good Friday",
+      "body": "On Good Friday morning the parishes of Pilsen carry the cross down Eighteenth Street, from the church at the east end to the park at the west, and something like ten thousand people walk with it. The man who plays Christ this year is a parishioner of {parish}, a drywall hanger from Michoacán who has been fasting since Ash Wednesday, and the Confirmation class has been asked to be the Roman soldiers. The organizers have asked you to walk the whole route and, at the ninth station, outside the panadería where the crowd is thickest, to preach. In Spanish. For four minutes. Into a microphone the police will be listening to as well. Behind you, at three o'clock, is the Celebration of the Lord's Passion at {parish}, which the old English-speaking remnant will attend in a nearly empty church whatever you decide, and which cannot be moved because the hour is the hour. The street is already closed. The condos that were not there five years ago have their curtains drawn.",
+      "flavorPrompt": "A living Way of the Cross through a changing neighborhood: the crowd, the cold, the drywall hanger carrying the beam, and the hour of the Passion waiting back at the church.",
+      "choices": [
+        {
+          "id": "preach_the_station",
+          "label": "Walk the whole route and preach the ninth station yourself, in Spanish",
+          "requires": [ { "type": "any", "inner": [
+            { "type": "credential", "key": "spanish" },
+            { "type": "flag", "key": "speaks_spanish", "value": true }
+          ] } ],
+          "outcome": "Your four minutes are about a man who falls a third time and gets up, and about the people who have moved three times and stayed. Nobody applauds at a Via Crucis. But the drywall hanger looks at you from under the beam, and an old woman takes your hand at the park and does not let go. You are back at {parish} by a quarter to three with your voice half gone.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 5 },
+            { "target": "reputation", "key": "public", "delta": 2 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "flag", "key": "dio_chi_preached_18th", "value": true }
+          ]
+        },
+        {
+          "id": "walk_and_let_deacon_preach",
+          "label": "Walk the route with the parish and let the deacon take the microphone",
+          "default": true,
+          "outcome": "You walk in the collar and the cold behind the soldiers, and at the ninth station the deacon preaches better than you would have, which is a fact and not a wound. People see the priest of {parish} in the street on the day that matters, and that is most of what they wanted. You are back in time to vest. The Passion is read to sixty people and the silence afterward is total.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 3 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "flag", "key": "dio_chi_walked_18th", "value": true }
+          ]
+        },
+        {
+          "id": "keep_three_oclock",
+          "label": "Stay at the church, prepare the three o'clock, and send the Confirmation class with the deacon",
+          "outcome": "The Passion at three is exactly right: the bare altar, the wooden cross carried in, the long intercessions, the old people who have never missed it. The Spanish families come in from the street at four, sunburned and wet, and find the church already stripped and the priest already gone to the rectory. Nobody says anything. The drywall hanger asks the deacon, the next day, whether Father was ill.",
+          "effects": [
+            { "target": "reputation", "key": "traditional_bloc", "delta": 2 },
+            { "target": "reputation", "key": "parishioners", "delta": -3 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "flag", "key": "dio_chi_kept_three_oclock", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dio_chi_letter_nobody_implements",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["loyalty_vs_honesty", "ambition_vs_integrity"],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 8,
+      "suppressYears": 3,
+      "requires": [
+        { "type": "flag", "key": "diocese:chicago", "value": true }
+      ],
+      "title": "Eleven of These",
+      "body": "The letter from {@vicar_general} is two pages and arrives at every rectory in the archdiocese on the same Tuesday. In the name of renewal, every Sunday Mass with fewer than a hundred people is to be dropped by the first Sunday of Advent, and the count is the October count, and the pastors are to submit their revised schedules by the fifteenth. At the deanery meeting, in a rectory basement with the good wine already open, the dean reads it aloud without expression. {@brother_priest}, forty years a pastor and the last man on the North Side still saying a seven o'clock in Polish, folds it into his breast pocket and says he has had eleven of these, and that the eleven previous archbishops' letters are in a drawer with the eleven previous archbishops. Nobody laughs, because it is not a joke. Then he turns to you, because you are the youngest man at the table, and asks, pleasantly, what {parish} intends to do. Everyone waits. In this presbyterate the answer to that question is how a man is filed.",
+      "flavorPrompt": "A rectory basement, an old pastor with a letter in his pocket, and a presbyterate that has always decided for itself which letters count.",
+      "choices": [
+        {
+          "id": "keep_every_mass",
+          "label": "Say you will keep every Mass the people come to, and let the chancery find out when it finds out",
+          "volume": "semi_public",
+          "positionTopic": "authority",
+          "positionValue": 35,
+          "outcome": "The old man nods once and pours you a glass, and the table goes back to the Bears. By the end of the week three pastors know you are one of theirs. The schedule at {parish} does not change. In February a letter from the pastoral center asks, in a neutral tone, for the revised schedule that was not received, and you understand that your name is now in a different drawer.",
+          "effects": [
+            { "target": "reputation", "key": "brother_priests", "delta": 4 },
+            { "target": "reputation", "key": "chancery", "delta": -3 },
+            { "target": "relationship", "key": "@brother_priest", "delta": 6 },
+            { "target": "flag", "key": "dio_chi_pastor_first", "value": true }
+          ]
+        },
+        {
+          "id": "follow_the_letter",
+          "label": "Say you will do what the letter says, and cut the Mass that is under the number",
+          "default": true,
+          "volume": "semi_public",
+          "positionTopic": "authority",
+          "positionValue": -30,
+          "outcome": "There is a pause of the kind that follows a dropped plate, and then the dean says that is certainly one approach, and the meeting moves on. The Mass at {parish} with eighty people goes on the first Sunday of Advent, and forty of the eighty come to another one, and forty do not. The pastoral center acknowledges the revised schedule the same day. {@brother_priest} does not pour you a glass again.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": 3 },
+            { "target": "reputation", "key": "brother_priests", "delta": -3 },
+            { "target": "reputation", "key": "parishioners", "delta": -2 },
+            { "target": "relationship", "key": "@brother_priest", "delta": -6 },
+            { "target": "flag", "key": "dio_chi_company_man", "value": true }
+          ]
+        },
+        {
+          "id": "ask_in_writing",
+          "label": "Write to {@vicar_general} for an exemption, with the numbers, and change nothing until he answers",
+          "requires": [ { "type": "stat", "key": "administration", "op": ">=", "value": 50 } ],
+          "outcome": "Your letter is two pages, like his, and has the October count broken out by language and by age, and a paragraph on what happens to the eighty when they are told to drive to Cicero. He answers in six weeks, granting a year's review. The old pastors regard this as cleverness, which they respect less than defiance but more than obedience. The chancery notes that you can write.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": 1 },
+            { "target": "reputation", "key": "brother_priests", "delta": 1 },
+            { "target": "stat", "key": "administration", "delta": 1 },
+            { "target": "flag", "key": "dio_chi_asked_in_writing", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dio_chi_closed_church_next_door",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["money", "friendship_vs_duty"],
+      "severity": "NOTABLE",
+      "category": "finance",
+      "baseWeight": 8,
+      "suppressYears": 5,
+      "once": true,
+      "requires": [
+        { "type": "flag", "key": "diocese:chicago", "value": true },
+        { "type": "not", "inner": { "type": "parish", "key": "terrain", "value": "rural" } }
+      ],
+      "bias": [
+        { "when": { "type": "parish", "key": "kind", "value": "struggling_urban" }, "multiplier": 1.5 },
+        { "when": { "type": "parish", "key": "problem", "value": "merger_rumor" }, "multiplier": 1.5 }
+      ],
+      "title": "St. Casimir's Last Sunday",
+      "body": "St. Casimir, three blocks over, said its last Mass on the Sunday after Corpus Christi, with the auxiliary bishop presiding and a Lithuanian choir that had been driven in from Lemont for the occasion. The following Sunday its people are at {parish}: perhaps ninety of them, in the front pews on the left, where nobody sits. They have brought things. Our Lady of Vilnius from the side altar, in a van. The Pietà, which needs four men. Two brass candlesticks, a set of vestments, and a folder. The folder is the problem. A parishioner of St. Casimir died in March and left sixty thousand dollars in her will to her parish, and the archdiocese's position, conveyed by {@chancellor} in a letter that is polite and final, is that the assets of a closed parish go where the decree of closure sends them, which is not to the parish its people happened to walk to. The people of St. Casimir want their money to follow them. They want their Madonna on a wall. They want, above everything, for someone to say the word welcome and mean it, and they are looking at you.",
+      "flavorPrompt": "A closed church's people in the wrong pews with a statue in a van and a folder: what follows a parish when it dies, and what does not.",
+      "choices": [
+        {
+          "id": "write_for_the_money",
+          "label": "Write to {@chancellor} as pastor: the people came here, and their bequest should come with them",
+          "requires": [ { "type": "role", "value": "pastor" } ],
+          "outcome": "Your letter cites the decree, the will, and the ninety people by name. The chancellor's answer takes two months and sends twenty-five thousand of the sixty, with a paragraph about precedent that is meant to be read as a warning. The Madonna goes up on the north wall. The people of St. Casimir put you in their wills, which is the highest compliment the Lithuanians have.",
+          "effects": [
+            { "target": "money", "key": "cash", "delta": 25000 },
+            { "target": "reputation", "key": "parishioners", "delta": 4 },
+            { "target": "reputation", "key": "chancery", "delta": -3 },
+            { "target": "flag", "key": "dio_chi_took_casimirs_money", "value": true }
+          ]
+        },
+        {
+          "id": "take_the_people",
+          "label": "Take the Madonna and the people, and let the money go where the decree sends it",
+          "default": true,
+          "outcome": "You find a wall. Our Lady of Vilnius is blessed at the ten o'clock with the Lithuanian choir driven in again from Lemont, and the ninety stay, most of them, and bring their envelopes with them, which over three years is worth more than sixty thousand and nobody at the pastoral center has to be written to. The folder goes in a drawer. Someone from St. Casimir mentions it at every festival.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 3 },
+            { "target": "reputation", "key": "chancery", "delta": 2 },
+            { "target": "flag", "key": "dio_chi_took_casimirs_people", "value": true }
+          ]
+        },
+        {
+          "id": "no_wall",
+          "label": "Tell them, kindly, that there is no wall for a second Madonna, and that {parish} has its own devotions",
+          "outcome": "You say it as gently as it can be said, and they hear it as it was always going to be heard. The Madonna goes back in the van. Forty of the ninety try the parish in Marquette Park and the rest scatter, and the ones who stay at {parish} sit in the back. The chancery hears nothing and is content. The Lithuanian choir does not come again.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": -3 },
+            { "target": "reputation", "key": "traditional_bloc", "delta": -3 },
+            { "target": "stat", "key": "administration", "delta": 1 },
+            { "target": "flag", "key": "dio_chi_turned_casimir_away", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dio_chi_buses_from_texas",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["belief_vs_safety", "friendship_vs_duty"],
+      "severity": "MAJOR",
+      "category": "admin",
+      "baseWeight": 7,
+      "suppressYears": 4,
+      "once": true,
+      "requires": [
+        { "type": "flag", "key": "diocese:chicago", "value": true },
+        { "type": "parish", "key": "needsSpanish", "value": true }
+      ],
+      "title": "The Police Station Lobby",
+      "body": "The buses from Texas come in at night to the bus station on Harrison Street, and the city, having nowhere to put anyone, has been sending families to sleep in the lobbies of police stations. The one nearest {parish} has forty Venezuelans on its floor: mothers, children, two grandmothers, men who walked from Colombia. A woman from the alderman's office calls the rectory on Wednesday and asks, without preamble, whether the parish hall could take twenty of them for the winter. Catholic Charities is coordinating, she says, but has no beds. The parish council chair, who came from Jalisco in 1988 and has scrubbed that hall himself, says the hall is for the parish: the quinceañeras, the Guadalupe supper, the funeral lunches. He is not unkind. He says that his people waited years for their papers and that these did not, and that he has heard what the neighborhood is saying, and that the boiler cannot heat the hall all week. Some of what he says is true. It is November. The forecast is single digits by Friday.",
+      "flavorPrompt": "A lobby floor, a phone call from the alderman's office, and a parish council chair who is half right; the older immigrants and the newer ones, and a hall with one boiler.",
+      "choices": [
+        {
+          "id": "open_the_hall",
+          "label": "Open the hall for the winter, and tell the council afterward",
+          "volume": "public",
+          "positionTopic": "immigration",
+          "positionValue": 50,
+          "outcome": "Twenty cots go in on Friday and the boiler holds. The council chair does not resign, which you had half expected, but he does not come to the hall again until spring. Two families leave the parish over it and a television crew comes once. In February a Venezuelan boy serves the Spanish Mass in a borrowed cassock and the old Jaliscans in the front pews watch him the whole time, and you cannot read their faces.",
+          "effects": [
+            { "target": "reputation", "key": "public", "delta": 4 },
+            { "target": "reputation", "key": "progressive_bloc", "delta": 3 },
+            { "target": "reputation", "key": "parishioners", "delta": -3 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "flag", "key": "dio_chi_opened_hall", "value": true }
+          ]
+        },
+        {
+          "id": "pantry_not_hall",
+          "label": "Send the pantry and every blanket in the building, and keep the hall for the parish",
+          "default": true,
+          "volume": "semi_public",
+          "positionTopic": "immigration",
+          "positionValue": -20,
+          "outcome": "The Knights drive three carloads of food and coats to the station on Thursday and the chair goes with them, which you note. The hall stays a hall. The alderman's office does not call again. In January a West Side parish opens its gym and is in the newspaper, and a parishioner asks you at the door why {parish} was not, and you give the answer about the boiler, which is true and satisfies neither of you.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "reputation", "key": "public", "delta": -1 },
+            { "target": "flag", "key": "dio_chi_kept_the_hall", "value": true }
+          ]
+        },
+        {
+          "id": "mass_at_the_station",
+          "label": "Say Sunday Mass for them on the lobby floor, in Spanish, and bring the council chair to serve it",
+          "requires": [ { "type": "any", "inner": [
+            { "type": "credential", "key": "spanish" },
+            { "type": "flag", "key": "speaks_spanish", "value": true }
+          ] } ],
+          "volume": "semi_public",
+          "positionTopic": "immigration",
+          "positionValue": 30,
+          "outcome": "The desk sergeant clears a corner and the Mass is said on a folding table with the grandmothers kneeling on coats. The chair holds the book and says nothing for the whole hour and drives you home in silence. On Tuesday he tells you the hall can take ten, not twenty, and only until Easter, and that he will manage the boiler himself. That is how the winter goes.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 3 },
+            { "target": "reputation", "key": "public", "delta": 2 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "flag", "key": "dio_chi_mass_at_the_station", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dio_chi_school_letter",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["money", "loyalty_vs_honesty"],
+      "severity": "NOTABLE",
+      "category": "finance",
+      "baseWeight": 8,
+      "suppressYears": 4,
+      "requires": [
+        { "type": "flag", "key": "diocese:chicago", "value": true },
+        { "type": "any", "inner": [
+          { "type": "parish", "key": "school", "value": "open" },
+          { "type": "parish", "key": "school", "value": "at_risk" }
+        ] }
+      ],
+      "bias": [
+        { "when": { "type": "parish", "key": "school", "value": "at_risk" }, "multiplier": 1.6 },
+        { "when": { "type": "parish", "key": "problem", "value": "school_tuition" }, "multiplier": 1.5 }
+      ],
+      "title": "The Parents' Letter",
+      "body": "The Office of Catholic Schools announced the deanery plan on a Thursday, by email, with a map. Four parish schools become one regional school, housed in the building with the newest boiler, which is not the school at {parish}. The state let the scholarship tax credit lapse two years ago and a third of your families were on it; the enrollment is a hundred and forty; the parish subsidy from the Sunday collection is two hundred thousand a year and rising. Those are the numbers, and the numbers are not wrong. By Sunday the parents have a letter. It is addressed to the archbishop, it is three pages, it is angry and well-written, and the woman who wrote it, whose grandmother was married in this church, asks you after Mass to sign it and read it aloud next week. The pastor of the parish whose building will win has already called you to say, in a friendly way, that he hopes the deanery can stay together. The superintendent has said, less friendly, that priests who sign parents' letters are not the priests the archdiocese asks to serve on the planning committee afterward.",
+      "flavorPrompt": "A map, a three-page letter, and a parish school that is loved and losing: the wound of the archdiocese, in one building.",
+      "choices": [
+        {
+          "id": "sign_and_read",
+          "label": "Sign the parents' letter and read it from the pulpit",
+          "volume": "public",
+          "positionTopic": "money",
+          "positionValue": 50,
+          "outcome": "The church applauds, which you have never heard it do. The letter goes to the pastoral center with four hundred signatures and yours at the top. The plan proceeds on schedule anyway. The school at {parish} gets a one-year reprieve, which the superintendent describes to the deanery as a courtesy and describes to you, in a hallway, differently. The parents remember. So does the office.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 5 },
+            { "target": "reputation", "key": "chancery", "delta": -4 },
+            { "target": "reputation", "key": "brother_priests", "delta": -1 },
+            { "target": "flag", "key": "dio_chi_signed_for_school", "value": true }
+          ]
+        },
+        {
+          "id": "back_the_plan",
+          "label": "Back the plan, and tell the parents plainly why the number does not work",
+          "default": true,
+          "volume": "public",
+          "positionTopic": "money",
+          "positionValue": -40,
+          "outcome": "You say it from the pulpit with the numbers, because the numbers are the only honest thing you have. The woman who wrote the letter walks out during the homily and does not slam the door, which is worse. The school closes in June with a Mass and a photograph. Thirty families follow it to the regional school, twenty go to the public school, and the collection drops by exactly what the subsidy was.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": 3 },
+            { "target": "reputation", "key": "parishioners", "delta": -4 },
+            { "target": "stat", "key": "administration", "delta": 1 },
+            { "target": "flag", "key": "dio_chi_backed_the_closure", "value": true }
+          ]
+        },
+        {
+          "id": "the_committee",
+          "label": "Decline to sign, and ask instead for a seat on the committee that will run the merged school",
+          "requires": [ { "type": "reputation", "key": "chancery", "op": ">=", "value": 15 } ],
+          "outcome": "The superintendent gives you the seat in a week, which tells you it was on offer all along. You spend a year of Tuesday evenings on tuition scales and bus routes, and the merged school opens with a Spanish track that would not exist otherwise and forty of your families in it. The woman who wrote the letter sends her children there. She does not speak to you at the door.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": 2 },
+            { "target": "stat", "key": "administration", "delta": 2 },
+            { "target": "reputation", "key": "parishioners", "delta": -1 },
+            { "target": "flag", "key": "dio_chi_school_committee", "value": true }
+          ]
+        }
+      ]
+    }
+  ]
+}
