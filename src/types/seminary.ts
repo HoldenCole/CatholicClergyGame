@@ -78,4 +78,6 @@ export interface SeminaryState {
   routine?: Record<string, number>;
   /** Hours ever given to each activity, for credentials that take time. */
   hoursLogged?: Record<string, number>;
+  /** What this year's free hours built, by stat, for the evaluation. Reset each year. */
+  hoursGains?: Partial<Record<StatKey, number>>;
 }

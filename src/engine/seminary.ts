@@ -109,7 +109,7 @@ export function chooseEmphasis(state: GameState, emphasis: Record<Pillar, number
       ...withEmphasis,
       beats,
       mode: { kind: 'clock' },
-      seminary: { ...sem, playedWeeks, yearStartWeek: start, pillarScores: zeroPillars(), summerAssignment: null },
+      seminary: { ...sem, playedWeeks, yearStartWeek: start, pillarScores: zeroPillars(), summerAssignment: null, hoursGains: {} },
     },
     rng,
   );

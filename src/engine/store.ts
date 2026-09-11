@@ -32,7 +32,8 @@ import {
 } from './seminary';
 import { parishWeekHook, resolvePending, seminaryWeekHook, type EventDeps } from './weekHook';
 import { setDiscretionary as doSetDiscretionary, setObligation as doSetObligation, startAssignment } from './parish';
-import { startFounding as doStartFounding, suppressGroup as doSuppress } from '@/systems/groups';
+import { focusGroup as doFocus, startFounding as doStartFounding, suppressGroup as doSuppress } from '@/systems/groups';
+import { payDebt as doPayDebt } from '@/systems/finance';
 import type { GroupType, ProjectType } from '@/types';
 import { startProject as doStartProject } from '@/systems/projects';
 import { furnish as doFurnish, petition as doPetition } from '@/systems/decor';
@@ -88,6 +89,10 @@ export interface GameStore {
   setDiscretionary(actionId: string, ap: number): void;
   foundGroup(type: GroupType): void;
   suppressGroup(groupId: string, suppressed: boolean): void;
+  /** Single a group out for the sustaining hours. */
+  focusGroup(groupId: string, focus: boolean): void;
+  /** Pay down the parish debt from cash in hand. Pastor or administrator only. */
+  payDebt(amount: number): void;
   startProject(type: ProjectType): void;
   furnish(place: DecorPlace, optionId: string): void;
   /** Write to the chancery for leave on a liturgical topic. */
@@ -366,6 +371,12 @@ export const useGameStore = create<GameStore>()((set, get) => ({
   },
   suppressGroup(groupId, suppressed) {
     update(set, get, (game) => doSuppress(game, groupId, suppressed));
+  },
+  focusGroup(groupId, focus) {
+    update(set, get, (game) => doFocus(game, groupId, focus));
+  },
+  payDebt(amount) {
+    update(set, get, (game) => doPayDebt(game, amount));
   },
   startProject(type) {
     update(set, get, (game) => doStartProject(game, type));

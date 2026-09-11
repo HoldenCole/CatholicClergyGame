@@ -106,6 +106,12 @@ export interface ParishState {
   recycledHomilyStreak: number;
   /** Weeks served in this assignment. */
   weeksServed: number;
+  /**
+   * Rolling 0..1 measure of how present the man is to his people: visits,
+   * confessions, the groups, an invested homily. Feeds attendance and so
+   * collections, and a well-tended parish has fewer fires. Absent in older saves.
+   */
+  care?: number;
 }
 
 /** What the week resolved to, for the digest and for tests. */
@@ -116,5 +122,9 @@ export interface WeekLedger {
   apDiscretionary: Record<string, number>;
   obligations: Record<ObligationKey, Quality>;
   collection: number;
+  /** Attendance after this week, and the change from the week before. */
+  attendance: number;
+  attendanceDelta: number;
+  debtService: number;
   lines: string[];
 }

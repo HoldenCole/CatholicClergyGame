@@ -1,4 +1,5 @@
 import { useGameStore } from '@/engine/store';
+import { controlsMoney, debtPayable } from '@/systems/finance';
 import { PROBLEM_LABEL } from '@/generation/parishes';
 import { STAT_KEYS, CONSTITUENCY_KEYS } from '@/types';
 import { useState } from 'react';
@@ -21,6 +22,7 @@ export default function ParishPanel() {
   const game = useGameStore((s) => s.game);
   const prose = useGameStore((s) => s.prose);
   const setPreference = useGameStore((s) => s.setPreference);
+  const payDebt = useGameStore((s) => s.payDebt);
   const [inspect, setInspect] = useState(false);
   if (!game?.parish || !game.world || !game.character) return null;
   const portraitKey = arcKey(game);
@@ -33,6 +35,7 @@ export default function ParishPanel() {
   const yearsIn = Math.floor(p.weeksServed / 52);
   const bishop = game.npcs[game.world.diocese.hidden.bishop.npcId];
   const fin = p.finance;
+  const payable = debtPayable(game);
   const year = yearOf(game.clock.startDay, game.clock.week);
 
   return (
@@ -50,9 +53,29 @@ export default function ParishPanel() {
           <div className="flex justify-between"><dt className="ink-muted">The chancery</dt><dd>{word(c.reputation.chancery)}</dd></div>
           <div className="flex justify-between"><dt className="ink-muted">Brother priests</dt><dd>{word(c.reputation.brother_priests)}</dd></div>
           <div className="flex justify-between"><dt className="ink-muted">Attendance</dt><dd>{Math.round(p.attendance * 100)}% of the rolls</dd></div>
+          <div className="flex justify-between"><dt className="ink-muted">Collections</dt><dd>${fin.averageCollection.toLocaleString()} a week</dd></div>
           <div className="flex justify-between"><dt className="ink-muted">Cash</dt><dd>${fin.cash.toLocaleString()}</dd></div>
           <div className="flex justify-between"><dt className="ink-muted">Debt</dt><dd>${fin.debt.toLocaleString()}</dd></div>
         </dl>
+        {fin.debt > 0 && (
+          <div className="mt-2 text-xs">
+            {controlsMoney(game) ? (
+              payable > 0 ? (
+                <span className="flex flex-wrap items-center gap-1">
+                  <span className="ink-muted">Pay it down, keeping two months in hand:</span>
+                  {[10000, 50000].filter((n) => n < payable).map((n) => (
+                    <button key={n} className="pbtn px-2 py-0 text-xs" onClick={() => payDebt(n)}>${(n / 1000).toFixed(0)}k</button>
+                  ))}
+                  <button className="pbtn px-2 py-0 text-xs" onClick={() => payDebt(payable)}>${payable.toLocaleString()}{payable >= fin.debt ? ', all of it' : ''}</button>
+                </span>
+              ) : (
+                <span className="ink-faint">Nothing to spare against the debt this week; the bills come first.</span>
+              )
+            ) : (
+              <span className="ink-faint">The debt is the pastor's to pay down, not yours.</span>
+            )}
+          </div>
+        )}
         <p className="ink-muted mt-3 text-xs">{PROBLEM_LABEL[parish.problem] ?? parish.problem}</p>
         {portrait && <p className="mt-3 whitespace-pre-line text-sm leading-relaxed">{portrait}</p>}
       </Sheet>

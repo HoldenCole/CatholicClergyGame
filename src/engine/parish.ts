@@ -143,10 +143,12 @@ export function parishWeek(state: GameState, rng: Rng): GameState {
   let next = maybeReschedule(state, rng);
   const { state: resolved, ledger } = resolveWeek(next, rng);
   next = resolved;
-  const money = ledger.collection >= next.parish!.finance.averageCollection ? 'a little above' : 'a little below';
+  const usual = next.parish!.finance.averageCollection;
+  const money = ledger.collection >= usual * 1.03 ? 'above' : ledger.collection <= usual * 0.97 ? 'below' : 'about';
+  const pews = ledger.attendanceDelta >= 0.002 ? ', up' : ledger.attendanceDelta <= -0.002 ? ', down' : '';
   const lines = [
     ...ledger.lines,
-    `Collections $${ledger.collection.toLocaleString()}, ${money} the usual.`,
+    `Collections $${ledger.collection.toLocaleString()}, ${money} the usual $${usual.toLocaleString()}. Attendance ${Math.round(ledger.attendance * 100)}%${pews}.`,
     ambientLine(next, rng.derive(`ambient:${next.clock.week}`)),
   ];
   const last = next.digest[next.digest.length - 1];

@@ -1,6 +1,6 @@
 import { useGameStore } from '@/engine/store';
 import { seminaryActivities } from '@/content/seminary';
-import { routineHours, routineOf, seminaryBudget } from '@/systems/seminaryWeek';
+import { activityBuilds, routineHours, routineOf, seminaryBudget } from '@/systems/seminaryWeek';
 import Sheet from '../Sheet';
 
 /** The seminarian's week: the horarium is fixed; these are the hours that are his. */
@@ -33,6 +33,7 @@ export default function SeminaryRoutinePanel() {
               <li key={a.id} className="flex items-center justify-between gap-2 text-sm">
                 <span className="min-w-0" title={a.blurb}>
                   {a.label}
+                  <span className="ink-faint ml-2 text-xs">{activityBuilds(a.id)}</span>
                   {sem.hoursLogged?.[a.id] && a.credentialAfter ? <span className="ink-faint ml-2 text-xs">{Math.min(sem.hoursLogged[a.id]!, a.credentialAfter.hours)} of {a.credentialAfter.hours} hours</span> : null}
                 </span>
                 <div className="flex shrink-0 items-center gap-1">
@@ -44,7 +45,7 @@ export default function SeminaryRoutinePanel() {
             );
           })}
         </ul>
-        <p className="ink-faint mt-3 text-xs">The year's emphasis still shapes the year. These hours are what you do with the rest of it, and the people you do it with.</p>
+        <p className="ink-faint mt-3 text-xs">The year's emphasis still shapes the year. These hours are what you do with the rest of it, and the people you do it with; what they build, they build for good, and the evaluation will say so.</p>
       </Sheet>
     </>
   );
