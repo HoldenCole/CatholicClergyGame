@@ -1,0 +1,3077 @@
+{
+  "_notes": "The pastor's Mass and a parish that gets noticed. Ids prefixed ms_. Reactions to the seven liturgy dials (parish/liturgy.json), each gated by the `liturgy` condition to the parish it fits; the last scenes read `changes`, `fresh`, `friction`, `lean`, and the engine's `parish_noticed` counter (systems/notice.ts). Phase pastor/administrator throughout except ms_vicar_pastors_mass (parochial_vicar). Nothing here changes a dial; the pastor does that on the parish sheet, and these scenes are what the parish says about it. Flags defined here: ms_servers_held / ms_servers_grandfathered / ms_girl_made_sacristan (boys only, and what became of the girl), ms_boys_trained (a server corps rebuilt), ms_latin_held / ms_latin_worship_aid (the Latin ordinary petition), ms_lot_schedule_moved / ms_bilingual_feast (the two-Mass parking lot), ms_incense_ventilated / ms_incense_bishop_warned, ms_easter_letter_answered / ms_easter_incense_promised (no incense; read by a later Easter if anyone writes it), ms_candles_inspected / ms_candles_oil, ms_hymnal_retired / ms_hymnal_kept (the folk group's book), ms_schola_hired / ms_chant_taught / ms_chant_donor, ms_old_choir_gone / ms_old_choir_funerals (the praise band), ms_gospel_choir_defended / ms_choir_exchange, ms_guadalupe_procession / ms_neighbors_fed (the mariachi feast), ms_kneeling_rail_option / ms_kneeling_held, ms_homily_notes, ms_slowed_down / ms_vg_written (changes too fast), ms_surveyed / ms_friction_admitted (a Mass that fights the parish), ms_mass_settled / ms_quiet_gift (a Mass that fits, once), ms_drew_his_families / ms_families_sent_home (the traditional Mass drawing outsiders), ms_gave_interview / ms_donor_across_town (noticed), ms_rival_handled / ms_rival_crossed (the deanery dinner), ms_vicar_defended_mass / ms_vicar_spoke_of_mass (the vicar's view), ms_music_director_retrained / ms_music_director_sidelined. Positions taken here: liturgy, women_roles, tlm, authority. Sensitive material: none routed to the skinning layer for outcome; the asthma letter and the knees of the old are health, not scandal.",
+  "events": [
+    {
+      "id": "ms_servers_girl_six_years",
+      "phase": [
+        "pastor",
+        "administrator"
+      ],
+      "pressure": [
+        "belief_vs_safety",
+        "friendship_vs_duty"
+      ],
+      "severity": "MAJOR",
+      "category": "admin",
+      "baseWeight": 10,
+      "requires": [
+        {
+          "type": "liturgy",
+          "key": "servers",
+          "value": "boys"
+        }
+      ],
+      "suppressYears": 4,
+      "once": true,
+      "title": "Six Years at the Altar",
+      "body": "She served her first Mass at nine, in an alb that reached the floor, and she has served every Sunday since, and she is the one who knows without being told when the thurible needs coal. Her mother is in your office with her, and the girl is not crying, which is worse. The mother has a copy of the 1994 letter from Rome and the diocesan policy, and she has read both, and she knows a pastor may decide this for his parish, and she wants to hear you say it to her daughter's face. The girl asks one question: whether she did something wrong. Then, on Thursday, a call from {@bishop}'s office, not from the bishop, asking in the flat voice of a secretary whether it is true that {parish} has stopped using girls at the altar, because a letter has come to the chancery and the bishop would like to know what he is answering. You have a policy. You have a fifteen-year-old who lit the Easter fire last spring. You have a bishop who has not said what he thinks and would prefer not to.",
+      "flavorPrompt": "A pastor's liturgical decision meeting the one child it costs most. No villains. The mother is right about the law and so is he.",
+      "choices": [
+        {
+          "id": "hold",
+          "label": "Tell her, and her mother, and the bishop's office, that the decision stands",
+          "outcome": "You say it plainly and do not soften it, because softening it would be a lie about what it is. The mother thanks you for your honesty in a voice that ends the conversation. The family goes to the next parish over. The bishop's secretary writes down that the pastor confirmed the policy, and the bishop answers his letter accordingly, and the people who wanted a pastor who would hold a line have found one.",
+          "volume": "semi_public",
+          "positionTopic": "women_roles",
+          "positionValue": -60,
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "progressive_bloc",
+              "delta": -6
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": -3
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": -2
+            },
+            {
+              "target": "flag",
+              "key": "ms_servers_held",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "grandfather",
+          "label": "Let the ones already trained serve out until they leave for college, and take no new girls",
+          "outcome": "It is the compromise every pastor reaches for and it satisfies nobody entirely, which is how you know it is fair. She serves until she is eighteen and trains the boys who replace her, with a competence that shames them. The bishop's office hears that the parish is in transition and lets it go. The men who wanted a clean break say you flinched. The mother says nothing, which from her is a kind of peace.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": -3
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "ms_servers_grandfathered",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "sacristan",
+          "label": "Ask her to be the parish's sacristan, with a key and a stipend, and mean it as an honor",
+          "requires": [
+            {
+              "type": "stat",
+              "key": "charisma",
+              "op": ">=",
+              "value": 50
+            }
+          ],
+          "outcome": "You say that the altar has lost her and the sacristy cannot afford to, and you say it well enough that she hears the truth in it rather than the consolation. She takes the key. Within a year the vestments are in order for the first time since the last sacristan died, and the boys are afraid of her, and her mother tells other mothers that the pastor found a way, which is not the same as agreeing with him.",
+          "effects": [
+            {
+              "target": "money",
+              "key": "cash",
+              "delta": -1200
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "ms_girl_made_sacristan",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ms_servers_mens_club",
+      "phase": [
+        "pastor",
+        "administrator"
+      ],
+      "pressure": [
+        "competence",
+        "friendship_vs_duty"
+      ],
+      "severity": "NOTABLE",
+      "category": "group",
+      "baseWeight": 9,
+      "requires": [
+        {
+          "type": "liturgy",
+          "key": "servers",
+          "value": "girls"
+        }
+      ],
+      "suppressYears": 3,
+      "title": "The Men's Club Has a Point",
+      "body": "The men's club meets in the hall on the first Thursday with coffee and a treasurer's report, and this month they have asked you to stay after. The president is careful; he says nobody has anything against the girls, who are excellent, and that is true, the girls are excellent. He says the boys have drifted, that there were eleven serving when his own sons were small and now there are two, and that a boy of twelve will not put on an alb to stand beside four girls who are better at it. {@parishioner} is there and does not wait for the president to finish. His son served for a year and quit, and he wants him back at the altar, and he says that at {parish} it has become something girls do, the way the bake sale is. He is not wrong about the pattern. He is asking you to do something about it without saying what, because what he means is hard to say in a hall with the coffee still out.",
+      "flavorPrompt": "A men's club, a father, and a pattern nobody chose. Practical rather than ideological; the pastor is being asked to recruit boys without insulting the girls.",
+      "choices": [
+        {
+          "id": "train_boys",
+          "label": "Run a servers' training for boys in the spring, with the fathers as the ones who ask",
+          "outcome": "You give the men's club the job of asking, which is the part that works, and you train the nine boys they bring on Saturday mornings with a cassock that fits and a rule about shoes. Four are serving by Easter. The girls, who were never the problem, absorb them without comment. The father whose son came back shakes your hand at the door every Sunday now, and the club's treasurer's report has a line for albs.",
+          "effects": [
+            {
+              "target": "ap",
+              "key": "next_week",
+              "delta": -1
+            },
+            {
+              "target": "money",
+              "key": "cash",
+              "delta": -600
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 4
+            },
+            {
+              "target": "relationship",
+              "key": "@parishioner",
+              "delta": 10
+            },
+            {
+              "target": "flag",
+              "key": "ms_boys_trained",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "welcome",
+          "label": "Tell him his son is welcome any Sunday he wants to serve, and leave it there",
+          "outcome": "It is true and it is not an answer, and the father knows the difference. His son does not come back, because a boy of twelve does not walk into a sacristy alone on the strength of a welcome. The men's club goes on meeting and does not raise it again, which is not agreement. You have declined to do a thing you were not sure was yours to do, and the pattern goes on being the pattern.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": -2
+            },
+            {
+              "target": "relationship",
+              "key": "@parishioner",
+              "delta": -6
+            }
+          ]
+        },
+        {
+          "id": "father_leads",
+          "label": "Make him the servers' coordinator, boys and girls together, and let him solve it",
+          "requires": [
+            {
+              "type": "stat",
+              "key": "charisma",
+              "op": ">=",
+              "value": 45
+            }
+          ],
+          "outcome": "He does not want the job and takes it because you asked him in front of the club. He is good at it, in the way of a man who has coached Little League: a schedule, a phone tree, a pizza night. The boys come back because their fathers are being asked by another father. The girls keep the senior places because they earned them. {@parishioner} is at the rectory more than the secretary likes, and the altar is full.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@parishioner",
+              "delta": 14
+            },
+            {
+              "target": "relationship",
+              "key": "@secretary",
+              "delta": -5
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "ms_boys_trained",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ms_latin_petition",
+      "phase": [
+        "pastor",
+        "administrator"
+      ],
+      "pressure": [
+        "belief_vs_safety",
+        "loyalty_vs_honesty"
+      ],
+      "severity": "MAJOR",
+      "category": "admin",
+      "baseWeight": 10,
+      "requires": [
+        {
+          "type": "liturgy",
+          "key": "language",
+          "value": "latin_ordinary"
+        }
+      ],
+      "bias": [
+        {
+          "when": {
+            "type": "alignment",
+            "op": "<=",
+            "value": -30
+          },
+          "multiplier": 1.4
+        },
+        {
+          "when": {
+            "type": "parish",
+            "key": "generational",
+            "value": "aging"
+          },
+          "multiplier": 1.3
+        }
+      ],
+      "suppressYears": 3,
+      "title": "The Petition and the Family from Three Parishes Over",
+      "body": "The petition has ninety-four signatures and was left on the altar, which is a statement in itself. It asks that the Mass at {parish} be returned to English, all of it, and it says that the Kyrie was one thing and the Gloria and Credo are another, and that the people cannot pray what they cannot say. Some of the names are of families who built the hall. One is the head usher's, and he has not been at his post for three Sundays; his wife says his knee, and everyone knows it is not his knee. And at the 10:30 last Sunday there was a family you did not know, a father and mother and five children in Sunday clothes from another decade, who told you afterward at the door that they drive forty minutes from a parish three over, because they heard the ordinary is sung in Latin here and it is the first Mass their children have knelt through without asking to leave. You have the petition in one hand and their name in the guest book in the other.",
+      "flavorPrompt": "The Latin ordinary in a parish that did not ask for it, and a family that drove for it. A pastor weighing the people who are his against the people who came.",
+      "choices": [
+        {
+          "id": "hold_and_preach",
+          "label": "Keep it, and preach on why, with the Council's own words in the homily",
+          "outcome": "You cite Sacrosanctum Concilium by paragraph and say the Church asked that the people be able to sing the ordinary in Latin, and that you are asking no more than that. It is a good homily and it settles nothing, because the petition was not about the documents. Twenty of the ninety-four drift to the next parish. The family from three over brings another. The head usher's knee does not improve.",
+          "volume": "semi_public",
+          "positionTopic": "liturgy",
+          "positionValue": -60,
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": 7
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": -5
+            },
+            {
+              "target": "reputation",
+              "key": "progressive_bloc",
+              "delta": -4
+            },
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "ms_latin_held",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "worship_aid",
+          "label": "Print a worship aid with the English facing, and teach the ordinary from the pulpit for six weeks",
+          "outcome": "The booklet costs more than you expected and the teaching costs you a minute of every homily, and after six weeks the people who stayed can sing the Sanctus without looking down. The petition's authors are not converted, but they are singing, which is not nothing. The usher comes back at Advent and says nothing about his knee. The family from three over stays, and finds the parish less strange than it found them.",
+          "effects": [
+            {
+              "target": "money",
+              "key": "cash",
+              "delta": -1800
+            },
+            {
+              "target": "ap",
+              "key": "next_week",
+              "delta": -1
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "ms_latin_worship_aid",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "visit_usher",
+          "label": "Go to the usher's house before you answer anyone, and let him tell you why",
+          "requires": [
+            {
+              "type": "stat",
+              "key": "piety",
+              "op": ">=",
+              "value": 45
+            }
+          ],
+          "outcome": "He tells you at his kitchen table that his father was ushering at {parish} in 1965 when the Latin went, and that the old man wept, and that he had been glad of the English his whole life because the weeping was about the losing and not the language. You listen. He comes back to his post the next Sunday, and tells the petition's authors the pastor came to his house, which goes further than a homily would.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 4
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "ap",
+              "key": "next_week",
+              "delta": -1
+            },
+            {
+              "target": "flag",
+              "key": "ms_latin_held",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "welcome_publicly",
+          "label": "Welcome the family from the pulpit by name, and say the door is open to anyone else who drives",
+          "outcome": "You mean it as hospitality and it is heard as recruitment, which in a diocese with parish boundaries is a kind of poaching. The family is embarrassed and pleased. Two more families arrive from other parishes by Lent. The petition's authors take it as an answer, and the answer is that the pastor prefers strangers. A brother priest mentions at the deanery, mildly, that his people have started driving.",
+          "volume": "public",
+          "positionTopic": "liturgy",
+          "positionValue": -50,
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": -4
+            },
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": -4
+            },
+            {
+              "target": "money",
+              "key": "cash",
+              "delta": 1500
+            },
+            {
+              "target": "flag",
+              "key": "ms_latin_held",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ms_spanish_parking_lot",
+      "phase": [
+        "pastor",
+        "administrator"
+      ],
+      "pressure": [
+        "competence",
+        "friendship_vs_duty"
+      ],
+      "severity": "NOTABLE",
+      "category": "admin",
+      "baseWeight": 10,
+      "requires": [
+        {
+          "type": "liturgy",
+          "key": "language",
+          "value": "spanish_mass"
+        }
+      ],
+      "suppressYears": 3,
+      "title": "Twelve-Thirty in the Parking Lot",
+      "body": "The Spanish Mass at {parish} is at 12:30, which was the only hour left, and the 11:00 English Mass ends at 12:05 on a good Sunday, and the parking lot holds ninety cars. So every Sunday at 12:15 there are two parishes in one lot: the English regulars trying to leave and the Spanish families arriving early, with grandmothers, in vans, parking on the grass by the Marian grotto because there is nowhere else. Last Sunday a man from the 11:00 backed into a van and words were said in two languages and the usher called you out of the sacristy. The English regulars have begun to say, not to you, that the parish has been given away. The Spanish families have begun to say, not to you, that they are tolerated. {@secretary} has had four calls about the grass. The lot is the whole thing in a hundred yards of asphalt, and everyone knows it, and it is yours.",
+      "flavorPrompt": "A bilingual parish's friction rendered as logistics: the parking lot as the place two congregations meet and do not mix.",
+      "choices": [
+        {
+          "id": "move_schedule",
+          "label": "Move the English Mass to 10:30 and the Spanish to 12:30, and take the complaints for a season",
+          "default": true,
+          "outcome": "The regulars who have gone to the 11:00 for thirty years do not like 10:30 and tell you so at the door for two months, and then they come at 10:30. The lot clears. The vans park on the asphalt. The grass by the grotto recovers. It was a schedule problem and you solved it as one, and nothing about the two parishes in one building has changed except that they no longer meet in the lot.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": -2
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "ms_lot_schedule_moved",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "ushers_lot",
+          "label": "Put the Knights in the lot in vests, and have both Masses' ushers work it together",
+          "outcome": "The Knights take it on with the seriousness of men given a uniform. The lot is worked by an English usher and a Spanish usher side by side every Sunday, and after a month they are talking, and after three the Spanish usher's son is a Knight. The vans still park on the grass. The regulars still leave slowly. But there is a handshake at 12:15 now that there was not, and it is worth more than the grass.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 3
+            },
+            {
+              "target": "money",
+              "key": "cash",
+              "delta": -500
+            },
+            {
+              "target": "relationship",
+              "key": "@secretary",
+              "delta": 5
+            }
+          ]
+        },
+        {
+          "id": "bilingual_feast",
+          "label": "Hold one bilingual Mass and a parish meal on the patronal feast, and preach in both languages yourself",
+          "requires": [
+            {
+              "type": "flag",
+              "key": "speaks_spanish",
+              "value": true
+            }
+          ],
+          "outcome": "The feast Mass is long and a little chaotic and the readings are in both languages and so is the homily, and the meal afterward is in the hall with the tables pushed together because there were not enough. Nobody parks on the grass because everybody came at once. It changes nothing on an ordinary Sunday and it changes what the regulars say about the vans, which is now that they were at the feast, and the tamales were good.",
+          "effects": [
+            {
+              "target": "money",
+              "key": "cash",
+              "delta": -1500
+            },
+            {
+              "target": "ap",
+              "key": "next_week",
+              "delta": -2
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "ms_bilingual_feast",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ms_incense_asthma",
+      "phase": [
+        "pastor",
+        "administrator"
+      ],
+      "pressure": [
+        "belief_vs_safety",
+        "money"
+      ],
+      "severity": "NOTABLE",
+      "category": "admin",
+      "baseWeight": 9,
+      "requires": [
+        {
+          "type": "liturgy",
+          "key": "incense",
+          "value": "every_sunday"
+        }
+      ],
+      "suppressYears": 3,
+      "title": "The Asthma Letter",
+      "body": "The letter is from a woman who has sat in the third pew at {parish} for forty years and now sits in the vestibule with the door propped, because the incense at every Mass, at the entrance and the Gospel and the offertory and the elevation, sets off an asthma she did not have at sixty and does now. She is not angry. She writes that she knows why you do it and that she has come to like the smell from the vestibule, and that she is writing because her daughter says she should. In the same week the sacristan lays the quarter's bill for charcoal and incense on your desk without comment, which is his comment. And {@bishop} said the 10:30 last month for the confirmations, and coughed twice through the Eucharistic Prayer in a way the whole church heard, and afterward in the sacristy said only, pleasantly, that it was very fragrant. You have a thurible you believe in and a vestibule with a woman in it, and a bill.",
+      "flavorPrompt": "Incense every Sunday: a health complaint written with love, a sacristan's silent bill, and a bishop's cough. The pastor is being asked to think about the air.",
+      "choices": [
+        {
+          "id": "ventilate",
+          "label": "Keep the incense and fix the air: exhaust fans in the sanctuary and a better blend",
+          "outcome": "The fans cost more than the incense will for a decade and the electrician takes a month, and when it is done the smoke rises and goes rather than settling in the nave like weather. The woman comes back to the third pew and tells you she can breathe, and the blend is better anyway. The sacristan's bill goes up and he says nothing about it, which is now approval. The bishop's cough is not mentioned again.",
+          "effects": [
+            {
+              "target": "money",
+              "key": "cash",
+              "delta": -4500
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "ms_incense_ventilated",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "visit_her",
+          "label": "Go and sit with her in the vestibule, and let the rest stand",
+          "outcome": "You sit with her for a Mass you are not saying, and she tells you about the pastor who brought the incense in for the first time in 1958 and how her mother said it was showing off. You change nothing. She does not ask you to. The bill and the cough go on being what they are, and she tells people the pastor sat with her, which is most of what she wanted.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "ap",
+              "key": "next_week",
+              "delta": -1
+            }
+          ]
+        },
+        {
+          "id": "write_bishop",
+          "label": "Write to the bishop first, before the letter reaches him from anyone else, and say what you are doing and why",
+          "requires": [
+            {
+              "type": "relationship",
+              "npcId": "@bishop",
+              "op": ">=",
+              "value": 10
+            }
+          ],
+          "outcome": "The letter is a page, unapologetic and courteous, and it says the parish uses incense as the Missal envisions and that a parishioner's health is being attended to. {@bishop} writes back in three lines that he appreciates being told and that he trusts your judgment, and the second sentence is the one that matters. Nothing changes in the church. Something changes in the file, in your favor, which is rare for a letter about smoke.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "ms_incense_bishop_warned",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ms_no_incense_easter",
+      "phase": [
+        "pastor",
+        "administrator"
+      ],
+      "pressure": [
+        "belief_vs_safety"
+      ],
+      "severity": "NOTABLE",
+      "category": "admin",
+      "baseWeight": 9,
+      "requires": [
+        {
+          "type": "liturgy",
+          "key": "incense",
+          "value": "none"
+        },
+        {
+          "type": "season",
+          "value": "easter"
+        }
+      ],
+      "suppressYears": 3,
+      "title": "Easter Without Smoke",
+      "body": "The letter arrives the Tuesday of Easter week, and it is signed by eleven people, and it is about the Vigil. It says that the Paschal candle was carried into a dark church at {parish} without a grain of incense, that the Exsultet was sung over an altar nobody had censed, and that on the morning of the Resurrection the church smelled of lilies and floor wax and nothing else. It says that the writers have been patient through Advent and Lent, that they understand the pastor has his reasons, and that they would like to know what they are, because their grandparents knelt through Easter in a cloud and they would like their children to. It is not rude. It is the kind of letter that is copied to nobody and would be copied to the chancery next year. Three of the names are on the finance council. One is the woman who arranges the lilies. You have no thurible on the credence table, and you had a reason, and you are being asked, for once politely, to say it.",
+      "flavorPrompt": "A parish with no incense receiving a courteous, organized letter from its traditional wing after Easter. The pastor must give an account or a concession.",
+      "choices": [
+        {
+          "id": "answer_kindly",
+          "label": "Answer each of the eleven by hand, give your reason, and change nothing",
+          "outcome": "Eleven letters take two evenings and say the same thing in eleven ways: that the Mass at {parish} is what it is because the people are what they are, and that you have heard them. Nobody is satisfied by a reason, but they are moved by the hand, and the letter that would have gone to the chancery next year does not. Three of the eleven find another parish for the Triduum and come home for the rest.",
+          "effects": [
+            {
+              "target": "ap",
+              "key": "next_week",
+              "delta": -1
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": -3
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "ms_easter_letter_answered",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "bulletin",
+          "label": "Answer in the bulletin, for everyone, and say why the parish worships the way it does",
+          "outcome": "The column is four paragraphs and says that the Mass at {parish} is simple because the people asked for simplicity, and that you are their pastor. More people read it than signed the letter, and most agree, and the eleven read it as the pastor taking their private letter public, which he did. The finance council meeting in May is cool. The parish knows where its pastor stands, at the cost of those who stood elsewhere.",
+          "volume": "semi_public",
+          "positionTopic": "liturgy",
+          "positionValue": 40,
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "progressive_bloc",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": -6
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "ms_easter_letter_answered",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "concede_triduum",
+          "label": "Invite the eleven to the rectory, hear them, and promise the Triduum next year",
+          "requires": [
+            {
+              "type": "stat",
+              "key": "charisma",
+              "op": ">=",
+              "value": 45
+            }
+          ],
+          "outcome": "They come, and the lily woman brings a cake, and you listen for an hour and then say that next year the candle will come in through smoke and the altar will be censed at the Vigil, and the rest of the year stays as it is. It costs you with the people who like the church smelling of floor wax, and it buys a year of a bloc that believes its pastor can be reasoned with.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "progressive_bloc",
+              "delta": -3
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "money",
+              "key": "cash",
+              "delta": -500
+            },
+            {
+              "target": "flag",
+              "key": "ms_easter_incense_promised",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ms_candles_fire_marshal",
+      "phase": [
+        "pastor",
+        "administrator"
+      ],
+      "pressure": [
+        "money",
+        "competence"
+      ],
+      "severity": "ROUTINE",
+      "category": "finance",
+      "baseWeight": 8,
+      "requires": [
+        {
+          "type": "liturgy",
+          "key": "candles",
+          "value": "full_rank"
+        }
+      ],
+      "suppressYears": 3,
+      "title": "The Fire Marshal and the Funeral Home",
+      "body": "The fire marshal came to {parish} on a Tuesday for the annual inspection of the hall and asked, on his way out, to see the church, and stood at the foot of the sanctuary for some time looking at the full rank of candles on the gradine and the seven lamps on their chains and the altar cloth eight inches below the lowest flame. He was polite. He has written it up: open flame in proximity to combustible textile, no extinguisher within thirty feet of the sanctuary, chains on the lamps not rated for the weight, and a note that the parish may wish to consult an electrician about a safer arrangement. And on Sunday, at the door, a woman who has sat in the same pew for decades took your hand and said, kindly, that it was very beautiful and looked exactly like the funeral home on Main Street, and that she had wondered whether you knew. You have the marshal's letter and the woman's sentence, and both of them are about the same six feet of altar.",
+      "flavorPrompt": "The full rank of candles as a fire code problem and a taste problem at once. Dry, domestic, a little funny to everyone but the pastor.",
+      "choices": [
+        {
+          "id": "comply",
+          "label": "Do what the marshal asks: extinguishers, rated chains, a flame-resistant cloth",
+          "default": true,
+          "outcome": "The chains are replaced by a man who does church lamps for a living and charges accordingly, the cloth is treated, and a red extinguisher hangs discreetly behind the ambo where only the lector sees it. The marshal signs off. The candles stay. The woman at the door says it still looks like the funeral home, but a safe one, and you take that as the compliment it partly is.",
+          "effects": [
+            {
+              "target": "money",
+              "key": "cash",
+              "delta": -3000
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "ms_candles_inspected",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "oil",
+          "label": "Convert the lamps and the rank to oil inserts, which the marshal will accept and the sacristan will bless",
+          "outcome": "The inserts look like candles from the pews and burn like lamps, and they cost a season's wax up front and nothing much after. The sacristan, who has trimmed wicks for fifteen years, is so pleased he tells the marshal himself. The purists notice, because purists notice, and one asks whether the altar is now lit by paraffin, and you say it is lit, which is the answer.",
+          "effects": [
+            {
+              "target": "money",
+              "key": "cash",
+              "delta": -2200
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": -2
+            },
+            {
+              "target": "flag",
+              "key": "ms_candles_oil",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "rearrange",
+          "label": "Take the woman's point as well as the marshal's, and rework the arrangement yourself",
+          "requires": [
+            {
+              "type": "stat",
+              "key": "administration",
+              "op": ">=",
+              "value": 45
+            }
+          ],
+          "outcome": "You spend a Saturday with the sacristan and a tape measure and the Ceremonial of Bishops open on the credence, and you move the rank back, hang the lamps higher, and lose the two that made it a funeral home. The marshal is satisfied with the distances alone. The woman at the door says it looks like a church again. The men who liked the seven lamps count six and say nothing, loudly.",
+          "effects": [
+            {
+              "target": "money",
+              "key": "cash",
+              "delta": -800
+            },
+            {
+              "target": "ap",
+              "key": "next_week",
+              "delta": -1
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": -2
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "ms_candles_inspected",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ms_folk_group_hymnal",
+      "phase": [
+        "pastor",
+        "administrator"
+      ],
+      "pressure": [
+        "friendship_vs_duty",
+        "competence"
+      ],
+      "severity": "NOTABLE",
+      "category": "group",
+      "baseWeight": 10,
+      "requires": [
+        {
+          "type": "liturgy",
+          "key": "music",
+          "value": "folk_group"
+        }
+      ],
+      "suppressYears": 4,
+      "title": "The Guitarist of Thirty Years",
+      "body": "{@music_director} has been at {parish} less than a year and has a degree and a plan, and the plan is the hymnal. The folk group sings from a paperback book that went out of print before the guitarist's children were born, and the guitarist has led it since the pastor who bought the guitars, and he knows every song in it by the page number. The music director wants the parish to buy a new hymnal, hardbound, with a psalter and the Mass settings the diocese uses, and wants the group to learn it, and has said so to the group in a meeting that went badly. The guitarist came to see you afterward. He did not threaten anything. He said that he has played the 9:00 for thirty years for nothing, that half the people at the 9:00 come because of the group, and that he is too old to learn a new book, and that if the pastor wants him gone the pastor should say so. {@music_director} wants an answer this week. So does he.",
+      "flavorPrompt": "A new music director and a thirty-year volunteer over the folk group's hymnal. Loyalty, competence, and who a parish's music belongs to.",
+      "choices": [
+        {
+          "id": "back_director",
+          "label": "Back the music director: buy the hymnal, and the group learns it or steps down",
+          "outcome": "The hymnals arrive in September, and the group learns eleven songs from it and refuses the rest, and the guitarist plays the 9:00 through Advent with a face like a closed door and stops at Christmas. The music director finds a college student with a guitar. The 9:00 is thinner by a third. The music is better by every measure but the one the 9:00 used, and {@music_director} knows you chose the staff over the people.",
+          "effects": [
+            {
+              "target": "money",
+              "key": "cash",
+              "delta": -3500
+            },
+            {
+              "target": "relationship",
+              "key": "@music_director",
+              "delta": 12
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": -5
+            },
+            {
+              "target": "reputation",
+              "key": "progressive_bloc",
+              "delta": -3
+            },
+            {
+              "target": "flag",
+              "key": "ms_hymnal_retired",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "keep_book",
+          "label": "Tell the music director the 9:00 keeps its book, and she has the other Masses",
+          "outcome": "She takes it as a verdict on her, which it partly is, gives the 11:00 the best music it has had in a decade, and never attends the 9:00 again. The guitarist plays on. The 9:00 goes on being the 9:00, the same two hundred people and the same paperback, and when the guitarist's hands give out there will be nobody who knows the book. You have kept a thing alive by refusing to let it change.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@music_director",
+              "delta": -10
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "progressive_bloc",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "ms_hymnal_kept",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "both",
+          "label": "Buy the hymnal, and ask the guitarist to be the one who teaches it to the group, one song a month",
+          "requires": [
+            {
+              "type": "relationship",
+              "npcId": "@music_director",
+              "op": ">=",
+              "value": 15
+            }
+          ],
+          "outcome": "He says he is too old and you say you are asking anyway, and he takes it because a man who has led for thirty years cannot bear to be led. One song a month for two years, and by the end the group is singing the diocese's Mass setting with guitars, which nobody wanted and everyone accepts. {@music_director} learns to sit in on the 9:00 and say nothing, and the guitarist learns her name.",
+          "effects": [
+            {
+              "target": "money",
+              "key": "cash",
+              "delta": -3500
+            },
+            {
+              "target": "relationship",
+              "key": "@music_director",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 4
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "ms_hymnal_retired",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ms_chant_choir_cannot",
+      "phase": [
+        "pastor",
+        "administrator"
+      ],
+      "pressure": [
+        "competence",
+        "money"
+      ],
+      "severity": "NOTABLE",
+      "category": "group",
+      "baseWeight": 10,
+      "requires": [
+        {
+          "type": "liturgy",
+          "key": "music",
+          "value": "chant"
+        }
+      ],
+      "bias": [
+        {
+          "when": {
+            "type": "alignment",
+            "op": "<=",
+            "value": -30
+          },
+          "multiplier": 1.4
+        }
+      ],
+      "suppressYears": 3,
+      "title": "The Choir That Cannot Sing It",
+      "body": "The choir at {parish} is fourteen people who have sung together since the Carter administration, and they are game, and they cannot sing chant. They cannot read the square notes and {@music_director} has been transcribing everything into modern notation at the kitchen table, and even then the Introit comes out as a hymn tune, four-square, with a breath where the phrase should carry. The polyphony is worse. Last Sunday the Kyrie from the Missa de Angelis fell apart at the Christe and the soprano section simply stopped, and the congregation heard it stop. And in the sixth pew, as he has been every Sunday since Lent, there is a man in a good coat who drives forty minutes from the suburbs because he heard {parish} sings chant, and who put a check in the basket last month that {@secretary} brought to you in person because of the number on it. He has asked, after Mass, whether the parish has considered a schola. He has not said he would pay for one. He has not needed to.",
+      "flavorPrompt": "A parish choir failing at chant with goodwill, and a wealthy outsider drawn by the attempt. Music as a matter of competence and money at once.",
+      "choices": [
+        {
+          "id": "hire_schola",
+          "label": "Hire a schola director, four paid singers, and let the old choir keep the Christmas Mass",
+          "outcome": "The schola is four young people with conservatory training who sing the Introit as if it were written yesterday, and the old choir sits in the pews and listens and does not forgive you. The man in the good coat writes a second check, larger. The music at the principal Mass is now the best in the diocese and belongs to nobody in the parish, which the parish notices. Christmas, with the fourteen, is the warmest Mass of the year.",
+          "effects": [
+            {
+              "target": "money",
+              "key": "cash",
+              "delta": 1500
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": 7
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": -4
+            },
+            {
+              "target": "relationship",
+              "key": "@music_director",
+              "delta": -6
+            },
+            {
+              "target": "flag",
+              "key": "ms_schola_hired",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "teach_them",
+          "label": "Teach the choir yourself, Thursday nights, from the square notes up",
+          "requires": [
+            {
+              "type": "credential",
+              "key": "latin"
+            }
+          ],
+          "outcome": "It takes a year of Thursdays and an evening you did not have, and the fourteen learn to read neumes with the slow pride of adults learning to read. They will never sing polyphony. They sing the ordinary and the simpler propers cleanly by Advent, in Latin they now understand, and the congregation that heard them fail hears them succeed. The man in the good coat keeps coming, and his check comes every month.",
+          "effects": [
+            {
+              "target": "ap",
+              "key": "next_week",
+              "delta": -2
+            },
+            {
+              "target": "relationship",
+              "key": "@music_director",
+              "delta": 10
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": 4
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "money",
+              "key": "cash",
+              "delta": 800
+            },
+            {
+              "target": "flag",
+              "key": "ms_chant_taught",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "ask_him",
+          "label": "Ask the man in the good coat directly what he would fund, and take it",
+          "outcome": "He would fund a schola director's salary for three years and says so in your office as if he had been waiting to be asked, which he had. The check clears. The choir is told a director is coming to help them, which is true and not the whole truth. You have a donor who lives in another parish, a director who reports to him in spirit, and a music program you did not build and cannot afford to lose.",
+          "effects": [
+            {
+              "target": "money",
+              "key": "cash",
+              "delta": 5000
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": -2
+            },
+            {
+              "target": "relationship",
+              "key": "@secretary",
+              "delta": -5
+            },
+            {
+              "target": "flag",
+              "key": "ms_chant_donor",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ms_praise_band_old_choir",
+      "phase": [
+        "pastor",
+        "administrator"
+      ],
+      "pressure": [
+        "friendship_vs_duty",
+        "belief_vs_safety"
+      ],
+      "severity": "NOTABLE",
+      "category": "group",
+      "baseWeight": 10,
+      "requires": [
+        {
+          "type": "liturgy",
+          "key": "music",
+          "value": "contemporary"
+        }
+      ],
+      "bias": [
+        {
+          "when": {
+            "type": "parish",
+            "key": "generational",
+            "value": "young"
+          },
+          "multiplier": 1.4
+        },
+        {
+          "when": {
+            "type": "parish",
+            "key": "generational",
+            "value": "aging"
+          },
+          "multiplier": 1.3
+        }
+      ],
+      "suppressYears": 4,
+      "title": "The Old Choir Quits",
+      "body": "The letter is signed by all nineteen of them and it is on the choir's own letterhead, which you did not know they had. It says that the choir of {parish} has served the parish for forty-one years and has decided, in light of the pastor's decision to place a praise band at the principal Mass, to conclude its ministry at the end of the month. It thanks you for your leadership. It is the coldest letter you have ever received. And the same month the count at the 10:30 is up, and it is up with families you have not seen before: a father with a baby in a carrier standing in the back through the whole Mass, three couples in their twenties who found the parish online, a teenager who sings. {@music_director} has the band's setlist for Sunday and a proposal for a second service. The choir's last Mass is next Sunday and the tenors are already not speaking to the altos about whether to sing the Mozart at it. You have gained a congregation and lost an institution, and both of them will be at the 10:30.",
+      "flavorPrompt": "A parish choir resigning en masse over a praise band, and the young families the band brought. Nobody is wrong; the pastor chose one over the other and now has to say goodbye well.",
+      "choices": [
+        {
+          "id": "dinner",
+          "label": "Give them a dinner and a plaque and a Mass of thanksgiving, and let them go",
+          "outcome": "The dinner is in the hall with the good tablecloths and the plaque is brass and you say true things about forty-one years, and the choir's last Mass is the Mozart, sung beautifully, to a church that includes the band's families sitting politely and not knowing the responses. Half the nineteen stop coming to {parish}. The other half sit at the 10:30 and do not sing. The families keep coming. It is a trade, and you made it.",
+          "effects": [
+            {
+              "target": "money",
+              "key": "cash",
+              "delta": -900
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": -5
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "progressive_bloc",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "ms_old_choir_gone",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "ask_back",
+          "label": "Go to the choir director's house and ask them to keep the 9:00 as theirs",
+          "outcome": "The choir director is a widow and receives you like a bishop. You ask for the 9:00 and she puts it to the choir, which takes it eleven to eight, and the eight leave. The 9:00 is the old parish and the 10:30 is the new one and they pass each other in the lot. It is two parishes, and it is peace, and someday you will have to say which is the principal Mass.",
+          "effects": [
+            {
+              "target": "ap",
+              "key": "next_week",
+              "delta": -1
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": -2
+            },
+            {
+              "target": "relationship",
+              "key": "@music_director",
+              "delta": -5
+            }
+          ]
+        },
+        {
+          "id": "funerals",
+          "label": "Ask the music director to make them the parish's funeral choir, and pay her to arrange it",
+          "requires": [
+            {
+              "type": "relationship",
+              "npcId": "@music_director",
+              "op": ">=",
+              "value": 15
+            }
+          ],
+          "outcome": "She does not want them and does it because you asked, and she is good enough at it that the choir accepts. They sing every funeral at {parish} for the next decade, which is what an aging choir is for and what an aging parish needs, and the families of the dead thank you for a thing the praise band could not have done. The Sunday 10:30 is the band's. The Thursday funerals are the Mozart.",
+          "effects": [
+            {
+              "target": "money",
+              "key": "cash",
+              "delta": -1500
+            },
+            {
+              "target": "relationship",
+              "key": "@music_director",
+              "delta": 8
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "ms_old_choir_funerals",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ms_gospel_choir_visit",
+      "phase": [
+        "pastor",
+        "administrator"
+      ],
+      "pressure": [
+        "belief_vs_safety",
+        "loyalty_vs_honesty"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 9,
+      "requires": [
+        {
+          "type": "liturgy",
+          "key": "music",
+          "value": "gospel_choir"
+        }
+      ],
+      "suppressYears": 3,
+      "title": "The Office of Worship Would Like to Visit",
+      "body": "{@brother_priest} came to the 11:00 at {parish} on a Sunday he was free, sat in the back, and stayed through the whole of the gospel choir's recessional, which runs eleven minutes and involves the congregation. He came to the sacristy afterward with his face open in a way you had not seen on him and said he had not heard music like that in a Catholic church in this diocese, and asked whether the choir would ever sing at his parish, which is white and quiet and dying, and whether he could bring his pastoral council to see how it was done. That was the good visit. The other letter is from the diocesan Office of Worship, courteous, saying that the director has heard about the music at {parish} and would like to attend a Sunday Mass, and would appreciate a copy of the choir's repertoire in advance, with sources, and a note on how the parish ensures the Mass settings conform to the approved texts. It is not a reprimand. It is the letter that comes before one.",
+      "flavorPrompt": "A gospel choir in a diocesan parish: a brother priest's admiration and the liturgy office's polite scrutiny in the same week. The pastor decides how to receive an inspection.",
+      "choices": [
+        {
+          "id": "invite_office",
+          "label": "Invite the director to the 11:00 with a seat in the front, and send her the repertoire with the sources marked",
+          "outcome": "She comes, sits in the front, and is sung to, and she is a musician before she is an official and cannot help it. The repertoire is mostly in the diocesan hymnal or in Lead Me, Guide Me, the Mass setting is approved, and she says so in a letter that goes in the parish file and not the other one. You have a friend in the office, and the choir has a story about the day the chancery clapped.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 3
+            },
+            {
+              "target": "relationship",
+              "key": "@music_director",
+              "delta": 8
+            },
+            {
+              "target": "ap",
+              "key": "next_week",
+              "delta": -1
+            },
+            {
+              "target": "flag",
+              "key": "ms_gospel_choir_defended",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "exchange",
+          "label": "Send the choir to his parish for a Sunday, and bring his council to yours, before you answer the office",
+          "outcome": "The choir sings at his 10:00 to a church that does not know whether to clap and then does, and his council comes to yours and sits through the eleven minutes. He calls it the best Sunday of his pastorate. The office's letter is answered a week late with a note that the choir has now sung at two parishes, which changes what the office thinks it is inspecting. {@brother_priest} owes you, and is the kind who pays.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@brother_priest",
+              "delta": 14
+            },
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 2
+            },
+            {
+              "target": "money",
+              "key": "cash",
+              "delta": -600
+            },
+            {
+              "target": "flag",
+              "key": "ms_choir_exchange",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "letter_girm",
+          "label": "Answer the office in writing, with the General Instruction and Sing to the Lord cited by paragraph",
+          "requires": [
+            {
+              "type": "stat",
+              "key": "theology",
+              "op": ">=",
+              "value": 50
+            }
+          ],
+          "outcome": "The letter is three pages and unanswerable, and cites the documents the office itself distributes, and says that the music at {parish} is what the bishops asked for in a parish like this one. The director does not come. The file has your letter in it, which is a good letter and a letter from a pastor who argues with the chancery. Two other pastors ask for a copy, which is how a position becomes a reputation.",
+          "volume": "semi_public",
+          "positionTopic": "liturgy",
+          "positionValue": 35,
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": -2
+            },
+            {
+              "target": "reputation",
+              "key": "progressive_bloc",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "ms_gospel_choir_defended",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ms_mariachi_feast",
+      "phase": [
+        "pastor",
+        "administrator"
+      ],
+      "pressure": [
+        "money",
+        "competence"
+      ],
+      "severity": "NOTABLE",
+      "category": "finance",
+      "baseWeight": 10,
+      "requires": [
+        {
+          "type": "liturgy",
+          "key": "music",
+          "value": "mariachi"
+        }
+      ],
+      "bias": [
+        {
+          "when": {
+            "type": "flag",
+            "key": "origin:latino_immigrant",
+            "value": true
+          },
+          "multiplier": 1.4
+        },
+        {
+          "when": {
+            "type": "parish",
+            "key": "kind",
+            "value": "immigrant_growing"
+          },
+          "multiplier": 1.3
+        }
+      ],
+      "suppressYears": 3,
+      "title": "The Twelfth of December",
+      "body": "The Mañanitas began at five in the morning with the mariachi on the church steps and the roses and four hundred people in the dark in December, and the Mass that followed filled {parish} past the fire code and out onto the lawn, and the procession afterward went twice around the block with the trumpets. It was the best morning the parish has had in your time. The collection was double any Sunday in the year, in small bills, and {@secretary} counted it twice. And on Monday there was a message from a neighbor, a man who has lived across from the church for thirty years, saying that it was five in the morning and that he had called the police, who came and stood and listened and left, and that he would be calling the city about the parish's permit, which the parish does not have. He is not the only neighbor. He is the one who called. You have a feast that filled the church and a block that heard it, and a man who was awake at five and did not want to be.",
+      "flavorPrompt": "Our Lady of Guadalupe with mariachi: a triumphant morning, a doubled collection, and a neighbor who called the police. Warmth and consequence.",
+      "choices": [
+        {
+          "id": "apologize",
+          "label": "Go across the street, apologize for the hour, and promise the trumpets start at six next year",
+          "default": true,
+          "outcome": "He receives you on his porch and is angrier than his message and calms as you stand there, because a priest at the door is still a thing on this street. You promise six. He says seven. You settle on six and a phone call the week before. The Guadalupanas say six is not the Mañanitas, and they are right, and they will sing at six. The collection is banked. The city is not called.",
+          "effects": [
+            {
+              "target": "money",
+              "key": "cash",
+              "delta": 3000
+            },
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": -2
+            },
+            {
+              "target": "flag",
+              "key": "ms_guadalupe_procession",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "indoors",
+          "label": "Move the Mañanitas inside the church next year, doors shut, and the procession to the parking lot",
+          "outcome": "The Guadalupanas take it as what it is, the parish choosing the neighbor over the feast, and the society's president tells you, respectfully, that her mother sang on these steps before the pastor was born. Next year the singing is inside and the trumpets are muffled by the doors and it is fine, and it is smaller. The neighbor sends a card at Christmas. The collection is still good and it is not double.",
+          "effects": [
+            {
+              "target": "money",
+              "key": "cash",
+              "delta": 2000
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": -5
+            },
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "feed_block",
+          "label": "Invite the whole block to the tamales next year, and go door to door yourself in Spanish and English to say so",
+          "requires": [
+            {
+              "type": "flag",
+              "key": "speaks_spanish",
+              "value": true
+            }
+          ],
+          "outcome": "It takes two Saturdays of knocking and most doors open, and the man across the street's does not, but his wife's does the week after, and next December there are neighbors in the hall at seven eating tamales they did not know they wanted. The trumpets start at five. Nobody calls anyone. The collection is double again and the Guadalupanas have put the pastor's name on the banner, which you will not explain to the chancery.",
+          "effects": [
+            {
+              "target": "money",
+              "key": "cash",
+              "delta": 3500
+            },
+            {
+              "target": "ap",
+              "key": "next_week",
+              "delta": -2
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": 5
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "ms_neighbors_fed",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ms_kneeling_knees",
+      "phase": [
+        "pastor",
+        "administrator"
+      ],
+      "pressure": [
+        "belief_vs_safety",
+        "loyalty_vs_honesty"
+      ],
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 10,
+      "requires": [
+        {
+          "type": "liturgy",
+          "key": "posture",
+          "value": "kneeling"
+        }
+      ],
+      "suppressYears": 3,
+      "title": "The Knees of the Old",
+      "body": "At {parish} the people receive kneeling, at the rail where there is one and at a kneeler where there is not, and it is beautiful from the sanctuary and it is a problem from the fourth pew back, where the parish keeps its widows. One of them went down at the rail in October and could not get up, and two ushers lifted her, and she has not come back to the 10:30. Her son wrote to the chancery. His letter, which {@vicar_general} has forwarded to you with a two-line note asking for a response, says that his mother has received Communion standing for fifty years and that the pastor has made her choose between her knees and her Lord. It also cites the General Instruction, correctly. And on the same Sunday there was a seminarian in the second pew, in a Roman collar he is not entitled to yet, who had driven in from the seminary because he heard that {parish} kneels, and who told you afterward, with a shining face, that this is the Church he wants to serve. You have a widow, a letter, and a boy, and a rail.",
+      "flavorPrompt": "Communion kneeling: a widow who fell, her son's letter to the chancery, and a seminarian who came to see it. The pastor answering the vicar general and himself.",
+      "choices": [
+        {
+          "id": "rail_option",
+          "label": "Keep the rail, and add a standing station at the side for anyone who cannot kneel, and say so in the bulletin",
+          "outcome": "The extraordinary minister stands at the side aisle every Sunday now, with a small card on the pew end that says any who cannot kneel may receive here, and the widows go there, and the widow who fell comes back. The son withdraws nothing but writes nothing more. {@vicar_general} receives a copy of the bulletin and files it. The rail is still the rail. The seminarian, when he visits again, does not notice the side aisle at all.",
+          "effects": [
+            {
+              "target": "money",
+              "key": "cash",
+              "delta": -900
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "ms_kneeling_rail_option",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "hold",
+          "label": "Answer the vicar general that no one at the rail is denied, and that the parish kneels",
+          "outcome": "Your letter is correct in law: the norm is the bishops' and the exception is the communicant's, and no one who stands is refused. {@vicar_general} reads it and calls you, and asks whether you understand that a correct letter is not the same as a wise one, and you say you do. The widow does not come back. The seminarian tells his classmates about {parish}, and two of them visit, and one of them tells the rector.",
+          "volume": "semi_public",
+          "positionTopic": "tlm",
+          "positionValue": -55,
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": 8
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": -4
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": -3
+            },
+            {
+              "target": "relationship",
+              "key": "@vicar_general",
+              "delta": -6
+            },
+            {
+              "target": "flag",
+              "key": "ms_kneeling_held",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "tell_seminarian",
+          "label": "Take the seminarian to lunch and tell him what it costs, including the widow",
+          "requires": [
+            {
+              "type": "stat",
+              "key": "piety",
+              "op": ">=",
+              "value": 50
+            }
+          ],
+          "outcome": "You tell him about the widow and the son's letter, and that the beauty he saw from the second pew is paid for in the fourth, and that he should want to serve the Church that has widows in it. He listens the way the young listen to a thing they will understand in ten years. You answer the vicar general the same week with the side-aisle solution and an honest sentence about the cost.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 2
+            },
+            {
+              "target": "ap",
+              "key": "next_week",
+              "delta": -1
+            },
+            {
+              "target": "flag",
+              "key": "ms_kneeling_rail_option",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ms_long_homily_timer",
+      "phase": [
+        "pastor",
+        "administrator"
+      ],
+      "pressure": [
+        "competence"
+      ],
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 8,
+      "requires": [
+        {
+          "type": "liturgy",
+          "key": "homily",
+          "value": "long"
+        }
+      ],
+      "suppressYears": 2,
+      "title": "The Man Who Times It",
+      "body": "He sits in the fourth pew on the left at {parish} and he has a wristwatch with a bezel, and every Sunday when you say In the name of the Father after the Gospel he turns the bezel, and when you sit down he looks at it. He does not sigh. He does not need to; the bezel is the sigh. Last week it was twenty-three minutes and he told {@secretary} the number in the vestibule as if reporting a score. And the same week a woman you know only slightly, a nurse who works Sundays and comes when she can, handed you an envelope at the door with four pages inside in a neat hand: notes on your last three homilies, with the Scripture references written out and a question at the end of each, and a note saying she had never understood the parable of the unjust steward until the third Sunday and wanted you to know. Two people, twenty minutes, one Mass. The man wants ten of them back. The woman wants the fourth page.",
+      "flavorPrompt": "A long homily judged by two parishioners: one with a watch, one with notes. Small, wry, a matter of the pastor's own craft.",
+      "choices": [
+        {
+          "id": "earn_it",
+          "label": "Keep the twenty minutes, and spend the week making every one of them earn its place",
+          "default": true,
+          "outcome": "You write the homily out for the first time in years and cut a third of it before Sunday and it is still twenty minutes and it is better. The man in the fourth pew turns the bezel and reads twenty-one and tells nobody. The nurse's next envelope has five pages. You have learned that the length was never the complaint, the drift was, and that a man with a watch is a kind of editor.",
+          "effects": [
+            {
+              "target": "ap",
+              "key": "next_week",
+              "delta": -1
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "print_notes",
+          "label": "Ask the nurse's leave to print her notes in the bulletin as a study guide, and answer her questions from the pulpit",
+          "requires": [
+            {
+              "type": "stat",
+              "key": "theology",
+              "op": ">=",
+              "value": 55
+            }
+          ],
+          "outcome": "She is mortified and then proud, and the notes go in the bulletin under a heading, and you answer her question about the steward the next Sunday in the homily, which runs twenty-four minutes because it is a good question. A bible study forms around the bulletin page without your doing anything. The man in the fourth pew reads the notes, which take him four minutes, and considers that a fair exchange.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "progressive_bloc",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "ms_homily_notes",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "visit_timer",
+          "label": "Sit with the man after Mass and ask him what he would cut",
+          "outcome": "He is surprised to be asked and has an answer ready: the second illustration, every week, which he says you use because you like it and not because it is needed. He is right about half the time. You do not shorten the homily. You lose the second illustration on the weeks he is right, and he notices, and turns the bezel with something like proprietorship, and stops reporting the number to {@secretary}.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "relationship",
+              "key": "@secretary",
+              "delta": 5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ms_changes_too_fast",
+      "phase": [
+        "pastor",
+        "administrator"
+      ],
+      "pressure": [
+        "ambition_vs_integrity",
+        "loyalty_vs_honesty"
+      ],
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 11,
+      "requires": [
+        {
+          "type": "liturgy",
+          "key": "fresh",
+          "op": ">=",
+          "amount": 3
+        }
+      ],
+      "bias": [
+        {
+          "when": {
+            "type": "outspokenness",
+            "op": ">=",
+            "value": 50
+          },
+          "multiplier": 1.4
+        }
+      ],
+      "suppressYears": 2,
+      "title": "Three Changes in Six Months",
+      "body": "The parish council of {parish} has asked for a special meeting and has put one item on the agenda, and the item is the Mass. The chair, who has been on the council through three pastors, reads it out: that in the past six months the parish has seen its music changed, its language changed, its manner of receiving Communion changed, and that the council would like to know whether there are more changes coming and whether the council will be consulted before them. She does not say it is not your decision. Everyone in the room knows that the council advises and the pastor decides. She says that the people are tired of being surprised on Sunday. And on your desk, dated two days earlier, a letter from {@vicar_general} on chancery letterhead, saying that the office has received several communications about the liturgy at {parish}, that he is confident the pastor is acting within his authority, and that he would be grateful for a short account of the changes made and the pastoral reasons for them. Two audiences, one question, and the question is whether you know what you are doing.",
+      "flavorPrompt": "A pastor who changed the Mass fast, facing his council and the vicar general in the same week. Authority, pace, and whether consultation is owed.",
+      "choices": [
+        {
+          "id": "slow_down",
+          "label": "Tell the council there will be no more changes this year, and tell the vicar general the same",
+          "outcome": "The room exhales. The chair thanks you in the tone of a woman who has won something and is too courteous to say so. Your letter to {@vicar_general} says what you did and why and that the parish will now settle, and he writes back that it is exactly the account he hoped for. You have bound yourself for a year in front of witnesses, and the things you meant to change next will wait.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 4
+            },
+            {
+              "target": "relationship",
+              "key": "@vicar_general",
+              "delta": 6
+            },
+            {
+              "target": "flag",
+              "key": "ms_slowed_down",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "defend_each",
+          "label": "Defend each change to the council on its merits, and say the Mass is the pastor's to set within the books",
+          "outcome": "You take them one at a time, with the reasons, and the reasons are good, and the council listens the way a council listens to a man who has told it that its opinion is welcome and not required. Two members resign by spring. The vicar general receives your account, which is the same speech, and reads it as a pastor telling the chancery the same thing. The changes stand. So does the word about you.",
+          "volume": "semi_public",
+          "positionTopic": "authority",
+          "positionValue": 35,
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": -5
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": -4
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "relationship",
+              "key": "@vicar_general",
+              "delta": -5
+            }
+          ]
+        },
+        {
+          "id": "call_vg",
+          "label": "Call the vicar general before you answer the council, and ask him what the chancery actually wants",
+          "requires": [
+            {
+              "type": "relationship",
+              "npcId": "@vicar_general",
+              "op": ">=",
+              "value": 10
+            }
+          ],
+          "outcome": "He says, off the letterhead, that the bishop has had four letters and would like to have none, and that nobody at the chancery cares what the parish sings if it stops writing. You go to the council with that in your pocket and give them a consultation process, on paper, for anything further, and it costs you nothing you were going to do this year anyway. The letters stop. {@vicar_general} tells the bishop the pastor handled it.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@vicar_general",
+              "delta": 8
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "ms_vg_written",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ms_friction_attendance",
+      "phase": [
+        "pastor",
+        "administrator"
+      ],
+      "pressure": [
+        "money",
+        "belief_vs_safety"
+      ],
+      "severity": "MAJOR",
+      "category": "finance",
+      "baseWeight": 11,
+      "requires": [
+        {
+          "type": "liturgy",
+          "key": "friction",
+          "op": ">=",
+          "amount": 0.5
+        }
+      ],
+      "bias": [
+        {
+          "when": {
+            "type": "parish",
+            "key": "wealth",
+            "value": 1
+          },
+          "multiplier": 1.4
+        },
+        {
+          "when": {
+            "type": "parish",
+            "key": "wealth",
+            "value": 2
+          },
+          "multiplier": 1.3
+        }
+      ],
+      "suppressYears": 2,
+      "title": "The Plate",
+      "body": "You can see it from the altar now. The 10:30 at {parish} used to fill to the fourth pew from the back and now there is a fifth, and a sixth, and the people who are there sit in the pattern of a congregation that has lost the people who used to sit between them. Nobody has written a letter. They have simply gone, to the parish across the highway and the parish in the next town, and you know some of their names because they were on the rolls and are not now. The finance council chair has the offertory graph in front of him and the graph is a slope, and he does not ask you about the Mass because he is a careful man. He asks about the plate. He says the parish is down eleven percent against last year and the assessment is not, and he asks, with his eyes on the paper, whether there is anything the pastor has observed that might account for it. Everyone at the table has observed it. It is your Mass, and it is not theirs, and the plate has counted the difference.",
+      "flavorPrompt": "A Mass the parish does not want, measured in empty pews and the collection graph. The finance council asks about money because it cannot ask about liturgy.",
+      "choices": [
+        {
+          "id": "not_line_item",
+          "label": "Tell the council the Mass is not a line item, and that you will not set the liturgy by the plate",
+          "outcome": "It is true and it is the wrong room to say it in, and the chair writes it into the minutes in exactly those words. The slope continues. The council finds the cuts in the youth minister and the snow contract, and the parish learns that the pastor's Mass costs a youth minister. The ones who love the Mass love it more. The ones who left are not coming back for a principle.",
+          "effects": [
+            {
+              "target": "money",
+              "key": "cash",
+              "delta": -4000
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": -5
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": -2
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "admit",
+          "label": "Say in the bulletin that you know the parish has not taken to the Mass, and ask for a year",
+          "outcome": "The column says that the pastor has heard the silence and knows what it means, and asks the parish to give the Mass a year and him a hearing. It is the most honest thing you have printed, and the parish reads it twice. Some who left read it too, passed along, and a few come back for the asking. The slope flattens and does not turn. The council chair cuts the snow contract anyway.",
+          "effects": [
+            {
+              "target": "money",
+              "key": "cash",
+              "delta": -2000
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 5
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "ms_friction_admitted",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "survey",
+          "label": "Commission a proper survey of the parish, in the pews and by mail, and bring the numbers to the council",
+          "requires": [
+            {
+              "type": "stat",
+              "key": "administration",
+              "op": ">=",
+              "value": 50
+            }
+          ],
+          "outcome": "The survey is designed properly, with the DRE's help and a sample, and it takes two months, and it says what the pews said with numbers attached, dial by dial. You bring it to the council, who have never seen a pastor measure his own Mass. It does not change the slope by itself. It tells you exactly where the parish and its Mass part, and the chancery, when it hears, calls it good management.",
+          "effects": [
+            {
+              "target": "money",
+              "key": "cash",
+              "delta": -1500
+            },
+            {
+              "target": "ap",
+              "key": "next_week",
+              "delta": -2
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 3
+            },
+            {
+              "target": "relationship",
+              "key": "@dre",
+              "delta": 6
+            },
+            {
+              "target": "flag",
+              "key": "ms_surveyed",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ms_mass_that_fits",
+      "phase": [
+        "pastor",
+        "administrator"
+      ],
+      "pressure": [
+        "doubt",
+        "money"
+      ],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 9,
+      "requires": [
+        {
+          "type": "liturgy",
+          "key": "friction",
+          "op": "<=",
+          "amount": 0.15
+        },
+        {
+          "type": "weeks_served",
+          "op": ">=",
+          "value": 104
+        }
+      ],
+      "suppressYears": 5,
+      "once": true,
+      "title": "The Parish That Stopped Arguing",
+      "body": "You notice it at the 10:30 on an ordinary Sunday in an ordinary season, which is where such things are noticed: that nobody at {parish} is arguing about the Mass. The music is sung by the people and not at them. The responses come back at the right volume. The ushers know where the families with small children go, and the families go there. Nobody has written to you about anything liturgical in a year, and the last letter was about the parking. It took two years, and it did not happen on any Sunday you could name, and it is the thing you were ordained for and nobody will ever give you credit for it because there is nothing to see. After Mass {@bonded_parishioner} waits at the door until the others are gone and hands you an envelope, and says it is for the church, for whatever you think it needs, and that the family wanted you to have it because Sunday has become the best morning of their week. It is a check. It is not small. There is no letter with it.",
+      "flavorPrompt": "The quiet reward: a parish at peace with its Mass, and a gift given without conditions by a family the pastor has already served. No conflict; the choice is what to do with grace.",
+      "choices": [
+        {
+          "id": "church",
+          "label": "Put it toward the church, as they said, and tell them what it bought",
+          "default": true,
+          "outcome": "The check goes to the sanctuary lighting, which has been on the list for years, and you write to the family in your own hand to tell them so, and that they will see it on a Sunday in the fall. They do. They say nothing at the door about it, because that is the kind of family they are, and the light on the altar is theirs and the parish's and nobody knows but four people.",
+          "effects": [
+            {
+              "target": "money",
+              "key": "cash",
+              "delta": 4000
+            },
+            {
+              "target": "relationship",
+              "key": "@bonded_parishioner",
+              "delta": 8
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "ms_quiet_gift",
+              "value": true
+            },
+            {
+              "target": "flag",
+              "key": "ms_mass_settled",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "poor",
+          "label": "Ask their leave to give it to the parish's poor instead, in their name",
+          "outcome": "They say yes at once, and are quietly pleased to have been asked, and the check goes to the St. Vincent de Paul fund with a note that it is from a family of the parish. The church's lighting stays on the list. You have taken a gift meant for the altar and given it to the door, which is a homily you did not have to preach, and the family understands it as one.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 4
+            },
+            {
+              "target": "relationship",
+              "key": "@bonded_parishioner",
+              "delta": 10
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "ms_mass_settled",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "tell_bishop",
+          "label": "Write to the bishop, without asking for anything, to say that the parish is at peace and why",
+          "requires": [
+            {
+              "type": "relationship",
+              "npcId": "@bishop",
+              "op": ">=",
+              "value": 15
+            }
+          ],
+          "outcome": "The letter is short and has no request in it, which the bishop's office is not used to, and it says that {parish} has settled into its Mass and that a family gave a gift for the church without a letter. {@bishop} answers in his own hand. The check goes to the lighting. You have told the chancery a quiet thing about yourself, and the chancery, which hears mostly complaints, remembers the ones who wrote to say nothing was wrong.",
+          "effects": [
+            {
+              "target": "money",
+              "key": "cash",
+              "delta": 4000
+            },
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": 8
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 3
+            },
+            {
+              "target": "relationship",
+              "key": "@bonded_parishioner",
+              "delta": 6
+            },
+            {
+              "target": "flag",
+              "key": "ms_quiet_gift",
+              "value": true
+            },
+            {
+              "target": "flag",
+              "key": "ms_mass_settled",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ms_trad_draws_outsiders",
+      "phase": [
+        "pastor",
+        "administrator"
+      ],
+      "pressure": [
+        "friendship_vs_duty",
+        "belief_vs_safety"
+      ],
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 10,
+      "requires": [
+        {
+          "type": "liturgy",
+          "key": "lean",
+          "op": "<=",
+          "amount": -0.5
+        },
+        {
+          "type": "flag",
+          "key": "parish_noticed",
+          "value": true
+        }
+      ],
+      "bias": [
+        {
+          "when": {
+            "type": "bishop_alignment",
+            "op": ">=",
+            "value": 20
+          },
+          "multiplier": 1.4
+        },
+        {
+          "when": {
+            "type": "outspokenness",
+            "op": ">=",
+            "value": 50
+          },
+          "multiplier": 1.3
+        }
+      ],
+      "suppressYears": 3,
+      "title": "His Families",
+      "body": "{@brother_priest} calls on a Tuesday, which is his day off, and does not begin with pleasantries. He has lost four families since Advent and he knows where they went, because one of them told him, kindly, that they were driving to {parish} for the Mass and would keep their envelopes with him for the school. He is not shouting. He says that he has a parish that is aging and a school that is closing and that he cannot afford to lose young families with money to a parish twenty minutes away that has decided to be a destination, and that he has not said this to the chancery and would like not to have to. And the chancery has asked anyway. A note from the vicar general's office, three lines, asks whether {parish} has been advertising its liturgy outside the parish boundaries, because the bishop has had a question about it from a pastor, and the bishop would like to say no. You have not advertised. You have not needed to. The Mass has done it, and the families have driven, and {@brother_priest} is waiting on the line.",
+      "flavorPrompt": "A traditional Mass drawing families from a brother priest's parish. Parish boundaries, the presbyterate's unwritten rules, and the chancery's polite question.",
+      "choices": [
+        {
+          "id": "welcome_them",
+          "label": "Tell him they are welcome, that you did not seek them, and that you will not turn them away",
+          "outcome": "He says he did not expect you to, and hangs up before either of you can say anything worse. The families stay, and bring a fifth. The chancery is told, truthfully, that the parish has not advertised, and the vicar general's office writes it down and notes that the pastor was asked. At the deanery {@brother_priest} sits across the table and is civil, and the other pastors have chosen sides without saying so.",
+          "volume": "semi_public",
+          "positionTopic": "liturgy",
+          "positionValue": -50,
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@brother_priest",
+              "delta": -14
+            },
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": -5
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": 6
+            },
+            {
+              "target": "money",
+              "key": "cash",
+              "delta": 2000
+            },
+            {
+              "target": "flag",
+              "key": "ms_drew_his_families",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "send_home",
+          "label": "Speak to the four families yourself, and ask them to register where they live and keep coming as guests",
+          "outcome": "They are startled to be asked and two of them do it, and keep their envelopes with him and their Sundays with you, which is a shape the diocese has no name for. {@brother_priest} gets the registrations and understands the gesture and does not entirely forgive it. The chancery is satisfied. You have given away something that was not yours to keep and kept something that was not yours to give, and the families know exactly what you did.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@brother_priest",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": -3
+            },
+            {
+              "target": "money",
+              "key": "cash",
+              "delta": -1000
+            },
+            {
+              "target": "flag",
+              "key": "ms_families_sent_home",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "lunch",
+          "label": "Drive to him, buy him lunch, and ask what would actually help his parish",
+          "requires": [
+            {
+              "type": "relationship",
+              "npcId": "@brother_priest",
+              "op": ">=",
+              "value": 15
+            }
+          ],
+          "outcome": "He wants the school kept open and knows it will not be, and by the second coffee he is talking about that and not about your Mass. You offer him a Sunday at {parish} to speak about the school and a second collection for it, and he takes it, and the four families give to it because they are still his. The chancery hears that two pastors had lunch, which is the sentence it likes best. The families keep driving.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@brother_priest",
+              "delta": 12
+            },
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 2
+            },
+            {
+              "target": "money",
+              "key": "cash",
+              "delta": -1500
+            },
+            {
+              "target": "ap",
+              "key": "next_week",
+              "delta": -1
+            },
+            {
+              "target": "flag",
+              "key": "ms_drew_his_families",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ms_noticed_reporter",
+      "phase": [
+        "pastor",
+        "administrator"
+      ],
+      "pressure": [
+        "ambition_vs_integrity"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 9,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "parish_noticed",
+          "value": true
+        }
+      ],
+      "suppressYears": 3,
+      "title": "The Parish That Gets Noticed",
+      "body": "It comes in threes. The diocesan paper's reporter, who has covered the diocese for twenty years, calls to say she is writing a piece on parishes that are growing and would like an hour with the pastor of {parish} and a photograph at the altar, and that the editor has already cleared it with the chancery, which is the sentence that tells you the chancery suggested it. Then on the second Sunday of the month {@bishop} is in the last pew at the 10:30 with no notice and no crozier and a raincoat, and leaves after the final blessing without coming to the sacristy, and {@secretary} says he was smiling. And on the Tuesday a man you have never met, from a parish across the city where the money lives, asks to see you and says in your office that he has heard what is happening here and would like to be part of it, and asks what the parish needs. He does not say a number; he has the manner of a man who does not need to. A parish that is doing well is a parish that is being watched, and you are being watched from three directions.",
+      "flavorPrompt": "A parish that has become a story: the diocesan paper, an unannounced bishop, a donor from across town. What a pastor does with attention.",
+      "choices": [
+        {
+          "id": "interview",
+          "label": "Give the reporter her hour and the photograph, and say what the parish does and why",
+          "outcome": "The piece runs on the front of the diocesan paper with you at the altar and a headline you would not have chosen, and it is accurate, and every priest in the diocese reads it, some glad and more not. The chancery clips it. The parish is proud the way a parish is proud of a thing partly theirs. You are, from this week, a name, and names in a diocese are spent whether or not their owners spend them.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": -3
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 3
+            },
+            {
+              "target": "outspokenness",
+              "key": "",
+              "delta": 4
+            },
+            {
+              "target": "flag",
+              "key": "ms_gave_interview",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "decline_press",
+          "label": "Decline the interview, thank the bishop by note for coming, and let the work speak",
+          "outcome": "The reporter is disappointed and writes the piece about another parish, with a paragraph on yours that says the pastor declined to be interviewed, which reads better than you feared. {@bishop} receives a note that says only that the parish was glad he came, and he mentions it to the vicar general as the right kind of note. The donor is not answered this week. The parish goes on growing without a photograph, which is how it grew.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 4
+            },
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": -2
+            }
+          ]
+        },
+        {
+          "id": "donor",
+          "label": "Tell the man from across the city exactly what the parish needs, with a number, and let him decide",
+          "requires": [
+            {
+              "type": "stat",
+              "key": "administration",
+              "op": ">=",
+              "value": 45
+            }
+          ],
+          "outcome": "You give him the boiler and the number, because a man who asks what a parish needs deserves a true answer, and he writes the check in your office. He is not a parishioner and will not become one; he gives where things are happening and will give elsewhere when they stop. The boiler is replaced in the spring. The finance council asks where the money came from, and the chair says that is a friend a parish should keep.",
+          "effects": [
+            {
+              "target": "money",
+              "key": "cash",
+              "delta": 5000
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "ms_donor_across_town",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ms_noticed_rival_deanery",
+      "phase": [
+        "pastor",
+        "administrator"
+      ],
+      "pressure": [
+        "friendship_vs_duty",
+        "loyalty_vs_honesty"
+      ],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 9,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "parish_noticed",
+          "value": true
+        }
+      ],
+      "bias": [
+        {
+          "when": {
+            "type": "outspokenness",
+            "op": ">=",
+            "value": 50
+          },
+          "multiplier": 1.3
+        },
+        {
+          "when": {
+            "type": "reputation",
+            "key": "brother_priests",
+            "op": "<=",
+            "value": 0
+          },
+          "multiplier": 1.3
+        }
+      ],
+      "suppressYears": 3,
+      "once": true,
+      "title": "The Deanery Dinner",
+      "body": "The deanery dinner is at the rectory of the dean, who cooks, and there are nine priests at the table and {@brother_priest} is seated across from you, which the dean did not do by accident. Somewhere between the soup and the roast the dean asks, as a pleasantry, how {parish} is doing, and before you can answer {@brother_priest} says that it is doing very well, he can vouch for it, because it is doing well with his families. He says it lightly. The table laughs, a little late. He says that the Delgados went in September and the Kowalskis in November and that he had baptized every one of the Kowalski children, and that it must be a fine thing to be a parish people drive to. He is not drunk. He has lost eleven families and a fifth of his offertory in a year and he has been waiting for this dinner since Advent, and he is saying it in front of the dean and seven other pastors because that is the only court a priest has. The roast is on the table. Everyone is looking at their plate. It is your turn.",
+      "flavorPrompt": "A wounded brother priest at the deanery table, accusing the pastor of taking his families. Clerical manners, the presbyterate as an audience, and what a man says with a fork in his hand.",
+      "choices": [
+        {
+          "id": "apologize",
+          "label": "Say you are sorry for it, as if it were your doing, and ask him what you can do",
+          "outcome": "The table relaxes, because an apology is what the table wanted, and {@brother_priest} does not know what to do with it and says nothing more. After dinner he finds you by the coats and says he should not have said it there. You have taken the blame for something the families did, in front of the presbyterate, which the presbyterate remembers as grace and which you remember as a thing you did not do.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": 5
+            },
+            {
+              "target": "relationship",
+              "key": "@brother_priest",
+              "delta": 8
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": -1
+            },
+            {
+              "target": "flag",
+              "key": "ms_rival_handled",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "plain",
+          "label": "Say the plain thing: nobody was asked to drive, and you will not apologize for a Mass people want",
+          "outcome": "It is true and the table is silent for the length of a Hail Mary, and then the dean passes the potatoes. {@brother_priest} does not speak to you again that night or for a year. Two of the seven pastors tell you afterward, separately, that they were glad you said it, and five tell each other you are a hard man. You have been honest at the deanery table, the one place in a diocese where it is not expected.",
+          "volume": "semi_public",
+          "positionTopic": "authority",
+          "positionValue": 25,
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": -6
+            },
+            {
+              "target": "relationship",
+              "key": "@brother_priest",
+              "delta": -15
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 3
+            },
+            {
+              "target": "outspokenness",
+              "key": "",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "ms_rival_crossed",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "send_help",
+          "label": "Offer him your music director for a month of Sundays, at your expense, and mean it",
+          "requires": [
+            {
+              "type": "relationship",
+              "npcId": "@music_director",
+              "op": ">=",
+              "value": 15
+            }
+          ],
+          "outcome": "The table does not know what to do with a gift, and neither does he, and he says yes because refusing in front of the dean would be worse. {@music_director} goes for a month and comes back with stories, and his 10:00 is better for it and his families do not come back, because a month is a month. The presbyterate decides you are a generous man who takes people's families. Both are true, and he knows both.",
+          "effects": [
+            {
+              "target": "money",
+              "key": "cash",
+              "delta": -1200
+            },
+            {
+              "target": "relationship",
+              "key": "@brother_priest",
+              "delta": 12
+            },
+            {
+              "target": "relationship",
+              "key": "@music_director",
+              "delta": -5
+            },
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": 4
+            },
+            {
+              "target": "flag",
+              "key": "ms_rival_handled",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "laugh",
+          "label": "Laugh with him, name the Kowalskis' youngest, and say you will send her back the day she stops singing",
+          "requires": [
+            {
+              "type": "relationship",
+              "npcId": "@brother_priest",
+              "op": ">=",
+              "value": 20
+            }
+          ],
+          "outcome": "He laughs, because he has known you long enough to hear the affection in it, and the table laughs because he did, and the dean carves. It goes no further. Later, by the coats, he says the families were the least of it and the school is closing in June, and you say you know, and stand there with him. The presbyterate saw two friends handle a thing at the table, which is the story they tell.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@brother_priest",
+              "delta": 8
+            },
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": 5
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "ms_rival_handled",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ms_vicar_pastors_mass",
+      "phase": "parochial_vicar",
+      "pressure": [
+        "loyalty_vs_honesty",
+        "belief_vs_safety"
+      ],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 10,
+      "requires": [
+        {
+          "type": "role",
+          "value": "parochial_vicar"
+        },
+        {
+          "type": "liturgy",
+          "key": "friction",
+          "op": ">=",
+          "amount": 0.35
+        }
+      ],
+      "suppressYears": 3,
+      "title": "The Pastor's Mass",
+      "body": "The Mass at {parish} is {@pastor}'s, set the way he has set it, and you say it his way at the 8:00 and the 5:30 and on the weekdays, because that is what a parochial vicar does. You do not love it. It is not what you would choose and it is not, by the evidence of the pews, what the parish would choose either, and you have said nothing about that to anyone because a vicar who criticizes his pastor's liturgy to the people has ended his own usefulness in that parish and possibly the next. And then after the Saturday 5:30 a woman who has been coming for forty years stops you in the vestibule, out of anyone's hearing, and asks you straight: does Father think this is right? Not the pastor. You. She says she is not asking to make trouble. She says she wants to know whether the young priest sees what she sees, or whether she is only old. She is waiting. The pastor is in the rectory. The question is honest and the answer is dangerous in both directions.",
+      "flavorPrompt": "A parochial vicar saying a Mass he did not set and does not love, asked by a parishioner what he really thinks. Loyalty to the pastor against honesty to the people, in a vestibule.",
+      "choices": [
+        {
+          "id": "defend",
+          "label": "Tell her the Mass is the pastor's to set, that he has his reasons, and that she should trust him",
+          "outcome": "She hears the loyalty in it and the evasion, because at her age she can hear both, and thanks you and goes home. {@pastor} hears about it within the week, because she tells someone who tells him, and he says nothing to you, which is how he says thank you. You have done what a vicar does. The woman does not ask you anything again, which is a small door closed in a parish where you will be for years.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@pastor",
+              "delta": 8
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": -2
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": -1
+            },
+            {
+              "target": "flag",
+              "key": "ms_vicar_defended_mass",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "honest_quiet",
+          "label": "Tell her, quietly, that it is not the Mass you would set, and that it is not yours to set",
+          "outcome": "She nods as if you had confirmed a diagnosis, and says she will not repeat it, and does, to two people, both careful. It reaches {@pastor} in the spring in a form he can neither prove nor ignore, and he is cooler with you after that and never says why. The woman brings you a pie. You have told the truth to one person in a vestibule and paid for it in a rectory, which is the usual rate.",
+          "volume": "private",
+          "positionTopic": "authority",
+          "positionValue": 20,
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@pastor",
+              "delta": -10
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 3
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "ms_vicar_spoke_of_mass",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "send_to_pastor",
+          "label": "Tell her the question is a good one and that she should ask him, and offer to walk her over",
+          "outcome": "She does not want to and you know it, and you walk her to the rectory door anyway and stand there while she asks {@pastor}, who is startled to be asked by a parishioner and answers her more fully than he has ever answered you. It changes nothing on Sunday. It changes how the woman thinks of the pastor, a little, and how the pastor thinks of you: a vicar who brings him people rather than talk.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@pastor",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "raise_it",
+          "label": "Answer her honestly and then raise it with the pastor yourself that night, as a vicar should",
+          "requires": [
+            {
+              "type": "relationship",
+              "npcId": "@pastor",
+              "op": ">=",
+              "value": 20
+            }
+          ],
+          "outcome": "You tell her it is not the Mass you would set, and then you knock on his study door and tell him the same, and that a parishioner asked. He is not pleased and he listens, because you have earned that much, and he says he will think about it, and changes nothing for a year, and then changes one thing. The woman never learns you went to him. You have been honest at both ends of the corridor.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@pastor",
+              "delta": -5
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "ms_vicar_spoke_of_mass",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ms_music_director_dial",
+      "phase": [
+        "pastor",
+        "administrator"
+      ],
+      "pressure": [
+        "competence",
+        "friendship_vs_duty"
+      ],
+      "severity": "NOTABLE",
+      "category": "admin",
+      "baseWeight": 10,
+      "requires": [
+        {
+          "type": "liturgy",
+          "key": "changes",
+          "op": ">=",
+          "amount": 1
+        },
+        {
+          "type": "any",
+          "inner": [
+            {
+              "type": "liturgy",
+              "key": "music",
+              "value": "chant"
+            },
+            {
+              "type": "liturgy",
+              "key": "music",
+              "value": "organ_hymns"
+            },
+            {
+              "type": "liturgy",
+              "key": "music",
+              "value": "contemporary"
+            }
+          ]
+        }
+      ],
+      "suppressYears": 4,
+      "title": "The Job That Changed",
+      "body": "{@music_director} was hired by your predecessor to do a particular thing, and did it competently for years, and you have changed what the parish sings, and so you have changed the job without changing the title or the pay or the person. She has come to your office with a folder. She is not angry; she is a professional, and professionals bring folders. The folder has her contract, which describes the job the old way, and a list of what the new music requires that she was not hired to do and, in two cases, cannot do: the repertoire is different, the rehearsals are different, the instrument is different, and the people who used to come to her choir have been replaced by people who do not. She asks, plainly, whether the parish wants her to become the person who does this, with the time and training that would take, or whether the parish wants someone else and has not said so. She says she would rather be told. She has been at {parish} longer than you have, and she is asking the question you should have asked her before you turned the dial.",
+      "flavorPrompt": "A pastor's liturgical change landing on the staff member whose job it rewrote. Employment, competence, and the decency of saying so.",
+      "choices": [
+        {
+          "id": "retrain",
+          "label": "Pay for the training and the time, rewrite the contract to the new job, and ask her to stay",
+          "outcome": "The training is a summer course and a year of lessons and it costs what a boiler repair costs, and the new contract describes the work she is actually doing. She takes it, and is not the same at it as she was at the old thing, and gets better. You have kept a person by paying for the change you made, which is the thing a parish is most reluctant to pay for and most needs to.",
+          "effects": [
+            {
+              "target": "money",
+              "key": "cash",
+              "delta": -2500
+            },
+            {
+              "target": "relationship",
+              "key": "@music_director",
+              "delta": 14
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "ms_music_director_retrained",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "job_is_job",
+          "label": "Tell her the job is the parish's music, whatever the parish sings, and that you expect her to lead it",
+          "outcome": "She closes the folder and says she understands, and does the job at the level of a person who has been told her competence is a matter of attitude. The music is adequate. The choir she built drifts, the new people find her cold, and in two years she takes a post at a parish that sings what she was trained to sing. You have a music director until then and a vacancy after.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@music_director",
+              "delta": -14
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": -2
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "ms_music_director_sidelined",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "hire_alongside",
+          "label": "Keep her for what she does best, and hire a part-time leader for the new music alongside her",
+          "requires": [
+            {
+              "type": "relationship",
+              "npcId": "@music_director",
+              "op": ">=",
+              "value": 15
+            }
+          ],
+          "outcome": "It is more money and two people in a loft built for one, and it works because she agrees to it in your office as a thing decided together rather than done to her. The new leader is young and takes the principal Mass; she takes the rest, and the funerals, and within a year is teaching him what a parish is. The finance council notes the second salary and asks whether it is permanent, and you say yes.",
+          "effects": [
+            {
+              "target": "money",
+              "key": "cash",
+              "delta": -4000
+            },
+            {
+              "target": "relationship",
+              "key": "@music_director",
+              "delta": 10
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 3
+            },
+            {
+              "target": "ap",
+              "key": "next_week",
+              "delta": -1
+            },
+            {
+              "target": "flag",
+              "key": "ms_music_director_retrained",
+              "value": true
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
