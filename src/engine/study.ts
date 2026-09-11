@@ -8,7 +8,7 @@ import { nextAssignment } from './career';
 import { ARC } from './parish';
 
 /** How a place is named in prose. */
-export const CITY_WORD: Record<StudyState['city'], string> = { rome: 'Rome', washington: 'Washington', residence: "the bishop's residence", campus: 'the Newman Center', hospital: 'the hospital', seminary: 'the seminary' };
+export const CITY_WORD: Record<StudyState['city'], string> = { rome: 'Rome', washington: 'Washington', residence: "the bishop's residence", campus: 'the Newman Center', hospital: 'the hospital', seminary: 'the seminary', chancery: 'the chancery' };
 
 /** Invented: what leaving costs the man's standing with the people he leaves. DESIGN §7.5 rule 3. */
 export const STUDY = { leaveParishioners: -8 } as const;

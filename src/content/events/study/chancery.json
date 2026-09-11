@@ -1,0 +1,849 @@
+{
+  "_notes": "The chancery tier: a priest serving as vicar general (or chancellor) of the diocese, run as a posting with phase study and the flag study:chancery set by the engine. He lives at the chancery residence; his week is the personnel board, the closings list, the bishop's door, the tribunal, the money, and the deaneries. Selectors are @bishop, @chancellor, @vicar_for_clergy, @brother_priest, @closest_classmate only; the seminary rector, the auditor, the nuncio and the press are named by role, not bound. The allegation (vg_allegation_file) is authored only, with no flavorPrompt. Flags written, all vg_*: vg_board_picked_the_better_man / vg_board_picked_a_friend / vg_board_recused (the personnel board and a classmate); vg_closed_own_parish / vg_spared_own_parish / vg_merger_plan (the closings list and his first parish); vg_removed_in_person / vg_removed_by_letter / vg_removed_with_a_door (a pastor removed); vg_allegation_reported_all / vg_allegation_held_the_note / vg_allegation_called_the_man (an allegation and the file); vg_budget_cut_schools / vg_budget_cut_chancery / vg_budget_raised_assessment (the deficit); vg_announced_cleanly / vg_announced_and_dissented / vg_made_bishop_announce (the Hispanic ministry office); vg_terna_answered_plainly / vg_terna_generous / vg_terna_recused (the nuncio's questionnaire); vg_fixed_an_assignment / vg_refused_a_fix / vg_showed_him_the_door (a brother priest's request); vg_press_confirmed / vg_press_no_comment / vg_press_called_pastors_first (the leaked list); vg_rector_backed / vg_rector_asked_for_reasons / vg_rector_overruled (a seminarian's dismissal); vg_audit_let_it_stand / vg_audit_softened / vg_audit_repayment_plan (the retirement fund); vg_covered_for_bishop / vg_told_bishop_plainly / vg_called_the_metropolitan (the bishop's health); vg_deanery_sat_with_them / vg_deanery_decreed / vg_deanery_carried_their_case (the Mass schedule); vg_rome_reported_plainly / vg_rome_kept_it_local / vg_rome_warned_the_pastor (the letter from the dicastery). Nothing here transfers, spends parish money, costs AP, or ends the run.",
+  "events": [
+    {
+      "id": "vg_board_friend",
+      "phase": "study",
+      "pressure": ["friendship_vs_duty", "loyalty_vs_honesty"],
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 8,
+      "suppressYears": 4,
+      "once": true,
+      "requires": [
+        { "type": "flag", "key": "study:chancery", "value": true }
+      ],
+      "title": "The Short List",
+      "body": "The personnel board meets on Tuesdays in the room with the bad chairs, and this Tuesday the list is short. A pastorate is open that matters: a school still standing, a debt paid off by the last man, a seat at the deanery table that comes with it. Two names have survived the winnowing. {@brother_priest} is the one {@vicar_for_clergy} calls the better fit, and he is right, and you have never liked the man, and neither fact has anything to do with the other. The second name is {@closest_classmate}, who telephoned the residence on Sunday night and talked for twenty minutes about his mother and the weather and did not ask for anything, which is how he asked. The board's vote is advisory. {@bishop} signs what you carry upstairs, and he has said, twice, in front of the chancellor, that he trusts your read of the men. That trust is the whole of your office. It is also the thing your friend was counting on when he called.",
+      "flavorPrompt": "The bad chairs, the short list, and the phone call that did not ask.",
+      "choices": [
+        {
+          "id": "back_the_better_man",
+          "label": "Put {@brother_priest} forward, because the parish needs him",
+          "outcome": "You say his name and the reasons, and {@vicar_for_clergy} nods as if it were obvious, which to him it was. The bishop signs. {@closest_classmate} hears within the day, as everyone hears everything, and the next time he calls the residence it is about a funeral, and he is careful, and so are you. The parish gets the man it needed.",
+          "effects": [
+            { "target": "relationship", "key": "@closest_classmate", "delta": -8 },
+            { "target": "relationship", "key": "@brother_priest", "delta": 6 },
+            { "target": "reputation", "key": "chancery", "delta": 4 },
+            { "target": "stat", "key": "administration", "delta": 1 },
+            { "target": "flag", "key": "vg_board_picked_the_better_man", "value": true }
+          ]
+        },
+        {
+          "id": "back_your_friend",
+          "label": "Put {@closest_classmate} forward; he has earned it, and you know him",
+          "outcome": "You make the case, and it is not a bad case, and the board defers to the vicar general as boards do. The bishop signs without reading past the name. {@closest_classmate} does well enough. But {@vicar_for_clergy} has a long memory for the Tuesday the better man lost, and the presbyterate, which keeps its own list, moves your name from one column to another.",
+          "effects": [
+            { "target": "relationship", "key": "@closest_classmate", "delta": 10 },
+            { "target": "relationship", "key": "@vicar_for_clergy", "delta": -6 },
+            { "target": "reputation", "key": "brother_priests", "delta": -4 },
+            { "target": "reputation", "key": "chancery", "delta": -2 },
+            { "target": "flag", "key": "vg_board_picked_a_friend", "value": true }
+          ]
+        },
+        {
+          "id": "recuse",
+          "label": "Tell the board you are too close to one name, and let them vote without you",
+          "outcome": "You say it plainly and leave the room, and stand in the corridor for eleven minutes reading a notice about the diocesan picnic. They choose {@brother_priest}. It was always going to be him. {@closest_classmate} says you could have stayed in the room, and does not say the rest, and the chancellor says, later, that it was the correct thing and the weak thing, and that both were true.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": 2 },
+            { "target": "relationship", "key": "@closest_classmate", "delta": -3 },
+            { "target": "relationship", "key": "@chancellor", "delta": 2 },
+            { "target": "flag", "key": "vg_board_recused", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "vg_closings_own_parish",
+      "phase": "study",
+      "pressure": ["loyalty_vs_honesty", "money"],
+      "severity": "MAJOR",
+      "category": "admin",
+      "baseWeight": 8,
+      "suppressYears": 5,
+      "once": true,
+      "requires": [
+        { "type": "flag", "key": "study:chancery", "value": true }
+      ],
+      "title": "The List",
+      "body": "The closings list is a spreadsheet the chancellor keeps on a drive that three people can open, and every spring it grows a line. The criteria are the ones you helped write: Mass attendance below a floor for three years, a building assessment above a ceiling, a priest within a deanery who could absorb it. They are good criteria. They are fair. And this year, by every one of them, the parish where you said your first Mass as a curate is on the list, in the eleventh row, with a note in the chancellor's hand that says simply, 'no reason to except.' You can see the sacristy from here, and the woman who ran it, and the stairs to the rectory where you learned what a pastor was. {@bishop} will take the list as you give it to him. He has never set foot in the place. Nobody on the finance council has. If it comes off the list, another parish goes on in its place, because the number is the number, and somebody else's first parish is in the twelfth row.",
+      "flavorPrompt": "A spreadsheet three people can open, the eleventh row, and the sacristy he can still see.",
+      "choices": [
+        {
+          "id": "leave_it_on",
+          "label": "Leave it on the list. The criteria are the criteria",
+          "default": true,
+          "outcome": "You carry the list upstairs unchanged, and the bishop signs it, and in the autumn you go down for the last Mass because someone from the chancery has to and it should be you. The woman from the sacristy is there, older, and she shakes your hand and says nothing about it at all. The presbyterate notices that you did not spare your own.",
+          "effects": [
+            { "target": "reputation", "key": "brother_priests", "delta": 3 },
+            { "target": "reputation", "key": "chancery", "delta": 3 },
+            { "target": "stat", "key": "piety", "delta": -1 },
+            { "target": "trait", "key": "closed his own first parish" },
+            { "target": "flag", "key": "vg_closed_own_parish", "value": true }
+          ]
+        },
+        {
+          "id": "take_it_off",
+          "label": "Take it off the list and let the twelfth row move up",
+          "outcome": "You tell the chancellor it can wait a year, and he does not ask why, and writes the twelfth parish into its place. The bishop signs. Nobody says a word to you about it, which is not the same as nobody knowing. The pastor of the twelfth parish, who has never met you, learns in a letter that his church is closing, and asks the vicar for clergy what the criteria were.",
+          "effects": [
+            { "target": "reputation", "key": "brother_priests", "delta": -5 },
+            { "target": "relationship", "key": "@chancellor", "delta": -3 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "flag", "key": "vg_spared_own_parish", "value": true }
+          ]
+        },
+        {
+          "id": "merger_plan",
+          "label": "Go to the bishop with a merger instead of a closing, and the numbers to carry it",
+          "requires": [
+            { "type": "stat", "key": "administration", "op": ">=", "value": 55 }
+          ],
+          "outcome": "You sit up two nights with the deanery map and the assessments and bring him something that is neither a closing nor a rescue: one pastor, two churches, one school, a schedule a man can keep. He reads it twice and asks whether you would have done this for any parish on the list. You say yes. He says he believes you, and signs, and you go and make it true.",
+          "effects": [
+            { "target": "stat", "key": "administration", "delta": 2 },
+            { "target": "relationship", "key": "@bishop", "delta": 5 },
+            { "target": "reputation", "key": "chancery", "delta": 2 },
+            { "target": "reputation", "key": "parishioners", "delta": 3 },
+            { "target": "flag", "key": "vg_merger_plan", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "vg_removing_a_pastor",
+      "phase": "study",
+      "pressure": ["friendship_vs_duty", "competence"],
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 8,
+      "suppressYears": 4,
+      "once": true,
+      "requires": [
+        { "type": "flag", "key": "study:chancery", "value": true }
+      ],
+      "title": "How It Is Done",
+      "body": "The decision is made and it is not yours to unmake. {@brother_priest} has been pastor of his parish for nine years, and for the last two the collections have halved, the parish council has resigned twice, and the letters to the chancery have gone from worried to something else. There is drink in it, and the loneliness that comes before the drink, and a school that closed under him that was going to close under anyone. {@bishop} has said, in the voice he uses when he has finished thinking, that a new pastor will be named by the first of the month. What remains is the manner. {@vicar_for_clergy} has a letter drafted, two paragraphs, which is how it has been done in {diocese} for forty years: a letter, a date, a forwarding address. You have known the man since he was a deacon. The letter is correct. It is also the thing you swore, at some point in your twenties, you would never let happen to a priest without a face in the room.",
+      "flavorPrompt": "The two-paragraph letter, forty years of custom, and the drive he does or does not take.",
+      "choices": [
+        {
+          "id": "go_yourself",
+          "label": "Drive out and tell him yourself, face to face, before any letter goes",
+          "outcome": "He knows before you have sat down. He asks whether it is the drink, and you tell him it is everything, and he nods as though that were fairer. You stay two hours. The letter follows on Monday and reads, now, like a formality. He goes to the treatment place in the next state, and writes to you from it, and the presbyterate hears that the vicar general came in person.",
+          "effects": [
+            { "target": "relationship", "key": "@brother_priest", "delta": 8 },
+            { "target": "reputation", "key": "brother_priests", "delta": 5 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "flag", "key": "vg_removed_in_person", "value": true }
+          ]
+        },
+        {
+          "id": "by_letter",
+          "label": "Let {@vicar_for_clergy} send the letter. It is his office, and the custom",
+          "outcome": "The letter goes, and he does not answer it, and on the first of the month the new pastor finds the rectory clean and the keys on the kitchen table. {@vicar_for_clergy} says it was handled. The chancery agrees. Somewhere in the deanery it is said that the vicar general did not have the stomach to drive forty minutes, and it is said by men who never would have either.",
+          "effects": [
+            { "target": "relationship", "key": "@vicar_for_clergy", "delta": 3 },
+            { "target": "reputation", "key": "chancery", "delta": 2 },
+            { "target": "reputation", "key": "brother_priests", "delta": -4 },
+            { "target": "flag", "key": "vg_removed_by_letter", "value": true }
+          ]
+        },
+        {
+          "id": "give_him_a_door",
+          "label": "Go out and offer him a door: a leave for his health, a resignation in his own hand",
+          "requires": [
+            { "type": "relationship", "npcId": "@brother_priest", "op": ">=", "value": 10 }
+          ],
+          "outcome": "You put it to him as a choice, though it is not one, and he takes it, and the announcement says that the pastor has asked for a leave for reasons of health, which is true in the way the chancery is true. His name is not in the file the way it would have been. The bishop says you were generous. The chancellor says you were slow, and that both can be so.",
+          "effects": [
+            { "target": "relationship", "key": "@brother_priest", "delta": 6 },
+            { "target": "relationship", "key": "@bishop", "delta": 2 },
+            { "target": "reputation", "key": "brother_priests", "delta": 3 },
+            { "target": "stat", "key": "administration", "delta": 1 },
+            { "target": "flag", "key": "vg_removed_with_a_door", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "vg_allegation_file",
+      "phase": "study",
+      "pressure": ["loyalty_vs_honesty", "belief_vs_safety"],
+      "severity": "MAJOR",
+      "category": "scandal",
+      "baseWeight": 7,
+      "suppressYears": 6,
+      "once": true,
+      "requires": [
+        { "type": "flag", "key": "study:chancery", "value": true }
+      ],
+      "title": "The File",
+      "body": "The letter is three handwritten pages from a man in his fifties, living in another state, and it concerns a summer in the nineteen-eighties and a priest who is now retired and living in the priests' residence across the parking lot. It is specific in the way that such letters are specific and vague in the way that memory is vague. The protocol is on the wall of your office, in the frame the last vicar general hung there: the report to the county, the review board, the man withdrawn from public ministry that day, the letter of acknowledgment to the writer within the week. You have it in the envelope by ten. At eleven the chancellor brings the personnel file, because the protocol says to, and in it there is a single sheet dated 1991: a pastor's note that a parent 'had raised a concern,' that the priest 'had been spoken to,' and nothing else. No name. No follow-up. The note is not the allegation. It is the diocese, and it is going to be read by whoever reads the rest.",
+      "choices": [
+        {
+          "id": "report_all",
+          "label": "Report it to the county and the review board today, and the 1991 note with it",
+          "volume": "semi_public",
+          "positionTopic": "abuse_handling",
+          "positionValue": 45,
+          "outcome": "You send everything, and you tell {@bishop} what you sent after you have sent it, which he does not thank you for and does not reverse. The review board asks about 1991 for an hour. The paper has it within the month. Two retired pastors stop speaking to you, and a man in another state receives a letter that says the diocese believes him, and that it should have known.",
+          "effects": [
+            { "target": "reputation", "key": "public", "delta": 5 },
+            { "target": "reputation", "key": "chancery", "delta": -4 },
+            { "target": "reputation", "key": "brother_priests", "delta": -3 },
+            { "target": "relationship", "key": "@bishop", "delta": -2 },
+            { "target": "stat", "key": "piety", "delta": 2 },
+            { "target": "trait", "key": "sent the whole file" },
+            { "target": "flag", "key": "vg_allegation_reported_all", "value": true }
+          ]
+        },
+        {
+          "id": "hold_the_note",
+          "label": "Follow the protocol to the letter, and leave the 1991 note in the file where it sits",
+          "volume": "semi_public",
+          "positionTopic": "abuse_handling",
+          "positionValue": -30,
+          "outcome": "The county is told, the board convenes, the man is withdrawn, the letter goes out on time. Everything the protocol requires is done and nothing it does not. The note stays in the drawer. {@bishop} says the diocese has acted properly, and it has. You know where the sheet is. If anyone ever subpoenas the file, so will they, and the date on it will be older than the date on your signature.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": 4 },
+            { "target": "relationship", "key": "@bishop", "delta": 3 },
+            { "target": "stat", "key": "piety", "delta": -2 },
+            { "target": "flag", "key": "vg_allegation_held_the_note", "value": true }
+          ]
+        },
+        {
+          "id": "call_the_man_first",
+          "label": "Walk across the parking lot and hear him before anyone else does",
+          "outcome": "He denies it for ten minutes and then stops denying it and talks about the summer, and you are a priest in a room with a priest and there is no protocol for that. You send everything the next morning, a day late, and the day is in the file now with your name beside it. He is withdrawn. The board asks why you waited, and you tell them, and they write it down.",
+          "effects": [
+            { "target": "reputation", "key": "brother_priests", "delta": 3 },
+            { "target": "reputation", "key": "public", "delta": -3 },
+            { "target": "reputation", "key": "chancery", "delta": -2 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "flag", "key": "vg_allegation_called_the_man", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "vg_budget_schools",
+      "phase": "study",
+      "pressure": ["money", "competence"],
+      "severity": "MAJOR",
+      "category": "finance",
+      "baseWeight": 8,
+      "suppressYears": 4,
+      "once": true,
+      "requires": [
+        { "type": "flag", "key": "study:chancery", "value": true }
+      ],
+      "title": "The Deficit",
+      "body": "The finance council meets in the room with the good chairs, and the chief financial officer has put one number on the screen and left it there. {diocese} is short by a sum that cannot be found under a cushion. The first line on the sheet is the school subsidy: four parish schools that would have closed years ago without the diocese paying their gap, in neighborhoods where the school is the last thing with the Church's name on it. The second line is the chancery itself: the offices on the second floor, the people who run the tribunal and the safe-environment training and the archives, some of whom have worked here since you were in high school. The third line is not on the sheet, because it is a tax: the assessment every parish pays, which could be raised by a point and a half, and which every pastor in the diocese would call, to your face and behind your back, the chancery balancing its books on their collections. {@bishop} has asked you to bring him a recommendation. He will take it.",
+      "flavorPrompt": "One number on a screen, three ways to make it smaller, and the pastors who will name the third.",
+      "choices": [
+        {
+          "id": "cut_the_schools",
+          "label": "End the subsidy and close two of the four schools",
+          "volume": "semi_public",
+          "positionTopic": "money",
+          "positionValue": -35,
+          "outcome": "The number goes away. The two schools close in June, with a Mass and a photograph. The pastors of the other two write to thank you and mean it. In the neighborhoods where the schools were, the parishes lose the families that came for the school and stayed for the parish, and in three years those two parishes are on the chancellor's spreadsheet.",
+          "effects": [
+            { "target": "stat", "key": "administration", "delta": 2 },
+            { "target": "reputation", "key": "chancery", "delta": 4 },
+            { "target": "reputation", "key": "parishioners", "delta": -5 },
+            { "target": "reputation", "key": "public", "delta": -3 },
+            { "target": "flag", "key": "vg_budget_cut_schools", "value": true }
+          ]
+        },
+        {
+          "id": "cut_the_chancery",
+          "label": "Cut the second floor: fewer offices, fewer people, starting with the ones you sit beside",
+          "requires": [
+            { "type": "stat", "key": "administration", "op": ">=", "value": 50 }
+          ],
+          "volume": "semi_public",
+          "positionTopic": "money",
+          "positionValue": 20,
+          "outcome": "You do it in a month, with a list and a severance the finance council calls generous and the people on the list do not. The archivist retires. The tribunal runs on one canonist and a volunteer. The pastors, who have never seen the chancery cut itself, are quiet for a season. The bishop signs. The offices are emptier, and you are the man who emptied them, and you pass their doors every morning.",
+          "effects": [
+            { "target": "stat", "key": "administration", "delta": 2 },
+            { "target": "reputation", "key": "brother_priests", "delta": 5 },
+            { "target": "reputation", "key": "chancery", "delta": -5 },
+            { "target": "relationship", "key": "@chancellor", "delta": -4 },
+            { "target": "flag", "key": "vg_budget_cut_chancery", "value": true }
+          ]
+        },
+        {
+          "id": "raise_the_assessment",
+          "label": "Raise the parish assessment and keep the schools and the offices both",
+          "default": true,
+          "outcome": "The number goes away and the schools stay open and nobody on the second floor loses a job. At the next presbyteral council a pastor you have known twenty years asks, for the record, whether the chancery intends to close its own parishes with their own money. You give him the honest answer, which is that it intends to keep the schools. He says that is not what he asked.",
+          "effects": [
+            { "target": "reputation", "key": "brother_priests", "delta": -6 },
+            { "target": "reputation", "key": "chancery", "delta": 2 },
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "stat", "key": "administration", "delta": 1 },
+            { "target": "flag", "key": "vg_budget_raised_assessment", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "vg_announce_decision",
+      "phase": "study",
+      "pressure": ["loyalty_vs_honesty", "belief_vs_safety"],
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 8,
+      "suppressYears": 4,
+      "once": true,
+      "requires": [
+        { "type": "flag", "key": "study:chancery", "value": true }
+      ],
+      "title": "His Decision, Your Voice",
+      "body": "{@bishop} has decided to fold the Office for Hispanic Ministry into the general pastoral office and to let its director go. He has reasons: the money, a director who has fought him twice in public, a belief that a separate office keeps a people separate. You have argued against it in his study three times, once with the numbers of the Spanish Masses in the diocese on a single sheet of paper, and lost three times, and he has closed the matter in the way he closes things, with a hand on the desk. Now it is Thursday and the presbyteral council meets at four, and he will not be there, because he is at the confirmation he scheduled a year ago, and it falls to the vicar general to announce it. The room will hold every Spanish-speaking pastor in {diocese} and the priests who have wanted this for years, and both will watch your face while you read. Whatever you say will be his. Whatever you do not say will be yours.",
+      "flavorPrompt": "The hand on the desk, the four o'clock council, and the sheet of paper with the Spanish Masses on it.",
+      "choices": [
+        {
+          "id": "announce_cleanly",
+          "label": "Announce it as his decision, in his words, and take the questions as his",
+          "default": true,
+          "outcome": "You read it as it was given to you and you take forty minutes of questions without once saying what you think, which the Spanish-speaking pastors note, and the others note, and everyone draws the same conclusion in two languages. The bishop hears you were loyal. The director of the office, on her last day, does not come to say goodbye to you, and you understand why.",
+          "effects": [
+            { "target": "relationship", "key": "@bishop", "delta": 5 },
+            { "target": "reputation", "key": "chancery", "delta": 4 },
+            { "target": "reputation", "key": "progressive_bloc", "delta": -5 },
+            { "target": "stat", "key": "administration", "delta": 1 },
+            { "target": "flag", "key": "vg_announced_cleanly", "value": true }
+          ]
+        },
+        {
+          "id": "announce_and_dissent",
+          "label": "Announce it, and say plainly that you argued against it and lost",
+          "requires": [
+            { "type": "outspokenness", "op": ">=", "value": 35 }
+          ],
+          "volume": "semi_public",
+          "positionTopic": "immigration",
+          "positionValue": 35,
+          "outcome": "You read the decision and then you say, in one sentence, that the vicar general advised otherwise and the bishop decided, as is his office. The room is very quiet. Some of it is respect and some of it is arithmetic. The bishop learns of the sentence before you are back at the residence, and says nothing for a week, and then says that he would rather have known you would say it.",
+          "effects": [
+            { "target": "relationship", "key": "@bishop", "delta": -6 },
+            { "target": "reputation", "key": "brother_priests", "delta": 4 },
+            { "target": "reputation", "key": "progressive_bloc", "delta": 5 },
+            { "target": "reputation", "key": "chancery", "delta": -3 },
+            { "target": "outspokenness", "key": "", "delta": 2 },
+            { "target": "flag", "key": "vg_announced_and_dissented", "value": true }
+          ]
+        },
+        {
+          "id": "make_him_announce",
+          "label": "Tell him before Thursday that you cannot be the voice for this one, and ask him to announce it himself",
+          "outcome": "He looks at you for a long moment and says that this is what a vicar general is for. You say you know. He moves the council to the following week and announces it himself, in eight minutes, and takes no questions. The pastors understand exactly what happened. He does not mention it again, and he does not ask you to announce anything for a month, and then he does.",
+          "effects": [
+            { "target": "relationship", "key": "@bishop", "delta": -3 },
+            { "target": "reputation", "key": "brother_priests", "delta": 3 },
+            { "target": "reputation", "key": "chancery", "delta": -2 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "flag", "key": "vg_made_bishop_announce", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "vg_nuncio_questionnaire",
+      "phase": "study",
+      "pressure": ["ambition_vs_integrity", "loyalty_vs_honesty"],
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 7,
+      "suppressYears": 5,
+      "once": true,
+      "requires": [
+        { "type": "flag", "key": "study:chancery", "value": true },
+        { "type": "years_ordained", "op": ">=", "value": 12 }
+      ],
+      "title": "The Questionnaire",
+      "body": "It comes from the nunciature in a plain envelope marked for your eyes, with the pontifical secret invoked on the first page and a candidate's name on the second. The questions are the ones the Church has asked for a century: his orthodoxy, his prudence, his health, his friends, his money, whether he has ever given scandal, whether he would make a bishop. The name is {@brother_priest}. You have sat on boards with him and watched him work a room and watched him fail to, and you know one true thing about him that is not in any file and that would decide the matter either way. You also know, because the chancellor told you on the stairs in the voice he uses for things he should not know, that the terna for this see has three names on it and that one of them is yours. The questionnaire does not say that. It asks about him. It asks you to answer under oath, by hand, within twenty days, and it will be read in Washington by a man who has a questionnaire about you on the same desk.",
+      "flavorPrompt": "The plain envelope, the century-old questions, and the chancellor's voice on the stairs.",
+      "choices": [
+        {
+          "id": "answer_plainly",
+          "label": "Answer every question exactly, the merits and the one true thing both",
+          "outcome": "You write four pages in your own hand and it is the most careful thing you have written since the seminary. The true thing goes in, with its date and its context and your own judgment of its weight. Whether it cost him the see you will never be told. You put the envelope in the post yourself and go and say the noon Mass, and for some weeks you notice that you are watching your own name.",
+          "effects": [
+            { "target": "reputation", "key": "rome", "delta": 4 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "stat", "key": "knowledge", "delta": 1 },
+            { "target": "trait", "key": "answered the nuncio under oath and in full" },
+            { "target": "flag", "key": "vg_terna_answered_plainly", "value": true }
+          ]
+        },
+        {
+          "id": "answer_generously",
+          "label": "Write him up well, leave the one thing out, and let Rome find its own faults",
+          "default": true,
+          "outcome": "Four pages, all true and none of them the whole truth. It reads as the letter of a man who wants a brother priest to succeed, and the nuncio, who has read ten thousand of these, files it where such letters go. If he is named, he will owe you something he does not know about. If you are named instead, you will know what you left out of the other man's file.",
+          "effects": [
+            { "target": "relationship", "key": "@brother_priest", "delta": 4 },
+            { "target": "reputation", "key": "brother_priests", "delta": 2 },
+            { "target": "reputation", "key": "rome", "delta": -2 },
+            { "target": "stat", "key": "piety", "delta": -1 },
+            { "target": "flag", "key": "vg_terna_generous", "value": true }
+          ]
+        },
+        {
+          "id": "recuse",
+          "label": "Return it unanswered with a note that you may be a candidate for the same see",
+          "requires": [
+            { "type": "reputation", "key": "rome", "op": ">=", "value": 10 }
+          ],
+          "outcome": "The note is two sentences and it goes back in the same plain envelope. A monsignor at the nunciature telephones, once, to say that it was noted and that it was the right thing, in a voice that suggests it was also unusual. The chancellor asks, later, how you knew, and you do not tell him it was from him. The questionnaire goes to someone else. So, in the end, does the see.",
+          "effects": [
+            { "target": "reputation", "key": "rome", "delta": 3 },
+            { "target": "reputation", "key": "chancery", "delta": 2 },
+            { "target": "relationship", "key": "@chancellor", "delta": 2 },
+            { "target": "flag", "key": "vg_terna_recused", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "vg_fix_my_assignment",
+      "phase": "study",
+      "pressure": ["friendship_vs_duty"],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 9,
+      "suppressYears": 3,
+      "requires": [
+        { "type": "flag", "key": "study:chancery", "value": true }
+      ],
+      "title": "A Brother Asks",
+      "body": "{@brother_priest} comes to the residence on a Tuesday night with a bottle he does not open, and sits in the chair by the window, and talks for a while about nothing. Then he says it. He has been eleven years in the parish at the far end of the county, the one with the three mission churches and the road that closes in February, and his mother is in the city now, in a home, and failing, and he is ninety minutes from her on a good day. There is a parish opening in the city in June. He does not want to write to {@vicar_for_clergy}, because {@vicar_for_clergy} keeps a ledger, and a man who asks for the city goes into it. He wants you, who sit on the board and carry the list upstairs, to see that his name is at the top of it. He says it as a brother. He says it as a man who has done eleven years in the place nobody wanted. He is not wrong about any of it, and you can do it with a pencil.",
+      "flavorPrompt": "The unopened bottle, the chair by the window, and the road that closes in February.",
+      "choices": [
+        {
+          "id": "fix_it",
+          "label": "Put his name at the top of the list yourself, and say nothing about how it got there",
+          "outcome": "The pencil does its work and the board sees his name first and nobody asks why. He gets the city in June and buries his mother in September from his own church. He never mentions it again, which is his thanks. {@vicar_for_clergy}, who keeps a ledger, opens a page for you, and the next pastor who comes to the residence on a Tuesday night has heard how it is done.",
+          "effects": [
+            { "target": "relationship", "key": "@brother_priest", "delta": 10 },
+            { "target": "relationship", "key": "@vicar_for_clergy", "delta": -5 },
+            { "target": "reputation", "key": "brother_priests", "delta": 3 },
+            { "target": "reputation", "key": "chancery", "delta": -3 },
+            { "target": "flag", "key": "vg_fixed_an_assignment", "value": true }
+          ]
+        },
+        {
+          "id": "refuse",
+          "label": "Tell him no. The board is the board, and the vicar for clergy is the door",
+          "default": true,
+          "outcome": "He takes it well, or takes it the way a man takes a thing he expected. He writes to {@vicar_for_clergy}, who puts him in the ledger and in the fourth row, and he does not get the city in June. His mother dies in the spring, and he drives the ninety minutes for the funeral, and when you see him at the Chrism Mass he is courteous and says nothing that you could take hold of.",
+          "effects": [
+            { "target": "relationship", "key": "@brother_priest", "delta": -8 },
+            { "target": "relationship", "key": "@vicar_for_clergy", "delta": 3 },
+            { "target": "reputation", "key": "chancery", "delta": 3 },
+            { "target": "flag", "key": "vg_refused_a_fix", "value": true }
+          ]
+        },
+        {
+          "id": "show_him_the_door",
+          "label": "Tell him exactly what to write and to whom, and promise it will be read",
+          "outcome": "You tell him the letter to write: the eleven years, the missions, the mother, the ninety minutes, and no request in it, only the facts. He writes it. You see that {@vicar_for_clergy} reads it aloud at the board, and it is enough. He gets the city. The ledger has his name in it, but the page says what he said. The presbyterate learns that you show a man the door and do not carry him through it.",
+          "effects": [
+            { "target": "relationship", "key": "@brother_priest", "delta": 6 },
+            { "target": "reputation", "key": "brother_priests", "delta": 4 },
+            { "target": "reputation", "key": "chancery", "delta": 1 },
+            { "target": "stat", "key": "administration", "delta": 1 },
+            { "target": "flag", "key": "vg_showed_him_the_door", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "vg_press_statement",
+      "phase": "study",
+      "pressure": ["loyalty_vs_honesty", "competence"],
+      "severity": "NOTABLE",
+      "category": "admin",
+      "baseWeight": 8,
+      "suppressYears": 3,
+      "once": true,
+      "requires": [
+        { "type": "flag", "key": "study:chancery", "value": true }
+      ],
+      "title": "The Paper Has the List",
+      "body": "The reporter from the city paper has the closings list. Not a rumor of it: the list, with the eleven parishes on it and the chancellor's notes in the margin, which means someone on the second floor or the finance council photographed a page. She is polite and has a deadline of six o'clock and would like the diocese to confirm or deny, and to say why. {@bishop} is in Rome for the week and unreachable in the way bishops in Rome are unreachable. The communications director has drafted a statement of ninety words that says the diocese is engaged in an ongoing process of pastoral planning and will communicate with the affected communities in due course, which is true and says nothing and will run beside the list in tomorrow's paper as the sound of a door closing. Eleven pastors do not know they are on it. Some of them will read it at breakfast. It is four o'clock. The chancellor is standing in your door with the ninety words and a pen.",
+      "flavorPrompt": "The photographed page, the six o'clock deadline, and eleven men who will read it at breakfast.",
+      "choices": [
+        {
+          "id": "confirm_and_explain",
+          "label": "Confirm it, give her the criteria and the numbers, and put your own name on the quote",
+          "volume": "public",
+          "positionTopic": "money",
+          "positionValue": -20,
+          "outcome": "The story runs with the list and with a vicar general who says, plainly, that the diocese cannot keep eleven churches open for four hundred people and that it would rather say so than pretend. The paper calls it candid. The bishop, reached in Rome, is not sure that is the word he would use, and says so on his return. The pastors are angry at the list and not at you.",
+          "effects": [
+            { "target": "reputation", "key": "public", "delta": 5 },
+            { "target": "reputation", "key": "brother_priests", "delta": 2 },
+            { "target": "relationship", "key": "@bishop", "delta": -4 },
+            { "target": "reputation", "key": "chancery", "delta": -2 },
+            { "target": "outspokenness", "key": "", "delta": 2 },
+            { "target": "flag", "key": "vg_press_confirmed", "value": true }
+          ]
+        },
+        {
+          "id": "send_the_ninety_words",
+          "label": "Send the ninety words as drafted, and let the bishop speak when he is home",
+          "default": true,
+          "outcome": "The statement runs beside the list and reads exactly as the chancellor said it would. Eleven pastors read it at breakfast, and four of them telephone the residence before nine, and you have nothing to tell them that the paper has not. The bishop, home on Friday, says the statement was correct. The presbyterate says the chancery hid behind a process, and it is not wrong.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": 3 },
+            { "target": "relationship", "key": "@chancellor", "delta": 2 },
+            { "target": "reputation", "key": "brother_priests", "delta": -5 },
+            { "target": "reputation", "key": "public", "delta": -3 },
+            { "target": "flag", "key": "vg_press_no_comment", "value": true }
+          ]
+        },
+        {
+          "id": "call_the_pastors",
+          "label": "Send the ninety words, and spend the next two hours calling all eleven pastors yourself",
+          "requires": [
+            { "type": "stat", "key": "charisma", "op": ">=", "value": 45 }
+          ],
+          "outcome": "The statement goes at five and you begin dialing at five past. You reach nine of the eleven before the paper is on the porches, and each call is the same call and a different one, and two are the hardest conversations of your year. The story runs. No pastor reads it cold. The bishop, home on Friday, hears from three of them before he hears from you, and all three say the same thing about you.",
+          "effects": [
+            { "target": "reputation", "key": "brother_priests", "delta": 6 },
+            { "target": "reputation", "key": "chancery", "delta": 2 },
+            { "target": "relationship", "key": "@bishop", "delta": 3 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "flag", "key": "vg_press_called_pastors_first", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "vg_rector_dismissal",
+      "phase": "study",
+      "pressure": ["competence", "belief_vs_safety"],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 7,
+      "suppressYears": 4,
+      "once": true,
+      "requires": [
+        { "type": "flag", "key": "study:chancery", "value": true }
+      ],
+      "title": "The Rector's Letter",
+      "body": "The rector of the seminary writes to the bishop, and the bishop's mail crosses your desk. He asks that a third-year man of {diocese} be dismissed at the end of the semester, citing formation concerns and a lack of the docility the program requires, and enclosing the annual evaluations, which are two pages each and say less than that. You have met the man twice. He is bright and stiff and asked you a question about the diocesan budget at a dinner that no seminarian should have known enough to ask. His pastor, who sent him, thinks the world of him. The vocation director, whose numbers are the numbers, thinks the rector is thinning the class of men who argue. The rector, who has run the place for nine years and sent {diocese} its best priests and its worst, thinks he knows a problem when he sees one and has never once been asked to prove it. The dismissal needs {@bishop}'s signature. What goes up to him goes up with your note on it, and your note is what he will read.",
+      "flavorPrompt": "Two-page evaluations, a question at dinner, and the note that goes up with the letter.",
+      "choices": [
+        {
+          "id": "back_the_rector",
+          "label": "Recommend the bishop sign. The rector's judgment is what a rector is for",
+          "default": true,
+          "outcome": "He signs, and the man is gone by June, and goes to another diocese's seminary within the year, where he is ordained in time and does well or does not, and you never hear which. The rector sends a note of thanks that says the diocese has been well served. The vocation director sends nothing, and his pastor, at the next deanery meeting, does not sit at your table.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": 3 },
+            { "target": "reputation", "key": "brother_priests", "delta": -3 },
+            { "target": "stat", "key": "administration", "delta": 1 },
+            { "target": "flag", "key": "vg_rector_backed", "value": true }
+          ]
+        },
+        {
+          "id": "ask_for_reasons",
+          "label": "Send it back, and ask the rector for the reasons in writing and a year to watch",
+          "outcome": "The rector writes four pages, cold and correct, and they make a case, though not the case the first letter implied. The bishop grants the year. The man finishes it under a rector who has been asked to prove something, which is its own formation. In June the rector recommends him again, differently, or does not, and either way the file is honest now and the diocese knows what it is deciding.",
+          "effects": [
+            { "target": "stat", "key": "administration", "delta": 2 },
+            { "target": "stat", "key": "knowledge", "delta": 1 },
+            { "target": "reputation", "key": "brother_priests", "delta": 3 },
+            { "target": "reputation", "key": "chancery", "delta": -1 },
+            { "target": "flag", "key": "vg_rector_asked_for_reasons", "value": true }
+          ]
+        },
+        {
+          "id": "overrule",
+          "label": "Go to the bishop and ask him to keep the man, on your own judgment of him",
+          "requires": [
+            { "type": "relationship", "npcId": "@bishop", "op": ">=", "value": 25 }
+          ],
+          "outcome": "He listens and asks whether you would ordain him, and you say you would, and he says that is the only question. He does not sign. The rector, who has never been overruled from the chancery, receives a courteous letter and understands who wrote it, and the next nine years of evaluations from the seminary are longer and colder and more careful, which is not what you intended and is not entirely bad.",
+          "effects": [
+            { "target": "relationship", "key": "@bishop", "delta": 3 },
+            { "target": "reputation", "key": "chancery", "delta": -3 },
+            { "target": "reputation", "key": "brother_priests", "delta": 4 },
+            { "target": "outspokenness", "key": "", "delta": 1 },
+            { "target": "flag", "key": "vg_rector_overruled", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "vg_auditor",
+      "phase": "study",
+      "pressure": ["money", "loyalty_vs_honesty"],
+      "severity": "MAJOR",
+      "category": "finance",
+      "baseWeight": 7,
+      "suppressYears": 5,
+      "once": true,
+      "requires": [
+        { "type": "flag", "key": "study:chancery", "value": true }
+      ],
+      "title": "The Management Letter",
+      "body": "The auditor is a woman from the firm the diocese has used for twenty years, and she asks for you and not the chief financial officer, which tells you what kind of meeting it is before she sits down. The priests' retirement fund has been borrowed from for operating cash three years running. It has been paid back each time, in the last week of the fiscal year, from the assessment receipts, and the finance council knew, or some of it did, and nothing about it was written anywhere that a finance council would have to sign. It is not theft. It is the diocese using old men's money as a line of credit and calling it cash management. She intends to put it in the management letter, in a paragraph, and the management letter goes to the finance council and then, by a policy {@bishop} adopted in his first year to great applause, to every parish in the diocese. She is not asking permission. She is telling you, as a courtesy, what the paragraph will say, and she would like you to read it before she leaves.",
+      "flavorPrompt": "The auditor who asks for the vicar general, the old men's money, and a policy adopted to applause.",
+      "choices": [
+        {
+          "id": "let_it_stand",
+          "label": "Let the paragraph stand as written and send it to the parishes as the policy says",
+          "volume": "semi_public",
+          "positionTopic": "money",
+          "positionValue": 25,
+          "outcome": "It goes out, and it is read, and for a season every pastor's newsletter has a sentence about it. The retired priests write a letter to the bishop that is very short. The finance council adds two members who ask questions. The chief financial officer is gone by spring. The bishop says, once, that the policy was his and he stands by it, and looks at you when he says it.",
+          "effects": [
+            { "target": "reputation", "key": "brother_priests", "delta": 5 },
+            { "target": "reputation", "key": "public", "delta": 3 },
+            { "target": "reputation", "key": "chancery", "delta": -5 },
+            { "target": "relationship", "key": "@bishop", "delta": -3 },
+            { "target": "trait", "key": "let the audit say what it said" },
+            { "target": "flag", "key": "vg_audit_let_it_stand", "value": true }
+          ]
+        },
+        {
+          "id": "soften_it",
+          "label": "Ask her to move it to a footnote on internal controls, and to say nothing about which fund",
+          "volume": "semi_public",
+          "positionTopic": "money",
+          "positionValue": -25,
+          "outcome": "She thinks about it for longer than is comfortable and then agrees, because the firm has had the diocese for twenty years and would like twenty more. The footnote goes to the parishes and no one reads it. The borrowing stops, quietly, because you make it stop. The retired priests never know. The auditor does not ask for you next year; she asks for the chief financial officer, and you understand that you have been reclassified.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": 4 },
+            { "target": "relationship", "key": "@bishop", "delta": 3 },
+            { "target": "stat", "key": "piety", "delta": -2 },
+            { "target": "reputation", "key": "rome", "delta": -1 },
+            { "target": "flag", "key": "vg_audit_softened", "value": true }
+          ]
+        },
+        {
+          "id": "repayment_plan",
+          "label": "Let it stand, and send it out with a signed plan to end the practice and fund the shortfall",
+          "requires": [
+            { "type": "stat", "key": "administration", "op": ">=", "value": 55 }
+          ],
+          "outcome": "You spend the weekend with the fund's actuary and Monday with the bishop, and the paragraph goes to the parishes beside a page in your name that says what will happen and when. It is read as what it is: a chancery that was caught and answered. The retired priests write a letter that is longer and kinder. The finance council adopts the plan. The bishop signs it, and says the page was well done, and means both halves.",
+          "effects": [
+            { "target": "stat", "key": "administration", "delta": 2 },
+            { "target": "reputation", "key": "brother_priests", "delta": 4 },
+            { "target": "reputation", "key": "chancery", "delta": 1 },
+            { "target": "reputation", "key": "public", "delta": 2 },
+            { "target": "relationship", "key": "@bishop", "delta": 2 },
+            { "target": "flag", "key": "vg_audit_repayment_plan", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "vg_bishops_health",
+      "phase": "study",
+      "pressure": ["loyalty_vs_honesty", "friendship_vs_duty"],
+      "severity": "MAJOR",
+      "category": "personal",
+      "baseWeight": 6,
+      "suppressYears": 6,
+      "once": true,
+      "requires": [
+        { "type": "flag", "key": "study:chancery", "value": true },
+        { "type": "relationship", "npcId": "@bishop", "op": ">=", "value": 5 }
+      ],
+      "title": "The Bishop's Hand",
+      "body": "You noticed the hand first, the tremor in it when he signed, and then the second confirmation cancelled in a month for what his secretary called a scheduling conflict in a voice that asked you not to ask. Then the finance council, where {@bishop} closed his eyes for a full minute during the report on insurance, and opened them, and asked a question that had been answered ten minutes before. The chancellor has seen it. {@vicar_for_clergy} has seen it and says nothing, because he has survived three bishops by seeing nothing. The bishop has not seen a doctor that anyone knows of, and has not written to the nuncio, and is, you think, afraid, in the ordinary way a man is afraid who has been the one that everyone else brings their fear to. The law is clear enough that a bishop who can no longer carry the office is earnestly asked to lay it down. The law does not say who tells him. You have his door, and his trust, and the second floor is beginning to run on a rumor.",
+      "flavorPrompt": "The tremor at the signature, the minute with his eyes closed, and the second floor running on a rumor.",
+      "choices": [
+        {
+          "id": "cover_for_him",
+          "label": "Cover for him: take what you can off his calendar, and let no one see what you have seen",
+          "default": true,
+          "volume": "semi_public",
+          "positionTopic": "bishop_conduct",
+          "positionValue": -30,
+          "outcome": "You arrange for a retired bishop to take the confirmations and you take the councils and the deaneries and the dinners, and for a year the diocese is run by a vicar general and a rumor, and runs well enough. He knows what you are doing and does not say so, and holds your hand once, at the door, longer than a handshake. When it ends, it ends suddenly, and the nuncio's office asks how long this went on.",
+          "effects": [
+            { "target": "relationship", "key": "@bishop", "delta": 8 },
+            { "target": "reputation", "key": "chancery", "delta": 3 },
+            { "target": "reputation", "key": "rome", "delta": -3 },
+            { "target": "stat", "key": "administration", "delta": 2 },
+            { "target": "flag", "key": "vg_covered_for_bishop", "value": true }
+          ]
+        },
+        {
+          "id": "tell_him_plainly",
+          "label": "Sit with him in his study and tell him what you have seen, and that he must see a doctor and write to Washington",
+          "requires": [
+            { "type": "relationship", "npcId": "@bishop", "op": ">=", "value": 25 }
+          ],
+          "volume": "private",
+          "positionTopic": "bishop_conduct",
+          "positionValue": 20,
+          "outcome": "He is angry for the length of one sentence and then he is not, and he asks whether it is that obvious, and you say only to the people who love him. He sees the doctor. He writes to the nuncio in the spring, and the letter is accepted in the autumn, and the last thing he does as bishop is tell the presbyterate, without naming you, that a man had the courage to say it to his face.",
+          "effects": [
+            { "target": "relationship", "key": "@bishop", "delta": 6 },
+            { "target": "reputation", "key": "brother_priests", "delta": 4 },
+            { "target": "reputation", "key": "rome", "delta": 2 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "trait", "key": "told his bishop the truth about his health" },
+            { "target": "flag", "key": "vg_told_bishop_plainly", "value": true }
+          ]
+        },
+        {
+          "id": "call_the_metropolitan",
+          "label": "Telephone the archbishop of the province quietly, and let the Church do what the Church does",
+          "volume": "semi_public",
+          "positionTopic": "bishop_conduct",
+          "positionValue": 35,
+          "outcome": "The metropolitan listens, thanks you, and does what metropolitans do, which is to visit for a weekend and see for himself and write to Washington on his own paper. Things move. The bishop learns within a month whose call it was; someone always tells. He does not confront you. He simply stops asking your opinion, and the second floor, which knows everything, adjusts its seating. The diocese is better governed and you are alone in it.",
+          "effects": [
+            { "target": "relationship", "key": "@bishop", "delta": -12 },
+            { "target": "reputation", "key": "rome", "delta": 4 },
+            { "target": "reputation", "key": "chancery", "delta": -4 },
+            { "target": "reputation", "key": "brother_priests", "delta": -2 },
+            { "target": "flag", "key": "vg_called_the_metropolitan", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "vg_deanery_defiance",
+      "phase": "study",
+      "pressure": ["competence", "loyalty_vs_honesty"],
+      "severity": "NOTABLE",
+      "category": "admin",
+      "baseWeight": 8,
+      "suppressYears": 3,
+      "once": true,
+      "requires": [
+        { "type": "flag", "key": "study:chancery", "value": true }
+      ],
+      "title": "The Northern Deanery",
+      "body": "The bishop's decree on the Sunday schedule was reasonable and signed and sent to every parish: no priest to celebrate more Masses on a Sunday than the law allows without the bishop's own leave, and every deanery to submit a common schedule by Lent so that a man with three churches is not saying four Masses and driving between them. Six deaneries submitted. The northern one, five pastors and eleven churches and a dean who was ordained before you were born, sent a letter instead, two paragraphs, saying that the people of the north had been promised their Masses by three bishops and would keep them, and that the dean would be glad to discuss the matter with {@bishop} personally, at his convenience. The bishop handed you the letter without a word. It has been six weeks. {@vicar_for_clergy} says the dean is testing the new vicar general the way he tested the last two, and that both of them lost. The chancellor has a draft decree with a date on it. The dean has a telephone, and has not used it.",
+      "flavorPrompt": "Eleven churches, a dean older than the vicar general, and a draft decree with a date on it.",
+      "choices": [
+        {
+          "id": "sit_with_them",
+          "label": "Drive north and sit with the five of them until there is a schedule",
+          "outcome": "It takes a day and a half and a dinner. The dean is courteous and immovable for four hours and then, once he is sure you have actually read the Mass counts, becomes a man with a problem instead of a position. The schedule they send is not the one the chancellor would have written, and it is theirs, and it holds. The dean tells the presbyterate the new vicar general can be talked to, his highest praise.",
+          "effects": [
+            { "target": "reputation", "key": "brother_priests", "delta": 5 },
+            { "target": "reputation", "key": "chancery", "delta": 2 },
+            { "target": "stat", "key": "charisma", "delta": 2 },
+            { "target": "stat", "key": "administration", "delta": 1 },
+            { "target": "flag", "key": "vg_deanery_sat_with_them", "value": true }
+          ]
+        },
+        {
+          "id": "decree",
+          "label": "Sign the chancellor's decree with its date, and let the north learn who signs things now",
+          "default": true,
+          "volume": "semi_public",
+          "positionTopic": "authority",
+          "positionValue": -35,
+          "outcome": "The decree goes north by courier and the schedule comes back by return, exactly as the chancellor drafted it, and the dean's covering letter is one sentence and perfectly correct. The north keeps the schedule. It also keeps the letter. The other deaneries take note that the new man signs things, and the pastors who wanted to see a test decided have seen one, and have opinions about the winner.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": 5 },
+            { "target": "relationship", "key": "@chancellor", "delta": 3 },
+            { "target": "reputation", "key": "brother_priests", "delta": -5 },
+            { "target": "reputation", "key": "traditional_bloc", "delta": 2 },
+            { "target": "flag", "key": "vg_deanery_decreed", "value": true }
+          ]
+        },
+        {
+          "id": "carry_their_case",
+          "label": "Take the dean's case to the bishop yourself, and ask him to give the north its exception",
+          "requires": [
+            { "type": "relationship", "npcId": "@bishop", "op": ">=", "value": 20 }
+          ],
+          "volume": "semi_public",
+          "positionTopic": "authority",
+          "positionValue": 25,
+          "outcome": "You put the north's numbers on his desk and say that the decree was right and the north is also right and that a bishop's leave exists for exactly this. He grants two of the eleven churches their extra Mass and not the rest, a ruling and not a surrender, and the dean accepts it in a letter three paragraphs long, which for him is effusion. The chancellor puts his draft in a drawer and says nothing.",
+          "effects": [
+            { "target": "reputation", "key": "brother_priests", "delta": 4 },
+            { "target": "relationship", "key": "@bishop", "delta": 2 },
+            { "target": "relationship", "key": "@chancellor", "delta": -2 },
+            { "target": "reputation", "key": "chancery", "delta": -2 },
+            { "target": "flag", "key": "vg_deanery_carried_their_case", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "vg_letter_from_rome",
+      "phase": "study",
+      "pressure": ["loyalty_vs_honesty", "belief_vs_safety"],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 7,
+      "suppressYears": 4,
+      "once": true,
+      "requires": [
+        { "type": "flag", "key": "study:chancery", "value": true }
+      ],
+      "title": "The Letter From Rome",
+      "body": "It arrives addressed to the bishop from the Dicastery for Divine Worship and the Discipline of the Sacraments, in Italian, with an English courtesy copy, and {@bishop} reads it and hands it across the desk and says, 'Yours.' A group of the faithful of a parish in {diocese} has written to Rome. They enclose photographs and a recording. Their pastor, they say, has not celebrated the Mass as the books have it in some years: prayers of his own composition, a Eucharistic Prayer no one can find in the Missal, a general absolution given on a Saturday afternoon to whoever was in the church. The dicastery would be grateful for the bishop's report on the facts and the remedies within thirty days. You know the pastor. He is {@brother_priest}, and his parish is full on a Sunday, and the people who wrote to Rome are eleven of the four hundred, and everything they say is true. The bishop wants a draft by Friday. He has not said what he wants it to say, which is his way of telling you that he wants it to be yours.",
+      "flavorPrompt": "The Italian original and the courtesy copy, the photographs and the recording, and a draft by Friday that will be his.",
+      "choices": [
+        {
+          "id": "report_plainly",
+          "label": "Report the facts as they are, name the remedies, and let Rome have the whole of it",
+          "volume": "semi_public",
+          "positionTopic": "liturgy",
+          "positionValue": -30,
+          "outcome": "Three pages, no adjectives, with the photographs described and the remedies listed: a visitation, a written admonition, the Missal on the altar and a deacon at the door. The dicastery thanks the bishop for his thoroughness. {@brother_priest} is told what was sent and by whom, and celebrates by the book from the following Sunday, and the eleven are satisfied, and the four hundred wonder what happened to their pastor.",
+          "effects": [
+            { "target": "reputation", "key": "rome", "delta": 5 },
+            { "target": "reputation", "key": "traditional_bloc", "delta": 4 },
+            { "target": "relationship", "key": "@brother_priest", "delta": -8 },
+            { "target": "reputation", "key": "progressive_bloc", "delta": -4 },
+            { "target": "flag", "key": "vg_rome_reported_plainly", "value": true }
+          ]
+        },
+        {
+          "id": "keep_it_local",
+          "label": "Report that the bishop is aware and is addressing the matter pastorally, and say no more",
+          "default": true,
+          "volume": "semi_public",
+          "positionTopic": "liturgy",
+          "positionValue": 25,
+          "outcome": "One page, courteous, which says that the ordinary has the matter in hand and will keep the dicastery informed, and which is the letter Rome receives from bishops forty times a week. It is filed. The eleven write again in six months, and the answer is the same, and they stop writing to Rome and start writing to the paper. {@brother_priest} never knows how close it came. The bishop signs without comment.",
+          "effects": [
+            { "target": "reputation", "key": "rome", "delta": -3 },
+            { "target": "reputation", "key": "progressive_bloc", "delta": 3 },
+            { "target": "reputation", "key": "traditional_bloc", "delta": -4 },
+            { "target": "relationship", "key": "@brother_priest", "delta": 2 },
+            { "target": "flag", "key": "vg_rome_kept_it_local", "value": true }
+          ]
+        },
+        {
+          "id": "warn_the_pastor",
+          "label": "Go to {@brother_priest} first with the letter in your hand, and give him three weeks to fix what needs fixing before you write a word",
+          "requires": [
+            { "type": "relationship", "npcId": "@brother_priest", "op": ">=", "value": 10 }
+          ],
+          "outcome": "He reads it in his kitchen and is quiet for a while and then says the absolution was a mistake and the rest he can defend, and you say the rest is in the Missal or it is not. He fixes it, mostly. The report goes to Rome on the thirtieth day and describes a parish where the matter has been corrected, which is true because you made it so. The dicastery is content. He owes you something.",
+          "effects": [
+            { "target": "relationship", "key": "@brother_priest", "delta": 8 },
+            { "target": "reputation", "key": "brother_priests", "delta": 3 },
+            { "target": "reputation", "key": "rome", "delta": 1 },
+            { "target": "stat", "key": "administration", "delta": 1 },
+            { "target": "flag", "key": "vg_rome_warned_the_pastor", "value": true }
+          ]
+        }
+      ]
+    }
+  ]
+}
