@@ -219,9 +219,38 @@ export const STUDY_CITY_DC: SceneDef = {
   ),
 };
 
-export function sceneById(id: SceneId, city: 'rome' | 'washington' = 'rome'): SceneDef {
-  if (id === 'study_room') return STUDY_ROOM;
-  if (id === 'study_city') return city === 'washington' ? STUDY_CITY_DC : STUDY_CITY;
+/** The bishop's residence: the same room, and the house instead of a city. */
+export const STUDY_ROOM_RESIDENCE: SceneDef = {
+  ...STUDY_ROOM,
+  label: 'Your room at the residence',
+  hotspots: STUDY_ROOM.hotspots.map((h) =>
+    h.id === 'desk' ? { ...h, label: "The desk: the bishop's calendar", binds: { kind: 'study_action', activityId: 'calendar' } }
+    : h.id === 'crucifix' ? { ...h, label: 'The crucifix: the residence chapel', binds: { kind: 'study_action', activityId: 'residence_chapel' } }
+    : h.id === 'shelf' ? { ...h, label: 'The shelf: the rubrics', binds: { kind: 'study_action', activityId: 'mc' } }
+    : h.id === 'window' ? { ...h, label: 'The window: the house' }
+    : h.id === 'door' ? { ...h, label: 'The door: the house' }
+    : h,
+  ),
+};
+
+export const STUDY_HOUSE: SceneDef = {
+  id: 'study_city',
+  label: "The bishop's house",
+  locations: [],
+  hotspots: [
+    { id: 'desk', label: "The desk: the bishop's calendar", x: 26, y: 56, w: 48, h: 26, binds: { kind: 'study_action', activityId: 'calendar' } },
+    { id: 'window', label: 'The window: the car and the door', x: 30, y: 10, w: 46, h: 34, binds: { kind: 'study_action', activityId: 'driving' } },
+    { id: 'files', label: 'The files: the phone', x: 84, y: 26, w: 12, h: 40, binds: { kind: 'study_action', activityId: 'phone' } },
+    { id: 'door', label: 'The door: weekend supply', x: 2, y: 22, w: 10, h: 56, binds: { kind: 'study_action', activityId: 'weekend_supply' } },
+    { id: 'mc', label: 'The vestment case: master of ceremonies', x: 76, y: 66, w: 22, h: 20, binds: { kind: 'study_action', activityId: 'mc' } },
+    { id: 'chapel', label: 'The residence chapel', x: 2, y: 80, w: 22, h: 16, binds: { kind: 'study_action', activityId: 'residence_chapel' } },
+    { id: 'back', label: 'Back to your room', x: 30, y: 86, w: 40, h: 12, binds: { kind: 'scene', scene: 'study_room' } },
+  ],
+};
+
+export function sceneById(id: SceneId, city: 'rome' | 'washington' | 'residence' = 'rome'): SceneDef {
+  if (id === 'study_room') return city === 'residence' ? STUDY_ROOM_RESIDENCE : STUDY_ROOM;
+  if (id === 'study_city') return city === 'residence' ? STUDY_HOUSE : city === 'washington' ? STUDY_CITY_DC : STUDY_CITY;
   if (id === 'seminary_room') return SEMINARY_SCENE;
   if (id === 'seminary_hall') return SEMINARY_HALL;
   if (id === 'chancery') return CHANCERY_SCENE;

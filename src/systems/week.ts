@@ -16,7 +16,11 @@ export const WEEK = {
   /** Lay support drifts a little each week toward or away from a man from that kind of place. Invented. */
   terrainMatchPerWeek: 0.06,
   terrainMismatchPerWeek: -0.04,
-  baseAp: { parochial_vicar: 10, administrator: 10, pastor: 10 } as Record<Role, number>,
+  /**
+   * DESIGN §2.6 gives 10 AP; playtesting asked for a week that reads like a working week, so the base is
+   * 12 blocks of four hours: about 48 hours after the daily Mass, the Office, and meals.
+   */
+  baseAp: { parochial_vicar: 12, administrator: 12, pastor: 12 } as Record<Role, number>,
   /** Extra administrative floor by role, reducible by Administration. */
   /** DESIGN §8.1 puts the pastor at ~6 mandatory; the obligation table alone sums to 7 at standard, so the floor stays at one. */
   adminFloor: { parochial_vicar: 0, administrator: 1, pastor: 1 } as Record<Role, number>,
@@ -54,6 +58,12 @@ export const WEEK = {
   strainWorn: 50,
   strainPietyDrain: 0.08,
 } as const;
+
+/** One block of the week is four working hours; the sheets speak in hours. */
+export const HOURS_PER_AP = 4;
+export function hoursOf(ap: number): number {
+  return Math.round(ap * HOURS_PER_AP);
+}
 
 const NEXT_DOWN: Record<Quality, Quality | null> = { invested: 'standard', standard: 'min', min: null };
 

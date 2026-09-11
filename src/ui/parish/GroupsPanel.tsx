@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useGameStore } from '@/engine/store';
 import { groupTypeDefs } from '@/content/parish';
 import { groupTrend, mayReplaceLeader, parishGroups, vitalityBand } from '@/systems/groups';
+import { hoursOf } from '@/systems/week';
 import type { GroupType } from '@/types';
 import Sheet from '../Sheet';
 
@@ -36,7 +37,7 @@ export default function GroupsPanel() {
         <p className="ink-wine mb-2 text-xs">Nothing in your routine goes to them. They will fade.</p>
       ) : groups.length > 0 ? (
         <p className="ink-muted mb-2 text-xs">
-          {sustain} {sustain === 1 ? 'hour' : 'hours'} a week {focused.length ? `goes to the ${focused.length === 1 ? 'one you have singled out' : `${focused.length} you have singled out`}` : 'is spread across all of them'}.
+          {hoursOf(sustain)} hours a week {focused.length ? `goes to the ${focused.length === 1 ? 'one you have singled out' : `${focused.length} you have singled out`}` : 'is spread across all of them'}.
           {focused.length === 0 && groups.length > 2 ? ' Single one or two out and it will show sooner.' : ''}
         </p>
       ) : null}
@@ -85,7 +86,7 @@ export default function GroupsPanel() {
       </ul>
       {founding ? (
         <p className="ink-muted mt-3 text-xs">
-          Founding a {groupTypeDefs.find((d) => d.type === founding.type)?.label.toLowerCase()}: {Math.max(0, founding.endWeek - game.clock.week)} weeks to go, {founding.apPerWeek} hours a week.
+          Founding a {groupTypeDefs.find((d) => d.type === founding.type)?.label.toLowerCase()}: {Math.max(0, founding.endWeek - game.clock.week)} weeks to go, {hoursOf(founding.apPerWeek)} hours a week.
         </p>
       ) : picking ? (
         <div className="mt-3">
@@ -94,7 +95,7 @@ export default function GroupsPanel() {
             {groupTypeDefs
               .filter((d) => !existing.has(d.type))
               .map((d) => (
-                <button key={d.type} className="pbtn px-2 py-0.5 text-xs" onClick={() => { found(d.type as GroupType); setPicking(false); }} title={`${d.founding.weeks} weeks at ${d.founding.apPerWeek} hours a week`}>
+                <button key={d.type} className="pbtn px-2 py-0.5 text-xs" onClick={() => { found(d.type as GroupType); setPicking(false); }} title={`${d.founding.weeks} weeks at ${hoursOf(d.founding.apPerWeek)} hours a week`}>
                   {d.label}
                 </button>
               ))}

@@ -8,9 +8,10 @@ import { Bookcase, Chair, Crucifix, Desk, Door, Frame, Lamp, LightPool, Room, Sh
  */
 export function StudyRoom({ city, school }: { city: StudyCity; school: string }) {
   const rome = city === 'rome';
+  const home = city === 'residence';
   return (
     <g>
-      {rome ? <Room wall="#d9b26a" dado="#8a5a2e" dadoAt={0.78} floor="tiles" ceiling="#efe4c8" /> : <Room wall="#c9c2b0" dado="#6b4a3a" dadoAt={0.72} floor="boards" ceiling="#efece3" />}
+      {rome ? <Room wall="#d9b26a" dado="#8a5a2e" dadoAt={0.78} floor="tiles" ceiling="#efe4c8" /> : home ? <Room wall="#e6e0cf" dado="#8a7a5a" dadoAt={0.74} floor="carpet" ceiling="#efece3" /> : <Room wall="#c9c2b0" dado="#6b4a3a" dadoAt={0.72} floor="boards" ceiling="#efece3" />}
       {/* shutters and the window on the city */}
       <rect x="58" y="5" width="3.6" height="22" fill={rome ? '#4f6b3a' : '#3a4a5a'} />
       <rect x="84.4" y="5" width="3.6" height="22" fill={rome ? '#4f6b3a' : '#3a4a5a'} />
@@ -20,7 +21,7 @@ export function StudyRoom({ city, school }: { city: StudyCity; school: string })
           <rect x="84.8" y={6 + i * 3} width="2.8" height="0.7" fill="#000" opacity="0.18" />
         </g>
       ))}
-      <Window x={62} y={7} w={22} h={18} view={rome ? 'piazza' : 'city'} frame={rome ? '#efe4c8' : '#efe9dc'} />
+      <Window x={62} y={7} w={22} h={18} view={rome ? 'piazza' : home ? 'yard' : 'city'} frame={rome ? '#efe4c8' : '#efe9dc'} />
       {rome && <Dome x={73} y={7} w={22} h={18} />}
       <LightPool x={60} y={40} w={24} h={14} />
       <Crucifix x={50} y={9} s={0.75} />
@@ -77,6 +78,7 @@ function Dome({ x, y, w, h }: { x: number; y: number; w: number; h: number }) {
  */
 export function StudyCity({ city }: { city: StudyCity }) {
   const rome = city === 'rome';
+  if (city === 'residence') return null;
   const facade = rome ? '#d9a860' : '#9a5a44';
   const facade2 = rome ? '#c98f52' : '#b4735a';
   const roof = rome ? '#8a4a2a' : '#4a4a52';

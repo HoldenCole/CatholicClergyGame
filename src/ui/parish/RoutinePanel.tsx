@@ -1,6 +1,6 @@
 import { useGameStore } from '@/engine/store';
 import { actionDefs, obligationDefs } from '@/content/parish';
-import { adminFloorFor, careOf, careOfPlan, planWeek, sacrificeAp, seasonalLoad, strainOf, strainWord, weekBudget, WEEK } from '@/systems/week';
+import { adminFloorFor, careOf, careOfPlan, hoursOf, planWeek, sacrificeAp, seasonalLoad, strainOf, strainWord, weekBudget, WEEK } from '@/systems/week';
 import { sacrificeDefs, problemFix } from '@/content/parish';
 import type { Effect } from '@/types';
 import { commitmentAp } from '@/engine/offers';
@@ -68,26 +68,26 @@ export default function RoutinePanel() {
     <>
       <Sheet title="The week">
         <p className="ink-muted text-xs leading-relaxed">
-          Mass, the Office, meals, sleep, and the day off are the shape of a priest's week and are not counted here. What is counted is the {budget} hours that are yours to point
-          {extra > 0 ? ` (${WEEK.baseAp[game.parish.role]} of them, and ${extra} you have taken from your own life)` : ''}. Obligations take {plan.mandatory}
-          {fixed > 0 ? ` (${fixed} of that is the season, the desk, and what you have promised elsewhere)` : ''}, leaving {available} for everything else
-          {requested > available ? `; you have asked for ${requested}, so it will be trimmed` : ''}.
+          A working week of about {hoursOf(budget)} hours, after the daily Mass, the Office, meals, and sleep, which are not counted here
+          {extra > 0 ? ` (${hoursOf(WEEK.baseAp[game.parish.role])} of them the diocese's, and ${hoursOf(extra)} you have taken from your own life)` : ''}. Obligations take {hoursOf(plan.mandatory)}
+          {fixed > 0 ? ` (${hoursOf(fixed)} of that is the season, the desk, and what you have promised elsewhere)` : ''}, leaving {hoursOf(available)} for everything else
+          {requested > available ? `; you have asked for ${hoursOf(requested)}, so it will be trimmed` : ''}. Every block below is four hours.
         </p>
         {requested > available && (
           <p className="ink-wine mt-1 text-xs">
-            The week is full before you get to it: {requested - available} {requested - available === 1 ? 'hour' : 'hours'} short. Go minimum on an obligation, drop something you promised, or take an hour from your own life below.
+            The week is full before you get to it: {hoursOf(requested - available)} hours short. Go minimum on an obligation, drop something you promised, or take hours from your own life below.
           </p>
         )}
         <div className="mt-2 flex h-5 w-full overflow-hidden rounded border rule" title="The week, hour by hour">
           {segments.map((x, i) => (
-            <div key={i} style={{ width: `${(x.ap / barTotal) * 100}%`, background: COLOR[x.kind] }} className="h-full border-r border-black/20 last:border-r-0" title={`${x.label}: ${x.ap}`} />
+            <div key={i} style={{ width: `${(x.ap / barTotal) * 100}%`, background: COLOR[x.kind] }} className="h-full border-r border-black/20 last:border-r-0" title={`${x.label}: ${hoursOf(x.ap)} hours`} />
           ))}
         </div>
         <ul className="mt-1 flex flex-wrap gap-x-3 gap-y-0.5 text-xs">
           {segments.map((x, i) => (
             <li key={i} className="flex items-center gap-1">
               <span className="inline-block h-2 w-2 rounded-sm" style={{ background: COLOR[x.kind] }} />
-              <span className="ink-muted">{x.label}</span> <span className="font-mono">{x.ap}</span>
+              <span className="ink-muted">{x.label}</span> <span className="font-mono">{hoursOf(x.ap)}h</span>
             </li>
           ))}
         </ul>
@@ -108,7 +108,7 @@ export default function RoutinePanel() {
                       if (ap === null) return null;
                       return (
                         <button key={q} onClick={() => setObligation(key, q)} className={'pbtn whitespace-nowrap px-2 py-0.5 text-xs ' + (q === chosen ? 'pbtn-active' : '')} title={`${QUALITY_LABEL[q]}: ${def.blurb[q]}`}>
-                          {QUALITY_SHORT[q]} <span className="opacity-70">{ap}</span>
+                          {QUALITY_SHORT[q]} <span className="opacity-70">{hoursOf(ap)}h</span>
                         </button>
                       );
                     })}
@@ -131,11 +131,11 @@ export default function RoutinePanel() {
               <li key={a.id} className="flex items-center justify-between gap-2 text-sm">
                 <span className="min-w-0" title={a.blurb}>
                   {a.label}
-                  <span className="ink-faint ml-2 text-xs">{feeds(a.id, a.effectsPerAp)}{ap > 0 && planned < ap ? ` · trimmed to ${planned}` : ''}</span>
+                  <span className="ink-faint ml-2 text-xs">{feeds(a.id, a.effectsPerAp)}{ap > 0 && planned < ap ? ` · trimmed to ${hoursOf(planned)}h` : ''}</span>
                 </span>
                 <div className="flex items-center gap-1">
                   <button className="pbtn px-2 py-0 text-xs" onClick={() => setDiscretionary(a.id, ap - 1)}>−</button>
-                  <span className="w-5 text-center font-mono text-xs">{ap}</span>
+                  <span className="w-7 text-center font-mono text-xs">{hoursOf(ap)}h</span>
                   <button className="pbtn px-2 py-0 text-xs" onClick={() => setDiscretionary(a.id, Math.min(a.maxAp, ap + 1))}>+</button>
                 </div>
               </li>
@@ -146,7 +146,7 @@ export default function RoutinePanel() {
       </Sheet>
       <Sheet title="The rest of your life">
         <p className="ink-muted text-xs leading-relaxed">
-          An hour more for the parish comes from somewhere. You are {strainWord(strain)}{strain >= WEEK.strainSick ? ', and the body has started taking an hour back' : strain >= WEEK.strainWorn ? ', and it is beginning to cost you' : ''}.
+          More hours for the parish come from somewhere. You are {strainWord(strain)}{strain >= WEEK.strainSick ? ', and the body has started taking an hour back' : strain >= WEEK.strainWorn ? ', and it is beginning to cost you' : ''}.
         </p>
         <ul className="mt-2 flex flex-col gap-1.5">
           {sacrificeDefs.map((d) => {
@@ -155,7 +155,7 @@ export default function RoutinePanel() {
               <li key={d.id} className="flex items-center justify-between gap-2 text-sm">
                 <span className="min-w-0" title={d.blurb}>
                   {d.label}
-                  <span className="ink-faint ml-2 text-xs">+{d.ap} hour · wears on you</span>
+                  <span className="ink-faint ml-2 text-xs">+{hoursOf(d.ap)} hours a week · wears on you</span>
                 </span>
                 <button className={'pbtn shrink-0 px-2 py-0 text-xs ' + (on ? 'pbtn-active' : '')} onClick={() => toggleSacrifice(d.id)}>
                   {on ? 'take it back' : 'give it up'}

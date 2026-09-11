@@ -19,10 +19,10 @@ export function parishState(seed = 'week', overrides: Partial<GameState> = {}): 
 }
 
 describe('systems/week', () => {
-  it('a standard routine fits ten AP with room for three discretionary', () => {
+  it('a standard routine fits twelve blocks with room for the three it asks for', () => {
     const s = parishState();
     const plan = planWeek(s);
-    expect(weekBudget(s)).toBe(10);
+    expect(weekBudget(s)).toBe(12);
     expect(plan.mandatory).toBe(7); // 2+1+1+1+2, ordinary time, vicar
     expect(Object.values(plan.discretionary).reduce((a, b) => a + b, 0)).toBe(3);
     expect(plan.neglected).toBe(false);
@@ -40,7 +40,7 @@ describe('systems/week', () => {
     s = { ...s, clock: { ...s.clock, week } };
     s = { ...s, parish: { ...s.parish!, routine: { ...s.parish!.routine, obligations: { ...s.parish!.routine.obligations, sunday_masses: 'invested' } } } };
     const plan = planWeek(s);
-    expect(plan.mandatory).toBeLessThanOrEqual(10);
+    expect(plan.mandatory).toBeLessThanOrEqual(12);
     expect(plan.obligations.meetings).toBe('min');
     expect(Object.values(plan.discretionary).reduce((a, b) => a + b, 0)).toBeLessThan(3);
   });
@@ -106,9 +106,9 @@ describe('systems/week', () => {
   it('an authored AP penalty applies to the next week only', () => {
     const s = parishState();
     const hit: GameState = { ...s, parish: { ...s.parish!, apNextWeek: -3 } };
-    expect(weekBudget(hit)).toBe(7);
+    expect(weekBudget(hit)).toBe(9);
     const after = resolveWeek(hit, createRng('ap')).state;
     expect(after.parish!.apNextWeek).toBe(0);
-    expect(weekBudget(after)).toBe(10);
+    expect(weekBudget(after)).toBe(12);
   });
 });
