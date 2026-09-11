@@ -16,6 +16,8 @@ export const CAREER = {
   deathPerYearOver65: 0.012,
   /** Years ordained before the board considers a man for a pastorate at all. */
   minYearsForPastor: 3,
+  /** When the board has nothing better, a pastor is renewed where he is this often; otherwise moved as pastor. Invented. */
+  pastorStaysChance: 0.6,
   pastorTermYears: 6,
 } as const;
 
@@ -153,6 +155,22 @@ export function nextAssignment(state: GameState, rng: Rng): { state: GameState; 
     assignment = { parishId, role, startWeek: next.clock.week, letter: letterFor(next, won.opening, role), reasons: won.reasons };
     next = { ...next, openings: next.openings.filter((o) => o.id !== won.opening.id) };
     next = note(next, 'promotion', `Appointed ${role.replace('_', ' ')} of ${openingBlurb(next, won.opening).split(':')[0]}. ${won.reasons.slice(0, 2).join('; ')}.`);
+  } else if ((state.assignment?.role === 'pastor' || state.assignment?.role === 'administrator') && next.parish) {
+    // A pastor is never sent back as a vicar: he is renewed where he is, or moved as pastor.
+    const role = state.assignment.role;
+    const here = next.world!.parishes.find((p) => p.id === next.parish!.parishId)!;
+    const stay = rng.derive(`renew:${next.clock.week}`).chance(CAREER.pastorStaysChance);
+    const others = next.world!.parishes.filter((p) => p.id !== here.id);
+    const parish = stay || others.length === 0 ? here : rng.derive(`lateral:${next.clock.week}`).weighted(others, (p) => 10 + (p.needsSpanish && next.flags.speaks_spanish ? 20 : 0) + (p.kind === 'difficult' ? 8 : 0));
+    const opening: Opening = { id: `${role}_${next.clock.week}`, kind: role === 'pastor' ? 'pastor' : 'administrator', parishId: parish.id, urgency: 50, needsSpanish: parish.needsSpanish, needsAdmin: false, alignment: parish.alignment, week: next.clock.week, label: `${role === 'pastor' ? 'Pastor' : 'Administrator'} of ${parish.name}` };
+    const lost = decisions.find((d) => d.opening.parishId) ?? decisions[0];
+    const reasons = parish.id === here.id ? ['Renewed where you are; the board saw no reason to move a pastor who is holding a parish'] : (lost ? lost.reasons : ['A pastor is moved as a pastor, and this parish needed one']);
+    assignment = { parishId: parish.id, role, startWeek: next.clock.week, letter: letterFor(next, opening, role), reasons };
+    if (lost && parish.id !== here.id) {
+      next = note(next, 'passed_over', `Passed over for ${openingBlurb(next, lost.opening).split(':')[0]}: ${lost.reasons.slice(0, 2).join('; ')}.`);
+      next = { ...next, flags: { ...next.flags, passed_over: true } };
+    }
+    next = note(next, 'assignment', parish.id === here.id ? `Renewed as ${role} of ${here.name} for another term.` : `Moved as ${role} to ${parish.name}, ${parish.place}.`);
   } else {
     // Another vicar posting: a parish other than the current one, weighted by need.
     // A man who told the chancery he would take the hard parish gets it (offer content sets the flag).

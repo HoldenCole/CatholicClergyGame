@@ -217,6 +217,23 @@ week), and `credentialAfter`. Each writes `club:<id>`; content and the engine
 read it (`club:tlm_society` and `can_celebrate_tlm` point the first assignment
 at a parish with a Latin Mass faction). Seminary clubs end at ordination.
 
+### The parish's money (`parish/spending.json`)
+
+Once the debt is paid a pastor spends: `once` spends apply their effects when
+bought (a mission, a festival, an expansion, a chapel), `fund` spends stand and
+draw `upkeep` each week while applying `weekly` effects (tuition, medical, the
+poor, a youth minister, the music). Money behind a group buys vitality
+(`systems/spending.ts`); the endowment (a business past, an MBA, a CPA, or
+the administration for it) grows with a seeded market. Two months of running
+costs are always kept back.
+
+### Postings away
+
+Programs of kind `post` (`study/programs.json`: the bishop's secretary, the
+Newman Center, the hospital, the seminary faculty) are full-time: the man
+leaves his parish and lives there, with that place's activities, until the
+years end and the board finds him a parish. Their offers carry `away`.
+
 ### The player's dials
 
 `state.settings` holds the work-week length (`light` 10, `standard` 12,

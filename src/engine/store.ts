@@ -35,6 +35,7 @@ import { setDiscretionary as doSetDiscretionary, setObligation as doSetObligatio
 import { focusGroup as doFocus, replaceLeader as doReplaceLeader, startFounding as doStartFounding, suppressGroup as doSuppress } from '@/systems/groups';
 import { startWork as doStartWork, stopWork as doStopWork } from '@/systems/problems';
 import { joinClub as doJoinClub, leaveClub as doLeaveClub } from '@/systems/clubs';
+import { closeFund as doCloseFund, fundGroup as doFundGroup, invest as doInvest, spend as doSpend, withdraw as doWithdraw } from '@/systems/spending';
 import { yearOf } from '@/ui/portraits/spec';
 import { payDebt as doPayDebt } from '@/systems/finance';
 import { applyForOpening as doApply } from '@/systems/openings';
@@ -107,6 +108,12 @@ export interface GameStore {
   applyForOpening(openingId: string): void;
   /** The player's own dials: the length of the week and how much it wears. Kept in the save. */
   setSettings(partial: Partial<GameSettings>): void;
+  /** What a pastor does with money that is not owed. */
+  spend(id: string): void;
+  closeFund(id: string): void;
+  fundGroup(groupId: string, amount: number): void;
+  invest(amount: number): void;
+  withdraw(amount: number): void;
   /** Societies: join an open one from the sheet, or leave one. */
   joinClub(id: string): void;
   leaveClub(id: string): void;
@@ -410,7 +417,26 @@ export const useGameStore = create<GameStore>()((set, get) => ({
     update(set, get, (game) => doApply(game, openingId));
   },
   setSettings(partial) {
-    update(set, get, (game) => ({ ...game, settings: { ...(game.settings ?? DEFAULT_SETTINGS), ...partial } }));
+    update(set, get, (game) => {
+      const settings = { ...(game.settings ?? DEFAULT_SETTINGS), ...partial };
+      if (!settings.hours) delete settings.hours;
+      return { ...game, settings };
+    });
+  },
+  spend(id) {
+    update(set, get, (game) => doSpend(game, id));
+  },
+  closeFund(id) {
+    update(set, get, (game) => doCloseFund(game, id));
+  },
+  fundGroup(groupId, amount) {
+    update(set, get, (game) => doFundGroup(game, groupId, amount));
+  },
+  invest(amount) {
+    update(set, get, (game) => doInvest(game, amount));
+  },
+  withdraw(amount) {
+    update(set, get, (game) => doWithdraw(game, amount));
   },
   joinClub(id) {
     update(set, get, (game, r) => doJoinClub(game, id, r.derive(`club:${id}:${game.clock.week}`)));

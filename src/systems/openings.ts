@@ -57,7 +57,7 @@ export function refreshOpenings(state: GameState, rng: Rng): { state: GameState;
       needsAdmin: p.debt >= 1_000_000 || p.problem === 'staff_theft' || p.problem === 'lawsuit',
       alignment: p.alignment,
       week: state.clock.week,
-      label: `Pastor of ${p.name}, ${p.place}`,
+      label: p.cathedral ? `Rector of ${p.name}` : `Pastor of ${p.name}, ${p.place}`,
     });
     return p;
   });

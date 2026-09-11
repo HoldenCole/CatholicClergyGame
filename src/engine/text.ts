@@ -9,6 +9,7 @@ export function textExtras(state: GameState): Record<string, string> {
     out.school = state.study.school;
     out.residence = state.study.residence;
     out.city = state.study.city === 'rome' ? 'Rome' : state.study.city === 'washington' ? 'Washington' : 'the diocese';
+    if (state.study.city === 'campus') out.city = 'the campus';
   }
   if (state.world) out.diocese = state.world.diocese.visible.name;
   if (state.world && state.assignment) {

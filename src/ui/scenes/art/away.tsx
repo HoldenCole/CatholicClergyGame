@@ -8,7 +8,7 @@ import { Bookcase, Chair, Crucifix, Desk, Door, Frame, Lamp, LightPool, Room, Sh
  */
 export function StudyRoom({ city, school }: { city: StudyCity; school: string }) {
   const rome = city === 'rome';
-  const home = city === 'residence';
+  const home = city !== 'rome' && city !== 'washington';
   return (
     <g>
       {rome ? <Room wall="#d9b26a" dado="#8a5a2e" dadoAt={0.78} floor="tiles" ceiling="#efe4c8" /> : home ? <Room wall="#e6e0cf" dado="#8a7a5a" dadoAt={0.74} floor="carpet" ceiling="#efece3" /> : <Room wall="#c9c2b0" dado="#6b4a3a" dadoAt={0.72} floor="boards" ceiling="#efece3" />}
@@ -78,7 +78,7 @@ function Dome({ x, y, w, h }: { x: number; y: number; w: number; h: number }) {
  */
 export function StudyCity({ city }: { city: StudyCity }) {
   const rome = city === 'rome';
-  if (city === 'residence') return null;
+  if (city !== 'rome' && city !== 'washington') return null;
   const facade = rome ? '#d9a860' : '#9a5a44';
   const facade2 = rome ? '#c98f52' : '#b4735a';
   const roof = rome ? '#8a4a2a' : '#4a4a52';

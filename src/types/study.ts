@@ -3,7 +3,7 @@ import type { Pillar } from './character';
 import type { StatKey, ConstituencyKey } from './stats';
 
 /** Where he lives while away: a city for a degree, or the bishop's residence for a post. */
-export type StudyCity = 'rome' | 'washington' | 'residence';
+export type StudyCity = 'rome' | 'washington' | 'residence' | 'campus' | 'hospital' | 'seminary';
 
 /** A course of study away from the diocese. content/study/programs.json */
 export interface StudyProgramDef {

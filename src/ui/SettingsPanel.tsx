@@ -1,6 +1,6 @@
 import { useGameStore } from '@/engine/store';
 import { LLM_MODELS } from '@/llm/settings';
-import { settingsOf, WEAR_LEVELS, WORK_WEEKS } from '@/systems/workweek';
+import { HOURS_RANGE, settingsOf, WEAR_LEVELS, WORK_WEEKS, workHours } from '@/systems/workweek';
 import { strainOf, strainWord } from '@/systems/week';
 import type { WorkWeek } from '@/types';
 import Sheet from './Sheet';
@@ -23,6 +23,14 @@ export default function SettingsPanel() {
             ))}
           </select>
           <span className="ink-faint text-xs">{WORK_WEEKS[settings.workWeek].blurb}</span>
+        </label>
+        <label className="mt-3 flex flex-col gap-1 text-sm">
+          <span>Or set the hours yourself: {workHours(game)} a week{typeof settings.hours === 'number' ? '' : ' (from the preset above)'}</span>
+          <input type="range" min={HOURS_RANGE.min} max={HOURS_RANGE.max} step={HOURS_RANGE.step} value={workHours(game)} onChange={(e) => setSettings({ hours: Number(e.target.value) })} />
+          <span className="ink-faint text-xs">
+            Every four hours past 48 wears at the rate below; in seminary and away, every eight hours past 48 is one more free hour. Sacrifices add on top.
+            {typeof settings.hours === 'number' && <button className="pbtn-link ml-1" onClick={() => setSettings({ hours: 0 })}>use the preset</button>}
+          </span>
         </label>
         <label className="mt-3 flex flex-col gap-1 text-sm">
           <span>How much a long week wears on you</span>

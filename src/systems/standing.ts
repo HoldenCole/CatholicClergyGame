@@ -86,6 +86,7 @@ export function formationStanding(state: GameState): Standing {
  */
 export function parishPrestige(parish: Parish): number {
   const byKind: Record<Parish['kind'], number> = { flagship_suburban: 1, immigrant_growing: 0.65, struggling_urban: 0.4, rural: 0.25, difficult: 0.15 };
+  if (parish.cathedral) return 1;
   return Math.max(0, Math.min(1, byKind[parish.kind] + (parish.wealth - 3) * 0.08));
 }
 

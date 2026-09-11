@@ -1,0 +1,343 @@
+{
+  "_notes": "The Los Angeles pool: six events that could only happen in the Archdiocese of Los Angeles, drawn for any parish role once the engine sets diocese:los_angeles. Named people are invented; the regional bishop in dio_la_regional_bishop is an invented auxiliary, not the generated @bishop. Flags written: dio_la_marquez_board / dio_la_marquez_on_terms / dio_la_marquez_trained_kids (Dell Marquez, the Hollywood re-recording mixer who cantors; later content may read whether he was given the board), dio_la_midnight_mananitas / dio_la_dawn_mananitas / dio_la_invited_the_block (Guadalupe, December 12), dio_la_aranda_circle / dio_la_kept_distance / dio_la_went_downtown (the regional auxiliary's circle of pastors), dio_la_cleared_brush / dio_la_knights_chipper / dio_la_fire_shelter (fire season), dio_la_phonetic_mass / dio_la_cuernavaca / dio_la_refused_spanish (the man without Spanish handed the Spanish Mass; no credential is granted here, that belongs to the study and offer systems), dio_la_fought_the_sale / dio_la_backed_the_sale / dio_la_carved_out_the_corner (the archdiocese's real estate and the settlement; authored only, no flavorPrompt). Positions recorded: immigration (the Spanish Mass), authority (the sale).",
+  "events": [
+    {
+      "id": "dio_la_marquez",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["friendship_vs_duty", "competence"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 8,
+      "suppressYears": 4,
+      "once": true,
+      "requires": [
+        { "type": "flag", "key": "diocese:los_angeles", "value": true },
+        { "type": "not", "inner": { "type": "parish", "key": "terrain", "value": "rural" } }
+      ],
+      "bias": [
+        { "when": { "type": "parish", "key": "kind", "value": "difficult" }, "multiplier": 1.5 },
+        { "when": { "type": "parish", "key": "problem", "value": "music_war" }, "multiplier": 1.5 }
+      ],
+      "title": "The Man at the Board",
+      "body": "Dell Marquez is a re-recording mixer, which means that for thirty years he has sat at a console on a dubbing stage in Burbank deciding how loud the explosions are, and he has an Emmy for a series nobody remembers and a credit on two films everyone does. He cantors the ten o'clock at {parish} because his mother did, in a baritone that does not need the microphone, which is fortunate, because the microphone is from 1978 and the amplifier hums in the key of the freeway. The mariachi at the one o'clock feeds back every Sunday at the Sanctus. He comes to the rectory with a drawing and a price. Forty thousand dollars of equipment at his cost, which is nothing like retail, and his crew from the stage on a Saturday, free, to hang it. The church would sound, he says, like a church. There is one condition, and he says it plainly because he is a plain man: he runs the board. Not {@music_director}, who has run the music at {parish} for eleven years and would, Dell says without malice, mix it like a wedding.",
+      "flavorPrompt": "A Burbank sound mixer with an Emmy and a drawing, a 1978 amplifier that hums with the freeway, and a music director who has not yet been told.",
+      "choices": [
+        {
+          "id": "give_him_the_board",
+          "label": "Take the system and give him the board, and tell {@music_director} afterward",
+          "default": true,
+          "outcome": "The crew comes on a Saturday in black T-shirts and by evening the church sounds like a church. The mariachi stops feeding back. The old people hear the homily for the first time in years and say so. {@music_director} hears about the condition from the sacristan and says nothing to you for a month, and then something, and the something is that eleven years should have bought a conversation.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 4 },
+            { "target": "relationship", "key": "@music_director", "delta": -8 },
+            { "target": "flag", "key": "dio_la_marquez_board", "value": true }
+          ]
+        },
+        {
+          "id": "on_terms",
+          "label": "Take the system on condition that {@music_director} runs it, and let Dell decide whether the offer stands",
+          "outcome": "Dell thinks about it for a week and says yes, because he is a plain man and it was never about the board. The crew comes. The church sounds like a church. {@music_director} runs the board like a wedding for six months and then, without anyone saying anything, Dell is in the booth on Sundays beside her, and the two of them are arguing about the reverb, and both of them are happy.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "relationship", "key": "@music_director", "delta": 6 },
+            { "target": "flag", "key": "dio_la_marquez_on_terms", "value": true }
+          ]
+        },
+        {
+          "id": "train_the_kids",
+          "label": "Ask him to train two teenagers from the youth group on the board, and put his name on nothing",
+          "requires": [ { "type": "stat", "key": "charisma", "op": ">=", "value": 50 } ],
+          "outcome": "He is quiet for a moment and then says that nobody has asked him to teach anything in thirty years. The two kids, a girl from Pacoima and a boy from the mariachi, are in the booth by Easter and better than either adult by Christmas. Dell sits behind them with his arms folded. {@music_director} takes the credit for the idea, which you allow, because the church sounds like a church.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 4 },
+            { "target": "relationship", "key": "@music_director", "delta": 3 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "trait", "key": "got a sound mixer to teach the youth group" },
+            { "target": "flag", "key": "dio_la_marquez_trained_kids", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dio_la_mananitas",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["competence", "belief_vs_safety"],
+      "severity": "NOTABLE",
+      "category": "admin",
+      "baseWeight": 8,
+      "suppressYears": 3,
+      "requires": [
+        { "type": "flag", "key": "diocese:los_angeles", "value": true },
+        { "type": "season", "value": "advent" },
+        { "type": "any", "inner": [
+          { "type": "parish", "key": "needsSpanish", "value": true },
+          { "type": "parish", "key": "terrain", "value": "latino" },
+          { "type": "parish", "key": "kind", "value": "immigrant_growing" }
+        ] }
+      ],
+      "title": "Las Mañanitas",
+      "body": "On the night of the eleventh of December the church at {parish} will be full by half past eleven, and at midnight the mariachi will play Las Mañanitas to the Virgin with the whole building singing, and the matachines will dance in the lot in their feathers and rattles until the roses run out. Last year the neighbors, who are new, called the police at twenty to one about the drums, and a sergeant stood in the lot with his hat off and waited for the dancers to finish before he said anything. The city has an ordinance. The archdiocese has its own procession the Sunday before, out on Cesar Chavez, with the auxiliary bishops and the television, and a letter from the region suggests, without requiring, that parishes near the route consider joining it rather than duplicating. The women who run the Guadalupanas have been sewing since October. The mariachi's leader, whose father played for the same Virgin in Zacatecas, has asked only whether it is midnight, as always, or something else. The Filipinos need the church at half past five each morning the following week for Simbang Gabi. Nobody at {parish} sleeps in December.",
+      "flavorPrompt": "The night of December eleventh: mariachi at midnight, matachines in the lot, roses, a noise ordinance, and new neighbors with the police on speed dial.",
+      "choices": [
+        {
+          "id": "midnight_as_always",
+          "label": "Hold the midnight Mañanitas and the dancers in the lot, and take the sergeant's call yourself",
+          "default": true,
+          "outcome": "The church holds twelve hundred people and the lot holds the rest, and at midnight the sound goes up off the roof and can be heard on the freeway. The sergeant comes at ten to one and you meet him at the gate with a rose and a cup of champurrado, and he waits for the dancers to finish. Two neighbors write to the council. The Guadalupanas call you Father for the first time as if they meant it.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 5 },
+            { "target": "reputation", "key": "public", "delta": -2 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "flag", "key": "dio_la_midnight_mananitas", "value": true }
+          ]
+        },
+        {
+          "id": "dawn_inside",
+          "label": "Move the Mañanitas to five in the morning, inside, with the doors shut and the dancers in the hall",
+          "outcome": "The church is full at five, because it would be full at any hour, and the mariachi plays, and the sound stays inside. The matachines dance in the hall with the ceiling too low for the feathers. Nobody calls the police. The mariachi's leader thanks you correctly and does not look at you. In January three of the Guadalupanas are at the parish in Pacoima that kept midnight, and their daughters go with them.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": -3 },
+            { "target": "reputation", "key": "public", "delta": 2 },
+            { "target": "stat", "key": "administration", "delta": 1 },
+            { "target": "flag", "key": "dio_la_dawn_mananitas", "value": true }
+          ]
+        },
+        {
+          "id": "walk_the_block",
+          "label": "Walk the neighbors' block the week before with the mariachi's leader, and invite every house in",
+          "requires": [ { "type": "stat", "key": "charisma", "op": ">=", "value": 50 } ],
+          "outcome": "You knock on thirty doors in a collar with a man carrying a guitarrón, which opens most of them. Eleven neighbors come at midnight and stand at the back, and one of them, an Armenian grandmother, cries at the roses and does not know why. The drums go until one. Nobody calls. The sergeant drives by, sees the crowd, and keeps going. The Guadalupanas make the neighbors tamales, and the block is the block now.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 4 },
+            { "target": "reputation", "key": "public", "delta": 3 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "flag", "key": "dio_la_invited_the_block", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dio_la_regional_bishop",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["ambition_vs_integrity", "loyalty_vs_honesty"],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 8,
+      "suppressYears": 4,
+      "requires": [
+        { "type": "flag", "key": "diocese:los_angeles", "value": true }
+      ],
+      "title": "The Region's Man",
+      "body": "The archdiocese is five pastoral regions, and each region has an auxiliary bishop as its episcopal vicar, and the auxiliary of your region is a man named Aranda who was a pastor in Huntington Park for twenty years before the mitre and has not forgotten it. He has dinners. Every other Thursday at a Salvadoran place near the regional office, eight or ten pastors of his region, no agenda, pupusas and a bottle of something, and the men who go are understood to be his. The pastorates in his region are proposed by him and signed downtown by an archbishop who is said to be on a list for a larger see and who signs, these days, without reading. {@brother_priest}, who goes, tells you at the chrism Mass that Aranda has asked after you twice, and that an invitation is a thing that is offered once. The chancery on Wilshire is forty minutes away on a good day and has never asked after you at all. On Thursday there is a text from a number you do not have, with the name of the restaurant and a time, and nothing else.",
+      "flavorPrompt": "Five regions, five auxiliaries, and one of them building a table: an archdiocese so large that a man is assigned by whoever is closest.",
+      "choices": [
+        {
+          "id": "join_the_table",
+          "label": "Go to the dinners, keep going, and become one of Aranda's men",
+          "outcome": "The pupusas are good and the talk is better, and within a season you know more about the region's parishes than the chancery does. Aranda asks your view on things and sometimes takes it. A pastorate in the region is mentioned as a possibility before it is a vacancy. Downtown, a monsignor who keeps lists adds you to the one headed by Aranda's name, which is a good list until the day it is not.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": 3 },
+            { "target": "reputation", "key": "brother_priests", "delta": 2 },
+            { "target": "relationship", "key": "@brother_priest", "delta": 5 },
+            { "target": "flag", "key": "dio_la_aranda_circle", "value": true }
+          ]
+        },
+        {
+          "id": "once_for_courtesy",
+          "label": "Go once, out of courtesy, and then be busy on Thursdays",
+          "default": true,
+          "outcome": "You go once and are welcomed and eat well and say little, and the next text comes and you are at a wake, and the one after that you are at the hospital, and then the texts stop. Aranda is cordial at the chrism Mass. {@brother_priest} says you have made a choice and probably do not know it. The region's pastorates go to the men at the table. Downtown does not notice either way.",
+          "effects": [
+            { "target": "reputation", "key": "brother_priests", "delta": -1 },
+            { "target": "flag", "key": "dio_la_kept_distance", "value": true }
+          ]
+        },
+        {
+          "id": "tell_downtown",
+          "label": "Go downtown and tell {@vicar_general} you would rather be assigned by the archdiocese than by a region",
+          "requires": [ { "type": "relationship", "npcId": "@vicar_general", "op": ">=", "value": 10 } ],
+          "outcome": "The vicar general hears you out in an office on Wilshire with a view of nothing, and says that the regions are how the archdiocese works, and that he understands you, and that he will remember it. Aranda hears within the week, because everything is heard, and is a degree cooler. Your name goes on a different list, a shorter one, kept downtown, of men who came to say something.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": 2 },
+            { "target": "relationship", "key": "@vicar_general", "delta": 4 },
+            { "target": "reputation", "key": "brother_priests", "delta": -2 },
+            { "target": "flag", "key": "dio_la_went_downtown", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dio_la_fire_season",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["money", "competence"],
+      "severity": "MAJOR",
+      "category": "finance",
+      "baseWeight": 7,
+      "suppressYears": 4,
+      "requires": [
+        { "type": "flag", "key": "diocese:los_angeles", "value": true },
+        { "type": "any", "inner": [
+          { "type": "parish", "key": "terrain", "value": "rural" },
+          { "type": "parish", "key": "terrain", "value": "suburban" }
+        ] }
+      ],
+      "title": "Red Flag Warning",
+      "body": "In October the Santa Anas come down through the passes at forty miles an hour with three percent humidity behind them, and the fire maps on the county's website turn the color of the hills. The archdiocese's insurance program sent the letter in August: the carrier is not renewing the canyon parishes, and {parish} goes to the state's plan of last resort at twice the premium and a third of the coverage. The fire marshal's inspection followed with a list. A hundred feet of brush clearance around every building, the vents on the church replaced with ember-resistant ones, the wood shake on the hall roof gone. Forty-five thousand dollars, by a contractor's estimate, and the fall is already half gone. On Thursday the sheriff issues an evacuation warning for the canyon above the parish, which is not an order but is the thing before one. The sacramental registers are already in the back seat of the car, where the pastors up here keep them from September to December. The Knights have a chainsaw and a truck. The sky to the east is the wrong color at four in the afternoon.",
+      "flavorPrompt": "Fire season in the hills: the insurer's letter, the marshal's list, the registers in the back seat, and a sky the wrong color at four o'clock.",
+      "choices": [
+        {
+          "id": "spend_the_reserve",
+          "label": "As pastor, spend the reserve on the clearance, the vents, and the roof this month, before the wind",
+          "requires": [ { "type": "role", "value": "pastor" } ],
+          "outcome": "The contractor's crew is on the roof within ten days because you paid the rush price, and the hillside behind the church is bare dirt by All Saints. The fire comes within two miles and stops at a ridge. The insurance program's man, when he sees the invoices, says that {parish} is the only canyon parish that did the whole list, and puts it in a memo, and the memo goes to the archbishop with your name on it.",
+          "effects": [
+            { "target": "money", "key": "cash", "delta": -45000 },
+            { "target": "reputation", "key": "chancery", "delta": 3 },
+            { "target": "stat", "key": "administration", "delta": 2 },
+            { "target": "flag", "key": "dio_la_cleared_brush", "value": true }
+          ]
+        },
+        {
+          "id": "knights_and_chipper",
+          "label": "Clear the brush with the Knights and a rented chipper, and leave the vents and the roof for spring",
+          "default": true,
+          "outcome": "Two Saturdays of chainsaws and a chipper from the rental yard, and the hillside is cleared to eighty feet, which the marshal accepts with a look. The roof stays shake. The fire comes within two miles and stops at a ridge, and you spend the night in the lot watching it with the Knights and the registers. In spring the vents are still on the list. So is the roof. So is the fire.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 3 },
+            { "target": "stat", "key": "administration", "delta": 1 },
+            { "target": "flag", "key": "dio_la_knights_chipper", "value": true }
+          ]
+        },
+        {
+          "id": "open_the_hall",
+          "label": "Open the hall as the canyon's evacuation center when the warning comes, and let the buildings take their chances",
+          "outcome": "The warning becomes an order at nine that night and the hall is full by eleven: canyon people with dogs and horses in trailers in the lot, a woman with her mother's ashes in a shoebox. The Knights run the kitchen. The fire stops at the ridge and the hall never burns, though for two hours you thought it would. The county calls {parish} a shelter in its report, which the archdiocese's insurer reads with interest.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 4 },
+            { "target": "reputation", "key": "public", "delta": 4 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "reputation", "key": "chancery", "delta": -1 },
+            { "target": "flag", "key": "dio_la_fire_shelter", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dio_la_half_a_career",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["competence", "belief_vs_safety"],
+      "severity": "NOTABLE",
+      "category": "admin",
+      "baseWeight": 9,
+      "suppressYears": 4,
+      "once": true,
+      "requires": [
+        { "type": "flag", "key": "diocese:los_angeles", "value": true },
+        { "type": "parish", "key": "needsSpanish", "value": true },
+        { "type": "not", "inner": { "type": "credential", "key": "spanish" } },
+        { "type": "not", "inner": { "type": "flag", "key": "speaks_spanish", "value": true } }
+      ],
+      "title": "Half a Career",
+      "body": "The schedule on the sacristy wall is written in the secretary's hand every Thursday, and this Thursday your name is at the one o'clock. The one o'clock is in Spanish. Nine of the eleven Sunday Masses at {parish} are in Spanish, and the deacon, Reyes, a retired bus mechanic from Sinaloa who has preached the one o'clock for nine years, has told you kindly that he will preach for as long as you need him to. You can say the Mass. The words of institution in Spanish are twenty-two words and you have them; the rest of the Missal can be read by a man who reads Latin, with the accent of a workbook. What you cannot do is hear confessions in Spanish, or sit with a dying woman from Oaxaca whose children are at work, or understand what the quinceañera's mother is actually asking. The archdiocese sends priests to a language school in Cuernavaca for six weeks every summer and pays half, and the pastoral center's line is that a priest without Spanish in this archdiocese has half a career, said as a fact rather than a threat. The one o'clock is in three days.",
+      "flavorPrompt": "A schedule on a sacristy wall, a deacon who will preach as long as he must, and a priest who can say the words and cannot hear the confession.",
+      "choices": [
+        {
+          "id": "phonetic_mass",
+          "label": "Say the Mass from the book, phonetically, and let the deacon preach until you can",
+          "default": true,
+          "outcome": "The one o'clock is fourteen hundred people and they are kind about it, which is worse than if they were not. Reyes preaches and you sit and listen and understand a third. After Mass a woman asks you something at the door and you smile and say sí, and Reyes tells you afterward, gently, what you agreed to. You buy the workbook. The workbook is not enough. Everybody knows it, including you.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 1 },
+            { "target": "stat", "key": "charisma", "delta": -1 },
+            { "target": "stat", "key": "knowledge", "delta": 1 },
+            { "target": "flag", "key": "dio_la_phonetic_mass", "value": true }
+          ]
+        },
+        {
+          "id": "cuernavaca",
+          "label": "Ask the pastoral center for the summer in Cuernavaca, and tell the parish it must do without you for six weeks",
+          "outcome": "The pastoral center says yes before you finish the sentence. Six weeks in a house with a family who speak no English, four hours of grammar a morning, the market in the afternoon, and Mass in a parish where nobody makes allowances. You come back able to hear a confession, slowly, and to understand what the quinceañera's mother is asking. Reyes preaches until Advent and then hands you the ambo without ceremony.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": 2 },
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "reputation", "key": "brother_priests", "delta": 1 },
+            { "target": "stat", "key": "knowledge", "delta": 2 },
+            { "target": "flag", "key": "dio_la_cuernavaca", "value": true }
+          ]
+        },
+        {
+          "id": "english_only",
+          "label": "Take the two English Masses, and tell the pastoral center you were ordained for the diocese and not for a language",
+          "volume": "semi_public",
+          "positionTopic": "immigration",
+          "positionValue": -40,
+          "outcome": "The pastoral center's answer is polite and takes a day. The two English Masses at {parish} are the eight o'clock and the five, three hundred people between them, mostly over sixty, and they are glad of you. The other fourteen hundred know your name and not your face. When the next assignment comes it is a parish in the Antelope Valley with one Spanish Mass, and the letter does not say why, and does not need to.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": -4 },
+            { "target": "reputation", "key": "chancery", "delta": -3 },
+            { "target": "reputation", "key": "traditional_bloc", "delta": 1 },
+            { "target": "flag", "key": "dio_la_refused_spanish", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dio_la_the_sale",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["money", "loyalty_vs_honesty"],
+      "severity": "MAJOR",
+      "category": "finance",
+      "baseWeight": 7,
+      "suppressYears": 5,
+      "requires": [
+        { "type": "flag", "key": "diocese:los_angeles", "value": true },
+        { "type": "not", "inner": { "type": "parish", "key": "terrain", "value": "rural" } }
+      ],
+      "title": "The Lot Across the Street",
+      "body": "The school across the street from {parish} closed nine years ago and the building has been the food pantry, the Guadalupanas' storeroom, and the overflow parking ever since, and the parish has come to think of it as its own. It is not. The archdiocese's real estate office has agreed to sell it, with the convent lot beside it, to a developer for a hundred and eighty apartments, and the proceeds go to the settlement, which is still being paid and will be for years. The letter says so plainly, because the archdiocese has learned that saying it plainly is cheaper than the alternative. The parish council wants to fight. The neighborhood council, which fights everything, wants to fight the density. A reporter from the Times has called the rectory twice. A priests' group in the region is circulating a letter that says the parishes should not be sold to pay for what the parishes did not do, and it has thirty signatures. The pantry feeds four hundred families a week out of that building. The settlement is owed to people who were children when it happened. Both of those things are true on the same street.",
+      "choices": [
+        {
+          "id": "fight_the_sale",
+          "label": "Tell the parish council, and then the reporter, that the lot should stay the parish's",
+          "volume": "public",
+          "positionTopic": "authority",
+          "positionValue": 50,
+          "outcome": "Your sentence is in the Times on Sunday, accurately quoted, which is the worst kind. The parish council puts your name on its banner. The sale goes through on schedule, because the archdiocese does not lose these, and the pantry moves to the hall. The real estate office does not call the rectory again. The archbishop's office calls once, and the call is short, and you are not asked to serve on anything for some time.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 5 },
+            { "target": "reputation", "key": "public", "delta": 3 },
+            { "target": "reputation", "key": "chancery", "delta": -6 },
+            { "target": "flag", "key": "dio_la_fought_the_sale", "value": true }
+          ]
+        },
+        {
+          "id": "back_the_sale",
+          "label": "Say from the pulpit that the debt is the whole Church's, and that the sale is just",
+          "default": true,
+          "volume": "public",
+          "positionTopic": "authority",
+          "positionValue": -40,
+          "outcome": "You say it at every Mass and it is the hardest homily of the year, and the church is silent in a way that is not agreement. The parish council chair resigns. The sale goes through. The pantry moves to the hall and feeds three hundred families instead of four hundred, because the hall is smaller. The archbishop writes a note. The priests' letter is published without your name, and someone in the region notices that.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": 4 },
+            { "target": "reputation", "key": "parishioners", "delta": -4 },
+            { "target": "reputation", "key": "brother_priests", "delta": -2 },
+            { "target": "flag", "key": "dio_la_backed_the_sale", "value": true }
+          ]
+        },
+        {
+          "id": "carve_out_the_corner",
+          "label": "Negotiate quietly with the real estate office for the pantry's corner and a covenant on the parking",
+          "requires": [ { "type": "stat", "key": "administration", "op": ">=", "value": 50 } ],
+          "outcome": "Three meetings on Wilshire with a lawyer who is surprised that a priest has read the term sheet. The developer gives up a corner of the ground floor for the pantry at a dollar a year for thirty years and forty spaces on Sundays, because it is cheaper than a fight with the neighborhood council. The sale goes through. The parish council calls it a defeat. The pantry feeds four hundred families a week. Nobody is quoted.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": 2 },
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "stat", "key": "administration", "delta": 2 },
+            { "target": "flag", "key": "dio_la_carved_out_the_corner", "value": true }
+          ]
+        }
+      ]
+    }
+  ]
+}

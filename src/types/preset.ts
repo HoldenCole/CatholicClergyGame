@@ -44,7 +44,8 @@ export interface DiocesePreset {
   /** Hidden complications the generator draws one of. */
   hiddenComplications: string[];
   /** The five parish seeds: kind, place names, and patron pools. */
-  parishSeeds: { kind: ParishKind; places: string[]; patrons: string[] }[];
+  /** The parishes of the diocese; the one marked cathedral is the bishop's own church, downtown, with a rector. */
+  parishSeeds: { kind: ParishKind; places: string[]; patrons: string[]; cathedral?: boolean }[];
   /** Heritage weights for the presbyterate and laity. */
   heritage: Record<string, number>;
   seminaryName: string;

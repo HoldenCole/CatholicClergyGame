@@ -5,6 +5,7 @@ import { hoursOf } from '@/systems/week';
 import { NEED_LABEL } from '@/generation/diocese';
 import { diocesePresets } from '@/content/dioceses';
 import { workAvailability } from '@/systems/problems';
+import { fundableGroups, mayInvest, spendAvailability, spendable, SPENDING } from '@/systems/spending';
 import { useUiStore } from '../uiStore';
 import { PROBLEM_LABEL } from '@/generation/parishes';
 import { STAT_KEYS, CONSTITUENCY_KEYS } from '@/types';
@@ -30,6 +31,11 @@ export default function ParishPanel() {
   const setPreference = useGameStore((s) => s.setPreference);
   const payDebt = useGameStore((s) => s.payDebt);
   const startWork = useGameStore((s) => s.startWork);
+  const spend = useGameStore((s) => s.spend);
+  const closeFund = useGameStore((s) => s.closeFund);
+  const fundGroup = useGameStore((s) => s.fundGroup);
+  const invest = useGameStore((s) => s.invest);
+  const withdraw = useGameStore((s) => s.withdraw);
   const stopWork = useGameStore((s) => s.stopWork);
   const furnish = useUiStore((s) => s.furnish);
   const [inspect, setInspect] = useState(false);
@@ -127,6 +133,66 @@ export default function ParishPanel() {
         )}
         {traj && <p className="ink-faint mt-2 text-xs">{Math.floor(traj.weeks / 52) > 0 ? `${Math.floor(traj.weeks / 52)} years and ` : ''}{traj.weeks % 52} weeks in. A quarter at a time is how a parish turns.</p>}
       </Sheet>
+      {controlsMoney(game) && fin.debt <= 0 && (() => {
+        const canSpend = spendable(game);
+        const spends = spendAvailability(game);
+        const standing = spends.filter((x) => x.standing);
+        const may = mayInvest(game);
+        const groups = fundableGroups(game);
+        return (
+          <Sheet title="The money">
+            <p className="ink-muted text-xs leading-relaxed">
+              The debt is paid. ${canSpend.toLocaleString()} can be spent with two months of running costs kept back
+              {fin.endowment ? `, and $${fin.endowment.toLocaleString()} is invested` : ''}. Money that sits does nothing for anyone.
+            </p>
+            {standing.length > 0 && (
+              <ul className="mt-2 flex flex-col gap-1 text-sm">
+                {standing.map(({ def }) => (
+                  <li key={def.id} className="flex items-center justify-between gap-2">
+                    <span>{def.label} <span className="ink-faint text-xs">· standing, ${(def.upkeep ?? 0).toLocaleString()} a week</span></span>
+                    <button className="pbtn-link" onClick={() => closeFund(def.id)}>wind it up</button>
+                  </li>
+                ))}
+              </ul>
+            )}
+            <ul className="mt-2 flex flex-col gap-1.5 text-sm">
+              {spends.filter((x) => !x.standing).map(({ def, available, why }) => (
+                <li key={def.id} className="flex items-start justify-between gap-2">
+                  <div className="min-w-0">
+                    <div className={available ? '' : 'ink-muted'}>{def.label} <span className="ink-faint text-xs">· ${def.cost.toLocaleString()}{def.upkeep ? ` and $${def.upkeep.toLocaleString()} a week` : ''}</span></div>
+                    <div className="ink-faint text-xs">{available ? def.blurb : why}</div>
+                  </div>
+                  {available && <button className="pbtn shrink-0 px-2 py-0 text-xs" onClick={() => spend(def.id)}>do it</button>}
+                </li>
+              ))}
+            </ul>
+            {groups.length > 0 && canSpend >= SPENDING.groupPerPoint * 5 && (
+              <div className="mt-3 text-xs">
+                <span className="ink-muted">Put money behind a group ($2,000 buys five points of life):</span>
+                <div className="mt-1 flex flex-wrap gap-1">
+                  {groups.map((g) => (
+                    <button key={g.id} className="pbtn px-2 py-0 text-xs" onClick={() => fundGroup(g.id, Math.min(canSpend, SPENDING.groupPerPoint * 10))}>{g.name}</button>
+                  ))}
+                </div>
+              </div>
+            )}
+            <div className="mt-3 text-xs">
+              {may.ok ? (
+                <span className="flex flex-wrap items-center gap-1">
+                  <span className="ink-muted">Invest it{fin.endowment ? ` (invested: $${fin.endowment.toLocaleString()})` : ''}:</span>
+                  {[25000, 100000].filter((n) => n <= canSpend).map((n) => (
+                    <button key={n} className="pbtn px-2 py-0 text-xs" onClick={() => invest(n)}>${(n / 1000).toFixed(0)}k</button>
+                  ))}
+                  {canSpend > 0 && <button className="pbtn px-2 py-0 text-xs" onClick={() => invest(canSpend)}>all of it</button>}
+                  {(fin.endowment ?? 0) > 0 && <button className="pbtn-link" onClick={() => withdraw(fin.endowment ?? 0)}>bring it back</button>}
+                </span>
+              ) : (
+                <span className="ink-faint">Investing it: {may.why}.</span>
+              )}
+            </div>
+          </Sheet>
+        );
+      })()}
       <Sheet title="The problem">
         <p className="text-sm">{parish.problem === 'none' ? 'Nothing is on fire. It will not last.' : (PROBLEM_LABEL[parish.problem] ?? parish.problem)}</p>
         {work && workAv.fix ? (

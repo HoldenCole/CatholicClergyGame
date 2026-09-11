@@ -121,9 +121,27 @@ export interface ProblemWork {
 /** Seasonal AP floors. DESIGN.md §2.5 */
 export type SeasonalLoad = Record<Season, number>;
 
+/** What a pastor does with money that is not owed. parish/spending.json */
+export interface SpendDef {
+  id: string;
+  kind: 'once' | 'fund';
+  label: string;
+  blurb: string;
+  cost: number;
+  /** Cash drawn each week while a fund stands. */
+  upkeep?: number;
+  requires?: Condition[];
+  effects: Effect[];
+  weekly?: Effect[];
+}
+
 export interface ParishFinance {
   cash: number;
   debt: number;
+  /** Money set aside and invested; grows with the market, seeded. */
+  endowment?: number;
+  /** Standing funds by id: the week they were set up. */
+  funds?: Record<string, number>;
   /** Rolling average weekly collection, for the digest. */
   averageCollection: number;
   /** Weeks until the next assessment installment. */

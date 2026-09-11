@@ -25,9 +25,18 @@ export function settingsOf(state: GameState): GameSettings {
   return state.settings ?? DEFAULT_SETTINGS;
 }
 
+export const HOURS_RANGE = { min: 32, max: 80, step: 4 } as const;
+
+/** Working hours a week: the slider if set, else the preset. */
+export function workHours(state: GameState): number {
+  const s = settingsOf(state);
+  if (typeof s.hours === 'number') return Math.max(HOURS_RANGE.min, Math.min(HOURS_RANGE.max, Math.round(s.hours / HOURS_RANGE.step) * HOURS_RANGE.step));
+  return WORK_WEEKS[s.workWeek].parish * 4;
+}
+
 /** Parish blocks a week under the setting. */
 export function parishBlocks(state: GameState): number {
-  return WORK_WEEKS[settingsOf(state).workWeek].parish;
+  return Math.round(workHours(state) / 4);
 }
 
 /** Blocks above the standard week: each wears, at the wear rate. */
@@ -37,7 +46,9 @@ export function extraBlocks(state: GameState): number {
 
 /** Free-hour adjustment for the seminary and study weeks. */
 export function freeHourShift(state: GameState): number {
-  return WORK_WEEKS[settingsOf(state).workWeek].free;
+  const s = settingsOf(state);
+  if (typeof s.hours === 'number') return Math.round((workHours(state) - 48) / 8);
+  return WORK_WEEKS[s.workWeek].free;
 }
 
 export function wearOf(state: GameState): number {
