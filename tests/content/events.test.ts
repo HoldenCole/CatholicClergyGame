@@ -1,7 +1,9 @@
 import { describe, it, expect } from 'vitest';
 import { allEvents, eventFiles } from '@/content';
 import { decorOptions } from '@/systems/decorState';
-import { actionDefs, obligationDefs } from '@/content/parish';
+import { actionDefs, liturgyDials, obligationDefs } from '@/content/parish';
+const LITURGY_DIALS = new Set(liturgyDials.map((d) => d.id));
+const LITURGY_OPTIONS = new Set(liturgyDials.flatMap((d) => d.options.map((o) => `${d.id}:${o.id}`)));
 import { CONSTITUENCY_KEYS, EVENT_CATEGORIES, SEVERITIES, STAT_KEYS, PILLARS, ARCHETYPES } from '@/types';
 import type { Condition, Effect, GameEvent } from '@/types';
 
@@ -119,6 +121,10 @@ function checkCondition(c: Condition, where: string, problems: Problem[]): void 
     case 'arc_weeks_left':
     case 'age':
       if (!hasOp(c.op) || typeof c.value !== 'number') problems.push(`${where}: bad ${c.type} condition`);
+      break;
+    case 'liturgy':
+      if (['changes', 'friction', 'lean', 'fresh'].includes(c.key)) { if (c.op !== undefined && !hasOp(c.op)) problems.push(`${where}: bad liturgy condition`); }
+      else if (!LITURGY_DIALS.has(c.key) || typeof c.value !== 'string' || !LITURGY_OPTIONS.has(`${c.key}:${c.value}`)) problems.push(`${where}: bad liturgy condition ${JSON.stringify(c)}`);
       break;
     case 'bond':
       if (!['any', 'baptized', 'married', 'buried', 'anointed', 'confirmed', 'counseled', 'helped', 'quarreled'].includes(c.kind) || !hasOp(c.op) || typeof c.value !== 'number') problems.push(`${where}: bad bond condition`);

@@ -154,12 +154,12 @@ describe('systems/projects', () => {
   it('only a pastor starts projects; they cost money weekly and complete with effects', () => {
     const vicar = parishState('proj');
     expect(availableProjects(vicar).every((p) => !p.available)).toBe(true);
-    let s: GameState = { ...vicar, assignment: { ...vicar.assignment!, role: 'pastor' } };
+    let s: GameState = { ...vicar, assignment: { ...vicar.assignment!, role: 'pastor' }, character: { ...vicar.character!, stats: { ...vicar.character!.stats, administration: 30 } } };
     s = { ...s, parish: { ...s.parish!, finance: { ...s.parish!.finance, cash: 900_000 } } };
     const options = availableProjects(s);
     expect(options.find((p) => p.def.type === 'renovation')?.available).toBe(true);
     s = startProject(s, 'renovation');
-    expect(() => startProject(s, 'capital_campaign')).toThrow(/One project/);
+    expect(() => startProject(s, 'capital_campaign')).toThrow(/carry/);
     const cash0 = s.parish!.finance.cash;
     const parishBefore = s.world!.parishes.find((p) => p.id === s.parish!.parishId)!;
     for (let w = 0; w < 101; w++) {

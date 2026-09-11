@@ -73,6 +73,7 @@ export default function RoutinePanel() {
           {fixed > 0 ? ` (${hoursOf(fixed)} of that is the season, the desk, and what you have promised elsewhere)` : ''}, leaving {hoursOf(available)} for everything else
           {requested > available ? `; you have asked for ${hoursOf(requested)}, so it will be trimmed` : ''}. Every block below is four hours.
         </p>
+        {game.assignment?.role === 'parochial_vicar' && <p className="ink-faint mt-1 text-xs">As vicar, the people are yours and the books are the pastor's: visits, confessions, and the groups count for more in your hands, and the desk for less.</p>}
         {requested > available && (
           <p className="ink-wine mt-1 text-xs">
             The week is full before you get to it: {hoursOf(requested - available)} hours short. Go minimum on an obligation, drop something you promised, or take hours from your own life below.

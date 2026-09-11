@@ -53,7 +53,7 @@ export function beginStudy(state: GameState, def: OfferDef, failed: boolean, rng
   const flags: GameState['flags'] = { ...next.flags, [`study:${program.city}`]: true };
   for (const k of Object.keys(flags)) if (k.startsWith('parish:') || k.startsWith('role:')) delete flags[k];
   const beats = [...next.beats.filter((b) => b.kind !== 'assignment'), { kind: 'assignment' as const, week: study.endWeek, label: program.kind === 'post' ? (program.city === 'residence' ? 'The bishop lets you go' : `The years at ${CITY_WORD[program.city]} end`) : `Home from ${CITY_WORD[program.city]}` }].sort((a, b) => a.week - b.week);
-  next = { ...next, phase: program.kind === 'see' ? 'bishop' : 'study', study, parish: null, assignment: null, founding: null, project: null, flags, beats, mode: { kind: 'clock' } };
+  next = { ...next, phase: program.kind === 'see' ? 'bishop' : 'study', study, parish: null, assignment: null, founding: null, project: null, projects: [], flags, beats, mode: { kind: 'clock' } };
   if (program.kind === 'see') {
     // The last act: a see of his own, held until the letter at seventy-five.
     const see = generateSee(next, rng.derive(`see:${next.clock.week}`));

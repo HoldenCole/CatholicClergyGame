@@ -5,6 +5,9 @@ import { takeSnapshot, TRAJECTORY } from './trajectory';
 import { extraBlocks, parishBlocks, wearOf } from './workweek';
 import { clubHours, staminaOf } from './clubs';
 import { bondsWeek } from './bonds';
+import { liturgyWeek } from './liturgy';
+import { fundBonuses } from './spending';
+import { noticeQuarter } from './notice';
 import { applyEffects } from '@/engine/effects';
 import { commitmentAp } from '@/engine/offers';
 import { seasonOf } from '@/engine/time';
@@ -51,6 +54,9 @@ export const WEEK = {
   groupsAttendance: 0.08,
   /** How fast attendance follows its target. */
   attendanceFollow: 0.2,
+  /** A vicar's people hours count for this much more, and his desk hours this much less. */
+  vicarCare: 1.3,
+  vicarAdmin: 0.6,
   /** At full care, finance, admin, and group fires draw this much less often. */
   careProblemRelief: 0.4,
   /** Strain recovered a week with nothing sacrificed. */
@@ -141,7 +147,7 @@ export interface Plan {
 export function planWeek(state: GameState): Plan {
   const parish = state.parish!;
   const budget = weekBudget(state);
-  const fixed = seasonalLoad(state) + adminFloorFor(state) + commitmentAp(state) + (state.founding?.apPerWeek ?? 0) + (state.parish?.work?.apPerWeek ?? 0) + clubHours(state);
+  const fixed = Math.max(0, seasonalLoad(state) + adminFloorFor(state) + commitmentAp(state) + (state.founding?.apPerWeek ?? 0) + (state.parish?.work?.apPerWeek ?? 0) + clubHours(state) - fundBonuses(state).relief);
   const relief = groupRelief(state);
   const obligations = { ...parish.routine.obligations };
   const mandatoryOf = () => fixed + OBLIGATION_KEYS.reduce((n, k) => n + obligationAp(k, obligations[k], (relief as Record<string, number>)[k] ?? 0), 0);
@@ -179,10 +185,12 @@ function scaled(effects: Effect[], factor: number): Effect[] {
 }
 
 /** Presence hours in the week as a 0..1 share of full care. */
-export function careOfPlan(plan: Plan): number {
+export function careOfPlan(plan: Plan, role: string = 'pastor'): number {
   const d = plan.discretionary;
   const homily = plan.obligations.sunday_masses === 'invested' ? 2 : plan.obligations.sunday_masses === 'min' ? -1 : 0;
-  const hours = (d.visits ?? 0) + 0.6 * (d.extra_confessions ?? 0) + 0.6 * (d.groups ?? 0) + homily;
+  // A vicar's hours are the people's: the same visit counts for more.
+  const people = role === 'parochial_vicar' ? WEEK.vicarCare : 1;
+  const hours = people * ((d.visits ?? 0) + 0.6 * (d.extra_confessions ?? 0) + 0.6 * (d.groups ?? 0)) + homily;
   return Math.max(0, Math.min(1, hours / WEEK.careFullHours));
 }
 
@@ -192,10 +200,10 @@ export function careOf(state: GameState): number {
 }
 
 /** Where attendance is heading under the current routine and standing. */
-export function attendanceTarget(state: GameState, care: number): number {
+export function attendanceTarget(state: GameState, care: number, extra = 0): number {
   const c = state.character!;
   const groups = (averageVitality(state) - 50) / 50;
-  const raw = 0.4 + c.reputation.parishioners / 400 + c.stats.charisma / 600 + WEEK.careAttendance * care + WEEK.groupsAttendance * groups;
+  const raw = 0.4 + c.reputation.parishioners / 400 + c.stats.charisma / 600 + WEEK.careAttendance * care + WEEK.groupsAttendance * groups + extra;
   return Math.min(0.9, Math.max(0.15, raw));
 }
 
@@ -244,7 +252,10 @@ export function resolveWeek(state: GameState, rng: Rng): { state: GameState; led
     const def = actionDefs.find((a) => a.id === id);
     if (!def || ap <= 0) continue;
     const effective = Math.min(ap, def.maxAp);
-    next = applyEffects(next, scaled(def.effectsPerAp, effective));
+    // A vicar's role is the people: his visits and confessions pay more, his desk work less.
+    const vicar = state.assignment?.role === 'parochial_vicar';
+    const factor = vicar && ['visits', 'extra_confessions', 'groups'].includes(id) ? WEEK.vicarCare : vicar && id === 'admin' ? WEEK.vicarAdmin : 1;
+    next = applyEffects(next, scaled(def.effectsPerAp, effective * factor));
     if (def.adminLoad) adminAp += effective;
     if (def.usesTheology) theologyUsed = true;
     if (def.usesKnowledge) knowledgeUsed = true;
@@ -273,6 +284,10 @@ export function resolveWeek(state: GameState, rng: Rng): { state: GameState; led
   const founded = finishFounding(next, rng, day.getUTCFullYear());
   next = founded.state;
   if (founded.line) lines.push(founded.line);
+  // A well-run parish draws families from outside it, once a quarter.
+  const noticed = noticeQuarter(next, rng.derive(`notice:${state.clock.week}`));
+  next = noticed.state;
+  if (noticed.line) lines.push(noticed.line);
 
   // Decay.
   const c = next.character!;
@@ -286,8 +301,13 @@ export function resolveWeek(state: GameState, rng: Rng): { state: GameState; led
   }
 
   // Presence and attendance. Hours with the people show up in the pews, slowly.
-  const care = careOf(state) + (careOfPlan(plan) - careOf(state)) * WEEK.careFollow;
-  const target = attendanceTarget(next, care);
+  const care = careOf(state) + (careOfPlan(plan, state.assignment?.role) - careOf(state)) * WEEK.careFollow;
+  // The Mass as set, and the standing programs, pull on the pews.
+  const mass = liturgyWeek(next);
+  next = mass.state;
+  if (mass.line) lines.push(mass.line);
+  const bonuses = fundBonuses(next);
+  const target = attendanceTarget(next, care, mass.pull + bonuses.pull);
   const attendance = parish.attendance + (target - parish.attendance) * WEEK.attendanceFollow;
 
   // Finance.
@@ -295,7 +315,7 @@ export function resolveWeek(state: GameState, rng: Rng): { state: GameState; led
   const record = world.parishes.find((p) => p.id === parish.parishId)!;
   const season = seasonOf(next.clock);
   const seasonal = WEEK.collectionSeason[season] * (season === 'ordinary' && isSummer(next) ? WEEK.summerCollection : 1);
-  const collection = Math.round(record.weeklyCollections * (attendance / 0.45) * seasonal * rng.float(0.92, 1.08));
+  const collection = Math.round(record.weeklyCollections * (attendance / 0.45) * seasonal * (1 + bonuses.collections) * rng.float(0.92, 1.08));
   const running = Math.round(record.weeklyCollections * WEEK.runningCostShare);
   const debtService = Math.round((parish.finance.debt * WEEK.debtRateAnnual) / 52);
   let cash = parish.finance.cash + collection - running - debtService;

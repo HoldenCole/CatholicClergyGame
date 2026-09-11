@@ -10,11 +10,23 @@ export function projectDef(type: ProjectType): ProjectDef {
   return projectDefs.find((p) => p.type === type)!;
 }
 
+/** How many projects a pastor can carry at once: one, and one more for every forty points of administration. Invented. */
+export function projectCap(state: GameState): number {
+  return Math.min(3, 1 + Math.floor((state.character?.stats.administration ?? 0) / 40));
+}
+
+/** The projects in hand; older saves carry one in `project`. */
+export function projectsOf(state: GameState): Project[] {
+  return state.projects ?? (state.project ? [state.project] : []);
+}
+
 export function availableProjects(state: GameState): { def: ProjectDef; available: boolean; why: string | null }[] {
   const parish = state.world?.parishes.find((p) => p.id === state.parish?.parishId);
+  const running = projectsOf(state);
   return projectDefs.map((def) => {
     if (state.assignment?.role !== 'pastor') return { def, available: false, why: 'Only a pastor decides this' };
-    if (state.project) return { def, available: false, why: 'One project at a time' };
+    if (running.some((r) => r.type === def.type)) return { def, available: false, why: 'Already in hand' };
+    if (running.length >= projectCap(state)) return { def, available: false, why: running.length === 1 ? 'One project is what you can carry; more administration would carry more' : `${running.length} projects is what you can carry` };
     if (def.requires?.school && (!parish || parish.school === 'none')) return { def, available: false, why: 'No school' };
     if (def.requires?.debt && (!parish || (state.parish?.finance.debt ?? 0) <= 0)) return { def, available: false, why: 'No debt to retire' };
     return { def, available: true, why: null };
@@ -35,7 +47,21 @@ export function startProject(state: GameState, type: ProjectType): GameState {
     costPerWeek: Math.round(def.cost / def.weeks),
     stalledWeeks: 0,
   };
-  return { ...state, project, career: [...state.career, { week: state.clock.week, kind: 'project', text: `Began: ${def.label.toLowerCase()} at {parish}.` }] };
+  const projects = [...projectsOf(state), project];
+  return { ...state, projects, project: projects[0] ?? null, career: [...state.career, { week: state.clock.week, kind: 'project', text: `Began: ${def.label.toLowerCase()} at {parish}.` }] };
+}
+
+/** Push a project: double the weekly draw and halve the time left; or ease off again. */
+export function pushProject(state: GameState, type: ProjectType, on: boolean): GameState {
+  const projects = projectsOf(state).map((p) => {
+    if (p.type !== type) return p;
+    const pace: 1 | 2 = on ? 2 : 1;
+    if ((p.pace ?? 1) === pace) return p;
+    const left = Math.max(1, p.endWeek - state.clock.week);
+    const endWeek = state.clock.week + Math.max(1, Math.round(on ? left / 2 : left * 2));
+    return { ...p, pace, endWeek };
+  });
+  return { ...state, projects, project: projects[0] ?? null };
 }
 
 /** Completion effects on the parish record and the player. Invented, following DESIGN 8.3. */
@@ -59,21 +85,37 @@ function completionEffects(type: ProjectType): Effect[] {
   }
 }
 
-/** One week of the project: money out, and completion when the weeks are served. */
+/** One week of every project: money out, and completion when the weeks are served. */
 export function projectWeek(state: GameState): { state: GameState; line: string | null } {
-  const p = state.project;
-  if (!p || !state.parish || !state.world) return { state, line: null };
-  if (p.parishId !== state.parish.parishId) return { state: { ...state, project: null }, line: 'The project did not survive your transfer.' };
+  const running = projectsOf(state);
+  if (!running.length || !state.parish || !state.world) return { state, line: null };
+  const lines: string[] = [];
+  let next: GameState = state;
+  const kept: Project[] = [];
+  for (const p of running) {
+    if (p.parishId !== state.parish.parishId) { lines.push('The project did not survive your transfer.'); continue; }
+    const r = oneProjectWeek(next, p);
+    next = r.state;
+    if (r.line) lines.push(r.line);
+    if (r.project) kept.push(r.project);
+  }
+  next = { ...next, projects: kept, project: kept[0] ?? null };
+  return { state: next, line: lines.length ? lines.join(' ') : null };
+}
+
+function oneProjectWeek(state: GameState, p: Project): { state: GameState; project: Project | null; line: string | null } {
   let next = state;
   let project = p;
-  if (p.costPerWeek > 0) {
-    if (next.parish!.finance.cash >= p.costPerWeek) next = applyEffects(next, [{ target: 'money', key: 'cash', delta: -p.costPerWeek }]);
+  const pace = p.pace ?? 1;
+  const draw = p.costPerWeek * pace;
+  if (draw > 0) {
+    if (next.parish!.finance.cash >= draw) next = applyEffects(next, [{ target: 'money', key: 'cash', delta: -draw }]);
     else project = { ...project, stalledWeeks: project.stalledWeeks + 1, endWeek: project.endWeek + 1 };
   } else if (p.type === 'debt_retirement') {
-    const pay = Math.min(next.parish!.finance.debt, Math.max(0, Math.round(next.parish!.finance.cash * 0.08)));
+    const pay = Math.min(next.parish!.finance.debt, Math.max(0, Math.round(next.parish!.finance.cash * 0.08 * pace)));
     next = { ...next, parish: { ...next.parish!, finance: { ...next.parish!.finance, cash: next.parish!.finance.cash - pay, debt: next.parish!.finance.debt - pay } } };
   }
-  if (next.clock.week < project.endWeek) return { state: { ...next, project }, line: null };
+  if (next.clock.week < project.endWeek) return { state: next, project, line: null };
 
   const def = projectDef(p.type);
   next = applyEffects(next, completionEffects(p.type));
@@ -83,11 +125,11 @@ export function projectWeek(state: GameState): { state: GameState; line: string 
   return {
     state: {
       ...next,
-      project: null,
       world: { ...world, parishes },
       parish: { ...next.parish!, finance: { ...next.parish!.finance, debt } },
       career: [...next.career, { week: next.clock.week, kind: 'project', text: `Finished: ${def.label.toLowerCase()} at {parish}.` }],
     },
+    project: null,
     line: `${def.label} is done.`,
   };
 }
@@ -125,13 +167,18 @@ export const HANDOFF = { base: 0.35, perProgress: 0.45 } as const;
  * standing the man who began it would have had.
  */
 export function handoffProject(state: GameState, rng: Rng): { state: GameState; kept: boolean | null } {
-  const p = state.project;
-  if (!p || !state.world || !state.parish || p.parishId !== state.parish.parishId) return { state, kept: null };
-  const def = projectDef(p.type);
-  const progress = Math.min(1, Math.max(0, (state.clock.week - p.startWeek) / Math.max(1, p.endWeek - p.startWeek)));
-  const kept = rng.chance(HANDOFF.base + HANDOFF.perProgress * progress);
-  const note = (text: string): GameState => ({ ...state, career: [...state.career, { week: state.clock.week, kind: 'project', text }] });
-  if (!kept) return { state: { ...note(`Abandoned by your successor: ${def.label.toLowerCase()} at {parish}.`), project: null }, kept };
-  const parishes = applyProjectToParishes(state.world.parishes, p, state.character!.alignment);
-  return { state: { ...note(`Your successor kept ${def.label.toLowerCase()} at {parish} and finished it.`), world: { ...state.world, parishes }, project: null }, kept };
+  const running = projectsOf(state).filter((p) => state.parish && p.parishId === state.parish.parishId);
+  if (!running.length || !state.world || !state.parish) return { state: { ...state, projects: [], project: null }, kept: null };
+  let next: GameState = state;
+  let any = false;
+  for (const p of running) {
+    const def = projectDef(p.type);
+    const progress = Math.min(1, Math.max(0, (state.clock.week - p.startWeek) / Math.max(1, p.endWeek - p.startWeek)));
+    const kept = rng.derive(`handoff:${p.type}`).chance(HANDOFF.base + HANDOFF.perProgress * progress);
+    const note = (text: string): GameState => ({ ...next, career: [...next.career, { week: state.clock.week, kind: 'project', text }] });
+    if (!kept) { next = note(`Abandoned by your successor: ${def.label.toLowerCase()} at {parish}.`); continue; }
+    any = true;
+    next = { ...note(`Your successor kept ${def.label.toLowerCase()} at {parish} and finished it.`), world: { ...next.world!, parishes: applyProjectToParishes(next.world!.parishes, p, next.character!.alignment) } };
+  }
+  return { state: { ...next, projects: [], project: null }, kept: any };
 }

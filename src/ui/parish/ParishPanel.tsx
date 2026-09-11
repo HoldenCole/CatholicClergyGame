@@ -13,6 +13,7 @@ import { useState } from 'react';
 import { arcKey } from '@/llm/skin';
 import Sheet from '../Sheet';
 import TalkButton, { LastTalk } from './TalkButton';
+import MassPanel from './MassPanel';
 import { currentPreference, PREFERENCES, PREFERENCE_LABEL } from '@/systems/assignment';
 import { TRAIT_LABEL } from '../portraits/traits';
 import Portrait from '../portraits/Portrait';
@@ -97,6 +98,7 @@ export default function ParishPanel() {
         )}
         {portrait && <p className="mt-3 whitespace-pre-line text-sm leading-relaxed">{portrait}</p>}
       </Sheet>
+      <MassPanel />
       <Sheet title={game.world.diocese.visible.name}>
         {(() => {
           const v = game.world!.diocese.visible;

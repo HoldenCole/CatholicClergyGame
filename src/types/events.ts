@@ -99,6 +99,8 @@ export type Condition =
   | { type: 'strain'; op: Op; value: number }
   /** Extension: the man's age in years. */
   | { type: 'age'; op: Op; value: number }
+  /** Extension: the pastor's Mass: a dial set to an option, or 'changes' / 'friction' (0..1 distance from what the parish wants) against a value. */
+  | { type: 'liturgy'; key: string; value?: string; op?: Op; amount?: number }
   /** Extension: how many bonds of a kind ('any' for all) he has with the people of the current parish. */
   | { type: 'bond'; kind: string; op: Op; value: number }
   /** Extension: the see he holds as bishop, one of its dials. */

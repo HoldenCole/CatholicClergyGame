@@ -54,7 +54,7 @@ describe('the third playtest round', () => {
     const av = spendAvailability(p);
     expect(av.find((a) => a.def.id === 'parish_mission')!.available).toBe(true);
     const inDebt: GameState = { ...p, parish: { ...p.parish!, finance: { ...p.parish!.finance, debt: 10_000 } } };
-    expect(spendAvailability(inDebt).every((a) => !a.available)).toBe(true);
+    expect(spendAvailability(inDebt).filter((a) => a.def.kind === 'once').every((a) => !a.available)).toBe(true);
     const missioned = spend(p, 'parish_mission');
     expect(missioned.parish!.finance.cash).toBe(p.parish!.finance.cash - 15_000);
     expect(missioned.flags['held:mission']).toBe(true);

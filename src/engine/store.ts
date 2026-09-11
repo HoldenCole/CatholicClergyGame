@@ -42,7 +42,8 @@ import { yearOf } from '@/ui/portraits/spec';
 import { payDebt as doPayDebt } from '@/systems/finance';
 import { applyForOpening as doApply } from '@/systems/openings';
 import type { GroupType, ProjectType } from '@/types';
-import { startProject as doStartProject } from '@/systems/projects';
+import { pushProject as doPushProject, startProject as doStartProject } from '@/systems/projects';
+import { setDial as doSetDial } from '@/systems/liturgy';
 import { furnish as doFurnish, petition as doPetition } from '@/systems/decor';
 import { setSeminaryActivity as doSetSeminaryActivity } from '@/systems/seminaryWeek';
 import { setStudyActivity as doSetStudyActivity } from '@/systems/studyWeek';
@@ -132,6 +133,9 @@ export interface GameStore {
   /** Put a new leader over a group. */
   replaceLeader(groupId: string): void;
   startProject(type: ProjectType): void;
+  pushProject(type: ProjectType, on: boolean): void;
+  /** Turn a dial of the pastor's Mass. */
+  setDial(dial: string, option: string): void;
   furnish(place: DecorPlace, optionId: string): void;
   /** Write to the chancery for leave on a liturgical topic. */
   petition(topic: LiturgicalTopic): void;
@@ -486,6 +490,12 @@ export const useGameStore = create<GameStore>()((set, get) => ({
   },
   startProject(type) {
     update(set, get, (game) => doStartProject(game, type));
+  },
+  pushProject(type, on) {
+    update(set, get, (game) => doPushProject(game, type, on));
+  },
+  setDial(dial, option) {
+    update(set, get, (game) => doSetDial(game, dial, option));
   },
   furnish(place, optionId) {
     update(set, get, (game) => {

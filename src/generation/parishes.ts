@@ -1,3 +1,4 @@
+import { withLiturgy } from '@/systems/liturgy';
 import type { DiocesePreset, HomeTerrain, Npc, Parish, ParishKind, SchoolStatus } from '@/types';
 import type { Rng } from '@/engine/rng';
 import { CLERGY_HERITAGE, eraForBirthYear, rollHeritage, rollMaleName } from './names';
@@ -178,7 +179,7 @@ export function generateParishes(rng: Rng, preset: DiocesePreset, year: number):
       made = { ...made, parish: { ...made.parish, name: rng.pick(seed.patrons), place: rng.pick(seed.places) } };
     }
     taken.add(`${made.parish.name}|${made.parish.place}`);
-    return made;
+    return { ...made, parish: withLiturgy(rng.derive(`mass:${made.parish.id}`), made.parish) };
   });
 }
 

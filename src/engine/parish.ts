@@ -1,6 +1,7 @@
 import type { Beat, GameState, ParishState, Quality, ObligationKey } from '@/types';
 import type { Rng } from './rng';
 import { generateParishPeople } from '@/generation/parishPeople';
+import { withLiturgy } from '@/systems/liturgy';
 import { generateGroups } from '@/systems/groups';
 import { resolveWeek } from '@/systems/week';
 import { takeSnapshot } from '@/systems/trajectory';
@@ -68,7 +69,7 @@ export function startAssignment(state: GameState, rng: Rng): GameState {
     for (const n of made.leaders) npcs[n.id] = n;
     groupIds = made.groups.map((g) => g.id);
   }
-  const parishes = world.parishes.map((p) => (p.id === parish.id ? { ...p, staffIds, groupIds } : p));
+  const parishes = world.parishes.map((p) => (p.id === parish.id ? withLiturgy(rng.derive(`mass:${p.id}`), { ...p, staffIds, groupIds }) : p));
 
   const arcYears = assignment.role === 'pastor' ? 6 : rng.int(ARC.minYears, ARC.maxYears);
   const arcEndWeek = state.clock.week + arcYears * 52;

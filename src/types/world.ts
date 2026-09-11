@@ -192,6 +192,14 @@ export interface Parish {
   groupIds: string[];
   /** One live problem, by id in content. */
   problem: string;
+  /** The Mass as it is said here: dial id -> option id. Rolled at generation; the pastor changes it. */
+  liturgy?: Record<string, string>;
+  /** What the people want of each dial, −1 traditional .. +1 progressive. */
+  taste?: Record<string, number>;
+  /** The week each dial was last changed, for the shock of it. */
+  liturgyChanged?: Record<string, number>;
+  /** Times outsiders have taken notice of a well-run parish. */
+  noticed?: number;
 }
 
 export interface World {

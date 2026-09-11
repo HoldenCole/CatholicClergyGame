@@ -1,6 +1,15 @@
 import type { GameState, SaveFile, Snapshot } from '@/types';
 import { SAVE_VERSION, EVENT_CATEGORIES, SPEEDS } from '@/types';
-import { restoreRng, type Rng } from './rng';
+import { createRng, restoreRng, type Rng } from './rng';
+import { withLiturgy } from '@/systems/liturgy';
+
+/** Parishes saved before the pastor's Mass existed get one now, rolled from the seed so a reload rolls the same. */
+function giveEveryParishItsMass(state: GameState): void {
+  const world = state.world;
+  if (!world) return;
+  if (world.parishes.every((p) => p.liturgy && p.taste)) return;
+  world.parishes = world.parishes.map((p) => (p.liturgy && p.taste ? p : withLiturgy(createRng(`${state.seed}:mass:${p.id}`), p)));
+}
 
 /**
  * JSON with keys in sorted order at every level, so two saves of the same
@@ -101,6 +110,16 @@ export function deserialize(json: string): SaveFile {
     };
     lift(raw.state);
     if (isRecord(raw.previous)) lift(raw.previous.state);
+    raw.version = 5;
+  }
+  if (raw.version === 5) {
+    // v5 → v6: several projects at once.
+    const lift = (st: unknown) => {
+      if (!isRecord(st)) return;
+      if (st.projects === undefined) st.projects = st.project ? [st.project] : [];
+    };
+    lift(raw.state);
+    if (isRecord(raw.previous)) lift(raw.previous.state);
     raw.version = SAVE_VERSION;
   }
   if (raw.version !== SAVE_VERSION) {
@@ -114,6 +133,8 @@ export function deserialize(json: string): SaveFile {
     if (!isRecord(raw.previous.rngState)) throw new SaveError('previous.rngState missing');
   }
   const prose = isRecord(raw.prose) ? (raw.prose as Record<string, string>) : {};
+  giveEveryParishItsMass(raw.state as GameState);
+  if (isRecord(raw.previous)) giveEveryParishItsMass(raw.previous.state as GameState);
   return {
     version: SAVE_VERSION,
     state: raw.state,
