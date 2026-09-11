@@ -17,6 +17,8 @@ export interface Opening {
   /** Calendar week the opening appeared. */
   week: number;
   label: string;
+  /** The player has put his name forward for it. */
+  applied?: boolean;
 }
 
 /** A candidate as the personnel board sees him. Built from the player or from an NPC priest. */

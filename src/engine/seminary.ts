@@ -171,6 +171,7 @@ export function chooseSummer(state: GameState, id: SummerAssignment): GameState 
     mode: { kind: 'clock' },
     seminary: { ...next.seminary!, summerAssignment: id, summers: { ...sem.summers, [sem.year]: id } },
     digest: [...next.digest.slice(0, -1), withLine(next.digest[next.digest.length - 1], renderText(option.outcome, next))],
+    career: [...next.career, { week: next.clock.week, kind: 'note', text: `Summer of year ${sem.year}: ${option.label.toLowerCase()}.` }],
   };
 }
 

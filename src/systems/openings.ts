@@ -3,6 +3,7 @@ import type { Rng } from '@/engine/rng';
 import { CLERGY_HERITAGE, eraForBirthYear, rollHeritage, rollMaleName } from '@/generation/names';
 import { addStats, finishNpc, rollAlignment, rollBaseStats } from '@/generation/npc';
 import { PROBLEM_LABEL } from '@/generation/parishes';
+import { fit, maturityModifier, readiness, trust } from './promotion';
 
 /** Invented. */
 export const OPENINGS = {
@@ -170,4 +171,54 @@ export function openingBlurb(state: GameState, opening: Opening): string {
   const p = openingParish(state, opening);
   if (!p) return opening.label;
   return `${p.name}, ${p.place}: ${PROBLEM_LABEL[p.problem] ?? p.problem}`;
+}
+
+/** Asking costs a little each time past the first in a year: the chancery does not love a man who applies for everything. Invented. */
+export const ASKING = { chanceryPerExtra: -2 } as const;
+
+/** Put the player's name forward for an opening. Remembered in the file. */
+export function applyForOpening(state: GameState, openingId: string): GameState {
+  const opening = state.openings.find((o) => o.id === openingId);
+  if (!opening || opening.applied || !state.character) return state;
+  const askedThisYear = state.openings.filter((o) => o.applied && state.clock.week - o.week < 52).length;
+  const cost = askedThisYear > 0 ? ASKING.chanceryPerExtra : 0;
+  const c = state.character;
+  return {
+    ...state,
+    openings: state.openings.map((o) => (o.id === openingId ? { ...o, applied: true } : o)),
+    character: cost ? { ...c, reputation: { ...c.reputation, chancery: Math.max(-100, c.reputation.chancery + cost) } } : c,
+    career: [...state.career, { week: state.clock.week, kind: 'note', text: `Put your name in for ${opening.label}.` }],
+  };
+}
+
+export interface Chances {
+  readiness: string;
+  trust: string;
+  fit: string;
+  /** One line the man can act on. */
+  verdict: string;
+  reasons: string[];
+}
+
+/** How the board would read the player against an opening today, in words. No noise, no rivals. */
+export function chancesFor(state: GameState, opening: Opening): Chances {
+  const me = playerCandidate(state);
+  const bishop = state.world!.diocese.hidden.bishop;
+  const r = readiness(me, opening);
+  const t = trust(me);
+  const f = fit(me, opening, bishop);
+  const fitEffective = f.value * (1 + me.outspokenness / 100);
+  const maturity = maturityModifier(me.ordinationAge, me.age);
+  const total = r.value * 0.3 + t.value * 0.25 + fitEffective * 0.3 + maturity;
+  const word = (v: number, lo: number, hi: number, words: [string, string, string]) => (v >= hi ? words[2] : v >= lo ? words[1] : words[0]);
+  const verdict =
+    opening.kind === 'pastor' && me.yearsOrdained < 3 && me.currentRole !== 'pastor' ? 'Too soon: the board does not make pastors before three years' :
+    total >= 40 ? 'A strong name for it' : total >= 22 ? 'A fair chance, against the right rivals' : total >= 8 ? 'A long shot' : 'Not this one, not yet';
+  return {
+    readiness: word(r.value, 35, 60, ['green', 'ready enough', 'ready']),
+    trust: word(t.value, 45, 65, ['an unknown quantity', 'trusted a little', 'trusted']),
+    fit: word(fitEffective, -5, 15, ['a poor fit', 'a fair fit', 'a good fit']),
+    verdict,
+    reasons: [...r.reasons, ...t.reasons, ...f.reasons],
+  };
 }

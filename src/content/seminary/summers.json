@@ -1,115 +1,364 @@
 [
-  {
-    "id": "home_parish",
-    "label": "Your home parish",
-    "blurb": "Familiar pews, a pastor who knew you before, and a summer of being watched by people who remember you as a boy.",
-    "outcome": "You are fed, photographed, and asked to say grace at every table. The pastor lets you do more than he should. You come back rested and a little embarrassed by how easy it was.",
-    "requires": [{ "type": "flag", "key": "tie:son", "value": true }],
-    "effects": [
-      { "target": "pillar", "key": "pastoral", "delta": 2 },
-      { "target": "pillar", "key": "human", "delta": 1 },
-      { "target": "stat", "key": "charisma", "delta": 1 },
-      { "target": "reputation", "key": "parishioners", "delta": 3 },
-      { "target": "relationship", "key": "@home_pastor", "delta": 8 }
+ {
+  "id": "home_parish",
+  "label": "Your home parish",
+  "blurb": "Familiar pews, a pastor who knew you before, and a summer of being watched by people who remember you as a boy.",
+  "outcome": "You are fed, photographed, and asked to say grace at every table. The pastor lets you do more than he should. You come back rested and a little embarrassed by how easy it was.",
+  "requires": [
+   {
+    "type": "flag",
+    "key": "tie:son",
+    "value": true
+   }
+  ],
+  "effects": [
+   {
+    "target": "pillar",
+    "key": "pastoral",
+    "delta": 2
+   },
+   {
+    "target": "pillar",
+    "key": "human",
+    "delta": 1
+   },
+   {
+    "target": "stat",
+    "key": "charisma",
+    "delta": 1
+   },
+   {
+    "target": "reputation",
+    "key": "parishioners",
+    "delta": 3
+   },
+   {
+    "target": "relationship",
+    "key": "@home_pastor",
+    "delta": 8
+   }
+  ]
+ },
+ {
+  "id": "hard_parish",
+  "label": "A hard parish",
+  "blurb": "Somewhere nobody asked for: a neighborhood with more funerals than baptisms, a pastor alone, a rectory with one working shower.",
+  "outcome": "You learn what a parish looks like when it is losing. You bury people whose names you never learned to pronounce and you sit with a pastor who has stopped expecting help. The formation faculty notice that you asked for it.",
+  "effects": [
+   {
+    "target": "pillar",
+    "key": "pastoral",
+    "delta": 3
+   },
+   {
+    "target": "pillar",
+    "key": "spiritual",
+    "delta": 1
+   },
+   {
+    "target": "stat",
+    "key": "piety",
+    "delta": 2
+   },
+   {
+    "target": "stat",
+    "key": "charisma",
+    "delta": 1
+   },
+   {
+    "target": "archetype",
+    "key": "pastoral",
+    "delta": 1
+   },
+   {
+    "target": "relationship",
+    "key": "@formation_advisor",
+    "delta": 5
+   },
+   {
+    "target": "flag",
+    "key": "summer:hard_parish",
+    "value": true
+   },
+   {
+    "target": "reputation",
+    "key": "parishioners",
+    "delta": 3
+   },
+   {
+    "target": "reputation",
+    "key": "chancery",
+    "delta": 3
+   }
+  ]
+ },
+ {
+  "id": "hospital",
+  "label": "Hospital chaplaincy",
+  "blurb": "A unit of clinical pastoral education: the wards, the night pager, the families in the hallway.",
+  "outcome": "You sit with the dying and with people who are angry at God and at you. You learn to say nothing well. The supervisor's evaluation is blunt and, in places, correct.",
+  "effects": [
+   {
+    "target": "pillar",
+    "key": "pastoral",
+    "delta": 2
+   },
+   {
+    "target": "pillar",
+    "key": "human",
+    "delta": 2
+   },
+   {
+    "target": "stat",
+    "key": "piety",
+    "delta": 1
+   },
+   {
+    "target": "stat",
+    "key": "charisma",
+    "delta": 2
+   },
+   {
+    "target": "credential",
+    "key": "cpe_unit"
+   },
+   {
+    "target": "flag",
+    "key": "summer:hospital",
+    "value": true
+   },
+   {
+    "target": "reputation",
+    "key": "parishioners",
+    "delta": 2
+   }
+  ]
+ },
+ {
+  "id": "mission",
+  "label": "A mission abroad",
+  "blurb": "Eight weeks somewhere hot with the diocese's sister mission: a school, a clinic, Mass under a tin roof.",
+  "outcome": "You come back thinner, with a tan and a set of opinions about American parishes that you will have to learn to keep to yourself. Your Spanish is better. So is your prayer.",
+  "effects": [
+   {
+    "target": "pillar",
+    "key": "spiritual",
+    "delta": 2
+   },
+   {
+    "target": "pillar",
+    "key": "pastoral",
+    "delta": 2
+   },
+   {
+    "target": "stat",
+    "key": "piety",
+    "delta": 2
+   },
+   {
+    "target": "stat",
+    "key": "knowledge",
+    "delta": 1
+   },
+   {
+    "target": "archetype",
+    "key": "missionary",
+    "delta": 2
+   },
+   {
+    "target": "credential",
+    "key": "spanish"
+   },
+   {
+    "target": "flag",
+    "key": "speaks_spanish",
+    "value": true
+   },
+   {
+    "target": "flag",
+    "key": "summer:mission",
+    "value": true
+   },
+   {
+    "target": "reputation",
+    "key": "public",
+    "delta": 2
+   },
+   {
+    "target": "reputation",
+    "key": "parishioners",
+    "delta": 2
+   }
+  ]
+ },
+ {
+  "id": "chancery",
+  "label": "A chancery internship",
+  "blurb": "Filing, driving, sitting outside meetings. Seeing how the diocese is actually run.",
+  "outcome": "You learn who signs what and who decides before the signing. Two officials remember your name. One of them is worth remembering back.",
+  "effects": [
+   {
+    "target": "pillar",
+    "key": "intellectual",
+    "delta": 1
+   },
+   {
+    "target": "pillar",
+    "key": "pastoral",
+    "delta": 1
+   },
+   {
+    "target": "stat",
+    "key": "administration",
+    "delta": 3
+   },
+   {
+    "target": "stat",
+    "key": "piety",
+    "delta": -1
+   },
+   {
+    "target": "archetype",
+    "key": "administrative",
+    "delta": 2
+   },
+   {
+    "target": "reputation",
+    "key": "chancery",
+    "delta": 6
+   },
+   {
+    "target": "relationship",
+    "key": "@vocation_director",
+    "delta": 8
+   },
+   {
+    "target": "flag",
+    "key": "summer:chancery",
+    "value": true
+   }
+  ]
+ },
+ {
+  "id": "rome",
+  "label": "A summer in Rome",
+  "blurb": "Italian classes, the Roman churches, and a chance to be seen by the people who notice.",
+  "outcome": "You learn enough Italian to be embarrassed by it and enough about Rome to want to go back. The rector hears that you did well. So does someone at the Congregation, though you will not know it for years.",
+  "requires": [
+   {
+    "type": "any",
+    "inner": [
+     {
+      "type": "year",
+      "op": ">=",
+      "value": 4
+     },
+     {
+      "type": "stat",
+      "key": "theology",
+      "op": ">=",
+      "value": 50
+     }
     ]
-  },
-  {
-    "id": "hard_parish",
-    "label": "A hard parish",
-    "blurb": "Somewhere nobody asked for: a neighborhood with more funerals than baptisms, a pastor alone, a rectory with one working shower.",
-    "outcome": "You learn what a parish looks like when it is losing. You bury people whose names you never learned to pronounce and you sit with a pastor who has stopped expecting help. The formation faculty notice that you asked for it.",
-    "effects": [
-      { "target": "pillar", "key": "pastoral", "delta": 3 },
-      { "target": "pillar", "key": "spiritual", "delta": 1 },
-      { "target": "stat", "key": "piety", "delta": 2 },
-      { "target": "stat", "key": "charisma", "delta": 1 },
-      { "target": "archetype", "key": "pastoral", "delta": 1 },
-      { "target": "relationship", "key": "@formation_advisor", "delta": 5 },
-      { "target": "flag", "key": "summer:hard_parish", "value": true }
-    ]
-  },
-  {
-    "id": "hospital",
-    "label": "Hospital chaplaincy",
-    "blurb": "A unit of clinical pastoral education: the wards, the night pager, the families in the hallway.",
-    "outcome": "You sit with the dying and with people who are angry at God and at you. You learn to say nothing well. The supervisor's evaluation is blunt and, in places, correct.",
-    "effects": [
-      { "target": "pillar", "key": "pastoral", "delta": 2 },
-      { "target": "pillar", "key": "human", "delta": 2 },
-      { "target": "stat", "key": "piety", "delta": 1 },
-      { "target": "stat", "key": "charisma", "delta": 2 },
-      { "target": "credential", "key": "cpe_unit" },
-      { "target": "flag", "key": "summer:hospital", "value": true }
-    ]
-  },
-  {
-    "id": "mission",
-    "label": "A mission abroad",
-    "blurb": "Eight weeks somewhere hot with the diocese's sister mission: a school, a clinic, Mass under a tin roof.",
-    "outcome": "You come back thinner, with a tan and a set of opinions about American parishes that you will have to learn to keep to yourself. Your Spanish is better. So is your prayer.",
-    "effects": [
-      { "target": "pillar", "key": "spiritual", "delta": 2 },
-      { "target": "pillar", "key": "pastoral", "delta": 2 },
-      { "target": "stat", "key": "piety", "delta": 2 },
-      { "target": "stat", "key": "knowledge", "delta": 1 },
-      { "target": "archetype", "key": "missionary", "delta": 2 },
-      { "target": "credential", "key": "spanish" },
-      { "target": "flag", "key": "speaks_spanish", "value": true },
-      { "target": "flag", "key": "summer:mission", "value": true }
-    ]
-  },
-  {
-    "id": "chancery",
-    "label": "A chancery internship",
-    "blurb": "Filing, driving, sitting outside meetings. Seeing how the diocese is actually run.",
-    "outcome": "You learn who signs what and who decides before the signing. Two officials remember your name. One of them is worth remembering back.",
-    "effects": [
-      { "target": "pillar", "key": "intellectual", "delta": 1 },
-      { "target": "pillar", "key": "pastoral", "delta": 1 },
-      { "target": "stat", "key": "administration", "delta": 3 },
-      { "target": "stat", "key": "piety", "delta": -1 },
-      { "target": "archetype", "key": "administrative", "delta": 2 },
-      { "target": "reputation", "key": "chancery", "delta": 6 },
-      { "target": "relationship", "key": "@vocation_director", "delta": 8 },
-      { "target": "flag", "key": "summer:chancery", "value": true }
-    ]
-  },
-  {
-    "id": "rome",
-    "label": "A summer in Rome",
-    "blurb": "Italian classes, the Roman churches, and a chance to be seen by the people who notice.",
-    "outcome": "You learn enough Italian to be embarrassed by it and enough about Rome to want to go back. The rector hears that you did well. So does someone at the Congregation, though you will not know it for years.",
-    "requires": [
-      { "type": "any", "inner": [
-        { "type": "year", "op": ">=", "value": 4 },
-        { "type": "stat", "key": "theology", "op": ">=", "value": 50 }
-      ] }
-    ],
-    "effects": [
-      { "target": "pillar", "key": "intellectual", "delta": 3 },
-      { "target": "pillar", "key": "spiritual", "delta": 1 },
-      { "target": "stat", "key": "knowledge", "delta": 2 },
-      { "target": "stat", "key": "theology", "delta": 1 },
-      { "target": "archetype", "key": "theological", "delta": 1 },
-      { "target": "reputation", "key": "rome", "delta": 5 },
-      { "target": "credential", "key": "italian_basic" },
-      { "target": "flag", "key": "summer:rome", "value": true }
-    ]
-  },
-  {
-    "id": "language_immersion",
-    "label": "Spanish immersion",
-    "blurb": "A language school in Mexico or Guatemala, host family included, for men the diocese needs to be bilingual.",
-    "outcome": "By August you can hear confessions in Spanish badly and preach in it worse, which is more than most of the presbyterate. The vocation director writes it down.",
-    "requires": [{ "type": "not", "inner": { "type": "flag", "key": "speaks_spanish", "value": true } }],
-    "effects": [
-      { "target": "pillar", "key": "pastoral", "delta": 2 },
-      { "target": "pillar", "key": "intellectual", "delta": 1 },
-      { "target": "stat", "key": "knowledge", "delta": 2 },
-      { "target": "credential", "key": "spanish" },
-      { "target": "flag", "key": "speaks_spanish", "value": true },
-      { "target": "relationship", "key": "@vocation_director", "delta": 5 },
-      { "target": "flag", "key": "summer:language", "value": true }
-    ]
-  }
+   }
+  ],
+  "effects": [
+   {
+    "target": "pillar",
+    "key": "intellectual",
+    "delta": 3
+   },
+   {
+    "target": "pillar",
+    "key": "spiritual",
+    "delta": 1
+   },
+   {
+    "target": "stat",
+    "key": "knowledge",
+    "delta": 2
+   },
+   {
+    "target": "stat",
+    "key": "theology",
+    "delta": 1
+   },
+   {
+    "target": "archetype",
+    "key": "theological",
+    "delta": 1
+   },
+   {
+    "target": "reputation",
+    "key": "rome",
+    "delta": 5
+   },
+   {
+    "target": "credential",
+    "key": "italian_basic"
+   },
+   {
+    "target": "flag",
+    "key": "summer:rome",
+    "value": true
+   }
+  ]
+ },
+ {
+  "id": "language_immersion",
+  "label": "Spanish immersion",
+  "blurb": "A language school in Mexico or Guatemala, host family included, for men the diocese needs to be bilingual.",
+  "outcome": "By August you can hear confessions in Spanish badly and preach in it worse, which is more than most of the presbyterate. The vocation director writes it down.",
+  "requires": [
+   {
+    "type": "not",
+    "inner": {
+     "type": "flag",
+     "key": "speaks_spanish",
+     "value": true
+    }
+   }
+  ],
+  "effects": [
+   {
+    "target": "pillar",
+    "key": "pastoral",
+    "delta": 2
+   },
+   {
+    "target": "pillar",
+    "key": "intellectual",
+    "delta": 1
+   },
+   {
+    "target": "stat",
+    "key": "knowledge",
+    "delta": 2
+   },
+   {
+    "target": "credential",
+    "key": "spanish"
+   },
+   {
+    "target": "flag",
+    "key": "speaks_spanish",
+    "value": true
+   },
+   {
+    "target": "relationship",
+    "key": "@vocation_director",
+    "delta": 5
+   },
+   {
+    "target": "flag",
+    "key": "summer:language",
+    "value": true
+   },
+   {
+    "target": "reputation",
+    "key": "parishioners",
+    "delta": 1
+   }
+  ]
+ }
 ]

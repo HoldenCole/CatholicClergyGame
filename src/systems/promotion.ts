@@ -25,6 +25,8 @@ export const PROMOTION = {
   /** DESIGN 4.3: the indispensable man is passed over for the move he wants. */
   indispensablePenalty: 12,
   affiliationSwing: 12,
+  /** A man who put his name forward is at least considered on purpose. */
+  askedBonus: 6,
 } as const;
 
 /** DESIGN 7.2: ordination age enters through trust, not as a cap. */
@@ -117,6 +119,10 @@ export function scoreCandidate(c: Candidate, opening: Opening, bishop: Pick<Bish
   const noise = rng.float(-PROMOTION.noise, PROMOTION.noise);
   let total = need * PROMOTION.wNeed + r.value * PROMOTION.wReady + t.value * PROMOTION.wTrust + fitEffective * PROMOTION.wFit + maturity + noise;
   const reasons = [...r.reasons, ...t.reasons, ...f.reasons];
+  if (opening.applied && c.isPlayer) {
+    total += PROMOTION.askedBonus;
+    reasons.push('he asked for it');
+  }
   if (c.indispensable && opening.kind !== 'parochial_vicar') {
     total -= PROMOTION.indispensablePenalty;
     reasons.push('too useful where he is');
