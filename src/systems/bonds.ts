@@ -8,7 +8,9 @@ import type { Rng } from '@/engine/rng';
  */
 export const BONDS = {
   /** Chance a week, at standard sacramental care, that a named parishioner is on the receiving end of something. */
-  chancePerWeek: 0.09,
+  chancePerWeek: 0.05,
+  /** A person carries at most so many bonds; the rest of the parish gets the next one. */
+  perPerson: 5,
   /** Multipliers by the quality of sacramental preparation. */
   byQuality: { min: 0.4, standard: 1, full: 1.6 } as Record<string, number>,
   /** Relationship gained with the person. */
@@ -67,8 +69,10 @@ export function bondsWeek(state: GameState, sacramentalQuality: string, rng: Rng
   if (!rng.chance(chance)) return { state, line: null };
   const year = new Date((state.clock.startDay + state.clock.week * 7) * 86_400_000).getUTCFullYear();
   // The ones with fewer bonds first, so the parish's memory spreads across families.
-  const least = Math.min(...people.map((n) => n.bonds?.length ?? 0));
-  const npc = rng.pick(people.filter((n) => (n.bonds?.length ?? 0) === least));
+  const open = people.filter((n) => (n.bonds?.length ?? 0) < BONDS.perPerson);
+  if (!open.length) return { state, line: null };
+  const least = Math.min(...open.map((n) => n.bonds?.length ?? 0));
+  const npc = rng.pick(open.filter((n) => (n.bonds?.length ?? 0) === least));
   const rolled = rollBond(rng, npc, year);
   if (!rolled) return { state, line: null };
   const bond: Bond = { ...rolled, week: state.clock.week };

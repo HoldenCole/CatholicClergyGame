@@ -119,3 +119,22 @@ describe('the episcopal tier', () => {
     expect(begun.state.see!.closings).toBe(0);
   });
 });
+
+describe('the bishop through the store', () => {
+  it('the clock runs the see through the study hook, not nothing', async () => {
+    const { useGameStore, setWeekHook } = await import('@/engine/store');
+    setWeekHook(null);
+    const s = candidate('store-see', { offers: [{ offerId: 'ep_diocesan_bishop', arrivedWeek: 0, expiresWeek: 9999, bindings: {} }] });
+    const b = acceptOffer(s, offerById('ep_diocesan_bishop')!, createRng('see')).state;
+    const store = useGameStore;
+    store.getState().newGame({ seed: 'store-see', start: { year: 2017, month: 8, day: 20 } });
+    store.setState({ game: setStudyActivity(b, 'see_money', 2) });
+    const before = store.getState().game!;
+    store.getState().setSpeed('SKIP');
+    store.getState().runToStop();
+    const after = store.getState().game!;
+    expect(store.getState().error).toBeNull();
+    expect(after.clock.week).toBeGreaterThan(before.clock.week);
+    expect(after.see!.money).toBeGreaterThan(before.see!.money);
+  });
+});

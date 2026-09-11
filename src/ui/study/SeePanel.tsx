@@ -21,7 +21,7 @@ export default function SeePanel() {
   ];
   return (
     <>
-      <Sheet title={`${see.name}, ${see.region}`}>
+      <Sheet title={`${see.name.charAt(0).toUpperCase()}${see.name.slice(1)}, ${see.region}`}>
         {def && <p className="text-sm leading-relaxed">{def.character}</p>}
         <p className="ink-muted mt-2 text-xs">{def ? `About ${def.priests} priests and ${def.parishes} parishes and missions. ` : ''}{years === 0 ? 'Your first year in the chair.' : `${years} year${years === 1 ? '' : 's'} in the chair.`}</p>
         <dl className="mt-3 grid grid-cols-2 gap-x-6 gap-y-1 text-sm">

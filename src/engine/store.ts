@@ -191,7 +191,7 @@ function depsFor(state: GameState): EventDeps {
 function hookFor(state: GameState): WeekHook {
   if (hookOverride) return hookOverride;
   if (state.phase === 'seminary') return seminaryWeekHook(depsFor(state));
-  if (state.phase === 'study' && state.study) return studyWeekHook(depsFor(state));
+  if (state.study) return studyWeekHook(depsFor(state));
   if (state.parish) return parishWeekHook(depsFor(state));
   return noHook;
 }
