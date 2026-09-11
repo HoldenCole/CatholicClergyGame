@@ -87,3 +87,40 @@ export function offerDoors(state: GameState, defs: OfferDef[]): Doors {
 }
 
 export const CATEGORY_WORD: Record<OfferDef['category'], string> = { academic: 'study', chancery: 'the chancery', patronage: 'a patron', social: 'a group', seminary: 'the seminary' };
+
+/** A condition that holds, in words the letter can use; null when it is not worth saying. */
+export function describeMet(cond: Condition, state: GameState): string | null {
+  if (!evaluateCondition(cond, state)) return null;
+  switch (cond.type) {
+    case 'stat': return cond.op === '>=' ? `your ${STAT_WORD[cond.key] ?? cond.key}` : null;
+    case 'reputation': return cond.op === '>=' ? `your standing with ${REP_WORD[cond.key] ?? cond.key}` : null;
+    case 'relationship': return cond.op === '>=' ? `${personWord(state, cond.npcId)}'s regard` : null;
+    case 'credential': return CRED_WORD[cond.key] ?? cond.key.replace(/_/g, ' ');
+    case 'flag': return cond.value ? (FLAG_WORD[cond.key] ?? null) : null;
+    case 'years_ordained': return cond.op === '>=' && cond.value >= 2 ? 'the years you have in' : null;
+    case 'alignment': return cond.op === '>=' ? 'your progressive record' : 'your traditional record';
+    case 'outspokenness': return cond.op === '>=' ? 'your public record' : null;
+    case 'figure': return 'being a figure';
+    case 'position': return 'a stand you took';
+    case 'role': return cond.value === 'pastor' ? 'your pastorate' : null;
+    case 'any': {
+      for (const c of cond.inner) { const w = describeMet(c, state); if (w) return w; }
+      return null;
+    }
+    case 'all': {
+      const parts = cond.inner.map((c) => describeMet(c, state)).filter((w): w is string => !!w);
+      return parts.length ? parts.slice(0, 2).join(' and ') : null;
+    }
+    default: return null;
+  }
+}
+
+/** Why this offer came: the requirements and biases that hold, in words. DESIGN §7.5 rule 1. */
+export function whyOffered(def: OfferDef, state: GameState): string | null {
+  const parts: string[] = [];
+  for (const cond of def.requires) { const w = describeMet(cond, state); if (w) parts.push(w); }
+  for (const b of def.bias ?? []) { if (b.multiplier > 1) { const w = describeMet(b.when, state); if (w) parts.push(w); } }
+  const uniq = [...new Set(parts)];
+  if (!uniq.length) return null;
+  return `It came because of ${uniq.slice(0, 3).join(', ')}.`;
+}

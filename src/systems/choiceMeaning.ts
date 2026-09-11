@@ -4,7 +4,7 @@ import type { Choice } from '@/types';
  * What a choice actually says, derived from its effects, so no label can hide
  * a stance. Words only: numbers stay out of the seminary sheets.
  */
-const TOPIC: Record<string, { label: string; neg: string; pos: string }> = {
+export const TOPIC: Record<string, { label: string; neg: string; pos: string }> = {
   liturgy: { label: 'the liturgy', neg: 'the traditional side', pos: 'the progressive side' },
   tlm: { label: 'the Latin Mass', neg: 'for it', pos: 'against it' },
   authority: { label: 'authority', neg: 'obedience and the bishop', pos: "the priest's own judgment" },

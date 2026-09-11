@@ -2,6 +2,7 @@ import { offerById } from '@/content/offers';
 import { useGameStore } from '@/engine/store';
 import { renderText } from '@/engine/text';
 import { evaluateAll } from '@/engine/conditions';
+import { whyOffered } from '@/systems/doors';
 import Sheet from '../Sheet';
 
 /** Letters: open offers with their windows, and the commitments already made. */
@@ -35,6 +36,7 @@ export default function OffersPanel() {
                 </span>
               </div>
               <p className="mt-2 leading-relaxed">{r(def.body)}</p>
+              {(() => { const why = whyOffered(def, game); return why ? <p className="ink-faint mt-1 text-xs">{why}</p> : null; })()}
               {def.accept.commitment && (
                 <p className="ink-muted mt-1 text-xs">
                   A commitment of {Math.round(def.accept.commitment.weeks / 4)} months{def.accept.commitment.apPerWeek > 0 ? ', on top of everything else' : ''}.
