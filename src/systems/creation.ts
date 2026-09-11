@@ -35,14 +35,28 @@ export function maxYearsWorked(answers: CreationAnswers, content: CreationConten
 }
 
 /** Careers the current path and field admit. DESIGN.md §3.3 */
-export function availableCareers(answers: Pick<CreationAnswers, 'path' | 'field'>, content: CreationContent): CareerOption[] {
-  const path = content.paths.find((p) => p.id === answers.path);
-  const hasDegree = !!path && path.id !== 'high_school' && path.id !== 'some_college';
-  return content.careers.filter((c) => {
-    if (!hasDegree) return !!c.noDegree;
-    if (c.requiresField.length === 0) return true;
-    return answers.field !== null && c.requiresField.includes(answers.field);
+const DEGREE_RANK: Record<string, number> = { high_school: 0, some_college: 0, college: 1, masters_1: 2, masters_2: 2, doctoral: 3 };
+const MIN_RANK: Record<NonNullable<CareerOption['minDegree']>, number> = { college: 1, masters: 2, doctoral: 3 };
+const DEGREE_NAME: Record<NonNullable<CareerOption['minDegree']>, string> = { college: 'a college degree', masters: "a master's degree", doctoral: 'a professional or doctoral degree' };
+
+/** Every career with whether this education admits it, and why not when it does not. */
+export function careerAvailability(answers: Pick<CreationAnswers, 'path' | 'field'>, content: CreationContent): { option: CareerOption; available: boolean; why: string | null }[] {
+  const rank = DEGREE_RANK[answers.path] ?? 0;
+  return content.careers.map((option) => {
+    if (rank === 0) {
+      return option.noDegree ? { option, available: true, why: null } : { option, available: false, why: `Needs ${DEGREE_NAME[option.minDegree ?? 'college']}.` };
+    }
+    if (option.minDegree && rank < MIN_RANK[option.minDegree]) return { option, available: false, why: `Needs ${DEGREE_NAME[option.minDegree]}.` };
+    if (option.requiresField.length > 0 && (answers.field === null || !option.requiresField.includes(answers.field))) {
+      const names = option.requiresField.map((f) => content.fields.find((x) => x.id === f)?.label.toLowerCase() ?? f);
+      return { option, available: false, why: `Needs a degree in ${names.length > 2 ? `${names.slice(0, 2).join(', ')}, or the like` : names.join(' or ')}.` };
+    }
+    return { option, available: true, why: null };
   });
+}
+
+export function availableCareers(answers: Pick<CreationAnswers, 'path' | 'field'>, content: CreationContent): CareerOption[] {
+  return careerAvailability(answers, content).filter((c) => c.available).map((c) => c.option);
 }
 
 export function validateAnswers(answers: CreationAnswers, content: CreationContent): string[] {

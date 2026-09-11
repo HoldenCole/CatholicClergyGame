@@ -1,6 +1,7 @@
 import { useGameStore } from '@/engine/store';
 import { useUiStore, type Sheet } from './uiStore';
 import RoutinePanel from './parish/RoutinePanel';
+import SeminaryRoutinePanel from './seminary/SeminaryRoutinePanel';
 import ParishPanel from './parish/ParishPanel';
 import GroupsPanel from './parish/GroupsPanel';
 import ProjectsPanel from './parish/ProjectsPanel';
@@ -34,9 +35,9 @@ export default function Desk() {
   const furnishing = useUiStore((s) => s.furnishing);
   if (!game) return null;
   const inParish = !!game.parish;
-  const tabs: Sheet[] = inParish ? ['week', 'parish', 'people', 'letters', 'record', 'settings'] : ['formation', 'letters', 'record', 'settings'];
+  const tabs: Sheet[] = inParish ? ['week', 'parish', 'people', 'letters', 'record', 'settings'] : ['week', 'formation', 'letters', 'record', 'settings'];
   if (furnishing) tabs.push('furnish');
-  const open = sheet ?? (inParish ? 'week' : 'formation');
+  const open = sheet ?? 'week';
   const letters = game.offers.length;
 
   return (
@@ -50,7 +51,7 @@ export default function Desk() {
         ))}
       </div>
       <div className="scroll-paper paper flex-1 overflow-y-auto">
-        {open === 'week' && <RoutinePanel />}
+        {open === 'week' && (inParish ? <RoutinePanel /> : <SeminaryRoutinePanel />)}
         {open === 'parish' && <ParishPanel />}
         {open === 'people' && (
           <>

@@ -1,4 +1,5 @@
 import type { Pillar } from './character';
+import type { StatKey } from './stats';
 
 /** DESIGN.md §6.4 */
 export type EvaluationResult = 'ADVANCED' | 'ADVANCED_WITH_CONCERNS' | 'HELD_BACK' | 'DISMISSED';
@@ -19,6 +20,33 @@ export type SummerAssignment =
   | 'chancery'
   | 'rome'
   | 'language_immersion';
+
+/** Where an activity happens, for the room's hotspots. */
+export type SeminaryLocation = 'chapel' | 'library' | 'common_room' | 'gym' | 'director' | 'rector' | 'parish' | 'desk' | 'language';
+
+/**
+ * Something a seminarian can give his free hours to each week, on top of
+ * the horarium. DESIGN §6: the weekly loop at low stakes. Rates are per
+ * hour per week; a year of one hour a week is about a third of an
+ * emphasis point.
+ */
+export interface SeminaryActivityDef {
+  id: string;
+  label: string;
+  blurb: string;
+  maxAp: number;
+  location: SeminaryLocation;
+  pillars: Partial<Record<Pillar, number>>;
+  stats: Partial<Record<StatKey, number>>;
+  /** Relationship movement per hour per week, by selector. */
+  relationships?: { selector: string; delta: number }[];
+  /** Standing with a constituency per hour per week. */
+  reputation?: { key: 'parishioners' | 'brother_priests' | 'chancery'; delta: number };
+  /** Hours logged toward a credential, and what arrives when they are done. */
+  credentialAfter?: { hours: number; credential: string; flag?: string; line: string };
+  /** Phrases for the week's digest line, rotated. */
+  digest: string[];
+}
 
 export interface SeminaryState {
   /** The seminary's name, for {seminary} tokens. */
@@ -46,4 +74,8 @@ export interface SeminaryState {
   classmateIds: string[];
   /** Absolute week the current formation year began. */
   yearStartWeek: number;
+  /** Free hours a week by activity id. Absent in saves from before the seminary week. */
+  routine?: Record<string, number>;
+  /** Hours ever given to each activity, for credentials that take time. */
+  hoursLogged?: Record<string, number>;
 }

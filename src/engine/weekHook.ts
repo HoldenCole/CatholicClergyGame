@@ -8,6 +8,7 @@ import { isPlayedWeek, parishWeek } from './parish';
 import { careerYear, isCareerYear, nextAssignment } from './career';
 import { projectWeek } from '@/systems/projects';
 import { resolvePermissions } from '@/systems/decor';
+import { seminaryWeek } from '@/systems/seminaryWeek';
 import { renderText } from './text';
 import type { WeekHook } from './clock';
 
@@ -77,8 +78,11 @@ export function resolvePending(state: GameState, pending: PendingEvent, choiceId
 /** The seminary week: formation accrual and beats, then any played-week event. */
 export function seminaryWeekHook(deps: EventDeps): WeekHook {
   return (state: GameState, rng: Rng, reachedBeats: Beat[]) => {
-    const next = formationBeats(state, reachedBeats);
+    let next = formationBeats(state, reachedBeats);
     if (next.mode.kind !== 'clock' || !next.seminary) return next;
+    // What he did with the week, whether or not anything else happens in it.
+    const week = seminaryWeek(next, rng.derive(`seminary-week:${next.clock.week}`));
+    next = week.line ? addDigestLine(week.state, week.line) : week.state;
     const pool = weekPool(deps.pool, next);
     if (pool.length === 0) return next;
     const [event] = drawEvents(pool, next, rng, 1);

@@ -42,9 +42,11 @@ export interface FieldOption extends CreationOption {
 
 export interface CareerOption extends CreationOption {
   id: Career;
-  /** Fields that admit this career. Empty means any degree; `noDegree` allows the high-school path. */
+  /** Fields that admit this career. Empty means any field; `noDegree` allows the paths without a degree. */
   requiresField: Field[];
   noDegree?: boolean;
+  /** The least education the career needs: a bachelor's, a master's, or a professional or doctoral degree. */
+  minDegree?: 'college' | 'masters' | 'doctoral';
   trait: string;
   /** Stat gained per year worked, with diminishing returns after year 8. */
   perYear: { key: 'knowledge' | 'administration'; delta: number };

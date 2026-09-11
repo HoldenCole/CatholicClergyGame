@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { creationContent as content } from '@/content/creation';
 import { useGameStore } from '@/engine/store';
-import { availableCareers, entryAge, maxYearsWorked, validateAnswers } from '@/systems/creation';
+import { careerAvailability, entryAge, maxYearsWorked, validateAnswers } from '@/systems/creation';
 import type { CreationAnswers, CreationOption } from '@/types';
 import OptionList from './OptionList';
 import DioceseCards from './DioceseCards';
@@ -218,15 +218,25 @@ function CareerStep({
   answers: CreationAnswers;
   onChange: (patch: Partial<CreationAnswers>, option?: CreationOption) => void;
 }) {
-  const careers = availableCareers(answers, content);
+  const careers = careerAvailability(answers, content);
   const max = maxYearsWorked(answers, content);
+  const none: CreationOption = { id: 'none', label: 'Straight in', blurb: 'No career to speak of. The seminary is the first serious thing you have done.', outcome: 'You arrive without a trade, which is fine; the Church has one for you.', effects: [] };
   return (
     <div className="flex flex-col gap-4">
-      <OptionList
-        options={[{ id: 'none', label: 'Straight in', blurb: 'No career to speak of. The seminary is the first serious thing you have done.', outcome: 'You arrive without a trade, which is fine; the Church has one for you.', effects: [] }, ...careers]}
-        selected={answers.career ?? 'none'}
-        onSelect={(o) => onChange(o.id === 'none' ? { career: null, yearsWorked: 0 } : { career: o.id as CreationAnswers['career'], yearsWorked: Math.max(1, answers.yearsWorked) }, o)}
-      />
+      <ul className="grid grid-cols-2 gap-3">
+        {[{ option: none, available: true, why: null }, ...careers].map(({ option: o, available, why }) => (
+          <li key={o.id}>
+            <button
+              disabled={!available}
+              onClick={() => onChange(o.id === 'none' ? { career: null, yearsWorked: 0 } : { career: o.id as CreationAnswers['career'], yearsWorked: Math.max(1, answers.yearsWorked) }, o)}
+              className={'choice h-full border rule ' + ((answers.career ?? 'none') === o.id ? 'choice-chosen' : '')}
+            >
+              <div className="font-medium">{o.label}</div>
+              <div className="ink-muted mt-1 text-sm leading-snug">{available ? o.blurb : why}</div>
+            </button>
+          </li>
+        ))}
+      </ul>
       {answers.career && (
         <label className="flex items-center gap-4 text-sm">
           <span className="ink-muted w-40">Years in that work</span>

@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import { useGameStore } from '@/engine/store';
 import { actionById, obligationDefs } from '@/content/parish';
+import { seminaryActivity } from '@/content/seminary';
+import { routineHours, routineOf, seminaryBudget } from '@/systems/seminaryWeek';
 import { seasonOf } from '@/engine/time';
 import { planWeek } from '@/systems/week';
 import { previewState } from '@/systems/decor';
 import type { DecorPlace, Quality } from '@/types';
 import SceneArt from './SceneArt';
-import { CHANCERY_SCENE, SCENES, SEMINARY_SCENE, sceneById, type HotspotBinding, type SceneId } from './scenes';
+import { CHANCERY_SCENE, SCENES, SEMINARY_HALL, SEMINARY_SCENE, sceneById, type HotspotBinding, type SceneId } from './scenes';
 import { useUiStore, type Sheet } from '../uiStore';
 
 const NEXT_QUALITY: Record<Quality, Quality> = { min: 'standard', standard: 'invested', invested: 'min' };
@@ -22,6 +24,7 @@ export default function SceneView() {
   const game = useGameStore((s) => s.game);
   const setDiscretionary = useGameStore((s) => s.setDiscretionary);
   const setObligation = useGameStore((s) => s.setObligation);
+  const setSeminaryActivity = useGameStore((s) => s.setSeminaryActivity);
   const chosenScene = useUiStore((s) => s.scene);
   const setScene = useUiStore((s) => s.setScene);
   const openSheet = useUiStore((s) => s.openSheet);
@@ -32,12 +35,14 @@ export default function SceneView() {
   const [hover, setHover] = useState<string | null>(null);
   if (!game || (!game.parish && !game.seminary)) return null;
   const inSeminary = !!game.seminary && !game.parish;
-  const sceneId: SceneId = inSeminary ? 'seminary_room' : chosenScene && chosenScene !== 'seminary_room' ? chosenScene : 'rectory';
+  const seminaryScenes: SceneId[] = ['seminary_room', 'seminary_hall'];
+  const sceneId: SceneId = inSeminary ? (chosenScene && seminaryScenes.includes(chosenScene) ? chosenScene : 'seminary_room') : chosenScene && !seminaryScenes.includes(chosenScene) ? chosenScene : 'rectory';
   const scene = sceneById(sceneId);
   const plan = game.parish ? planWeek(game) : null;
   const routine = game.parish?.routine ?? { obligations: {} as Record<string, never>, discretionary: {} as Record<string, number> };
   const hasChancery = Object.keys(game.flags).some((k) => k.startsWith('office:') && game.flags[k]);
-  const rooms = inSeminary ? [SEMINARY_SCENE] : hasChancery ? [...SCENES, CHANCERY_SCENE] : SCENES;
+  const rooms = inSeminary ? [SEMINARY_SCENE, SEMINARY_HALL] : hasChancery ? [...SCENES, CHANCERY_SCENE] : SCENES;
+  const semRoutine = game.seminary ? routineOf(game.seminary) : {};
   const shown = preview ? previewState(game, preview.place, preview.optionId) : game;
 
   const describe = (binds: HotspotBinding): string => {
@@ -46,6 +51,13 @@ export default function SceneView() {
         const def = actionById(binds.actionId);
         const ap = routine.discretionary[binds.actionId] ?? 0;
         return def ? `${def.label}: ${ap} hour${ap === 1 ? '' : 's'} a week${ap >= def.maxAp ? ' (as much as does any good; click to clear)' : ' (click for one more)'}` : binds.actionId;
+      }
+      case 'seminary_action': {
+        const def = seminaryActivity(binds.activityId);
+        if (!def || !game.seminary) return binds.activityId;
+        const ap = semRoutine[binds.activityId] ?? 0;
+        const left = seminaryBudget(game) - routineHours(game.seminary);
+        return `${def.label}: ${ap} hour${ap === 1 ? '' : 's'} a week. ${def.blurb} (${ap >= def.maxAp ? 'click to clear' : left > 0 ? 'click for one more' : 'no hours left; take one from something else'})`;
       }
       case 'obligation': {
         const def = obligationDefs.find((o) => o.key === binds.key)!;
@@ -69,6 +81,14 @@ export default function SceneView() {
         if (!def) return;
         const ap = routine.discretionary[binds.actionId] ?? 0;
         setDiscretionary(binds.actionId, ap >= def.maxAp ? 0 : ap + 1);
+        openSheet('week');
+        break;
+      }
+      case 'seminary_action': {
+        const def = seminaryActivity(binds.activityId);
+        if (!def) return;
+        const ap = semRoutine[binds.activityId] ?? 0;
+        setSeminaryActivity(binds.activityId, ap >= def.maxAp ? 0 : ap + 1);
         openSheet('week');
         break;
       }
@@ -115,7 +135,7 @@ export default function SceneView() {
         <SceneArt scene={scene.id} season={seasonOf(game.clock)} state={shown} />
         {preview && <div className="pointer-events-none absolute left-3 top-3 rounded bg-[#2b2116]/80 px-2 py-1 text-xs text-[#e6c25a]">As it would look</div>}
         {scene.hotspots.map((h) => {
-          const active = h.binds.kind === 'action' ? (routine.discretionary[h.binds.actionId] ?? 0) > 0 : h.binds.kind === 'obligation' ? (routine.obligations as Record<string, Quality>)[h.binds.key] !== 'standard' : false;
+          const active = h.binds.kind === 'action' ? (routine.discretionary[h.binds.actionId] ?? 0) > 0 : h.binds.kind === 'seminary_action' ? (semRoutine[h.binds.activityId] ?? 0) > 0 : h.binds.kind === 'obligation' ? (routine.obligations as Record<string, Quality>)[h.binds.key] !== 'standard' : false;
           return (
             <button
               key={h.id}

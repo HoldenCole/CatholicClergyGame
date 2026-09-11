@@ -4,7 +4,7 @@ import { ambientFor, currentDecor } from '@/systems/decor';
 import { Defs, Finish } from './art/defs';
 import { Church } from './art/church';
 import { Chancery, chanceryRank, Office } from './art/office';
-import { Rectory, SeminaryRoom, Study } from './art/home';
+import { Rectory, SeminaryHall, SeminaryRoom, Study } from './art/home';
 import { Chapel, Hall, Street } from './art/places';
 import { portraitForCharacter, yearOf } from '../portraits/spec';
 import { lookFor } from '../portraits/Portrait';
@@ -42,6 +42,7 @@ export default function SceneArt({ scene, season, state, plain = false }: { scen
       {scene === 'street' && <Street terrain={parish?.terrain} />}
       {scene === 'study' && <Study ambient={ambient('office')} />}
       {scene === 'seminary_room' && <SeminaryRoom ambient={ambient('seminary_room')} seminaryName={state.seminary?.name} />}
+      {scene === 'seminary_hall' && <SeminaryHall />}
       {scene === 'chancery' && <Chancery ambient={ambient('chancery')} rank={chanceryRank(state) ?? 'modest'} bishopName={bishop ? `${bishop.title} ${bishop.name.first} ${bishop.name.last}` : 'The bishop'} />}
       {!plain && <Finish />}
     </svg>
