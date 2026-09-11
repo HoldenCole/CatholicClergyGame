@@ -4,7 +4,7 @@ import { newGame } from '@/engine/game';
 import { generateCandidates, installWorld } from '@/generation/world';
 import { assignFirstParish } from '@/systems/assignment';
 import { startAssignment } from '@/engine/parish';
-import { adminFloorFor, planWeek, resolveWeek, weekBudget } from '@/systems/week';
+import { efficiencyWords, obligationAp, hoursOf, adminFloorFor, planWeek, resolveWeek, weekBudget } from '@/systems/week';
 import { testCharacter } from '../helpers/fixtures';
 import type { GameState } from '@/types';
 
@@ -23,11 +23,31 @@ describe('systems/week', () => {
     const s = parishState();
     const plan = planWeek(s);
     expect(weekBudget(s)).toBe(12);
-    expect(plan.mandatory).toBeGreaterThanOrEqual(6); // 2+1+1+1+2, ordinary time, vicar, less a block a thriving group gives back
-    expect(plan.mandatory).toBeLessThanOrEqual(7);
+    // 2 + 0.75 + 1 + 1 + 1.5 at standard, ordinary time, vicar, less what a thriving group gives back and what his stats save.
+    expect(plan.mandatory).toBeGreaterThanOrEqual(4.5);
+    expect(plan.mandatory).toBeLessThanOrEqual(6.25);
     expect(Object.values(plan.discretionary).reduce((a, b) => a + b, 0)).toBe(3);
     expect(plan.neglected).toBe(false);
     expect(plan.obligations).toEqual(s.parish!.routine.obligations);
+  });
+
+  it('the daily Mass is half an hour a day, and skill shortens the work done properly', () => {
+    expect(hoursOf(obligationAp('weekday_masses', 'standard'))).toBe(3);
+    expect(hoursOf(obligationAp('weekday_masses', 'min'))).toBe(2);
+    const dull = { piety: 30, theology: 30, knowledge: 30, charisma: 30, administration: 30 };
+    const sharp = { piety: 30, theology: 80, knowledge: 75, charisma: 70, administration: 80 };
+    expect(obligationAp('sunday_masses', 'standard', 0, dull)).toBe(2);
+    expect(obligationAp('sunday_masses', 'standard', 0, sharp)).toBe(1.25);
+    expect(obligationAp('meetings', 'standard', 0, sharp)).toBe(0.5);
+    expect(obligationAp('sacramental_prep', 'standard', 0, sharp)).toBe(1);
+    // The minimum is the minimum; nothing goes below an hour.
+    expect(obligationAp('sunday_masses', 'min', 0, sharp)).toBe(1);
+    expect(obligationAp('meetings', 'min', 3, sharp)).toBe(0.25);
+    expect(efficiencyWords(sharp).length).toBeGreaterThanOrEqual(5);
+    expect(efficiencyWords(dull)).toEqual([]);
+    const s = parishState('sharp');
+    const sharper = { ...s, character: { ...s.character!, stats: { ...s.character!.stats, ...sharp } } };
+    expect(planWeek(sharper).mandatory).toBeLessThan(planWeek(s).mandatory);
   });
 
   it('Holy Week forces something to be cut, in the fixed order', () => {
@@ -50,7 +70,9 @@ describe('systems/week', () => {
     let s = parishState();
     const min = { sunday_masses: 'min', weekday_masses: 'min', confessions: 'min', meetings: 'min', sacramental_prep: 'min' } as const;
     s = { ...s, parish: { ...s.parish!, routine: { obligations: { ...min }, discretionary: { visits: 4, study: 1 } } } };
-    expect(planWeek(s).mandatory).toBe(5);
+    // 1 + 0.5 + 0.5 + 0.75 + 1 at the minimum, which skill cannot shorten, less what a thriving group gives back.
+    expect(planWeek(s).mandatory).toBeGreaterThanOrEqual(3);
+    expect(planWeek(s).mandatory).toBeLessThanOrEqual(3.75);
     const before = s.character!.reputation.parishioners;
     const rng = createRng('min');
     for (let i = 0; i < 6; i++) s = resolveWeek(s, rng).state;

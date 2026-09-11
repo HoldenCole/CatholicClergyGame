@@ -1,6 +1,6 @@
 import { useGameStore } from '@/engine/store';
 import { actionDefs, obligationDefs } from '@/content/parish';
-import { adminFloorFor, careOf, careOfPlan, hoursOf, planWeek, sacrificeAp, seasonalLoad, strainOf, strainWord, weekBudget, WEEK } from '@/systems/week';
+import { adminFloorFor, careOf, careOfPlan, efficiencyWords, hoursOf, obligationAp, planWeek, sacrificeAp, seasonalLoad, strainOf, strainWord, weekBudget, WEEK } from '@/systems/week';
 import { sacrificeDefs, problemFix } from '@/content/parish';
 import type { Effect } from '@/types';
 import { commitmentAp } from '@/engine/offers';
@@ -56,8 +56,7 @@ export default function RoutinePanel() {
   if (game.parish.work && work) segments.push({ label: work.label, ap: game.parish.work.apPerWeek, kind: 'promise' });
   for (const key of OBLIGATION_KEYS) {
     const def = obligationDefs.find((o) => o.key === key)!;
-    const ap = def.ap[plan.obligations[key]] ?? def.ap.standard;
-    segments.push({ label: def.label, ap, kind: 'obligation' });
+    segments.push({ label: def.label, ap: obligationAp(key, plan.obligations[key], 0, game.character?.stats), kind: 'obligation' });
   }
   for (const [id, ap] of Object.entries(plan.discretionary)) if (ap > 0) segments.push({ label: actionDefs.find((a) => a.id === id)?.label ?? id, ap, kind: 'action' });
   if (plan.slack > 0) segments.push({ label: 'Unspoken for', ap: plan.slack, kind: 'slack' });
@@ -68,11 +67,12 @@ export default function RoutinePanel() {
     <>
       <Sheet title="The week">
         <p className="ink-muted text-xs leading-relaxed">
-          A working week of about {hoursOf(budget)} hours, after the daily Mass, the Office, meals, and sleep, which are not counted here
+          A working week of about {hoursOf(budget)} hours, after the Office, meals, and sleep, which are not counted here
           {extra > 0 ? ` (${hoursOf(WEEK.baseAp[game.parish.role])} of them the diocese's, and ${hoursOf(extra)} you have taken from your own life)` : ''}. Obligations take {hoursOf(plan.mandatory)}
           {fixed > 0 ? ` (${hoursOf(fixed)} of that is the season, the desk, and what you have promised elsewhere)` : ''}, leaving {hoursOf(available)} for everything else
-          {requested > available ? `; you have asked for ${hoursOf(requested)}, so it will be trimmed` : ''}. Every block below is four hours.
+          {requested > available ? `; you have asked for ${hoursOf(requested)}, so it will be trimmed` : ''}. Every block below is four hours; the daily Mass is half an hour a day and is costed that way.
         </p>
+        {efficiencyWords(game.character?.stats).length > 0 && <p className="ink-faint mt-1 text-xs">What you know saves you time: {efficiencyWords(game.character?.stats).join('; ')}.</p>}
         {game.assignment?.role === 'parochial_vicar' && <p className="ink-faint mt-1 text-xs">As vicar, the people are yours and the books are the pastor's: visits, confessions, and the groups count for more in your hands, and the desk for less.</p>}
         {requested > available && (
           <p className="ink-wine mt-1 text-xs">
@@ -105,8 +105,8 @@ export default function RoutinePanel() {
                   <span className="min-w-0 truncate" title={def.label}>{def.label}</span>
                   <div className="flex gap-1">
                     {QUALITIES.map((q) => {
-                      const ap = def.ap[q];
-                      if (ap === null) return null;
+                      const ap = def.ap[q] === undefined ? undefined : obligationAp(def.key, q, 0, game.character?.stats);
+                      if (ap === undefined) return null;
                       return (
                         <button key={q} onClick={() => setObligation(key, q)} className={'pbtn whitespace-nowrap px-2 py-0.5 text-xs ' + (q === chosen ? 'pbtn-active' : '')} title={`${QUALITY_LABEL[q]}: ${def.blurb[q]}`}>
                           {QUALITY_SHORT[q]} <span className="opacity-70">{hoursOf(ap)}h</span>

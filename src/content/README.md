@@ -185,8 +185,13 @@ program kind `post`): he moves into the residence and its own activities.
 ### The week in hours
 
 The engine counts action points; the sheets multiply by `HOURS_PER_AP` (4)
-and speak in hours. A parish week is 12 blocks, about 48 hours after the
-daily Mass, the Office, meals and sleep. Content that sets `ap` or
+and speak in hours, to the half hour. A parish week is 12 blocks, about 48
+hours after the Office, meals and sleep. Obligations are costed in fractions
+of a block at what they really take (`parish/obligations.json`: the weekday
+Masses are half an hour a day, three hours a week at standard), and skill
+shortens the work done properly (`EFFICIENCY` in `systems/week.ts`: theology
+and learning on the homily, administration on the meetings, learning and
+presence on the preparation), never below an hour. Content that sets `ap` or
 `apPerWeek` speaks in blocks.
 
 ### Flags the seminary writes for the career

@@ -1,4 +1,4 @@
-import type { Effect, GameState, ObligationKey, Quality, Role, Season, WeekLedger } from '@/types';
+import type { Effect, GameState, ObligationKey, Quality, Role, Season, WeekLedger, Stats, StatKey } from '@/types';
 import { OBLIGATION_KEYS } from '@/types';
 import { actionDefs, obligationDefs, sacrificeDefs, SEASONAL_LOAD } from '@/content/parish';
 import { takeSnapshot, TRAJECTORY } from './trajectory';
@@ -72,16 +72,50 @@ export const WEEK = {
 
 /** One block of the week is four working hours; the sheets speak in hours. */
 export const HOURS_PER_AP = 4;
+/** Hours, to the half hour: a block is four, and the obligations are costed in fractions of one. */
 export function hoursOf(ap: number): number {
-  return Math.round(ap * HOURS_PER_AP);
+  return Math.round(ap * HOURS_PER_AP * 2) / 2;
+}
+
+/**
+ * What a man's stats save him on each obligation, in blocks: a homily comes
+ * faster to a theologian, a meeting runs short under an organized man, the
+ * couples and the families do what a persuasive priest asks the first time.
+ * Requested in playtesting; numbers invented.
+ */
+export const EFFICIENCY: { key: ObligationKey; stat: StatKey; at: number; saves: number; word: string }[] = [
+  { key: 'sunday_masses', stat: 'theology', at: 50, saves: 0.25, word: 'your theology writes the homily faster' },
+  { key: 'sunday_masses', stat: 'theology', at: 75, saves: 0.25, word: 'the homily comes to you almost whole' },
+  { key: 'sunday_masses', stat: 'knowledge', at: 70, saves: 0.25, word: 'you have read what the homily needs' },
+  { key: 'meetings', stat: 'administration', at: 50, saves: 0.25, word: 'your meetings run short' },
+  { key: 'meetings', stat: 'administration', at: 75, saves: 0.25, word: 'the staff come with the work done' },
+  { key: 'sacramental_prep', stat: 'knowledge', at: 60, saves: 0.25, word: 'you know the material cold' },
+  { key: 'sacramental_prep', stat: 'charisma', at: 60, saves: 0.25, word: 'the couples and the families do what you ask the first time' },
+];
+
+/** The least an obligation can take, in blocks: an hour. */
+const OBLIGATION_FLOOR = 0.25;
+
+/** Blocks a man's stats save on an obligation at any quality above the minimum. */
+export function efficiencyOf(key: ObligationKey, stats: Stats | undefined): number {
+  if (!stats) return 0;
+  return EFFICIENCY.filter((e) => e.key === key && stats[e.stat] >= e.at).reduce((n, e) => n + e.saves, 0);
+}
+
+/** The savings in words, for the week sheet. */
+export function efficiencyWords(stats: Stats | undefined): string[] {
+  if (!stats) return [];
+  return EFFICIENCY.filter((e) => stats[e.stat] >= e.at).map((e) => e.word);
 }
 
 const NEXT_DOWN: Record<Quality, Quality | null> = { invested: 'standard', standard: 'min', min: null };
 
-export function obligationAp(key: ObligationKey, quality: Quality, relief = 0): number {
+export function obligationAp(key: ObligationKey, quality: Quality, relief = 0, stats?: Stats): number {
   const def = obligationDefs.find((o) => o.key === key)!;
   const ap = def.ap[quality] ?? def.ap.standard;
-  return Math.max(1, ap - relief);
+  // The minimum is already the minimum; skill saves time on the work done properly.
+  const saved = quality === 'min' ? 0 : efficiencyOf(key, stats);
+  return Math.max(OBLIGATION_FLOOR, ap - relief - saved);
 }
 
 export function adminFloorFor(state: GameState): number {
@@ -150,7 +184,8 @@ export function planWeek(state: GameState): Plan {
   const fixed = Math.max(0, seasonalLoad(state) + adminFloorFor(state) + commitmentAp(state) + (state.founding?.apPerWeek ?? 0) + (state.parish?.work?.apPerWeek ?? 0) + clubHours(state) - fundBonuses(state).relief);
   const relief = groupRelief(state);
   const obligations = { ...parish.routine.obligations };
-  const mandatoryOf = () => fixed + OBLIGATION_KEYS.reduce((n, k) => n + obligationAp(k, obligations[k], (relief as Record<string, number>)[k] ?? 0), 0);
+  const stats = state.character?.stats;
+  const mandatoryOf = () => fixed + OBLIGATION_KEYS.reduce((n, k) => n + obligationAp(k, obligations[k], (relief as Record<string, number>)[k] ?? 0, stats), 0);
 
   let neglected = false;
   let guard = 0;
@@ -245,7 +280,7 @@ export function resolveWeek(state: GameState, rng: Rng): { state: GameState; led
   }
 
   // Discretionary actions.
-  let adminAp = adminFloorFor(next) + obligationAp('meetings', plan.obligations.meetings);
+  let adminAp = adminFloorFor(next) + obligationAp('meetings', plan.obligations.meetings, 0, state.character?.stats);
   let theologyUsed = plan.obligations.sunday_masses === 'invested';
   let knowledgeUsed = false;
   for (const [id, ap] of Object.entries(plan.discretionary)) {

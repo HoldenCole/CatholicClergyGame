@@ -94,7 +94,7 @@ describe('systems/groups', () => {
     const type = (['grief_support', 'recovery', 'mens_group', 'bible_study', 'adoration'] as const).find((t) => !existing.has(t))!;
     s = startFounding(s, type);
     expect(s.founding?.apPerWeek).toBeGreaterThan(0);
-    expect(planWeek(s).mandatory).toBeGreaterThan(7);
+    expect(planWeek(s).mandatory).toBeGreaterThan(5);
     expect(() => startFounding(s, type)).toThrow();
     const done: GameState = { ...s, clock: { ...s.clock, week: s.founding!.endWeek } };
     let successes = 0;
