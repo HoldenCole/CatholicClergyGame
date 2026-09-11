@@ -8,7 +8,7 @@ import { nextAssignment } from './career';
 import { ARC } from './parish';
 
 /** How a place is named in prose. */
-export const CITY_WORD: Record<StudyState['city'], string> = { rome: 'Rome', washington: 'Washington', residence: "the bishop's residence" };
+export const CITY_WORD: Record<StudyState['city'], string> = { rome: 'Rome', washington: 'Washington', residence: "the bishop's residence", campus: 'the Newman Center', hospital: 'the hospital', seminary: 'the seminary' };
 
 /** Invented: what leaving costs the man's standing with the people he leaves. DESIGN §7.5 rule 3. */
 export const STUDY = { leaveParishioners: -8 } as const;
@@ -48,7 +48,7 @@ export function beginStudy(state: GameState, def: OfferDef, failed: boolean, rng
   };
   const flags: GameState['flags'] = { ...next.flags, [`study:${program.city}`]: true };
   for (const k of Object.keys(flags)) if (k.startsWith('parish:') || k.startsWith('role:')) delete flags[k];
-  const beats = [...next.beats.filter((b) => b.kind !== 'assignment'), { kind: 'assignment' as const, week: study.endWeek, label: program.kind === 'post' ? 'The bishop lets you go' : `Home from ${CITY_WORD[program.city]}` }].sort((a, b) => a.week - b.week);
+  const beats = [...next.beats.filter((b) => b.kind !== 'assignment'), { kind: 'assignment' as const, week: study.endWeek, label: program.kind === 'post' ? (program.city === 'residence' ? 'The bishop lets you go' : `The years at ${CITY_WORD[program.city]} end`) : `Home from ${CITY_WORD[program.city]}` }].sort((a, b) => a.week - b.week);
   next = { ...next, phase: 'study', study, parish: null, assignment: null, founding: null, project: null, flags, beats, mode: { kind: 'clock' } };
   const years = Math.round(c.weeks / 52);
   return note(next, 'offer', program.kind === 'post' ? `Moved into ${program.residence} as ${program.label.toLowerCase()}, ${years} years.` : `Left for ${CITY_WORD[program.city]}: ${program.label.toLowerCase()} at ${program.school}, ${years} years.`);
@@ -70,7 +70,8 @@ export function endStudy(state: GameState, def: OfferDef, rng: Rng): GameState {
   } else {
     next = applyEffects(next, c.onComplete);
     next = { ...next, offerHistory: [...next.offerHistory, { offerId: def.id, week: next.clock.week, decision: 'completed' }] };
-    next = note(next, 'offer', study.city === 'residence' ? `Three years as ${study.label.toLowerCase()}, and the bishop let you go with his blessing.` : `Came home from ${CITY_WORD[study.city]} with ${study.label.toLowerCase()}.`);
+    const post = studyProgram(study.program)?.kind === 'post';
+    next = note(next, 'offer', study.city === 'residence' ? `Three years as ${study.label.toLowerCase()}, and the bishop let you go with his blessing.` : post ? `${Math.round((study.endWeek - study.startWeek) / 52)} years as ${study.label.toLowerCase()}; the board has a parish for you again.` : `Came home from ${CITY_WORD[study.city]} with ${study.label.toLowerCase()}.`);
   }
   const flags: GameState['flags'] = { ...next.flags };
   delete flags[`study:${study.city}`];

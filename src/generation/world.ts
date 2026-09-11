@@ -30,7 +30,10 @@ export function installWorld(state: GameState, candidate: Candidate, year: numbe
     bishopHistory: [candidate.diocese.hidden.bishop.npcId],
   };
   // The rolled dioceses stay until the run begins, so the choice can be changed.
-  return { ...state, world, npcs, candidates: state.candidates };
+  const flags: GameState['flags'] = { ...state.flags };
+  for (const k of Object.keys(flags)) if (k.startsWith('diocese:')) delete flags[k];
+  flags[`diocese:${candidate.presetId}`] = true;
+  return { ...state, world, npcs, flags, candidates: state.candidates };
 }
 
 const TRAIT_TEXT: Record<string, string> = {

@@ -46,9 +46,13 @@ describe('generation/world', () => {
     expect(d.visible.bishop).not.toHaveProperty('alignment');
   });
 
-  it('parishes are spread across the five kinds with pastors and one live problem each', () => {
+  it('parishes are spread across the five kinds, plus the cathedral, with pastors and one live problem each', () => {
     const c = runs[0]![1]!;
-    expect(c.parishes.map((p) => p.kind)).toEqual(['flagship_suburban', 'struggling_urban', 'immigrant_growing', 'rural', 'difficult']);
+    expect(c.parishes.map((p) => p.kind)).toEqual(['flagship_suburban', 'struggling_urban', 'immigrant_growing', 'rural', 'difficult', 'flagship_suburban']);
+    const cathedral = c.parishes.find((p) => p.cathedral)!;
+    expect(cathedral.terrain).toBe('urban');
+    expect(cathedral.school).toBe('none');
+    expect(c.npcs.find((n) => n.id === cathedral.pastorId)?.title).toBe('Msgr.');
     for (const p of c.parishes) {
       expect(c.npcs.find((n) => n.id === p.pastorId)?.tags).toContain('pastor');
       expect(p.problem).toBeTruthy();

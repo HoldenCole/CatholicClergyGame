@@ -4,7 +4,10 @@ import { currentPreference, PREFERENCES, PREFERENCE_LABEL } from '@/systems/assi
 import { chancesFor } from '@/systems/openings';
 import { CATEGORY_WORD, offerDoors } from '@/systems/doors';
 import { formationStanding, summersOnRecord } from '@/systems/standing';
-import type { Opening } from '@/types';
+import type { Opening, Parish } from '@/types';
+import { parishKindWord } from '@/systems/placement';
+import { PROBLEM_LABEL } from '@/generation/parishes';
+import { yearOf } from './portraits/spec';
 import Sheet from './Sheet';
 
 const KIND_WORD: Record<Opening['kind'], string> = { pastor: 'Pastor', administrator: 'Administrator', parochial_vicar: 'Parochial vicar', chancery: 'A chancery post' };
@@ -142,6 +145,33 @@ export default function JobsPanel() {
         </ul>
       </Sheet>
 
+      {game.world && (inParish || away) && (
+        <Sheet title={`The parishes of ${game.world.diocese.visible.name}`}>
+          <ul className="flex flex-col gap-2 text-sm">
+            {[...game.world.parishes].sort((a, b) => (b.cathedral ? 1 : 0) - (a.cathedral ? 1 : 0) || a.name.localeCompare(b.name)).map((p: Parish) => {
+              const pastor = game.npcs[p.pastorId];
+              const here = p.id === game.parish?.parishId;
+              const open = game.openings.some((o) => o.parishId === p.id);
+              const age = pastor ? yearOf(game.clock.startDay, game.clock.week) - pastor.birthYear : null;
+              const debtWord = p.debt >= 1_000_000 ? 'deep in debt' : p.debt >= 250_000 ? 'in debt' : p.debt > 0 ? 'a little debt' : 'no debt';
+              return (
+                <li key={p.id}>
+                  <div>
+                    {p.name}, {p.place}
+                    <span className="ink-faint ml-2 text-xs">{parishKindWord(p)}{here ? ' · you are here' : open ? ' · open' : ''}</span>
+                  </div>
+                  <div className="ink-muted text-xs">
+                    {pastor && !here ? `${pastor.title} ${pastor.name.last}, ${age}, ${p.cathedral ? 'rector' : 'pastor'}` : here ? `${p.cathedral ? 'Rector' : 'Pastor'}: ${game.parish?.role === 'parochial_vicar' && pastor ? `${pastor.title} ${pastor.name.last}` : 'you'}` : 'no pastor'}
+                    {' · '}{p.households.toLocaleString()} households · {p.school === 'none' ? 'no school' : `school ${p.school.replace('_', ' ')}`} · {debtWord}
+                    {p.needsSpanish ? ' · Spanish needed' : ''}
+                  </div>
+                  <div className="ink-faint text-xs">{PROBLEM_LABEL[p.problem] ?? (p.problem === 'none' ? 'Nothing on fire.' : p.problem)}</div>
+                </li>
+              );
+            })}
+          </ul>
+        </Sheet>
+      )}
       {(summers.length > 0 || game.character.credentials.length > 0) && (
         <Sheet title="On your record">
           <ul className="flex flex-col gap-1 text-sm">

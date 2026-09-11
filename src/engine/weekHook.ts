@@ -10,6 +10,7 @@ import { careerYear, directedTransfer, isCareerYear, nextAssignment } from './ca
 import { projectWeek } from '@/systems/projects';
 import { workWeek } from '@/systems/problems';
 import { clubsWeek, joinClub, leaveClub } from '@/systems/clubs';
+import { spendingWeek } from '@/systems/spending';
 import { resolvePermissions } from '@/systems/decor';
 import { seminaryWeek } from '@/systems/seminaryWeek';
 import { studyWeek } from '@/systems/studyWeek';
@@ -139,7 +140,7 @@ export function studyWeekHook(deps: EventDeps): WeekHook {
     if (next.mode.kind !== 'clock') return next;
     if (next.study && next.clock.week >= next.study.endWeek) {
       const def = deps.offerLookup?.(next.study.offerId);
-      if (def) return addDigestLine(endStudy(next, def, rng.derive(`study-end:${next.clock.week}`)), next.study.city === 'residence' ? 'The bishop thanks you at dinner, in front of the sisters, and names your successor before dessert. The board has a parish for you.' : 'The degree is defended, the room is packed, and the plane home is full of people going somewhere else.');
+      if (def) return addDigestLine(endStudy(next, def, rng.derive(`study-end:${next.clock.week}`)), next.study.city === 'residence' ? 'The bishop thanks you at dinner, in front of the sisters, and names your successor before dessert. The board has a parish for you.' : next.study.city === 'rome' || next.study.city === 'washington' ? 'The degree is defended, the room is packed, and the plane home is full of people going somewhere else.' : 'The appointment ends the way they do: a dinner, a card signed by everyone, and a letter from the personnel board that was in the mail before the dinner.');
     }
     if (rng.derive(`study-scene:${next.clock.week}`).chance(STUDY_EVENT_CHANCE)) {
       const [event] = drawEvents(deps.pool.filter((e) => !e.beat), next, rng, 1);
@@ -170,6 +171,9 @@ export function parishWeekHook(deps: EventDeps): WeekHook {
     next = work.state;
     if (work.line) next = addDigestLine(next, work.line);
     next = clubsStep(next, rng);
+    const spent = spendingWeek(next, rng);
+    next = spent.state;
+    for (const line of spent.lines) next = addDigestLine(next, line);
     const letters = resolvePermissions(next, rng.derive(`permissions:${next.clock.week}`));
     next = letters.state;
     for (const line of letters.lines) next = addDigestLine(next, line);

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { DioceseVisible } from '@/types';
-import { KIND_WORD, type Placement } from '@/systems/placement';
+import { parishKindWord, type Placement } from '@/systems/placement';
 import { NEED_LABEL, TENSION_LABEL, prioritiesLine } from '@/generation/diocese';
 import Portrait from '../portraits/Portrait';
 import { portraitFromParts } from '../portraits/spec';
@@ -98,11 +98,11 @@ function Card({ d, placement }: { d: DioceseVisible; placement: Placement | null
       {placement && (
         <Row label="Where you would likely land">
           <p>
-            {placement.parish.name}, {placement.parish.place}: {KIND_WORD[placement.parish.kind]}
+            {placement.parish.name}, {placement.parish.place}: {parishKindWord(placement.parish)}
             {placement.parish.needsSpanish ? ', where Spanish is needed' : ''}. {placement.reasons.length ? placement.reasons.join('; ') + '.' : 'Nothing about you points anywhere in particular yet; the seminary years will.'}
           </p>
           <p className="ink-faint mt-1 text-xs">
-            The parishes: {placement.ranked.map((r) => `${r.parish.name} (${KIND_WORD[r.parish.kind].replace('the ', '').replace('a ', '')})`).join(', ')}. A guess from what you have said so far; the record you make in seminary and the diocese's need decide.
+            The parishes: {placement.ranked.map((r) => `${r.parish.name} (${parishKindWord(r.parish).replace('the ', '').replace('a ', '')})`).join(', ')}. A guess from what you have said so far; the record you make in seminary and the diocese's need decide.
           </p>
         </Row>
       )}

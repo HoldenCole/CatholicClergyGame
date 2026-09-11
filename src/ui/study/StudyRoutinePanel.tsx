@@ -16,8 +16,9 @@ export default function StudyRoutinePanel() {
   const all = studyActivitiesFor(game);
   const studies = all.filter((a) => a.def.kind === 'study');
   const work = all.filter((a) => a.def.kind === 'work');
-  const post = study.city === 'residence';
-  const where = study.city === 'rome' ? 'Rome' : post ? 'the diocese' : 'Washington';
+  const post = !['rome', 'washington'].includes(study.city);
+  const where = study.city === 'rome' ? 'Rome' : study.city === 'washington' ? 'Washington' : 'the diocese';
+  const POST_DAY: Record<string, string> = { residence: "The bishop's day", campus: "The Center's week", hospital: "The hospital's week", seminary: "The seminary's week" };
 
   const row = ({ def, available, why }: (typeof all)[number]) => {
     const ap = study.routine[def.id] ?? 0;
@@ -42,14 +43,14 @@ export default function StudyRoutinePanel() {
     <>
       <Sheet title={post ? study.label : `${study.label} in ${where}`}>
         <p className="ink-muted text-xs leading-relaxed">
-          {post ? 'Living at the residence, in the room with the view of the parking lot.' : `${study.school.charAt(0).toUpperCase() + study.school.slice(1)}, living at ${study.residence}.`} {Math.floor(weeksLeft / 52) > 0 ? `${Math.floor(weeksLeft / 52)} years and ` : ''}{weeksLeft % 52} weeks {post ? 'until he lets you go' : `until the degree${study.failed ? ', if it comes' : ''}`}. {post ? 'The bishop\'s day takes the week; the shape of it is yours:' : 'Lectures, the chapel, and the house rule take the week;'} {budget} {post ? 'blocks of it' : 'hours are yours'}.
+          {post ? (study.city === 'residence' ? 'Living at the residence, in the room with the view of the parking lot.' : `Living at ${study.residence}.`) : `${study.school.charAt(0).toUpperCase() + study.school.slice(1)}, living at ${study.residence}.`} {Math.floor(weeksLeft / 52) > 0 ? `${Math.floor(weeksLeft / 52)} years and ` : ''}{weeksLeft % 52} weeks {post ? (study.city === 'residence' ? 'until he lets you go' : 'until the appointment ends') : `until the degree${study.failed ? ', if it comes' : ''}`}. {post ? `${POST_DAY[study.city] ?? 'The work'} takes the week; the shape of it is yours:` : 'Lectures, the chapel, and the house rule take the week;'} {budget} {post ? 'blocks of it' : 'hours are yours'}.
           {left > 0 ? ` ${left} still unspoken for; they go to the city.` : ' All of them are given.'}
         </p>
         {last && <p className="mt-2 rounded border rule bg-white/30 px-3 py-2 text-sm leading-relaxed">{last.lines.join(' ')}</p>}
       </Sheet>
-      <Sheet title={post ? "The bishop's day" : 'Your studies'}>
+      <Sheet title={post ? (POST_DAY[study.city] ?? 'The work') : 'Your studies'}>
         <ul className="flex flex-col gap-1.5">{studies.map(row)}</ul>
-        <p className="ink-faint mt-2 text-xs">{post ? 'Every priest of the diocese will remember how you did this.' : 'The thesis is the degree. Everything else is what kind of priest comes home.'}</p>
+        <p className="ink-faint mt-2 text-xs">{post ? (study.city === 'residence' ? 'Every priest of the diocese will remember how you did this.' : 'The diocese hears how the appointment goes; so does the board.') : 'The thesis is the degree. Everything else is what kind of priest comes home.'}</p>
       </Sheet>
       <Sheet title="Work on the side">
         <ul className="flex flex-col gap-1.5">{work.map(row)}</ul>

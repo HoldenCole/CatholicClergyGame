@@ -118,6 +118,8 @@ export interface GameSettings {
   workWeek: WorkWeek;
   /** Multiplier on strain gained: 0 (none) .. 2 (brutal). */
   wear: number;
+  /** Working hours a week, 32..80 in steps of four, when set by the slider; overrides the preset. */
+  hours?: number;
 }
 
 export const SAVE_VERSION = 5;

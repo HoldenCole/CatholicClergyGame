@@ -11,6 +11,10 @@ export interface Placement {
   ranked: { parish: Parish; score: number }[];
 }
 
+export function parishKindWord(parish: Parish): string {
+  return parish.cathedral ? 'the cathedral' : KIND_WORD[parish.kind];
+}
+
 export const KIND_WORD: Record<Parish['kind'], string> = {
   flagship_suburban: 'the flagship parish',
   struggling_urban: 'a struggling city parish',

@@ -571,5 +571,407 @@
       "three Masses in a parish that does not know you",
       "a weekend in a pulpit"
     ]
+  },
+  {
+    "id": "campus_mass",
+    "kind": "study",
+    "city": "campus",
+    "label": "The Sunday night Mass",
+    "blurb": "Ninety students and a guitar you cannot get rid of. The homily has to be able to take any question afterward.",
+    "maxAp": 2,
+    "location": "chapel",
+    "stats": {
+      "charisma": 0.06,
+      "piety": 0.03
+    },
+    "reputation": [
+      {
+        "key": "parishioners",
+        "delta": 0.08
+      }
+    ],
+    "digest": [
+      "the Sunday night Mass, full",
+      "a homily argued with afterward",
+      "ninety students and the guitar"
+    ]
+  },
+  {
+    "id": "campus_series",
+    "kind": "study",
+    "city": "campus",
+    "label": "The discussion series",
+    "blurb": "Hell, the priest before you, celibacy, the Crusades. Every question, and the ones who leave the Church leave from your chapel.",
+    "maxAp": 2,
+    "location": "library",
+    "stats": {
+      "knowledge": 0.05,
+      "theology": 0.03
+    },
+    "reputation": [
+      {
+        "key": "public",
+        "delta": 0.05
+      }
+    ],
+    "digest": [
+      "the Thursday series, and a question about Hell",
+      "an argument that went past midnight",
+      "a student who came back"
+    ]
+  },
+  {
+    "id": "campus_door",
+    "kind": "study",
+    "city": "campus",
+    "label": "The open door",
+    "blurb": "Office hours that are not office hours: the student who cannot sleep, the one who is leaving, the one who wants to be a priest.",
+    "maxAp": 2,
+    "location": "college_office",
+    "stats": {
+      "charisma": 0.04,
+      "piety": 0.03
+    },
+    "onFirst": [
+      {
+        "target": "flag",
+        "key": "vocations_from_campus",
+        "value": true
+      }
+    ],
+    "digest": [
+      "the door, open until one",
+      "a student who wants to be a priest",
+      "the one who is leaving, and the hour with him"
+    ]
+  },
+  {
+    "id": "campus_faculty",
+    "kind": "work",
+    "city": "campus",
+    "label": "The faculty table",
+    "blurb": "Lunch with the professors who tolerate a priest. The town hears what you say there.",
+    "maxAp": 1,
+    "location": "piazza",
+    "stats": {
+      "knowledge": 0.04
+    },
+    "reputation": [
+      {
+        "key": "public",
+        "delta": 0.1
+      }
+    ],
+    "digest": [
+      "lunch with the faculty",
+      "a philosophy professor who wants to argue",
+      "the faculty club, and its opinions"
+    ]
+  },
+  {
+    "id": "campus_parish",
+    "kind": "work",
+    "city": "campus",
+    "label": "Sunday supply in town",
+    "blurb": "A parish near the campus needs the noon Mass. It keeps you a parish priest.",
+    "maxAp": 2,
+    "location": "parish",
+    "stats": {
+      "charisma": 0.03
+    },
+    "reputation": [
+      {
+        "key": "parishioners",
+        "delta": 0.1
+      },
+      {
+        "key": "brother_priests",
+        "delta": 0.04
+      }
+    ],
+    "digest": [
+      "the noon Mass in town",
+      "Sunday supply, and a baptism"
+    ]
+  },
+  {
+    "id": "wards",
+    "kind": "study",
+    "city": "hospital",
+    "label": "The wards",
+    "blurb": "Room to room, the sick and the dying and the ones who will walk out. You learn to say nothing well.",
+    "maxAp": 3,
+    "location": "hospital",
+    "stats": {
+      "piety": 0.06,
+      "charisma": 0.04
+    },
+    "reputation": [
+      {
+        "key": "parishioners",
+        "delta": 0.06
+      },
+      {
+        "key": "public",
+        "delta": 0.03
+      }
+    ],
+    "digest": [
+      "the wards, room by room",
+      "a death on the fourth floor",
+      "the oncology unit, and the woman who laughed"
+    ]
+  },
+  {
+    "id": "night_pager",
+    "kind": "study",
+    "city": "hospital",
+    "label": "The night pager",
+    "blurb": "Anointings at three in the morning. The families in the hallway remember who came.",
+    "maxAp": 2,
+    "location": "hospital",
+    "stats": {
+      "piety": 0.05
+    },
+    "reputation": [
+      {
+        "key": "parishioners",
+        "delta": 0.1
+      }
+    ],
+    "onFirst": [
+      {
+        "target": "flag",
+        "key": "kept_the_pager",
+        "value": true
+      }
+    ],
+    "digest": [
+      "the pager at three",
+      "an anointing in the emergency room",
+      "the hallway, and the family who waited"
+    ]
+  },
+  {
+    "id": "ethics_committee",
+    "kind": "work",
+    "city": "hospital",
+    "label": "The ethics committee",
+    "blurb": "The physicians, the lawyer, and you, on the cases that have no good answer. The diocese's bioethics voice, whether you meant to be or not.",
+    "maxAp": 1,
+    "location": "college_office",
+    "requires": [
+      {
+        "type": "any",
+        "inner": [
+          {
+            "type": "stat",
+            "key": "theology",
+            "op": ">=",
+            "value": 50
+          },
+          {
+            "type": "stat",
+            "key": "knowledge",
+            "op": ">=",
+            "value": 50
+          }
+        ]
+      }
+    ],
+    "stats": {
+      "knowledge": 0.05,
+      "theology": 0.03
+    },
+    "reputation": [
+      {
+        "key": "chancery",
+        "delta": 0.06
+      },
+      {
+        "key": "public",
+        "delta": 0.06
+      }
+    ],
+    "onFirst": [
+      {
+        "target": "flag",
+        "key": "bioethics_voice",
+        "value": true
+      }
+    ],
+    "digest": [
+      "the ethics committee, and a case with no answer",
+      "a physician who wanted the Church's view and got yours"
+    ]
+  },
+  {
+    "id": "hospital_chapel",
+    "kind": "study",
+    "city": "hospital",
+    "label": "The hospital chapel",
+    "blurb": "Mass at noon for the staff who come, and an hour of your own after.",
+    "maxAp": 2,
+    "location": "chapel",
+    "stats": {
+      "piety": 0.08
+    },
+    "digest": [
+      "Mass for the nurses",
+      "the chapel between rounds"
+    ]
+  },
+  {
+    "id": "hospital_supply",
+    "kind": "work",
+    "city": "hospital",
+    "label": "Weekend supply",
+    "blurb": "A parish somewhere needs the Sunday Masses, and you are still a parish priest on Sundays.",
+    "maxAp": 2,
+    "location": "parish",
+    "stats": {
+      "charisma": 0.03
+    },
+    "reputation": [
+      {
+        "key": "parishioners",
+        "delta": 0.1
+      },
+      {
+        "key": "brother_priests",
+        "delta": 0.04
+      }
+    ],
+    "digest": [
+      "Sunday supply, and lunch after",
+      "three Masses in a parish that borrowed you"
+    ]
+  },
+  {
+    "id": "lectures",
+    "kind": "study",
+    "city": "seminary",
+    "label": "The lectures",
+    "blurb": "Two courses a semester to men who decided what they think of you from the way you walked in. Teach.",
+    "maxAp": 3,
+    "location": "library",
+    "stats": {
+      "theology": 0.07,
+      "knowledge": 0.03
+    },
+    "reputation": [
+      {
+        "key": "brother_priests",
+        "delta": 0.06
+      }
+    ],
+    "digest": [
+      "dogmatics at nine, to twenty-two men",
+      "a lecture that landed",
+      "a question from the back row you could not answer"
+    ]
+  },
+  {
+    "id": "formation_reports",
+    "kind": "study",
+    "city": "seminary",
+    "label": "The formation reports",
+    "blurb": "A dozen men a year, and a paragraph on each that goes to a bishop. What you write follows them.",
+    "maxAp": 2,
+    "location": "college_office",
+    "stats": {
+      "administration": 0.05,
+      "knowledge": 0.02
+    },
+    "reputation": [
+      {
+        "key": "chancery",
+        "delta": 0.08
+      }
+    ],
+    "onFirst": [
+      {
+        "target": "flag",
+        "key": "wrote_formation_reports",
+        "value": true
+      }
+    ],
+    "digest": [
+      "formation reports, twelve of them",
+      "a paragraph that will follow a man for years"
+    ]
+  },
+  {
+    "id": "seminary_direction",
+    "kind": "study",
+    "city": "seminary",
+    "label": "Spiritual direction",
+    "blurb": "Four seminarians an hour a week each, in the internal forum, where what is said stays.",
+    "maxAp": 2,
+    "location": "chapel",
+    "stats": {
+      "piety": 0.07,
+      "charisma": 0.02
+    },
+    "digest": [
+      "direction, four men, four hours",
+      "a directee who said the true thing"
+    ]
+  },
+  {
+    "id": "seminary_supply",
+    "kind": "work",
+    "city": "seminary",
+    "label": "Sunday supply",
+    "blurb": "The parishes near the seminary borrow the faculty on Sundays. It keeps you a parish priest.",
+    "maxAp": 2,
+    "location": "parish",
+    "stats": {
+      "charisma": 0.03
+    },
+    "reputation": [
+      {
+        "key": "parishioners",
+        "delta": 0.1
+      }
+    ],
+    "digest": [
+      "Sunday supply, borrowed by a parish",
+      "a wedding for a former student"
+    ]
+  },
+  {
+    "id": "seminary_writing",
+    "kind": "work",
+    "city": "seminary",
+    "label": "Writing",
+    "blurb": "The article the journal asked for, the book you keep not starting. Faculty are expected to publish.",
+    "maxAp": 2,
+    "location": "desk",
+    "stats": {
+      "theology": 0.04,
+      "knowledge": 0.04
+    },
+    "reputation": [
+      {
+        "key": "rome",
+        "delta": 0.04
+      },
+      {
+        "key": "public",
+        "delta": 0.03
+      }
+    ],
+    "onFirst": [
+      {
+        "target": "flag",
+        "key": "faculty_writes",
+        "value": true
+      }
+    ],
+    "digest": [
+      "the article, revised again",
+      "a chapter drafted between lectures"
+    ]
   }
 ]

@@ -184,6 +184,8 @@ export interface Parish {
   assessment: number;
   school: SchoolStatus;
   pastorId: string;
+  /** The bishop's own church. Its pastor is the rector. */
+  cathedral?: boolean;
   staffIds: string[];
   groupIds: string[];
   /** One live problem, by id in content. */

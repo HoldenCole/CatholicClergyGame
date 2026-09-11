@@ -109,7 +109,7 @@ export function generateParish(rng: Rng, preset: DiocesePreset, seed: DiocesePre
     id: `pastor_${index + 1}`,
     name: rollMaleName(rng, rollHeritage(rng, { ...CLERGY_HERITAGE, ...preset.heritage }), eraForBirthYear(pastorBirth)),
     role: 'priest',
-    title: rng.chance(0.15) ? 'Msgr.' : 'Fr.',
+    title: seed.cathedral || rng.chance(0.15) ? 'Msgr.' : 'Fr.',
     birthYear: pastorBirth,
     origin: rng.pick(['urban_ethnic', 'rural', 'suburban', 'latino_immigrant', 'convert', 'lapsed'] as const),
     stats: addStats(rollBaseStats(rng, 25, 60), { administration: rng.int(-10, 20), piety: rng.int(-5, 15) }),
@@ -123,9 +123,9 @@ export function generateParish(rng: Rng, preset: DiocesePreset, seed: DiocesePre
     name: rng.pick(seed.patrons),
     place: rng.pick(seed.places),
     kind: seed.kind,
-    terrain: shape.terrain,
-    households,
-    wealth,
+    terrain: seed.cathedral ? 'urban' : shape.terrain,
+    households: seed.cathedral ? Math.max(households, 2400) : households,
+    wealth: seed.cathedral ? 5 : wealth,
     ethnic,
     generational: rng.pick(shape.generational),
     needsSpanish: latino >= 0.3,
@@ -144,6 +144,7 @@ export function generateParish(rng: Rng, preset: DiocesePreset, seed: DiocesePre
     staffIds: [],
     groupIds: [],
     problem: rng.pick(shape.problems),
+    ...(seed.cathedral ? { cathedral: true, school: 'none' as const, buildings: { church: rangeInt(rng, [70, 95]), rectory: condition(), hall: condition(), school: null } } : {}),
   };
   return { parish, pastor };
 }
