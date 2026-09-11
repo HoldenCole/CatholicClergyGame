@@ -1,7 +1,7 @@
 import type { AmbientItem, Parish, PlaceDecor } from '@/types';
 import { decorOptions } from '@/systems/decor';
 import { PALETTE } from './defs';
-import { Bookcase, Candle, Chair, Crucifix, Desk, Door, Frame, Lamp, LightPool, Radiator, Room, Rug, Shadow, Window, pts } from './primitives';
+import { Bookcase, Candle, Chair, Crucifix, Desk, Door, Frame, Lamp, LightPool, Radiator, Room, Rug, Shadow, Window, pts, wallPoint } from './primitives';
 import { Ambient, CornerItem, WallItem } from './ambient';
 import { SideDoor } from './office';
 
@@ -114,6 +114,68 @@ export function SeminaryRoom({ ambient, seminaryName }: { ambient: AmbientItem[]
       </Frame>
       <Ambient scene="seminary_room" items={ambient} anchor={{ books: [7, 7], wall: [40, 18], desk: [56, 31] }} />
       <Door x={90} y={30} w={8} h={16} open={false} color="#8a8378" />
+    </g>
+  );
+}
+
+/** The corridor outside the room: the chapel at the end, doors on both sides, the gym and the language lab, the front door. */
+export function SeminaryHall() {
+  const sign = (x: number, y: number, text: string) => (
+    <g>
+      <rect x={x - 5} y={y - 1.4} width="10" height="2.8" fill="#e9e2cc" stroke="#7a6a4a" strokeWidth="0.2" />
+      <text x={x} y={y + 0.7} fontSize="1.6" textAnchor="middle" fill="#5a4a32" fontFamily="serif">{text}</text>
+    </g>
+  );
+  const sideDoor = (side: 'left' | 'right', x0: number, x1: number) => (
+    <g>
+      <polygon points={pts([wallPoint(side, x0, 0.22), wallPoint(side, x1, 0.22), wallPoint(side, x1, 1), wallPoint(side, x0, 1)])} fill={PALETTE.oak} />
+      <polygon points={pts([wallPoint(side, x0 + 0.8, 0.28), wallPoint(side, x1 - 0.8, 0.28), wallPoint(side, x1 - 0.8, 0.55), wallPoint(side, x0 + 0.8, 0.55)])} fill="#000" opacity="0.18" />
+      <polygon points={pts([wallPoint(side, x0, 0.22), wallPoint(side, x1, 0.22), wallPoint(side, x1, 1), wallPoint(side, x0, 1)])} fill={side === 'left' ? 'url(#sideLeft)' : 'url(#sideRight)'} />
+    </g>
+  );
+  return (
+    <g>
+      <Room wall="#e6dfcd" dado="#8a7a5a" dadoAt={0.72} floor="lino" ceiling="#efece3">
+        <rect x="34" y="1.5" width="32" height="1.4" fill="#f4f1e6" />
+        <rect x="34" y="1.5" width="32" height="1.4" fill="#fff" opacity="0.7" filter="url(#soft)" />
+      </Room>
+      {/* the chapel doors at the end of the corridor */}
+      <rect x="36" y="9" width="28" height="31" fill={PALETTE.oakDark} />
+      <path d="M36 9 Q50 -2 64 9 Z" fill={PALETTE.oakDark} />
+      <rect x="38" y="12" width="11" height="28" fill={PALETTE.oak} />
+      <rect x="51" y="12" width="11" height="28" fill={PALETTE.oak} />
+      <rect x="40" y="15" width="7" height="10" fill="#7a1f1f" opacity="0.8" />
+      <rect x="53" y="15" width="7" height="10" fill="#2e5aac" opacity="0.8" />
+      <circle cx="49" cy="27" r="0.6" fill="url(#brass)" />
+      <circle cx="51" cy="27" r="0.6" fill="url(#brass)" />
+      <Crucifix x={50} y={2.5} s={0.55} />
+      <circle cx="50" cy="28" r="14" fill="url(#glow)" opacity="0.18" />
+      {/* doors along the walls */}
+      {sideDoor('left', 3, 12)}
+      {sideDoor('left', 16, 22)}
+      {sideDoor('left', 27, 32)}
+      {sideDoor('right', 78, 84)}
+      {sideDoor('right', 87, 96)}
+      <g>{sign(8, 12, 'Library')}</g>
+      <g>{sign(19, 14, 'Director')}</g>
+      <g>{sign(29.5, 16, 'Room 12')}</g>
+      <g>{sign(81, 14, 'Rector')}</g>
+      <g>{sign(91.5, 12, 'Common')}</g>
+      {/* the gym bag, the language lab cart, the front door mat */}
+      <Shadow x={8} y={57} w={12} />
+      <path d="M8 48 q1 -3 4 -3 h6 q3 0 4 3 v7 h-14 Z" fill="#2f3a4a" />
+      <rect x="12" y="43" width="6" height="2" rx="1" fill="#1c1917" />
+      <circle cx="26" cy="52" r="3.2" fill="#c7742a" />
+      <path d="M22.8 52 h6.4 M26 48.8 v6.4" stroke="#1c1917" strokeWidth="0.3" />
+      <Shadow x={76} y={57} w={16} />
+      <rect x="76" y="44" width="14" height="10" fill="#8a8378" />
+      <rect x="77" y="45" width="12" height="4" fill="#1e3a5a" />
+      <rect x="78" y="46" width="5" height="1" fill="#e9e2cc" />
+      <rect x="78" y="47.5" width="7" height="0.6" fill="#e9e2cc" opacity="0.7" />
+      {[79, 82, 85].map((x) => <rect key={x} x={x} y="50" width="2.4" height="3" fill={['#7a1f1f', '#2e6b4f', '#c9a24a'][(x - 79) / 3]} />)}
+      <rect x="40" y="50" width="20" height="4" fill="#5a3a12" opacity="0.6" />
+      <text x="50" y="52.9" fontSize="1.8" textAnchor="middle" fill="#e9e2cc" fontFamily="serif" opacity="0.8">To the parishes</text>
+      <Door x={44} y={40} w={12} h={10} color="#8a8378" />
     </g>
   );
 }

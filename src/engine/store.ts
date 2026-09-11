@@ -36,6 +36,7 @@ import { startFounding as doStartFounding, suppressGroup as doSuppress } from '@
 import type { GroupType, ProjectType } from '@/types';
 import { startProject as doStartProject } from '@/systems/projects';
 import { furnish as doFurnish, petition as doPetition } from '@/systems/decor';
+import { setSeminaryActivity as doSetSeminaryActivity } from '@/systems/seminaryWeek';
 import type { DecorPlace, LiturgicalTopic } from '@/types';
 import { anthropicProvider, type Provider } from '@/llm/provider';
 import { DEFAULT_LLM, loadLlmSettings, saveLlmSettings, type LlmSettings } from '@/llm/settings';
@@ -79,6 +80,8 @@ export interface GameStore {
   startGame(answers: CreationAnswers): void;
   acceptAssignment(): void;
   setObligation(key: ObligationKey, quality: Quality): void;
+  /** Hours a week a seminarian gives an activity. */
+  setSeminaryActivity(id: string, ap: number): void;
   setDiscretionary(actionId: string, ap: number): void;
   foundGroup(type: GroupType): void;
   suppressGroup(groupId: string, suppressed: boolean): void;
@@ -345,6 +348,9 @@ export const useGameStore = create<GameStore>()((set, get) => ({
   },
   setObligation(key, quality) {
     update(set, get, (game) => doSetObligation(game, key, quality));
+  },
+  setSeminaryActivity(id, ap) {
+    update(set, get, (game) => doSetSeminaryActivity(game, id, ap));
   },
   setDiscretionary(actionId, ap) {
     update(set, get, (game) => doSetDiscretionary(game, actionId, ap));

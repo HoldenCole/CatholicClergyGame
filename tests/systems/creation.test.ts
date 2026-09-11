@@ -4,6 +4,7 @@ import { newGame } from '@/engine/game';
 import {
   applyCreation,
   availableCareers,
+  careerAvailability,
   careerGain,
   entryAge,
   ordinationAge,
@@ -32,8 +33,8 @@ describe('systems/creation', () => {
     expect(content.origins).toHaveLength(6);
     expect(content.ties).toHaveLength(4);
     expect(content.paths).toHaveLength(6);
-    expect(content.fields).toHaveLength(5);
-    expect(content.careers).toHaveLength(10);
+    expect(content.fields).toHaveLength(8);
+    expect(content.careers).toHaveLength(14);
     expect(content.motives).toHaveLength(6);
     expect(content.families).toHaveLength(6);
     expect(content.pasts).toHaveLength(6);
@@ -48,22 +49,40 @@ describe('systems/creation', () => {
   it('entry age follows the seven-year rule', () => {
     expect(entryAge(base, content)).toBe(22);
     expect(entryAge({ ...base, path: 'high_school', field: null }, content)).toBe(18);
-    const lawyer = { ...base, field: 'history_law' as const, career: 'attorney' as const, yearsWorked: 10 };
-    expect(entryAge(lawyer, content)).toBe(32);
+    const lawyer = { ...base, path: 'doctoral' as const, field: 'history_law' as const, career: 'attorney' as const, yearsWorked: 8 };
+    expect(entryAge(lawyer, content)).toBe(34);
     expect(entryAge({ ...lawyer, yearsWorked: 30 }, content)).toBe(40);
     const { state } = newGame({ seed: 'c' });
     const built = applyCreation(state, lawyer, content);
-    expect(ordinationAge(built.character!)).toBe(39);
+    expect(ordinationAge(built.character!)).toBe(41);
   });
 
-  it('gates careers by field and degree', () => {
-    expect(availableCareers({ path: 'college', field: 'history_law' }, content).map((c) => c.id)).toEqual(
-      expect.arrayContaining(['attorney', 'journalism', 'professor', 'teacher', 'military', 'trades', 'social_work']),
-    );
-    expect(availableCareers({ path: 'college', field: 'history_law' }, content).map((c) => c.id)).not.toContain('accountant');
-    expect(availableCareers({ path: 'high_school', field: null }, content).map((c) => c.id)).toEqual(['trades']);
-    expect(availableCareers({ path: 'college', field: 'stem' }, content).map((c) => c.id)).toContain('physician');
-    expect(availableCareers({ path: 'college', field: 'stem' }, content).map((c) => c.id)).toContain('management');
+  it('gates careers by field and by how much degree the path carries', () => {
+    const ids = (path: CreationAnswers['path'], field: CreationAnswers['field']) => availableCareers({ path, field }, content).map((c) => c.id);
+    // A bachelor's in history or law is not a law degree.
+    expect(ids('college', 'history_law')).toEqual(expect.arrayContaining(['journalism', 'teacher', 'military', 'trades']));
+    expect(ids('college', 'history_law')).not.toContain('attorney');
+    expect(ids('doctoral', 'history_law')).toContain('attorney');
+    expect(ids('college', 'history_law')).not.toContain('professor');
+    expect(ids('masters_2', 'history_law')).toContain('professor');
+    expect(ids('college', 'history_law')).not.toContain('accountant');
+    // Without a degree the trades and the jobs that never needed one.
+    expect(ids('high_school', null)).toEqual(expect.arrayContaining(['trades', 'police_fire', 'sales', 'farm']));
+    expect(ids('high_school', null)).not.toContain('teacher');
+    expect(ids('some_college', 'stem')).not.toContain('nurse');
+    // Medicine needs the doctorate; nursing needs the degree.
+    expect(ids('college', 'stem')).not.toContain('physician');
+    expect(ids('doctoral', 'stem')).toContain('physician');
+    expect(ids('college', 'nursing')).toContain('nurse');
+    expect(ids('college', 'stem')).toContain('management');
+    expect(ids('college', 'education')).toContain('teacher');
+    // Every career is reachable by some path and field.
+    for (const c of content.careers) {
+      const reachable = content.paths.some((p) => content.fields.some((f) => availableCareers({ path: p.id, field: f.id }, content).some((x) => x.id === c.id)));
+      expect(reachable, c.id).toBe(true);
+    }
+    const why = careerAvailability({ path: 'college', field: 'history_law' }, content).find((c) => c.option.id === 'attorney')!.why;
+    expect(why).toMatch(/professional or doctoral/);
   });
 
   it('validates answers', () => {

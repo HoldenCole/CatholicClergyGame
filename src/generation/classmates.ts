@@ -28,6 +28,9 @@ const FIELD_WEIGHTS: Record<Field, number> = {
   history_law: 1.5,
   stem: 2,
   classics: 1.5,
+  education: 1,
+  nursing: 0.7,
+  social_science: 1,
 };
 
 /** Stat deltas an option would give the player, reused so classmates are shaped by the same table. */

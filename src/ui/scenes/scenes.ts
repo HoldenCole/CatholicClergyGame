@@ -5,10 +5,12 @@ import type { ActionLocation, ObligationKey } from '@/types';
  * systems already own: a discretionary action (by location), an obligation
  * dial, a panel, or another scene. Coordinates are percentages of the scene.
  */
-export type SceneId = 'church' | 'rectory' | 'office' | 'hall' | 'chapel' | 'street' | 'study' | 'seminary_room' | 'chancery';
+export type SceneId = 'church' | 'rectory' | 'office' | 'hall' | 'chapel' | 'street' | 'study' | 'seminary_room' | 'seminary_hall' | 'chancery';
 
 export type HotspotBinding =
   | { kind: 'action'; actionId: string }
+  /** A seminarian's free-hour activity, by id in content/seminary/activities.json. */
+  | { kind: 'seminary_action'; activityId: string }
   | { kind: 'obligation'; key: ObligationKey }
   | { kind: 'panel'; panel: 'routine' | 'groups' | 'projects' | 'offers' | 'digest' | 'parish' | 'formation' }
   | { kind: 'furnish'; place: 'church' | 'office' | 'rectory' | 'seminary_room' | 'chancery' }
@@ -130,10 +132,30 @@ export const SEMINARY_SCENE: SceneDef = {
   label: 'Your room',
   locations: [],
   hotspots: [
-    { id: 'desk', label: 'The desk: your formation', x: 50, y: 50, w: 42, h: 26, binds: { kind: 'panel', panel: 'formation' } },
+    { id: 'desk', label: 'The desk: writing', x: 50, y: 50, w: 42, h: 26, binds: { kind: 'seminary_action', activityId: 'writing' } },
+    { id: 'crucifix', label: 'The crucifix: a holy hour in the chapel', x: 44, y: 10, w: 12, h: 30, binds: { kind: 'seminary_action', activityId: 'holy_hour' } },
     { id: 'window', label: 'The window: the week', x: 60, y: 10, w: 24, h: 32, binds: { kind: 'panel', panel: 'digest' } },
-    { id: 'mail', label: 'The mail on the bed: offers', x: 6, y: 48, w: 36, h: 26, binds: { kind: 'panel', panel: 'offers' } },
-    { id: 'shelf', label: 'The shelf', x: 6, y: 8, w: 30, h: 32, binds: { kind: 'furnish', place: 'seminary_room' } },
+    { id: 'mail', label: 'The mail on the bed: letters', x: 6, y: 48, w: 36, h: 26, binds: { kind: 'panel', panel: 'offers' } },
+    { id: 'shelf', label: 'The shelf: study, and how the room looks', x: 6, y: 8, w: 30, h: 32, binds: { kind: 'seminary_action', activityId: 'study' } },
+    { id: 'frame', label: 'The frame: how the room looks', x: 39, y: 18, w: 8, h: 10, binds: { kind: 'furnish', place: 'seminary_room' } },
+    { id: 'door', label: 'The door: the corridor', x: 88, y: 48, w: 10, h: 30, binds: { kind: 'scene', scene: 'seminary_hall' } },
+  ],
+};
+
+export const SEMINARY_HALL: SceneDef = {
+  id: 'seminary_hall',
+  label: 'The corridor',
+  locations: [],
+  hotspots: [
+    { id: 'chapel', label: 'The chapel: a holy hour', x: 34, y: 14, w: 32, h: 52, binds: { kind: 'seminary_action', activityId: 'holy_hour' } },
+    { id: 'library', label: 'The library: study', x: 3, y: 18, w: 11, h: 44, binds: { kind: 'seminary_action', activityId: 'study' } },
+    { id: 'director', label: "The spiritual director's door", x: 15, y: 20, w: 8, h: 38, binds: { kind: 'seminary_action', activityId: 'direction' } },
+    { id: 'rector', label: "The rector's office: the sacristan's job", x: 77, y: 20, w: 8, h: 38, binds: { kind: 'seminary_action', activityId: 'sacristan' } },
+    { id: 'common', label: 'The common room', x: 86, y: 18, w: 11, h: 44, binds: { kind: 'seminary_action', activityId: 'common_room' } },
+    { id: 'gym', label: 'The gym: basketball at four', x: 4, y: 66, w: 22, h: 26, binds: { kind: 'seminary_action', activityId: 'sports' } },
+    { id: 'language', label: 'The language lab: Spanish', x: 74, y: 66, w: 22, h: 26, binds: { kind: 'seminary_action', activityId: 'spanish' } },
+    { id: 'out', label: 'The front door: a parish weekend', x: 40, y: 70, w: 20, h: 26, binds: { kind: 'seminary_action', activityId: 'parish_weekend' } },
+    { id: 'back', label: 'Back to your room', x: 26, y: 22, w: 7, h: 36, binds: { kind: 'scene', scene: 'seminary_room' } },
   ],
 };
 
@@ -151,6 +173,7 @@ export const CHANCERY_SCENE: SceneDef = {
 
 export function sceneById(id: SceneId): SceneDef {
   if (id === 'seminary_room') return SEMINARY_SCENE;
+  if (id === 'seminary_hall') return SEMINARY_HALL;
   if (id === 'chancery') return CHANCERY_SCENE;
   return SCENES.find((s) => s.id === id)!;
 }

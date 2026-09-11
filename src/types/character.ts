@@ -22,7 +22,7 @@ export type EntryPath =
   | 'masters_2'
   | 'doctoral';
 
-export type Field = 'business' | 'philosophy' | 'history_law' | 'stem' | 'classics';
+export type Field = 'business' | 'philosophy' | 'history_law' | 'stem' | 'classics' | 'education' | 'nursing' | 'social_science';
 
 export type Career =
   | 'attorney'
@@ -34,7 +34,11 @@ export type Career =
   | 'military'
   | 'trades'
   | 'journalism'
-  | 'social_work';
+  | 'social_work'
+  | 'nurse'
+  | 'police_fire'
+  | 'sales'
+  | 'farm';
 
 /** DESIGN.md §3.4 */
 export type Motive = 'certainty' | 'conversion' | 'priest' | 'intellectual' | 'grief' | 'running';
