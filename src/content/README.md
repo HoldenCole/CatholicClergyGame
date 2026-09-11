@@ -300,6 +300,17 @@ Events can read and write furnishings, and read the bishop's temper:
 { "target": "permission", "key": "latin_mass", "value": "denied" }              // the bishop's word, given or taken back
 ```
 
+Three more conditions and one effect close the last design gaps:
+
+```json
+{ "type": "position", "topic": "liturgy", "op": "<=", "value": -30 }   // a semi-public or public position on record (topic "any" for any); DESIGN §5.4
+{ "type": "routine", "key": "study", "op": ">=", "value": 3 }          // hours a week on an action id, or an obligation key read as AP; DESIGN §2.3
+{ "type": "figure" }                                                    // DESIGN §5.6
+{ "target": "trait_known", "key": "@pastor" }                           // the player has seen the person's hidden trait; DESIGN §9.2
+```
+
+Flags the engine sets for content to read: `ordained_late` (32 or older), `ordained_young` (under 30), `passed_over`, `term_renewed`, `left_a_collapse` (a charismatic man's parish thins after he goes), `pref_*` (what he asked the chancery for; set at ordination and changeable on the parish sheet).
+
 ## The bishop's requests (`events/parish/bishop.json`)
 
 The bishop leans on his pastors through requests: a letter, a word after

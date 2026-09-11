@@ -12,10 +12,13 @@ export const SEMINARY_WEEK = {
   freeHours: 5,
   /** The propaedeutic year has more silence and less choice. */
   propaedeuticHours: 4,
+  /** The deacon's year runs at near-parish complexity. DESIGN §6.3 */
+  deaconHours: 6,
 } as const;
 
 export function seminaryBudget(state: GameState): number {
-  return state.seminary?.year === 1 ? SEMINARY_WEEK.propaedeuticHours : SEMINARY_WEEK.freeHours;
+  const year = state.seminary?.year ?? 2;
+  return year === 1 ? SEMINARY_WEEK.propaedeuticHours : year >= 7 ? SEMINARY_WEEK.deaconHours : SEMINARY_WEEK.freeHours;
 }
 
 export function routineOf(sem: SeminaryState): Record<string, number> {

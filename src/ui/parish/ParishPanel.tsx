@@ -4,6 +4,8 @@ import { STAT_KEYS, CONSTITUENCY_KEYS } from '@/types';
 import { useState } from 'react';
 import { arcKey } from '@/llm/skin';
 import Sheet from '../Sheet';
+import { currentPreference, PREFERENCES, PREFERENCE_LABEL } from '@/systems/assignment';
+import { TRAIT_LABEL } from '../portraits/traits';
 import Portrait from '../portraits/Portrait';
 import { portraitForCharacter, portraitForNpc, yearOf } from '../portraits/spec';
 
@@ -18,6 +20,7 @@ function word(v: number): string {
 export default function ParishPanel() {
   const game = useGameStore((s) => s.game);
   const prose = useGameStore((s) => s.prose);
+  const setPreference = useGameStore((s) => s.setPreference);
   const [inspect, setInspect] = useState(false);
   if (!game?.parish || !game.world || !game.character) return null;
   const portraitKey = arcKey(game);
@@ -58,7 +61,10 @@ export default function ParishPanel() {
           {[...(pastor && pastor.id !== 'player' ? [pastor] : []), ...staff].map((n) => (
             <li key={n.id} className="flex items-center gap-2">
               <Portrait portrait={portraitForNpc(n, year)} size={26} />
-              <span className="min-w-0 flex-1 truncate">{n.title ? `${n.title} ` : ''}{n.name.first} {n.name.last}, {n.id === pastor?.id ? 'pastor' : (n.tags[0] ?? '').replace('_', ' ')}</span>
+              <span className="min-w-0 flex-1 truncate">
+                {n.title ? `${n.title} ` : ''}{n.name.first} {n.name.last}, {n.id === pastor?.id ? 'pastor' : (n.tags[0] ?? '').replace('_', ' ')}
+                {n.traitKnown && <span className="ink-faint ml-2 text-xs">{TRAIT_LABEL[n.hiddenTrait]}</span>}
+              </span>
               <span className="ink-muted">{word(n.relationship)}</span>
             </li>
           ))}
@@ -71,6 +77,14 @@ export default function ParishPanel() {
           )}
         </ul>
         {game.commitments.length > 0 && <p className="ink-muted mt-2 text-xs">Also on your plate: {game.commitments.map((x) => x.label).join(', ')}.</p>}
+        <div className="mt-3 flex items-center gap-2 text-sm">
+          <span className="ink-muted">What you have asked the chancery for</span>
+          <select className="pinput text-xs" value={currentPreference(game) ?? 'wherever'} onChange={(e) => setPreference(e.target.value as (typeof PREFERENCES)[number])}>
+            {PREFERENCES.map((p) => (
+              <option key={p} value={p}>{PREFERENCE_LABEL[p].label}</option>
+            ))}
+          </select>
+        </div>
         <button className="pbtn-link mt-3" onClick={() => setInspect((v) => !v)}>
           {inspect ? 'Hide the numbers' : 'Inspect the numbers'}
         </button>

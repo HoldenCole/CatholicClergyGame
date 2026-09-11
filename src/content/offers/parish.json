@@ -1662,6 +1662,292 @@
         ],
         "outcome": "You tell the chancellor the parish is not ready to be shown, which the council, when it hears, takes as an insult, and the bishop, when he hears, takes as a lack of confidence in his judgment. The feast day passes with the usual Mass and a potluck. The reports keep going to the chancery, and are read, and nobody comes."
       }
+    },
+    {
+      "id": "pv_figure_lectures",
+      "category": "social",
+      "phase": [
+        "parochial_vicar",
+        "pastor"
+      ],
+      "title": "Invitations",
+      "weight": 40,
+      "windowWeeks": 4,
+      "once": true,
+      "cluster": "social",
+      "body": "They come in a week, four of them, as if someone had passed a list around: a Newman Center two states away, a diocesan men's conference, a podcast with a hundred thousand listeners, a parish in the next diocese whose pastor writes that his people have been reading you. Nobody in the chancery arranged any of it and nobody in the chancery can stop it. You are being asked to be the thing you have become, out loud, in rooms the bishop does not control. The letters say honorarium. The letters say we would be honored. One of them says, carefully, that they know it might be awkward for you at home, and that they will understand, and that they hope.",
+      "requires": [
+        {
+          "type": "figure"
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "figure:circuit",
+            "value": true
+          }
+        }
+      ],
+      "accept": {
+        "effects": [
+          {
+            "target": "flag",
+            "key": "figure:circuit",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "public",
+            "delta": 10
+          },
+          {
+            "target": "outspokenness",
+            "key": "",
+            "delta": 6
+          },
+          {
+            "target": "reputation",
+            "key": "chancery",
+            "delta": -5
+          },
+          {
+            "target": "stat",
+            "key": "charisma",
+            "delta": 2
+          }
+        ],
+        "outcome": "You take three of the four and the podcast runs an hour and forty minutes. Strangers write. Priests you have never met write. The vicar general asks, at a funeral, whether you cleared your travel, and you say a priest does not need permission to give a talk, which is true, and which he writes down.",
+        "commitment": {
+          "label": "The circuit",
+          "weeks": 52,
+          "apPerWeek": 1,
+          "onComplete": [
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": 8
+            },
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": -4
+            }
+          ],
+          "completeOutcome": "A year of Saturdays in other people's halls. You are known in three states and slightly less known in your own rectory, where the pastor has stopped asking where you were."
+        }
+      },
+      "decline": {
+        "effects": [
+          {
+            "target": "reputation",
+            "key": "public",
+            "delta": -4
+          },
+          {
+            "target": "reputation",
+            "key": "chancery",
+            "delta": 3
+          }
+        ],
+        "outcome": "You answer all four kindly and go nowhere. The letters stop for a while. The chancery notices that a man who could have been trouble chose not to be, and files that too."
+      }
+    },
+    {
+      "id": "pv_figure_faction",
+      "category": "social",
+      "phase": [
+        "parochial_vicar",
+        "pastor"
+      ],
+      "title": "The Men Who Think As You Do",
+      "weight": 35,
+      "windowWeeks": 6,
+      "once": true,
+      "cluster": "social",
+      "body": "{@brother_priest} asks you to dinner and there are nine of them at the table, priests of the diocese, and it is not a dinner. They have been meeting for a year. They read what you say and they say it to each other, and they have decided, without asking you, that you are the one the rest of the presbyterate would listen to. They would like you to lead: a name for the group, a letter to the bishop when a letter is needed, a voice at the priests' council that says out loud what they say at this table. It is not a conspiracy. It is a faction, and it exists whether you join it or not, and if you do not join it someone else will lead it, less carefully.",
+      "requires": [
+        {
+          "type": "figure"
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "figure:faction",
+            "value": true
+          }
+        }
+      ],
+      "accept": {
+        "effects": [
+          {
+            "target": "flag",
+            "key": "figure:faction",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "brother_priests",
+            "delta": 8
+          },
+          {
+            "target": "outspokenness",
+            "key": "",
+            "delta": 8
+          },
+          {
+            "target": "reputation",
+            "key": "chancery",
+            "delta": -8
+          },
+          {
+            "target": "relationship",
+            "key": "@brother_priest",
+            "delta": 10
+          }
+        ],
+        "outcome": "The group has a name by Lent and a letter to the bishop by Pentecost, and your name is first on it. The bishop answers the letter, which he did not have to do, and answers it to you, which tells you what you are now. Men you have never met nod to you at the clergy day. Men you have known for years do not.",
+        "commitment": {
+          "label": "The group",
+          "weeks": 104,
+          "apPerWeek": 1,
+          "onComplete": [
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": 6
+            },
+            {
+              "target": "flag",
+              "key": "figure:faction_led",
+              "value": true
+            }
+          ],
+          "completeOutcome": "Two years of leading men who did not entirely want to be led. The group survives you, which is the point of a group. The chancery cannot bury you now without burying nine others, and it knows it."
+        }
+      },
+      "decline": {
+        "effects": [
+          {
+            "target": "reputation",
+            "key": "brother_priests",
+            "delta": -5
+          },
+          {
+            "target": "relationship",
+            "key": "@brother_priest",
+            "delta": -8
+          },
+          {
+            "target": "honesty",
+            "key": "",
+            "delta": 1
+          }
+        ],
+        "outcome": "You say you will say what you think from your own pulpit and nowhere else, and that a faction is the one thing the diocese does not need more of. They are disappointed. Someone else leads it, less carefully, and his letters have your ideas in them without your name."
+      }
+    },
+    {
+      "id": "pv_figure_column",
+      "category": "academic",
+      "phase": [
+        "parochial_vicar",
+        "pastor"
+      ],
+      "title": "A Column of Your Own",
+      "weight": 35,
+      "windowWeeks": 3,
+      "once": true,
+      "cluster": "academic",
+      "body": "The editor of a national Catholic paper writes to offer you a column, monthly, eight hundred words, on whatever you like, which is how editors say on what you are known for. Your name would be on it and the diocese's name would be under yours. The editor does not ask whether the bishop minds and does not offer to. The money is nothing. The readership is everyone who decides anything in the American Church and a great many people who write letters to bishops. You have said all of this before, at a lower volume, in rooms you could see the edges of. This room has no edges.",
+      "requires": [
+        {
+          "type": "figure"
+        },
+        {
+          "type": "stat",
+          "key": "knowledge",
+          "op": ">=",
+          "value": 45
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "figure:column",
+            "value": true
+          }
+        }
+      ],
+      "accept": {
+        "effects": [
+          {
+            "target": "flag",
+            "key": "figure:column",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "public",
+            "delta": 12
+          },
+          {
+            "target": "outspokenness",
+            "key": "",
+            "delta": 10
+          },
+          {
+            "target": "reputation",
+            "key": "chancery",
+            "delta": -6
+          },
+          {
+            "target": "stat",
+            "key": "knowledge",
+            "delta": 2
+          }
+        ],
+        "outcome": "The first column is careful and the second one is not. A bishop in another state quotes you approvingly and your own bishop is asked about it by a reporter and says he has not read it, which everyone understands to mean that he has. The letters to the editor are about you now.",
+        "commitment": {
+          "label": "The column",
+          "weeks": 156,
+          "apPerWeek": 1,
+          "onComplete": [
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": 10
+            },
+            {
+              "target": "flag",
+              "key": "published",
+              "value": true
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 4
+            }
+          ],
+          "completeOutcome": "Three years and thirty-six columns, later a book nobody asked for and several people read. You are a name. Names are useful to bishops who agree with them and a problem for the rest, and you will have more than one bishop."
+        }
+      },
+      "decline": {
+        "effects": [
+          {
+            "target": "reputation",
+            "key": "public",
+            "delta": -3
+          },
+          {
+            "target": "stat",
+            "key": "piety",
+            "delta": 1
+          }
+        ],
+        "outcome": "You write back that you have a parish, which the editor, who has heard it from better men, accepts with grace. The column goes to a priest who says less and is read more. You are, for a while, quieter, and something in the chapel is easier for it."
+      }
     }
   ]
 }

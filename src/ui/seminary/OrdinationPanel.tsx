@@ -3,6 +3,7 @@ import { nameArchetype } from '@/systems/formation';
 import { ordinationAge } from '@/systems/creation';
 import type { Archetype } from '@/types';
 import Panel from '../Panel';
+import { currentPreference, PREFERENCES, PREFERENCE_LABEL } from '@/systems/assignment';
 
 const ARCHETYPE_TEXT: Record<Archetype, string> = {
   pastoral: 'a pastor: the man people come to, and stay with',
@@ -15,12 +16,14 @@ const ARCHETYPE_TEXT: Record<Archetype, string> = {
 export default function OrdinationPanel() {
   const game = useGameStore((s) => s.game);
   const ordain = useGameStore((s) => s.ordain);
+  const setPreference = useGameStore((s) => s.setPreference);
   if (!game?.character || game.mode.kind !== 'ordination') return null;
   const c = game.character;
   const archetype = nameArchetype(game);
   const classmates = Object.values(game.npcs).filter((n) => n.role === 'classmate');
   const ordainedWith = classmates.filter((n) => n.status === 'active');
   const bishop = Object.values(game.npcs).find((n) => n.tags.includes('bishop'));
+  const pref = currentPreference(game);
   return (
     <Panel title="Ordination" tilt="l">
       <p className="leading-relaxed">
@@ -31,7 +34,22 @@ export default function OrdinationPanel() {
       <p className="ink-muted mt-2 text-sm">
         Positions on the record: {c.positions.filter((p) => p.volume !== 'private').length}. Concerns in the file: {game.seminary?.concerns.length ?? 0}.
       </p>
-      <button className="pbtn pbtn-primary mt-4" onClick={ordain}>Receive your first assignment</button>
+      <div className="mt-4 border-t rule pt-3">
+        <div className="heading mb-1">The preference form</div>
+        <p className="ink-muted text-sm">The chancery asks every new priest what he would like. It reads the answer, and then it decides.</p>
+        <ul className="mt-2 flex flex-col gap-1">
+          {PREFERENCES.map((p) => (
+            <li key={p}>
+              <button className={'choice ' + (pref === p ? 'choice-chosen' : '')} onClick={() => setPreference(p)}>
+                <span>{PREFERENCE_LABEL[p].label}</span>
+                <span className="ink-faint ml-2 text-xs">{PREFERENCE_LABEL[p].blurb}</span>
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <button className="pbtn pbtn-primary mt-4" disabled={!pref} onClick={ordain}>Receive your first assignment</button>
+      {!pref && <span className="ink-faint ml-3 text-xs">The form has to say something.</span>}
     </Panel>
   );
 }

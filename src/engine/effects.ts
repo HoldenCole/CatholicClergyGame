@@ -154,6 +154,11 @@ export function applyEffect(
         flags: { ...state.flags, [`permission:${topic}`]: status === 'granted' },
       };
     }
+    case 'trait_known': {
+      const npc = resolveSelector(state, bindings[effect.key] ?? effect.key);
+      if (!npc) return state;
+      return { ...state, npcs: { ...state.npcs, [npc.id]: { ...npc, traitKnown: true } } };
+    }
     case 'thread':
     case 'position':
       // Handled by applyChoice via opensThread / resolvesThread / volume.

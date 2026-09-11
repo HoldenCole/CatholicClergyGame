@@ -85,6 +85,12 @@ export type Condition =
   /** The bishop's temper: his management style, a priority, what he rewards or cannot bear, or his stance on a liturgical topic. */
   | { type: 'bishop'; key: 'management' | 'priority' | 'rewards' | 'cannotTolerate'; value: string }
   | { type: 'bishop'; key: 'stance'; topic: LiturgicalTopic; value: LiturgicalStance }
+  /** A semi-public or public position on record for a topic ('any' for any topic) at or past the value. DESIGN §5.4. */
+  | { type: 'position'; topic: string; op: Op; value: number }
+  /** Hours a week in the standing routine: a discretionary action id, or an obligation key read as AP. DESIGN §2.3. */
+  | { type: 'routine'; key: string; op: Op; value: number }
+  /** Whether the man has become a figure. DESIGN §5.6. */
+  | { type: 'figure' }
   /**
    * Extension: some group of the current parish matches. When an event
    * carries group conditions, @group_leader binds to a matching group.
@@ -135,7 +141,9 @@ export type EffectTarget =
   /** key "<place>:<slot>", value: option id. Sets a furnishing outright, no cost, no computed reaction. */
   | 'decor'
   /** key: liturgical topic, value: 'granted' | 'denied'. The bishop's word, given or taken back. */
-  | 'permission';
+  | 'permission'
+  /** key: selector or npc id. The player has seen through to that person's hidden trait. DESIGN §9.2. */
+  | 'trait_known';
 
 export interface Effect {
   target: EffectTarget;

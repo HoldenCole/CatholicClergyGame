@@ -6,6 +6,7 @@ import Sheet from '../Sheet';
 import { pillarWord } from './EvaluationPanel';
 import Portrait from '../portraits/Portrait';
 import { portraitForCharacter, portraitForNpc, yearOf } from '../portraits/spec';
+import { TRAIT_LABEL } from '../portraits/traits';
 
 const PILLAR_LABEL: Record<Pillar, string> = { human: 'Human', spiritual: 'Spiritual', intellectual: 'Intellectual', pastoral: 'Pastoral' };
 
@@ -44,7 +45,7 @@ export default function FormationPanel() {
           {classmates.map((n) => (
             <li key={n.id} className={'flex items-center gap-2 ' + (n.status !== 'active' ? 'ink-faint line-through' : '')}>
               <Portrait portrait={portraitForNpc(n, year, true)} size={22} />
-              <span className="flex-1">{n.name.first} {n.name.last}</span>
+              <span className="flex-1">{n.name.first} {n.name.last}{n.traitKnown && <span className="ink-faint ml-2 text-xs">{TRAIT_LABEL[n.hiddenTrait]}</span>}</span>
               <span className="ink-muted">{relationshipWord(n.relationship)}</span>
             </li>
           ))}

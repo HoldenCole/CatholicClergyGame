@@ -5,6 +5,9 @@ import { resolveSelector } from './selectors';
 import type { Group } from '@/types';
 import { vitalityBand } from '@/systems/groups';
 import { currentDecor } from '@/systems/decorState';
+import { isFigure } from '@/systems/reputation';
+import { obligationDefs } from '@/content/parish';
+import type { ObligationKey, Quality } from '@/types';
 
 function compare(op: '>=' | '<=', actual: number, value: number): boolean {
   return op === '>=' ? actual >= value : actual <= value;
@@ -72,6 +75,21 @@ export function evaluateCondition(
       return !!state.world && compare(cond.op, state.world.diocese.hidden.bishop.alignment, cond.value);
     case 'decor':
       return currentDecor(state, cond.place)[cond.slot] === cond.value;
+    case 'position': {
+      if (!c) return false;
+      return c.positions.some((p) => p.volume !== 'private' && (cond.topic === 'any' || p.topic === cond.topic) && compare(cond.op, p.value, cond.value));
+    }
+    case 'routine': {
+      const routine = state.parish?.routine;
+      if (!routine) return false;
+      const obligation = obligationDefs.find((o) => o.key === cond.key);
+      const hours = obligation
+        ? (obligation.ap[(routine.obligations as Record<ObligationKey, Quality>)[obligation.key] ?? 'standard'] ?? 0)
+        : (routine.discretionary[cond.key] ?? 0);
+      return compare(cond.op, hours, cond.value);
+    }
+    case 'figure':
+      return !!c && isFigure(c);
     case 'bishop': {
       const b = state.world?.diocese.hidden.bishop;
       if (!b) return false;
