@@ -6,7 +6,7 @@ import { createRng } from '@/engine/rng';
 import { COLLAPSE, nextAssignment } from '@/engine/career';
 import { handoffProject, startProject } from '@/systems/projects';
 import { currentPreference, setPreference, terrainOf } from '@/systems/assignment';
-import { parishWeek } from '@/engine/parish';
+import { parishWeek, startAssignment } from '@/engine/parish';
 import { allOffers } from '@/content/offers';
 import type { GameState } from '@/types';
 
@@ -25,6 +25,23 @@ describe('design gaps closed', () => {
     expect(evaluateCondition({ type: 'routine', key: 'sunday_masses', op: '<=', value: 1 }, studious)).toBe(true);
     expect(evaluateCondition({ type: 'routine', key: 'sunday_masses', op: '<=', value: 1 }, s)).toBe(false);
     expect(allOffers.filter((o) => o.requires?.some((r) => r.type === 'figure')).length).toBeGreaterThanOrEqual(3);
+    const settled: GameState = { ...s, parish: { ...s.parish!, weeksServed: 30, arcEndWeek: s.clock.week + 8 } };
+    expect(evaluateCondition({ type: 'weeks_served', op: '<=', value: 6 }, settled)).toBe(false);
+    expect(evaluateCondition({ type: 'weeks_served', op: '>=', value: 20 }, settled)).toBe(true);
+    expect(evaluateCondition({ type: 'arc_weeks_left', op: '<=', value: 10 }, settled)).toBe(true);
+    expect(evaluateCondition({ type: 'arc_weeks_left', op: '<=', value: 10 }, { ...s, parish: null })).toBe(false);
+  });
+
+  it('taking a pastorate moves the phase so the pastor pool is drawn', () => {
+    const base = parishState('phase');
+    expect(base.phase).toBe('parochial_vicar');
+    const parish = base.world!.parishes.find((p) => p.id === base.parish!.parishId)!;
+    const asPastor: GameState = { ...base, assignment: { parishId: parish.id, role: 'pastor', startWeek: base.clock.week, letter: '', reasons: [] } };
+    const started = startAssignment(asPastor, createRng('phase:start'));
+    expect(started.phase).toBe('pastor');
+    expect(started.flags['role:pastor']).toBe(true);
+    const asAdmin: GameState = { ...base, assignment: { parishId: parish.id, role: 'administrator', startWeek: base.clock.week, letter: '', reasons: [] } };
+    expect(startAssignment(asAdmin, createRng('phase:admin')).phase).toBe('administrator');
   });
 
   it('a hidden trait becomes known only through an effect', () => {

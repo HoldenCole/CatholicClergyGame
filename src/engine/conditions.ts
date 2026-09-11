@@ -71,6 +71,10 @@ export function evaluateCondition(
       if (typeof at !== 'number') return false;
       return compare(cond.op, (state.clock.week - at) / 52, cond.value);
     }
+    case 'weeks_served':
+      return !!state.parish && compare(cond.op, state.parish.weeksServed, cond.value);
+    case 'arc_weeks_left':
+      return !!state.parish && compare(cond.op, state.parish.arcEndWeek - state.clock.week, cond.value);
     case 'bishop_alignment':
       return !!state.world && compare(cond.op, state.world.diocese.hidden.bishop.alignment, cond.value);
     case 'decor':

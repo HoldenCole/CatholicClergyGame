@@ -114,7 +114,9 @@ function checkCondition(c: Condition, where: string, problems: Problem[]): void 
       if (!ROLES.includes(c.value)) problems.push(`${where}: bad role ${c.value}`);
       break;
     case 'years_ordained':
-      if (!hasOp(c.op) || typeof c.value !== 'number') problems.push(`${where}: bad years_ordained condition`);
+    case 'weeks_served':
+    case 'arc_weeks_left':
+      if (!hasOp(c.op) || typeof c.value !== 'number') problems.push(`${where}: bad ${c.type} condition`);
       break;
     case 'group':
       if (!GROUP_KEYS.includes(c.key) || c.value === undefined) problems.push(`${where}: bad group condition`);

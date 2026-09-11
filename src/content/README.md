@@ -205,6 +205,8 @@ Gate on the career instead:
 
 ```json
 { "type": "years_ordained", "op": "<=", "value": 2 }
+{ "type": "weeks_served", "op": "<=", "value": 8 }      // weeks into the current assignment
+{ "type": "arc_weeks_left", "op": "<=", "value": 12 }   // weeks until the arc ends
 { "type": "role", "value": "parochial_vicar" }
 { "type": "parish", "key": "kind", "value": "immigrant_growing" }      // flagship_suburban | struggling_urban | immigrant_growing | rural | difficult
 { "type": "parish", "key": "terrain", "value": "urban" }               // urban | latino | rural | suburban

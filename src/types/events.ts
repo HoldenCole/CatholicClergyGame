@@ -78,6 +78,10 @@ export type Condition =
   | { type: 'role'; value: 'parochial_vicar' | 'administrator' | 'pastor' }
   /** Extension: years since ordination. */
   | { type: 'years_ordained'; op: Op; value: number }
+  /** Weeks into the current assignment. */
+  | { type: 'weeks_served'; op: Op; value: number }
+  /** Weeks until the current arc ends (the bishop's next look). */
+  | { type: 'arc_weeks_left'; op: Op; value: number }
   /** Extension: the current bishop's alignment, −100 traditional .. +100 progressive. */
   | { type: 'bishop_alignment'; op: Op; value: number }
   /** How the church or a room is furnished right now: the option id in a slot of the current parish's place. */
