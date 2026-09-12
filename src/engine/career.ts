@@ -10,6 +10,7 @@ import { renderText } from './text';
 import { deliverLetter, yearInReview } from '@/systems/review';
 import { closeTenure } from '@/systems/tenures';
 import { seeYear } from './see';
+import { withChoice } from '@/systems/choice';
 
 /** Invented. DESIGN 7.3: retirement letters go in at 75 and are often not accepted for years. */
 export const CAREER = {
@@ -135,7 +136,7 @@ export function boardDecision(state: GameState, rng: Rng): { decisions: Decision
   return { decisions, won: wins[0] ?? null };
 }
 
-function letterFor(state: GameState, opening: Opening, role: Assignment['role']): string {
+export function letterFor(state: GameState, opening: Opening, role: Assignment['role']): string {
   const c = state.character!;
   const bishop = state.npcs[state.world!.diocese.hidden.bishop.npcId];
   const parish = opening.parishId ? state.world!.parishes.find((p) => p.id === opening.parishId) : undefined;
@@ -203,10 +204,9 @@ export function nextAssignment(state: GameState, rng: Rng): { state: GameState; 
     }
     next = note(next, 'assignment', `Sent as parochial vicar to ${parish.name}, ${parish.place}.`);
   }
-  return {
-    state: { ...next, assignment, parish: null, founding: null, project: null, projects: [], mode: { kind: 'assignment', assignment }, flags: { ...next.flags, transfers: Number(next.flags.transfers ?? 0) + 1 } },
-    decisions,
-  };
+  const moved: GameState = { ...next, assignment, parish: null, founding: null, project: null, projects: [], mode: { kind: 'assignment', assignment }, flags: { ...next.flags, transfers: Number(next.flags.transfers ?? 0) + 1 } };
+  // A man the chancery rates is asked which he would rather.
+  return { state: won ? withChoice(moved, rng.derive('choice'), 'board', assignment) : moved, decisions };
 }
 
 /** At ordination: classmates get futures and the record opens. */

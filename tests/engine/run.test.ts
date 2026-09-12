@@ -139,10 +139,14 @@ describe('engine/store with real content', () => {
     const after = useGameStore.getState().game!;
     expect(after.phase).toBe('parochial_vicar');
     expect(after.character!.archetype).toBeTruthy();
-    expect(after.mode.kind).toBe('assignment');
-    expect(after.assignment?.role).toBe('parochial_vicar');
-    expect(after.assignment?.letter).toMatch(/Parochial Vicar of/);
-    expect(after.world!.parishes.some((p) => p.id === after.assignment!.parishId)).toBe(true);
+    // The top of the class is asked which he would rather; everyone else gets the letter.
+    expect(['assignment', 'assignment_choice']).toContain(after.mode.kind);
+    if (after.mode.kind === 'assignment_choice') useGameStore.getState().chooseAssignment(after.mode.options[0]!.id);
+    const lettered = useGameStore.getState().game!;
+    expect(lettered.mode.kind).toBe('assignment');
+    expect(lettered.assignment?.role).toBe('parochial_vicar');
+    expect(lettered.assignment?.letter).toMatch(/Parochial Vicar of/);
+    expect(lettered.world!.parishes.some((p) => p.id === lettered.assignment!.parishId)).toBe(true);
     useGameStore.getState().acceptAssignment();
     expect(useGameStore.getState().game!.mode.kind).toBe('clock');
   });

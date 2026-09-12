@@ -9,6 +9,7 @@ import { evaluate, formationWeek, nameArchetype, setEmphasis, zeroPillars } from
 import { summerOptions } from '@/content/seminary';
 import { renderText } from './text';
 import { assignFirstParish } from '@/systems/assignment';
+import { withChoice } from '@/systems/choice';
 import { beginCareer } from './career';
 import { driftYear } from '@/systems/drift';
 import { fromDayNumber } from './calendar';
@@ -285,17 +286,18 @@ export function ordain(state: GameState, rng: Rng): GameState {
   if (!ordained.world) return { ...ordained, mode: { kind: 'clock' } };
   const withCareer = beginCareer(ordained, rng);
   const assignment = assignFirstParish(withCareer, rng.derive('assignment'));
-  return {
+  const noted: GameState = {
     ...withCareer,
-    assignment,
-    mode: { kind: 'assignment', assignment },
     career: [...withCareer.career, { week: withCareer.clock.week, kind: 'assignment', text: `First assignment: parochial vicar of ${withCareer.world!.parishes.find((p) => p.id === assignment.parishId)?.name ?? 'a parish'}.` }],
   };
+  // The top of the class is given a choice.
+  return withChoice(noted, rng.derive('choice'), 'ordination', assignment);
 }
 
 /** The player has read the letter of assignment. */
 export function acceptAssignment(state: GameState): GameState {
   if (state.mode.kind !== 'assignment') return state;
+  if (!state.assignment || state.assignment.parishId !== state.mode.assignment.parishId || state.assignment.role !== state.mode.assignment.role) return { ...state, assignment: state.mode.assignment, mode: { kind: 'clock' } };
   return { ...state, mode: { kind: 'clock' } };
 }
 

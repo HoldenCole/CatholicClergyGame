@@ -142,6 +142,18 @@ export interface SpendDef {
   collections?: number;
 }
 
+/** A diocesan office held alongside a parish. parish/offices.json */
+export interface OfficeDef {
+  id: string;
+  label: string;
+  blurb: string;
+  apPerWeek: number;
+  weeks: number;
+  flag: string;
+  weekly?: Effect[];
+  onComplete?: Effect[];
+}
+
 /** One dial of the pastor's Mass. parish/liturgy.json */
 export interface LiturgyOptionDef {
   id: string;

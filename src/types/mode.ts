@@ -20,9 +20,29 @@ export type Mode =
   | { kind: 'evaluation'; record: EvaluationRecord }
   | { kind: 'ordination' }
   | { kind: 'assignment'; assignment: Assignment }
+  /** The bishop offers the man a choice; each option says what it involves. */
+  | { kind: 'assignment_choice'; options: AssignmentOption[]; why: string }
   /** A letter that stops the clock until read: the year in review, a new bishop's reading of the file. */
   | { kind: 'letter'; letter: Letter }
   | { kind: 'ended'; ending: Ending; summary: string };
+
+/** One assignment on offer, with its breakdown. systems/choice.ts */
+export interface AssignmentOption {
+  id: string;
+  headline: string;
+  blurb: string;
+  assignment: Assignment;
+  /** In words: what the post is worth in the diocese's eyes. */
+  prestige: string;
+  /** In words: what it takes of the week. */
+  time: string;
+  /** What is involved, a few lines. */
+  involves: string[];
+  /** A diocesan office carried alongside (parish/offices.json), by id. */
+  office?: string;
+  /** A posting instead of a parish: the offer whose program it is. */
+  posting?: string;
+}
 
 export interface Letter {
   /** What kind of letter, for the sheet's heading and the record. */
