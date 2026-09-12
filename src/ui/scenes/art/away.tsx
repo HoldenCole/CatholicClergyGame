@@ -34,12 +34,12 @@ export function StudyRoom({ city, school }: { city: StudyCity; school: string })
       <rect x="4" y="26" width="2.2" height="20" fill={rome ? '#1c1917' : 'url(#wood)'} />
       <rect x="40" y="28" width="2" height="18" fill={rome ? '#1c1917' : 'url(#wood)'} />
       {/* desk under the window, the thesis on it */}
+      <Chair x={66} y={22} s={0.85} kind="wood" />
       <Desk x={50} y={31} w={40} kind={rome ? 'walnut' : 'plain'} />
-      <Chair x={66} y={19} s={0.8} kind="wood" />
       <Lamp x={84} y={27} s={0.75} lit />
-      <rect x="55" y="28.2" width="8" height="2.8" fill="#f3eee0" transform="rotate(-4 59 29.5)" />
-      <rect x="56.5" y="27.6" width="8" height="2.8" fill="#f3eee0" opacity="0.95" transform="rotate(3 60 29)" />
-      <rect x="66" y="28" width="5" height="3.2" fill={rome ? '#5a1414' : '#1e3a5a'} />
+      <rect x="55" y="29.6" width="8" height="2.8" fill="#f3eee0" transform="rotate(-4 59 31)" />
+      <rect x="56.5" y="29" width="8" height="2.8" fill="#f3eee0" opacity="0.95" transform="rotate(3 60 30.4)" />
+      <rect x="66" y="29.4" width="5" height="3.2" fill={rome ? '#5a1414' : '#1e3a5a'} />
       {/* shelf with the language books and a map of the city */}
       <Bookcase x={6} y={6} w={30} h={18} rows={3} density={0.8} />
       <Frame x={39} y={12} w={8} h={5} mat="#e9e2cc">
@@ -47,8 +47,8 @@ export function StudyRoom({ city, school }: { city: StudyCity; school: string })
         <text x="43" y="16.4" fontSize="1" textAnchor="middle" fill="#5a4a32" fontFamily="serif">{school.replace('the ', '').split(' ')[0]}</text>
       </Frame>
       {/* a bottle of water and an espresso cup: the room's only luxuries */}
-      <rect x="86" y="30.4" width="1.4" height="3.2" rx="0.4" fill="#cfe3ea" opacity="0.9" />
-      <ellipse cx="82" cy="32.6" rx="1.1" ry="0.5" fill="#f3eee0" />
+      <rect x="78" y="30.4" width="1.4" height="3.2" rx="0.4" fill="#cfe3ea" opacity="0.9" />
+      <ellipse cx="75" cy="32.6" rx="1.1" ry="0.5" fill="#f3eee0" />
       <Door x={90} y={30} w={8} h={16} open={false} color={rome ? '#5a3a12' : '#8a8378'} />
     </g>
   );
@@ -163,8 +163,10 @@ export function StudyCity({ city }: { city: StudyCity }) {
       <circle cx="13" cy="52.5" r="1.4" fill="none" stroke="#e9e2cc" strokeWidth="0.3" />
       {[32, 35, 38, 41, 52, 55].map((x, i) => (
         <g key={x}>
-          <circle cx={x} cy="55.5" r="1" fill={['#e0b89a', '#c9a07a', '#f0d0b0'][i % 3]} />
-          <rect x={x - 1.1} y="56.5" width="2.2" height="3.5" rx="0.5" fill={['#3a4a6a', '#7a3a3a', '#4a6a4a', '#6a5a3a', '#2a2a2a', '#8a6a4a'][i]} />
+          <circle cx={x} cy="54.6" r="0.9" fill={['#e0b89a', '#c9a07a', '#f0d0b0'][i % 3]} />
+          <rect x={x - 1.1} y="55.5" width="2.2" height="2.8" rx="0.6" fill={['#3a4a6a', '#7a3a3a', '#4a6a4a', '#6a5a3a', '#2a2a2a', '#8a6a4a'][i]} />
+          <rect x={x - 0.9} y="58.2" width="0.7" height="1.8" fill="#2a2a2a" />
+          <rect x={x + 0.2} y="58.2" width="0.7" height="1.8" fill="#2a2a2a" />
         </g>
       ))}
       <Shadow x={30} y={59.4} w={28} h={1} />

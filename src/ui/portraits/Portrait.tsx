@@ -255,7 +255,14 @@ function HairBack({ spec, female, hair, rx, ry }: { spec: PortraitSpec; female: 
   if (female) {
     switch (spec.hairStyle) {
       case 0: return <path d={`M${50 - rx - 5} ${top + 12} Q${50 - rx - 6} 72 ${50 - rx + 2} 74 L${50 + rx - 2} 74 Q${50 + rx + 6} 72 ${50 + rx + 5} ${top + 12} Q50 ${top - 6} ${50 - rx - 5} ${top + 12} Z`} fill={hair} />; // bob
-      case 1: case 4: return <path d={`M${50 - rx - 6} ${top + 10} Q${50 - rx - 9} 70 ${50 - rx - 4} 96 L${50 + rx + 4} 96 Q${50 + rx + 9} 70 ${50 + rx + 6} ${top + 10} Q50 ${top - 7} ${50 - rx - 6} ${top + 10} Z`} fill={hair} />; // long, waves
+      case 1: case 4: return (
+        <g fill={hair}>
+          <path d={`M${50 - rx + 1} ${top + 12} Q${50 - rx - 6} 60 ${50 - rx - 9} 94 Q${50 - rx - 3} 97 ${50 - rx + 4} 94 Q${50 - rx + 6} 66 ${50 - rx + 4} 48 Z`} />
+          <path d={`M${50 + rx - 1} ${top + 12} Q${50 + rx + 6} 60 ${50 + rx + 9} 94 Q${50 + rx + 3} 97 ${50 + rx - 4} 94 Q${50 + rx - 6} 66 ${50 + rx - 4} 48 Z`} />
+          <path d={`M${50 - rx + 1} ${top + 12} Q50 ${top + 2} ${50 + rx - 1} ${top + 12} L${50 + rx - 4} 48 L${50 - rx + 4} 48 Z`} />
+          {spec.hairStyle === 4 && <path d={`M${50 - rx - 4} 62 q3 6 -1 14 M${50 + rx + 4} 62 q-3 6 1 14`} fill="none" stroke={hair} strokeWidth="1.2" opacity="0.6" />}
+        </g>
+      ); // long, waves
       case 3: return <ellipse cx="50" cy="54" rx={rx + 11} ry={ry + 12} fill={hair} />; // curly
       case 7: return <g fill={hair}><path d={`M${50 + rx - 2} 36 q15 22 7 56 q-8 -22 -13 -46 Z`} /><ellipse cx="50" cy="46" rx={rx + 3} ry={ry + 4} /></g>; // ponytail
       case 8: return <g fill={hair}><path d={`M${50 - rx + 1} 44 q-7 26 -2 50 q5 -22 5 -50 Z`} /><path d={`M${50 + rx - 1} 44 q7 26 2 50 q-5 -22 -5 -50 Z`} /><ellipse cx="50" cy="48" rx={rx + 4} ry={ry + 6} /></g>; // braids
@@ -265,7 +272,13 @@ function HairBack({ spec, female, hair, rx, ry }: { spec: PortraitSpec; female: 
       default: return null;
     }
   }
-  if (spec.hairStyle === 11) return <path d={`M${50 - rx - 3} ${top + 12} Q${50 - rx - 6} 62 ${50 - rx - 5} 84 Q${50 - rx} 82 ${50 - rx + 4} 84 L${50 + rx - 4} 84 Q${50 + rx} 82 ${50 + rx + 5} 84 Q${50 + rx + 6} 62 ${50 + rx + 3} ${top + 12} Q50 ${top - 5} ${50 - rx - 3} ${top + 12} Z`} fill={hair} />;
+  if (spec.hairStyle === 11) return (
+    <g fill={hair}>
+      <path d={`M${50 - rx + 1} ${top + 14} Q${50 - rx - 4} 62 ${50 - rx - 6} 82 Q${50 - rx - 2} 85 ${50 - rx + 3} 82 Q${50 - rx + 5} 66 ${50 - rx + 4} 48 Z`} />
+      <path d={`M${50 + rx - 1} ${top + 14} Q${50 + rx + 4} 62 ${50 + rx + 6} 82 Q${50 + rx + 2} 85 ${50 + rx - 3} 82 Q${50 + rx - 5} 66 ${50 + rx - 4} 48 Z`} />
+      <path d={`M${50 - rx + 1} ${top + 14} Q50 ${top + 4} ${50 + rx - 1} ${top + 14} L${50 + rx - 4} 48 L${50 - rx + 4} 48 Z`} />
+    </g>
+  );
   if (spec.hairStyle === 10) return <ellipse cx="50" cy="45" rx={rx + 5} ry={ry + 5} fill={hair} />;
   if (spec.hairStyle === 3) return <ellipse cx="50" cy="45" rx={rx + 4} ry={ry + 5} fill={hair} />;
   return null;
@@ -312,7 +325,7 @@ function Hair({ spec, female, hair, light, rx, ry, age, shine }: { spec: Portrai
   if (female) {
     switch (spec.hairStyle) {
       case 0: case 10: return glossy(cap(rx, ry, { lift: 7, side: 4, low: 60, line: spec.hairStyle === 10 ? 'fringe' : 'part_l' }));
-      case 1: case 4: return glossy(cap(rx, ry, { lift: 7, side: 4, low: 64, line: 'part_l' }), spec.hairStyle === 4 ? <path d={`M${50 - rx - 3} 60 q3 4 0 8 M${50 + rx + 3} 60 q-3 4 0 8`} fill="none" stroke={light} strokeWidth="0.8" opacity="0.4" /> : undefined);
+      case 1: case 4: return glossy(cap(rx, ry, { lift: 7, side: 2, low: 60, line: 'part_l' }), spec.hairStyle === 4 ? <path d={`M${50 - rx - 4} 64 q3 5 0 10 M${50 + rx + 4} 64 q-3 5 0 10`} fill="none" stroke={light} strokeWidth="0.8" opacity="0.4" /> : undefined);
       case 2: return glossy(cap(rx, ry, { lift: 5, side: 1.5, low: 48, line: 'back' }), <g><circle cx="50" cy={top - 5} r="7.5" fill={hair} /><circle cx="50" cy={top - 5} r="7.5" fill={shine} /></g>);
       case 3: return glossy(cap(rx, ry, { lift: 9, side: 6, low: 54, line: 'bumpy' }));
       case 5: case 9: return glossy(cap(rx, ry, { lift: 5, side: 1.5, low: 49, line: spec.hairStyle === 9 ? 'part_r' : 'fringe' }));
@@ -342,7 +355,7 @@ function Hair({ spec, female, hair, light, rx, ry, age, shine }: { spec: Portrai
     case 8: return glossy(cap(rx, ry, { lift: 6, side: 2, low: 49, line: 'fringe' }));
     case 9: return <path d={cap(rx, ry, { lift: 1.2, side: 0.3, low: 48, line: 'straight' })} fill={hair} opacity="0.6" />;
     case 10: return glossy(cap(rx, ry, { lift: 7, side: 5, low: 49, line: 'bumpy' }), <g fill={light} opacity="0.35">{[-14, -7, 0, 7, 14].map((dx) => <circle key={dx} cx={50 + dx} cy={top - 1 + Math.abs(dx) * 0.15} r="1.1" />)}</g>);
-    case 11: return glossy(cap(rx, ry, { lift: 6, side: 3, low: 60, line: 'part_l' }), <g fill="none" stroke={light} strokeWidth="0.8" opacity="0.4"><path d={`M${50 - rx - 2} 52 q1 8 -1 16`} /><path d={`M${50 + rx + 2} 52 q-1 8 1 16`} /></g>);
+    case 11: return glossy(cap(rx, ry, { lift: 6, side: 1.5, low: 58, line: 'part_l' }), <g fill="none" stroke={light} strokeWidth="0.8" opacity="0.4"><path d={`M${50 - rx - 3} 56 q1 10 -1 20`} /><path d={`M${50 + rx + 3} 56 q-1 10 1 20`} /></g>);
     default: return glossy(cap(rx, ry, { lift: 5, side: 1.5, low: 48, line: 'straight' }));
   }
 }
