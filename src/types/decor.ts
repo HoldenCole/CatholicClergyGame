@@ -2,7 +2,7 @@ import type { Condition, Effect } from './events';
 import type { LiturgicalTopic } from './world';
 
 /** A place that has a look: the church and office of a parish, the rectory, the seminary room, a chancery office. */
-export type DecorPlace = 'church' | 'office' | 'rectory' | 'seminary_room' | 'chancery';
+export type DecorPlace = 'church' | 'chapel' | 'office' | 'rectory' | 'seminary_room' | 'chancery';
 
 /** Slots a place exposes. Each holds exactly one option. */
 export type DecorSlot =
@@ -16,6 +16,10 @@ export type DecorSlot =
   | 'tabernacle'
   | 'mass_form'
   | 'music'
+  // chapel
+  | 'style'
+  | 'devotion'
+  | 'seating'
   // office and rectory and room
   | 'wall'
   | 'desk'

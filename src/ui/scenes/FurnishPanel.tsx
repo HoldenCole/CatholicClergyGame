@@ -17,6 +17,9 @@ const SLOT_LABEL: Record<DecorSlot, string> = {
   tabernacle: 'The tabernacle',
   mass_form: 'The Mass',
   music: 'What the parish sings',
+  style: 'The room',
+  devotion: 'The devotion',
+  seating: 'The seating',
   wall: 'The wall',
   desk: 'The desk',
   floor: 'The floor',
@@ -25,12 +28,13 @@ const SLOT_LABEL: Record<DecorSlot, string> = {
 
 const PLACE_LABEL: Record<DecorPlace, string> = {
   church: 'How the church looks',
+  chapel: 'How the chapel looks',
   office: 'How your office looks',
   rectory: 'How the rectory looks',
   seminary_room: 'Your room',
   chancery: 'Your office at the chancery',
 };
-const PLACE_SCENE: Record<DecorPlace, SceneId> = { church: 'church', office: 'office', rectory: 'rectory', seminary_room: 'seminary_room', chancery: 'chancery' };
+const PLACE_SCENE: Record<DecorPlace, SceneId> = { church: 'church', chapel: 'chapel', office: 'office', rectory: 'rectory', seminary_room: 'seminary_room', chancery: 'chancery' };
 
 /**
  * The furnishing sheet. Hovering an option shows the room as it would
@@ -63,13 +67,13 @@ export default function FurnishPanel({ place }: { place: DecorPlace }) {
       </div>
       <div className="px-5 py-3 text-sm">
         {!allowed.ok && <p className="ink-wine">{allowed.why}</p>}
-        {allowed.ok && place === 'church' && (
+        {allowed.ok && (place === 'church' || place === 'chapel') && (
           <p className="ink-muted text-xs leading-relaxed">
             Paid from parish cash, ${cash.toLocaleString()} on hand. The parish will react; so will the blocs; the chancery hears about some of it.
             {bishop && ` ${bishop.title} ${bishop.name.last} decides what needs his leave.`}
           </p>
         )}
-        {allowed.ok && place !== 'church' && <p className="ink-muted text-xs">Yours to arrange. Nobody minds.</p>}
+        {allowed.ok && place !== 'church' && place !== 'chapel' && <p className="ink-muted text-xs">Yours to arrange. Nobody minds.</p>}
         {line && <p className="mt-2 rounded border rule bg-white/30 px-3 py-2 text-sm">{line}</p>}
       </div>
       {selected && (
@@ -135,7 +139,7 @@ function Selected({ option, place, onDone, onFurnish, onPetition }: { option: De
   const stance = option.policy ? stanceFor(game, option.policy) : null;
   const parish = game.world?.parishes.find((p) => p.id === game.assignment?.parishId);
   const gap = option.alignment !== null && parish ? Math.abs(option.alignment - parish.alignment) : 0;
-  const reaction = place !== 'church' || option.alignment === null ? null : gap < 30 ? 'The parish would take it as their own.' : gap < 60 ? 'Some would mind.' : 'Letters would be written.';
+  const reaction = (place !== 'church' && place !== 'chapel') || option.alignment === null ? null : gap < 30 ? 'The parish would take it as their own.' : gap < 60 ? 'Some would mind.' : 'Letters would be written.';
   return (
     <div className="border-y rule px-5 py-3 text-sm shadow-md" style={{ background: '#f6efdd' }}>
       <div className="flex items-baseline justify-between">

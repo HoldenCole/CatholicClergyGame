@@ -279,10 +279,32 @@
     "place": "church",
     "slot": "mass_form",
     "label": "The older Mass on Sunday",
-    "blurb": "The 1962 Missal at one Sunday Mass. The bishop must authorize it, and since 2021 Rome looks over his shoulder. Families will drive an hour for it, and letters will go the other way.",
+    "blurb": "The 1962 Missal at one Sunday Mass. The bishop must authorize it, and since 2021 the priest needs faculties of his own to begin one; where it already stands, it stays. Families will drive an hour for it, and letters will go the other way.",
     "cost": 6000,
     "alignment": -85,
-    "requires": [{ "type": "flag", "key": "can_celebrate_tlm", "value": true }],
+    "requires": [
+      {
+        "type": "any",
+        "inner": [
+          {
+            "type": "flag",
+            "key": "can_celebrate_tlm",
+            "value": true
+          },
+          {
+            "type": "decor",
+            "place": "church",
+            "slot": "mass_form",
+            "value": "mass_tlm"
+          },
+          {
+            "type": "calendar_year",
+            "op": "<=",
+            "value": 2020
+          }
+        ]
+      }
+    ],
     "policy": "latin_mass",
     "art": "tlm",
     "effects": [
@@ -484,5 +506,135 @@
         "value": true
       }
     ]
+  },
+  {
+    "id": "chapel_as_is",
+    "place": "chapel",
+    "slot": "style",
+    "label": "As it was left",
+    "blurb": "The plum walls, the tile, the lamp. Nobody has touched it since the pastor who built it, and nobody has minded.",
+    "cost": 0,
+    "alignment": null,
+    "art": "as_is"
+  },
+  {
+    "id": "chapel_old",
+    "place": "chapel",
+    "slot": "style",
+    "label": "Dark stone and old wood",
+    "blurb": "Stone on the walls, a carved wooden reredos, candles in iron, a rail to kneel at. A room from before the parish, made now.",
+    "cost": 30000,
+    "alignment": -50,
+    "art": "old"
+  },
+  {
+    "id": "chapel_modern",
+    "place": "chapel",
+    "slot": "style",
+    "label": "Light, glass, and clean lines",
+    "blurb": "White walls, a slab altar, a wall of glass, one line of light on the tabernacle. Architects will photograph it; the rosary group will bring their own candles.",
+    "cost": 25000,
+    "alignment": 50,
+    "art": "modern"
+  },
+  {
+    "id": "chapel_soft",
+    "place": "chapel",
+    "slot": "style",
+    "label": "Warm and comforting",
+    "blurb": "Carpet, lamps, warm plaster, a room that is not cold at six in the morning. The grief group asks for it; so does anyone who has sat in it once.",
+    "cost": 12000,
+    "alignment": 15,
+    "art": "soft"
+  },
+  {
+    "id": "chapel_match",
+    "place": "chapel",
+    "slot": "style",
+    "label": "To match the church",
+    "blurb": "Whatever the sanctuary is, the chapel becomes: the same stone or the same glass or the same 1970s, so the two rooms speak with one voice.",
+    "cost": 18000,
+    "alignment": null,
+    "art": "match"
+  },
+  {
+    "id": "chapel_none",
+    "place": "chapel",
+    "slot": "devotion",
+    "label": "The tabernacle alone",
+    "blurb": "Nothing to look at but the one thing. Some find it austere, and say so.",
+    "cost": 0,
+    "alignment": 20,
+    "art": "none"
+  },
+  {
+    "id": "chapel_marian",
+    "place": "chapel",
+    "slot": "devotion",
+    "label": "Our Lady, with votive candles",
+    "blurb": "A statue on a stand, a rack of candles, a box for the dollar. The candles are lit at every hour of the day by people you never see.",
+    "cost": 2500,
+    "alignment": -20,
+    "art": "marian"
+  },
+  {
+    "id": "chapel_icon",
+    "place": "chapel",
+    "slot": "devotion",
+    "label": "An icon corner with a lamp",
+    "blurb": "An icon of Christ in a gilt frame, a red lamp before it, a shelf for the prayer books. The Eastern-rite family will weep.",
+    "cost": 3000,
+    "alignment": -10,
+    "art": "icon"
+  },
+  {
+    "id": "chapel_mercy",
+    "place": "chapel",
+    "slot": "devotion",
+    "label": "The Divine Mercy image",
+    "blurb": "The image, the rays, the chaplet at three on Fridays. The Polish grandmothers and the young families agree on it, which is rare.",
+    "cost": 1500,
+    "alignment": 0,
+    "art": "mercy"
+  },
+  {
+    "id": "chapel_stations",
+    "place": "chapel",
+    "slot": "devotion",
+    "label": "The Stations along the walls",
+    "blurb": "Fourteen small stations in a ring, so the Friday devotion has a room of its own in Lent and the rest of the year a reason to walk.",
+    "cost": 4000,
+    "alignment": -30,
+    "art": "stations"
+  },
+  {
+    "id": "chapel_kneelers",
+    "place": "chapel",
+    "slot": "seating",
+    "label": "Kneelers",
+    "blurb": "Three rows of kneelers with a rail to lean on. You kneel or you stand.",
+    "cost": 0,
+    "alignment": -10,
+    "art": "kneelers"
+  },
+  {
+    "id": "chapel_chairs",
+    "place": "chapel",
+    "slot": "seating",
+    "label": "Chairs, and a few soft ones",
+    "blurb": "Upholstered chairs in a loose half-circle and two armchairs by the wall for the old and the tired. Nobody kneels; some pray longer.",
+    "cost": 3000,
+    "alignment": 30,
+    "art": "chairs"
+  },
+  {
+    "id": "chapel_pews",
+    "place": "chapel",
+    "slot": "seating",
+    "label": "Three short pews",
+    "blurb": "Oak pews from a closed church, with kneelers that fold down. The room becomes a small church, which some wanted and some did not.",
+    "cost": 6000,
+    "alignment": -20,
+    "art": "pews"
   }
 ]

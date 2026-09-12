@@ -1,6 +1,6 @@
 import { frictionOf, leanOf } from '@/systems/liturgy';
 import type { Condition, GameState } from '@/types';
-import { seasonOf } from './time';
+import { dateOf, seasonOf } from './time';
 import { resolveSelector } from './selectors';
 
 import type { Group } from '@/types';
@@ -143,6 +143,8 @@ export function evaluateCondition(
       const pool = bound ? [bound] : Object.values(state.groups).filter((g) => g.parishId === state.assignment?.parishId);
       return pool.some((g) => groupMatches(g, cond.key, cond.value));
     }
+    case 'calendar_year':
+      return compare(cond.op, dateOf(state.clock).year, cond.value);
     case 'house': {
       const houses = state.world?.diocese.visible.houses ?? [];
       return houses.some((h) => !cond.charism || h.charism === cond.charism) === cond.value;

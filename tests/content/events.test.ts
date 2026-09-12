@@ -60,8 +60,8 @@ const EFFECT_TARGETS = [
   'pillar', 'alignment', 'outspokenness', 'honesty', 'credential', 'trait', 'archetype',
   'concern', 'risk', 'npc', 'end', 'decor', 'permission', 'trait_known', 'transfer', 'building', 'club', 'bond',
 ];
-const DECOR_PLACES = ['church', 'office', 'rectory', 'seminary_room', 'chancery'];
-const DECOR_SLOTS = ['sanctuary', 'altar_rail', 'orientation', 'confessionals', 'choir', 'statues', 'tabernacle', 'mass_form', 'wall', 'desk', 'floor', 'corner'];
+const DECOR_PLACES = ['church', 'chapel', 'office', 'rectory', 'seminary_room', 'chancery'];
+const DECOR_SLOTS = ['sanctuary', 'altar_rail', 'orientation', 'confessionals', 'choir', 'statues', 'tabernacle', 'mass_form', 'music', 'style', 'devotion', 'seating', 'wall', 'desk', 'floor', 'corner'];
 const LITURGICAL_TOPICS = ['ad_orientem', 'latin_mass', 'altar_rail', 'tabernacle', 'renovation', 'older_form_faculty'];
 const BISHOP_KEYS = ['management', 'priority', 'rewards', 'cannotTolerate', 'stance'];
 const DECOR_IDS = new Set(decorOptions.map((o) => o.id));
@@ -123,6 +123,7 @@ function checkCondition(c: Condition, where: string, problems: Problem[]): void 
     case 'weeks_served':
     case 'arc_weeks_left':
     case 'age':
+    case 'calendar_year':
       if (!hasOp(c.op) || typeof c.value !== 'number') problems.push(`${where}: bad ${c.type} condition`);
       break;
     case 'liturgy':
