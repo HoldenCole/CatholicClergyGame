@@ -1,5 +1,8 @@
 import type { GameState } from '@/types';
 import { resolveSelector } from './selectors';
+import { pendingAppointment, APPOINTMENT_FLAGS } from './appointment';
+import { offerById } from '@/content/offers';
+import { studyProgram } from '@/content/study';
 
 /** Tokens every piece of text can use, derived from state. Later phases add {diocese} and {parish}. */
 export function textExtras(state: GameState): Record<string, string> {
@@ -12,6 +15,14 @@ export function textExtras(state: GameState): Record<string, string> {
     if (state.study.city === 'campus') out.city = 'the campus';
   }
   if (state.world) out.diocese = state.world.diocese.visible.name;
+  const pending = pendingAppointment(state);
+  const program = pending ? studyProgram(offerById(pending.offerId)?.accept.commitment?.away ?? '') : undefined;
+  if (program) {
+    out.appointment = program.label.toLowerCase();
+    out.appointment_residence = program.residence;
+  }
+  const from = state.flags[APPOINTMENT_FLAGS.from];
+  if (typeof from === 'string') out.appointment_from = from;
   if (state.world && state.assignment) {
     const parish = state.world.parishes.find((p) => p.id === state.assignment!.parishId);
     if (parish) out.parish = parish.name;

@@ -7,7 +7,6 @@ import { offerById } from '@/content/offers';
 import { officeDefs, groupTypeDefs } from '@/content/parish';
 import { seminaryActivity } from '@/content/seminary';
 import { offersWeek } from '@/engine/offers';
-import { acceptOffer } from '@/engine/offers';
 import { studyProgram } from '@/content/study';
 import { placeVerdict, setStudyActivity, studyWeek } from '@/systems/studyWeek';
 import { startFounding, finishFounding, parishGroups } from '@/systems/groups';
@@ -15,6 +14,7 @@ import { offerWeight } from '@/engine/offers';
 import { evaluateAll } from '@/engine/conditions';
 import { commitmentAp } from '@/engine/offers';
 import type { GameState } from '@/types';
+import { acceptAndGo } from '../helpers/appointment';
 
 describe('Italian in seminary', () => {
   it('is an activity that earns the credential, and Rome reads it', () => {
@@ -53,7 +53,7 @@ describe('the postings as places', () => {
     const base = parishState('place');
     const c = base.character!;
     const s: GameState = { ...base, character: { ...c, stats: { ...c.stats, theology: 75 }, reputation: { ...c.reputation, chancery: 40 } }, flags: { ...base.flags, ordination_week: base.clock.week - 52 * 4 }, offers: [{ offerId: 'pv_seminary_faculty', arrivedWeek: 0, expiresWeek: 9999, bindings: {} }] };
-    let away = acceptOffer(s, offerById('pv_seminary_faculty')!, createRng('f')).state;
+    let away = acceptAndGo(s, offerById('pv_seminary_faculty')!, createRng('f')).state;
     expect(away.study!.place).toEqual({ men: 0, faculty: 0, formation: 0 });
     away = setStudyActivity(away, 'lectures', 3);
     away = setStudyActivity(away, 'formation_reports', 2);

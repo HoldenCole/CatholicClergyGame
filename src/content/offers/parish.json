@@ -243,7 +243,7 @@
         "administrator",
         "pastor"
       ],
-      "title": "The Judicial Vicar Needs a Successor",
+      "title": "Two Years in Washington for the Tribunal",
       "body": "The chancellor's letter is two paragraphs. The judicial vicar is sixty-eight, the tribunal is behind on annulment cases by fourteen months, and the diocese has no priest under fifty with a canon law degree. {@bishop} would like to send one for the licentiate: two years at the Catholic University in Washington, or at Santa Croce in Rome if your Italian will stand it. Your background is why the letter came to you. It is not glamorous work. The men who do it spend their lives reading depositions about marriages that failed, and the chancery comes to depend on them in a way that is hard to leave. You would be gone from the parish for two full years, and the people would be told you were away studying, which is true and never sounds it.",
       "requires": [
         {
@@ -1522,6 +1522,11 @@
             },
             {
               "type": "flag",
+              "key": "career:investment",
+              "value": true
+            },
+            {
+              "type": "flag",
               "key": "field:business",
               "value": true
             },
@@ -1555,6 +1560,14 @@
             "value": true
           },
           "multiplier": 1.3
+        },
+        {
+          "when": {
+            "type": "flag",
+            "key": "career:investment",
+            "value": true
+          },
+          "multiplier": 1.6
         }
       ],
       "windowWeeks": 4,
@@ -3597,8 +3610,8 @@
         "administrator",
         "pastor"
       ],
-      "title": "The Hospital Rota",
-      "body": "The director of pastoral care at the regional hospital, a Lutheran with a clinical background, asks the diocese for a full-time chaplain: the on-call rota, every night the pager rings, the emergency room and the intensive care unit and the room where families are told things. Your background is why she asked for you by name. The priests who do this well are the ones people remember when a diocese is choosing who to trust with the dying. You would leave the parish and live in the chaplains' quarters for the length of it. It is also three in the morning, most nights, in a building that smells of bleach, and the parish will have a priest on Wednesday mornings who did not sleep on Tuesday.",
+      "title": "Chaplain of the Hospital",
+      "body": "A post, not a rota: The director of pastoral care at the regional hospital, a Lutheran with a clinical background, asks {@bishop} for a full-time chaplain: the on-call rota, every night the pager rings, the emergency room and the intensive care unit and the room where families are told things. Your background is why she asked for you by name. The priests who do this well are the ones people remember when a diocese is choosing who to trust with the dying. You would leave the parish and live in the chaplains' quarters for the length of it. It is also three in the morning, most nights, in a building that smells of bleach, and the parish will have a priest on Wednesday mornings who did not sleep on Tuesday.",
       "requires": [
         {
           "type": "years_ordained",
@@ -3911,7 +3924,7 @@
         "administrator",
         "pastor"
       ],
-      "title": "The Newman Center",
+      "title": "Chaplain of the Newman Center",
       "body": "The Newman Center at the state university has lost its priest to a religious order's reshuffle and the campus ministry director, a laywoman who has run it through three chaplains, has asked {@bishop} for someone who can hold a room of twenty-year-olds. Three evenings a week during term, Sunday night Mass, and the discussion series that has to be able to take any question. You would leave the parish and live at the Newman Center for the length of the appointment; the parish is nobody's to keep. The students who come are the best and most difficult Catholics in the diocese. The ones who leave the Church will leave from your chapel, and the ones who become priests will say your name at their ordination.",
       "requires": [
         {
@@ -5305,341 +5318,160 @@
         "outcome": "You tell {@bishop} that the parish is where you are a priest. He looks at you for a while and says that he asked because he thought you were the one who would say no, and that this is not the compliment it sounds like. He names a canonist you have met twice. The presbyterate hears within the week that you turned it down, and a few of them buy you a drink for it."
       }
     },
-      {
-        "id": "ep_auxiliary_bishop",
-        "category": "chancery",
-        "phase": [
-          "pastor",
-          "administrator",
-          "study"
-        ],
-        "title": "The Nuncio's Call",
-        "body": "The call comes to the rectory on a Tuesday from a Washington number, and the voice is Italian and courteous and asks whether you are alone. The Holy Father, it says, wishes to name you auxiliary bishop of {diocese}. It asks whether you accept, and it asks for an answer in the same conversation, and it asks you to tell no one until the announcement, not your mother, not {@bishop}, who already knows. You would be ordained a bishop in the cathedral by the man whose secretary once kept you waiting. You would confirm forty parishes a year, take a third of the diocese as your vicariate, and stand in for him wherever he cannot be. Every priest you have known would have to decide what to call you. The men who have said no to this call are remembered in Rome for exactly one thing.",
-        "from": "@bishop",
-        "requires": [
-          {
+    {
+      "id": "ep_auxiliary_bishop",
+      "category": "chancery",
+      "phase": [
+        "pastor",
+        "administrator",
+        "study"
+      ],
+      "title": "The Nuncio's Call",
+      "body": "The call comes to the rectory on a Tuesday from a Washington number, and the voice is Italian and courteous and asks whether you are alone. The Holy Father, it says, wishes to name you auxiliary bishop of {diocese}. It asks whether you accept, and it asks for an answer in the same conversation, and it asks you to tell no one until the announcement, not your mother, not {@bishop}, who already knows. You would be ordained a bishop in the cathedral by the man whose secretary once kept you waiting. You would confirm forty parishes a year, take a third of the diocese as your vicariate, and stand in for him wherever he cannot be. Every priest you have known would have to decide what to call you. The men who have said no to this call are remembered in Rome for exactly one thing.",
+      "from": "@bishop",
+      "requires": [
+        {
+          "type": "flag",
+          "key": "terna_named",
+          "value": true
+        },
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 18
+        },
+        {
+          "type": "age",
+          "op": "<=",
+          "value": 65
+        },
+        {
+          "type": "not",
+          "inner": {
             "type": "flag",
-            "key": "terna_named",
+            "key": "ordained_bishop",
             "value": true
-          },
-          {
-            "type": "years_ordained",
-            "op": ">=",
-            "value": 18
-          },
-          {
-            "type": "age",
-            "op": "<=",
-            "value": 65
-          },
-          {
-            "type": "not",
-            "inner": {
-              "type": "flag",
-              "key": "ordained_bishop",
-              "value": true
-            }
-          },
-          {
-            "type": "not",
-            "inner": {
-              "type": "flag",
-              "key": "refused_mitre",
-              "value": true
-            }
-          },
-          {
-            "type": "reputation",
-            "key": "chancery",
-            "op": ">=",
-            "value": 55
-          },
-          {
-            "type": "reputation",
-            "key": "rome",
-            "op": ">=",
-            "value": 20
-          }
-        ],
-        "weight": 30,
-        "bias": [
-          {
-            "when": {
-              "type": "flag",
-              "key": "vg_served",
-              "value": true
-            },
-            "multiplier": 2.0
-          },
-          {
-            "when": {
-              "type": "flag",
-              "key": "office:bishops_secretary",
-              "value": true
-            },
-            "multiplier": 1.4
-          },
-          {
-            "when": {
-              "type": "credential",
-              "key": "JCL"
-            },
-            "multiplier": 1.3
-          },
-          {
-            "when": {
-              "type": "flag",
-              "key": "rome_alumnus",
-              "value": true
-            },
-            "multiplier": 1.4
-          },
-          {
-            "when": {
-              "type": "outspokenness",
-              "op": ">=",
-              "value": 50
-            },
-            "multiplier": 0.4
-          }
-        ],
-        "windowWeeks": 0,
-        "once": true,
-        "cluster": "episcopal",
-        "accept": {
-          "effects": [
-            {
-              "target": "flag",
-              "key": "ordained_bishop",
-              "value": true
-            },
-            {
-              "target": "flag",
-              "key": "office:auxiliary_bishop",
-              "value": true
-            },
-            {
-              "target": "reputation",
-              "key": "chancery",
-              "delta": 10
-            },
-            {
-              "target": "reputation",
-              "key": "rome",
-              "delta": 6
-            },
-            {
-              "target": "reputation",
-              "key": "parishioners",
-              "delta": -6
-            },
-            {
-              "target": "reputation",
-              "key": "brother_priests",
-              "delta": -4
-            },
-            {
-              "target": "stat",
-              "key": "piety",
-              "delta": -1
-            }
-          ],
-          "outcome": "The announcement is at noon Roman time, which is five in the morning at the rectory, and by six the phone has not stopped. The ordination is in the cathedral, the crozier is borrowed, and your mother's parish sends a bus. The first confirmation is in a gym. You have a coat of arms now, designed by a layman in Ohio, and a motto you chose in an afternoon that will outlive you.",
-          "commitment": {
-            "label": "Auxiliary bishop",
-            "weeks": 312,
-            "apPerWeek": 0,
-            "onComplete": [
-              {
-                "target": "flag",
-                "key": "served_auxiliary",
-                "value": true
-              },
-              {
-                "target": "reputation",
-                "key": "chancery",
-                "delta": 8
-              },
-              {
-                "target": "reputation",
-                "key": "rome",
-                "delta": 8
-              },
-              {
-                "target": "relationship",
-                "key": "@bishop",
-                "delta": 10
-              },
-              {
-                "target": "stat",
-                "key": "administration",
-                "delta": 3
-              },
-              {
-                "target": "stat",
-                "key": "charisma",
-                "delta": 2
-              }
-            ],
-            "completeOutcome": "Six years of confirmations and stand-ins. The bishop gives you a parish of your own again, a large one, because an auxiliary without a parish is a man without a home, and you keep the mitre in a closet there. Rome has your file. The next call, if it comes, is for a see.",
-            "away": "auxiliary_bishop"
           }
         },
-        "decline": {
-          "effects": [
-            {
-              "target": "flag",
-              "key": "refused_mitre",
-              "value": true
-            },
-            {
-              "target": "reputation",
-              "key": "rome",
-              "delta": -10
-            },
-            {
-              "target": "reputation",
-              "key": "chancery",
-              "delta": -6
-            },
-            {
-              "target": "reputation",
-              "key": "brother_priests",
-              "delta": 6
-            },
-            {
-              "target": "stat",
-              "key": "piety",
-              "delta": 2
-            }
-          ],
-          "outcome": "You say that you are a pastor and that you would be a poor bishop, and the voice on the line is silent for a while and then says that this is not the reason men usually give, and thanks you. The name is never announced. {@bishop} knows within the day and says nothing for a month, and then, at a deanery dinner, tells the table what you did, and the table does not know what to make of it."
-        }
-      },
-      {
-        "id": "ep_diocesan_bishop",
-        "category": "chancery",
-        "phase": [
-          "pastor",
-          "administrator",
-          "study"
-        ],
-        "title": "A See",
-        "body": "The nuncio himself, this time, and not on the phone. He asks you to lunch in Washington and does not get to it until the coffee. A see is vacant: small, far from here, more parishes than priests, a cathedral that needs a roof. The Holy Father would like you to take it. You would leave {diocese} for good, and your mother's grave, and every priest who knows your name, and become the man that forty strangers in collars talk about at their deanery dinners. You would hold it until the letter at seventy-five, or until Rome moved you, which for a see like this it does not. The nuncio says the Holy Father is aware that it is not a reward. He says it is a diocese, and it needs a bishop, and he has read your file twice.",
-        "requires": [
-          {
+        {
+          "type": "not",
+          "inner": {
             "type": "flag",
-            "key": "terna_named",
+            "key": "refused_mitre",
+            "value": true
+          }
+        },
+        {
+          "type": "reputation",
+          "key": "chancery",
+          "op": ">=",
+          "value": 55
+        },
+        {
+          "type": "reputation",
+          "key": "rome",
+          "op": ">=",
+          "value": 20
+        }
+      ],
+      "weight": 30,
+      "bias": [
+        {
+          "when": {
+            "type": "flag",
+            "key": "vg_served",
+            "value": true
+          },
+          "multiplier": 2.0
+        },
+        {
+          "when": {
+            "type": "flag",
+            "key": "office:bishops_secretary",
+            "value": true
+          },
+          "multiplier": 1.4
+        },
+        {
+          "when": {
+            "type": "credential",
+            "key": "JCL"
+          },
+          "multiplier": 1.3
+        },
+        {
+          "when": {
+            "type": "flag",
+            "key": "rome_alumnus",
+            "value": true
+          },
+          "multiplier": 1.4
+        },
+        {
+          "when": {
+            "type": "outspokenness",
+            "op": ">=",
+            "value": 50
+          },
+          "multiplier": 0.4
+        }
+      ],
+      "windowWeeks": 0,
+      "once": true,
+      "cluster": "episcopal",
+      "accept": {
+        "effects": [
+          {
+            "target": "flag",
+            "key": "ordained_bishop",
             "value": true
           },
           {
-            "type": "years_ordained",
-            "op": ">=",
-            "value": 20
+            "target": "flag",
+            "key": "office:auxiliary_bishop",
+            "value": true
           },
           {
-            "type": "age",
-            "op": "<=",
-            "value": 68
+            "target": "reputation",
+            "key": "chancery",
+            "delta": 10
           },
           {
-            "type": "not",
-            "inner": {
-              "type": "flag",
-              "key": "bishop_of_a_see",
-              "value": true
-            }
-          },
-          {
-            "type": "not",
-            "inner": {
-              "type": "flag",
-              "key": "refused_see",
-              "value": true
-            }
-          },
-          {
-            "type": "reputation",
+            "target": "reputation",
             "key": "rome",
-            "op": ">=",
-            "value": 30
+            "delta": 6
           },
           {
-            "type": "any",
-            "inner": [
-              {
-                "type": "flag",
-                "key": "served_auxiliary",
-                "value": true
-              },
-              {
-                "type": "flag",
-                "key": "ordained_bishop",
-                "value": true
-              },
-              {
-                "type": "flag",
-                "key": "vg_served",
-                "value": true
-              },
-              {
-                "type": "reputation",
-                "key": "chancery",
-                "op": ">=",
-                "value": 70
-              }
-            ]
+            "target": "reputation",
+            "key": "parishioners",
+            "delta": -6
+          },
+          {
+            "target": "reputation",
+            "key": "brother_priests",
+            "delta": -4
+          },
+          {
+            "target": "stat",
+            "key": "piety",
+            "delta": -1
           }
         ],
-        "weight": 25,
-        "bias": [
-          {
-            "when": {
-              "type": "flag",
+        "outcome": "The announcement is at noon Roman time, which is five in the morning at the rectory, and by six the phone has not stopped. The ordination is in the cathedral, the crozier is borrowed, and your mother's parish sends a bus. The first confirmation is in a gym. You have a coat of arms now, designed by a layman in Ohio, and a motto you chose in an afternoon that will outlive you.",
+        "commitment": {
+          "label": "Auxiliary bishop",
+          "weeks": 312,
+          "apPerWeek": 0,
+          "onComplete": [
+            {
+              "target": "flag",
               "key": "served_auxiliary",
               "value": true
             },
-            "multiplier": 2.5
-          },
-          {
-            "when": {
-              "type": "flag",
-              "key": "vg_served",
-              "value": true
-            },
-            "multiplier": 1.6
-          },
-          {
-            "when": {
-              "type": "flag",
-              "key": "hard_parish_turned",
-              "value": true
-            },
-            "multiplier": 1.4
-          },
-          {
-            "when": {
-              "type": "outspokenness",
-              "op": ">=",
-              "value": 50
-            },
-            "multiplier": 0.4
-          }
-        ],
-        "windowWeeks": 1,
-        "once": true,
-        "cluster": "episcopal",
-        "accept": {
-          "effects": [
             {
-              "target": "flag",
-              "key": "ordained_bishop",
-              "value": true
-            },
-            {
-              "target": "flag",
-              "key": "bishop_of_a_see",
-              "value": true
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 8
             },
             {
               "target": "reputation",
@@ -5647,62 +5479,406 @@
               "delta": 8
             },
             {
-              "target": "reputation",
-              "key": "chancery",
-              "delta": 6
-            },
-            {
-              "target": "reputation",
-              "key": "parishioners",
-              "delta": -10
-            },
-            {
-              "target": "reputation",
-              "key": "brother_priests",
-              "delta": -6
-            }
-          ],
-          "outcome": "The installation is in a cathedral you had never seen, before priests you had never met, with the nuncio reading the bull in a Latin the town does not follow. The house has a study with a window on the parking lot and a housekeeper who worked for three bishops and will outlast you. The first letter on the desk is from the insurer. The second is from a pastor who wants to know when you will visit. You are the diocese now.",
-          "commitment": {
-            "label": "Bishop of a see",
-            "weeks": 520,
-            "apPerWeek": 0,
-            "onComplete": [
-              {
-                "target": "flag",
-                "key": "held_a_see",
-                "value": true
-              }
-            ],
-            "completeOutcome": "The letter at seventy-five, as canon law requires, and Rome accepts it the way it accepts them. The see has a bishop emeritus now, which is a man with a title and a small house. The priests give a dinner. The cathedral roof is done, or it is not.",
-            "away": "diocesan_bishop"
-          }
-        },
-        "decline": {
-          "effects": [
-            {
-              "target": "flag",
-              "key": "refused_see",
-              "value": true
-            },
-            {
-              "target": "reputation",
-              "key": "rome",
-              "delta": -12
-            },
-            {
-              "target": "reputation",
-              "key": "chancery",
-              "delta": -4
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": 10
             },
             {
               "target": "stat",
-              "key": "piety",
-              "delta": 1
+              "key": "administration",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
             }
           ],
-          "outcome": "You tell the nuncio that you are too old to learn a diocese, or that your mother is dying, or the truth, which is that you do not want to be the man in that chair. He listens without moving. He says that the Holy Father will be told, and that the Holy Father does not ask twice. The see gets a canonist from Ohio. You go home and say the noon Mass, and it is a very good Mass."
+          "completeOutcome": "Six years of confirmations and stand-ins. The bishop gives you a parish of your own again, a large one, because an auxiliary without a parish is a man without a home, and you keep the mitre in a closet there. Rome has your file. The next call, if it comes, is for a see.",
+          "away": "auxiliary_bishop"
         }
+      },
+      "decline": {
+        "effects": [
+          {
+            "target": "flag",
+            "key": "refused_mitre",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "rome",
+            "delta": -10
+          },
+          {
+            "target": "reputation",
+            "key": "chancery",
+            "delta": -6
+          },
+          {
+            "target": "reputation",
+            "key": "brother_priests",
+            "delta": 6
+          },
+          {
+            "target": "stat",
+            "key": "piety",
+            "delta": 2
+          }
+        ],
+        "outcome": "You say that you are a pastor and that you would be a poor bishop, and the voice on the line is silent for a while and then says that this is not the reason men usually give, and thanks you. The name is never announced. {@bishop} knows within the day and says nothing for a month, and then, at a deanery dinner, tells the table what you did, and the table does not know what to make of it."
       }
+    },
+    {
+      "id": "ep_diocesan_bishop",
+      "category": "chancery",
+      "phase": [
+        "pastor",
+        "administrator",
+        "study"
+      ],
+      "title": "A See",
+      "body": "The nuncio himself, this time, and not on the phone. He asks you to lunch in Washington and does not get to it until the coffee. A see is vacant: small, far from here, more parishes than priests, a cathedral that needs a roof. The Holy Father would like you to take it. You would leave {diocese} for good, and your mother's grave, and every priest who knows your name, and become the man that forty strangers in collars talk about at their deanery dinners. You would hold it until the letter at seventy-five, or until Rome moved you, which for a see like this it does not. The nuncio says the Holy Father is aware that it is not a reward. He says it is a diocese, and it needs a bishop, and he has read your file twice.",
+      "requires": [
+        {
+          "type": "flag",
+          "key": "terna_named",
+          "value": true
+        },
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 20
+        },
+        {
+          "type": "age",
+          "op": "<=",
+          "value": 68
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "bishop_of_a_see",
+            "value": true
+          }
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "refused_see",
+            "value": true
+          }
+        },
+        {
+          "type": "reputation",
+          "key": "rome",
+          "op": ">=",
+          "value": 30
+        },
+        {
+          "type": "any",
+          "inner": [
+            {
+              "type": "flag",
+              "key": "served_auxiliary",
+              "value": true
+            },
+            {
+              "type": "flag",
+              "key": "ordained_bishop",
+              "value": true
+            },
+            {
+              "type": "flag",
+              "key": "vg_served",
+              "value": true
+            },
+            {
+              "type": "reputation",
+              "key": "chancery",
+              "op": ">=",
+              "value": 70
+            }
+          ]
+        }
+      ],
+      "weight": 25,
+      "bias": [
+        {
+          "when": {
+            "type": "flag",
+            "key": "served_auxiliary",
+            "value": true
+          },
+          "multiplier": 2.5
+        },
+        {
+          "when": {
+            "type": "flag",
+            "key": "vg_served",
+            "value": true
+          },
+          "multiplier": 1.6
+        },
+        {
+          "when": {
+            "type": "flag",
+            "key": "hard_parish_turned",
+            "value": true
+          },
+          "multiplier": 1.4
+        },
+        {
+          "when": {
+            "type": "outspokenness",
+            "op": ">=",
+            "value": 50
+          },
+          "multiplier": 0.4
+        }
+      ],
+      "windowWeeks": 1,
+      "once": true,
+      "cluster": "episcopal",
+      "accept": {
+        "effects": [
+          {
+            "target": "flag",
+            "key": "ordained_bishop",
+            "value": true
+          },
+          {
+            "target": "flag",
+            "key": "bishop_of_a_see",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "rome",
+            "delta": 8
+          },
+          {
+            "target": "reputation",
+            "key": "chancery",
+            "delta": 6
+          },
+          {
+            "target": "reputation",
+            "key": "parishioners",
+            "delta": -10
+          },
+          {
+            "target": "reputation",
+            "key": "brother_priests",
+            "delta": -6
+          }
+        ],
+        "outcome": "The installation is in a cathedral you had never seen, before priests you had never met, with the nuncio reading the bull in a Latin the town does not follow. The house has a study with a window on the parking lot and a housekeeper who worked for three bishops and will outlast you. The first letter on the desk is from the insurer. The second is from a pastor who wants to know when you will visit. You are the diocese now.",
+        "commitment": {
+          "label": "Bishop of a see",
+          "weeks": 520,
+          "apPerWeek": 0,
+          "onComplete": [
+            {
+              "target": "flag",
+              "key": "held_a_see",
+              "value": true
+            }
+          ],
+          "completeOutcome": "The letter at seventy-five, as canon law requires, and Rome accepts it the way it accepts them. The see has a bishop emeritus now, which is a man with a title and a small house. The priests give a dinner. The cathedral roof is done, or it is not.",
+          "away": "diocesan_bishop"
+        }
+      },
+      "decline": {
+        "effects": [
+          {
+            "target": "flag",
+            "key": "refused_see",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "rome",
+            "delta": -12
+          },
+          {
+            "target": "reputation",
+            "key": "chancery",
+            "delta": -4
+          },
+          {
+            "target": "stat",
+            "key": "piety",
+            "delta": 1
+          }
+        ],
+        "outcome": "You tell the nuncio that you are too old to learn a diocese, or that your mother is dying, or the truth, which is that you do not want to be the man in that chair. He listens without moving. He says that the Holy Father will be told, and that the Holy Father does not ask twice. The see gets a canonist from Ohio. You go home and say the noon Mass, and it is a very good Mass."
+      }
+    },
+    {
+      "id": "pv_investment_committee",
+      "category": "chancery",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "title": "The Investment Committee",
+      "body": "The diocese keeps its money, the parishes' deposits, and the priests' pension fund in a pool that a committee of laymen watches over four times a year, and the chairman, who runs a family office downtown, has told {@chancellor} that he wants a priest on it who has read a prospectus for a living. {@chancellor} has your name from the file. Four meetings a year, the manager's reports before each, and the argument, every spring, about whether the pension fund is a promise or a hope. You would know what the diocese is worth to the dollar, which is a thing the chancery does not say aloud, and you would be the priest the finance officer calls when a pastor wants to sell a field.",
+      "from": "@chancellor",
+      "requires": [
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 2
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "office:investment_committee",
+            "value": true
+          }
+        },
+        {
+          "type": "any",
+          "inner": [
+            {
+              "type": "flag",
+              "key": "career:investment",
+              "value": true
+            },
+            {
+              "type": "all",
+              "inner": [
+                {
+                  "type": "flag",
+                  "key": "career:accountant",
+                  "value": true
+                },
+                {
+                  "type": "stat",
+                  "key": "administration",
+                  "op": ">=",
+                  "value": 55
+                }
+              ]
+            },
+            {
+              "type": "credential",
+              "key": "MBA"
+            }
+          ]
+        }
+      ],
+      "weight": 35,
+      "bias": [
+        {
+          "when": {
+            "type": "flag",
+            "key": "career:investment",
+            "value": true
+          },
+          "multiplier": 1.8
+        },
+        {
+          "when": {
+            "type": "flag",
+            "key": "office:finance_council",
+            "value": true
+          },
+          "multiplier": 1.3
+        }
+      ],
+      "windowWeeks": 4,
+      "once": true,
+      "cluster": "chancery",
+      "accept": {
+        "effects": [
+          {
+            "target": "flag",
+            "key": "office:investment_committee",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "chancery",
+            "delta": 4
+          },
+          {
+            "target": "reputation",
+            "key": "brother_priests",
+            "delta": -2
+          }
+        ],
+        "outcome": "The first meeting is in a conference room with a view of the river and a manager who says 'headwinds' four times. You ask what the fee is. The chairman looks at you the way a man looks at a dog that has spoken. The fee comes down by a quarter point that year, which on the pool is a parish school.",
+        "commitment": {
+          "label": "Diocesan investment committee",
+          "weeks": 156,
+          "apPerWeek": 1,
+          "onComplete": [
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 7
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 1
+            },
+            {
+              "target": "archetype",
+              "key": "administrative",
+              "delta": 3
+            },
+            {
+              "target": "relationship",
+              "key": "@chancellor",
+              "delta": 5
+            },
+            {
+              "target": "trait",
+              "key": "sits on the money"
+            }
+          ],
+          "completeOutcome": "Three years, twelve meetings, one manager fired. The pension fund is a little more promise than hope, and the chairman, who did not want a priest, tells the bishop he would like to keep this one. The brother priests know you know what the diocese is worth, and do not ask, and would like to.",
+          "weekly": [
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 0.05
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 0.03
+            }
+          ]
+        }
+      },
+      "decline": {
+        "effects": [
+          {
+            "target": "flag",
+            "key": "refused_investment_committee",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "chancery",
+            "delta": -2
+          }
+        ],
+        "outcome": "You tell {@chancellor} that you left that work for a reason. He says the chairman will be disappointed, and that the chairman is on the seminary board, and lets the sentence sit."
+      }
+    }
   ]
 }

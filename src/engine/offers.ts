@@ -4,7 +4,7 @@ import { officeDef } from '@/content/parish';
 import { applyEffects } from './effects';
 import type { Rng } from './rng';
 import { resolveSelector, selectorsIn } from './selectors';
-import { beginStudy } from './study';
+import { askToGo } from './appointment';
 
 /** Tunables. Invented. */
 export const OFFERS = {
@@ -140,8 +140,8 @@ export function acceptOffer(state: GameState, def: OfferDef, rng: Rng): AcceptRe
 
   const c = def.accept.commitment;
   if (c?.away) {
-    // Years away are not a background commitment: he goes. DESIGN §7.5.
-    return { state: beginStudy(next, def, failed, rng), failed };
+    // Years away are not a background commitment, and not his to take: the bishop's letter moves him.
+    return { state: askToGo(next, def, failed, rng), failed };
   }
   if (c) {
     const commitment: Commitment = {

@@ -2,7 +2,6 @@ import { describe, it, expect } from 'vitest';
 import { parishState } from './week.test';
 import { createRng } from '@/engine/rng';
 import { nextAssignment } from '@/engine/career';
-import { acceptOffer } from '@/engine/offers';
 import { offerById } from '@/content/offers';
 import { studyActivitiesFor } from '@/systems/studyWeek';
 import { fundGroup, invest, mayInvest, spend, spendAvailability, spendable, spendingWeek, withdraw } from '@/systems/spending';
@@ -13,6 +12,7 @@ import { generateCandidates, installWorld } from '@/generation/world';
 import { newGame } from '@/engine/game';
 import { parishPrestige } from '@/systems/standing';
 import type { GameState } from '@/types';
+import { acceptAndGo } from '../helpers/appointment';
 
 function pastorOf(seed: string, cash = 900_000): GameState {
   const s = parishState(seed);
@@ -95,7 +95,7 @@ describe('the third playtest round', () => {
       expect(def.accept.commitment!.away).toBeDefined();
       let away: GameState;
       try {
-        away = acceptOffer(s, def, createRng('post')).state;
+        away = acceptAndGo(s, def, createRng('post')).state;
       } catch (e) {
         // A requirement this fixture cannot meet is not the point of the test.
         expect(String(e)).toMatch(/requirements/);

@@ -255,7 +255,7 @@ function checkEvent(ev: GameEvent, file: string, problems: Problem[], ids: Set<s
   });
   for (const token of tokensIn(ev.title + ' ' + ev.body)) {
     if (token.startsWith('@') && !SELECTORS.includes(token)) problems.push(`${where}: unknown selector ${token}`);
-    if (!token.startsWith('@') && !['name', 'first_name', 'surname', 'diocese', 'parish', 'seminary', 'school', 'city', 'residence'].includes(token)) {
+    if (!token.startsWith('@') && !['name', 'first_name', 'surname', 'diocese', 'parish', 'seminary', 'school', 'city', 'residence', 'appointment', 'appointment_residence', 'appointment_from'].includes(token)) {
       problems.push(`${where}: unknown token {${token}}`);
     }
   }

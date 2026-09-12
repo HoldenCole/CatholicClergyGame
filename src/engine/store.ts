@@ -551,9 +551,9 @@ export const useGameStore = create<GameStore>()((set, get) => ({
     if (!def) return;
     update(set, get, (game, r) => {
       const result = doAccept(game, def, r);
-      set({ lastOfferOutcome: result.failed && def.failure ? `${def.accept.outcome} ${def.failure.outcome}` : def.accept.outcome });
       const c = def.accept.commitment;
-      const text = c?.away ? `Accepted: ${def.title}.` : c ? `Accepted: ${def.title}. ${c.label}, ${hoursOf(c.apPerWeek)} hours a week for ${Math.round(c.weeks / 52) || 1} ${c.weeks >= 78 ? 'years' : 'year'}, alongside the parish.` : `Accepted: ${def.title}.`;
+      set({ lastOfferOutcome: c?.away ? (def.from === '@bishop' ? 'You said yes. The bishop is the one asking, and his letter of appointment follows; nothing moves until it comes.' : 'You said yes. The request goes to the bishop, who will send you or keep you; nothing moves until his letter comes.') : result.failed && def.failure ? `${def.accept.outcome} ${def.failure.outcome}` : def.accept.outcome });
+      const text = c?.away ? `Said yes to: ${def.title}. The bishop's letter will decide it.` : c ? `Accepted: ${def.title}. ${c.label}, ${hoursOf(c.apPerWeek)} hours a week for ${Math.round(c.weeks / 52) || 1} ${c.weeks >= 78 ? 'years' : 'year'}, alongside the parish.` : `Accepted: ${def.title}.`;
       return { ...result.state, career: [...result.state.career, { week: game.clock.week, kind: 'offer', text }] };
     });
   },

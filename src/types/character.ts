@@ -27,6 +27,7 @@ export type Field = 'business' | 'philosophy' | 'history_law' | 'stem' | 'classi
 export type Career =
   | 'attorney'
   | 'accountant'
+  | 'investment'
   | 'management'
   | 'teacher'
   | 'professor'

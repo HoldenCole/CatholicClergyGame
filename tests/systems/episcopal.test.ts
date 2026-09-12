@@ -1,7 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { parishState } from './week.test';
 import { createRng } from '@/engine/rng';
-import { acceptOffer } from '@/engine/offers';
 import { offerById } from '@/content/offers';
 import { eventById } from '@/content';
 import { evaluateCondition } from '@/engine/conditions';
@@ -12,6 +11,7 @@ import { studyWeekHook, type EventDeps } from '@/engine/weekHook';
 import { careerYear } from '@/engine/career';
 import { allTenures } from '@/systems/tenures';
 import type { GameState } from '@/types';
+import { acceptAndGo } from '../helpers/appointment';
 
 function candidate(seed: string, extra: Partial<GameState> = {}): GameState {
   const base = parishState(seed);
@@ -48,7 +48,7 @@ describe('the episcopal tier', () => {
 
   it('the auxiliary is a six-year posting with its own week', () => {
     const s = candidate('aux', { offers: [{ offerId: 'ep_auxiliary_bishop', arrivedWeek: 0, expiresWeek: 9999, bindings: {} }] });
-    const away = acceptOffer(s, offerById('ep_auxiliary_bishop')!, createRng('aux')).state;
+    const away = acceptAndGo(s, offerById('ep_auxiliary_bishop')!, createRng('aux')).state;
     expect(away.phase).toBe('study');
     expect(away.study!.city).toBe('auxiliary');
     expect(away.flags.ordained_bishop).toBe(true);
@@ -74,7 +74,7 @@ describe('the episcopal tier', () => {
 
   it('naming to a see is the last act: phase bishop, a see of his own, years that ordain and close, and the letter at seventy-five', () => {
     const s = candidate('see', { offers: [{ offerId: 'ep_diocesan_bishop', arrivedWeek: 0, expiresWeek: 9999, bindings: {} }] });
-    let b = acceptOffer(s, offerById('ep_diocesan_bishop')!, createRng('see')).state;
+    let b = acceptAndGo(s, offerById('ep_diocesan_bishop')!, createRng('see')).state;
     expect(b.phase).toBe('bishop');
     expect(b.see).toBeTruthy();
     expect(b.study!.city).toBe('see');
@@ -125,7 +125,7 @@ describe('the bishop through the store', () => {
     const { useGameStore, setWeekHook } = await import('@/engine/store');
     setWeekHook(null);
     const s = candidate('store-see', { offers: [{ offerId: 'ep_diocesan_bishop', arrivedWeek: 0, expiresWeek: 9999, bindings: {} }] });
-    const b = acceptOffer(s, offerById('ep_diocesan_bishop')!, createRng('see')).state;
+    const b = acceptAndGo(s, offerById('ep_diocesan_bishop')!, createRng('see')).state;
     const store = useGameStore;
     store.getState().newGame({ seed: 'store-see', start: { year: 2017, month: 8, day: 20 } });
     store.setState({ game: setStudyActivity(b, 'see_money', 2) });
