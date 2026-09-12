@@ -53,6 +53,26 @@ export function generateParishPeople(rng: Rng, parish: Parish, presetId: string,
     if (!spec.when(parish)) continue;
     out.push(generateStaffMember(rng, parish, presetId, year, spec.tag));
   }
+  // A permanent deacon, in a parish big enough to have one.
+  if (parish.households >= 800 && rng.chance(0.5)) {
+    const age = rng.int(45, 70);
+    const birthYear = year - age;
+    const heritage = heritageFor(rng, parish, presetId);
+    out.push(
+      finishNpc(rng, {
+        id: `${parish.id}_deacon`,
+        name: rollMaleName(rng, heritage, eraForBirthYear(birthYear)),
+        role: 'lay',
+        title: 'Deacon',
+        birthYear,
+        origin: parish.terrain === 'latino' ? 'latino_immigrant' : parish.terrain === 'rural' ? 'rural' : parish.terrain === 'suburban' ? 'suburban' : 'urban_ethnic',
+        stats: addStats(rollBaseStats(rng, 30, 60), { charisma: 8, theology: 8 }),
+        tags: ['deacon', `parish:${parish.id}`],
+        alignment: rollAlignment(rng, parish.alignment * 0.5, 30),
+        relationship: Math.round(rng.gaussian() * 6),
+      }),
+    );
+  }
   const count = rng.int(6, 9);
   // Two of them are family: a parish remembers by surname.
   const kin: string[] = [];

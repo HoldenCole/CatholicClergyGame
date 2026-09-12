@@ -112,15 +112,33 @@ export interface DialAvailability {
 
 export function mayChangeMass(state: GameState): { ok: boolean; why: string | null } {
   if (!state.parish || !state.assignment) return { ok: false, why: 'No parish' };
-  if (state.assignment.role === 'parochial_vicar') return { ok: false, why: "The pastor's Mass. A vicar says it as he finds it." };
+  if (state.assignment.role === 'parochial_vicar') {
+    const given = delegatedDials(state);
+    return { ok: false, why: given.length ? `The pastor's Mass; he has left you ${given.map((d) => dialDef(d)?.label.toLowerCase() ?? d).join(' and ')}.` : "The pastor's Mass. A vicar says it as he finds it." };
+  }
   if (state.mode.kind !== 'clock') return { ok: false, why: 'Not now' };
   return { ok: true, why: null };
+}
+
+/** The dials a pastor has left to his vicar, by his temperament: a mentor gives him something, an absent pastor gives him most of it. */
+export function delegatedDials(state: GameState): string[] {
+  if (state.assignment?.role !== 'parochial_vicar') return [];
+  if (state.flags['boss:mentor']) return ['music', 'homily'];
+  if (state.flags['boss:absent']) return ['language', 'music', 'homily', 'incense'];
+  return [];
+}
+
+/** Whether this dial is the man's to set: the pastor's all, a vicar's what he was given. */
+export function mayChangeDial(state: GameState, dial: string): { ok: boolean; why: string | null } {
+  const may = mayChangeMass(state);
+  if (may.ok) return may;
+  if (state.assignment?.role === 'parochial_vicar' && state.mode.kind === 'clock' && delegatedDials(state).includes(dial)) return { ok: true, why: null };
+  return may;
 }
 
 export function dialAvailability(state: GameState): DialAvailability[] {
   const parish = currentParish(state);
   if (!parish?.liturgy || !parish.taste) return [];
-  const may = mayChangeMass(state);
   return liturgyDials.map((def) => {
     const current = parish.liturgy![def.id] ?? def.options[0]!.id;
     const want = parish.taste![def.id] ?? 0;
@@ -130,7 +148,7 @@ export function dialAvailability(state: GameState): DialAvailability[] {
     return {
       def,
       current,
-      options: def.options.map((o) => ({ def: o, available: may.ok && fits(parish, o) && o.id !== current, why: !may.ok ? may.why : !fits(parish, o) ? 'Not the people for it here' : o.id === current ? 'As it is' : null })),
+      options: def.options.map((o) => ({ def: o, available: mayChangeDial(state, def.id).ok && fits(parish, o) && o.id !== current, why: !mayChangeDial(state, def.id).ok ? mayChangeDial(state, def.id).why : !fits(parish, o) ? 'Not the people for it here' : o.id === current ? 'As it is' : null })),
       want: tasteWord(want),
       fit: dist < 0.15 ? 'fits' : dist < 0.35 ? 'near' : 'far',
       changedWeeksAgo: changed === undefined ? null : state.clock.week - changed,
@@ -144,7 +162,7 @@ export function dialAvailability(state: GameState): DialAvailability[] {
  * weeks after decide whether the people come round.
  */
 export function setDial(state: GameState, dial: string, option: string): GameState {
-  const may = mayChangeMass(state);
+  const may = mayChangeDial(state, dial);
   if (!may.ok) throw new Error(may.why ?? 'not now');
   const parish = currentParish(state);
   const def = dialDef(dial);

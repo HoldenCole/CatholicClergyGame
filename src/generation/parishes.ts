@@ -121,14 +121,20 @@ export function generateParish(rng: Rng, preset: DiocesePreset, seed: DiocesePre
   });
 
   const name = seed.real?.name ?? rng.pick(seed.patrons);
+  // Where it sits: the cathedral at the center, the city around it, the suburbs in a ring, the country beyond.
+  const terrain = seed.cathedral ? 'urban' : shape.terrain;
+  const radius = seed.cathedral ? 0 : terrain === 'urban' ? rng.float(3, 12) : terrain === 'latino' ? rng.float(4, 18) : terrain === 'suburban' ? rng.float(12, 30) : rng.float(28, 48);
+  const angle = rng.float(0, Math.PI * 2);
   const parish: Parish = {
     id,
     name,
+    x: Math.round((50 + Math.cos(angle) * radius) * 10) / 10,
+    y: Math.round((50 + Math.sin(angle) * radius) * 10) / 10,
     place: seed.real?.place ?? rng.pick(seed.places),
     ...(seed.real ? { founded: seed.real.founded } : {}),
     kind: seed.kind,
     patronal: patronalOf(name, id),
-    terrain: seed.cathedral ? 'urban' : shape.terrain,
+    terrain,
     households: seed.cathedral ? Math.max(households, 2400) : households,
     wealth: seed.cathedral ? 5 : wealth,
     ethnic,

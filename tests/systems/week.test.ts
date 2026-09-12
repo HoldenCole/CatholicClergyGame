@@ -8,14 +8,19 @@ import { efficiencyWords, obligationAp, hoursOf, adminFloorFor, planWeek, resolv
 import { testCharacter } from '../helpers/fixtures';
 import type { GameState } from '@/types';
 
-export function parishState(seed = 'week', overrides: Partial<GameState> = {}): GameState {
+/** A vicar in his first parish. The pastor's temperament is cleared unless asked for, so the routine math is plain. */
+export function parishState(seed = 'week', overrides: Partial<GameState> = {}, keepBoss = false): GameState {
   const { state } = newGame({ seed, start: { year: 2017, month: 8, day: 20 } });
   const cands = generateCandidates(createRng(seed), 2010);
   let s = installWorld(state, cands[1]!, 2010);
   s = { ...s, character: testCharacter(), phase: 'parochial_vicar', mode: { kind: 'clock' }, flags: { ordained: true, ordination_week: 0 }, ...overrides };
   const assignment = assignFirstParish(s, createRng(`${seed}:assign`));
   s = { ...s, assignment, mode: { kind: 'assignment', assignment } };
-  return startAssignment({ ...s, mode: { kind: 'clock' } }, createRng(`${seed}:start`));
+  const started = startAssignment({ ...s, mode: { kind: 'clock' } }, createRng(`${seed}:start`));
+  if (keepBoss) return started;
+  const flags = { ...started.flags };
+  for (const k of Object.keys(flags)) if (k.startsWith('boss:')) delete flags[k];
+  return { ...started, flags };
 }
 
 describe('systems/week', () => {

@@ -2,6 +2,7 @@ import type { Beat, GameState, ParishState, Quality, ObligationKey } from '@/typ
 import type { Rng } from './rng';
 import { generateParishPeople } from '@/generation/parishPeople';
 import { withLiturgy } from '@/systems/liturgy';
+import { formDeanery } from '@/systems/deanery';
 import { generateGroups } from '@/systems/groups';
 import { resolveWeek } from '@/systems/week';
 import { takeSnapshot } from '@/systems/trajectory';
@@ -100,7 +101,7 @@ export function startAssignment(state: GameState, rng: Rng): GameState {
     { kind: 'assignment' as const, week: arcEndWeek, label: 'The bishop is thinking about your next assignment' },
   ].sort((a, b) => a.week - b.week);
   const flags = { ...state.flags };
-  for (const k of Object.keys(flags)) if (k.startsWith('parish:') || k.startsWith('role:')) delete flags[k];
+  for (const k of Object.keys(flags)) if (k.startsWith('parish:') || k.startsWith('role:') || k.startsWith('boss:') || k.startsWith('deanery:') || k.startsWith('seminarian:') || k === 'deacon:here') delete flags[k];
   flags[`role:${assignment.role}`] = true;
   flags[`parish:kind:${parish.kind}`] = true;
   if (parish.needsSpanish) flags['parish:needs_spanish'] = true;
@@ -117,7 +118,8 @@ export function startAssignment(state: GameState, rng: Rng): GameState {
     mode: { kind: 'clock' },
   };
   const arrival = takeSnapshot(started);
-  return arrival ? { ...started, parish: { ...parishState, arrival } } : started;
+  const settled = arrival ? { ...started, parish: { ...parishState, arrival } } : started;
+  return placeAmongPriests(settled, rng);
 }
 
 export function isPlayedWeek(state: GameState): boolean {
@@ -176,4 +178,29 @@ export function setDiscretionary(state: GameState, actionId: string, ap: number)
   const discretionary = { ...state.parish.routine.discretionary, [actionId]: Math.max(0, ap) };
   if (discretionary[actionId] === 0) delete discretionary[actionId];
   return { ...state, parish: { ...state.parish, routine: { ...state.parish.routine, discretionary } } };
+}
+
+/**
+ * The priests around him: the deanery forms from the map, the pastor a vicar
+ * serves under shows his temperament, and a deacon on the staff is noted.
+ */
+function placeAmongPriests(state: GameState, rng: Rng): GameState {
+  let next = formDeanery(state, rng.derive(`deanery:${state.assignment?.parishId}`));
+  const pid = state.assignment?.parishId;
+  if (state.assignment?.role === 'parochial_vicar' && pid) {
+    const pastor = Object.values(next.npcs).find((n) => n.status === 'active' && n.tags.includes(`pastor:${pid}`));
+    if (pastor) {
+      const known = pastor.tags.find((t) => t.startsWith('temperament:'))?.slice('temperament:'.length);
+      const temperament = known ?? rng.derive(`boss:${pid}`).weighted(['mentor', 'micromanager', 'absent'], (t) => ({ mentor: 3, micromanager: 3, absent: 2 })[t]!);
+      next = {
+        ...next,
+        npcs: { ...next.npcs, [pastor.id]: { ...pastor, tags: known ? pastor.tags : [...pastor.tags, `temperament:${temperament}`] } },
+        flags: { ...next.flags, [`boss:${temperament}`]: true },
+      };
+    }
+  }
+  if (pid && Object.values(next.npcs).some((n) => n.status === 'active' && n.tags.includes('deacon') && n.tags.includes(`parish:${pid}`))) {
+    next = { ...next, flags: { ...next.flags, 'deacon:here': true } };
+  }
+  return next;
 }

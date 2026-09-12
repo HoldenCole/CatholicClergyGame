@@ -48,10 +48,14 @@ export function refreshOpenings(state: GameState, rng: Rng): { state: GameState;
     if (!why) return p;
     npcs[pastor.id] = { ...pastor, status: why === 'died' ? 'dead' : why === 'retired' ? 'retired' : 'active', tags: why === 'moved' ? pastor.tags.filter((t) => !t.startsWith('pastor:')) : pastor.tags };
     lines.push(`${pastor.title} ${pastor.name.last} of ${p.name} has ${why === 'moved' ? 'been moved' : why}.`);
+    // A priest of the deanery may be said to want it.
+    const neighbors = (state.parish?.deanery?.priestIds ?? []).filter((id) => npcs[id]?.status === 'active' && id !== pastor.id);
+    const rival = neighbors.length && rng.chance(DEANERY_RIVAL_CHANCE) ? rng.pick([...neighbors].sort()) : undefined;
     openings.push({
       id: `open_${p.id}_${state.clock.week}`,
       kind: 'pastor',
       parishId: p.id,
+      ...(rival ? { deaneryRivalId: rival } : {}),
       urgency: Math.min(100, 40 + shortage * 10 + (why === 'died' ? 15 : 0)),
       needsSpanish: p.needsSpanish,
       needsAdmin: p.debt >= 1_000_000 || p.problem === 'staff_theft' || p.problem === 'lawsuit',
@@ -167,10 +171,20 @@ export function openingParish(state: GameState, opening: Opening): Parish | unde
   return opening.parishId ? state.world?.parishes.find((p) => p.id === opening.parishId) : undefined;
 }
 
+/** The chance an opening is one a neighbor is said to want. Invented. */
+const DEANERY_RIVAL_CHANCE = 0.35;
+
+/** Whether a priest of the deanery is after one of the open parishes. */
+export function deaneryRivalStands(state: GameState): boolean {
+  return state.openings.some((o) => o.deaneryRivalId && state.npcs[o.deaneryRivalId]?.status === 'active');
+}
+
 export function openingBlurb(state: GameState, opening: Opening): string {
   const p = openingParish(state, opening);
   if (!p) return opening.label;
-  return `${p.name}, ${p.place}: ${PROBLEM_LABEL[p.problem] ?? p.problem}`;
+  const rival = opening.deaneryRivalId ? state.npcs[opening.deaneryRivalId] : undefined;
+  const said = rival && rival.status === 'active' ? ` ${rival.title} ${rival.name.last}, of the deanery, is said to want it.` : '';
+  return `${p.name}, ${p.place}: ${PROBLEM_LABEL[p.problem] ?? p.problem}${said}`;
 }
 
 /** Asking costs a little each time past the first in a year: the chancery does not love a man who applies for everything. Invented. */

@@ -20,6 +20,19 @@ function giveEveryParishItsPatron(state: GameState): void {
   world.parishes = world.parishes.map((p) => (p.patronal ? p : { ...p, patronal: patronalOf(p.name, p.id) }));
 }
 
+/** Parishes saved before the map existed get a place on it, rolled from the seed. */
+function giveEveryParishItsPlace(state: GameState): void {
+  const world = state.world;
+  if (!world || world.parishes.every((p) => typeof p.x === 'number')) return;
+  world.parishes = world.parishes.map((p) => {
+    if (typeof p.x === 'number') return p;
+    const rng = createRng(`${state.seed}:place:${p.id}`);
+    const radius = p.cathedral ? 0 : p.terrain === 'urban' ? rng.float(3, 12) : p.terrain === 'latino' ? rng.float(4, 18) : p.terrain === 'suburban' ? rng.float(12, 30) : rng.float(28, 48);
+    const angle = rng.float(0, Math.PI * 2);
+    return { ...p, x: Math.round((50 + Math.cos(angle) * radius) * 10) / 10, y: Math.round((50 + Math.sin(angle) * radius) * 10) / 10 };
+  });
+}
+
 /** Dioceses saved before religious houses existed get theirs now, rolled from the seed so a reload rolls the same. */
 function giveEveryDioceseItsHouses(state: GameState): void {
   const world = state.world;
@@ -155,6 +168,8 @@ export function deserialize(json: string): SaveFile {
   if (isRecord(raw.previous)) giveEveryDioceseItsHouses(raw.previous.state as GameState);
   giveEveryParishItsPatron(raw.state as GameState);
   if (isRecord(raw.previous)) giveEveryParishItsPatron(raw.previous.state as GameState);
+  giveEveryParishItsPlace(raw.state as GameState);
+  if (isRecord(raw.previous)) giveEveryParishItsPlace(raw.previous.state as GameState);
   return {
     version: SAVE_VERSION,
     state: raw.state,

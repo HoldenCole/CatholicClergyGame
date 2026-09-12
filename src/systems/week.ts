@@ -9,6 +9,8 @@ import { liturgyWeek } from './liturgy';
 import { fundBonuses } from './spending';
 import { noteMover, trimMovers } from './movers';
 import { homilyWeek } from './homily';
+import { coverRelief } from './deanery';
+import { helpRelief } from './formed';
 import { FEAST_LABEL, feastsOfWeek } from '@/engine/feasts';
 import { noticeQuarter } from './notice';
 import { applyEffects } from '@/engine/effects';
@@ -125,7 +127,14 @@ export function obligationAp(key: ObligationKey, quality: Quality, relief = 0, s
 export function adminFloorFor(state: GameState): number {
   const role = state.assignment?.role ?? 'parochial_vicar';
   const admin = state.character?.stats.administration ?? 0;
-  return Math.max(0, WEEK.adminFloor[role] - Math.floor(admin / WEEK.adminPerFloorAp));
+  // A micromanaging pastor wants his reports.
+  const boss = role === 'parochial_vicar' && state.flags['boss:micromanager'] ? 1 : 0;
+  return Math.max(0, WEEK.adminFloor[role] - Math.floor(admin / WEEK.adminPerFloorAp)) + boss;
+}
+
+/** An absent pastor's Masses fall to his vicar. */
+export function bossLoad(state: GameState): number {
+  return state.assignment?.role === 'parochial_vicar' && state.flags['boss:absent'] ? 1 : 0;
 }
 
 export function seasonalLoad(state: GameState): number {
@@ -185,11 +194,12 @@ export interface Plan {
 export function planWeek(state: GameState): Plan {
   const parish = state.parish!;
   const budget = weekBudget(state);
-  const fixed = Math.max(0, seasonalLoad(state) + adminFloorFor(state) + commitmentAp(state) + (state.founding?.apPerWeek ?? 0) + (state.parish?.work?.apPerWeek ?? 0) + clubHours(state) - fundBonuses(state).relief);
+  // The men around him give blocks back below the floor: a neighbor's cover, a seminarian, a deacon, the vicar he formed.
+  const fixed = Math.max(0, seasonalLoad(state) + adminFloorFor(state) + commitmentAp(state) + (state.founding?.apPerWeek ?? 0) + (state.parish?.work?.apPerWeek ?? 0) + clubHours(state) + bossLoad(state) - fundBonuses(state).relief) - coverRelief(state) - helpRelief(state);
   const relief = groupRelief(state);
   const obligations = { ...parish.routine.obligations };
   const stats = state.character?.stats;
-  const mandatoryOf = () => fixed + OBLIGATION_KEYS.reduce((n, k) => n + obligationAp(k, obligations[k], (relief as Record<string, number>)[k] ?? 0, stats), 0);
+  const mandatoryOf = () => Math.max(0, fixed + OBLIGATION_KEYS.reduce((n, k) => n + obligationAp(k, obligations[k], (relief as Record<string, number>)[k] ?? 0, stats), 0));
 
   let neglected = false;
   let guard = 0;
@@ -294,7 +304,8 @@ export function resolveWeek(state: GameState, rng: Rng): { state: GameState; led
     const effective = Math.min(ap, def.maxAp);
     // A vicar's role is the people: his visits and confessions pay more, his desk work less.
     const vicar = state.assignment?.role === 'parochial_vicar';
-    const factor = vicar && ['visits', 'extra_confessions', 'groups'].includes(id) ? WEEK.vicarCare : vicar && id === 'admin' ? WEEK.vicarAdmin : 1;
+    // A mentor makes the people's work pay a little more; an absent pastor leaves the desk to his vicar, and it counts.
+    const factor = vicar && ['visits', 'extra_confessions', 'groups'].includes(id) ? WEEK.vicarCare + (state.flags['boss:mentor'] ? 0.1 : 0) : vicar && id === 'admin' ? (state.flags['boss:absent'] ? 1 : WEEK.vicarAdmin) : 1;
     next = applyEffects(next, scaled(def.effectsPerAp, effective * factor), {}, def.label);
     if (def.adminLoad) adminAp += effective;
     if (def.usesTheology) theologyUsed = true;

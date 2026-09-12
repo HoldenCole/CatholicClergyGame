@@ -1,0 +1,512 @@
+{
+  "_notes": "Formed pool: the men the priest forms. A summer seminarian (@seminarian) is at the parish June to August while the engine holds seminarian:here; years later the engine sets seminarian:returned when he comes back as a priest of the parish. A permanent deacon (@deacon) may be on staff: deacon:here. Ids prefixed fm_. Seminarian scenes: all three parish roles. Deacon scenes: pastor and administrator. The returned scene: pastor, once, and its gated choices read the flags the summer scenes wrote. Flags defined here: fm_stood_by_him, fm_gave_him_the_grave, fm_wrote_him_plainly, fm_pulled_him, fm_kept_the_table, fm_wrote_the_doubt, fm_gave_him_a_month, fm_backed_the_dre, fm_backed_the_seminarian, fm_put_them_together, fm_wrote_the_rector, fm_gave_him_wednesdays, fm_learned_the_group, fm_sent_him_home, fm_owned_the_sentence, fm_deflected_the_sentence, fm_told_him_the_rest, fm_table_remembered, fm_cut_the_deacons_hours, fm_asked_the_deacon, fm_paid_the_deacon, fm_heard_the_wife, fm_gave_deacon_sundays, fm_deacon_taught_you, fm_kept_deacon_at_one, fm_moved_deacon_to_feasts, fm_owned_the_missed_call, fm_let_it_pass, fm_deacon_first_on_card, fm_fixed_the_nights. fm_kitchen_table (a seminarian's doubt) is authored only and must not be skinned.",
+  "events": [
+    {
+      "id": "fm_first_funeral",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["competence", "friendship_vs_duty"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 14,
+      "suppressYears": 2,
+      "requires": [{ "type": "flag", "key": "seminarian:here", "value": true }],
+      "title": "His First Funeral",
+      "body": "{@seminarian} arrived in June with a duffel and a laptop and the particular confidence of a man who has finished second theology and has not yet stood next to a coffin. In the third week you give him the vigil service for a parishioner nobody knew well, an old man from the six-thirty Mass whose family came from out of state. He asked for it. He had the ritual open on the kitchen table for two days. Then he stood at the funeral home in front of thirty people and led the prayers too fast and mispronounced the man's name twice, and when the daughter began to cry during the psalm he stopped, entirely, and looked at the page, and the room waited eleven seconds for him to find it. He spoke for four minutes on the resurrection and did not once say the man's name correctly. The funeral director, who has seen fifty seminarians, walked him to the car afterward with a hand on his back. He is in the rectory kitchen now, not eating, with the ritual closed in front of him. The daughter has called {@secretary} to ask whether Father himself will be doing the Mass tomorrow. He heard the phone.",
+      "flavorPrompt": "A seminarian's first vigil service gone badly, a kitchen table afterward, a daughter's phone call he overheard.",
+      "choices": [
+        {
+          "id": "at_your_side",
+          "label": "Take the Mass yourself, and keep him at your side for all of it",
+          "outcome": "You say the Mass and preach it and say the man's name right, four times, and he serves as a seminarian serves, and stands with you at the grave. In the car back he says he does not know whether he can do this. You say no one knows at the first one, and that he went, which is what the daughter will remember. He goes to the next one.",
+          "effects": [
+            { "target": "relationship", "key": "@seminarian", "delta": 8 },
+            { "target": "reputation", "key": "parishioners", "delta": 3 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "flag", "key": "fm_stood_by_him", "value": true }
+          ]
+        },
+        {
+          "id": "give_him_the_grave",
+          "label": "Do the Mass, and give him the committal at the grave",
+          "outcome": "He does the committal, slowly, correctly, with the man's name right this time, and the daughter thanks him at the car, which she did not have to do. He walks back to the rectory instead of riding. That evening he asks you what you did at yours. You tell him, and it is worse than what he did, and he laughs for the first time in two days.",
+          "effects": [
+            { "target": "relationship", "key": "@seminarian", "delta": 10 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "flag", "key": "fm_gave_him_the_grave", "value": true }
+          ]
+        },
+        {
+          "id": "tell_him_plainly",
+          "label": "Tell him, at the table, exactly what went wrong and why",
+          "outcome": "You go through it: the pace, the name, the eleven seconds, the four minutes that were about doctrine because he was afraid of the person. He takes it without flinching, which is either character or shock. You write it in the summer evaluation, in the same words. He has the name right at the next one and the pace right by August, and looks at you differently.",
+          "effects": [
+            { "target": "relationship", "key": "@seminarian", "delta": -4 },
+            { "target": "stat", "key": "knowledge", "delta": 1 },
+            { "target": "stat", "key": "administration", "delta": 1 },
+            { "target": "honesty", "key": "", "delta": 1 },
+            { "target": "flag", "key": "fm_wrote_him_plainly", "value": true }
+          ]
+        },
+        {
+          "id": "pull_him",
+          "label": "Keep him off funerals for the rest of the summer",
+          "outcome": "You tell him gently that funerals can wait for the diaconate and put him on the school and the hospital instead, and he is relieved and ashamed in equal parts. The daughter is satisfied. He goes back to the seminary in August with one funeral behind him instead of six, and a story he tells about you for years, not kindly.",
+          "effects": [
+            { "target": "relationship", "key": "@seminarian", "delta": -8 },
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "flag", "key": "fm_pulled_him", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fm_kitchen_table",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["doubt", "friendship_vs_duty"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 12,
+      "suppressYears": 2,
+      "requires": [{ "type": "flag", "key": "seminarian:here", "value": true }],
+      "title": "The Kitchen Table",
+      "body": "It is past eleven on a Thursday in July and {@seminarian} is at the kitchen table with a glass of water he has not touched, and he has said the thing, and now neither of you is saying anything. He wants to leave. Not the parish; the seminary. He has thought about it since Lent, he says, and the summer was supposed to settle it, and it has, though not in the direction the vocation director hoped. He is not in love with anyone. He is not in trouble. He has simply stood at the altar beside you for six weeks and watched you do the thing, and has not once, he says, felt that it was his. He says this carefully, because he knows you will write an evaluation in August, and he knows the vocation director will read it, and he knows that what he has just said, if it is in the evaluation, ends the question for him whether he is ready to have it ended or not. He has told no one else. He is telling you because you are here and it is late. He asks what you think. Then, before you can answer, he asks whether you will write it down.",
+      "flavorPrompt": "Sensitive: authored only. A seminarian at a rectory table at midnight who wants to leave, and a priest who must write his evaluation in August.",
+      "choices": [
+        {
+          "id": "stays_at_the_table",
+          "label": "Tell him it stays at this table, and talk until two",
+          "outcome": "You say the evaluation will say what you saw at the altar and in the parish and nothing about this table, and then you talk, for a long time, about the year you nearly went, and he listens the way a man listens who has not been told a true thing by a priest in a while. He goes back in August. Whether he stays is his. He writes at Christmas.",
+          "effects": [
+            { "target": "relationship", "key": "@seminarian", "delta": 12 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "honesty", "key": "", "delta": -1 },
+            { "target": "reputation", "key": "chancery", "delta": -1 },
+            { "target": "flag", "key": "fm_kept_the_table", "value": true }
+          ]
+        },
+        {
+          "id": "you_must_write_it",
+          "label": "Tell him you will have to put it in the evaluation, and why",
+          "outcome": "You say the vocation director sends men to parishes to learn exactly this, that a formation which does not know what he told you tonight is not formation, and that you will write it kindly and truly and he should tell his director first, himself, before your letter arrives. He is angry and then is not. He tells the director. He leaves in October, well, with a letter from you in his file that he asks for a copy of.",
+          "effects": [
+            { "target": "honesty", "key": "", "delta": 2 },
+            { "target": "reputation", "key": "chancery", "delta": 2 },
+            { "target": "relationship", "key": "@seminarian", "delta": -4 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "flag", "key": "fm_wrote_the_doubt", "value": true }
+          ]
+        },
+        {
+          "id": "a_month_of_office",
+          "label": "Tell him to say nothing to anyone for a month, and to pray the Office with you every morning",
+          "outcome": "You do not answer the question. You say the Church takes years to decide these things because they take years, and that he will sit in the chapel with you at six every morning until August and then see. He does. Some mornings he does not pray and simply sits. At the end of August he does not know, which is more honest than either answer, and you write that.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 2 },
+            { "target": "relationship", "key": "@seminarian", "delta": 6 },
+            { "target": "stat", "key": "theology", "delta": 1 },
+            { "target": "flag", "key": "fm_gave_him_a_month", "value": true }
+          ]
+        },
+        {
+          "id": "ask_what_he_saw",
+          "label": "Ask him what, exactly, he watched you do that was not his",
+          "requires": [{ "type": "stat", "key": "charisma", "op": ">=", "value": 45 }],
+          "outcome": "He tells you, and it is precise, and it is about you and not about him: something in how you are with the sick that he cannot imagine being, and something in how you are alone in the rectory that he cannot imagine bearing. You have never heard yourself described. You say both were learned. He looks at you as though that had not occurred to him. It goes in no evaluation.",
+          "effects": [
+            { "target": "relationship", "key": "@seminarian", "delta": 8 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "stat", "key": "knowledge", "delta": 1 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "flag", "key": "fm_kept_the_table", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fm_seminarian_dre",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["loyalty_vs_honesty", "friendship_vs_duty"],
+      "severity": "NOTABLE",
+      "category": "admin",
+      "baseWeight": 12,
+      "suppressYears": 2,
+      "requires": [{ "type": "flag", "key": "seminarian:here", "value": true }],
+      "title": "The DRE's Opinion",
+      "body": "{@dre} closes your office door, which she does not do, and says she will be brief, and is not. {@seminarian} has been at {parish} five weeks. In that time he has corrected two of her catechists in front of their classes on a point of sacramental theology on which, she notes, he was right; he has told the eighth-grade confirmation class that their parents are wrong about a thing their parents are, in fact, wrong about; and he has asked her, in the hall, in front of the office volunteers, whether she has a degree in theology. She does not. She has run religious education for eleven years and sixty children a year go through it and come out knowing the faith, and she has buried two catechists and trained thirty, and she would like you to know that she has met his type before, and that the last one is now a pastor two counties over who calls his DRE \"the help.\" She is not asking you to send him home. She is asking whether the diocese is still sending men like this, and whether you intend to write to the seminary about it, and whether you think she is being unreasonable, and she would like an answer to all three. He is in the next room, teaching, well.",
+      "flavorPrompt": "A DRE with the door closed, a seminarian who is right and insufferable, a priest asked three questions.",
+      "choices": [
+        {
+          "id": "she_runs_it",
+          "label": "Tell him, today, that {@dre} runs the program and he will treat her as such",
+          "outcome": "You do it in the office with the door open. He is stung and says he only said what was true, and you say that being right in a hallway is not a charism. He apologizes to her, stiffly, then better. She accepts it with the face of a woman who has accepted a great many apologies. Your August evaluation mentions it, briefly, under human formation.",
+          "effects": [
+            { "target": "relationship", "key": "@dre", "delta": 8 },
+            { "target": "relationship", "key": "@seminarian", "delta": -4 },
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "stat", "key": "administration", "delta": 1 },
+            { "target": "flag", "key": "fm_backed_the_dre", "value": true }
+          ]
+        },
+        {
+          "id": "he_was_right",
+          "label": "Tell {@dre} he was right on the theology and that the parish can bear a little sharpness",
+          "outcome": "She says nothing for a moment and then says thank you for your time, and goes back to her office, and the door stays closed the rest of the summer. He hears that you backed him and is worse for a week and then, on his own, better. She trains the catechists as she always has. In September she asks whether you plan to have a seminarian next summer, and you understand the question.",
+          "effects": [
+            { "target": "relationship", "key": "@seminarian", "delta": 8 },
+            { "target": "relationship", "key": "@dre", "delta": -10 },
+            { "target": "stat", "key": "theology", "delta": 1 },
+            { "target": "reputation", "key": "traditional_bloc", "delta": 2 },
+            { "target": "reputation", "key": "progressive_bloc", "delta": -3 },
+            { "target": "flag", "key": "fm_backed_the_seminarian", "value": true }
+          ],
+          "volume": "private",
+          "positionTopic": "authority",
+          "positionValue": -30
+        },
+        {
+          "id": "a_room_and_a_syllabus",
+          "label": "Put the two of them in a room with the confirmation syllabus and leave",
+          "outcome": "You give them the eighth-grade syllabus and two hours and tell them to fix it together, and you leave the door open and go to the hospital. When you come back the syllabus is better and both of them are tired, and neither is sure who won, and she says he knows more than she thought and he says she teaches better than he does. It holds until August.",
+          "effects": [
+            { "target": "relationship", "key": "@dre", "delta": 4 },
+            { "target": "relationship", "key": "@seminarian", "delta": 4 },
+            { "target": "stat", "key": "administration", "delta": 2 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "flag", "key": "fm_put_them_together", "value": true }
+          ]
+        },
+        {
+          "id": "write_the_rector",
+          "label": "Write to the seminary now, not in August, and tell her you have",
+          "outcome": "You write the rector a page about a man who is right and does not know when to be, and you tell {@dre} you have written it and what it says. She is satisfied. The rector calls, which rectors do not do, and asks whether you want him withdrawn, and you say no, and the rector says something to him, and he is careful for the rest of the summer and cool with you for longer.",
+          "effects": [
+            { "target": "relationship", "key": "@dre", "delta": 6 },
+            { "target": "relationship", "key": "@seminarian", "delta": -8 },
+            { "target": "reputation", "key": "chancery", "delta": 2 },
+            { "target": "honesty", "key": "", "delta": 1 },
+            { "target": "flag", "key": "fm_wrote_the_rector", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fm_youth_group",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["ambition_vs_integrity", "competence"],
+      "severity": "NOTABLE",
+      "category": "group",
+      "baseWeight": 12,
+      "suppressYears": 2,
+      "requires": [{ "type": "flag", "key": "seminarian:here", "value": true }],
+      "bias": [{ "when": { "type": "parish", "key": "generational", "value": "young" }, "multiplier": 1.4 }],
+      "title": "Wednesday Nights",
+      "body": "The youth group at {parish} has been eleven kids on a Wednesday night for as long as anyone remembers, and the eleven came for the pizza. You gave it a year of Wednesdays yourself and it was fourteen, then nine. Then {@seminarian} took it in June because you gave him what was easy to give, and it is July and there are forty of them. He learned their names the first night. He plays a sport with them in the lot before it starts and does not talk about God until the third week and then talks about God as though they had asked. Parents who have not been to Mass since their own confirmation are dropping their children off and staying in the car and then, some of them, coming in. {@dre} says confirmation registration is up. {@secretary} has started calling it \"his group.\" On Wednesday you walk past the hall on the way to the hospital and forty teenagers are quiet, listening to a man of twenty-five say something you have said, better, from the pulpit, to no effect at all. He goes back to the seminary in August. He asks you whether there is any way he could keep coming up on Wednesdays during the year. It is a two-hour drive. He means it.",
+      "flavorPrompt": "A parish youth group that a seminarian has quietly quadrupled, a priest watching from the hallway.",
+      "choices": [
+        {
+          "id": "wednesdays_are_his",
+          "label": "Tell him yes, Wednesdays are his, and clear it with the seminary",
+          "outcome": "The rector agrees, with a limit of twice a month. He drives up. The group holds at thirty through the winter, and some of the parents stay at Mass, and it is known in the deanery that {parish} has a youth group, and it is known why. You are the pastor of a thing you did not build, which is most of what a pastor is.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 5 },
+            { "target": "relationship", "key": "@seminarian", "delta": 10 },
+            { "target": "reputation", "key": "chancery", "delta": 2 },
+            { "target": "stat", "key": "administration", "delta": 1 },
+            { "target": "flag", "key": "fm_gave_him_wednesdays", "value": true }
+          ]
+        },
+        {
+          "id": "show_me",
+          "label": "Ask him to show you what he does before he goes",
+          "outcome": "He is embarrassed and then is not, and shows you: the names, the lot, the waiting. You try it in September. It is twenty-two in October and eighteen by Lent, which is twice what it was and half what it was with him, and the kids are kind about it, which is worse. You are better at it than you were.",
+          "effects": [
+            { "target": "stat", "key": "charisma", "delta": 2 },
+            { "target": "reputation", "key": "parishioners", "delta": 3 },
+            { "target": "relationship", "key": "@seminarian", "delta": 6 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "flag", "key": "fm_learned_the_group", "value": true }
+          ]
+        },
+        {
+          "id": "hire_a_coordinator",
+          "label": "Hand the group to {@dre} and a paid coordinator, and let him go",
+          "requires": [{ "type": "any", "inner": [{ "type": "role", "value": "pastor" }, { "type": "role", "value": "administrator" }] }],
+          "outcome": "You say the parish cannot depend on a man two hours away, and you put a line in the budget for a youth coordinator and give {@dre} the Wednesday. It falls to twenty by Advent and stays there, which is a program. He writes twice, and then does not, and comes back at Christmas to say hello to the kids and looks at you across the hall with something he is too young to hide.",
+          "effects": [
+            { "target": "stat", "key": "administration", "delta": 2 },
+            { "target": "reputation", "key": "parishioners", "delta": 1 },
+            { "target": "relationship", "key": "@seminarian", "delta": -8 },
+            { "target": "relationship", "key": "@dre", "delta": 4 },
+            { "target": "money", "key": "cash", "delta": -4000 },
+            { "target": "flag", "key": "fm_sent_him_home", "value": true }
+          ]
+        },
+        {
+          "id": "summers_end",
+          "label": "Tell him, kindly, that it was a summer, and summers end",
+          "outcome": "You say it well: that a parish is built by the man who stays and not the man who visits, that the group is the parish's and not his, and that he should learn to leave things. He takes it as wisdom, because it sounds like wisdom. The group is fourteen by October. Years later he is a pastor and says it to a seminarian of his own, and it is still half true.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "relationship", "key": "@seminarian", "delta": 2 },
+            { "target": "reputation", "key": "parishioners", "delta": -3 },
+            { "target": "stat", "key": "knowledge", "delta": 1 },
+            { "target": "flag", "key": "fm_sent_him_home", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fm_returned_vicar",
+      "phase": ["pastor"],
+      "pressure": ["loyalty_vs_honesty", "friendship_vs_duty"],
+      "severity": "NOTABLE",
+      "category": "assignment",
+      "baseWeight": 16,
+      "suppressYears": 2,
+      "once": true,
+      "requires": [
+        { "type": "flag", "key": "seminarian:returned", "value": true },
+        { "type": "role", "value": "pastor" }
+      ],
+      "title": "The Man You Wrote About",
+      "body": "The letter of appointment came in May and the name on it stopped you: {@seminarian}, ordained now, assigned as parochial vicar to {parish} from the first of July. The vicar for clergy either has a long memory or a short one. He arrives on a Tuesday with two bags and a better car than yours and shakes your hand in the driveway and says it is good to be back, and it is clear in the first ten minutes that he has read what you wrote about him. Not the whole file; the seminary does not show a man his file. But a director once read him a sentence from it, in a meeting about something else, and he has carried the sentence for years, and he quotes it to you now in the kitchen, lightly, the way a man quotes a thing that is not light. He is not angry. He is better than he was, and he knows it, and he is also the priest who will now say the eight o'clock and take the hospital and preach every third Sunday under your name, and he would like to know, before either of you unpacks, whether the man who wrote that sentence is the man he is about to live with.",
+      "flavorPrompt": "A seminarian returned as a priest of the parish, quoting one line of the evaluation his pastor wrote years ago.",
+      "choices": [
+        {
+          "id": "own_the_sentence",
+          "label": "Say you wrote it, it was true then, and ask what he thinks now",
+          "outcome": "He thinks about it at the kitchen table, the same one, and says it was true then and is less true now, and that he would rather have had it written than not. You say the same. He unpacks. He is a good vicar and a better one than you were, and he tells you so at Christmas, and you write his evaluation that year with more care than any before it.",
+          "effects": [
+            { "target": "relationship", "key": "@seminarian", "delta": 10 },
+            { "target": "honesty", "key": "", "delta": 2 },
+            { "target": "reputation", "key": "brother_priests", "delta": 2 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "flag", "key": "fm_owned_the_sentence", "value": true }
+          ]
+        },
+        {
+          "id": "blame_the_director",
+          "label": "Say the director should never have read it to him, and leave it there",
+          "outcome": "It is true and it is the wrong thing to say first, and you both know it. He nods and carries the bags up. He is correct with you, and competent, and it is a year before he sits at the kitchen table after ten. When he does, he asks the question again, and you answer it properly the second time.",
+          "effects": [
+            { "target": "relationship", "key": "@seminarian", "delta": -4 },
+            { "target": "reputation", "key": "chancery", "delta": 1 },
+            { "target": "stat", "key": "administration", "delta": 1 },
+            { "target": "flag", "key": "fm_deflected_the_sentence", "value": true }
+          ]
+        },
+        {
+          "id": "the_rest_of_the_paragraph",
+          "label": "Tell him the sentence was in a paragraph, and what the paragraph said",
+          "hidden": true,
+          "requires": [{ "type": "flag", "key": "fm_wrote_him_plainly", "value": true }],
+          "outcome": "You tell him what the rest of the paragraph said, which was that the man who stopped for eleven seconds at his first vigil was a man who would learn, and had, and would be a priest people asked for. He has never heard that part. He sits down. It changes what the sentence was, and the year that follows is the easiest you will have with a vicar.",
+          "effects": [
+            { "target": "relationship", "key": "@seminarian", "delta": 12 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "honesty", "key": "", "delta": 1 },
+            { "target": "flag", "key": "fm_told_him_the_rest", "value": true }
+          ]
+        },
+        {
+          "id": "the_table_held",
+          "label": "Say that what he told you at this table stayed at it, and still does",
+          "hidden": true,
+          "requires": [{ "type": "flag", "key": "fm_kept_the_table", "value": true }],
+          "outcome": "He goes still. He had not been sure you remembered. He says that night is why he stayed, and that he has never told the director what he told you, and that he has wondered for six years whether you did. You say no. He unpacks. There is a thing between you now that no evaluation could have made, and a vicar who would follow you into a fire.",
+          "effects": [
+            { "target": "relationship", "key": "@seminarian", "delta": 12 },
+            { "target": "stat", "key": "piety", "delta": 2 },
+            { "target": "reputation", "key": "brother_priests", "delta": 2 },
+            { "target": "flag", "key": "fm_table_remembered", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fm_deacons_wife",
+      "phase": ["pastor", "administrator"],
+      "pressure": ["friendship_vs_duty", "money"],
+      "severity": "NOTABLE",
+      "category": "admin",
+      "baseWeight": 12,
+      "suppressYears": 2,
+      "requires": [{ "type": "flag", "key": "deacon:here", "value": true }],
+      "title": "Her Husband's Hours",
+      "body": "{@deacon}'s wife is at the rectory door on a Saturday morning, which she has never been, and she has not come to see you as a parishioner. She is polite. She has a list. Her husband works forty-four hours a week at the plant and then serves the Saturday five and two Sunday Masses, does the baptism preparation on Tuesday, the marriage preparation on Thursday, the hospital on Wednesday, three funerals a month when you cannot, and the weekly holy hour, and is at every parish meeting because someone once said the deacon should be. He is sixty-one. He had a thing with his heart in March that he did not tell you about, because he did not want to be taken off the schedule. He is not paid. He does not want to be paid. He wants to be a deacon, and she married a man who wanted to be a deacon, and she gave the consent the bishop asked of her before his ordination, and she meant it. She is not asking you to reduce his hours. She is asking you whether you know what they are, because she has come to believe you do not, and she would like to hear you say them. She stands in the doorway with the list.",
+      "flavorPrompt": "A deacon's wife at the rectory door with a list of his hours, and a pastor who does not know them.",
+      "choices": [
+        {
+          "id": "cut_a_third",
+          "label": "Take the list, and cut a third of it that afternoon",
+          "outcome": "You read the list in front of her and it is worse than she said. You take the Thursday and the Wednesday hospital and two of the three funerals back yourself, and tell him Monday, and he argues, and loses, because his wife is behind you. He is hurt for a month and then is not. He is at Mass on Sunday with a color in his face you had not noticed was missing.",
+          "effects": [
+            { "target": "relationship", "key": "@deacon", "delta": 4 },
+            { "target": "reputation", "key": "parishioners", "delta": 3 },
+            { "target": "stat", "key": "administration", "delta": 1 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "flag", "key": "fm_cut_the_deacons_hours", "value": true }
+          ]
+        },
+        {
+          "id": "between_you_and_him",
+          "label": "Say this is between you and the deacon, and take it to him",
+          "outcome": "You say, kindly, that you will speak to her husband, and she says that is what she was afraid of, and goes. You do speak to him. He says he is fine. He is not, and he goes on being not fine, at the same hours, because you asked the wrong person the question and he gave you the answer he gives. She does not come to the door again.",
+          "effects": [
+            { "target": "relationship", "key": "@deacon", "delta": 2 },
+            { "target": "reputation", "key": "parishioners", "delta": -2 },
+            { "target": "flag", "key": "fm_asked_the_deacon", "value": true }
+          ]
+        },
+        {
+          "id": "stipend_and_schedule",
+          "label": "Put a stipend in the budget and tell him it comes with a schedule",
+          "outcome": "You find the money and you make it a job: twenty hours, listed, with a day off that is not Sunday. He takes it badly; he did not want to be staff. His wife takes it well. The finance council asks a question and you answer it. Six months later he says the schedule was the thing, not the money, and gives the money to the St. Vincent de Paul Society.",
+          "effects": [
+            { "target": "relationship", "key": "@deacon", "delta": 6 },
+            { "target": "stat", "key": "administration", "delta": 2 },
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "money", "key": "cash", "delta": -6000 },
+            { "target": "flag", "key": "fm_paid_the_deacon", "value": true }
+          ]
+        },
+        {
+          "id": "read_it_back",
+          "label": "Ask her to come in, and read her the list back",
+          "outcome": "You sit her down and you say each line aloud, and at the fourth line you stop, because you had not known about the Thursday, and she watches you not know it. You say the thing she came for, which is that you had not known. She says she thought not. The schedule changes over the next month without a meeting, quietly, and he does not learn that she came.",
+          "effects": [
+            { "target": "relationship", "key": "@deacon", "delta": 6 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "honesty", "key": "", "delta": 1 },
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "flag", "key": "fm_heard_the_wife", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fm_deacon_preaches",
+      "phase": ["pastor", "administrator"],
+      "pressure": ["ambition_vs_integrity", "competence"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 12,
+      "suppressYears": 2,
+      "requires": [{ "type": "flag", "key": "deacon:here", "value": true }],
+      "title": "The Deacon's Sunday",
+      "body": "A deacon preaches at Mass with the pastor's permission, and {@deacon} has had yours one Sunday a month since before you came. This month he preached on the Gospel for eight minutes, from the plant floor and the hospital and thirty-one years of a marriage, and the church was silent in the way a church is when it has forgotten to be. At the door afterward the people said the thing they say to you, and said it differently. On Monday {@secretary} passed along, neutrally, that three people had asked whether the deacon might preach more often. He knows. He is not vain about it; he has a job and a wife and no ambition that a deacon can have, and he would preach every Sunday or never, as you decide. But he knows, and he looks at you at the Tuesday staff meeting with the level, slightly apologetic face of a man who is better at the one thing the parish will remember you by. Your homily this Sunday was fine. You have been preaching fine for a long time. He preaches once a month and it is not fine, it is something else, and the parish has noticed, and now so have you.",
+      "flavorPrompt": "A deacon who preaches better than the pastor and knows it, a staff meeting after, a pastor's fine homily.",
+      "choices": [
+        {
+          "id": "two_sundays",
+          "label": "Give him two Sundays a month",
+          "outcome": "You say it at the staff meeting, in front of everyone, and he is surprised and then careful, and thanks you. Attendance on his Sundays is up. The deanery hears that {parish} has a deacon who preaches. The people love you for it, in the way of a parish that has noticed its pastor is not jealous, and your own homilies get better, because they have to.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 5 },
+            { "target": "relationship", "key": "@deacon", "delta": 10 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "reputation", "key": "brother_priests", "delta": 1 },
+            { "target": "reputation", "key": "progressive_bloc", "delta": 2 },
+            { "target": "flag", "key": "fm_gave_deacon_sundays", "value": true }
+          ]
+        },
+        {
+          "id": "thursdays_at_the_table",
+          "label": "Ask him, privately, to sit with you on Thursdays and read your homily",
+          "outcome": "He is embarrassed and agrees. Every Thursday for a year he reads your draft at the kitchen table and says where it stops being about people, and every Thursday he is right. By Easter your homilies are not fine. It is the best formation you will get after the seminary and it came from a man who runs a shift at the plant.",
+          "effects": [
+            { "target": "stat", "key": "charisma", "delta": 2 },
+            { "target": "stat", "key": "theology", "delta": 1 },
+            { "target": "relationship", "key": "@deacon", "delta": 8 },
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "flag", "key": "fm_deacon_taught_you", "value": true }
+          ]
+        },
+        {
+          "id": "keep_it_at_one",
+          "label": "Keep it at one Sunday a month and say nothing",
+          "outcome": "You do nothing, which is a decision. He preaches once a month and the church goes quiet once a month, and the people stop asking because {@secretary} has told them the answer. He is not hurt; he did not expect otherwise. You are the pastor and you preach fine, and the thing the parish will remember you by is decided.",
+          "effects": [
+            { "target": "relationship", "key": "@deacon", "delta": -2 },
+            { "target": "reputation", "key": "parishioners", "delta": -2 },
+            { "target": "stat", "key": "administration", "delta": 1 },
+            { "target": "flag", "key": "fm_kept_deacon_at_one", "value": true }
+          ]
+        },
+        {
+          "id": "feasts_only",
+          "label": "Move him to feast days and special occasions",
+          "outcome": "You say it is about the liturgical rhythm, and it is, partly. He accepts it with the face of a man who understands exactly what has happened and will never say so. He preaches at Christmas and it is the best homily of the year, and everyone says so, and that is the last time anyone at the parish asks you about it.",
+          "effects": [
+            { "target": "relationship", "key": "@deacon", "delta": -8 },
+            { "target": "reputation", "key": "parishioners", "delta": -3 },
+            { "target": "reputation", "key": "traditional_bloc", "delta": 2 },
+            { "target": "flag", "key": "fm_moved_deacon_to_feasts", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fm_deacon_hospital",
+      "phase": ["pastor", "administrator"],
+      "pressure": ["body_vs_vow", "loyalty_vs_honesty"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 12,
+      "suppressYears": 2,
+      "requires": [{ "type": "flag", "key": "deacon:here", "value": true }],
+      "title": "Two in the Morning",
+      "body": "The call came at ten past two. The hospital rang the rectory line and the rectory line rang in the hall, and you did not hear it, because you had been up until one with the finance council's numbers and had turned off the bedroom extension in a moment you do not remember. The hospital called {@deacon} next, because his number is second on the card. He got up, and dressed, and drove the twenty minutes, and sat with a family whose father was dying, and led the prayers, and stayed until it was over at a quarter to five, and drove home, and was at the plant at seven. He could not anoint. A deacon cannot. He told the family that Father would come in the morning, and in the morning you did, and the man had died at four, unanointed, with his family and the deacon saying the Rosary at the bed. The daughter thanked you. She did not know what a deacon cannot do. {@deacon} has said nothing about it. He sent a text at five: \"Mr. Alvarez died at four. Family is fine. Sorry we couldn't reach you.\" Sorry we couldn't reach you. He is at the Saturday five as usual. The bedroom extension is still off.",
+      "flavorPrompt": "A hospital call the pastor slept through, a deacon who went and could not anoint, a text that says sorry.",
+      "choices": [
+        {
+          "id": "say_it_plainly",
+          "label": "Go to him, and say it plainly: you turned off the phone",
+          "outcome": "You tell him in the sacristy before the five. He listens and says he assumed something like that, and that it happens, and you say it does not happen, not this, and he nods and does not argue with you, which is his kindness. You turn the extension on. You learn from the nursing home, and tell the family in a visit that is not about that, that the man was anointed there in March. He was.",
+          "effects": [
+            { "target": "relationship", "key": "@deacon", "delta": 8 },
+            { "target": "honesty", "key": "", "delta": 2 },
+            { "target": "stat", "key": "piety", "delta": 2 },
+            { "target": "reputation", "key": "parishioners", "delta": 1 },
+            { "target": "flag", "key": "fm_owned_the_missed_call", "value": true }
+          ]
+        },
+        {
+          "id": "thank_him_only",
+          "label": "Thank him for going and say nothing about the phone",
+          "outcome": "You thank him at the staff meeting, warmly, and it is deserved. He accepts it. The extension goes back on that night and no one ever knows why it was off, including, after a while, you. The text sits in your phone. You do not delete it and you do not answer it, and it is there, months later, when you scroll past it looking for something else.",
+          "effects": [
+            { "target": "relationship", "key": "@deacon", "delta": 2 },
+            { "target": "honesty", "key": "", "delta": -1 },
+            { "target": "stat", "key": "administration", "delta": 1 },
+            { "target": "flag", "key": "fm_let_it_pass", "value": true }
+          ]
+        },
+        {
+          "id": "his_number_first",
+          "label": "Put his number first on the hospital card, and tell him why",
+          "outcome": "You say it plainly: he answers and you did not, and the card should say who answers. He objects that he cannot anoint and you say the card is for who comes, and that you will be second and awake. It is an odd arrangement and the hospital chaplain raises an eyebrow. It works. He is called four times that year and you are called four times after him, and you go.",
+          "effects": [
+            { "target": "relationship", "key": "@deacon", "delta": 6 },
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "stat", "key": "administration", "delta": 1 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "flag", "key": "fm_deacon_first_on_card", "value": true }
+          ]
+        },
+        {
+          "id": "fix_the_nights",
+          "label": "Take the finance work out of the nights and put the phone by the bed",
+          "outcome": "You say nothing to him beyond thanks, and you change the thing that caused it: the numbers get done at four in the afternoon, the phone is on the nightstand, the extension is never off again. He notices that you are at the hospital at three the next time and says nothing. Between you it is settled, the way men who work together settle things, by the next time going right.",
+          "effects": [
+            { "target": "stat", "key": "administration", "delta": 1 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "relationship", "key": "@deacon", "delta": 4 },
+            { "target": "flag", "key": "fm_fixed_the_nights", "value": true }
+          ]
+        }
+      ]
+    }
+  ]
+}

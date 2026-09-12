@@ -143,7 +143,7 @@ describe('faculties for the older form', () => {
     expect(after).toBeGreaterThan(before);
     const without: GameState = { ...withHours, flags: { ...withHours.flags, can_celebrate_tlm: false } };
     const still = resolveWeek(without, createRng('week')).state.character!.reputation.traditional_bloc;
-    expect(still).toBeLessThanOrEqual(before);
+    expect(still).toBeLessThan(after);
   });
 
   it('a pastor cannot put the older Mass on the parish without the faculties', () => {

@@ -15,6 +15,8 @@ import { spendingWeek } from '@/systems/spending';
 import { resolvePermissions } from '@/systems/decor';
 import { awayWeek, retreatYearEnd } from '@/systems/away';
 import { staffWeek } from '@/systems/staff';
+import { deaneryWeek } from '@/systems/deanery';
+import { returnOfTheFormed, seminarianWeek, summerSeminarian } from '@/systems/formed';
 import { isYearStart } from './time';
 import { seminaryWeek } from '@/systems/seminaryWeek';
 import { studyWeek } from '@/systems/studyWeek';
@@ -184,6 +186,18 @@ export function parishWeekHook(deps: EventDeps): WeekHook {
     const staffed = staffWeek(next, rng.derive(`staff:${next.clock.week}`));
     next = staffed.state;
     for (const line of staffed.lines) next = addDigestLine(next, line);
+    next = deaneryWeek(next);
+    const summer = summerSeminarian(next, rng.derive(`seminarian:${next.clock.week}`));
+    next = summer.state;
+    if (summer.line) next = addDigestLine(next, summer.line);
+    const sem = seminarianWeek(next);
+    next = sem.state;
+    if (sem.line) next = addDigestLine(next, sem.line);
+    if (isYearStart(next.clock)) {
+      const back = returnOfTheFormed(next, rng.derive(`returned:${next.clock.week}`));
+      next = back.state;
+      if (back.line) next = addDigestLine(next, back.line);
+    }
     const project = projectWeek(next);
     next = project.state;
     if (project.line) next = addDigestLine(next, project.line);

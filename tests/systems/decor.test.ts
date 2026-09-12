@@ -45,8 +45,9 @@ describe('systems/decor', () => {
 
   it('a church change costs cash and provokes a reaction sized by the gap', () => {
     const base = parishState('react');
-    const pastor: GameState = { ...base, assignment: { ...base.assignment!, role: 'pastor' }, parish: { ...base.parish!, finance: { ...base.parish!.finance, cash: 200000 } } };
-    const parishId = pastor.parish!.parishId;
+    const parishId = base.parish!.parishId;
+    // Start from no rail, whatever the parish rolled, so the change is a change.
+    const pastor: GameState = { ...base, assignment: { ...base.assignment!, role: 'pastor' }, parish: { ...base.parish!, finance: { ...base.parish!.finance, cash: 200000 } }, decor: { ...base.decor, [`parish:${parishId}:church`]: { altar_rail: 'rail_none' } } };
     const trad: GameState = { ...pastor, world: { ...pastor.world!, parishes: pastor.world!.parishes.map((p) => (p.id === parishId ? { ...p, alignment: -60 } : p)) } };
     const prog: GameState = { ...pastor, world: { ...pastor.world!, parishes: pastor.world!.parishes.map((p) => (p.id === parishId ? { ...p, alignment: 60 } : p)) } };
     const a = furnish(trad, 'church', 'rail_marble');
