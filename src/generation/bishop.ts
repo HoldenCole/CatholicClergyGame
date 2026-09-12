@@ -99,12 +99,16 @@ export function rollLiturgicalPolicy(rng: Rng, alignment: number, priorities: re
   const tabernacle: StanceWeights = { free: loose ? 3 : 1, by_permission: 8, forbidden: 0 };
   // The building commission reviews any real renovation.
   const renovation: StanceWeights = { free: loose ? 3 : 1, by_permission: 9, forbidden: 0 };
+  const latinMass = stance(rng, latin);
+  // Faculties for a priest to celebrate the older form: the same norms, asked for by the man rather than the parish. A bishop who shuts the parish Mass rarely opens the faculty.
+  const faculty: StanceWeights = latinMass === 'forbidden' ? { free: 0, by_permission: 2, forbidden: 8 } : { free: 0, by_permission: 8, forbidden: 1 };
   return {
     ad_orientem: stance(rng, adOrientem),
-    latin_mass: stance(rng, latin),
+    latin_mass: latinMass,
     altar_rail: stance(rng, rail),
     tabernacle: stance(rng, tabernacle),
     renovation: stance(rng, renovation),
+    older_form_faculty: stance(rng, faculty),
   };
 }
 

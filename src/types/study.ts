@@ -24,7 +24,7 @@ export interface StudyProgramDef {
   place?: { label: string; dials: { id: string; label: string; low: string; high: string }[] };
 }
 
-export type StudyLocation = 'desk' | 'chapel' | 'library' | 'hospital' | 'parish' | 'basilica' | 'college_office' | 'curia' | 'piazza' | 'language' | 'field';
+export type StudyLocation = 'desk' | 'chapel' | 'library' | 'hospital' | 'parish' | 'basilica' | 'college_office' | 'curia' | 'piazza' | 'language' | 'field' | 'monastery';
 
 /** What a priest-student does with a free hour. content/study/activities.json */
 export interface StudyActivityDef {

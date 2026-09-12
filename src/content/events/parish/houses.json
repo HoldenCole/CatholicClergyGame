@@ -1,0 +1,209 @@
+{
+  "_notes": "The chapel and the monastery (playtesting): scenes that come to a pastor who has joined forces with a religious house or set up perpetual adoration, and to any priest who holds faculties for the older form. Gated on the flags those spends and the chancery's letter write.",
+  "events": [
+    {
+      "id": "ho_abbots_favor",
+      "phase": ["pastor", "administrator"],
+      "pressure": ["friendship_vs_duty", "money"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 12,
+      "suppressYears": 3,
+      "once": true,
+      "requires": [{ "type": "flag", "key": "partner:house", "value": true }, { "type": "role", "value": "pastor" }],
+      "title": "The Superior's Favor",
+      "body": "The superior of the house comes to see you himself, which he has not done before, and sits in the visitor's chair with his hands folded like a man who has rehearsed on the drive. The arrangement between {parish} and the house has gone well; he says so, and means it. Now they have a need. One of their younger men, ordained three years, has been told by the novice master and the doctor and the superior himself that he needs a year outside the walls before he decides anything, and the house would like him to spend it in a parish. Yours. He would say the early Mass, take the hospital, do what a curate does. He would eat at your table and go to bed at nine. The diocese would not pay him; the house would. The vicar for clergy has been told and has no objection, which is the vicar for clergy's way of having several. The superior does not say what is wrong with the young man. He says he is a good priest, and looks at the crucifix while he says it.",
+      "flavorPrompt": "An abbot in a visitor's chair, a favor asked plainly, the things not said about a young monk.",
+      "choices": [
+        {
+          "id": "take_him",
+          "label": "Take him for the year",
+          "default": true,
+          "outcome": "He arrives with one bag and a breviary older than he is, and is the best curate you have had. He says the early Mass without hurrying it, and the hospital chaplain asks who he is. In March he tells you, over the dishes, what the year was for; you listen and do not advise. In July the house takes him back, steadier, and the superior sends a case of the abbey's wine and a letter you keep.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 2 },
+            { "target": "reputation", "key": "parishioners", "delta": 4 },
+            { "target": "reputation", "key": "traditional_bloc", "delta": 4 },
+            { "target": "reputation", "key": "brother_priests", "delta": 3 },
+            { "target": "flag", "key": "ho_hosted_the_monk", "value": true }
+          ]
+        },
+        {
+          "id": "ask_what_is_wrong",
+          "label": "Ask what is wrong with him before you answer",
+          "outcome": "The superior tells you, because you asked, and it is nothing that would keep a man from a parish and everything that would keep him from a cloister. You take him. Knowing makes the year easier and the young man never learns that you know. The superior, who told you a thing he did not have to, treats you afterward as a man who can be told things, which in a diocese is worth a great deal.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "reputation", "key": "parishioners", "delta": 3 },
+            { "target": "reputation", "key": "traditional_bloc", "delta": 3 },
+            { "target": "flag", "key": "ho_hosted_the_monk", "value": true }
+          ]
+        },
+        {
+          "id": "decline_kindly",
+          "label": "Say the rectory is not the place for a man deciding anything",
+          "outcome": "You say it as kindly as it can be said, and he takes it as kindly as it can be taken, which is not entirely. He finds the young man a parish across the diocese. The arrangement with the house goes on, correct and a degree cooler, and the case of wine at Christmas is a bottle.",
+          "effects": [
+            { "target": "reputation", "key": "traditional_bloc", "delta": -4 },
+            { "target": "reputation", "key": "brother_priests", "delta": -2 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ho_friars_homily",
+      "phase": ["pastor", "administrator"],
+      "pressure": ["loyalty_vs_honesty", "belief_vs_safety"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 12,
+      "suppressYears": 2,
+      "requires": [{ "type": "flag", "key": "fund:friars", "value": true }],
+      "title": "What the Friar Said",
+      "body": "You were away the weekend the friar preached, which is what he was for. On Monday there are eleven emails, two letters, and {@secretary} standing in the office door with the face she keeps for things she would rather you heard from her. The friar preached on the Gospel and then on the news, and said from your pulpit a thing about the men sleeping under the overpass and the men who voted for the overpass that you might have said yourself, in a smaller voice, on a weekday. Four families are angry. Two are angry the other way, that he did not go further. One man has written to the bishop, and copied you, which is the courtesy of a man who wants you to know he did it. The friar, reached by phone, is unrepentant and apologetic in the same sentence, and says he will preach whatever you tell him to, and asks whether you would like him to come back Saturday for confessions as usual.",
+      "flavorPrompt": "A pastor reading the emails about a homily he did not give, a friar on the phone who is sorry and not sorry.",
+      "choices": [
+        {
+          "id": "stand_by_him",
+          "label": "Tell the four families he preached the Gospel, and have him back Saturday",
+          "default": true,
+          "outcome": "You answer every email, by hand, and say that the friar preached what the Church teaches and that you would have too, in your own words, and that he will be in the confessional on Saturday for anyone who wants to tell him so. Two families leave. Nine stay. The friar hears the confessions of three of the angry ones and says afterward, not what they said, but that it was a good Saturday.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": -3 },
+            { "target": "reputation", "key": "progressive_bloc", "delta": 5 },
+            { "target": "reputation", "key": "traditional_bloc", "delta": -3 },
+            { "target": "outspokenness", "key": "", "delta": 5 },
+            { "target": "reputation", "key": "chancery", "delta": -2 }
+          ],
+          "volume": "semi_public",
+          "positionTopic": "immigration",
+          "positionValue": 40
+        },
+        {
+          "id": "apologize_and_keep_him",
+          "label": "Apologize to the families for the politics, and ask the friar to keep to the Gospel",
+          "outcome": "You write that a visiting preacher said more than you would have and that you have spoken to him. You have. He agrees, easily, which tells you he has had this conversation with other pastors. The families stay. The friar preaches beautifully on the Sundays that follow and never again on anything that happened after the first century, and you are not sure you have done him or the parish a service.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "reputation", "key": "progressive_bloc", "delta": -3 },
+            { "target": "honesty", "key": "", "delta": -1 }
+          ]
+        },
+        {
+          "id": "let_him_go",
+          "label": "Thank the house and end the arrangement quietly",
+          "outcome": "You call the superior, who understands, and does not ask you to explain, which is worse than if he had. The friar sends a note wishing you well. The confessional line on Saturdays goes back to what it was, and the block of the week he gave you goes back to the parish, and the families who were angry are satisfied in a way that does not make you like them.",
+          "effects": [
+            { "target": "flag", "key": "fund:friars", "value": false },
+            { "target": "flag", "key": "ho_dropped_the_friars", "value": true },
+            { "target": "reputation", "key": "traditional_bloc", "delta": -4 },
+            { "target": "reputation", "key": "progressive_bloc", "delta": -4 },
+            { "target": "reputation", "key": "parishioners", "delta": 1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ho_first_older_mass",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["belief_vs_safety", "ambition_vs_integrity"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 14,
+      "suppressYears": 4,
+      "once": true,
+      "requires": [{ "type": "flag", "key": "can_celebrate_tlm", "value": true }, { "type": "routine", "key": "older_mass", "op": ">=", "value": 1 }],
+      "title": "Tuesday Evening, 1962",
+      "body": "The first time you say the older Mass at {parish} you expect the nine people who asked for it. Forty come. They come from three counties, because someone posted it, and they kneel on the bare floor where the rail was, and a woman in a veil older than you follows the Latin without a book. You have practiced for a month in the sacristy with the door shut and still say the Confiteor too fast. Afterward there is a man at the sacristy door who wants to know when it will be on a Sunday, and a man beside him who wants to know whether the bishop knows, and behind them {@pastor}, or the parish council chair if you are the pastor, with a face that says the phone has already rung. By Thursday there are two letters: one from a family that says they have found a home at last, and one from a family that has been in the parish since the church was built and asks, in a hand that shakes, whether this is where the parish is going now.",
+      "flavorPrompt": "The first older Mass in a parish that did not ask for it: the veils, the bare floor, the two letters.",
+      "choices": [
+        {
+          "id": "keep_it_small",
+          "label": "Keep it to a weekday evening, unannounced, for the ones who asked",
+          "default": true,
+          "outcome": "You do not post it and ask the man at the door not to. It settles at twenty-five, most of them from somewhere else, and the family who wrote the shaking letter never notices it is happening. The chancery is told, by you, in one line in a letter about something else. It is the older Mass as a private devotion with a public door, which is what the norms seem to want, and it satisfies almost nobody completely.",
+          "effects": [
+            { "target": "reputation", "key": "traditional_bloc", "delta": 3 },
+            { "target": "reputation", "key": "chancery", "delta": 2 },
+            { "target": "stat", "key": "piety", "delta": 1 }
+          ]
+        },
+        {
+          "id": "put_it_in_the_bulletin",
+          "label": "Put it in the bulletin and let the parish decide what it thinks",
+          "outcome": "The bulletin says Tuesday, seven, the Mass in the older form, all welcome. Sixty come the next week and the parish council spends forty minutes on it. The chancery hears within the month and writes to ask, with courtesy, whether the faculties were understood to be for this. The traditional wing of the diocese learns your name. The family with the shaking hand writes to the bishop, and the bishop, whatever he thinks, now has to think it.",
+          "effects": [
+            { "target": "reputation", "key": "traditional_bloc", "delta": 8 },
+            { "target": "reputation", "key": "progressive_bloc", "delta": -6 },
+            { "target": "reputation", "key": "chancery", "delta": -4 },
+            { "target": "reputation", "key": "parishioners", "delta": -2 },
+            { "target": "outspokenness", "key": "", "delta": 8 },
+            { "target": "flag", "key": "ho_older_mass_public", "value": true }
+          ],
+          "volume": "semi_public",
+          "positionTopic": "latin_mass",
+          "positionValue": -60
+        },
+        {
+          "id": "answer_the_letter",
+          "label": "Go and see the family who wrote the shaking letter",
+          "outcome": "You sit in their kitchen for an hour and drink their coffee and do not defend anything. She says her mother was married in that Mass and hated it and was glad when it went, and that she is not against you, only afraid of what comes after you. You say you do not know what comes after you either. The Tuesday Mass goes on, small. She does not come, and sends a card at Christmas, which is a kind of coming.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 4 },
+            { "target": "reputation", "key": "traditional_bloc", "delta": 1 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "stat", "key": "piety", "delta": 1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ho_three_in_the_morning",
+      "phase": ["pastor", "administrator"],
+      "pressure": ["body_vs_vow", "competence"],
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 10,
+      "suppressYears": 2,
+      "requires": [{ "type": "flag", "key": "fund:adoration", "value": true }],
+      "title": "Three in the Morning",
+      "body": "The adoration coordinator catches you after the eight o'clock with the binder. The three a.m. hour on Wednesdays has been empty for a month; the man who had it is in the hospital and his wife has stopped answering. Twice the chapel door has been found propped with a hymnal at dawn, and once there was someone asleep in the back pew who was not there for the monstrance. She has called everyone on the list. She is seventy-four and has taken the four a.m. hour herself for eleven years and she is not asking you to take it; she is telling you it is empty, which is a different thing, and standing there with the binder until you say something. Perpetual means perpetual; that was the point of it, and the parish said so on the sign in the vestibule.",
+      "flavorPrompt": "A binder, an empty hour, a woman who has kept four a.m. for eleven years and is not asking.",
+      "choices": [
+        {
+          "id": "take_the_hour",
+          "label": "Take the Wednesday three a.m. yourself until someone else does",
+          "default": true,
+          "outcome": "You take it. The first week you fall asleep on the kneeler and wake with the lamp in your eyes and something like peace. By the fourth week a man from the eleven-thirty Mass has heard the pastor is doing three a.m. and takes it from you, embarrassed for you, which was not the mechanism you intended but is one. The coordinator writes your name in the binder in pencil, and then erases it, and then keeps the page.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 2 },
+            { "target": "reputation", "key": "parishioners", "delta": 3 },
+            { "target": "reputation", "key": "traditional_bloc", "delta": 2 }
+          ]
+        },
+        {
+          "id": "lock_it_overnight",
+          "label": "Close the chapel from midnight to five and take the word off the sign",
+          "outcome": "You have the sign changed and the lock timed. Nobody sleeps in the back pew again. The coordinator says nothing, which is louder than the sign was, and takes the four a.m. hour off the schedule since there is no four a.m. now. Something the parish was proud of becomes a thing the parish used to do, and it happened in a week, and you did it.",
+          "effects": [
+            { "target": "flag", "key": "fund:adoration", "value": false },
+            { "target": "reputation", "key": "parishioners", "delta": -3 },
+            { "target": "reputation", "key": "traditional_bloc", "delta": -5 },
+            { "target": "stat", "key": "piety", "delta": -1 }
+          ]
+        },
+        {
+          "id": "find_a_fourth_man",
+          "label": "Preach on it Sunday and ask for the hour by name",
+          "outcome": "You say from the pulpit that there is an empty hour and what it is, and that whoever takes it will be alone with God in a room the parish built for exactly that, and that it is three in the morning on a Wednesday. Three people sign up. The coordinator gives two of them other hours and keeps the third for Wednesday and looks, for a moment, like a woman who might one day sleep past four.",
+          "effects": [
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "reputation", "key": "parishioners", "delta": 4 },
+            { "target": "stat", "key": "piety", "delta": 1 }
+          ]
+        }
+      ]
+    }
+  ]
+}

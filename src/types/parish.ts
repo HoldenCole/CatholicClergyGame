@@ -133,6 +133,8 @@ export interface SpendDef {
   requires?: Condition[];
   effects: Effect[];
   weekly?: Effect[];
+  /** Names a religious house of this charism in the label and blurb, where they say {house}. */
+  house?: 'contemplative' | 'active' | 'any';
   /** Standing programs: what a fund does to the parish every week while it runs. */
   pull?: number;
   growth?: number;

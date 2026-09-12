@@ -9,6 +9,7 @@ import { liturgyWeek } from './liturgy';
 import { fundBonuses } from './spending';
 import { noticeQuarter } from './notice';
 import { applyEffects } from '@/engine/effects';
+import { evaluateAll } from '@/engine/conditions';
 import { commitmentAp } from '@/engine/offers';
 import { seasonOf } from '@/engine/time';
 import { decayWeek } from './stats';
@@ -286,6 +287,7 @@ export function resolveWeek(state: GameState, rng: Rng): { state: GameState; led
   for (const [id, ap] of Object.entries(plan.discretionary)) {
     const def = actionDefs.find((a) => a.id === id);
     if (!def || ap <= 0) continue;
+    if (def.requires && !evaluateAll(def.requires, next)) continue;
     const effective = Math.min(ap, def.maxAp);
     // A vicar's role is the people: his visits and confessions pay more, his desk work less.
     const vicar = state.assignment?.role === 'parochial_vicar';

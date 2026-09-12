@@ -479,6 +479,18 @@ Multi-year efforts consuming AP and money: renovation, restoration, debt retirem
 
 ---
 
+### 8.4 The chapel, the monastery, and the older form
+
+*Added in playtesting.* Three things a priest can reach for beyond the church and the school.
+
+**The chapel.** A pastor can restore the chapel (a one-time spend that changes how it looks) and, once an adoration chapel is built, keep perpetual adoration going as a standing program with a small upkeep. Both feed piety and the people, and the chapel scene shows them: a reredos and marble when restored, a monstrance when there is adoration, someone on the kneelers when it is perpetual.
+
+**Religious houses.** Every diocese generates one to four houses from `content/houses.json`: an abbey, a friary, a monastery of nuns, with an order, a charism (contemplative or active), an alignment, and a size, all rolled independently. They are visible on the diocese card. A pastor may join forces with one (a one-time spend, a flag); after that a stipend to a contemplative house is a standing program that pays in piety and steadiness, and a confessor from an active house is a standing program that gives a block of the week back and a second face in the confessional. Events come to a parish that has done this. `house` conditions gate content on the diocese having such a house.
+
+**Faculties for the older form.** Under the 2021 norms the diocesan bishop grants a priest faculties to celebrate the 1962 Missal. Any priest with a parish, vicar or pastor, may write to the chancery for them from the Mass sheet; the bishop's stance on the topic (`older_form_faculty`, rolled with his policy and usually shut where he shuts the parish Mass) and the man's Latin, his circle, and his years decide the answer. Faculties set `can_celebrate_tlm`, open the weekly action *The older Mass* (a weekday evening as a vicar, a Sunday afternoon if the pastor puts it on), and are required before a pastor can make the older Mass one of the parish's own. The traditional wing counts the man who asks; the record shows it.
+
+**Away.** In Rome and Washington a priest-student can say Mass for a monastery of nuns, sing Vespers with the monks, and give a hand at a friary's kitchen, from the city scene or the routine sheet. Hours there build piety and a flag the cloister remembers.
+
 ## 9. Generation
 
 ### 9.1 Dioceses

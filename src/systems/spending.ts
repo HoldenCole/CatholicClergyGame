@@ -7,6 +7,7 @@ import { controlsMoney } from './finance';
 import { describeUnmet } from './doors';
 import { parishGroups } from './groups';
 import { WEEK } from './week';
+import { houseOf } from '@/generation/houses';
 
 /** Invented. */
 export const SPENDING = {
@@ -42,6 +43,14 @@ export function spendable(state: GameState): number {
   return Math.max(0, parish.finance.cash - reserve);
 }
 
+/** A spend's label and blurb with {house} filled in from the diocese. */
+export function spendWords(state: GameState, def: SpendDef): { label: string; blurb: string } {
+  if (!def.house) return { label: def.label, blurb: def.blurb };
+  const house = houseOf(state.world?.diocese.visible.houses, def.house);
+  const name = house?.name ?? 'the monastery';
+  return { label: def.label.replace('{house}', name), blurb: def.blurb.replace('{house}', name) };
+}
+
 export function spendAvailability(state: GameState): SpendAvailability[] {
   const parish = state.parish;
   return spendDefs.map((def) => {
@@ -67,7 +76,7 @@ export function spend(state: GameState, id: string): GameState {
   if (def.kind === 'fund') finance.funds = { ...(finance.funds ?? {}), [id]: state.clock.week };
   let next: GameState = { ...state, parish: { ...state.parish, finance } };
   next = applyEffects(next, def.effects);
-  return { ...next, career: [...next.career, { week: next.clock.week, kind: 'project', text: `${def.label}: $${def.cost.toLocaleString()} from the parish.` }] };
+  return { ...next, career: [...next.career, { week: next.clock.week, kind: 'project', text: `${spendWords(state, def).label}: $${def.cost.toLocaleString()} from the parish.` }] };
 }
 
 export function closeFund(state: GameState, id: string): GameState {
@@ -139,7 +148,7 @@ export function spendingWeek(state: GameState, rng: Rng): { state: GameState; li
     const upkeep = def.upkeep ?? 0;
     if (f.cash < upkeep) {
       delete funds[id];
-      lines.push(`${def.label} ran dry; the parish could not keep it up.`);
+      lines.push(`${spendWords(state, def).label} ran dry; the parish could not keep it up.`);
       continue;
     }
     f = { ...f, cash: f.cash - upkeep };

@@ -1,5 +1,5 @@
 {
-  "_notes": "What a pastor can do with money that is not owed (DESIGN §8.2, playtesting). 'once' spends apply their effects when bought; 'fund' spends stand, draw their upkeep from cash each week and apply their weekly effects while the cash lasts. Conditions use the ordinary schema; 'parish' conditions read the current parish. The investment is engine-side (systems/spending.ts, endowment). Standing programs (marketing, the school, the staff, formation, online) are funds too: they run every week until wound up and can be set up again; besides `weekly` effects a fund may carry `pull` (attendance target while it stands), `growth` (households a year, as a share), `school` (school condition a week), `groups` (vitality a week to every supported group), `relief` (a block of the week the staff carry), and `collections` (a share on every collection).",
+  "_notes": "What a pastor can do with money that is not owed (DESIGN \u00a78.2, playtesting). 'once' spends apply their effects when bought; 'fund' spends stand, draw their upkeep from cash each week and apply their weekly effects while the cash lasts. Conditions use the ordinary schema; 'parish' conditions read the current parish. The investment is engine-side (systems/spending.ts, endowment). Standing programs (marketing, the school, the staff, formation, online) are funds too: they run every week until wound up and can be set up again; besides `weekly` effects a fund may carry `pull` (attendance target while it stands), `growth` (households a year, as a share), `school` (school condition a week), `groups` (vitality a week to every supported group), `relief` (a block of the week the staff carry), and `collections` (a share on every collection). Chapel and monastery spends (playtesting): a spend may carry `house` so its {house} reads as the diocese's house of that charism; 'house' conditions check the diocese has one.",
   "spends": [
     {
       "id": "tuition_fund",
@@ -451,6 +451,221 @@
       ],
       "pull": 0.01,
       "collections": 0.02
+    },
+    {
+      "id": "chapel_restoration",
+      "kind": "once",
+      "label": "Restore the chapel",
+      "blurb": "The plaster patched and painted, the windows releaded, a proper altar with a reredos behind it, a lamp that burns. A room people come into on purpose, and the first thing a visitor sees that says the parish is loved.",
+      "cost": 35000,
+      "requires": [
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "chapel_restored",
+            "value": true
+          }
+        }
+      ],
+      "effects": [
+        {
+          "target": "stat",
+          "key": "piety",
+          "delta": 1
+        },
+        {
+          "target": "reputation",
+          "key": "parishioners",
+          "delta": 3
+        },
+        {
+          "target": "reputation",
+          "key": "traditional_bloc",
+          "delta": 3
+        },
+        {
+          "target": "flag",
+          "key": "chapel_restored",
+          "value": true
+        }
+      ]
+    },
+    {
+      "id": "perpetual_adoration",
+      "kind": "fund",
+      "label": "Perpetual adoration",
+      "blurb": "Someone before the monstrance every hour of the week: a sign-up sheet, a coordinator, the three a.m. slots filled by the same four people for years. The parish's prayer, kept going, and the thing people from other parishes drive over for.",
+      "cost": 5000,
+      "upkeep": 250,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "built_adoration_chapel",
+          "value": true
+        }
+      ],
+      "effects": [
+        {
+          "target": "flag",
+          "key": "fund:adoration",
+          "value": true
+        },
+        {
+          "target": "reputation",
+          "key": "parishioners",
+          "delta": 2
+        }
+      ],
+      "weekly": [
+        {
+          "target": "stat",
+          "key": "piety",
+          "delta": 0.05
+        },
+        {
+          "target": "reputation",
+          "key": "parishioners",
+          "delta": 0.06
+        },
+        {
+          "target": "reputation",
+          "key": "traditional_bloc",
+          "delta": 0.04
+        }
+      ],
+      "pull": 0.02
+    },
+    {
+      "id": "house_partnership",
+      "kind": "once",
+      "label": "Join forces with {house}",
+      "blurb": "A standing arrangement with {house}: their guesthouse for your retreats and your people at their Sunday Mass; their name in your bulletin and yours in their prayers; a door that opens when you knock. It costs a gift to their building fund and a Sunday a year.",
+      "cost": 20000,
+      "house": "any",
+      "requires": [
+        {
+          "type": "house",
+          "value": true
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "partner:house",
+            "value": true
+          }
+        }
+      ],
+      "effects": [
+        {
+          "target": "flag",
+          "key": "partner:house",
+          "value": true
+        },
+        {
+          "target": "reputation",
+          "key": "parishioners",
+          "delta": 4
+        },
+        {
+          "target": "reputation",
+          "key": "traditional_bloc",
+          "delta": 5
+        },
+        {
+          "target": "stat",
+          "key": "piety",
+          "delta": 2
+        }
+      ]
+    },
+    {
+      "id": "house_prayers",
+      "kind": "fund",
+      "label": "A stipend to {house}",
+      "blurb": "Mass stipends and a monthly cheque to {house}, and the parish's intentions read at their Office every morning. Nothing visible happens, which is the point; the people know, and something in the parish is steadier for it.",
+      "cost": 3000,
+      "upkeep": 200,
+      "house": "contemplative",
+      "requires": [
+        {
+          "type": "flag",
+          "key": "partner:house",
+          "value": true
+        },
+        {
+          "type": "house",
+          "charism": "contemplative",
+          "value": true
+        }
+      ],
+      "effects": [
+        {
+          "target": "flag",
+          "key": "fund:house_prayers",
+          "value": true
+        }
+      ],
+      "weekly": [
+        {
+          "target": "stat",
+          "key": "piety",
+          "delta": 0.06
+        },
+        {
+          "target": "reputation",
+          "key": "parishioners",
+          "delta": 0.03
+        },
+        {
+          "target": "reputation",
+          "key": "traditional_bloc",
+          "delta": 0.03
+        }
+      ],
+      "pull": 0.01
+    },
+    {
+      "id": "friars_help",
+      "kind": "fund",
+      "label": "A confessor from {house}",
+      "blurb": "A friar from {house} in your confessional on Saturdays and the feasts, and in your pulpit when you are away, for a stipend and lunch. The line moves, the people have a second face to tell things to, and your week gets a block back.",
+      "cost": 6000,
+      "upkeep": 500,
+      "house": "active",
+      "requires": [
+        {
+          "type": "flag",
+          "key": "partner:house",
+          "value": true
+        },
+        {
+          "type": "house",
+          "charism": "active",
+          "value": true
+        }
+      ],
+      "effects": [
+        {
+          "target": "flag",
+          "key": "fund:friars",
+          "value": true
+        }
+      ],
+      "weekly": [
+        {
+          "target": "reputation",
+          "key": "parishioners",
+          "delta": 0.08
+        },
+        {
+          "target": "reputation",
+          "key": "traditional_bloc",
+          "delta": 0.03
+        }
+      ],
+      "relief": 1
     }
   ]
 }

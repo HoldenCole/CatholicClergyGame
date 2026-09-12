@@ -154,8 +154,8 @@ describe('succession as a turn', () => {
     const prog = testNpc('nb', { role: 'bishop', alignment: 60, title: 'Bishop' });
     const circles = circlesOf(s, prog);
     expect(circles.map((x) => x.agrees)).toEqual([false, true]);
-    const before: LiturgicalPolicy = { ad_orientem: 'free', latin_mass: 'by_permission', altar_rail: 'free', tabernacle: 'by_permission', renovation: 'by_permission' };
-    const after: LiturgicalPolicy = { ad_orientem: 'by_permission', latin_mass: 'forbidden', altar_rail: 'forbidden', tabernacle: 'free', renovation: 'by_permission' };
+    const before: LiturgicalPolicy = { ad_orientem: 'free', latin_mass: 'by_permission', altar_rail: 'free', tabernacle: 'by_permission', renovation: 'by_permission', older_form_faculty: 'by_permission' };
+    const after: LiturgicalPolicy = { ad_orientem: 'by_permission', latin_mass: 'forbidden', altar_rail: 'forbidden', tabernacle: 'free', renovation: 'by_permission', older_form_faculty: 'by_permission' };
     const r = revalue(s, prog, { before, after });
     expect(r.reread.revoked).toEqual(['latin_mass', 'altar_rail']);
     expect(r.reread.tightened).toEqual(['ad_orientem']);

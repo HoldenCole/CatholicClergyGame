@@ -39,7 +39,7 @@ export default function SceneArt({ scene, season, state, plain = false }: { scen
       {scene === 'rectory' && <Rectory decor={currentDecor(state, 'rectory')} ambient={ambient('rectory')} parish={parish} />}
       {scene === 'church' && <Church decor={currentDecor(state, 'church')} parish={parish} {...(look ? { priest: look } : {})} />}
       {scene === 'hall' && <Hall />}
-      {scene === 'chapel' && <Chapel />}
+      {scene === 'chapel' && <Chapel restored={!!state.flags.chapel_restored} adoration={!!state.flags.built_adoration_chapel} perpetual={!!state.parish?.finance.funds?.perpetual_adoration} />}
       {scene === 'street' && <Street terrain={parish?.terrain} {...(state.world ? { see: state.world.diocese.presetId } : {})} />}
       {scene === 'study' && <Study ambient={ambient('office')} />}
       {scene === 'seminary_room' && <SeminaryRoom ambient={ambient('seminary_room')} seminaryName={state.seminary?.name} />}

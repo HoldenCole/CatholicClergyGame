@@ -4,6 +4,7 @@ import { adminFloorFor, careOf, careOfPlan, efficiencyWords, hoursOf, obligation
 import { sacrificeDefs, problemFix } from '@/content/parish';
 import type { Effect } from '@/types';
 import { commitmentAp } from '@/engine/offers';
+import { evaluateAll } from '@/engine/conditions';
 import { OBLIGATION_KEYS, type Quality } from '@/types';
 import Sheet from '../Sheet';
 
@@ -125,7 +126,7 @@ export default function RoutinePanel() {
       </Sheet>
       <Sheet title="Everything else">
         <ul className="flex flex-col gap-1.5">
-          {actionDefs.map((a) => {
+          {actionDefs.filter((a) => !a.requires || evaluateAll(a.requires, game)).map((a) => {
             const ap = routine.discretionary[a.id] ?? 0;
             const planned = plan.discretionary[a.id] ?? 0;
             return (

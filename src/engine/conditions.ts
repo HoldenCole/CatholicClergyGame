@@ -143,6 +143,10 @@ export function evaluateCondition(
       const pool = bound ? [bound] : Object.values(state.groups).filter((g) => g.parishId === state.assignment?.parishId);
       return pool.some((g) => groupMatches(g, cond.key, cond.value));
     }
+    case 'house': {
+      const houses = state.world?.diocese.visible.houses ?? [];
+      return houses.some((h) => !cond.charism || h.charism === cond.charism) === cond.value;
+    }
     case 'not':
       return !evaluateCondition(cond.inner, state, bindings);
     case 'any':

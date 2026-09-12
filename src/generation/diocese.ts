@@ -13,6 +13,7 @@ import type { Rng } from '@/engine/rng';
 import { generateBishop, PRIORITY_LABEL, temperamentLine } from './bishop';
 import { generateChancery } from './chancery';
 import { generateParishes } from './parishes';
+import { generateHouses } from './houses';
 
 export interface GeneratedDiocese {
   diocese: Diocese;
@@ -113,6 +114,7 @@ export function generateDiocese(rng: Rng, preset: DiocesePreset, year: number): 
       character,
       opportunities,
       institutions: preset.institutions,
+      houses: generateHouses(rng.derive('houses'), preset.size),
       complication: rng.pick(preset.complications),
     },
     hidden: {

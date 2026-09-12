@@ -18,6 +18,7 @@ const FLAG_WORD: Record<string, string> = {
   rome_alumnus: 'a Roman degree', published: 'something published', speaks_spanish: 'Spanish', rome_track: 'the rector\'s eye for Rome', seminary_faculty: 'a seat on the faculty',
   'summer:chancery': 'a summer in the chancery', 'summer:hospital': 'a hospital summer', 'summer:hard_parish': 'a summer in a hard parish', 'summer:rome': 'a Roman summer',
   took_the_hard_parish: 'having taken the hard parish', tribunal_ready: 'tribunal experience',
+  can_celebrate_tlm: 'faculties for the older form of the Mass', built_adoration_chapel: 'an adoration chapel', 'partner:house': 'an arrangement with a religious house', chapel_restored: 'the chapel restored',
 };
 
 function personWord(state: GameState, selector: string): string {
@@ -43,6 +44,7 @@ export function describeUnmet(cond: Condition, state: GameState): string | null 
     case 'pillar': return `a stronger ${cond.key} pillar this year`;
     case 'role': return cond.value === 'pastor' ? 'a pastorate' : `to be ${cond.value.replace('_', ' ')}`;
     case 'parish': return 'a different kind of parish';
+    case 'house': return cond.value ? `a ${cond.charism === 'active' ? 'house of friars' : cond.charism === 'contemplative' ? 'monastery' : 'religious house'} in the diocese` : null;
     case 'figure': return 'to be a public figure';
     case 'position': return 'a stand on the record';
     case 'any': {

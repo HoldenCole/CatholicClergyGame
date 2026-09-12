@@ -51,13 +51,36 @@ export function Hall() {
   );
 }
 
-/** The chapel: small, dim, the lamp burning. */
-export function Chapel() {
+/**
+ * The chapel: small, dim, the lamp burning. Restored, it is plastered and
+ * lit and has a reredos; with an adoration chapel there is a monstrance on
+ * the altar, and perpetual adoration keeps someone on the kneelers.
+ */
+export function Chapel({ restored = false, adoration = false, perpetual = false }: { restored?: boolean; adoration?: boolean; perpetual?: boolean }) {
   return (
     <g>
-      <Room wall="#4a3a3c" floor="tiles" ceiling="#3a2a2c" />
-      <rect x="40" y="10" width="20" height="20" fill="#e2d6be" stroke={PALETTE.gold} strokeWidth="0.5" />
-      <path d="M40 10 Q50 2 60 10 Z" fill="#e2d6be" stroke={PALETTE.gold} strokeWidth="0.5" />
+      {restored ? <Room wall="#7a6660" dado="#4a3230" dadoAt={0.72} floor="marble" ceiling="#5a4a48" /> : <Room wall="#4a3a3c" floor="tiles" ceiling="#3a2a2c" />}
+      {restored && (
+        <g>
+          {/* a reredos behind the altar, and two statues in niches */}
+          <rect x="34" y="6" width="32" height="26" fill="#3a2a22" />
+          <rect x="35" y="7" width="30" height="24" fill="#5a3a2a" />
+          <path d="M34 6 Q50 -4 66 6 Z" fill="#3a2a22" />
+          {[37, 60].map((x) => (
+            <g key={x}>
+              <rect x={x} y="14" width="3.6" height="14" rx="1.8" fill="#2a1a12" />
+              <ellipse cx={x + 1.8} cy="19" rx="1" ry="1.1" fill="#e3c69c" />
+              <path d={`M${x + 0.6} 20 h2.4 l0.4 7 h-3.2 Z`} fill={x === 37 ? '#2e5aac' : '#7a5a2a'} />
+            </g>
+          ))}
+          <rect x="34" y="31" width="32" height="1" fill={PALETTE.gold} opacity="0.8" />
+          {[20, 80].map((x) => (
+            <rect key={x} x={x - 3} y="10" width="6" height="16" fill="#c9d9ea" opacity="0.5" />
+          ))}
+        </g>
+      )}
+      <rect x="40" y="10" width="20" height="20" fill={restored ? '#efe6d2' : '#e2d6be'} stroke={PALETTE.gold} strokeWidth="0.5" />
+      <path d="M40 10 Q50 2 60 10 Z" fill={restored ? '#efe6d2' : '#e2d6be'} stroke={PALETTE.gold} strokeWidth="0.5" />
       <rect x="46" y="17" width="8" height="8" fill="url(#brass)" stroke="#5a3a12" strokeWidth="0.3" />
       <rect x="49.7" y="17.6" width="0.6" height="6.8" fill="#5a3a12" opacity="0.7" />
       <circle cx="50" cy="8" r="0.9" fill="url(#brass)" />
@@ -65,12 +88,30 @@ export function Chapel() {
       <rect x="64" y="20" width="1.6" height="9" fill="#f3eee0" />
       <circle cx="64.8" cy="19" r="1" fill="#e04a2a" />
       <circle cx="64.8" cy="19" r="4" fill="url(#glow)" opacity="0.7" />
-      <circle cx="50" cy="18" r="14" fill="url(#glow)" opacity="0.25" />
+      <circle cx="50" cy="18" r="14" fill="url(#glow)" opacity={restored ? 0.35 : 0.25} />
       {/* small altar */}
       <polygon points="42,32 58,32 59,34 41,34" fill="url(#cloth)" />
-      <rect x="41" y="34" width="18" height="5" fill="#8a7a5a" />
+      <rect x="41" y="34" width="18" height="5" fill={restored ? 'url(#marble)' : '#8a7a5a'} />
       <Candle x={44} y={32} h={2.4} lit />
       <Candle x={56} y={32} h={2.4} lit />
+      {restored && (
+        <g>
+          <Candle x={46.5} y={32} h={2} lit />
+          <Candle x={53.5} y={32} h={2} lit />
+        </g>
+      )}
+      {adoration && (
+        <g>
+          {/* the monstrance: a sunburst on a stem, and the light it makes */}
+          <circle cx="50" cy="26.5" r="6" fill="url(#glow)" opacity="0.8" />
+          {Array.from({ length: 16 }, (_, i) => (
+            <line key={i} x1="50" y1="26.5" x2={50 + Math.cos((i * Math.PI) / 8) * 3.4} y2={26.5 + Math.sin((i * Math.PI) / 8) * 3.4} stroke={PALETTE.gold} strokeWidth={i % 2 ? 0.35 : 0.6} />
+          ))}
+          <circle cx="50" cy="26.5" r="1.6" fill="#fff8e6" stroke={PALETTE.gold} strokeWidth="0.4" />
+          <rect x="49.6" y="29.6" width="0.8" height="2.4" fill="url(#brass)" />
+          <ellipse cx="50" cy="32.1" rx="1.6" ry="0.5" fill="url(#brass)" />
+        </g>
+      )}
       {/* kneelers */}
       {[30, 46, 62].map((x) => (
         <g key={x}>
@@ -80,6 +121,15 @@ export function Chapel() {
           <rect x={x + 4.5} y="49.8" width="1" height="3" fill={PALETTE.oakDark} />
         </g>
       ))}
+      {perpetual && (
+        <g>
+          {/* someone on the kneeler, whatever the hour */}
+          <ellipse cx="46" cy="53.5" rx="4" ry="0.9" fill="#1a0f08" opacity="0.35" filter="url(#soft)" />
+          <path d="M43 52 q0 -6 3 -6 q3 0 3 6 Z" fill="#3a3a44" />
+          <circle cx="46" cy="44.6" r="1.5" fill="#d9b48f" />
+          <path d="M44.5 44 q1.5 -1.6 3 0 v-0.4 q-1.5 -1.2 -3 0 Z" fill="#4a3a2a" />
+        </g>
+      )}
       <rect x="44" y="53" width="12" height="7" fill="#000" opacity="0.15" />
       <Door x={4} y={20} w={10} h={26} open />
     </g>
