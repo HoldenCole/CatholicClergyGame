@@ -515,13 +515,18 @@ Multi-year efforts consuming AP and money: renovation, restoration, debt retirem
 
 ### 9.1 Dioceses
 
-The five presets keep their character across runs; everything else rolls at game start.
+The ten presets keep their character across runs; everything else rolls at game start.
 
 - **New York** — large, wealthy, media-exposed, nationally significant cathedral
 - **Chicago** — deep ethnic parish roots, shrinking, consolidating
 - **Los Angeles** — enormous, fragmented, heavily Latino
 - **Houston** — fast-growing, heavily Latino, short on priests
 - **Washington, DC** — small, political, disproportionately connected to Rome
+- **Philadelphia** — clerical, rowhouse parishes, a school system in retreat, traditional presbyterate
+- **Boston** — Irish to the bone, chastened by the scandal, collaboratives, Brazilian and Haitian pews
+- **San Francisco** — small, wealthy in land, a progressive laity under a conservative archbishop
+- **Miami** — young, built by exiles, Cuban and Haitian, growing, short on priests
+- **New Orleans** — old, French and Black Catholic, post-storm, in bankruptcy, the seminary of the South
 
 **Incardination is permanent.** The player belongs to this diocese for life and does not transfer because he dislikes the bishop. This is what makes the succession roll land.
 
@@ -537,7 +542,7 @@ The five presets keep their character across runs; everything else rolls at game
 
 **The five parishes** each get: size, wealth, ethnic and generational makeup, alignment, building condition, debt, school status, current pastor (age, health, competence), staff, existing groups, and one live problem. Spread them deliberately — a wealthy suburban flagship, a struggling urban parish, a growing immigrant parish, a rural post, and one that is genuinely difficult (debt, a divided congregation, a predecessor who left badly).
 
-**Custom dioceses (post-V1)** use the same generator with the preset layer replaced by player input. Build the five presets *as data files in the same schema* and the custom feature is nearly free.
+**Custom dioceses (post-V1)** use the same generator with the preset layer replaced by player input. Build the presets *as data files in the same schema* and the custom feature is nearly free.
 
 ### 9.2 Classmates and NPCs
 

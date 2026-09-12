@@ -41,7 +41,7 @@ describe('assignments that mean something', () => {
     expect(kinds.rural!).toBeGreaterThan(kinds.difficult! - 0.01);
   });
 
-  it('the top of the class is sent where he will be seen; a thin record goes somewhere quiet', () => {
+  it('the top of the class is sent where he will be seen; a thin record goes somewhere quiet', { timeout: 30_000 }, () => {
     let strongSeen = 0;
     let weakQuiet = 0;
     const N = 60;

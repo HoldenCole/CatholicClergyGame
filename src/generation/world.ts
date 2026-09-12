@@ -8,7 +8,7 @@ export interface Candidate extends GeneratedDiocese {
   presetId: string;
 }
 
-/** All five dioceses roll before the player sees anything. DESIGN.md §3.1a */
+/** Every diocese rolls before the player sees anything. DESIGN.md §3.1a */
 export function generateCandidates(rng: Rng, year: number): Candidate[] {
   return diocesePresets.map((preset) => ({
     presetId: preset.id,

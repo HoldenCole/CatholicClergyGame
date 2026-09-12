@@ -333,6 +333,86 @@ function Skyline({ see, urban }: { see: string | undefined; urban: boolean }) {
           <path d="M0 30 Q20 24 40 28 V38 H0 Z" fill="#6f7f5a" />
         </g>
       );
+    case 'philadelphia':
+      return (
+        <g opacity="0.85">
+          {[30, 36, 62, 68].map((x, i) => <rect key={x} x={x} y={[14, 9, 11, 16][i]} width={[5, 5, 5, 4][i]} height="24" fill={i % 2 ? '#5c5a63' : '#6d6b74'} />)}
+          <rect x="47" y="12" width="6" height="26" fill="#d9cfb8" />
+          <rect x="48.5" y="4" width="3" height="9" fill="#d9cfb8" />
+          <path d="M48.5 4 L50 0.5 L51.5 4 Z" fill="#c9bfa8" />
+          <rect x="49.6" y="-2" width="0.8" height="2.6" fill="#7a7468" />
+          <circle cx="50" cy="-2.2" r="0.6" fill="#7a7468" />
+          {[42, 44.5, 55, 57.5].map((x) => <rect key={x} x={x} y="24" width="2.2" height="14" fill="#9a4a3c" />)}
+          {[42, 44.5, 55, 57.5].map((x) => <rect key={`w${x}`} x={x + 0.6} y="26" width="0.9" height="1.4" fill="#f5e6b0" opacity="0.6" />)}
+          <rect x="0" y="30" width="100" height="1" fill="#6f6a60" />
+        </g>
+      );
+    case 'boston':
+      return (
+        <g opacity="0.85">
+          <rect x="58" y="2" width="4" height="36" fill="#8fa9b8" />
+          <rect x="63" y="8" width="6" height="30" fill="#6d6f78" />
+          {[30, 33, 36, 39, 42].map((x, i) => <rect key={x} x={x} y={22 - (i % 2)} width="3" height="16" fill={i % 2 ? '#8a4a3a' : '#9a5a45'} />)}
+          {[30, 33, 36, 39, 42].map((x) => [0, 1].map((r) => <rect key={`${x}-${r}`} x={x + 1} y={24 + r * 4} width="1" height="1.6" fill="#f5e6b0" opacity="0.55" />))}
+          <rect x="49" y="18" width="4" height="20" fill="#e8e2d2" />
+          <rect x="50" y="10" width="2" height="8" fill="#e8e2d2" />
+          <path d="M50 10 L51 2 L52 10 Z" fill="#e8e2d2" />
+          <path d="M0 33 Q30 30 60 33 T100 32 V38 H0 Z" fill="#8fa3ad" opacity="0.7" />
+        </g>
+      );
+    case 'san_francisco':
+      return (
+        <g opacity="0.9">
+          <path d="M0 28 Q18 16 36 24 T72 20 T100 26 V38 H0 Z" fill="#b9b39a" />
+          <rect x="62" y="6" width="2.2" height="30" fill="#c8532b" />
+          <rect x="80" y="6" width="2.2" height="30" fill="#c8532b" />
+          <path d="M62 8 Q72 20 82 8" stroke="#c8532b" strokeWidth="0.7" fill="none" />
+          <rect x="60" y="22" width="24" height="0.9" fill="#c8532b" />
+          {[28, 32, 36, 40, 44].map((x, i) => (
+            <g key={x}>
+              <rect x={x} y={24 + (i % 2)} width="3.6" height="14" fill={['#e9dcc7', '#dfe6ea', '#e8d9df', '#e4e8d4', '#eadfc9'][i]} />
+              <rect x={x + 1} y={26 + (i % 2)} width="1.6" height="2.4" fill="#7c8890" opacity="0.6" />
+            </g>
+          ))}
+          <path d="M84 30 L100 30 L100 38 L84 38 Z" fill="#7f98a8" opacity="0.6" />
+        </g>
+      );
+    case 'miami':
+      return (
+        <g opacity="0.9">
+          {[40, 46, 52, 58, 64].map((x, i) => <rect key={x} x={x} y={[10, 4, 14, 8, 12][i]} width={[4, 5, 4, 5, 4][i]} height="28" fill={['#d9ecef', '#f1d9d2', '#e8e4d0', '#d5e3ea', '#f0dfc6'][i]} />)}
+          {[40, 46, 52, 58, 64].map((x) => [0, 1, 2].map((r) => <rect key={`${x}-${r}`} x={x + 1} y={16 + r * 5} width="0.9" height="2" fill="#7c8890" opacity="0.4" />))}
+          {[24, 30, 76].map((x) => (
+            <g key={x}>
+              <path d={`M${x} 38 q1 -8 0.5 -16`} stroke="#6b5a3a" strokeWidth="0.8" fill="none" />
+              <path d={`M${x + 0.5} 22 q-5 -1 -7 3 M${x + 0.5} 22 q5 -1 7 3 M${x + 0.5} 22 q-3 -4 -1 -6 M${x + 0.5} 22 q3 -4 1 -6 M${x + 0.5} 22 q0 -5 2 -6`} stroke="#4f8a4f" strokeWidth="1" fill="none" />
+            </g>
+          ))}
+          <rect x="0" y="33" width="100" height="5" fill="#7fb3c9" opacity="0.7" />
+        </g>
+      );
+    case 'new_orleans':
+      return (
+        <g opacity="0.85">
+          <rect x="45" y="16" width="10" height="22" fill="#e8e2d2" />
+          {[45.5, 49, 52.5].map((x, i) => (
+            <g key={x}>
+              <rect x={x} y={i === 1 ? 6 : 10} width="2" height={i === 1 ? 10 : 6} fill="#e8e2d2" />
+              <path d={`M${x} ${i === 1 ? 6 : 10} L${x + 1} ${i === 1 ? 0 : 5} L${x + 2} ${i === 1 ? 6 : 10} Z`} fill="#6d6f78" />
+            </g>
+          ))}
+          <path d="M0 30 H30 L34 22 H62 L66 30 H100" stroke="#5a5a5a" strokeWidth="0.8" fill="none" />
+          {[36, 42, 48, 54, 60].map((x) => <path key={x} d={`M${x} 22 L${x + 3} 30`} stroke="#5a5a5a" strokeWidth="0.5" />)}
+          {[10, 18, 84, 92].map((x) => (
+            <g key={x}>
+              <rect x={x} y="24" width="1.2" height="14" fill="#5a4a2a" />
+              <ellipse cx={x + 0.6} cy="22" rx="7" ry="4" fill="#4f7a3f" />
+              {[-4, -1, 2].map((d) => <path key={d} d={`M${x + 0.6 + d} 24 q0.3 3 -0.2 6`} stroke="#8a9a7a" strokeWidth="0.5" fill="none" />)}
+            </g>
+          ))}
+          <rect x="0" y="34" width="100" height="4" fill="#8a7a5a" opacity="0.6" />
+        </g>
+      );
     default:
       return urban ? <g>{[40, 48, 56, 64].map((x, i) => <rect key={x} x={x} y={10 - (i % 2) * 4} width="8" height="28" fill={i % 2 ? '#6e6a70' : '#7d7a80'} />)}</g> : <path d="M0 30 Q25 22 50 28 T100 26 V38 H0 Z" fill="#6f7f5a" />;
   }
