@@ -56,16 +56,17 @@ describe('the hours pay off visibly', () => {
   it('a pastor can pay the debt down from cash, keeping a reserve; a vicar cannot', () => {
     const base = parishState('debt');
     const rec = base.world!.parishes.find((p) => p.id === base.parish!.parishId)!;
-    const vicar: GameState = { ...base, parish: { ...base.parish!, finance: { ...base.parish!.finance, cash: 200000, debt: 150000 } } };
+    // Cash well above any reserve the parish's collections could ask for.
+    const vicar: GameState = { ...base, parish: { ...base.parish!, finance: { ...base.parish!.finance, cash: 2000000, debt: 150000 } } };
     expect(controlsMoney(vicar)).toBe(false);
     expect(debtPayable(vicar)).toBe(0);
     expect(payDebt(vicar, 50000)).toBe(vicar);
     const pastor: GameState = { ...vicar, assignment: { ...vicar.assignment!, role: 'pastor' }, parish: { ...vicar.parish!, role: 'pastor' } };
     const reserve = Math.round(rec.weeklyCollections * 0.82 * 8);
-    expect(debtPayable(pastor)).toBe(Math.min(150000, 200000 - reserve));
+    expect(debtPayable(pastor)).toBe(Math.min(150000, 2000000 - reserve));
     const paid = payDebt(pastor, 50000);
     expect(paid.parish!.finance.debt).toBe(100000);
-    expect(paid.parish!.finance.cash).toBe(150000);
+    expect(paid.parish!.finance.cash).toBe(1950000);
     expect(paid.career[paid.career.length - 1]!.text).toMatch(/\$50,000/);
     const all = payDebt(paid, 10_000_000);
     expect(all.parish!.finance.debt).toBe(Math.max(0, 100000 - debtPayable(paid)));

@@ -49,7 +49,11 @@ export interface DiocesePreset {
    * rolls. A seed without one rolls its patron and place from the pools. The
    * one marked cathedral is the bishop's own church, downtown, with a rector.
    */
-  parishSeeds: { kind: ParishKind; places: string[]; patrons: string[]; cathedral?: boolean; real?: { name: string; place: string; founded: number } }[];
+  parishSeeds: { kind: ParishKind; places: string[]; patrons: string[]; cathedral?: boolean; real?: { name: string; place: string; founded: number; lat?: number; lon?: number } }[];
+  /** The see's cathedral on the earth, and how many miles the map is across. Real churches and places project onto it. */
+  map?: { lat: number; lon: number; milesAcross: number };
+  /** The cities and neighborhoods of the diocese, where they are, for the map's labels and for placing rolled parishes. */
+  places?: { name: string; lat: number; lon: number }[];
   /** Heritage weights for the presbyterate and laity. */
   heritage: Record<string, number>;
   seminaryName: string;
