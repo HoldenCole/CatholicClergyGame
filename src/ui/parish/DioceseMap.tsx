@@ -86,6 +86,13 @@ export function DioceseMap({ world, hereId, deaneryIds = [], view, onView, onHov
         </pattern>
       </defs>
       <rect x="-20" y="-20" width="140" height="140" fill="url(#mapgrain)" />
+      {/* the land beyond the diocese, a shade greyer; the diocese itself on clean paper */}
+      {data && data.diocese.length > 0 && (
+        <g>
+          <rect x="-20" y="-20" width="140" height="140" fill="#d9d0bd" opacity="0.55" />
+          <path d={data.diocese.map((rings) => path(rings)).join('')} fill="url(#mapgrain)" fillRule="evenodd" />
+        </g>
+      )}
       {/* the built-up land, faintly */}
       {data?.urban.map((r, i) => <polygon key={`u${i}`} points={pts(r)} fill="#dcccaa" opacity="0.45" />)}
       {/* the sea, the bays, the lakes */}
@@ -95,6 +102,8 @@ export function DioceseMap({ world, hereId, deaneryIds = [], view, onView, onHov
       {/* the county lines, then the state lines */}
       {data?.counties.map((l, i) => <polyline key={`c${i}`} points={pts(l)} fill="none" stroke="#9a8a6a" strokeWidth={sw(0.18)} strokeDasharray={`${sw(0.8)} ${sw(0.6)}`} opacity="0.8" />)}
       {data?.states.map((l, i) => <polyline key={`s${i}`} points={pts(l)} fill="none" stroke="#7a6a4a" strokeWidth={sw(0.4)} strokeDasharray={`${sw(1.6)} ${sw(0.8)}`} />)}
+      {/* the diocese's own border */}
+      {data?.diocese.map((rings, i) => <path key={`b${i}`} d={path(rings)} fill="none" stroke="#7a1f1f" strokeWidth={sw(0.55)} strokeDasharray={`${sw(2)} ${sw(0.9)}`} opacity="0.85" />)}
       {/* the highways */}
       {data?.roads.filter((r) => r.kind === 'minor').map((r, i) => <polyline key={`m${i}`} points={pts(r.line)} fill="none" stroke="#b9a482" strokeWidth={sw(0.28)} strokeLinejoin="round" />)}
       {data?.roads.filter((r) => r.kind === 'major').map((r, i) => <polyline key={`h${i}`} points={pts(r.line)} fill="none" stroke="#8a6a3a" strokeWidth={sw(0.42)} strokeLinejoin="round" />)}

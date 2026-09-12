@@ -107,13 +107,13 @@ describe('the men you form', () => {
     const sem = seminarianOf(next)!;
     expect(next.flags['seminarian:here']).toBe(true);
     expect(resolveSelector(next, '@seminarian')?.id).toBe(sem.id);
-    expect(helpRelief(next)).toBe(FORMED.seminarianRelief);
+    expect(helpRelief(next) - helpRelief(s)).toBe(FORMED.seminarianRelief);
     expect(summerSeminarian(next, createRng('again')).line).toBeNull();
     next = { ...next, clock: { ...next.clock, week: next.parish!.seminarian!.endWeek } };
     const gone = seminarianWeek(next);
     expect(gone.line).toMatch(/evaluation/);
     expect(gone.state.flags['seminarian:evaluation_due']).toBe(true);
-    expect(helpRelief(gone.state)).toBe(0);
+    expect(helpRelief(gone.state)).toBe(helpRelief(s));
     expect(() => evaluateSeminarian(next, 'strong')).toThrow();
     const written = evaluateSeminarian(gone.state, 'strong');
     expect(written.formed).toHaveLength(1);
@@ -130,7 +130,7 @@ describe('the men you form', () => {
     for (let i = 0; i < 20 && !back?.line; i++) back = returnOfTheFormed(later, createRng(`back:${i}`));
     expect(back!.line).toMatch(/parochial vicar/);
     expect(back!.state.flags['seminarian:returned']).toBe(true);
-    expect(helpRelief(back!.state)).toBe(FORMED.vicarRelief);
+    expect(helpRelief(back!.state) - helpRelief(s)).toBe(FORMED.vicarRelief);
     expect(resolveSelector(back!.state, '@seminarian')?.relationship).toBe(30);
     expect(back!.state.formed![0]!.returned).toBe(true);
   });
