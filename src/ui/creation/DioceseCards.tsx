@@ -94,6 +94,15 @@ function Card({ d, placement }: { d: DioceseVisible; placement: Placement | null
           ))}
         </ul>
       </Row>
+      {d.houses?.length > 0 && (
+        <Row label="Religious houses">
+          <ul className="list-disc pl-4">
+            {d.houses.map((h) => (
+              <li key={h.id}>{h.line}</li>
+            ))}
+          </ul>
+        </Row>
+      )}
       <Row label="Complication">{d.complication}</Row>
       {placement && (
         <Row label="Where you would likely land">

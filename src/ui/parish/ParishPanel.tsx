@@ -5,7 +5,7 @@ import { hoursOf } from '@/systems/week';
 import { NEED_LABEL } from '@/generation/diocese';
 import { diocesePresets } from '@/content/dioceses';
 import { workAvailability } from '@/systems/problems';
-import { fundableGroups, mayInvest, spendAvailability, spendable, SPENDING } from '@/systems/spending';
+import { fundableGroups, mayInvest, spendAvailability, spendable, spendWords, SPENDING } from '@/systems/spending';
 import { useUiStore } from '../uiStore';
 import { PROBLEM_LABEL } from '@/generation/parishes';
 import { STAT_KEYS, CONSTITUENCY_KEYS } from '@/types';
@@ -152,7 +152,7 @@ export default function ParishPanel() {
               <ul className="mt-2 flex flex-col gap-1 text-sm">
                 {standing.map(({ def }) => (
                   <li key={def.id} className="flex items-center justify-between gap-2">
-                    <span>{def.label} <span className="ink-faint text-xs">· standing, ${(def.upkeep ?? 0).toLocaleString()} a week</span></span>
+                    <span>{spendWords(game, def).label} <span className="ink-faint text-xs">· standing, ${(def.upkeep ?? 0).toLocaleString()} a week</span></span>
                     <button className="pbtn-link" onClick={() => closeFund(def.id)}>wind it up</button>
                   </li>
                 ))}
@@ -162,8 +162,8 @@ export default function ParishPanel() {
               {spends.filter((x) => !x.standing).map(({ def, available, why }) => (
                 <li key={def.id} className="flex items-start justify-between gap-2">
                   <div className="min-w-0">
-                    <div className={available ? '' : 'ink-muted'}>{def.label} <span className="ink-faint text-xs">· ${def.cost.toLocaleString()}{def.upkeep ? ` and $${def.upkeep.toLocaleString()} a week` : ''}</span></div>
-                    <div className="ink-faint text-xs">{available ? def.blurb : why}</div>
+                    <div className={available ? '' : 'ink-muted'}>{spendWords(game, def).label} <span className="ink-faint text-xs">· ${def.cost.toLocaleString()}{def.upkeep ? ` and $${def.upkeep.toLocaleString()} a week` : ''}</span></div>
+                    <div className="ink-faint text-xs">{available ? spendWords(game, def).blurb : why}</div>
                   </div>
                   {available && <button className="pbtn shrink-0 px-2 py-0 text-xs" onClick={() => spend(def.id)}>do it</button>}
                 </li>

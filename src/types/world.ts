@@ -94,8 +94,33 @@ export interface DioceseVisible {
   /** Institutions present and what they open. */
   opportunities: string[];
   institutions: Institution[];
+  /** The religious houses of the diocese: abbeys, friaries, monasteries of nuns. Public knowledge. */
+  houses: ReligiousHouse[];
   /** One visible problem. */
   complication: string;
+}
+
+/**
+ * A religious house in the diocese. Generated from content/houses.json; a
+ * pastor can lean on one, and the diocese card names them.
+ */
+export interface ReligiousHouse {
+  id: string;
+  name: string;
+  /** The order's id in content/houses.json. */
+  order: string;
+  /** "the Benedictines" */
+  orderLabel: string;
+  members: 'monks' | 'friars' | 'nuns' | 'canons';
+  /** Contemplatives pray for a parish; an active house sends a confessor and a preacher. */
+  charism: 'contemplative' | 'active';
+  /** −100 traditional .. +100 progressive. */
+  alignment: number;
+  /** In the see city, or out in the country. */
+  setting: 'city' | 'country';
+  /** How many live there. */
+  size: number;
+  line: string;
 }
 
 /** Everything the preview must not show. DESIGN.md §3.1a "Hidden from the preview". */
@@ -119,8 +144,8 @@ export interface DioceseHidden {
  * authorizes the older form, as the 2021 norms require.
  */
 export type LiturgicalStance = 'free' | 'by_permission' | 'forbidden';
-export type LiturgicalTopic = 'ad_orientem' | 'latin_mass' | 'altar_rail' | 'tabernacle' | 'renovation';
-export const LITURGICAL_TOPICS: readonly LiturgicalTopic[] = ['ad_orientem', 'latin_mass', 'altar_rail', 'tabernacle', 'renovation'] as const;
+export type LiturgicalTopic = 'ad_orientem' | 'latin_mass' | 'altar_rail' | 'tabernacle' | 'renovation' | 'older_form_faculty';
+export const LITURGICAL_TOPICS: readonly LiturgicalTopic[] = ['ad_orientem', 'latin_mass', 'altar_rail', 'tabernacle', 'renovation', 'older_form_faculty'] as const;
 export type LiturgicalPolicy = Record<LiturgicalTopic, LiturgicalStance>;
 
 export interface BishopProfile {

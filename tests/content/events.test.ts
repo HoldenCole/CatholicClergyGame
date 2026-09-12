@@ -62,7 +62,7 @@ const EFFECT_TARGETS = [
 ];
 const DECOR_PLACES = ['church', 'office', 'rectory', 'seminary_room', 'chancery'];
 const DECOR_SLOTS = ['sanctuary', 'altar_rail', 'orientation', 'confessionals', 'choir', 'statues', 'tabernacle', 'mass_form', 'wall', 'desk', 'floor', 'corner'];
-const LITURGICAL_TOPICS = ['ad_orientem', 'latin_mass', 'altar_rail', 'tabernacle', 'renovation'];
+const LITURGICAL_TOPICS = ['ad_orientem', 'latin_mass', 'altar_rail', 'tabernacle', 'renovation', 'older_form_faculty'];
 const BISHOP_KEYS = ['management', 'priority', 'rewards', 'cannotTolerate', 'stance'];
 const DECOR_IDS = new Set(decorOptions.map((o) => o.id));
 const ROUTINE_KEYS = new Set([...actionDefs.map((a) => a.id), ...obligationDefs.map((o) => o.key)]);
@@ -109,6 +109,9 @@ function checkCondition(c: Condition, where: string, problems: Problem[]): void 
       break;
     case 'thread':
       if (typeof c.key !== 'string' || typeof c.open !== 'boolean') problems.push(`${where}: bad thread condition`);
+      break;
+    case 'house':
+      if (typeof c.value !== 'boolean' || (c.charism !== undefined && !['contemplative', 'active'].includes(c.charism))) problems.push(`${where}: bad house condition`);
       break;
     case 'parish':
       if (!PARISH_KEYS.includes(c.key) || c.value === undefined) problems.push(`${where}: bad parish condition`);

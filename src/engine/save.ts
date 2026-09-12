@@ -2,6 +2,7 @@ import type { GameState, SaveFile, Snapshot } from '@/types';
 import { SAVE_VERSION, EVENT_CATEGORIES, SPEEDS } from '@/types';
 import { createRng, restoreRng, type Rng } from './rng';
 import { withLiturgy } from '@/systems/liturgy';
+import { generateHouses } from '@/generation/houses';
 
 /** Parishes saved before the pastor's Mass existed get one now, rolled from the seed so a reload rolls the same. */
 function giveEveryParishItsMass(state: GameState): void {
@@ -9,6 +10,13 @@ function giveEveryParishItsMass(state: GameState): void {
   if (!world) return;
   if (world.parishes.every((p) => p.liturgy && p.taste)) return;
   world.parishes = world.parishes.map((p) => (p.liturgy && p.taste ? p : withLiturgy(createRng(`${state.seed}:mass:${p.id}`), p)));
+}
+
+/** Dioceses saved before religious houses existed get theirs now, rolled from the seed so a reload rolls the same. */
+function giveEveryDioceseItsHouses(state: GameState): void {
+  const world = state.world;
+  if (!world || world.diocese.visible.houses) return;
+  world.diocese.visible.houses = generateHouses(createRng(`${state.seed}:houses`), world.diocese.visible.size);
 }
 
 /**
@@ -135,6 +143,8 @@ export function deserialize(json: string): SaveFile {
   const prose = isRecord(raw.prose) ? (raw.prose as Record<string, string>) : {};
   giveEveryParishItsMass(raw.state as GameState);
   if (isRecord(raw.previous)) giveEveryParishItsMass(raw.previous.state as GameState);
+  giveEveryDioceseItsHouses(raw.state as GameState);
+  if (isRecord(raw.previous)) giveEveryDioceseItsHouses(raw.previous.state as GameState);
   return {
     version: SAVE_VERSION,
     state: raw.state,

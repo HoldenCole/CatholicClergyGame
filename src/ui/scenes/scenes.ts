@@ -194,11 +194,14 @@ export const STUDY_CITY: SceneDef = {
   label: 'The city',
   locations: [],
   hotspots: [
-    { id: 'university', label: 'The university: lectures and the thesis', x: 2, y: 14, w: 22, h: 48, binds: { kind: 'study_action', activityId: 'thesis' } },
+    { id: 'university', label: 'The university: lectures and the thesis', x: 2, y: 14, w: 16, h: 48, binds: { kind: 'study_action', activityId: 'thesis' } },
+    { id: 'monastery', label: 'The monastery: Mass for the nuns', x: 19, y: 30, w: 11, h: 26, binds: { kind: 'study_action', activityId: 'monastery_mass' } },
+    { id: 'cloister', label: 'The bell tower: Vespers with the monks', x: 19, y: 2, w: 7, h: 27, binds: { kind: 'study_action', activityId: 'monastery_vespers' } },
+    { id: 'friary', label: "The friary door: a hand in the kitchen", x: 26, y: 2, w: 5, h: 27, binds: { kind: 'study_action', activityId: 'monastery_help' } },
     { id: 'basilica', label: 'The basilica: confessions', x: 36, y: 4, w: 28, h: 50, binds: { kind: 'study_action', activityId: 'confessions' } },
     { id: 'hospital', label: 'The hospital: chaplaincy', x: 70, y: 18, w: 16, h: 40, binds: { kind: 'study_action', activityId: 'hospital' } },
     { id: 'parish', label: 'A parish: Sunday supply', x: 86, y: 22, w: 12, h: 36, binds: { kind: 'study_action', activityId: 'parish_supply' } },
-    { id: 'curia', label: 'The offices: work at the Holy See', x: 24, y: 24, w: 12, h: 30, binds: { kind: 'study_action', activityId: 'curia' } },
+    { id: 'curia', label: 'The offices: work at the Holy See', x: 31, y: 24, w: 6, h: 30, binds: { kind: 'study_action', activityId: 'curia' } },
     { id: 'college', label: 'The college office', x: 64, y: 26, w: 7, h: 28, binds: { kind: 'study_action', activityId: 'college_office' } },
     { id: 'table', label: 'The trattoria: the Roman table', x: 62, y: 62, w: 20, h: 22, binds: { kind: 'study_action', activityId: 'table' } },
     { id: 'pilgrims', label: 'The piazza: pilgrims from home', x: 30, y: 62, w: 26, h: 22, binds: { kind: 'study_action', activityId: 'pilgrims' } },
@@ -215,6 +218,9 @@ export const STUDY_CITY_DC: SceneDef = {
     : h.id === 'curia' ? { ...h, label: 'The tribunal', binds: { kind: 'study_action', activityId: 'tribunal' } }
     : h.id === 'pilgrims' ? { ...h, label: 'Fourth Street: the bishops\' conference', binds: { kind: 'study_action', activityId: 'conference' } }
     : h.id === 'table' ? { ...h, label: 'Dinner: the table' }
+    : h.id === 'monastery' ? { ...h, label: 'The Poor Clares: Mass for the nuns' }
+    : h.id === 'cloister' ? { ...h, label: 'The Dominicans: Compline with the friars' }
+    : h.id === 'friary' ? { ...h, label: "The sisters' kitchen: a hand" }
     : h,
   ),
 };

@@ -87,18 +87,32 @@ export function StudyCity({ city }: { city: StudyCity }) {
       <rect width="100" height="40" fill="url(#sky)" />
       <ellipse cx="78" cy="6" rx="14" ry="3" fill="#fff" opacity="0.35" filter="url(#softer)" />
       {/* the university */}
-      <rect x="2" y="16" width="22" height="24" fill={facade2} stroke="#7a5a3a" strokeWidth="0.3" />
-      <rect x="2" y="14" width="22" height="2.4" fill={roof} />
-      {[5, 10, 15, 20].map((x) => <rect key={x} x={x} y="20" width="2.4" height="4" fill="#dfe9f0" />)}
-      {[5, 10, 15, 20].map((x) => <rect key={x} x={x} y="27" width="2.4" height="4" fill="#dfe9f0" />)}
-      <rect x="10" y="32" width="6" height="8" fill={PALETTE.oakDark} />
-      <path d="M10 32 Q13 28 16 32 Z" fill={PALETTE.oakDark} />
-      <text x="13" y="18.8" fontSize="1.4" textAnchor="middle" fill="#3a2a18" fontFamily="serif">{rome ? 'GREGORIANA' : 'CUA'}</text>
+      <rect x="2" y="16" width="16" height="24" fill={facade2} stroke="#7a5a3a" strokeWidth="0.3" />
+      <rect x="2" y="14" width="16" height="2.4" fill={roof} />
+      {[4, 8.5, 13].map((x) => <rect key={x} x={x} y="20" width="2.2" height="4" fill="#dfe9f0" />)}
+      {[4, 13].map((x) => <rect key={x} x={x} y="27" width="2.2" height="4" fill="#dfe9f0" />)}
+      <rect x="7.5" y="32" width="5" height="8" fill={PALETTE.oakDark} />
+      <path d="M7.5 32 Q10 28 12.5 32 Z" fill={PALETTE.oakDark} />
+      <text x="10" y="18.8" fontSize="1.2" textAnchor="middle" fill="#3a2a18" fontFamily="serif">{rome ? 'GREGORIANA' : 'CUA'}</text>
+      {/* the monastery: a bell tower, the church, and the friary door under the arcade */}
+      <rect x="19" y="8" width="5" height="32" fill={rome ? '#d9cfb2' : '#c9b8a0'} stroke="#7a6a4a" strokeWidth="0.3" />
+      <polygon points="18.5,8 21.5,3 24.5,8" fill={rome ? '#8a4a2a' : '#4a4a52'} />
+      <rect x="21.2" y="0.5" width="0.6" height="2.6" fill={PALETTE.gold} />
+      <rect x="20.4" y="1.2" width="2.2" height="0.5" fill={PALETTE.gold} />
+      <path d="M20 12 q1.5 -2 3 0 v3 h-3 Z" fill="#2a1a12" />
+      <ellipse cx="21.5" cy="14" rx="0.7" ry="0.9" fill="url(#brass)" />
+      <rect x="24" y="20" width="7" height="20" fill={rome ? '#e6dcc4' : '#d9cfb8'} stroke="#7a6a4a" strokeWidth="0.3" />
+      <rect x="24" y="18.6" width="7" height="1.8" fill={rome ? '#8a4a2a' : '#4a4a52'} />
+      <circle cx="27.5" cy="24" r="1.5" fill="#2e5aac" opacity="0.8" />
+      <circle cx="27.5" cy="24" r="1.5" fill="none" stroke={PALETTE.gold} strokeWidth="0.25" />
+      <rect x="26.2" y="31" width="2.6" height="9" fill={PALETTE.oakDark} />
+      <path d="M26.2 31 Q27.5 28.6 28.8 31 Z" fill={PALETTE.oakDark} />
+      {[24.4, 29.2].map((x) => <path key={x} d={`M${x} 40 v-4 q0.9 -1.6 1.8 0 v4 Z`} fill="#3a2a22" opacity="0.7" />)}
       {/* the offices, a narrow building */}
-      <rect x="25" y="22" width="10" height="18" fill={facade} stroke="#7a5a3a" strokeWidth="0.3" />
-      <rect x="25" y="20.6" width="10" height="1.8" fill={roof} />
-      {[27, 31].map((x) => <rect key={x} x={x} y="25" width="2" height="3.4" fill="#dfe9f0" />)}
-      <rect x="28.5" y="34" width="3" height="6" fill={PALETTE.oakDark} />
+      <rect x="31" y="22" width="6" height="18" fill={facade} stroke="#7a5a3a" strokeWidth="0.3" />
+      <rect x="31" y="20.6" width="6" height="1.8" fill={roof} />
+      {[32, 35].map((x) => <rect key={x} x={x} y="25" width="1.6" height="3.4" fill="#dfe9f0" />)}
+      <rect x="32.8" y="34" width="2.4" height="6" fill={PALETTE.oakDark} />
       {/* the basilica */}
       {rome ? (
         <g>

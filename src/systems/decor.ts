@@ -34,6 +34,7 @@ export const TOPIC_LABEL: Record<LiturgicalTopic, string> = {
   altar_rail: 'an altar rail',
   tabernacle: 'moving the tabernacle',
   renovation: 'a renovation of the sanctuary',
+  older_form_faculty: 'faculties to celebrate the older form of the Mass',
 };
 
 /** How long a refusal stands before the chancery will read a second letter. */
@@ -72,6 +73,11 @@ export function stanceFor(state: GameState, topic: LiturgicalTopic): LiturgicalS
 export function gateFor(state: GameState, option: DecorOption): Gate {
   const topic = option.policy;
   if (!topic) return { ok: true, why: null, stance: null, permission: null, canAsk: false };
+  return gateForTopic(state, topic);
+}
+
+/** The bishop's gate on one topic: open, closed, a letter pending, a refusal standing, or a letter to write. */
+export function gateForTopic(state: GameState, topic: LiturgicalTopic): Gate {
   const stance = stanceFor(state, topic);
   const permission = state.permissions[topic] ?? null;
   if (stance === null || stance === 'free') return { ok: true, why: null, stance, permission, canAsk: false };
@@ -88,9 +94,27 @@ export function gateFor(state: GameState, option: DecorOption): Gate {
   return { ok: false, why: `Needs the bishop's leave. Write to the chancery about ${TOPIC_LABEL[topic]}.`, stance, permission, canAsk: true };
 }
 
+/**
+ * Whether the man may write for faculties to celebrate the older form of the
+ * Mass. Under the 2021 norms the diocesan bishop grants them to the priest,
+ * not the parish, so a vicar asks as readily as a pastor.
+ */
+export function facultyGate(state: GameState): Gate {
+  const topic: LiturgicalTopic = 'older_form_faculty';
+  if (state.flags.can_celebrate_tlm) return { ok: true, why: null, stance: stanceFor(state, topic), permission: state.permissions[topic] ?? null, canAsk: false };
+  if (!state.assignment) return { ok: false, why: 'Ask when you have a parish.', stance: null, permission: null, canAsk: false };
+  const gate = gateForTopic(state, topic);
+  if (gate.stance === 'forbidden') return { ...gate, why: `${bishopName(state)} grants no faculties for the older form. The question is closed under him.` };
+  if (gate.canAsk) return { ...gate, why: 'Write to the chancery for faculties. The bishop will want to know your Latin and your reasons.' };
+  return gate;
+}
+
 /** Send the letter. The answer comes back through the week hook some weeks later. */
 export function petition(state: GameState, topic: LiturgicalTopic, rng: Rng): FurnishResult {
-  if (state.assignment?.role !== 'pastor') throw new Error('Only the pastor writes to the chancery about the liturgy.');
+  if (topic === 'older_form_faculty') {
+    if (!state.assignment) throw new Error('Ask when you have a parish.');
+    if (state.flags.can_celebrate_tlm) return { state, line: 'You already have the faculties.' };
+  } else if (state.assignment?.role !== 'pastor') throw new Error('Only the pastor writes to the chancery about the liturgy.');
   const stance = stanceFor(state, topic);
   if (stance === null) throw new Error('There is no bishop to ask.');
   if (stance === 'forbidden') throw new Error(`${bishopName(state)} does not permit ${TOPIC_LABEL[topic]}.`);
@@ -109,7 +133,7 @@ export function petition(state: GameState, topic: LiturgicalTopic, rng: Rng): Fu
 }
 
 /** Topics that read as a traditional tilt when the bishop decides. */
-const TOPIC_TILT: Record<LiturgicalTopic, number> = { ad_orientem: -1, latin_mass: -1, altar_rail: -1, tabernacle: 0, renovation: 0 };
+const TOPIC_TILT: Record<LiturgicalTopic, number> = { ad_orientem: -1, latin_mass: -1, altar_rail: -1, tabernacle: 0, renovation: 0, older_form_faculty: -1 };
 
 /** The chance the bishop says yes: standing with him and the chancery, and how the ask sits with his own leanings. */
 export function grantChance(state: GameState, topic: LiturgicalTopic): number {
@@ -117,7 +141,16 @@ export function grantChance(state: GameState, topic: LiturgicalTopic): number {
   const rel = state.npcs[profile.npcId]?.relationship ?? 0;
   const chancery = state.character?.reputation.chancery ?? 0;
   const lean = TOPIC_TILT[topic] * -profile.alignment / 300; // a traditional bishop warms to a traditional ask
-  return Math.min(0.95, Math.max(0.05, PERMISSION.baseChance + rel / 250 + chancery / 250 + lean));
+  let fit = 0;
+  if (topic === 'older_form_faculty') {
+    // Faculties go to a man who can read the missal and has somewhere to use it; a newly ordained man's request goes to Rome, and slower.
+    const c = state.character;
+    if (c?.credentials.includes('latin')) fit += 0.15;
+    if (state.flags['club:tlm_society'] || state.flags['club:priests_tlm']) fit += 0.1;
+    const at = state.flags.ordination_week;
+    if (typeof at === 'number' && state.clock.week - at < 104) fit -= 0.15;
+  }
+  return Math.min(0.95, Math.max(0.05, PERMISSION.baseChance + rel / 250 + chancery / 250 + lean + fit));
 }
 
 /** Answer any letters whose week has come. Called by the week hook. */
@@ -128,16 +161,23 @@ export function resolvePermissions(state: GameState, rng: Rng): { state: GameSta
     if (p.status !== 'pending' || p.answerWeek > state.clock.week || !next.world) continue;
     const granted = rng.chance(grantChance(next, p.topic));
     const answered: Permission = { ...p, status: granted ? 'granted' : 'denied', answerWeek: state.clock.week };
-    const line = granted
-      ? `A letter from the chancery: ${bishopName(next)} grants leave for ${TOPIC_LABEL[p.topic]}, "with the usual prudence."`
-      : `A letter from the chancery: ${bishopName(next)} declines ${TOPIC_LABEL[p.topic]} "at this time."`;
+    const faculty = p.topic === 'older_form_faculty';
+    const line = faculty
+      ? granted
+        ? `A letter from the chancery: ${bishopName(next)} grants you faculties to celebrate the older form of the Mass, "for the good of the faithful attached to it," and copies the vicar for clergy.`
+        : `A letter from the chancery: ${bishopName(next)} declines to grant faculties for the older form "at this time," and suggests the Latin of the Novus Ordo would serve.`
+      : granted
+        ? `A letter from the chancery: ${bishopName(next)} grants leave for ${TOPIC_LABEL[p.topic]}, "with the usual prudence."`
+        : `A letter from the chancery: ${bishopName(next)} declines ${TOPIC_LABEL[p.topic]} "at this time."`;
     lines.push(line);
     next = {
       ...next,
       permissions: { ...next.permissions, [p.topic]: answered },
-      flags: { ...next.flags, [`permission:${p.topic}`]: granted },
+      flags: { ...next.flags, [`permission:${p.topic}`]: granted, ...(faculty && granted ? { can_celebrate_tlm: true } : {}) },
       career: [...next.career, { week: state.clock.week, kind: 'note', text: line }],
     };
+    // Faculties are noticed: the traditional wing counts him, and the record shows a man who asked.
+    if (faculty) next = applyEffects(next, granted ? [{ target: 'reputation', key: 'traditional_bloc', delta: 4 }, { target: 'outspokenness', key: '', delta: 2 }] : [{ target: 'reputation', key: 'traditional_bloc', delta: 2 }]);
   }
   return { state: next, lines };
 }
