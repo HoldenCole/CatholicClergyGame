@@ -253,85 +253,141 @@ export function Bookcase({ x, y, w, h, rows = 4, density = 1 }: { x: number; y: 
   );
 }
 
-/** A desk seen from the front: top in perspective, a front with drawers, legs or a pedestal. */
+/**
+ * A desk seen from the front: a top in perspective, an apron, and either two
+ * pedestals of drawers (oak, walnut) or legs with a modesty panel (plain,
+ * metal). The chair behind it is drawn first so the desk hides its seat.
+ */
 export function Desk({ x, y, w, kind = 'oak' }: { x: number; y: number; w: number; kind?: 'oak' | 'walnut' | 'metal' | 'plain' }) {
-  const top = kind === 'metal' ? '#c9c4bb' : kind === 'plain' ? '#c9a87a' : 'url(#woodTop)';
-  const front = kind === 'metal' ? '#8f8b84' : kind === 'plain' ? '#a8865a' : kind === 'walnut' ? PALETTE.walnut : 'url(#wood)';
+  const pedestal = kind === 'oak' || kind === 'walnut';
+  const top = kind === 'metal' ? '#d6d1c7' : kind === 'plain' ? '#c8a26f' : 'url(#woodTop)';
+  const edge = kind === 'metal' ? '#b9b3a8' : kind === 'plain' ? '#a3825a' : kind === 'walnut' ? '#4a2c17' : '#6b4320';
+  const body = kind === 'metal' ? '#8f8b84' : kind === 'plain' ? '#98764c' : kind === 'walnut' ? PALETTE.walnut : 'url(#wood)';
+  const dark = kind === 'metal' ? '#5f5b55' : kind === 'plain' ? '#7a5a38' : '#2a1408';
   const d = 5;
+  const h = 14.5;
+  const pw = Math.min(16, w * 0.28);
+  const legW = kind === 'metal' ? 1.2 : 1.6;
   return (
     <g>
-      <Shadow x={x - 2} y={y + 16} w={w + 4} h={2.2} />
-      <polygon points={pts([[x + 3, y], [x + w - 3, y], [x + w, y + d], [x, y + d]])} fill={top} />
-      <rect x={x} y={y + d} width={w} height="9.5" fill={front} />
-      <rect x={x} y={y + d} width={w} height="0.7" fill="#fff" opacity="0.3" />
-      {kind !== 'metal' && kind !== 'plain' && (
+      <Shadow x={x - 2} y={y + h + 1.5} w={w + 4} h={2.2} />
+      {pedestal ? (
         <g>
-          <rect x={x + 2} y={y + d + 1.5} width={w * 0.26} height="3" fill="#00000030" stroke={PALETTE.gold} strokeWidth="0.2" />
-          <rect x={x + 2} y={y + d + 5.2} width={w * 0.26} height="3" fill="#00000030" stroke={PALETTE.gold} strokeWidth="0.2" />
-          <rect x={x + w - 2 - w * 0.26} y={y + d + 1.5} width={w * 0.26} height="3" fill="#00000030" stroke={PALETTE.gold} strokeWidth="0.2" />
-          <rect x={x + w - 2 - w * 0.26} y={y + d + 5.2} width={w * 0.26} height="3" fill="#00000030" stroke={PALETTE.gold} strokeWidth="0.2" />
-          {[y + d + 3, y + d + 6.7].map((yy) => (
-            <g key={yy}>
-              <rect x={x + 2 + w * 0.1} y={yy} width={w * 0.06} height="0.7" rx="0.35" fill="url(#brass)" />
-              <rect x={x + w - 2 - w * 0.16} y={yy} width={w * 0.06} height="0.7" rx="0.35" fill="url(#brass)" />
+          <rect x={x} y={y + d} width={pw} height={h - d} fill={body} />
+          <rect x={x + w - pw} y={y + d} width={pw} height={h - d} fill={body} />
+          <rect x={x + pw} y={y + d} width={w - pw * 2} height={h - d - 3.5} fill={body} />
+          <rect x={x + pw} y={y + d} width={w - pw * 2} height={h - d - 3.5} fill="#000" opacity="0.28" />
+          <rect x={x + pw} y={y + h - 3.5} width={w - pw * 2} height="3.5" fill={dark} opacity="0.9" />
+          {[x + 1.2, x + w - pw + 1.2].map((px) => (
+            <g key={px}>
+              {[1.2, 4.4, 7.6].map((dy) => (
+                <g key={dy}>
+                  <rect x={px} y={y + d + dy} width={pw - 2.4} height="2.6" fill="#000" opacity="0.22" stroke={PALETTE.gold} strokeWidth="0.15" />
+                  <rect x={px + pw / 2 - 2.2} y={y + d + dy + 1} width="2" height="0.6" rx="0.3" fill="url(#brass)" />
+                </g>
+              ))}
             </g>
           ))}
-          <rect x={x + w * 0.4} y={y + d + 1.5} width={w * 0.2} height="2" fill="#00000030" stroke={PALETTE.gold} strokeWidth="0.15" />
+          <rect x={x + pw + 1} y={y + d + 1.2} width={w - pw * 2 - 2} height="2.2" fill="#000" opacity="0.18" stroke={PALETTE.gold} strokeWidth="0.15" />
         </g>
-      )}
-      {kind === 'metal' && (
+      ) : (
         <g>
-          {[1.5, 4.5, 7.5].map((dy) => (
-            <rect key={dy} x={x + 1.5} y={y + d + dy} width={w * 0.3} height="2.2" fill="#7d7973" stroke="#5f5b55" strokeWidth="0.2" />
-          ))}
-          <rect x={x + w - 1.5 - w * 0.3} y={y + d + 1.5} width={w * 0.3} height="8" fill="#7d7973" stroke="#5f5b55" strokeWidth="0.2" />
+          <rect x={x + 2.5} y={y + d} width={w - 5} height={h - d - 3.5} fill={body} />
+          <rect x={x + 2.5} y={y + d} width={w - 5} height={h - d - 3.5} fill="#000" opacity="0.2" />
+          <rect x={x + 2.5} y={y + h - 3.5} width={w - 5} height="3.5" fill={dark} opacity="0.55" />
+          {kind === 'metal' && (
+            <g>
+              <rect x={x + w - 2.5 - pw} y={y + d} width={pw} height={h - d} fill="#7d7973" stroke="#5f5b55" strokeWidth="0.2" />
+              {[1, 4, 7].map((dy) => (
+                <rect key={dy} x={x + w - 1.5 - pw} y={y + d + dy} width={pw - 2} height="2.2" fill="#8f8b84" stroke="#5f5b55" strokeWidth="0.2" />
+              ))}
+            </g>
+          )}
+          {kind === 'plain' && <rect x={x + w - 2.5 - pw} y={y + d + 1} width={pw} height="2.4" fill="#000" opacity="0.18" stroke={dark} strokeWidth="0.2" />}
+          <rect x={x + 0.8} y={y + d} width={legW} height={h - d} fill={dark} />
+          <rect x={x + w - 0.8 - legW} y={y + d} width={legW} height={h - d} fill={dark} />
+          <rect x={x + 0.8} y={y + d} width={legW * 0.4} height={h - d} fill="#fff" opacity="0.15" />
         </g>
       )}
-      {(kind === 'plain' || kind === 'metal') && (
-        <g>
-          <rect x={x + 1} y={y + d + 9.5} width="1.6" height="3.5" fill={kind === 'metal' ? '#5f5b55' : '#8a6a44'} />
-          <rect x={x + w - 2.6} y={y + d + 9.5} width="1.6" height="3.5" fill={kind === 'metal' ? '#5f5b55' : '#8a6a44'} />
-        </g>
-      )}
+      <polygon points={pts([[x + 3, y], [x + w - 3, y], [x + w, y + d], [x, y + d]])} fill={top} />
+      <polygon points={pts([[x + 3, y], [x + w - 3, y], [x + w, y + d], [x, y + d]])} fill="url(#wallShade)" opacity="0.25" />
+      <rect x={x} y={y + d} width={w} height="1.2" fill={edge} />
+      <rect x={x} y={y + d} width={w} height="0.4" fill="#fff" opacity="0.35" />
     </g>
   );
 }
 
-export function Chair({ x, y, s = 1, kind = 'leather' }: { x: number; y: number; s?: number; kind?: 'leather' | 'wood' | 'office' | 'folding' }) {
+/**
+ * A chair. `facing` 'front' shows the seat; 'away' is a chair seen from
+ * behind, as one pulled up to the near side of a desk or table. Local units:
+ * the chair is about 8 wide and 15 tall.
+ */
+export function Chair({ x, y, s = 1, kind = 'leather', facing = 'front' }: { x: number; y: number; s?: number; kind?: 'leather' | 'wood' | 'office' | 'folding'; facing?: 'front' | 'away' }) {
   const seat = kind === 'leather' ? 'url(#leather)' : kind === 'office' ? '#2e2a2a' : kind === 'folding' ? '#8a8378' : PALETTE.oak;
+  const frame = kind === 'leather' ? '#5a160f' : kind === 'office' ? '#333' : kind === 'folding' ? '#5f5b55' : PALETTE.oakDark;
+  const back =
+    kind === 'leather' ? (
+      <g>
+        <path d="M0 0 Q4 -3 8 0 L7.6 9 L0.4 9 Z" fill={seat} />
+        <path d="M1 0.9 Q4 -1.4 7 0.9 L6.6 8 L1.4 8 Z" fill="#000" opacity="0.15" />
+        {[2.5, 5.5].map((cx) => [2.5, 5.5].map((cy) => <circle key={`${cx}${cy}`} cx={cx} cy={cy} r="0.28" fill="#f0d47a" opacity="0.6" />))}
+      </g>
+    ) : kind === 'wood' ? (
+      <g>
+        <rect x="0.6" y="0" width="1" height="9" fill={PALETTE.oakDark} />
+        <rect x="6.4" y="0" width="1" height="9" fill={PALETTE.oakDark} />
+        {[1.5, 4, 6.5].map((yy) => (
+          <rect key={yy} x="1" y={yy} width="6" height="1" fill={PALETTE.oak} />
+        ))}
+      </g>
+    ) : kind === 'office' ? (
+      <g>
+        <rect x="0.5" y="0" width="7" height="9" rx="1" fill={seat} />
+        <rect x="1.3" y="0.8" width="5.4" height="7.4" rx="0.8" fill="#fff" opacity="0.06" />
+      </g>
+    ) : (
+      <g>
+        <rect x="0.5" y="0" width="7" height="6" rx="0.4" fill={seat} />
+        <rect x="0.5" y="0" width="7" height="6" rx="0.4" fill="#fff" opacity="0.08" />
+        <rect x="1" y="6" width="0.7" height="3" fill={frame} />
+        <rect x="6.3" y="6" width="0.7" height="3" fill={frame} />
+      </g>
+    );
+  const legs =
+    kind === 'office' ? (
+      <g>
+        <rect x="3.6" y="11.6" width="0.8" height="2.6" fill="#333" />
+        <path d="M0.5 15 L4 14 L7.5 15 M2 15.4 L4 14 L6 15.4" stroke="#333" strokeWidth="0.7" fill="none" strokeLinecap="round" />
+      </g>
+    ) : kind === 'folding' ? (
+      <g>
+        <path d="M0.6 11.6 L7.4 15.4 M7.4 11.6 L0.6 15.4" stroke={frame} strokeWidth="0.7" strokeLinecap="round" />
+      </g>
+    ) : (
+      <g>
+        <rect x="1.4" y="11.6" width="0.7" height="2.6" fill={frame} opacity="0.7" />
+        <rect x="5.9" y="11.6" width="0.7" height="2.6" fill={frame} opacity="0.7" />
+        <rect x="0" y="11.6" width="0.9" height="3.8" fill={frame} />
+        <rect x="7.1" y="11.6" width="0.9" height="3.8" fill={frame} />
+      </g>
+    );
+  if (facing === 'away')
+    return (
+      <g transform={`translate(${x} ${y}) scale(${s})`}>
+        <ellipse cx="4" cy="14.8" rx="5" ry="1.1" fill="#1a0f08" opacity="0.35" filter="url(#soft)" />
+        {legs}
+        <rect x="-0.4" y="9" width="8.8" height="2.6" rx="0.4" fill={frame} />
+        <g>{back}</g>
+        <rect x="0" y="0" width="8" height="9" fill="#000" opacity="0.12" />
+      </g>
+    );
   return (
     <g transform={`translate(${x} ${y}) scale(${s})`}>
       <ellipse cx="4" cy="15.5" rx="5" ry="1.2" fill="#1a0f08" opacity="0.35" filter="url(#soft)" />
-      {kind === 'leather' ? (
-        <g>
-          <path d="M0 0 Q4 -3 8 0 L7.6 9 L0.4 9 Z" fill={seat} />
-          <path d="M1 0.9 Q4 -1.4 7 0.9 L6.6 8 L1.4 8 Z" fill="#000" opacity="0.15" />
-          {[2.5, 5.5].map((cx) => [2.5, 5.5].map((cy) => <circle key={`${cx}${cy}`} cx={cx} cy={cy} r="0.28" fill="#f0d47a" opacity="0.6" />))}
-        </g>
-      ) : kind === 'wood' ? (
-        <g>
-          <rect x="0.6" y="0" width="1" height="9" fill={PALETTE.oakDark} />
-          <rect x="6.4" y="0" width="1" height="9" fill={PALETTE.oakDark} />
-          {[1.5, 4, 6.5].map((yy) => (
-            <rect key={yy} x="1" y={yy} width="6" height="1" fill={PALETTE.oak} />
-          ))}
-        </g>
-      ) : (
-        <path d="M0.5 0 h7 v9 h-7 Z" fill={seat} />
-      )}
+      {back}
       <rect x="-0.4" y="9" width="8.8" height="2.6" rx="0.4" fill={kind === 'leather' ? '#5a160f' : seat} />
       <rect x="-0.4" y="9" width="8.8" height="0.5" fill="#fff" opacity="0.2" />
-      {kind === 'office' ? (
-        <g>
-          <rect x="3.6" y="11.6" width="0.8" height="3" fill="#333" />
-          <path d="M0 15 h8" stroke="#333" strokeWidth="0.8" />
-        </g>
-      ) : (
-        <g>
-          <rect x="0" y="11.6" width="0.9" height="3.8" fill={PALETTE.oakDark} />
-          <rect x="7.1" y="11.6" width="0.9" height="3.8" fill={PALETTE.oakDark} />
-        </g>
-      )}
+      {legs}
     </g>
   );
 }
@@ -367,7 +423,8 @@ export function Rug({ x, y, w, h, pattern = 'rug' }: { x: number; y: number; w: 
 export function Lamp({ x, y, s = 1, lit = true }: { x: number; y: number; s?: number; lit?: boolean }) {
   return (
     <g transform={`translate(${x} ${y}) scale(${s})`}>
-      {lit && <ellipse cx="0" cy="3" rx="9" ry="7" fill="url(#lamp)" />}
+      {lit && <ellipse cx="0" cy="1.5" rx="5.5" ry="4" fill="url(#lamp)" opacity="0.8" />}
+      <ellipse cx="0" cy="5.6" rx="2.6" ry="0.8" fill="#1a0f08" opacity="0.3" filter="url(#soft)" />
       <polygon points="-4,0 4,0 3,-4 -3,-4" fill={lit ? '#2f5f3a' : '#274a30'} />
       <polygon points="-4,0 4,0 3,-4 -3,-4" fill="#fff" opacity={lit ? 0.18 : 0.05} />
       <rect x="-0.4" y="0" width="0.8" height="5" fill="url(#brass)" />

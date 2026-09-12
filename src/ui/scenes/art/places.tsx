@@ -43,8 +43,9 @@ export function Hall() {
           <circle cx={x! + 12} cy={y! + 1.6} r="1" fill="#f3eee0" />
         </g>
       ))}
-      <Chair x={4} y={36} s={0.7} kind="folding" />
-      <Chair x={90} y={36} s={0.7} kind="folding" />
+      <Chair x={8} y={49} s={0.7} kind="folding" facing="away" />
+      <Chair x={46} y={49} s={0.7} kind="folding" facing="away" />
+      <Chair x={76} y={49} s={0.7} kind="folding" facing="away" />
       <Door x={45} y={50} w={10} h={10} color="#8a8378" />
     </g>
   );

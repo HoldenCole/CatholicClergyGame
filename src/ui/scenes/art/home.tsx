@@ -24,44 +24,79 @@ export function Rectory({ decor, ambient, parish }: { decor: PlaceDecor; ambient
       {wall === 'crucifix' ? <Crucifix x={40} y={10} s={0.85} /> : <WallItem scene="rectory" variant={wall} x={36} y={10} />}
       {wall !== 'crucifix' && <Crucifix x={48} y={10} s={0.7} />}
       <SideDoor color={PALETTE.oak} />
-      <CornerItem scene="rectory" variant={corner} x={12} y={48} />
-      <Ambient scene="rectory" items={ambient.filter((i) => i.layer === 'family' || i.layer === 'prayer')} anchor={{ books: [0, 0], wall: [22, 10], desk: [30, 33] }} />
+      <Stairs />
+      {!poor && <Radiator x={75.5} y={33} w={6} />}
       {/* sideboard with the mail and the phone */}
-      <Shadow x={4} y={43} w={16} />
-      <rect x="4" y="33" width="16" height="9" fill="url(#wood)" />
-      <rect x="4" y="33" width="16" height="0.7" fill="#fff" opacity="0.3" />
-      <rect x="5" y="35" width="6.5" height="5.5" fill="#000" opacity="0.2" />
-      <rect x="12.5" y="35" width="6.5" height="5.5" fill="#000" opacity="0.2" />
-      <rect x="6" y="31.4" width="6" height="1.6" fill="#f3eee0" transform="rotate(-6 9 32)" />
-      <rect x="7.5" y="30.6" width="6" height="1.6" fill="#f3eee0" opacity="0.95" transform="rotate(4 10 31)" />
-      <rect x="15" y="29.5" width="4" height="3.5" rx="0.4" fill="#1c1917" />
-      <rect x="15.6" y="30" width="2.8" height="0.8" rx="0.4" fill="#3f3a35" />
-      {/* table and chairs */}
-      {fine && <Rug x={16} y={44} w={68} h={16} />}
-      <Chair x={30} y={24} s={0.95} kind={fine ? 'leather' : 'wood'} />
-      <Chair x={44} y={24} s={0.95} kind={fine ? 'leather' : 'wood'} />
-      <Chair x={58} y={24} s={0.95} kind={fine ? 'leather' : 'wood'} />
-      <Shadow x={24} y={49} w={54} h={2.5} />
-      <polygon points={pts([[28, 34], [72, 34], [77, 41], [23, 41]])} fill={poor ? '#e8e2d2' : 'url(#woodTop)'} />
-      {!poor && <polygon points={pts([[30, 34.5], [70, 34.5], [74, 40], [26, 40]])} fill="url(#cloth)" opacity="0.9" />}
-      <rect x="23" y="41" width="54" height="2.2" fill={poor ? '#b9b3a6' : 'url(#wood)'} />
-      <rect x="26" y="43.2" width="1.8" height="8" fill={poor ? '#8a8478' : PALETTE.oakDark} />
-      <rect x="72" y="43.2" width="1.8" height="8" fill={poor ? '#8a8478' : PALETTE.oakDark} />
-      <Candle x={50} y={35} h={2.6} lit={fine} />
-      <ellipse cx="40" cy="37" rx="2.4" ry="0.9" fill="#f3eee0" />
-      <ellipse cx="60" cy="37" rx="2.4" ry="0.9" fill="#f3eee0" />
-      <rect x="47" y="35.5" width="2" height="2.4" fill="#5a1414" opacity="0.8" />
-      {/* stairs up to the study */}
-      {[0, 1, 2, 3, 4, 5].map((i) => (
-        <g key={i}>
-          <rect x={80 + i * 2.6} y={26 - i * 3} width="4" height="3" fill={PALETTE.oak} />
-          <rect x={80 + i * 2.6} y={26 - i * 3} width="4" height="0.6" fill="#fff" opacity="0.3" />
-        </g>
-      ))}
-      <rect x="93" y="6" width="6" height="8" fill="#1b1008" opacity="0.7" />
-      <rect x="79" y="10" width="0.8" height="18" fill={PALETTE.oakDark} />
-      <Door x={82} y={28} w={9} h={12} open={false} color={PALETTE.oakDark} />
-      {!poor && <Radiator x={62} y={27} w={9} />}
+      <Shadow x={3} y={41} w={11} />
+      <rect x="3" y="31" width="10" height="9" fill="url(#wood)" />
+      <rect x="3" y="31" width="10" height="0.7" fill="#fff" opacity="0.3" />
+      <rect x="4" y="33" width="3.6" height="5.5" fill="#000" opacity="0.2" />
+      <rect x="8.4" y="33" width="3.6" height="5.5" fill="#000" opacity="0.2" />
+      <rect x="4" y="29.4" width="5" height="1.6" fill="#f3eee0" transform="rotate(-6 6.5 30)" />
+      <rect x="5" y="28.6" width="5" height="1.6" fill="#f3eee0" opacity="0.95" transform="rotate(4 7.5 29)" />
+      <rect x="9.6" y="27.6" width="3.2" height="3.4" rx="0.4" fill="#1c1917" />
+      <rect x="10.1" y="28.1" width="2.2" height="0.8" rx="0.4" fill="#3f3a35" />
+      <Ambient scene="rectory" items={ambient.filter((i) => i.layer === 'family' || i.layer === 'prayer')} anchor={{ books: [0, 0], wall: [22, 10], desk: [30, 33] }} />
+      {fine && <Rug x={16} y={46} w={68} h={14} />}
+      <CornerItem scene="rectory" variant={corner} x={15} y={48} />
+      {/* the table: two chairs behind it, one pulled out on the near side */}
+      <Chair x={32} y={26.5} s={0.95} kind={fine ? 'leather' : 'wood'} />
+      <Chair x={58} y={26.5} s={0.95} kind={fine ? 'leather' : 'wood'} />
+      <Shadow x={22} y={54} w={56} h={2.5} />
+      <rect x="25" y="46" width="1.8" height="8" fill={poor ? '#8a8478' : PALETTE.oakDark} />
+      <rect x="73" y="46" width="1.8" height="8" fill={poor ? '#8a8478' : PALETTE.oakDark} />
+      <polygon points={pts([[27, 36], [73, 36], [78, 44], [22, 44]])} fill={poor ? '#e8e2d2' : 'url(#woodTop)'} />
+      {!poor && <polygon points={pts([[29, 36.6], [71, 36.6], [75, 43], [25, 43]])} fill="url(#cloth)" opacity="0.9" />}
+      <rect x="22" y="44" width="56" height="2.4" fill={poor ? '#b9b3a6' : 'url(#wood)'} />
+      <rect x="22" y="44" width="56" height="0.5" fill="#fff" opacity="0.25" />
+      <Candle x={50} y={38.6} h={2.6} lit={fine} />
+      <ellipse cx="38" cy="40.5" rx="2.6" ry="1" fill="#f3eee0" />
+      <ellipse cx="62" cy="40.5" rx="2.6" ry="1" fill="#f3eee0" />
+      <rect x="46" y="37.6" width="2" height="2.6" fill="#5a1414" opacity="0.8" />
+      <Chair x={46} y={46} s={1} kind={fine ? 'leather' : 'wood'} facing="away" />
+    </g>
+  );
+}
+
+/** The stairs up to the study, climbing the right wall. */
+function Stairs() {
+  const n = 7;
+  const x0 = 83;
+  const dx = 2.1;
+  const df = 0.095;
+  const prof: [number, number][] = [wallPoint('right', x0, 1)];
+  for (let i = 0; i < n; i++) {
+    prof.push(wallPoint('right', x0 + i * dx, 1 - i * df));
+    prof.push(wallPoint('right', x0 + i * dx, 1 - (i + 1) * df));
+    prof.push(wallPoint('right', x0 + (i + 1) * dx, 1 - (i + 1) * df));
+  }
+  const top = wallPoint('right', x0 + n * dx, 1 - n * df);
+  prof.push(wallPoint('right', x0 + n * dx, 1));
+  const rail0 = wallPoint('right', x0, 0.7);
+  const rail1 = wallPoint('right', x0 + n * dx, 0.7 - n * df);
+  return (
+    <g>
+      <polygon points={pts([top, wallPoint('right', 100, 1 - n * df), wallPoint('right', 100, 1 - n * df - 0.28), wallPoint('right', x0 + n * dx, 1 - n * df - 0.28)])} fill="#1b1008" opacity="0.65" />
+      <polygon points={pts(prof)} fill="#7a4a22" />
+      <polygon points={pts(prof)} fill="url(#sideRight)" />
+      {Array.from({ length: n }, (_, i) => {
+        const a = wallPoint('right', x0 + i * dx, 1 - (i + 1) * df);
+        const b = wallPoint('right', x0 + (i + 1) * dx, 1 - (i + 1) * df);
+        const c = wallPoint('right', x0 + i * dx, 1 - i * df);
+        return (
+          <g key={i}>
+            <line x1={a[0]} y1={a[1]} x2={b[0]} y2={b[1]} stroke="#fff" strokeWidth="0.35" opacity="0.4" />
+            <line x1={a[0]} y1={a[1]} x2={c[0]} y2={c[1]} stroke="#3a2210" strokeWidth="0.3" opacity="0.7" />
+          </g>
+        );
+      })}
+      {Array.from({ length: n }, (_, i) => {
+        const foot = wallPoint('right', x0 + i * dx + 1, 1 - (i + 1) * df);
+        const head = wallPoint('right', x0 + i * dx + 1, 0.7 - (i + 1) * df);
+        return <line key={i} x1={foot[0]} y1={foot[1]} x2={head[0]} y2={head[1]} stroke="#e9e2cc" strokeWidth="0.35" />;
+      })}
+      <line x1={rail0[0]} y1={rail0[1]} x2={rail1[0]} y2={rail1[1]} stroke={PALETTE.oakDark} strokeWidth="0.9" strokeLinecap="round" />
+      <line x1={rail0[0]} y1={rail0[1]} x2={rail0[0]} y2={wallPoint('right', x0, 1)[1]} stroke={PALETTE.oakDark} strokeWidth="1.1" strokeLinecap="round" />
     </g>
   );
 }
@@ -71,17 +106,17 @@ export function Study({ ambient }: { ambient: AmbientItem[] }) {
   return (
     <g>
       <Room wall="#a8794a" dado="#5a3b22" dadoAt={0.75} floor="boards" ceiling="#e2d8c2" />
-      <Bookcase x={6} y={4} w={36} h={36} rows={5} />
+      <SideDoor color={PALETTE.oakDark} />
+      <Bookcase x={19} y={9} w={28} h={31} rows={5} />
       <Window x={62} y={7} w={20} h={16} view="hills" curtains="#4a3a2a" />
       <LightPool x={60} y={40} w={22} h={14} />
       <Rug x={20} y={46} w={64} h={14} pattern="rugBlue" />
-      <Desk x={50} y={30} w={40} kind="oak" />
-      <Lamp x={82} y={26} s={0.85} lit />
-      <Chair x={64} y={19} s={0.8} kind="wood" />
-      <Chair x={8} y={42} s={1.1} kind="leather" />
-      <Ambient scene="study" items={ambient.filter((i) => i.layer === 'prayer' || i.layer === 'desk_state' || i.layer === 'archetype')} anchor={{ books: [0, 0], wall: [44, 8], desk: [52, 30] }} />
-      <rect x="54" y="27.8" width="9" height="2.4" fill="#f3eee0" transform="rotate(-3 58 29)" />
-      <Door x={4} y={42} w={9} h={16} open />
+      <Chair x={66} y={23} s={0.85} kind="wood" />
+      <Desk x={50} y={32} w={40} kind="oak" />
+      <Lamp x={56} y={28} s={0.85} lit />
+      <Ambient scene="study" items={ambient.filter((i) => i.layer === 'prayer' || i.layer === 'desk_state' || i.layer === 'archetype')} anchor={{ books: [0, 0], wall: [56, 8], desk: [52, 34] }} />
+      <rect x="64" y="30.8" width="9" height="2.4" fill="#f3eee0" transform="rotate(-3 68 32)" />
+      <Chair x={6} y={42} s={1.2} kind="leather" />
     </g>
   );
 }
@@ -103,16 +138,16 @@ export function SeminaryRoom({ ambient, seminaryName }: { ambient: AmbientItem[]
       <rect x="4" y="26" width="2.2" height="20" fill="url(#wood)" />
       <rect x="40" y="28" width="2" height="18" fill="url(#wood)" />
       {/* desk under the window */}
+      <Chair x={66} y={22} s={0.85} kind="wood" />
       <Desk x={50} y={31} w={40} kind="plain" />
-      <Chair x={66} y={19} s={0.8} kind="wood" />
       <Lamp x={84} y={27} s={0.75} lit />
-      <rect x="56" y="28.4" width="8" height="2.6" fill="#f3eee0" transform="rotate(-4 60 29.5)" />
+      <rect x="56" y="29.8" width="8" height="2.6" fill="#f3eee0" transform="rotate(-4 60 31)" />
       {/* shelf */}
       <Bookcase x={6} y={6} w={30} h={18} rows={3} density={0.7} />
       <Frame x={40} y={12} w={6} h={4} mat="#e9e2cc">
         <text x="43" y="14.8" fontSize="1.2" textAnchor="middle" fill="#5a4a32" fontFamily="serif">{(seminaryName ?? 'The seminary').split(' ')[0]}</text>
       </Frame>
-      <Ambient scene="seminary_room" items={ambient} anchor={{ books: [7, 7], wall: [40, 18], desk: [56, 31] }} />
+      <Ambient scene="seminary_room" items={ambient} anchor={{ books: [7, 7], wall: [40, 18], desk: [56, 33] }} />
       <Door x={90} y={30} w={8} h={16} open={false} color="#8a8378" />
     </g>
   );

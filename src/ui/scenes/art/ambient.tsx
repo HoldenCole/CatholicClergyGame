@@ -62,13 +62,21 @@ export function CornerItem({ scene, variant, x, y }: { scene: string; variant: s
       {variant === 'files' && <Cabinet x={x - 4.5} y={y - 10} w={9} h={22} drawers={4} />}
       {variant === 'chapel' && (
         <g>
-          <rect x={x - 3.5} y={y + 6} width="7" height="2.4" fill="url(#wood)" />
-          <rect x={x - 3.5} y={y + 8.4} width="7" height="1.4" fill="#5a1414" />
-          <Frame x={x - 2} y={y - 7} w={4} h={5} mat="url(#brass)" gilt>
-            <path d={`M${x} ${y - 5.8} C${x + 1.2} ${y - 5.8} ${x + 1.4} ${y - 4} ${x + 1} ${y - 2.6} L${x - 1} ${y - 2.6} C${x - 1.4} ${y - 4} ${x - 1.2} ${y - 5.8} ${x} ${y - 5.8} Z`} fill="#1f3a6e" />
+          {/* a prie-dieu: the kneeler, two uprights, the armrest with the icon and a candle on it */}
+          <ellipse cx={x} cy={y + 7.5} rx="5.5" ry="1" fill="#1a0f08" opacity="0.35" filter="url(#soft)" />
+          <rect x={x - 3.6} y={y - 6} width="1.3" height="12" fill={PALETTE.oakDark} />
+          <rect x={x + 2.3} y={y - 6} width="1.3" height="12" fill={PALETTE.oakDark} />
+          <rect x={x - 4.5} y={y + 4} width="9" height="2.6" fill="url(#wood)" />
+          <rect x={x - 4.5} y={y + 4} width="9" height="1.3" fill="#5a1414" />
+          <rect x={x - 4.5} y={y - 7.4} width="9" height="1.8" fill="url(#wood)" />
+          <rect x={x - 4.5} y={y - 7.4} width="9" height="0.4" fill="#fff" opacity="0.3" />
+          <rect x={x - 3.4} y={y - 5} width="6.8" height="4.4" fill="#000" opacity="0.18" />
+          <Frame x={x - 2.4} y={y - 13.2} w={4.8} h={5.8} mat="url(#brass)" gilt>
+            <path d={`M${x} ${y - 12} C${x + 1.4} ${y - 12} ${x + 1.6} ${y - 10} ${x + 1.2} ${y - 8.4} L${x - 1.2} ${y - 8.4} C${x - 1.6} ${y - 10} ${x - 1.4} ${y - 12} ${x} ${y - 12} Z`} fill="#1f3a6e" />
+            <circle cx={x} cy={y - 11.4} r="0.7" fill="#e3c69c" />
           </Frame>
-          <Candle x={x + 4} y={y + 6} h={2} lit />
-          <rect x={x + 3} y={y + 6} width="2" height="0.6" fill="url(#brass)" />
+          <Candle x={x + 3.6} y={y - 7.4} h={2} lit />
+          <rect x={x + 2.8} y={y - 7.6} width="1.6" height="0.5" fill="url(#brass)" />
         </g>
       )}
       {variant === 'tv' && (
@@ -82,13 +90,24 @@ export function CornerItem({ scene, variant, x, y }: { scene: string; variant: s
       )}
       {variant === 'books' && (
         <g>
-          <path d={`M${x - 5} ${y - 4} q0 -3 3 -3 h4 q3 0 3 3 v9 h-10 Z`} fill="url(#leather)" />
-          <rect x={x - 4} y={y + 1} width="8" height="4" fill="#5a160f" />
-          <rect x={x - 6} y={y + 5} width="12" height="1.2" fill={PALETTE.oakDark} />
-          <rect x={x + 6.5} y={y - 10} width="0.8" height="16" fill="url(#brass)" />
-          <polygon points={`${x + 4},${y - 10} ${x + 9.8},${y - 10} ${x + 8.6},${y - 6.5} ${x + 5.2},${y - 6.5}`} fill="#e6c96a" opacity="0.9" />
-          <ellipse cx={x + 6.9} cy={y - 4} rx="7" ry="6" fill="url(#lamp)" />
-          <rect x={x - 5} y={y - 2} width="3" height="0.8" fill="#f3eee0" opacity="0.6" />
+          {/* a reading chair with a floor lamp behind it and the books on the floor */}
+          <ellipse cx={x} cy={y + 8} rx="7" ry="1.2" fill="#1a0f08" opacity="0.35" filter="url(#soft)" />
+          <rect x={x + 6.3} y={y - 10} width="0.8" height="17" fill="url(#brass)" />
+          <polygon points={`${x + 3.6},${y - 10} ${x + 9.8},${y - 10} ${x + 8.8},${y - 6} ${x + 4.6},${y - 6}`} fill="#e6c96a" />
+          <ellipse cx={x + 6.7} cy={y - 5} rx="5" ry="3.6" fill="url(#lamp)" opacity="0.7" />
+          <ellipse cx={x + 6.7} cy={y + 7} rx="2.2" ry="0.6" fill="url(#brass)" />
+          <path d={`M${x - 5} ${y - 3} q0 -3 3 -3 h4 q3 0 3 3 v8 h-10 Z`} fill="url(#leather)" />
+          <rect x={x - 5} y={y - 2} width="10" height="7" fill="#000" opacity="0.12" />
+          <rect x={x - 6.5} y={y + 1} width="2.4" height="5.5" rx="0.8" fill="#5a160f" />
+          <rect x={x + 4.1} y={y + 1} width="2.4" height="5.5" rx="0.8" fill="#5a160f" />
+          <rect x={x - 4.2} y={y + 2.5} width="8.4" height="3.4" rx="0.8" fill="url(#leather)" />
+          <rect x={x - 6.5} y={y + 6.5} width="13" height="1.4" fill="#3a0f0a" />
+          <rect x={x - 6} y={y + 7.9} width="0.9" height="1.6" fill={PALETTE.oakDark} />
+          <rect x={x + 5.1} y={y + 7.9} width="0.9" height="1.6" fill={PALETTE.oakDark} />
+          {[0, 1, 2].map((i) => (
+            <rect key={i} x={x - 11 + (i % 2) * 0.4} y={y + 7.8 - i * 1.1} width="4" height="1.1" fill={['#7c2d12', '#1e3a8a', '#365314'][i]} />
+          ))}
+          <rect x={x - 2.5} y={y + 1.2} width="3" height="0.9" fill="#f3eee0" opacity="0.7" />
         </g>
       )}
     </Layer>

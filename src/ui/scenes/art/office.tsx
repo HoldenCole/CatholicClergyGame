@@ -67,14 +67,15 @@ export function Office({ decor, ambient, parish, role }: { decor: PlaceDecor; am
       {/* corner */}
       {corner === 'globe' && <Globe x={14} y={31} />}
       {corner !== 'globe' && <CornerItem scene="office" variant={corner} x={14} y={31} />}
-      {/* chairs for visitors */}
-      <Chair x={26} y={27} s={0.95} kind={grade === 'poor' ? 'folding' : grade === 'fine' ? 'leather' : 'wood'} />
-      <Chair x={66} y={27} s={0.95} kind={grade === 'poor' ? 'folding' : grade === 'fine' ? 'leather' : 'wood'} />
       {grade !== 'poor' && <Rug x={14} y={45} w={72} h={15} pattern={grade === 'fine' ? 'rug' : 'rugBlue'} />}
+      {/* his chair behind the desk, the desk hiding its seat */}
+      <Chair x={46.5} y={25} s={0.85} kind={grade === 'poor' ? 'office' : 'leather'} />
       <Desk x={22} y={35} w={56} kind={deskKind} />
       <Lamp x={70} y={31} s={0.9} lit />
-      <Ambient scene="office" items={ambient} anchor={{ books: [84, 6], wall: [84, 8], desk: [24, 35] }} />
-      <Chair x={46} y={22} s={0.8} kind={grade === 'poor' ? 'office' : 'leather'} />
+      <Ambient scene="office" items={ambient} anchor={{ books: [84, 6], wall: [84, 8], desk: [24, 37] }} />
+      {/* two chairs for visitors, pulled up to the near side */}
+      <Chair x={31} y={47} s={0.9} kind={grade === 'poor' ? 'folding' : grade === 'fine' ? 'leather' : 'wood'} facing="away" />
+      <Chair x={61} y={47} s={0.9} kind={grade === 'poor' ? 'folding' : grade === 'fine' ? 'leather' : 'wood'} facing="away" />
       <SideDoor color={grade === 'poor' ? '#8a8378' : PALETTE.oak} />
       {grade === 'fine' && <Plant x={92} y={44} s={1.3} />}
     </g>
@@ -157,13 +158,13 @@ export function Chancery({ ambient, rank, bishopName }: { ambient: AmbientItem[]
       <Crucifix x={corner ? 79 : 78} y={11} s={0.8} />
       <Cabinet x={84} y={16} w={11} h={24} drawers={4} color={corner ? '#5a3a22' : '#6b6660'} />
       <Cabinet x={4} y={18} w={10} h={22} drawers={3} color={corner ? '#5a3a22' : '#7a756e'} />
+      <Chair x={46.5} y={25} s={0.85} kind="office" />
       <Desk x={26} y={35} w={48} kind={corner ? 'walnut' : 'plain'} />
-      <Chair x={46} y={22} s={0.8} kind="office" />
-      <Chair x={28} y={27} s={0.9} kind={corner ? 'leather' : 'office'} />
-      <Chair x={66} y={27} s={0.9} kind={corner ? 'leather' : 'office'} />
-      <Lamp x={68} y={31} s={0.8} lit />
+      <Lamp x={33} y={31} s={0.8} lit />
+      <Chair x={33} y={47} s={0.9} kind={corner ? 'leather' : 'office'} facing="away" />
+      <Chair x={59} y={47} s={0.9} kind={corner ? 'leather' : 'office'} facing="away" />
       {corner && <Plant x={92} y={44} s={1.4} />}
-      <Ambient scene="chancery" items={ambient} anchor={{ books: [4, 6], wall: [64, 8], desk: [28, 35] }} />
+      <Ambient scene="chancery" items={ambient} anchor={{ books: [4, 6], wall: [64, 8], desk: [28, 37] }} />
       <polygon points={pts([wallPoint('left', 2, 0.15), wallPoint('left', 10, 0.15), wallPoint('left', 10, 0.95), wallPoint('left', 2, 0.95)])} fill="#000" opacity="0.08" />
     </g>
   );
