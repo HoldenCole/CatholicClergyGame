@@ -3,6 +3,7 @@ import { bondsPhrase, parishPeople } from '@/systems/bonds';
 import { relationshipWord } from '@/systems/classmates';
 import Sheet from '../Sheet';
 import StaffPanel from './StaffPanel';
+import FormedPanel from './FormedPanel';
 import Portrait from '../portraits/Portrait';
 import { portraitForNpc, yearOf } from '../portraits/spec';
 import { TRAIT_LABEL } from '../portraits/traits';
@@ -17,6 +18,7 @@ export default function PeoplePanel() {
   return (
     <>
     <StaffPanel />
+    <FormedPanel />
     {people.length > 0 && (
     <Sheet title="The people you know">
       <p className="ink-muted mb-2 text-xs">{known === 0 ? 'Names on the registry, so far. The sacraments will make them yours.' : known === 1 ? 'One family the parish will remember you by.' : `${known} people the parish will remember you by.`}</p>

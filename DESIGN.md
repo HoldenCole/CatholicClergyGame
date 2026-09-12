@@ -491,6 +491,26 @@ Multi-year efforts consuming AP and money: renovation, restoration, debt retirem
 
 **Away.** In Rome and Washington a priest-student can say Mass for a monastery of nuns, sing Vespers with the monks, and give a hand at a friary's kitchen, from the city scene or the routine sheet. Hours there build piety and a flag the cloister remembers.
 
+### 8.5 The year, the pulpit, the staff, the deanery, and the men
+
+*Added in playtesting.*
+
+**The why.** Every move of a constituency's opinion is written with its reason and kept a quarter, and the Parish sheet reads them back: what moved the people, where the pews are heading and what pulls them, what the plate comes to and why. Numbers stay hidden where the design says; reasons are always shown.
+
+**The liturgical year.** A strip under the clock shows the season and the feasts ahead. Feasts follow the US calendar; each parish has a patronal feast from its name; the communities' feasts (Guadalupe, Simbang Gabi, Santo Niño, Tết, Częstochowa, the Korean Martyrs) are kept where the community is. A `feast` condition gates scenes on the week. Vietnamese, Polish, Filipino, and Korean Masses join the language dial where the share warrants.
+
+**The homily.** What the man preaches on is chosen a month at a time from six topics in content, each with weekly effects under its own name. It is the one lever a vicar has as fully as a pastor.
+
+**The staff.** Desks the parish has (secretary, DRE, music director, maintenance) are filled by generated people. A pastor may let one go; the desk then draws three rolled candidates; a hire reads as new for half a year; a member of staff who cannot stand the priest may give notice.
+
+**Away.** Canon 276's retreat is owed each calendar year and two weeks of vacation are allowed, at places in content with their own weeks, rest, effects, and a supply priest paid by a pastor. A week away runs instead of the routine and fires one authored scene; a skipped year is noticed.
+
+**The map and the deanery.** Every parish has a place on a map of the diocese, the cathedral at the center and the country beyond the suburbs; miles follow the diocese's size. The deanery forms from the nearest parishes when an assignment starts, with a dean (a pastor long enough ordained may be named dean himself). A neighbor who trusts the man will trade cover, which gives a block of the week back; a neighbor may be said to want the same opening. Scenes come through `@dean` and `@deanery_priest`.
+
+**The pastor's temperament.** A vicar's pastor is a mentor, a micromanager, or absent, rolled once and kept. A mentor leaves him the music and the homily dial and makes his hours with the people pay a little more; a micromanager wants his reports; an absent pastor leaves him most of the Mass and the desk, and his Masses. Each has its scenes and a yearly talk.
+
+**The men you form.** In June a seminarian may come for ten weeks, carrying a block of the week; at the end the man writes his evaluation (strong, reserved, concerned), and an unwritten one writes itself. Four years on, a man he formed may be sent back as his parochial vicar, remembering what was written. A parish big enough may have a permanent deacon on staff, with his own scenes and half a block back.
+
 ## 9. Generation
 
 ### 9.1 Dioceses

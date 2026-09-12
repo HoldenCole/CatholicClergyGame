@@ -49,6 +49,8 @@ import { furnish as doFurnish, petition as doPetition } from '@/systems/decor';
 import { setHomily as doSetHomily } from '@/systems/homily';
 import { hire as doHire, letGo as doLetGo } from '@/systems/staff';
 import { goAway as doGoAway } from '@/systems/away';
+import { setCover as doSetCover } from '@/systems/deanery';
+import { evaluateSeminarian as doEvaluate } from '@/systems/formed';
 import { setSeminaryActivity as doSetSeminaryActivity } from '@/systems/seminaryWeek';
 import { setStudyActivity as doSetStudyActivity } from '@/systems/studyWeek';
 import { hoursOf } from '@/systems/week';
@@ -149,6 +151,8 @@ export interface GameStore {
   letGo(npcId: string): void;
   hire(candidateId: string): void;
   goAway(placeId: string): void;
+  setCover(npcId: string | null): void;
+  evaluateSeminarian(verdict: 'strong' | 'reserved' | 'concerned'): void;
   lastFurnishLine: string | null;
 
   /** The skinning layer. Off by default; the game is complete without it. */
@@ -528,6 +532,12 @@ export const useGameStore = create<GameStore>()((set, get) => ({
   },
   goAway(placeId) {
     update(set, get, (game) => doGoAway(game, placeId));
+  },
+  setCover(npcId) {
+    update(set, get, (game) => doSetCover(game, npcId));
+  },
+  evaluateSeminarian(verdict) {
+    update(set, get, (game) => doEvaluate(game, verdict));
   },
   petition(topic) {
     update(set, get, (game, r) => {

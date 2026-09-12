@@ -17,6 +17,8 @@ export interface Opening {
   /** Calendar week the opening appeared. */
   week: number;
   label: string;
+  /** A priest of the deanery said to want it, if one is. */
+  deaneryRivalId?: string;
   /** The player has put his name forward for it. */
   applied?: boolean;
 }

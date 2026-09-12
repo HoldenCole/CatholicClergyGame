@@ -3,7 +3,7 @@ import type { DecorPlace } from '@/types';
 import type { SceneId } from './scenes/scenes';
 
 /** The sheets on the desk. One is open at a time. */
-export type Sheet = 'week' | 'parish' | 'see' | 'place' | 'people' | 'jobs' | 'clubs' | 'letters' | 'record' | 'formation' | 'settings' | 'furnish';
+export type Sheet = 'week' | 'parish' | 'map' | 'deanery' | 'see' | 'place' | 'people' | 'jobs' | 'clubs' | 'letters' | 'record' | 'formation' | 'settings' | 'furnish';
 
 /** Reading preferences: kept in the browser, never in the save. */
 export interface Prefs {

@@ -218,6 +218,9 @@ export interface Parish {
   /** One live problem, by id in content. */
   problem: string;
   /** The Mass as it is said here: dial id -> option id. Rolled at generation; the pastor changes it. */
+  /** Where it sits on the map of the diocese, 0..100 each way; the cathedral at the center. */
+  x?: number;
+  y?: number;
   /** The parish's patronal feast, from its name or rolled: month, day, and what the parish calls it. */
   patronal?: { label: string; month?: number; day?: number; feast?: string };
   liturgy?: Record<string, string>;

@@ -68,6 +68,8 @@ export interface GameState {
   strain: number;
   /** The player's own dials, kept in the save so a replay is byte-identical. */
   settings?: GameSettings;
+  /** The men he formed: summer seminarians and the evaluations he wrote, and whether each came back. */
+  formed?: { npcId: string; name: string; year: number; verdict: 'strong' | 'reserved' | 'concerned'; returned?: boolean }[];
   /** A week away from the parish: the retreat or the vacation, where, and how long is left. */
   away?: { placeId: string; kind: 'retreat' | 'vacation'; weeksLeft: number; startWeek: number } | null;
   /** What moved each constituency lately, with the reason, so the sheets can say why. Trimmed to a quarter. */
