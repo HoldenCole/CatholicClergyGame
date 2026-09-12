@@ -80,7 +80,8 @@ describe('study away', () => {
     expect(home.study).toBeNull();
     expect(home.character!.credentials).toContain('STL');
     expect(home.flags.rome_alumnus).toBe(true);
-    expect(home.mode.kind).toBe('assignment');
+    // A degree earned buys a choice of assignments; the board's own letter waits behind it.
+    expect(home.mode.kind).toBe('assignment_choice');
     expect(home.assignment).not.toBeNull();
     expect(home.offerHistory.some((h) => h.offerId === 'pv_rome_study' && h.decision === 'completed')).toBe(true);
     expect(home.digest[home.digest.length - 1]!.lines.join(' ')).toMatch(/plane home/);

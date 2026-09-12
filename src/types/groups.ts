@@ -19,12 +19,13 @@ export type GroupType =
   | 'social_justice'
   | 'mens_group'
   | 'grief_support'
-  | 'recovery';
+  | 'recovery'
+  | 'third_order';
 
 export const GROUP_TYPES: readonly GroupType[] = [
   'young_adult', 'youth', 'pro_life', 'svdp', 'knights', 'womens_guild', 'bible_study', 'adoration', 'choir',
   'rcia', 'marriage_prep', 'school_parents', 'ethnic_community', 'tlm_society', 'social_justice', 'mens_group',
-  'grief_support', 'recovery',
+  'grief_support', 'recovery', 'third_order',
 ] as const;
 
 export type Vitality = 'thriving' | 'steady' | 'declining' | 'dying';

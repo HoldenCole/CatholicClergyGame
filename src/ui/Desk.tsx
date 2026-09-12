@@ -8,6 +8,7 @@ import GroupsPanel from './parish/GroupsPanel';
 import ClassmatesPanel from './parish/ClassmatesPanel';
 import PeoplePanel from './parish/PeoplePanel';
 import SeePanel from './study/SeePanel';
+import PlacePanel from './study/PlacePanel';
 import ProjectsPanel from './parish/ProjectsPanel';
 import OffersPanel from './seminary/OffersPanel';
 import FormationPanel from './seminary/FormationPanel';
@@ -23,6 +24,7 @@ const LABEL: Record<Sheet, string> = {
   week: 'Week',
   parish: 'Parish',
   see: 'The see',
+  place: 'The work',
   people: 'People',
   jobs: 'Jobs',
   clubs: 'Clubs',
@@ -45,7 +47,7 @@ export default function Desk() {
   if (!game) return null;
   const inParish = !!game.parish;
   const away = !!game.study;
-  const tabs: Sheet[] = inParish ? ['week', 'parish', 'people', 'jobs', 'clubs', 'letters', 'record', 'settings'] : away ? (game.see ? ['week', 'see', 'jobs', 'letters', 'record', 'settings'] : ['week', 'jobs', 'letters', 'record', 'settings']) : ['week', 'formation', 'jobs', 'clubs', 'letters', 'record', 'settings'];
+  const tabs: Sheet[] = inParish ? ['week', 'parish', 'people', 'jobs', 'clubs', 'letters', 'record', 'settings'] : away ? (game.see ? ['week', 'see', 'jobs', 'letters', 'record', 'settings'] : game.study?.place ? ['week', 'place', 'jobs', 'letters', 'record', 'settings'] : ['week', 'jobs', 'letters', 'record', 'settings']) : ['week', 'formation', 'jobs', 'clubs', 'letters', 'record', 'settings'];
   if (furnishing) tabs.push('furnish');
   const open = sheet ?? 'week';
   const letters = game.offers.length;
@@ -64,6 +66,7 @@ export default function Desk() {
         {open === 'week' && (inParish ? <RoutinePanel /> : away ? <StudyRoutinePanel /> : <SeminaryRoutinePanel />)}
         {open === 'parish' && <ParishPanel />}
         {open === 'see' && <SeePanel />}
+        {open === 'place' && <PlacePanel />}
         {open === 'people' && (
           <>
             <GroupsPanel />

@@ -4,6 +4,8 @@ import { careOf, strainOf, strainWord } from './week';
 import { chancesFor } from './openings';
 import { isFigure } from './reputation';
 import { bondWord } from './bonds';
+import { studyProgram } from '@/content/study';
+import { placeWord } from './studyWeek';
 
 /** The reputation and stat words the sheets use. */
 function word(v: number): string {
@@ -33,7 +35,10 @@ export function yearInReview(state: GameState): { letter: Letter; baseline: NonN
   if (traj && rec) {
     body.push(`${rec.name}, ${traj.verdict.toLowerCase()}. ${traj.rows.filter((r) => r.sign !== 0).map((r) => `${r.label}: ${r.then} to ${r.now}`).join('; ') || 'Nothing has moved that a quarter would show'}.`);
   } else if (state.study) {
-    body.push(`A year away at ${state.study.school}. The diocese counts the years.`);
+    const program = studyProgram(state.study.program);
+    if (program?.place && state.study.place) {
+      body.push(`${program.place.label}, a year on: ${program.place.dials.map((d) => `${d.label.toLowerCase()}, ${placeWord(state.study!.place![d.id] ?? 0, d.low, d.high)}`).join('; ')}.`);
+    } else body.push(`A year away at ${state.study.school}. The diocese counts the years.`);
   }
 
   // What moved with each constituency.

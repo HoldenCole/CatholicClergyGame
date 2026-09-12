@@ -44,6 +44,7 @@ import { applyForOpening as doApply } from '@/systems/openings';
 import type { GroupType, ProjectType } from '@/types';
 import { pushProject as doPushProject, startProject as doStartProject } from '@/systems/projects';
 import { setDial as doSetDial } from '@/systems/liturgy';
+import { chooseAssignment as doChooseAssignment } from '@/systems/choice';
 import { furnish as doFurnish, petition as doPetition } from '@/systems/decor';
 import { setSeminaryActivity as doSetSeminaryActivity } from '@/systems/seminaryWeek';
 import { setStudyActivity as doSetStudyActivity } from '@/systems/studyWeek';
@@ -93,6 +94,8 @@ export interface GameStore {
   /** Character creation is done; generate the run and enter seminary. */
   startGame(answers: CreationAnswers): void;
   acceptAssignment(): void;
+  /** The bishop laid out a choice; take one. */
+  chooseAssignment(id: string): void;
   setObligation(key: ObligationKey, quality: Quality): void;
   /** Hours a week a seminarian gives an activity. */
   setSeminaryActivity(id: string, ap: number): void;
@@ -397,6 +400,9 @@ export const useGameStore = create<GameStore>()((set, get) => ({
   },
   acceptAssignment() {
     update(set, get, (game, r) => startAssignment(doAcceptAssignment(game), r));
+  },
+  chooseAssignment(id) {
+    update(set, get, (game, r) => doChooseAssignment(game, id, r.derive(`choose:${game.clock.week}`)));
   },
   setObligation(key, quality) {
     update(set, get, (game) => doSetObligation(game, key, quality));

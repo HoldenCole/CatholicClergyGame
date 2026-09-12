@@ -222,6 +222,12 @@ the parish sheet, and `parish/ambient.json` has a pool per preset id that
 the digest draws from twice as often as the general pool. No diocese rolls
 a shortage below 3 (`stretched`): there is always a shortage.
 
+### Italian in seminary
+
+`seminary/activities.json` carries `italian`: sixty hours for the credential
+`italian` and `speaks_italian`. The Rome offer (`pv_rome_study`) reads it
+as a road in beside the rector's track and weights it heavily.
+
 ### Clubs and circles (`content/clubs/`)
 
 `seminary.json` and `priests.json` define societies: hours a week (free hours in
@@ -291,8 +297,27 @@ poor, a youth minister, the music). Money behind a group buys vitality
 the administration for it) grows with a seeded market. Two months of running
 costs are always kept back.
 
+### The bishop's choice (`systems/choice.ts`, `parish/offices.json`)
+
+A strong man is asked which he would rather. At ordination the top of the
+class (formation standing, or `seminary_leader` / `rector_recommends`)
+chooses between the board's parish, the cathedral with the bishop's Masses,
+and the hard parish; a man home from a degree chooses between the flagship,
+a smaller parish with a diocesan office (the tribunal for a canonist, the
+Office for Worship for a theologian), and the seminary faculty or a deanery;
+a man the chancery rates (`CHOICE.boardChancery`) chooses at a board between
+what it decided, the same with an office, and the other opening. Each option
+carries prestige, time, and what is involved in words. Offices are
+commitments with `offerId` `office:<id>`; `engine/offers.ts` reads their
+weekly effects and payout from `parish/offices.json`.
+
 ### Postings away
 
+Every posting is a hybrid of Rome and the parish: its own rooms and
+activities, its scenes, and now its own dials (`place` on the program:
+three things the years there move, with words for low and high), which
+the activities carry as `place` deltas per hour, the Work sheet reads, the
+year in review reports, and the record keeps as the posting's verdict.
 Programs of kind `post` (`study/programs.json`: the bishop's secretary, the
 Newman Center, the hospital, the seminary faculty, the vicar general) are
 full-time: the man leaves his parish and lives there, with that place's

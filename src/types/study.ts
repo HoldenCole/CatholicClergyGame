@@ -20,6 +20,8 @@ export interface StudyProgramDef {
   hours: number;
   /** The class line for the digest. */
   classes: string;
+  /** A posting's own dials: what the years there move. */
+  place?: { label: string; dials: { id: string; label: string; low: string; high: string }[] };
 }
 
 export type StudyLocation = 'desk' | 'chapel' | 'library' | 'hospital' | 'parish' | 'basilica' | 'college_office' | 'curia' | 'piazza' | 'language' | 'field';
@@ -43,6 +45,8 @@ export interface StudyActivityDef {
   credentialAfter?: { hours: number; credential: string; flag?: string; line: string };
   /** Applied once, the first week it is taken. */
   onFirst?: Effect[];
+  /** For a posting: what an hour a week does to the place's dials. */
+  place?: Record<string, number>;
   /** For a bishop: what an hour a week does to the see's dials. */
   see?: Partial<Record<'presbyterate' | 'people' | 'rome' | 'money' | 'shortage', number>>;
   digest: string[];
@@ -65,4 +69,6 @@ export interface StudyState {
   taken: string[];
   /** The parish he left, for the record. */
   fromParishId: string | null;
+  /** A posting's dials, −100..100, moved by the week. */
+  place?: Record<string, number>;
 }

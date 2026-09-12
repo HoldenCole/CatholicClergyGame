@@ -73,11 +73,13 @@ export function studyWeek(state: GameState, rng: Rng): { state: GameState; line:
   const earned: string[] = [];
   let next: GameState = state;
   let see = state.see ?? null;
+  const place = study.place ? { ...study.place } : null;
   const bindings: Record<string, string> = {};
   for (const def of studyActivities) {
     const hours = study.routine[def.id] ?? 0;
     if (hours <= 0) continue;
     if (def.see && see) see = applySeeHours(see, def.see, hours);
+    if (def.place && place) for (const [k, d] of Object.entries(def.place)) place[k] = Math.max(-100, Math.min(100, (place[k] ?? 0) + d * hours));
     for (const [k, rate] of Object.entries(def.stats) as [StatKey, number][]) stats = applyStat(stats, k, rate * hours);
     for (const r of def.reputation ?? []) reputation = applyReputation(reputation, r.key, r.delta * hours);
     for (const r of def.relationships ?? []) {
@@ -107,10 +109,25 @@ export function studyWeek(state: GameState, rng: Rng): { state: GameState; line:
   const strain = strainAfterWeek(state, 0, Math.max(0, freeHourShift(state)));
   if (strain >= WEEK.strainWorn) stats = applyStat(stats, 'piety', -WEEK.strainPietyDrain);
   const character = { ...next.character!, stats, reputation, credentials };
-  const result: GameState = { ...next, ...(see ? { see } : {}), strain, npcs: { ...next.npcs, ...npcs }, flags: { ...next.flags, ...flags }, character, study: { ...study, hoursLogged, taken } };
+  const result: GameState = { ...next, ...(see ? { see } : {}), strain, npcs: { ...next.npcs, ...npcs }, flags: { ...next.flags, ...flags }, character, study: { ...study, hoursLogged, taken, ...(place ? { place } : {}) } };
   const head = studyProgram(study.program)?.classes ?? 'Lectures';
   const body = phrases.length ? `${head}; ${phrases.join(', ')}.` : `${head}, and the free hours went to the city.`;
   return { state: result, line: renderText([body, ...earned].join(' '), result, bindings) };
+}
+
+/** Where a posting's dials stand, in words: low, middling, or high. */
+export function placeWord(value: number, low: string, high: string): string {
+  return value >= 30 ? high : value <= -15 ? low : 'somewhere between';
+}
+
+/** A posting's verdict for the record: how the years there went, from the mean of its dials. */
+export function placeVerdict(state: GameState): string | null {
+  const study = state.study;
+  const program = study ? studyProgram(study.program) : undefined;
+  if (!study?.place || !program?.place) return null;
+  const vals = program.place.dials.map((d) => study.place![d.id] ?? 0);
+  const mean = vals.reduce((a, b) => a + b, 0) / Math.max(1, vals.length);
+  return mean >= 40 ? 'the years there made your name' : mean >= 15 ? 'the years there went well' : mean > -15 ? 'the years there passed' : 'the years there went badly';
 }
 
 /** What an activity builds, in words. */

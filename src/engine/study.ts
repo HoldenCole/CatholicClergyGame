@@ -6,6 +6,7 @@ import { handoffProject } from '@/systems/projects';
 import { refreshOpenings } from '@/systems/openings';
 import { closeTenure } from '@/systems/tenures';
 import { nextAssignment } from './career';
+import { withChoice } from '@/systems/choice';
 import { ARC } from './parish';
 import { generateSee } from './see';
 import { retire } from './career';
@@ -49,6 +50,7 @@ export function beginStudy(state: GameState, def: OfferDef, failed: boolean, rng
     hoursLogged: {},
     taken: [],
     fromParishId: next.parish?.parishId ?? null,
+    ...(program.place ? { place: Object.fromEntries(program.place.dials.map((d) => [d.id, 0])) } : {}),
   };
   const flags: GameState['flags'] = { ...next.flags, [`study:${program.city}`]: true };
   for (const k of Object.keys(flags)) if (k.startsWith('parish:') || k.startsWith('role:')) delete flags[k];
@@ -94,5 +96,8 @@ export function endStudy(state: GameState, def: OfferDef, rng: Rng): GameState {
   }
   next = { ...next, flags, study: null, phase: 'parochial_vicar', beats: next.beats.filter((b) => b.kind !== 'assignment') };
   next = refreshOpenings(next, rng.derive(`openings:home:${next.clock.week}`)).state;
-  return nextAssignment(next, rng).state;
+  const home = nextAssignment(next, rng).state;
+  // A degree earned buys a choice; a posting ended, or a washout, takes what the board gives.
+  if (!study.failed && studyProgram(study.program)?.kind === 'study' && home.mode.kind === 'assignment') return withChoice(home, rng.derive('choice'), 'degree', home.mode.assignment);
+  return home;
 }

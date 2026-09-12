@@ -1,6 +1,7 @@
 import type { GameState, Tenure } from '@/types';
 import { sinceArrival } from './trajectory';
 import { studyProgram } from '@/content/study';
+import { placeVerdict } from './studyWeek';
 
 const ROLE_LABEL: Record<string, string> = { parochial_vicar: 'Parochial vicar', administrator: 'Administrator', pastor: 'Pastor' };
 
@@ -28,6 +29,7 @@ export function openTenure(state: GameState): Tenure | null {
       place: state.see ? `${state.see.name}, ${state.see.region}` : program?.kind === 'post' ? state.study.residence : state.study.school,
       startWeek: state.study.startWeek,
       endWeek: state.clock.week,
+      ...(placeVerdict(state) ? { verdict: placeVerdict(state)! } : {}),
     };
   }
   return null;

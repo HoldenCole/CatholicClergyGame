@@ -1,5 +1,6 @@
 import type { ActiveOffer, Commitment, GameState, OfferDef, OfferRecord } from '@/types';
 import { evaluateAll, evaluateCondition } from './conditions';
+import { officeDef } from '@/content/parish';
 import { applyEffects } from './effects';
 import type { Rng } from './rng';
 import { resolveSelector, selectorsIn } from './selectors';
@@ -58,12 +59,19 @@ export function offersWeek(state: GameState, rng: Rng, defs: OfferDef[], lookup:
   }
   // A job does something to a man every week he holds it.
   for (const c of next.commitments.filter((c) => c.endWeek > week)) {
-    const weekly = lookup(c.offerId)?.accept.commitment?.weekly;
+    const weekly = c.offerId.startsWith('office:') ? officeDef(c.offerId.slice(7))?.weekly : lookup(c.offerId)?.accept.commitment?.weekly;
     if (weekly?.length) next = applyEffects(next, weekly);
   }
   for (const c of next.commitments.filter((c) => c.endWeek <= week)) {
-    const def = lookup(c.offerId);
     next = { ...next, commitments: next.commitments.filter((x) => x !== c) };
+    if (c.offerId.startsWith('office:')) {
+      // A diocesan office held alongside the parish (parish/offices.json) ends with its own payout.
+      const office = officeDef(c.offerId.slice(7));
+      if (office?.onComplete?.length) next = applyEffects(next, office.onComplete);
+      if (office) next = { ...next, career: [...next.career, { week, kind: 'note', text: `${office.label}: the years ended, and the chancery remembers them.` }] };
+      continue;
+    }
+    const def = lookup(c.offerId);
     if (!def) continue;
     if (c.failed && def.failure) {
       next = applyEffects(next, def.failure.effects);
