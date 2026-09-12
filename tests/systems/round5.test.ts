@@ -5,7 +5,6 @@ import { createRng } from '@/engine/rng';
 import { runClock } from '@/engine/clock';
 import { parishWeekHook, type EventDeps } from '@/engine/weekHook';
 import { careerYear } from '@/engine/career';
-import { acceptOffer } from '@/engine/offers';
 import { offerById } from '@/content/offers';
 import { eventById } from '@/content';
 import { yearInReview, deliverLetter, openMail, readLetter } from '@/systems/review';
@@ -17,6 +16,7 @@ import { TALKS, bandOf, haveAWord, mayTalk, whoIs } from '@/systems/talks';
 import { studyActivitiesFor } from '@/systems/studyWeek';
 import { talkDefs } from '@/content/parish';
 import type { GameState, LiturgicalPolicy } from '@/types';
+import { acceptAndGo } from '../helpers/appointment';
 
 const noDeps: EventDeps = { pool: [], lookup: () => undefined };
 
@@ -236,7 +236,7 @@ describe('the chancery tier', () => {
     };
     const def = offerById('pa_vicar_general')!;
     expect(def.accept.commitment!.away).toBe('vicar_general');
-    const away = acceptOffer(s, def, createRng('vg')).state;
+    const away = acceptAndGo(s, def, createRng('vg')).state;
     expect(away.phase).toBe('study');
     expect(away.parish).toBeNull();
     expect(away.study!.city).toBe('chancery');

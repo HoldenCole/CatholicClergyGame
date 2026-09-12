@@ -108,7 +108,7 @@ export function fundGroup(state: GameState, groupId: string, amount: number): Ga
 export function mayInvest(state: GameState): { ok: boolean; why: string | null } {
   if (!controlsMoney(state)) return { ok: false, why: "The pastor's to spend" };
   const c = state.character!;
-  const ok = !!state.flags['career:accountant'] || !!state.flags['career:management'] || !!state.flags['field:business'] || !!state.flags['field:finance'] || c.credentials.includes('MBA') || c.credentials.includes('partial_cpa') || c.stats.administration >= SPENDING.investAdministration;
+  const ok = !!state.flags['career:accountant'] || !!state.flags['career:investment'] || !!state.flags['career:management'] || !!state.flags['field:business'] || !!state.flags['field:finance'] || c.credentials.includes('MBA') || c.credentials.includes('partial_cpa') || c.stats.administration >= SPENDING.investAdministration;
   return ok ? { ok: true, why: null } : { ok: false, why: 'Nobody would trust you with it: a business past, an MBA, or the administration for it' };
 }
 

@@ -34,7 +34,7 @@ describe('systems/creation', () => {
     expect(content.ties).toHaveLength(4);
     expect(content.paths).toHaveLength(6);
     expect(content.fields).toHaveLength(8);
-    expect(content.careers).toHaveLength(14);
+    expect(content.careers).toHaveLength(15);
     expect(content.motives).toHaveLength(6);
     expect(content.families).toHaveLength(6);
     expect(content.pasts).toHaveLength(6);

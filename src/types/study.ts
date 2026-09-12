@@ -1,3 +1,4 @@
+import type { BishopPriority } from './world';
 import type { Condition, Effect } from './events';
 import type { Pillar } from './character';
 import type { StatKey, ConstituencyKey } from './stats';
@@ -22,6 +23,8 @@ export interface StudyProgramDef {
   classes: string;
   /** A posting's own dials: what the years there move. */
   place?: { label: string; dials: { id: string; label: string; low: string; high: string }[] };
+  /** Whether the bishop releases a man someone else asked for: certain for Rome's call, likelier when the post is his priority. */
+  release?: { priority?: BishopPriority; always?: boolean };
 }
 
 export type StudyLocation = 'desk' | 'chapel' | 'library' | 'hospital' | 'parish' | 'basilica' | 'college_office' | 'curia' | 'piazza' | 'language' | 'field' | 'monastery';

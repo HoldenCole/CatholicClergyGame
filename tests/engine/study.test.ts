@@ -12,6 +12,7 @@ import { buildSave, deserialize, serialize } from '@/engine/save';
 import { renderText } from '@/engine/text';
 import { hoursOf, planWeek, weekBudget } from '@/systems/week';
 import type { GameState } from '@/types';
+import { acceptAndGo } from '../helpers/appointment';
 
 function withRomeOffer(seed: string, theology = 70): GameState {
   const s = parishState(seed);
@@ -31,7 +32,7 @@ describe('study away', () => {
   it('accepting Rome moves the man out of the parish and into the study phase', () => {
     const s = withRomeOffer('rome');
     const from = s.parish!.parishId;
-    const r = acceptOffer(s, offerById('pv_rome_study')!, createRng('accept'));
+    const r = acceptAndGo(s, offerById('pv_rome_study')!, createRng('accept'));
     const next = r.state;
     expect(next.phase).toBe('study');
     expect(next.parish).toBeNull();
@@ -47,7 +48,7 @@ describe('study away', () => {
   });
 
   it('the hours build what they say, a language becomes a credential, and the Curia is gated', () => {
-    let s = acceptOffer(withRomeOffer('hours'), offerById('pv_rome_study')!, createRng('accept')).state;
+    let s = acceptAndGo(withRomeOffer('hours'), offerById('pv_rome_study')!, createRng('accept')).state;
     const avail = studyActivitiesFor(s);
     expect(avail.map((a) => a.def.id)).toContain('confessions');
     expect(avail.map((a) => a.def.id)).not.toContain('shrine_confessions');
@@ -73,7 +74,7 @@ describe('study away', () => {
   });
 
   it('when the years are up he graduates and the board sends him somewhere', () => {
-    let s = acceptOffer(withRomeOffer('grad'), offerById('pv_rome_study')!, createRng('accept')).state;
+    let s = acceptAndGo(withRomeOffer('grad'), offerById('pv_rome_study')!, createRng('accept')).state;
     const hook = studyWeekHook(deps);
     s = { ...s, clock: { ...s.clock, week: s.study!.endWeek } };
     const home = hook(s, createRng('end'), []);
@@ -94,7 +95,7 @@ describe('study away', () => {
     const def = offerById('pv_rome_study')!;
     let washed: GameState | null = null;
     for (let i = 0; i < 40 && !washed; i++) {
-      const r = acceptOffer(withRomeOffer(`wash-${i}`, 30), def, createRng(`wash:${i}`));
+      const r = acceptAndGo(withRomeOffer(`wash-${i}`, 30), def, createRng(`wash:${i}`));
       if (r.failed) washed = r.state;
     }
     expect(washed).not.toBeNull();
@@ -107,7 +108,7 @@ describe('study away', () => {
   });
 
   it('the study state survives a save, and a v3 save loads with none', () => {
-    const s = acceptOffer(withRomeOffer('save'), offerById('pv_rome_study')!, createRng('accept')).state;
+    const s = acceptAndGo(withRomeOffer('save'), offerById('pv_rome_study')!, createRng('accept')).state;
     const rng = createRng(s.seed);
     const back = deserialize(serialize(buildSave(s, rng, null, {})));
     expect(back.state.study).toEqual(s.study);
@@ -130,7 +131,7 @@ describe('jobs and the week', () => {
       offers: [{ offerId: 'pv_bishops_secretary', arrivedWeek: base.clock.week, expiresWeek: base.clock.week + 6, bindings: {} }],
       flags: { ...base.flags, ordination_week: base.clock.week - 52 * 3 },
     };
-    const away = acceptOffer(s, offerById('pv_bishops_secretary')!, createRng('sec')).state;
+    const away = acceptAndGo(s, offerById('pv_bishops_secretary')!, createRng('sec')).state;
     expect(away.phase).toBe('study');
     expect(away.parish).toBeNull();
     expect(away.study).toMatchObject({ city: 'residence', program: 'bishops_secretary' });

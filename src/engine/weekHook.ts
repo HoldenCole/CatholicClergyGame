@@ -21,6 +21,7 @@ import { isYearStart } from './time';
 import { seminaryWeek } from '@/systems/seminaryWeek';
 import { studyWeek } from '@/systems/studyWeek';
 import { endStudy } from './study';
+import { appointmentStep, APPOINTMENT_FLAGS } from './appointment';
 import { careOf, WEEK } from '@/systems/week';
 import { renderText } from './text';
 import type { WeekHook } from './clock';
@@ -133,6 +134,24 @@ function clubsStep(state: GameState, rng: Rng): GameState {
   return next;
 }
 
+/** The bishop's letter, when it is due: it moves the man or keeps him, and says so over the scene. */
+function letterStep(state: GameState, rng: Rng, deps: EventDeps): { state: GameState; moved: boolean } {
+  const res = appointmentStep(state, rng, (id) => deps.offerLookup?.(id));
+  if (!res.letter) return { state: res.state, moved: false };
+  let next = res.state;
+  const def = deps.offerLookup?.(state.flags[APPOINTMENT_FLAGS.offer] as string);
+  next = addDigestLine(next, res.letter === 'go' ? (def ? renderText(def.accept.outcome, next) : 'The letter of appointment came.') : "The bishop's answer came: he keeps you where you are.");
+  const letter = deps.lookup(`ap_letter_${res.letter}`);
+  if (letter) {
+    next = { ...next, flags: { ...next.flags, [`${APPOINTMENT_FLAGS.letter}:${res.letter}`]: true } };
+    next = fireOrResolve(next, letter, rng.derive(`letter:${next.clock.week}`), deps);
+    const flags = { ...next.flags };
+    delete flags[`${APPOINTMENT_FLAGS.letter}:${res.letter}`];
+    next = { ...next, flags };
+  }
+  return { state: next, moved: res.letter === 'go' };
+}
+
 /** Roughly how often a week away carries a scene. Invented. */
 const STUDY_EVENT_CHANCE = 0.1;
 
@@ -140,7 +159,10 @@ const STUDY_EVENT_CHANCE = 0.1;
 export function studyWeekHook(deps: EventDeps): WeekHook {
   return (state: GameState, rng: Rng) => {
     if (!state.study) return state;
-    const week = studyWeek(state, rng.derive(`study-week:${state.clock.week}`));
+    // A post he said yes to from this one: the letter comes, or does not.
+    const letter = letterStep(state, rng, deps);
+    if (letter.moved || letter.state.pending.length > 0) return letter.state;
+    const week = studyWeek(letter.state, rng.derive(`study-week:${state.clock.week}`));
     let next = week.line ? addDigestLine(week.state, week.line) : week.state;
     if (isCareerYear(next)) next = careerYear(next, rng);
     if (next.mode.kind !== 'clock') return next;
@@ -169,6 +191,10 @@ export function parishWeekHook(deps: EventDeps): WeekHook {
       const moved = directedTransfer(state, rng, kind ?? 'difficult', asRole);
       if (moved.moved) return addDigestLine(moved.state, 'The letter of appointment came, as the vicar for clergy said it would. You packed.');
     }
+    // A post he said yes to: the bishop's letter moves him, or keeps him.
+    const letter = letterStep(state, rng, deps);
+    if (letter.moved || letter.state.pending.length > 0) return letter.state;
+    state = letter.state;
     // A week away: the retreat or the vacation, with one scene the first week.
     if (state.away) {
       const gone = awayWeek(state, rng, deps.pool);
