@@ -1,5 +1,7 @@
+import type { PlaceDecor } from '@/types';
+import { decorOptions } from '@/systems/decorState';
 import { PALETTE } from './defs';
-import { Chair, Crucifix, Candle, Door, LightPool, Room, Shadow, pts } from './primitives';
+import { Chair, Crucifix, Candle, Door, Frame, LightPool, Room, Rug, Shadow, pts, wallPoint } from './primitives';
 
 /** The parish hall: folding tables, a stage, a kitchen pass-through, the bulletin board. */
 export function Hall() {
@@ -51,47 +53,164 @@ export function Hall() {
   );
 }
 
+type ChapelStyle = 'as_is' | 'old' | 'modern' | 'soft';
+
+/** What the chapel's style resolves to, "match the church" read from the sanctuary. */
+export function chapelStyle(decor: PlaceDecor, church: PlaceDecor): ChapelStyle {
+  const art = decorOptions.find((o) => o.id === decor.style)?.art ?? 'as_is';
+  if (art !== 'match') return art as ChapelStyle;
+  const sanct = church.sanctuary ?? 'sanct_plain';
+  if (sanct === 'sanct_high_altar' || sanct === 'sanct_restored' || sanct === 'sanct_gothic') return 'old';
+  if (sanct === 'sanct_modern') return 'modern';
+  return 'soft';
+}
+
+const CHAPEL_ROOM: Record<ChapelStyle, { wall: string; dado?: string; floor: 'tiles' | 'stone' | 'marble' | 'carpet'; ceiling: string; housing: string; altar: string; glow: number }> = {
+  as_is: { wall: '#4a3a3c', floor: 'tiles', ceiling: '#3a2a2c', housing: '#e2d6be', altar: '#8a7a5a', glow: 0.25 },
+  old: { wall: 'url(#stone)', dado: '#3a2a20', floor: 'stone', ceiling: '#2a2220', housing: '#d9c9a8', altar: '#4a3220', glow: 0.3 },
+  modern: { wall: '#efe9df', floor: 'marble', ceiling: '#f4f0e8', housing: '#f7f3ea', altar: '#cfc9bf', glow: 0.18 },
+  soft: { wall: '#c9a98a', dado: '#7a4a32', floor: 'carpet', ceiling: '#e7d8c4', housing: '#f0e4cc', altar: '#8a5a3a', glow: 0.35 },
+};
+
 /**
- * The chapel: small, dim, the lamp burning. Restored, it is plastered and
- * lit and has a reredos; with an adoration chapel there is a monstrance on
- * the altar, and perpetual adoration keeps someone on the kneelers.
+ * The chapel: small, dim, the lamp burning. Its style is the pastor's
+ * (dark stone, glass and light, warm and soft, or the church's own), so is
+ * the devotion on the wall and what the people sit on. Restored, it gets
+ * its windows and statues back; with an adoration chapel there is a
+ * monstrance on the altar, and perpetual adoration keeps someone kneeling.
  */
-export function Chapel({ restored = false, adoration = false, perpetual = false }: { restored?: boolean; adoration?: boolean; perpetual?: boolean }) {
+export function Chapel({ decor = {}, church = {}, restored = false, adoration = false, perpetual = false }: { decor?: PlaceDecor; church?: PlaceDecor; restored?: boolean; adoration?: boolean; perpetual?: boolean }) {
+  const style = chapelStyle(decor, church);
+  const room = CHAPEL_ROOM[style];
+  const devotion = decorOptions.find((o) => o.id === decor.devotion)?.art ?? 'none';
+  const seating = decorOptions.find((o) => o.id === decor.seating)?.art ?? 'kneelers';
+  const old = style === 'old';
+  const modern = style === 'modern';
   return (
     <g>
-      {restored ? <Room wall="#7a6660" dado="#4a3230" dadoAt={0.72} floor="marble" ceiling="#5a4a48" /> : <Room wall="#4a3a3c" floor="tiles" ceiling="#3a2a2c" />}
-      {restored && (
+      <Room wall={room.wall} {...(room.dado ? { dado: room.dado, dadoAt: 0.72 } : {})} floor={room.floor} ceiling={room.ceiling} />
+      {modern && (
+        <g>
+          {/* a wall of glass behind the altar, and the one line of light */}
+          <rect x="22" y="8" width="56" height="32" fill="#dfe9f0" opacity="0.8" />
+          {[30, 40, 50, 60, 70].map((x) => (
+            <line key={x} x1={x} y1="8" x2={x} y2="40" stroke="#b9c3ca" strokeWidth="0.3" />
+          ))}
+          <rect x="49.4" y="4" width="1.2" height="36" fill="#fff8e6" opacity="0.9" />
+          <rect x="47" y="4" width="6" height="36" fill="url(#lightShaft)" opacity="0.7" />
+        </g>
+      )}
+      {(old || (restored && !modern)) && (
         <g>
           {/* a reredos behind the altar, and two statues in niches */}
-          <rect x="34" y="6" width="32" height="26" fill="#3a2a22" />
-          <rect x="35" y="7" width="30" height="24" fill="#5a3a2a" />
-          <path d="M34 6 Q50 -4 66 6 Z" fill="#3a2a22" />
+          <rect x="34" y="6" width="32" height="26" fill={old ? '#2a1a12' : '#3a2a22'} />
+          <rect x="35" y="7" width="30" height="24" fill={old ? '#3a2416' : '#5a3a2a'} />
+          <path d="M34 6 Q50 -4 66 6 Z" fill={old ? '#2a1a12' : '#3a2a22'} />
+          {old && [38, 44, 56, 62].map((x) => <rect key={x} x={x} y="9" width="1" height="21" fill={PALETTE.gold} opacity="0.5" />)}
           {[37, 60].map((x) => (
             <g key={x}>
-              <rect x={x} y="14" width="3.6" height="14" rx="1.8" fill="#2a1a12" />
+              <rect x={x} y="14" width="3.6" height="14" rx="1.8" fill="#1a100a" />
               <ellipse cx={x + 1.8} cy="19" rx="1" ry="1.1" fill="#e3c69c" />
               <path d={`M${x + 0.6} 20 h2.4 l0.4 7 h-3.2 Z`} fill={x === 37 ? '#2e5aac' : '#7a5a2a'} />
             </g>
           ))}
           <rect x="34" y="31" width="32" height="1" fill={PALETTE.gold} opacity="0.8" />
-          {[20, 80].map((x) => (
-            <rect key={x} x={x - 3} y="10" width="6" height="16" fill="#c9d9ea" opacity="0.5" />
+        </g>
+      )}
+      {restored && !modern && [20, 80].map((x) => <rect key={x} x={x - 3} y="10" width="6" height="16" fill="#c9d9ea" opacity="0.5" />)}
+      {style === 'soft' && (
+        <g>
+          {/* lamps on the side walls, and a rug */}
+          {[[12, 22], [88, 22]].map(([x, y]) => (
+            <g key={x}>
+              <ellipse cx={x} cy={y} rx="7" ry="6" fill="url(#lamp)" opacity="0.8" />
+              <polygon points={`${x! - 2.5},${y! - 1} ${x! + 2.5},${y! - 1} ${x! + 1.8},${y! - 4} ${x! - 1.8},${y! - 4}`} fill="#e9d9b8" />
+              <rect x={x! - 0.3} y={y! - 1} width="0.6" height="2.5" fill="url(#brass)" />
+            </g>
+          ))}
+          <Rug x={24} y={44} w={52} h={14} pattern="rug" />
+        </g>
+      )}
+      {old && (
+        <g>
+          {/* a rail to kneel at, and candles in iron */}
+          <rect x="30" y="40.5" width="40" height="0.9" fill="#3a2416" />
+          {[32, 41, 50, 59, 68].map((x) => <rect key={x} x={x} y="41.4" width="0.8" height="4" fill="#3a2416" />)}
+          {[26, 74].map((x) => (
+            <g key={x}>
+              <rect x={x - 0.4} y="26" width="0.8" height="14" fill="#1c1917" />
+              <ellipse cx={x} cy="40" rx="2" ry="0.6" fill="#1c1917" />
+              <Candle x={x} y={26} h={3} lit />
+            </g>
           ))}
         </g>
       )}
-      <rect x="40" y="10" width="20" height="20" fill={restored ? '#efe6d2' : '#e2d6be'} stroke={PALETTE.gold} strokeWidth="0.5" />
-      <path d="M40 10 Q50 2 60 10 Z" fill={restored ? '#efe6d2' : '#e2d6be'} stroke={PALETTE.gold} strokeWidth="0.5" />
-      <rect x="46" y="17" width="8" height="8" fill="url(#brass)" stroke="#5a3a12" strokeWidth="0.3" />
+      {/* the tabernacle */}
+      <rect x="40" y="10" width="20" height="20" fill={room.housing} stroke={modern ? '#b9b3a8' : PALETTE.gold} strokeWidth="0.5" />
+      {!modern && <path d="M40 10 Q50 2 60 10 Z" fill={room.housing} stroke={PALETTE.gold} strokeWidth="0.5" />}
+      <rect x="46" y="17" width="8" height="8" fill={modern ? '#d9d3c7' : 'url(#brass)'} stroke={modern ? '#8a8478' : '#5a3a12'} strokeWidth="0.3" />
       <rect x="49.7" y="17.6" width="0.6" height="6.8" fill="#5a3a12" opacity="0.7" />
-      <circle cx="50" cy="8" r="0.9" fill="url(#brass)" />
-      <Crucifix x={50} y={-0.5} s={0.7} />
+      {!modern && <circle cx="50" cy="8" r="0.9" fill="url(#brass)" />}
+      <Crucifix x={50} y={-0.5} s={0.7} corpus={!modern} />
       <rect x="64" y="20" width="1.6" height="9" fill="#f3eee0" />
       <circle cx="64.8" cy="19" r="1" fill="#e04a2a" />
       <circle cx="64.8" cy="19" r="4" fill="url(#glow)" opacity="0.7" />
-      <circle cx="50" cy="18" r="14" fill="url(#glow)" opacity={restored ? 0.35 : 0.25} />
+      <circle cx="50" cy="18" r="14" fill="url(#glow)" opacity={room.glow} />
+      {/* the devotion */}
+      {devotion === 'marian' && (
+        <g>
+          <rect x="21" y="30" width="6" height="8" fill={old ? '#3a2416' : '#8a7a5a'} />
+          <ellipse cx="24" cy="21.5" rx="1.2" ry="1.3" fill="#e3c69c" />
+          <path d="M22.6 22.6 h2.8 l0.9 7.4 h-4.6 Z" fill="#2e5aac" />
+          <path d="M22.4 21 q1.6 -2.4 3.2 0 l0.4 2 h-4 Z" fill="#dfe9f0" />
+          {[0, 1, 2, 3, 4, 5].map((i) => (
+            <g key={i}>
+              <rect x={21.5 + (i % 3) * 1.8} y={39 + Math.floor(i / 3) * 1.6} width="1.2" height="1.4" fill="#b91c1c" opacity="0.85" />
+              <circle cx={22.1 + (i % 3) * 1.8} cy={38.8 + Math.floor(i / 3) * 1.6} r="0.5" fill="#ffd166" />
+            </g>
+          ))}
+          <ellipse cx="24" cy="38" rx="4" ry="2.4" fill="url(#glow)" opacity="0.6" />
+        </g>
+      )}
+      {devotion === 'icon' && (
+        <g>
+          <Frame x={74} y={14} w={7} h={9} mat="url(#brass)" gilt>
+            <path d="M77.5 16.2 C79 16.2 79.6 18.4 79 21.6 L76 21.6 C75.4 18.4 76 16.2 77.5 16.2 Z" fill="#7a1f1f" />
+            <circle cx="77.5" cy="16.8" r="0.9" fill="#e3c69c" />
+            <circle cx="77.5" cy="16.8" r="1.4" fill="none" stroke={PALETTE.gold} strokeWidth="0.3" />
+          </Frame>
+          <circle cx="77.5" cy="25.5" r="0.7" fill="#e04a2a" />
+          <circle cx="77.5" cy="25.5" r="3" fill="url(#glow)" opacity="0.7" />
+          <rect x="73" y="27" width="9" height="0.8" fill={PALETTE.oakDark} />
+        </g>
+      )}
+      {devotion === 'mercy' && (
+        <g>
+          <Frame x={73} y={12} w={8} h={12} mat="#1c1917">
+            <path d="M77 15 l-3 8 h6 Z" fill="#f3eee0" opacity="0.6" />
+            <path d="M77 15 l-1 8 h2 Z" fill="#b91c1c" opacity="0.6" />
+            <circle cx="77" cy="14.6" r="0.9" fill="#e3c69c" />
+            <path d="M75.6 15.4 h2.8 l0.5 6.6 h-3.8 Z" fill="#f3eee0" />
+          </Frame>
+        </g>
+      )}
+      {devotion === 'stations' && (
+        <g>
+          {[0.22, 0.36, 0.5, 0.64, 0.78, 0.92, 1.06].map((f, i) => {
+            const l = wallPoint('left', 4 + f * 12, 0.28);
+            const r = wallPoint('right', 96 - f * 12, 0.28);
+            return (
+              <g key={i}>
+                <rect x={l[0] - 1.2} y={l[1] - 1.5} width="2.4" height="3" fill="#f3eee0" stroke={PALETTE.oakDark} strokeWidth="0.25" />
+                <rect x={r[0] - 1.2} y={r[1] - 1.5} width="2.4" height="3" fill="#f3eee0" stroke={PALETTE.oakDark} strokeWidth="0.25" />
+              </g>
+            );
+          })}
+        </g>
+      )}
       {/* small altar */}
-      <polygon points="42,32 58,32 59,34 41,34" fill="url(#cloth)" />
-      <rect x="41" y="34" width="18" height="5" fill={restored ? 'url(#marble)' : '#8a7a5a'} />
+      <polygon points="42,32 58,32 59,34 41,34" fill={modern ? '#f7f3ea' : 'url(#cloth)'} />
+      <rect x="41" y="34" width="18" height="5" fill={modern ? room.altar : restored ? 'url(#marble)' : room.altar} />
       <Candle x={44} y={32} h={2.4} lit />
       <Candle x={56} y={32} h={2.4} lit />
       {restored && (
@@ -112,15 +231,36 @@ export function Chapel({ restored = false, adoration = false, perpetual = false 
           <ellipse cx="50" cy="32.1" rx="1.6" ry="0.5" fill="url(#brass)" />
         </g>
       )}
-      {/* kneelers */}
-      {[30, 46, 62].map((x) => (
-        <g key={x}>
-          <rect x={x - 6} y="46" width="12" height="2.2" fill="url(#wood)" />
-          <rect x={x - 6} y="48.2" width="12" height="1.6" fill="#5a1414" />
-          <rect x={x - 5.5} y="49.8" width="1" height="3" fill={PALETTE.oakDark} />
-          <rect x={x + 4.5} y="49.8" width="1" height="3" fill={PALETTE.oakDark} />
+      {/* the seating */}
+      {seating === 'kneelers' &&
+        [30, 46, 62].map((x) => (
+          <g key={x}>
+            <rect x={x - 6} y="46" width="12" height="2.2" fill="url(#wood)" />
+            <rect x={x - 6} y="48.2" width="12" height="1.6" fill="#5a1414" />
+            <rect x={x - 5.5} y="49.8" width="1" height="3" fill={PALETTE.oakDark} />
+            <rect x={x + 4.5} y="49.8" width="1" height="3" fill={PALETTE.oakDark} />
+          </g>
+        ))}
+      {seating === 'chairs' && (
+        <g>
+          {[[28, 46], [40, 45], [52, 45], [64, 46]].map(([x, y]) => (
+            <Chair key={x} x={x!} y={y!} s={0.75} kind="leather" facing="away" />
+          ))}
+          <Chair x={10} y={42} s={1} kind="leather" />
+          <Chair x={84} y={42} s={1} kind="leather" />
         </g>
-      ))}
+      )}
+      {seating === 'pews' &&
+        [[24, 44], [38, 44], [56, 44]].map(([x, y]) => (
+          <g key={x}>
+            <Shadow x={x!} y={y! + 9} w={18} />
+            <rect x={x!} y={y!} width="18" height="2.2" fill="url(#wood)" />
+            <rect x={x!} y={y! + 2.2} width="18" height="5.5" fill="url(#woodSide)" />
+            <rect x={x!} y={y!} width="18" height="0.5" fill="#fff" opacity="0.3" />
+            <rect x={x! + 0.6} y={y! + 7.7} width="1" height="2.2" fill={PALETTE.oakDark} />
+            <rect x={x! + 16.4} y={y! + 7.7} width="1" height="2.2" fill={PALETTE.oakDark} />
+          </g>
+        ))}
       {perpetual && (
         <g>
           {/* someone on the kneeler, whatever the hour */}

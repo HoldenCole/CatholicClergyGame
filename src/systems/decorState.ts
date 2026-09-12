@@ -7,6 +7,7 @@ export function placeKey(state: GameState, place: DecorPlace): string {
   const pid = state.assignment?.parishId ?? 'none';
   switch (place) {
     case 'church':
+    case 'chapel':
     case 'office':
       return `parish:${pid}:${place}`;
     case 'rectory':
@@ -31,7 +32,8 @@ export function defaultChurchDecor(parish: Parish): PlaceDecor {
     choir: prog ? 'choir_front' : 'choir_loft',
     statues: parish.kind === 'struggling_urban' || parish.kind === 'immigrant_growing' || trad ? 'statues_many' : prog ? 'statues_few' : 'statues_many',
     tabernacle: prog && parish.wealth >= 3 ? 'tab_side' : 'tab_center',
-    mass_form: 'mass_vernacular',
+    // A parish with a Latin Mass community already has the older Mass; it stays whoever comes.
+    mass_form: parish.problem === 'tlm_faction' ? 'mass_tlm' : 'mass_vernacular',
     music: parish.needsSpanish ? 'music_bilingual' : prog ? 'music_contemporary' : 'music_organ',
   };
 }
@@ -40,6 +42,8 @@ export function defaultDecor(place: DecorPlace, parish: Parish | undefined): Pla
   switch (place) {
     case 'church':
       return parish ? defaultChurchDecor(parish) : {};
+    case 'chapel':
+      return { style: 'chapel_as_is', devotion: parish && (parish.alignment <= -25 || parish.kind === 'immigrant_growing' || parish.kind === 'struggling_urban') ? 'chapel_marian' : 'chapel_none', seating: 'chapel_kneelers' };
     case 'office':
       return { wall: 'owall_crucifix', desk: 'odesk_inherited', corner: 'ocorner_files' };
     case 'rectory':

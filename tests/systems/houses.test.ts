@@ -2,7 +2,9 @@ import { describe, it, expect } from 'vitest';
 import { generateHouses, houseOf } from '@/generation/houses';
 import { createRng } from '@/engine/rng';
 import { parishState } from './week.test';
-import { decorOptions, facultyGate, grantChance, petition, resolvePermissions } from '@/systems/decor';
+import { currentDecor, decorOptions, facultyGate, furnish, grantChance, mayFurnish, petition, resolvePermissions } from '@/systems/decor';
+import { chapelStyle } from '@/ui/scenes/art/places';
+import { createClock, dateOf } from '@/engine/time';
 import { spend, spendAvailability, spendWords } from '@/systems/spending';
 import { evaluateAll } from '@/engine/conditions';
 import { resolveWeek } from '@/systems/week';
@@ -146,9 +148,51 @@ describe('faculties for the older form', () => {
 
   it('a pastor cannot put the older Mass on the parish without the faculties', () => {
     const s = vicar('pastor', 'by_permission');
-    const pastor: GameState = { ...s, assignment: { ...s.assignment!, role: 'pastor' } };
+    const pastor: GameState = { ...s, assignment: { ...s.assignment!, role: 'pastor' }, clock: createClock({ year: 2024, month: 1, day: 7 }) };
     const tlm = decorOptions.find((o) => o.id === 'mass_tlm')!;
     expect(evaluateAll(tlm.requires ?? [], pastor)).toBe(false);
     expect(evaluateAll(tlm.requires ?? [], { ...pastor, flags: { ...pastor.flags, can_celebrate_tlm: true } })).toBe(true);
+  });
+});
+
+describe('the chapel and the parish Latin Mass', () => {
+  it('the pastor styles the chapel with a smaller reaction than the church; a vicar cannot', () => {
+    const base = parishState('chapel:look');
+    const pastor: GameState = { ...base, assignment: { ...base.assignment!, role: 'pastor' }, parish: { ...base.parish!, finance: { ...base.parish!.finance, cash: 500000 } } };
+    expect(mayFurnish(base, 'chapel').ok).toBe(false);
+    expect(mayFurnish(pastor, 'chapel').ok).toBe(true);
+    expect(currentDecor(pastor, 'chapel').style).toBe('chapel_as_is');
+    const done = furnish(pastor, 'chapel', 'chapel_old');
+    expect(currentDecor(done.state, 'chapel').style).toBe('chapel_old');
+    expect(done.state.parish!.finance.cash).toBe(500000 - 30000);
+    expect(done.state.career[done.state.career.length - 1]!.text).toMatch(/Changed the chapel/);
+    const churchMove = furnish(pastor, 'church', 'statues_none').state.character!.reputation.progressive_bloc - pastor.character!.reputation.progressive_bloc;
+    const chapelMove = furnish(pastor, 'chapel', 'chapel_modern').state.character!.reputation.progressive_bloc - pastor.character!.reputation.progressive_bloc;
+    expect(chapelMove).toBeGreaterThan(0);
+    expect(chapelMove).toBeLessThan(churchMove);
+    // Matching the church reads the sanctuary.
+    expect(chapelStyle({ style: 'chapel_match' }, { sanctuary: 'sanct_high_altar' })).toBe('old');
+    expect(chapelStyle({ style: 'chapel_match' }, { sanctuary: 'sanct_modern' })).toBe('modern');
+    expect(chapelStyle({ style: 'chapel_soft' }, { sanctuary: 'sanct_modern' })).toBe('soft');
+  });
+
+  it('the older Mass stays where it already stands or before 2021, and needs faculties to begin otherwise', () => {
+    const base = parishState('tlm:rule');
+    const pastor: GameState = { ...base, assignment: { ...base.assignment!, role: 'pastor' } };
+    const tlm = decorOptions.find((o) => o.id === 'mass_tlm')!;
+    const yearOf = (s: GameState) => dateOf(s.clock).year;
+    const now: GameState = { ...pastor, clock: createClock({ year: 2024, month: 1, day: 7 }) };
+    expect(yearOf(now)).toBe(2024);
+    expect(evaluateAll(tlm.requires!, now)).toBe(false);
+    const before: GameState = { ...pastor, clock: createClock({ year: 2018, month: 1, day: 7 }) };
+    expect(evaluateAll(tlm.requires!, before)).toBe(true);
+    const withFaculties: GameState = { ...now, flags: { ...now.flags, can_celebrate_tlm: true } };
+    expect(evaluateAll(tlm.requires!, withFaculties)).toBe(true);
+    // A parish with a Latin Mass community already has it, and keeps it.
+    const world = now.world!;
+    const pid = now.assignment!.parishId;
+    const community: GameState = { ...now, world: { ...world, parishes: world.parishes.map((p) => (p.id === pid ? { ...p, problem: 'tlm_faction' } : p)) } };
+    expect(currentDecor(community, 'church').mass_form).toBe('mass_tlm');
+    expect(evaluateAll(tlm.requires!, community)).toBe(true);
   });
 });

@@ -110,6 +110,8 @@ export type Condition =
    * carries group conditions, @group_leader binds to a matching group.
    */
   | { type: 'group'; key: 'type' | 'vitality' | 'hostile' | 'suppressed' | 'foundedByPlayer' | 'agenda'; value: string | boolean }
+  /** The calendar year of the current week: the 2021 norms on the older Mass, and the like. */
+  | { type: 'calendar_year'; op: Op; value: number }
   /** Whether the diocese has a religious house, of a charism if given. */
   | { type: 'house'; charism?: 'contemplative' | 'active'; value: boolean }
   | { type: 'not'; inner: Condition }

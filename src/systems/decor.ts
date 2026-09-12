@@ -18,9 +18,9 @@ export function slotsFor(place: DecorPlace): DecorSlot[] {
 
 /** Who may change what. DESIGN 8.1: the pastor has full authority over the liturgy and the building. */
 export function mayFurnish(state: GameState, place: DecorPlace): { ok: boolean; why: string | null } {
-  if (place === 'church') {
+  if (place === 'church' || place === 'chapel') {
     if (state.assignment?.role === 'pastor') return { ok: true, why: null };
-    return { ok: false, why: 'Only the pastor decides how the church looks.' };
+    return { ok: false, why: place === 'chapel' ? 'Only the pastor decides how the chapel looks.' : 'Only the pastor decides how the church looks.' };
   }
   if (place === 'chancery' && !Object.keys(state.flags).some((k) => k.startsWith('office:') && state.flags[k])) {
     return { ok: false, why: 'You have no office in the chancery.' };
@@ -227,24 +227,26 @@ export function furnish(state: GameState, place: DecorPlace, optionId: string): 
     if (!next.parish || next.parish.finance.cash < option.cost) throw new Error('The parish cannot pay for it.');
     next = applyEffects(next, [{ target: 'money', key: 'cash', delta: -option.cost }]);
   }
-  if (place === 'church' && option.alignment !== null && next.world && next.parish && next.character) {
+  if ((place === 'church' || place === 'chapel') && option.alignment !== null && next.world && next.parish && next.character) {
     const parish = next.world.parishes.find((p) => p.id === next.parish!.parishId)!;
     const gap = Math.abs(option.alignment - parish.alignment);
-    const people = Math.round(DECOR.parishionersBase - gap * DECOR.parishionersPerGap);
-    const bloc = Math.round(Math.abs(option.alignment) * DECOR.blocPerAlignment);
+    // The chapel is a smaller room: fewer see it, and fewer mind.
+    const scale = place === 'chapel' ? 0.5 : 1;
+    const people = Math.round((DECOR.parishionersBase - gap * DECOR.parishionersPerGap) * scale);
+    const bloc = Math.round(Math.abs(option.alignment) * DECOR.blocPerAlignment * scale);
     next = applyEffects(next, [
       { target: 'reputation', key: 'parishioners', delta: people },
       { target: 'reputation', key: option.alignment < 0 ? 'traditional_bloc' : 'progressive_bloc', delta: bloc },
       { target: 'reputation', key: option.alignment < 0 ? 'progressive_bloc' : 'traditional_bloc', delta: -Math.round(bloc / 2) },
     ]);
-    const drift = Math.sign(option.alignment - parish.alignment) * Math.min(DECOR.parishDrift, gap);
+    const drift = Math.sign(option.alignment - parish.alignment) * Math.min(DECOR.parishDrift * scale, gap);
     const world = next.world!;
     next = {
       ...next,
       world: { ...world, parishes: world.parishes.map((p) => (p.id === parish.id ? { ...p, alignment: clampSigned(p.alignment + drift) } : p)) },
     };
     line = people >= 2 ? `${option.label}. The parish approves, mostly.` : people <= -2 ? `${option.label}. Letters will be written.` : `${option.label}. Some noticed; a few minded.`;
-    next = { ...next, career: [...next.career, { week: next.clock.week, kind: 'note', text: `Changed the church: ${option.label.toLowerCase()}.` }] };
+    next = { ...next, career: [...next.career, { week: next.clock.week, kind: 'note', text: `Changed the ${place}: ${option.label.toLowerCase()}.` }] };
   }
   if (option.effects) next = applyEffects(next, option.effects);
   return { state: next, line };

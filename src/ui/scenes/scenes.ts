@@ -15,7 +15,7 @@ export type HotspotBinding =
   | { kind: 'study_action'; activityId: string }
   | { kind: 'obligation'; key: ObligationKey }
   | { kind: 'panel'; panel: 'routine' | 'groups' | 'projects' | 'offers' | 'digest' | 'parish' | 'formation' | 'clubs' }
-  | { kind: 'furnish'; place: 'church' | 'office' | 'rectory' | 'seminary_room' | 'chancery' }
+  | { kind: 'furnish'; place: 'church' | 'chapel' | 'office' | 'rectory' | 'seminary_room' | 'chancery' }
   | { kind: 'scene'; scene: SceneId };
 
 export interface Hotspot {
@@ -100,6 +100,7 @@ export const SCENES: SceneDef[] = [
     hotspots: [
       { id: 'tabernacle', label: 'The tabernacle: personal prayer and adoration', x: 38, y: 10, w: 24, h: 40, binds: { kind: 'action', actionId: 'prayer' } },
       { id: 'kneeler', label: 'The kneelers', x: 22, y: 72, w: 56, h: 18, binds: { kind: 'action', actionId: 'prayer' } },
+      { id: 'look', label: 'The side wall: how the chapel looks', x: 72, y: 20, w: 26, h: 50, binds: { kind: 'furnish', place: 'chapel' } },
       { id: 'back', label: 'Back into the church', x: 3, y: 32, w: 12, h: 46, binds: { kind: 'scene', scene: 'church' } },
     ],
   },

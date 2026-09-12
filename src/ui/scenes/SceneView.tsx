@@ -15,7 +15,7 @@ import { useUiStore, type Sheet } from '../uiStore';
 
 const NEXT_QUALITY: Record<Quality, Quality> = { min: 'standard', standard: 'invested', invested: 'min' };
 const PANEL_SHEET: Record<string, Sheet> = { routine: 'week', groups: 'people', projects: 'people', offers: 'letters', digest: 'record', parish: 'parish', formation: 'formation', clubs: 'clubs' };
-const PLACE_SCENE: Record<DecorPlace, SceneId> = { church: 'church', office: 'office', rectory: 'rectory', seminary_room: 'seminary_room', chancery: 'chancery' };
+const PLACE_SCENE: Record<DecorPlace, SceneId> = { church: 'church', chapel: 'chapel', office: 'office', rectory: 'rectory', seminary_room: 'seminary_room', chancery: 'chancery' };
 
 /**
  * The room. Hotspots are read from the scene table and bound to the
