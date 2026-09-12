@@ -9,9 +9,9 @@ import { playCareer } from '../helpers/career';
 describe('divergence', () => {
   it('two men from the same start are visibly different by the fourth year', () => {
     const weeks = 52 * 4;
-    const a = playCareer('diverge', 'chicago', weeks, undefined, 'first');
-    const b = playCareer('diverge', 'chicago', weeks, undefined, 'last');
-    const same = playCareer('diverge', 'chicago', weeks, undefined, 'first');
+    const a = playCareer('diverge-1', 'chicago', weeks, undefined, 'first');
+    const b = playCareer('diverge-1', 'chicago', weeks, undefined, 'last');
+    const same = playCareer('diverge-1', 'chicago', weeks, undefined, 'first');
     // Determinism first: the same man twice is the same man.
     expect(JSON.stringify(same.character)).toBe(JSON.stringify(a.character));
     // Then the divergence: stats, pillars, reputation, the record, the people.

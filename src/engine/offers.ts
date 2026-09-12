@@ -18,6 +18,11 @@ export const OFFERS = {
   reofferAfterWeeks: 104,
 } as const;
 
+/** Where a promised offer's due week is kept. */
+export function dueFlag(def: OfferDef): string {
+  return `offer_due:${def.id}`;
+}
+
 export function offerSelectors(def: OfferDef): string[] {
   const out = new Set(selectorsIn(def.title + ' ' + def.body + ' ' + def.accept.outcome + ' ' + def.decline.outcome));
   if (def.from) out.add(def.from);
@@ -84,12 +89,23 @@ export function offersWeek(state: GameState, rng: Rng, defs: OfferDef[], lookup:
 
   if (next.offers.length >= OFFERS.maxOpen || next.mode.kind !== 'clock') return next;
   const eligible = defs.filter((d) => isOfferEligible(d, next));
+  // A promised letter: the week it became due is written down, and it comes by then.
+  const promised = eligible.filter((d) => d.guarantee && evaluateAll(d.guarantee.when, next));
+  for (const d of promised) {
+    if (typeof next.flags[dueFlag(d)] !== 'number') next = { ...next, flags: { ...next.flags, [dueFlag(d)]: week + d.guarantee!.withinWeeks } };
+  }
+  const due = promised.find((d) => Number(next.flags[dueFlag(d)]) <= week);
   const weights = new Map(eligible.map((d) => [d.id, offerWeight(d, next)]));
   const total = [...weights.values()].reduce((a, b) => a + b, 0);
-  if (total <= 0) return next;
+  if (total <= 0 && !due) return next;
   // One roll decides whether anything arrives; a second picks which.
-  if (!rng.chance(Math.min(1, total * OFFERS.weightScale))) return next;
-  const chosen = rng.weighted(eligible, (d) => weights.get(d.id) ?? 0);
+  if (!due && !rng.chance(Math.min(1, total * OFFERS.weightScale))) return next;
+  const chosen = due ?? rng.weighted(eligible, (d) => weights.get(d.id) ?? 0);
+  if (chosen.guarantee) {
+    const flags = { ...next.flags };
+    delete flags[dueFlag(chosen)];
+    next = { ...next, flags };
+  }
   const bindings: Record<string, string> = {};
   for (const sel of offerSelectors(chosen)) {
     const npc = resolveSelector(next, sel, rng);

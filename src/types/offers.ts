@@ -34,6 +34,12 @@ export interface OfferDef {
   requires: Condition[];
   /** Arrival weight; roughly the chance in 1,000 per week that it arrives when eligible. */
   weight: number;
+  /**
+   * A promise on top of the roll: once the offer is eligible and `when` holds,
+   * it arrives within `withinWeeks` whatever the dice say. For the letters a
+   * man has clearly earned (the crypt chapel for a traditional man).
+   */
+  guarantee?: { when: Condition[]; withinWeeks: number };
   bias?: { when: Condition; multiplier: number }[];
   /** Weeks to decide. 0 means one scene: decide now. */
   windowWeeks: number;
