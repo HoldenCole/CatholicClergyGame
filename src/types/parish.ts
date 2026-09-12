@@ -221,6 +221,10 @@ export interface ParishState {
   snapshots?: ParishSnapshot[];
   /** Work in hand on the parish's problem. */
   work?: ProblemWork | null;
+  /** What he preaches on this month, and when he set it. */
+  homily?: { topic: string; setWeek: number };
+  /** The deanery the parish sits in: the dean and the priests of it, from the map. */
+  deanery?: { id: string; deanId: string; priestIds: string[]; parishIds: string[] };
 }
 
 /** What the week resolved to, for the digest and for tests. */

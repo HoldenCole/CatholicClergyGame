@@ -6,6 +6,8 @@ import { NEED_LABEL } from '@/generation/diocese';
 import { diocesePresets } from '@/content/dioceses';
 import { workAvailability } from '@/systems/problems';
 import { fundableGroups, mayInvest, spendAvailability, spendable, spendWords, SPENDING } from '@/systems/spending';
+import { explainAttendance, explainCollections, explainReputation } from '@/systems/movers';
+import type { ConstituencyKey } from '@/types';
 import { useUiStore } from '../uiStore';
 import { PROBLEM_LABEL } from '@/generation/parishes';
 import { STAT_KEYS, CONSTITUENCY_KEYS } from '@/types';
@@ -58,6 +60,14 @@ export default function ParishPanel() {
   const work = p.work;
   const year = yearOf(game.clock.startDay, game.clock.week);
 
+  const whyRep = (key: ConstituencyKey): string => {
+    const reasons = explainReputation(game, key);
+    return reasons.length ? `This quarter: ${reasons.map((r) => `${r.label} ${r.amount > 0 ? '+' : ''}${Math.round(r.amount)}`).join(', ')}.` : 'Nothing has moved it this quarter; opinions drift back toward rest.';
+  };
+  const pews = explainAttendance(game);
+  const whyPews = `Heading to ${Math.round(pews.target * 100)}%: ${pews.reasons.map((r) => `${r.label} ${r.amount > 0 ? '+' : ''}${r.amount}`).join(', ')}. Hover shows points of attendance.`;
+  const plate = explainCollections(game);
+  const whyPlate = `The usual is $${plate.usual.toLocaleString()}, then ${plate.factors.map((f) => `×${f.amount} for ${f.label}`).join(', ')}. Out of it each week: ${plate.costs.map((k) => `${k.label} $${Math.abs(k.amount).toLocaleString()}`).join(', ')}.`;
   return (
     <>
       <Sheet title={`${parish.name}, ${parish.place}${parish.founded ? ` (${parish.founded})` : ''}`}>
@@ -69,11 +79,11 @@ export default function ParishPanel() {
           </p>
         </div>
         <dl className="mt-3 grid grid-cols-2 gap-x-6 gap-y-1 text-sm">
-          <div className="flex justify-between"><dt className="ink-muted">The people</dt><dd>{word(c.reputation.parishioners)}</dd></div>
-          <div className="flex justify-between"><dt className="ink-muted">The chancery</dt><dd>{word(c.reputation.chancery)}</dd></div>
-          <div className="flex justify-between"><dt className="ink-muted">Brother priests</dt><dd>{word(c.reputation.brother_priests)}</dd></div>
-          <div className="flex justify-between"><dt className="ink-muted">Attendance</dt><dd>{Math.round(p.attendance * 100)}% of the rolls</dd></div>
-          <div className="flex justify-between"><dt className="ink-muted">Collections</dt><dd>${fin.averageCollection.toLocaleString()} a week</dd></div>
+          <Standing label="The people" value={word(c.reputation.parishioners)} why={whyRep('parishioners')} />
+          <Standing label="The chancery" value={word(c.reputation.chancery)} why={whyRep('chancery')} />
+          <Standing label="Brother priests" value={word(c.reputation.brother_priests)} why={whyRep('brother_priests')} />
+          <Standing label="Attendance" value={`${Math.round(p.attendance * 100)}% of the rolls`} why={whyPews} />
+          <Standing label="Collections" value={`$${fin.averageCollection.toLocaleString()} a week`} why={whyPlate} />
           <div className="flex justify-between"><dt className="ink-muted">Cash</dt><dd>${fin.cash.toLocaleString()}</dd></div>
           <div className="flex justify-between"><dt className="ink-muted">Debt</dt><dd>${fin.debt.toLocaleString()}</dd></div>
         </dl>
@@ -268,5 +278,19 @@ export default function ParishPanel() {
         )}
       </Sheet>
     </>
+  );
+}
+
+/** One line of the standing, with the reason behind it on hover and on a click. */
+function Standing({ label, value, why }: { label: string; value: string; why: string }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="flex flex-col">
+      <button className="flex justify-between text-left" title={why} onClick={() => setOpen((o) => !o)}>
+        <dt className="ink-muted">{label}</dt>
+        <dd className="underline decoration-dotted underline-offset-2">{value}</dd>
+      </button>
+      {open && <p className="ink-faint mt-0.5 text-xs leading-snug">{why}</p>}
+    </div>
   );
 }

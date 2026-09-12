@@ -36,6 +36,7 @@ export default function SceneView() {
   const selected = useUiStore((s) => s.selected);
   const preview = selected ?? hoverPreview;
   const [hover, setHover] = useState<string | null>(null);
+  const hints = useUiStore((s) => s.prefs.hints);
   if (!game || (!game.parish && !game.seminary && !game.study)) return null;
   const away = !!game.study;
   const inSeminary = !away && !!game.seminary && !game.parish;
@@ -179,7 +180,7 @@ export default function SceneView() {
         })}
       </div>
       <div className="plate px-4 py-2">
-        {hovered ? describe(hovered.binds) : away ? 'A room in a city that does not know you. The hours are yours; the years are the diocese\'s.' : inSeminary ? 'Your room. The shelf fills with what you give the year to.' : 'Everything in the room is something you could do with the week.'}
+        {hovered ? describe(hovered.binds) : hints ? `Here: ${scene.hotspots.map((h) => h.label.split(':')[0]!.toLowerCase()).join(', ')}.` : away ? 'A room in a city that does not know you. The hours are yours; the years are the diocese\'s.' : inSeminary ? 'Your room. The shelf fills with what you give the year to.' : 'Everything in the room is something you could do with the week.'}
       </div>
     </div>
   );

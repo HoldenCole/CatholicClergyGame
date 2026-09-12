@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { allEvents, eventFiles } from '@/content';
 import { decorOptions } from '@/systems/decorState';
+import { FEAST_KEYS } from '@/engine/feasts';
 import { actionDefs, liturgyDials, obligationDefs } from '@/content/parish';
 const LITURGY_DIALS = new Set(liturgyDials.map((d) => d.id));
 const LITURGY_OPTIONS = new Set(liturgyDials.flatMap((d) => d.options.map((o) => `${d.id}:${o.id}`)));
@@ -50,6 +51,10 @@ const SELECTORS = [
   '@chancellor',
   '@vicar_for_clergy',
   '@group_leader',
+  '@dean',
+  '@deanery_priest',
+  '@seminarian',
+  '@deacon',
 ];
 const GROUP_KEYS = ['type', 'vitality', 'hostile', 'suppressed', 'foundedByPlayer', 'agenda'];
 const GROUP_EFFECT_KEYS = ['vitality', 'size', 'hostile', 'suppressed', 'dissolve'];
@@ -109,6 +114,15 @@ function checkCondition(c: Condition, where: string, problems: Problem[]): void 
       break;
     case 'thread':
       if (typeof c.key !== 'string' || typeof c.open !== 'boolean') problems.push(`${where}: bad thread condition`);
+      break;
+    case 'feast':
+      if (!FEAST_KEYS.includes(c.key as never)) problems.push(`${where}: unknown feast ${c.key}`);
+      break;
+    case 'ethnic':
+      if (typeof c.key !== 'string' || !hasOp(c.op) || typeof c.value !== 'number') problems.push(`${where}: bad ethnic condition`);
+      break;
+    case 'homily':
+      if (!['readings', 'the_parish', 'the_news', 'the_bishop', 'the_money', 'vocations'].includes(c.value)) problems.push(`${where}: bad homily topic ${c.value}`);
       break;
     case 'house':
       if (typeof c.value !== 'boolean' || (c.charism !== undefined && !['contemplative', 'active'].includes(c.charism))) problems.push(`${where}: bad house condition`);

@@ -75,7 +75,7 @@ export function spend(state: GameState, id: string): GameState {
   const finance = { ...state.parish.finance, cash: state.parish.finance.cash - def.cost };
   if (def.kind === 'fund') finance.funds = { ...(finance.funds ?? {}), [id]: state.clock.week };
   let next: GameState = { ...state, parish: { ...state.parish, finance } };
-  next = applyEffects(next, def.effects);
+  next = applyEffects(next, def.effects, {}, spendWords(state, def).label);
   return { ...next, career: [...next.career, { week: next.clock.week, kind: 'project', text: `${spendWords(state, def).label}: $${def.cost.toLocaleString()} from the parish.` }] };
 }
 
@@ -152,7 +152,7 @@ export function spendingWeek(state: GameState, rng: Rng): { state: GameState; li
       continue;
     }
     f = { ...f, cash: f.cash - upkeep };
-    if (def.weekly?.length) next = applyEffects(next, def.weekly);
+    if (def.weekly?.length) next = applyEffects(next, def.weekly, {}, spendWords(state, def).label);
     next = fundWork(next, def, funds[id]!);
   }
   f.funds = funds;

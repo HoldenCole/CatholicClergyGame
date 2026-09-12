@@ -1,0 +1,352 @@
+{
+  "_notes": "Homily pool: what the man preaches on this month, and where it lands. Each scene is gated on a { type: 'homily' } condition matching one of the six topics (readings, the_parish, the_news, the_bishop, the_money, vocations) and shows the homily arriving somewhere it was not aimed. Ids prefixed hm_. Phases parochial_vicar, administrator, pastor. Flags defined here (all hm_): hm_visited_the_policeman, hm_visited_the_migrant, hm_preached_both_sons, hm_returned_envelope, hm_kept_envelope_note, hm_agreed_with_bishop, hm_disagreed_with_bishop, hm_chair_apologized_to, hm_chair_stood_up_to, hm_boy_sent_to_vocations, hm_boy_told_to_wait, hm_told_mother_the_life, hm_preaches_plain, hm_preaches_harder. Nothing here is sensitive in the §11 sense; the LLM layer may skin all of it.",
+  "events": [
+    {
+      "id": "hm_news_two_sons",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["belief_vs_safety", "loyalty_vs_honesty"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 12,
+      "suppressYears": 3,
+      "requires": [{ "type": "homily", "value": "the_news" }],
+      "bias": [
+        { "when": { "type": "parish", "key": "needsSpanish", "value": true }, "multiplier": 1.5 }
+      ],
+      "title": "The Week's News, Preached",
+      "body": "You preached the news this month because the Gospel was the Good Samaritan and the news was the raid at the packing plant two counties over, and it seemed a coward's thing to preach one without the other. You were careful. You did not name a party or a policy. You said that the man in the ditch had no papers and the Samaritan did not ask for them. It was a good homily and you knew it in the pulpit, which is a thing to be suspicious of. After the ten-thirty two people are waiting, and they have not come together. One is {@parishioner}, whose son is a deputy and was on the line at the plant on Tuesday, and who wants to know whether you meant that her boy was the robbers or the priest who walked past. The other is a woman you have seen at the Spanish Mass, whose brother was in the van, and who says only, thank you, Father, and holds your hand a beat too long. They are standing four feet apart. Neither knows who the other is. {@secretary} has already told you there were three phone calls before you got out of the vestments.",
+      "flavorPrompt": "A homily on the news that was careful and landed on two families anyway; the deputy's mother and the migrant's sister, four feet apart.",
+      "choices": [
+        {
+          "id": "visit_the_deputy",
+          "label": "Go to the deputy's house this week and hear it from him",
+          "outcome": "He is younger than you expected and does not want to talk about it and then does. He says he was told to hold the line and held it and went home and did not sleep. You do not tell him he was the Samaritan or the robbers. You tell him you are glad he came to Mass. {@parishioner} sets a plate in front of you without asking, which is how you know the visit worked. The woman from the Spanish Mass does not know you went, and you do not tell her.",
+          "effects": [
+            { "target": "relationship", "key": "@parishioner", "delta": 8 },
+            { "target": "reputation", "key": "parishioners", "delta": 3 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "flag", "key": "hm_visited_the_policeman", "value": true }
+          ]
+        },
+        {
+          "id": "visit_the_family",
+          "label": "Go to the Spanish Mass family and ask what the parish can do",
+          "outcome": "The apartment is full of people who fall quiet when a priest comes in. The brother has been moved somewhere with a phone number and no address. You take the number and give it to the diocesan office that handles these, and the office does what it can, which is not nothing. {@parishioner} hears where you went, because everyone hears everything, and is not at the ten-thirty for a month. The Spanish Mass grows by a pew.",
+          "effects": [
+            { "target": "reputation", "key": "progressive_bloc", "delta": 5 },
+            { "target": "reputation", "key": "traditional_bloc", "delta": -3 },
+            { "target": "relationship", "key": "@parishioner", "delta": -6 },
+            { "target": "outspokenness", "key": "", "delta": 4 },
+            { "target": "flag", "key": "hm_visited_the_migrant", "value": true }
+          ],
+          "volume": "semi_public",
+          "positionTopic": "immigration",
+          "positionValue": 35
+        },
+        {
+          "id": "preach_it_again",
+          "label": "Next Sunday, preach the same Gospel with both sons in it",
+          "requires": [{ "type": "stat", "key": "charisma", "op": ">=", "value": 50 }],
+          "outcome": "You say from the pulpit that there was a man on the line on Tuesday doing what he was told, and a man in the van doing what he had to, and that the parish has both of their mothers in it, and that the Samaritan did not have the luxury of choosing which one to stop for. Nobody claps, which is right. {@parishioner} nods once from the fourth pew. The woman from the Spanish Mass is not there; she does not come to the English Mass. The phone rings less.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 5 },
+            { "target": "stat", "key": "charisma", "delta": 2 },
+            { "target": "stat", "key": "theology", "delta": 1 },
+            { "target": "flag", "key": "hm_preached_both_sons", "value": true }
+          ]
+        },
+        {
+          "id": "back_to_the_readings",
+          "label": "Let it lie, and preach the readings next month",
+          "outcome": "You do not go to either house. The phone stops ringing by Wednesday, as phones do. Next month you preach on the readings and the parish is grateful in the way a parish is grateful for a homily that asks nothing of it. The woman from the Spanish Mass still holds your hand a beat too long at the door, and you are not sure she should.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 1 },
+            { "target": "reputation", "key": "progressive_bloc", "delta": -2 },
+            { "target": "honesty", "key": "", "delta": -1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hm_money_envelope",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["money", "loyalty_vs_honesty"],
+      "severity": "NOTABLE",
+      "category": "finance",
+      "baseWeight": 12,
+      "suppressYears": 3,
+      "requires": [{ "type": "homily", "value": "the_money" }],
+      "bias": [
+        { "when": { "type": "parish", "key": "wealth", "value": "poor" }, "multiplier": 1.4 }
+      ],
+      "title": "The Note in the Envelope",
+      "body": "You preached the money this month. You had to; the boiler and the roof and the diocesan assessment do not preach themselves, and you said so, plainly, with the numbers on a sheet in the bulletin so no one could say the priest was hiding anything. You said the parish is not a business but it has a business's bills. You said that the widow's mite was a mite and not a check for the balance. It was not a beautiful homily. It was honest, and the second collection was up by half. On Monday {@secretary} brings you the envelopes, as she does, and one of them she has set apart. It is a plain white envelope with two hundred dollars in twenties and a note in a hand that shakes. The note says: This is my grocery money for the month. You said the parish needs it more than the widow. I am the widow. I will eat at my daughter's. God bless you Father. There is no name. {@secretary} says she thinks she knows who it is and she thinks you should not ask her.",
+      "flavorPrompt": "An honest money homily and the plain envelope with the grocery money in it; the secretary who knows who and will not say.",
+      "choices": [
+        {
+          "id": "find_her_and_return_it",
+          "label": "Ask {@secretary} who, and take the envelope back to her yourself",
+          "outcome": "{@secretary} tells you, after saying twice that she should not. The woman lives alone above the hardware store and is angry that you came and angrier that you brought it back. She says she heard what you said. You say you said it badly. In the end she keeps forty dollars of it in the parish and you leave with the rest on the table and her still telling you she is not a charity case. The second collection stays up. You preach the money differently after that, if you preach it at all.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 2 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "relationship", "key": "@secretary", "delta": 4 },
+            { "target": "money", "key": "cash", "delta": -160 },
+            { "target": "flag", "key": "hm_returned_envelope", "value": true }
+          ]
+        },
+        {
+          "id": "keep_it_and_say_mass",
+          "label": "Keep it, say the Tuesday Mass for her intention, and say nothing",
+          "default": true,
+          "outcome": "You bank it with the rest, because she gave it and you do not know her name and to hunt her down would be to take from her the thing she did. You put her intention in the Tuesday Mass as 'for a benefactor' and she is there, you think, in the back, though you are not certain which one she is. {@secretary} says nothing about it again and files the note in a drawer where the parish keeps the things it does not throw away.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "flag", "key": "hm_kept_envelope_note", "value": true }
+          ]
+        },
+        {
+          "id": "preach_it_back",
+          "label": "Next Sunday, read the note from the pulpit without the name and say you were wrong",
+          "requires": [{ "type": "stat", "key": "charisma", "op": ">=", "value": 45 }],
+          "outcome": "You read it, all of it, and say that whoever wrote it heard the homily better than the priest who gave it, and that the parish does not want anyone's grocery money and never did. It is the kind of thing that could go wrong and does not. The collection stays up; the envelopes come with names on them now. Three people ask {@secretary} who the widow was, and she says she does not know, which is now true, because she has decided not to.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 6 },
+            { "target": "stat", "key": "charisma", "delta": 2 },
+            { "target": "honesty", "key": "", "delta": 1 },
+            { "target": "money", "key": "cash", "delta": 150 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hm_bishops_letter",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["loyalty_vs_honesty", "belief_vs_safety"],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 12,
+      "suppressYears": 2,
+      "requires": [{ "type": "homily", "value": "the_bishop" }],
+      "title": "Do You Agree With It, Father",
+      "body": "The bishop's letter came with the instruction that it was to be read at all Masses in place of the homily, and you read it, at all Masses, in place of the homily. You read it well. You did not add a sentence at the end, which some priests do, to let the parish know where the priest stands, and you did not read it in the voice that some priests use, which is the voice of a man reading a thing he did not write. You read it as if you meant it, because the bishop is the bishop and the letter was his to write. It was three pages. It was about what the letters are about lately, and it was careful and unmistakable. After the ten-thirty, in the line at the door, a woman you know by sight and not by name lets three people go ahead of her so she will be last. She has the bulletin folded in her hand. She says, quietly, so the ushers cannot hear: I want to ask you one thing, Father, and I want you to answer it. Do you agree with it? {@secretary} is at the far end of the vestibule, and {@pastor}, if you have one, is already back in the sacristy.",
+      "flavorPrompt": "A bishop's letter read straight, and a woman at the back of the line who wants to know whether the priest agrees with it.",
+      "choices": [
+        {
+          "id": "say_yes",
+          "label": "Tell her you do",
+          "outcome": "You say it and she looks at you for a moment as if reading something in your face and then thanks you and goes, and you do not know whether she was hoping for that answer or the other. The parish hears, in the way parishes hear, that Father agrees with the bishop. Some are glad. A family from the eight o'clock is not, and finds a parish across the county line by Advent. The chancery hears too.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": 4 },
+            { "target": "reputation", "key": "traditional_bloc", "delta": 3 },
+            { "target": "reputation", "key": "progressive_bloc", "delta": -3 },
+            { "target": "flag", "key": "hm_agreed_with_bishop", "value": true }
+          ],
+          "volume": "semi_public",
+          "positionTopic": "authority",
+          "positionValue": 40
+        },
+        {
+          "id": "say_no",
+          "label": "Tell her, quietly, that you do not, and that you read it because he asked",
+          "requires": [{ "type": "stat", "key": "theology", "op": ">=", "value": 50 }],
+          "outcome": "You say it in the voice she used, so the ushers do not hear, and you say why, in two sentences, because she asked and you will not lie to a woman at the door of the church. She says she does not agree with it either, and then she says she is not sure that makes it easier. It does not stay quiet. By Friday {@vicar_for_clergy} has called, not about anything, and asked how the parish took the letter.",
+          "effects": [
+            { "target": "honesty", "key": "", "delta": 2 },
+            { "target": "reputation", "key": "chancery", "delta": -5 },
+            { "target": "reputation", "key": "progressive_bloc", "delta": 4 },
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "outspokenness", "key": "", "delta": 5 },
+            { "target": "flag", "key": "hm_disagreed_with_bishop", "value": true }
+          ],
+          "volume": "semi_public",
+          "positionTopic": "authority",
+          "positionValue": -40
+        },
+        {
+          "id": "say_it_is_his",
+          "label": "Tell her the letter is the bishop's, and that you are his priest, and leave it there",
+          "default": true,
+          "outcome": "You say that it was his to write and yours to read, and that she can write to him and he reads his mail. She says that is not an answer and you say you know. She thanks you anyway, which is more than the answer earned. It is the answer a priest gives who wants to keep his parish and his bishop and his conscience in the same room, and it keeps them there for now.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": 2 },
+            { "target": "reputation", "key": "parishioners", "delta": -1 },
+            { "target": "honesty", "key": "", "delta": -1 }
+          ]
+        },
+        {
+          "id": "ask_her_first",
+          "label": "Ask her what she thinks of it before you say anything",
+          "outcome": "She tells you, at length, in the vestibule while {@secretary} turns the lights off around you both, and it is more thought than most of the parish gave it. You listen. At the end she says you still have not answered. You say that you have heard her, and that it will be in your prayer, which is true and is also the thing priests say. She writes to the bishop. He answers her, which surprises you both.",
+          "effects": [
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "reputation", "key": "parishioners", "delta": 2 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hm_parish_named",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["friendship_vs_duty", "competence"],
+      "severity": "NOTABLE",
+      "category": "group",
+      "baseWeight": 12,
+      "suppressYears": 3,
+      "requires": [{ "type": "homily", "value": "the_parish" }],
+      "title": "The Chair Who Felt Named",
+      "body": "You preached the parish this month, which is to say you preached its problem, the one everybody knows and nobody says from the pulpit, and you said it from the pulpit. You did not use a name. You did not have to. The problem has a committee, and the committee has a chair, and the chair is {@group_leader}, who has held that chair for nine years and has been on the parish council for twelve and who was in the second pew with the family. Halfway through you saw the back of a neck go red and did not stop, because you had decided in the sacristy that you would not stop, and you are not sure now whether that was courage or a plan. The homily was true. Four people said so at the door, in the way people do when they mean, thank God someone said it. {@group_leader} did not come to the door. On Tuesday the council meeting is on the calendar, and the agenda came around this morning from {@secretary} with one item added at the bottom in a different font: Pastoral communication.",
+      "flavorPrompt": "The parish's problem named from the pulpit; the council chair who felt named, and the agenda item in a different font.",
+      "choices": [
+        {
+          "id": "go_to_him_first",
+          "label": "Go to {@group_leader} before Tuesday and say you were not talking about him",
+          "outcome": "You say it in his kitchen and it is half true, and he knows which half. He says he has given twelve years to this parish and you have given it, at that point, less. You do not argue. You say the problem is the parish's, not his, and that you need him on Tuesday, not against you. He is on Tuesday. The item is withdrawn. Something between you has been spent and you will not get it back at the old rate.",
+          "effects": [
+            { "target": "relationship", "key": "@group_leader", "delta": 4 },
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "honesty", "key": "", "delta": -1 },
+            { "target": "flag", "key": "hm_chair_apologized_to", "value": true }
+          ]
+        },
+        {
+          "id": "stand_by_it_tuesday",
+          "label": "Let the item stand, and on Tuesday say again what you said Sunday",
+          "requires": [{ "type": "stat", "key": "charisma", "op": ">=", "value": 50 }],
+          "outcome": "The item comes up at nine-forty and {@group_leader} says his piece, which is prepared and not unfair. You say yours, which is that the homily was about the parish and the parish was in the pews and that includes the council and the priest. Two members side with him. Three do not. He stays on the council. He does not stay chair of the committee, and he steps down himself before anyone asks, which is the thing you will remember about him.",
+          "effects": [
+            { "target": "relationship", "key": "@group_leader", "delta": -10 },
+            { "target": "reputation", "key": "parishioners", "delta": 4 },
+            { "target": "stat", "key": "charisma", "delta": 2 },
+            { "target": "outspokenness", "key": "", "delta": 4 },
+            { "target": "flag", "key": "hm_chair_stood_up_to", "value": true }
+          ]
+        },
+        {
+          "id": "give_him_the_fix",
+          "label": "Bring a plan to Tuesday and give {@group_leader} the running of it",
+          "requires": [{ "type": "stat", "key": "administration", "op": ">=", "value": 45 }],
+          "outcome": "You come with three pages and a timeline and, before he can read his statement, ask him to chair the thing that fixes it. It is a transparent move and it works, because he wants the parish to be well more than he wants to be right, which is why he has been on the council for twelve years. The item is not withdrawn; it is tabled, permanently. The plan is his by Lent and you let it be.",
+          "effects": [
+            { "target": "relationship", "key": "@group_leader", "delta": 6 },
+            { "target": "stat", "key": "administration", "delta": 2 },
+            { "target": "reputation", "key": "parishioners", "delta": 3 }
+          ]
+        },
+        {
+          "id": "let_it_pass",
+          "label": "Say nothing before Tuesday and let the meeting be what it will be",
+          "outcome": "The item comes up. {@group_leader} reads a statement about the proper channels for pastoral concern and you say you take the point, because you do, partly. It is over in ten minutes. The problem is not fixed. The parish, having heard it named once, waits to see what the naming was for, and the waiting costs you something every week it goes on.",
+          "effects": [
+            { "target": "relationship", "key": "@group_leader", "delta": -4 },
+            { "target": "reputation", "key": "parishioners", "delta": -2 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hm_vocations_sacristy",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["friendship_vs_duty", "doubt"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 12,
+      "suppressYears": 3,
+      "requires": [{ "type": "homily", "value": "vocations" }],
+      "bias": [
+        { "when": { "type": "parish", "key": "generational", "value": "young" }, "multiplier": 1.5 },
+        { "when": { "type": "flag", "key": "vocation_seed", "value": true }, "multiplier": 1.4 }
+      ],
+      "title": "The Boy in the Sacristy",
+      "body": "You preached vocations this month because the diocese asked, and because it is a thing you believe in on the days you believe in anything, and you did it without the poster and without the pamphlet and said what the life is: the early mornings and the phone at two and the funerals of people you loved and the loneliness that is real and the joy that is realer, most days. You said that if a boy in the church was thinking about it he should come and talk to a priest, any priest. You did not think anyone would. After the last Mass, unvesting, you turn and there is a boy in the sacristy door, fifteen maybe, in the good shirt his mother made him wear, and behind him, a step back, his mother, who has the face of a woman who has just found out something about her son in church. He says he has been thinking about it. He says it to the floor. She says nothing. She is watching you the way {@dre} watches a substitute catechist, to see whether you know what you are doing.",
+      "flavorPrompt": "A vocations homily that landed; a boy in a sacristy door and his mother behind him, not yet decided what she thinks.",
+      "choices": [
+        {
+          "id": "talk_to_the_boy",
+          "label": "Sit him down in the sacristy, door open, and ask him what he has been thinking",
+          "default": true,
+          "outcome": "He talks for fifteen minutes with his mother in the doorway, and it is more than the poster and less than a vocation, which is right for fifteen. You give him your number and a name at the vocations office, and say there is no hurry and that God is not in a hurry. His mother says thank you in a voice that has not decided. He serves the ten-thirty the next Sunday, and the one after.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "flag", "key": "hm_boy_sent_to_vocations", "value": true }
+          ]
+        },
+        {
+          "id": "talk_to_the_mother",
+          "label": "Send the boy to take off his alb, and talk to the mother",
+          "requires": [{ "type": "stat", "key": "charisma", "op": ">=", "value": 45 }],
+          "outcome": "She says she is not against it and you can hear that she is, or that she is against something, and it takes a while to find out what: not the priesthood, but the thing that happened in the diocese when she was a girl and the way people looked at priests after. You tell her the truth about the life, the good and the rest of it. She says she will think. She comes to the vocations holy hour in Lent and sits in the back with her arms folded and stays to the end.",
+          "effects": [
+            { "target": "stat", "key": "charisma", "delta": 2 },
+            { "target": "reputation", "key": "parishioners", "delta": 3 },
+            { "target": "honesty", "key": "", "delta": 1 },
+            { "target": "flag", "key": "hm_told_mother_the_life", "value": true }
+          ]
+        },
+        {
+          "id": "tell_him_to_wait",
+          "label": "Tell him to finish high school and come back if it is still there",
+          "outcome": "You say it kindly and his mother relaxes visibly and he does not. It is the right advice and it is also the advice that costs you nothing, and you know the difference. He does not come back to the sacristy. He is at Mass for a year and then at college, and you hear from {@dre} three years on that he is in a seminary, another diocese's, and did not tell you.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 1 },
+            { "target": "stat", "key": "piety", "delta": -1 },
+            { "target": "flag", "key": "hm_boy_told_to_wait", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hm_readings_nothing",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["doubt", "competence"],
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 10,
+      "suppressYears": 2,
+      "requires": [{ "type": "homily", "value": "readings" }],
+      "title": "You Never Say Anything",
+      "body": "You preached the readings this month: only the readings, the way you were taught, the text and the Church's reading of the text and one thing to take home. No news. No parish. No bishop, no money, no vocations. It is the safest homily there is and also the hardest to do well, and this month you did it well, mostly, and nobody complained, which is the thing about preaching the readings. On Sunday at the door, in the ordinary line of hands and thank-you-Fathers, {@parishioner} takes your hand and does not let go of it and says, not unkindly, that he has been coming to {parish} for twenty years and to your Masses since you came and that he wants to say one thing, and the thing is: You never say anything, Father. He says it like a man reporting the weather. Behind him the line backs up. He says he does not mean it as an insult; he means he could listen to you for a year and not know what you think about anything, and he wonders whether that is on purpose.",
+      "flavorPrompt": "A readings-only month, done well, and the man at the door who says the priest never says anything.",
+      "choices": [
+        {
+          "id": "ask_what_he_wants",
+          "label": "Ask him what he would want you to say",
+          "default": true,
+          "outcome": "He thinks about it with the line still backed up behind him and says: anything you would say at a kitchen table. You say that is a fair thing to want. He lets go of your hand. The next month you preach the readings again, but one Sunday you say a thing you believe out loud, and afterward he nods at you from the fourth pew and does not come to the door, which you take as the review.",
+          "effects": [
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "relationship", "key": "@parishioner", "delta": 4 },
+            { "target": "flag", "key": "hm_preaches_plain", "value": true }
+          ]
+        },
+        {
+          "id": "defend_the_readings",
+          "label": "Tell him the readings are what you think, and that is the point",
+          "outcome": "You say that the Word is what you have to say and that a priest who preaches himself has nothing to give, and it is a true thing and you say it too fast, and he hears the too fast. He says all right, Father, and goes. He is not wrong and neither are you, and the two of you carry that to the door every Sunday after, politely.",
+          "effects": [
+            { "target": "stat", "key": "theology", "delta": 1 },
+            { "target": "relationship", "key": "@parishioner", "delta": -3 },
+            { "target": "reputation", "key": "traditional_bloc", "delta": 2 }
+          ]
+        },
+        {
+          "id": "preach_harder_next_month",
+          "label": "Take it, and next month preach something that could get you a letter",
+          "requires": [{ "type": "stat", "key": "theology", "op": ">=", "value": 50 }],
+          "outcome": "You do not answer him at the door. Next month you preach the readings and, on the third Sunday, you say what the readings mean for the way the parish lives, with specifics, and one of the specifics costs you a letter to the chancery and gains you a dozen people who did not know you could do that. {@parishioner} shakes your hand at the door and says nothing, which is the point.",
+          "effects": [
+            { "target": "stat", "key": "charisma", "delta": 2 },
+            { "target": "reputation", "key": "parishioners", "delta": 4 },
+            { "target": "reputation", "key": "chancery", "delta": -2 },
+            { "target": "outspokenness", "key": "", "delta": 4 },
+            { "target": "flag", "key": "hm_preaches_harder", "value": true }
+          ]
+        }
+      ]
+    }
+  ]
+}
