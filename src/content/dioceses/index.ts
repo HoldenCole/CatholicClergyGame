@@ -21,6 +21,8 @@ export interface DioceseMapData {
   counties: [number, number][][];
   states: [number, number][][];
   towns: { name: string; x: number; y: number; rank: number }[];
+  /** The diocese itself, from its counties: outer ring first, then holes. */
+  diocese: [number, number][][][];
 }
 
 const maps = import.meta.glob<{ default: DioceseMapData }>('./maps/*.json', { eager: true });

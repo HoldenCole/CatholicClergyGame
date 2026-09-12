@@ -54,14 +54,17 @@ describe('generation/geo: the real churches where they stand', () => {
     expect(milesBetween(chinatown, cathedral, milesAcrossOf(presetById('washington')))).toBeLessThanOrEqual(2);
     const across = milesAcrossOf(presetById('washington'));
     expect(milesBetween(lourdes, by("St. Francis Xavier"), across)).toBeGreaterThan(40);
-    // Rolled parishes land near their named place.
-    const rolled = w.parishes.filter((p) => !p.founded && !p.cathedral);
-    expect(rolled.length).toBeGreaterThan(0);
-    for (const p of rolled) {
-      const pl = presetById('washington')!.places!.find((x) => x.name === p.place)!;
-      const at = project(presetById('washington')!, pl.lat, pl.lon);
-      expect(Math.abs(p.x! - at.x) + Math.abs(p.y! - at.y), `${p.name}, ${p.place}`).toBeLessThan(7);
+    // Every parish is a real church, and every one stands where its coordinates say.
+    const preset = presetById('washington')!;
+    expect(w.parishes.every((p) => p.founded)).toBe(true);
+    for (const p of w.parishes) {
+      const seed = preset.parishSeeds.find((s) => s.real && s.real.name === p.name && s.real.place === p.place)!;
+      expect(seed, `${p.name}, ${p.place}`).toBeDefined();
+      const at = project(preset, seed.real!.lat!, seed.real!.lon!);
+      expect([p.x, p.y], `${p.name}, ${p.place}`).toEqual([at.x, at.y]);
     }
+    // Enough of them to cover the ground: the far counties each have a church.
+    expect(w.parishes.filter((p) => p.y! > 70).length).toBeGreaterThanOrEqual(3);
     const h = worldOf('houston');
     const galveston = h.parishes.find((p) => p.name === 'St. Mary Cathedral Basilica')!;
     const houston = h.parishes.find((p) => p.cathedral)!;
