@@ -5,6 +5,7 @@ import { beginStudy } from '@/engine/study';
 import { officeDef } from '@/content/parish';
 import { offerById } from '@/content/offers';
 import { PROBLEM_LABEL } from '@/generation/parishes';
+import { scoreParish } from './assignment';
 import { formationStanding, parishPrestige } from './standing';
 import { parishKindWord } from './placement';
 import { hoursOf } from './week';
@@ -12,9 +13,10 @@ import { hoursOf } from './week';
 /**
  * A strong man is given a choice. At ordination for the top of the class,
  * on return from a degree, and at a board for a man the chancery rates,
- * the bishop lays two or three assignments on the desk and each says what
- * it is worth, what it takes, and what is involved. Requested in
- * playtesting; numbers invented.
+ * the bishop lays the assignments on the desk and each says what it is
+ * worth, what it takes, and what is involved: the board's own choice, and
+ * then one parish of every kind, and every parish that is open, not only
+ * the kind the man asked for. Requested in playtesting; numbers invented.
  */
 export const CHOICE = {
   /** Formation standing that earns a choice at ordination. */
@@ -51,6 +53,49 @@ function option(state: GameState, id: string, headline: string, blurb: string, p
   return { id, headline, blurb, assignment: assignmentFor(state, parish, role, reasons), prestige: prestigeWord(parishPrestige(parish)), time: timeWord(office), involves: involvesOf(parish, role), ...(office ? { office } : {}) };
 }
 
+/** What each kind of parish is, for a man deciding between them. */
+const KIND_BLURB: Record<Parish['kind'], string> = {
+  flagship_suburban: 'The parish people have heard of: a big staff, a school, and a pastor who will decide what you are for. The diocese watches who is sent here.',
+  struggling_urban: 'Old stone, old families, and a budget that does not close. Nobody is watching, which is its own kind of freedom.',
+  immigrant_growing: 'Full at noon in Spanish, thin at eight in English, and a pastor who needs a second priest more than he needs a good one.',
+  rural: 'Two churches forty miles apart and a truck. The deanery meets once a quarter and nobody from the chancery has visited in years.',
+  difficult: "The parish nobody asked for. Two years there are worth five anywhere else in the board's memory, and it will cost you.",
+};
+
+const KIND_REASON: Record<Parish['kind'], string> = {
+  flagship_suburban: 'The board sends its strong men where the diocese can see them',
+  struggling_urban: 'A city parish needed a priest, and the board had one to spare',
+  immigrant_growing: 'The parish is growing faster than its priests',
+  rural: 'The country parishes are always short',
+  difficult: 'The chancery remembers the men who go where they are needed',
+};
+
+const KINDS: Parish['kind'][] = ['flagship_suburban', 'struggling_urban', 'immigrant_growing', 'rural', 'difficult'];
+
+/** The parish of each kind that fits the man best, by the board's own scoring. */
+function bestOfEachKind(state: GameState, parishes: Parish[], taken: Set<string>): Parish[] {
+  const world = state.world!;
+  const out: Parish[] = [];
+  for (const kind of KINDS) {
+    const pool = parishes.filter((p) => p.kind === kind && !p.cathedral && !taken.has(p.id));
+    if (pool.length === 0) continue;
+    const best = pool.map((p) => scoreParish(state, world, p)).sort((a, b) => b.score - a.score)[0]!.parish;
+    out.push(best);
+    taken.add(best.id);
+  }
+  return out;
+}
+
+function kindOption(state: GameState, parish: Parish, role: Role, taken: Set<string>): AssignmentOption {
+  const score = scoreParish(state, state.world!, parish);
+  const reasons = score.reasons.length ? score.reasons : [KIND_REASON[parish.kind]];
+  const spanish = parish.needsSpanish && !!state.flags.speaks_spanish;
+  const blurb = spanish ? 'The parish that needs your Spanish and has nobody. The chancery remembers the men who go where they are needed.' : KIND_BLURB[parish.kind];
+  taken.add(parish.id);
+  const title = role === 'pastor' ? 'Pastor' : role === 'administrator' ? 'Administrator' : 'Parochial vicar';
+  return option(state, `kind_${parish.kind}`, `${title} of ${parish.name}`, blurb, parish, role, reasons);
+}
+
 function byPrestige(parishes: Parish[]): Parish[] {
   return [...parishes].sort((a, b) => parishPrestige(b) - parishPrestige(a));
 }
@@ -76,8 +121,9 @@ export function buildChoice(state: GameState, rng: Rng, occasion: Occasion, fall
     if (here) options.push(option(state, 'first', `Parochial vicar of ${here.name}`, 'The board\'s own choice for you: the parish that fits what the seminary said you were for.', here, 'parochial_vicar', fallback.reasons));
     const cathedral = parishes.find((p) => p.cathedral && p.id !== here?.id);
     if (cathedral) options.push(option(state, 'cathedral', `Parochial vicar at ${cathedral.name}, and the bishop's Masses`, 'The cathedral: the bishop sees you every month, the chancery is across the street, and the rector runs a tight house. Master of ceremonies for the pontifical Masses on top of the parish.', cathedral, 'parochial_vicar', ['The rector asked for a man who can be trusted with the bishop\'s calendar', 'The top of the class is sent where the diocese can see him'], 'cathedral_calendar'));
-    const hard = byPrestige(parishes.filter((p) => p.id !== here?.id && !p.cathedral && (p.kind === 'difficult' || (p.needsSpanish && !!state.flags.speaks_spanish)))).reverse()[0];
-    if (hard) options.push(option(state, 'hard', `Parochial vicar of ${hard.name}`, hard.needsSpanish && state.flags.speaks_spanish ? 'The parish that needs your Spanish and has nobody. The chancery remembers the men who go where they are needed.' : 'The parish nobody asked for. Two years there are worth five anywhere else in the board\'s memory, and it will cost you.', hard, 'parochial_vicar', ['The vicar for clergy said you could take it', 'The chancery remembers the men who go where they are needed']));
+    // Then one parish of every kind, not only the kind the seminary said he was for.
+    const taken = new Set(options.map((o) => o.assignment.parishId));
+    for (const parish of bestOfEachKind(state, parishes, taken)) options.push(kindOption(state, parish, 'parochial_vicar', taken));
   }
 
   if (occasion === 'degree') {
@@ -94,6 +140,9 @@ export function buildChoice(state: GameState, rng: Rng, occasion: Occasion, fall
       const rural = byPrestige(parishes.filter((p) => p.kind === 'rural' && p.id !== top?.id && p.id !== mid?.id)).reverse()[0];
       if (rural) options.push(option(state, 'dean', `Pastor of ${rural.name}, and dean`, 'A quiet parish and the deanery: the pastors of a dozen parishes look to you first, and the chancery hears what you tell it.', rural, 'pastor', ['The vicar for clergy wants a canonist in that deanery', 'A dean is the chancery\'s face at the table'], 'dean'));
     }
+    // A man home with a degree may still choose an ordinary parish of any kind, as pastor.
+    const taken = new Set(options.map((o) => o.assignment.parishId));
+    for (const parish of bestOfEachKind(state, parishes, taken)) options.push(kindOption(state, parish, 'pastor', taken));
   }
 
   if (occasion === 'board') {
@@ -102,12 +151,21 @@ export function buildChoice(state: GameState, rng: Rng, occasion: Occasion, fall
       const office = fallback.role === 'pastor' ? 'vocations' : 'tribunal';
       options.push(option(state, 'won_office', `${fallback.role === 'pastor' ? 'Pastor' : 'Administrator'} of ${here.name}, and ${officeDef(office)!.label.toLowerCase()}`, `${officeDef(office)!.blurb} The bishop asks because the chancery thinks well of you.`, here, fallback.role, [...fallback.reasons, 'The chancery asked for more of you'], office));
     }
-    const other = byPrestige(parishes.filter((p) => p.id !== here?.id && !p.cathedral && state.openings.some((o) => o.parishId === p.id && (o.kind === 'pastor' || o.kind === 'administrator'))))[0];
-    if (other && fallback.role !== 'parochial_vicar') options.push(option(state, 'other', `${fallback.role === 'pastor' ? 'Pastor' : 'Administrator'} of ${other.name}`, 'The other opening the board would have given you. A different parish, a different problem.', other, fallback.role, ['Open, and the board would take you for it too']));
+    const taken = new Set(options.map((o) => o.assignment.parishId));
+    if (fallback.role !== 'parochial_vicar') {
+      // Every parish that is open, not only the one the board would have picked for him.
+      const open = byPrestige(parishes.filter((p) => !taken.has(p.id) && !p.cathedral && state.openings.some((o) => o.parishId === p.id && (o.kind === 'pastor' || o.kind === 'administrator'))));
+      for (const other of open) {
+        taken.add(other.id);
+        options.push(option(state, `open_${other.id}`, `${fallback.role === 'pastor' ? 'Pastor' : 'Administrator'} of ${other.name}`, `${KIND_BLURB[other.kind]} Open, and the board would take you for it.`, other, fallback.role, ['Open, and the board would take you for it too', KIND_REASON[other.kind]]));
+      }
+    } else {
+      for (const parish of bestOfEachKind(state, parishes, taken)) options.push(kindOption(state, parish, 'parochial_vicar', taken));
+    }
   }
 
   if (options.length < 2) return null;
-  const why = occasion === 'ordination' ? 'The rector\'s letter was strong enough that the bishop has let you choose.' : occasion === 'degree' ? 'A man comes home from a degree with a choice; the bishop lays three on the desk.' : 'The chancery thinks well enough of you that the bishop asks which you would rather.';
+  const why = occasion === 'ordination' ? 'The rector\'s letter was strong enough that the bishop has let you choose, and he has laid out one parish of every kind.' : occasion === 'degree' ? 'A man comes home from a degree with a choice; the bishop lays the diocese on the desk.' : 'The chancery thinks well enough of you that the bishop asks which you would rather, of everything that is open.';
   return { options, why };
 }
 

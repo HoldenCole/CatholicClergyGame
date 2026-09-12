@@ -77,6 +77,11 @@ describe("the bishop's choice", () => {
     const choice = buildChoice(withWorld, createRng('c'), 'ordination', fallback)!;
     expect(choice.options.length).toBeGreaterThanOrEqual(2);
     expect(choice.options.map((o) => o.id)).toContain('cathedral');
+    // One parish of every kind, not only the kind the seminary said he was for, and no parish twice.
+    const kinds = new Set(world.parishes.map((p) => p.kind));
+    for (const k of kinds) expect(choice.options.map((o) => o.id), k).toContain(`kind_${k}`);
+    expect(new Set(choice.options.map((o) => o.assignment.parishId)).size).toBe(choice.options.length);
+    expect(choice.options.length).toBeGreaterThanOrEqual(6);
     for (const o of choice.options) {
       expect(o.prestige).toBeTruthy();
       expect(o.time).toBeTruthy();
@@ -94,7 +99,11 @@ describe("the bishop's choice", () => {
     const s: GameState = { ...base, parish: null, assignment: null, phase: 'parochial_vicar', character: { ...base.character!, credentials: [...base.character!.credentials, 'STL'] }, flags: { ...base.flags, ordination_week: base.clock.week - 52 * 6 } };
     const fallback = { parishId: base.world!.parishes[1]!.id, role: 'pastor' as const, startWeek: s.clock.week, letter: 'x', reasons: ['home from Rome'] };
     const choice = buildChoice(s, createRng('r'), 'degree', fallback)!;
-    expect(choice.options.map((o) => o.id)).toEqual(['flagship', 'office', 'faculty']);
+    expect(choice.options.map((o) => o.id).slice(0, 3)).toEqual(['flagship', 'office', 'faculty']);
+    // And then a parish of every kind the diocese has, as pastor.
+    expect(choice.options.filter((o) => o.id.startsWith('kind_')).length).toBeGreaterThanOrEqual(3);
+    const parishOptions = choice.options.filter((o) => !o.posting);
+    expect(new Set(parishOptions.map((o) => o.assignment.parishId)).size).toBe(parishOptions.length);
     expect(choice.options[1]!.office).toBe('worship');
     expect(choice.options[1]!.time).toMatch(/hours a week/);
     const faculty = chooseAssignment(withChoice(s, createRng('r'), 'degree', fallback), 'faculty', createRng('x'));
@@ -114,5 +123,20 @@ describe("the bishop's choice", () => {
     expect(done.commitments).toHaveLength(0);
     expect(done.character!.reputation.chancery).toBeGreaterThan(week.character!.reputation.chancery + 5);
     expect(done.career[done.career.length - 1]!.text).toMatch(/tribunal/i);
+  });
+
+  it('at a board, every open parish is on the desk, not the one the board would have picked', () => {
+    const base = parishState('board-all');
+    const world = base.world!;
+    const here = world.parishes[2]!;
+    const others = world.parishes.filter((p) => p.id !== here.id && !p.cathedral).slice(0, 4);
+    const openings = others.map((p, i) => ({ id: `o${i}`, kind: 'pastor' as const, parishId: p.id, urgency: 50, needsSpanish: false, needsAdmin: false, alignment: 0, week: base.clock.week, label: p.name }));
+    const s: GameState = { ...base, openings, character: { ...base.character!, reputation: { ...base.character!.reputation, chancery: 70 } }, flags: { ...base.flags, ordination_week: base.clock.week - 52 * 12 } };
+    const fallback = { parishId: here.id, role: 'pastor' as const, startWeek: s.clock.week, letter: 'x', reasons: ['the board'] };
+    const choice = buildChoice(s, createRng('b'), 'board', fallback)!;
+    const ids = choice.options.map((o) => o.id);
+    expect(ids).toContain('won');
+    for (const p of others) expect(ids, p.name).toContain(`open_${p.id}`);
+    expect(choice.options.filter((o) => o.id.startsWith('open_')).length).toBe(4);
   });
 });

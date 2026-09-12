@@ -99,10 +99,13 @@ export function seminaryWeekHook(deps: EventDeps): WeekHook {
     next = week.line ? addDigestLine(week.state, week.line) : week.state;
     next = clubsStep(next, rng);
     const pool = weekPool(deps.pool, next);
-    if (pool.length === 0) return next;
-    const [event] = drawEvents(pool, next, rng, 1);
-    if (!event) return next;
-    return fireOrResolve(next, event, rng, deps);
+    if (pool.length > 0) {
+      const [event] = drawEvents(pool, next, rng, 1);
+      if (event) next = fireOrResolve(next, event, rng, deps);
+    }
+    // The house's invitations and the chancery's summers come by letter, week by week, like everyone else's.
+    if (next.mode.kind !== 'clock' || next.pending.length > 0) return next;
+    return openMail(offersStep(next, rng, deps));
   };
 }
 

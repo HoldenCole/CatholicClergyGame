@@ -1,7 +1,7 @@
 import { useGameStore } from '@/engine/store';
 import Panel from '../Panel';
 
-/** The bishop's desk: two or three assignments, each with what it is worth, what it takes, and what is involved. */
+/** The bishop's desk: every assignment he would give, each with what it is worth, what it takes, and what is involved. */
 export default function AssignmentChoicePanel() {
   const game = useGameStore((s) => s.game);
   const choose = useGameStore((s) => s.chooseAssignment);
@@ -10,7 +10,7 @@ export default function AssignmentChoicePanel() {
   return (
     <Panel title="The bishop asks which you would rather" tilt="l">
       <p className="leading-relaxed">{why}</p>
-      <ul className="mt-3 flex flex-col gap-3">
+      <ul className={`mt-3 grid gap-3 ${options.length > 3 ? 'md:grid-cols-2' : 'grid-cols-1'}`}>
         {options.map((o) => (
           <li key={o.id} className="rounded border rule bg-white/30 px-3 py-2">
             <h3 className="title text-lg">{o.headline}</h3>
