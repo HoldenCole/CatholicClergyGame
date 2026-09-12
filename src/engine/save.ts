@@ -4,6 +4,8 @@ import { createRng, restoreRng, type Rng } from './rng';
 import { withLiturgy } from '@/systems/liturgy';
 import { generateHouses } from '@/generation/houses';
 import { patronalOf } from '@/generation/patronal';
+import { placeParish } from '@/generation/geo';
+import { presetById } from '@/content/dioceses';
 
 /** Parishes saved before the pastor's Mass existed get one now, rolled from the seed so a reload rolls the same. */
 function giveEveryParishItsMass(state: GameState): void {
@@ -24,12 +26,18 @@ function giveEveryParishItsPatron(state: GameState): void {
 function giveEveryParishItsPlace(state: GameState): void {
   const world = state.world;
   if (!world || world.parishes.every((p) => typeof p.x === 'number')) return;
+  const preset = presetById(world.diocese.presetId);
   world.parishes = world.parishes.map((p) => {
     if (typeof p.x === 'number') return p;
     const rng = createRng(`${state.seed}:place:${p.id}`);
-    const radius = p.cathedral ? 0 : p.terrain === 'urban' ? rng.float(3, 12) : p.terrain === 'latino' ? rng.float(4, 18) : p.terrain === 'suburban' ? rng.float(12, 30) : rng.float(28, 48);
-    const angle = rng.float(0, Math.PI * 2);
-    return { ...p, x: Math.round((50 + Math.cos(angle) * radius) * 10) / 10, y: Math.round((50 + Math.sin(angle) * radius) * 10) / 10 };
+    if (!preset) {
+      const radius = p.cathedral ? 0 : p.terrain === 'urban' ? rng.float(3, 12) : p.terrain === 'latino' ? rng.float(4, 18) : p.terrain === 'suburban' ? rng.float(12, 30) : rng.float(28, 48);
+      const angle = rng.float(0, Math.PI * 2);
+      return { ...p, x: Math.round((50 + Math.cos(angle) * radius) * 10) / 10, y: Math.round((50 + Math.sin(angle) * radius) * 10) / 10 };
+    }
+    const real = preset.parishSeeds.find((s) => s.real && s.real.name === p.name && s.real.place === p.place)?.real;
+    const at = placeParish(rng, preset, { real, place: p.place, terrain: p.terrain, ...(p.cathedral ? { cathedral: true } : {}) });
+    return { ...p, x: at.x, y: at.y };
   });
 }
 

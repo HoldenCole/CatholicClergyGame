@@ -1,6 +1,6 @@
 import type { GameState, Npc, Parish } from '@/types';
 import type { Rng } from '@/engine/rng';
-import { nearestParishes, milesBetween } from './map';
+import { nearestParishes, milesBetween, milesAcross } from './map';
 import { noteMover } from './movers';
 import { deaneryRivalStands } from './openings';
 
@@ -29,7 +29,7 @@ export function formDeanery(state: GameState, rng: Rng): GameState {
   const world = state.world;
   const parish = world?.parishes.find((p) => p.id === state.assignment?.parishId);
   if (!world || !parish || !state.parish) return state;
-  const members = nearestParishes(world.parishes, parish, world.diocese.visible.size, DEANERY.size);
+  const members = nearestParishes(world.parishes, parish, milesAcross(world), DEANERY.size);
   const priests = members.map((p) => pastorOf(state, p.id)).filter((n): n is Npc => !!n);
   const own = pastorOf(state, parish.id);
   const ordainedAt = state.flags.ordination_week;
@@ -69,7 +69,7 @@ export function deaneryPriests(state: GameState): DeaneryPriest[] {
     .filter((n): n is Npc => !!n && n.status === 'active')
     .map((npc) => {
       const parish = world.parishes.find((p) => npc.tags.includes(`pastor:${p.id}`))!;
-      return { npc, parish, miles: milesBetween(here, parish, world.diocese.visible.size), dean: npc.id === d.deanId };
+      return { npc, parish, miles: milesBetween(here, parish, milesAcross(world)), dean: npc.id === d.deanId };
     })
     .filter((x) => !!x.parish)
     .sort((a, b) => a.miles - b.miles);

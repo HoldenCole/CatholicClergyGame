@@ -11,8 +11,20 @@
   "growth": "stable",
   "dispositionBias": -5,
   "shortageBias": 3,
-  "financialWeights": { "healthy": 2, "strained": 3, "crisis": 1 },
-  "institutions": ["major_seminary", "catholic_university", "hospital_system", "school_network", "national_cathedral", "diocesan_media", "catholic_charities"],
+  "financialWeights": {
+    "healthy": 2,
+    "strained": 3,
+    "crisis": 1
+  },
+  "institutions": [
+    "major_seminary",
+    "catholic_university",
+    "hospital_system",
+    "school_network",
+    "national_cathedral",
+    "diocesan_media",
+    "catholic_charities"
+  ],
   "character": {
     "base": [
       "The cathedral is on the national news twice a year and the archbishop is asked about the president. Everything said from a pulpit here can be repeated in print by Monday.",
@@ -48,36 +60,385 @@
     "The seminary's rector and the archbishop have not spoken privately in a year."
   ],
   "parishSeeds": [
-    { "kind": "flagship_suburban", "places": ["Scarsdale", "Bronxville", "Rye", "Larchmont"], "patrons": ["St. Pius X", "Immaculate Heart of Mary", "Resurrection", "Holy Family"] },
-    { "kind": "struggling_urban", "places": ["the South Bronx", "Washington Heights", "East Harlem", "Mott Haven"], "patrons": ["St. Athanasius", "Our Lady of Victory", "St. Cecilia", "Immaculate Conception"] },
-    { "kind": "immigrant_growing", "places": ["Yonkers", "Port Chester", "Newburgh", "Inwood"], "patrons": ["Our Lady of Guadalupe", "St. Joseph", "Sacred Heart", "Holy Rosary"] },
-    { "kind": "rural", "places": ["Sullivan County", "the northern Catskills", "Orange County's farm towns", "the Delaware valley"], "patrons": ["St. Peter", "Our Lady of the Assumption", "St. Anne", "St. Francis Xavier"] },
-    { "kind": "difficult", "places": ["Staten Island's north shore", "the West Side", "Kingsbridge", "Poughkeepsie"], "patrons": ["St. Michael", "Blessed Sacrament", "St. Augustine", "Our Lady of Mount Carmel"] },
-    { "kind": "flagship_suburban", "real": { "name": "the Basilica of St. Patrick's Old Cathedral", "place": "Nolita", "founded": 1809 }, "places": ["Nolita"], "patrons": ["the Basilica of St. Patrick's Old Cathedral"] },
-    { "kind": "flagship_suburban", "real": { "name": "the Church of Our Saviour", "place": "Murray Hill", "founded": 1955 }, "places": ["Murray Hill"], "patrons": ["the Church of Our Saviour"] },
-    { "kind": "flagship_suburban", "real": { "name": "the Church of the Ascension", "place": "the Upper West Side", "founded": 1895 }, "places": ["the Upper West Side"], "patrons": ["the Church of the Ascension"] },
-    { "kind": "flagship_suburban", "real": { "name": "the Church of the Resurrection", "place": "Rye", "founded": 1880 }, "places": ["Rye"], "patrons": ["the Church of the Resurrection"] },
-    { "kind": "flagship_suburban", "real": { "name": "St. Augustine", "place": "Larchmont", "founded": 1892 }, "places": ["Larchmont"], "patrons": ["St. Augustine"] },
-    { "kind": "difficult", "real": { "name": "the Church of the Holy Innocents", "place": "the Garment District", "founded": 1866 }, "places": ["the Garment District"], "patrons": ["the Church of the Holy Innocents"] },
-    { "kind": "difficult", "real": { "name": "St. Agnes", "place": "East 43rd Street", "founded": 1873 }, "places": ["East 43rd Street"], "patrons": ["St. Agnes"] },
-    { "kind": "immigrant_growing", "real": { "name": "the Church of the Incarnation", "place": "Washington Heights", "founded": 1908 }, "places": ["Washington Heights"], "patrons": ["the Church of the Incarnation"] },
-    { "kind": "immigrant_growing", "real": { "name": "St. Elizabeth", "place": "Washington Heights", "founded": 1869 }, "places": ["Washington Heights"], "patrons": ["St. Elizabeth"] },
-    { "kind": "immigrant_growing", "real": { "name": "Our Lady of Mount Carmel", "place": "Belmont, the Bronx", "founded": 1906 }, "places": ["Belmont, the Bronx"], "patrons": ["Our Lady of Mount Carmel"] },
-    { "kind": "struggling_urban", "real": { "name": "St. Raymond", "place": "Parkchester, the Bronx", "founded": 1842 }, "places": ["Parkchester, the Bronx"], "patrons": ["St. Raymond"] },
-    { "kind": "struggling_urban", "real": { "name": "St. Charles Borromeo", "place": "Harlem", "founded": 1888 }, "places": ["Harlem"], "patrons": ["St. Charles Borromeo"] },
-    { "kind": "struggling_urban", "real": { "name": "Corpus Christi", "place": "Morningside Heights", "founded": 1906 }, "places": ["Morningside Heights"], "patrons": ["Corpus Christi"] },
-    { "kind": "struggling_urban", "real": { "name": "St. Peter", "place": "New Brighton, Staten Island", "founded": 1839 }, "places": ["New Brighton, Staten Island"], "patrons": ["St. Peter"] },
-    { "kind": "rural", "real": { "name": "St. Mary", "place": "Poughkeepsie", "founded": 1873 }, "places": ["Poughkeepsie"], "patrons": ["St. Mary"] },
-    { "kind": "rural", "real": { "name": "St. Joseph", "place": "New Paltz", "founded": 1852 }, "places": ["New Paltz"], "patrons": ["St. Joseph"] },
-    { "kind": "rural", "real": { "name": "St. Peter", "place": "Liberty", "founded": 1872 }, "places": ["Liberty"], "patrons": ["St. Peter"] },
+    {
+      "kind": "flagship_suburban",
+      "places": [
+        "Scarsdale",
+        "Bronxville",
+        "Rye",
+        "Larchmont"
+      ],
+      "patrons": [
+        "St. Pius X",
+        "Immaculate Heart of Mary",
+        "Resurrection",
+        "Holy Family"
+      ]
+    },
+    {
+      "kind": "struggling_urban",
+      "places": [
+        "the South Bronx",
+        "Washington Heights",
+        "East Harlem",
+        "Mott Haven"
+      ],
+      "patrons": [
+        "St. Athanasius",
+        "Our Lady of Victory",
+        "St. Cecilia",
+        "Immaculate Conception"
+      ]
+    },
+    {
+      "kind": "immigrant_growing",
+      "places": [
+        "Yonkers",
+        "Port Chester",
+        "Newburgh",
+        "Inwood"
+      ],
+      "patrons": [
+        "Our Lady of Guadalupe",
+        "St. Joseph",
+        "Sacred Heart",
+        "Holy Rosary"
+      ]
+    },
+    {
+      "kind": "rural",
+      "places": [
+        "Sullivan County",
+        "the northern Catskills",
+        "Orange County's farm towns",
+        "the Delaware valley"
+      ],
+      "patrons": [
+        "St. Peter",
+        "Our Lady of the Assumption",
+        "St. Anne",
+        "St. Francis Xavier"
+      ]
+    },
+    {
+      "kind": "difficult",
+      "places": [
+        "Staten Island's north shore",
+        "the West Side",
+        "Kingsbridge",
+        "Poughkeepsie"
+      ],
+      "patrons": [
+        "St. Michael",
+        "Blessed Sacrament",
+        "St. Augustine",
+        "Our Lady of Mount Carmel"
+      ]
+    },
+    {
+      "kind": "flagship_suburban",
+      "real": {
+        "name": "the Basilica of St. Patrick's Old Cathedral",
+        "place": "Nolita",
+        "founded": 1809,
+        "lat": 40.7237,
+        "lon": -73.9955
+      },
+      "places": [
+        "Nolita"
+      ],
+      "patrons": [
+        "the Basilica of St. Patrick's Old Cathedral"
+      ]
+    },
+    {
+      "kind": "flagship_suburban",
+      "real": {
+        "name": "the Church of Our Saviour",
+        "place": "Murray Hill",
+        "founded": 1955,
+        "lat": 40.749,
+        "lon": -73.98
+      },
+      "places": [
+        "Murray Hill"
+      ],
+      "patrons": [
+        "the Church of Our Saviour"
+      ]
+    },
+    {
+      "kind": "flagship_suburban",
+      "real": {
+        "name": "the Church of the Ascension",
+        "place": "the Upper West Side",
+        "founded": 1895,
+        "lat": 40.801,
+        "lon": -73.966
+      },
+      "places": [
+        "the Upper West Side"
+      ],
+      "patrons": [
+        "the Church of the Ascension"
+      ]
+    },
+    {
+      "kind": "flagship_suburban",
+      "real": {
+        "name": "the Church of the Resurrection",
+        "place": "Rye",
+        "founded": 1880,
+        "lat": 40.98,
+        "lon": -73.69
+      },
+      "places": [
+        "Rye"
+      ],
+      "patrons": [
+        "the Church of the Resurrection"
+      ]
+    },
+    {
+      "kind": "flagship_suburban",
+      "real": {
+        "name": "St. Augustine",
+        "place": "Larchmont",
+        "founded": 1892,
+        "lat": 40.928,
+        "lon": -73.755
+      },
+      "places": [
+        "Larchmont"
+      ],
+      "patrons": [
+        "St. Augustine"
+      ]
+    },
+    {
+      "kind": "difficult",
+      "real": {
+        "name": "the Church of the Holy Innocents",
+        "place": "the Garment District",
+        "founded": 1866,
+        "lat": 40.753,
+        "lon": -73.99
+      },
+      "places": [
+        "the Garment District"
+      ],
+      "patrons": [
+        "the Church of the Holy Innocents"
+      ]
+    },
+    {
+      "kind": "difficult",
+      "real": {
+        "name": "St. Agnes",
+        "place": "East 43rd Street",
+        "founded": 1873,
+        "lat": 40.752,
+        "lon": -73.974
+      },
+      "places": [
+        "East 43rd Street"
+      ],
+      "patrons": [
+        "St. Agnes"
+      ]
+    },
+    {
+      "kind": "immigrant_growing",
+      "real": {
+        "name": "the Church of the Incarnation",
+        "place": "Washington Heights",
+        "founded": 1908,
+        "lat": 40.846,
+        "lon": -73.936
+      },
+      "places": [
+        "Washington Heights"
+      ],
+      "patrons": [
+        "the Church of the Incarnation"
+      ]
+    },
+    {
+      "kind": "immigrant_growing",
+      "real": {
+        "name": "St. Elizabeth",
+        "place": "Washington Heights",
+        "founded": 1869,
+        "lat": 40.853,
+        "lon": -73.93
+      },
+      "places": [
+        "Washington Heights"
+      ],
+      "patrons": [
+        "St. Elizabeth"
+      ]
+    },
+    {
+      "kind": "immigrant_growing",
+      "real": {
+        "name": "Our Lady of Mount Carmel",
+        "place": "Belmont, the Bronx",
+        "founded": 1906,
+        "lat": 40.856,
+        "lon": -73.888
+      },
+      "places": [
+        "Belmont, the Bronx"
+      ],
+      "patrons": [
+        "Our Lady of Mount Carmel"
+      ]
+    },
+    {
+      "kind": "struggling_urban",
+      "real": {
+        "name": "St. Raymond",
+        "place": "Parkchester, the Bronx",
+        "founded": 1842,
+        "lat": 40.836,
+        "lon": -73.85
+      },
+      "places": [
+        "Parkchester, the Bronx"
+      ],
+      "patrons": [
+        "St. Raymond"
+      ]
+    },
+    {
+      "kind": "struggling_urban",
+      "real": {
+        "name": "St. Charles Borromeo",
+        "place": "Harlem",
+        "founded": 1888,
+        "lat": 40.82,
+        "lon": -73.94
+      },
+      "places": [
+        "Harlem"
+      ],
+      "patrons": [
+        "St. Charles Borromeo"
+      ]
+    },
+    {
+      "kind": "struggling_urban",
+      "real": {
+        "name": "Corpus Christi",
+        "place": "Morningside Heights",
+        "founded": 1906,
+        "lat": 40.81,
+        "lon": -73.96
+      },
+      "places": [
+        "Morningside Heights"
+      ],
+      "patrons": [
+        "Corpus Christi"
+      ]
+    },
+    {
+      "kind": "struggling_urban",
+      "real": {
+        "name": "St. Peter",
+        "place": "New Brighton, Staten Island",
+        "founded": 1839,
+        "lat": 40.642,
+        "lon": -74.088
+      },
+      "places": [
+        "New Brighton, Staten Island"
+      ],
+      "patrons": [
+        "St. Peter"
+      ]
+    },
+    {
+      "kind": "rural",
+      "real": {
+        "name": "St. Mary",
+        "place": "Poughkeepsie",
+        "founded": 1873,
+        "lat": 41.705,
+        "lon": -73.927
+      },
+      "places": [
+        "Poughkeepsie"
+      ],
+      "patrons": [
+        "St. Mary"
+      ]
+    },
+    {
+      "kind": "rural",
+      "real": {
+        "name": "St. Joseph",
+        "place": "New Paltz",
+        "founded": 1852,
+        "lat": 41.748,
+        "lon": -74.085
+      },
+      "places": [
+        "New Paltz"
+      ],
+      "patrons": [
+        "St. Joseph"
+      ]
+    },
+    {
+      "kind": "rural",
+      "real": {
+        "name": "St. Peter",
+        "place": "Liberty",
+        "founded": 1872,
+        "lat": 41.801,
+        "lon": -74.745
+      },
+      "places": [
+        "Liberty"
+      ],
+      "patrons": [
+        "St. Peter"
+      ]
+    },
     {
       "kind": "flagship_suburban",
       "cathedral": true,
-      "places": ["Fifth Avenue"],
-      "patrons": ["St. Patrick's Cathedral"]
+      "places": [
+        "Fifth Avenue"
+      ],
+      "patrons": [
+        "St. Patrick's Cathedral"
+      ],
+      "real": {
+        "name": "St. Patrick's Cathedral",
+        "place": "Fifth Avenue",
+        "founded": 1858,
+        "lat": 40.7585,
+        "lon": -73.976
+      }
     }
   ],
-  "heritage": { "irish": 3, "italian": 3, "mexican": 1.5, "caribbean": 2, "central_american": 1, "polish": 1, "filipino": 1, "african_american": 0.7, "german": 0.5, "nigerian": 0.5, "korean": 0.5, "anglo": 0.5 },
+  "heritage": {
+    "irish": 3,
+    "italian": 3,
+    "mexican": 1.5,
+    "caribbean": 2,
+    "central_american": 1,
+    "polish": 1,
+    "filipino": 1,
+    "african_american": 0.7,
+    "german": 0.5,
+    "nigerian": 0.5,
+    "korean": 0.5,
+    "anglo": 0.5
+  },
   "seminaryName": "St. Joseph's Seminary",
   "voice": {
     "weather": [
@@ -96,5 +457,177 @@
       "They rank each other by seminary class, by parish, and by which archbishop made them, and they are rarely wrong.",
       "A thing said at a clergy dinner on Thursday is known at the chancery by Friday and in the tabloid by Sunday."
     ]
-  }
+  },
+  "map": {
+    "lat": 40.7585,
+    "lon": -73.976,
+    "milesAcross": 200
+  },
+  "places": [
+    {
+      "name": "Scarsdale",
+      "lat": 40.99,
+      "lon": -73.79
+    },
+    {
+      "name": "Bronxville",
+      "lat": 40.94,
+      "lon": -73.83
+    },
+    {
+      "name": "Rye",
+      "lat": 40.98,
+      "lon": -73.69
+    },
+    {
+      "name": "Larchmont",
+      "lat": 40.93,
+      "lon": -73.75
+    },
+    {
+      "name": "the South Bronx",
+      "lat": 40.815,
+      "lon": -73.91
+    },
+    {
+      "name": "Washington Heights",
+      "lat": 40.845,
+      "lon": -73.94
+    },
+    {
+      "name": "East Harlem",
+      "lat": 40.795,
+      "lon": -73.94
+    },
+    {
+      "name": "Mott Haven",
+      "lat": 40.81,
+      "lon": -73.92
+    },
+    {
+      "name": "Yonkers",
+      "lat": 40.93,
+      "lon": -73.9
+    },
+    {
+      "name": "Port Chester",
+      "lat": 41.0,
+      "lon": -73.67
+    },
+    {
+      "name": "Newburgh",
+      "lat": 41.5,
+      "lon": -74.01
+    },
+    {
+      "name": "Inwood",
+      "lat": 40.865,
+      "lon": -73.92
+    },
+    {
+      "name": "Sullivan County",
+      "lat": 41.72,
+      "lon": -74.75
+    },
+    {
+      "name": "the northern Catskills",
+      "lat": 42.05,
+      "lon": -74.3
+    },
+    {
+      "name": "Orange County's farm towns",
+      "lat": 41.4,
+      "lon": -74.35
+    },
+    {
+      "name": "the Delaware valley",
+      "lat": 41.55,
+      "lon": -74.95
+    },
+    {
+      "name": "Staten Island's north shore",
+      "lat": 40.64,
+      "lon": -74.1
+    },
+    {
+      "name": "the West Side",
+      "lat": 40.79,
+      "lon": -73.975
+    },
+    {
+      "name": "Kingsbridge",
+      "lat": 40.88,
+      "lon": -73.9
+    },
+    {
+      "name": "Poughkeepsie",
+      "lat": 41.7,
+      "lon": -73.92
+    },
+    {
+      "name": "Nolita",
+      "lat": 40.72,
+      "lon": -73.995
+    },
+    {
+      "name": "Murray Hill",
+      "lat": 40.748,
+      "lon": -73.977
+    },
+    {
+      "name": "the Upper West Side",
+      "lat": 40.79,
+      "lon": -73.97
+    },
+    {
+      "name": "the Garment District",
+      "lat": 40.754,
+      "lon": -73.99
+    },
+    {
+      "name": "East 43rd Street",
+      "lat": 40.752,
+      "lon": -73.974
+    },
+    {
+      "name": "Belmont, the Bronx",
+      "lat": 40.855,
+      "lon": -73.888
+    },
+    {
+      "name": "Parkchester, the Bronx",
+      "lat": 40.837,
+      "lon": -73.86
+    },
+    {
+      "name": "Harlem",
+      "lat": 40.81,
+      "lon": -73.945
+    },
+    {
+      "name": "Morningside Heights",
+      "lat": 40.81,
+      "lon": -73.96
+    },
+    {
+      "name": "New Brighton, Staten Island",
+      "lat": 40.64,
+      "lon": -74.09
+    },
+    {
+      "name": "New Paltz",
+      "lat": 41.75,
+      "lon": -74.08
+    },
+    {
+      "name": "Liberty",
+      "lat": 41.8,
+      "lon": -74.75
+    },
+    {
+      "name": "Fifth Avenue",
+      "lat": 40.758,
+      "lon": -73.976
+    }
+  ]
 }

@@ -3,6 +3,7 @@ import type { DiocesePreset, HomeTerrain, Npc, Parish, ParishKind, SchoolStatus 
 import type { Rng } from '@/engine/rng';
 import { CLERGY_HERITAGE, eraForBirthYear, rollHeritage, rollMaleName } from './names';
 import { patronalOf } from './patronal';
+import { placeParish } from './geo';
 import { addStats, finishNpc, rollAlignment, rollBaseStats } from './npc';
 
 interface KindShape {
@@ -121,16 +122,16 @@ export function generateParish(rng: Rng, preset: DiocesePreset, seed: DiocesePre
   });
 
   const name = seed.real?.name ?? rng.pick(seed.patrons);
-  // Where it sits: the cathedral at the center, the city around it, the suburbs in a ring, the country beyond.
+  // Where it sits: a real church where it stands, a rolled one near its named place, the cathedral at the center.
   const terrain = seed.cathedral ? 'urban' : shape.terrain;
-  const radius = seed.cathedral ? 0 : terrain === 'urban' ? rng.float(3, 12) : terrain === 'latino' ? rng.float(4, 18) : terrain === 'suburban' ? rng.float(12, 30) : rng.float(28, 48);
-  const angle = rng.float(0, Math.PI * 2);
+  const place = seed.real?.place ?? rng.pick(seed.places);
+  const at = placeParish(rng, preset, { real: seed.real, place, terrain, ...(seed.cathedral ? { cathedral: true } : {}) });
   const parish: Parish = {
     id,
     name,
-    x: Math.round((50 + Math.cos(angle) * radius) * 10) / 10,
-    y: Math.round((50 + Math.sin(angle) * radius) * 10) / 10,
-    place: seed.real?.place ?? rng.pick(seed.places),
+    x: at.x,
+    y: at.y,
+    place,
     ...(seed.real ? { founded: seed.real.founded } : {}),
     kind: seed.kind,
     patronal: patronalOf(name, id),
@@ -186,7 +187,9 @@ export function generateParishes(rng: Rng, preset: DiocesePreset, year: number):
     let made = generateParish(rng, preset, seed, i, year);
     for (let tries = 0; !seed.real && taken.has(`${made.parish.name}|${made.parish.place}`) && tries < 6; tries++) {
       const renamed = rng.pick(seed.patrons);
-      made = { ...made, parish: { ...made.parish, name: renamed, place: rng.pick(seed.places), patronal: patronalOf(renamed, made.parish.id) } };
+      const moved = rng.pick(seed.places);
+      const at = placeParish(rng, preset, { place: moved, terrain: made.parish.terrain });
+      made = { ...made, parish: { ...made.parish, name: renamed, place: moved, x: at.x, y: at.y, patronal: patronalOf(renamed, made.parish.id) } };
     }
     taken.add(`${made.parish.name}|${made.parish.place}`);
     return { ...made, parish: withLiturgy(rng.derive(`mass:${made.parish.id}`), made.parish) };
