@@ -13,6 +13,9 @@ import { workWeek } from '@/systems/problems';
 import { clubsWeek, joinClub, leaveClub } from '@/systems/clubs';
 import { spendingWeek } from '@/systems/spending';
 import { resolvePermissions } from '@/systems/decor';
+import { awayWeek, retreatYearEnd } from '@/systems/away';
+import { staffWeek } from '@/systems/staff';
+import { isYearStart } from './time';
 import { seminaryWeek } from '@/systems/seminaryWeek';
 import { studyWeek } from '@/systems/studyWeek';
 import { endStudy } from './study';
@@ -164,7 +167,23 @@ export function parishWeekHook(deps: EventDeps): WeekHook {
       const moved = directedTransfer(state, rng, kind ?? 'difficult', asRole);
       if (moved.moved) return addDigestLine(moved.state, 'The letter of appointment came, as the vicar for clergy said it would. You packed.');
     }
+    // A week away: the retreat or the vacation, with one scene the first week.
+    if (state.away) {
+      const gone = awayWeek(state, rng, deps.pool);
+      let away = addDigestLine(gone.state, gone.line);
+      if (gone.event) away = fireOrResolve(away, gone.event, rng, deps);
+      if (away.mode.kind !== 'clock' || away.pending.length > 0) return away;
+      return openMail(offersStep(away, rng, deps));
+    }
     let next = parishWeek(state, rng);
+    if (isYearStart(next.clock)) {
+      const owed = retreatYearEnd(next);
+      next = owed.state;
+      if (owed.line) next = addDigestLine(next, owed.line);
+    }
+    const staffed = staffWeek(next, rng.derive(`staff:${next.clock.week}`));
+    next = staffed.state;
+    for (const line of staffed.lines) next = addDigestLine(next, line);
     const project = projectWeek(next);
     next = project.state;
     if (project.line) next = addDigestLine(next, project.line);

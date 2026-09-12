@@ -17,6 +17,7 @@ import { applyReputation, clampSigned } from '@/systems/reputation';
 import { applyStat } from '@/systems/stats';
 import { closeTenure } from '@/systems/tenures';
 import { resolveSelector } from './selectors';
+import { noteMovers } from '@/systems/movers';
 
 export class EffectError extends Error {
   override name = 'EffectError';
@@ -233,6 +234,7 @@ export function applyEffect(
   }
 }
 
-export function applyEffects(state: GameState, effects: Effect[], bindings: Record<string, string> = {}): GameState {
-  return effects.reduce((s, e) => applyEffect(s, e, bindings), state);
+export function applyEffects(state: GameState, effects: Effect[], bindings: Record<string, string> = {}, why?: string): GameState {
+  const next = effects.reduce((s, e) => applyEffect(s, e, bindings), state);
+  return why ? noteMovers(next, effects, why) : next;
 }

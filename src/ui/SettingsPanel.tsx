@@ -4,6 +4,7 @@ import { HOURS_RANGE, settingsOf, WEAR_LEVELS, WORK_WEEKS, workHours } from '@/s
 import { strainOf, strainWord } from '@/systems/week';
 import type { WorkWeek } from '@/types';
 import Sheet from './Sheet';
+import { useUiStore } from './uiStore';
 
 export default function SettingsPanel() {
   const llm = useGameStore((s) => s.llm);
@@ -11,8 +12,33 @@ export default function SettingsPanel() {
   const game = useGameStore((s) => s.game);
   const setSettings = useGameStore((s) => s.setSettings);
   const settings = game ? settingsOf(game) : null;
+  const prefs = useUiStore((s) => s.prefs);
+  const setPrefs = useUiStore((s) => s.setPrefs);
   return (
     <>
+    <Sheet title="Reading">
+      <label className="flex flex-col gap-1 text-sm">
+        <span>The size of the type</span>
+        <select className="pinput" value={prefs.fontScale} onChange={(e) => setPrefs({ fontScale: e.target.value as typeof prefs.fontScale })}>
+          <option value="small">Small</option>
+          <option value="normal">As it comes</option>
+          <option value="large">Large</option>
+        </select>
+      </label>
+      <label className="mt-2 flex items-center gap-2 text-sm">
+        <input type="checkbox" checked={prefs.reducedMotion} onChange={(e) => setPrefs({ reducedMotion: e.target.checked })} />
+        <span>Nothing moves: no fades, no transitions</span>
+      </label>
+      <label className="mt-1 flex items-center gap-2 text-sm">
+        <input type="checkbox" checked={prefs.hints} onChange={(e) => setPrefs({ hints: e.target.checked })} />
+        <span>A line under each room saying what can be clicked</span>
+      </label>
+      <label className="mt-1 flex items-center gap-2 text-sm">
+        <input type="checkbox" checked={prefs.briefings} onChange={(e) => setPrefs({ briefings: e.target.checked, ...(e.target.checked ? { seen: [] } : {}) })} />
+        <span>A note explaining the first week of each phase</span>
+      </label>
+      <p className="ink-faint mt-1 text-xs">Kept in this browser, not in the save.</p>
+    </Sheet>
     {game && settings && (
       <Sheet title="The week">
         <label className="flex flex-col gap-1 text-sm">

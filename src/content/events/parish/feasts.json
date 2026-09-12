@@ -1,0 +1,847 @@
+{
+  "_notes": "Feasts pool: one scene for each feast the parish keeps, gated on {type:'feast'} so it fires in the week the feast falls. Ids prefixed fe_. Phases parochial_vicar, administrator, pastor except where the scene belongs to the man in charge (mandatum, patronal festival, Czestochowa Mass). The communities' feasts (guadalupe, simbang_gabi, tet, czestochowa) carry no ethnic gate; the engine only lists them when the parish has the community. suppressYears 1 on the recurring feasts; the Vigil scene is once. Flags defined here (all fe_): fe_mandatum_opened, fe_mandatum_twelve_men, fe_vigil_baptized_wavering, fe_vigil_let_her_wait, fe_procession_in_the_streets, fe_procession_kept_home, fe_read_the_name, fe_left_the_name_out, fe_festival_no_beer, fe_festival_beer_kept, fe_asked_the_bishop_for_something, fe_mananitas_kept, fe_mananitas_indoors, fe_ancestors_table_kept, fe_ancestors_table_removed, fe_said_mass_in_polish, fe_polish_priest_brought_in. Reads no engine flags. The Christmas scene touches drink and grief and is authored only; do not skin it.",
+  "events": [
+    {
+      "id": "fe_ash_wednesday_line",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["competence", "doubt"],
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 14,
+      "suppressYears": 1,
+      "requires": [{ "type": "feast", "key": "ash_wednesday" }],
+      "bias": [
+        { "when": { "type": "parish", "key": "terrain", "value": "urban" }, "multiplier": 1.4 },
+        { "when": { "type": "parish", "key": "kind", "value": "rural" }, "multiplier": 0.7 }
+      ],
+      "title": "The Line Out the Door",
+      "body": "It is not a holy day of obligation and nobody has ever needed telling. By a quarter to seven the line is out the door of {parish} and down the steps, and {@secretary} has already been asked twice whether there will be ashes at noon without the Mass. There will. There are people here you have not seen since the last Ash Wednesday and will not see until the next: the men from the plant in their work boots, the woman who brings her mother in the wheelchair and stands in the aisle with her, a row of teenagers who came together on a dare and will keep the smudge on all day. Last year's palms burned badly and the ashes are gritty and pale, and {@maintenance} has mixed in a little water so they will hold. You have said the words two hundred times by nine o'clock. Repent, and believe in the Gospel. Remember that you are dust. Some of them look at you when you say it, and some of them look at the floor, and one man, about your father's age, says thank you, Father, as if you had done something for him, and goes out the side door without waiting for the rest.",
+      "flavorPrompt": "The once-a-year crowd on Ash Wednesday, the grit of bad ashes, a thank-you from a man who does not stay.",
+      "choices": [
+        {
+          "id": "keep_the_line_moving",
+          "label": "Give the ashes all day and let the line be the homily",
+          "default": true,
+          "outcome": "You add a stop at three for the school pickup and one at eight at night, and your thumb is black to the knuckle by the end of it. You preach nothing anyone will remember and say the words every time as if they were new. {@secretary} counts eleven hundred through the door, which is more than Christmas. A few of them, not many, are at Mass on the first Sunday of Lent.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "reputation", "key": "parishioners", "delta": 3 },
+            { "target": "reputation", "key": "public", "delta": 2 }
+          ]
+        },
+        {
+          "id": "say_something_to_them",
+          "label": "Say one true thing to the once-a-year people before the ashes",
+          "requires": [{ "type": "stat", "key": "charisma", "op": ">=", "value": 45 }],
+          "outcome": "At each Mass you say, in under two minutes, that you are glad they came and that the door they came through is open the other fifty-one weeks, and you say it without the note of reproach that would have ruined it. A woman in the vestibule tells {@secretary} she had not heard a priest say that in years. Four families you do not know come back the next Sunday, and one of them stays.",
+          "effects": [
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "reputation", "key": "parishioners", "delta": 4 },
+            { "target": "reputation", "key": "public", "delta": 3 }
+          ]
+        },
+        {
+          "id": "ashes_only_with_mass",
+          "label": "No ashes outside Mass; if they want the sign they can sit for the sacrifice",
+          "outcome": "You cancel the noon service that was ashes only and the line at noon is a third what it was, and the people who came sit through the readings looking at their phones. {@secretary} fields the complaints. The ones who stayed for Mass heard a homily, which is the argument for it; the ones who drove off are the argument against, and there were more of them.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": -3 },
+            { "target": "reputation", "key": "traditional_bloc", "delta": 2 },
+            { "target": "reputation", "key": "public", "delta": -3 },
+            { "target": "stat", "key": "piety", "delta": 1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fe_holy_thursday_feet",
+      "phase": ["administrator", "pastor"],
+      "pressure": ["loyalty_vs_honesty", "belief_vs_safety"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 12,
+      "suppressYears": 2,
+      "requires": [{ "type": "feast", "key": "holy_thursday" }],
+      "bias": [
+        { "when": { "type": "liturgy", "key": "servers", "value": "boys" }, "multiplier": 1.5 },
+        { "when": { "type": "parish", "key": "generational", "value": "aging" }, "multiplier": 1.3 }
+      ],
+      "title": "Whose Feet",
+      "body": "The list for the mandatum has been the same list for as long as anyone at {parish} remembers: twelve men, the Knights in their sashes, the same chairs in the same half-circle in front of the sanctuary step. {@dre} brings you a different list on Tuesday of Holy Week and does not quite hand it over. Hers has the widow who runs the food pantry, a boy from the confirmation class, the man who sleeps in the doorway of the credit union and has been coming to the eight o'clock since Advent, and two of the Knights, who she says will not mind. Rome said, some years ago now, that the twelve may be chosen from the whole people of God, and the bishop has said nothing either way, which is what he says about most things. The Grand Knight has already called {@secretary} to ask what time the men should be in their seats. It is Tuesday. The Mass of the Lord's Supper is Thursday at seven, and the towel and the basin do not care whose feet, but the parish will.",
+      "flavorPrompt": "Two lists for the washing of the feet, the Knights' half-circle, a man from the credit union doorway.",
+      "choices": [
+        {
+          "id": "the_parish_as_it_is",
+          "label": "Take {@dre}'s list, and the man from the doorway sits in the first chair",
+          "outcome": "You call the Grand Knight yourself and he is quieter about it than you feared and colder than you hoped. On Thursday the man from the doorway takes his boot off slowly and you wash a foot that has not been washed in some time, and the church is very still. The widow cries. Two Knights do not come to the Vigil. The boy from the confirmation class tells his mother afterward that he did not know priests did that.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 2 },
+            { "target": "reputation", "key": "progressive_bloc", "delta": 6 },
+            { "target": "reputation", "key": "traditional_bloc", "delta": -5 },
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "relationship", "key": "@dre", "delta": 8 },
+            { "target": "flag", "key": "fe_mandatum_opened", "value": true }
+          ]
+        },
+        {
+          "id": "twelve_men",
+          "label": "Keep the twelve men; it is not the week to argue with the parish",
+          "default": true,
+          "outcome": "You tell {@dre} that you read her list and that it was the better list and that you are not changing Holy Week on a Tuesday. She takes it well and does not believe you will do it next year either. The Knights are in their seats at a quarter to seven. The rite goes as it always has, and the man from the doorway watches from the back pew, and nobody notices that but you.",
+          "effects": [
+            { "target": "reputation", "key": "traditional_bloc", "delta": 4 },
+            { "target": "reputation", "key": "progressive_bloc", "delta": -3 },
+            { "target": "relationship", "key": "@dre", "delta": -6 },
+            { "target": "flag", "key": "fe_mandatum_twelve_men", "value": true }
+          ]
+        },
+        {
+          "id": "six_and_six",
+          "label": "Six from each list, and tell both sides why on Thursday night",
+          "outcome": "You say from the chair, before the rite, that the Lord washed the feet of the men who were there, and that these are the people who are here. Six Knights and six of {@dre}'s, the widow next to the Grand Knight, who holds her hand when she cries. Nobody is entirely pleased and nobody leaves. It is the kind of compromise that reads as leadership in a diocese, and the vicar for clergy hears about it that way.",
+          "effects": [
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "reputation", "key": "parishioners", "delta": 3 },
+            { "target": "reputation", "key": "traditional_bloc", "delta": -1 },
+            { "target": "reputation", "key": "progressive_bloc", "delta": 2 },
+            { "target": "reputation", "key": "chancery", "delta": 2 },
+            { "target": "flag", "key": "fe_mandatum_opened", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fe_easter_vigil_fire",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["belief_vs_safety", "doubt"],
+      "severity": "MAJOR",
+      "category": "personal",
+      "baseWeight": 14,
+      "suppressYears": 1,
+      "once": true,
+      "requires": [{ "type": "feast", "key": "easter_vigil" }],
+      "title": "The Fire in the Wind",
+      "body": "There are four to be baptized at {parish} this year, and the wind is coming across the parking lot hard enough that {@maintenance} has moved the brazier twice and is standing over it with a piece of plywood. The elect have been with you since September. Three of them are ready in the way people are ready, which is imperfectly and entirely. The fourth, a woman in her thirties who came because her husband's family asked and stayed because of something she has never quite been able to say, told {@dre} on Wednesday that she does not know if she believes it, any of it, and that she does not want to stand at the font and lie. {@dre} told her to come and see you. She came. She is in the sacristy now in the white garment her mother-in-law sewed, twenty minutes before the fire, and she is asking you, in a low voice so the servers will not hear, whether it is wrong to be baptized if you are not sure. The paschal candle is on the table between you. Outside, the parish is standing in the dark holding unlit tapers, and the wind is taking the fire sideways.",
+      "flavorPrompt": "A sacristy twenty minutes before the Vigil, a woman in a white garment asking whether doubt disqualifies her, wind in the new fire.",
+      "choices": [
+        {
+          "id": "the_font_is_for_her",
+          "label": "Tell her the font is for people who are not sure, and walk her out to the fire",
+          "outcome": "You say that certainty is not what she is being asked for, that she is being asked whether she wants what the Church has, and that the doubt can come in with her. She thinks about it for a long time and says yes. At the font the water is cold and she gasps, and her mother-in-law, who was ready for anything, is not ready for that and has to sit down. She is at the nine-thirty the next Sunday and the one after. Her husband does not come.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 2 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "reputation", "key": "parishioners", "delta": 4 },
+            { "target": "reputation", "key": "progressive_bloc", "delta": 3 },
+            { "target": "relationship", "key": "@dre", "delta": 6 },
+            { "target": "flag", "key": "fe_vigil_baptized_wavering", "value": true }
+          ]
+        },
+        {
+          "id": "let_her_wait",
+          "label": "Tell her the sacrament will keep, and she can come back to the font when she is sure",
+          "outcome": "You say that nobody has ever been hurt by waiting a year, and that the Church has room for people standing in the doorway. She takes the white garment off in the ladies' room and sits with her mother-in-law in the fourth pew, and watches the other three go under. She does not come back in September. Her mother-in-law does not blame you to your face. {@dre} thinks you were right and does not say so, which is her way of disagreeing.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "stat", "key": "theology", "delta": 1 },
+            { "target": "reputation", "key": "traditional_bloc", "delta": 3 },
+            { "target": "reputation", "key": "parishioners", "delta": -2 },
+            { "target": "relationship", "key": "@dre", "delta": -4 },
+            { "target": "flag", "key": "fe_vigil_let_her_wait", "value": true }
+          ]
+        },
+        {
+          "id": "tell_her_your_own",
+          "label": "Tell her you are not always sure either, and ask what she wants to do",
+          "requires": [{ "type": "stat", "key": "charisma", "op": ">=", "value": 50 }],
+          "outcome": "You say a thing you have not said to a parishioner before, quietly, with the candle between you. She looks at you as though you had handed her something heavy. She says she wants to do it. At the font she does not gasp; she goes under like a woman who has decided. Afterward she never mentions what you said, and you are grateful for that and also, in a way you do not examine, not.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "stat", "key": "charisma", "delta": 2 },
+            { "target": "reputation", "key": "parishioners", "delta": 3 },
+            { "target": "flag", "key": "fe_vigil_baptized_wavering", "value": true }
+          ]
+        },
+        {
+          "id": "send_her_to_dre",
+          "label": "You have a Vigil to run; send her back to {@dre} and go light the fire",
+          "outcome": "You say, not unkindly, that this is a question for Wednesday and it is Saturday, and that {@dre} will sit with her. {@dre} does. The woman is baptized with the others and does it correctly and without visible feeling, and is not seen at {parish} after Divine Mercy Sunday. {@dre} tells you in June that she had asked for you specifically, and that she had known that you knew that.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": -3 },
+            { "target": "relationship", "key": "@dre", "delta": -8 },
+            { "target": "stat", "key": "administration", "delta": 1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fe_corpus_christi_streets",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["belief_vs_safety", "ambition_vs_integrity"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 12,
+      "suppressYears": 1,
+      "requires": [{ "type": "feast", "key": "corpus_christi" }],
+      "bias": [
+        { "when": { "type": "liturgy", "key": "incense", "value": "every_sunday" }, "multiplier": 1.5 },
+        { "when": { "type": "liturgy", "key": "music", "value": "chant" }, "multiplier": 1.4 },
+        { "when": { "type": "parish", "key": "terrain", "value": "latino" }, "multiplier": 1.3 }
+      ],
+      "title": "Through the Streets",
+      "body": "The procession has gone around the parking lot of {parish} for eleven years, four altars at the four corners, the canopy carried by whichever Knights can still lift it, benediction at each stop and back into the church for the last. This year a group of the younger families has asked to take it through the streets, six blocks, past the credit union and the taquería and the Baptist church, the way it is done in the towns some of them came from. {@music_director} has the Pange Lingua ready in Latin and the hymn in Spanish and is not sure which to lead with. The city wants a permit and a police escort and four hundred dollars, and the officer on the phone asked {@secretary} whether this was a parade or a protest, because the form is different. Two of the older parishioners have said, separately, that they will not walk past the Baptist church with the monstrance because it is showing off. One of the younger fathers has said he will carry the canopy alone if he has to. The feast is Sunday. The form has to be in by Wednesday.",
+      "flavorPrompt": "A Corpus Christi procession that wants to leave the parking lot, the city's permit form, an elderly objection about showing off.",
+      "choices": [
+        {
+          "id": "through_the_streets",
+          "label": "File the permit, pay the four hundred, and take Him past the Baptist church",
+          "outcome": "The police block the intersections and stand with their hats off, which nobody expected. The Baptist pastor comes out on his steps and nods. The canopy goes six blocks in the heat and the mothers sing in Spanish and the Knights sing in Latin and it is not the same hymn and it does not matter. The two who would not walk stand in the church and pray before an empty tabernacle. One of them tells you Monday it was the first time she had ever seen the street stop for God.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 2 },
+            { "target": "reputation", "key": "parishioners", "delta": 4 },
+            { "target": "reputation", "key": "traditional_bloc", "delta": 5 },
+            { "target": "reputation", "key": "public", "delta": 3 },
+            { "target": "reputation", "key": "progressive_bloc", "delta": -2 },
+            { "target": "money", "key": "cash", "delta": -400 },
+            { "target": "flag", "key": "fe_procession_in_the_streets", "value": true }
+          ],
+          "volume": "public",
+          "positionTopic": "liturgy",
+          "positionValue": -40
+        },
+        {
+          "id": "keep_it_home",
+          "label": "Keep it to the parish grounds, and give the young families the fourth altar",
+          "default": true,
+          "outcome": "The parking lot again, with a difference: the fourth altar is built by the younger families, with flowers on the asphalt in a pattern that took them all Saturday, and the last benediction is in Spanish. The young father who would have carried the canopy alone carries it with three Knights and is not satisfied. The older parishioners are. The city keeps its four hundred dollars. Nobody outside the fence knows it happened, which is the point for some and the problem for others.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "reputation", "key": "traditional_bloc", "delta": -2 },
+            { "target": "reputation", "key": "progressive_bloc", "delta": 1 },
+            { "target": "flag", "key": "fe_procession_kept_home", "value": true }
+          ]
+        },
+        {
+          "id": "the_streets_without_the_form",
+          "label": "Walk the six blocks on the sidewalk, no permit, and see who stops you",
+          "outcome": "A sidewalk procession is not a parade, and nobody stops you, though a patrol car follows at walking pace the whole way and the officer does not take his hat off. The Baptist church is having its own service and someone inside closes a window. It is smaller than it would have been with the street closed and it is entirely yours. A letter reaches the chancery from a parishioner who thought it was reckless, and the vicar general asks you, mildly, whether you had thought about the liability.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "reputation", "key": "traditional_bloc", "delta": 6 },
+            { "target": "reputation", "key": "chancery", "delta": -4 },
+            { "target": "reputation", "key": "public", "delta": 1 },
+            { "target": "outspokenness", "key": "", "delta": 5 },
+            { "target": "flag", "key": "fe_procession_in_the_streets", "value": true }
+          ],
+          "volume": "semi_public",
+          "positionTopic": "liturgy",
+          "positionValue": -50
+        }
+      ]
+    },
+    {
+      "id": "fe_all_souls_name",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["loyalty_vs_honesty", "friendship_vs_duty"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 12,
+      "suppressYears": 1,
+      "requires": [{ "type": "feast", "key": "all_souls" }],
+      "bias": [
+        { "when": { "type": "parish", "key": "generational", "value": "aging" }, "multiplier": 1.4 }
+      ],
+      "title": "The Book of the Dead",
+      "body": "The book has been on the stand by the baptismal font since the last week of October, and the parish has been writing in it: parents, a stillborn child with a date and no name, a dog, crossed out by someone else. On All Souls the names are read at every Mass, and it takes eleven minutes at the eight o'clock and {@music_director} has learned to play softly under them. On the fourth page, in a careful hand, is the name of the man who kept the books at {parish} for nineteen years and left, three years ago, with a sum the finance council still does not say aloud. He died in the spring, in another state. His widow wrote the name. She still comes to the seven-thirty on weekdays and sits where she always sat. {@secretary} found the page on Friday and showed it to you without a word. There are people in this parish who lost a school wing to that man. There is a woman in the seventh pew who lost a husband and has not been able to say his name here since. The lector will read what is in the book unless someone tells her otherwise.",
+      "flavorPrompt": "A November book of names, one of them a man the parish would rather forget, his widow in the weekday pew.",
+      "choices": [
+        {
+          "id": "read_it",
+          "label": "Read the name with all the others and say nothing about it",
+          "default": true,
+          "outcome": "The lector reads it in the middle of the fourth page and does not pause. Three or four heads come up. The widow, at the ten-thirty, does not move. Afterward the finance chair says nothing to you and nods, once, in the vestibule, which from him is a paragraph. A letter comes on Wednesday that says you should be ashamed, unsigned. You keep it, and you would read the name again.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 2 },
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "reputation", "key": "traditional_bloc", "delta": 1 },
+            { "target": "reputation", "key": "progressive_bloc", "delta": 1 },
+            { "target": "flag", "key": "fe_read_the_name", "value": true }
+          ]
+        },
+        {
+          "id": "leave_it_out",
+          "label": "Have the lector skip the name and go to see the widow yourself",
+          "outcome": "The lector skips it, and only you and {@secretary} know. You go to the widow's house on Tuesday with the excuse of a blessing and she knows in the first minute why you have come. She does not shout. She says she understands, that she has understood for three years. She is at the seven-thirty on Wednesday and every day after, and she does not look at you during the sign of peace. The finance chair never learns there was a question.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 1 },
+            { "target": "stat", "key": "piety", "delta": -1 },
+            { "target": "stat", "key": "administration", "delta": 1 },
+            { "target": "flag", "key": "fe_left_the_name_out", "value": true }
+          ]
+        },
+        {
+          "id": "read_it_and_preach_it",
+          "label": "Read the name and preach on it: the dead we do not want to pray for",
+          "requires": [{ "type": "stat", "key": "theology", "op": ">=", "value": 45 }],
+          "outcome": "You do not say his name from the pulpit; you do not need to. You say that the book has names in it we would not have chosen and that November is for exactly those, and that a parish that will not pray for its thieves has not understood the feast. It is not a comfortable homily. The widow leaves before Communion and comes back the next day. Two men on the finance council have not forgiven you by Advent, and one of them tells you so, and one of them tells the dean.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 2 },
+            { "target": "stat", "key": "theology", "delta": 1 },
+            { "target": "reputation", "key": "parishioners", "delta": -3 },
+            { "target": "reputation", "key": "progressive_bloc", "delta": 4 },
+            { "target": "reputation", "key": "brother_priests", "delta": 2 },
+            { "target": "outspokenness", "key": "", "delta": 4 },
+            { "target": "flag", "key": "fe_read_the_name", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fe_christmas_midnight",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["body_vs_vow", "competence"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 12,
+      "suppressYears": 1,
+      "requires": [{ "type": "feast", "key": "christmas" }],
+      "bias": [
+        { "when": { "type": "parish", "key": "terrain", "value": "urban" }, "multiplier": 1.3 }
+      ],
+      "title": "The Man in the Back",
+      "body": "Midnight Mass at {parish} is the one the parish dresses for, and there are people standing along the side walls by a quarter to twelve, and the Gloria comes back after four weeks like a door opening. You have said four Masses since noon on the twenty-fourth and will say two more in the morning, and the sacristy coffee has stopped working. He is in the last pew on the left, alone, in a coat too heavy for the church, and by the second reading the people on either side of him have moved. He is not loud. He is talking, to nobody, in a low steady voice, and during the psalm he puts his head down on the pew in front of him and his shoulders go. {@parishioner}, who is ushering, has come up the side aisle to catch your eye and is asking with his face what you want done. It could be drink. It could be a wife who died in March, at a Mass she would have sung at. From the chair, with the Gospel book in your hands, you cannot tell, and nine hundred people are waiting for you to stand.",
+      "flavorPrompt": "Midnight Mass, a man in the back pew coming apart quietly, an usher waiting for a signal.",
+      "choices": [
+        {
+          "id": "let_him_be",
+          "label": "Shake your head at the usher and go on with the Mass",
+          "default": true,
+          "outcome": "He stays. He is quieter during the homily and gone by Communion, and nobody knows where. In the morning, at the ten, a woman you do not know asks whether the man in the back was all right, and you say you hope so, and it is not enough for her or for you. The parish saw you not stop, and most of them would say that was right, and you are not sure.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 1 },
+            { "target": "stat", "key": "piety", "delta": -1 }
+          ]
+        },
+        {
+          "id": "go_to_him",
+          "label": "Hand the book to {@deacon} for the Gospel, and go down the aisle yourself",
+          "outcome": "The deacon proclaims and you walk the length of the church in the middle of Midnight Mass, and nine hundred people watch you do it. You sit beside him. It is grief, and it is drink on top of grief, and he lets you put a hand on his back and says her name. You are back in the chair for the homily and preach it worse than you had planned and better than you had feared. He is at the funeral home's Mass in March. He remembers you.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 2 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "reputation", "key": "parishioners", "delta": 4 },
+            { "target": "reputation", "key": "traditional_bloc", "delta": -2 },
+            { "target": "relationship", "key": "@deacon", "delta": 5 }
+          ]
+        },
+        {
+          "id": "usher_him_out",
+          "label": "Nod, and let the ushers walk him to the vestibule",
+          "outcome": "{@parishioner} and another usher walk him out, gently, and one of them stays with him in the vestibule through the homily and calls his sister, who comes. It is the correct thing and the parish is relieved. You did not see his face. The usher tells you on the feast of the Holy Family that the man's wife died in March and he had come because she always came, and you find that you would have liked to know that before you nodded.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "reputation", "key": "traditional_bloc", "delta": 2 },
+            { "target": "relationship", "key": "@parishioner", "delta": 4 },
+            { "target": "stat", "key": "piety", "delta": -1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fe_patronal_festival",
+      "phase": ["administrator", "pastor"],
+      "pressure": ["money", "ambition_vs_integrity"],
+      "severity": "NOTABLE",
+      "category": "finance",
+      "baseWeight": 12,
+      "suppressYears": 1,
+      "requires": [{ "type": "feast", "key": "patronal" }],
+      "bias": [
+        { "when": { "type": "parish", "key": "kind", "value": "struggling_urban" }, "multiplier": 1.4 },
+        { "when": { "type": "parish", "key": "kind", "value": "rural" }, "multiplier": 1.3 }
+      ],
+      "title": "The Parish's Feast",
+      "body": "The patronal feast at {parish} is a Mass and then a festival, and for most of the county it is the festival. The raffle is a car this year, a used one, donated by a dealer who wants his name on the banner. The beer license from the county needs the pastor's signature by Tuesday, and the festival chair, who has run it for fourteen years and made the parish forty thousand dollars a year doing it, is standing in the office with the form. Last year a man from the eleven o'clock got into his car after the beer tent closed and put it into the ditch on the county road, and walked away from it, and the finance council has said nothing about it because nobody wants to be the one. {@music_director} wants the feast day Mass at the center of the day, a real solemnity with the parish's own hymn, and has been told by the festival chair that the Mass is at nine so the tent can open at eleven. The dealer's banner arrived this morning. It is larger than the one with the saint on it.",
+      "flavorPrompt": "A parish festival that pays the bills, a beer license, a car dealer's banner bigger than the saint's.",
+      "choices": [
+        {
+          "id": "sign_it",
+          "label": "Sign the license, hang the banner, and let the festival be what it is",
+          "default": true,
+          "outcome": "The tent opens at eleven and the county sends a deputy for the evening, which is new and which you arranged. The car goes to a family from the next parish. The festival clears what it usually clears, and the finance council is easy for a quarter. The Mass at nine is well attended by people in festival shirts, and {@music_director} plays the parish hymn to a church that is thinking about the tent.",
+          "effects": [
+            { "target": "money", "key": "cash", "delta": 4000 },
+            { "target": "reputation", "key": "parishioners", "delta": 3 },
+            { "target": "reputation", "key": "public", "delta": 2 },
+            { "target": "stat", "key": "administration", "delta": 1 },
+            { "target": "relationship", "key": "@music_director", "delta": -4 },
+            { "target": "flag", "key": "fe_festival_beer_kept", "value": true }
+          ]
+        },
+        {
+          "id": "no_beer",
+          "label": "Do not sign; the festival runs dry this year, and you say why",
+          "outcome": "The festival chair does not resign but tells three people he is thinking of it. The tent sells lemonade. Attendance is down by a third and the take by half, and the finance council says so in October in a tone. The man who put his car in the ditch comes to see you in the rectory, unasked, and does not say much, and shakes your hand at the door. The dealer takes his banner back.",
+          "effects": [
+            { "target": "money", "key": "cash", "delta": 1500 },
+            { "target": "reputation", "key": "parishioners", "delta": -4 },
+            { "target": "reputation", "key": "public", "delta": -2 },
+            { "target": "reputation", "key": "chancery", "delta": 2 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "flag", "key": "fe_festival_no_beer", "value": true }
+          ]
+        },
+        {
+          "id": "mass_at_the_center",
+          "label": "Sign it, but move the Mass to eleven, the tent to one, and the saint above the dealer",
+          "outcome": "The festival chair is furious for a day and then finds that a church full of people at eleven walks straight to the tent at noon and stays. {@music_director} gets the solemnity, incense and the parish hymn and the procession with the statue around the grounds before the first beer is poured. The dealer's banner hangs on the fence by the parking lot. The take is a little down. Nobody puts a car in a ditch.",
+          "effects": [
+            { "target": "money", "key": "cash", "delta": 3000 },
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "reputation", "key": "traditional_bloc", "delta": 3 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "relationship", "key": "@music_director", "delta": 8 },
+            { "target": "flag", "key": "fe_festival_beer_kept", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fe_assumption_empty",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["doubt", "competence"],
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 12,
+      "suppressYears": 1,
+      "requires": [{ "type": "feast", "key": "assumption" }],
+      "bias": [
+        { "when": { "type": "parish", "key": "kind", "value": "flagship_suburban" }, "multiplier": 1.4 },
+        { "when": { "type": "parish", "key": "terrain", "value": "latino" }, "multiplier": 0.5 }
+      ],
+      "title": "August the Fifteenth",
+      "body": "It is a holy day of obligation, unless the calendar has landed it on a Saturday or a Monday and let them off, and this year it has not. The bulletin said so twice. The vigil Mass on the fourteenth had nineteen people. The seven in the morning had the daily Mass crowd, who would have come anyway, and the noon has eleven, four of them the staff. It is August in {parish} and half the parish is at the lake and the other half has forgotten that there is anything in August but heat. {@secretary} has left the air conditioning off in the church to save the bill, on the grounds that nobody would come, and was right. The readings are the Ark going up to the house of David and the woman clothed with the sun, and you have a homily on the body and its destiny that you worked on, and eleven people to give it to, and the sound of the lawn service outside the east windows. One of the eleven is a nurse from the hospital still in her scrubs who came on her lunch hour and will be late back.",
+      "flavorPrompt": "A holy day in August, eleven people in a hot church, a nurse in scrubs on her lunch hour.",
+      "choices": [
+        {
+          "id": "as_if_full",
+          "label": "Give the homily you wrote to the eleven, all of it",
+          "default": true,
+          "outcome": "You preach it to them as if they were the parish, because they are. The nurse is twelve minutes late back to the floor and does not mind. It is not the kind of Mass anyone remembers, except that in October, at a funeral, the nurse's mother tells you her daughter has started coming on Sundays and that it was something you said in August, and cannot say what.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 2 },
+            { "target": "reputation", "key": "parishioners", "delta": 1 }
+          ]
+        },
+        {
+          "id": "cut_it_short",
+          "label": "Three sentences and the Creed; give them back their lunch hour",
+          "outcome": "You say what the feast is in the time it takes to say it and the Mass is over in twenty-eight minutes, and the nurse is on time. Nobody complains. The homily goes in the drawer for a year when someone might hear it. It is a small surrender, and you know it is one, and it is also lunch.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 1 },
+            { "target": "stat", "key": "piety", "delta": -1 }
+          ]
+        },
+        {
+          "id": "preach_obligation_sunday",
+          "label": "Say nothing today, and preach on the Sunday after about the ones who did not come",
+          "outcome": "On the Sunday you say from the pulpit that a holy day is not a suggestion and that the church was empty on the feast of the Mother of God, and you do it without raising your voice, which makes it worse. Some of them are ashamed and some of them are annoyed at being made to feel it, and one couple writes that they were at Mass at the lake, which they were. The next holy day, in November, has forty at noon.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": -2 },
+            { "target": "reputation", "key": "traditional_bloc", "delta": 4 },
+            { "target": "reputation", "key": "progressive_bloc", "delta": -2 },
+            { "target": "outspokenness", "key": "", "delta": 3 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fe_epiphany_chalk",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["body_vs_vow", "friendship_vs_duty"],
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 12,
+      "suppressYears": 1,
+      "requires": [{ "type": "feast", "key": "epiphany" }],
+      "bias": [
+        { "when": { "type": "ethnic", "key": "polish", "op": ">=", "value": 0.1 }, "multiplier": 1.5 },
+        { "when": { "type": "parish", "key": "generational", "value": "young" }, "multiplier": 1.3 }
+      ],
+      "title": "Chalk",
+      "body": "The chalk is blessed at the end of every Mass on Epiphany and the parish takes it home in little bags {@dre} made, with the card that explains the letters over the door and the year. That was meant to be the end of it. Instead there is a sheet on the table in the vestibule, and by the last Mass there are forty-one households on it who would like Father to come and bless the house himself, in January, in the evening, when the family is home. {@secretary} has looked at the sheet and looked at the calendar and looked at you. Some of the names are the ones who always ask and always feed you. Some are people you have never met, in the apartments behind the plant, who wrote their address in careful block capitals. One is the widow on the county road who has not had a priest in her house since her husband's anointing. It is nine miles out. It is January, and the weeks are already full, and a house blessing done right is not fifteen minutes, it is an hour and a plate of something.",
+      "flavorPrompt": "A sign-up sheet of forty-one houses wanting the Epiphany blessing, a January calendar, a widow nine miles out.",
+      "choices": [
+        {
+          "id": "the_chalk_is_the_blessing",
+          "label": "Bless the chalk and tell them from the pulpit that the head of the house does the door",
+          "default": true,
+          "outcome": "You say it kindly: that the blessing was given at Mass, that the chalk carries it, and that the father or mother of the family writes the letters, which is how it was done before there were enough priests to do it for them. Most of the sheet is content. The widow on the county road is not, and does not say so, and {@secretary} mentions her twice in January until you go anyway.",
+          "effects": [
+            { "target": "stat", "key": "administration", "delta": 1 },
+            { "target": "reputation", "key": "parishioners", "delta": 1 },
+            { "target": "reputation", "key": "traditional_bloc", "delta": -1 }
+          ]
+        },
+        {
+          "id": "do_the_houses",
+          "label": "Take the sheet and do the forty-one houses before Candlemas",
+          "outcome": "It takes every evening in January and two Saturdays. You eat forty-one plates of something and see the inside of the apartments behind the plant, which you had not, and the widow's kitchen, where the calendar on the wall is three years old. By February you are tired in the way that comes from having been welcomed, and the parish knows something about you it did not.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "reputation", "key": "parishioners", "delta": 6 },
+            { "target": "reputation", "key": "traditional_bloc", "delta": 2 },
+            { "target": "reputation", "key": "progressive_bloc", "delta": 2 }
+          ]
+        },
+        {
+          "id": "split_with_the_deacon",
+          "label": "Give half the sheet to {@deacon} and take the far ones yourself",
+          "outcome": "The deacon takes the twenty nearest and does them well, with his wife along, which some of the houses like better. You take the plant apartments and the county road. A few households are visibly disappointed to open the door to a deacon, and he tells you so with a grin that costs him something. It is done by the end of the month, and it is the first thing you and he have shared out rather than handed down.",
+          "effects": [
+            { "target": "stat", "key": "administration", "delta": 1 },
+            { "target": "reputation", "key": "parishioners", "delta": 3 },
+            { "target": "relationship", "key": "@deacon", "delta": 8 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fe_pentecost_confirmations",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["ambition_vs_integrity", "competence"],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 12,
+      "suppressYears": 1,
+      "requires": [{ "type": "feast", "key": "pentecost" }],
+      "bias": [
+        { "when": { "type": "parish", "key": "kind", "value": "flagship_suburban" }, "multiplier": 1.4 },
+        { "when": { "type": "liturgy", "key": "music", "value": "contemporary" }, "multiplier": 1.3 }
+      ],
+      "title": "The Bishop's Chair",
+      "body": "The bishop is confirming at {parish} on Pentecost, or his delegate is; the letter from the chancery said the bishop and the phone call on Thursday said the vicar general, and on Sunday morning it is the bishop after all, forty minutes early, with his master of ceremonies. The MC walks the sanctuary once and has changes: the chair, the placement of the chrism, the order the candidates come up, and the hymn {@music_director} chose for the sealing, which he calls unsuitable to the bishop's face and to yours. Fifty-three candidates in red stoles are in the hall with their sponsors and {@dre}, who has spent two years on them and has a list. The bishop looks at the list. He asks, not sharply, why two of the names have no Mass attendance noted and whether the parish confirms everyone who finishes the program. He asks it in front of {@dre}. He also, on the way to the sacristy, admires the restored ceiling and asks who paid for it, and says that he has been wanting to talk with you about something, after, if there is time. There is a Mass to begin.",
+      "flavorPrompt": "Pentecost morning, the bishop early and his MC rearranging the sanctuary, a question about two names on the list.",
+      "choices": [
+        {
+          "id": "his_way",
+          "label": "Give the MC the sanctuary and the bishop the answer he wants about the two names",
+          "default": true,
+          "outcome": "The chair moves, the hymn changes, and you say the two families are known to you and will be seen, which is true after you say it. The Mass is the bishop's Mass and goes like one. {@music_director} plays the substitute hymn with visible restraint. Afterward, in the sacristy, the bishop says what he wanted to say, and it is a real conversation, and he remembers that the day went easily.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": 5 },
+            { "target": "reputation", "key": "parishioners", "delta": 1 },
+            { "target": "relationship", "key": "@music_director", "delta": -5 },
+            { "target": "relationship", "key": "@dre", "delta": -3 },
+            { "target": "flag", "key": "fe_asked_the_bishop_for_something", "value": true }
+          ]
+        },
+        {
+          "id": "the_parish_way",
+          "label": "Keep the parish's arrangement and stand with {@dre} on the fifty-three",
+          "outcome": "You tell the MC the chair is where the parish puts it and that the hymn was chosen with care, and you tell the bishop that {@dre} has walked with every one of the fifty-three and that you would confirm all of them yourself. He does. He is correct with you afterward and does not raise the other matter, and the MC writes it down somewhere. {@dre} does not thank you, because she is crying in the hall, and does later.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": -4 },
+            { "target": "reputation", "key": "parishioners", "delta": 4 },
+            { "target": "reputation", "key": "progressive_bloc", "delta": 3 },
+            { "target": "relationship", "key": "@dre", "delta": 10 },
+            { "target": "relationship", "key": "@music_director", "delta": 6 },
+            { "target": "outspokenness", "key": "", "delta": 3 }
+          ]
+        },
+        {
+          "id": "ask_him_for_something",
+          "label": "Do as the MC asks, and use the sacristy afterward to ask the bishop for what the parish needs",
+          "requires": [{ "type": "stat", "key": "charisma", "op": ">=", "value": 50 }],
+          "outcome": "The morning goes his way, easily, and when he says he wanted to talk you say that you did too, and name it: the thing {parish} has needed from the diocese for years and never had the ear for. He listens because the day went well. He does not promise. Something moves in the chancery in the autumn that would not have moved otherwise. {@music_director} hears which hymn you gave up for it and is not consoled.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": 4 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "stat", "key": "administration", "delta": 1 },
+            { "target": "reputation", "key": "brother_priests", "delta": 2 },
+            { "target": "relationship", "key": "@music_director", "delta": -6 },
+            { "target": "flag", "key": "fe_asked_the_bishop_for_something", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fe_christ_the_king_report",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["money", "competence"],
+      "severity": "ROUTINE",
+      "category": "admin",
+      "baseWeight": 12,
+      "suppressYears": 1,
+      "requires": [{ "type": "feast", "key": "christ_the_king" }],
+      "bias": [
+        { "when": { "type": "role", "value": "pastor" }, "multiplier": 1.5 },
+        { "when": { "type": "role", "value": "administrator" }, "multiplier": 1.5 }
+      ],
+      "title": "The Last Sunday",
+      "body": "The last Sunday of the year at {parish} arrives with three things at once. The chancery's annual report is due Friday, thirty pages of it, sacramental counts and the census and the financial pages that the finance council was supposed to have reviewed and has not, and {@secretary} has the folder open on the desk with the parts she can fill in filled in, which is not the parts that matter. The food pantry has two hundred and twelve turkeys in a refrigerated truck in the parking lot that has to be back to the rental company by Wednesday morning, and the people who come for them start lining up at seven on Tuesday, and there are not enough volunteers because it is the week before Thanksgiving and they are all cooking. And it is Christ the King, the end of the year, with the readings about the sheep and the goats and the throne, and a homily that ought to say something about what kind of kingdom this was, in this parish, this year, and you have not written it. The truck's compressor is audible from the sacristy.",
+      "flavorPrompt": "Christ the King with the chancery's report due, a truck of turkeys in the lot, and no homily written.",
+      "choices": [
+        {
+          "id": "the_report_yourself",
+          "label": "Do the report yourself, tonight and tomorrow, and let the pantry run the turkeys",
+          "default": true,
+          "outcome": "You are at the desk until one and again at six and the report goes in Thursday, correct, with the financial pages reconciled by you because nobody else was going to. The pantry manages, short-handed, and a few families wait in the cold longer than they should have. The homily was the one from three years ago with the year changed. The chancery notices the report was on time and clean, which is what the chancery notices.",
+          "effects": [
+            { "target": "stat", "key": "administration", "delta": 2 },
+            { "target": "reputation", "key": "chancery", "delta": 4 },
+            { "target": "reputation", "key": "parishioners", "delta": -1 }
+          ]
+        },
+        {
+          "id": "the_turkeys_first",
+          "label": "Unload the truck yourself Tuesday, and send the report in late with an apology",
+          "outcome": "You are in the parking lot at seven in a parka handing frozen birds to people who did not expect the priest to be the one handing them. It is a good morning. The report goes in the following Wednesday with a note, and the chancery's finance office replies with a form letter and, a week later, a phone call that is not a form. The finance council, shamed, reviews the pages it should have reviewed in October.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 5 },
+            { "target": "reputation", "key": "public", "delta": 2 },
+            { "target": "reputation", "key": "chancery", "delta": -4 },
+            { "target": "stat", "key": "piety", "delta": 1 }
+          ]
+        },
+        {
+          "id": "hand_it_to_the_secretary",
+          "label": "Sign what {@secretary} has and send the financial pages as the council left them",
+          "outcome": "The report goes in on Friday with the financial pages unreconciled and a cover note saying the council's review is pending. The chancery accepts it because it is on time and files it because it is a report. You preach a homily you wrote Saturday night and it is better than you expected. In March the diocesan auditor finds the pages, and the council, and asks you why you signed them.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": 1 },
+            { "target": "stat", "key": "administration", "delta": -1 },
+            { "target": "relationship", "key": "@secretary", "delta": -4 },
+            { "target": "reputation", "key": "parishioners", "delta": 1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fe_guadalupe_mananitas",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["belief_vs_safety", "friendship_vs_duty"],
+      "severity": "NOTABLE",
+      "category": "group",
+      "baseWeight": 13,
+      "suppressYears": 1,
+      "requires": [{ "type": "feast", "key": "guadalupe" }],
+      "bias": [
+        { "when": { "type": "liturgy", "key": "music", "value": "mariachi" }, "multiplier": 1.5 },
+        { "when": { "type": "liturgy", "key": "language", "value": "spanish_mass" }, "multiplier": 1.3 },
+        { "when": { "type": "parish", "key": "terrain", "value": "suburban" }, "multiplier": 1.4 }
+      ],
+      "title": "Las Mañanitas",
+      "body": "The mariachis are in the parking lot of {parish} at a quarter to five on the twelfth of December, tuning in the cold, and by five the church is fuller than it is at Easter. They sing Las Mañanitas to the image with the roses piled to the second step, the matachines dance in the aisle in their rattles and feathers, and there are children in serapes and a boy dressed as Juan Diego who has been rehearsing the tilma for a month. The Mass is at six, and the tamales and champurrado after are in the hall until people go to work. It is the best morning of the parish year, and it is loud. On Monday the man who owns the house across from the church, who has lived there thirty years and been to Mass at {parish} four times, calls {@secretary} and then the city and then you. Trumpets at five in the morning, cars on his lawn, and he has a job, Father. He is not wrong about the trumpets. The city has sent a letter about the noise ordinance, which it has never enforced against the bells. {@group_leader} of the Guadalupanas has heard about the call and is waiting to see what you will do.",
+      "flavorPrompt": "Mañanitas at five in the morning, mariachis in the cold, a neighbor's complaint and the city's letter.",
+      "choices": [
+        {
+          "id": "keep_it_and_go_see_him",
+          "label": "Keep the mañanitas as they are, and take him a plate of tamales and an apology for his lawn",
+          "default": true,
+          "outcome": "You go over Tuesday evening with the plate and the Guadalupanas' apology for the lawn, which they mean, and he lets you in, because a priest at the door is still a priest. He does not withdraw the complaint and does not press it. The city's letter is answered by a lawyer in the parish, in one paragraph, about the bells. Next year the Guadalupanas put cones on his lawn and a boy is posted to keep the cars off it, and the trumpets are at five.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 4 },
+            { "target": "reputation", "key": "public", "delta": -1 },
+            { "target": "relationship", "key": "@group_leader", "delta": 8 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "flag", "key": "fe_mananitas_kept", "value": true }
+          ]
+        },
+        {
+          "id": "indoors_with_the_doors_shut",
+          "label": "Move the mariachis inside and close the doors; the city gets what it asked for",
+          "outcome": "The Guadalupanas agree with the face of people who have been asked to agree before. The trumpets are inside the church and the doors are shut, and the sound carries anyway, less. The neighbor withdraws the complaint. Something about the morning is smaller and everyone who was there knows it, and {@group_leader} says next year they may hold the mañanitas at the other parish, which has a Mexican pastor, and does not say it as a threat.",
+          "effects": [
+            { "target": "reputation", "key": "public", "delta": 3 },
+            { "target": "reputation", "key": "parishioners", "delta": -3 },
+            { "target": "relationship", "key": "@group_leader", "delta": -8 },
+            { "target": "reputation", "key": "chancery", "delta": 1 },
+            { "target": "flag", "key": "fe_mananitas_indoors", "value": true }
+          ]
+        },
+        {
+          "id": "invite_him",
+          "label": "Answer the city's letter yourself, and invite the neighbor to next year's mañanitas as the parish's guest",
+          "requires": [{ "type": "stat", "key": "charisma", "op": ">=", "value": 55 }],
+          "outcome": "Your letter to the city is short and mentions the bells and the First Amendment in the same sentence, and the city does not write back. Your letter to the neighbor is longer, and says that the parish is sorry about his lawn and that he is welcome at five next December, that there will be a chair for him and a coffee. He does not come. His wife does, and stays for the tamales, and the Guadalupanas take the point.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 3 },
+            { "target": "reputation", "key": "public", "delta": 2 },
+            { "target": "relationship", "key": "@group_leader", "delta": 6 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "outspokenness", "key": "", "delta": 2 },
+            { "target": "flag", "key": "fe_mananitas_kept", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fe_simbang_gabi_nine",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["body_vs_vow", "competence"],
+      "severity": "ROUTINE",
+      "category": "group",
+      "baseWeight": 13,
+      "suppressYears": 1,
+      "requires": [{ "type": "feast", "key": "simbang_gabi" }],
+      "bias": [
+        { "when": { "type": "parish", "key": "kind", "value": "immigrant_growing" }, "multiplier": 1.4 }
+      ],
+      "title": "Nine Mornings",
+      "body": "The Filipino community of {parish} has hung the parols in the vestibule, star lanterns in capiz shell and colored paper, and the first of the nine dawn Masses is on the sixteenth at five-thirty. Simbang Gabi. {@group_leader} of the community has brought you the schedule, and the choir's list, and the roster of which family is bringing the bibingka and the puto bumbong and the ginger tea for the hall afterward, and, lower on the page, a request: that all nine Masses be said by you, because the community would like its own priest for its own novena and not a rotation, and that the Gloria be sung and the white vestments worn, as the bishops in the Philippines allow in Advent for these Masses and as this diocese has never said anything about. It is the third week of Advent. There are two funerals scheduled, the school Christmas program, confessions every night, and the parish's own Masses at seven and noon. Nine mornings at five-thirty, with a hall full of rice cake and three hundred people singing in Tagalog at the end of every one, and then the day.",
+      "flavorPrompt": "Nine dawn Masses in the third week of Advent, star lanterns, rice cakes in the hall, a community that wants its own priest.",
+      "choices": [
+        {
+          "id": "all_nine",
+          "label": "Say all nine, at dawn, with the Gloria",
+          "default": true,
+          "outcome": "By the fourth morning you are tired in a way you will not recover from until Epiphany, and by the sixth you would not trade it. The hall smells of coconut and ginger and the children sleep against their mothers through the last hymn. On the ninth morning {@group_leader} gives you a parol for the rectory window. The chancery, if it hears about the Gloria, does not say so. You are hoarse on Christmas Eve.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 2 },
+            { "target": "reputation", "key": "parishioners", "delta": 5 },
+            { "target": "relationship", "key": "@group_leader", "delta": 10 },
+            { "target": "reputation", "key": "brother_priests", "delta": 1 }
+          ]
+        },
+        {
+          "id": "share_with_brother_priest",
+          "label": "Take five and ask {@brother_priest} to take four",
+          "outcome": "{@brother_priest} takes four and is glad of the rice cake, and the community is gracious about the rotation and remembers that they asked for something else. You get through Advent on your feet. The Gloria is sung at your five and not at his four, because he was not asked and did not think to, and the community notices the difference and says nothing about it to him.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "relationship", "key": "@group_leader", "delta": 3 },
+            { "target": "relationship", "key": "@brother_priest", "delta": 6 },
+            { "target": "stat", "key": "administration", "delta": 1 }
+          ]
+        },
+        {
+          "id": "evenings_instead",
+          "label": "Move the nine to the evening, as the parishes in the city do, and say them all",
+          "outcome": "You explain that the anticipated evening Mass counts, that half the dioceses in the country do it this way now, and that you will be there for all nine at seven at night. The community accepts it and the older members grieve it privately; the dawn was the point, the going out in the dark. Attendance is better than it would have been at dawn. The hall is full of rice cake at eight at night and the children are awake for it.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 3 },
+            { "target": "relationship", "key": "@group_leader", "delta": -3 },
+            { "target": "stat", "key": "administration", "delta": 1 },
+            { "target": "stat", "key": "piety", "delta": 1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fe_tet_ancestors",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["loyalty_vs_honesty", "belief_vs_safety"],
+      "severity": "NOTABLE",
+      "category": "group",
+      "baseWeight": 13,
+      "suppressYears": 1,
+      "requires": [{ "type": "feast", "key": "tet" }],
+      "bias": [
+        { "when": { "type": "parish", "key": "generational", "value": "aging" }, "multiplier": 1.4 },
+        { "when": { "type": "liturgy", "key": "incense", "value": "none" }, "multiplier": 1.3 }
+      ],
+      "title": "The Table in the Vestibule",
+      "body": "The Vietnamese community of {parish} has set the ancestors' table in the vestibule for Tết: a red cloth, the tray of five fruits, incense in a brass bowl, and photographs of the dead, grandparents mostly, a young man in a uniform from a war the older Anglo parishioners remember from the other side. The three days have their order, which {@group_leader} explained to you carefully: the first for thanksgiving to God, the second for ancestors and parents, the third for the sanctification of work, and after each Mass the red envelopes with a verse of Scripture in them, drawn blind, which the children line up for. On the second morning two of the older parishioners, who have been at the seven-thirty for forty years, stop in the vestibule and look at the incense and the photographs and one of them says, to the other, loud enough, that this is ancestor worship and that her mother would have been made to kneel for it. {@group_leader} is standing four feet away and heard. Rome settled the question of the rites in 1939, and the Vietnamese bishops after, and none of that is in the vestibule this morning. The incense is still burning.",
+      "flavorPrompt": "An ancestors' table in a parish vestibule at Tết, incense and photographs, an old parishioner's remark within earshot.",
+      "choices": [
+        {
+          "id": "explain_it_from_the_ambo",
+          "label": "Leave the table, and explain from the ambo what it is and what it is not",
+          "default": true,
+          "outcome": "You say, at the seven-thirty and again on Sunday, that the Church answered this question before most of the parish was born, that honoring the dead is not worshiping them, and that the parish's own book of names in November is the same thing on a different table. One of the two women does not speak to you until Easter. {@group_leader} brings the community's thanks in the form of a lacquered box, which you keep on the desk.",
+          "effects": [
+            { "target": "stat", "key": "theology", "delta": 1 },
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "reputation", "key": "progressive_bloc", "delta": 3 },
+            { "target": "reputation", "key": "traditional_bloc", "delta": -2 },
+            { "target": "relationship", "key": "@group_leader", "delta": 8 },
+            { "target": "flag", "key": "fe_ancestors_table_kept", "value": true }
+          ]
+        },
+        {
+          "id": "move_it_to_the_hall",
+          "label": "Move the table to the hall, where the community's own Masses are",
+          "outcome": "You ask {@group_leader}, privately and with the reasons, and the table moves that afternoon. The community understands the reasons and is not consoled by them. The two women are satisfied without knowing they were the cause. The envelopes are drawn in the hall, and the children do not mind, and the photographs of the dead look at the folding chairs instead of the font.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 1 },
+            { "target": "reputation", "key": "traditional_bloc", "delta": 2 },
+            { "target": "relationship", "key": "@group_leader", "delta": -6 },
+            { "target": "stat", "key": "administration", "delta": 1 },
+            { "target": "flag", "key": "fe_ancestors_table_removed", "value": true }
+          ]
+        },
+        {
+          "id": "bring_the_women_to_the_table",
+          "label": "Go and stand at the table with the two women and ask them to tell you about their dead",
+          "requires": [{ "type": "stat", "key": "charisma", "op": ">=", "value": 50 }],
+          "outcome": "You do not argue. You ask the one who spoke about her mother, and she tells you, and then about her brother, and {@group_leader} brings her a stick of incense without a word and she holds it for a long moment before she puts it in the bowl. It does not fix her. It fixes the morning. On the third day there is a photograph on the table that was not there before, a man in a uniform from the other side of that war.",
+          "effects": [
+            { "target": "stat", "key": "charisma", "delta": 2 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "reputation", "key": "parishioners", "delta": 5 },
+            { "target": "relationship", "key": "@group_leader", "delta": 10 },
+            { "target": "flag", "key": "fe_ancestors_table_kept", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fe_czestochowa_pilgrimage",
+      "phase": ["administrator", "pastor"],
+      "pressure": ["competence", "friendship_vs_duty"],
+      "severity": "ROUTINE",
+      "category": "group",
+      "baseWeight": 13,
+      "suppressYears": 1,
+      "requires": [{ "type": "feast", "key": "czestochowa" }],
+      "bias": [
+        { "when": { "type": "liturgy", "key": "language", "value": "some_latin" }, "multiplier": 1.3 },
+        { "when": { "type": "parish", "key": "terrain", "value": "urban" }, "multiplier": 1.3 }
+      ],
+      "title": "The Black Madonna",
+      "body": "The Polish community of {parish} walks on the twenty-sixth of August, as it has for decades: from the old church in the city where their grandparents were baptized, eleven miles, with the icon of the Black Madonna carried on poles under a canopy and the hymns sung the whole way. They arrive at {parish} in the late afternoon, sunburnt, and expect a Mass. In Polish. {@group_leader} of the community came to see you in July about it and was courteous and clear: the last pastor who spoke Polish retired nine years ago, and since then they have brought in a priest from the Polish parish across the diocese, who is now eighty-one and has said that this is his last year on the road. He will come this year. Next year the community would like to know what the parish intends, and they would rather hear it from you before the walk than after. You do not speak Polish. You can say the Mass in Latin, if the community would have it, or in English with the hymns in Polish, which they have had before and did not love. Or you can learn the Eucharistic Prayer phonetically in eleven months, which a pastor two dioceses over did, and which the community still talks about.",
+      "flavorPrompt": "A Polish pilgrimage arriving sunburnt with an icon on poles, an eighty-one-year-old priest's last year, a pastor without the language.",
+      "choices": [
+        {
+          "id": "bring_a_polish_priest",
+          "label": "Thank the old priest, and find another Polish-speaking priest for next year through the vicar for clergy",
+          "default": true,
+          "outcome": "The vicar for clergy finds one, a young man from Kraków in his second year in the diocese, who is glad of the Polish and gladder of the pilgrims. The community is well served and knows it is being served by arrangement. The old priest says the Mass this year and sits in the front pew next year and weeps through the Czarna Madonna, and {@group_leader} thanks you for having asked, which is not the same as thanks for having learned.",
+          "effects": [
+            { "target": "stat", "key": "administration", "delta": 1 },
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "reputation", "key": "brother_priests", "delta": 2 },
+            { "target": "relationship", "key": "@group_leader", "delta": 4 },
+            { "target": "flag", "key": "fe_polish_priest_brought_in", "value": true }
+          ]
+        },
+        {
+          "id": "learn_it",
+          "label": "Tell them you will say it in Polish next year, and start learning tonight",
+          "outcome": "Eleven months of a Polish tutor from the community, two evenings a week, the Eucharistic Prayer on index cards on the dashboard, the responses drilled until you dream them. Next August you say it badly and completely, and the old priest, in the front pew, mouths the words with you. The community does not correct your accent and never forgets that you did it. Other things in the parish were not done those two evenings a week.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "stat", "key": "charisma", "delta": 2 },
+            { "target": "reputation", "key": "parishioners", "delta": 6 },
+            { "target": "reputation", "key": "traditional_bloc", "delta": 3 },
+            { "target": "relationship", "key": "@group_leader", "delta": 12 },
+            { "target": "flag", "key": "fe_said_mass_in_polish", "value": true }
+          ]
+        },
+        {
+          "id": "latin_for_everyone",
+          "label": "Offer the Mass in Latin, the language they and you share, with the hymns in Polish",
+          "outcome": "The community thinks about it and accepts, because their grandparents heard it that way and because it is not English. You say it well, and the hymns are theirs, and the homily is in English with {@group_leader} translating from a lectern beside you, which is slow and dignified and works. The older pilgrims approve. The younger ones, who wanted Polish and not a substitute for it, drive to the other parish the next year.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "reputation", "key": "traditional_bloc", "delta": 4 },
+            { "target": "reputation", "key": "parishioners", "delta": 1 },
+            { "target": "relationship", "key": "@group_leader", "delta": 2 }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -2,6 +2,7 @@ import type { GameState, LiturgyDialDef, LiturgyOptionDef, Parish } from '@/type
 import type { Rng } from '@/engine/rng';
 import { liturgyDials } from '@/content/parish';
 import { recordPosition } from './reputation';
+import { noteMover } from './movers';
 
 /** Requested in playtesting; numbers invented. */
 export const LITURGY = {
@@ -177,6 +178,9 @@ export function liturgyWeek(state: GameState): { state: GameState; pull: number;
   const pull = friction < LITURGY.tolerance ? LITURGY.pullWhenFitting * (1 - friction / LITURGY.tolerance) : LITURGY.pullPerFriction * (friction - LITURGY.tolerance);
   const cost = weeklyCost(parish);
   let next: GameState = { ...state, character: { ...c, reputation: rep } };
+  next = noteMover(next, 'parishioners', support, 'the Mass as set');
+  next = noteMover(next, 'traditional_bloc', -lean * LITURGY.blocPerWeek, 'the Mass as set');
+  next = noteMover(next, 'progressive_bloc', lean * LITURGY.blocPerWeek, 'the Mass as set');
   if (cost > 0) next = { ...next, parish: { ...next.parish!, finance: { ...next.parish!.finance, cash: next.parish!.finance.cash - cost } } };
   const line = fresh && friction > 0.4 && state.clock.week % 4 === 0 ? 'There are letters about the Mass, and one of them went to the chancery.' : null;
   return { state: next, pull, line };

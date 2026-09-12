@@ -46,6 +46,9 @@ import { pushProject as doPushProject, startProject as doStartProject } from '@/
 import { setDial as doSetDial } from '@/systems/liturgy';
 import { chooseAssignment as doChooseAssignment } from '@/systems/choice';
 import { furnish as doFurnish, petition as doPetition } from '@/systems/decor';
+import { setHomily as doSetHomily } from '@/systems/homily';
+import { hire as doHire, letGo as doLetGo } from '@/systems/staff';
+import { goAway as doGoAway } from '@/systems/away';
 import { setSeminaryActivity as doSetSeminaryActivity } from '@/systems/seminaryWeek';
 import { setStudyActivity as doSetStudyActivity } from '@/systems/studyWeek';
 import { hoursOf } from '@/systems/week';
@@ -142,6 +145,10 @@ export interface GameStore {
   furnish(place: DecorPlace, optionId: string): void;
   /** Write to the chancery for leave on a liturgical topic. */
   petition(topic: LiturgicalTopic): void;
+  setHomily(topic: string): void;
+  letGo(npcId: string): void;
+  hire(candidateId: string): void;
+  goAway(placeId: string): void;
   lastFurnishLine: string | null;
 
   /** The skinning layer. Off by default; the game is complete without it. */
@@ -509,6 +516,18 @@ export const useGameStore = create<GameStore>()((set, get) => ({
       set({ lastFurnishLine: r.line });
       return r.state;
     });
+  },
+  setHomily(topic) {
+    update(set, get, (game) => doSetHomily(game, topic));
+  },
+  letGo(npcId) {
+    update(set, get, (game) => doLetGo(game, npcId));
+  },
+  hire(candidateId) {
+    update(set, get, (game) => doHire(game, candidateId));
+  },
+  goAway(placeId) {
+    update(set, get, (game) => doGoAway(game, placeId));
   },
   petition(topic) {
     update(set, get, (game, r) => {

@@ -2,6 +2,7 @@ import { withLiturgy } from '@/systems/liturgy';
 import type { DiocesePreset, HomeTerrain, Npc, Parish, ParishKind, SchoolStatus } from '@/types';
 import type { Rng } from '@/engine/rng';
 import { CLERGY_HERITAGE, eraForBirthYear, rollHeritage, rollMaleName } from './names';
+import { patronalOf } from './patronal';
 import { addStats, finishNpc, rollAlignment, rollBaseStats } from './npc';
 
 interface KindShape {
@@ -119,12 +120,14 @@ export function generateParish(rng: Rng, preset: DiocesePreset, seed: DiocesePre
     relationship: 0,
   });
 
+  const name = seed.real?.name ?? rng.pick(seed.patrons);
   const parish: Parish = {
     id,
-    name: seed.real?.name ?? rng.pick(seed.patrons),
+    name,
     place: seed.real?.place ?? rng.pick(seed.places),
     ...(seed.real ? { founded: seed.real.founded } : {}),
     kind: seed.kind,
+    patronal: patronalOf(name, id),
     terrain: seed.cathedral ? 'urban' : shape.terrain,
     households: seed.cathedral ? Math.max(households, 2400) : households,
     wealth: seed.cathedral ? 5 : wealth,
@@ -176,7 +179,8 @@ export function generateParishes(rng: Rng, preset: DiocesePreset, year: number):
   return preset.parishSeeds.map((seed, i) => {
     let made = generateParish(rng, preset, seed, i, year);
     for (let tries = 0; !seed.real && taken.has(`${made.parish.name}|${made.parish.place}`) && tries < 6; tries++) {
-      made = { ...made, parish: { ...made.parish, name: rng.pick(seed.patrons), place: rng.pick(seed.places) } };
+      const renamed = rng.pick(seed.patrons);
+      made = { ...made, parish: { ...made.parish, name: renamed, place: rng.pick(seed.places), patronal: patronalOf(renamed, made.parish.id) } };
     }
     taken.add(`${made.parish.name}|${made.parish.place}`);
     return { ...made, parish: withLiturgy(rng.derive(`mass:${made.parish.id}`), made.parish) };

@@ -1,0 +1,544 @@
+{
+  "_notes": "Deanery pool: the dean and the priests of the neighboring parishes. Reads the engine flags deanery:member (always true in a parish), deanery:cover (a standing trade of cover with a neighbor), deanery:rival (a deanery priest is up for the same opening), deanery:dean (the player is the dean). Ids prefixed dn_. All three parish roles; the dean-as-you scene is pastor only. Flags defined here: dn_spoke_at_meeting, dn_backed_the_critic, dn_took_dean_aside, dn_covered_the_month, dn_asked_why, dn_refused_cover, dn_told_the_dean, dn_kept_the_mass, dn_trimmed_the_mass, dn_asked_dean_in_writing, dn_rival_congratulated, dn_rival_undercut, dn_preached_the_funeral, dn_funeral_declined, dn_penance_covered, dn_penance_named, dn_carried_complaint, dn_buried_complaint, dn_took_the_closing_people, dn_closing_shared. @deanery_priest is one priest drawn per scene.",
+  "events": [
+    {
+      "id": "dn_monthly_meeting",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["loyalty_vs_honesty", "friendship_vs_duty"],
+      "severity": "NOTABLE",
+      "category": "group",
+      "baseWeight": 12,
+      "suppressYears": 2,
+      "requires": [{ "type": "flag", "key": "deanery:member", "value": true }],
+      "title": "Second Tuesday",
+      "body": "The deanery meets on the second Tuesday at whichever rectory has the biggest table, which this month is {@dean}'s. The agenda is the agenda it always is: the confirmation schedule, the Catholic Charities appeal, a diocesan policy on facility rentals nobody has read. Eleven priests around a table, two of them asleep with their eyes open. Then {@deanery_priest} says he has an item not on the list. He wants the deanery to say something, as a body, about the bishop: the reassignments in May were done without a word to anyone, three men moved in a week, one of them out of a parish he had rebuilt with his hands. He is not wrong about the facts. He is angry in the way of a man who has been rehearsing in the car. {@dean} says nothing. He looks at the agenda, and then at the window, and lets the silence run to the point where it becomes an answer. Every man at the table knows the dean's minutes go to the chancery. Every man knows {@deanery_priest} knows it. He looks at you, because you are the one who has not yet looked at the table.",
+      "flavorPrompt": "A rectory dining room, eleven priests, a dean who answers with silence, one man who wants the minutes to say something.",
+      "choices": [
+        {
+          "id": "look_at_the_agenda",
+          "label": "Look at the agenda with everyone else",
+          "outcome": "The silence holds. {@deanery_priest} says, \"Fine,\" and the confirmation schedule resumes. In the parking lot he does not speak to you, and the next month he sits at the far end. {@dean} nods to you on the way out, the nod of a man who noticed. The minutes record that the deanery discussed the confirmation schedule.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": 2 },
+            { "target": "reputation", "key": "brother_priests", "delta": -3 },
+            { "target": "relationship", "key": "@deanery_priest", "delta": -6 },
+            { "target": "honesty", "key": "", "delta": -1 }
+          ]
+        },
+        {
+          "id": "send_it_to_the_council",
+          "label": "Say the facts are right and the body is wrong: this belongs to the presbyteral council",
+          "outcome": "You say it plainly: the moves were badly done, a deanery letter would be read in the chancery as a faction, and the place for it is the council, where he has a vote and you will second him. {@deanery_priest} does not like it and cannot argue it. {@dean} says, \"That's the item, then,\" and writes something, and later you learn that what he wrote was fair.",
+          "effects": [
+            { "target": "reputation", "key": "brother_priests", "delta": 3 },
+            { "target": "reputation", "key": "chancery", "delta": 1 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "relationship", "key": "@deanery_priest", "delta": 2 },
+            { "target": "relationship", "key": "@dean", "delta": 4 },
+            { "target": "flag", "key": "dn_spoke_at_meeting", "value": true }
+          ]
+        },
+        {
+          "id": "second_him",
+          "label": "Second him. Say the deanery should write",
+          "outcome": "You say the deanery should write, and say why, and for a moment the table shifts. Two men agree; the rest look at {@dean}, who says he will take it under advisement, which means no. The letter is never written. Your name is in the minutes as having proposed it, and the minutes go where they go. {@deanery_priest} buys you lunch.",
+          "effects": [
+            { "target": "reputation", "key": "brother_priests", "delta": 5 },
+            { "target": "reputation", "key": "chancery", "delta": -5 },
+            { "target": "relationship", "key": "@deanery_priest", "delta": 8 },
+            { "target": "outspokenness", "key": "", "delta": 4 },
+            { "target": "flag", "key": "dn_backed_the_critic", "value": true }
+          ],
+          "volume": "semi_public",
+          "positionTopic": "bishop_conduct",
+          "positionValue": 40
+        },
+        {
+          "id": "kitchen_afterward",
+          "label": "Say nothing at the table, and find {@dean} in the kitchen afterward",
+          "requires": [{ "type": "stat", "key": "charisma", "op": ">=", "value": 45 }],
+          "outcome": "Over the dishes you tell the dean he could have said one sentence and saved the man's face. He dries a glass for a while. He says the sentence he did not say would have been in the vicar general's inbox by nine, and that he has protected {@deanery_priest} from himself before and is tired of it. It is the most he has ever said to you.",
+          "effects": [
+            { "target": "relationship", "key": "@dean", "delta": 8 },
+            { "target": "stat", "key": "knowledge", "delta": 1 },
+            { "target": "flag", "key": "dn_took_dean_aside", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dn_cover_a_month",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["friendship_vs_duty", "body_vs_vow"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 11,
+      "suppressYears": 2,
+      "requires": [{ "type": "flag", "key": "deanery:member", "value": true }],
+      "bias": [{ "when": { "type": "flag", "key": "deanery:cover", "value": true }, "multiplier": 1.5 }],
+      "title": "A Month of Sundays",
+      "body": "{@deanery_priest} calls on a Monday, which is when priests call each other, and asks whether you could take his weekend Masses for a month. Not a weekend. A month. He has the weekdays covered, he says, by a retired priest who cannot do stairs; it is the Saturday five and the two Sunday mornings, and there is a wedding on the third weekend he would like you to take as well if you could. He does not say where he is going. He does not say he is going anywhere. His voice is steady in the particular way of a voice that has been made steady. You have known him four years, across the table at deanery meetings, and once at a funeral where he was the only other priest who stayed for the lunch. His parish is nine miles from {parish}. You have your own Masses, and a parish that expects to see you, and whatever else is on the calendar. The obvious question sits in the phone line between you and he can hear you not asking it. \"I'd owe you,\" he says, which is not an answer, and which is, in a diocese, a currency.",
+      "flavorPrompt": "A phone call between priests, a favor asked without a reason, the question not asked.",
+      "choices": [
+        {
+          "id": "yes_no_questions",
+          "label": "Say yes and do not ask",
+          "outcome": "You take the Masses. His people are kind and puzzled, and one of them asks you in the vestibule whether Father is all right, and you say you are sure he is, which you are not. He comes back in the fifth week with no explanation and a haircut and says Mass as though nothing happened. He owes you, and both of you know it, and neither of you says it again.",
+          "effects": [
+            { "target": "reputation", "key": "brother_priests", "delta": 5 },
+            { "target": "relationship", "key": "@deanery_priest", "delta": 10 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "flag", "key": "dn_covered_the_month", "value": true }
+          ]
+        },
+        {
+          "id": "yes_and_ask",
+          "label": "Say yes, and then ask him where he will be",
+          "outcome": "He tells you, because you asked after saying yes and not before, and what he tells you is a thing a man tells one other man. You keep it. You take the Masses. When he comes back he is a different weight, and he stops by {parish} on a Tuesday with nothing to say and stays an hour.",
+          "effects": [
+            { "target": "relationship", "key": "@deanery_priest", "delta": 12 },
+            { "target": "reputation", "key": "brother_priests", "delta": 3 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "flag", "key": "dn_covered_the_month", "value": true },
+            { "target": "flag", "key": "dn_asked_why", "value": true }
+          ]
+        },
+        {
+          "id": "cannot_carry_it",
+          "label": "Say you cannot carry a month, and offer two weekends",
+          "outcome": "You say it is too much with what you have and offer two of the four weekends, and he says no, thank you, he will find someone, in a voice that has closed. He finds someone. At the next deanery meeting he sits where he always sits and is courteous, and you understand that a door you did not know was open has shut.",
+          "effects": [
+            { "target": "relationship", "key": "@deanery_priest", "delta": -8 },
+            { "target": "reputation", "key": "brother_priests", "delta": -3 },
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "flag", "key": "dn_refused_cover", "value": true }
+          ]
+        },
+        {
+          "id": "yes_and_tell_dean",
+          "label": "Say yes, and mention it to {@dean}",
+          "outcome": "You cover, and you tell the dean, because a priest gone a month is the dean's business whether he wants it or not. The dean already knew. He says so, and says you were right to tell him, and something in how he says it makes you wonder whether {@deanery_priest} will hear that you did. He does.",
+          "effects": [
+            { "target": "relationship", "key": "@dean", "delta": 6 },
+            { "target": "reputation", "key": "chancery", "delta": 2 },
+            { "target": "relationship", "key": "@deanery_priest", "delta": -4 },
+            { "target": "flag", "key": "dn_covered_the_month", "value": true },
+            { "target": "flag", "key": "dn_told_the_dean", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dn_deans_call",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["belief_vs_safety", "ambition_vs_integrity"],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 12,
+      "suppressYears": 2,
+      "requires": [
+        { "type": "flag", "key": "deanery:member", "value": true },
+        { "type": "weeks_served", "op": ">=", "value": 26 },
+        {
+          "type": "any",
+          "inner": [
+            { "type": "flag", "key": "can_celebrate_tlm", "value": true },
+            { "type": "flag", "key": "ho_older_mass_public", "value": true },
+            { "type": "liturgy", "key": "language", "value": "latin_ordinary" },
+            { "type": "liturgy", "key": "music", "value": "chant" }
+          ]
+        }
+      ],
+      "title": "As a Friend",
+      "body": "{@dean} calls on a Thursday evening, which he does not do, and begins by asking how you are, which he does not do either. Then he gets to it. Someone in the deanery has mentioned to him, and he wants to stress that this is as a friend, that {parish} has become a place people drive to. The Latin, or the chant, or the Mass in the older form, whichever it was the man from the next parish said over lunch. Two families from that parish are now yours. The dean is not calling to tell you to stop anything. He says this twice. He is calling to say that the deanery is a small place and the presbyterate is smaller, and that a priest who is talked about in the rectories is talked about eventually in the chancery, and that he would rather you heard it from him than read it in a letter. He does not say who spoke. He does not say what the bishop thinks. He asks whether you have considered moving the thing to a weekday, or to a later hour, or, he says, and there is a pause, whether it needs to be in the bulletin at all. He is being kind. It is the kindest warning you will get.",
+      "flavorPrompt": "A dean's phone call, a warning dressed as a favor, nothing said about the bishop.",
+      "choices": [
+        {
+          "id": "change_nothing",
+          "label": "Thank him and change nothing",
+          "outcome": "You thank him, honestly, and say the Mass is licit and the people who come are the parish's people now, and that you will put nothing in a corner. He says he expected that. The call ends warmly. Two months later a letter comes from the chancery about something else, with a paragraph at the end about the deanery's concern, and you know what the paragraph is.",
+          "effects": [
+            { "target": "reputation", "key": "traditional_bloc", "delta": 5 },
+            { "target": "reputation", "key": "chancery", "delta": -4 },
+            { "target": "reputation", "key": "brother_priests", "delta": -2 },
+            { "target": "outspokenness", "key": "", "delta": 4 },
+            { "target": "flag", "key": "dn_kept_the_mass", "value": true }
+          ],
+          "volume": "semi_public",
+          "positionTopic": "tlm",
+          "positionValue": -50
+        },
+        {
+          "id": "move_it",
+          "label": "Move it to a weekday and out of the bulletin",
+          "outcome": "You move it. Attendance falls by half and the half that stays is the half that would drive anywhere. The two families from the next parish go home. The dean does not mention it again, which is his thanks. The man who spoke over lunch nods to you at the next meeting as though you had done him a service, and you have.",
+          "effects": [
+            { "target": "reputation", "key": "traditional_bloc", "delta": -5 },
+            { "target": "reputation", "key": "chancery", "delta": 3 },
+            { "target": "reputation", "key": "brother_priests", "delta": 3 },
+            { "target": "reputation", "key": "parishioners", "delta": -2 },
+            { "target": "flag", "key": "dn_trimmed_the_mass", "value": true }
+          ]
+        },
+        {
+          "id": "ask_for_a_letter",
+          "label": "Ask him to put the concern in writing, from whoever has it",
+          "requires": [{ "type": "stat", "key": "knowledge", "op": ">=", "value": 50 }],
+          "outcome": "You say, gently, that a concern about a licit Mass ought to have a name on it, and that if the bishop has a view you would be glad of a letter. There is a long pause. He says he will pass that along. No letter comes. The Mass goes on. At the next meeting {@deanery_priest} does not sit near you and the dean is exactly as friendly as before, which is how you learn what a dean's friendship is.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": -2 },
+            { "target": "reputation", "key": "brother_priests", "delta": -3 },
+            { "target": "reputation", "key": "traditional_bloc", "delta": 3 },
+            { "target": "relationship", "key": "@dean", "delta": -4 },
+            { "target": "stat", "key": "knowledge", "delta": 1 },
+            { "target": "honesty", "key": "", "delta": 1 },
+            { "target": "flag", "key": "dn_asked_dean_in_writing", "value": true }
+          ]
+        },
+        {
+          "id": "see_the_neighbor",
+          "label": "Drive to the next parish and talk to the man who said it",
+          "outcome": "You go, unannounced, at lunch. {@deanery_priest} is embarrassed and then is not, and says what he thinks over a sandwich, which is that his parish is dying and yours is taking the people who would have kept it alive. It is not about Latin. You have no answer. You stay for coffee. The Mass continues; the two families stay; you say the early Mass at his parish one Sunday a month without being asked.",
+          "effects": [
+            { "target": "relationship", "key": "@deanery_priest", "delta": 8 },
+            { "target": "reputation", "key": "brother_priests", "delta": 4 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "stat", "key": "piety", "delta": 1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dn_rival_chrism",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["ambition_vs_integrity", "friendship_vs_duty"],
+      "severity": "NOTABLE",
+      "category": "assignment",
+      "baseWeight": 14,
+      "suppressYears": 2,
+      "requires": [
+        { "type": "flag", "key": "deanery:rival", "value": true },
+        { "type": "any", "inner": [{ "type": "season", "value": "lent" }, { "type": "season", "value": "holy_week" }] }
+      ],
+      "title": "The Chrism Mass",
+      "body": "The Chrism Mass is the one morning of the year the whole presbyterate is in one place, vested, in rows, renewing promises in unison, and afterward standing in the cathedral hall with coffee while the bishop moves through the room like weather. {@deanery_priest} finds you by the urns. You both know why. The opening everyone has heard about, the one you have wanted since you understood you could want things, has two names being said in the chancery and one of them is his. He is a good priest. That is the difficulty. He is four years ahead of you, and he has done nothing wrong, and his parish sends more men to the seminary than yours. He asks how Holy Week is shaping up. He asks whether the bishop has spoken to you. He says, lightly, that he hears the vicar for clergy is leaning toward the younger man and that he would understand. He is looking at you the whole time with a face you cannot read, and you realize that he is doing to you exactly what you would be doing to him, and that neither of you is any good at it. The bishop is three groups away and closing.",
+      "flavorPrompt": "Two priests at the coffee urns after the Chrism Mass, a rivalry neither is good at, the bishop approaching.",
+      "choices": [
+        {
+          "id": "hope_he_gets_it",
+          "label": "Tell him you hope he gets it, and mean it enough",
+          "outcome": "You say it and he looks at you for a moment to see whether you mean it, and decides you nearly do, and says the same back. When the bishop reaches you he speaks to you both together and about neither thing. Whoever gets the parish, you will still be able to sit at the same table on the second Tuesday, which is worth what it is worth.",
+          "effects": [
+            { "target": "reputation", "key": "brother_priests", "delta": 4 },
+            { "target": "relationship", "key": "@deanery_priest", "delta": 8 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "flag", "key": "dn_rival_congratulated", "value": true }
+          ]
+        },
+        {
+          "id": "make_your_case",
+          "label": "Steer the bishop to you when he arrives",
+          "outcome": "When the bishop reaches you, you say the one thing about {parish} you have been saving, briefly, well, in front of {@deanery_priest}, and the bishop hears it and remembers it, which was the purpose. {@deanery_priest} says nothing and refills his coffee. He does not sit near you on the second Tuesday, and the deanery, which watches everything, notes who moved.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": 4 },
+            { "target": "reputation", "key": "brother_priests", "delta": -4 },
+            { "target": "relationship", "key": "@deanery_priest", "delta": -10 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "flag", "key": "dn_rival_undercut", "value": true }
+          ]
+        },
+        {
+          "id": "praise_his_parish",
+          "label": "When the bishop comes, speak well of {@deanery_priest}'s parish first",
+          "outcome": "You do it, and it is true, and the bishop looks at {@deanery_priest} and then at you, and you cannot tell what he has concluded. {@deanery_priest} drives home not knowing what you have done to him, and neither do you. It was either the most generous thing you did that year or the cleverest, and the presbyterate will decide which.",
+          "effects": [
+            { "target": "reputation", "key": "brother_priests", "delta": 6 },
+            { "target": "relationship", "key": "@deanery_priest", "delta": 6 },
+            { "target": "reputation", "key": "chancery", "delta": 1 },
+            { "target": "honesty", "key": "", "delta": 1 }
+          ]
+        },
+        {
+          "id": "pack_the_oils",
+          "label": "Take your coffee to the sacristy and let the room do without you",
+          "outcome": "You do not stand near the bishop. You help the master of ceremonies pack the oils. Nobody notices that you are not in the room but {@deanery_priest}, who notices everything that morning, and who understands it either as contempt or as grace. The vicar for clergy notes that you were not seen.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": -2 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "reputation", "key": "brother_priests", "delta": 1 },
+            { "target": "relationship", "key": "@deanery_priest", "delta": 2 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dn_sudden_death",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["doubt", "competence"],
+      "severity": "MAJOR",
+      "category": "personal",
+      "baseWeight": 9,
+      "suppressYears": 2,
+      "once": true,
+      "requires": [
+        { "type": "flag", "key": "deanery:member", "value": true },
+        { "type": "years_ordained", "op": ">=", "value": 2 }
+      ],
+      "title": "Preaching a Brother",
+      "body": "{@deanery_priest} died on a Wednesday, in the sacristy after the morning Mass, with the alb half off; the sacristan found him. He was fifty-eight. There was nothing anyone could have done, and everyone in the deanery is saying so to each other on the phone, which is how priests grieve. {@dean} calls you that night. The bishop will celebrate the funeral, in the man's own church, on Monday. The dean has to choose a preacher, and the man had no brother priest who was a friend the way some men do, and his classmates are scattered or dead, and the dean has decided it should be you. He does not say why. Perhaps because you were seen at the last meeting to laugh at something he said; perhaps because you are the one the dean thinks can stand up in front of the bishop and the presbyterate and the parish and say something true about a priest nobody knew well. You have four days. You know him the way you know a man you have sat across from forty times: his coffee, his opinions on the Charities appeal, the way he came to every penance service and heard confessions until the last one left. That is what you have.",
+      "flavorPrompt": "A priest's sudden death, a dean's phone call, four days to preach a man you barely knew in front of the men who knew him less.",
+      "choices": [
+        {
+          "id": "preach_what_you_know",
+          "label": "Preach what you know: a man who stayed until the last confession",
+          "outcome": "You preach for nine minutes, and you preach the penance services and the coffee and the Charities appeal, and you say that a priest can be known entirely by whether he stays, and that he stayed. The bishop looks at you once during it. Afterward priests you have never spoken to shake your hand without saying anything. His parish sends you a card signed by four hundred people.",
+          "effects": [
+            { "target": "reputation", "key": "brother_priests", "delta": 8 },
+            { "target": "reputation", "key": "chancery", "delta": 3 },
+            { "target": "stat", "key": "charisma", "delta": 2 },
+            { "target": "stat", "key": "piety", "delta": 2 },
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "flag", "key": "dn_preached_the_funeral", "value": true }
+          ]
+        },
+        {
+          "id": "preach_the_office",
+          "label": "Preach the priesthood, and let the man be an instance of it",
+          "outcome": "You preach well and safely, on the dignity of the office and the promise of the resurrection, and it is a homily that could have been given for any priest. The bishop nods. The presbyterate approves. His sacristan, at the door, thanks you and asks whether you had known Father long, and you understand what she is telling you.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": 4 },
+            { "target": "reputation", "key": "brother_priests", "delta": 3 },
+            { "target": "stat", "key": "theology", "delta": 1 },
+            { "target": "reputation", "key": "parishioners", "delta": 1 },
+            { "target": "flag", "key": "dn_preached_the_funeral", "value": true }
+          ]
+        },
+        {
+          "id": "the_dean_should",
+          "label": "Tell {@dean} it should be him, and say why",
+          "outcome": "You say the dean sat across from the man for eleven years and you for four, and that the deanery should hear its dean. He is quiet. He says he asked you because he did not think he could get through it, and then he says he will do it. He preaches badly and honestly and weeps once, and it is the funeral the man deserved. The dean does not forget that you made him.",
+          "effects": [
+            { "target": "relationship", "key": "@dean", "delta": 10 },
+            { "target": "reputation", "key": "brother_priests", "delta": 3 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "flag", "key": "dn_funeral_declined", "value": true }
+          ]
+        },
+        {
+          "id": "concelebrate_only",
+          "label": "Say you did not know him well enough, and offer to concelebrate",
+          "outcome": "The dean accepts it without argument, which is how you know he had a second name. A monsignor from the cathedral preaches, competently, about a man he had met twice. You concelebrate in the third row. You watch the sacristan in the front pew and think about what you could have said.",
+          "effects": [
+            { "target": "reputation", "key": "brother_priests", "delta": -3 },
+            { "target": "relationship", "key": "@dean", "delta": -4 },
+            { "target": "stat", "key": "piety", "delta": -1 },
+            { "target": "flag", "key": "dn_funeral_declined", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dn_advent_penance",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["friendship_vs_duty", "loyalty_vs_honesty"],
+      "severity": "NOTABLE",
+      "category": "group",
+      "baseWeight": 12,
+      "suppressYears": 2,
+      "requires": [
+        { "type": "flag", "key": "deanery:member", "value": true },
+        { "type": "season", "value": "advent" }
+      ],
+      "title": "The Deanery Penance Service",
+      "body": "The deanery's Advent penance service rotates, and this year it is at {parish}: a Wednesday evening in the third week, seven confessors promised, the church full of people who go once a year and have saved a great deal for it. {@dean} arrives early and takes the confessional by the sacristy, as he always does. Two more come on time. At seven, when you stand at the ambo to begin, there are four priests where there should be seven, and one of the missing is {@deanery_priest}, who said at the meeting, in front of everyone, that he would be here. His parish is twelve minutes away. His phone goes to voicemail. The examination of conscience is read; the lines form; they are long. By eight-thirty the dean has heard forty and looks it, and the line at the empty station has been folded into yours, and a woman who has been standing an hour asks the usher whether the priests are leaving soon. The people will not remember that {@deanery_priest} was not here. The priests will. In the sacristy at ten, unvesting, {@dean} says, to no one, \"Three men short,\" and looks at you, because it was your church and your list.",
+      "flavorPrompt": "A penance service with lines out the door and confessors who did not come, a dean counting heads at ten at night.",
+      "choices": [
+        {
+          "id": "hear_until_done",
+          "label": "Hear confessions until the last one, and say nothing about who came",
+          "outcome": "You hear until ten-fifteen. The dean stays with you, and the two others, and nobody speaks in the sacristy afterward except to say goodnight. You do not mention {@deanery_priest} to anyone. He mentions it himself, at the next meeting, with an excuse that may be true, and thanks you in front of the table, which costs him.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 4 },
+            { "target": "stat", "key": "piety", "delta": 2 },
+            { "target": "reputation", "key": "brother_priests", "delta": 3 },
+            { "target": "relationship", "key": "@deanery_priest", "delta": 4 },
+            { "target": "flag", "key": "dn_penance_covered", "value": true }
+          ]
+        },
+        {
+          "id": "name_it",
+          "label": "Name it at the next deanery meeting",
+          "outcome": "You say, at the table, that three men promised and did not come and that the people stood in line for an hour, and you say {@deanery_priest}'s name because he was the one who promised aloud. The table goes still. He apologizes, tightly. The dean says nothing, which this time is agreement. Two of the missing come next year. {@deanery_priest} does not sit near you again.",
+          "effects": [
+            { "target": "reputation", "key": "brother_priests", "delta": -4 },
+            { "target": "relationship", "key": "@deanery_priest", "delta": -10 },
+            { "target": "relationship", "key": "@dean", "delta": 4 },
+            { "target": "honesty", "key": "", "delta": 2 },
+            { "target": "outspokenness", "key": "", "delta": 3 },
+            { "target": "flag", "key": "dn_penance_named", "value": true }
+          ]
+        },
+        {
+          "id": "call_him_at_ten",
+          "label": "Call him from the sacristy at ten and ask if he is all right",
+          "outcome": "He answers on the sixth ring. He is at home. He says he forgot, and then, after a silence, that he did not forget. You do not ask what that means. You say the lines were long and the dean is tired and that you will see him Tuesday. He is there Tuesday, early, and takes a confessional at the next parish's service without being asked.",
+          "effects": [
+            { "target": "relationship", "key": "@deanery_priest", "delta": 8 },
+            { "target": "reputation", "key": "brother_priests", "delta": 2 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "stat", "key": "piety", "delta": 1 }
+          ]
+        },
+        {
+          "id": "deans_phone_call",
+          "label": "Tell {@dean}, in the sacristy, that it is the dean's phone call and not yours",
+          "outcome": "You say it is his deanery and his list and that you have heard forty confessions and would like to go to bed. He looks at you and nods and makes the call the next morning, and whatever he says works, because {@deanery_priest} is at every service after that. The dean treats you afterward as a man who knows what a dean is for.",
+          "effects": [
+            { "target": "relationship", "key": "@dean", "delta": 6 },
+            { "target": "stat", "key": "administration", "delta": 1 },
+            { "target": "reputation", "key": "brother_priests", "delta": 1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dn_dean_complaint",
+      "phase": ["pastor"],
+      "pressure": ["loyalty_vs_honesty", "friendship_vs_duty"],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 12,
+      "suppressYears": 2,
+      "requires": [
+        { "type": "flag", "key": "deanery:dean", "value": true },
+        { "type": "role", "value": "pastor" }
+      ],
+      "title": "The Dean's Errand",
+      "body": "Being dean means the phone rings with things that are not yours. This one is a letter, forwarded from {@vicar_for_clergy} with a note that says only \"Yours, I think,\" and under it three pages from a parish council member at {@deanery_priest}'s parish. The complaint is specific. The parish's finance council has not met in fourteen months. The collection counts are done by the pastor alone, in the rectory, on Sunday afternoon. The second collection for the missions was, the writer believes, never sent. There are no numbers attached and there is no accusation, only the shape of one. You know {@deanery_priest}. He is disorganized and tired and has run that parish alone for nine years without a secretary who lasted, and you have never for one moment thought him dishonest. You have also never seen his books. The chancery wants the dean to \"look into it and advise,\" which means the chancery wants to know whether this is a letter it can file or a letter it will regret filing. Whatever you write will be read by the vicar for clergy, and then by the bishop, and then, if it goes badly, by a lawyer. {@deanery_priest} does not know the letter exists.",
+      "flavorPrompt": "A dean holding a letter about a neighbor's books, a chancery that wants to know whether to file it, a friend who does not know it exists.",
+      "choices": [
+        {
+          "id": "go_and_look",
+          "label": "Drive over, tell him about the letter, and ask to see the books",
+          "outcome": "You tell him at his kitchen table with the letter in front of him. He goes white and then red and then gets the ledger. It is a mess and it is honest; the missions money went, late, in the wrong envelope, in March. You write that to the chancery in one page with the receipts attached. He does not thank you for a month. Then he does, once, badly, and it holds.",
+          "effects": [
+            { "target": "relationship", "key": "@deanery_priest", "delta": 6 },
+            { "target": "reputation", "key": "chancery", "delta": 5 },
+            { "target": "stat", "key": "administration", "delta": 2 },
+            { "target": "honesty", "key": "", "delta": 1 },
+            { "target": "reputation", "key": "brother_priests", "delta": 2 },
+            { "target": "flag", "key": "dn_carried_complaint", "value": true }
+          ]
+        },
+        {
+          "id": "write_it_up",
+          "label": "Write what the letter says and what you know, and let the chancery decide",
+          "outcome": "You send a fair summary: the complaint, the man's history, your own opinion that he is honest and overwhelmed. The chancery sends an auditor. The books are honest, and the auditor's visit is known in the parish by nightfall, and {@deanery_priest} learns from the auditor whose signature was on the referral. He is cleared. He does not come to the deanery meeting for three months.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": 6 },
+            { "target": "reputation", "key": "brother_priests", "delta": -5 },
+            { "target": "relationship", "key": "@deanery_priest", "delta": -10 },
+            { "target": "stat", "key": "administration", "delta": 1 },
+            { "target": "flag", "key": "dn_carried_complaint", "value": true }
+          ]
+        },
+        {
+          "id": "handle_it_yourself",
+          "label": "Write back that the deanery will handle it, and handle it with a phone call",
+          "outcome": "You call him, say a finance council has to meet and that you will sit in on the first one, and you do. The chancery gets a note that the matter is in hand. It is, for now. If the writer of the letter writes again, it will go over your head, and your name will be on the first reply.",
+          "effects": [
+            { "target": "relationship", "key": "@deanery_priest", "delta": 8 },
+            { "target": "reputation", "key": "brother_priests", "delta": 4 },
+            { "target": "reputation", "key": "chancery", "delta": -3 },
+            { "target": "flag", "key": "dn_buried_complaint", "value": true }
+          ]
+        },
+        {
+          "id": "send_it_back",
+          "label": "Tell {@vicar_for_clergy} this is the finance office's job, not the deanery's",
+          "outcome": "You write that a question about money is a question for the finance office, and that a dean who audits his neighbors will not be a dean anyone talks to. The vicar for clergy calls, unamused, and then, after a while, amused. The finance office goes. {@deanery_priest} never learns you had it first. You have told the chancery what a dean is not for, and it will remember.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": -4 },
+            { "target": "reputation", "key": "brother_priests", "delta": 3 },
+            { "target": "relationship", "key": "@vicar_for_clergy", "delta": -4 },
+            { "target": "stat", "key": "administration", "delta": 1 },
+            { "target": "outspokenness", "key": "", "delta": 2 }
+          ],
+          "volume": "private",
+          "positionTopic": "authority",
+          "positionValue": 30
+        }
+      ]
+    },
+    {
+      "id": "dn_parish_closing",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["money", "competence"],
+      "severity": "NOTABLE",
+      "category": "admin",
+      "baseWeight": 10,
+      "suppressYears": 2,
+      "once": true,
+      "requires": [
+        { "type": "flag", "key": "deanery:member", "value": true },
+        { "type": "weeks_served", "op": ">=", "value": 52 }
+      ],
+      "bias": [
+        { "when": { "type": "parish", "key": "kind", "value": "flagship_suburban" }, "multiplier": 1.4 },
+        { "when": { "type": "parish", "key": "kind", "value": "rural" }, "multiplier": 1.3 }
+      ],
+      "title": "The Next Parish Over",
+      "body": "The chancery announced it in a letter read at all the Masses on the same Sunday: {@deanery_priest}'s parish, nine miles away and a hundred and ten years old, will be merged into {parish} effective the first of July. The building will be kept for now as a chapel with no scheduled Masses, which everyone understands to mean it will be sold. {@deanery_priest} is to be reassigned. He read the letter himself, at his own Masses, and did not add anything, and the people came out of the church and stood in the lot as if waiting for a correction. Now it is the second Sunday of July and they are here. Perhaps forty families, in the back pews of the ten-thirty, sitting together, standing when your people kneel, singing their own parish's setting of the Gloria a half-beat off yours. They have brought their pastoral council chair, who wants a meeting. They have brought their Altar Society, who want to know where their vestments are. They have brought a bronze plaque with the names of their dead. {@secretary} says the phone has not stopped. Your own people, who did not ask for any of this, have noticed that the parking lot is full and that the newcomers took the pew the Hendersons have used since 1971.",
+      "flavorPrompt": "A merged parish's people in the back pews, a plaque of their dead, a full parking lot nobody asked for.",
+      "choices": [
+        {
+          "id": "give_them_a_wall",
+          "label": "Give them the plaque wall, their Gloria once a month, and two seats on the council",
+          "outcome": "You hang the plaque in the narthex beside your own, sing their Gloria the first Sunday of each month, and add two seats to the pastoral council. Half of your people think it is right and the other half think you have given the parish away. The forty families stay. By Advent it is one parish with two memories, which is the most anyone gets.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "reputation", "key": "chancery", "delta": 4 },
+            { "target": "stat", "key": "administration", "delta": 2 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "flag", "key": "dn_took_the_closing_people", "value": true }
+          ]
+        },
+        {
+          "id": "welcome_and_move_on",
+          "label": "Welcome them from the pulpit and change nothing else",
+          "outcome": "You say it well on Sunday, and it is sincere, and nothing else moves. The plaque goes into the sacristy closet until someone can decide. Their Gloria stops on its own by September. Twenty of the forty families are in the next diocese's parish by Christmas, and the ones who stay do not sit together anymore, which you count as a kind of success and they do not.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 3 },
+            { "target": "reputation", "key": "chancery", "delta": 1 },
+            { "target": "stat", "key": "administration", "delta": 1 },
+            { "target": "reputation", "key": "brother_priests", "delta": -2 }
+          ]
+        },
+        {
+          "id": "one_mass_a_month_there",
+          "label": "Ask the chancery to let you say one Mass a month in their church, with their people",
+          "requires": [{ "type": "any", "inner": [{ "type": "role", "value": "pastor" }, { "type": "role", "value": "administrator" }] }],
+          "outcome": "The chancery says no, and then says yes for a year, on the condition that the bulletin calls it a chapel. You say the first Saturday Mass there with {@deanery_priest}, who drives back for it, and the church is full, and the Altar Society has cleaned it for a week. It postpones what everyone knows is coming. It also means the forty families have two homes, which is one more than most people are allowed.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 4 },
+            { "target": "relationship", "key": "@deanery_priest", "delta": 8 },
+            { "target": "reputation", "key": "chancery", "delta": -3 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "flag", "key": "dn_closing_shared", "value": true }
+          ]
+        },
+        {
+          "id": "have_him_preach",
+          "label": "Ask {@deanery_priest} to come and preach to his own people at your ten-thirty",
+          "outcome": "He comes, the third Sunday, and preaches to the back pews about leaving a place and to the front pews about receiving people who did not choose you. It is the best homily anyone has heard at {parish} in a year, and he says so himself afterward, wryly, in the sacristy. After that the forty families are easier and your people are easier, and he is reassigned to the far end of the diocese and writes at Christmas.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 5 },
+            { "target": "relationship", "key": "@deanery_priest", "delta": 10 },
+            { "target": "reputation", "key": "brother_priests", "delta": 4 },
+            { "target": "stat", "key": "piety", "delta": 1 }
+          ]
+        }
+      ]
+    }
+  ]
+}

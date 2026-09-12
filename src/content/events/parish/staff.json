@@ -1,0 +1,314 @@
+{
+  "_notes": "Staff pool: the four people on the parish payroll (@secretary, @dre, @music_director, @maintenance) and what it is to be their employer as well as their priest. Ids prefixed sf_. A departure is written with { target: 'npc', key: '@dre', value: 'left' }; the engine then shows the vacancy and lets the pastor hire. Reads the engine flags staff:new:<tag> (first half year after a hire), staff:let_go:<tag> (after the pastor lets someone go), staff:let_go_any, staff:vacancy:<tag>. The DRE and music-director scenes are pastor-only because only a pastor can accept a resignation or end a contract; the let-go scenes are pastor and administrator; the rest fire for any of the three roles. Flags defined here (all sf_): sf_dre_program_dropped, sf_dre_left_over_program, sf_dre_stayed_shared, sf_folk_group_kept, sf_folk_group_ended, sf_music_director_let_go, sf_secretary_retired_with_mass, sf_secretary_retired_plain, sf_secretary_stayed_on, sf_new_secretary_trained, sf_new_secretary_left_alone, sf_old_secretary_called_back, sf_maintenance_welcomed_back, sf_maintenance_rehired, sf_maintenance_avoided, sf_firing_explained, sf_firing_unexplained, sf_firing_regretted. Nothing here is sensitive in the §11 sense; the LLM layer may skin all of it.",
+  "events": [
+    {
+      "id": "sf_dre_resigns",
+      "phase": ["pastor"],
+      "pressure": ["loyalty_vs_honesty", "competence"],
+      "severity": "NOTABLE",
+      "category": "admin",
+      "baseWeight": 11,
+      "suppressYears": 4,
+      "once": true,
+      "requires": [{ "type": "role", "value": "pastor" }, { "type": "weeks_served", "op": ">=", "value": 52 }],
+      "bias": [
+        { "when": { "type": "parish", "key": "school", "value": "open" }, "multiplier": 1.3 }
+      ],
+      "title": "The Program",
+      "body": "{@dre} asks for a meeting, which she has never done; she has always simply come in. She has the new program's binder with her, the one the diocese recommended and you approved in June, and she sets it on your desk and does not open it. She has run religious education at {parish} for longer than you have been ordained. She says the new program is fine. She says it the way people say a thing is fine when they have decided to stop arguing about it. It is not that the theology is wrong, she says; it is that it is somebody else's, and that she has spent eleven years building a thing that fit this parish and its families and its particular children, and that she was not asked, only told. She says she has prayed about it since June. She says she is giving notice and will finish the year so the catechists are not left. She is not angry. That is the thing you will remember: she is not angry, and she has a letter in her hand, and she is waiting to see whether you will read it.",
+      "flavorPrompt": "The DRE resigning over a program the pastor approved without asking her; a binder on the desk, unopened, a letter she has not yet handed over.",
+      "choices": [
+        {
+          "id": "accept_the_letter",
+          "label": "Take the letter, thank her for eleven years, and let her finish the year",
+          "outcome": "You read it in front of her. It is two paragraphs and generous. She finishes the year and trains no one, because there is no one yet, and leaves the office cleaner than she found it with the old program's binders labeled on the shelf. The catechists give her a plaque. Half of them do not come back in September, and the new program starts with the new DRE, whoever that is, and a room full of empty chairs.",
+          "effects": [
+            { "target": "npc", "key": "@dre", "value": "left" },
+            { "target": "reputation", "key": "parishioners", "delta": -3 },
+            { "target": "reputation", "key": "chancery", "delta": 2 },
+            { "target": "flag", "key": "sf_dre_left_over_program", "value": true }
+          ]
+        },
+        {
+          "id": "drop_the_program",
+          "label": "Tell her the program was a mistake and hers stays",
+          "outcome": "You say it and mean most of it. She does not hand you the letter; she puts it back in her bag, and you both know it is still there. The diocese's office of catechesis notices at the annual review that {parish} did not adopt the recommended program and writes a courteous note to that effect. Her program runs, and it is good, and it is hers, and every September you sign off on it knowing the note will come again.",
+          "effects": [
+            { "target": "relationship", "key": "@dre", "delta": 10 },
+            { "target": "reputation", "key": "chancery", "delta": -3 },
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "flag", "key": "sf_dre_program_dropped", "value": true }
+          ]
+        },
+        {
+          "id": "ask_her_to_build_it",
+          "label": "Ask her to take the new program apart and rebuild it for this parish",
+          "requires": [{ "type": "stat", "key": "administration", "op": ">=", "value": 45 }],
+          "outcome": "You open the binder yourself and say: keep the spine, change the rest, and tell me what you need. She says that is not how the program is designed to be used. You say that is why you are asking her and not the diocese. It takes her a week to decide and a year to do. What comes out is neither program and better than both, and when the office of catechesis visits they ask whether they can have a copy.",
+          "effects": [
+            { "target": "relationship", "key": "@dre", "delta": 8 },
+            { "target": "stat", "key": "administration", "delta": 2 },
+            { "target": "reputation", "key": "chancery", "delta": 2 },
+            { "target": "flag", "key": "sf_dre_stayed_shared", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sf_music_ultimatum",
+      "phase": ["pastor"],
+      "pressure": ["friendship_vs_duty", "belief_vs_safety"],
+      "severity": "NOTABLE",
+      "category": "admin",
+      "baseWeight": 11,
+      "suppressYears": 4,
+      "once": true,
+      "requires": [{ "type": "role", "value": "pastor" }, { "type": "weeks_served", "op": ">=", "value": 26 }],
+      "title": "Him or the Folk Group",
+      "body": "{@music_director} has been at {parish} through three pastors and has outlasted two of them by not asking for things. He is asking for a thing. The folk group has played the eleven o'clock since before the church was carpeted, four guitars and a flute and a woman with a tambourine who is now eighty-one, and they have never been under him and have never wanted to be. Twice this year they have played a hymn he had removed from the parish list. Last Sunday they played it as the Communion hymn while he sat at the organ with his hands in his lap. He is in your office with his contract, which you did not know he kept a copy of, and he says he is not making a threat, and then he makes it: either the eleven o'clock comes under the music director, all of it, the repertoire and the rehearsals and the tambourine, or he will give notice at Pentecost and go to the cathedral, which has asked him twice. He is very good. The folk group is not, and it is loved, and its members bury one another out of the eleven o'clock a few times a year.",
+      "flavorPrompt": "A gifted music director's ultimatum about a beloved, mediocre folk group; a contract on the desk that the pastor did not know existed.",
+      "choices": [
+        {
+          "id": "give_him_the_eleven",
+          "label": "Put the eleven o'clock under him, and tell the folk group yourself",
+          "outcome": "You tell them after rehearsal on Thursday, all six of them, and the woman with the tambourine says nothing and packs it into its case. Two of the guitars stay and play under him and are better for it. The rest do not, and the eleven o'clock is quieter and more beautiful and a dozen families drift to the nine. {@music_director} does not gloat, which you had not expected, and writes a new setting of the Gloria for the parish's patronal feast, which is the closest he comes to thanks.",
+          "effects": [
+            { "target": "relationship", "key": "@music_director", "delta": 10 },
+            { "target": "reputation", "key": "parishioners", "delta": -4 },
+            { "target": "reputation", "key": "traditional_bloc", "delta": 3 },
+            { "target": "reputation", "key": "progressive_bloc", "delta": -2 },
+            { "target": "flag", "key": "sf_folk_group_ended", "value": true }
+          ],
+          "volume": "semi_public",
+          "positionTopic": "liturgy",
+          "positionValue": -25
+        },
+        {
+          "id": "let_him_go",
+          "label": "Tell him the folk group stays, and that the cathedral is lucky to have him",
+          "outcome": "He is surprised, and then he is not, and he gives notice that afternoon with a courtesy that costs him something. He plays through Pentecost and the last hymn he plays is one the folk group asked for, which is either a gift or a judgment. The cathedral takes him. The eleven o'clock is what it was. The nine o'clock, which he had built, is thin by Advent, and you will be a year finding anyone who can do what he did.",
+          "effects": [
+            { "target": "npc", "key": "@music_director", "value": "left" },
+            { "target": "reputation", "key": "parishioners", "delta": 3 },
+            { "target": "reputation", "key": "progressive_bloc", "delta": 2 },
+            { "target": "reputation", "key": "traditional_bloc", "delta": -3 },
+            { "target": "reputation", "key": "brother_priests", "delta": -1 },
+            { "target": "flag", "key": "sf_music_director_let_go", "value": true },
+            { "target": "flag", "key": "sf_folk_group_kept", "value": true }
+          ]
+        },
+        {
+          "id": "split_the_difference",
+          "label": "Put the repertoire under him and leave the group its rehearsals and its Sunday",
+          "requires": [{ "type": "stat", "key": "charisma", "op": ">=", "value": 50 }],
+          "outcome": "It takes three meetings and one of them is with the tambourine. He gets the list; they keep the eleven and their Thursdays; the hymn he removed does not come back, and one he did not know they loved does. Nobody is happy and everybody stays, which is what a parish mostly is. He does not go to the cathedral. He asks, a year later, whether the folk group would like a bass, and it turns out he means himself.",
+          "effects": [
+            { "target": "relationship", "key": "@music_director", "delta": 4 },
+            { "target": "stat", "key": "charisma", "delta": 2 },
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "flag", "key": "sf_folk_group_kept", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sf_secretary_thirty_years",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["friendship_vs_duty", "money"],
+      "severity": "NOTABLE",
+      "category": "admin",
+      "baseWeight": 10,
+      "suppressYears": 5,
+      "once": true,
+      "requires": [{ "type": "weeks_served", "op": ">=", "value": 78 }],
+      "bias": [
+        { "when": { "type": "parish", "key": "generational", "value": "aging" }, "multiplier": 1.5 }
+      ],
+      "title": "Thirty Years at the Front Desk",
+      "body": "The letter is on your desk when you come in from the eight o'clock, in the middle of the blotter where {@secretary} puts the things she wants you to see before the phone starts. It is typed, which she never does for herself, and signed in the blue pen. Thirty years, it says, at the front desk of {parish}: five pastors, three parochial vicars, two boilers, one fire. She will finish at the end of June. She has trained no one because there has been no one to train, and she says so without complaint. Then there is a second paragraph, and it is the one she typed the letter for. She asks for three things. She would like a Mass said for her husband on the anniversary, every year, for as long as there are priests at {parish} who remember to say it. She would like her name to stay on the office door until the new person comes, because she has seen how fast the parish forgets. And she would like to know, before she goes, whether there is a pension, because in thirty years nobody has ever said, and she has never asked, and she is asking now. She is at her desk on the other side of the wall. The phone has started.",
+      "flavorPrompt": "A secretary's typed resignation after thirty years, and the three things she asks for; the pension question nobody ever answered.",
+      "choices": [
+        {
+          "id": "all_three",
+          "label": "Find out about the pension today, and give her the other two now",
+          "default": true,
+          "outcome": "You go through the wall and say yes to the Mass and the door before she has finished pretending to type. The pension takes a phone call to the diocesan benefits office and the answer is that there is one, small, and that nobody enrolled her in it for the first nine years because nobody enrolled anyone, and that the diocese will, after some letters, make it right. She retires in June with a party in the hall. The anniversary Mass is in the sacristy book in your hand, and in the pastor's after you, if he reads it.",
+          "effects": [
+            { "target": "relationship", "key": "@secretary", "delta": 10 },
+            { "target": "reputation", "key": "parishioners", "delta": 4 },
+            { "target": "stat", "key": "administration", "delta": 1 },
+            { "target": "npc", "key": "@secretary", "value": "left" },
+            { "target": "flag", "key": "sf_secretary_retired_with_mass", "value": true }
+          ]
+        },
+        {
+          "id": "ask_her_to_stay_on",
+          "label": "Ask her to stay one more year and train whoever comes",
+          "requires": [{ "type": "stat", "key": "charisma", "op": ">=", "value": 40 }],
+          "outcome": "She says no, and then she says she will think about it, and then she stays, which is the order she does everything in. The year is a good one; she trains the new person with a severity that the new person will imitate for thirty years of her own. The pension question you answer in the meantime, and it is answered well because there was time. She leaves the following June and the Mass is in the book.",
+          "effects": [
+            { "target": "relationship", "key": "@secretary", "delta": 6 },
+            { "target": "stat", "key": "administration", "delta": 2 },
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "flag", "key": "sf_secretary_stayed_on", "value": true }
+          ]
+        },
+        {
+          "id": "accept_plainly",
+          "label": "Accept the letter, agree to the Mass, and pass the pension question to the chancery",
+          "outcome": "You write a note for the chancery and it goes into the pile that the chancery has of such notes. The Mass is said. The name comes off the door in July because the new person needed the slot for her own, and you did not think to say otherwise. {@secretary} comes to the ten-thirty and sits in the back and does not come to the office, and when the pension is settled, a year on, she hears it from the diocese and not from you.",
+          "effects": [
+            { "target": "relationship", "key": "@secretary", "delta": -4 },
+            { "target": "reputation", "key": "parishioners", "delta": -2 },
+            { "target": "npc", "key": "@secretary", "value": "left" },
+            { "target": "flag", "key": "sf_secretary_retired_plain", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sf_new_secretary_first_month",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["competence", "friendship_vs_duty"],
+      "severity": "ROUTINE",
+      "category": "admin",
+      "baseWeight": 12,
+      "suppressYears": 2,
+      "requires": [{ "type": "flag", "key": "staff:new:secretary", "value": true }],
+      "title": "The First Month at the Desk",
+      "body": "{@secretary} has been at the front desk of {parish} for four weeks and has not yet found where the old secretary kept anything, because the old secretary kept it in her head. The sacramental register has a system that is not the diocesan system and there is no one left to explain it. The funeral home called on Tuesday and was told Father was unavailable when Father was in the next room, because nobody had said which calls come through. The Mass intentions for the week were read for the wrong people, twice, and you found out from the people. On Thursday she is at your door with the parish's second-oldest Mass intention book open in her hands and a face that is trying not to show anything, and she says: Father, I do not know what I do not know, and I would rather you told me now than found out in a year. She is good. You can see that she is good. She is also, at the moment, in a room built by someone else with the lights off, and the phone is going, and the funeral home is on line one.",
+      "flavorPrompt": "A new parish secretary's first month in an office the old one kept in her head; the intention book, the funeral home on line one.",
+      "choices": [
+        {
+          "id": "sit_with_her",
+          "label": "Take Friday afternoon and go through the office together, drawer by drawer",
+          "default": true,
+          "outcome": "It takes the afternoon and most of the evening. You find the intention book's system, the funeral home's real number, the file of the parishioners who are never to be given the rectory line, and a box of Christmas cards from 1994. By Monday the intentions are right. By the end of the month the funeral home is being put through. She keeps a list of the things you told her and adds to it for years, and it becomes, in time, the office manual the parish never had.",
+          "effects": [
+            { "target": "relationship", "key": "@secretary", "delta": 8 },
+            { "target": "stat", "key": "administration", "delta": 2 },
+            { "target": "flag", "key": "sf_new_secretary_trained", "value": true }
+          ]
+        },
+        {
+          "id": "call_the_old_one",
+          "label": "Call the old secretary and ask her to come in for a morning",
+          "outcome": "She comes, because she was waiting to be asked, and in three hours she explains the intention book and the register and the funeral home and the thing about the boiler, and she is gentle with the new woman in a way she never was with you. She does not stay for lunch. {@secretary} is grateful and also, you can see, a little smaller for having needed it, and works twice as hard the following week to make up for a thing that was never her fault.",
+          "effects": [
+            { "target": "relationship", "key": "@secretary", "delta": 3 },
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "flag", "key": "sf_old_secretary_called_back", "value": true }
+          ]
+        },
+        {
+          "id": "let_her_find_it",
+          "label": "Tell her she will find it, and that the parish forgave the last one her first year too",
+          "outcome": "It is true, and it is also the thing you say because Friday is full. She finds most of it. The intentions are wrong twice more, and one of the families does not forget. The funeral home is not put through for another month and you lose a funeral to the parish across town. She is good and she gets there. She gets there alone, and she remembers that.",
+          "effects": [
+            { "target": "relationship", "key": "@secretary", "delta": -3 },
+            { "target": "reputation", "key": "parishioners", "delta": -2 },
+            { "target": "flag", "key": "sf_new_secretary_left_alone", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sf_maintenance_at_the_festival",
+      "phase": ["pastor", "administrator"],
+      "pressure": ["friendship_vs_duty", "loyalty_vs_honesty"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 12,
+      "suppressYears": 3,
+      "once": true,
+      "requires": [{ "type": "flag", "key": "staff:let_go:maintenance", "value": true }],
+      "title": "The Man at the Beer Tent",
+      "body": "The parish festival is the one weekend a year when {parish} looks like the parish it thinks it is, and on Saturday evening, between the raffle and the band, you see him across the hall lot at the beer tent with a plastic cup, talking to the men who run the grill. It is the maintenance man you let go. He was a parishioner before he was an employee and is a parishioner still; he was baptized here, and you knew that when you did it, and you did it anyway, for reasons that were good enough at the time and that you have not had cause to revisit until now. He has seen you. He has not come over and he has not left. The men at the grill have seen you both, and they know, because everyone knows. {@maintenance}, the new one, is on the other side of the lot running the generator and does not know who that is. The band is starting. Somebody is going to have to walk across the lot, and it is a long lot.",
+      "flavorPrompt": "The parish festival and the maintenance man the pastor let go, at the beer tent with the grill crew; a long lot to cross.",
+      "choices": [
+        {
+          "id": "walk_over",
+          "label": "Walk across the lot and shake his hand in front of the grill",
+          "default": true,
+          "outcome": "You do it before the band gets loud. He shakes your hand and does not smile, and says the generator is running rich and the new man should know. You say you will tell him. The grill crew watch and then go back to the grill, and that is the whole of it, and it is enough; the parish saw you cross the lot. He comes to the eight o'clock the next morning, which he had not been doing.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 5 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "flag", "key": "sf_maintenance_welcomed_back", "value": true }
+          ]
+        },
+        {
+          "id": "offer_him_the_festival",
+          "label": "Go over and ask him to run the festival crew next year, paid",
+          "requires": [{ "type": "stat", "key": "administration", "op": ">=", "value": 45 }],
+          "outcome": "It is a real job and it is not his old one, and he knows the difference and takes it anyway, because he loves the festival and he loved the parish before you came. He runs it the next year and it is the best in a decade. {@maintenance} learns who he is and is wary and then is not, and the two of them fix the generator together in the dark on the Saturday, arguing about it. The men at the grill decide something about you and do not tell you what.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 6 },
+            { "target": "relationship", "key": "@maintenance", "delta": 3 },
+            { "target": "money", "key": "cash", "delta": -400 },
+            { "target": "flag", "key": "sf_maintenance_rehired", "value": true }
+          ]
+        },
+        {
+          "id": "stay_where_you_are",
+          "label": "Stay by the raffle; the festival is not the place",
+          "outcome": "The band gets loud and you are needed at the raffle and then at the bingo and then at the closing prayer, and he is gone by then. It was not the place. The men at the grill, who wanted to see what you would do, saw. On Monday {@secretary} mentions, not about anything, that the grill crew has always been the hardest to find volunteers for.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": -4 },
+            { "target": "flag", "key": "sf_maintenance_avoided", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sf_coffee_hour_version",
+      "phase": ["pastor", "administrator"],
+      "pressure": ["loyalty_vs_honesty", "competence"],
+      "severity": "NOTABLE",
+      "category": "group",
+      "baseWeight": 12,
+      "suppressYears": 3,
+      "once": true,
+      "requires": [{ "type": "flag", "key": "staff:let_go_any", "value": true }],
+      "title": "What They Are Saying in the Hall",
+      "body": "It has been a month since you let someone go, and you have said nothing about it in public, because that is what you were told to do and because it is what a decent employer does. The parish has filled the silence. {@parishioner} tells you, at coffee hour, with the kindness of a person delivering bad news they have enjoyed carrying, what the parish is saying: that there was money involved, or that there was a fight in the rectory, or that the chancery ordered it, or that Father simply did not like her, or him, and that this is how it is going to be now, with the new priest, that the people who have given years to the parish are out the door the minute they say the wrong thing. None of it is true. Some of it is near enough to be uncomfortable. The person you let go has said nothing either, which is to their credit, and which the parish has taken as confirmation. {@secretary} has fielded two calls from people asking whether they should be worried about their own jobs, and neither of them works here.",
+      "flavorPrompt": "A month after a dismissal the pastor did not explain, the parish has invented four explanations; coffee hour, and the one who repeats them.",
+      "choices": [
+        {
+          "id": "say_something_sunday",
+          "label": "Say at the announcements that a staff member has left, with thanks, and that the parish owes them privacy",
+          "default": true,
+          "outcome": "You say four sentences and do not say why, and the four sentences are enough because they are the first thing anyone has heard from the pulpit about it. You thank the person by name for their years. Half the parish decides that it was handled well; the other half decides that if there were nothing to hide you would have said. Both halves stop asking {@secretary}. The person who left hears what you said and sends a card, one line, which is more than you expected.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 3 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "flag", "key": "sf_firing_explained", "value": true }
+          ]
+        },
+        {
+          "id": "hold_the_line",
+          "label": "Say nothing; it is a personnel matter and it stays one",
+          "outcome": "You tell {@parishioner} that you do not discuss employees, and the parish learns that you do not, which is a reputation of a kind. The stories thin out by Advent, as stories do, and one of them survives and is told at the festival for years, and it is not the true one. The staff who remain understand that if it ever comes to them, you will not defend them in public either, and they draw their own conclusions about that.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": -3 },
+            { "target": "reputation", "key": "chancery", "delta": 2 },
+            { "target": "flag", "key": "sf_firing_unexplained", "value": true }
+          ]
+        },
+        {
+          "id": "go_to_the_source",
+          "label": "Ask {@parishioner} to stop, and go to the person who left to say what you will say",
+          "requires": [{ "type": "stat", "key": "charisma", "op": ">=", "value": 45 }],
+          "outcome": "You tell {@parishioner} plainly that the stories are not true and that repeating them is not kind, and it lands, because it was said to the face and not to the room. Then you drive to the house of the person you let go and say what you intend to tell the parish and ask whether they object. They do not. They ask you to sit for a minute. The minute is longer than that and you leave knowing more about why it went wrong than you did when you did it.",
+          "effects": [
+            { "target": "relationship", "key": "@parishioner", "delta": -4 },
+            { "target": "reputation", "key": "parishioners", "delta": 4 },
+            { "target": "honesty", "key": "", "delta": 1 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "flag", "key": "sf_firing_regretted", "value": true }
+          ]
+        }
+      ]
+    }
+  ]
+}

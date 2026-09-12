@@ -1,4 +1,4 @@
-import type { ActionDef, GroupTypeDef, ObligationDef, ProblemFixDef, SacrificeDef, SeasonalLoad, SpendDef, TalkDef, LiturgyDialDef, OfficeDef } from '@/types';
+import type { ActionDef, AwayPlaceDef, GroupTypeDef, HomilyDef, ObligationDef, ProblemFixDef, SacrificeDef, SeasonalLoad, SpendDef, TalkDef, LiturgyDialDef, OfficeDef } from '@/types';
 import obligations from './obligations.json';
 import actions from './actions.json';
 import groups from './groups.json';
@@ -8,6 +8,8 @@ import spending from './spending.json';
 import talks from './talks.json';
 import liturgy from './liturgy.json';
 import offices from './offices.json';
+import homilies from './homilies.json';
+import away from './away.json';
 
 export const obligationDefs = obligations as ObligationDef[];
 export const actionDefs = actions as ActionDef[];
@@ -18,6 +20,16 @@ export const spendDefs = (spending as { spends: SpendDef[] }).spends;
 export const talkDefs = (talks as { talks: TalkDef[] }).talks;
 export const liturgyDials = (liturgy as { dials: LiturgyDialDef[] }).dials;
 export const officeDefs = (offices as { offices: OfficeDef[] }).offices;
+export const homilyDefs = (homilies as { topics: HomilyDef[] }).topics;
+export const awayPlaces = (away as { places: AwayPlaceDef[] }).places;
+
+export function homilyDef(id: string): HomilyDef | undefined {
+  return homilyDefs.find((h) => h.id === id);
+}
+
+export function awayPlace(id: string): AwayPlaceDef | undefined {
+  return awayPlaces.find((p) => p.id === id);
+}
 
 export function officeDef(id: string): OfficeDef | undefined {
   return officeDefs.find((o) => o.id === id);

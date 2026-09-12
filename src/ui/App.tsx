@@ -15,6 +15,8 @@ import LetterPanel from './LetterPanel';
 import SceneView from './scenes/SceneView';
 import Desk from './Desk';
 import Hud from './Hud';
+import CalendarStrip from './CalendarStrip';
+import Briefing from './Briefing';
 import { useUiStore } from './uiStore';
 
 export default function App() {
@@ -22,7 +24,15 @@ export default function App() {
   const error = useGameStore((s) => s.error);
   const lastStop = useGameStore((s) => s.lastStop);
   const openSheet = useUiStore((s) => s.openSheet);
+  const prefs = useUiStore((s) => s.prefs);
   useClockRunner();
+
+  // Reading preferences: the type size and whether anything moves.
+  useEffect(() => {
+    const root = document.documentElement;
+    root.style.fontSize = prefs.fontScale === 'large' ? '18px' : prefs.fontScale === 'small' ? '14px' : '';
+    root.classList.toggle('reduce-motion', prefs.reducedMotion);
+  }, [prefs.fontScale, prefs.reducedMotion]);
 
   // A letter arriving opens the letters sheet; nothing else moves the desk on its own.
   useEffect(() => {
@@ -48,9 +58,11 @@ export default function App() {
   return (
     <div className="felt min-h-screen text-stone-100">
       <Hud />
-      <main className="layout mx-auto flex max-w-[1400px] gap-5 px-5 pb-6 pt-4">
+      <CalendarStrip />
+      <main className="layout mx-auto flex max-w-[1400px] gap-5 px-5 pb-6 pt-2">
         <section className="relative min-w-0 flex-[3]">
           <SceneView />
+          {!decision && <Briefing />}
           {decision && (
             <div className="scrim absolute inset-0 z-20 flex items-start justify-center overflow-y-auto p-6">
               <div className="w-full max-w-2xl">{decision}</div>

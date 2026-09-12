@@ -110,6 +110,12 @@ export type Condition =
    * carries group conditions, @group_leader binds to a matching group.
    */
   | { type: 'group'; key: 'type' | 'vitality' | 'hostile' | 'suppressed' | 'foundedByPlayer' | 'agenda'; value: string | boolean }
+  /** A feast that falls in the current week, as the parish keeps it (engine/feasts.ts). */
+  | { type: 'feast'; key: string }
+  /** The share of the parish from one community: latino, vietnamese, polish, filipino, korean, nigerian, indian... */
+  | { type: 'ethnic'; key: string; op: Op; value: number }
+  /** What the man has been preaching on, this month. */
+  | { type: 'homily'; value: string }
   /** The calendar year of the current week: the 2021 norms on the older Mass, and the like. */
   | { type: 'calendar_year'; op: Op; value: number }
   /** Whether the diocese has a religious house, of a charism if given. */

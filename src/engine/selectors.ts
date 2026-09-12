@@ -63,6 +63,17 @@ export function resolveSelector(state: GameState, key: string, rng?: Rng): Npc |
         .sort((a, b) => (a.id < b.id ? -1 : 1));
       return leaders.length && rng ? rng.pick(leaders) : (leaders[0] ?? null);
     }
+    case 'dean': {
+      const id = state.parish?.deanery?.deanId;
+      const dean = id ? state.npcs[id] : undefined;
+      return dean && dean.status === 'active' ? dean : resolveSelector(state, '@brother_priest', rng);
+    }
+    case 'deanery_priest': {
+      const ids = state.parish?.deanery?.priestIds ?? [];
+      const priests = ids.map((id) => state.npcs[id]).filter((n): n is Npc => !!n && n.status === 'active').sort((a, b) => (a.id < b.id ? -1 : 1));
+      if (!priests.length) return resolveSelector(state, '@brother_priest', rng);
+      return rng ? rng.pick(priests) : priests[0]!;
+    }
     case 'brother_priest': {
       const pid = state.assignment?.parishId;
       const priests = Object.values(state.npcs)
@@ -75,7 +86,7 @@ export function resolveSelector(state: GameState, key: string, rng?: Rng): Npc |
       if (m) return classmates[Number(m[1])] ?? null;
       const pid = state.assignment?.parishId;
       // Parish staff are tagged with both their job and their parish.
-      if (pid && ['secretary', 'dre', 'music_director', 'maintenance'].includes(name)) {
+      if (pid && ['secretary', 'dre', 'music_director', 'maintenance', 'seminarian', 'deacon'].includes(name)) {
         return Object.values(state.npcs).find((n) => n.status === 'active' && n.tags.includes(name) && n.tags.includes(`parish:${pid}`)) ?? null;
       }
       return Object.values(state.npcs).find((n) => n.status === 'active' && n.tags.includes(name)) ?? null;

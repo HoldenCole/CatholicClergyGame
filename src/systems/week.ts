@@ -7,6 +7,9 @@ import { clubHours, staminaOf } from './clubs';
 import { bondsWeek } from './bonds';
 import { liturgyWeek } from './liturgy';
 import { fundBonuses } from './spending';
+import { noteMover, trimMovers } from './movers';
+import { homilyWeek } from './homily';
+import { FEAST_LABEL, feastsOfWeek } from '@/engine/feasts';
 import { noticeQuarter } from './notice';
 import { applyEffects } from '@/engine/effects';
 import { evaluateAll } from '@/engine/conditions';
@@ -263,18 +266,18 @@ export function resolveWeek(state: GameState, rng: Rng): { state: GameState; led
   for (const key of OBLIGATION_KEYS) {
     const def = obligationDefs.find((o) => o.key === key)!;
     const quality = plan.obligations[key];
-    next = applyEffects(next, def.effects[quality]);
+    next = applyEffects(next, def.effects[quality], {}, quality === 'standard' ? def.label : `${def.label}, ${quality === 'min' ? 'at the minimum' : 'invested'}`);
     if (quality === 'min' && key === 'sunday_masses') lines.push('The homily was from the file.');
   }
   const streak = plan.obligations.sunday_masses === 'min' ? parish.recycledHomilyStreak + 1 : 0;
   if (streak > 1) {
-    next = applyEffects(next, [{ target: 'reputation', key: 'parishioners', delta: -WEEK.recycledStreakPenalty * streak }]);
+    next = applyEffects(next, [{ target: 'reputation', key: 'parishioners', delta: -WEEK.recycledStreakPenalty * streak }], {}, 'the homily from the file, again');
   }
   if (plan.neglected) {
     next = applyEffects(next, [
       { target: 'reputation', key: 'parishioners', delta: -2 },
       { target: 'stat', key: 'piety', delta: -0.5 },
-    ]);
+    ], {}, 'not enough of you to go round');
     lines.push('There was not enough of you to go round this week, and people noticed.');
   } else if (plan.obligations.sunday_masses !== parish.routine.obligations.sunday_masses || plan.obligations.sacramental_prep !== parish.routine.obligations.sacramental_prep) {
     lines.push('The week ran over; something was done less well than you meant to.');
@@ -292,7 +295,7 @@ export function resolveWeek(state: GameState, rng: Rng): { state: GameState; led
     // A vicar's role is the people: his visits and confessions pay more, his desk work less.
     const vicar = state.assignment?.role === 'parochial_vicar';
     const factor = vicar && ['visits', 'extra_confessions', 'groups'].includes(id) ? WEEK.vicarCare : vicar && id === 'admin' ? WEEK.vicarAdmin : 1;
-    next = applyEffects(next, scaled(def.effectsPerAp, effective * factor));
+    next = applyEffects(next, scaled(def.effectsPerAp, effective * factor), {}, def.label);
     if (def.adminLoad) adminAp += effective;
     if (def.usesTheology) theologyUsed = true;
     if (def.usesKnowledge) knowledgeUsed = true;
@@ -334,7 +337,7 @@ export function resolveWeek(state: GameState, rng: Rng): { state: GameState; led
   const here = next.world!.parishes.find((p) => p.id === parish.parishId)!;
   if (terrain && terrain !== 'none') {
     const pull = terrain === here.terrain ? WEEK.terrainMatchPerWeek : WEEK.terrainMismatchPerWeek;
-    next = { ...next, character: { ...next.character!, reputation: applyReputation(next.character!.reputation, 'parishioners', pull) } };
+    next = noteMover({ ...next, character: { ...next.character!, reputation: applyReputation(next.character!.reputation, 'parishioners', pull) } }, 'parishioners', pull, terrain === here.terrain ? 'a parish like the one you came from' : 'a parish unlike the one you came from');
   }
 
   // Presence and attendance. Hours with the people show up in the pews, slowly.
@@ -343,7 +346,10 @@ export function resolveWeek(state: GameState, rng: Rng): { state: GameState; led
   const mass = liturgyWeek(next);
   next = mass.state;
   if (mass.line) lines.push(mass.line);
+  const preached = homilyWeek(next);
+  next = preached.state;
   const bonuses = fundBonuses(next);
+  bonuses.collections += preached.collections;
   const target = attendanceTarget(next, care, mass.pull + bonuses.pull);
   const attendance = parish.attendance + (target - parish.attendance) * WEEK.attendanceFollow;
 
@@ -367,6 +373,10 @@ export function resolveWeek(state: GameState, rng: Rng): { state: GameState; led
   for (const k of ['church', 'rectory', 'hall'] as const) buildings[k] = Math.max(0, buildings[k] - WEEK.buildingDecayPerWeek);
   if (buildings.school !== null) buildings.school = Math.max(0, buildings.school - WEEK.buildingDecayPerWeek);
   const parishes = world.parishes.map((p) => (p.id === record.id ? { ...p, buildings } : p));
+
+  // The feasts of the week go into the digest.
+  for (const key of feastsOfWeek(next.clock, record)) lines.push(`${key === 'patronal' && record.patronal ? record.patronal.label : FEAST_LABEL[key]} this week.`);
+  next = trimMovers(next);
 
   // A quarterly reading, so he can tell whether the place is turning.
   const dueSnapshot = (parish.weeksServed + 1) % TRAJECTORY.everyWeeks === 0;

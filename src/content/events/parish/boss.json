@@ -1,0 +1,395 @@
+{
+  "_notes": "Boss pool: the temperament of the pastor a parochial vicar serves under. The engine sets exactly one of boss:mentor, boss:micromanager, boss:absent when the vicar arrives. Ids prefixed bs_; phase parochial_vicar only. Two scenes per temperament: one that shows it in the work, one yearly talk (suppressYears 1, not once, weeks_served >= 40). @pastor throughout. Flags defined here: bs_preached_the_vigil, bs_vigil_safe, bs_vigil_declined, bs_asked_for_studies, bs_asked_for_a_parish, bs_asked_for_nothing, bs_took_his_advice, bs_took_the_pencil, bs_refused_the_pencil, bs_learned_the_rules, bs_signed_the_evaluation, bs_answered_the_evaluation, bs_refused_to_sign, bs_carried_the_weekends, bs_told_him, bs_told_the_dean, bs_ran_the_parish, bs_took_the_fine, bs_wrote_own_letter, bs_made_him_look, bs_knows_the_weekends. The absent pastor's weekends are never explained; bs_absent_beer is authored only.",
+  "events": [
+    {
+      "id": "bs_mentor_vigil",
+      "phase": ["parochial_vicar"],
+      "pressure": ["competence", "doubt"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 14,
+      "suppressYears": 2,
+      "requires": [
+        { "type": "flag", "key": "boss:mentor", "value": true },
+        { "type": "season", "value": "lent" }
+      ],
+      "title": "The Vigil Homily",
+      "body": "{@pastor} puts it to you in the second week of Lent, over the dishes, as though it were nothing: he would like you to preach the Easter Vigil. Not the Sunday morning, which is the parish's Mass, and not the Saturday five, which is the retired priest's; the Vigil, the readings and the fire and the water and the adults he has been preparing since September, the one homily in the year that a pastor keeps for himself. He says it plainly and then explains himself, which he does not usually do. He says he has preached twenty-two Vigils and knows what he will say before he opens his mouth, and that the parish knows it too, and that he would like to hear what a man ten months ordained finds in it. He will be in the front pew. He says that too, and means it as a kindness, and you both know it is also a test, and you both know he knows you know. He does not say what he wants you to preach. He does not say how long. He says the elect are terrified and the choir is tired by the seventh reading and that the fire is always too big, and then he goes to say the school Mass. You have five weeks.",
+      "flavorPrompt": "A pastor hands his vicar the one homily he keeps for himself, and will sit in the front pew for it.",
+      "choices": [
+        {
+          "id": "preach_your_own",
+          "label": "Preach what you actually think the Exsultet says",
+          "outcome": "You write it four times and throw away three. On the night it is eleven minutes and it is yours, and there is one line in it that you would not have dared in October. {@pastor} does not look at you during it. Afterward, in the sacristy, he says, \"That line,\" and nothing else, and the next morning at breakfast he says the elect were listening, which from him is a review.",
+          "effects": [
+            { "target": "stat", "key": "charisma", "delta": 2 },
+            { "target": "stat", "key": "theology", "delta": 1 },
+            { "target": "relationship", "key": "@pastor", "delta": 8 },
+            { "target": "reputation", "key": "parishioners", "delta": 3 },
+            { "target": "flag", "key": "bs_preached_the_vigil", "value": true }
+          ]
+        },
+        {
+          "id": "preach_it_safe",
+          "label": "Preach a homily he could have given",
+          "outcome": "It is sound and it is nine minutes and it is not yours. The parish, which has heard him for twenty-two years, hears him again and is comforted. {@pastor} says it was well done and means it. He does not ask you to preach the Vigil again, not because you failed but because you showed him what you would do with it.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "stat", "key": "theology", "delta": 1 },
+            { "target": "relationship", "key": "@pastor", "delta": 2 },
+            { "target": "flag", "key": "bs_vigil_safe", "value": true }
+          ]
+        },
+        {
+          "id": "bring_him_the_draft",
+          "label": "Bring him the draft on Wednesday of Holy Week and ask him to cut it",
+          "outcome": "He reads it at the kitchen table with a pencil, and cuts four minutes, and every cut is right, and he does not touch the one line he could have. On the night it is his shape and your voice, and afterward he says, in front of the sacristan, that he has not heard the Vigil preached like that in this church. You learn more in that hour with the pencil than in a semester of homiletics.",
+          "effects": [
+            { "target": "relationship", "key": "@pastor", "delta": 10 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "stat", "key": "theology", "delta": 1 },
+            { "target": "stat", "key": "knowledge", "delta": 1 },
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "flag", "key": "bs_preached_the_vigil", "value": true }
+          ]
+        },
+        {
+          "id": "give_it_back",
+          "label": "Tell him the Vigil is the pastor's, and you are not ready",
+          "outcome": "He looks at you for a long moment and says all right, and preaches it himself, beautifully, the way he has twenty-two times, and you sit in the sanctuary and are relieved and something else. He does not offer again. Years later you are the pastor handing it to someone and you understand what you handed back.",
+          "effects": [
+            { "target": "relationship", "key": "@pastor", "delta": -6 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "flag", "key": "bs_vigil_declined", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bs_mentor_talk",
+      "phase": ["parochial_vicar"],
+      "pressure": ["ambition_vs_integrity"],
+      "severity": "NOTABLE",
+      "category": "assignment",
+      "baseWeight": 12,
+      "suppressYears": 1,
+      "requires": [
+        { "type": "flag", "key": "boss:mentor", "value": true },
+        { "type": "weeks_served", "op": ">=", "value": 40 }
+      ],
+      "title": "What to Ask For",
+      "body": "Once a year, {@pastor} takes you out. It is a steakhouse forty minutes away where no one knows either of you, and he orders for the table and does not talk about the parish until the plates are cleared. Then he does. He has been a pastor for a long time and has watched the vicar for clergy move men around for longer than that, and he has a theory of it, and the theory is that a priest who never asks for anything is given whatever is left. He wants to know what you would ask the bishop for. Not what you would accept. What you would ask for, in the meeting the vicar for clergy holds every spring, if you were the kind of man who asked. Graduate studies, he says; a Spanish parish; a year in the chancery, God help you; a rural pastorate at six years, which is early, which is possible. He has a view on which of those you should want and he does not give it to you. He says he will write to the vicar for clergy in March, as pastors do, and he would rather write what you want than what he guesses. He has one more coffee. He waits.",
+      "flavorPrompt": "A mentor pastor at a steakhouse, once a year, asking his vicar what he would ask the bishop for.",
+      "choices": [
+        {
+          "id": "studies",
+          "label": "Say graduate studies, and say which",
+          "outcome": "You say it, and the field, and he nods as though you had confirmed something. He writes it in March. Whether it comes is the bishop's, but the vicar for clergy now has a sentence about you that says the man knows what he wants, which is rarer in a file than it should be.",
+          "effects": [
+            { "target": "stat", "key": "theology", "delta": 1 },
+            { "target": "stat", "key": "knowledge", "delta": 1 },
+            { "target": "reputation", "key": "chancery", "delta": 2 },
+            { "target": "relationship", "key": "@pastor", "delta": 4 },
+            { "target": "flag", "key": "bs_asked_for_studies", "value": true }
+          ]
+        },
+        {
+          "id": "a_parish",
+          "label": "Say a parish of your own, as soon as they will give it",
+          "outcome": "He says that is the honest answer and the dangerous one, and that he will write it, and that the vicar for clergy will read it as ambition or as readiness depending on what else is in the file, which is why the rest of this year matters. He writes it. The rest of the year you work like a man who has been told it matters.",
+          "effects": [
+            { "target": "stat", "key": "administration", "delta": 1 },
+            { "target": "reputation", "key": "chancery", "delta": 2 },
+            { "target": "reputation", "key": "brother_priests", "delta": -1 },
+            { "target": "relationship", "key": "@pastor", "delta": 4 },
+            { "target": "outspokenness", "key": "", "delta": 2 },
+            { "target": "flag", "key": "bs_asked_for_a_parish", "value": true }
+          ]
+        },
+        {
+          "id": "wherever_sent",
+          "label": "Say you will go where you are sent",
+          "outcome": "He puts his cup down. He says every man says that and half of them mean it, and the half who mean it are the ones the diocese uses hardest, and that he will write it, if that is what you want, and it will be true, and he hopes you know what you have asked for. He writes it. You do go where you are sent.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 2 },
+            { "target": "reputation", "key": "chancery", "delta": 1 },
+            { "target": "relationship", "key": "@pastor", "delta": 2 },
+            { "target": "flag", "key": "bs_asked_for_nothing", "value": true }
+          ]
+        },
+        {
+          "id": "ask_him",
+          "label": "Ask him what he would ask for, if he were you",
+          "requires": [{ "type": "stat", "key": "charisma", "op": ">=", "value": 40 }],
+          "outcome": "He tells you, and it is not what you expected, and it is specific: a thing about your preaching and a thing about your temper and a parish he names that would use the one and cure the other. He writes that. It is the truest thing anyone has put in your file and you did not choose it.",
+          "effects": [
+            { "target": "stat", "key": "knowledge", "delta": 2 },
+            { "target": "relationship", "key": "@pastor", "delta": 8 },
+            { "target": "reputation", "key": "chancery", "delta": 2 },
+            { "target": "flag", "key": "bs_took_his_advice", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bs_micro_bulletin",
+      "phase": ["parochial_vicar"],
+      "pressure": ["loyalty_vs_honesty", "competence"],
+      "severity": "NOTABLE",
+      "category": "admin",
+      "baseWeight": 14,
+      "suppressYears": 2,
+      "requires": [{ "type": "flag", "key": "boss:micromanager", "value": true }],
+      "title": "The Column, and the Hosts",
+      "body": "Your bulletin column comes back on Wednesday with {@pastor}'s pencil on it. Not a note. The pencil. Four sentences struck, two rewritten in his hand, a paragraph about the Gospel replaced with a paragraph about the parking lot. The column will run under your name. It is the third week running. On Thursday he is in the sacristy before the morning Mass with the ciborium and the tally sheet, counting hosts, which he does every Thursday, and he asks, without looking up, why the count is nineteen low from what the attendance would suggest, and whether you have been giving Communion to people who come up with their hands the wrong way, and whether the servers have been eating the unconsecrated ones again. He has a binder for the thermostat. He has a binder for the keys. He knows which of the six confessional lights burns out first. He has run {parish} for fourteen years without a deficit, a scandal, or a vicar who stayed more than two, and the chancery thinks he is a good pastor, and by every measure the chancery has, he is. {@secretary} has learned to put your mail in a drawer he does not open. You are a year ordained and you have been told, by pencil, how to write a sentence about the Gospel.",
+      "flavorPrompt": "A pastor's pencil on a vicar's column, hosts counted on a tally sheet, a rectory run like a ledger.",
+      "choices": [
+        {
+          "id": "let_it_run",
+          "label": "Let the column run with his edits, and count the hosts with him",
+          "outcome": "You say nothing about the pencil and stand beside him with the tally sheet and learn, despite yourself, that he is right about the servers. The column runs. It is not yours and nobody knows that but the two of you and {@secretary}. You are learning how a parish is run without a deficit, which is not nothing, and it costs you a sentence a week.",
+          "effects": [
+            { "target": "stat", "key": "administration", "delta": 2 },
+            { "target": "relationship", "key": "@pastor", "delta": 4 },
+            { "target": "reputation", "key": "parishioners", "delta": 1 },
+            { "target": "honesty", "key": "", "delta": -1 },
+            { "target": "flag", "key": "bs_took_the_pencil", "value": true }
+          ]
+        },
+        {
+          "id": "column_or_name",
+          "label": "Ask him, in the office, to give you the column or take your name off it",
+          "outcome": "You say it evenly: he may have the column, or you may have it, but your name will not run over his paragraph about the parking lot. He looks at you for the length of a breath. The next week the column runs untouched, and the week after there is no column, and the week after that it is his, under his name, and you have the Gospel back and no place to put it.",
+          "effects": [
+            { "target": "honesty", "key": "", "delta": 2 },
+            { "target": "relationship", "key": "@pastor", "delta": -8 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "reputation", "key": "brother_priests", "delta": 1 },
+            { "target": "flag", "key": "bs_refused_the_pencil", "value": true }
+          ]
+        },
+        {
+          "id": "write_to_his_standard",
+          "label": "Write the column so tightly there is nothing for the pencil to do",
+          "requires": [{ "type": "stat", "key": "knowledge", "op": ">=", "value": 50 }],
+          "outcome": "You learn his rules by reading his edits and write inside them, and by the sixth week the column comes back clean, and he says nothing, which is the highest praise he has. It is a smaller thing than you wanted to write. It is a thing you can write in twenty minutes, every week, for the rest of your life.",
+          "effects": [
+            { "target": "stat", "key": "administration", "delta": 1 },
+            { "target": "stat", "key": "knowledge", "delta": 1 },
+            { "target": "relationship", "key": "@pastor", "delta": 6 },
+            { "target": "reputation", "key": "parishioners", "delta": 1 },
+            { "target": "flag", "key": "bs_learned_the_rules", "value": true }
+          ]
+        },
+        {
+          "id": "mention_it_to_the_dean",
+          "label": "Mention the pencil to {@dean}, lightly, at the deanery meeting",
+          "outcome": "You say it as a joke and the dean does not laugh. He says {@pastor} has trained four vicars who are now pastors and that all of them tell that story, and that you should decide whether you want to be the fifth or the one who complained. The pencil continues. So does the count. The dean says nothing to {@pastor}, and {@pastor} somehow knows anyway.",
+          "effects": [
+            { "target": "relationship", "key": "@dean", "delta": 2 },
+            { "target": "relationship", "key": "@pastor", "delta": -6 },
+            { "target": "reputation", "key": "brother_priests", "delta": -2 },
+            { "target": "stat", "key": "knowledge", "delta": 1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bs_micro_evaluation",
+      "phase": ["parochial_vicar"],
+      "pressure": ["ambition_vs_integrity", "competence"],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 12,
+      "suppressYears": 1,
+      "requires": [
+        { "type": "flag", "key": "boss:micromanager", "value": true },
+        { "type": "weeks_served", "op": ">=", "value": 40 }
+      ],
+      "title": "On Paper",
+      "body": "The vicar for clergy asks pastors for a written evaluation of each vicar every year. Most pastors write a paragraph. {@pastor} has written four pages, single-spaced, with headings, and he has put them on your desk with a cover note that says he thought you should see it before the chancery does, which is correct of him and is also not what any of the four vicars before you were given. It is fair. That is the worst of it. Under \"Liturgy\" it says you are reverent and slow and that the eight o'clock runs to fifty-two minutes. Under \"Administration\" it says you have not once returned the sacristy key to the board. Under \"Preaching\" it says you are the best preacher he has had and that you do not prepare enough, both, in the same sentence. Under \"Rectory\" it says you are out four evenings a week, which is true, and does not say where, which he does not know. Under \"Recommendation\" it says that you are not ready for a parish and gives the year in which he thinks you will be, which is three years off. He has left a line for your signature, which the form does not require. He would like it by Friday.",
+      "flavorPrompt": "A four-page evaluation left on a vicar's desk, fair in every line, with a signature line the form does not require.",
+      "choices": [
+        {
+          "id": "sign_it",
+          "label": "Sign it and give it back Thursday",
+          "outcome": "You sign. He files it. The chancery reads four pages where it usually reads four lines, and the vicar for clergy, who has read hundreds, notes that the vicar signed, which he has never seen before, and draws from it whatever he draws. Three years later you find out what.",
+          "effects": [
+            { "target": "relationship", "key": "@pastor", "delta": 6 },
+            { "target": "reputation", "key": "chancery", "delta": 2 },
+            { "target": "honesty", "key": "", "delta": 1 },
+            { "target": "stat", "key": "administration", "delta": 1 },
+            { "target": "flag", "key": "bs_signed_the_evaluation", "value": true }
+          ]
+        },
+        {
+          "id": "answer_it",
+          "label": "Write a page of your own and ask that it be attached",
+          "outcome": "You write one page, not four, and it is not a rebuttal: it says the eight o'clock runs long because of the Prayer of the Faithful he insists on, and where the four evenings go, and that you agree about the key. He reads it at the kitchen table and says, \"Fair,\" and staples it behind his. The chancery now has both, and a vicar for clergy who can read between two documents better than either of you.",
+          "effects": [
+            { "target": "honesty", "key": "", "delta": 2 },
+            { "target": "reputation", "key": "chancery", "delta": 3 },
+            { "target": "relationship", "key": "@pastor", "delta": 2 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "flag", "key": "bs_answered_the_evaluation", "value": true }
+          ]
+        },
+        {
+          "id": "refuse_to_sign",
+          "label": "Give it back unsigned and say the form does not ask for it",
+          "outcome": "He takes it without comment. It goes in unsigned, with a line at the bottom that says the vicar declined to sign, which is also fair, and is now the first thing the reader sees. You have kept something and you are not certain what. The eight o'clock still runs fifty-two minutes.",
+          "effects": [
+            { "target": "relationship", "key": "@pastor", "delta": -6 },
+            { "target": "reputation", "key": "chancery", "delta": -2 },
+            { "target": "honesty", "key": "", "delta": 1 },
+            { "target": "outspokenness", "key": "", "delta": 2 },
+            { "target": "flag", "key": "bs_refused_to_sign", "value": true }
+          ]
+        },
+        {
+          "id": "ask_what_moves_the_year",
+          "label": "Ask him what would move the year",
+          "requires": [{ "type": "stat", "key": "charisma", "op": ">=", "value": 40 }],
+          "outcome": "He was waiting for the question. He goes through the four pages a heading at a time and tells you, exactly, and it is the most useful hour of your first assignment: what a chancery reads, what it does not, which of your habits will follow you and which will not. You sign it. He changes nothing in it. Next year the year is two years off.",
+          "effects": [
+            { "target": "stat", "key": "knowledge", "delta": 2 },
+            { "target": "stat", "key": "administration", "delta": 1 },
+            { "target": "relationship", "key": "@pastor", "delta": 8 },
+            { "target": "reputation", "key": "chancery", "delta": 2 },
+            { "target": "flag", "key": "bs_signed_the_evaluation", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bs_absent_thursday",
+      "phase": ["parochial_vicar"],
+      "pressure": ["loyalty_vs_honesty", "friendship_vs_duty"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 14,
+      "suppressYears": 2,
+      "requires": [{ "type": "flag", "key": "boss:absent", "value": true }],
+      "title": "Thursday to Monday",
+      "body": "{@pastor}'s car is gone from the rectory lot on Thursday after the school Mass and it is back on Monday at noon, and this has been true every week since you arrived. He does not say where. There is a sister in the next state, {@secretary} said once, in a way that did not invite a second question. The weekend is yours: the Saturday five, three Sunday Masses, the baptisms, the sick calls, the phone. He is the pastor and the bulletin says so and the chancery sends its letters to his name, and the people have stopped asking for him. They ask for you. A woman whose husband is dying asks whether you can come Sunday night and you say yes because there is no one else to say it. The parish council chair calls Friday about the roof and you say you will tell {@pastor}, and she says, kindly, that she has been telling {@pastor} about the roof since Advent. On Monday he comes in through the kitchen and asks how the weekend went, and listens, and says you are doing a fine job, and takes the mail up to his room. He is not a bad man. He is simply not here, and the parish has quietly decided that you are.",
+      "flavorPrompt": "A pastor's empty parking space Thursday to Monday, a parish that has decided the vicar is the priest, a roof nobody fixes.",
+      "choices": [
+        {
+          "id": "carry_it",
+          "label": "Carry the weekends and say nothing",
+          "outcome": "You do it. The sick calls and the roof and the baptisms, and you are good at it, and tired in a way a first assignment should not make you. The parish loves you in the way people love the one who comes. {@pastor} says you are doing a fine job. The chancery, which reads the bulletin and the collection reports, sees a parish running well under a pastor's name.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 6 },
+            { "target": "stat", "key": "administration", "delta": 1 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "stat", "key": "piety", "delta": -1 },
+            { "target": "relationship", "key": "@pastor", "delta": 2 },
+            { "target": "flag", "key": "bs_carried_the_weekends", "value": true }
+          ]
+        },
+        {
+          "id": "say_it_to_him",
+          "label": "Tell him, Monday, that the parish thinks he has left",
+          "outcome": "You say it at the kitchen table, without heat: that the council chair has been telling him about the roof since Advent and that the woman with the dying husband did not ask for him. He is quiet a long time. He says he knows. He does not say what the weekends are. The car is still gone Thursday, but the roof is bid by Lent, and he takes the Sunday eleven himself for a month, and then does not.",
+          "effects": [
+            { "target": "honesty", "key": "", "delta": 2 },
+            { "target": "relationship", "key": "@pastor", "delta": -4 },
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "stat", "key": "administration", "delta": 1 },
+            { "target": "flag", "key": "bs_told_him", "value": true }
+          ]
+        },
+        {
+          "id": "tell_the_dean",
+          "label": "Mention the weekends to {@dean}",
+          "outcome": "The dean says he knows, and that the chancery knows, and that {@pastor} has three years to retirement and a file with nothing in it, and that nobody is going to move a man three years out. He says you should be careful whom else you tell. You are. The weekends continue. Something in how the dean looks at you now says you did the correct thing and not the loyal one.",
+          "effects": [
+            { "target": "relationship", "key": "@dean", "delta": 4 },
+            { "target": "reputation", "key": "chancery", "delta": 1 },
+            { "target": "relationship", "key": "@pastor", "delta": -8 },
+            { "target": "reputation", "key": "brother_priests", "delta": -3 },
+            { "target": "flag", "key": "bs_told_the_dean", "value": true }
+          ]
+        },
+        {
+          "id": "bid_the_roof",
+          "label": "Get the roof bid yourself and put it on his desk Monday",
+          "requires": [{ "type": "stat", "key": "administration", "op": ">=", "value": 45 }],
+          "outcome": "You get three bids and the finance council chair to the table and put the folder in front of him with the mail. He reads it and signs the middle one without a word and thanks you, and it is done, and the council chair sends you, not him, a card. You have learned that an absent pastor will sign anything a competent vicar puts in front of him, which is a thing to know and a thing to be careful with.",
+          "effects": [
+            { "target": "stat", "key": "administration", "delta": 2 },
+            { "target": "reputation", "key": "parishioners", "delta": 4 },
+            { "target": "relationship", "key": "@pastor", "delta": 4 },
+            { "target": "reputation", "key": "chancery", "delta": 1 },
+            { "target": "flag", "key": "bs_ran_the_parish", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bs_absent_beer",
+      "phase": ["parochial_vicar"],
+      "pressure": ["ambition_vs_integrity", "doubt"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 12,
+      "suppressYears": 1,
+      "requires": [
+        { "type": "flag", "key": "boss:absent", "value": true },
+        { "type": "weeks_served", "op": ">=", "value": 40 }
+      ],
+      "title": "Doing Fine",
+      "body": "Once a year, around the anniversary of your arrival, {@pastor} remembers he is supposed to talk to you, and does it the way he does everything, which is sideways. He knocks on your door on a Tuesday evening with two bottles and sits in your one chair and says the vicar for clergy wants a letter and he is going to write that you are doing fine, because you are, and is there anything you want in it. That is the evaluation. He is not unkind and he is not uninterested; he asks about your mother and remembers her name. He does not ask about the parish, because he does not want to know what you would say, and you both know that too. What he wants is for the letter to be short and for you to be content, and he would sincerely like both. Somewhere in the second bottle he says that he was a good vicar once, under a man who noticed everything, and that he swore he would never do that to a young priest, and he looks around your room as though he has just seen it. He asks again whether there is anything you want in the letter. He means it. He will write whatever you say.",
+      "flavorPrompt": "Sensitive: authored only. An absent pastor's annual talk: two bottles, a short letter, and an offer to write anything at all.",
+      "choices": [
+        {
+          "id": "fine_is_fine",
+          "label": "Say fine is fine",
+          "outcome": "He writes two lines and they are kind and they say nothing, and the vicar for clergy files them with the hundred others like them. You have a year on your record that no one in the chancery could describe. That is either safety or invisibility, and you will not know which until the spring the assignments are made.",
+          "effects": [
+            { "target": "relationship", "key": "@pastor", "delta": 3 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "reputation", "key": "chancery", "delta": -1 },
+            { "target": "flag", "key": "bs_took_the_fine", "value": true }
+          ]
+        },
+        {
+          "id": "draft_it_yourself",
+          "label": "Say you will draft it, and he can sign what he agrees with",
+          "outcome": "You write a page, honest and specific, about the sick calls and the roof and what you have learned about running a weekend, and you leave out where he was. He reads it and signs it and says, \"That's better than I'd have done,\" and it is. The chancery now has a document about you that a man could describe. It is in your hand and it went in under his name, and one day someone will notice.",
+          "effects": [
+            { "target": "stat", "key": "administration", "delta": 2 },
+            { "target": "reputation", "key": "chancery", "delta": 3 },
+            { "target": "honesty", "key": "", "delta": -1 },
+            { "target": "relationship", "key": "@pastor", "delta": 4 },
+            { "target": "flag", "key": "bs_wrote_own_letter", "value": true }
+          ]
+        },
+        {
+          "id": "come_to_the_eleven",
+          "label": "Ask him to come to the eleven o'clock on Sunday and then write",
+          "outcome": "He comes. He sits in the back, in a jacket, and watches the parish he is pastor of at Mass with his vicar, and afterward he is quiet on the stairs. The letter he writes is a paragraph and it is true, and there is a sentence in it about the parish's face that no one else could have written. He is at the eleven the Sunday after, too, and then the car is gone again on Thursday.",
+          "effects": [
+            { "target": "relationship", "key": "@pastor", "delta": 8 },
+            { "target": "reputation", "key": "chancery", "delta": 2 },
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "flag", "key": "bs_made_him_look", "value": true }
+          ]
+        },
+        {
+          "id": "ask_where_he_goes",
+          "label": "Ask him, in the second bottle, where he goes",
+          "requires": [{ "type": "stat", "key": "charisma", "op": ">=", "value": 45 }],
+          "outcome": "He tells you. It is not what the parish thinks and it is not nothing, and it is his to tell, and you keep it. He writes a good letter, because you asked him a thing nobody has asked in years and he is grateful in the way of a man who has been let alone too long. You are not a vicar to him after that. You are the priest who knows.",
+          "effects": [
+            { "target": "relationship", "key": "@pastor", "delta": 12 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "honesty", "key": "", "delta": 1 },
+            { "target": "flag", "key": "bs_knows_the_weekends", "value": true }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -177,7 +177,7 @@ export function resolvePermissions(state: GameState, rng: Rng): { state: GameSta
       career: [...next.career, { week: state.clock.week, kind: 'note', text: line }],
     };
     // Faculties are noticed: the traditional wing counts him, and the record shows a man who asked.
-    if (faculty) next = applyEffects(next, granted ? [{ target: 'reputation', key: 'traditional_bloc', delta: 4 }, { target: 'outspokenness', key: '', delta: 2 }] : [{ target: 'reputation', key: 'traditional_bloc', delta: 2 }]);
+    if (faculty) next = applyEffects(next, granted ? [{ target: 'reputation', key: 'traditional_bloc', delta: 4 }, { target: 'outspokenness', key: '', delta: 2 }] : [{ target: 'reputation', key: 'traditional_bloc', delta: 2 }], {}, 'asking for faculties for the older form');
   }
   return { state: next, lines };
 }
@@ -238,7 +238,7 @@ export function furnish(state: GameState, place: DecorPlace, optionId: string): 
       { target: 'reputation', key: 'parishioners', delta: people },
       { target: 'reputation', key: option.alignment < 0 ? 'traditional_bloc' : 'progressive_bloc', delta: bloc },
       { target: 'reputation', key: option.alignment < 0 ? 'progressive_bloc' : 'traditional_bloc', delta: -Math.round(bloc / 2) },
-    ]);
+    ], {}, `${place === 'chapel' ? 'the chapel' : 'the church'}: ${option.label.toLowerCase()}`);
     const drift = Math.sign(option.alignment - parish.alignment) * Math.min(DECOR.parishDrift * scale, gap);
     const world = next.world!;
     next = {
@@ -248,7 +248,7 @@ export function furnish(state: GameState, place: DecorPlace, optionId: string): 
     line = people >= 2 ? `${option.label}. The parish approves, mostly.` : people <= -2 ? `${option.label}. Letters will be written.` : `${option.label}. Some noticed; a few minded.`;
     next = { ...next, career: [...next.career, { week: next.clock.week, kind: 'note', text: `Changed the ${place}: ${option.label.toLowerCase()}.` }] };
   }
-  if (option.effects) next = applyEffects(next, option.effects);
+  if (option.effects) next = applyEffects(next, option.effects, {}, option.label);
   return { state: next, line };
 }
 
