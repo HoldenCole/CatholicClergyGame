@@ -1,5 +1,5 @@
 import type { Character, Npc } from '@/types';
-import { namePools } from '@/content/names';
+import { namePools, type Heritage } from '@/content/names';
 
 /**
  * A face is a handful of independent attributes. NPC faces derive from a
@@ -73,10 +73,70 @@ function roll(seed: string, n: number): number {
   return (hash(seed) >>> 11) % n;
 }
 
-/** A spec from a seed string: every attribute takes its own hash so none correlate. */
-export function specFrom(seed: string): PortraitSpec {
+/**
+ * What a background makes likely: complexions, hair colours, eyes, and the
+ * cuts that suit the hair, as weights the roll draws from. Everything stays
+ * possible; nothing is a stereotype so much as a prior. A face is still a
+ * handful of independent rolls (CLAUDE.md rule 4).
+ */
+export interface HeritageLook {
+  skin: number[];
+  hairColor: number[];
+  eyes: number[];
+  hairStyle?: number[];
+}
+
+const EURO_N: HeritageLook = { skin: [0, 1, 1, 2], hairColor: [0, 1, 2, 3, 4, 5, 6], eyes: [0, 1, 2, 3] };
+const EURO_S: HeritageLook = { skin: [1, 2, 2, 3], hairColor: [0, 0, 1, 1, 2], eyes: [0, 0, 3, 4] };
+const LATINO: HeritageLook = { skin: [2, 3, 3, 4, 4, 5], hairColor: [0, 0, 0, 1, 1], eyes: [0, 0, 4] };
+const EAST_ASIAN: HeritageLook = { skin: [1, 2, 2, 3], hairColor: [0, 0, 0, 1], eyes: [4, 4, 0], hairStyle: [0, 1, 2, 4, 7, 8, 9] };
+const SOUTH_ASIAN: HeritageLook = { skin: [3, 4, 4, 5, 6], hairColor: [0, 0, 1], eyes: [4, 0, 0] };
+const AFRICAN: HeritageLook = { skin: [4, 5, 6, 6, 7, 7], hairColor: [0, 0, 0, 1], eyes: [4, 0, 0], hairStyle: [0, 2, 5, 6, 9, 9, 10, 10, 10] };
+const AFRICAN_AMERICAN: HeritageLook = { skin: [3, 4, 5, 5, 6, 6, 7], hairColor: [0, 0, 0, 1], eyes: [4, 0, 0, 3], hairStyle: [0, 2, 5, 6, 9, 9, 10, 10, 10] };
+const LEVANT: HeritageLook = { skin: [1, 2, 2, 3, 4], hairColor: [0, 0, 1, 1], eyes: [0, 0, 4, 3] };
+
+export const HERITAGE_LOOKS: Record<Heritage, HeritageLook> = {
+  irish: { skin: [0, 0, 1, 1], hairColor: [0, 1, 2, 3, 4, 5, 5, 6], eyes: [1, 1, 2, 0, 3] },
+  italian: EURO_S,
+  polish: EURO_N,
+  german: EURO_N,
+  anglo: EURO_N,
+  mexican: LATINO,
+  central_american: LATINO,
+  caribbean: { skin: [2, 3, 4, 5, 6], hairColor: [0, 0, 0, 1], eyes: [0, 0, 4], hairStyle: [0, 1, 2, 3, 9, 10] },
+  filipino: { skin: [2, 3, 3, 4], hairColor: [0, 0, 0, 1], eyes: [4, 0, 0], hairStyle: [0, 1, 2, 4, 7, 8, 9] },
+  vietnamese: EAST_ASIAN,
+  korean: EAST_ASIAN,
+  african_american: AFRICAN_AMERICAN,
+  nigerian: AFRICAN,
+  indian: SOUTH_ASIAN,
+  lebanese: LEVANT,
+};
+
+export const HERITAGE_LABEL: Record<Heritage, string> = {
+  irish: 'Irish', italian: 'Italian', polish: 'Polish', german: 'German', anglo: 'Anglo-American', mexican: 'Mexican', central_american: 'Central American',
+  caribbean: 'Caribbean', filipino: 'Filipino', vietnamese: 'Vietnamese', korean: 'Korean', african_american: 'African American', nigerian: 'Nigerian', indian: 'Indian', lebanese: 'Lebanese',
+};
+
+const SURNAME_HERITAGE = new Map<string, Heritage>();
+for (const [h, pool] of Object.entries(namePools) as [Heritage, { last: string[] }][]) for (const last of pool.last) if (!SURNAME_HERITAGE.has(last)) SURNAME_HERITAGE.set(last, h);
+
+/** The people a surname comes from, when the name pools know it. */
+export function heritageOfName(last: string): Heritage | null {
+  return SURNAME_HERITAGE.get(last) ?? null;
+}
+
+/** A spec from a seed string: every attribute takes its own hash so none correlate; a background weights the draw. */
+export function specFrom(seed: string, heritage: Heritage | null = null): PortraitSpec {
   const out = {} as PortraitSpec;
   for (const k of SPEC_KEYS) out[k] = roll(`${seed}/${k}`, SPEC_RANGES[k]);
+  const look = heritage ? HERITAGE_LOOKS[heritage] : null;
+  if (look) {
+    out.skin = look.skin[roll(`${seed}/skin-of`, look.skin.length)]!;
+    out.hairColor = look.hairColor[roll(`${seed}/hair-of`, look.hairColor.length)]!;
+    out.eyes = look.eyes[roll(`${seed}/eyes-of`, look.eyes.length)]!;
+    if (look.hairStyle && roll(`${seed}/cut-of-them`, 4) !== 0) out.hairStyle = look.hairStyle[roll(`${seed}/cut-of`, look.hairStyle.length)]!;
+  }
   // Glasses, beards, and marks are less common than a uniform draw would make them.
   if (roll(`${seed}/wears-glasses`, 3) !== 0) out.glasses = 0;
   if (roll(`${seed}/has-beard`, 2) !== 0) out.facial = 0;
@@ -109,9 +169,9 @@ export function adjustSpec(s: PortraitSpec, key: keyof PortraitSpec, dir: 1 | -1
   return { ...s, [key]: (s[key] + dir + n) % n };
 }
 
-/** A page of faces to choose from at creation, deterministic in the run's seed. */
-export function facesFor(seed: string, page: number, n = 8): PortraitSpec[] {
-  return Array.from({ length: n }, (_, i) => specFrom(`${seed}:face:${page}:${i}`));
+/** A page of faces to choose from at creation, deterministic in the run's seed, drawn for a background when one is chosen. */
+export function facesFor(seed: string, page: number, n = 8, heritage: Heritage | null = null): PortraitSpec[] {
+  return Array.from({ length: n }, (_, i) => specFrom(`${seed}:face:${page}:${i}${heritage ? `:${heritage}` : ''}`, heritage));
 }
 
 const WOMEN = new Set(Object.values(namePools).flatMap((p) => p.women));
@@ -133,7 +193,7 @@ function dressFor(npc: Npc, inSeminary: boolean): Dress {
 export function portraitForNpc(npc: Npc, year: number, inSeminary = false): Portrait {
   const dress = dressFor(npc, inSeminary);
   const female = dress === 'lay_f';
-  const spec = specFrom(`${npc.id}:${npc.name.first}:${npc.name.last}`);
+  const spec = specFrom(`${npc.id}:${npc.name.first}:${npc.name.last}`, heritageOfName(npc.name.last));
   if (female) spec.facial = 0;
   return { spec, dress, age: Math.max(16, year - npc.birthYear), female };
 }
@@ -148,7 +208,7 @@ export function portraitForCharacter(c: Character, year: number, phase: string, 
 /** A face from the parts the diocese preview may see: id, name, age. Seeds the same way as portraitForNpc. */
 export function portraitFromParts(id: string, first: string, last: string, age: number, dress: Dress): Portrait {
   const female = dress === 'lay_f';
-  const spec = specFrom(`${id}:${first}:${last}`);
+  const spec = specFrom(`${id}:${first}:${last}`, heritageOfName(last));
   if (female) spec.facial = 0;
   return { spec, dress, age, female };
 }

@@ -9,7 +9,8 @@ import { revealFieldForTie, revealFor } from '@/generation/world';
 import { likelyPlacement } from '@/systems/placement';
 import { createRng } from '@/engine/rng';
 import Portrait from '../portraits/Portrait';
-import { adjustSpec, facesFor, parseSpec, serializeSpec, SPEC_KEYS, SPEC_LABELS } from '../portraits/spec';
+import { adjustSpec, facesFor, HERITAGE_LABEL, parseSpec, serializeSpec, SPEC_KEYS, SPEC_LABELS } from '../portraits/spec';
+import type { Heritage } from '@/content/names';
 
 type Step = 'name' | 'face' | 'diocese' | 'origin' | 'tie' | 'path' | 'field' | 'career' | 'motive' | 'family' | 'past' | 'summary';
 /** The diocese comes after the background so its cards can say where a man like this would be sent. */
@@ -40,6 +41,7 @@ export default function CreationScreen() {
     firstName: '',
     lastName: '',
     portrait: 'p1',
+    heritage: null,
     entryYear: 2010,
     origin: 'urban_ethnic',
     tie: 'son',
@@ -109,7 +111,7 @@ export default function CreationScreen() {
           </div>
         )}
         {step === 'face' && game && (
-          <FaceStep seed={game.seed} value={answers.portrait} age={entryAge(full, content)} page={facePage} onPage={() => setFacePage((p) => p + 1)} onChange={(v) => setAnswers((a) => ({ ...a, portrait: v }))} />
+          <FaceStep seed={game.seed} value={answers.portrait} heritage={(answers.heritage as Heritage | null) ?? null} age={entryAge(full, content)} page={facePage} onPage={() => setFacePage((p) => p + 1)} onChange={(v) => setAnswers((a) => ({ ...a, portrait: v }))} onHeritage={(h) => { setAnswers((a) => ({ ...a, heritage: h })); setFacePage(0); }} />
         )}
         {step === 'diocese' && (
           <DioceseCards
@@ -268,14 +270,19 @@ function Summary({ answers, seen }: { answers: CreationAnswers; seen: Partial<Re
   );
 }
 
-function FaceStep({ seed, value, age, page, onPage, onChange }: { seed: string; value: string; age: number; page: number; onPage: () => void; onChange: (v: string) => void }) {
+function FaceStep({ seed, value, heritage, age, page, onPage, onChange, onHeritage }: { seed: string; value: string; heritage: Heritage | null; age: number; page: number; onPage: () => void; onChange: (v: string) => void; onHeritage: (h: Heritage | null) => void }) {
   const chosen = parseSpec(value);
   return (
     <div className="flex gap-6">
       <div>
+        <div className="heading mb-2">Your people</div>
+        <select className="pinput mb-3 text-sm" value={heritage ?? ''} onChange={(e) => onHeritage((e.target.value || null) as Heritage | null)}>
+          <option value="">Any background</option>
+          {(Object.keys(HERITAGE_LABEL) as Heritage[]).map((h) => <option key={h} value={h}>{HERITAGE_LABEL[h]}</option>)}
+        </select>
         <div className="heading mb-2">Start from one</div>
         <ul className="grid grid-cols-4 gap-2">
-          {facesFor(seed, page).map((spec) => {
+          {facesFor(seed, page, 8, heritage).map((spec) => {
             const id = serializeSpec(spec);
             return (
               <li key={id}>
