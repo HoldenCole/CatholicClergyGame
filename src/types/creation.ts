@@ -87,6 +87,8 @@ export interface CreationAnswers {
   firstName: string;
   lastName: string;
   portrait: string;
+  /** The people he comes from, for the face pools; names are typed by hand. */
+  heritage?: string | null;
   entryYear: number;
   origin: Origin;
   tie: DioceseTie;
