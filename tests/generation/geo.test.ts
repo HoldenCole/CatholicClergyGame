@@ -15,7 +15,7 @@ function worldOf(presetId: string, seed = 'geo') {
 
 describe('generation/geo: the real churches where they stand', () => {
   it('every preset carries a map and coordinates for every real church and named place', () => {
-    for (const id of ['washington', 'chicago', 'new_york', 'los_angeles', 'houston']) {
+    for (const id of ['washington', 'chicago', 'new_york', 'los_angeles', 'houston', 'philadelphia', 'boston', 'san_francisco', 'miami', 'new_orleans']) {
       const p = presetById(id)!;
       expect(p.map, id).toBeDefined();
       const names = new Set((p.places ?? []).map((x) => x.name));

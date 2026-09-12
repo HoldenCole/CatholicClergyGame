@@ -73,7 +73,7 @@ export function refreshOpenings(state: GameState, rng: Rng): { state: GameState;
       kind: rng.chance(0.75) ? 'pastor' : 'administrator',
       parishId: null,
       urgency: Math.min(100, 30 + shortage * 12 + rng.int(0, 20)),
-      needsSpanish: rng.chance(world.diocese.presetId === 'los_angeles' || world.diocese.presetId === 'houston' ? 0.6 : 0.3),
+      needsSpanish: rng.chance(['los_angeles', 'houston', 'miami'].includes(world.diocese.presetId) ? 0.6 : 0.3),
       needsAdmin: rng.chance(0.3),
       alignment: rollAlignment(rng, world.diocese.visible.disposition * 0.3, 30),
       week: state.clock.week,

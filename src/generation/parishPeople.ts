@@ -18,7 +18,7 @@ function heritageFor(rng: Rng, parish: Parish, presetId: string): Parameters<typ
     if (k === 'latino') {
       weights.mexican = (weights.mexican ?? 0) + share * 3;
       weights.central_american = (weights.central_american ?? 0) + share;
-      weights.caribbean = (weights.caribbean ?? 0) + share * (presetId === 'new_york' ? 2 : 0.3);
+      weights.caribbean = (weights.caribbean ?? 0) + share * (presetId === 'miami' ? 3 : presetId === 'new_york' ? 2 : 0.3);
     } else weights[k] = (weights[k] ?? 0) + share * 4;
   }
   for (const [k, v] of Object.entries(preset?.heritage ?? CLERGY_HERITAGE)) weights[k] = (weights[k] ?? 0) + v * 0.2;

@@ -2,8 +2,8 @@ import type { DiocesePreset } from '@/types';
 
 const modules = import.meta.glob<{ default: DiocesePreset }>('./*.json', { eager: true });
 
-/** The five presets, in a fixed order so the preview is stable. */
-export const diocesePresets: DiocesePreset[] = ['new_york', 'chicago', 'los_angeles', 'houston', 'washington']
+/** The presets, in a fixed order so the preview is stable. */
+export const diocesePresets: DiocesePreset[] = ['new_york', 'chicago', 'los_angeles', 'houston', 'washington', 'philadelphia', 'boston', 'san_francisco', 'miami', 'new_orleans']
   .map((id) => Object.values(modules).find((m) => m.default.id === id)?.default)
   .filter((p): p is DiocesePreset => !!p);
 
