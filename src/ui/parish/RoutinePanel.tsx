@@ -7,6 +7,8 @@ import { commitmentAp } from '@/engine/offers';
 import { evaluateAll } from '@/engine/conditions';
 import { OBLIGATION_KEYS, type Quality } from '@/types';
 import Sheet from '../Sheet';
+import HomilyPanel from './HomilyPanel';
+import AwayPanel from './AwayPanel';
 
 const QUALITIES: Quality[] = ['min', 'standard', 'invested'];
 const FEEDS: Record<string, string> = {
@@ -124,6 +126,7 @@ export default function RoutinePanel() {
           })}
         </ul>
       </Sheet>
+      <HomilyPanel />
       <Sheet title="Everything else">
         <ul className="flex flex-col gap-1.5">
           {actionDefs.filter((a) => !a.requires || evaluateAll(a.requires, game)).map((a) => {
@@ -167,6 +170,7 @@ export default function RoutinePanel() {
           })}
         </ul>
       </Sheet>
+      <AwayPanel />
     </>
   );
 }

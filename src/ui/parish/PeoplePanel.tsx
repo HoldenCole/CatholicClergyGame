@@ -2,6 +2,7 @@ import { useGameStore } from '@/engine/store';
 import { bondsPhrase, parishPeople } from '@/systems/bonds';
 import { relationshipWord } from '@/systems/classmates';
 import Sheet from '../Sheet';
+import StaffPanel from './StaffPanel';
 import Portrait from '../portraits/Portrait';
 import { portraitForNpc, yearOf } from '../portraits/spec';
 import { TRAIT_LABEL } from '../portraits/traits';
@@ -11,10 +12,12 @@ export default function PeoplePanel() {
   const game = useGameStore((s) => s.game);
   if (!game?.parish) return null;
   const people = parishPeople(game);
-  if (!people.length) return null;
   const year = yearOf(game.clock.startDay, game.clock.week);
   const known = people.filter((n) => (n.bonds?.length ?? 0) > 0).length;
   return (
+    <>
+    <StaffPanel />
+    {people.length > 0 && (
     <Sheet title="The people you know">
       <p className="ink-muted mb-2 text-xs">{known === 0 ? 'Names on the registry, so far. The sacraments will make them yours.' : known === 1 ? 'One family the parish will remember you by.' : `${known} people the parish will remember you by.`}</p>
       <ul className="flex flex-col gap-1 text-sm">
@@ -34,5 +37,7 @@ export default function PeoplePanel() {
         })}
       </ul>
     </Sheet>
+    )}
+    </>
   );
 }

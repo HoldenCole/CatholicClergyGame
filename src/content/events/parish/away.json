@@ -1,0 +1,372 @@
+{
+  "_notes": "Away pool: the week a priest is on retreat or vacation. Each scene except the last carries beat 'away' and is gated on the engine flags away:retreat | away:vacation and away:place:<abbey|diocesan|home|rome|beach|cabin>, which are true during the week he is gone. Choices are about the man: rest, prayer, the phone, the family; effects are mostly piety and charisma with small flags. The last scene (aw_skipped_retreat) has no beat and fires at home when the engine flag retreat:overdue is true. Ids prefixed aw_. Flags defined here (all aw_): aw_abbey_kept_silence, aw_abbey_took_the_call, aw_abbey_spoke_to_abbot, aw_diocesan_kept_quiet, aw_diocesan_walked_him_up, aw_diocesan_told_vicar, aw_home_answered_sibling, aw_home_deflected_sibling, aw_home_prayed_the_hours, aw_rome_heard_him_out, aw_rome_kept_it_light, aw_rome_prayed_at_the_tomb, aw_beach_took_the_call, aw_beach_let_it_ring, aw_beach_lost_at_cards, aw_cabin_finished_the_book, aw_cabin_sat_with_it, aw_cabin_went_home_early, aw_retreat_booked, aw_retreat_deferred, aw_retreat_argued. Sensitive: aw_diocesan_retreat (a brother priest and drink) is authored only and must not be skinned by the LLM layer; no risk or mechanic is attached to it.",
+  "events": [
+    {
+      "id": "aw_abbey_retreat",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["doubt", "body_vs_vow"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 12,
+      "suppressYears": 1,
+      "beat": "away",
+      "requires": [
+        { "type": "flag", "key": "away:retreat", "value": true },
+        { "type": "flag", "key": "away:place:abbey", "value": true }
+      ],
+      "title": "The Four O'Clock Bell",
+      "body": "The guestmaster shows you the room, which has a bed and a desk and a crucifix and a window onto the orchard, and tells you the hours and says that the silence begins at the door and that the brothers will not speak to you unless you ask, and then he leaves. The bell for Vigils is at four. You hear it the first morning as a thing that has happened to you and go, and sit in the guests' stalls in the dark while the monks sing the psalms they have sung every day since the house was founded, slowly, with the long pause at the half-verse that seminary told you about and that you have never once kept in a parish. By the third day the bell is not happening to you; you are awake before it. Your phone is in the desk drawer, off, and you have opened the drawer twice. On the fourth day the abbot comes to the guesthouse, as he does once for every retreatant, and sits with you for ten minutes and says almost nothing, and at the end he stands and says one sentence, and it is about you, and it is right, and you do not know how he knew.",
+      "flavorPrompt": "A monastic retreat: the guest room, Vigils at four, a phone in a drawer, and the abbot's one sentence.",
+      "choices": [
+        {
+          "id": "keep_the_silence",
+          "label": "Keep the silence to the end, and the phone in the drawer",
+          "default": true,
+          "outcome": "You do not open the drawer again. On the last morning you are in the stalls before the bell and know the tones by then, and when you drive out through the orchard the parish comes back to you a mile at a time, which is the right speed. The sentence stays with you. You do not repeat it to anyone. There are eleven messages when you turn the phone on, and none of them needed you.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 3 },
+            { "target": "flag", "key": "aw_abbey_kept_silence", "value": true }
+          ]
+        },
+        {
+          "id": "take_the_call",
+          "label": "Check the phone on the fifth night, once, because of the funeral",
+          "outcome": "There is a death, as you thought there might be, and you call {@secretary} from the orchard in the dark and set the funeral for the day after you are back, and the family is grateful, and the silence is broken, and you know it. The last two days are a retreat with a funeral in them. The abbot's sentence is still true. It is harder to hear.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "flag", "key": "aw_abbey_took_the_call", "value": true }
+          ]
+        },
+        {
+          "id": "ask_the_abbot",
+          "label": "Ask the abbot for a second ten minutes, and tell him what the sentence touched",
+          "requires": [{ "type": "stat", "key": "piety", "op": ">=", "value": 45 }],
+          "outcome": "He gives you an hour, which the guestmaster says afterward he does not do. You tell him the thing the sentence touched and he does not fix it or explain it; he asks you two questions and then says the Office is in ten minutes and you should come. You go. When you leave the abbey he gives you a card with the house's number on it and says that the door is open, and you keep the card in your breviary for the rest of your priesthood.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 3 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "flag", "key": "aw_abbey_spoke_to_abbot", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "aw_diocesan_retreat",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["friendship_vs_duty", "loyalty_vs_honesty"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 12,
+      "suppressYears": 1,
+      "beat": "away",
+      "requires": [
+        { "type": "flag", "key": "away:retreat", "value": true },
+        { "type": "flag", "key": "away:place:diocesan", "value": true }
+      ],
+      "title": "The Hotel Bar",
+      "body": "The diocesan retreat is at the conference hotel this year, because the retreat house was sold, and the presbyterate of {diocese} is in a ballroom with the carpet and the chandeliers and a hired speaker who has a book. He is good. He has given this retreat in nine dioceses and it shows; the jokes land on the beat and the silence after the third conference is real, and men who have not sat still in a year sit still. The days are conferences and Mass and confessions and the long afternoons that are the actual retreat, if a man uses them. On the second night, coming back from a walk, you pass the hotel bar and {@brother_priest} is at it, alone, with the glass that is not his first. He sees you. He says come and sit, and you sit, and for a while it is two priests at a bar in a hotel talking about the speaker. Then he puts the glass down and does not pick it up and says, looking at it and not at you, that he would be grateful if this stayed here, that it is a retreat and a man is allowed a drink on retreat, and that he is fine. He says fine twice. The bar closes at midnight.",
+      "flavorPrompt": "Sensitive: authored only. A diocesan retreat at a conference hotel, and a brother priest at the bar who asks you to keep it there.",
+      "choices": [
+        {
+          "id": "keep_it_here",
+          "label": "Say it stays here, and stay with him until the bar closes",
+          "default": true,
+          "outcome": "You say it stays here and you mean it, and you stay, and you do not have a second yourself, and at midnight you walk up together and he says goodnight at his door as if nothing was said. He is at Vigils in the morning. He is at every conference. On the last day he sits beside you at Mass and you are aware that he has given you something to carry and that you have agreed to carry it, and you do not yet know how heavy it is.",
+          "effects": [
+            { "target": "relationship", "key": "@brother_priest", "delta": 8 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "flag", "key": "aw_diocesan_kept_quiet", "value": true }
+          ]
+        },
+        {
+          "id": "walk_him_up",
+          "label": "Say you will keep it here, and ask him to walk up with you now",
+          "requires": [{ "type": "stat", "key": "charisma", "op": ">=", "value": 45 }],
+          "outcome": "He does not argue, which tells you something, and on the stairs he talks, and it is not about the drink; it is about the parish and the year and a thing his mother said before she died. At his door he says thank you and does not say for what. You do not tell anyone. You call him three weeks later about nothing and he knows why you called and lets you, and that becomes a thing the two of you do, calling about nothing.",
+          "effects": [
+            { "target": "relationship", "key": "@brother_priest", "delta": 10 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "flag", "key": "aw_diocesan_walked_him_up", "value": true }
+          ]
+        },
+        {
+          "id": "tell_the_vicar",
+          "label": "Say nothing to him, and tell {@vicar_for_clergy} before you leave the hotel",
+          "outcome": "You do it on the last morning, in the lobby, in three sentences, and {@vicar_for_clergy} listens and thanks you and says he will handle it with care, and you believe that he will try. {@brother_priest} finds out, as men do, and does not speak to you at the next deanery meeting, or the one after. Whether it was the right thing you will not know for years, and when you do know, it will be because of what happened to him, one way or the other.",
+          "effects": [
+            { "target": "relationship", "key": "@brother_priest", "delta": -12 },
+            { "target": "reputation", "key": "chancery", "delta": 2 },
+            { "target": "reputation", "key": "brother_priests", "delta": -4 },
+            { "target": "honesty", "key": "", "delta": 1 },
+            { "target": "flag", "key": "aw_diocesan_told_vicar", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "aw_home_retreat",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["doubt", "friendship_vs_duty"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 12,
+      "suppressYears": 1,
+      "beat": "away",
+      "requires": [
+        { "type": "flag", "key": "away:retreat", "value": true },
+        { "type": "flag", "key": "away:place:home", "value": true }
+      ],
+      "title": "The Kitchen at Home",
+      "body": "You have told the parish it is a retreat and told yourself the same, and it is true in the sense that you are away and the breviary is open on the table and you say the Office in the room you slept in as a boy. It is also your mother's kitchen. Your mother makes the things she made, and asks nothing about the parish, which is her way of asking, and the house has the smell it had. You sleep nine hours the first night. You had forgotten that was possible. On the third evening, after the dishes, your sister stays at the table after your mother has gone up, and turns a mug around on the placemat, and says the thing that has been in the house all week: have you ever thought about leaving? Not angry. Not hoping. Just asking, because nobody else will, and because you are the one who is always asked how everyone else is and never how you are. The furnace kicks on. Upstairs the floor creaks where your mother is not asleep.",
+      "flavorPrompt": "A retreat at the family home: the mother's kitchen, the boyhood room, and the sibling's question at the table after dishes.",
+      "choices": [
+        {
+          "id": "answer_honestly",
+          "label": "Answer the question, truthfully, whatever the answer is",
+          "default": true,
+          "outcome": "You tell her the truth, which is longer than yes or no and has a year in it you have not told anyone about. It is the first time you have said it out loud and it does not break anything. She listens and does not advise and pours the last of the coffee. Upstairs the floor creaks again. In the morning your mother says nothing and makes eggs, and you are fairly sure she heard, and fairly sure that is all right.",
+          "effects": [
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "stat", "key": "piety", "delta": 2 },
+            { "target": "honesty", "key": "", "delta": 1 },
+            { "target": "flag", "key": "aw_home_answered_sibling", "value": true }
+          ]
+        },
+        {
+          "id": "deflect",
+          "label": "Say every priest thinks about it, and ask about the kids",
+          "outcome": "It is true and it is a door closing, and she hears the door and asks about nothing after that. You sleep another nine hours and drive back rested, which was the point. Somewhere in the drive you notice that the question is still on the table at home, turning like the mug, and that you left it there on purpose.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": -1 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "flag", "key": "aw_home_deflected_sibling", "value": true }
+          ]
+        },
+        {
+          "id": "make_it_a_retreat",
+          "label": "Answer briefly, and spend the last days on the Office and the parish church down the road",
+          "requires": [{ "type": "stat", "key": "piety", "op": ">=", "value": 40 }],
+          "outcome": "You say that you think about it and that you are still here, which is the answer and is enough for your sister, who nods and goes up. The last three days you say the Hours at the church you were baptized in, in the empty nave with the old pastor's successor pretending not to notice you, and the retreat becomes one. Your mother drives you to the highway and says, at the ramp, that you look better, which from her is a homily.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 3 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "flag", "key": "aw_home_prayed_the_hours", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "aw_rome_classmates",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["ambition_vs_integrity", "friendship_vs_duty"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 12,
+      "suppressYears": 1,
+      "beat": "away",
+      "requires": [
+        { "type": "flag", "key": "away:vacation", "value": true },
+        { "type": "flag", "key": "away:place:rome", "value": true }
+      ],
+      "title": "Two Classmates in Rome",
+      "body": "The plan was a week in Rome with two men from your ordination class, and the plan holds: the early Mass at a side altar in St. Peter's arranged by a friend of a friend, the walk to the Lateran, the evening at the trattoria near the Pantheon that one of them knows the owner of. One of them is doing well. He is at a dicastery, second secretary to somebody, and knows the waiters and the monsignori and the shortcut through the Borgo, and is generous with all of it and a little too pleased to be. The other flew in from a parish in a diocese you have not heard of in years, and has the look of a man who has been at that parish too long, and drinks the wine and laughs at the right places and, on the third night, when the first has gone to a reception, sits with you on the steps of a church that is closed and says that he does not know why he came. Not to Rome. He is careful to say, not to Rome. The bells go at the quarter hour and neither of you can tell which church.",
+      "flavorPrompt": "Vacation in Rome with two ordination classmates: the one at a dicastery who knows everyone, the one from a forgotten parish on the church steps at night.",
+      "choices": [
+        {
+          "id": "hear_him_out",
+          "label": "Stay on the steps and let him say it all",
+          "default": true,
+          "outcome": "It takes until the bars close. It is a parish and a bishop and a year, and none of it is scandalous and all of it is heavy, and he is not asking you to fix it and you do not try. In the morning the man from the dicastery takes you both to a rooftop he has a key to and you look at the dome, and the other is quieter and better, and thanks you at the airport in a way that is not about the trip.",
+          "effects": [
+            { "target": "reputation", "key": "brother_priests", "delta": 3 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "flag", "key": "aw_rome_heard_him_out", "value": true }
+          ]
+        },
+        {
+          "id": "keep_it_light",
+          "label": "Say it is Rome, and get him up and walking",
+          "outcome": "You do not let him say it. You take him to the gelato place that is open late and then to the fountain and you talk about the seminary and the rector's habit of losing his glasses, and it is a good night, and it is a night he needed, maybe, or maybe he needed the other one. The week is a vacation. You come home rested and knowing something about him that you did not let him tell you.",
+          "effects": [
+            { "target": "reputation", "key": "brother_priests", "delta": 2 },
+            { "target": "stat", "key": "charisma", "delta": 2 },
+            { "target": "flag", "key": "aw_rome_kept_it_light", "value": true }
+          ]
+        },
+        {
+          "id": "take_him_to_the_tomb",
+          "label": "Get up before the others and take him to the early Mass at the tomb",
+          "requires": [{ "type": "stat", "key": "piety", "op": ">=", "value": 45 }],
+          "outcome": "You knock at five and he comes, unshaven, and the two of you concelebrate at a side altar with a Polish priest and four nuns while the basilica is still dark at the far end. Afterward he stands at the confessio for a long time and you leave him there. It does not solve anything. He tells you, at the trattoria that night, in front of the other, that it was the best morning he has had in a year, and the man from the dicastery looks at his plate.",
+          "effects": [
+            { "target": "reputation", "key": "brother_priests", "delta": 3 },
+            { "target": "stat", "key": "piety", "delta": 3 },
+            { "target": "flag", "key": "aw_rome_prayed_at_the_tomb", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "aw_beach_brother_priests",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["body_vs_vow", "competence"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 12,
+      "suppressYears": 1,
+      "beat": "away",
+      "requires": [
+        { "type": "flag", "key": "away:vacation", "value": true },
+        { "type": "flag", "key": "away:place:beach", "value": true }
+      ],
+      "title": "The House at the Shore",
+      "body": "The house belongs to a parishioner of somebody's, and four priests of {diocese} have it for the week, and it is the week the presbyterate talks about the rest of the year: the deck, the cards after supper, the Mass in the living room with the coffee table for an altar and the surf in the readings. {@brother_priest} has organized it for eleven years and runs the kitchen with a tyranny nobody minds. Nobody wears black. The card game is for quarters and is savage. On Wednesday afternoon, on the deck, with the game at the point where {@brother_priest} has all of the quarters, your phone rings, and it is the parish, and you look at it, and everyone at the table looks at you looking at it, because they have all had this phone ring and they all know the rule of the house, which is that {@brother_priest} made it and it is: not this week. It rings four times. {@secretary} does not call unless. You have three quarters left.",
+      "flavorPrompt": "A beach week with brother priests: cards for quarters, Mass on the coffee table, and the parish phone ringing on the deck.",
+      "choices": [
+        {
+          "id": "take_it",
+          "label": "Take the call on the beach, away from the table",
+          "outcome": "It is what you thought: a death, a family that wants you and not the priest covering. You handle it from the sand in ten minutes and set the funeral for the Monday you are back, and come up the steps to a table that has dealt you out. {@brother_priest} says nothing and hands you a beer. The rest of the week is a vacation with a funeral at the end of it, which is what most of them are.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 3 },
+            { "target": "relationship", "key": "@brother_priest", "delta": -3 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "flag", "key": "aw_beach_took_the_call", "value": true }
+          ]
+        },
+        {
+          "id": "let_it_ring",
+          "label": "Let it ring, and play the hand",
+          "default": true,
+          "outcome": "You turn it face down. {@brother_priest} deals. It is a death, you learn Saturday, and the covering priest did the funeral and did it well, and the family was disappointed and told {@secretary} so, and {@secretary} told them that Father was on vacation for the first time in two years, and they were ashamed, a little, and then they were not. You lose the three quarters. You sleep like a man with no phone.",
+          "effects": [
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "relationship", "key": "@brother_priest", "delta": 5 },
+            { "target": "reputation", "key": "parishioners", "delta": -2 },
+            { "target": "flag", "key": "aw_beach_let_it_ring", "value": true }
+          ]
+        },
+        {
+          "id": "call_back_after_cards",
+          "label": "Finish the hand, then call {@secretary} back from the porch",
+          "requires": [{ "type": "stat", "key": "charisma", "op": ">=", "value": 40 }],
+          "outcome": "You lose the hand and call back. {@secretary} has already told the family that Father will call on Sunday and the covering priest will do the vigil, and she is right, and you say so, and she says get some sun. You do. The family gets you at the Sunday Mass when you are back and the funeral is yours on Monday, and the table has kept your seat. It is possible, it turns out, to have both, if the secretary is good and the friends are patient.",
+          "effects": [
+            { "target": "relationship", "key": "@secretary", "delta": 4 },
+            { "target": "relationship", "key": "@brother_priest", "delta": 3 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "flag", "key": "aw_beach_lost_at_cards", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "aw_cabin_alone",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["doubt", "body_vs_vow"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 12,
+      "suppressYears": 1,
+      "beat": "away",
+      "requires": [
+        { "type": "any", "inner": [
+          { "type": "flag", "key": "away:retreat", "value": true },
+          { "type": "flag", "key": "away:vacation", "value": true }
+        ] },
+        { "type": "flag", "key": "away:place:cabin", "value": true }
+      ],
+      "title": "The Cabin",
+      "body": "The cabin has a woodstove and a lake and no signal, and you brought one book, which was a decision. Not a spiritual one: a novel, a long one you have been meaning to read since seminary, and the first two days you read it on the dock in a chair that is too low and sleep in the afternoon like a sick man. There is nobody. The nearest neighbor is a mile up the shore and has a flag out. You say Mass at the kitchen table with the stole over a flannel shirt. On the third night, with the book half done and the stove ticking, the thing you came away from comes, as you knew it would if you sat still long enough: not a crisis, nothing you could name for a spiritual director, only the plain question of what you are for, asked in the dark by no one, with the lake making its noise. You sit with it. You do not sleep much. In the morning there is a deer at the edge of the trees, a doe, looking at the cabin as if it has always been empty and you are the surprise, and she stays for a long minute and then is not there.",
+      "flavorPrompt": "A week alone at a lake cabin: a novel on the dock, Mass in a flannel shirt, the plain question in the dark, and the deer.",
+      "choices": [
+        {
+          "id": "finish_the_book",
+          "label": "Finish the book, and let the question keep",
+          "default": true,
+          "outcome": "You finish it on the last afternoon and it is very good and the ending is not what you expected. The question is still there when you close it, and you take it home with you like the dock chair's sunburn, and it is smaller in the parish than it was at the lake, which does not mean it is gone. You come back rested, actually rested, and the eight o'clock crowd notices before you do.",
+          "effects": [
+            { "target": "stat", "key": "charisma", "delta": 2 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "flag", "key": "aw_cabin_finished_the_book", "value": true }
+          ]
+        },
+        {
+          "id": "sit_with_it",
+          "label": "Put the book down and give the question the rest of the week",
+          "requires": [{ "type": "stat", "key": "piety", "op": ">=", "value": 40 }],
+          "outcome": "You do not finish the book. You say the Hours on the dock at the proper times and sit between them, and the question does not resolve and does not have to; by the fifth day it is a companion rather than a visitor, and you can look at it. The deer comes back once. When you drive out you know something about what you are for that you did not know on the way in, and it is not a sentence you could say to anyone.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 3 },
+            { "target": "stat", "key": "theology", "delta": 1 },
+            { "target": "flag", "key": "aw_cabin_sat_with_it", "value": true }
+          ]
+        },
+        {
+          "id": "go_home_early",
+          "label": "Pack up on the fourth morning and drive back to the parish",
+          "outcome": "You tell yourself it is the funeral schedule and it is partly the funeral schedule. The parish is glad to see you and does not ask why you are early. The book goes on the shelf at the page you stopped. The question stays at the lake, or you tell yourself it does, and in Lent you find it has come back on its own without the deer.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "stat", "key": "piety", "delta": -1 },
+            { "target": "flag", "key": "aw_cabin_went_home_early", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "aw_skipped_retreat",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["competence", "body_vs_vow"],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 12,
+      "suppressYears": 1,
+      "requires": [{ "type": "flag", "key": "retreat:overdue", "value": true }],
+      "title": "Canon 276",
+      "body": "The letter is from the bishop's office and is a form, mostly, with your name typed into it. It reminds the clergy of {diocese} that canon 276 obliges every cleric to make a spiritual retreat according to the prescriptions of particular law, that the particular law of this diocese prescribes one annually, and that the records of the office show no retreat on file for you in the past year. It asks that you schedule one and inform the office. It is signed by the bishop with the stamp that is not his hand. You know why there was no retreat. There was a funeral the week of the one you booked, and then the boiler, and then it was Lent. Two days later {@vicar_for_clergy} calls, and says he just wanted to check in, which is what he says, and asks how things are, and does not mention the letter, and waits. The waiting is the conversation. The retreat house has a week in three months. {@secretary} has the calendar open on the other side of the wall and is not typing.",
+      "flavorPrompt": "A form letter about canon 276 and the retreat that did not happen; the vicar for clergy who just wanted to check in.",
+      "choices": [
+        {
+          "id": "book_it",
+          "label": "Book the week in three months and tell {@vicar_for_clergy} you have",
+          "default": true,
+          "outcome": "You say it before he has to ask and you can hear him relax on the line; he says good, and then talks about the deanery for ten minutes as if that was why he called. {@secretary} blocks the week and moves two things and does not say that she has been trying to block it since Advent. The retreat house sends the confirmation with a note about bringing your own alb. The office files it. You go.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": 3 },
+            { "target": "relationship", "key": "@secretary", "delta": 3 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "flag", "key": "aw_retreat_booked", "value": true }
+          ]
+        },
+        {
+          "id": "explain_and_defer",
+          "label": "Explain the funeral and the boiler and say you will find a week after Easter",
+          "outcome": "{@vicar_for_clergy} says he understands, and does, and says the office only wants to see a date, and you say after Easter, and he says he will note that. After Easter there is First Communion and then the festival. The office writes again in the fall, and this time the letter is not a form, and you understand that a man who does not go on retreat becomes, in the chancery's mind, a man who does not go on retreat, which is a category with other things in it.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": -3 },
+            { "target": "stat", "key": "piety", "delta": -1 },
+            { "target": "flag", "key": "aw_retreat_deferred", "value": true }
+          ]
+        },
+        {
+          "id": "say_the_parish_is_the_retreat",
+          "label": "Tell {@vicar_for_clergy}, plainly, that you have not had a week to give and ask what the diocese will cover",
+          "requires": [{ "type": "stat", "key": "charisma", "op": ">=", "value": 45 }],
+          "outcome": "You say that you would go tomorrow if there were a priest to say the Masses, and that there has not been, and that you would like the office to send one. It is not what he expected and it is not unfair. He says he will see. Three weeks later a retired priest of the diocese appears at the rectory with a suitcase and says he has been sent for a week, and the retreat house has a cancellation, and you go, and the letter is filed, and the vicar for clergy has learned that you will say what you need, which he will remember either way.",
+          "effects": [
+            { "target": "honesty", "key": "", "delta": 1 },
+            { "target": "reputation", "key": "chancery", "delta": 1 },
+            { "target": "reputation", "key": "brother_priests", "delta": 2 },
+            { "target": "stat", "key": "piety", "delta": 2 },
+            { "target": "flag", "key": "aw_retreat_argued", "value": true }
+          ]
+        }
+      ]
+    }
+  ]
+}

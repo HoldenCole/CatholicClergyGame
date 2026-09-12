@@ -68,6 +68,8 @@ export interface GameState {
   strain: number;
   /** The player's own dials, kept in the save so a replay is byte-identical. */
   settings?: GameSettings;
+  /** A week away from the parish: the retreat or the vacation, where, and how long is left. */
+  away?: { placeId: string; kind: 'retreat' | 'vacation'; weeksLeft: number; startWeek: number } | null;
   /** What moved each constituency lately, with the reason, so the sheets can say why. Trimmed to a quarter. */
   movers?: { week: number; key: string; delta: number; why: string }[];
   /** Societies he belongs to. Absent in older saves. */

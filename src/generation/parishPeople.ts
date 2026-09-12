@@ -4,7 +4,7 @@ import { presetById } from '@/content/dioceses';
 import { CLERGY_HERITAGE, eraForBirthYear, rollFemaleName, rollHeritage, rollMaleName } from './names';
 import { addStats, finishNpc, rollAlignment, rollBaseStats } from './npc';
 
-const STAFF: { tag: string; title: string; ages: [number, number]; women: number; when: (p: Parish) => boolean }[] = [
+export const STAFF_SPECS: { tag: string; title: string; ages: [number, number]; women: number; when: (p: Parish) => boolean }[] = [
   { tag: 'secretary', title: '', ages: [30, 68], women: 0.85, when: () => true },
   { tag: 'dre', title: '', ages: [28, 62], women: 0.8, when: (p) => p.households >= 500 || p.school !== 'none' },
   { tag: 'music_director', title: '', ages: [24, 70], women: 0.5, when: (p) => p.households >= 400 },
@@ -26,28 +26,32 @@ function heritageFor(rng: Rng, parish: Parish, presetId: string): Parameters<typ
 }
 
 /** Staff and a handful of named parishioners for the player's parish. DESIGN 8.2 */
+/** One member of staff for a desk, rolled: a hire or the one who was there. */
+export function generateStaffMember(rng: Rng, parish: Parish, presetId: string, year: number, tag: string, id = `${parish.id}_${tag}`): Npc {
+  const spec = STAFF_SPECS.find((s) => s.tag === tag) ?? STAFF_SPECS[0]!;
+  const age = rng.int(spec.ages[0], spec.ages[1]);
+  const birthYear = year - age;
+  const heritage = heritageFor(rng, parish, presetId);
+  const woman = rng.chance(spec.women);
+  return finishNpc(rng, {
+    id,
+    name: woman ? rollFemaleName(rng, heritage) : rollMaleName(rng, heritage, eraForBirthYear(birthYear)),
+    role: 'lay',
+    title: '',
+    birthYear,
+    origin: parish.terrain === 'latino' ? 'latino_immigrant' : parish.terrain === 'rural' ? 'rural' : parish.terrain === 'suburban' ? 'suburban' : 'urban_ethnic',
+    stats: addStats(rollBaseStats(rng, 20, 55), spec.tag === 'maintenance' ? { administration: 10 } : spec.tag === 'music_director' ? { charisma: 10 } : {}),
+    tags: [spec.tag, `parish:${parish.id}`, 'staff'],
+    alignment: rollAlignment(rng, parish.alignment * 0.5, 30),
+    relationship: Math.round(rng.gaussian() * 6),
+  });
+}
+
 export function generateParishPeople(rng: Rng, parish: Parish, presetId: string, year: number): Npc[] {
   const out: Npc[] = [];
-  for (const spec of STAFF) {
+  for (const spec of STAFF_SPECS) {
     if (!spec.when(parish)) continue;
-    const age = rng.int(spec.ages[0], spec.ages[1]);
-    const birthYear = year - age;
-    const heritage = heritageFor(rng, parish, presetId);
-    const woman = rng.chance(spec.women);
-    out.push(
-      finishNpc(rng, {
-        id: `${parish.id}_${spec.tag}`,
-        name: woman ? rollFemaleName(rng, heritage) : rollMaleName(rng, heritage, eraForBirthYear(birthYear)),
-        role: 'lay',
-        title: '',
-        birthYear,
-        origin: parish.terrain === 'latino' ? 'latino_immigrant' : parish.terrain === 'rural' ? 'rural' : parish.terrain === 'suburban' ? 'suburban' : 'urban_ethnic',
-        stats: addStats(rollBaseStats(rng, 20, 55), spec.tag === 'maintenance' ? { administration: 10 } : spec.tag === 'music_director' ? { charisma: 10 } : {}),
-        tags: [spec.tag, `parish:${parish.id}`, 'staff'],
-        alignment: rollAlignment(rng, parish.alignment * 0.5, 30),
-        relationship: Math.round(rng.gaussian() * 6),
-      }),
-    );
+    out.push(generateStaffMember(rng, parish, presetId, year, spec.tag));
   }
   const count = rng.int(6, 9);
   // Two of them are family: a parish remembers by surname.

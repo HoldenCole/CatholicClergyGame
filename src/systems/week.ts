@@ -8,6 +8,7 @@ import { bondsWeek } from './bonds';
 import { liturgyWeek } from './liturgy';
 import { fundBonuses } from './spending';
 import { noteMover, trimMovers } from './movers';
+import { homilyWeek } from './homily';
 import { FEAST_LABEL, feastsOfWeek } from '@/engine/feasts';
 import { noticeQuarter } from './notice';
 import { applyEffects } from '@/engine/effects';
@@ -345,7 +346,10 @@ export function resolveWeek(state: GameState, rng: Rng): { state: GameState; led
   const mass = liturgyWeek(next);
   next = mass.state;
   if (mass.line) lines.push(mass.line);
+  const preached = homilyWeek(next);
+  next = preached.state;
   const bonuses = fundBonuses(next);
+  bonuses.collections += preached.collections;
   const target = attendanceTarget(next, care, mass.pull + bonuses.pull);
   const attendance = parish.attendance + (target - parish.attendance) * WEEK.attendanceFollow;
 

@@ -1,4 +1,5 @@
 import type { Condition, Effect } from './events';
+import type { Npc } from './npc';
 import type { Season } from './time';
 import type { Role } from './world';
 
@@ -223,6 +224,13 @@ export interface ParishState {
   work?: ProblemWork | null;
   /** What he preaches on this month, and when he set it. */
   homily?: { topic: string; setWeek: number };
+  /** The candidates for an empty desk, by staff tag, until one is hired. */
+  hiring?: Record<string, Npc[]>;
+  /** When each desk was last filled, by tag, so the first months read as new. */
+  staffHired?: Record<string, number>;
+  /** The calendar year of his last retreat, and the vacation weeks taken this year. */
+  retreatYear?: number;
+  vacation?: { year: number; weeks: number };
   /** The deanery the parish sits in: the dean and the priests of it, from the map. */
   deanery?: { id: string; deanId: string; priestIds: string[]; parishIds: string[] };
 }
@@ -240,4 +248,30 @@ export interface WeekLedger {
   attendanceDelta: number;
   debtService: number;
   lines: string[];
+}
+
+/** What he preaches on this month. parish/homilies.json */
+export interface HomilyDef {
+  id: string;
+  label: string;
+  blurb: string;
+  requires?: Condition[];
+  weekly: Effect[];
+  /** A share on the plate while it stands. */
+  collections?: number;
+}
+
+/** A week away: the retreat or the vacation. parish/away.json */
+export interface AwayPlaceDef {
+  id: string;
+  kind: 'retreat' | 'vacation';
+  label: string;
+  blurb: string;
+  weeks: number;
+  /** Strain repaired per week. */
+  strain: number;
+  /** What a supply priest costs the parish per week while the pastor is gone. */
+  supply: number;
+  requires?: Condition[];
+  weekly: Effect[];
 }
