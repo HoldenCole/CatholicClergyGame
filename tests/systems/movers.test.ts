@@ -22,7 +22,8 @@ describe('systems/movers: the why behind the numbers', () => {
   it('effects applied with a reason are remembered under it', () => {
     const s = parishState('reason');
     const next = applyEffects(s, [{ target: 'reputation', key: 'chancery', delta: 6 }, { target: 'stat', key: 'piety', delta: 1 }], {}, 'The Finance Council');
-    expect(next.movers).toHaveLength(1);
+    // The reputation and the stat are both remembered, each under the reason.
+    expect(next.movers).toHaveLength(2);
     expect(explainReputation(next, 'chancery')).toEqual([{ label: 'The Finance Council', amount: 6 }]);
     expect(explainReputation(next, 'parishioners')).toEqual([]);
   });

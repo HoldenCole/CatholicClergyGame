@@ -1,3 +1,4 @@
+import { noteStatChange } from './movers';
 import type { Archetype, EvaluationRecord, EvaluationResult, GameState, Pillar, SeminaryState, StatKey } from '@/types';
 import { ARCHETYPES, PILLARS } from '@/types';
 import { applyStat, decayWeek } from './stats';
@@ -98,12 +99,15 @@ export function formationWeek(state: GameState): GameState {
       }
     }
   }
+  const studied = stats;
   stats = decayWeek(stats, {
     adminAp: 0,
     theologyUsed: !!e && e.intellectual > 0,
     knowledgeUsed: !!e && e.intellectual > 0,
   });
-  return { ...state, character: { ...c, stats }, seminary: { ...sem, pillarScores } };
+  let next = noteStatChange(state, c.stats, studied, "the year's emphasis");
+  next = noteStatChange(next, studied, stats, 'unused, and fading');
+  return { ...next, character: { ...c, stats }, seminary: { ...sem, pillarScores } };
 }
 
 export interface EvaluationInput {

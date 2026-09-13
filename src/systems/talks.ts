@@ -86,7 +86,7 @@ export function haveAWord(state: GameState, npcId: string, rng: Rng): { state: G
   const variant = def.text[index]!;
   const bindings = { '@who': npcId };
   const text = renderText(variant, state, bindings, textExtras(state));
-  let next = applyEffects(state, [...def.effects, ...(def.variantEffects?.[index] ?? [])], bindings);
+  let next = applyEffects(state, [...def.effects, ...(def.variantEffects?.[index] ?? [])], bindings, `talking with ${npc.name.first} ${npc.name.last}`);
   const talks = talksOf(next);
   next = {
     ...next,

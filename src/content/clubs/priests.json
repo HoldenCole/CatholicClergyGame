@@ -1,41 +1,432 @@
 [
-  { "id": "deanery_table", "phase": "priest", "label": "The deanery table", "blurb": "Monday dinner with the priests of the deanery, at the same restaurant, at the same table, for thirty years. Missing it is noticed; coming is how you learn what the chancery will do before it does it.", "hours": 1, "fellows": 4, "builds": "brother priests, the news before the memo",
-    "onJoin": [{ "target": "flag", "key": "club:deanery_table", "value": true }],
-    "onLeave": [{ "target": "flag", "key": "club:deanery_table", "value": false }, { "target": "reputation", "key": "brother_priests", "delta": -4 }],
-    "weekly": [{ "target": "reputation", "key": "brother_priests", "delta": 0.15 }, { "target": "stat", "key": "knowledge", "delta": 0.01 }, { "target": "stat", "key": "piety", "delta": -0.01 }] },
-  { "id": "emmaus", "phase": "priest", "label": "An Emmaus group", "blurb": "Five priests, once a fortnight, who tell each other the truth. A holy hour, a meal, and the thing nobody else hears.", "hours": 1, "fellows": 4, "builds": "piety, a man who does not burn out alone",
-    "onJoin": [{ "target": "flag", "key": "club:emmaus", "value": true }],
-    "onLeave": [{ "target": "flag", "key": "club:emmaus", "value": false }],
-    "weekly": [{ "target": "stat", "key": "piety", "delta": 0.06 }, { "target": "reputation", "key": "brother_priests", "delta": 0.05 }],
-    "stamina": 1 },
-  { "id": "priests_tlm", "leaning": -1, "phase": "priest", "label": "The priests' Latin Mass circle", "blurb": "The men who celebrate the older form, where the bishop allows it, and the ones who would like to. They meet at a parish forty miles out and say Mass together on a Tuesday.", "hours": 1, "inviteOnly": true, "fellows": 3, "builds": "the traditional wing, Latin kept sharp, a faction that will speak for you and against you",
-    "requires": [{ "type": "any", "inner": [{ "type": "credential", "key": "latin" }, { "type": "flag", "key": "can_celebrate_tlm", "value": true }, { "type": "flag", "key": "affiliation:trad_fraternity", "value": true }] }],
-    "onJoin": [{ "target": "flag", "key": "club:priests_tlm", "value": true }, { "target": "outspokenness", "key": "outspokenness", "delta": 4 }],
-    "onLeave": [{ "target": "flag", "key": "club:priests_tlm", "value": false }, { "target": "reputation", "key": "traditional_bloc", "delta": -8 }],
-    "weekly": [{ "target": "reputation", "key": "traditional_bloc", "delta": 0.25 }, { "target": "reputation", "key": "progressive_bloc", "delta": -0.08 }, { "target": "stat", "key": "piety", "delta": 0.03 }, { "target": "alignment", "key": "alignment", "delta": -0.1 }] },
-  { "id": "chesterton", "leaning": -0.2, "phase": "priest", "label": "The Chesterton society", "blurb": "Laymen and a few priests who read aloud and argue in a pub back room. The newspaper's religion writer comes. So does a donor.", "hours": 1, "fellows": 2, "builds": "learning, the town, a name in print",
-    "requires": [{ "type": "stat", "key": "knowledge", "op": ">=", "value": 35 }],
-    "onJoin": [{ "target": "flag", "key": "club:chesterton", "value": true }],
-    "onLeave": [{ "target": "flag", "key": "club:chesterton", "value": false }],
-    "weekly": [{ "target": "stat", "key": "knowledge", "delta": 0.04 }, { "target": "reputation", "key": "public", "delta": 0.1 }, { "target": "outspokenness", "key": "outspokenness", "delta": 0.04 }] },
-  { "id": "liturgical_commission", "leaning": 0, "phase": "priest", "label": "The diocesan liturgical commission", "blurb": "The committee that decides what the diocese sings and how the cathedral is arranged, and which every pastor resents. The bishop reads its minutes.", "hours": 1, "inviteOnly": true, "fellows": 3, "builds": "the chancery, the bishop's ear, a hand on the diocese's liturgy",
-    "requires": [{ "type": "reputation", "key": "chancery", "op": ">=", "value": 25 }],
-    "onJoin": [{ "target": "flag", "key": "club:liturgical_commission", "value": true }],
-    "onLeave": [{ "target": "flag", "key": "club:liturgical_commission", "value": false }, { "target": "reputation", "key": "chancery", "delta": -5 }],
-    "weekly": [{ "target": "reputation", "key": "chancery", "delta": 0.12 }, { "target": "relationship", "key": "@bishop", "delta": 0.08 }, { "target": "stat", "key": "administration", "delta": 0.02 }, { "target": "reputation", "key": "brother_priests", "delta": -0.04 }] },
-  { "id": "priests_running", "phase": "priest", "label": "The priests who run", "blurb": "A Saturday morning ten kilometres with four brother priests and a deacon who is faster than all of you. The only hour of the week nobody can reach you.", "hours": 1, "fellows": 3, "builds": "presence, brother priests, a body that bears the week",
-    "onJoin": [{ "target": "flag", "key": "club:priests_running", "value": true }],
-    "onLeave": [{ "target": "flag", "key": "club:priests_running", "value": false }],
-    "weekly": [{ "target": "stat", "key": "charisma", "delta": 0.02 }, { "target": "reputation", "key": "brother_priests", "delta": 0.06 }],
-    "stamina": 1.5 },
-  { "id": "spanish_circle", "leaning": 0.2, "phase": "priest", "label": "The Spanish-speaking clergy", "blurb": "The priests who say the noon Mass in Spanish across the diocese, native and learned, who meet monthly and cover each other's parishes. The diocese cannot run without them and knows it.", "hours": 1, "fellows": 3, "builds": "the people, the chancery's gratitude, a network that covers for you",
-    "requires": [{ "type": "any", "inner": [{ "type": "credential", "key": "spanish" }, { "type": "flag", "key": "speaks_spanish", "value": true }] }],
-    "onJoin": [{ "target": "flag", "key": "club:spanish_circle", "value": true }],
-    "onLeave": [{ "target": "flag", "key": "club:spanish_circle", "value": false }],
-    "weekly": [{ "target": "reputation", "key": "parishioners", "delta": 0.08 }, { "target": "reputation", "key": "chancery", "delta": 0.05 }, { "target": "reputation", "key": "brother_priests", "delta": 0.05 }] },
-  { "id": "canon_lawyers", "phase": "priest", "label": "The canonists' lunch", "blurb": "The tribunal's priests and the two pastors who read canon law for pleasure, at a diner near the chancery on the first Friday. Every marriage case and every pastor's mistake passes across the table.", "hours": 1, "inviteOnly": true, "fellows": 2, "builds": "learning, the chancery, secrets",
-    "requires": [{ "type": "any", "inner": [{ "type": "credential", "key": "JCL" }, { "type": "credential", "key": "partial_jcl" }, { "type": "flag", "key": "tribunal_ready", "value": true }, { "type": "flag", "key": "office:tribunal", "value": true }] }],
-    "onJoin": [{ "target": "flag", "key": "club:canon_lawyers", "value": true }, { "target": "flag", "key": "knows_secrets", "value": true }],
-    "onLeave": [{ "target": "flag", "key": "club:canon_lawyers", "value": false }],
-    "weekly": [{ "target": "stat", "key": "knowledge", "delta": 0.04 }, { "target": "reputation", "key": "chancery", "delta": 0.08 }] }
+  {
+    "id": "deanery_table",
+    "phase": "priest",
+    "label": "The deanery table",
+    "blurb": "Monday dinner with the priests of the deanery, at the same restaurant, at the same table, for thirty years. Missing it is noticed; coming is how you learn what the chancery will do before it does it.",
+    "hours": 1,
+    "fellows": 4,
+    "builds": "brother priests, the news before the memo",
+    "onJoin": [
+      {
+        "target": "flag",
+        "key": "club:deanery_table",
+        "value": true
+      }
+    ],
+    "onLeave": [
+      {
+        "target": "flag",
+        "key": "club:deanery_table",
+        "value": false
+      },
+      {
+        "target": "reputation",
+        "key": "brother_priests",
+        "delta": -4
+      }
+    ],
+    "weekly": [
+      {
+        "target": "reputation",
+        "key": "brother_priests",
+        "delta": 0.15
+      },
+      {
+        "target": "stat",
+        "key": "knowledge",
+        "delta": 0.01
+      },
+      {
+        "target": "stat",
+        "key": "piety",
+        "delta": -0.01
+      }
+    ]
+  },
+  {
+    "id": "emmaus",
+    "phase": "priest",
+    "label": "An Emmaus group",
+    "blurb": "Five priests, once a fortnight, who tell each other the truth. A holy hour, a meal, and the thing nobody else hears.",
+    "hours": 1,
+    "fellows": 4,
+    "builds": "piety, a man who does not burn out alone",
+    "onJoin": [
+      {
+        "target": "flag",
+        "key": "club:emmaus",
+        "value": true
+      }
+    ],
+    "onLeave": [
+      {
+        "target": "flag",
+        "key": "club:emmaus",
+        "value": false
+      }
+    ],
+    "weekly": [
+      {
+        "target": "stat",
+        "key": "piety",
+        "delta": 0.06
+      },
+      {
+        "target": "reputation",
+        "key": "brother_priests",
+        "delta": 0.05
+      }
+    ],
+    "stamina": 1
+  },
+  {
+    "id": "priests_tlm",
+    "leaning": -1,
+    "phase": "priest",
+    "label": "The priests' Latin Mass circle",
+    "blurb": "The men who celebrate the older form, where the bishop allows it, and the ones who would like to. They meet at a parish forty miles out and say Mass together on a Tuesday.",
+    "hours": 1,
+    "inviteOnly": true,
+    "fellows": 3,
+    "builds": "the traditional wing, Latin kept sharp, a faction that will speak for you and against you",
+    "requires": [
+      {
+        "type": "any",
+        "inner": [
+          {
+            "type": "credential",
+            "key": "latin"
+          },
+          {
+            "type": "flag",
+            "key": "can_celebrate_tlm",
+            "value": true
+          },
+          {
+            "type": "flag",
+            "key": "affiliation:trad_fraternity",
+            "value": true
+          }
+        ]
+      }
+    ],
+    "onJoin": [
+      {
+        "target": "flag",
+        "key": "club:priests_tlm",
+        "value": true
+      },
+      {
+        "target": "outspokenness",
+        "key": "outspokenness",
+        "delta": 4
+      }
+    ],
+    "onLeave": [
+      {
+        "target": "flag",
+        "key": "club:priests_tlm",
+        "value": false
+      },
+      {
+        "target": "reputation",
+        "key": "traditional_bloc",
+        "delta": -8
+      }
+    ],
+    "weekly": [
+      {
+        "target": "reputation",
+        "key": "traditional_bloc",
+        "delta": 0.25
+      },
+      {
+        "target": "reputation",
+        "key": "progressive_bloc",
+        "delta": -0.08
+      },
+      {
+        "target": "stat",
+        "key": "piety",
+        "delta": 0.03
+      },
+      {
+        "target": "alignment",
+        "key": "alignment",
+        "delta": -0.1
+      }
+    ],
+    "hint": "The priests who say the older Mass ask a man who can say it, or who has plainly wanted to: the crypt chapel in seminary, or the faculty since."
+  },
+  {
+    "id": "chesterton",
+    "leaning": -0.2,
+    "phase": "priest",
+    "label": "The Chesterton society",
+    "blurb": "Laymen and a few priests who read aloud and argue in a pub back room. The newspaper's religion writer comes. So does a donor.",
+    "hours": 1,
+    "fellows": 2,
+    "builds": "learning, the town, a name in print",
+    "requires": [
+      {
+        "type": "stat",
+        "key": "knowledge",
+        "op": ">=",
+        "value": 35
+      }
+    ],
+    "onJoin": [
+      {
+        "target": "flag",
+        "key": "club:chesterton",
+        "value": true
+      }
+    ],
+    "onLeave": [
+      {
+        "target": "flag",
+        "key": "club:chesterton",
+        "value": false
+      }
+    ],
+    "weekly": [
+      {
+        "target": "stat",
+        "key": "knowledge",
+        "delta": 0.04
+      },
+      {
+        "target": "reputation",
+        "key": "public",
+        "delta": 0.1
+      },
+      {
+        "target": "outspokenness",
+        "key": "outspokenness",
+        "delta": 0.04
+      }
+    ]
+  },
+  {
+    "id": "liturgical_commission",
+    "leaning": 0,
+    "phase": "priest",
+    "label": "The diocesan liturgical commission",
+    "blurb": "The committee that decides what the diocese sings and how the cathedral is arranged, and which every pastor resents. The bishop reads its minutes.",
+    "hours": 1,
+    "inviteOnly": true,
+    "fellows": 3,
+    "builds": "the chancery, the bishop's ear, a hand on the diocese's liturgy",
+    "requires": [
+      {
+        "type": "reputation",
+        "key": "chancery",
+        "op": ">=",
+        "value": 25
+      }
+    ],
+    "onJoin": [
+      {
+        "target": "flag",
+        "key": "club:liturgical_commission",
+        "value": true
+      }
+    ],
+    "onLeave": [
+      {
+        "target": "flag",
+        "key": "club:liturgical_commission",
+        "value": false
+      },
+      {
+        "target": "reputation",
+        "key": "chancery",
+        "delta": -5
+      }
+    ],
+    "weekly": [
+      {
+        "target": "reputation",
+        "key": "chancery",
+        "delta": 0.12
+      },
+      {
+        "target": "relationship",
+        "key": "@bishop",
+        "delta": 0.08
+      },
+      {
+        "target": "stat",
+        "key": "administration",
+        "delta": 0.02
+      },
+      {
+        "target": "reputation",
+        "key": "brother_priests",
+        "delta": -0.04
+      }
+    ],
+    "hint": "The commission is the chancery's: a man is asked when the office of worship thinks well of him and his parish's liturgy has been noticed."
+  },
+  {
+    "id": "priests_running",
+    "phase": "priest",
+    "label": "The priests who run",
+    "blurb": "A Saturday morning ten kilometres with four brother priests and a deacon who is faster than all of you. The only hour of the week nobody can reach you.",
+    "hours": 1,
+    "fellows": 3,
+    "builds": "presence, brother priests, a body that bears the week",
+    "onJoin": [
+      {
+        "target": "flag",
+        "key": "club:priests_running",
+        "value": true
+      }
+    ],
+    "onLeave": [
+      {
+        "target": "flag",
+        "key": "club:priests_running",
+        "value": false
+      }
+    ],
+    "weekly": [
+      {
+        "target": "stat",
+        "key": "charisma",
+        "delta": 0.02
+      },
+      {
+        "target": "reputation",
+        "key": "brother_priests",
+        "delta": 0.06
+      }
+    ],
+    "stamina": 1.5
+  },
+  {
+    "id": "spanish_circle",
+    "leaning": 0.2,
+    "phase": "priest",
+    "label": "The Spanish-speaking clergy",
+    "blurb": "The priests who say the noon Mass in Spanish across the diocese, native and learned, who meet monthly and cover each other's parishes. The diocese cannot run without them and knows it.",
+    "hours": 1,
+    "fellows": 3,
+    "builds": "the people, the chancery's gratitude, a network that covers for you",
+    "requires": [
+      {
+        "type": "any",
+        "inner": [
+          {
+            "type": "credential",
+            "key": "spanish"
+          },
+          {
+            "type": "flag",
+            "key": "speaks_spanish",
+            "value": true
+          }
+        ]
+      }
+    ],
+    "onJoin": [
+      {
+        "target": "flag",
+        "key": "club:spanish_circle",
+        "value": true
+      }
+    ],
+    "onLeave": [
+      {
+        "target": "flag",
+        "key": "club:spanish_circle",
+        "value": false
+      }
+    ],
+    "weekly": [
+      {
+        "target": "reputation",
+        "key": "parishioners",
+        "delta": 0.08
+      },
+      {
+        "target": "reputation",
+        "key": "chancery",
+        "delta": 0.05
+      },
+      {
+        "target": "reputation",
+        "key": "brother_priests",
+        "delta": 0.05
+      }
+    ]
+  },
+  {
+    "id": "canon_lawyers",
+    "phase": "priest",
+    "label": "The canonists' lunch",
+    "blurb": "The tribunal's priests and the two pastors who read canon law for pleasure, at a diner near the chancery on the first Friday. Every marriage case and every pastor's mistake passes across the table.",
+    "hours": 1,
+    "inviteOnly": true,
+    "fellows": 2,
+    "builds": "learning, the chancery, secrets",
+    "requires": [
+      {
+        "type": "any",
+        "inner": [
+          {
+            "type": "credential",
+            "key": "JCL"
+          },
+          {
+            "type": "credential",
+            "key": "partial_jcl"
+          },
+          {
+            "type": "flag",
+            "key": "tribunal_ready",
+            "value": true
+          },
+          {
+            "type": "flag",
+            "key": "office:tribunal",
+            "value": true
+          }
+        ]
+      }
+    ],
+    "onJoin": [
+      {
+        "target": "flag",
+        "key": "club:canon_lawyers",
+        "value": true
+      },
+      {
+        "target": "flag",
+        "key": "knows_secrets",
+        "value": true
+      }
+    ],
+    "onLeave": [
+      {
+        "target": "flag",
+        "key": "club:canon_lawyers",
+        "value": false
+      }
+    ],
+    "weekly": [
+      {
+        "target": "stat",
+        "key": "knowledge",
+        "delta": 0.04
+      },
+      {
+        "target": "reputation",
+        "key": "chancery",
+        "delta": 0.08
+      }
+    ],
+    "hint": "Canonists ask canonists: the licentiate, or the tribunal's work, is the ticket."
+  }
 ]

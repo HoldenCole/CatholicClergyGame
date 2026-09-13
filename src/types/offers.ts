@@ -74,7 +74,7 @@ export interface Commitment {
   failed: boolean;
 }
 
-export type OfferDecision = 'accepted' | 'declined' | 'expired' | 'completed' | 'failed' | 'kept';
+export type OfferDecision = 'accepted' | 'declined' | 'expired' | 'completed' | 'failed' | 'kept' | 'deferred';
 
 export interface OfferRecord {
   offerId: string;

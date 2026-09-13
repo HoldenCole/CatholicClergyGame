@@ -1,3 +1,4 @@
+import type { Mover } from './movers';
 import type { GameState, StatKey, StudyActivityDef, StudyState } from '@/types';
 import type { Rng } from '@/engine/rng';
 import { studyActivities, studyActivity, studyProgram } from '@/content/study';
@@ -75,12 +76,17 @@ export function studyWeek(state: GameState, rng: Rng): { state: GameState; line:
   let see = state.see ?? null;
   const place = study.place ? { ...study.place } : null;
   const bindings: Record<string, string> = {};
+  const moves: Mover[] = [];
   for (const def of studyActivities) {
     const hours = study.routine[def.id] ?? 0;
     if (hours <= 0) continue;
     if (def.see && see) see = applySeeHours(see, def.see, hours);
     if (def.place && place) for (const [k, d] of Object.entries(def.place)) place[k] = Math.max(-100, Math.min(100, (place[k] ?? 0) + d * hours));
-    for (const [k, rate] of Object.entries(def.stats) as [StatKey, number][]) stats = applyStat(stats, k, rate * hours);
+    for (const [k, rate] of Object.entries(def.stats) as [StatKey, number][]) {
+      const before = stats[k];
+      stats = applyStat(stats, k, rate * hours);
+      moves.push({ week: state.clock.week, key: k, delta: stats[k] - before, why: def.label });
+    }
     for (const r of def.reputation ?? []) reputation = applyReputation(reputation, r.key, r.delta * hours);
     for (const r of def.relationships ?? []) {
       const npc = resolveSelector({ ...state, npcs }, r.selector, rng.derive(`${def.id}:${state.clock.week}`));
@@ -107,9 +113,12 @@ export function studyWeek(state: GameState, rng: Rng): { state: GameState; line:
   }
   // onFirst effects are flags and traits (never stats or reputation), so the tallies above can go on top of them.
   const strain = strainAfterWeek(state, 0, Math.max(0, freeHourShift(state)));
-  if (strain >= WEEK.strainWorn) stats = applyStat(stats, 'piety', -WEEK.strainPietyDrain);
+  if (strain >= WEEK.strainWorn) {
+    stats = applyStat(stats, 'piety', -WEEK.strainPietyDrain);
+    moves.push({ week: state.clock.week, key: 'piety', delta: -WEEK.strainPietyDrain, why: 'worn out' });
+  }
   const character = { ...next.character!, stats, reputation, credentials };
-  const result: GameState = { ...next, ...(see ? { see } : {}), strain, npcs: { ...next.npcs, ...npcs }, flags: { ...next.flags, ...flags }, character, study: { ...study, hoursLogged, taken, ...(place ? { place } : {}) } };
+  const result: GameState = { ...next, ...(see ? { see } : {}), strain, movers: [...(next.movers ?? []), ...moves.filter((m) => m.delta !== 0)], npcs: { ...next.npcs, ...npcs }, flags: { ...next.flags, ...flags }, character, study: { ...study, hoursLogged, taken, ...(place ? { place } : {}) } };
   const head = studyProgram(study.program)?.classes ?? 'Lectures';
   const body = phrases.length ? `${head}; ${phrases.join(', ')}.` : `${head}, and the free hours went to the city.`;
   return { state: result, line: renderText([body, ...earned].join(' '), result, bindings) };

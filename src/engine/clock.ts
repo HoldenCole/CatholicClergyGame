@@ -10,7 +10,7 @@ export type StopReason =
   | { kind: 'event'; event: PendingEvent }
   | { kind: 'beat'; beat: Beat }
   | { kind: 'mode'; mode: GameState['mode']['kind'] }
-  | { kind: 'offer'; offerId: string }
+  | { kind: 'offer'; offerId: string; lapsing?: boolean }
   | { kind: 'cap' };
 
 /**
@@ -112,6 +112,9 @@ export function stopAfterWeek(speed: Speed, state: GameState, reachedBeats: Beat
   // An offer arriving this week stops every speed: windows are short and expiry has a cost.
   const offer = state.offers.find((o) => o.arrivedWeek === state.clock.week);
   if (offer) return { kind: 'offer', offerId: offer.offerId };
+  // The week before a letter lapses, the clock stops to ask, at every speed but SKIP.
+  const lapsing = speed !== 'SKIP' ? state.offers.find((o) => o.expiresWeek === state.clock.week + 1 && o.expiresWeek > o.arrivedWeek) : undefined;
+  if (lapsing) return { kind: 'offer', offerId: lapsing.offerId, lapsing: true };
   return null;
 }
 

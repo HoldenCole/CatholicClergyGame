@@ -2,6 +2,8 @@ import { useGameStore } from '@/engine/store';
 import { seasonOf } from '@/engine/time';
 import { SEASON_LABELS } from '@/engine/calendar';
 import { upcomingFeasts } from '@/engine/feasts';
+import { offerById } from '@/content/offers';
+import { pendingAppointment } from '@/engine/appointment';
 
 const SEASON_COLOR: Record<string, string> = { advent: '#6b4fa0', christmas: '#e6dcc4', ordinary: '#3f7a3f', lent: '#6b4fa0', holy_week: '#8a1f1f', easter: '#e6dcc4' };
 
@@ -12,11 +14,21 @@ export default function CalendarStrip() {
   const parish = game.world?.parishes.find((p) => p.id === game.assignment?.parishId);
   const season = seasonOf(game.clock);
   const ahead = upcomingFeasts(game.clock, parish, 5);
+  const week = game.clock.week;
+  const letters = game.offers.map((o) => ({ id: o.offerId, title: offerById(o.offerId)?.title ?? 'a letter', weeks: o.expiresWeek - week })).filter((l) => l.weeks >= 0);
+  const asked = pendingAppointment(game);
   return (
     <div className="mx-auto flex max-w-[1400px] items-center gap-3 px-5 pt-2 text-xs text-[#cbbfa4]">
       <span className="inline-block h-2.5 w-2.5 rounded-full border border-black/30" style={{ background: SEASON_COLOR[season] ?? '#3f7a3f' }} title="The liturgical color of the week" />
       <span className="shrink-0">{SEASON_LABELS[season]}</span>
       <span className="opacity-40">·</span>
+      {(letters.length > 0 || asked) && (
+        <span className="shrink-0 text-[#e6c25a]">
+          {letters.map((l) => `${l.title} ${l.weeks === 0 ? 'lapses this week' : l.weeks === 1 ? 'lapses next week' : `lapses in ${l.weeks} weeks`}`).join(' · ')}
+          {asked ? `${letters.length ? ' · ' : ''}the bishop's letter ${asked.week - week <= 0 ? 'this week' : asked.week - week === 1 ? 'next week' : `in ${asked.week - week} weeks`}` : ''}
+        </span>
+      )}
+      {(letters.length > 0 || asked) && <span className="opacity-40">·</span>}
       <span className="truncate">
         {ahead.length === 0
           ? 'Nothing on the calendar for a while.'

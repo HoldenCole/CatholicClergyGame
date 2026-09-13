@@ -78,7 +78,7 @@ export default function ClubsPanel() {
           <ul className="flex flex-col gap-1 text-sm">
             {shut.map(({ def, why }) => (
               <li key={def.id}>
-                <span className="ink-muted">{def.label}</span> <span className="ink-faint text-xs">· {why === 'by invitation' ? 'by invitation: be the kind of man they ask' : `needs ${why}`}</span>
+                <span className="ink-muted">{def.label}</span> <span className="ink-faint text-xs">· {why === 'by invitation' ? `by invitation. ${def.hint ?? 'Be the kind of man they ask.'}` : `needs ${why}`}</span>
               </li>
             ))}
           </ul>

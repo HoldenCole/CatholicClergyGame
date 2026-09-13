@@ -1,52 +1,512 @@
 [
-  { "id": "tlm_society", "leaning": -1, "phase": "seminary", "label": "The Latin Mass Society", "blurb": "Thursday evenings in the crypt chapel: the older form learned rubric by rubric from a priest who drives in from the country. The house notices who goes down those stairs.", "hours": 2, "inviteOnly": true, "fellows": 3, "builds": "Latin, piety, the traditional wing; the older Mass, in time",
-    "requires": [{ "type": "alignment", "op": "<=", "value": 10 }],
-    "onJoin": [{ "target": "flag", "key": "club:tlm_society", "value": true }, { "target": "outspokenness", "key": "outspokenness", "delta": 3 }],
-    "onLeave": [{ "target": "flag", "key": "club:tlm_society", "value": false }, { "target": "reputation", "key": "traditional_bloc", "delta": -6 }],
-    "weekly": [{ "target": "stat", "key": "piety", "delta": 0.05 }, { "target": "stat", "key": "theology", "delta": 0.02 }, { "target": "reputation", "key": "traditional_bloc", "delta": 0.2 }, { "target": "reputation", "key": "progressive_bloc", "delta": -0.06 }, { "target": "alignment", "key": "alignment", "delta": -0.15 }],
-    "credentialAfter": { "weeks": 40, "credential": "latin", "flag": "can_celebrate_tlm", "line": "You can celebrate the older Mass now, slowly and without error. Two men in the house have asked you to teach them." } },
-  { "id": "thomists", "leaning": -0.3, "phase": "seminary", "label": "The Thomists", "blurb": "A Dominican from the priory across town leads the Summa on Tuesday nights, one article at a time, with beer after. Nobody leaves early.", "hours": 2, "fellows": 4, "builds": "theology, the intellectual pillar, an argument you can win",
-    "onJoin": [{ "target": "flag", "key": "club:thomists", "value": true }],
-    "onLeave": [{ "target": "flag", "key": "club:thomists", "value": false }],
-    "weekly": [{ "target": "stat", "key": "theology", "delta": 0.07 }, { "target": "stat", "key": "knowledge", "delta": 0.02 }, { "target": "pillar", "key": "intellectual", "delta": 0.03 }, { "target": "alignment", "key": "alignment", "delta": -0.05 }],
-    "credentialAfter": { "weeks": 52, "flag": "read_the_summa", "line": "You have read the Secunda Secundae through, which almost no priest of the diocese can say. The Dominican shakes your hand." } },
-  { "id": "disputatio", "phase": "seminary", "label": "Disputatio", "blurb": "A philosophy and theology discussion circle that meets to disagree. Positions are taken, and remembered.", "hours": 1, "fellows": 4, "builds": "learning, presence, a louder record",
-    "onJoin": [{ "target": "flag", "key": "club:disputatio", "value": true }],
-    "onLeave": [{ "target": "flag", "key": "club:disputatio", "value": false }],
-    "weekly": [{ "target": "stat", "key": "knowledge", "delta": 0.04 }, { "target": "stat", "key": "charisma", "delta": 0.03 }, { "target": "stat", "key": "theology", "delta": 0.02 }, { "target": "outspokenness", "key": "outspokenness", "delta": 0.08 }] },
-  { "id": "ascetics_anonymous", "phase": "seminary", "label": "Ascetics Anonymous", "blurb": "Twelve steps toward holiness, taken with a straight face: a fast on Fridays, a holy hour kept together, an accountability that is half joke and wholly serious.", "hours": 1, "fellows": 3, "builds": "piety, the spiritual pillar, a body used to less",
-    "onJoin": [{ "target": "flag", "key": "club:ascetics", "value": true }],
-    "onLeave": [{ "target": "flag", "key": "club:ascetics", "value": false }],
-    "weekly": [{ "target": "stat", "key": "piety", "delta": 0.1 }, { "target": "pillar", "key": "spiritual", "delta": 0.03 }, { "target": "stat", "key": "charisma", "delta": -0.01 }],
-    "stamina": 0.5 },
-  { "id": "admin_warriors", "phase": "seminary", "label": "The Admin Warriors", "blurb": "The men who run the house: the sacristy schedule, the class fund, the retreat logistics, the rector's spreadsheets. Unglamorous, and the chancery hears their names first.", "hours": 2, "fellows": 3, "builds": "order, the chancery, the rector",
-    "onJoin": [{ "target": "flag", "key": "club:admin_warriors", "value": true }],
-    "onLeave": [{ "target": "flag", "key": "club:admin_warriors", "value": false }],
-    "weekly": [{ "target": "stat", "key": "administration", "delta": 0.08 }, { "target": "reputation", "key": "chancery", "delta": 0.08 }, { "target": "relationship", "key": "@rector", "delta": 0.12 }, { "target": "stat", "key": "piety", "delta": -0.02 }],
-    "credentialAfter": { "weeks": 52, "flag": "known_administrator", "line": "The rector tells the vicar for clergy that you can run a building. It goes in the file." } },
-  { "id": "runners", "phase": "seminary", "label": "The running club", "blurb": "Six in the morning, four miles, in every weather, with the men who will not let you sleep in. The body keeps its accounts; this pays into them.", "hours": 1, "fellows": 3, "builds": "presence, and a body that bears a long week",
-    "onJoin": [{ "target": "flag", "key": "club:runners", "value": true }],
-    "onLeave": [{ "target": "flag", "key": "club:runners", "value": false }],
-    "weekly": [{ "target": "stat", "key": "charisma", "delta": 0.03 }, { "target": "pillar", "key": "human", "delta": 0.02 }],
-    "stamina": 1.5 },
-  { "id": "social", "phase": "seminary", "label": "The Thursday club", "blurb": "Cards, the game, the argument about the professor, and a standing table at the bar down the hill. Where the class becomes a class, and where it finds out who cannot hold his drink.", "hours": 1, "fellows": 5, "builds": "presence, the human pillar, a class that will remember you",
-    "onJoin": [{ "target": "flag", "key": "club:social", "value": true }],
-    "onLeave": [{ "target": "flag", "key": "club:social", "value": false }],
-    "weekly": [{ "target": "stat", "key": "charisma", "delta": 0.05 }, { "target": "pillar", "key": "human", "delta": 0.03 }, { "target": "stat", "key": "piety", "delta": -0.02 }] },
-  { "id": "hispanic_ministry", "leaning": 0.3, "phase": "seminary", "label": "The Hispanic ministry circle", "blurb": "Spanish over supper, a Mass served at the immigrant parish on Sundays, and a diocese that is watching who shows up.", "hours": 2, "fellows": 3, "builds": "Spanish, the people, the pastoral pillar",
-    "onJoin": [{ "target": "flag", "key": "club:hispanic_ministry", "value": true }],
-    "onLeave": [{ "target": "flag", "key": "club:hispanic_ministry", "value": false }],
-    "weekly": [{ "target": "stat", "key": "knowledge", "delta": 0.03 }, { "target": "stat", "key": "charisma", "delta": 0.02 }, { "target": "pillar", "key": "pastoral", "delta": 0.03 }, { "target": "reputation", "key": "parishioners", "delta": 0.05 }],
-    "credentialAfter": { "weeks": 40, "credential": "spanish", "flag": "speaks_spanish", "line": "You heard your first confession in Spanish, badly, and the woman thanked you anyway. The vocation director has written it down." } },
-  { "id": "schola", "leaning": -0.4, "phase": "seminary", "label": "The schola", "blurb": "Chant on Wednesday nights and the Sunday Mass in the seminary chapel. A voice, and an ear, and the bishop hears it at the Chrism Mass.", "hours": 1, "fellows": 3, "builds": "presence, piety, the bishop's ear",
-    "requires": [{ "type": "stat", "key": "charisma", "op": ">=", "value": 30 }],
-    "onJoin": [{ "target": "flag", "key": "club:schola", "value": true }],
-    "onLeave": [{ "target": "flag", "key": "club:schola", "value": false }],
-    "weekly": [{ "target": "stat", "key": "charisma", "delta": 0.03 }, { "target": "stat", "key": "piety", "delta": 0.03 }, { "target": "reputation", "key": "chancery", "delta": 0.03 }, { "target": "reputation", "key": "traditional_bloc", "delta": 0.04 }] },
-  { "id": "rectors_table", "phase": "seminary", "label": "The rector's table", "blurb": "Dinner with the rector and his guests once a month: the auxiliary bishop, a donor, a visiting theologian. Four men are asked. The rest of the house knows which four.", "hours": 1, "inviteOnly": true, "fellows": 3, "builds": "the chancery, the rector, connections that outlast the seminary",
-    "requires": [{ "type": "relationship", "npcId": "@rector", "op": ">=", "value": 20 }],
-    "onJoin": [{ "target": "flag", "key": "club:rectors_table", "value": true }],
-    "onLeave": [{ "target": "flag", "key": "club:rectors_table", "value": false }, { "target": "relationship", "key": "@rector", "delta": -10 }],
-    "weekly": [{ "target": "reputation", "key": "chancery", "delta": 0.1 }, { "target": "relationship", "key": "@rector", "delta": 0.15 }, { "target": "stat", "key": "knowledge", "delta": 0.02 }, { "target": "reputation", "key": "brother_priests", "delta": -0.03 }],
-    "credentialAfter": { "weeks": 52, "flag": "noticed_by_bishop", "line": "The auxiliary bishop asks after you by name at the Chrism Mass. The rector does not look surprised." } }
+  {
+    "id": "tlm_society",
+    "leaning": -1,
+    "phase": "seminary",
+    "label": "The Latin Mass Society",
+    "blurb": "Thursday evenings in the crypt chapel: the older form learned rubric by rubric from a priest who drives in from the country. The house notices who goes down those stairs.",
+    "hours": 2,
+    "inviteOnly": true,
+    "fellows": 3,
+    "builds": "Latin, piety, the traditional wing; the older Mass, in time",
+    "requires": [
+      {
+        "type": "alignment",
+        "op": "<=",
+        "value": 10
+      }
+    ],
+    "onJoin": [
+      {
+        "target": "flag",
+        "key": "club:tlm_society",
+        "value": true
+      },
+      {
+        "target": "outspokenness",
+        "key": "outspokenness",
+        "delta": 3
+      }
+    ],
+    "onLeave": [
+      {
+        "target": "flag",
+        "key": "club:tlm_society",
+        "value": false
+      },
+      {
+        "target": "reputation",
+        "key": "traditional_bloc",
+        "delta": -6
+      }
+    ],
+    "weekly": [
+      {
+        "target": "stat",
+        "key": "piety",
+        "delta": 0.05
+      },
+      {
+        "target": "stat",
+        "key": "theology",
+        "delta": 0.02
+      },
+      {
+        "target": "reputation",
+        "key": "traditional_bloc",
+        "delta": 0.2
+      },
+      {
+        "target": "reputation",
+        "key": "progressive_bloc",
+        "delta": -0.06
+      },
+      {
+        "target": "alignment",
+        "key": "alignment",
+        "delta": -0.15
+      }
+    ],
+    "credentialAfter": {
+      "weeks": 40,
+      "credential": "latin",
+      "flag": "can_celebrate_tlm",
+      "line": "You can celebrate the older Mass now, slowly and without error. Two men in the house have asked you to teach them."
+    },
+    "hint": "They notice which way a man leans: the ones who go down those stairs have taken the older side of the arguments, in class and at table, for a year or more."
+  },
+  {
+    "id": "thomists",
+    "leaning": -0.3,
+    "phase": "seminary",
+    "label": "The Thomists",
+    "blurb": "A Dominican from the priory across town leads the Summa on Tuesday nights, one article at a time, with beer after. Nobody leaves early.",
+    "hours": 2,
+    "fellows": 4,
+    "builds": "theology, the intellectual pillar, an argument you can win",
+    "onJoin": [
+      {
+        "target": "flag",
+        "key": "club:thomists",
+        "value": true
+      }
+    ],
+    "onLeave": [
+      {
+        "target": "flag",
+        "key": "club:thomists",
+        "value": false
+      }
+    ],
+    "weekly": [
+      {
+        "target": "stat",
+        "key": "theology",
+        "delta": 0.07
+      },
+      {
+        "target": "stat",
+        "key": "knowledge",
+        "delta": 0.02
+      },
+      {
+        "target": "pillar",
+        "key": "intellectual",
+        "delta": 0.03
+      },
+      {
+        "target": "alignment",
+        "key": "alignment",
+        "delta": -0.05
+      }
+    ],
+    "credentialAfter": {
+      "weeks": 52,
+      "flag": "read_the_summa",
+      "line": "You have read the Secunda Secundae through, which almost no priest of the diocese can say. The Dominican shakes your hand."
+    }
+  },
+  {
+    "id": "disputatio",
+    "phase": "seminary",
+    "label": "Disputatio",
+    "blurb": "A philosophy and theology discussion circle that meets to disagree. Positions are taken, and remembered.",
+    "hours": 1,
+    "fellows": 4,
+    "builds": "learning, presence, a louder record",
+    "onJoin": [
+      {
+        "target": "flag",
+        "key": "club:disputatio",
+        "value": true
+      }
+    ],
+    "onLeave": [
+      {
+        "target": "flag",
+        "key": "club:disputatio",
+        "value": false
+      }
+    ],
+    "weekly": [
+      {
+        "target": "stat",
+        "key": "knowledge",
+        "delta": 0.04
+      },
+      {
+        "target": "stat",
+        "key": "charisma",
+        "delta": 0.03
+      },
+      {
+        "target": "stat",
+        "key": "theology",
+        "delta": 0.02
+      },
+      {
+        "target": "outspokenness",
+        "key": "outspokenness",
+        "delta": 0.08
+      }
+    ]
+  },
+  {
+    "id": "ascetics_anonymous",
+    "phase": "seminary",
+    "label": "Ascetics Anonymous",
+    "blurb": "Twelve steps toward holiness, taken with a straight face: a fast on Fridays, a holy hour kept together, an accountability that is half joke and wholly serious.",
+    "hours": 1,
+    "fellows": 3,
+    "builds": "piety, the spiritual pillar, a body used to less",
+    "onJoin": [
+      {
+        "target": "flag",
+        "key": "club:ascetics",
+        "value": true
+      }
+    ],
+    "onLeave": [
+      {
+        "target": "flag",
+        "key": "club:ascetics",
+        "value": false
+      }
+    ],
+    "weekly": [
+      {
+        "target": "stat",
+        "key": "piety",
+        "delta": 0.1
+      },
+      {
+        "target": "pillar",
+        "key": "spiritual",
+        "delta": 0.03
+      },
+      {
+        "target": "stat",
+        "key": "charisma",
+        "delta": -0.01
+      }
+    ],
+    "stamina": 0.5
+  },
+  {
+    "id": "admin_warriors",
+    "phase": "seminary",
+    "label": "The Admin Warriors",
+    "blurb": "The men who run the house: the sacristy schedule, the class fund, the retreat logistics, the rector's spreadsheets. Unglamorous, and the chancery hears their names first.",
+    "hours": 2,
+    "fellows": 3,
+    "builds": "order, the chancery, the rector",
+    "onJoin": [
+      {
+        "target": "flag",
+        "key": "club:admin_warriors",
+        "value": true
+      }
+    ],
+    "onLeave": [
+      {
+        "target": "flag",
+        "key": "club:admin_warriors",
+        "value": false
+      }
+    ],
+    "weekly": [
+      {
+        "target": "stat",
+        "key": "administration",
+        "delta": 0.08
+      },
+      {
+        "target": "reputation",
+        "key": "chancery",
+        "delta": 0.08
+      },
+      {
+        "target": "relationship",
+        "key": "@rector",
+        "delta": 0.12
+      },
+      {
+        "target": "stat",
+        "key": "piety",
+        "delta": -0.02
+      }
+    ],
+    "credentialAfter": {
+      "weeks": 52,
+      "flag": "known_administrator",
+      "line": "The rector tells the vicar for clergy that you can run a building. It goes in the file."
+    }
+  },
+  {
+    "id": "runners",
+    "phase": "seminary",
+    "label": "The running club",
+    "blurb": "Six in the morning, four miles, in every weather, with the men who will not let you sleep in. The body keeps its accounts; this pays into them.",
+    "hours": 1,
+    "fellows": 3,
+    "builds": "presence, and a body that bears a long week",
+    "onJoin": [
+      {
+        "target": "flag",
+        "key": "club:runners",
+        "value": true
+      }
+    ],
+    "onLeave": [
+      {
+        "target": "flag",
+        "key": "club:runners",
+        "value": false
+      }
+    ],
+    "weekly": [
+      {
+        "target": "stat",
+        "key": "charisma",
+        "delta": 0.03
+      },
+      {
+        "target": "pillar",
+        "key": "human",
+        "delta": 0.02
+      }
+    ],
+    "stamina": 1.5
+  },
+  {
+    "id": "social",
+    "phase": "seminary",
+    "label": "The Thursday club",
+    "blurb": "Cards, the game, the argument about the professor, and a standing table at the bar down the hill. Where the class becomes a class, and where it finds out who cannot hold his drink.",
+    "hours": 1,
+    "fellows": 5,
+    "builds": "presence, the human pillar, a class that will remember you",
+    "onJoin": [
+      {
+        "target": "flag",
+        "key": "club:social",
+        "value": true
+      }
+    ],
+    "onLeave": [
+      {
+        "target": "flag",
+        "key": "club:social",
+        "value": false
+      }
+    ],
+    "weekly": [
+      {
+        "target": "stat",
+        "key": "charisma",
+        "delta": 0.05
+      },
+      {
+        "target": "pillar",
+        "key": "human",
+        "delta": 0.03
+      },
+      {
+        "target": "stat",
+        "key": "piety",
+        "delta": -0.02
+      }
+    ]
+  },
+  {
+    "id": "hispanic_ministry",
+    "leaning": 0.3,
+    "phase": "seminary",
+    "label": "The Hispanic ministry circle",
+    "blurb": "Spanish over supper, a Mass served at the immigrant parish on Sundays, and a diocese that is watching who shows up.",
+    "hours": 2,
+    "fellows": 3,
+    "builds": "Spanish, the people, the pastoral pillar",
+    "onJoin": [
+      {
+        "target": "flag",
+        "key": "club:hispanic_ministry",
+        "value": true
+      }
+    ],
+    "onLeave": [
+      {
+        "target": "flag",
+        "key": "club:hispanic_ministry",
+        "value": false
+      }
+    ],
+    "weekly": [
+      {
+        "target": "stat",
+        "key": "knowledge",
+        "delta": 0.03
+      },
+      {
+        "target": "stat",
+        "key": "charisma",
+        "delta": 0.02
+      },
+      {
+        "target": "pillar",
+        "key": "pastoral",
+        "delta": 0.03
+      },
+      {
+        "target": "reputation",
+        "key": "parishioners",
+        "delta": 0.05
+      }
+    ],
+    "credentialAfter": {
+      "weeks": 40,
+      "credential": "spanish",
+      "flag": "speaks_spanish",
+      "line": "You heard your first confession in Spanish, badly, and the woman thanked you anyway. The vocation director has written it down."
+    }
+  },
+  {
+    "id": "schola",
+    "leaning": -0.4,
+    "phase": "seminary",
+    "label": "The schola",
+    "blurb": "Chant on Wednesday nights and the Sunday Mass in the seminary chapel. A voice, and an ear, and the bishop hears it at the Chrism Mass.",
+    "hours": 1,
+    "fellows": 3,
+    "builds": "presence, piety, the bishop's ear",
+    "requires": [
+      {
+        "type": "stat",
+        "key": "charisma",
+        "op": ">=",
+        "value": 30
+      }
+    ],
+    "onJoin": [
+      {
+        "target": "flag",
+        "key": "club:schola",
+        "value": true
+      }
+    ],
+    "onLeave": [
+      {
+        "target": "flag",
+        "key": "club:schola",
+        "value": false
+      }
+    ],
+    "weekly": [
+      {
+        "target": "stat",
+        "key": "charisma",
+        "delta": 0.03
+      },
+      {
+        "target": "stat",
+        "key": "piety",
+        "delta": 0.03
+      },
+      {
+        "target": "reputation",
+        "key": "chancery",
+        "delta": 0.03
+      },
+      {
+        "target": "reputation",
+        "key": "traditional_bloc",
+        "delta": 0.04
+      }
+    ]
+  },
+  {
+    "id": "rectors_table",
+    "phase": "seminary",
+    "label": "The rector's table",
+    "blurb": "Dinner with the rector and his guests once a month: the auxiliary bishop, a donor, a visiting theologian. Four men are asked. The rest of the house knows which four.",
+    "hours": 1,
+    "inviteOnly": true,
+    "fellows": 3,
+    "builds": "the chancery, the rector, connections that outlast the seminary",
+    "requires": [
+      {
+        "type": "relationship",
+        "npcId": "@rector",
+        "op": ">=",
+        "value": 20
+      }
+    ],
+    "onJoin": [
+      {
+        "target": "flag",
+        "key": "club:rectors_table",
+        "value": true
+      }
+    ],
+    "onLeave": [
+      {
+        "target": "flag",
+        "key": "club:rectors_table",
+        "value": false
+      },
+      {
+        "target": "relationship",
+        "key": "@rector",
+        "delta": -10
+      }
+    ],
+    "weekly": [
+      {
+        "target": "reputation",
+        "key": "chancery",
+        "delta": 0.1
+      },
+      {
+        "target": "relationship",
+        "key": "@rector",
+        "delta": 0.15
+      },
+      {
+        "target": "stat",
+        "key": "knowledge",
+        "delta": 0.02
+      },
+      {
+        "target": "reputation",
+        "key": "brother_priests",
+        "delta": -0.03
+      }
+    ],
+    "credentialAfter": {
+      "weeks": 52,
+      "flag": "noticed_by_bishop",
+      "line": "The auxiliary bishop asks after you by name at the Chrism Mass. The rector does not look surprised."
+    },
+    "hint": "The rector asks the men whose evaluations read well and who have kept the house rule without being asked; the invitation comes with a good year behind it."
+  }
 ]

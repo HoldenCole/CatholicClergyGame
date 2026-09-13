@@ -18,7 +18,7 @@ import type { Rng } from './rng';
 import { buildSave, deserialize, rngFromSave, SaveError, serialize } from './save';
 import { eventById, eventsForPhase } from '@/content';
 import { offerById, offersForPhase } from '@/content/offers';
-import { acceptOffer as doAccept, declineOffer as doDecline } from './offers';
+import { acceptOffer as doAccept, declineOffer as doDecline, deferOffer as doDefer } from './offers';
 import { generateRun } from '@/generation';
 import { generateCandidates, installWorld } from '@/generation/world';
 import { fromDayNumber } from './calendar';
@@ -169,6 +169,7 @@ export interface GameStore {
   ordain(): void;
   acceptOffer(offerId: string): void;
   declineOffer(offerId: string): void;
+  deferOffer(offerId: string): void;
   /** Prose from the last offer decision, for the UI. */
   lastOfferOutcome: string | null;
 }
@@ -555,6 +556,15 @@ export const useGameStore = create<GameStore>()((set, get) => ({
       set({ lastOfferOutcome: c?.away ? (def.from === '@bishop' ? 'You said yes. The bishop is the one asking, and his letter of appointment follows; nothing moves until it comes.' : 'You said yes. The request goes to the bishop, who will send you or keep you; nothing moves until his letter comes.') : result.failed && def.failure ? `${def.accept.outcome} ${def.failure.outcome}` : def.accept.outcome });
       const text = c?.away ? `Said yes to: ${def.title}. The bishop's letter will decide it.` : c ? `Accepted: ${def.title}. ${c.label}, ${hoursOf(c.apPerWeek)} hours a week for ${Math.round(c.weeks / 52) || 1} ${c.weeks >= 78 ? 'years' : 'year'}, alongside the parish.` : `Accepted: ${def.title}.`;
       return { ...result.state, career: [...result.state.career, { week: game.clock.week, kind: 'offer', text }] };
+    });
+  },
+  deferOffer(offerId) {
+    const def = offerById(offerId);
+    if (!def) return;
+    update(set, get, (game) => {
+      set({ lastOfferOutcome: 'You say not now, and ask them to keep your name. They will; a request like that is remembered longer than a no, and the letter comes again.' });
+      const next = doDefer(game, def);
+      return { ...next, career: [...next.career, { week: game.clock.week, kind: 'offer', text: `Not now: ${def.title}. Your name is on file.` }] };
     });
   },
   declineOffer(offerId) {
