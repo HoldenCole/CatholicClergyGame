@@ -1,6 +1,6 @@
 import { useGameStore } from '@/engine/store';
 import { controlsMoney, debtPayable } from '@/systems/finance';
-import { sinceArrival } from '@/systems/trajectory';
+import { driversOf, HARD_KINDS, sinceArrival } from '@/systems/trajectory';
 import { hoursOf } from '@/systems/week';
 import { NEED_LABEL } from '@/generation/diocese';
 import { diocesePresets } from '@/content/dioceses';
@@ -136,13 +136,28 @@ export default function ParishPanel() {
                   <td className="ink-muted py-0.5 pr-2">{r.label}</td>
                   <td className="ink-faint py-0.5 pr-2 text-xs">{r.then}</td>
                   <td className="py-0.5 pr-2">{r.now}</td>
-                  <td className={'py-0.5 text-xs ' + (r.sign > 0 ? 'text-emerald-800' : r.sign < 0 ? 'ink-wine' : 'ink-faint')}>{r.sign > 0 ? 'better' : r.sign < 0 ? 'worse' : 'the same'}</td>
+                  <td className={'py-0.5 text-xs ' + (r.sign > 0 ? 'ink-green' : r.sign < 0 ? 'ink-wine' : 'ink-faint')}>{r.sign > 0 ? '▲ better' : r.sign < 0 ? '▼ worse' : 'the same'}</td>
                 </tr>
               ))}
             </tbody>
           </table>
         ) : (
           <p className="ink-faint text-sm">No reading yet.</p>
+        )}
+        {traj && (
+          <div className="mt-2 border-t rule pt-2">
+            <div className="ink-muted text-xs font-medium">What is driving it</div>
+            <ul className="mt-1 flex flex-col gap-0.5 text-xs">
+              {driversOf(game).map((d) => (
+                <li key={d.label}><span className="ink-muted">{d.label}:</span> {d.lines.join(' ')}</li>
+              ))}
+            </ul>
+            {HARD_KINDS.has(parish.kind) && (
+              <p className={'mt-1 text-xs ' + (game.flags[`turnaround:${parish.id}`] ? 'ink-green' : 'ink-faint')}>
+                {game.flags[`turnaround:${parish.id}`] ? 'The chancery has noticed this one turning around; the board will remember it.' : 'A parish nobody asked for. Turn it around and hold it a year, and the board remembers the man who did.'}
+              </p>
+            )}
+          </div>
         )}
         {traj && <p className="ink-faint mt-2 text-xs">{Math.floor(traj.weeks / 52) > 0 ? `${Math.floor(traj.weeks / 52)} years and ` : ''}{traj.weeks % 52} weeks in. A quarter at a time is how a parish turns.</p>}
       </Sheet>

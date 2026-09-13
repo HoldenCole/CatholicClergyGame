@@ -1,3 +1,4 @@
+import { turnaroundOf } from './trajectory';
 import type { Candidate, GameState, Npc, Opening, Parish } from '@/types';
 import type { Rng } from '@/engine/rng';
 import { CLERGY_HERITAGE, eraForBirthYear, rollHeritage, rollMaleName } from '@/generation/names';
@@ -112,6 +113,7 @@ export function playerCandidate(state: GameState): Candidate {
     speaksSpanish: !!state.flags.speaks_spanish,
     affiliation,
     indispensable: !!parish && c.stats.administration >= 70 && (parish.debt >= 1_000_000 || parish.problem === 'staff_theft'),
+    turnaround: turnaroundOf(state),
     currentRole: state.assignment?.role ?? null,
   };
 }

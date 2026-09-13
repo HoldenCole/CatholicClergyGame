@@ -55,8 +55,8 @@ export default function GroupsPanel() {
               <div>
                 <div>
                   {g.name}
-                  <span className={'ml-2 text-xs ' + (band === 'thriving' ? 'text-emerald-800' : band === 'dying' ? 'ink-wine' : 'ink-faint')}>{band}</span>
-                  {!g.suppressed && <span className={'ml-1 text-xs ' + (trend >= 0.3 ? 'text-emerald-800' : trend <= -0.3 ? 'ink-wine' : 'ink-faint')}>· {trendWord(trend)}{eta && eta <= 104 ? `, ${band === 'steady' ? 'thriving' : band === 'declining' ? 'steady' : 'off the floor'} in ${eta} weeks` : ''}</span>}
+                  <span className={'ml-2 text-xs ' + (band === 'thriving' ? 'ink-green' : band === 'dying' ? 'ink-wine' : 'ink-faint')}>{band}</span>
+                  {!g.suppressed && <span className={'ml-1 text-xs ' + (trend >= 0.3 ? 'ink-green' : trend <= -0.3 ? 'ink-wine' : 'ink-faint')}>· {trendWord(trend)}{eta && eta <= 104 ? `, ${band === 'steady' ? 'thriving' : band === 'declining' ? 'steady' : 'off the floor'} in ${eta} weeks` : ''}</span>}
                   {g.foundedByPlayer && <span className="ml-2 text-xs" style={{ color: '#8f6a1e' }}>yours</span>}
                   {g.hostile && <span className="ink-wine ml-2 text-xs">against you</span>}
                 </div>

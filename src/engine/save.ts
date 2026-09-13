@@ -1,7 +1,7 @@
 import type { GameState, SaveFile, Snapshot } from '@/types';
 import { SAVE_VERSION, EVENT_CATEGORIES, SPEEDS } from '@/types';
 import { createRng, restoreRng, type Rng } from './rng';
-import { withLiturgy } from '@/systems/liturgy';
+import { migrateLiturgy, withLiturgy } from '@/systems/liturgy';
 import { generateHouses } from '@/generation/houses';
 import { patronalOf } from '@/generation/patronal';
 import { placeParish } from '@/generation/geo';
@@ -11,8 +11,7 @@ import { presetById } from '@/content/dioceses';
 function giveEveryParishItsMass(state: GameState): void {
   const world = state.world;
   if (!world) return;
-  if (world.parishes.every((p) => p.liturgy && p.taste)) return;
-  world.parishes = world.parishes.map((p) => (p.liturgy && p.taste ? p : withLiturgy(createRng(`${state.seed}:mass:${p.id}`), p)));
+  world.parishes = world.parishes.map((p) => (p.liturgy && p.taste ? migrateLiturgy(p) : withLiturgy(createRng(`${state.seed}:mass:${p.id}`), p)));
 }
 
 /** Parishes saved before patronal feasts existed get theirs from their names. */

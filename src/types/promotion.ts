@@ -44,6 +44,8 @@ export interface Candidate {
   speaksSpanish: boolean;
   /** Affiliation alignment (−1 traditional, 0 none, +1 progressive). */
   affiliation: number;
+  /** 0..1: a hard parish turned around under him, a year in. systems/trajectory.ts */
+  turnaround?: number;
   /** Too useful where he is: the chancery would rather not move him. */
   indispensable: boolean;
   currentRole: Role | null;

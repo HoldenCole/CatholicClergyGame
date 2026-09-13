@@ -1,10 +1,10 @@
 {
-  "_notes": "The pastor's Mass (playtesting): dials a pastor sets for his parish. Each option carries a lean (\u22121 traditional .. +1 progressive), an optional weekly cost, and optional needs (an ethnic share the parish must have). The parish's taste per dial rolls from its alignment and generation at generation; systems/liturgy.ts scores the distance between what is set and what is wanted.",
+  "_notes": "The pastor's Mass (playtesting): dials a pastor sets for his parish. Each option carries a lean (−1 traditional .. +1 progressive), an optional weekly cost, and optional needs (an ethnic share the parish must have). The parish's taste per dial rolls from its alignment and generation at generation; systems/liturgy.ts scores the distance between what is set and what is wanted. A dial marked multi holds any number of its options, joined by '+' in the parish record, and stands outside the taste and friction; its options are added alongside the main Mass, never instead of it.",
   "dials": [
     {
       "id": "language",
-      "label": "The language",
-      "blurb": "What the people hear and answer in.",
+      "label": "The English Mass",
+      "blurb": "How much Latin the main Mass carries. One of these; it says nothing about the other Masses.",
       "options": [
         {
           "id": "english",
@@ -20,7 +20,15 @@
           "id": "latin_ordinary",
           "label": "The ordinary in Latin, the readings and homily in English",
           "lean": -0.85
-        },
+        }
+      ]
+    },
+    {
+      "id": "communities",
+      "label": "The communities' Masses",
+      "multi": true,
+      "blurb": "Masses added alongside the English one, each for a community the parish has: as many as it has people for, none of them instead of the others.",
+      "options": [
         {
           "id": "spanish_mass",
           "label": "A Spanish Mass on Sunday alongside the English",
@@ -42,7 +50,7 @@
         },
         {
           "id": "polish_mass",
-          "label": "A Polish Mass on Sunday, and the Gorzkie \u017cale in Lent",
+          "label": "A Polish Mass on Sunday, and the Gorzkie żale in Lent",
           "lean": -0.3,
           "cost": 30,
           "needs": {
@@ -52,7 +60,7 @@
         },
         {
           "id": "filipino_mass",
-          "label": "A Filipino Mass once a month, Tagalog hymns and the Santo Ni\u00f1o",
+          "label": "A Filipino Mass once a month, Tagalog hymns and the Santo Niño",
           "lean": 0.0,
           "cost": 30,
           "needs": {
