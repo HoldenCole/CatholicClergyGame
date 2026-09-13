@@ -73,13 +73,23 @@ export function sinceArrival(state: GameState): Trajectory | null {
 /** The kinds of parish nobody asks for: turning one is remembered. */
 export const HARD_KINDS = new Set(['difficult', 'struggling_urban', 'rural']);
 
-/** Turnaround credit, 0..1: a hard parish, a year in, turning around. */
+/** Whether the parish was dying when he came: a hard kind, or the numbers themselves at arrival. */
+export function wasDying(state: GameState): boolean {
+  const rec = state.world?.parishes.find((p) => p.id === state.parish?.parishId);
+  const then = state.parish?.arrival;
+  if (!rec || !then) return false;
+  return HARD_KINDS.has(rec.kind) || then.attendance <= 0.25 || then.groups < 20 || then.debt >= 750_000;
+}
+
+/** Turnaround credit, 0..1: a dying parish, a year in, turning around. */
 export function turnaroundOf(state: GameState): number {
   const traj = sinceArrival(state);
-  const rec = state.world?.parishes.find((p) => p.id === state.parish?.parishId);
-  if (!traj || !rec || !HARD_KINDS.has(rec.kind) || traj.weeks < 52) return 0;
+  if (!traj || !wasDying(state) || traj.weeks < 52) return 0;
   return traj.score >= 3 ? 1 : traj.score >= 1 ? 0.5 : 0;
 }
+
+/** Weeks after the turnaround lands before the bishop's own letter comes. */
+export const TURNAROUND_LETTER_WEEKS = 6;
 
 export interface Driver {
   label: string;
@@ -128,7 +138,7 @@ export function turnaroundStep(state: GameState): { state: GameState; line: stri
   const next: GameState = {
     ...state,
     character: { ...c, reputation: rep, traits: c.traits.includes('turned a parish around') ? c.traits : [...c.traits, 'turned a parish around'] },
-    flags: { ...state.flags, [`turnaround:${pid}`]: true, turned_a_parish: true },
+    flags: { ...state.flags, [`turnaround:${pid}`]: true, turned_a_parish: true, 'turnaround:letter_week': state.clock.week + TURNAROUND_LETTER_WEEKS },
     movers: [...(state.movers ?? []), { week: state.clock.week, key: 'chancery', delta: 6, why: 'the parish nobody wanted, turning around' }, { week: state.clock.week, key: 'brother_priests', delta: 3, why: 'the parish nobody wanted, turning around' }],
     career: [...state.career, { week: state.clock.week, kind: 'note', text: `The chancery noticed: ${rec?.name ?? 'the parish'} is turning around under you.` }],
   };

@@ -1,6 +1,6 @@
 import { useGameStore } from '@/engine/store';
 import { controlsMoney, debtPayable } from '@/systems/finance';
-import { driversOf, HARD_KINDS, sinceArrival } from '@/systems/trajectory';
+import { driversOf, HARD_KINDS, sinceArrival, wasDying } from '@/systems/trajectory';
 import { hoursOf } from '@/systems/week';
 import { NEED_LABEL } from '@/generation/diocese';
 import { diocesePresets } from '@/content/dioceses';
@@ -152,9 +152,9 @@ export default function ParishPanel() {
                 <li key={d.label}><span className="ink-muted">{d.label}:</span> {d.lines.join(' ')}</li>
               ))}
             </ul>
-            {HARD_KINDS.has(parish.kind) && (
+            {(HARD_KINDS.has(parish.kind) || wasDying(game)) && (
               <p className={'mt-1 text-xs ' + (game.flags[`turnaround:${parish.id}`] ? 'ink-green' : 'ink-faint')}>
-                {game.flags[`turnaround:${parish.id}`] ? 'The chancery has noticed this one turning around; the board will remember it.' : 'A parish nobody asked for. Turn it around and hold it a year, and the board remembers the man who did.'}
+                {game.flags[`turnaround:${parish.id}`] ? 'The parish has said it, the bishop has written, and the board will remember it.' : 'A parish that was dying when you came. Turn it around and hold it a year, and the parish, the bishop, and the board will say so.'}
               </p>
             )}
           </div>

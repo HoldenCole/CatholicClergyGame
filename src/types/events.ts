@@ -227,6 +227,8 @@ export interface GameEvent {
    * which one varies. DESIGN.md §12.2.
    */
   beat?: string;
+  /** Among a beat's scenes whose conditions hold, the highest priority fires before any weighted draw: the thing that must be said this time. */
+  priority?: number;
   title: string;
   body: string;
   flavorPrompt?: string;

@@ -250,6 +250,7 @@ function checkEvent(ev: GameEvent, file: string, problems: Problem[], ids: Set<s
     problems.push(`${where}: bad pressure tags`);
   }
   if (typeof ev.baseWeight !== 'number' || ev.baseWeight <= 0) problems.push(`${where}: baseWeight must be > 0`);
+  if (ev.priority !== undefined && (typeof ev.priority !== 'number' || ev.priority <= 0 || !ev.beat)) problems.push(`${where}: priority must be a positive number on a beat scene`);
   if (typeof ev.suppressYears !== 'number' || ev.suppressYears < 1) problems.push(`${where}: suppressYears must be >= 1`);
   if (phases.includes('seminary')) {
     if (!ev.yearGate || ev.yearGate.some((y) => y < 1 || y > 7)) problems.push(`${where}: seminary events need yearGate within 1..7`);
