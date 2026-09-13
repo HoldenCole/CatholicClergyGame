@@ -13,6 +13,19 @@ export interface SeeDef {
   parishes: number;
   /** Where the dials start, −1..1 nudges. */
   leans?: Partial<Record<'presbyterate' | 'people' | 'rome' | 'money' | 'shortage', number>>;
+  /** One of the great sees: the game's own dioceses, where Rome sends a bishop it has watched. */
+  great?: boolean;
+}
+
+/** A see he held before this one, for the sheet and the ending. */
+export interface FormerSee {
+  id: string;
+  name: string;
+  see: string;
+  region: string;
+  years: number;
+  ordinations: number;
+  closings: number;
 }
 
 /**
@@ -39,4 +52,6 @@ export interface SeeState {
   closings: number;
   /** One line per year, for the sheet and the ending. */
   years: string[];
+  /** The sees he held before, oldest first, when Rome has moved him. */
+  former?: FormerSee[];
 }

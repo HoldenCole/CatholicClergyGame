@@ -5556,7 +5556,7 @@
         "study"
       ],
       "title": "A See",
-      "body": "The nuncio himself, this time, and not on the phone. He asks you to lunch in Washington and does not get to it until the coffee. A see is vacant: small, far from here, more parishes than priests, a cathedral that needs a roof. The Holy Father would like you to take it. You would leave {diocese} for good, and your mother's grave, and every priest who knows your name, and become the man that forty strangers in collars talk about at their deanery dinners. You would hold it until the letter at seventy-five, or until Rome moved you, which for a see like this it does not. The nuncio says the Holy Father is aware that it is not a reward. He says it is a diocese, and it needs a bishop, and he has read your file twice.",
+      "body": "The nuncio himself, this time, and not on the phone. He asks you to lunch in Washington and does not get to it until the coffee. A see is vacant. It may be small and far from here, more parishes than priests and a cathedral that needs a roof, or it may be one of the great sees, which the nuncio does not say until the bull is drawn. The Holy Father would like you to take it. You would leave {diocese} for good, and your mother's grave, and every priest who knows your name, and become the man that forty strangers in collars talk about at their deanery dinners. You would hold it until the letter at seventy-five, or until Rome moved you, which for a see like this it does not. The nuncio says the Holy Father is aware that it is not a reward. He says it is a diocese, and it needs a bishop, and he has read your file twice.",
       "requires": [
         {
           "type": "flag",
@@ -6086,6 +6086,134 @@
           }
         ],
         "outcome": "You say the parish cannot spare you, which the parish would dispute. The vicar for clergy sends someone else, and the other diocese's bishop, who keeps a list, does not put your name on it."
+      }
+    },
+    {
+      "id": "ep_translation",
+      "category": "chancery",
+      "phase": [
+        "bishop"
+      ],
+      "title": "The Nuncio Again",
+      "body": "The nuncio's secretary calls the bishop's house and asks whether you could be in Washington on Thursday, and does not say why, which is why. The nuncio gives you lunch and gets to it with the coffee, as before. A larger see is vacant, one of the great ones, and the Holy Father has read your file again, and the years here, and the numbers, and would like you to take it. You would leave a diocese you have learned, forty priests who have stopped calling you the new man, a cathedral whose roof you finally fixed, and a people who did not want you and now do, for a chancery three times the size and a city that has never heard your name. Rome moves the bishops it trusts. It is also how Rome says it is watching.",
+      "requires": [
+        {
+          "type": "flag",
+          "key": "bishop_of_a_see",
+          "value": true
+        },
+        {
+          "type": "see",
+          "key": "years",
+          "op": ">=",
+          "value": 4
+        },
+        {
+          "type": "see",
+          "key": "rome",
+          "op": ">=",
+          "value": 20
+        },
+        {
+          "type": "age",
+          "op": "<=",
+          "value": 70
+        },
+        {
+          "type": "reputation",
+          "key": "rome",
+          "op": ">=",
+          "value": 35
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "refused_translation",
+            "value": true
+          }
+        }
+      ],
+      "weight": 16,
+      "bias": [
+        {
+          "when": {
+            "type": "see",
+            "key": "presbyterate",
+            "op": ">=",
+            "value": 30
+          },
+          "multiplier": 1.5
+        },
+        {
+          "when": {
+            "type": "see",
+            "key": "money",
+            "op": ">=",
+            "value": 30
+          },
+          "multiplier": 1.3
+        },
+        {
+          "when": {
+            "type": "see",
+            "key": "people",
+            "op": "<=",
+            "value": -30
+          },
+          "multiplier": 0.5
+        }
+      ],
+      "windowWeeks": 2,
+      "cluster": "chancery",
+      "accept": {
+        "effects": [
+          {
+            "target": "flag",
+            "key": "translated",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "rome",
+            "delta": 6
+          },
+          {
+            "target": "reputation",
+            "key": "public",
+            "delta": 4
+          }
+        ],
+        "outcome": "The announcement is at noon Roman time. The priests of the see you are leaving hear it from the radio, and the ones who liked you least are the ones who write. The installation is in a cathedral three times the size of the one you know, before a presbyterate that has already decided what it thinks, and the first letter on the new desk is from a pastor who wants to be moved.",
+        "commitment": {
+          "label": "Bishop",
+          "weeks": 520,
+          "apPerWeek": 0,
+          "onComplete": [
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 4
+            }
+          ],
+          "completeOutcome": "The letter went to Rome on your seventy-fifth birthday, from the second chair.",
+          "away": "diocesan_bishop"
+        }
+      },
+      "decline": {
+        "effects": [
+          {
+            "target": "flag",
+            "key": "refused_translation",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "rome",
+            "delta": -6
+          }
+        ],
+        "outcome": "You tell the nuncio that the diocese you have is the one you were given, and that it is not finished. He says the Holy Father will understand, in the voice of a man who will report otherwise. Rome does not ask twice."
       }
     }
   ]

@@ -1,6 +1,7 @@
 import type { GameState, Letter, SeeState } from '@/types';
 import type { Rng } from './rng';
 import { seeDefs } from '@/content/sees';
+import type { FormerSee } from '@/types';
 import { clampSigned } from '@/systems/reputation';
 
 /** Invented. The last act: a small see, held until the letter at seventy-five. */
@@ -28,9 +29,22 @@ export function regardWord(v: number): string {
   return word(v);
 }
 
-/** A see from the pool, never the home diocese, its dials rolled around the pool's leans. */
+/** The weight of each see in the pool: small ones first, the great ones on a translation or for a man Rome has watched. Invented. */
+export const SEE_POOL = { small: 3, greatFirst: 0.35, greatFirstWatched: 1.2, greatTranslation: 3, smallTranslation: 0.4, watchedRome: 50 } as const;
+
+/** What the see he leaves becomes on the record. */
+export function formerOf(state: GameState, see: SeeState): FormerSee {
+  return { id: see.id, name: see.name, see: see.see, region: see.region, years: Math.max(0, Math.round((state.clock.week - see.installedWeek) / 52)), ordinations: see.ordinations, closings: see.closings };
+}
+
+/** A see from the pool, never the home diocese and never the one he holds, its dials rolled around the pool's leans. */
 export function generateSee(state: GameState, rng: Rng): SeeState {
-  const def = rng.pick(seeDefs);
+  const home = state.world?.diocese.presetId;
+  const current = state.see;
+  const translation = !!current;
+  const watched = (state.character?.reputation.rome ?? 0) >= SEE_POOL.watchedRome;
+  const pool = seeDefs.filter((d) => d.id !== home && d.id !== current?.id);
+  const def = rng.weighted(pool, (d) => (d.great ? (translation ? SEE_POOL.greatTranslation : watched ? SEE_POOL.greatFirstWatched : SEE_POOL.greatFirst) : translation ? SEE_POOL.smallTranslation : SEE_POOL.small));
   const lean = def.leans ?? {};
   const roll = (k: keyof NonNullable<typeof def.leans>, spread: number) => Math.round((lean[k] ?? 0) * 25 + rng.gaussian() * spread);
   return {
@@ -47,6 +61,7 @@ export function generateSee(state: GameState, rng: Rng): SeeState {
     ordinations: 0,
     closings: 0,
     years: [],
+    ...(current ? { former: [...(current.former ?? []), formerOf(state, current)] } : {}),
   };
 }
 

@@ -5,7 +5,9 @@ import { offerById } from '@/content/offers';
 import { eventById } from '@/content';
 import { evaluateCondition } from '@/engine/conditions';
 import { generateSee, seeYear, applySeeHours } from '@/engine/see';
-import { seeDefs } from '@/content/sees';
+import { presetSees, seeDefs, smallSees } from '@/content/sees';
+import { isOfferEligible } from '@/engine/offers';
+const presetSeeIds = new Set(presetSees.map((p) => p.id));
 import { studyActivitiesFor, setStudyActivity, studyWeek } from '@/systems/studyWeek';
 import { studyWeekHook, type EventDeps } from '@/engine/weekHook';
 import { careerYear } from '@/engine/career';
@@ -136,5 +138,42 @@ describe('the bishop through the store', () => {
     expect(store.getState().error).toBeNull();
     expect(after.clock.week).toBeGreaterThan(before.clock.week);
     expect(after.see!.money).toBeGreaterThan(before.see!.money);
+  });
+});
+
+describe('a bishop of a different diocese', () => {
+  it('the pool holds the small sees and the ten great ones, never home and never the chair he sits in', () => {
+    expect(presetSees.length).toBe(10);
+    expect(presetSees.every((s) => s.great)).toBe(true);
+    expect(seeDefs.length).toBe(smallSees.length + 10);
+    const s = candidate('pool');
+    const home = s.world!.diocese.presetId;
+    for (let i = 0; i < 60; i++) expect(generateSee(s, createRng(`p${i}`)).id).not.toBe(home);
+    const great = Array.from({ length: 80 }, (_, i) => generateSee(s, createRng(`g${i}`))).filter((x) => presetSees.some((p) => p.id === x.id)).length;
+    expect(great).toBeGreaterThan(0);
+    expect(great).toBeLessThan(40);
+  });
+
+  it('after years in a small chair Rome moves him to a great one, and the first chair goes on the record', () => {
+    const s = candidate('translate', { offers: [{ offerId: 'ep_diocesan_bishop', arrivedWeek: 0, expiresWeek: 9999, bindings: {} }] });
+    let b = acceptAndGo(s, offerById('ep_diocesan_bishop')!, createRng('see')).state;
+    const first = b.see!;
+    const def = offerById('ep_translation')!;
+    expect(def.phase).toEqual(['bishop']);
+    // Too soon, then eligible: four years in, Rome content, his name known there.
+    expect(isOfferEligible(def, b)).toBe(false);
+    b = { ...b, clock: { ...b.clock, week: b.clock.week + 52 * 5 }, see: { ...first, rome: 40, presbyterate: 35, ordinations: 7 }, character: { ...b.character!, reputation: { ...b.character!.reputation, rome: 50 } } };
+    expect(isOfferEligible(def, b)).toBe(true);
+    const offered: GameState = { ...b, offers: [{ offerId: def.id, arrivedWeek: b.clock.week, expiresWeek: b.clock.week + 2, bindings: {} }] };
+    const moved = acceptAndGo(offered, def, createRng('move')).state;
+    expect(moved.phase).toBe('bishop');
+    expect(moved.see!.id).not.toBe(first.id);
+    expect(moved.see!.former).toHaveLength(1);
+    expect(moved.see!.former![0]).toMatchObject({ id: first.id, ordinations: 7, years: 5 });
+    expect(moved.career.at(-1)!.text).toMatch(/Translated from/);
+    expect(moved.flags.translated).toBe(true);
+    // A translation goes to a great see far more often than not.
+    const greats = Array.from({ length: 40 }, (_, i) => acceptAndGo(offered, def, createRng(`m${i}`)).state.see!.id).filter((id) => presetSeeIds.has(id)).length;
+    expect(greats).toBeGreaterThan(25);
   });
 });
