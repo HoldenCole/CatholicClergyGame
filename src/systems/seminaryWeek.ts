@@ -1,5 +1,6 @@
+import { evaluateAll } from '@/engine/conditions';
 import type { Mover } from './movers';
-import type { GameState, Pillar, SeminaryState, StatKey } from '@/types';
+import type { SeminaryActivityDef, GameState, Pillar, SeminaryState, StatKey } from '@/types';
 import type { Rng } from '@/engine/rng';
 import { seminaryActivities, seminaryActivity } from '@/content/seminary';
 import { resolveSelector } from '@/engine/selectors';
@@ -57,8 +58,17 @@ export function hoursGainsSentence(sem: SeminaryState): string | null {
 }
 
 /** Give an activity so many hours a week; clamped to its maximum and to what is left of the week. */
+/** Whether an activity is offered: a language already held is not. */
+export function seminaryActivityOffered(state: GameState, def: SeminaryActivityDef): boolean {
+  return !def.requires || evaluateAll(def.requires, state);
+}
+
 export function setSeminaryActivity(state: GameState, id: string, ap: number): GameState {
   const sem = state.seminary;
+  {
+    const def = seminaryActivities.find((a) => a.id === id);
+    if (def && ap > 0 && !seminaryActivityOffered(state, def)) throw new Error(`${def.label}: you have it already.`);
+  }
   const def = seminaryActivity(id);
   if (!sem || !def) throw new Error(`no such activity ${id}`);
   const routine = { ...routineOf(sem) };

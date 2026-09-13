@@ -16,6 +16,7 @@ import { noticeQuarter } from './notice';
 import { applyEffects } from '@/engine/effects';
 import { noteStatChange } from './movers';
 import { confessorPull } from './confessor';
+import { learnWeek } from './languages';
 import { evaluateAll } from '@/engine/conditions';
 import { commitmentAp } from '@/engine/offers';
 import { seasonOf } from '@/engine/time';
@@ -299,6 +300,7 @@ export function resolveWeek(state: GameState, rng: Rng): { state: GameState; led
   let adminAp = adminFloorFor(next) + obligationAp('meetings', plan.obligations.meetings, 0, state.character?.stats);
   let theologyUsed = plan.obligations.sunday_masses === 'invested';
   let knowledgeUsed = false;
+  let learnBlocks = 0;
   // In content order, not the routine's key order, so a saved week resolves in the same order as an unsaved one.
   for (const def of actionDefs) {
     const id = def.id;
@@ -313,6 +315,7 @@ export function resolveWeek(state: GameState, rng: Rng): { state: GameState; led
     next = applyEffects(next, scaled(def.effectsPerAp, effective * factor), {}, def.label);
     if (def.adminLoad) adminAp += effective;
     if (def.setsFlag && !next.flags[def.setsFlag]) next = { ...next, flags: { ...next.flags, [def.setsFlag]: true } };
+    if (def.learns) learnBlocks += effective;
     if (def.usesTheology) theologyUsed = true;
     if (def.usesKnowledge) knowledgeUsed = true;
   }
@@ -346,6 +349,9 @@ export function resolveWeek(state: GameState, rng: Rng): { state: GameState; led
   if (noticed.line) lines.push(noticed.line);
 
   // Decay.
+  const learned = learnWeek(next, learnBlocks);
+  next = learned.state;
+  if (learned.line) lines.push(learned.line);
   const c = next.character!;
   const decayed = decayWeek(c.stats, { adminAp, theologyUsed, knowledgeUsed });
   next = noteStatChange(next, c.stats, decayed, 'unused, and fading');

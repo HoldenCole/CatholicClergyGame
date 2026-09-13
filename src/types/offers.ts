@@ -31,6 +31,8 @@ export interface OfferDef {
   body: string;
   /** Selector of the person making the offer; declining costs that relationship. */
   from?: string;
+  /** The interest a man may put on file that makes this letter likelier (systems/interests.ts). */
+  interest?: string;
   requires: Condition[];
   /** Arrival weight; roughly the chance in 1,000 per week that it arrives when eligible. */
   weight: number;

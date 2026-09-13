@@ -32,6 +32,12 @@ function fits(parish: Parish, o: LiturgyOptionDef): boolean {
   return !o.needs || (parish.ethnic[o.needs.ethnic] ?? 0) >= o.needs.share;
 }
 
+/** Whether the man can say it himself: a community's Mass needs its language. */
+export function speaksFor(state: GameState, o: LiturgyOptionDef): boolean {
+  const lang = o.needs?.language;
+  return !lang || !!state.character?.credentials.includes(lang);
+}
+
 /** What is set on a dial: one option, or for a multi dial every option held, in content order. */
 export function selectedOf(parish: Parish, dial: string): string[] {
   const raw = parish.liturgy?.[dial] ?? '';
@@ -190,8 +196,8 @@ export function dialAvailability(state: GameState): DialAvailability[] {
       selected,
       options: def.options.map((o) => ({
         def: o,
-        available: may.ok && fits(parish, o) && (def.multi || o.id !== current),
-        why: !may.ok ? may.why : !fits(parish, o) ? 'Not the people for it here' : def.multi ? (selected.includes(o.id) ? 'Held; click to drop it' : 'Click to add it alongside the rest') : o.id === current ? 'As it is' : null,
+        available: may.ok && fits(parish, o) && (def.multi || o.id !== current) && (speaksFor(state, o) || selected.includes(o.id)),
+        why: !may.ok ? may.why : !fits(parish, o) ? 'Not the people for it here' : !speaksFor(state, o) && !selected.includes(o.id) ? `You would have to say it: take up ${o.needs!.language} in the study hours first` : def.multi ? (selected.includes(o.id) ? 'Held; click to drop it' : 'Click to add it alongside the rest') : o.id === current ? 'As it is' : null,
       })),
       want: def.multi ? 'as many as the parish has people for' : tasteWord(want),
       fit: def.multi ? 'fits' : dist < 0.15 ? 'fits' : dist < 0.35 ? 'near' : 'far',
@@ -213,6 +219,7 @@ export function setDial(state: GameState, dial: string, option: string): GameSta
   const o = optionDef(dial, option);
   if (!parish?.liturgy || !def || !o) throw new Error('no such dial');
   if (!fits(parish, o)) throw new Error('Not the people for it here');
+  if (def.multi && !selectedOf(parish, dial).includes(o.id) && !speaksFor(state, o)) throw new Error(`You would have to say it: take up ${o.needs!.language} first`);
   if (def.multi) {
     // A community's Mass is added or dropped alongside the rest; the parish feels it, the record does not tilt.
     const held = new Set(selectedOf(parish, dial));

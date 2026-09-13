@@ -1,6 +1,7 @@
 import { useGameStore } from '@/engine/store';
 import { allOffers } from '@/content/offers';
 import { currentPreference, PREFERENCES, PREFERENCE_LABEL } from '@/systems/assignment';
+import { INTEREST_DEFS, INTERESTS, interestsOf, parishInterest } from '@/systems/interests';
 import { chancesFor } from '@/systems/openings';
 import { CATEGORY_WORD, offerDoors } from '@/systems/doors';
 import { formationStanding, summersOnRecord } from '@/systems/standing';
@@ -28,6 +29,7 @@ function urgencyWord(u: number): string {
 export default function JobsPanel() {
   const game = useGameStore((s) => s.game);
   const setPreference = useGameStore((s) => s.setPreference);
+  const setInterest = useGameStore((s) => s.setInterest);
   const apply = useGameStore((s) => s.applyForOpening);
   if (!game?.character) return null;
   const inParish = !!game.parish;
@@ -70,6 +72,41 @@ export default function JobsPanel() {
             The bishop will read your file as <span className="ink">{standing.word}</span>{standing.reasons.length ? `: ${standing.reasons.join(', ')}` : ''}. The flagship and the growing parishes go to the men he wants seen; the rural posts and the hard parish are where he seasons the rest, or spends a good man where one is needed.
           </p>
         )}
+      </Sheet>
+
+      <Sheet title="Interests on file">
+        {(() => {
+          const have = interestsOf(game);
+          const asked = parishInterest(game);
+          const full = have.length >= INTERESTS.max;
+          const parishes = [...(game.world?.parishes ?? [])].filter((p) => !p.cathedral).sort((a, b) => a.name.localeCompare(b.name));
+          return (
+            <>
+              <p className="ink-muted text-xs leading-relaxed">
+                What you would go to if asked: the chancery reads it, the letters that match come likelier, and at ordination a good record turns an interest into a choice. Up to {INTERESTS.max} at once; more reads as asking for everything.
+              </p>
+              <div className="mt-2 flex flex-wrap gap-1">
+                {INTEREST_DEFS.map((d) => {
+                  const on = have.includes(d.id);
+                  return (
+                    <button key={d.id} className={'pbtn px-2 py-0.5 text-xs ' + (on ? 'pbtn-active' : '')} disabled={!on && full} title={d.blurb} onClick={() => setInterest(d.id, !on)}>
+                      {on ? '✓ ' : ''}{d.label}
+                    </button>
+                  );
+                })}
+              </div>
+              {parishes.length > 0 && (
+                <div className="mt-2 flex items-center gap-2 text-xs">
+                  <span className="ink-muted">A parish:</span>
+                  <select className="rounded border rule bg-white/40 px-1 py-0.5" value={asked ?? ''} disabled={!asked && full} onChange={(e) => (e.target.value ? setInterest(`parish:${e.target.value}`, true) : asked && setInterest(`parish:${asked}`, false))}>
+                    <option value="">none</option>
+                    {parishes.map((p) => <option key={p.id} value={p.id}>{p.name}, {p.place}</option>)}
+                  </select>
+                </div>
+              )}
+            </>
+          );
+        })()}
       </Sheet>
 
       {inParish && (

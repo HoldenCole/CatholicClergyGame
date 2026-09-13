@@ -1,6 +1,6 @@
 import { useGameStore } from '@/engine/store';
 import { seminaryActivities } from '@/content/seminary';
-import { activityBuilds, routineHours, routineOf, seminaryBudget } from '@/systems/seminaryWeek';
+import { activityBuilds, routineHours, routineOf, seminaryBudget, seminaryActivityOffered } from '@/systems/seminaryWeek';
 import Sheet from '../Sheet';
 
 /** The seminarian's week: the horarium is fixed; these are the hours that are his. */
@@ -26,7 +26,7 @@ export default function SeminaryRoutinePanel() {
       </Sheet>
       <Sheet title="Your hours">
         <ul className="flex flex-col gap-1.5">
-          {seminaryActivities.map((a) => {
+          {seminaryActivities.filter((a) => seminaryActivityOffered(game, a)).map((a) => {
             const ap = routine[a.id] ?? 0;
             const canAdd = ap < a.maxAp && left > 0;
             return (

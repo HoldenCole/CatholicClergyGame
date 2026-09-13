@@ -9,6 +9,7 @@ import { OBLIGATION_KEYS, type Quality } from '@/types';
 import Sheet from '../Sheet';
 import HomilyPanel from './HomilyPanel';
 import PressPanel from './PressPanel';
+import { hoursLearned, languageDefs, learnable, learningOf } from '@/systems/languages';
 import AwayPanel from './AwayPanel';
 
 const QUALITIES: Quality[] = ['min', 'standard', 'invested'];
@@ -33,6 +34,7 @@ export default function RoutinePanel() {
   const game = useGameStore((s) => s.game);
   const setObligation = useGameStore((s) => s.setObligation);
   const setDiscretionary = useGameStore((s) => s.setDiscretionary);
+  const setLearning = useGameStore((s) => s.setLearning);
   const toggleSacrifice = useGameStore((s) => s.toggleSacrifice);
   if (!game?.parish) return null;
   const plan = planWeek(game);
@@ -149,6 +151,21 @@ export default function RoutinePanel() {
             );
           })}
         </ul>
+        {(() => {
+          const learning = learningOf(game);
+          const options = learnable(game);
+          return (
+            <div className="mt-2 flex flex-wrap items-center gap-2 text-xs">
+              <span className="ink-muted">A language, in the study hours:</span>
+              <select className="rounded border rule bg-white/40 px-1 py-0.5" value={learning?.id ?? ''} onChange={(e) => setLearning(e.target.value || null)}>
+                <option value="">none</option>
+                {options.map((l) => <option key={l.id} value={l.id}>{l.label}</option>)}
+              </select>
+              {learning && <span className="ink-faint">{hoursLearned(game, learning.id)} of {learning.hours} hours; study hours count.</span>}
+              {!learning && game.character!.credentials.filter((c) => languageDefs.some((l) => l.credential === c)).length > 0 && <span className="ink-faint">You hold {game.character!.credentials.filter((c) => languageDefs.some((l) => l.credential === c)).map((c) => languageDefs.find((l) => l.credential === c)!.label).join(', ')}.</span>}
+            </div>
+          );
+        })()}
         <p className="ink-muted mt-3 text-xs">{careWord}{careTrend}. Hours with the people fill the pews, and full pews fill the basket; a parish that is looked after has fewer fires.</p>
       </Sheet>
       <Sheet title="The rest of your life">

@@ -87,6 +87,8 @@ export interface ActionDef {
   maxAp: number;
   /** A flag set the first week the action is spent on: the older Mass begun before the 2021 norms stands after them. */
   setsFlag?: string;
+  /** Hours here go to a language the man has taken up (systems/languages.ts). */
+  learns?: boolean;
   /** Phase 4: which group verb this action performs, if any. */
   groupVerb?: 'sustain' | 'found';
 }
@@ -167,8 +169,8 @@ export interface LiturgyOptionDef {
   lean: number;
   /** Weekly cost while chosen. */
   cost?: number;
-  /** Only where the parish has the people for it. */
-  needs?: { ethnic: string; share: number };
+  /** Only where the parish has the people for it, and only for a priest who has the language (a credential). */
+  needs?: { ethnic: string; share: number; language?: string };
 }
 
 export interface LiturgyDialDef {
