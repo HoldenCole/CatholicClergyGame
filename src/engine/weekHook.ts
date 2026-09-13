@@ -26,6 +26,7 @@ import { studyWeek } from '@/systems/studyWeek';
 import { endStudy } from './study';
 import { appointmentStep, APPOINTMENT_FLAGS } from './appointment';
 import { confessorWeek } from '@/systems/confessor';
+import { turnaroundStep } from '@/systems/trajectory';
 import { visitationStep } from '@/systems/visitation';
 import { careOf, WEEK } from '@/systems/week';
 import { renderText } from './text';
@@ -251,6 +252,9 @@ export function parishWeekHook(deps: EventDeps): WeekHook {
     const letters = resolvePermissions(next, rng.derive(`permissions:${next.clock.week}`));
     next = letters.state;
     for (const line of letters.lines) next = addDigestLine(next, line);
+    const turned = turnaroundStep(next);
+    next = turned.state;
+    if (turned.line) next = addDigestLine(next, turned.line);
     const box = confessorWeek(next);
     next = box.state;
     if (box.line) next = addDigestLine(next, box.line);

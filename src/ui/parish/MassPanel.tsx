@@ -1,6 +1,6 @@
 import { useGameStore } from '@/engine/store';
 import { currentParish, dialAvailability, frictionOf, frictionWord, mayChangeMass, weeklyCost } from '@/systems/liturgy';
-import { facultyGate } from '@/systems/decor';
+import { facultyGate, preTraditionisCustodes } from '@/systems/decor';
 import Sheet from '../Sheet';
 
 /** The Mass: seven dials the pastor sets, what the people want of each, and how it sits. */
@@ -27,22 +27,26 @@ export default function MassPanel() {
         {dials.map((d) => (
           <li key={d.def.id} className="text-sm">
             <div className="flex items-baseline justify-between gap-2">
-              <span>{d.def.label}</span>
-              <span className={'text-xs ' + (d.fit === 'far' ? 'ink-wine' : 'ink-faint')}>the people want {d.want}{d.fit === 'far' ? '; this is not it' : d.fit === 'near' ? '; near enough' : ''}</span>
+              <span>{d.def.label} <span className="ink-faint text-xs">· {d.def.multi ? 'any number, alongside the English Mass' : 'one of these'}</span></span>
+              <span className={'text-xs ' + (d.fit === 'far' ? 'ink-wine' : 'ink-faint')}>{d.def.multi ? d.want : `the people want ${d.want}${d.fit === 'far' ? '; this is not it' : d.fit === 'near' ? '; near enough' : ''}`}</span>
             </div>
             <div className="mt-0.5 flex flex-wrap gap-1">
-              {d.options.map((o) => (
-                <button
-                  key={o.def.id}
-                  className={'tab ' + (o.def.id === d.current ? 'tab-active' : '')}
-                  disabled={!o.available && o.def.id !== d.current}
-                  title={o.def.id === d.current ? 'As it is' : o.why ?? (o.def.cost ? `$${o.def.cost} a week` : '')}
-                  onClick={() => o.available && setDial(d.def.id, o.def.id)}
-                >
-                  {o.def.label}
-                </button>
-              ))}
+              {d.options.map((o) => {
+                const on = d.def.multi ? d.selected.includes(o.def.id) : o.def.id === d.current;
+                return (
+                  <button
+                    key={o.def.id}
+                    className={'tab ' + (on ? 'tab-active' : '')}
+                    disabled={!o.available && !on}
+                    title={on && !d.def.multi ? 'As it is' : o.why ?? (o.def.cost ? `$${o.def.cost} a week` : '')}
+                    onClick={() => o.available && setDial(d.def.id, o.def.id)}
+                  >
+                    {d.def.multi ? `${on ? '✓ ' : '+ '}` : ''}{o.def.label}
+                  </button>
+                );
+              })}
             </div>
+            {d.def.multi && <p className="ink-faint mt-0.5 text-xs">{d.selected.length === 0 ? 'None alongside the English Mass. Only communities the parish has the people for are offered.' : `${d.selected.length} alongside the English Mass; the Latin question above is about the English Mass itself and does not touch these.`}</p>}
           </li>
         ))}
       </ul>
@@ -53,11 +57,11 @@ export default function MassPanel() {
           <div className="mt-3 border-t rule pt-2 text-sm">
             <div className="flex items-baseline justify-between gap-2">
               <span>The older form</span>
-              <span className="ink-faint text-xs">the 1962 Missal, by the bishop's faculties</span>
+              <span className="ink-faint text-xs">{preTraditionisCustodes(game) ? 'the 1962 Missal, under Summorum Pontificum' : "the 1962 Missal, by the bishop's faculties"}</span>
             </div>
             <p className={'mt-0.5 text-xs ' + (gate.ok ? '' : 'ink-muted')}>
               {gate.ok
-                ? 'You hold faculties to celebrate it. Put hours to it in the routine, and it is yours to say on a weekday evening; the pastor decides whether it goes on a Sunday.'
+                ? (gate.why ?? 'You hold faculties to celebrate it. Put hours to it in the routine, and it is yours to say on a weekday evening; the pastor decides whether it goes on a Sunday.')
                 : gate.why}
             </p>
             {gate.canAsk && (

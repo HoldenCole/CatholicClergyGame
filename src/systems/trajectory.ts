@@ -1,5 +1,7 @@
 import type { GameState, ParishSnapshot } from '@/types';
-import { averageVitality } from './groups';
+import { averageVitality, parishGroups, vitalityBand } from './groups';
+import { explainAttendance, explainCollections } from './movers';
+import { planWeek } from './week';
 
 /** Quarterly readings. Invented. */
 export const TRAJECTORY = { everyWeeks: 13, keep: 40 } as const;
@@ -66,6 +68,71 @@ export function sinceArrival(state: GameState): Trajectory | null {
     weeks < 8 ? 'Too soon to say' :
     score >= 3 ? 'Turning around' : score >= 1 ? 'Coming along' : score === 0 ? 'Holding' : score >= -2 ? 'Slipping' : 'Going under';
   return { weeks, rows, verdict, score };
+}
+
+/** The kinds of parish nobody asks for: turning one is remembered. */
+export const HARD_KINDS = new Set(['difficult', 'struggling_urban', 'rural']);
+
+/** Turnaround credit, 0..1: a hard parish, a year in, turning around. */
+export function turnaroundOf(state: GameState): number {
+  const traj = sinceArrival(state);
+  const rec = state.world?.parishes.find((p) => p.id === state.parish?.parishId);
+  if (!traj || !rec || !HARD_KINDS.has(rec.kind) || traj.weeks < 52) return 0;
+  return traj.score >= 3 ? 1 : traj.score >= 1 ? 0.5 : 0;
+}
+
+export interface Driver {
+  label: string;
+  lines: string[];
+}
+
+function signed(n: number, unit = ''): string {
+  return `${n > 0 ? '+' : ''}${Math.round(n * 10) / 10}${unit}`;
+}
+
+/** What is moving each row, in words a pastor can act on. */
+export function driversOf(state: GameState): Driver[] {
+  const parish = state.parish;
+  const rec = state.world?.parishes.find((p) => p.id === parish?.parishId);
+  if (!parish || !rec || !state.character) return [];
+  const pews = explainAttendance(state);
+  const up = pews.reasons.filter((r) => r.amount > 0 && !r.label.startsWith('the rolls')).sort((a, b) => b.amount - a.amount).slice(0, 3);
+  const down = pews.reasons.filter((r) => r.amount < 0).sort((a, b) => a.amount - b.amount).slice(0, 2);
+  const plate = explainCollections(state);
+  const lifts = plate.factors.filter((f) => f.amount > 1).map((f) => `${f.label} ×${f.amount}`);
+  const drags = plate.factors.filter((f) => f.amount < 1).map((f) => `${f.label} ×${f.amount}`);
+  const plan = planWeek(state);
+  const groupHours = plan.discretionary.groups ?? 0;
+  const groups = parishGroups(state);
+  const thriving = groups.filter((g) => vitalityBand(g.vitality) === 'thriving').length;
+  const dying = groups.filter((g) => vitalityBand(g.vitality) === 'dying').length;
+  const then = parish.arrival;
+  const paid = then ? Math.max(0, then.debt - parish.finance.debt) : 0;
+  const projects = state.career.filter((e) => e.kind === 'project' && !/the Mass/.test(e.text) && (!then || e.week >= then.week)).length;
+  return [
+    { label: 'Attendance', lines: [`Heading to ${Math.round(pews.target * 100)}%.`, ...(up.length ? [`Lifting it: ${up.map((r) => `${r.label} ${signed(r.amount, ' pts')}`).join(', ')}.`] : []), ...(down.length ? [`Dragging it: ${down.map((r) => `${r.label} ${signed(r.amount, ' pts')}`).join(', ')}.`] : [])] },
+    { label: 'Collections', lines: [`The usual is $${plate.usual.toLocaleString()} a week${lifts.length ? `, lifted by ${lifts.join(', ')}` : ''}${drags.length ? `, dragged by ${drags.join(', ')}` : ''}.`] },
+    { label: 'Debt', lines: [paid > 0 ? `$${Math.round(paid).toLocaleString()} paid down since you came, from the spending sheet.` : 'Nothing paid down yet; the spending sheet is where that happens.'] },
+    { label: 'The groups', lines: [`${groupHours ? `${groupHours} block${groupHours === 1 ? '' : 's'} a week on them` : 'No hours on them this week'}; ${thriving} thriving, ${dying} dying. Hours, and a leader who is listened to, are what move them.`] },
+    { label: 'The buildings', lines: [projects ? `${projects} project${projects === 1 ? '' : 's'} since you came; each one is a building that stops falling.` : 'No projects yet; a project on the parish sheet is the only thing that mends a roof.'] },
+  ];
+}
+
+/** A hard parish turned around, a year in: the chancery hears, once, and it goes in the file. */
+export function turnaroundStep(state: GameState): { state: GameState; line: string | null } {
+  const pid = state.parish?.parishId;
+  if (!pid || turnaroundOf(state) < 1 || state.flags[`turnaround:${pid}`]) return { state, line: null };
+  const rec = state.world?.parishes.find((p) => p.id === pid);
+  const c = state.character!;
+  const rep = { ...c.reputation, chancery: Math.min(100, c.reputation.chancery + 6), brother_priests: Math.min(100, c.reputation.brother_priests + 3) };
+  const next: GameState = {
+    ...state,
+    character: { ...c, reputation: rep, traits: c.traits.includes('turned a parish around') ? c.traits : [...c.traits, 'turned a parish around'] },
+    flags: { ...state.flags, [`turnaround:${pid}`]: true, turned_a_parish: true },
+    movers: [...(state.movers ?? []), { week: state.clock.week, key: 'chancery', delta: 6, why: 'the parish nobody wanted, turning around' }, { week: state.clock.week, key: 'brother_priests', delta: 3, why: 'the parish nobody wanted, turning around' }],
+    career: [...state.career, { week: state.clock.week, kind: 'note', text: `The chancery noticed: ${rec?.name ?? 'the parish'} is turning around under you.` }],
+  };
+  return { state: next, line: `The vicar for clergy mentioned ${rec?.name ?? 'the parish'} at a meeting, by name, as a parish that is turning around. It went in the file that matters.` };
 }
 
 export function vitalityWord(v: number): string {

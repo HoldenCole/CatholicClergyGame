@@ -1,3 +1,4 @@
+import { dateOf } from '@/engine/time';
 import type { Achievement, AmbientItem, Archetype, DecorOption, DecorPlace, DecorSlot, GameState, LiturgicalStance, LiturgicalTopic, Permission } from '@/types';
 import type { Rng } from '@/engine/rng';
 import { evaluateAll } from '@/engine/conditions';
@@ -99,9 +100,20 @@ export function gateForTopic(state: GameState, topic: LiturgicalTopic): Gate {
  * Mass. Under the 2021 norms the diocesan bishop grants them to the priest,
  * not the parish, so a vicar asks as readily as a pastor.
  */
+/** Before Traditionis Custodes (16 July 2021) any priest who could say the older Mass might; the faculties came after. */
+export function preTraditionisCustodes(state: GameState): boolean {
+  const d = dateOf(state.clock);
+  return d.year < 2021 || (d.year === 2021 && (d.month < 7 || (d.month === 7 && d.day < 16)));
+}
+
 export function facultyGate(state: GameState): Gate {
   const topic: LiturgicalTopic = 'older_form_faculty';
   if (state.flags.can_celebrate_tlm) return { ok: true, why: null, stance: stanceFor(state, topic), permission: state.permissions[topic] ?? null, canAsk: false };
+  if (state.flags['older_mass:said']) return { ok: true, why: 'You began before the 2021 norms, and what stood then stands: no faculties are asked of you.', stance: stanceFor(state, topic), permission: state.permissions[topic] ?? null, canAsk: false };
+  if (preTraditionisCustodes(state)) {
+    const can = !!state.character?.credentials.includes('latin');
+    return { ok: can, why: can ? 'Under Summorum Pontificum no faculties are needed: any priest who can say it may. Put hours to it in the routine.' : 'Under Summorum Pontificum no faculties are needed, only the Latin and the rubrics: the crypt chapel in seminary, or the priests who say it.', stance: stanceFor(state, topic), permission: null, canAsk: false };
+  }
   if (!state.assignment) return { ok: false, why: 'Ask when you have a parish.', stance: null, permission: null, canAsk: false };
   const gate = gateForTopic(state, topic);
   if (gate.stance === 'forbidden') return { ...gate, why: `${bishopName(state)} grants no faculties for the older form. The question is closed under him.` };

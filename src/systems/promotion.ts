@@ -27,6 +27,8 @@ export const PROMOTION = {
   affiliationSwing: 12,
   /** A man who put his name forward is at least considered on purpose. */
   askedBonus: 6,
+  /** The parish nobody wanted, turned around: the board remembers. */
+  turnaroundBonus: 14,
 } as const;
 
 /** DESIGN 7.2: ordination age enters through trust, not as a cap. */
@@ -71,7 +73,9 @@ export function trust(c: Candidate): { value: number; reasons: string[] } {
   const chancery = (c.chancery + 100) / 2;
   const bishop = (c.bishopRelationship + 100) / 2;
   const vouch = Math.min(24, c.vouchers * 8);
-  const value = chancery * 0.5 + bishop * 0.3 + vouch;
+  const turned = PROMOTION.turnaroundBonus * (c.turnaround ?? 0);
+  const value = chancery * 0.5 + bishop * 0.3 + vouch + turned;
+  if (turned > 0) reasons.push(c.turnaround === 1 ? 'turned around the parish nobody wanted' : 'the hard parish is coming along under him');
   if (c.chancery >= 30) reasons.push('the chancery trusts him');
   if (c.bishopRelationship >= 30) reasons.push('the bishop likes him');
   if (c.vouchers > 0) reasons.push('someone in the chancery vouched');

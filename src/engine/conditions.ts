@@ -1,4 +1,4 @@
-import { frictionOf, leanOf } from '@/systems/liturgy';
+import { frictionOf, leanOf, selectedOf } from '@/systems/liturgy';
 import type { Condition, GameState } from '@/types';
 import { dateOf, seasonOf } from './time';
 import { feastsOfWeek, type FeastKey } from './feasts';
@@ -88,7 +88,7 @@ export function evaluateCondition(
       if (cond.key === 'friction') return compare(cond.op ?? '>=', frictionOf(parish), cond.amount ?? 0.3);
       if (cond.key === 'lean') return compare(cond.op ?? '>=', leanOf(parish), cond.amount ?? 0);
       if (cond.key === 'fresh') return compare(cond.op ?? '>=', Object.values(parish.liturgyChanged ?? {}).filter((w) => state.clock.week - w < 26).length, cond.amount ?? 1);
-      return parish.liturgy[cond.key] === cond.value;
+      return selectedOf(parish, cond.key).includes(String(cond.value));
     }
     case 'bond': {
       const pid = state.assignment?.parishId;

@@ -312,6 +312,7 @@ export function resolveWeek(state: GameState, rng: Rng): { state: GameState; led
     const factor = vicar && ['visits', 'extra_confessions', 'groups'].includes(id) ? WEEK.vicarCare + (state.flags['boss:mentor'] ? 0.1 : 0) : vicar && id === 'admin' ? (state.flags['boss:absent'] ? 1 : WEEK.vicarAdmin) : 1;
     next = applyEffects(next, scaled(def.effectsPerAp, effective * factor), {}, def.label);
     if (def.adminLoad) adminAp += effective;
+    if (def.setsFlag && !next.flags[def.setsFlag]) next = { ...next, flags: { ...next.flags, [def.setsFlag]: true } };
     if (def.usesTheology) theologyUsed = true;
     if (def.usesKnowledge) knowledgeUsed = true;
   }

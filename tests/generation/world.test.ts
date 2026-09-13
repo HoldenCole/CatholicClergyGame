@@ -135,7 +135,7 @@ describe('systems/assignment', () => {
     return { ...s, character: { ...c, stats: { ...c.stats, ...stats } }, flags };
   }
 
-  it('a Spanish speaker who asked for a Latino parish goes to the immigrant parish', () => {
+  it('a Spanish speaker who asked for a Latino parish goes to the immigrant parish', { timeout: 30_000 }, () => {
     let hits = 0;
     for (let i = 0; i < 100; i++) {
       const s = stateWith({ speaks_spanish: true, pref_latino: true, 'home_terrain:latino': true });

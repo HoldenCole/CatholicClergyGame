@@ -12,6 +12,13 @@ import { actionById } from '@/content/parish';
 import { buildSave, deserialize, serialize } from '@/engine/save';
 import type { GameState } from '@/types';
 
+/** The week hook's clock, moved to March 2022: after Traditionis Custodes. */
+function afterTheNorms(s: GameState): GameState {
+  let t = s;
+  for (let i = 0; i < 52 * 20 && !(dateOf(t.clock).year >= 2022); i++) t = { ...t, clock: { ...t.clock, week: t.clock.week + 1 } };
+  return t;
+}
+
 describe('generation/houses', () => {
   it('rolls one to four distinct houses, and neither the order nor the alignment collapses', () => {
     const orders = new Map<string, number>();
@@ -116,7 +123,8 @@ describe('faculties for the older form', () => {
     expect(facultyGate(shut).canAsk).toBe(false);
     expect(facultyGate(shut).why).toMatch(/no faculties/);
 
-    const s = vicar('open', 'by_permission');
+    // The faculties are a 2021 matter: move the clock past the norms first.
+    const s = afterTheNorms(vicar('open', 'by_permission'));
     expect(facultyGate(s).canAsk).toBe(true);
     expect(evaluateAll(actionById('older_mass')!.requires!, s)).toBe(false);
     const asked = petition(s, 'older_form_faculty', createRng('ask')).state;

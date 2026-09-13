@@ -85,6 +85,8 @@ export interface ActionDef {
   adminLoad?: boolean;
   /** Maximum AP per week that does anything. */
   maxAp: number;
+  /** A flag set the first week the action is spent on: the older Mass begun before the 2021 norms stands after them. */
+  setsFlag?: string;
   /** Phase 4: which group verb this action performs, if any. */
   groupVerb?: 'sustain' | 'found';
 }
@@ -174,6 +176,8 @@ export interface LiturgyDialDef {
   label: string;
   blurb: string;
   options: LiturgyOptionDef[];
+  /** Any number of its options at once (the communities' Masses), joined by '+' in the parish record; outside the taste. */
+  multi?: boolean;
 }
 
 export interface ParishFinance {
