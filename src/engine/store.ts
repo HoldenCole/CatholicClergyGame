@@ -58,6 +58,8 @@ import { hoursOf } from '@/systems/week';
 import { DEFAULT_SETTINGS } from '@/systems/workweek';
 import type { GameSettings } from '@/types';
 import { setPreference, type Preference } from '@/systems/assignment';
+import { setInterest as doSetInterest } from '@/systems/interests';
+import { setLearning as doSetLearning } from '@/systems/languages';
 import type { DecorPlace, LiturgicalTopic } from '@/types';
 import { anthropicProvider, type Provider } from '@/llm/provider';
 import { DEFAULT_LLM, loadLlmSettings, saveLlmSettings, type LlmSettings } from '@/llm/settings';
@@ -109,6 +111,10 @@ export interface GameStore {
   setStudyActivity(id: string, ap: number): void;
   /** What the man has asked the chancery for, read by the assignment algorithm. DESIGN §7.4 */
   setPreference(pref: Preference): void;
+  /** Indicate interest: the Gregorian, a parish, the posts. */
+  setInterest(key: string, on: boolean): void;
+  /** Take up a language in the routine's study hours, or put it down. */
+  setLearning(id: string | null): void;
   setDiscretionary(actionId: string, ap: number): void;
   foundGroup(type: GroupType): void;
   suppressGroup(groupId: string, suppressed: boolean): void;
@@ -430,6 +436,12 @@ export const useGameStore = create<GameStore>()((set, get) => ({
   },
   setPreference(pref) {
     update(set, get, (game) => setPreference(game, pref));
+  },
+  setInterest(key, on) {
+    update(set, get, (game) => doSetInterest(game, key, on));
+  },
+  setLearning(id) {
+    update(set, get, (game) => doSetLearning(game, id));
   },
   setDiscretionary(actionId, ap) {
     update(set, get, (game) => doSetDiscretionary(game, actionId, ap));

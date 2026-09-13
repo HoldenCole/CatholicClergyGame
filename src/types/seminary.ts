@@ -1,3 +1,4 @@
+import type { Condition } from './events';
 import type { Pillar } from './character';
 import type { StatKey } from './stats';
 
@@ -46,6 +47,8 @@ export interface SeminaryActivityDef {
   credentialAfter?: { hours: number; credential: string; flag?: string; line: string };
   /** Phrases for the week's digest line, rotated. */
   digest: string[];
+  /** Offered only while these hold: a language already held is not offered again. */
+  requires?: Condition[];
 }
 
 export interface SeminaryState {

@@ -1,3 +1,4 @@
+import { INTERESTS, parishInterest } from '@/systems/interests';
 import type { Assignment, Decision, GameState, Opening } from '@/types';
 import type { Rng } from './rng';
 import { decide } from '@/systems/promotion';
@@ -192,7 +193,7 @@ export function nextAssignment(state: GameState, rng: Rng): { state: GameState; 
     // A man who told the chancery he would take the hard parish gets it (offer content sets the flag).
     const others = next.world!.parishes.filter((p) => p.id !== next.parish?.parishId);
     const hard = next.flags.took_the_hard_parish && !next.flags.hard_parish_honored ? others.find((p) => p.kind === 'difficult') : undefined;
-    const parish = hard ?? rng.derive(`posting:${next.clock.week}`).weighted(others, (p) => 10 + (p.needsSpanish && next.flags.speaks_spanish ? 20 : 0));
+    const parish = hard ?? rng.derive(`posting:${next.clock.week}`).weighted(others, (p) => 10 + (p.needsSpanish && next.flags.speaks_spanish ? 20 : 0) + (parishInterest(next) === p.id ? INTERESTS.postingWeight : 0));
     if (hard) next = { ...next, flags: { ...next.flags, hard_parish_honored: true } };
     const opening: Opening = { id: `vicar_${next.clock.week}`, kind: 'parochial_vicar', parishId: parish.id, urgency: 50, needsSpanish: parish.needsSpanish, needsAdmin: false, alignment: parish.alignment, week: next.clock.week, label: `Parochial Vicar of ${parish.name}` };
     const lost = decisions.find((d) => d.opening.parishId) ?? decisions[0];

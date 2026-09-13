@@ -22,7 +22,8 @@ describe("the Latin question and the communities' Masses", () => {
     const s = pastor('dials');
     const parish = currentParish(s)!;
     const latino: Parish = { ...parish, ethnic: { ...parish.ethnic, latino: 0.4, vietnamese: 0.2, polish: 0 }, liturgy: { ...parish.liturgy!, language: 'some_latin', communities: '' } };
-    const t: GameState = { ...s, world: { ...s.world!, parishes: s.world!.parishes.map((p) => (p.id === parish.id ? latino : p)) } };
+    // A pastor who has the languages: a community's Mass needs its tongue.
+    const t: GameState = { ...s, character: { ...s.character!, credentials: [...s.character!.credentials, 'spanish', 'vietnamese'] }, world: { ...s.world!, parishes: s.world!.parishes.map((p) => (p.id === parish.id ? latino : p)) } };
     const dials = dialAvailability(t);
     const lang = dials.find((d) => d.def.id === 'language')!;
     expect(lang.def.multi).toBeUndefined();

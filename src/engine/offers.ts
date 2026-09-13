@@ -5,6 +5,7 @@ import { applyEffects } from './effects';
 import type { Rng } from './rng';
 import { resolveSelector, selectorsIn } from './selectors';
 import { askToGo } from './appointment';
+import { hasInterest, INTERESTS } from '@/systems/interests';
 
 /** Tunables. Invented. */
 export const OFFERS = {
@@ -51,6 +52,7 @@ export function offerWeight(def: OfferDef, state: GameState): number {
   for (const b of def.bias ?? []) if (evaluateCondition(b.when, state)) w *= b.multiplier;
   if (def.cluster) w *= Math.pow(OFFERS.clusterMultiplier, state.clusters[def.cluster] ?? 0);
   if (state.flags[onFileFlag(def)]) w *= OFFERS.deferredWeight;
+  if (def.interest && hasInterest(state, def.interest)) w *= INTERESTS.offerWeight;
   return Math.max(0, w);
 }
 

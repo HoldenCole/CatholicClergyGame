@@ -6,6 +6,7 @@ import { officeDef } from '@/content/parish';
 import { offerById } from '@/content/offers';
 import { PROBLEM_LABEL } from '@/generation/parishes';
 import { scoreParish } from './assignment';
+import { hasInterest, INTERESTS, parishInterest } from './interests';
 import { formationStanding, parishPrestige } from './standing';
 import { parishKindWord } from './placement';
 import { hoursOf } from './week';
@@ -121,6 +122,16 @@ export function buildChoice(state: GameState, rng: Rng, occasion: Occasion, fall
     if (here) options.push(option(state, 'first', `Parochial vicar of ${here.name}`, 'The board\'s own choice for you: the parish that fits what the seminary said you were for.', here, 'parochial_vicar', fallback.reasons));
     const cathedral = parishes.find((p) => p.cathedral && p.id !== here?.id);
     if (cathedral) options.push(option(state, 'cathedral', `Parochial vicar at ${cathedral.name}, and the bishop's Masses`, 'The cathedral: the bishop sees you every month, the chancery is across the street, and the rector runs a tight house. Master of ceremonies for the pontifical Masses on top of the parish.', cathedral, 'parochial_vicar', ['The rector asked for a man who can be trusted with the bishop\'s calendar', 'The top of the class is sent where the diocese can see him'], 'cathedral_calendar'));
+    // The parish he asked for, when his record earns a hearing or nobody else wants it.
+    const asked = parishInterest(state);
+    const askedParish = asked ? parishes.find((p) => p.id === asked && p.id !== here?.id && !p.cathedral) : undefined;
+    if (askedParish && (formationStanding(state).value >= CHOICE.ordinationStanding - INTERESTS.parishSlack || askedParish.kind === 'difficult' || askedParish.kind === 'rural')) {
+      options.push(option(state, 'asked', `Parochial vicar of ${askedParish.name}`, 'The parish you told the chancery you wanted. The board heard, and would rather send a man where he asked to go than argue with him about it.', askedParish, 'parochial_vicar', ['You asked for it, and the record was good enough to be heard']));
+    }
+    // Rome straight from ordination, for the top of the class who asked for it.
+    if (hasInterest(state, 'rome') && (formationStanding(state).value >= CHOICE.ordinationStanding || !!state.flags.rome_track) && offerById('pv_rome_study')) {
+      options.push({ id: 'rome', headline: 'Rome, for the licentiate', blurb: 'The Gregorian, three years, and the North American College. You asked, the rector agreed, and the bishop would rather send a man who wants it than one who does not. No parish yet; the parish comes home with you.', assignment: fallback, prestige: 'the diocese watches who is sent to Rome', time: 'Rome, all of it', involves: ['Lectures in Italian', 'A thesis, and the Curia across the river', 'A parish when you come home, chosen with the degree in hand'], posting: 'pv_rome_study' });
+    }
     // Then one parish of every kind, not only the kind the seminary said he was for.
     const taken = new Set(options.map((o) => o.assignment.parishId));
     for (const parish of bestOfEachKind(state, parishes, taken)) options.push(kindOption(state, parish, 'parochial_vicar', taken));
