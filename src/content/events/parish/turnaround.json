@@ -1,0 +1,426 @@
+{
+  "_notes": "A dying parish turned around (systems/trajectory.ts turnaroundStep). ta_the_parish_notices fires by id the week the turnaround lands; ta_bishops_letter fires by id six weeks later; vs_turnaround is the next visitation; ta_deanery_table is drawn.",
+  "events": [
+    {
+      "id": "ta_the_parish_notices",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "pressure": [
+        "ambition_vs_integrity"
+      ],
+      "severity": "MAJOR",
+      "category": "personal",
+      "baseWeight": 1,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "turned_a_parish",
+          "value": true
+        }
+      ],
+      "title": "The Parish Says It",
+      "body": "The annual meeting is in the hall on a Tuesday, and it is the first one in years that anyone has come to who was not on a committee. The finance council chair reads the numbers, which are better, and sits down. Then {@bonded_parishioner} stands up, without being on the agenda, and says what everyone in the room has been saying to each other in the parking lot for a year: that this parish was dying, that everyone knew it, that the diocese knew it, and that it is not dying now, and that the reason is standing at the front of the room pretending to look at the agenda. The room applauds. It goes on longer than is comfortable. The sacristan, who does not cry, is looking at the ceiling.",
+      "flavorPrompt": "the parish says it; the parish that was dying, and is not.",
+      "choices": [
+        {
+          "id": "thank_them",
+          "label": "Thank them, and say it was theirs: the ones who stayed",
+          "outcome": "You name the ones who stayed: the sacristan, the man who fixed the boiler, the women who ran the pantry through the worst of it. It is true and it is the thing that makes them love you. The applause the second time is for them, and is louder.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 6
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 0.5
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 0.5
+            },
+            {
+              "target": "flag",
+              "key": "turnaround:thanked_them",
+              "value": true
+            },
+            {
+              "target": "trait",
+              "key": "gave the credit away"
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "accept",
+          "label": "Accept it plainly, and say what is still to do",
+          "outcome": "You say thank you, once, and then you say the school roof and the debt and the eight o'clock, which is still thin. The room hears a man who is not finished. The finance council chair says afterward that it was the best annual meeting in twenty years and the first with a to-do list.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "turnaround:accepted",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "campaign",
+          "label": "Take the moment and announce the capital campaign",
+          "outcome": "The room, which was applauding, is now being asked for money, and it gives: the pledges by the end of the night are more than the last three campaigns together. Two of the old families think the timing was cynical and say so. They also pledge.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 1
+            },
+            {
+              "target": "money",
+              "key": "cash",
+              "delta": 30000
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 0.5
+            },
+            {
+              "target": "flag",
+              "key": "turnaround:campaign",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ta_bishops_letter",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "pressure": [
+        "ambition_vs_integrity"
+      ],
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 1,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "turned_a_parish",
+          "value": true
+        }
+      ],
+      "title": "A Letter From the Bishop, Unasked",
+      "body": "It comes on the chancery's paper and it is not an appointment and not a correction, which are the two kinds of letter a pastor expects from {@bishop}. It is a page, in his own hand for the first paragraph and typed for the rest, and it says that the vicar for clergy has told him about the parish, and that he has looked at the numbers himself, and that he remembers what the parish was when he sent you there, and that he did not, in honesty, expect this. He thanks you. He says the diocese is grateful and that he is. He asks nothing. It is the letter every priest wants and almost none of them get, and you read it three times and put it in the drawer with the other kind.",
+      "flavorPrompt": "a letter from the bishop, unasked; the parish that was dying, and is not.",
+      "choices": [
+        {
+          "id": "write_back",
+          "label": "Write back: two lines, and the names of the people who did it",
+          "outcome": "He answers your two lines with one, and the names go in a file he keeps. At the next Chrism Mass he says one of them to the man himself, at the door, and the man tells the parish.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "turnaround:wrote_back",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "invite",
+          "label": "Invite him to come and see it, on a Sunday, unannounced",
+          "outcome": "He comes, in October, in the leased car, and sits in the back of the ten-thirty, and the parish does not know until the sign of peace. He stays for the coffee. He says, at the door, that it is what he had hoped, and the sacristan hears him.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": 7
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 5
+            },
+            {
+              "target": "flag",
+              "key": "turnaround:bishop_came",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "ask_vicar",
+          "label": "Thank him, and ask for a vicar, because the parish can carry one now",
+          "outcome": "He writes back that he will see what the board can do. The board does, in the spring: a newly ordained man with more energy than sense, and the parish, which could not have carried him two years ago, carries him.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "turnaround:asked_for_vicar",
+              "value": true
+            },
+            {
+              "target": "flag",
+              "key": "asked_for_vicar",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "vs_turnaround",
+      "phase": [
+        "administrator",
+        "pastor"
+      ],
+      "pressure": [
+        "ambition_vs_integrity"
+      ],
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 40,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "turned_a_parish",
+          "value": true
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "visitation:turnaround_said",
+            "value": true
+          }
+        }
+      ],
+      "title": "The Visitation, and What He Says From the Microphone",
+      "body": "{@bishop} comes for confirmations and does the rite and shakes the hands and then, at the cake, takes the microphone from the parish council chair, which he does not usually do, and says to the hall that when he sent this pastor here he was sending him to a parish the diocese had nearly given up on, and that he has come today to a parish the diocese is proud of, and that the difference has a name, and he says it. The hall stands. The pastor of the parish two towns over, who drove him, is standing at the back, and hears it too, and will tell the deanery.",
+      "flavorPrompt": "the visitation, and what he says from the microphone; the parish that was dying, and is not.",
+      "choices": [
+        {
+          "id": "stand_there",
+          "label": "Stand there and take it, because there is nothing else to do",
+          "outcome": "You stand there. The sacristan cries in public for the first time in her life. The bishop's secretary, who writes everything down, writes down the length of the applause, which is a thing the chancery will remember when a parish opens that matters.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "visitation:turnaround_said",
+              "value": true
+            },
+            {
+              "target": "trait",
+              "key": "praised by the bishop in front of the parish"
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "hand_it_on",
+          "label": "Take the microphone back and hand it to the sacristan",
+          "outcome": "She does not want it and takes it and says four words and gives it back, and the hall, which was standing for you, stands for her. The bishop, who understands what you did, says so in the car.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": 7
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 7
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "visitation:turnaround_said",
+              "value": true
+            },
+            {
+              "target": "trait",
+              "key": "gave the credit away"
+            }
+          ]
+        }
+      ],
+      "once": true,
+      "beat": "visitation",
+      "priority": 10
+    },
+    {
+      "id": "ta_deanery_table",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "pressure": [
+        "friendship_vs_duty"
+      ],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 14,
+      "suppressYears": 3,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "turned_a_parish",
+          "value": true
+        }
+      ],
+      "title": "The Deanery Hears About It",
+      "body": "At the deanery lunch the dean says, before grace, that the vicar for clergy mentioned your parish at the last meeting by name, as a parish that has turned, and that he thought the table should know. The table knows. Half of it is glad, in the way of men who like a good story about one of their own. The other half is doing arithmetic: {@deanery_priest} has had a parish like yours for nine years and it has not turned, and he is looking at his soup, and everyone at the table knows what the arithmetic says.",
+      "flavorPrompt": "the deanery hears about it; the parish that was dying, and is not.",
+      "choices": [
+        {
+          "id": "credit_the_parish",
+          "label": "Say it was the parish, and name what you found there",
+          "outcome": "{@deanery_priest} looks up. You say the sacristan and the boiler man and the pantry women and the fact that the last pastor had left the books in order, which is half true. The table lets it be true. The dean, who knows the books were not in order, says nothing and thinks better of you.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": 4
+            },
+            {
+              "target": "relationship",
+              "key": "@deanery_priest",
+              "delta": 3
+            },
+            {
+              "target": "relationship",
+              "key": "@dean",
+              "delta": 3
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "say_how",
+          "label": "Say how it was done, plainly, for anyone who wants to try it",
+          "outcome": "It is a useful ten minutes and two of the men take notes on napkins. {@deanery_priest} does not, and drives home early, and is civil to you for a year in the way that is worse than rudeness.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": 2
+            },
+            {
+              "target": "relationship",
+              "key": "@deanery_priest",
+              "delta": -5
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 0.5
+            },
+            {
+              "target": "flag",
+              "key": "turnaround:told_the_deanery",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "say_nothing",
+          "label": "Say nothing and let the dean have said it",
+          "outcome": "The table moves on to the Chrism Mass rota. It was the graceful thing. {@deanery_priest} notices that too, and is grateful, and does not say so.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": 3
+            },
+            {
+              "target": "relationship",
+              "key": "@deanery_priest",
+              "delta": 4
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

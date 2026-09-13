@@ -130,3 +130,39 @@ describe('the parish nobody wanted, turning around', () => {
     expect(drivers[2]!.lines[0]).toMatch(/paid down/);
   });
 });
+
+describe('the people and the bishop say it', () => {
+  it('the week the turnaround lands the parish says it to your face, six weeks on the bishop writes, and the next visitation says it from the microphone', async () => {
+    const { parishWeekHook, resolvePending } = await import('@/engine/weekHook');
+    const { eventById, eventsForPhase } = await import('@/content');
+    const { TURNAROUND_LETTER_WEEKS, wasDying } = await import('@/systems/trajectory');
+    const { visitationStep } = await import('@/systems/visitation');
+    const s = pastor('say-it');
+    const rec = currentParish(s)!;
+    const arrival = s.parish!.arrival!;
+    // A parish of any kind counts when the numbers at arrival say dying.
+    const dying: GameState = { ...s, parish: { ...s.parish!, arrival: { ...arrival, attendance: 0.2 } } };
+    expect(wasDying(dying)).toBe(true);
+    let t: GameState = {
+      ...dying,
+      clock: { ...dying.clock, week: arrival.week + 60 },
+      parish: { ...dying.parish!, attendance: 0.5, finance: { ...dying.parish!.finance, averageCollection: arrival.collections * 1.6, debt: Math.max(0, arrival.debt - 60000) } },
+      world: { ...dying.world!, parishes: dying.world!.parishes.map((p) => (p.id === rec.id ? { ...p, buildings: { ...p.buildings, church: Math.min(100, p.buildings.church + 25), rectory: Math.min(100, p.buildings.rectory + 25), hall: Math.min(100, p.buildings.hall + 25) } } : p)) },
+    };
+    expect(turnaroundOf(t)).toBe(1);
+    const deps = { pool: eventsForPhase('pastor'), lookup: eventById };
+    t = parishWeekHook(deps)(t, createRng('w'), []);
+    expect(t.pending.map((e) => e.eventId)).toContain('ta_the_parish_notices');
+    expect(t.flags['turnaround:letter_week']).toBe(t.clock.week + TURNAROUND_LETTER_WEEKS);
+    t = resolvePending(t, t.pending.find((e) => e.eventId === 'ta_the_parish_notices')!, 'thank_them', createRng('r'), deps);
+    expect(t.character!.traits).toContain('gave the credit away');
+    // Six weeks on, the bishop's letter, unasked.
+    t = { ...t, clock: { ...t.clock, week: t.clock.week + TURNAROUND_LETTER_WEEKS }, pending: [], mode: { kind: 'clock' } };
+    t = parishWeekHook(deps)(t, createRng('w2'), []);
+    expect(t.pending.map((e) => e.eventId)).toContain('ta_bishops_letter');
+    expect(t.flags['turnaround:letter_week']).toBeUndefined();
+    // The next visitation says it from the microphone, and only once.
+    const v = visitationStep({ ...t, pending: [], mode: { kind: 'clock' }, parish: { ...t.parish!, visitationYear: 0 }, clock: { ...t.clock, week: t.clock.week + 52 } }, createRng('v'), deps.pool);
+    expect(v.event?.id).toBe('vs_turnaround');
+  });
+});

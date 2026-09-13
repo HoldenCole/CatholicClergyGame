@@ -254,7 +254,21 @@ export function parishWeekHook(deps: EventDeps): WeekHook {
     for (const line of letters.lines) next = addDigestLine(next, line);
     const turned = turnaroundStep(next);
     next = turned.state;
-    if (turned.line) next = addDigestLine(next, turned.line);
+    if (turned.line) {
+      next = addDigestLine(next, turned.line);
+      const said = deps.lookup('ta_the_parish_notices');
+      if (said) next = fireOrResolve(next, said, rng.derive(`turnaround:${next.clock.week}`), deps);
+      if (next.mode.kind !== 'clock' || next.pending.length > 0) return next;
+    }
+    const letterWeek = next.flags['turnaround:letter_week'];
+    if (typeof letterWeek === 'number' && next.clock.week >= letterWeek) {
+      const flags = { ...next.flags };
+      delete flags['turnaround:letter_week'];
+      next = { ...next, flags };
+      const letter = deps.lookup('ta_bishops_letter');
+      if (letter) next = fireOrResolve(next, letter, rng.derive(`turnaround-letter:${next.clock.week}`), deps);
+      if (next.mode.kind !== 'clock' || next.pending.length > 0) return next;
+    }
     const box = confessorWeek(next);
     next = box.state;
     if (box.line) next = addDigestLine(next, box.line);

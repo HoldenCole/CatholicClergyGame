@@ -49,7 +49,9 @@ export function visitationStep(state: GameState, rng: Rng, pool: GameEvent[]): {
   const year = dateOf(state.clock).year;
   const next: GameState = { ...state, parish: { ...state.parish!, visitationYear: year } };
   const scenes = pool.filter((e) => e.beat === 'visitation');
-  let [event] = drawEvents(scenes, next, rng.derive(`visitation:${year}`), 1);
+  // What must be said this time comes before the draw.
+  const urgent = scenes.filter((e) => (e.priority ?? 0) > 0 && evaluateAll(e.requires ?? [], next) && !next.history.some((h) => h.eventId === e.id && e.once)).sort((a, b) => (b.priority ?? 0) - (a.priority ?? 0) || (a.id < b.id ? -1 : 1));
+  let [event] = urgent.length ? [urgent[0]] : drawEvents(scenes, next, rng.derive(`visitation:${year}`), 1);
   if (!event) {
     const any = scenes.filter((e) => evaluateAll(e.requires ?? [], next));
     if (any.length) event = rng.derive(`visitation-any:${year}`).pick([...any].sort((a, b) => (a.id < b.id ? -1 : 1)));
