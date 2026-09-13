@@ -1,0 +1,360 @@
+{
+  "_notes": "A name as a confessor (systems/confessor.ts): hours in the box build it, and it draws penitents from across the diocese, the brother priests' notice, and the chancery's hard cases. Conditions use type 'confessor' (0..100).",
+  "events": [
+    {
+      "id": "cf_across_the_diocese",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "pressure": [
+        "friendship_vs_duty"
+      ],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 12,
+      "suppressYears": 2,
+      "requires": [
+        {
+          "type": "confessor",
+          "op": ">=",
+          "value": 30
+        }
+      ],
+      "title": "A Penitent From Across the Diocese",
+      "body": "There is a woman in the Saturday line whom you have never seen, in a good coat, who waits through four people to come to you and not to the other box. She has driven forty minutes. She says so, before she says anything else, as if to explain herself: someone at a deanery meeting told her husband's cousin that the priest here listens. What she has to confess is ordinary and old and has been carried a long way, and she has not said it to her own pastor in twelve years because she sees him at the school gate. You give her what you can. At the door she asks whether she may come again.",
+      "flavorPrompt": "a penitent from across the diocese; the visit, the room, what was said and not said.",
+      "choices": [
+        {
+          "id": "welcome",
+          "label": "Tell her the box is open to anyone, and mean it",
+          "outcome": "She comes monthly. She brings, by the spring, two others, one of whom is her pastor's parish council chair. Your Saturday afternoons run late, and you would not trade them.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "confessor:regulars",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "send_home",
+          "label": "Tell her, kindly, that her own pastor is the one who should carry this",
+          "outcome": "She thanks you and does not come back, and you do not know whether she went to him. It was the right answer by the book, and the book is not always right.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": -0.5
+            }
+          ]
+        },
+        {
+          "id": "say_nothing",
+          "label": "Say nothing about where she comes from; the seal covers the miles too",
+          "outcome": "She comes when she comes. You never ask, and she never explains again, and the name goes on spreading in the way that names do, by people who do not say where they heard it.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 0.5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cf_saturday_line",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "pressure": [
+        "competence"
+      ],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 10,
+      "suppressYears": 2,
+      "requires": [
+        {
+          "type": "confessor",
+          "op": ">=",
+          "value": 30
+        }
+      ],
+      "title": "The Line Runs Past the Vigil",
+      "body": "The Saturday line is out the door of the church and into the vestibule by four, and at ten to five the sacristan, who has to light the candles for the vigil, stands at the end of it with her arms folded. Twenty people are still waiting. Some of them have been there an hour. Two are from parishes with their own Saturday hours, which they will tell you if you ask, and you do not ask. The vigil Mass is at five and you are the only priest in the building. The people in the line can see you looking at the clock, and the ones at the back begin, quietly, to leave.",
+      "flavorPrompt": "the line runs past the vigil; the visit, the room, what was said and not said.",
+      "choices": [
+        {
+          "id": "add_hours",
+          "label": "Announce a second hour on Saturday mornings, and keep it",
+          "outcome": "The morning hour fills in a month. The parish council notices the cars. The other box gets a second priest from the deanery on the first Saturday, because the dean has heard, and does not say from whom.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 0.5
+            },
+            {
+              "target": "flag",
+              "key": "confessor:second_hour",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "cut_it",
+          "label": "Cut the line at ten to five and say the vigil Mass on time",
+          "outcome": "The ones at the back come back next week, earlier. One of them does not. The sacristan lights the candles and says nothing, which from her is thanks.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": -1
+            }
+          ]
+        },
+        {
+          "id": "late_mass",
+          "label": "Hear every one of them and start the vigil late",
+          "outcome": "Mass starts at twenty past. The choir is annoyed and the people are not, mostly, and a man in the fourth pew who waited in the line says the Confiteor like he means it. The pastor hears the Mass was late.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": -2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cf_deanery_grumble",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "pressure": [
+        "friendship_vs_duty"
+      ],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 12,
+      "suppressYears": 3,
+      "requires": [
+        {
+          "type": "confessor",
+          "op": ">=",
+          "value": 60
+        }
+      ],
+      "title": "Their People, in Your Box",
+      "body": "At the deanery lunch {@deanery_priest} says it as a joke, which is how the true things are said at that table: that half his parish drives to your Saturday afternoon and he can tell which half by who does not look him in the eye on Sunday. The dean laughs. Two other pastors do not. One of them says, into his coffee, that he did not know there was a competition. You have not advertised anything. You have kept a light on in a box for three years, and people have found it, and the men whose people found it are looking at you over the sandwiches.",
+      "flavorPrompt": "their people, in your box; the visit, the room, what was said and not said.",
+      "choices": [
+        {
+          "id": "disarm",
+          "label": "Say their people come because they cannot see you at the school gate, and mean it as a kindness",
+          "outcome": "It lands as it was meant. {@deanery_priest} nods slowly and says his own confessor is two dioceses away for the same reason. The table moves on. The two who did not laugh laugh now.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": 3
+            },
+            {
+              "target": "relationship",
+              "key": "@deanery_priest",
+              "delta": 4
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "offer",
+          "label": "Offer to take a Saturday in each of their boxes, in turn",
+          "outcome": "It costs you a Saturday a month for a year. It buys you the deanery. The dean, who has been trying to get these men to share anything for a decade, says at Christmas that you did it with a stole.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": 6
+            },
+            {
+              "target": "relationship",
+              "key": "@deanery_priest",
+              "delta": 3
+            },
+            {
+              "target": "ap",
+              "key": "",
+              "delta": -1
+            },
+            {
+              "target": "flag",
+              "key": "confessor:deanery_rota",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "shrug",
+          "label": "Shrug and say the seal covers the parking lot too",
+          "outcome": "It is a good line and it is remembered as a line. {@deanery_priest} does not send his people anywhere else, because he cannot, and does not forget the lunch.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": -4
+            },
+            {
+              "target": "relationship",
+              "key": "@deanery_priest",
+              "delta": -5
+            },
+            {
+              "target": "outspokenness",
+              "key": "outspokenness",
+              "delta": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cf_hard_case",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 10,
+      "suppressYears": 4,
+      "requires": [
+        {
+          "type": "confessor",
+          "op": ">=",
+          "value": 60
+        },
+        {
+          "type": "reputation",
+          "key": "chancery",
+          "op": ">=",
+          "value": 15
+        }
+      ],
+      "title": "The Chancery's Hard Case",
+      "body": "{@vicar_for_clergy} calls on a Tuesday and does not say much on the phone, which is how you know. A man the diocese would rather not name, whose name is in the paper for other reasons, has asked the bishop for a confessor who is not at the cathedral and not in his own parish and can be trusted to say nothing to anyone, ever, including the bishop. The bishop said yours. He will come after the evening Mass on Thursdays, by the side door, and you will not know when he is coming until he is there. What he carries is his, and heavy, and the seal covers it and so must you.",
+      "flavorPrompt": "the chancery's hard case; the visit, the room, what was said and not said.",
+      "choices": [
+        {
+          "id": "take_him",
+          "label": "Take him, and tell no one, not even the pastor",
+          "outcome": "He comes for two years and then does not. You never learn why and never ask. The vicar for clergy, who cannot say what he knows, says once at a funeral that the bishop trusts you with the things that matter, and leaves it there.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 6
+            },
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": 5
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "confessor:hard_case",
+              "value": true
+            },
+            {
+              "target": "trait",
+              "key": "trusted with the things that matter"
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "decline",
+          "label": "Say you are not the man for it, and give a reason that is true",
+          "outcome": "The vicar for clergy accepts the reason. The chancery remembers that you were asked and said no, which is not held against you, exactly, and is not forgotten either.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": -2
+            },
+            {
+              "target": "flag",
+              "key": "confessor:declined_hard_case",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "once": true
+    }
+  ]
+}

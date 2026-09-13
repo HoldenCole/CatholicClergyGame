@@ -1,0 +1,584 @@
+{
+  "_notes": "Storm season on the Gulf and the Florida coast (dioceses houston, miami, new_orleans; months 8..10). One watch a season; the landfall follows the watch's choice by followUpId and clears the pending flag; the insurer comes after damage.",
+  "events": [
+    {
+      "id": "st_the_cone",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "pressure": [
+        "belief_vs_safety"
+      ],
+      "severity": "MAJOR",
+      "category": "admin",
+      "baseWeight": 16,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "diocese",
+          "value": [
+            "houston",
+            "miami",
+            "new_orleans"
+          ]
+        },
+        {
+          "type": "month",
+          "op": ">=",
+          "value": 8
+        },
+        {
+          "type": "month",
+          "op": "<=",
+          "value": 10
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "storm:pending",
+            "value": true
+          }
+        }
+      ],
+      "title": "The Cone",
+      "body": "The storm is a cone on the television on Tuesday and the parish is inside it by Thursday, and by Friday morning the parish council chair has called twice, the school principal once, and the chancery not at all, which means the chancery is calling the pastors in order and you are not first. The plywood is gone from the hardware store. The hall has a generator that was tested in 2019. Half the parish is leaving and half is not, and the half that is not includes the people who cannot: the old, the poor, the ones without a car, the ones who stayed last time and were fine and the ones who stayed last time and were not.",
+      "flavorPrompt": "the cone.",
+      "choices": [
+        {
+          "id": "open_hall",
+          "label": "Open the hall as a shelter and stay with it",
+          "outcome": "The cots come from the Knights, the water from the grocery that closes at noon, and by evening there are sixty people in the hall, eleven dogs, and a generator that works. You do not sleep. The storm decides the rest.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "storm:pending",
+              "value": true
+            },
+            {
+              "target": "flag",
+              "key": "storm:sheltered",
+              "value": true
+            }
+          ],
+          "default": true,
+          "followUpId": "st_landfall_shelter"
+        },
+        {
+          "id": "evacuate",
+          "label": "Close the church, send the people north, and go",
+          "outcome": "The bulletin says the Masses are cancelled and the church is locked, and the car is on the interstate by noon with the parish's records in a box on the seat. It is the sensible thing. The people who could not leave remember who left.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": -4
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "storm:pending",
+              "value": true
+            },
+            {
+              "target": "flag",
+              "key": "storm:evacuated",
+              "value": true
+            }
+          ],
+          "followUpId": "st_landfall_gone"
+        },
+        {
+          "id": "stay_quiet",
+          "label": "Stay in the rectory, keep the church open, and wait it out",
+          "outcome": "You say the Saturday vigil to nine people and the wind. You sleep in the sacristy with the Blessed Sacrament and a flashlight. It is not sensible and it is the thing a pastor of this parish has done for a hundred years.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "storm:pending",
+              "value": true
+            },
+            {
+              "target": "flag",
+              "key": "storm:stayed",
+              "value": true
+            }
+          ],
+          "followUpId": "st_landfall_stayed"
+        }
+      ]
+    },
+    {
+      "id": "st_landfall_shelter",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "pressure": [
+        "belief_vs_safety"
+      ],
+      "severity": "MAJOR",
+      "category": "admin",
+      "baseWeight": 1,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "storm:pending",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "storm:sheltered",
+          "value": true
+        }
+      ],
+      "title": "Landfall, With Sixty People in the Hall",
+      "body": "It comes ashore at two in the morning as something less than the cone promised and more than the hall was built for. The generator holds. The roof over the school does not, and the sound of it going is a thing the sixty people in the hall will describe for years. Nobody is hurt. A woman has a baby in the kitchen at four, delivered by a nurse from the eight o'clock and a deacon who has never been so frightened. By dawn the water is in the parking lot and the sky is the color it is after, and the sixty people look at you as if you had done it.",
+      "flavorPrompt": "landfall, with sixty people in the hall.",
+      "choices": [
+        {
+          "id": "stay_on",
+          "label": "Keep the hall open until the last family has somewhere to go",
+          "outcome": "It is eleven days. The Knights feed everyone. The diocese sends a check and the newspaper sends a photographer, and the photograph is the hall, the baby, and you asleep in a chair, and it runs everywhere.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": 8
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 4
+            },
+            {
+              "target": "building",
+              "key": "school",
+              "delta": -30
+            },
+            {
+              "target": "money",
+              "key": "cash",
+              "delta": -25000
+            },
+            {
+              "target": "flag",
+              "key": "storm:pending",
+              "value": false
+            },
+            {
+              "target": "flag",
+              "key": "storm:damaged",
+              "value": true
+            },
+            {
+              "target": "trait",
+              "key": "kept the hall open through the storm"
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "hand_off",
+          "label": "Hand the shelter to the county on the second day and see to the buildings",
+          "outcome": "The county is grateful and competent. The school roof is tarped by Wednesday. The sixty people go to the county's shelter, which is a gymnasium, and remember the hall.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 2
+            },
+            {
+              "target": "building",
+              "key": "school",
+              "delta": -25
+            },
+            {
+              "target": "money",
+              "key": "cash",
+              "delta": -12000
+            },
+            {
+              "target": "flag",
+              "key": "storm:pending",
+              "value": false
+            },
+            {
+              "target": "flag",
+              "key": "storm:damaged",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "st_landfall_gone",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "pressure": [
+        "belief_vs_safety"
+      ],
+      "severity": "MAJOR",
+      "category": "admin",
+      "baseWeight": 1,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "storm:pending",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "storm:evacuated",
+          "value": true
+        }
+      ],
+      "title": "Landfall, From Four Hundred Miles",
+      "body": "You watch it come ashore on a motel television four hundred miles north with the parish records in a box on the other bed. The phone works until it does not. When it works again there are forty messages, and the first is the sacristan, who stayed, and who says the church is standing and the school is not and the hall had thirty people in it that she let in with her own key, and that she is not asking. The drive back is eleven hours and the last hour is the parish, and the people at the curb watch the car go by.",
+      "flavorPrompt": "landfall, from four hundred miles.",
+      "choices": [
+        {
+          "id": "come_back_fast",
+          "label": "Come back the first day the road opens and go to work",
+          "outcome": "You are on the ground by the second day and in the hall by the third. The sacristan does not say anything and does not need to. The school roof takes a year. The parish takes longer, and comes round.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": -2
+            },
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": -2
+            },
+            {
+              "target": "building",
+              "key": "school",
+              "delta": -30
+            },
+            {
+              "target": "money",
+              "key": "cash",
+              "delta": -20000
+            },
+            {
+              "target": "flag",
+              "key": "storm:pending",
+              "value": false
+            },
+            {
+              "target": "flag",
+              "key": "storm:damaged",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "wait_it_out",
+          "label": "Stay north until the diocese says it is safe",
+          "outcome": "It is a week. The sacristan ran the hall for a week. The diocese's letter about returning is polite and general and copied to the dean. The parish is civil to you for a year and warm to her for the rest of her life.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": -8
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": -3
+            },
+            {
+              "target": "building",
+              "key": "school",
+              "delta": -30
+            },
+            {
+              "target": "money",
+              "key": "cash",
+              "delta": -20000
+            },
+            {
+              "target": "flag",
+              "key": "storm:pending",
+              "value": false
+            },
+            {
+              "target": "flag",
+              "key": "storm:damaged",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "st_landfall_stayed",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "pressure": [
+        "belief_vs_safety"
+      ],
+      "severity": "MAJOR",
+      "category": "admin",
+      "baseWeight": 1,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "storm:pending",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "storm:stayed",
+          "value": true
+        }
+      ],
+      "title": "Landfall, in the Sacristy",
+      "body": "It comes at two in the morning and the church, which has stood through eleven of these, stands through the twelfth, and you learn what the sound of a roof holding is, which is a sound you will not forget. The rectory loses its porch. The school loses the gym roof and the third grade's classroom. At dawn you walk the property in boots with the sacristan and a flashlight, and the water is at the second step of the church and going down, and a man from across the street who has never been to Mass brings coffee because the light was on all night.",
+      "flavorPrompt": "landfall, in the sacristy.",
+      "choices": [
+        {
+          "id": "open_after",
+          "label": "Open the church at seven and say Mass for whoever comes",
+          "outcome": "Nine people come, the same nine, and the man with the coffee stands at the back. The parish learns that the church was open and the pastor was in it, and the word for that in a town like this is not one you would use of yourself.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 7
+            },
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": 5
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "building",
+              "key": "school",
+              "delta": -25
+            },
+            {
+              "target": "building",
+              "key": "rectory",
+              "delta": -10
+            },
+            {
+              "target": "money",
+              "key": "cash",
+              "delta": -18000
+            },
+            {
+              "target": "flag",
+              "key": "storm:pending",
+              "value": false
+            },
+            {
+              "target": "flag",
+              "key": "storm:damaged",
+              "value": true
+            },
+            {
+              "target": "trait",
+              "key": "stayed for the storm"
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "assess_first",
+          "label": "See to the buildings first and open on Sunday",
+          "outcome": "The tarps are on by Saturday and the church is dry by Sunday. It is the sensible order. The nine who came at seven on Friday found the door locked, and one of them says so.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": 2
+            },
+            {
+              "target": "building",
+              "key": "school",
+              "delta": -25
+            },
+            {
+              "target": "building",
+              "key": "rectory",
+              "delta": -10
+            },
+            {
+              "target": "money",
+              "key": "cash",
+              "delta": -12000
+            },
+            {
+              "target": "flag",
+              "key": "storm:pending",
+              "value": false
+            },
+            {
+              "target": "flag",
+              "key": "storm:damaged",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "st_the_insurer",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "pressure": [
+        "money"
+      ],
+      "severity": "NOTABLE",
+      "category": "finance",
+      "baseWeight": 20,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "storm:damaged",
+          "value": true
+        }
+      ],
+      "title": "The Adjuster",
+      "body": "The insurance adjuster comes six weeks after the storm in a rented car with a tablet and a manner, walks the school roof in ten minutes, and offers a number in the parking lot that would cover a third of it. He explains the deductible, which the diocese chose, and the exclusion, which the diocese did not read, and the fact that the carrier is leaving the state in January, which is not his department. The finance council chair, who sells insurance, is standing beside you and has gone a color.",
+      "flavorPrompt": "the adjuster.",
+      "choices": [
+        {
+          "id": "fight",
+          "label": "Fight it: the public adjuster, the diocese's lawyer, the year it takes",
+          "outcome": "It takes fourteen months and comes out at two-thirds, which the finance council chair says is a miracle and the diocese's lawyer says is Tuesday. The school reopens the second September. The parish learns what a deductible is.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 2
+            },
+            {
+              "target": "money",
+              "key": "cash",
+              "delta": 40000
+            },
+            {
+              "target": "flag",
+              "key": "storm:damaged",
+              "value": false
+            },
+            {
+              "target": "flag",
+              "key": "storm:fought_insurer",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "take_it",
+          "label": "Take the number and start a campaign for the rest",
+          "outcome": "The campaign raises the rest in a year, from the parish and from a parish in a dry diocese that adopted yours. The adjuster's number is remembered. So is the campaign.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": 3
+            },
+            {
+              "target": "money",
+              "key": "cash",
+              "delta": 15000
+            },
+            {
+              "target": "flag",
+              "key": "storm:damaged",
+              "value": false
+            },
+            {
+              "target": "flag",
+              "key": "storm:campaign",
+              "value": true
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

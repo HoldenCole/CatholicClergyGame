@@ -1,0 +1,316 @@
+{
+  "_notes": "Replies to a column in the diocesan paper (systems/press.ts). Drawn by the flags the column sets; the chancellor's call needs column:crossed_bishop.",
+  "events": [
+    {
+      "id": "pr_letter_to_editor",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "pressure": [
+        "ambition_vs_integrity"
+      ],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 14,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "column:written",
+          "value": true
+        }
+      ],
+      "title": "A Letter to the Editor",
+      "body": "The diocesan paper prints your column on a Thursday and a letter about it the Thursday after, from a man in a parish across the diocese who signs his name and his parish and disagrees with you at length, in the tone of a person who has been waiting years for a priest to say the thing you said so that he could say what he thinks of it. He is not stupid. Two of his sentences are better than two of yours. The editor calls to ask, cheerfully, whether you would like to reply, because a reply sells the next issue, and because the man has already written a second letter.",
+      "flavorPrompt": "a letter to the editor.",
+      "choices": [
+        {
+          "id": "reply",
+          "label": "Reply, once, briefly, and let him have the last word",
+          "outcome": "Your reply is four paragraphs and concedes the two sentences. The man writes a third letter that the editor does not print. Two pastors tell you at the deanery that they read both and that you came out of it well, which is the most the presbyterate says about anything in print.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 0.5
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "ignore",
+          "label": "Let it stand; a column is a column and a letter is a letter",
+          "outcome": "The editor is disappointed. The man writes to the bishop instead, who does not answer, and mentions it to you at the next confirmation as a joke that is not entirely one.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": 1
+            },
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": -1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pr_chancellor_call",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 18,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "column:crossed_bishop",
+          "value": true
+        }
+      ],
+      "title": "The Chancellor Calls About the Column",
+      "body": "{@chancellor} calls on Friday morning, which he does not do, and asks how you are, which he does not do either, and then says that the bishop read the column. He does not say what the bishop thought. He says that the bishop's position on the matter is well known, and that a priest of the diocese writing in the diocese's own paper is understood by readers to be speaking, in some sense, for the diocese, and that the editor has been reminded of this, and that he is reminding you. He is courteous throughout. He asks whether you have anything planned for the next quarter's column.",
+      "flavorPrompt": "the chancellor calls about the column.",
+      "choices": [
+        {
+          "id": "stand",
+          "label": "Say the column was yours and you stand by it",
+          "outcome": "There is a pause in which you can hear the chancery's air conditioning. He says that he will tell the bishop, and does, and the bishop says nothing to you about it for a year, which is its own sentence.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": -3
+            },
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": -3
+            },
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": 3
+            },
+            {
+              "target": "outspokenness",
+              "key": "outspokenness",
+              "delta": 3
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 2
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "soften",
+          "label": "Say you will write to the bishop and explain",
+          "outcome": "The letter is two pages and honest and the bishop answers it in three lines that thank you for it and close the subject. The next column is on the food pantry.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 1
+            },
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": -1
+            }
+          ]
+        },
+        {
+          "id": "retreat",
+          "label": "Say the next column will be on something safer, and mean it",
+          "outcome": "He says that would be wise, in the tone of a man who has said it to twenty priests. The editor hears from someone that you have been spoken to, and the next column runs shorter and lower on the page.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": -3
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": -2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pr_invited_to_speak",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "pressure": [
+        "competence"
+      ],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 10,
+      "suppressYears": 2,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "column:written",
+          "value": true
+        },
+        {
+          "type": "reputation",
+          "key": "public",
+          "op": ">=",
+          "value": 25
+        }
+      ],
+      "title": "An Invitation Across the Diocese",
+      "body": "A pastor you have met twice writes to say his parish read your column, and passed it around, and would you come and speak on a Wednesday evening in Lent: the hall, a hundred people, a question period that he promises to keep to forty minutes and will not. He offers gas money and dinner. It is an hour's drive. The people who would come are the people who agreed with the column, mostly, and a few who did not and want to see your face when they say so, and one man who will ask about something else entirely.",
+      "flavorPrompt": "an invitation across the diocese.",
+      "choices": [
+        {
+          "id": "go",
+          "label": "Go, and take the questions as they come",
+          "outcome": "The hall is full and the question period runs an hour and ten. The man who asks about something else is asking about his son, and you answer that one too. The pastor walks you to the car and says his people will remember it, and they do; two of them drive to your Saturday confessions in the spring.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "ap",
+              "key": "",
+              "delta": -1
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "decline",
+          "label": "Decline; the parish has your Wednesdays",
+          "outcome": "He understands. The column is remembered as a column. The invitation does not come again.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": -1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pr_reader_at_the_door",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 12,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "column:written",
+          "value": true
+        }
+      ],
+      "title": "A Reader at the Door",
+      "body": "A woman stops you at the door after the ten-thirty with the paper folded to your column, which she has underlined. She says she has been a member of this parish for thirty-one years and she did not know you thought that. She does not say whether she is glad. Her husband, behind her, is looking at the parking lot. She asks, in front of the next three families in the line, whether you meant it the way it reads, and the three families wait for the answer, because they read it too.",
+      "flavorPrompt": "a reader at the door.",
+      "choices": [
+        {
+          "id": "meant_it",
+          "label": "Say you meant it, and that she is welcome to disagree at the door any Sunday",
+          "outcome": "She does, for a month, and then she brings you a pie. The three families tell the parish that Father says what he thinks, and the parish, which had suspected as much, adjusts.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": 2
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "hedge",
+          "label": "Say the paper cut it, and it read harder than you meant",
+          "outcome": "She nods in a way that does not believe you and comes back the next week with the uncut version, which the editor sent her. The three families remember the hedge longer than the column.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": -3
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": -2
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

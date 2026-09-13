@@ -14,6 +14,8 @@ import { helpRelief } from './formed';
 import { FEAST_LABEL, feastsOfWeek } from '@/engine/feasts';
 import { noticeQuarter } from './notice';
 import { applyEffects } from '@/engine/effects';
+import { noteStatChange } from './movers';
+import { confessorPull } from './confessor';
 import { evaluateAll } from '@/engine/conditions';
 import { commitmentAp } from '@/engine/offers';
 import { seasonOf } from '@/engine/time';
@@ -297,9 +299,11 @@ export function resolveWeek(state: GameState, rng: Rng): { state: GameState; led
   let adminAp = adminFloorFor(next) + obligationAp('meetings', plan.obligations.meetings, 0, state.character?.stats);
   let theologyUsed = plan.obligations.sunday_masses === 'invested';
   let knowledgeUsed = false;
-  for (const [id, ap] of Object.entries(plan.discretionary)) {
-    const def = actionDefs.find((a) => a.id === id);
-    if (!def || ap <= 0) continue;
+  // In content order, not the routine's key order, so a saved week resolves in the same order as an unsaved one.
+  for (const def of actionDefs) {
+    const id = def.id;
+    const ap = plan.discretionary[id] ?? 0;
+    if (ap <= 0) continue;
     if (def.requires && !evaluateAll(def.requires, next)) continue;
     const effective = Math.min(ap, def.maxAp);
     // A vicar's role is the people: his visits and confessions pay more, his desk work less.
@@ -311,14 +315,14 @@ export function resolveWeek(state: GameState, rng: Rng): { state: GameState; led
     if (def.usesTheology) theologyUsed = true;
     if (def.usesKnowledge) knowledgeUsed = true;
   }
-  if (plan.slack > 0) next = applyEffects(next, [{ target: 'stat', key: 'piety', delta: WEEK.restPietyPerAp * plan.slack }]);
+  if (plan.slack > 0) next = applyEffects(next, [{ target: 'stat', key: 'piety', delta: WEEK.restPietyPerAp * plan.slack }], {}, 'hours left to rest');
 
   // What he cut from his own week costs him, and wears him. DESIGN §2.6 extension.
   const sacrificed = sacrificesOf(state);
-  for (const d of sacrificed) next = applyEffects(next, d.effectsPerWeek);
+  for (const d of sacrificed) next = applyEffects(next, d.effectsPerWeek, {}, `${d.label} cut from the week`);
   const strainBefore = strainOf(state);
   const strain = strainAfterWeek(state, sacrificed.reduce((n, d) => n + d.strain, 0), extraBlocks(state));
-  if (strain >= WEEK.strainWorn) next = applyEffects(next, [{ target: 'stat', key: 'piety', delta: -WEEK.strainPietyDrain }]);
+  if (strain >= WEEK.strainWorn) next = applyEffects(next, [{ target: 'stat', key: 'piety', delta: -WEEK.strainPietyDrain }], {}, 'worn out');
   if (strainBefore < WEEK.strainWorn && strain >= WEEK.strainWorn) lines.push('You are tired in a way sleep does not fix.');
   if (strainBefore < WEEK.strainSick && strain >= WEEK.strainSick) lines.push('You were sick for two days and said Mass anyway. Something has to give.');
   if (strainBefore >= WEEK.strainWorn && strain < WEEK.strainWorn) lines.push('You slept, and it showed.');
@@ -342,7 +346,9 @@ export function resolveWeek(state: GameState, rng: Rng): { state: GameState; led
 
   // Decay.
   const c = next.character!;
-  next = { ...next, character: fadeReputation({ ...c, stats: decayWeek(c.stats, { adminAp, theologyUsed, knowledgeUsed }) }) };
+  const decayed = decayWeek(c.stats, { adminAp, theologyUsed, knowledgeUsed });
+  next = noteStatChange(next, c.stats, decayed, 'unused, and fading');
+  next = { ...next, character: fadeReputation({ ...c, stats: decayed }) };
   // DESIGN §3.2: home terrain is a standing pull on lay support, for or against.
   const terrain = terrainOf(next);
   const here = next.world!.parishes.find((p) => p.id === parish.parishId)!;
@@ -361,7 +367,7 @@ export function resolveWeek(state: GameState, rng: Rng): { state: GameState; led
   next = preached.state;
   const bonuses = fundBonuses(next);
   bonuses.collections += preached.collections;
-  const target = attendanceTarget(next, care, mass.pull + bonuses.pull);
+  const target = attendanceTarget(next, care, mass.pull + bonuses.pull + confessorPull(next));
   const attendance = parish.attendance + (target - parish.attendance) * WEEK.attendanceFollow;
 
   // Finance.

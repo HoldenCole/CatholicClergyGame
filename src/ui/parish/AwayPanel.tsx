@@ -29,7 +29,7 @@ export default function AwayPanel() {
           {options.map(({ def, available, why }) => (
             <li key={def.id} className="flex items-start justify-between gap-2">
               <div className="min-w-0">
-                <div className={available ? '' : 'ink-muted'}>{def.label} <span className="ink-faint text-xs">· {def.kind === 'retreat' ? 'the retreat' : 'vacation'}, {def.weeks} week{def.weeks === 1 ? '' : 's'}</span></div>
+                <div className={available ? '' : 'ink-muted'}>{def.label} <span className="ink-faint text-xs">· {def.kind === 'retreat' ? 'the retreat' : def.kind === 'supply' ? 'on loan' : 'vacation'}, {def.weeks} week{def.weeks === 1 ? '' : 's'}</span></div>
                 <div className="ink-faint text-xs">{available ? def.blurb : why}</div>
               </div>
               {available && <button className="pbtn shrink-0 px-2 py-0 text-xs" onClick={() => goAway(def.id)}>go</button>}

@@ -36,11 +36,12 @@ export function fitView(points: { x: number; y: number }[], maxZoom = 3): MapVie
  * as ink on paper; every church a small red dot, yours ringed, the cathedral a
  * cross. Pans by dragging and zooms by the wheel or the buttons.
  */
-export function DioceseMap({ world, hereId, deaneryIds = [], view, onView, onHover }: { world: World; hereId?: string | undefined; deaneryIds?: string[]; view: MapView; onView?: (v: MapView) => void; onHover?: (id: string | null) => void }) {
+export function DioceseMap({ world, hereId, deaneryIds = [], openIds = [], selectedId, view, onView, onHover, onSelect }: { world: World; hereId?: string | undefined; deaneryIds?: string[]; openIds?: string[]; selectedId?: string | null; view: MapView; onView?: (v: MapView) => void; onHover?: (id: string | null) => void; onSelect?: (id: string) => void }) {
   const preset = presetById(world.diocese.presetId);
   const data = mapDataById(world.diocese.presetId);
   const here = world.parishes.find((p) => p.id === hereId);
   const deanery = new Set(deaneryIds);
+  const open = new Set(openIds);
   const drag = useRef<{ x: number; y: number; cx: number; cy: number } | null>(null);
   const z = view.zoom;
   const half = 50 / z;
@@ -122,8 +123,10 @@ export function DioceseMap({ world, hereId, deaneryIds = [], view, onView, onHov
         const mine = p.id === here?.id;
         const r = mine ? sw(1.1) : sw(0.75);
         return (
-          <g key={p.id} onMouseEnter={() => onHover?.(p.id)} onMouseLeave={() => onHover?.(null)} style={{ cursor: 'default' }}>
+          <g key={p.id} onMouseEnter={() => onHover?.(p.id)} onMouseLeave={() => onHover?.(null)} onClick={(e) => { e.stopPropagation(); onSelect?.(p.id); }} style={{ cursor: onSelect ? 'pointer' : 'default' }}>
             {deanery.has(p.id) && !mine && <circle cx={x} cy={y} r={r + sw(1.1)} fill="none" stroke="#7a1f1f" strokeWidth={sw(0.3)} />}
+            {open.has(p.id) && !mine && <circle cx={x} cy={y} r={r + sw(1.9)} fill="none" stroke="#b91c1c" strokeWidth={sw(0.35)} strokeDasharray={`${sw(0.7)} ${sw(0.5)}`} />}
+            {selectedId === p.id && <circle cx={x} cy={y} r={r + sw(2.6)} fill="none" stroke={INK} strokeWidth={sw(0.3)} opacity="0.7" />}
             {p.cathedral ? (
               <g>
                 <rect x={x - sw(0.4)} y={y - sw(2.4)} width={sw(0.8)} height={sw(4.8)} fill={INK} />

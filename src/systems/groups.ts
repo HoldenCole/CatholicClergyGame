@@ -184,7 +184,7 @@ export function groupsWeek(state: GameState, sustainAp: number, rng: Rng): { sta
     v = Math.max(0, Math.min(100, v));
     const band = vitalityBand(v);
     const def = groupTypeDef(g.type);
-    if (!g.suppressed) next = applyEffects(next, scaled(def.benefit, BAND_SCALE[band]));
+    if (!g.suppressed) next = applyEffects(next, scaled(def.benefit, BAND_SCALE[band]), {}, g.name);
     if (vitalityBand(g.vitality) !== band) {
       lines.push(`${g.name} is ${band === 'dying' ? 'dying' : band === 'declining' ? 'fading' : band === 'steady' ? 'steady again' : 'thriving'}.`);
     }

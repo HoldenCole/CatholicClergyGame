@@ -13,7 +13,10 @@ import { workWeek } from '@/systems/problems';
 import { clubsWeek, joinClub, leaveClub } from '@/systems/clubs';
 import { spendingWeek } from '@/systems/spending';
 import { resolvePermissions } from '@/systems/decor';
-import { awayWeek, retreatYearEnd } from '@/systems/away';
+import { awayWeek, goSupply, retreatYearEnd } from '@/systems/away';
+import { residentWeek } from '@/systems/resident';
+import { vocationsWeek } from '@/systems/vocations';
+import { presetById } from '@/content/dioceses';
 import { staffWeek } from '@/systems/staff';
 import { deaneryWeek } from '@/systems/deanery';
 import { returnOfTheFormed, seminarianWeek, summerSeminarian } from '@/systems/formed';
@@ -22,6 +25,8 @@ import { seminaryWeek } from '@/systems/seminaryWeek';
 import { studyWeek } from '@/systems/studyWeek';
 import { endStudy } from './study';
 import { appointmentStep, APPOINTMENT_FLAGS } from './appointment';
+import { confessorWeek } from '@/systems/confessor';
+import { visitationStep } from '@/systems/visitation';
 import { careOf, WEEK } from '@/systems/week';
 import { renderText } from './text';
 import type { WeekHook } from './clock';
@@ -198,6 +203,12 @@ export function parishWeekHook(deps: EventDeps): WeekHook {
     const letter = letterStep(state, rng, deps);
     if (letter.moved || letter.state.pending.length > 0) return letter.state;
     state = letter.state;
+    // The vicar for clergy's letter about a summer on loan: go, and the away week takes it from here.
+    if (state.flags['supply:pending'] && !state.away) {
+      state = goSupply(state, rng.derive(`supply:${state.clock.week}`));
+      const preset = state.away?.presetId ? presetById(state.away.presetId) : undefined;
+      if (preset) state = addDigestLine(state, `The letter from ${preset.name} came through the vicar for clergy: twelve weeks, three parishes, a room in a rectory in ${preset.see}. You packed.`);
+    }
     // A week away: the retreat or the vacation, with one scene the first week.
     if (state.away) {
       const gone = awayWeek(state, rng, deps.pool);
@@ -240,6 +251,36 @@ export function parishWeekHook(deps: EventDeps): WeekHook {
     const letters = resolvePermissions(next, rng.derive(`permissions:${next.clock.week}`));
     next = letters.state;
     for (const line of letters.lines) next = addDigestLine(next, line);
+    const box = confessorWeek(next);
+    next = box.state;
+    if (box.line) next = addDigestLine(next, box.line);
+    // The young men who might be called: their week, and in June the one who goes.
+    const called = vocationsWeek(next, rng.derive(`vocations:${next.clock.week}`));
+    next = called.state;
+    if (called.line) next = addDigestLine(next, called.line);
+    if (called.entered) {
+      const sendOff = deps.lookup('vo_send_off');
+      if (sendOff) next = fireOrResolve(next, sendOff, rng.derive(`send-off:${next.clock.week}`), deps);
+      if (next.mode.kind !== 'clock' || next.pending.length > 0) return next;
+    }
+    // The old priest in the rectory: his week, and one day his funeral.
+    const old = residentWeek(next, rng.derive(`resident:${next.clock.week}`));
+    next = old.state;
+    if (old.line) next = addDigestLine(next, old.line);
+    if (old.died) {
+      const funeral = deps.lookup('rs_funeral');
+      if (funeral) next = fireOrResolve(next, funeral, rng.derive(`funeral:${next.clock.week}`), deps);
+      if (next.mode.kind !== 'clock' || next.pending.length > 0) return next;
+    }
+    // The bishop's visitation, once a year, in the parish's own week.
+    const visit = visitationStep(next, rng, deps.pool);
+    next = visit.state;
+    if (visit.line) next = addDigestLine(next, visit.line);
+    if (visit.event) {
+      next = addDigestLine(next, 'The bishop came for confirmations.');
+      next = fireOrResolve(next, visit.event, rng.derive(`visitation:${next.clock.week}`), deps);
+      if (next.mode.kind !== 'clock' || next.pending.length > 0) return next;
+    }
     if (isCareerYear(next)) next = careerYear(next, rng);
     if (next.mode.kind !== 'clock') return next;
     if (next.flags.new_bishop_pending) {

@@ -1,0 +1,387 @@
+{
+  "_notes": "The retired priest in residence (systems/resident.ts). @resident is the man in the room at the top of the stairs; rs_funeral is fired by id the week he dies, never drawn.",
+  "events": [
+    {
+      "id": "rs_dinner_opinions",
+      "phase": [
+        "administrator",
+        "pastor"
+      ],
+      "pressure": [
+        "friendship_vs_duty"
+      ],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 12,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "resident:here",
+          "value": true
+        }
+      ],
+      "title": "Opinions at Dinner",
+      "body": "{@resident} has opinions, and dinner is when he has them. Tonight it is the homily, yours, which he heard from the sacristy door: too long by four minutes, one point too many, and a word he would not have used from a pulpit, though he grants the word is in the dictionary. He says it kindly, with the salt in his hand, as a man who preached two thousand Sundays says a thing to a man who has preached two hundred. The housekeeper looks at her plate. He is not wrong about the four minutes.",
+      "flavorPrompt": "opinions at dinner; the rectory, the old man, the years.",
+      "choices": [
+        {
+          "id": "take_it",
+          "label": "Take it, and ask what he would have cut",
+          "outcome": "He tells you, exactly, and he is right, and the next Sunday is better by four minutes and one point. He says nothing about it at dinner, which is how you know he heard.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@resident",
+              "delta": 5
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 1
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "push_back",
+          "label": "Say the pulpit is yours now, kindly",
+          "outcome": "He nods and passes the salt. He does not mention a homily again for a year, and when he does it is to say one was good. The housekeeper tells the sacristan you put him in his place, and the sacristan tells the parish.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@resident",
+              "delta": -4
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": -1
+            },
+            {
+              "target": "outspokenness",
+              "key": "outspokenness",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rs_the_seven",
+      "phase": [
+        "administrator",
+        "pastor"
+      ],
+      "pressure": [
+        "friendship_vs_duty"
+      ],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 10,
+      "suppressYears": 2,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "resident:here",
+          "value": true
+        }
+      ],
+      "title": "The Seven O'Clock",
+      "body": "{@resident} has said the seven o'clock every day since he came, in the older way of a man ordained before the changes and obedient to them: slowly, facing the people, without a homily, with the twelve who come at seven and have come for thirty years. They love him. Two of them have told you so, in the tone of people telling you something you should know. This morning he was not at the altar at seven and was at the altar at ten past, and the twelve waited, and he apologized from the sanctuary, which he has never done. He says his knee. It may be his knee.",
+      "flavorPrompt": "the seven o'clock; the rectory, the old man, the years.",
+      "choices": [
+        {
+          "id": "keep_him",
+          "label": "Keep him on the seven o'clock, and be in the sacristy at ten to",
+          "outcome": "You are there at ten to seven for a month, reading the paper, and he pretends not to know why, and one morning he says thank you without looking up from the vestments. The twelve notice you there and think better of you for it.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@resident",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 0.5
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "take_it_back",
+          "label": "Take the seven o'clock back, gently, for his sake",
+          "outcome": "He says of course. He comes to the seven o'clock and sits in the third pew, which the twelve find unbearable, and after a month he stops coming to the seven o'clock, and the housekeeper says he does not come down before nine now.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@resident",
+              "delta": -6
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": -3
+            },
+            {
+              "target": "flag",
+              "key": "resident:took_the_seven",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rs_the_fall",
+      "phase": [
+        "administrator",
+        "pastor"
+      ],
+      "pressure": [
+        "friendship_vs_duty"
+      ],
+      "severity": "MAJOR",
+      "category": "personal",
+      "baseWeight": 16,
+      "suppressYears": 3,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "resident:frail",
+          "value": true
+        }
+      ],
+      "title": "A Fall on the Stairs",
+      "body": "The housekeeper finds {@resident} at the foot of the stairs at six in the morning, conscious, angry, and unable to get up, and by the time you are down he has talked her out of the ambulance and is talking you out of it. His hip. He wants to say the seven o'clock. He wants, more than anything, not to go to the home the diocese runs for retired priests, which he calls the last parish, and he looks at you from the floor with the eyes of a man who knows what a fall means at his age and is asking you not to know it too.",
+      "flavorPrompt": "a fall on the stairs; the rectory, the old man, the years.",
+      "choices": [
+        {
+          "id": "ambulance",
+          "label": "Call the ambulance, and go with him",
+          "outcome": "The hip is broken. He is in the hospital a month and comes home with a walker and a nurse three mornings a week that the parish pays for without being asked. He never forgives you for the ambulance and never stops being grateful for the walker.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@resident",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 2
+            },
+            {
+              "target": "money",
+              "key": "cash",
+              "delta": -4000
+            },
+            {
+              "target": "flag",
+              "key": "resident:hospital",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "doctor_at_home",
+          "label": "Get the doctor to the house, and keep him home",
+          "outcome": "The doctor comes and is unhappy and comes again. The hip is cracked, not broken, and heals badly, and the old man says the seven o'clock from a chair in the sanctuary for a year and says it was the best year of his priesthood.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@resident",
+              "delta": 6
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "resident:kept_home",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "once": true
+    },
+    {
+      "id": "rs_funeral",
+      "phase": [
+        "administrator",
+        "pastor"
+      ],
+      "pressure": [
+        "friendship_vs_duty"
+      ],
+      "severity": "MAJOR",
+      "category": "parish_death",
+      "baseWeight": 1,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "resident:died",
+          "value": true
+        }
+      ],
+      "title": "The Old Man's Funeral",
+      "body": "{@resident} is buried from your church on a weekday morning, and the church is full: the twelve from the seven o'clock in the front pews, and behind them, in a block, forty priests of the diocese in white, and behind them people from three parishes he was pastor of before you were born, who drove. {@bishop} presides. The homily is yours, if you want it, because you were his pastor at the end, or the bishop's, if you would rather, because the bishop was his classmate. The bishop asks which, in the sacristy, with the vestments on. He does not say which he would prefer.",
+      "flavorPrompt": "the old man's funeral; the rectory, the old man, the years.",
+      "choices": [
+        {
+          "id": "preach",
+          "label": "Preach it yourself: the seven o'clock, the salt, the stairs",
+          "outcome": "You tell them about the seven o'clock and the twelve, and the opinions at dinner, and the stairs. The forty priests laugh in the right places and two of them cry, and the bishop, who did not expect to, says at the lunch that you buried his friend properly.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 4
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "trait",
+              "key": "buried the old man properly"
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "bishop",
+          "label": "Let the bishop preach: they were classmates",
+          "outcome": "He preaches about the seminary of 1968 and the man he knew before either of them was a pastor, and the priests hear something they had not heard, and you sit in the presider's chair beside him and hold the book. It was right. The parish would have liked to hear you.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": -1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sp_first_sunday",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "pressure": [
+        "competence"
+      ],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 10,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "away:supply",
+          "value": true
+        }
+      ],
+      "title": "The First Sunday on Loan",
+      "body": "The first Sunday in the other diocese is three Masses in three churches thirty miles apart, in a car the chancery lent you with a map in the glove box that is older than the highway. The people know you are on loan and treat you the way a town treats a doctor filling in: politely, provisionally, with an eye on the calendar. At the second church a woman asks after Mass whether you would take her mother's funeral on Tuesday, because the pastor who left did not know her mother and you, at least, are here. At the third the collection is counted in front of you by a man who says the last one took it home.",
+      "flavorPrompt": "the first sunday on loan; the rectory, the old man, the years.",
+      "choices": [
+        {
+          "id": "be_theirs",
+          "label": "Be their priest for the summer: the funeral, the counting, all of it",
+          "outcome": "You take the funeral and learn the mother's name and the daughter's and the town's. By August they have stopped saying on loan. The pastor who comes in September finds a parish that has been kept, and says so to his bishop, who writes to yours.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 0.5
+            },
+            {
+              "target": "flag",
+              "key": "supply:kept_it",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "hold_back",
+          "label": "Say the Masses well and keep the rest for their own pastor",
+          "outcome": "You say the Masses well, and they are grateful, and the funeral goes to a deacon, and the counting goes on as it went. It is a summer of Masses. The people remember a good voice and cannot remember the name.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 0.3
+            }
+          ]
+        }
+      ],
+      "beat": "away"
+    }
+  ]
+}

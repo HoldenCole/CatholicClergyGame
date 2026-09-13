@@ -32,7 +32,7 @@ function describeStop(stop: StopReason | null): string | null {
     case 'event': return `Something ${stop.event.severity === 'CRITICAL' ? 'that cannot wait' : 'worth your attention'}.`;
     case 'beat': return `${stop.beat.label}.`;
     case 'mode': return 'A decision is waiting.';
-    case 'offer': return 'A letter has come.';
+    case 'offer': return stop.lapsing ? 'A letter lapses next week.' : 'A letter has come.';
     case 'cap': return 'Stopped to let you look around.';
   }
 }

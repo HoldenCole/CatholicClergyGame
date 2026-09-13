@@ -156,6 +156,14 @@ export function evaluateCondition(
       return state.parish?.homily?.topic === cond.value;
     case 'calendar_year':
       return compare(cond.op, dateOf(state.clock).year, cond.value);
+    case 'month':
+      return compare(cond.op, dateOf(state.clock).month, cond.value);
+    case 'diocese': {
+      const id = state.world?.diocese.presetId;
+      return !!id && (Array.isArray(cond.value) ? cond.value.includes(id) : cond.value === id);
+    }
+    case 'confessor':
+      return compare(cond.op, state.character?.confessor ?? 0, cond.value);
     case 'house': {
       const houses = state.world?.diocese.visible.houses ?? [];
       return houses.some((h) => !cond.charism || h.charism === cond.charism) === cond.value;

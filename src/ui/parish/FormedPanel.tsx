@@ -1,5 +1,6 @@
 import { useGameStore } from '@/engine/store';
 import { deaconOf, returnedVicarOf, seminarianOf } from '@/systems/formed';
+import { residentHealthWord, residentOf } from '@/systems/resident';
 import { relationshipWord } from '@/systems/classmates';
 import Sheet from '../Sheet';
 import Portrait from '../portraits/Portrait';
@@ -14,14 +15,26 @@ export default function FormedPanel() {
   const seminarian = seminarianOf(game);
   const deacon = deaconOf(game);
   const vicar = returnedVicarOf(game);
+  const resident = residentOf(game);
   const formed = game.formed ?? [];
-  if (!seminarian && !deacon && !vicar && !formed.length) return null;
+  if (!seminarian && !deacon && !vicar && !resident && !formed.length) return null;
   const year = yearOf(game.clock.startDay, game.clock.week);
   const due = !!game.flags['seminarian:evaluation_due'];
   const weeksLeft = game.parish.seminarian ? Math.max(0, game.parish.seminarian.endWeek - game.clock.week) : 0;
   return (
     <Sheet title="The men">
       <ul className="flex flex-col gap-1.5 text-sm">
+        {resident && game.parish.resident && (
+          <li className="flex items-center gap-2">
+            <Portrait portrait={portraitForNpc(resident, year)} size={22} />
+            <span className="min-w-0 flex-1">
+              {resident.title} {resident.name.first} {resident.name.last}, {year - resident.birthYear}, retired, in the room at the top of the stairs
+              <span className="ink-faint block text-xs">{residentHealthWord(game.parish.resident.health)}; {game.parish.resident.health >= 35 ? 'he has the seven o\'clock, and half a block of your week back' : 'the seven o\'clock is yours again'}.</span>
+            </span>
+            <span className="ink-muted">{relationshipWord(resident.relationship)}</span>
+            <TalkButton npcId={resident.id} />
+          </li>
+        )}
         {seminarian && (
           <li>
             <div className="flex items-center gap-2">

@@ -1,12 +1,185 @@
 {
   "_notes": "The annual retreat and a vacation (playtesting). Canon 276 obliges a priest to a retreat; the game does too, once a calendar year, and gives him two weeks of vacation a year. Each place takes the weeks named, repairs strain per week, applies its effects per week, and costs the parish a supply priest while a pastor is gone. The engine fires one authored scene (beat 'away') in the first week and sets the flags away:<kind> and away:place:<id>.",
   "places": [
-    { "id": "abbey", "kind": "retreat", "label": "A silent retreat at the abbey", "blurb": "The hours, the silence, the four a.m. bell, and one conversation with the abbot. The best thing you can do for yourself, and the hardest to book.", "weeks": 1, "strain": 24, "supply": 700, "requires": [{ "type": "house", "charism": "contemplative", "value": true }], "weekly": [{ "target": "stat", "key": "piety", "delta": 1.5 }] },
-    { "id": "diocesan", "kind": "retreat", "label": "The diocesan priests' retreat", "blurb": "A retreat house, a hired speaker, forty priests, and the bar in the evening. Less silence than the abbey and more of the diocese; the vicar for clergy takes attendance.", "weeks": 1, "strain": 14, "supply": 700, "weekly": [{ "target": "stat", "key": "piety", "delta": 0.8 }, { "target": "reputation", "key": "brother_priests", "delta": 3 }, { "target": "reputation", "key": "chancery", "delta": 1 }] },
-    { "id": "home", "kind": "retreat", "label": "A week at home, with a book", "blurb": "Your mother's kitchen, the parish you grew up in, the breviary at the table. Not a retreat by the letter, and the chancery may say so, but a rest.", "weeks": 1, "strain": 16, "supply": 700, "weekly": [{ "target": "stat", "key": "piety", "delta": 0.4 }, { "target": "stat", "key": "charisma", "delta": 0.3 }] },
-    { "id": "rome", "kind": "vacation", "label": "Rome, with the men you were ordained with", "blurb": "Two weeks, a pensione near the Pantheon, the classmates who stayed and the ones who came. You come back with a tan and the news of the diocese three weeks before the chancery has it.", "weeks": 2, "strain": 10, "supply": 700, "weekly": [{ "target": "reputation", "key": "brother_priests", "delta": 2 }, { "target": "stat", "key": "knowledge", "delta": 0.3 }] },
-    { "id": "beach", "kind": "vacation", "label": "The beach house with brother priests", "blurb": "A rented house, cards, the grill, and the parish phone that you turn off on the second day. Two weeks of being a man among men who know what the job is.", "weeks": 2, "strain": 12, "supply": 700, "weekly": [{ "target": "reputation", "key": "brother_priests", "delta": 3 }, { "target": "stat", "key": "charisma", "delta": 0.2 }] },
-    { "id": "family", "kind": "vacation", "label": "Two weeks with the family", "blurb": "The nieces, the reunion, the sibling who asks the question, the parents getting older. It is not rest exactly, but it is yours.", "weeks": 2, "strain": 9, "supply": 700, "weekly": [{ "target": "stat", "key": "charisma", "delta": 0.3 }, { "target": "stat", "key": "piety", "delta": 0.2 }] },
-    { "id": "cabin", "kind": "vacation", "label": "A cabin, alone", "blurb": "A lake, a stack of books, no signal. The doubt comes with you and so does the deer at the window. Two weeks of nobody needing anything.", "weeks": 2, "strain": 16, "supply": 700, "weekly": [{ "target": "stat", "key": "piety", "delta": 0.5 }, { "target": "stat", "key": "knowledge", "delta": 0.2 }] }
+    {
+      "id": "abbey",
+      "kind": "retreat",
+      "label": "A silent retreat at the abbey",
+      "blurb": "The hours, the silence, the four a.m. bell, and one conversation with the abbot. The best thing you can do for yourself, and the hardest to book.",
+      "weeks": 1,
+      "strain": 24,
+      "supply": 700,
+      "requires": [
+        {
+          "type": "house",
+          "charism": "contemplative",
+          "value": true
+        }
+      ],
+      "weekly": [
+        {
+          "target": "stat",
+          "key": "piety",
+          "delta": 1.5
+        }
+      ]
+    },
+    {
+      "id": "diocesan",
+      "kind": "retreat",
+      "label": "The diocesan priests' retreat",
+      "blurb": "A retreat house, a hired speaker, forty priests, and the bar in the evening. Less silence than the abbey and more of the diocese; the vicar for clergy takes attendance.",
+      "weeks": 1,
+      "strain": 14,
+      "supply": 700,
+      "weekly": [
+        {
+          "target": "stat",
+          "key": "piety",
+          "delta": 0.8
+        },
+        {
+          "target": "reputation",
+          "key": "brother_priests",
+          "delta": 3
+        },
+        {
+          "target": "reputation",
+          "key": "chancery",
+          "delta": 1
+        }
+      ]
+    },
+    {
+      "id": "home",
+      "kind": "retreat",
+      "label": "A week at home, with a book",
+      "blurb": "Your mother's kitchen, the parish you grew up in, the breviary at the table. Not a retreat by the letter, and the chancery may say so, but a rest.",
+      "weeks": 1,
+      "strain": 16,
+      "supply": 700,
+      "weekly": [
+        {
+          "target": "stat",
+          "key": "piety",
+          "delta": 0.4
+        },
+        {
+          "target": "stat",
+          "key": "charisma",
+          "delta": 0.3
+        }
+      ]
+    },
+    {
+      "id": "rome",
+      "kind": "vacation",
+      "label": "Rome, with the men you were ordained with",
+      "blurb": "Two weeks, a pensione near the Pantheon, the classmates who stayed and the ones who came. You come back with a tan and the news of the diocese three weeks before the chancery has it.",
+      "weeks": 2,
+      "strain": 10,
+      "supply": 700,
+      "weekly": [
+        {
+          "target": "reputation",
+          "key": "brother_priests",
+          "delta": 2
+        },
+        {
+          "target": "stat",
+          "key": "knowledge",
+          "delta": 0.3
+        }
+      ]
+    },
+    {
+      "id": "beach",
+      "kind": "vacation",
+      "label": "The beach house with brother priests",
+      "blurb": "A rented house, cards, the grill, and the parish phone that you turn off on the second day. Two weeks of being a man among men who know what the job is.",
+      "weeks": 2,
+      "strain": 12,
+      "supply": 700,
+      "weekly": [
+        {
+          "target": "reputation",
+          "key": "brother_priests",
+          "delta": 3
+        },
+        {
+          "target": "stat",
+          "key": "charisma",
+          "delta": 0.2
+        }
+      ]
+    },
+    {
+      "id": "family",
+      "kind": "vacation",
+      "label": "Two weeks with the family",
+      "blurb": "The nieces, the reunion, the sibling who asks the question, the parents getting older. It is not rest exactly, but it is yours.",
+      "weeks": 2,
+      "strain": 9,
+      "supply": 700,
+      "weekly": [
+        {
+          "target": "stat",
+          "key": "charisma",
+          "delta": 0.3
+        },
+        {
+          "target": "stat",
+          "key": "piety",
+          "delta": 0.2
+        }
+      ]
+    },
+    {
+      "id": "cabin",
+      "kind": "vacation",
+      "label": "A cabin, alone",
+      "blurb": "A lake, a stack of books, no signal. The doubt comes with you and so does the deer at the window. Two weeks of nobody needing anything.",
+      "weeks": 2,
+      "strain": 16,
+      "supply": 700,
+      "weekly": [
+        {
+          "target": "stat",
+          "key": "piety",
+          "delta": 0.5
+        },
+        {
+          "target": "stat",
+          "key": "knowledge",
+          "delta": 0.2
+        }
+      ]
+    },
+    {
+      "id": "supply",
+      "kind": "supply",
+      "label": "A summer on loan to another diocese",
+      "blurb": "Twelve weeks of supply in a diocese shorter than yours: their parishes from the inside, their people, their pastor's chair. It comes by the vicar for clergy's letter when a diocese asks, and it comes home with a friend.",
+      "weeks": 12,
+      "strain": 3,
+      "supply": 0,
+      "weekly": [
+        {
+          "target": "reputation",
+          "key": "public",
+          "delta": 0.06
+        },
+        {
+          "target": "stat",
+          "key": "charisma",
+          "delta": 0.03
+        },
+        {
+          "target": "stat",
+          "key": "piety",
+          "delta": 0.02
+        }
+      ]
+    }
   ]
 }

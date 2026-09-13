@@ -1,3 +1,4 @@
+import type { Mover } from './movers';
 import type { GameState, Pillar, SeminaryState, StatKey } from '@/types';
 import type { Rng } from '@/engine/rng';
 import { seminaryActivities, seminaryActivity } from '@/content/seminary';
@@ -105,6 +106,7 @@ export function seminaryWeek(state: GameState, rng: Rng): SeminaryWeekResult {
   const phrases: string[] = [];
   const earned: string[] = [];
   const bindings: Record<string, string> = {};
+  const moves: Mover[] = [];
   for (const def of seminaryActivities) {
     const hours = routine[def.id] ?? 0;
     if (hours <= 0) continue;
@@ -113,6 +115,7 @@ export function seminaryWeek(state: GameState, rng: Rng): SeminaryWeekResult {
       const before = stats[k];
       stats = applyStat(stats, k, rate * hours);
       hoursGains[k] = (hoursGains[k] ?? 0) + (stats[k] - before);
+      moves.push({ week: state.clock.week, key: k, delta: stats[k] - before, why: def.label });
     }
     if (def.reputation) reputation = applyReputation(reputation, def.reputation.key, def.reputation.delta * hours);
     for (const r of def.relationships ?? []) {
@@ -136,12 +139,16 @@ export function seminaryWeek(state: GameState, rng: Rng): SeminaryWeekResult {
   }
   // A longer week than the house keeps wears on a seminarian too.
   const strain = strainAfterWeek(state, 0, Math.max(0, freeHourShift(state)));
-  if (strain >= WEEK.strainWorn) stats = applyStat(stats, 'piety', -WEEK.strainPietyDrain);
+  if (strain >= WEEK.strainWorn) {
+    stats = applyStat(stats, 'piety', -WEEK.strainPietyDrain);
+    moves.push({ week: state.clock.week, key: 'piety', delta: -WEEK.strainPietyDrain, why: 'worn out' });
+  }
   const next: GameState = {
     ...state,
     npcs,
     flags,
     strain,
+    movers: [...(state.movers ?? []), ...moves.filter((m) => m.delta !== 0)],
     character: { ...c, stats, reputation, credentials },
     seminary: { ...sem, pillarScores, hoursLogged, hoursGains },
   };

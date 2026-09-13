@@ -88,7 +88,7 @@ export function joinClub(state: GameState, id: string, rng: Rng, byInvitation = 
   const membership: ClubMembership = { joinedWeek: state.clock.week, weeks: 0, fellows: pickFellows(state, def, rng) };
   const clubs = clubsOf(state);
   let next: GameState = { ...state, clubs: { ...clubs, memberships: { ...clubs.memberships, [id]: membership } } };
-  if (def.onJoin) next = applyEffects(next, def.onJoin);
+  if (def.onJoin) next = applyEffects(next, def.onJoin, {}, `joining ${def.label}`);
   return { ...next, career: [...next.career, { week: next.clock.week, kind: 'note', text: `Joined ${def.label}.` }] };
 }
 
@@ -125,7 +125,7 @@ export function clubsWeek(state: GameState): { state: GameState; lines: string[]
       memberships[id] = m;
       continue;
     }
-    next = applyEffects(next, def.weekly.filter((e) => e.target !== 'pillar' || !!next.seminary));
+    next = applyEffects(next, def.weekly.filter((e) => e.target !== 'pillar' || !!next.seminary), {}, def.label);
     const npcs = { ...next.npcs };
     for (const fid of m.fellows) {
       const n = npcs[fid];

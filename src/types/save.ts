@@ -71,7 +71,7 @@ export interface GameState {
   /** The men he formed: summer seminarians and the evaluations he wrote, and whether each came back. */
   formed?: { npcId: string; name: string; year: number; verdict: 'strong' | 'reserved' | 'concerned'; returned?: boolean }[];
   /** A week away from the parish: the retreat or the vacation, where, and how long is left. */
-  away?: { placeId: string; kind: 'retreat' | 'vacation'; weeksLeft: number; startWeek: number } | null;
+  away?: { placeId: string; kind: 'retreat' | 'vacation' | 'supply'; weeksLeft: number; startWeek: number; /** The diocese a summer's supply is lent to, by preset id. */ presetId?: string } | null;
   /** What moved each constituency lately, with the reason, so the sheets can say why. Trimmed to a quarter. */
   movers?: { week: number; key: string; delta: number; why: string }[];
   /** Societies he belongs to. Absent in older saves. */

@@ -1,0 +1,304 @@
+{
+  "_notes": "The young men of the parish who might be called (systems/vocations.ts). The flags vocation:asking and vocation:ready follow their interest; vo_send_off is fired by id the June a man goes.",
+  "events": [
+    {
+      "id": "vo_the_boy_asks",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "pressure": [
+        "friendship_vs_duty"
+      ],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 14,
+      "suppressYears": 2,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "vocation:asking",
+          "value": true
+        }
+      ],
+      "title": "He Asks on the Steps",
+      "body": "{@parishioner}'s nephew, one of the altar servers, waits on the steps after the last Mass until the last family has gone, and asks you, looking at the parking lot, how a person knows. He is seventeen. He has a girlfriend, a scholarship he has not told his mother about, and a way of standing at the altar that the sacristan noticed before you did. He does not say the word priest. He asks how a person knows, and whether you knew, and whether it was like this, and you have about ninety seconds before his ride comes.",
+      "flavorPrompt": "he asks on the steps.",
+      "choices": [
+        {
+          "id": "tell_true",
+          "label": "Tell him the truth: you did not know, and you went anyway",
+          "outcome": "He listens without moving. His ride comes and he does not get in for a minute. He comes back to the steps the next Sunday and the one after, and the conversation gets longer, and one day he says the word.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@parishioner",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 0.5
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "vocation:told_true",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "send_him",
+          "label": "Give him the vocations director's card and a good word",
+          "outcome": "He takes the card. The vocations director calls him, once, and he does not call back, and the card is in a drawer in his mother's kitchen for a decade. He becomes an engineer and comes to Mass at Christmas.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "slow_him",
+          "label": "Tell him to finish school and see how he feels at twenty-two",
+          "outcome": "It is the sensible answer and he hears it as a no. He does finish school. At twenty-two he is in another city with the girlfriend, and he writes you a letter that says thank you and is not, quite, angry.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": -0.5
+            },
+            {
+              "target": "flag",
+              "key": "vocation:slowed",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "vo_his_mother",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "pressure": [
+        "friendship_vs_duty"
+      ],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 10,
+      "suppressYears": 3,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "vocation:asking",
+          "value": true
+        }
+      ],
+      "title": "His Mother Comes to the Office",
+      "body": "The mother of one of the young men you have been talking to comes to the office on a Tuesday without an appointment and sits with her purse on her knees. She wants to know what you have been saying to her son. She is a good woman and a good Catholic and she has one son and she had, until this spring, a plan for him that included grandchildren, and she is frightened and ashamed of being frightened and angry at you for both. She says the seminary took her brother and gave him back a stranger. She asks you to leave the boy alone.",
+      "flavorPrompt": "his mother comes to the office.",
+      "choices": [
+        {
+          "id": "honor_her",
+          "label": "Hear her out, and promise you will never push, only answer",
+          "outcome": "She cries and then stops. You keep the promise, which is harder than pushing. The boy comes on his own, in the end, or does not, and either way his mother sends a Christmas card for twenty years.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@parishioner",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 0.5
+            },
+            {
+              "target": "flag",
+              "key": "vocation:mother_heard",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "defend",
+          "label": "Say that the call is God's and not hers, and not yours either",
+          "outcome": "It is true and it lands like a slap. She leaves. The boy hears about it from her and comes less. The parish hears about it from her too.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": -4
+            },
+            {
+              "target": "outspokenness",
+              "key": "outspokenness",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "vo_visit_day",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "pressure": [
+        "friendship_vs_duty"
+      ],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 14,
+      "suppressYears": 2,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "vocation:ready",
+          "value": true
+        }
+      ],
+      "title": "The Seminary's Visit Day",
+      "body": "The seminary's visit day is a Saturday in Lent, and one of your young men has asked, in the way they ask, whether you would drive him. Four hours there and four back, the tour, the Mass, the lunch with men in cassocks who were altar servers five years ago, the rector's talk, the drive home in the dark with a boy who has seen the place and has to decide whether he could live in it. It is the day a vocation becomes a thing with a building. It is also a Saturday, and the vigil Mass is at five.",
+      "flavorPrompt": "the seminary's visit day.",
+      "choices": [
+        {
+          "id": "drive_him",
+          "label": "Drive him, and get the deanery to cover the vigil",
+          "outcome": "The drive home is quiet for two hours and then he talks for two. He asks whether the men were happy. You tell him the truth, which is that some were. He applies in the spring.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": -1
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 1
+            },
+            {
+              "target": "ap",
+              "key": "",
+              "delta": -1
+            },
+            {
+              "target": "flag",
+              "key": "vocation:visited",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "send_with_deacon",
+          "label": "Send him with the deacon and say the vigil",
+          "outcome": "He goes and sees the place and comes back with a folder. He does not say much about it. He does not apply that spring, and it is not clear it was the deacon.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": -0.3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "vo_send_off",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "pressure": [
+        "friendship_vs_duty"
+      ],
+      "severity": "MAJOR",
+      "category": "personal",
+      "baseWeight": 1,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "vocation:entered",
+          "value": true
+        }
+      ],
+      "title": "The Send-Off",
+      "body": "The parish gives him a send-off in the hall on the last Sunday in August: a cake with a chalice on it in blue icing, his grandmother, a card signed by four hundred people, and a speech by the parish council chair that mentions you three times, which the young man's mother notices and you notice her noticing. He is nervous and trying not to be. The vocations director has sent a note. Someone has put a cassock on him for a photograph and he does not know what to do with his hands. He asks you, at the end, quietly, whether you think he will make it.",
+      "flavorPrompt": "the send-off.",
+      "choices": [
+        {
+          "id": "truth",
+          "label": "Tell him you do not know, and that you will be here either way",
+          "outcome": "He nods, once, and gets it. He writes at Christmas and at Easter for six years, and comes for a summer, and one day is ordained in the cathedral with his mother in the second pew, and mentions you, and you sit in the back with the other pastors and do not cry until the car.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 2
+            },
+            {
+              "target": "trait",
+              "key": "sent a man to the seminary"
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "yes",
+          "label": "Tell him yes, plainly, because he needs to hear it",
+          "outcome": "He hears it. It carries him a year, and then it does not, and what carries him after that is his own. He does not hold the yes against you, and he remembers it.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 0.5
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 3
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

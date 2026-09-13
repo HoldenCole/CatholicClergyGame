@@ -28,21 +28,26 @@ export default function DioceseCards({
 
   return (
     <div className="grid grid-cols-12 gap-4">
-      <ul className="col-span-4 flex flex-col gap-2">
-        {dioceses.map((d) => (
-          <li key={d.id}>
-            <button
-              onClick={() => {
-                setOpen(d.id);
-                onSelect(d.id);
-              }}
-              className={'choice border rule ' + (d.id === selected ? 'choice-chosen' : '')}
-            >
-              <div className="font-medium">{d.see}</div>
-              <div className="ink-faint text-xs">
-                {NEED_LABEL[d.clergyNeed]} · {TENSION_LABEL[d.tension]}
-              </div>
-            </button>
+      <ul className="col-span-4 flex flex-col gap-1.5">
+        {regionsOf(dioceses).map(({ region, list }) => (
+          <li key={region}>
+            <div className="ink-faint mt-1 text-[10px] uppercase tracking-wide">{region}</div>
+            <ul className="flex flex-col gap-1">
+              {list.map((d) => (
+                <li key={d.id}>
+                  <button
+                    onClick={() => {
+                      setOpen(d.id);
+                      onSelect(d.id);
+                    }}
+                    className={'choice border rule py-1 ' + (d.id === selected ? 'choice-chosen' : '')}
+                  >
+                    <span className="font-medium">{d.see}</span>
+                    <span className="ink-faint ml-2 text-xs">{NEED_LABEL[d.clergyNeed]} · {TENSION_LABEL[d.tension]}</span>
+                  </button>
+                </li>
+              ))}
+            </ul>
           </li>
         ))}
         <li>
@@ -57,6 +62,17 @@ export default function DioceseCards({
       </div>
     </div>
   );
+}
+
+/** The list by region, in the order the regions first appear, so ten sees fit a screen. */
+function regionsOf(dioceses: DioceseVisible[]): { region: string; list: DioceseVisible[] }[] {
+  const out: { region: string; list: DioceseVisible[] }[] = [];
+  for (const d of dioceses) {
+    const r = out.find((x) => x.region === d.region);
+    if (r) r.list.push(d);
+    else out.push({ region: d.region, list: [d] });
+  }
+  return out;
 }
 
 function Card({ d, placement }: { d: DioceseVisible; placement: Placement | null }) {

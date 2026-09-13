@@ -6,6 +6,10 @@ import { applyEffects } from '@/engine/effects';
 import { describeUnmet } from './doors';
 import { controlsMoney } from './finance';
 import { strainOf } from './week';
+import { diocesePresets, presetById } from '@/content/dioceses';
+import ambient from '@/content/parish/ambient.json';
+import { finishNpc, rollAlignment, rollBaseStats } from '@/generation/npc';
+import { CLERGY_HERITAGE, eraForBirthYear, rollHeritage, rollMaleName } from '@/generation/names';
 
 /** Requested in playtesting; canon 276 obliges the retreat. Numbers invented. */
 export const AWAY = {
@@ -40,6 +44,7 @@ export function vacationLeft(state: GameState): number {
 export function awayAvailability(state: GameState): AwayAvailability[] {
   return awayPlaces.map((def) => {
     if (!state.parish) return { def, available: false, why: 'Not from here' };
+    if (def.kind === 'supply') return { def, available: false, why: "By the vicar for clergy's letter, when a diocese asks" };
     if (state.away) return { def, available: false, why: 'You are away' };
     if (state.mode.kind !== 'clock' || state.pending.length > 0) return { def, available: false, why: 'Not this week' };
     if (def.kind === 'retreat' && !retreatDue(state)) return { def, available: false, why: 'Made this year' };
@@ -70,6 +75,51 @@ export function goAway(state: GameState, placeId: string): GameState {
   };
 }
 
+/** Which diocese asks: any other preset, the short ones likelier. */
+export function pickSupplyDiocese(state: GameState, rng: Rng): string {
+  const here = state.world?.diocese.presetId;
+  const others = diocesePresets.filter((p) => p.id !== here);
+  return rng.weighted(others, (p) => p.shortageBias).id;
+}
+
+/** The letter said yes: twelve weeks in another diocese, its parishes from the inside. */
+export function goSupply(state: GameState, rng: Rng): GameState {
+  const def = awayPlaces.find((p) => p.kind === 'supply');
+  if (!def || !state.parish || state.away) return state;
+  const presetId = pickSupplyDiocese(state, rng.derive('supply-diocese'));
+  const preset = presetById(presetId)!;
+  const flags = { ...state.flags, 'away:supply': true, [`away:place:${def.id}`]: true, [`supply:diocese:${presetId}`]: true };
+  delete flags['supply:pending'];
+  return {
+    ...state,
+    away: { placeId: def.id, kind: 'supply', weeksLeft: def.weeks, startWeek: state.clock.week, presetId },
+    flags,
+    career: [...state.career, { week: state.clock.week, kind: 'note', text: `Lent to the ${preset.name} for the summer: ${def.weeks} weeks of supply.` }],
+  };
+}
+
+/** A friend made on loan: a priest of that diocese who will remember you. */
+function supplyFriend(state: GameState, presetId: string, rng: Rng): GameState {
+  const preset = presetById(presetId);
+  if (!preset) return state;
+  const year = calendarYear(state);
+  const birthYear = year - rng.int(32, 62);
+  const heritage = rollHeritage(rng, { ...CLERGY_HERITAGE, ...preset.heritage });
+  const npc = finishNpc(rng, {
+    id: `friend_${presetId}_${state.clock.week}`,
+    name: rollMaleName(rng, heritage, eraForBirthYear(birthYear)),
+    role: 'priest',
+    title: 'Fr.',
+    birthYear,
+    origin: rng.pick(['urban_ethnic', 'rural', 'suburban'] as const),
+    stats: rollBaseStats(rng, 30, 60),
+    tags: ['friend', `diocese:${presetId}`],
+    alignment: rollAlignment(rng, 0, 35),
+    relationship: rng.int(30, 45),
+  });
+  return { ...state, npcs: { ...state.npcs, [npc.id]: npc }, career: [...state.career, { week: state.clock.week, kind: 'note', text: `Home from ${preset.see} with a friend there: ${npc.title} ${npc.name.first} ${npc.name.last}.` }] };
+}
+
 /**
  * A week away: no routine, a supply priest paid for, strain repaired, the
  * place's effects, and a scene the first week. The last week clears the flags.
@@ -86,9 +136,24 @@ export function awayWeek(state: GameState, rng: Rng, pool: GameEvent[]): { state
   const candidates = first ? pool.filter((e) => e.beat === 'away' && evaluateAll(e.requires ?? [], next)) : [];
   const event = candidates.length ? rng.derive(`away:${state.clock.week}`).pick(candidates.sort((a, b) => (a.id < b.id ? -1 : 1))) : null;
   const weeksLeft = away.weeksLeft - 1;
-  const line = weeksLeft > 0 ? `Away: ${def.label.toLowerCase()}. The supply priest has the Masses.` : `Back from ${def.kind === 'retreat' ? 'the retreat' : 'vacation'}: ${def.label.toLowerCase()}.`;
+  const preset = away.presetId ? presetById(away.presetId) : undefined;
+  let line: string;
+  if (def.kind === 'supply' && preset) {
+    const pool = (ambient as Record<string, string[]>)[preset.id] ?? [];
+    const there = pool.length ? rng.derive(`supply-line:${state.clock.week}`).pick(pool) : 'A parish that is not yours, and a week that is.';
+    line = weeksLeft > 0 ? `On loan in ${preset.see}, week ${def.weeks - weeksLeft}: ${there}` : `Home from ${preset.see}. Twelve weeks of somebody else's parishes, and a friend who will call.`;
+  } else {
+    line = weeksLeft > 0 ? `Away: ${def.label.toLowerCase()}. The supply priest has the Masses.` : `Back from ${def.kind === 'retreat' ? 'the retreat' : 'vacation'}: ${def.label.toLowerCase()}.`;
+  }
   if (weeksLeft > 0) next = { ...next, away: { ...away, weeksLeft } };
-  else next = { ...next, away: null, flags: { ...next.flags, [`away:${def.kind}`]: false, [`away:place:${def.id}`]: false } };
+  else {
+    next = { ...next, away: null, flags: { ...next.flags, [`away:${def.kind}`]: false, [`away:place:${def.id}`]: false } };
+    if (def.kind === 'supply' && preset) {
+      next = supplyFriend(next, preset.id, rng.derive(`friend:${state.clock.week}`));
+      next = applyEffects(next, [{ target: 'reputation', key: 'public', delta: 3 }, { target: 'reputation', key: 'chancery', delta: 2 }, { target: 'trait', key: `has said Mass in ${preset.see}` }], {}, `the summer in ${preset.see}`);
+      next = { ...next, flags: { ...next.flags, [`supplied:${preset.id}`]: true } };
+    }
+  }
   return { state: next, line, event };
 }
 

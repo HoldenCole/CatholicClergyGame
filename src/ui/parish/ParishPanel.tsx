@@ -6,7 +6,7 @@ import { NEED_LABEL } from '@/generation/diocese';
 import { diocesePresets } from '@/content/dioceses';
 import { workAvailability } from '@/systems/problems';
 import { fundableGroups, mayInvest, spendAvailability, spendable, spendWords, SPENDING } from '@/systems/spending';
-import { explainAttendance, explainCollections, explainReputation } from '@/systems/movers';
+import { explainAlignment, explainAttendance, explainCollections, explainReputation, explainStat, reasonsLine } from '@/systems/movers';
 import type { ConstituencyKey } from '@/types';
 import { useUiStore } from '../uiStore';
 import { PROBLEM_LABEL } from '@/generation/parishes';
@@ -267,9 +267,13 @@ export default function ParishPanel() {
         {inspect && (
           <div className="ink-muted mt-2 grid grid-cols-2 gap-x-6 font-mono text-xs">
             {STAT_KEYS.map((k) => (
-              <div key={k} className="flex justify-between"><span>{k}</span><span>{c.stats[k].toFixed(1)}</span></div>
+              <div key={k} className="flex justify-between" title={reasonsLine(explainStat(game, k), 1)}><span>{k}</span><span>{c.stats[k].toFixed(1)}</span></div>
             ))}
-            <div className="flex justify-between"><span>alignment</span><span>{c.alignment.toFixed(0)}</span></div>
+            <div className="flex justify-between" title={reasonsLine(explainAlignment(game))}><span>alignment</span><span>{c.alignment.toFixed(0)}</span></div>
+            <div className="col-span-2 mt-1 font-sans text-[11px] leading-relaxed">
+              {STAT_KEYS.map((k) => ({ k, r: explainStat(game, k) })).filter((x) => x.r.length).map((x) => <div key={x.k}>{x.k}: {x.r.map((r) => `${r.label} ${r.amount > 0 ? '+' : ''}${r.amount.toFixed(1)}`).join(', ')}.</div>)}
+              {explainAlignment(game).length > 0 && <div>alignment: {explainAlignment(game).map((r) => `${r.label} ${r.amount > 0 ? '+' : ''}${r.amount.toFixed(0)}`).join(', ')}.</div>}
+            </div>
             <div className="flex justify-between"><span>outspokenness</span><span>{c.outspokenness.toFixed(0)}</span></div>
             {CONSTITUENCY_KEYS.map((k) => (
               <div key={k} className="flex justify-between"><span>{k}</span><span>{c.reputation[k].toFixed(0)}</span></div>

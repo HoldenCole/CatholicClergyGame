@@ -5,6 +5,7 @@ import { evaluateAll } from '@/engine/conditions';
 import { whyOffered } from '@/systems/doors';
 import { studyProgram } from '@/content/study';
 import { pendingAppointment } from '@/engine/appointment';
+import { canDefer } from '@/engine/offers';
 import Sheet from '../Sheet';
 
 /** Letters: open offers with their windows, and the commitments already made. */
@@ -12,6 +13,7 @@ export default function OffersPanel() {
   const game = useGameStore((s) => s.game);
   const accept = useGameStore((s) => s.acceptOffer);
   const decline = useGameStore((s) => s.declineOffer);
+  const defer = useGameStore((s) => s.deferOffer);
   const outcome = useGameStore((s) => s.lastOfferOutcome);
   if (!game) return null;
   const open = game.offers;
@@ -63,6 +65,7 @@ export default function OffersPanel() {
               )}
               <div className="mt-3 flex gap-2">
                 <button className="pbtn pbtn-primary" disabled={!stillQualified || (!!asked && !!def.accept.commitment?.away)} title={asked && def.accept.commitment?.away ? "The bishop's answer to your last yes has not come" : undefined} onClick={() => accept(o.offerId)}>{def.accept.commitment?.away ? 'Say yes' : 'Accept'}</button>
+                {canDefer(def) && <button className="pbtn" title="A smaller cost than a no: they keep your name, and the letter comes again in a year or two, likelier for the asking" onClick={() => defer(o.offerId)}>Not now, keep my name</button>}
                 <button className="pbtn" onClick={() => decline(o.offerId)}>Decline</button>
               </div>
             </div>

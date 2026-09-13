@@ -16,6 +16,10 @@ export const OFFERS = {
   weightScale: 1 / 1000,
   /** A declined or lapsed offer is not made again for this long. Invented. */
   reofferAfterWeeks: 104,
+  /** "Not now, but keep my name": sooner, and likelier when it comes. Invented. */
+  reofferAfterDeferWeeks: 78,
+  deferredWeight: 1.5,
+  deferRelationship: -3,
 } as const;
 
 /** Where a promised offer's due week is kept. */
@@ -34,9 +38,9 @@ export function isOfferEligible(def: OfferDef, state: GameState): boolean {
   if (def.yearGate && (!state.seminary || !def.yearGate.includes(state.seminary.year))) return false;
   if (state.offers.some((o) => o.offerId === def.id)) return false;
   if (state.commitments.some((c) => c.offerId === def.id)) return false;
-  if (def.once && state.offerHistory.some((h) => h.offerId === def.id)) return false;
+  if (def.once && state.offerHistory.some((h) => h.offerId === def.id && h.decision !== 'deferred')) return false;
   const last = [...state.offerHistory].reverse().find((h) => h.offerId === def.id);
-  if (last && state.clock.week - last.week < OFFERS.reofferAfterWeeks) return false;
+  if (last && state.clock.week - last.week < (last.decision === 'deferred' ? OFFERS.reofferAfterDeferWeeks : OFFERS.reofferAfterWeeks)) return false;
   if (!evaluateAll(def.requires, state)) return false;
   for (const sel of offerSelectors(def)) if (!resolveSelector(state, sel)) return false;
   return true;
@@ -46,6 +50,7 @@ export function offerWeight(def: OfferDef, state: GameState): number {
   let w = def.weight;
   for (const b of def.bias ?? []) if (evaluateCondition(b.when, state)) w *= b.multiplier;
   if (def.cluster) w *= Math.pow(OFFERS.clusterMultiplier, state.clusters[def.cluster] ?? 0);
+  if (state.flags[onFileFlag(def)]) w *= OFFERS.deferredWeight;
   return Math.max(0, w);
 }
 
@@ -65,7 +70,7 @@ export function offersWeek(state: GameState, rng: Rng, defs: OfferDef[], lookup:
   // A job does something to a man every week he holds it.
   for (const c of next.commitments.filter((c) => c.endWeek > week)) {
     const weekly = c.offerId.startsWith('office:') ? officeDef(c.offerId.slice(7))?.weekly : lookup(c.offerId)?.accept.commitment?.weekly;
-    if (weekly?.length) next = applyEffects(next, weekly);
+    if (weekly?.length) next = applyEffects(next, weekly, {}, c.label);
   }
   for (const c of next.commitments.filter((c) => c.endWeek <= week)) {
     next = { ...next, commitments: next.commitments.filter((x) => x !== c) };
@@ -101,9 +106,10 @@ export function offersWeek(state: GameState, rng: Rng, defs: OfferDef[], lookup:
   // One roll decides whether anything arrives; a second picks which.
   if (!due && !rng.chance(Math.min(1, total * OFFERS.weightScale))) return next;
   const chosen = due ?? rng.weighted(eligible, (d) => weights.get(d.id) ?? 0);
-  if (chosen.guarantee) {
+  if (chosen.guarantee || next.flags[onFileFlag(chosen)]) {
     const flags = { ...next.flags };
     delete flags[dueFlag(chosen)];
+    delete flags[onFileFlag(chosen)];
     next = { ...next, flags };
   }
   const bindings: Record<string, string> = {};
@@ -126,6 +132,26 @@ function settleDecline(state: GameState, def: OfferDef, open: ActiveOffer, decis
   }
   next = { ...next, offers: next.offers.filter((o) => o !== open) };
   return record(next, def.id, decision);
+}
+
+/** The flag that says a man asked to be kept on file for this. */
+export function onFileFlag(def: OfferDef): string {
+  return `on_file:${def.id}`;
+}
+
+/** Whether an offer takes "not now": someone other than the bishop asking for a man's years. */
+export function canDefer(def: OfferDef): boolean {
+  return !!def.accept.commitment?.away && def.from !== '@bishop';
+}
+
+/** Not now, but keep my name: a smaller cost than a no, and the letter comes again, sooner and likelier. */
+export function deferOffer(state: GameState, def: OfferDef): GameState {
+  const open = state.offers.find((o) => o.offerId === def.id);
+  if (!open) throw new Error(`offer ${def.id} is not open`);
+  if (!canDefer(def)) throw new Error(`offer ${def.id} does not take not now`);
+  let next: GameState = { ...state, offers: state.offers.filter((o) => o !== open), flags: { ...state.flags, [onFileFlag(def)]: true } };
+  if (def.from) next = applyEffects(next, [{ target: 'relationship', key: def.from, delta: OFFERS.deferRelationship }], open.bindings);
+  return record(next, def.id, 'deferred');
 }
 
 export function declineOffer(state: GameState, def: OfferDef): GameState {

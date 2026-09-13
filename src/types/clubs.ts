@@ -16,6 +16,8 @@ export interface ClubDef {
   requires?: Condition[];
   /** By invitation only: the invitation is an offer whose accept effect joins the club. */
   inviteOnly?: boolean;
+  /** For an invite-only club: what the house notices, so a man knows what would earn the letter. */
+  hint?: string;
   /** Applied once on joining, and once on leaving. */
   onJoin?: Effect[];
   onLeave?: Effect[];

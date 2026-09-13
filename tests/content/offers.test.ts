@@ -9,7 +9,7 @@ const CATEGORIES = ['academic', 'chancery', 'patronage', 'social', 'seminary'];
 const SELECTORS = [
   '@rector', '@spiritual_director', '@formation_advisor', '@vocation_director', '@professor_trad', '@professor_prog',
   '@bishop', '@mother', '@father', '@sibling', '@mentor_priest', '@home_pastor', '@closest_classmate', '@rival_classmate',
-  '@random_classmate', '@pastor', '@secretary', '@dre', '@music_director', '@maintenance', '@parishioner', '@bonded_parishioner', '@brother_priest',
+  '@random_classmate', '@pastor', '@secretary', '@dre', '@music_director', '@maintenance', '@parishioner', '@bonded_parishioner', '@brother_priest', '@resident',
   '@vicar_general', '@chancellor', '@vicar_for_clergy', '@group_leader',
 ];
 const CLUB_IDS = new Set(clubDefs.map((c) => c.id));
