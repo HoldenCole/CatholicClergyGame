@@ -15,6 +15,7 @@ import { spendingWeek } from '@/systems/spending';
 import { resolvePermissions } from '@/systems/decor';
 import { awayWeek, goSupply, retreatYearEnd } from '@/systems/away';
 import { residentWeek } from '@/systems/resident';
+import { vocationsWeek } from '@/systems/vocations';
 import { presetById } from '@/content/dioceses';
 import { staffWeek } from '@/systems/staff';
 import { deaneryWeek } from '@/systems/deanery';
@@ -253,6 +254,15 @@ export function parishWeekHook(deps: EventDeps): WeekHook {
     const box = confessorWeek(next);
     next = box.state;
     if (box.line) next = addDigestLine(next, box.line);
+    // The young men who might be called: their week, and in June the one who goes.
+    const called = vocationsWeek(next, rng.derive(`vocations:${next.clock.week}`));
+    next = called.state;
+    if (called.line) next = addDigestLine(next, called.line);
+    if (called.entered) {
+      const sendOff = deps.lookup('vo_send_off');
+      if (sendOff) next = fireOrResolve(next, sendOff, rng.derive(`send-off:${next.clock.week}`), deps);
+      if (next.mode.kind !== 'clock' || next.pending.length > 0) return next;
+    }
     // The old priest in the rectory: his week, and one day his funeral.
     const old = residentWeek(next, rng.derive(`resident:${next.clock.week}`));
     next = old.state;

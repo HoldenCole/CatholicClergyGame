@@ -69,6 +69,18 @@ export function summerSeminarian(state: GameState, rng: Rng): { state: GameState
   if (date.month !== 6 || date.day > 7) return { state, line: null };
   const chance = state.assignment?.role === 'pastor' ? FORMED.chancePastor : FORMED.chanceVicar;
   if (!rng.chance(chance)) return { state, line: null };
+  // A man of this parish who entered on your watch comes back to it first.
+  const own = Object.values(state.npcs).find((n) => n.status === 'active' && n.tags.includes('seminarian') && n.tags.includes('from_parish') && n.tags.includes(`parish:${p}`) && !n.tags.includes('summered'));
+  if (own) {
+    const marked = { ...own, tags: [...own.tags, 'summered'] };
+    const next: GameState = {
+      ...state,
+      npcs: { ...state.npcs, [own.id]: marked },
+      parish: { ...state.parish, seminarian: { npcId: own.id, startWeek: state.clock.week, endWeek: state.clock.week + FORMED.weeks } },
+      flags: { ...state.flags, 'seminarian:here': true, 'seminarian:own': true },
+    };
+    return { state: next, line: `The seminary sent back your own: ${own.name.first} ${own.name.last}, who served this altar as a boy, for the summer. The parish has already decided how he is doing.` };
+  }
   const year = calendarYear(state);
   const birthYear = year - rng.int(23, 31);
   const heritage = rollHeritage(rng, CLERGY_HERITAGE);

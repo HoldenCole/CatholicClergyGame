@@ -138,3 +138,99 @@ describe('a summer on loan', () => {
     expect(t.character!.reputation.public).toBeGreaterThan(base.character!.reputation.public);
   });
 });
+
+describe('a column in the diocesan paper', () => {
+  it('writes a public position, moves the wings, costs a block, waits a quarter, and can cross the bishop', async () => {
+    const { writeColumn, mayWriteColumn, weeksUntilColumn, PRESS, topicsFor } = await import('@/systems/press');
+    const base = parishState('press');
+    const bishopId = base.world!.diocese.hidden.bishop.npcId;
+    const s: GameState = { ...base, npcs: { ...base.npcs, [bishopId]: { ...base.npcs[bishopId]!, alignment: 50 } } };
+    expect(mayWriteColumn(s).ok).toBe(true);
+    expect(topicsFor(s).find((t) => t.topic.id === 'authority')!.available).toBe(false);
+    const wrote = writeColumn(s, 'liturgy', 'traditional');
+    expect(wrote.character!.positions.at(-1)).toMatchObject({ topic: 'liturgy', value: -60, volume: 'public' });
+    expect(wrote.character!.reputation.traditional_bloc).toBeGreaterThan(s.character!.reputation.traditional_bloc);
+    expect(wrote.parish!.apNextWeek).toBe(-PRESS.apCost);
+    expect(wrote.flags['column:written']).toBe(true);
+    expect(wrote.flags['column:liturgy']).toBe(true);
+    expect(wrote.flags['column:crossed_bishop']).toBe(true);
+    expect(wrote.character!.reputation.chancery).toBe(s.character!.reputation.chancery + PRESS.crossChancery);
+    expect(weeksUntilColumn(wrote)).toBe(PRESS.everyWeeks);
+    expect(mayWriteColumn(wrote).ok).toBe(false);
+    expect(() => writeColumn(wrote, 'money', 'middle')).toThrow(/other priests/);
+    const later: GameState = { ...wrote, clock: { ...wrote.clock, week: wrote.clock.week + PRESS.everyWeeks } };
+    const middle = writeColumn(later, 'money', 'middle');
+    expect(middle.flags['column:crossed_bishop']).toBe(false);
+  });
+});
+
+describe('the young men who might be called', () => {
+  it('prospects are rolled, hours build interest faster with the office, and in June a ready man goes and comes back to you', async () => {
+    const { vocationsWeek, prospectsOf, VOCATIONS } = await import('@/systems/vocations');
+    const { summerSeminarian } = await import('@/systems/formed');
+    const { dateOf } = await import('@/engine/time');
+    let s = setDiscretionary(parishState('called'), 'vocations', 2);
+    const first = vocationsWeek(s, createRng('v0'));
+    s = first.state;
+    expect(prospectsOf(s).length).toBeGreaterThanOrEqual(1);
+    const plain = vocationsWeek(s, createRng('v1')).state;
+    const office = vocationsWeek({ ...s, flags: { ...s.flags, 'office:vocations': true } }, createRng('v1')).state;
+    expect(prospectsOf(office)[0]!.interest).toBeGreaterThan(prospectsOf(plain)[0]!.interest);
+    // Push one to ready and land on the first week of June.
+    let t: GameState = { ...s, flags: { ...s.flags, 'office:vocations': true } };
+    let entered = null;
+    for (let i = 0; i < 300 && !entered; i++) {
+      const r = vocationsWeek({ ...t, clock: { ...t.clock, week: t.clock.week + 1 } }, createRng(`v${i}`));
+      t = r.state;
+      entered = r.entered;
+      if (prospectsOf(t).some((p) => p.interest >= VOCATIONS.ready)) expect(t.flags['vocation:ready']).toBe(true);
+    }
+    expect(entered).not.toBeNull();
+    expect(dateOf(t.clock).month).toBe(6);
+    expect(entered!.tags).toContain('seminarian');
+    expect(entered!.tags).toContain('from_parish');
+    expect(t.flags['vocation:entered']).toBe(1);
+    expect(t.career.some((e) => /entered the seminary/.test(e.text))).toBe(true);
+    // The next June, the seminary sends him back to you.
+    let june: GameState = { ...t, parish: { ...t.parish!, seminarian: undefined as never } };
+    delete (june.parish as { seminarian?: unknown }).seminarian;
+    june = { ...june, assignment: { ...june.assignment!, role: 'pastor' } };
+    let back = null;
+    for (let i = 0; i < 60 && !back; i++) {
+      june = { ...june, clock: { ...june.clock, week: june.clock.week + 1 } };
+      const d = dateOf(june.clock);
+      if (d.month !== 6 || d.day > 7) continue;
+      const r = summerSeminarian(june, createRng(`s${i}`));
+      if (r.state.parish!.seminarian) back = r;
+    }
+    expect(back).not.toBeNull();
+    expect(back!.line).toMatch(/sent back your own/);
+    expect(back!.state.parish!.seminarian!.npcId).toBe(entered!.id);
+  });
+});
+
+describe('storm season', () => {
+  it('the cone is drawn only on the Gulf in season, and every landfall follows a choice', async () => {
+    const { eventById, eventsForPhase } = await import('@/content');
+    const { evaluateAll } = await import('@/engine/conditions');
+    const cone = eventById('st_the_cone')!;
+    const gulf = parishState('gulf');
+    const inSeason = (s: GameState, month: number): GameState => {
+      let t = s;
+      while (dateOf(t.clock).month !== month) t = { ...t, clock: { ...t.clock, week: t.clock.week + 1 } };
+      return t;
+    };
+    const houston: GameState = { ...gulf, world: { ...gulf.world!, diocese: { ...gulf.world!.diocese, presetId: 'houston' } } };
+    const chicago: GameState = { ...gulf, world: { ...gulf.world!, diocese: { ...gulf.world!.diocese, presetId: 'chicago' } } };
+    expect(evaluateAll(cone.requires ?? [], inSeason(houston, 9))).toBe(true);
+    expect(evaluateAll(cone.requires ?? [], inSeason(houston, 3))).toBe(false);
+    expect(evaluateAll(cone.requires ?? [], inSeason(chicago, 9))).toBe(false);
+    for (const c of cone.choices) {
+      expect(c.followUpId, c.id).toMatch(/^st_landfall_/);
+      const follow = eventById(c.followUpId!)!;
+      expect(follow.baseWeight).toBe(1);
+      expect(follow.requires!.some((r) => r.type === 'flag' && r.key === 'storm:pending')).toBe(true);
+    }
+    expect(eventsForPhase('pastor').some((e) => e.id === 'st_the_insurer')).toBe(true);
+  });
+});

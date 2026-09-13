@@ -1208,10 +1208,20 @@
           }
         },
         {
-          "type": "stat",
-          "key": "charisma",
-          "op": ">=",
-          "value": 55
+          "type": "any",
+          "inner": [
+            {
+              "type": "stat",
+              "key": "charisma",
+              "op": ">=",
+              "value": 55
+            },
+            {
+              "type": "flag",
+              "key": "vocation:entered",
+              "value": true
+            }
+          ]
         }
       ],
       "weight": 35,
@@ -1232,6 +1242,14 @@
             "value": 15
           },
           "multiplier": 1.4
+        },
+        {
+          "when": {
+            "type": "flag",
+            "key": "vocation:entered",
+            "value": true
+          },
+          "multiplier": 2
         }
       ],
       "windowWeeks": 4,

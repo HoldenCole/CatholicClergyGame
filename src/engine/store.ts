@@ -47,6 +47,7 @@ import { setDial as doSetDial } from '@/systems/liturgy';
 import { chooseAssignment as doChooseAssignment } from '@/systems/choice';
 import { furnish as doFurnish, petition as doPetition } from '@/systems/decor';
 import { setHomily as doSetHomily } from '@/systems/homily';
+import { writeColumn as doWriteColumn } from '@/systems/press';
 import { hire as doHire, letGo as doLetGo } from '@/systems/staff';
 import { goAway as doGoAway } from '@/systems/away';
 import { setCover as doSetCover } from '@/systems/deanery';
@@ -148,6 +149,8 @@ export interface GameStore {
   /** Write to the chancery for leave on a liturgical topic. */
   petition(topic: LiturgicalTopic): void;
   setHomily(topic: string): void;
+  /** A column in the diocesan paper: a topic and a stance, once a quarter. */
+  writeColumn(topic: string, stance: string): void;
   letGo(npcId: string): void;
   hire(candidateId: string): void;
   goAway(placeId: string): void;
@@ -521,6 +524,9 @@ export const useGameStore = create<GameStore>()((set, get) => ({
       set({ lastFurnishLine: r.line });
       return r.state;
     });
+  },
+  writeColumn(topic, stance) {
+    update(set, get, (game) => doWriteColumn(game, topic, stance));
   },
   setHomily(topic) {
     update(set, get, (game) => doSetHomily(game, topic));
