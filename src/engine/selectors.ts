@@ -40,6 +40,11 @@ export function resolveSelector(state: GameState, key: string, rng?: Rng): Npc |
     case 'random_classmate':
       // Without dice (an eligibility check), any classmate stands in; the roll happens when the letter is written.
       return classmates.length ? (rng ? rng.pick(classmates) : classmates[0]!) : null;
+    case 'resident': {
+      const id = state.parish?.resident?.npcId;
+      const npc = id ? state.npcs[id] : undefined;
+      return npc ?? null;
+    }
     case 'pastor': {
       const pid = state.assignment?.parishId;
       return pid ? (Object.values(state.npcs).find((n) => n.status === 'active' && n.tags.includes(`pastor:${pid}`)) ?? null) : null;

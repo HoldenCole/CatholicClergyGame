@@ -4,6 +4,7 @@ import { dateOf } from '@/engine/time';
 import { finishNpc, rollBaseStats, addStats, rollAlignment } from '@/generation/npc';
 import { CLERGY_HERITAGE, eraForBirthYear, rollHeritage, rollMaleName } from '@/generation/names';
 import { applyEffects } from '@/engine/effects';
+import { residentRelief } from './resident';
 
 /** Requested in playtesting; numbers invented. */
 export const FORMED = {
@@ -56,6 +57,7 @@ export function helpRelief(state: GameState): number {
   if (seminarianOf(state) && !state.flags['seminarian:evaluation_due']) relief += FORMED.seminarianRelief;
   if (deaconOf(state)) relief += FORMED.deaconRelief;
   if (returnedVicarOf(state)) relief += FORMED.vicarRelief;
+  relief += residentRelief(state);
   return relief;
 }
 

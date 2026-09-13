@@ -53,6 +53,7 @@ const SELECTORS = [
   '@group_leader',
   '@dean',
   '@deanery_priest',
+  '@resident',
   '@seminarian',
   '@deacon',
 ];

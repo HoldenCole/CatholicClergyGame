@@ -13,7 +13,9 @@ import { workWeek } from '@/systems/problems';
 import { clubsWeek, joinClub, leaveClub } from '@/systems/clubs';
 import { spendingWeek } from '@/systems/spending';
 import { resolvePermissions } from '@/systems/decor';
-import { awayWeek, retreatYearEnd } from '@/systems/away';
+import { awayWeek, goSupply, retreatYearEnd } from '@/systems/away';
+import { residentWeek } from '@/systems/resident';
+import { presetById } from '@/content/dioceses';
 import { staffWeek } from '@/systems/staff';
 import { deaneryWeek } from '@/systems/deanery';
 import { returnOfTheFormed, seminarianWeek, summerSeminarian } from '@/systems/formed';
@@ -200,6 +202,12 @@ export function parishWeekHook(deps: EventDeps): WeekHook {
     const letter = letterStep(state, rng, deps);
     if (letter.moved || letter.state.pending.length > 0) return letter.state;
     state = letter.state;
+    // The vicar for clergy's letter about a summer on loan: go, and the away week takes it from here.
+    if (state.flags['supply:pending'] && !state.away) {
+      state = goSupply(state, rng.derive(`supply:${state.clock.week}`));
+      const preset = state.away?.presetId ? presetById(state.away.presetId) : undefined;
+      if (preset) state = addDigestLine(state, `The letter from ${preset.name} came through the vicar for clergy: twelve weeks, three parishes, a room in a rectory in ${preset.see}. You packed.`);
+    }
     // A week away: the retreat or the vacation, with one scene the first week.
     if (state.away) {
       const gone = awayWeek(state, rng, deps.pool);
@@ -245,6 +253,15 @@ export function parishWeekHook(deps: EventDeps): WeekHook {
     const box = confessorWeek(next);
     next = box.state;
     if (box.line) next = addDigestLine(next, box.line);
+    // The old priest in the rectory: his week, and one day his funeral.
+    const old = residentWeek(next, rng.derive(`resident:${next.clock.week}`));
+    next = old.state;
+    if (old.line) next = addDigestLine(next, old.line);
+    if (old.died) {
+      const funeral = deps.lookup('rs_funeral');
+      if (funeral) next = fireOrResolve(next, funeral, rng.derive(`funeral:${next.clock.week}`), deps);
+      if (next.mode.kind !== 'clock' || next.pending.length > 0) return next;
+    }
     // The bishop's visitation, once a year, in the parish's own week.
     const visit = visitationStep(next, rng, deps.pool);
     next = visit.state;
