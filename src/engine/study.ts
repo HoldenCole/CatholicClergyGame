@@ -63,7 +63,8 @@ export function beginStudy(state: GameState, def: OfferDef, failed: boolean, rng
     const age = year - (next.character!.entryYear - next.character!.background.entryAge);
     const endWeek = next.clock.week + Math.max(52, (75 - age) * 52);
     next = { ...next, see, study: { ...study, endWeek, school: see.name, residence: `the bishop's house in ${see.see}` }, beats: [...next.beats.filter((b) => b.kind !== 'assignment'), { kind: 'assignment' as const, week: endWeek, label: 'The letter at seventy-five' }].sort((a, b) => a.week - b.week), flags: { ...next.flags, [`see:${see.id}`]: true } };
-    return note(next, 'promotion', `Named Bishop of ${see.see}, ${see.region}: ${see.name}, ${program.label.toLowerCase()} of forty priests and more parishes than that.`);
+    const moved = see.former?.at(-1);
+    return note(next, 'promotion', moved ? `Translated from ${moved.see} to ${see.see}, ${see.region}: ${see.name}, after ${moved.years} year${moved.years === 1 ? '' : 's'} in the first chair.` : `Named Bishop of ${see.see}, ${see.region}: ${see.name}, ${program.label.toLowerCase()} of forty priests and more parishes than that.`);
   }
   const years = Math.round(c.weeks / 52);
   return note(next, 'offer', program.kind === 'post' ? `Moved into ${program.residence} as ${program.label.toLowerCase()}, ${years} years.` : `Left for ${CITY_WORD[program.city]}: ${program.label.toLowerCase()} at ${program.school}, ${years} years.`);
