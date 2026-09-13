@@ -127,6 +127,15 @@ function checkCondition(c: Condition, where: string, problems: Problem[]): void 
     case 'house':
       if (typeof c.value !== 'boolean' || (c.charism !== undefined && !['contemplative', 'active'].includes(c.charism))) problems.push(`${where}: bad house condition`);
       break;
+    case 'diocese':
+      if (!(typeof c.value === 'string' || (Array.isArray(c.value) && c.value.every((v: unknown) => typeof v === 'string')))) problems.push(`${where}: bad diocese condition`);
+      break;
+    case 'month':
+      if (!hasOp(c.op) || typeof c.value !== 'number' || c.value < 1 || c.value > 12) problems.push(`${where}: bad month condition`);
+      break;
+    case 'confessor':
+      if (!hasOp(c.op) || typeof c.value !== 'number') problems.push(`${where}: bad confessor condition`);
+      break;
     case 'parish':
       if (!PARISH_KEYS.includes(c.key) || c.value === undefined) problems.push(`${where}: bad parish condition`);
       break;

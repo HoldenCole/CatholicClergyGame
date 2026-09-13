@@ -22,6 +22,8 @@ import { seminaryWeek } from '@/systems/seminaryWeek';
 import { studyWeek } from '@/systems/studyWeek';
 import { endStudy } from './study';
 import { appointmentStep, APPOINTMENT_FLAGS } from './appointment';
+import { confessorWeek } from '@/systems/confessor';
+import { visitationStep } from '@/systems/visitation';
 import { careOf, WEEK } from '@/systems/week';
 import { renderText } from './text';
 import type { WeekHook } from './clock';
@@ -240,6 +242,18 @@ export function parishWeekHook(deps: EventDeps): WeekHook {
     const letters = resolvePermissions(next, rng.derive(`permissions:${next.clock.week}`));
     next = letters.state;
     for (const line of letters.lines) next = addDigestLine(next, line);
+    const box = confessorWeek(next);
+    next = box.state;
+    if (box.line) next = addDigestLine(next, box.line);
+    // The bishop's visitation, once a year, in the parish's own week.
+    const visit = visitationStep(next, rng, deps.pool);
+    next = visit.state;
+    if (visit.line) next = addDigestLine(next, visit.line);
+    if (visit.event) {
+      next = addDigestLine(next, 'The bishop came for confirmations.');
+      next = fireOrResolve(next, visit.event, rng.derive(`visitation:${next.clock.week}`), deps);
+      if (next.mode.kind !== 'clock' || next.pending.length > 0) return next;
+    }
     if (isCareerYear(next)) next = careerYear(next, rng);
     if (next.mode.kind !== 'clock') return next;
     if (next.flags.new_bishop_pending) {

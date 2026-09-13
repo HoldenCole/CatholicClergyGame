@@ -120,6 +120,12 @@ export type Condition =
   | { type: 'calendar_year'; op: Op; value: number }
   /** Whether the diocese has a religious house, of a charism if given. */
   | { type: 'house'; charism?: 'contemplative' | 'active'; value: boolean }
+  /** The diocese by preset id, one or several: storm country, the Gulf, the coasts. */
+  | { type: 'diocese'; value: string | string[] }
+  /** The calendar month of the current week, 1..12. */
+  | { type: 'month'; op: Op; value: number }
+  /** The man's name as a confessor, 0..100 (systems/confessor.ts). */
+  | { type: 'confessor'; op: Op; value: number }
   | { type: 'not'; inner: Condition }
   | { type: 'any'; inner: Condition[] }
   | { type: 'all'; inner: Condition[] };

@@ -1,0 +1,596 @@
+{
+  "_notes": "The bishop's annual visitation (systems/visitation.ts): one scene with beat 'visitation' fires in the parish's own week of the year for a pastor or administrator, chosen by conditions and weight. Never drawn on an ordinary week.",
+  "events": [
+    {
+      "id": "vs_confirmations",
+      "phase": [
+        "administrator",
+        "pastor"
+      ],
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 6,
+      "suppressYears": 1,
+      "requires": [],
+      "title": "The Bishop's Visitation",
+      "body": "{@bishop} comes on a Sunday afternoon for the confirmations, in the car the diocese leases for him, with the secretary and the crozier in its case. The sacristy is too small for three men and a mitre. He looks at the church the way a man looks at a house he might buy: the sanctuary, the floor, the sound of the choir warming up, the number of people already in the pews forty minutes early. He asks you two questions before the procession, one about the parish and one about you, and you will remember which he asked first. Afterward there is cake in the hall and a line of grandmothers, and he shakes every hand in it, and the secretary watches the clock.",
+      "flavorPrompt": "the bishop's visitation; the visit, the room, what was said and not said.",
+      "choices": [
+        {
+          "id": "show_it",
+          "label": "Walk him through the parish and let it speak for itself",
+          "outcome": "He sees the school, the hall, the boiler you replaced, the food pantry with its line. He says little and looks at everything, and in the car the secretary writes three lines. One of them, you learn later, was about the pantry.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "visitation:seen",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "keep_short",
+          "label": "Keep it to the sacrament and the cake, and let him go",
+          "outcome": "He is grateful, in the way of a man with three more parishes this month. He remembers the parish as a place that did not need him, which is a compliment with an edge.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "raise_it",
+          "label": "Raise the deanery's needs while you have him",
+          "outcome": "You tell him about the parish two towns over with no priest and the hospital with no chaplain, over the cake, in front of the dean. He listens. The dean does not forgive you for a year, and the chancery moves a man in the fall.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": -4
+            },
+            {
+              "target": "flag",
+              "key": "visitation:spoke_up",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "beat": "visitation"
+    },
+    {
+      "id": "vs_the_books",
+      "phase": [
+        "administrator",
+        "pastor"
+      ],
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 14,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "bishop",
+          "key": "priority",
+          "value": "finances"
+        }
+      ],
+      "title": "The Visitation, and the Books",
+      "body": "{@bishop} comes for confirmations with the finance officer in the second car, which is not usual, and while the children are being lined up in the hall the two of them sit in your office with the ledgers open. He reads a balance sheet without moving his lips. He asks about the assessment, the school subsidy, the second collection that went where it went, and the roof. His questions are courteous and exact, and the finance officer takes notes in a hand you cannot read upside down. The children are waiting. The organist has played the processional twice.",
+      "flavorPrompt": "the visitation, and the books; the visit, the room, what was said and not said.",
+      "choices": [
+        {
+          "id": "lay_open",
+          "label": "Lay it all open, the bad pages first",
+          "outcome": "He turns the bad pages himself and nods, once, at the end. The finance officer's notes are shorter than you feared. A man who shows the bishop the bad pages first is trusted with the good ones later.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 5
+            },
+            {
+              "target": "flag",
+              "key": "visitation:books_open",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "best_face",
+          "label": "Put the best face on it and keep the worst page for another day",
+          "outcome": "He does not find the page. The finance officer does, in March, from the assessment return, and the letter that comes is polite and cold and copied to the bishop, who remembers that he sat in your office in the fall.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": -6
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": -5
+            },
+            {
+              "target": "flag",
+              "key": "visitation:books_hidden",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "beat": "visitation"
+    },
+    {
+      "id": "vs_liturgy_pleased",
+      "phase": [
+        "administrator",
+        "pastor"
+      ],
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 14,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "bishop",
+          "key": "priority",
+          "value": "liturgy"
+        },
+        {
+          "type": "liturgy",
+          "key": "friction",
+          "op": "<=",
+          "amount": 0.2
+        }
+      ],
+      "title": "The Visitation: He Notices the Altar",
+      "body": "{@bishop} comes for confirmations and stands in the sanctuary before Mass with his hands behind his back, looking at the altar, the tabernacle, the lectern, the way the servers move. He asks who trained the servers. He asks about the music. He says, not to you but to the secretary, that this is how it should be done, and the secretary writes it down, and the master of ceremonies at the cathedral hears about it by Tuesday. The confirmations go without a fault. In the hall he says it again, to the parish, from the microphone, and the parish looks at you.",
+      "flavorPrompt": "the visitation: he notices the altar; the visit, the room, what was said and not said.",
+      "choices": [
+        {
+          "id": "credit_them",
+          "label": "Give the credit to the sacristan and the choir, in front of him",
+          "outcome": "The sacristan, who has done this for thirty years under four pastors, hears the bishop say her name. She cries and denies it. The parish loves you for it more than for the liturgy, and the bishop notices that too.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 5
+            },
+            {
+              "target": "flag",
+              "key": "visitation:praised",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "take_it",
+          "label": "Take the compliment and use it",
+          "outcome": "You mention, in the car park, the request about the older Mass that has been sitting on the chancellor's desk since Lent. He says he will look at it. He does.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "visitation:praised",
+              "value": true
+            },
+            {
+              "target": "flag",
+              "key": "visitation:asked_favor",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "beat": "visitation"
+    },
+    {
+      "id": "vs_liturgy_noted",
+      "phase": [
+        "administrator",
+        "pastor"
+      ],
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 14,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "bishop",
+          "key": "priority",
+          "value": "liturgy"
+        },
+        {
+          "type": "liturgy",
+          "key": "friction",
+          "op": ">=",
+          "amount": 0.4
+        }
+      ],
+      "title": "The Visitation: He Notices the Altar",
+      "body": "{@bishop} comes for confirmations and stands in the sanctuary before Mass with his hands behind his back, and you watch him see it: the things the parish does its own way, the things a pastor before you changed, the things you changed. He says nothing before Mass. During the rite he corrects a server, gently, with a hand. Afterward, in the sacristy, with the secretary in the doorway, he asks you three questions about the liturgy of the parish, and each one is a sentence with a verdict in it. The parish is in the hall with the cake and does not know.",
+      "flavorPrompt": "the visitation: he notices the altar; the visit, the room, what was said and not said.",
+      "choices": [
+        {
+          "id": "explain",
+          "label": "Explain the parish's reasons, and yours, plainly",
+          "outcome": "He listens all the way to the end, which is more than most men get. He does not agree. He says that he is the bishop, and that this is his church too, and that he will write. The letter, when it comes, is specific and not unkind.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": -2
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": -2
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "visitation:noted",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "yield",
+          "label": "Say you will bring it into line, and mean it",
+          "outcome": "He nods and goes to the cake. The parish council hears on Wednesday what will change and why, and the ones who liked it the old way remember who told the bishop yes.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": -5
+            },
+            {
+              "target": "flag",
+              "key": "visitation:noted",
+              "value": true
+            },
+            {
+              "target": "flag",
+              "key": "visitation:yielded",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "push_back",
+          "label": "Say the parish is his to correct and you will do it when he puts it in writing",
+          "outcome": "The secretary stops writing. The bishop looks at you for a long moment and says that he will. The letter is three pages and copied to the dean, and the presbyterate hears that you asked for it.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": -8
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": -5
+            },
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": 3
+            },
+            {
+              "target": "outspokenness",
+              "key": "outspokenness",
+              "delta": 4
+            },
+            {
+              "target": "flag",
+              "key": "visitation:noted",
+              "value": true
+            },
+            {
+              "target": "flag",
+              "key": "visitation:pushed_back",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "beat": "visitation"
+    },
+    {
+      "id": "vs_the_school",
+      "phase": [
+        "administrator",
+        "pastor"
+      ],
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 12,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "not",
+          "inner": {
+            "type": "parish",
+            "key": "school",
+            "value": "none"
+          }
+        }
+      ],
+      "title": "The Visitation, and the School",
+      "body": "{@bishop} comes for confirmations on a Friday so that he can see the school first, which the principal has known for three weeks and the children for two. He walks every classroom. He asks the eighth grade a question about the Trinity and gets an answer that is mostly right. He asks the principal about enrollment and the subsidy and the roof, and the principal, who has rehearsed, answers well until the roof. In the office afterward he asks you the question every pastor with a school dreads, which is what the parish would do without it.",
+      "flavorPrompt": "the visitation, and the school; the visit, the room, what was said and not said.",
+      "choices": [
+        {
+          "id": "defend",
+          "label": "Defend the school: it is the parish's reason and the diocese's future",
+          "outcome": "You say it with numbers and without them. He hears you out and says that he has heard it in eleven parishes this year, and that it is true in perhaps four, and that he thinks this is one of the four. The subsidy holds another year.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 4
+            },
+            {
+              "target": "flag",
+              "key": "visitation:school_defended",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "honest",
+          "label": "Be honest that it cannot last as it is, and ask his help to change it",
+          "outcome": "He is surprised, and then grateful. The chancery sends a consultant and a plan and, a year later, a merger with the parish two miles over that keeps the building and loses the name. The parish is angry at the plan and quietly relieved.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": -4
+            },
+            {
+              "target": "flag",
+              "key": "visitation:school_honest",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "beat": "visitation"
+    },
+    {
+      "id": "vs_vocations",
+      "phase": [
+        "administrator",
+        "pastor"
+      ],
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 12,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "bishop",
+          "key": "priority",
+          "value": "vocations"
+        }
+      ],
+      "title": "The Visitation: He Asks About the Boys",
+      "body": "{@bishop} comes for confirmations and, at the cake, asks the altar servers by name whether they have thought about the priesthood, which their mothers hear, and which two of the boys will remember for the rest of their lives, one gladly. In the sacristy he asks you the question directly: how many men from this parish are in the seminary, how many have been in your time, and what you do about it. He has the numbers already. He wants to know whether you do.",
+      "flavorPrompt": "the visitation: he asks about the boys; the visit, the room, what was said and not said.",
+      "choices": [
+        {
+          "id": "name_them",
+          "label": "Name the boys you have your eye on, and what you have done",
+          "outcome": "He listens, and asks about one of them twice. The vocations director calls you the next week with a summer program and a form. One of the boys goes.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 4
+            },
+            {
+              "target": "flag",
+              "key": "visitation:vocations_named",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "admit",
+          "label": "Admit you have not made it a work, and ask how",
+          "outcome": "He tells you: the altar servers' dinner, the seminarian for the summer, the homily on it once a year, the boy you take to the ordination. He says it as a man who was asked once himself. You start.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "visitation:vocations_asked",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "beat": "visitation"
+    },
+    {
+      "id": "vs_the_choir",
+      "phase": [
+        "administrator",
+        "pastor"
+      ],
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 8,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "reputation",
+          "key": "parishioners",
+          "op": ">=",
+          "value": 35
+        }
+      ],
+      "title": "The Visitation, and the Music",
+      "body": "{@bishop} comes for confirmations and the choir, which has been rehearsing since Lent, does the thing it can do when it is frightened enough, and the church is full to the doors and sings back. He turns around in the presider's chair during the offertory, which bishops do not do, to see where it is coming from. Afterward he asks who the director is and how much the parish pays her, and you tell him, and he says the diocese should be ashamed of the number and that he will say so to the finance council. He does. Nothing changes, but he said it.",
+      "flavorPrompt": "the visitation, and the music; the visit, the room, what was said and not said.",
+      "choices": [
+        {
+          "id": "thank",
+          "label": "Thank him in front of the choir, and let the director have the moment",
+          "outcome": "She is thanked by a bishop in front of the people she has held together for a decade. She stays another decade. The bishop remembers the parish as the one that sang.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "visitation:sang",
+              "value": true
+            }
+          ],
+          "default": true
+        }
+      ],
+      "beat": "visitation"
+    }
+  ]
+}

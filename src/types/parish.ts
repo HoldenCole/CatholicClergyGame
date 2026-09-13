@@ -237,6 +237,12 @@ export interface ParishState {
   seminarian?: { npcId: string; startWeek: number; endWeek: number };
   /** The man you formed, come back as your vicar. */
   vicarId?: string;
+  /** The calendar year of the bishop's last visitation. systems/visitation.ts */
+  visitationYear?: number;
+  /** The retired priest living in the rectory, and how he is. systems/resident.ts */
+  resident?: { npcId: string; arrivedWeek: number; health: number } | null;
+  /** The young men of the parish who might be called, and how far along each is. systems/vocations.ts */
+  vocations?: { npcId: string; interest: number; since: number }[];
 }
 
 /** What the week resolved to, for the digest and for tests. */
@@ -265,10 +271,10 @@ export interface HomilyDef {
   collections?: number;
 }
 
-/** A week away: the retreat or the vacation. parish/away.json */
+/** A week away: the retreat, the vacation, or a summer on loan to another diocese. parish/away.json */
 export interface AwayPlaceDef {
   id: string;
-  kind: 'retreat' | 'vacation';
+  kind: 'retreat' | 'vacation' | 'supply';
   label: string;
   blurb: string;
   weeks: number;

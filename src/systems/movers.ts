@@ -7,6 +7,7 @@ import { currentParish, frictionOf, LITURGY } from './liturgy';
 import { fundBonuses, spendWords } from './spending';
 import { spendDef } from '@/content/parish';
 import { seasonOf } from '@/engine/time';
+import { confessorPull } from './confessor';
 
 /** One thing that moved a number (a constituency's opinion, a stat, alignment), kept for a quarter so the man can see why. */
 export interface Mover {
@@ -109,6 +110,7 @@ export function explainAttendance(state: GameState): { target: number; now: numb
     { label: 'hours with the people', amount: WEEK.careAttendance * care },
     { label: 'the groups', amount: WEEK.groupsAttendance * groups },
     { label: 'the Mass as set', amount: mass },
+    { label: 'your name as a confessor', amount: confessorPull(state) },
   ];
   for (const id of Object.keys(parish.finance.funds ?? {})) {
     const def = spendDef(id);

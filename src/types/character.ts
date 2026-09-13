@@ -112,6 +112,8 @@ export interface Character {
   /** Career traits, e.g. "reads a document properly". */
   traits: string[];
   positions: PositionRecord[];
+  /** His name as a confessor, 0..100: hours in the box, kept up. Absent in older saves. systems/confessor.ts */
+  confessor?: number;
   latentRisks: LatentRisk[];
   hooks: Hook[];
   archetype: Archetype | null;

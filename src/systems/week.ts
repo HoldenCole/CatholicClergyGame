@@ -15,6 +15,7 @@ import { FEAST_LABEL, feastsOfWeek } from '@/engine/feasts';
 import { noticeQuarter } from './notice';
 import { applyEffects } from '@/engine/effects';
 import { noteStatChange } from './movers';
+import { confessorPull } from './confessor';
 import { evaluateAll } from '@/engine/conditions';
 import { commitmentAp } from '@/engine/offers';
 import { seasonOf } from '@/engine/time';
@@ -366,7 +367,7 @@ export function resolveWeek(state: GameState, rng: Rng): { state: GameState; led
   next = preached.state;
   const bonuses = fundBonuses(next);
   bonuses.collections += preached.collections;
-  const target = attendanceTarget(next, care, mass.pull + bonuses.pull);
+  const target = attendanceTarget(next, care, mass.pull + bonuses.pull + confessorPull(next));
   const attendance = parish.attendance + (target - parish.attendance) * WEEK.attendanceFollow;
 
   // Finance.
