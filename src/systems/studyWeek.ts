@@ -77,6 +77,7 @@ export function studyWeek(state: GameState, rng: Rng): { state: GameState; line:
   const place = study.place ? { ...study.place } : null;
   const bindings: Record<string, string> = {};
   const moves: Mover[] = [];
+  const freed: string[] = [];
   for (const def of studyActivities) {
     const hours = study.routine[def.id] ?? 0;
     if (hours <= 0) continue;
@@ -102,6 +103,7 @@ export function studyWeek(state: GameState, rng: Rng): { state: GameState; line:
         credentials = [...credentials, def.credentialAfter.credential];
         if (def.credentialAfter.flag) flags[def.credentialAfter.flag] = true;
         earned.push(def.credentialAfter.line);
+        freed.push(def.id);
       }
     }
     if (def.onFirst && !taken.includes(def.id)) {
@@ -118,7 +120,8 @@ export function studyWeek(state: GameState, rng: Rng): { state: GameState; line:
     moves.push({ week: state.clock.week, key: 'piety', delta: -WEEK.strainPietyDrain, why: 'worn out' });
   }
   const character = { ...next.character!, stats, reputation, credentials };
-  const result: GameState = { ...next, ...(see ? { see } : {}), strain, movers: [...(next.movers ?? []), ...moves.filter((m) => m.delta !== 0)], npcs: { ...next.npcs, ...npcs }, flags: { ...next.flags, ...flags }, character, study: { ...study, hoursLogged, taken, ...(place ? { place } : {}) } };
+  const result: GameState = { ...next, ...(see ? { see } : {}), strain, movers: [...(next.movers ?? []), ...moves.filter((m) => m.delta !== 0)], npcs: { ...next.npcs, ...npcs }, flags: { ...next.flags, ...flags }, character, study: { ...study, hoursLogged, taken, ...(place ? { place } : {}), ...(freed.length ? { routine: Object.fromEntries(Object.entries(study.routine).filter(([k]) => !freed.includes(k))) } : {}) } };
+  if (freed.length) earned.push(`The ${freed.map((id) => studyActivities.find((a) => a.id === id)?.label ?? id).join(' and ')} hours are yours again; put them somewhere.`);
   const head = studyProgram(study.program)?.classes ?? 'Lectures';
   const body = phrases.length ? `${head}; ${phrases.join(', ')}.` : `${head}, and the free hours went to the city.`;
   return { state: result, line: renderText([body, ...earned].join(' '), result, bindings) };

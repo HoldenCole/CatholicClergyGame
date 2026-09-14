@@ -1,8 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { useGameStore } from '@/engine/store';
 import Sheet from './Sheet';
-
-export const AUTOSAVE_KEY = 'vocation.autosave';
 
 export default function SavePanel() {
   const game = useGameStore((s) => s.game);
@@ -12,16 +10,6 @@ export default function SavePanel() {
   const clearError = useGameStore((s) => s.clearError);
   const [note, setNote] = useState<string | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
-
-  // Autosave whenever the week or settings change.
-  useEffect(() => {
-    if (!game) return;
-    try {
-      window.localStorage.setItem(AUTOSAVE_KEY, exportSave());
-    } catch {
-      /* storage unavailable; export still works */
-    }
-  }, [game, exportSave]);
 
   if (!game) return null;
 

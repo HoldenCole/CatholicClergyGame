@@ -1,15 +1,12 @@
 import { useState } from 'react';
 import { useGameStore } from '@/engine/store';
 import { DEFAULT_START_YEAR } from '@/engine/game';
-import { AUTOSAVE_KEY } from './SavePanel';
 
 export default function NewGameScreen() {
   const newGame = useGameStore((s) => s.newGame);
-  const importSave = useGameStore((s) => s.importSave);
   const error = useGameStore((s) => s.error);
   const [seed, setSeed] = useState(() => `run-${Date.now().toString(36)}`);
   const [startYear, setStartYear] = useState(DEFAULT_START_YEAR);
-  const autosave = safeRead(AUTOSAVE_KEY);
 
   return (
     <div className="felt flex min-h-screen items-center justify-center p-6">
@@ -30,19 +27,9 @@ export default function NewGameScreen() {
         <button className="pbtn pbtn-primary self-start px-5 py-2" disabled={seed.trim().length === 0} onClick={() => newGame({ seed: seed.trim(), startYear })}>
           Begin
         </button>
-        {autosave && (
-          <button className="pbtn self-start" onClick={() => importSave(autosave)}>Continue from autosave</button>
-        )}
         {error && <p className="ink-wine text-sm">{error}</p>}
       </div>
     </div>
   );
 }
 
-function safeRead(key: string): string | null {
-  try {
-    return window.localStorage.getItem(key);
-  } catch {
-    return null;
-  }
-}
