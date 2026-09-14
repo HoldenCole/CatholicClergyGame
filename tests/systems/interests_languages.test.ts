@@ -5,7 +5,7 @@ import { createRng } from '@/engine/rng';
 import { INTERESTS, interestsOf, parishInterest, setInterest } from '@/systems/interests';
 import { offerById } from '@/content/offers';
 import { offerWeight } from '@/engine/offers';
-import { buildChoice } from '@/systems/choice';
+import { buildChoice, chooseAssignment } from '@/systems/choice';
 import { languageDefs, learnWeek, learnable, setLearning, speaks } from '@/systems/languages';
 import { seminaryActivities } from '@/content/seminary';
 import { seminaryActivityOffered, setSeminaryActivity } from '@/systems/seminaryWeek';
@@ -36,6 +36,36 @@ describe('indicate interest', () => {
     const plain = setInterest(s, 'rome', false);
     expect(offerWeight(rome, s)).toBeCloseTo(offerWeight(rome, plain) * INTERESTS.offerWeight);
     expect(s.career.some((e) => /interested/.test(e.text))).toBe(true);
+  });
+
+  it('at ordination, the posts he asked for are laid out too: the hospital, the Newman Center, canon law, and the bishop\'s desk when the bishop knows him', () => {
+    const sem: GameState = { ...seminaryState('choice-posts'), flags: { rector_recommends: true } };
+    const world = parishState('choice-posts-world').world!;
+    const withWorld: GameState = { ...sem, world };
+    const fallback = { parishId: world.parishes[0]!.id, role: 'parochial_vicar' as const, startWeek: 0, letter: 'x', reasons: ['because'] };
+    const none = buildChoice(withWorld, createRng('c'), 'ordination', fallback)!;
+    for (const id of ['hospital', 'newman', 'canon_law', 'secretary']) expect(none.options.map((o) => o.id)).not.toContain(id);
+    let asked = setInterest(setInterest(setInterest(withWorld, 'hospital', true), 'newman', true), 'secretary', true);
+    const choice = buildChoice(asked, createRng('c'), 'ordination', fallback)!;
+    expect(choice.options.map((o) => o.id)).toContain('hospital');
+    expect(choice.options.map((o) => o.id)).toContain('newman');
+    // The bishop's desk waits on the bishop having noticed him; the seminary faculty never comes at ordination.
+    expect(choice.options.map((o) => o.id)).not.toContain('secretary');
+    const noticed = buildChoice({ ...asked, flags: { ...asked.flags, noticed_by_bishop: true } }, createRng('c'), 'ordination', fallback)!;
+    expect(noticed.options.map((o) => o.id)).toContain('secretary');
+    const hospital = choice.options.find((o) => o.id === 'hospital')!;
+    expect(hospital.posting).toBe('pv_hospital_chaplain');
+    // Taking it sends him to the hospital, no parish, the book open.
+    const staged: GameState = { ...asked, assignment: fallback, mode: { kind: 'assignment_choice', options: choice.options, why: choice.why } };
+    const gone = chooseAssignment(staged, 'hospital', createRng('go'));
+    expect(gone.phase).toBe('study');
+    expect(gone.study!.city).toBe('hospital');
+    expect(gone.parish).toBeNull();
+    expect(gone.career.at(-2)!.text).toMatch(/Chose, when the bishop asked: the hospital, as its chaplain/);
+    asked = setInterest(setInterest(withWorld, 'canon_law', true), 'seminary_faculty', true);
+    const law = buildChoice(asked, createRng('c'), 'ordination', fallback)!;
+    expect(law.options.map((o) => o.id)).toContain('canon_law');
+    expect(law.options.map((o) => o.id)).not.toContain('seminary_faculty');
   });
 
   it('at ordination, a good record turns an interest into a choice: Rome, or the parish he asked for', () => {

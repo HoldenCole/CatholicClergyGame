@@ -101,6 +101,14 @@ function byPrestige(parishes: Parish[]): Parish[] {
   return [...parishes].sort((a, b) => parishPrestige(b) - parishPrestige(a));
 }
 
+/** The postings an interest can turn into an ordination option. The seminary faculty is not one: it wants a degree first. */
+export const ORDINATION_POSTINGS: { id: string; interest: string; offer: string; needsFlag?: string; headline: string; blurb: string; prestige: string; time: string; involves: string[] }[] = [
+  { id: 'hospital', interest: 'hospital', offer: 'pv_hospital_chaplain', headline: 'The hospital, as its chaplain', blurb: 'The director of pastoral care asked the bishop for a priest by name, and the name was yours. Unusual for a man just ordained; the pager does not know that. No parish: the chaplains\' quarters, the wards, and the room where families are told things.', prestige: 'the diocese trusts the man it sends to the dying', time: 'the hospital, all of it', involves: ['The pager, every night it rings', 'The wards, the chapel, and the confessions nobody else hears', 'A parish when the years end, with the book in your file'] },
+  { id: 'newman', interest: 'newman', offer: 'pv_university_chaplain', headline: 'The Newman Center', blurb: 'Campus ministry asked for a young priest and you asked for campus ministry. Sunday night Mass, the discussion series, and a door that is never locked. No parish; the students are the parish.', prestige: 'the vocations of the next ten years come through that chapel', time: 'the campus, all of it', involves: ['Ninety students and a guitar', 'Every question, and the ones who leave the Church leave from your chapel', 'A parish when the years end'] },
+  { id: 'canon_law', interest: 'canon_law', offer: 'pv_canon_law_licentiate', headline: 'Washington, for canon law', blurb: 'The judicial vicar keeps a list and you were on it before you were ordained. Two years at the Catholic University for the licentiate, and the tribunal after. No parish yet; the parish comes home with the degree.', prestige: 'a canonist is the chancery\'s to use, and it uses him', time: 'Washington, all of it', involves: ['Seminars in canon law', 'The tribunal internship, every marriage in the city in paper', 'A parish when you come home, chosen with the degree in hand'] },
+  { id: 'secretary', interest: 'secretary', offer: 'pv_bishops_secretary', needsFlag: 'noticed_by_bishop', headline: 'The bishop\'s secretary', blurb: 'He noticed you in the seminary and you told the chancery you would do it. The calendar, the car, the phone, and the bishop\'s mind from the next chair. No parish; the residence, for three years.', prestige: 'every priest of the diocese learns your name in a month', time: 'the residence, all of it', involves: ['The calendar, and who gets ten minutes', 'The car, and what he says in it', 'A parish when he lets you go, and the chancery\'s regard with it'] },
+];
+
 /** Whether this occasion earns the man a choice at all. */
 export function earnsChoice(state: GameState, occasion: Occasion): boolean {
   if (!state.world || !state.character) return false;
@@ -131,6 +139,13 @@ export function buildChoice(state: GameState, rng: Rng, occasion: Occasion, fall
     // Rome straight from ordination, for the top of the class who asked for it.
     if (hasInterest(state, 'rome') && (formationStanding(state).value >= CHOICE.ordinationStanding || !!state.flags.rome_track) && offerById('pv_rome_study')) {
       options.push({ id: 'rome', headline: 'Rome, for the licentiate', blurb: 'The Gregorian, three years, and the North American College. You asked, the rector agreed, and the bishop would rather send a man who wants it than one who does not. No parish yet; the parish comes home with you.', assignment: fallback, prestige: 'the diocese watches who is sent to Rome', time: 'Rome, all of it', involves: ['Lectures in Italian', 'A thesis, and the Curia across the river', 'A parish when you come home, chosen with the degree in hand'], posting: 'pv_rome_study' });
+    }
+    // The posts he asked for, straight from ordination, for a man whose record earned the choice: the hospital,
+    // the Newman Center, canon law in Washington, and the bishop's own desk when the bishop already knows him.
+    for (const post of ORDINATION_POSTINGS) {
+      if (!hasInterest(state, post.interest) || !offerById(post.offer)) continue;
+      if (post.needsFlag && !state.flags[post.needsFlag]) continue;
+      options.push({ id: post.id, headline: post.headline, blurb: post.blurb, assignment: fallback, prestige: post.prestige, time: post.time, involves: post.involves, posting: post.offer });
     }
     // Then one parish of every kind, not only the kind the seminary said he was for.
     const taken = new Set(options.map((o) => o.assignment.parishId));
