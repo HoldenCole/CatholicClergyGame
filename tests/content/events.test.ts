@@ -3,6 +3,9 @@ import { allEvents, eventFiles } from '@/content';
 import { decorOptions } from '@/systems/decorState';
 import { FEAST_KEYS } from '@/engine/feasts';
 import { actionDefs, liturgyDials, obligationDefs } from '@/content/parish';
+import { studyPrograms } from '@/content/study';
+const PLACE_DIALS = new Set(studyPrograms.flatMap((p) => p.place?.dials.map((d) => d.id) ?? []));
+const BOOK_KEYS = new Set(studyPrograms.flatMap((p) => p.place?.book?.map((b) => b.id) ?? []));
 const LITURGY_DIALS = new Set(liturgyDials.map((d) => d.id));
 const LITURGY_OPTIONS = new Set(liturgyDials.flatMap((d) => d.options.map((o) => `${d.id}:${o.id}`)));
 import { CONSTITUENCY_KEYS, EVENT_CATEGORIES, SEVERITIES, STAT_KEYS, PILLARS, ARCHETYPES } from '@/types';
@@ -64,7 +67,7 @@ const ROLES = ['parochial_vicar', 'administrator', 'pastor'];
 const EFFECT_TARGETS = [
   'stat', 'reputation', 'relationship', 'flag', 'group', 'money', 'ap', 'thread', 'position',
   'pillar', 'alignment', 'outspokenness', 'honesty', 'credential', 'trait', 'archetype',
-  'concern', 'risk', 'npc', 'end', 'decor', 'permission', 'trait_known', 'transfer', 'building', 'club', 'bond',
+  'concern', 'risk', 'npc', 'end', 'decor', 'permission', 'trait_known', 'transfer', 'building', 'club', 'bond', 'place', 'record',
 ];
 const DECOR_PLACES = ['church', 'chapel', 'office', 'rectory', 'seminary_room', 'chancery'];
 const DECOR_SLOTS = ['sanctuary', 'altar_rail', 'orientation', 'confessionals', 'choir', 'statues', 'tabernacle', 'mass_form', 'music', 'style', 'devotion', 'seating', 'wall', 'desk', 'floor', 'corner'];
@@ -160,6 +163,12 @@ function checkCondition(c: Condition, where: string, problems: Problem[]): void 
     case 'see':
       if (!['presbyterate', 'people', 'rome', 'money', 'shortage', 'years'].includes(c.key) || !hasOp(c.op) || typeof c.value !== 'number') problems.push(`${where}: bad see condition`);
       break;
+    case 'place':
+      if (!PLACE_DIALS.has(c.key) || !hasOp(c.op) || typeof c.value !== 'number') problems.push(`${where}: bad place condition ${c.key}`);
+      break;
+    case 'record':
+      if (!BOOK_KEYS.has(c.key) || !hasOp(c.op) || typeof c.value !== 'number') problems.push(`${where}: bad record condition ${c.key}`);
+      break;
     case 'group':
       if (!GROUP_KEYS.includes(c.key) || c.value === undefined) problems.push(`${where}: bad group condition`);
       break;
@@ -228,6 +237,8 @@ function checkEffect(e: Effect, where: string, problems: Problem[]): void {
     const [place, slot] = e.key.split(':');
     if (!DECOR_PLACES.includes(place ?? '') || !DECOR_SLOTS.includes(slot ?? '') || !DECOR_IDS.has(String(e.value))) problems.push(`${where}: bad decor effect ${e.key}=${String(e.value)}`);
   }
+  if (e.target === 'place' && (!PLACE_DIALS.has(e.key) || typeof e.delta !== 'number')) problems.push(`${where}: place effect needs a known dial and a delta: ${e.key}`);
+  if (e.target === 'record' && (!BOOK_KEYS.has(e.key) || typeof e.delta !== 'number')) problems.push(`${where}: record effect needs a known book entry and a delta: ${e.key}`);
   if (e.target === 'transfer' && !['flagship_suburban', 'struggling_urban', 'immigrant_growing', 'rural', 'difficult'].includes(e.key)) problems.push(`${where}: transfer key must be a parish kind`);
   if (e.target === 'building' && (!['church', 'rectory', 'hall', 'school'].includes(e.key) || typeof e.delta !== 'number')) problems.push(`${where}: bad building effect`);
   if (e.target === 'permission' && (!LITURGICAL_TOPICS.includes(e.key) || !['granted', 'denied'].includes(String(e.value)))) problems.push(`${where}: bad permission effect`);

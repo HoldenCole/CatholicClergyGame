@@ -174,6 +174,18 @@ export function applyEffect(
       });
       return { ...state, world: { ...state.world, parishes } };
     }
+    case 'place': {
+      const study = state.study;
+      if (!study?.place || effect.delta === undefined) return state;
+      const place = { ...study.place, [effect.key]: Math.max(-100, Math.min(100, (study.place[effect.key] ?? 0) + effect.delta)) };
+      return { ...state, study: { ...study, place } };
+    }
+    case 'record': {
+      const study = state.study;
+      if (!study || effect.delta === undefined) return state;
+      const record = { ...(study.record ?? {}), [effect.key]: Math.max(0, (study.record?.[effect.key] ?? 0) + effect.delta) };
+      return { ...state, study: { ...study, record } };
+    }
     case 'club': {
       // Joining needs a die for the fellows; the hook resolves it next week from this flag.
       const verb = effect.value === 'leave' ? 'leave' : 'join';

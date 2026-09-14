@@ -105,6 +105,10 @@ export type Condition =
   | { type: 'bond'; kind: string; op: Op; value: number }
   /** Extension: the see he holds as bishop, one of its dials. */
   | { type: 'see'; key: 'presbyterate' | 'people' | 'rome' | 'money' | 'shortage' | 'years'; op: Op; value: number }
+  /** A posting's own dial (study.place), −100..100. */
+  | { type: 'place'; key: string; op: Op; value: number }
+  /** A posting's book (study.record): how many of a thing the years there have counted. */
+  | { type: 'record'; key: string; op: Op; value: number }
   /**
    * Extension: some group of the current parish matches. When an event
    * carries group conditions, @group_leader binds to a matching group.
@@ -181,7 +185,11 @@ export type EffectTarget =
   /** Building condition of the current parish: key church | rectory | hall | school, delta. */
   | 'building'
   /** Join or leave a society: key is the club id, value 'join' | 'leave'. content/clubs. */
-  | 'club';
+  | 'club'
+  /** Move a posting's dial (study.place): key is the dial id, delta. Nothing happens outside a posting. */
+  | 'place'
+  /** Count in a posting's book (study.record): key is the entry, delta. Nothing happens outside a posting. */
+  | 'record';
 
 export interface Effect {
   target: EffectTarget;

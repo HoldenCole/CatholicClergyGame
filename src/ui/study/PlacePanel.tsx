@@ -1,6 +1,6 @@
 import { useGameStore } from '@/engine/store';
 import { studyProgram } from '@/content/study';
-import { placeVerdict, placeWord } from '@/systems/studyWeek';
+import { bookPhrase, placeVerdict, placeWord } from '@/systems/studyWeek';
 import Sheet from '../Sheet';
 
 /** The work: a posting's own dials, in words, and how the years there are going. */
@@ -18,6 +18,17 @@ export default function PlacePanel() {
           <div key={d.id} className="flex justify-between gap-3"><dt className="ink-muted">{d.label}</dt><dd className="text-right">{placeWord(game.study!.place![d.id] ?? 0, d.low, d.high)}</dd></div>
         ))}
       </dl>
+      {program.place.book && (
+        <div className="mt-3 border-t rule pt-2">
+          <p className="text-xs font-semibold">The book</p>
+          <dl className="mt-1 flex flex-col gap-0.5 text-sm">
+            {program.place.book.map((b) => (
+              <div key={b.id} className="flex justify-between gap-3"><dt className="ink-muted">{b.label}</dt><dd className="text-right font-mono text-xs">{game.study!.record?.[b.id] ?? 0}</dd></div>
+            ))}
+          </dl>
+          <p className="ink-faint mt-1 text-xs">{bookPhrase(game.study!.record ?? {}, program.place.book) ? 'What the years here have counted. It goes into the file when they end.' : 'Nothing counted yet. The wards, the pager, the chapel, and the confessions fill it.'}</p>
+        </div>
+      )}
       <p className="ink-faint mt-2 text-xs">The hours on the Week sheet move these. The diocese hears how the appointment goes, and the board reads it when the years end.</p>
     </Sheet>
   );

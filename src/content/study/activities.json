@@ -769,6 +769,11 @@
     "place": {
       "wards": 0.6,
       "families": 0.3
+    },
+    "record": {
+      "anointed": 1.5,
+      "attended": 0.6,
+      "confessions": 0.8
     }
   },
   {
@@ -803,6 +808,11 @@
     "place": {
       "wards": 0.4,
       "families": 0.4
+    },
+    "record": {
+      "anointed": 1.2,
+      "attended": 0.9,
+      "baptized": 0.04
     }
   },
   {
@@ -858,7 +868,8 @@
       "a physician who wanted the Church's view and got yours"
     ],
     "place": {
-      "staff": 0.6
+      "staff": 0.6,
+      "ministry": 0.1
     }
   },
   {
@@ -866,7 +877,7 @@
     "kind": "study",
     "city": "hospital",
     "label": "The hospital chapel",
-    "blurb": "Mass at noon for the staff who come, and an hour of your own after.",
+    "blurb": "Mass at noon for the staff who come, and an hour of your own after. The chapel is the one room in the building where nobody is dying.",
     "maxAp": 2,
     "location": "chapel",
     "stats": {
@@ -877,7 +888,12 @@
       "the chapel between rounds"
     ],
     "place": {
-      "families": 0.3
+      "families": 0.2,
+      "staff": 0.2
+    },
+    "record": {
+      "masses": 2.5,
+      "confessions": 0.3
     }
   },
   {
@@ -907,7 +923,346 @@
     ],
     "place": {
       "families": 0.2
+    },
+    "record": {
+      "masses": 1.5
     }
+  },
+  {
+    "id": "hospital_sunday_mass",
+    "kind": "study",
+    "city": "hospital",
+    "label": "The Sunday Mass",
+    "blurb": "A Sunday Mass in the chapel for the patients who can be wheeled down, the families who cannot leave, and the nurses between shifts. Communion carried to the floors after. The building learns it has a parish.",
+    "maxAp": 2,
+    "location": "chapel",
+    "stats": {
+      "charisma": 0.05,
+      "piety": 0.04
+    },
+    "reputation": [
+      {
+        "key": "parishioners",
+        "delta": 0.06
+      }
+    ],
+    "place": {
+      "families": 0.4,
+      "wards": 0.2,
+      "ministry": 0.15
+    },
+    "record": {
+      "masses": 1,
+      "confessions": 0.4
+    },
+    "onFirst": [
+      {
+        "target": "flag",
+        "key": "hospital:sunday_mass",
+        "value": true
+      }
+    ],
+    "digest": [
+      "the Sunday Mass in the chapel, and Communion to the floors",
+      "a wheelchair in every aisle at the ten o'clock",
+      "the chapel full, for once, and a nurse reading"
+    ]
+  },
+  {
+    "id": "hospital_spanish_mass",
+    "kind": "study",
+    "city": "hospital",
+    "label": "The Spanish Mass",
+    "blurb": "A Saturday evening Mass in Spanish for the families on the floors and the housekeeping staff who have never been asked. The word goes out through the kitchens.",
+    "maxAp": 1,
+    "location": "chapel",
+    "requires": [
+      {
+        "type": "credential",
+        "key": "spanish"
+      }
+    ],
+    "stats": {
+      "charisma": 0.04,
+      "piety": 0.03
+    },
+    "reputation": [
+      {
+        "key": "parishioners",
+        "delta": 0.08
+      }
+    ],
+    "place": {
+      "families": 0.5,
+      "staff": 0.3,
+      "ministry": 0.15
+    },
+    "record": {
+      "masses": 1,
+      "confessions": 0.3
+    },
+    "onFirst": [
+      {
+        "target": "flag",
+        "key": "hospital:spanish_mass",
+        "value": true
+      }
+    ],
+    "digest": [
+      "the Spanish Mass on Saturday, and the kitchens emptied for it",
+      "a rosary in Spanish on the sixth floor after"
+    ]
+  },
+  {
+    "id": "ward_confessions",
+    "kind": "study",
+    "city": "hospital",
+    "label": "Confessions on the wards",
+    "blurb": "Posted hours, a stole in your pocket, and a chair pulled to the bed. Half the floor has not been in twenty years, and a hospital bed is where they remember.",
+    "maxAp": 2,
+    "location": "hospital",
+    "stats": {
+      "piety": 0.06,
+      "theology": 0.02
+    },
+    "reputation": [
+      {
+        "key": "parishioners",
+        "delta": 0.05
+      }
+    ],
+    "place": {
+      "wards": 0.35,
+      "families": 0.15
+    },
+    "record": {
+      "confessions": 3,
+      "received": 0.02
+    },
+    "digest": [
+      "confessions, bed to bed, on the posted hours",
+      "a man who had not been in forty years, and cried",
+      "the stole and the chair, on five"
+    ]
+  },
+  {
+    "id": "icu_er",
+    "kind": "study",
+    "city": "hospital",
+    "label": "The unit and the emergency room",
+    "blurb": "The two doors the pager sends you through most. The trauma bay at midnight, the intensive care unit at dawn, and the staff who learn your face there before they learn your name.",
+    "maxAp": 2,
+    "location": "hospital",
+    "stats": {
+      "piety": 0.04,
+      "charisma": 0.03
+    },
+    "reputation": [
+      {
+        "key": "public",
+        "delta": 0.04
+      }
+    ],
+    "place": {
+      "staff": 0.4,
+      "wards": 0.2
+    },
+    "record": {
+      "anointed": 1.8,
+      "attended": 1,
+      "baptized": 0.03
+    },
+    "digest": [
+      "the unit at dawn, and the trauma bay after",
+      "an anointing through the door of a helicopter",
+      "the ICU, where the staff know your coffee"
+    ]
+  },
+  {
+    "id": "bedside_instruction",
+    "kind": "study",
+    "city": "hospital",
+    "label": "Instruction at the bedside",
+    "blurb": "The ones who ask: the lapsed, the never-baptized, the husband of forty years who came to Mass every Sunday and never joined. Catechesis in a chair, at their pace, which is not always slow enough.",
+    "maxAp": 2,
+    "location": "hospital",
+    "stats": {
+      "theology": 0.05,
+      "piety": 0.03
+    },
+    "place": {
+      "families": 0.3,
+      "wards": 0.1
+    },
+    "record": {
+      "received": 0.12,
+      "baptized": 0.06
+    },
+    "onFirst": [
+      {
+        "target": "flag",
+        "key": "hospital:instructs",
+        "value": true
+      }
+    ],
+    "digest": [
+      "the Creed, a line at a time, on four",
+      "a man of eighty asking what happens at the Offertory",
+      "instruction at the bedside, and a profession of faith by Friday"
+    ]
+  },
+  {
+    "id": "hospice_rounds",
+    "kind": "work",
+    "city": "hospital",
+    "label": "Hospice",
+    "blurb": "The hospital's hospice and the homes it sends people to. Slow deaths, long conversations, and families who have had time to decide what they think of priests.",
+    "maxAp": 2,
+    "location": "field",
+    "stats": {
+      "piety": 0.06,
+      "charisma": 0.03
+    },
+    "reputation": [
+      {
+        "key": "public",
+        "delta": 0.05
+      },
+      {
+        "key": "parishioners",
+        "delta": 0.04
+      }
+    ],
+    "place": {
+      "families": 0.35
+    },
+    "record": {
+      "attended": 0.8,
+      "anointed": 0.8,
+      "received": 0.02
+    },
+    "digest": [
+      "hospice, and a house with the furniture moved for the bed",
+      "a death that took all of Thursday, and was ready",
+      "the hospice nurse, who calls you first now"
+    ]
+  },
+  {
+    "id": "volunteer_corps",
+    "kind": "work",
+    "city": "hospital",
+    "label": "The volunteers",
+    "blurb": "Eucharistic ministers from the parishes, trained, scheduled, and sent to the floors you cannot reach. A ministry grows by other hands, and the parishes remember whose idea it was.",
+    "maxAp": 2,
+    "location": "college_office",
+    "stats": {
+      "administration": 0.06,
+      "charisma": 0.02
+    },
+    "reputation": [
+      {
+        "key": "parishioners",
+        "delta": 0.05
+      },
+      {
+        "key": "brother_priests",
+        "delta": 0.03
+      }
+    ],
+    "place": {
+      "ministry": 0.5,
+      "wards": 0.15
+    },
+    "onFirst": [
+      {
+        "target": "flag",
+        "key": "hospital:volunteers",
+        "value": true
+      }
+    ],
+    "digest": [
+      "a Saturday training the volunteers",
+      "the volunteer schedule, and every floor covered on Sunday",
+      "forty names on the rota, and one who does not show"
+    ]
+  },
+  {
+    "id": "chaplains_office",
+    "kind": "work",
+    "city": "hospital",
+    "label": "The chaplains' office",
+    "blurb": "The budget line, the on-call rota, the meeting with the administrator, the paperwork the hospital wants and the diocese never reads. Somebody has to run it, and it decides whether there is a chaplaincy after you.",
+    "maxAp": 2,
+    "location": "college_office",
+    "stats": {
+      "administration": 0.08
+    },
+    "reputation": [
+      {
+        "key": "chancery",
+        "delta": 0.05
+      }
+    ],
+    "place": {
+      "ministry": 0.4,
+      "staff": 0.2
+    },
+    "digest": [
+      "the chaplaincy budget, argued line by line",
+      "the on-call rota, rewritten so somebody sleeps",
+      "a meeting with the administrator that was about metrics"
+    ]
+  },
+  {
+    "id": "second_chaplain",
+    "kind": "work",
+    "city": "hospital",
+    "label": "The second chaplain",
+    "blurb": "The diocese lends a deacon, or the hospital hires a lay chaplain, and you are the one who trains and covers. The pager rings less. The floors are seen more.",
+    "maxAp": 1,
+    "location": "college_office",
+    "requires": [
+      {
+        "type": "place",
+        "key": "ministry",
+        "op": ">=",
+        "value": 30
+      }
+    ],
+    "stats": {
+      "administration": 0.04,
+      "charisma": 0.03
+    },
+    "reputation": [
+      {
+        "key": "chancery",
+        "delta": 0.04
+      },
+      {
+        "key": "brother_priests",
+        "delta": 0.05
+      }
+    ],
+    "place": {
+      "ministry": 0.5,
+      "wards": 0.3,
+      "staff": 0.2
+    },
+    "record": {
+      "anointed": 0.6,
+      "attended": 0.3
+    },
+    "onFirst": [
+      {
+        "target": "flag",
+        "key": "hospital:second_chaplain",
+        "value": true
+      }
+    ],
+    "digest": [
+      "the deacon's first night on the pager, and your phone by the bed anyway",
+      "the second chaplain, and a floor you had never had time for"
+    ]
   },
   {
     "id": "lectures",

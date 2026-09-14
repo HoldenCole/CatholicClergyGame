@@ -747,6 +747,8 @@ Rationale: the game is 95% text, menus, stat panels, and dialogue trees, which i
 
 ---
 
+**Postings as places.** A full-time posting away from a parish (the residence, the Newman Center, the hospital, the seminary faculty, the chancery) carries its own dials, moved by the hours of the week and by its scenes, and the hospital keeps a book beside them: anointings, deaths attended, baptisms at the bedside, receptions into the Church, confessions heard, Masses said. The hours fill the book on average rates rolled with the week's seed; authored scenes write to it directly (`record`) and to the dials (`place`), and may read both as conditions. The book is shown on the posting's sheet, counted in the digest, and written into the career record when the years end. The hospital's ministry dial gates a second chaplain and the scenes that come with a department rather than a pager.
+
 ## 14. Roadmap
 
 **Phase 0 — Skeleton.** Types, Zustand store, seeded RNG, save/load, time engine with all four speeds, interrupt configuration. No content. *Done when a clock runs and saves.*

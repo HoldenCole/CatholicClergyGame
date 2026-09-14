@@ -102,6 +102,10 @@ export function evaluateCondition(
       const v = cond.key === 'years' ? (state.clock.week - see.installedWeek) / 52 : see[cond.key];
       return compare(cond.op, v, cond.value);
     }
+    case 'place':
+      return !!state.study?.place && compare(cond.op, state.study.place[cond.key] ?? 0, cond.value);
+    case 'record':
+      return !!state.study && compare(cond.op, state.study.record?.[cond.key] ?? 0, cond.value);
     case 'arc_weeks_left':
       return !!state.parish && compare(cond.op, state.parish.arcEndWeek - state.clock.week, cond.value);
     case 'bishop_alignment':
