@@ -10,6 +10,7 @@ import { withChoice } from '@/systems/choice';
 import { ARC } from './parish';
 import { generateSee } from './see';
 import { retire } from './career';
+import { bookLine } from '@/systems/studyWeek';
 
 /** How a place is named in prose. */
 export const CITY_WORD: Record<StudyState['city'], string> = { rome: 'Rome', washington: 'Washington', residence: "the bishop's residence", campus: 'the Newman Center', hospital: 'the hospital', seminary: 'the seminary', chancery: 'the chancery', auxiliary: 'the chancery', see: 'the see' };
@@ -87,7 +88,8 @@ export function endStudy(state: GameState, def: OfferDef, rng: Rng): GameState {
     next = applyEffects(next, c.onComplete);
     next = { ...next, offerHistory: [...next.offerHistory, { offerId: def.id, week: next.clock.week, decision: 'completed' }] };
     const post = studyProgram(study.program)?.kind === 'post';
-    next = note(next, 'offer', study.city === 'residence' ? `Three years as ${study.label.toLowerCase()}, and the bishop let you go with his blessing.` : post ? `${Math.round((study.endWeek - study.startWeek) / 52)} years as ${study.label.toLowerCase()}; the board has a parish for you again.` : `Came home from ${CITY_WORD[study.city]} with ${study.label.toLowerCase()}.`);
+    const book = bookLine(next);
+    next = note(next, 'offer', (study.city === 'residence' ? `Three years as ${study.label.toLowerCase()}, and the bishop let you go with his blessing.` : post ? `${Math.round((study.endWeek - study.startWeek) / 52)} years as ${study.label.toLowerCase()}; the board has a parish for you again.` : `Came home from ${CITY_WORD[study.city]} with ${study.label.toLowerCase()}.`) + (book ? ` ${book}` : ''));
   }
   const flags: GameState['flags'] = { ...next.flags };
   delete flags[`study:${study.city}`];

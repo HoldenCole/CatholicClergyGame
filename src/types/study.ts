@@ -21,8 +21,8 @@ export interface StudyProgramDef {
   hours: number;
   /** The class line for the digest. */
   classes: string;
-  /** A posting's own dials: what the years there move. */
-  place?: { label: string; dials: { id: string; label: string; low: string; high: string }[] };
+  /** A posting's own dials: what the years there move; and its book, the things it counts. */
+  place?: { label: string; dials: { id: string; label: string; low: string; high: string }[]; book?: { id: string; label: string }[] };
   /** Whether the bishop releases a man someone else asked for: certain for Rome's call, likelier when the post is his priority. */
   release?: { priority?: BishopPriority; always?: boolean };
 }
@@ -50,6 +50,8 @@ export interface StudyActivityDef {
   onFirst?: Effect[];
   /** For a posting: what an hour a week does to the place's dials. */
   place?: Record<string, number>;
+  /** For a posting: what an hour a week adds to its book on average; fractions roll with the week. */
+  record?: Record<string, number>;
   /** For a bishop: what an hour a week does to the see's dials. */
   see?: Partial<Record<'presbyterate' | 'people' | 'rome' | 'money' | 'shortage', number>>;
   digest: string[];
@@ -74,4 +76,6 @@ export interface StudyState {
   fromParishId: string | null;
   /** A posting's dials, −100..100, moved by the week. */
   place?: Record<string, number>;
+  /** A posting's book: what the years there counted (anointings, deaths attended, baptisms at the bedside, receptions). */
+  record?: Record<string, number>;
 }

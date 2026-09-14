@@ -49,7 +49,7 @@ describe('third orders', () => {
 
 describe('the postings as places', () => {
   it('every posting has dials the week moves, and a verdict for the record', () => {
-    for (const id of ['bishops_secretary', 'university_chaplain', 'hospital_chaplain', 'seminary_faculty', 'vicar_general', 'auxiliary_bishop']) expect(studyProgram(id)!.place?.dials.length, id).toBe(3);
+    for (const id of ['bishops_secretary', 'university_chaplain', 'hospital_chaplain', 'seminary_faculty', 'vicar_general', 'auxiliary_bishop']) expect(studyProgram(id)!.place?.dials.length, id).toBe(id === 'hospital_chaplain' ? 4 : 3);
     const base = parishState('place');
     const c = base.character!;
     const s: GameState = { ...base, character: { ...c, stats: { ...c.stats, theology: 75 }, reputation: { ...c.reputation, chancery: 40 } }, flags: { ...base.flags, ordination_week: base.clock.week - 52 * 4 }, offers: [{ offerId: 'pv_seminary_faculty', arrivedWeek: 0, expiresWeek: 9999, bindings: {} }] };

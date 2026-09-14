@@ -272,7 +272,7 @@ function postScene(label: string, room: string, ids: [string, string, string, st
   };
 }
 export const STUDY_CAMPUS = postScene('The Newman Center', 'Back to your rooms', ['campus_door', 'campus_mass', 'campus_series', 'campus_parish', 'campus_faculty', 'campus_door']);
-export const STUDY_HOSPITAL = postScene('The hospital', 'Back to your quarters', ['wards', 'hospital_chapel', 'ethics_committee', 'hospital_supply', 'night_pager', 'wards']);
+export const STUDY_HOSPITAL = postScene('The hospital', 'Back to your quarters', ['wards', 'hospital_sunday_mass', 'chaplains_office', 'ward_confessions', 'icu_er', 'night_pager']);
 export const STUDY_CHANCERY = postScene('The chancery', 'Back to the rectory', ['bishops_door', 'personnel_board', 'closings_list', 'tribunal_desk', 'the_money', 'deanery_visits']);
 export const STUDY_AUXILIARY = postScene('The chancery', 'Back to the rectory', ['confirmation_circuit', 'the_vicariate', 'standing_in', 'seminary_board', 'spanish_parishes', 'auxiliary_press']);
 export const STUDY_SEE = postScene('The see', "Back to the bishop's house", ['cathedral_and_confirmations', 'see_personnel', 'see_closings', 'see_money', 'see_seminary', 'see_rome']);

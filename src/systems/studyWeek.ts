@@ -75,6 +75,9 @@ export function studyWeek(state: GameState, rng: Rng): { state: GameState; line:
   let next: GameState = state;
   let see = state.see ?? null;
   const place = study.place ? { ...study.place } : null;
+  const program = studyProgram(study.program);
+  const record = program?.place?.book ? { ...(study.record ?? {}) } : null;
+  const counted: Record<string, number> = {};
   const bindings: Record<string, string> = {};
   const moves: Mover[] = [];
   const freed: string[] = [];
@@ -83,6 +86,16 @@ export function studyWeek(state: GameState, rng: Rng): { state: GameState; line:
     if (hours <= 0) continue;
     if (def.see && see) see = applySeeHours(see, def.see, hours);
     if (def.place && place) for (const [k, d] of Object.entries(def.place)) place[k] = Math.max(-100, Math.min(100, (place[k] ?? 0) + d * hours));
+    if (def.record && record) {
+      const roll = rng.derive(`book:${def.id}:${state.clock.week}`);
+      for (const [k, perHour] of Object.entries(def.record)) {
+        const expected = perHour * hours;
+        const n = Math.floor(expected) + (roll.chance(expected - Math.floor(expected)) ? 1 : 0);
+        if (n <= 0) continue;
+        record[k] = (record[k] ?? 0) + n;
+        counted[k] = (counted[k] ?? 0) + n;
+      }
+    }
     for (const [k, rate] of Object.entries(def.stats) as [StatKey, number][]) {
       const before = stats[k];
       stats = applyStat(stats, k, rate * hours);
@@ -120,11 +133,32 @@ export function studyWeek(state: GameState, rng: Rng): { state: GameState; line:
     moves.push({ week: state.clock.week, key: 'piety', delta: -WEEK.strainPietyDrain, why: 'worn out' });
   }
   const character = { ...next.character!, stats, reputation, credentials };
-  const result: GameState = { ...next, ...(see ? { see } : {}), strain, movers: [...(next.movers ?? []), ...moves.filter((m) => m.delta !== 0)], npcs: { ...next.npcs, ...npcs }, flags: { ...next.flags, ...flags }, character, study: { ...study, hoursLogged, taken, ...(place ? { place } : {}), ...(freed.length ? { routine: Object.fromEntries(Object.entries(study.routine).filter(([k]) => !freed.includes(k))) } : {}) } };
+  const result: GameState = { ...next, ...(see ? { see } : {}), strain, movers: [...(next.movers ?? []), ...moves.filter((m) => m.delta !== 0)], npcs: { ...next.npcs, ...npcs }, flags: { ...next.flags, ...flags }, character, study: { ...study, hoursLogged, taken, ...(place ? { place } : {}), ...(record ? { record } : {}), ...(freed.length ? { routine: Object.fromEntries(Object.entries(study.routine).filter(([k]) => !freed.includes(k))) } : {}) } };
   if (freed.length) earned.push(`The ${freed.map((id) => studyActivities.find((a) => a.id === id)?.label ?? id).join(' and ')} hours are yours again; put them somewhere.`);
-  const head = studyProgram(study.program)?.classes ?? 'Lectures';
+  const head = program?.classes ?? 'Lectures';
   const body = phrases.length ? `${head}; ${phrases.join(', ')}.` : `${head}, and the free hours went to the city.`;
-  return { state: result, line: renderText([body, ...earned].join(' '), result, bindings) };
+  const week = Object.keys(counted).length && program?.place?.book ? `In the book this week: ${bookPhrase(counted, program.place.book)}.` : '';
+  return { state: result, line: renderText([body, ...(week ? [week] : []), ...earned].join(' '), result, bindings) };
+}
+
+/** A count from the book, in words: "anointed 4, one baptized at the bedside". */
+export function bookPhrase(counts: Record<string, number>, book: { id: string; label: string }[]): string {
+  const parts: string[] = [];
+  for (const b of book) {
+    const n = counts[b.id] ?? 0;
+    if (n <= 0) continue;
+    parts.push(`${b.label.charAt(0).toLowerCase()}${b.label.slice(1)} ${n}`);
+  }
+  return parts.join(', ');
+}
+
+/** The whole book of a posting so far, in words, or null where the posting keeps none. */
+export function bookLine(state: GameState): string | null {
+  const study = state.study;
+  const program = study ? studyProgram(study.program) : undefined;
+  if (!study?.record || !program?.place?.book) return null;
+  const phrase = bookPhrase(study.record, program.place.book);
+  return phrase ? `The book: ${phrase}.` : null;
 }
 
 /** Where a posting's dials stand, in words: low, middling, or high. */

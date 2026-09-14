@@ -1,5 +1,6 @@
 import type { Condition, GameState, OfferDef } from '@/types';
 import { evaluateCondition } from '@/engine/conditions';
+import { studyProgram } from '@/content/study';
 import { isOfferEligible } from '@/engine/offers';
 import { resolveSelector } from '@/engine/selectors';
 
@@ -27,6 +28,17 @@ function personWord(state: GameState, selector: string): string {
 }
 
 /** The first unmet requirement, in words. Null when the condition holds or is not worth naming. */
+function dialLabel(state: GameState, key: string): string {
+  const program = studyProgram(state.study?.program ?? '');
+  return (program?.place?.dials.find((d) => d.id === key)?.label ?? key.replace(/_/g, ' ')).toLowerCase();
+}
+
+function bookLabel(state: GameState, key: string): string {
+  const program = studyProgram(state.study?.program ?? '');
+  const label = program?.place?.book?.find((b) => b.id === key)?.label ?? key.replace(/_/g, ' ');
+  return label.charAt(0).toLowerCase() + label.slice(1);
+}
+
 export function describeUnmet(cond: Condition, state: GameState): string | null {
   if (evaluateCondition(cond, state)) return null;
   switch (cond.type) {
@@ -40,6 +52,8 @@ export function describeUnmet(cond: Condition, state: GameState): string | null 
     case 'years_ordained': return cond.op === '>=' ? `${cond.value} years ordained` : 'fewer years ordained';
     case 'age': return cond.op === '<=' ? 'to be younger' : 'more years';
     case 'see': return `the see's ${cond.key === 'years' ? 'years' : cond.key}`;
+    case 'place': return cond.op === '>=' ? `more standing here: ${dialLabel(state, cond.key)}` : `less standing here: ${dialLabel(state, cond.key)}`;
+    case 'record': return `${cond.value} in the book: ${bookLabel(state, cond.key)}`;
     case 'year': return cond.op === '>=' ? `year ${cond.value} of seminary` : null;
     case 'pillar': return `a stronger ${cond.key} pillar this year`;
     case 'role': return cond.value === 'pastor' ? 'a pastorate' : `to be ${cond.value.replace('_', ' ')}`;
