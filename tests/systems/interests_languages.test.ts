@@ -129,3 +129,22 @@ describe('languages that stick', () => {
     expect(currentParish(setDial(fluent, 'communities', 'spanish_mass'))!.liturgy!.communities).toContain('spanish_mass');
   });
 });
+
+describe('a finished language gives its hours back', () => {
+  it('in seminary the routine drops the hours and says so, and the activity stays listed as completed', async () => {
+    const { seminaryWeek, routineOf, routineHours, setSeminaryActivity } = await import('@/systems/seminaryWeek');
+    const sem = seminaryState('free-hours');
+    let s: GameState = { ...sem, seminary: { ...sem.seminary!, emphasis: { human: 3, spiritual: 3, intellectual: 2, pastoral: 2 }, routine: { latin: 2, spanish: 2 }, hoursLogged: { latin: 39 } } };
+    const before = routineHours(s.seminary!);
+    const week = seminaryWeek(s, createRng('w'));
+    s = week.state;
+    expect(s.character!.credentials).toContain('latin');
+    expect(routineOf(s.seminary!).latin).toBeUndefined();
+    expect(routineHours(s.seminary!)).toBe(before - 2);
+    expect(week.line).toMatch(/hours are yours again/);
+    // The finished one is not offered, and the freed hours can go elsewhere.
+    expect(() => setSeminaryActivity(s, 'latin', 1)).toThrow(/already/);
+    const moved = setSeminaryActivity(s, 'holy_hour', 2);
+    expect(routineOf(moved.seminary!).holy_hour).toBe(2);
+  });
+});

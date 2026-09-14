@@ -26,9 +26,17 @@ export default function SeminaryRoutinePanel() {
       </Sheet>
       <Sheet title="Your hours">
         <ul className="flex flex-col gap-1.5">
-          {seminaryActivities.filter((a) => seminaryActivityOffered(game, a)).map((a) => {
+          {seminaryActivities.map((a) => {
             const ap = routine[a.id] ?? 0;
-            const canAdd = ap < a.maxAp && left > 0;
+            const offered = seminaryActivityOffered(game, a);
+            const canAdd = offered && ap < a.maxAp && left > 0;
+            if (!offered) {
+              return (
+                <li key={a.id} className="flex items-center justify-between gap-2 text-sm">
+                  <span className="ink-faint min-w-0" title={a.blurb}>{a.label} <span className="ml-2 text-xs">(completed)</span></span>
+                </li>
+              );
+            }
             return (
               <li key={a.id} className="flex items-center justify-between gap-2 text-sm">
                 <span className="min-w-0" title={a.blurb}>

@@ -117,6 +117,7 @@ export function seminaryWeek(state: GameState, rng: Rng): SeminaryWeekResult {
   const earned: string[] = [];
   const bindings: Record<string, string> = {};
   const moves: Mover[] = [];
+  const freed: string[] = [];
   for (const def of seminaryActivities) {
     const hours = routine[def.id] ?? 0;
     if (hours <= 0) continue;
@@ -142,11 +143,16 @@ export function seminaryWeek(state: GameState, rng: Rng): SeminaryWeekResult {
         credentials = [...credentials, def.credentialAfter.credential];
         if (def.credentialAfter.flag) flags[def.credentialAfter.flag] = true;
         earned.push(def.credentialAfter.line);
+        freed.push(def.id);
       }
     }
     const phrase = def.digest[(state.clock.week + def.digest.length) % def.digest.length]!;
     phrases.push(hours > 1 ? `${phrase} (${hours} hours)` : phrase);
   }
+  // The hours given to a finished language are the man's again.
+  const routineAfter = { ...routine };
+  for (const id of freed) delete routineAfter[id];
+  if (freed.length) earned.push(`The ${freed.map((id) => seminaryActivities.find((a) => a.id === id)?.label ?? id).join(' and ')} hours are yours again; put them somewhere.`);
   // A longer week than the house keeps wears on a seminarian too.
   const strain = strainAfterWeek(state, 0, Math.max(0, freeHourShift(state)));
   if (strain >= WEEK.strainWorn) {
@@ -160,7 +166,7 @@ export function seminaryWeek(state: GameState, rng: Rng): SeminaryWeekResult {
     strain,
     movers: [...(state.movers ?? []), ...moves.filter((m) => m.delta !== 0)],
     character: { ...c, stats, reputation, credentials },
-    seminary: { ...sem, pillarScores, hoursLogged, hoursGains },
+    seminary: { ...sem, pillarScores, hoursLogged, hoursGains, ...(freed.length ? { routine: routineAfter } : {}) },
   };
   const head = CLASSES[sem.year] ?? 'Classes';
   const body = phrases.length ? `${head}; ${phrases.join(', ')}.` : `${head}, and the free hours went nowhere in particular.`;
