@@ -28,6 +28,14 @@ export function clergyNeedOf(shortage: number): ClergyNeed {
   return 'deep_bench';
 }
 
+/** Hostility below this reads as 'one voice'; generation and drift never go there. */
+export const HOSTILITY_FLOOR = 35;
+
+/** The least shortage a preset can hold: 5 for the dioceses that are critically short by design, else 3. */
+export function shortageFloorOf(preset: Pick<DiocesePreset, 'shortageBias'>): number {
+  return preset.shortageBias >= 5 ? 5 : 3;
+}
+
 export function tensionOf(hostility: number): Tension {
   if (hostility < 35) return 'one_voice';
   if (hostility < 70) return 'quietly_split';
@@ -70,9 +78,12 @@ export function generateDiocese(rng: Rng, preset: DiocesePreset, year: number): 
     progressive *= scale;
     mainstream = 0.1;
   }
-  const hostility = rng.int(0, 100);
+  // No presbyterate speaks with one voice: every diocese is at least quietly split on the liturgy.
+  const hostility = rng.int(HOSTILITY_FLOOR, 100);
   // There is always a shortage: no diocese rolls below 'stretched'. Playtesting asked for it; the presets' bias still spreads 3..5.
-  const shortage = Math.min(5, Math.max(3, Math.round(preset.shortageBias + rng.gaussian() * 1.1)));
+  // A preset biased all the way to 5 is critically short every time (Houston, Washington); the gaussian is still drawn so the stream holds.
+  const rolled = Math.min(5, Math.max(3, Math.round(preset.shortageBias + rng.gaussian() * 1.1)));
+  const shortage = shortageFloorOf(preset) === 5 ? 5 : rolled;
   const financial = rng.weighted(Object.keys(preset.financialWeights) as FinancialState[], (f) => preset.financialWeights[f]);
   const scandalHandling = rng.weighted(['transparent', 'defensive', 'concealing'] as ScandalHandling[], (h) => ({ transparent: 2, defensive: 3, concealing: 1 })[h]);
   const need = clergyNeedOf(shortage);

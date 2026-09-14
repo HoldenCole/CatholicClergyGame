@@ -1,5 +1,5 @@
 import { turnaroundOf } from './trajectory';
-import type { Candidate, GameState, Npc, Opening, Parish } from '@/types';
+import type { Candidate, EntryPath, GameState, Npc, Opening, Parish } from '@/types';
 import type { Rng } from '@/engine/rng';
 import { CLERGY_HERITAGE, eraForBirthYear, rollHeritage, rollMaleName } from '@/generation/names';
 import { addStats, finishNpc, rollAlignment, rollBaseStats } from '@/generation/npc';
@@ -114,13 +114,24 @@ export function playerCandidate(state: GameState): Candidate {
     affiliation,
     indispensable: !!parish && c.stats.administration >= 70 && (parish.debt >= 1_000_000 || parish.problem === 'staff_theft'),
     turnaround: turnaroundOf(state),
+    careerYears: c.background.yearsWorked,
+    ...(degreeOf(c.background.path) ? { degree: degreeOf(c.background.path)! } : {}),
     currentRole: state.assignment?.role ?? null,
   };
 }
 
+/** The degree a man came in with, from his entry path. */
+export function degreeOf(path: EntryPath): Candidate['degree'] | null {
+  if (path === 'doctoral') return 'doctoral';
+  if (path === 'masters_1' || path === 'masters_2') return 'masters';
+  if (path === 'college') return 'college';
+  return null;
+}
+
 /** An NPC priest as a candidate; classmates use their real records, others are rolled. */
 export function npcCandidate(npc: Npc, year: number, rng: Rng): Candidate {
-  const yearsOrdained = Math.max(1, year - (npc.birthYear + (npc.formation?.entryAge ?? 26) + 7));
+  const entryAge = npc.formation?.entryAge ?? 26;
+  const yearsOrdained = Math.max(1, year - (npc.birthYear + entryAge + 7));
   return {
     id: npc.id,
     isPlayer: false,
@@ -139,6 +150,9 @@ export function npcCandidate(npc: Npc, year: number, rng: Rng): Candidate {
     speaksSpanish: npc.origin === 'latino_immigrant' || rng.chance(0.3),
     affiliation: 0,
     indispensable: false,
+    // A man who entered late worked first; the board reads it the same way for him.
+    careerYears: npc.formation?.career ? Math.max(0, entryAge - 23) : 0,
+    ...(entryAge >= 26 ? { degree: 'college' as const } : {}),
     currentRole: npc.tags.includes('pastor') ? 'pastor' : 'parochial_vicar',
   };
 }
@@ -147,7 +161,9 @@ export function npcCandidate(npc: Npc, year: number, rng: Rng): Candidate {
 export function rivalsFor(state: GameState, opening: Opening, rng: Rng): Candidate[] {
   const year = calendarYear(state);
   const classmates = Object.values(state.npcs).filter((n) => n.role === 'classmate' && n.status === 'active' && !n.tags.includes('on_leave'));
-  const count = rng.int(OPENINGS.rivals[0], OPENINGS.rivals[1]);
+  // A short diocese has fewer men to put beside him: the field narrows by one for each step past 'stretched'.
+  const shortage = state.world?.diocese.hidden.shortage ?? 3;
+  const count = rng.int(OPENINGS.rivals[0], Math.max(OPENINGS.rivals[0], OPENINGS.rivals[1] - Math.max(0, shortage - 3)));
   const out: Candidate[] = [];
   const picked = rng.shuffle(classmates).slice(0, Math.min(count, classmates.length, 2));
   for (const n of picked) out.push(npcCandidate(n, year, rng.derive(`cand:${n.id}:${opening.id}`)));
@@ -220,7 +236,7 @@ export interface Chances {
 export function chancesFor(state: GameState, opening: Opening): Chances {
   const me = playerCandidate(state);
   const bishop = state.world!.diocese.hidden.bishop;
-  const r = readiness(me, opening);
+  const r = readiness(me, opening, Math.max(Math.min(100, (state.world?.diocese.hidden.shortage ?? 3) * 20), opening.urgency));
   const t = trust(me);
   const f = fit(me, opening, bishop);
   const fitEffective = f.value * (1 + me.outspokenness / 100);

@@ -27,7 +27,7 @@ export interface DiocesePreset {
   growth: 'shrinking' | 'stable' | 'growing' | 'fast';
   /** Alignment tendency, −100..100, of the presbyterate and laity. */
   dispositionBias: number;
-  /** Shortage tendency 1..5. */
+  /** Shortage tendency 1..5. A 5 pins the diocese at critically short. */
   shortageBias: number;
   /** Financial tendency weights. */
   financialWeights: Record<FinancialState, number>;

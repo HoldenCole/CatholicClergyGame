@@ -1,7 +1,7 @@
 import type { GameState, Npc, World } from '@/types';
 import type { Rng } from '@/engine/rng';
 import { generateBishop, temperamentLine } from '@/generation/bishop';
-import { clergyNeedOf } from '@/generation/diocese';
+import { clergyNeedOf, shortageFloorOf } from '@/generation/diocese';
 import { presetById } from '@/content/dioceses';
 
 /** Tunables. Invented to match DESIGN.md §3.1a: modest drift, one run in four sees a new bishop during seminary. */
@@ -53,7 +53,7 @@ export function driftYear(state: GameState, rng: Rng, year: number): DriftResult
   const visible = { ...world.diocese.visible };
 
   visible.disposition = Math.max(-100, Math.min(100, visible.disposition + rng.int(-DRIFT.dispositionStep, DRIFT.dispositionStep)));
-  if (rng.chance(DRIFT.shortageStepChance)) hidden.shortage = Math.max(1, Math.min(5, hidden.shortage + (rng.chance(0.6) ? 1 : -1)));
+  if (rng.chance(DRIFT.shortageStepChance)) hidden.shortage = Math.max(preset ? shortageFloorOf(preset) : 1, Math.min(5, hidden.shortage + (rng.chance(0.6) ? 1 : -1)));
   if (rng.chance(DRIFT.financialStepChance)) {
     const order = ['healthy', 'strained', 'crisis'] as const;
     const i = order.indexOf(hidden.financial);

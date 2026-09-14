@@ -46,6 +46,10 @@ export interface Candidate {
   affiliation: number;
   /** 0..1: a hard parish turned around under him, a year in. systems/trajectory.ts */
   turnaround?: number;
+  /** Years worked before the seminary: a life the board can read as experience. */
+  careerYears?: number;
+  /** The degree he came in with, if any. */
+  degree?: 'college' | 'masters' | 'doctoral';
   /** Too useful where he is: the chancery would rather not move him. */
   indispensable: boolean;
   currentRole: Role | null;

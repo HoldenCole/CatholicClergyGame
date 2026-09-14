@@ -22,19 +22,24 @@ describe('generation/world', () => {
   it('every preset keeps its character while the state varies', () => {
     for (const presetId of ['new_york', 'houston']) {
       const dioceses = runs.map((r) => r.find((c) => c.presetId === presetId)!.diocese);
-      // There is always a shortage: only 'stretched' and 'critically_short' can roll now.
-      expect(new Set(dioceses.map((d) => d.visible.clergyNeed)).size).toBe(2);
-      expect(new Set(dioceses.map((d) => d.visible.tension)).size).toBe(3);
+      // There is always a shortage: only 'stretched' and 'critically_short' can roll now, and Houston is always critically short.
+      expect(new Set(dioceses.map((d) => d.visible.clergyNeed)).size).toBe(presetId === 'houston' ? 1 : 2);
+      // No presbyterate speaks with one voice.
+      expect(new Set(dioceses.map((d) => d.visible.tension))).toEqual(new Set(['quietly_split', 'openly_divided']));
       expect(new Set(dioceses.map((d) => d.hidden.financial)).size).toBe(3);
       expect(new Set(dioceses.map((d) => d.visible.bishop.name)).size).toBeGreaterThan(200);
       expect(new Set(dioceses.map((d) => d.hidden.bishop.management)).size).toBe(4);
       expect(new Set(dioceses.map((d) => d.visible.complication)).size).toBeGreaterThanOrEqual(3);
       expect(dioceses.every((d) => d.visible.character.length >= 2 && d.visible.character.length <= 4)).toBe(true);
     }
-    const houston = runs.map((r) => r.find((c) => c.presetId === 'houston')!.diocese);
-    const dc = runs.map((r) => r.find((c) => c.presetId === 'washington')!.diocese);
+    // Houston and Washington are critically short every time; New York spreads.
+    for (const id of ['houston', 'washington']) {
+      const ds = runs.map((r) => r.find((c) => c.presetId === id)!.diocese);
+      expect(ds.every((d) => d.hidden.shortage === 5 && d.visible.clergyNeed === 'critically_short'), id).toBe(true);
+    }
+    const ny = runs.map((r) => r.find((c) => c.presetId === 'new_york')!.diocese);
     const mean = (xs: number[]) => xs.reduce((a, b) => a + b, 0) / xs.length;
-    expect(mean(houston.map((d) => d.hidden.shortage))).toBeGreaterThan(mean(dc.map((d) => d.hidden.shortage)) + 0.8);
+    expect(mean(ny.map((d) => d.hidden.shortage))).toBeLessThan(4.5);
   });
 
   it('the visible half never carries hidden fields', () => {

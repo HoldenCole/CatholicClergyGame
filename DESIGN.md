@@ -367,7 +367,7 @@ fit_effective = fit × (1 + outspokenness / 100)
 
 `fit` can be negative. Outspokenness amplifies it in both directions — that is the entire volume mechanic in one line.
 
-**Need** (0–100) — how badly the diocese requires a body. The largest lever, and it swings hard. Shortage, retirement waves, and a parish in crisis all promote fast and forgive a lot. A well-staffed diocese with a deep bench makes you wait ten years.
+**Need** (0–100) — how badly the diocese requires a body. The largest lever, and it swings hard. Shortage, retirement waves, and a parish in crisis all promote fast and forgive a lot. A well-staffed diocese with a deep bench makes you wait ten years. Concretely: above a need of 60 the years at which experience saturates shrink (to 60% at need 100), and a diocese past 'stretched' fields fewer rivals for each opening. Years worked before the seminary count as half-years ordained for a pastorate (up to half the saturation), and the degree a man came in with counts alongside his credentials. Houston and Washington are critically short every time.
 
 **Readiness** — role-relevant stats, credentials, years ordained, and demonstrated results at the current post.
 

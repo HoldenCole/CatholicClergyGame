@@ -15,13 +15,30 @@ export const PROMOTION = {
   noise: 10,
   /** Years ordained at which readiness from experience saturates, by opening kind. */
   experienceYears: { pastor: 12, administrator: 8, parochial_vicar: 3, chancery: 10 } as Record<Opening['kind'], number>,
+  /**
+   * A short diocese cannot wait for the years: above this need the saturation point comes sooner,
+   * down to `hasteFloor` of the years at need 100. DESIGN 7.1: need promotes fast and forgives a lot.
+   */
+  hasteAbove: 60,
+  hasteFloor: 0.6,
+  /** A year worked before the seminary counts this much of a year ordained, by opening kind, up to half the saturation. */
+  careerCredit: { pastor: 0.5, administrator: 0.6, parochial_vicar: 0, chancery: 0.5 } as Record<Opening['kind'], number>,
+  /** The degree he came in with, by opening kind. */
+  degreeBonus: {
+    pastor: { college: 0, masters: 3, doctoral: 6 },
+    administrator: { college: 0, masters: 3, doctoral: 5 },
+    parochial_vicar: { college: 0, masters: 0, doctoral: 0 },
+    chancery: { college: 0, masters: 5, doctoral: 10 },
+  } as Record<Opening['kind'], Record<NonNullable<Candidate['degree']>, number>>,
   /** Credentials that count toward readiness, by opening kind. */
   credentialBonus: {
-    pastor: { partial_cpa: 6, partial_jcl: 4, MBA: 8, JCL: 6 },
-    administrator: { partial_cpa: 6, partial_jcl: 6, JCL: 8 },
+    pastor: { partial_cpa: 8, partial_jcl: 5, partial_doctorate: 4, partial_msw: 4, MBA: 10, JCL: 6, STL: 4, JCD: 6 },
+    administrator: { partial_cpa: 10, partial_jcl: 6, partial_msw: 3, MBA: 10, JCL: 8, JCD: 6 },
     parochial_vicar: {},
-    chancery: { JCL: 20, partial_jcl: 10, JCD: 25, MBA: 10, partial_cpa: 8, STL: 6 },
+    chancery: { JCL: 20, partial_jcl: 10, JCD: 25, MBA: 10, partial_cpa: 8, partial_doctorate: 6, partial_msw: 4, STL: 6, STD: 8 },
   } as Record<Opening['kind'], Record<string, number>>,
+  /** Credentials and degrees together cap here. */
+  credentialCap: 28,
   /** DESIGN 4.3: the indispensable man is passed over for the move he wants. */
   indispensablePenalty: 12,
   affiliationSwing: 12,
@@ -52,18 +69,29 @@ const ROLE_STATS: Record<Opening['kind'], Partial<Record<keyof Candidate['stats'
   chancery: { administration: 0.5, knowledge: 0.3, theology: 0.2 },
 };
 
-export function readiness(c: Candidate, opening: Opening): { value: number; reasons: string[] } {
+/** Years ordained at which experience saturates for this opening, sooner where the need is high. */
+export function yearsToSaturate(kind: Opening['kind'], need: number): number {
+  const over = Math.max(0, Math.min(100, need) - PROMOTION.hasteAbove) / (100 - PROMOTION.hasteAbove);
+  return PROMOTION.experienceYears[kind] * (1 - over * (1 - PROMOTION.hasteFloor));
+}
+
+export function readiness(c: Candidate, opening: Opening, need: number = PROMOTION.hasteAbove): { value: number; reasons: string[] } {
   const reasons: string[] = [];
   let stats = 0;
   for (const [key, w] of Object.entries(ROLE_STATS[opening.kind]) as [keyof Candidate['stats'], number][]) stats += c.stats[key] * w;
-  const experience = Math.min(1, c.yearsOrdained / PROMOTION.experienceYears[opening.kind]) * 100;
+  const years = yearsToSaturate(opening.kind, need);
+  const before = Math.min(years / 2, (c.careerYears ?? 0) * PROMOTION.careerCredit[opening.kind]);
+  const experience = Math.min(1, (c.yearsOrdained + before) / years) * 100;
   let credentials = 0;
   for (const [cred, bonus] of Object.entries(PROMOTION.credentialBonus[opening.kind])) if (c.credentials.includes(cred)) credentials += bonus;
+  const degree = c.degree ? PROMOTION.degreeBonus[opening.kind][c.degree] : 0;
   const results = Math.max(0, c.results);
-  const value = stats * 0.45 + experience * 0.3 + Math.min(20, credentials) + results * 0.15;
+  const value = stats * 0.45 + experience * 0.3 + Math.min(PROMOTION.credentialCap, credentials + degree) + results * 0.15;
   if (stats >= 60) reasons.push('the stats the post needs');
-  if (experience >= 100) reasons.push('the years');
+  if (experience >= 100) reasons.push(before >= 2 && c.yearsOrdained < years ? 'the years, counting the ones before the seminary' : 'the years');
+  else if (before >= 2) reasons.push('a life before the seminary');
   if (credentials >= 8) reasons.push('the credentials');
+  if (degree >= 5) reasons.push('the degree he came in with');
   if (results >= 40) reasons.push('a track record');
   return { value: Math.min(100, value), reasons };
 }
@@ -115,7 +143,7 @@ export function fit(c: Candidate, opening: Opening, bishop: Pick<BishopProfile, 
 }
 
 export function scoreCandidate(c: Candidate, opening: Opening, bishop: Pick<BishopProfile, 'alignment'>, need: number, rng: Rng): ScoreBreakdown {
-  const r = readiness(c, opening);
+  const r = readiness(c, opening, need);
   const t = trust(c);
   const f = fit(c, opening, bishop);
   const fitEffective = f.value * (1 + c.outspokenness / 100);
