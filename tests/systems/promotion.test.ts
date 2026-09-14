@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { createRng } from '@/engine/rng';
-import { decide, fit, maturityModifier, readiness, scoreCandidate, trust } from '@/systems/promotion';
+import { decide, fit, maturityModifier, PROMOTION, readiness, scoreCandidate, trust } from '@/systems/promotion';
 import type { Candidate, Opening } from '@/types';
 
 function candidate(overrides: Partial<Candidate> = {}): Candidate {
@@ -66,7 +66,7 @@ describe('systems/promotion', () => {
     const seasoned = candidate({ yearsOrdained: 12, results: 50, stats: { ...candidate().stats, administration: 70 } });
     expect(readiness(seasoned, pastorOpening).value).toBeGreaterThan(readiness(green, pastorOpening).value + 25);
     const cpa = candidate({ credentials: ['partial_cpa'] });
-    expect(readiness(cpa, pastorOpening).value).toBe(readiness(candidate(), pastorOpening).value + 6);
+    expect(readiness(cpa, pastorOpening).value).toBe(readiness(candidate(), pastorOpening).value + PROMOTION.credentialBonus.pastor.partial_cpa!);
     expect(readiness(cpa, { ...pastorOpening, kind: 'chancery' }).reasons).toContain('the credentials');
   });
 
