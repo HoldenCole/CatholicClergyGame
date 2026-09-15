@@ -6,11 +6,13 @@ import { handoffProject } from '@/systems/projects';
 import { refreshOpenings } from '@/systems/openings';
 import { closeTenure } from '@/systems/tenures';
 import { nextAssignment } from './career';
-import { withChoice } from '@/systems/choice';
+import { assignmentTo, flagshipFor, parishYears, withChoice } from '@/systems/choice';
+import { CAREER } from './career';
 import { ARC } from './parish';
 import { generateSee } from './see';
 import { retire } from './career';
 import { bookLine } from '@/systems/studyWeek';
+import { dropOffices } from '@/systems/offices';
 
 /** How a place is named in prose. */
 export const CITY_WORD: Record<StudyState['city'], string> = { rome: 'Rome', washington: 'Washington', residence: "the bishop's residence", campus: 'the Newman Center', hospital: 'the hospital', seminary: 'the seminary', chancery: 'the chancery', auxiliary: 'the chancery', see: 'the see' };
@@ -33,6 +35,7 @@ export function beginStudy(state: GameState, def: OfferDef, failed: boolean, rng
   if (!c || !program) throw new Error(`offer ${def.id} is not a course of study`);
   let next = closeTenure(state, program.kind === 'post' ? `left for ${program.label.toLowerCase()}` : `sent to ${CITY_WORD[program.city]}`);
   next = next.parish ? handoffProject(next, rng.derive(`handoff:${state.clock.week}`)).state : next;
+  next = dropOffices(next);
   const ch = next.character!;
   const carried = Math.round(ch.reputation.parishioners * ARC.parishionersCarryover);
   next = { ...next, character: { ...ch, reputation: { ...ch.reputation, parishioners: carried } } };
@@ -100,7 +103,13 @@ export function endStudy(state: GameState, def: OfferDef, rng: Rng): GameState {
   next = { ...next, flags, study: null, phase: 'parochial_vicar', beats: next.beats.filter((b) => b.kind !== 'assignment') };
   next = refreshOpenings(next, rng.derive(`openings:home:${next.clock.week}`)).state;
   const home = nextAssignment(next, rng).state;
-  // A degree earned buys a choice; a posting ended, or a washout, takes what the board gives.
-  if (!study.failed && studyProgram(study.program)?.kind === 'study' && home.mode.kind === 'assignment') return withChoice(home, rng.derive('choice'), 'degree', home.mode.assignment);
+  // A degree earned buys a choice among the top of the diocese, whatever the board rolled; the letter behind the
+  // choice is the flagship. A posting ended, or a washout, takes what the board gives.
+  if (!study.failed && studyProgram(study.program)?.kind === 'study' && home.assignment) {
+    const flagship = flagshipFor(home);
+    const experienced = parishYears(home) >= CAREER.minYearsForPastor;
+    const fallback = flagship ? assignmentTo(home, flagship, experienced ? 'pastor' : 'parochial_vicar', ['A Roman degree is meant to be seen']) : home.assignment;
+    return withChoice({ ...home, assignment: fallback, mode: { kind: 'clock' } }, rng.derive('choice'), 'degree', fallback);
+  }
   return home;
 }

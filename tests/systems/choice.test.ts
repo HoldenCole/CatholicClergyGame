@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { parishState } from './week.test';
 import { seminaryState } from '../helpers/fixtures';
 import { createRng } from '@/engine/rng';
-import { buildChoice, chooseAssignment, earnsChoice, withChoice } from '@/systems/choice';
+import { buildChoice, chooseAssignment, earnsChoice, flagshipFor, parishYears, withChoice } from '@/systems/choice';
 import { offerById } from '@/content/offers';
 import { officeDefs, groupTypeDefs } from '@/content/parish';
 import { seminaryActivity } from '@/content/seminary';
@@ -94,23 +94,35 @@ describe("the bishop's choice", () => {
     expect(commitmentAp(chosen)).toBe(officeDefs.find((o) => o.id === 'cathedral_calendar')!.apPerWeek);
   });
 
-  it('a man home from Rome chooses the flagship, a parish with an office, or the seminary', () => {
+  it('a man home from Rome chooses among the top of the diocese only: the flagship, a good parish with an office, the seminary, the bishop\'s desk', () => {
     const base = parishState('rome-home');
     const s: GameState = { ...base, parish: null, assignment: null, phase: 'parochial_vicar', character: { ...base.character!, credentials: [...base.character!.credentials, 'STL'] }, flags: { ...base.flags, ordination_week: base.clock.week - 52 * 6 } };
     const fallback = { parishId: base.world!.parishes[1]!.id, role: 'pastor' as const, startWeek: s.clock.week, letter: 'x', reasons: ['home from Rome'] };
     const choice = buildChoice(s, createRng('r'), 'degree', fallback)!;
-    expect(choice.options.map((o) => o.id).slice(0, 3)).toEqual(['flagship', 'office', 'faculty']);
-    // And then a parish of every kind the diocese has, as pastor.
-    expect(choice.options.filter((o) => o.id.startsWith('kind_')).length).toBeGreaterThanOrEqual(3);
-    const parishOptions = choice.options.filter((o) => !o.posting);
-    expect(new Set(parishOptions.map((o) => o.assignment.parishId)).size).toBe(parishOptions.length);
+    expect(choice.options.map((o) => o.id)).toEqual(['flagship', 'office', 'faculty', 'secretary']);
+    // Six years in a parish before Rome: pastor of the flagship. Never a rural or difficult parish.
+    expect(choice.options[0]!.assignment.role).toBe('pastor');
+    expect(choice.options[0]!.assignment.parishId).toBe(flagshipFor(s)!.id);
+    for (const o of choice.options.filter((x) => !x.posting)) expect(['rural', 'difficult']).not.toContain(base.world!.parishes.find((p) => p.id === o.assignment.parishId)!.kind);
+    expect(choice.options.some((o) => o.id.startsWith('kind_'))).toBe(false);
     expect(choice.options[1]!.office).toBe('worship');
     expect(choice.options[1]!.time).toMatch(/hours a week/);
     const faculty = chooseAssignment(withChoice(s, createRng('r'), 'degree', fallback), 'faculty', createRng('x'));
     expect(faculty.study!.city).toBe('seminary');
     expect(faculty.phase).toBe('study');
     const canonist: GameState = { ...s, character: { ...s.character!, credentials: ['JCL'] } };
-    expect(buildChoice(canonist, createRng('r'), 'degree', fallback)!.options.map((o) => o.office)).toContain('tribunal');
+    const law = buildChoice(canonist, createRng('r'), 'degree', fallback)!;
+    expect(law.options.map((o) => o.office)).toContain('tribunal');
+    expect(law.options.map((o) => o.id)).toContain('dean');
+    // Straight from the seminary to Rome: three years ordained, all of them away, so a vicar of the flagship or the cathedral for a term.
+    const green: GameState = { ...s, flags: { ...s.flags, ordination_week: base.clock.week - 52 * 3 }, tenures: [{ kind: 'away', label: 'A licentiate in theology', place: 'the Gregorian', startWeek: base.clock.week - 52 * 3, endWeek: base.clock.week }] };
+    expect(parishYears(green)).toBe(0);
+    const young = buildChoice(green, createRng('r'), 'degree', fallback)!;
+    expect(young.options.map((o) => o.id)).toEqual(['flagship', 'cathedral', 'office', 'faculty', 'secretary']);
+    expect(young.options[0]!.assignment.role).toBe('parochial_vicar');
+    expect(young.options[0]!.headline).toMatch(/for a term/);
+    expect(young.options[1]!.office).toBe('cathedral_calendar');
+    expect(young.options[2]!.assignment.role).toBe('parochial_vicar');
   });
 
   it('a diocesan office does its weekly work and pays out when the years end', () => {
