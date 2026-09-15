@@ -1,6 +1,7 @@
 import type { Assignment, AssignmentOption, GameState, Opening, Parish, Role } from '@/types';
 import type { Rng } from '@/engine/rng';
-import { letterFor } from '@/engine/career';
+import { CAREER, letterFor } from '@/engine/career';
+import { holdsOrHeld } from './offices';
 import { beginStudy } from '@/engine/study';
 import { officeDef } from '@/content/parish';
 import { offerById } from '@/content/offers';
@@ -43,6 +44,10 @@ function involvesOf(parish: Parish, role: Role): string[] {
   if (parish.needsSpanish) out.push('Spanish is needed');
   if (parish.debt > 0) out.push(`$${parish.debt.toLocaleString()} of debt${role === 'pastor' ? ', yours to carry' : ''}`);
   return out;
+}
+
+export function assignmentTo(state: GameState, parish: Parish, role: Role, reasons: string[]): Assignment {
+  return assignmentFor(state, parish, role, reasons);
 }
 
 function assignmentFor(state: GameState, parish: Parish, role: Role, reasons: string[]): Assignment {
@@ -109,6 +114,18 @@ export const ORDINATION_POSTINGS: { id: string; interest: string; offer: string;
   { id: 'secretary', interest: 'secretary', offer: 'pv_bishops_secretary', needsFlag: 'noticed_by_bishop', headline: 'The bishop\'s secretary', blurb: 'He noticed you in the seminary and you told the chancery you would do it. The calendar, the car, the phone, and the bishop\'s mind from the next chair. No parish; the residence, for three years.', prestige: 'every priest of the diocese learns your name in a month', time: 'the residence, all of it', involves: ['The calendar, and who gets ten minutes', 'The car, and what he says in it', 'A parish when he lets you go, and the chancery\'s regard with it'] },
 ];
 
+/** Years in a parish before the years away: the board counts them toward a pastorate, not the years at a desk in Rome. */
+export function parishYears(state: GameState): number {
+  const ordained = Math.max(0, state.clock.week - Number(state.flags.ordination_week ?? state.clock.week));
+  const away = (state.tenures ?? []).filter((t) => t.kind === 'away').reduce((n, t) => n + Math.max(0, t.endWeek - t.startWeek), 0);
+  return Math.max(0, ordained - away) / 52;
+}
+
+/** The parish the diocese watches: where a man home with a degree is sent when nothing else is chosen. */
+export function flagshipFor(state: GameState): Parish | undefined {
+  return byPrestige((state.world?.parishes ?? []).filter((p) => !p.cathedral))[0];
+}
+
 /** Whether this occasion earns the man a choice at all. */
 export function earnsChoice(state: GameState, occasion: Occasion): boolean {
   if (!state.world || !state.character) return false;
@@ -153,29 +170,38 @@ export function buildChoice(state: GameState, rng: Rng, occasion: Occasion, fall
   }
 
   if (occasion === 'degree') {
+    // Home from Rome or Washington: the top of the diocese, and nothing below it. A man with the years is made
+    // pastor of the parish the diocese watches; a man sent straight from the seminary is its vicar for a term, or the
+    // cathedral's; either may take a good parish with a chancery office, the seminary's chair with a licentiate in
+    // theology, the tribunal with one in canon law, or the bishop's own desk. Requested in playtesting.
     const stl = c.credentials.includes('STL');
     const jcl = c.credentials.includes('JCL');
-    const top = byPrestige(parishes.filter((p) => !p.cathedral))[0];
-    if (top) options.push(option(state, 'flagship', `Pastor of ${top.name}`, 'The parish the diocese watches. Its pastor is being moved to make room, and everyone will know why.', top, 'pastor', ['A Roman degree is meant to be seen', 'The bishop wants the diocese to know what it has']));
-    const middle = byPrestige(parishes.filter((p) => !p.cathedral && p.id !== top?.id)).slice(2, 6);
-    const mid = middle.length ? rng.pick(middle) : undefined;
-    const office = jcl ? 'tribunal' : 'worship';
-    if (mid) options.push(option(state, 'office', `Pastor of ${mid.name}, and ${officeDef(office)!.label.toLowerCase()}`, `${officeDef(office)!.blurb} A smaller parish, so the office has your afternoons.`, mid, 'pastor', ['The degree is for the diocese\'s use, not the parish\'s', 'The chancery has a chair with your name on it'], office));
-    if (stl && offerById('pv_seminary_faculty')) options.push({ id: 'faculty', headline: 'A chair at the seminary', blurb: 'Two courses a semester, the seminar, the formation reports. No parish; every future priest of the diocese through your classroom.', assignment: fallback, prestige: 'the presbyterate of the next forty years', time: 'the seminary, all of it', involves: ['The faculty wing, not a rectory', 'Forty men a year who decide what they think of you from the way you walk in', 'The rector, who asked for you'], posting: 'pv_seminary_faculty' });
-    else if (jcl) {
-      const rural = byPrestige(parishes.filter((p) => p.kind === 'rural' && p.id !== top?.id && p.id !== mid?.id)).reverse()[0];
-      if (rural) options.push(option(state, 'dean', `Pastor of ${rural.name}, and dean`, 'A quiet parish and the deanery: the pastors of a dozen parishes look to you first, and the chancery hears what you tell it.', rural, 'pastor', ['The vicar for clergy wants a canonist in that deanery', 'A dean is the chancery\'s face at the table'], 'dean'));
+    const experienced = parishYears(state) >= CAREER.minYearsForPastor;
+    const ranked = byPrestige(parishes.filter((p) => !p.cathedral));
+    const top = ranked[0];
+    const cathedral = parishes.find((p) => p.cathedral);
+    if (top) {
+      if (experienced) options.push(option(state, 'flagship', `Pastor of ${top.name}`, 'The parish the diocese watches. Its pastor is being moved to make room, and everyone will know why.', top, 'pastor', ['A Roman degree is meant to be seen', 'The bishop wants the diocese to know what it has']));
+      else options.push(option(state, 'flagship', `Parochial vicar of ${top.name}, for a term`, 'The parish the diocese watches, and a pastor who has been told to show you everything. A vicar for a few years, because the canons want the years; a pastorate after, because the degree wants it.', top, 'parochial_vicar', ['A Roman degree is meant to be seen', 'The years for a pastorate are not there yet; the board will not wait long']));
     }
-    // A man home with a degree may still choose an ordinary parish of any kind, as pastor.
-    const taken = new Set(options.map((o) => o.assignment.parishId));
-    for (const parish of bestOfEachKind(state, parishes, taken)) options.push(kindOption(state, parish, 'pastor', taken));
+    if (cathedral && !experienced) options.push(option(state, 'cathedral', `Parochial vicar at ${cathedral.name}, and the bishop's Masses`, 'The cathedral: the bishop sees you every month, the chancery is across the street, and the rector runs a tight house. Master of ceremonies for the pontifical Masses on top of the parish.', cathedral, 'parochial_vicar', ['The rector asked for the man home from Rome', 'The bishop wants him where the diocese can see him'], 'cathedral_calendar'));
+    const goodOnes = ranked.slice(1, 5).filter((p) => p.kind !== 'rural' && p.kind !== 'difficult' && p.id !== top?.id);
+    const good = goodOnes.length ? rng.pick(goodOnes) : undefined;
+    const office = jcl ? 'tribunal' : 'worship';
+    if (good && !holdsOrHeld(state, office)) options.push(option(state, 'office', `${experienced ? 'Pastor' : 'Parochial vicar'} of ${good.name}, and ${officeDef(office)!.label.toLowerCase()}`, `${officeDef(office)!.blurb} A good parish, so the office has your afternoons.`, good, experienced ? 'pastor' : 'parochial_vicar', ['The degree is for the diocese\'s use, not the parish\'s', 'The chancery has a chair with your name on it'], office));
+    if (stl && offerById('pv_seminary_faculty')) options.push({ id: 'faculty', headline: 'A chair at the seminary', blurb: 'Two courses a semester, the seminar, the formation reports. No parish; every future priest of the diocese through your classroom.', assignment: fallback, prestige: 'the presbyterate of the next forty years', time: 'the seminary, all of it', involves: ['The faculty wing, not a rectory', 'Forty men a year who decide what they think of you from the way you walk in', 'The rector, who asked for you'], posting: 'pv_seminary_faculty' });
+    if (offerById('pv_bishops_secretary') && !state.flags['office:bishops_secretary'] && !state.flags['held:office:bishops_secretary']) options.push({ id: 'secretary', headline: 'The bishop\'s secretary', blurb: 'He wants the man with the degree at the next desk: the calendar, the car, the phone, and his mind from the next chair. No parish; the residence, for three years, and the chancery\'s regard after.', assignment: fallback, prestige: 'every priest of the diocese learns your name in a month', time: 'the residence, all of it', involves: ['The calendar, and who gets ten minutes', 'The car, and what he says in it', 'A parish when he lets you go, and the chancery\'s regard with it'], posting: 'pv_bishops_secretary' });
+    if (jcl && experienced) {
+      const deanParish = ranked.slice(1, 8).find((p) => p.kind !== 'rural' && p.kind !== 'difficult' && !options.some((o) => o.assignment.parishId === p.id));
+      if (deanParish && !holdsOrHeld(state, 'dean')) options.push(option(state, 'dean', `Pastor of ${deanParish.name}, and dean`, 'A good parish and the deanery: the pastors of a dozen parishes look to you first, and the chancery hears what you tell it.', deanParish, 'pastor', ['The vicar for clergy wants a canonist in that deanery', 'A dean is the chancery\'s face at the table'], 'dean'));
+    }
   }
 
   if (occasion === 'board') {
     if (here) {
       options.push(option(state, 'won', `${fallback.role === 'pastor' ? 'Pastor' : fallback.role === 'administrator' ? 'Administrator' : 'Parochial vicar'} of ${here.name}`, 'What the board decided, on its own.', here, fallback.role, fallback.reasons));
-      const office = fallback.role === 'pastor' ? 'vocations' : 'tribunal';
-      options.push(option(state, 'won_office', `${fallback.role === 'pastor' ? 'Pastor' : 'Administrator'} of ${here.name}, and ${officeDef(office)!.label.toLowerCase()}`, `${officeDef(office)!.blurb} The bishop asks because the chancery thinks well of you.`, here, fallback.role, [...fallback.reasons, 'The chancery asked for more of you'], office));
+      const office = ['vocations', 'tribunal', 'worship'].filter((o) => !holdsOrHeld(state, o))[fallback.role === 'pastor' ? 0 : 1] ?? ['vocations', 'tribunal', 'worship'].find((o) => !holdsOrHeld(state, o));
+      if (office) options.push(option(state, 'won_office', `${fallback.role === 'pastor' ? 'Pastor' : 'Administrator'} of ${here.name}, and ${officeDef(office)!.label.toLowerCase()}`, `${officeDef(office)!.blurb} The bishop asks because the chancery thinks well of you.`, here, fallback.role, [...fallback.reasons, 'The chancery asked for more of you'], office));
     }
     const taken = new Set(options.map((o) => o.assignment.parishId));
     if (fallback.role !== 'parochial_vicar') {
@@ -213,7 +239,7 @@ export function chooseAssignment(state: GameState, id: string, rng: Rng): GameSt
     next = { ...next, mode: { kind: 'clock' } };
     return beginStudy({ ...next, assignment: null }, def, false, rng);
   }
-  if (opt.office) {
+  if (opt.office && !holdsOrHeld(next, opt.office)) {
     const o = officeDef(opt.office)!;
     next = { ...next, commitments: [...next.commitments, { offerId: `office:${o.id}`, label: o.label, startWeek: state.clock.week, endWeek: state.clock.week + o.weeks, apPerWeek: o.apPerWeek, failed: false }], flags: { ...next.flags, [o.flag]: true } };
   }

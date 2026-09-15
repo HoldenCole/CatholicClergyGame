@@ -12,6 +12,7 @@ import { deliverLetter, yearInReview } from '@/systems/review';
 import { closeTenure } from '@/systems/tenures';
 import { seeYear } from './see';
 import { withChoice } from '@/systems/choice';
+import { dropOffices } from '@/systems/offices';
 
 /** Invented. DESIGN 7.3: retirement letters go in at 75 and are often not accepted for years. */
 export const CAREER = {
@@ -205,6 +206,8 @@ export function nextAssignment(state: GameState, rng: Rng): { state: GameState; 
     }
     next = note(next, 'assignment', `Sent as parochial vicar to ${parish.name}, ${parish.place}.`);
   }
+  // A man moved to another parish leaves his diocesan offices behind; renewed where he is, he keeps them.
+  if (assignment.parishId !== state.parish?.parishId) next = dropOffices(next);
   const moved: GameState = { ...next, assignment, parish: null, founding: null, project: null, projects: [], mode: { kind: 'assignment', assignment }, flags: { ...next.flags, transfers: Number(next.flags.transfers ?? 0) + 1 } };
   // A man the chancery rates is asked which he would rather.
   return { state: won ? withChoice(moved, rng.derive('choice'), 'board', assignment) : moved, decisions };
@@ -283,6 +286,7 @@ export function directedTransfer(state: GameState, rng: Rng, kind: string, role:
   const parish = others.find((p) => p.kind === kind) ?? rng.derive(`directed:${next.clock.week}`).pick(others);
   const opening: Opening = { id: `directed_${next.clock.week}`, kind: role === 'pastor' ? 'pastor' : role === 'administrator' ? 'administrator' : 'parochial_vicar', parishId: parish.id, urgency: 70, needsSpanish: parish.needsSpanish, needsAdmin: false, alignment: parish.alignment, week: next.clock.week, label: `${parish.name}, ${parish.place}` };
   const assignment: Assignment = { parishId: parish.id, role, startWeek: next.clock.week, letter: letterFor(next, opening, role), reasons: ['You said yes when the vicar for clergy asked', 'Nobody else had'] };
+  next = dropOffices(next);
   next = note(next, 'assignment', `Sent as ${role.replace('_', ' ')} to ${parish.name}, ${parish.place}, at the bishop's asking.`);
   const flags: GameState['flags'] = { ...next.flags, transfers: Number(next.flags.transfers ?? 0) + 1, hard_parish_honored: true };
   delete flags.transfer_pending;

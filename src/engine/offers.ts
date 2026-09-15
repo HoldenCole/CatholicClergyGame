@@ -1,6 +1,7 @@
 import type { ActiveOffer, Commitment, GameState, OfferDef, OfferRecord } from '@/types';
 import { evaluateAll, evaluateCondition } from './conditions';
 import { officeDef } from '@/content/parish';
+import { officeFlagOf, releaseOfficeFlag } from '@/systems/offices';
 import { applyEffects } from './effects';
 import type { Rng } from './rng';
 import { resolveSelector, selectorsIn } from './selectors';
@@ -76,6 +77,8 @@ export function offersWeek(state: GameState, rng: Rng, defs: OfferDef[], lookup:
   }
   for (const c of next.commitments.filter((c) => c.endWeek <= week)) {
     next = { ...next, commitments: next.commitments.filter((x) => x !== c) };
+    const officeFlag = officeFlagOf(c.offerId);
+    if (officeFlag) next = releaseOfficeFlag(next, officeFlag);
     if (c.offerId.startsWith('office:')) {
       // A diocesan office held alongside the parish (parish/offices.json) ends with its own payout.
       const office = officeDef(c.offerId.slice(7));
