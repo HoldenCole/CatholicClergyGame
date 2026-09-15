@@ -101,7 +101,7 @@ export interface GameStore {
   chooseDiocese(presetId: string | 'surprise'): void;
   /** Character creation is done; generate the run and enter seminary. */
   startGame(answers: CreationAnswers): void;
-  acceptAssignment(): void;
+  acceptAssignment(keepOffice?: boolean): void;
   /** The bishop laid out a choice; take one. */
   chooseAssignment(id: string): void;
   setObligation(key: ObligationKey, quality: Quality): void;
@@ -419,8 +419,8 @@ export const useGameStore = create<GameStore>()((set, get) => ({
   ordain() {
     update(set, get, (game, r) => doOrdain(game, r));
   },
-  acceptAssignment() {
-    update(set, get, (game, r) => startAssignment(doAcceptAssignment(game), r));
+  acceptAssignment(keepOffice = true) {
+    update(set, get, (game, r) => startAssignment(doAcceptAssignment(game, keepOffice), r));
   },
   chooseAssignment(id) {
     update(set, get, (game, r) => doChooseAssignment(game, id, r.derive(`choose:${game.clock.week}`)));

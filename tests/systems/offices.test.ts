@@ -6,7 +6,8 @@ import { acceptOffer, offersWeek } from '@/engine/offers';
 import { offerById, offersForPhase } from '@/content/offers';
 import { officeDefs } from '@/content/parish';
 import { buildChoice, chooseAssignment, withChoice } from '@/systems/choice';
-import { dropOffices, holdsOrHeld, officeFlagOf } from '@/systems/offices';
+import { dropOffices, holdsOrHeld, isMoveTo, officeFlagOf, officesHeld } from '@/systems/offices';
+import { acceptAssignment } from '@/engine/seminary';
 import { studyWeekHook } from '@/engine/weekHook';
 import { eventById, eventsForPhase } from '@/content';
 import { acceptAndGo } from '../helpers/appointment';
@@ -19,20 +20,39 @@ function withOffice(seed: string, id = 'vocations'): GameState {
 }
 
 describe('diocesan offices are one man\'s for a term, and go with the desk, not the man', () => {
-  it('a move to another parish drops the office; renewal where he is keeps it', () => {
+  it('moved within the diocese, he is asked: keep the office alongside the new parish, or hand it on', () => {
     const s = withOffice('drop');
     expect(holdsOrHeld(s, 'vocations')).toBe(true);
+    // The move itself takes nothing: the letter arrives with the office still his.
     const moved = directedTransfer(s, createRng('t'), 'difficult', 'parochial_vicar').state;
-    expect(moved.commitments.some((c) => c.offerId === 'office:vocations')).toBe(false);
-    expect(moved.flags['office:vocations']).toBeUndefined();
-    expect(moved.flags['held:office:vocations']).toBe(true);
-    expect(moved.career.some((c) => /vocations office went to another man/.test(c.text))).toBe(true);
-    // Still remembered as held: the board's office alongside a won post is a different one.
-    expect(holdsOrHeld(moved, 'vocations')).toBe(true);
+    expect(moved.mode.kind).toBe('assignment');
+    expect(moved.commitments.some((c) => c.offerId === 'office:vocations')).toBe(true);
+    expect(moved.flags['office:vocations']).toBe(true);
+    expect(officesHeld(moved)).toEqual(['The vocations office']);
+    // Keep it: the office rides along, and the record says so.
+    const kept = acceptAssignment(moved, true);
+    expect(kept.mode.kind).toBe('clock');
+    expect(kept.commitments.some((c) => c.offerId === 'office:vocations')).toBe(true);
+    expect(kept.flags['office:vocations']).toBe(true);
+    expect(kept.career.at(-1)!.text).toMatch(/Kept the vocations office alongside the new parish/);
+    // Hand it on: released, remembered as held, never stacked or offered again.
+    const handed = acceptAssignment(moved, false);
+    expect(handed.commitments.some((c) => c.offerId === 'office:vocations')).toBe(false);
+    expect(handed.flags['office:vocations']).toBeUndefined();
+    expect(handed.flags['held:office:vocations']).toBe(true);
+    expect(handed.career.some((c) => /handed on when you were moved/.test(c.text))).toBe(true);
+    expect(holdsOrHeld(handed, 'vocations')).toBe(true);
     const here = s.world!.parishes.find((p) => p.id === s.parish!.parishId)!;
     const fallback = { parishId: here.id, role: 'pastor' as const, startWeek: s.clock.week, letter: 'x', reasons: ['x'] };
-    const board = buildChoice({ ...moved, parish: s.parish, assignment: { ...s.assignment!, role: 'pastor' }, character: { ...moved.character!, reputation: { ...moved.character!.reputation, chancery: 80 } } }, createRng('c'), 'board', fallback)!;
+    const board = buildChoice({ ...handed, parish: s.parish, assignment: { ...s.assignment!, role: 'pastor' }, character: { ...handed.character!, reputation: { ...handed.character!.reputation, chancery: 80 } } }, createRng('c'), 'board', fallback)!;
     expect(board.options.find((o) => o.id === 'won_office')!.office).not.toBe('vocations');
+    // Staying where he is, nobody asks and nothing changes.
+    expect(isMoveTo(moved, moved.assignment!.parishId)).toBe(true);
+    const stay: GameState = { ...s, parish: null, tenures: [{ kind: 'parish', label: 'Parochial vicar', place: 'here', parishId: s.parish!.parishId, startWeek: 0, endWeek: s.clock.week }], mode: { kind: 'assignment', assignment: { ...s.assignment!, startWeek: s.clock.week } } };
+    expect(isMoveTo(stay, s.parish!.parishId)).toBe(false);
+    const renewed = acceptAssignment(stay, false);
+    expect(renewed.commitments.some((c) => c.offerId === 'office:vocations')).toBe(true);
+    expect(renewed.career.length).toBe(s.career.length);
   });
 
   it('choosing the office twice does not stack it, and a term that runs out releases the flag', () => {
@@ -67,7 +87,8 @@ describe('diocesan offices are one man\'s for a term, and go with the desk, not 
     const moved = dropOffices(taken);
     expect(moved.commitments.some((c) => c.offerId === def.id)).toBe(false);
     expect(moved.flags['held:office:vocations']).toBe(true);
-    // Going away for a degree drops it too.
+    expect(moved.career.at(-1)!.text).toMatch(/went to another man when you left/);
+    // Going away for a degree takes it, no question asked.
     const rome: GameState = { ...taken, character: { ...taken.character!, stats: { ...taken.character!.stats, theology: 75, knowledge: 60 }, reputation: { ...taken.character!.reputation, chancery: 40 } }, flags: { ...taken.flags, rome_track: true }, offers: [{ offerId: 'pv_rome_study', arrivedWeek: taken.clock.week, expiresWeek: taken.clock.week + 6, bindings: {} }] };
     const away = acceptAndGo(rome, offerById('pv_rome_study')!, createRng('go')).state;
     expect(away.commitments).toEqual([]);

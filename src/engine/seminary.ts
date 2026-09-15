@@ -1,3 +1,4 @@
+import { handOnOffices, isMoveTo, keepOffices, officesHeld } from '@/systems/offices';
 import type { Beat, GameEvent, GameState, Pillar, SeminaryState, SummerAssignment } from '@/types';
 import { PILLARS } from '@/types';
 import { evaluateAll } from './conditions';
@@ -295,10 +296,18 @@ export function ordain(state: GameState, rng: Rng): GameState {
 }
 
 /** The player has read the letter of assignment. */
-export function acceptAssignment(state: GameState): GameState {
+/**
+ * The letter is answered. A man moved within the diocese who holds a chancery office is asked whether he keeps
+ * it alongside the new parish or hands it on; a man staying put, or with no office, is not asked.
+ */
+export function acceptAssignment(state: GameState, keepOffice = true): GameState {
   if (state.mode.kind !== 'assignment') return state;
-  if (!state.assignment || state.assignment.parishId !== state.mode.assignment.parishId || state.assignment.role !== state.mode.assignment.role) return { ...state, assignment: state.mode.assignment, mode: { kind: 'clock' } };
-  return { ...state, mode: { kind: 'clock' } };
+  const letter = state.mode.assignment;
+  const moving = isMoveTo(state, letter.parishId);
+  let next: GameState = state;
+  if (moving && officesHeld(state).length > 0) next = keepOffice ? keepOffices(next) : handOnOffices(next);
+  if (!next.assignment || next.assignment.parishId !== letter.parishId || next.assignment.role !== letter.role) return { ...next, assignment: letter, mode: { kind: 'clock' } };
+  return { ...next, mode: { kind: 'clock' } };
 }
 
 /** Calendar year of the current week. */
