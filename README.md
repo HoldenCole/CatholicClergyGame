@@ -4,18 +4,30 @@ A single-player, text-driven career and life simulation of a Catholic
 diocesan priest. `DESIGN.md` is the design; `CLAUDE.md` governs how the code
 is written.
 
-## Playing it
+## Play it
 
-- **Playtest build:** https://claude.ai/code/artifact/8d6d0e01-4bf5-4e5e-97e4-d1d3108fed36
-  A self-contained page of the current build. Saves autosave to the browser
-  and can be downloaded, copied as JSON, or loaded from a file.
-- **GitHub Pages:** https://holdencole.github.io/CatholicClergyGame/
-  Served by `.github/workflows/pages.yml` once Pages is switched on under
-  Settings → Pages with "GitHub Actions" as the source (a one-time click the
-  workflow cannot do for itself). It redeploys on every push to `main`, or
-  by hand from the Actions tab for any branch.
-- **Locally:** `npm run playtest` writes `dist-playtest/vocation.html`, one
-  file that opens anywhere.
+**https://holdencole.github.io/CatholicClergyGame/**
+
+That link is the game. Bookmark it; it is the same address after every
+update, and the game keeps your saves in the browser you play it in.
+
+- **Saves.** The run autosaves as the weeks pass, so closing the tab loses
+  nothing: the title screen offers *Continue*. The *Saves & settings* sheet
+  keeps a shelf of up to eight saves you name yourself, and can save over or
+  delete any of them. Beginning a new man sets the last run aside as a named
+  save first, so starting over never quietly ends the game you were playing.
+  All of it lives in that browser on that device, so clearing the browser's
+  data clears it, and a save made on the phone is not on the laptop.
+- **Save files.** The Save sheet also downloads the run as plain JSON and
+  loads one back, which is how a save moves between browsers or is kept for
+  good. Worth doing before anything you would hate to lose.
+- **Elsewhere.** A self-contained copy of the build is published as a
+  claude.ai artifact for playtesting, and `npm run playtest` writes the same
+  thing to `dist-playtest/vocation.html`, one file that opens anywhere.
+  Those are separate pages, so their saves are their own.
+
+The Pages site is built by `.github/workflows/pages.yml` on every push to
+`main`, and can be deployed by hand from the Actions tab for any branch.
 
 ## Running it
 
@@ -27,7 +39,7 @@ npm run check    # tsc --noEmit + eslint
 npm run build    # production build
 ```
 
-No backend. Saves are plain JSON, autosaved to the browser and exportable.
+No backend. Saves are plain JSON, kept in the browser and exportable to a file.
 
 ## Where things live
 

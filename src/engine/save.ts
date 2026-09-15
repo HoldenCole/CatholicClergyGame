@@ -49,10 +49,11 @@ function giveEveryDioceseItsHouses(state: GameState): void {
 
 /**
  * JSON with keys in sorted order at every level, so two saves of the same
- * state are byte-identical regardless of how the objects were built.
+ * state are byte-identical regardless of how the objects were built. Indented
+ * for a file a person may open; compact for the browser's own shelf.
  */
-export function stableStringify(value: unknown): string {
-  return JSON.stringify(sortKeys(value), null, 2);
+export function stableStringify(value: unknown, pretty = true): string {
+  return pretty ? JSON.stringify(sortKeys(value), null, 2) : JSON.stringify(sortKeys(value));
 }
 
 function sortKeys(value: unknown): unknown {

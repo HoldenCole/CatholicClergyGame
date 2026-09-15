@@ -16,6 +16,7 @@ import { noDraw, noHook, runClock, type StopReason, type WeekDraw, type WeekHook
 import { newGame as buildNewGame, type NewGameOptions } from './game';
 import type { Rng } from './rng';
 import { buildSave, deserialize, rngFromSave, SaveError, serialize } from './save';
+import { deleteSlot as removeSlot, listSlots, loadSlot as readSlotFile, preserveAutosave, SLOTS, SlotError, writeSlot, type SlotMeta } from './slots';
 import { eventById, eventsForPhase } from '@/content';
 import { offerById, offersForPhase } from '@/content/offers';
 import { acceptOffer as doAccept, declineOffer as doDecline, deferOffer as doDefer } from './offers';
@@ -96,6 +97,20 @@ export interface GameStore {
   exportSave(): string;
   importSave(json: string): void;
   clearError(): void;
+
+  /** The saved games in this browser, newest first. */
+  slots: SlotMeta[];
+  /** Which slot this run was last written to, for the "saved" mark. */
+  slotId: string | null;
+  /** Read the shelf again (after another tab, or on the title screen). */
+  refreshSlots(): void;
+  /** Write the run to a slot: `id` overwrites, otherwise a new one is taken. */
+  saveToSlot(opts?: { id?: string; name?: string }): void;
+  /** Continue a saved game. */
+  loadSlot(id: string): void;
+  deleteSlot(id: string): void;
+  /** Write the autosave now, whatever the throttle says. Called when the page is hidden or closed. */
+  autosaveNow(): void;
 
   /** Pick one of the rolled dioceses, or 'surprise' for a blind roll with a small bonus. DESIGN §3.1a */
   chooseDiocese(presetId: string | 'surprise'): void;
@@ -230,8 +245,35 @@ function update(set: (partial: Partial<GameStore>) => void, get: () => GameStore
   try {
     set({ game: fn(game, rng), error: null });
     get().requestSkins();
+    autosave(get, set);
   } catch (err) {
     set({ error: err instanceof Error ? err.message : String(err) });
+  }
+}
+
+let lastAutosave = 0;
+
+/** Tests reset the autosave throttle. */
+export function resetAutosaveClock(): void {
+  lastAutosave = 0;
+}
+
+/**
+ * The autosave: the run as it stands, written to its own slot, so closing the
+ * page loses nothing. Throttled while the clock runs; silent when the browser
+ * refuses, because a failed save must never interrupt a week.
+ */
+function autosave(get: () => GameStore, set: (partial: Partial<GameStore>) => void, force = false): void {
+  const { game, previous, prose } = get();
+  if (!game || !rng || game.mode.kind === 'creation') return;
+  const now = Date.now();
+  if (!force && now - lastAutosave < SLOTS.autosaveMs) return;
+  lastAutosave = now;
+  try {
+    writeSlot(buildSave(game, rng, previous, prose), { auto: true });
+    set({ slots: listSlots() });
+  } catch {
+    /* no room, or no storage: the shelf and the file export are still there */
   }
 }
 
@@ -250,6 +292,8 @@ export const useGameStore = create<GameStore>()((set, get) => ({
   lastOfferOutcome: null,
   lastTalk: null,
   lastFurnishLine: null,
+  slots: typeof window === 'undefined' ? [] : listSlots(),
+  slotId: null,
   llm: typeof window === 'undefined' ? DEFAULT_LLM : loadLlmSettings(),
 
   setLlm(patch) {
@@ -274,11 +318,13 @@ export const useGameStore = create<GameStore>()((set, get) => ({
   },
 
   newGame(options) {
+    // The last run's autosave is about to be this one's: keep it, if it was another man.
+    preserveAutosave(options.seed);
     const built = buildNewGame(options);
     rng = built.rng;
     const year = fromDayNumber(built.state.clock.startDay).year;
     const candidates = generateCandidates(rng.derive('world'), year);
-    set({ game: { ...built.state, candidates }, previous: null, prose: {}, lastStop: null, running: false, error: null, lastOfferOutcome: null });
+    set({ game: { ...built.state, candidates }, previous: null, prose: {}, lastStop: null, running: false, error: null, lastOfferOutcome: null, slotId: null, slots: listSlots() });
   },
 
   chooseDiocese(presetId) {
@@ -320,6 +366,8 @@ export const useGameStore = create<GameStore>()((set, get) => ({
       running: result.stop.kind === 'cap' ? get().running : false,
     });
     if (result.state.pending.length || result.stop.kind === 'mode') get().requestSkins();
+    // The clock is the main way a week passes, and it does not go through update().
+    autosave(get, set);
     return result.stop;
   },
 
@@ -373,10 +421,58 @@ export const useGameStore = create<GameStore>()((set, get) => ({
         lastStop: null,
         running: false,
         error: null,
+        slotId: null,
       });
     } catch (err) {
       set({ error: err instanceof Error ? err.message : String(err) });
     }
+  },
+
+  refreshSlots() {
+    set({ slots: listSlots() });
+  },
+
+  saveToSlot(opts = {}) {
+    const { game, previous, prose } = get();
+    if (!game || !rng) {
+      set({ error: 'no game to save' });
+      return;
+    }
+    try {
+      const meta = writeSlot(buildSave(game, rng, previous, prose), opts);
+      set({ slots: listSlots(), slotId: meta.id, error: null });
+    } catch (err) {
+      set({ error: err instanceof SlotError ? err.message : err instanceof Error ? err.message : String(err) });
+    }
+  },
+
+  loadSlot(id) {
+    try {
+      const save = readSlotFile(id);
+      rng = rngFromSave(save);
+      lastAutosave = Date.now();
+      set({
+        game: { ...save.state, speed: 'PAUSED' },
+        previous: save.previous,
+        prose: save.prose,
+        lastStop: null,
+        running: false,
+        error: null,
+        slotId: id === SLOTS.autoId ? null : id,
+        slots: listSlots(),
+      });
+    } catch (err) {
+      set({ error: err instanceof Error ? err.message : String(err) });
+    }
+  },
+
+  deleteSlot(id) {
+    removeSlot(id);
+    set({ slots: listSlots(), ...(get().slotId === id ? { slotId: null } : {}) });
+  },
+
+  autosaveNow() {
+    autosave(get, set, true);
   },
 
   clearError() {
