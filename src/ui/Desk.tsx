@@ -35,7 +35,7 @@ const LABEL: Record<Sheet, string> = {
   letters: 'Letters',
   record: 'Record',
   formation: 'Formation',
-  settings: 'Settings',
+  settings: 'Saves & settings',
   furnish: 'Furnish',
 };
 
@@ -88,9 +88,9 @@ export default function Desk() {
         {open === 'formation' && <FormationPanel />}
         {open === 'settings' && (
           <>
+            <SavePanel />
             <SettingsPanel />
             <InterruptSettings />
-            <SavePanel />
           </>
         )}
         {open === 'furnish' && furnishing && <FurnishPanel place={furnishing} />}

@@ -34,6 +34,22 @@ export default function App() {
     root.classList.toggle('reduce-motion', prefs.reducedMotion);
   }, [prefs.fontScale, prefs.reducedMotion]);
 
+  // Closing the tab, or hiding it on a phone, writes the autosave: the run is where he left it.
+  useEffect(() => {
+    const write = () => useGameStore.getState().autosaveNow();
+    const onHidden = () => {
+      if (document.visibilityState === 'hidden') write();
+    };
+    window.addEventListener('pagehide', write);
+    window.addEventListener('beforeunload', write);
+    document.addEventListener('visibilitychange', onHidden);
+    return () => {
+      window.removeEventListener('pagehide', write);
+      window.removeEventListener('beforeunload', write);
+      document.removeEventListener('visibilitychange', onHidden);
+    };
+  }, []);
+
   // A letter arriving opens the letters sheet; nothing else moves the desk on its own.
   useEffect(() => {
     if (lastStop?.kind === 'offer') openSheet('letters');
