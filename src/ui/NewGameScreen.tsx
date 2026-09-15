@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useGameStore } from '@/engine/store';
 import { DEFAULT_START_YEAR } from '@/engine/game';
 import { slotsAvailable, SLOTS } from '@/engine/slots';
+import RepoSavePanel from './RepoSavePanel';
 
 /** "3 days ago", for the shelf. */
 function ago(iso: string): string {
@@ -36,7 +37,8 @@ export default function NewGameScreen() {
 
   const auto = slots.find((s) => s.id === SLOTS.autoId);
   const kept = slots.filter((s) => s.id !== SLOTS.autoId);
-  const showNew = starting || slots.length === 0;
+  const repoSaves = useGameStore((s) => s.repoSaves);
+  const showNew = starting || (slots.length === 0 && repoSaves.length === 0);
 
   const onFile = async (file: File | undefined) => {
     if (!file) return;
@@ -98,6 +100,10 @@ export default function NewGameScreen() {
         ) : (
           <button className="pbtn self-start px-4 py-1.5" onClick={() => setStarting(true)}>Begin a new man</button>
         )}
+
+        <div className="border-t rule pt-3">
+          <RepoSavePanel mode="title" />
+        </div>
 
         <div className="border-t rule pt-3">
           <button className="pbtn text-xs" onClick={() => fileRef.current?.click()}>Load a save file</button>
