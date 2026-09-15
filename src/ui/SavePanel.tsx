@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react';
 import { useGameStore } from '@/engine/store';
 import { describeSave, SLOTS, slotsAvailable } from '@/engine/slots';
+import RepoSavePanel from './RepoSavePanel';
 import Sheet from './Sheet';
 
 function ago(iso: string): string {
@@ -124,6 +125,8 @@ export default function SavePanel() {
       ) : (
         <p className="ink-muted text-xs">This browser will not keep saves. Download the file and load it again when you come back.</p>
       )}
+
+      <RepoSavePanel mode="sheet" />
 
       <div className="mt-3 flex flex-wrap gap-2 border-t rule pt-3">
         <button className="pbtn" onClick={() => void download()}>Download</button>

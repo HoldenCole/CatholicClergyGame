@@ -36,7 +36,10 @@ export default function App() {
 
   // Closing the tab, or hiding it on a phone, writes the autosave: the run is where he left it.
   useEffect(() => {
-    const write = () => useGameStore.getState().autosaveNow();
+    const write = () => {
+      useGameStore.getState().autosaveNow();
+      useGameStore.getState().pushOnLeaving();
+    };
     const onHidden = () => {
       if (document.visibilityState === 'hidden') write();
     };

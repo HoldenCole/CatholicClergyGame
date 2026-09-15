@@ -16,7 +16,8 @@ import { noDraw, noHook, runClock, type StopReason, type WeekDraw, type WeekHook
 import { newGame as buildNewGame, type NewGameOptions } from './game';
 import type { Rng } from './rng';
 import { buildSave, deserialize, rngFromSave, SaveError, serialize } from './save';
-import { deleteSlot as removeSlot, listSlots, loadSlot as readSlotFile, preserveAutosave, SLOTS, SlotError, writeSlot, type SlotMeta } from './slots';
+import { deleteSlot as removeSlot, describeSave, listSlots, loadSlot as readSlotFile, preserveAutosave, SLOTS, SlotError, writeSlot, type SlotMeta } from './slots';
+import { deleteRemote, listRemote, loadGithub, readRemote, saveGithub, writeRemote, type GithubConfig, type RemoteSave } from './github';
 import { eventById, eventsForPhase } from '@/content';
 import { offerById, offersForPhase } from '@/content/offers';
 import { acceptOffer as doAccept, declineOffer as doDecline, deferOffer as doDefer } from './offers';
@@ -111,6 +112,26 @@ export interface GameStore {
   deleteSlot(id: string): void;
   /** Write the autosave now, whatever the throttle says. Called when the page is hidden or closed. */
   autosaveNow(): void;
+
+  /** The repository this browser saves to, so a run crosses machines. Null until set up. */
+  github: GithubConfig | null;
+  /** Saves on the repository's branch, as last read. */
+  repoSaves: RemoteSave[];
+  repoBusy: boolean;
+  repoError: string | null;
+  repoNote: string | null;
+  setGithub(cfg: GithubConfig | null): void;
+  refreshRepoSaves(): Promise<void>;
+  /** Commit this run to the repository. */
+  pushToRepo(name?: string): Promise<void>;
+  /** Take a run off the repository and play it here. */
+  pullFromRepo(path: string): Promise<void>;
+  /**
+   * The page is closing: commit the run, if the repository is linked, the week has
+   * moved since the last push, and a couple of minutes have passed. Quiet by design.
+   */
+  pushOnLeaving(): void;
+  deleteRepoSave(path: string): Promise<void>;
 
   /** Pick one of the rolled dioceses, or 'surprise' for a blind roll with a small bonus. DESIGN §3.1a */
   chooseDiocese(presetId: string | 'surprise'): void;
@@ -252,10 +273,14 @@ function update(set: (partial: Partial<GameStore>) => void, get: () => GameStore
 }
 
 let lastAutosave = 0;
+let lastPushWeek: number | null = null;
+let lastPushAt = 0;
 
-/** Tests reset the autosave throttle. */
+/** Tests reset the autosave and push throttles. */
 export function resetAutosaveClock(): void {
   lastAutosave = 0;
+  lastPushWeek = null;
+  lastPushAt = 0;
 }
 
 /**
@@ -294,6 +319,11 @@ export const useGameStore = create<GameStore>()((set, get) => ({
   lastFurnishLine: null,
   slots: typeof window === 'undefined' ? [] : listSlots(),
   slotId: null,
+  github: typeof window === 'undefined' ? null : loadGithub(),
+  repoSaves: [],
+  repoBusy: false,
+  repoError: null,
+  repoNote: null,
   llm: typeof window === 'undefined' ? DEFAULT_LLM : loadLlmSettings(),
 
   setLlm(patch) {
@@ -473,6 +503,85 @@ export const useGameStore = create<GameStore>()((set, get) => ({
 
   autosaveNow() {
     autosave(get, set, true);
+  },
+
+  setGithub(cfg) {
+    saveGithub(cfg);
+    set({ github: cfg, repoSaves: cfg ? get().repoSaves : [], repoError: null, repoNote: cfg ? null : 'The repository is no longer linked here.' });
+  },
+
+  async refreshRepoSaves() {
+    const cfg = get().github;
+    if (!cfg) return;
+    set({ repoBusy: true, repoError: null });
+    try {
+      set({ repoSaves: await listRemote(cfg), repoBusy: false });
+    } catch (err) {
+      set({ repoBusy: false, repoError: err instanceof Error ? err.message : String(err) });
+    }
+  },
+
+  async pushToRepo(name) {
+    const { game, previous, prose, github: cfg } = get();
+    if (!cfg || !game || !rng) return;
+    set({ repoBusy: true, repoError: null, repoNote: null });
+    try {
+      const json = serialize(buildSave(game, rng, previous, prose));
+      const line = describeSave(game);
+      await writeRemote(cfg, json, { name: name?.trim() || line, line, seed: game.seed, week: game.clock.week });
+      lastPushWeek = game.clock.week;
+      lastPushAt = Date.now();
+      set({ repoSaves: await listRemote(cfg), repoBusy: false, repoNote: 'Committed to the repository.' });
+    } catch (err) {
+      set({ repoBusy: false, repoError: err instanceof Error ? err.message : String(err) });
+    }
+  },
+
+  async pullFromRepo(path) {
+    const cfg = get().github;
+    if (!cfg) return;
+    set({ repoBusy: true, repoError: null, repoNote: null });
+    try {
+      const json = await readRemote(cfg, path);
+      const save = deserialize(json);
+      rng = rngFromSave(save);
+      lastAutosave = Date.now();
+      set({
+        game: { ...save.state, speed: 'PAUSED' },
+        previous: save.previous,
+        prose: save.prose,
+        lastStop: null,
+        running: false,
+        error: null,
+        slotId: null,
+        repoBusy: false,
+        repoNote: 'Taken off the repository.',
+      });
+    } catch (err) {
+      set({ repoBusy: false, repoError: err instanceof Error ? err.message : String(err) });
+    }
+  },
+
+  pushOnLeaving() {
+    const { github: cfg, game } = get();
+    // On unless it was turned off: a config written before the setting existed still commits.
+    if (!cfg || cfg.autoPush === false || !game || get().repoBusy) return;
+    if (game.clock.week === lastPushWeek || Date.now() - lastPushAt < 120_000) return;
+    lastPushWeek = game.clock.week;
+    lastPushAt = Date.now();
+    void get().pushToRepo();
+  },
+
+  async deleteRepoSave(path) {
+    const cfg = get().github;
+    if (!cfg) return;
+    set({ repoBusy: true, repoError: null, repoNote: null });
+    try {
+      await deleteRemote(cfg, path);
+      set({ repoSaves: await listRemote(cfg), repoBusy: false, repoNote: 'Taken off the repository.' });
+    } catch (err) {
+      set({ repoBusy: false, repoError: err instanceof Error ? err.message : String(err) });
+    }
   },
 
   clearError() {

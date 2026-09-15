@@ -18,9 +18,21 @@ update, and the game keeps your saves in the browser you play it in.
   save first, so starting over never quietly ends the game you were playing.
   All of it lives in that browser on that device, so clearing the browser's
   data clears it, and a save made on the phone is not on the laptop.
+- **Across machines.** Link the repository from *Across machines* on the
+  save sheet and a run commits to a branch of it (`saves` by default, which
+  the Pages build does not watch, so saving never redeploys the site). The
+  other computer, linked the same way, lists it on its title screen and
+  picks it up where you left off. It commits when you close the page, and
+  on the button whenever you like.
+
+  It needs a [fine-grained token](https://github.com/settings/personal-access-tokens/new)
+  for this one repository, with **Contents: read and write** and nothing
+  else. The token is kept in that browser only: never in a save, never
+  committed, and sent nowhere but api.github.com. Two machines writing the
+  same run do not merge, so the last one saved is the one that is there.
 - **Save files.** The Save sheet also downloads the run as plain JSON and
-  loads one back, which is how a save moves between browsers or is kept for
-  good. Worth doing before anything you would hate to lose.
+  loads one back, which works with no token and no network. Worth doing
+  before anything you would hate to lose.
 - **Elsewhere.** A self-contained copy of the build is published as a
   claude.ai artifact for playtesting, and `npm run playtest` writes the same
   thing to `dist-playtest/vocation.html`, one file that opens anywhere.
@@ -39,7 +51,8 @@ npm run check    # tsc --noEmit + eslint
 npm run build    # production build
 ```
 
-No backend. Saves are plain JSON, kept in the browser and exportable to a file.
+No backend. Saves are plain JSON, kept in the browser, exportable to a file,
+and committable to a branch of this repository so a run crosses machines.
 
 ## Where things live
 
