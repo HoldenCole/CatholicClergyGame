@@ -4,6 +4,7 @@ import type { Rng } from '@/engine/rng';
 import { CLERGY_HERITAGE, eraForBirthYear, rollHeritage, rollMaleName } from './names';
 import { patronalOf } from './patronal';
 import { placeParish } from './geo';
+import { parishIssueDefs } from '@/content/parish';
 import { addStats, finishNpc, rollAlignment, rollBaseStats } from './npc';
 
 interface KindShape {
@@ -156,9 +157,31 @@ export function generateParish(rng: Rng, preset: DiocesePreset, seed: DiocesePre
     staffIds: [],
     groupIds: [],
     problem: rng.pick(shape.problems),
+    // The cathedral's own override below takes its school away: the issues must know that first.
+    issues: rollIssues(rng.derive(`issues:${index}`), !seed.cathedral && school !== 'none', latino >= 0.3),
     ...(seed.cathedral ? { cathedral: true, school: 'none' as const, buildings: { church: rangeInt(rng, [70, 95]), rectory: condition(), hall: condition(), school: null } } : {}),
   };
   return { parish, pastor };
+}
+
+/**
+ * Two to four named things wrong with this parish in particular. DESIGN §8.7:
+ * the single `problem` is what the diocese would write down; these are what the
+ * pastor finds in the first year, and no two parishes have the same set.
+ */
+export const ISSUES = { count: [2, 4] as [number, number] };
+
+function rollIssues(rng: Rng, hasSchool: boolean, needsSpanish: boolean): string[] {
+  const pool = parishIssueDefs.filter((d) => (!d.needsSchool || hasSchool) && (!d.needsSpanish || needsSpanish));
+  const want = rng.int(ISSUES.count[0], ISSUES.count[1]);
+  const out: string[] = [];
+  const left = [...pool];
+  for (let i = 0; i < want && left.length; i++) {
+    const pick = rng.weighted(left, (d) => d.weight);
+    left.splice(left.indexOf(pick), 1);
+    out.push(pick.id);
+  }
+  return out.sort();
 }
 
 function rollHeritageMix(rng: Rng, weights: Record<string, number>, total: number): Record<string, number> {

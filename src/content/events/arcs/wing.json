@@ -1,0 +1,179 @@
+{
+  "_notes": "The old school wing: four stages across five or six years. A building the parish cannot afford to keep or to lose, and the fight is never really about the building.",
+  "events": [
+    {
+      "id": "ax_wing_the_report",
+      "phase": ["pastor", "administrator"],
+      "beat": "arc",
+      "pressure": ["money", "competence"],
+      "severity": "NOTABLE",
+      "category": "finance",
+      "baseWeight": 10,
+      "suppressYears": 40,
+      "once": true,
+      "title": "The Engineer's Report",
+      "body": "Eleven pages and one sentence that matters, on page seven: the wing is safe for now and will not be safe indefinitely, and the range of estimates to make it safe indefinitely runs from four hundred thousand dollars to one and a half million depending on what you find when you open the wall. The parish has no idea any of this is happening. The finance council has two members who will want it in the bulletin and two who will not.",
+      "choices": [
+        {
+          "id": "publish_it",
+          "label": "Put the report in the bulletin and the whole number with it",
+          "default": true,
+          "outcome": "Six hundred households read page seven over coffee. Two of them are engineers and telephone with questions you cannot answer, and one is a woman who has been waiting eleven years for somebody to tell this parish the truth about something.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 4 },
+            { "target": "honesty", "key": "", "delta": 3 },
+            { "target": "flag", "key": "ax_wing_public", "value": true }
+          ]
+        },
+        {
+          "id": "second_opinion",
+          "label": "Get a second engineer before you tell anybody anything",
+          "outcome": "Three months and eighteen hundred dollars for a report that says the same thing in different words with a narrower range. It is money well spent and it is also three months in which you did not tell the parish.",
+          "effects": [
+            { "target": "money", "key": "cash", "delta": -1800 },
+            { "target": "stat", "key": "administration", "delta": 1 },
+            { "target": "flag", "key": "ax_wing_second_opinion", "value": true }
+          ]
+        },
+        {
+          "id": "sit_on_it",
+          "label": "Put it in the drawer; it is safe for now",
+          "outcome": "It is genuinely safe for now and there are eleven other things on fire. The report is in the drawer when the next thing happens, and somebody will ask when you first knew.",
+          "effects": [
+            { "target": "flag", "key": "ax_wing_in_the_drawer", "value": true },
+            { "target": "reputation", "key": "chancery", "delta": -1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ax_wing_the_meeting",
+      "phase": ["pastor", "administrator"],
+      "beat": "arc",
+      "pressure": ["money", "loyalty_vs_honesty"],
+      "severity": "MAJOR",
+      "category": "admin",
+      "baseWeight": 10,
+      "suppressYears": 40,
+      "once": true,
+      "title": "The Meeting In The Hall",
+      "body": "Two hundred people in a hall built for a hundred and fifty, and a microphone that works intermittently. The families who went to that school are in the first six rows. A man near the back has done his own arithmetic on what the parish spends and would like to read it out. Somebody's grandmother is sitting under the plaque with her husband's name on it. Whatever you say in the next ninety minutes is the thing the parish will quote back at you for a decade.",
+      "choices": [
+        {
+          "id": "say_the_hard_thing_first",
+          "label": "Open with the worst of it and make them sit with the number",
+          "default": true,
+          "outcome": "Ninety minutes that begin badly and end better than they began, because a room that has been told the truth first will argue about the right thing. Nothing is decided. A committee of nine is formed and four of them are people you would not have chosen and two of those turn out to be the ones who matter.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 5 },
+            { "target": "honesty", "key": "", "delta": 3 },
+            { "target": "flag", "key": "ax_wing_the_committee", "value": true }
+          ]
+        },
+        {
+          "id": "bring_a_plan",
+          "label": "Bring a plan of your own and ask them to back it",
+          "outcome": "You have done the work and the plan is good and the room can tell it was written without them. Half of them back it and half of them spend four years explaining that the pastor decided it in the rectory.",
+          "effects": [
+            { "target": "stat", "key": "administration", "delta": 2 },
+            { "target": "reputation", "key": "parishioners", "delta": -3 },
+            { "target": "flag", "key": "ax_wing_the_pastors_plan", "value": true }
+          ]
+        },
+        {
+          "id": "let_them_talk",
+          "label": "Chair it, say almost nothing, and let the parish talk itself out",
+          "outcome": "Two hours, forty speakers, and the man at the back reads his arithmetic, which is wrong in one place and right in two. Nothing is decided and everybody has been heard, and that turns out to have been worth an evening.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 3 },
+            { "target": "flag", "key": "ax_wing_heard_them", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ax_wing_the_money",
+      "phase": ["pastor", "administrator"],
+      "beat": "arc",
+      "pressure": ["money", "ambition_vs_integrity"],
+      "severity": "MAJOR",
+      "category": "finance",
+      "baseWeight": 10,
+      "suppressYears": 40,
+      "once": true,
+      "title": "Two Years In, And The Campaign Is Short",
+      "body": "The campaign has raised sixty-one percent of what the wing needs and has stopped moving. The consultant the diocese recommended says this is normal and that the last forty percent comes from eleven households. Two of those eleven have told you privately that they will give what is asked if the school stops teaching something they read about in the paper. A third will give the whole balance if the wing carries her family's name.",
+      "choices": [
+        {
+          "id": "take_the_name_refuse_the_rest",
+          "label": "Take the name on the wing; refuse the condition about the school",
+          "default": true,
+          "outcome": "You tell the two, separately and without heat, that the school's curriculum is not for sale and that their children are welcome anywhere in this parish. One of them gives anyway, a third of what he was going to. The wing is named for a family that deserved it, and the campaign closes at eighty-eight percent.",
+          "effects": [
+            { "target": "money", "key": "cash", "delta": 250000 },
+            { "target": "honesty", "key": "", "delta": 4 },
+            { "target": "reputation", "key": "parishioners", "delta": 4 },
+            { "target": "flag", "key": "ax_wing_named", "value": true }
+          ]
+        },
+        {
+          "id": "take_it_all",
+          "label": "Take all three and deal with the conditions later",
+          "outcome": "The campaign closes in eleven weeks at a hundred and four percent, and the wing is safe for fifty years, and in the spring two families ask you, with the cheque cleared, when the thing they raised is going to be dealt with.",
+          "effects": [
+            { "target": "money", "key": "cash", "delta": 520000 },
+            { "target": "honesty", "key": "", "delta": -5 },
+            { "target": "flag", "key": "ax_wing_owed", "value": true }
+          ]
+        },
+        {
+          "id": "close_the_wing_instead",
+          "label": "Stop the campaign and close the wing",
+          "outcome": "You give back what was given for a thing that will not now happen, which nobody has ever seen a parish do, and you move the classes into the church basement and the hall. The parish is furious and four people tell you it was the only honest decision made in this building in twenty years.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": -8 },
+            { "target": "reputation", "key": "chancery", "delta": 5 },
+            { "target": "arc", "key": "arc_wing", "value": "closed" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ax_wing_the_end",
+      "phase": ["pastor", "administrator"],
+      "beat": "arc",
+      "pressure": ["competence", "doubt"],
+      "severity": "MAJOR",
+      "category": "finance",
+      "baseWeight": 10,
+      "suppressYears": 40,
+      "once": true,
+      "title": "The Ribbon, Or The Machines",
+      "body": "Five years from the engineer's report, it comes to an end one way or the other: either there is a ribbon across a door in September, with the bishop and a photograph and a plaque listing the eleven households, or there is a fence and a machine and a parish car park where a wing used to be. Either way somebody in that crowd is crying and it is not the person you expect.",
+      "choices": [
+        {
+          "id": "give_it_to_the_parish",
+          "label": "Put the parish's names on it, not yours",
+          "default": true,
+          "outcome": "The plaque lists the committee of nine and the eleven households and the two engineers and does not list the pastor, which one of the nine notices and mentions from the microphone anyway. It is the best thing you build in that parish and it will be there when nobody remembers who was pastor.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 8 },
+            { "target": "building", "key": "school", "delta": 20 },
+            { "target": "stat", "key": "piety", "delta": 2 },
+            { "target": "arc", "key": "arc_wing", "value": "built" }
+          ]
+        },
+        {
+          "id": "mark_what_was_lost",
+          "label": "If it comes down, mark it properly",
+          "outcome": "A Mass in the car park on the last morning with the machines waiting, and forty-year-olds standing where their classrooms were. It costs nothing and it is the difference between a demolition and a funeral, and this parish needed the second one.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 6 },
+            { "target": "stat", "key": "piety", "delta": 3 },
+            { "target": "arc", "key": "arc_wing", "value": "mourned" }
+          ]
+        }
+      ]
+    }
+  ]
+}

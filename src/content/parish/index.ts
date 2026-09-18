@@ -1,4 +1,4 @@
-import type { HouseAskDef, HouseFavourDef, ActionDef, AwayPlaceDef, GroupTypeDef, HomilyDef, ObligationDef, ProblemFixDef, SacrificeDef, SeasonalLoad, SpendDef, TalkDef, LiturgyDialDef, OfficeDef } from '@/types';
+import type { HouseAskDef, HouseFavourDef, ParishIssueDef, ActionDef, AwayPlaceDef, GroupTypeDef, HomilyDef, ObligationDef, ProblemFixDef, SacrificeDef, SeasonalLoad, SpendDef, TalkDef, LiturgyDialDef, OfficeDef } from '@/types';
 import obligations from './obligations.json';
 import actions from './actions.json';
 import groups from './groups.json';
@@ -11,6 +11,7 @@ import offices from './offices.json';
 import homilies from './homilies.json';
 import away from './away.json';
 import houseFavoursJson from './house_favours.json';
+import issuesJson from './issues.json';
 
 export const obligationDefs = obligations as ObligationDef[];
 export const actionDefs = actions as ActionDef[];
@@ -25,6 +26,11 @@ export const homilyDefs = (homilies as { topics: HomilyDef[] }).topics;
 export const awayPlaces = (away as { places: AwayPlaceDef[] }).places;
 export const houseFavours = (houseFavoursJson as unknown as { favours: HouseFavourDef[] }).favours;
 export const houseAsks = (houseFavoursJson as unknown as { asks: HouseAskDef[] }).asks;
+export const parishIssueDefs = (issuesJson as unknown as { issues: ParishIssueDef[] }).issues;
+
+export function parishIssueDef(id: string): ParishIssueDef | undefined {
+  return parishIssueDefs.find((i) => i.id === id);
+}
 
 export function homilyDef(id: string): HomilyDef | undefined {
   return homilyDefs.find((h) => h.id === id);

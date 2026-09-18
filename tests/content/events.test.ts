@@ -5,6 +5,9 @@ import { FEAST_KEYS } from '@/engine/feasts';
 import { actionDefs, liturgyDials, obligationDefs } from '@/content/parish';
 import { studyPrograms } from '@/content/study';
 import { SEALED_TARGETS } from '@/engine/internalForum';
+import { arcDefs } from '@/content/arcs';
+const ARC_IDS = new Set(arcDefs.map((a) => a.id));
+const ARC_STAGES = new Set(arcDefs.flatMap((a) => a.stages.map((s) => s.id)));
 const PLACE_DIALS = new Set(studyPrograms.flatMap((p) => p.place?.dials.map((d) => d.id) ?? []));
 const BOOK_KEYS = new Set(studyPrograms.flatMap((p) => p.place?.book?.map((b) => b.id) ?? []));
 const LITURGY_DIALS = new Set(liturgyDials.map((d) => d.id));
@@ -74,7 +77,7 @@ const ROLES = ['parochial_vicar', 'administrator', 'pastor'];
 const EFFECT_TARGETS = [
   'stat', 'reputation', 'relationship', 'flag', 'group', 'money', 'ap', 'thread', 'position',
   'pillar', 'alignment', 'outspokenness', 'honesty', 'credential', 'trait', 'archetype',
-  'concern', 'risk', 'npc', 'end', 'decor', 'permission', 'trait_known', 'transfer', 'building', 'club', 'bond', 'place', 'record', 'strain',
+  'concern', 'risk', 'npc', 'end', 'decor', 'permission', 'trait_known', 'transfer', 'building', 'club', 'bond', 'place', 'record', 'strain', 'arc', 'ministry',
 ];
 const DECOR_PLACES = ['church', 'chapel', 'office', 'rectory', 'seminary_room', 'chancery'];
 const DECOR_SLOTS = ['sanctuary', 'altar_rail', 'orientation', 'confessionals', 'choir', 'statues', 'tabernacle', 'mass_form', 'music', 'style', 'devotion', 'seating', 'wall', 'desk', 'floor', 'corner'];
@@ -227,6 +230,13 @@ function checkEffect(e: Effect, where: string, problems: Problem[]): void {
   if (needsDelta.includes(e.target) && typeof e.delta !== 'number') problems.push(`${where}: ${e.target} effect needs delta`);
   if (e.target === 'stat' && !STAT_KEYS.includes(e.key as never)) problems.push(`${where}: bad stat key ${e.key}`);
   if (e.target === 'pillar' && !PILLARS.includes(e.key as never)) problems.push(`${where}: bad pillar key ${e.key}`);
+  if (e.target === 'ministry' && !MINISTRY_COND_KEYS.includes(e.key)) problems.push(`${where}: unknown ministry key ${e.key}`);
+  if (e.target === 'arc') {
+    if (!ARC_IDS.has(e.key)) problems.push(`${where}: unknown arc ${e.key}`);
+    const v = String(e.value ?? 'end');
+    const ok = v === 'end' || v === 'advance' || /^hold:\d+$/.test(v) || ARC_STAGES.has(v) || /^[a-z_]+$/.test(v);
+    if (!ok) problems.push(`${where}: bad arc move ${v}`);
+  }
   if (e.target === 'reputation' && !CONSTITUENCY_KEYS.includes(e.key as never)) problems.push(`${where}: bad reputation key ${e.key}`);
   if (e.target === 'archetype' && !ARCHETYPES.includes(e.key as never)) problems.push(`${where}: bad archetype ${e.key}`);
   if ((e.target === 'relationship' || e.target === 'npc' || e.target === 'trait_known') && e.key.startsWith('@') && !SELECTORS.includes(e.key)) {

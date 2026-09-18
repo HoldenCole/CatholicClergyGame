@@ -14,6 +14,7 @@ import type { Institute } from './religious';
 import type { CareerRequest } from './request';
 import type { Ministry } from './ministry';
 import type { HouseStanding } from './houses';
+import type { ActiveArc } from './arcs';
 
 /** A rolled diocese the player may choose, held only during creation. */
 export interface DioceseCandidate {
@@ -126,6 +127,10 @@ export interface GameState {
   ministry?: Ministry;
   /** What each religious house of the diocese thinks of him, and what stands between them. DESIGN §9.4a. */
   houses?: Record<string, HouseStanding>;
+  /** Things that are happening over years rather than in a week. DESIGN §12.5. */
+  arcs?: ActiveArc[];
+  /** Named things wrong with this parish in particular, by id in content. DESIGN §8.7. */
+  parishIssues?: Record<string, string[]>;
   /** The pastor's current project, if any. DESIGN 8.3 */
   /** The pastor's projects, several at once. `project` is kept for older saves and mirrors the first. */
   project: Project | null;

@@ -47,6 +47,19 @@ export type ActionLocation =
   | 'study'
   | 'chapel';
 
+/** A named thing wrong with one parish in particular. parish/issues.json — DESIGN §8.7. */
+export interface ParishIssueDef {
+  id: string;
+  label: string;
+  /** What it is, in the pastor's own words. */
+  blurb: string;
+  touches: 'buildings' | 'money' | 'people' | 'liturgy' | 'school' | 'neighborhood' | 'history';
+  weight: number;
+  /** Only where the parish has a school, or needs the second language. */
+  needsSchool?: boolean;
+  needsSpanish?: boolean;
+}
+
 /** Something a man cuts out of his own week to make an hour. parish/sacrifices.json */
 export interface SacrificeDef {
   id: string;

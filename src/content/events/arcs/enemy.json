@@ -1,0 +1,189 @@
+{
+  "_notes": "The man who writes the letters: four stages across four or five years. One parishioner who has decided about the pastor, and what a man does with that over time.",
+  "events": [
+    {
+      "id": "ax_enemy_the_first_letter",
+      "phase": ["pastor", "administrator"],
+      "beat": "arc",
+      "pressure": ["loyalty_vs_honesty", "competence"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 10,
+      "suppressYears": 40,
+      "once": true,
+      "title": "Three Pages, Single Spaced",
+      "body": "It is typed, it is signed, it is not anonymous, and it is about the music, the homilies, the way you hold your hands at the consecration, and a remark you made in August that you do not remember making. It is not mad. That is the difficulty: about a fifth of it is fair. The man is sixty-one, has been in the parish his whole life, and is at the eight o'clock every single Sunday in the fourth pew on the left.",
+      "choices": [
+        {
+          "id": "answer_the_fair_fifth",
+          "label": "Answer in writing: concede the fair fifth, decline the rest, invite him in",
+          "default": true,
+          "outcome": "One page. You grant two of his points outright and say plainly why the others are not yours to grant, and you ask him to come and see you. He does not come. The letter you wrote is the one he shows people for the next four years, and it makes you look like a man who answers his post.",
+          "effects": [
+            { "target": "honesty", "key": "", "delta": 3 },
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "flag", "key": "ax_enemy_answered", "value": true }
+          ]
+        },
+        {
+          "id": "go_and_see_him",
+          "label": "Drive to his house without telephoning first",
+          "outcome": "He is astonished and lets you in and his wife makes tea and the conversation lasts two hours and is not friendly and is not nothing. He writes again in eleven weeks. The letters get shorter after that and never stop.",
+          "effects": [
+            { "target": "relationship", "key": "@parishioner", "delta": 6 },
+            { "target": "reputation", "key": "parishioners", "delta": 3 },
+            { "target": "flag", "key": "ax_enemy_the_visit", "value": true }
+          ]
+        },
+        {
+          "id": "file_it",
+          "label": "File it; a pastor cannot answer every letter",
+          "outcome": "It goes in the drawer with the others and he notices, because men like him keep track. The second letter is copied to the chancery, which is a different kind of letter.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": -2 },
+            { "target": "flag", "key": "ax_enemy_filed", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ax_enemy_the_petition",
+      "phase": ["pastor", "administrator"],
+      "beat": "arc",
+      "pressure": ["loyalty_vs_honesty", "belief_vs_safety"],
+      "severity": "MAJOR",
+      "category": "personal",
+      "baseWeight": 10,
+      "suppressYears": 40,
+      "once": true,
+      "title": "Forty-One Signatures",
+      "body": "He has a petition and it has forty-one names on it, some of them collected in the car park after the eight o'clock and at least four of them from people who thought they were signing about the car park itself. It asks the bishop to look at the direction of this parish. Two of the names are on the finance council. One is a woman whose husband you buried in March and who will not meet your eye at the door.",
+      "choices": [
+        {
+          "id": "go_to_the_signers",
+          "label": "Go and see the eleven names that surprised you, one at a time",
+          "default": true,
+          "outcome": "Eleven kitchens over five weeks. Four had not understood what they signed, three had something real they had never told you, two are his and always were, and two apologize and are embarrassed. It is the most useful month of pastoral work you do that year, and the petition goes to the bishop anyway.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 6 },
+            { "target": "stat", "key": "charisma", "delta": 2 },
+            { "target": "strain", "key": "", "delta": 6 },
+            { "target": "flag", "key": "ax_enemy_the_kitchens", "value": true }
+          ]
+        },
+        {
+          "id": "get_ahead_of_it",
+          "label": "Telephone the vicar for clergy before it arrives",
+          "outcome": "The chancery hears it from you first, with the fair fifth conceded in your own voice, which is worth a great deal when the envelope lands a fortnight later. It is also the first time your name and the word petition have been in the same sentence in that office.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": 4 },
+            { "target": "flag", "key": "ax_enemy_chancery_warned", "value": true }
+          ]
+        },
+        {
+          "id": "preach_at_it",
+          "label": "Preach about it on Sunday",
+          "outcome": "You do not name him and everybody knows. It is a strong homily and it is a pastor using the pulpit to win an argument with a parishioner who cannot answer from the pew, and the eleven who signed by accident now feel that they were told off in public.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": -5 },
+            { "target": "outspokenness", "key": "", "delta": 5 },
+            { "target": "flag", "key": "ax_enemy_preached_at", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ax_enemy_the_chancery",
+      "phase": ["pastor", "administrator"],
+      "beat": "arc",
+      "pressure": ["loyalty_vs_honesty", "ambition_vs_integrity"],
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 10,
+      "suppressYears": 40,
+      "once": true,
+      "title": "The Vicar For Clergy Would Like To Come Out",
+      "body": "Not a visitation; a visit. He will come on a Tuesday, see the books, walk the church, and talk to four people, two of whom you choose and two of whom he chooses, and one of his two is the man with the typewriter. He is not hostile. He has thirty-one of these a year and knows what a persistent letter-writer is, and he also knows that about a fifth of them are right.",
+      "choices": [
+        {
+          "id": "hand_him_everything",
+          "label": "Give him the file: every letter, your answers, the petition, and the eleven kitchens",
+          "default": true,
+          "outcome": "He reads the lot in the rectory office with a cup of tea and says, at the end, that this is the best-documented parish complaint he has seen and that you should have telephoned him three years ago. The finding is that the parish is well run and that the pastor writes too many letters, which he says with a straight face.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": 8 },
+            { "target": "honesty", "key": "", "delta": 3 },
+            { "target": "flag", "key": "ax_enemy_the_file", "value": true }
+          ]
+        },
+        {
+          "id": "let_the_parish_speak",
+          "label": "Let him pick all four of the people he talks to",
+          "outcome": "A risk taken in front of a man whose whole job is reading pastors, and it lands: three of the four are unremarkable and the fourth is your letter-writer, and the contrast does more for you than any file.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": 10 },
+            { "target": "reputation", "key": "parishioners", "delta": 3 },
+            { "target": "flag", "key": "ax_enemy_open_door", "value": true }
+          ]
+        },
+        {
+          "id": "manage_the_visit",
+          "label": "Stage it: the two friendliest people, the good numbers, the new roof",
+          "outcome": "A pleasant Tuesday that persuades nobody. He has seen the managed version eleven times this year and writes a report that is fine and says nothing, and the file stays open, and so does the question.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": -3 },
+            { "target": "flag", "key": "ax_enemy_staged_it", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ax_enemy_the_end",
+      "phase": ["pastor", "administrator"],
+      "beat": "arc",
+      "pressure": ["friendship_vs_duty", "doubt"],
+      "severity": "MAJOR",
+      "category": "personal",
+      "baseWeight": 10,
+      "suppressYears": 40,
+      "once": true,
+      "title": "The Fourth Pew On The Left Is Empty",
+      "body": "He is in the hospital and it is not a short stay, and his wife has telephoned the rectory, which she has never done. She does not apologize for him and does not ask you to forgive anything. She says he has been asking whether you would come, and that he will not say so when you get there, and that his father died in this parish in 1979 and was buried by a priest he had fought with for eleven years, which she thinks is the whole explanation and may be right.",
+      "choices": [
+        {
+          "id": "go_that_afternoon",
+          "label": "Go that afternoon, and do not mention one word of it",
+          "default": true,
+          "outcome": "Forty minutes about the 1979 parish and the priest his father fought with, and the sacrament at the end because he asks for it in a way that is almost rude. Neither of you mentions the letters. He dies in October and you bury him, and his wife sits at the front and holds your hand at the door.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 5 },
+            { "target": "reputation", "key": "parishioners", "delta": 6 },
+            { "target": "ministry", "key": "anointings", "delta": 1 },
+            { "target": "bond", "key": "@parishioner", "value": "buried:the man who wrote the letters" },
+            { "target": "arc", "key": "arc_enemy", "value": "buried_him" }
+          ]
+        },
+        {
+          "id": "send_the_associate",
+          "label": "Send somebody else; there is history and it may not help",
+          "outcome": "A defensible pastoral judgment made by a man protecting himself. Another priest anoints him, well and kindly. His wife does not telephone the rectory again and comes to the ten o'clock instead of the eight from then on.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": -4 },
+            { "target": "stat", "key": "piety", "delta": -2 },
+            { "target": "arc", "key": "arc_enemy", "value": "sent_another" }
+          ]
+        },
+        {
+          "id": "go_and_say_it",
+          "label": "Go, and say the four years out loud",
+          "outcome": "You say it in a hospital room and he says three sentences back that you were not expecting, one of which is an explanation and none of which is an apology. It is not reconciliation as anybody would draw it and it is over, which is different and is enough.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 4 },
+            { "target": "honesty", "key": "", "delta": 4 },
+            { "target": "arc", "key": "arc_enemy", "value": "said_it" }
+          ]
+        }
+      ]
+    }
+  ]
+}

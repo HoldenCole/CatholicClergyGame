@@ -25,3 +25,4 @@ export * from './see';
 export * from './request';
 export * from './ministry';
 export * from './houses';
+export * from './arcs';
