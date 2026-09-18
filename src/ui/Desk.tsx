@@ -10,6 +10,7 @@ import GroupsPanel from './parish/GroupsPanel';
 import ClassmatesPanel from './parish/ClassmatesPanel';
 import PeoplePanel from './parish/PeoplePanel';
 import HousesPanel from './parish/HousesPanel';
+import WorkPanel from './parish/WorkPanel';
 import SeePanel from './study/SeePanel';
 import PlacePanel from './study/PlacePanel';
 import ProjectsPanel from './parish/ProjectsPanel';
@@ -82,6 +83,7 @@ export default function Desk() {
             <HousesPanel />
             <PeoplePanel />
             <ProjectsPanel />
+            <WorkPanel />
             <ClassmatesPanel />
           </>
         )}

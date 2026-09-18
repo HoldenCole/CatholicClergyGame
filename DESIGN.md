@@ -564,6 +564,15 @@ The Profile sheet reads it back with the rest of a life: his name and age, the y
 They are not a mechanic on their own. They are what the Parish sheet lists in the pastor's own words, what a `parish_issue` condition gates a scene on — by name, or by what it touches (buildings, money, people, liturgy, school, neighborhood, history) — and what an arc can be built on. Two parishes of the same kind never play the same, and a man moved after eight years finds a different set of things to worry about.
 
 
+### 8.8 The thing he does besides the parish
+
+*Added in playtesting.* A parish will take every hour a man has. What makes two priests of the same rank into two different men is what else they did with thirty years: a book, an hour a week on the diocesan radio, a lecture series around the deaneries, a translation nobody else would attempt, a pilgrimage led, Thursday mornings at the county jail, a seat on the hospital board, retreats preached in other men's parishes.
+
+One at a time. It takes an hour or two of every week — off the top of the same budget as everything else — for two to five years, passes **milestones** that report themselves in the digest and move stats and standing, and then **lands or does not**: some works carry a real chance of coming to nothing, unless the man has built the thing that saves them (the book wants learning behind it; the radio hour wants a chancery that is not looking for a reason). Coming to nothing is also something that happened to a man, and the flags remember it.
+
+It can be put down at any time, quietly, and nobody is told, because nobody was watching.
+
+
 ## 9. Generation
 
 ### 9.1 Dioceses
@@ -699,6 +708,15 @@ Each religious house of the diocese (the abbey, the friary, the Carmel) carries 
 **What the house asks in return**: a priest for their community Mass while their chaplain is ill, a second collection for their missions, their novena in his church, a letter backing them when the diocese wants their land, a young man of theirs boarded for a summer. Saying yes builds standing faster than any hour; saying no costs a little; **silence is a no**, and the clock answers for him in six weeks.
 
 **The asymmetry is the point.** Every arrangement runs at the provincial's pleasure: once a year he may end one, less often where the standing is high, and the notice is six weeks and the reason is a house in another state. A pastor cannot appeal it, cannot hire around it, and cannot hold it against them, and the parish notices the Saturday confessional is dark.
+
+### 9.5 The men you were ordained with
+
+*Added in playtesting.* A diocesan priest has no community and no rule. What he has instead is twenty men who were in the same building at twenty-four, and whichever of them he has bothered to keep up with.
+
+The hours in the routine marked *time with brother priests* now land on **one man at a time** — the one he has left longest — rather than on a constituency. Everything else drifts: a friendship nobody tends slides back toward civil at a few hundredths a week, and stops at civil, because nobody forgets the seminary entirely.
+
+What it buys is **favours**, each gated on the relationship and on what that man actually is: a weekend covered (blocks back in the week), a word at the chancery from somebody who is there, what the board is actually thinking three months early, a name for a roofer or a bookkeeper or a lawyer who will not charge a parish, and an hour on the telephone at eleven at night. A favour costs the man who grants it — that is what makes it a favour — and it cannot be asked of the same man twice.
+
 
 ## 10. Special interest groups
 

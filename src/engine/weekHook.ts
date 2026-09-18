@@ -28,6 +28,7 @@ import { appointmentStep, APPOINTMENT_FLAGS } from './appointment';
 import { clearRequestAnswer, closeRequest, requestAnswerDue } from '@/systems/request';
 import { expireAsks } from '@/systems/houses';
 import { ARCS, dueArc, endArc, maybeOpenArc } from '@/systems/arcs';
+import { sideWorkWeek } from '@/systems/sidework';
 import { requestedChoice } from '@/systems/choice';
 import { confessorWeek } from '@/systems/confessor';
 import { turnaroundStep } from '@/systems/trajectory';
@@ -264,6 +265,10 @@ export function parishWeekHook(deps: EventDeps): WeekHook {
     const work = workWeek(next);
     next = work.state;
     if (work.line) next = addDigestLine(next, work.line);
+    // The thing he does besides the parish: a milestone, or the end of it. DESIGN §8.8.
+    const side = sideWorkWeek(next, rng.derive(`sidework:${next.clock.week}`));
+    next = side.state;
+    if (side.line) next = addDigestLine(next, side.line);
     next = clubsStep(next, rng);
     const spent = spendingWeek(next, rng);
     next = spent.state;

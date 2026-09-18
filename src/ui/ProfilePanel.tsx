@@ -1,6 +1,7 @@
 import { useGameStore } from '@/engine/store';
 import { profileOf } from '@/systems/profile';
 import { requestHistory } from '@/systems/request';
+import { worksDone } from '@/systems/sidework';
 import Sheet from './Sheet';
 import Portrait from './portraits/Portrait';
 import { portraitForCharacter, yearOf } from './portraits/spec';
@@ -16,6 +17,7 @@ export default function ProfilePanel() {
   const p = profileOf(game);
   const year = yearOf(game.clock.startDay, game.clock.week);
   const asked = requestHistory(game).filter((r) => r.outcome);
+  const works = worksDone(game);
 
   return (
     <>
@@ -105,12 +107,13 @@ export default function ProfilePanel() {
           {p.offices.length > 0 && <li>Offices: {p.offices.join(', ')}.</li>}
           {p.credentials.length > 0 && <li>Degrees and credentials: {p.credentials.map((c) => c.replace(/_/g, ' ')).join(', ')}.</li>}
           {p.groupsFounded > 0 && <li>Founded {p.groupsFounded === 1 ? 'one group' : `${p.groupsFounded} groups`} in the parishes you served.</li>}
+          {works.length > 0 && <li>Besides the parish: {works.join('; ')}.</li>}
           {asked.length > 0 && (
             <li>
               Asked the chancery for: {asked.map((r) => `${r.label} (${r.outcome})`).join('; ')}.
             </li>
           )}
-          {p.offices.length === 0 && p.credentials.length === 0 && p.groupsFounded === 0 && asked.length === 0 && <li className="ink-faint">Nothing the chancery would file.</li>}
+          {p.offices.length === 0 && p.credentials.length === 0 && p.groupsFounded === 0 && asked.length === 0 && works.length === 0 && <li className="ink-faint">Nothing the chancery would file.</li>}
         </ul>
       </Sheet>
     </>

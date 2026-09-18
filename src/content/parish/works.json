@@ -1,0 +1,200 @@
+{
+  "_notes": "Side works (DESIGN §8.8): the thing a priest does besides the parish, taken on for years, costing hours every week, reaching milestones, and finishing — or not. One at a time; the hours come off the same week as everything else.",
+  "works": [
+    {
+      "id": "book",
+      "label": "Write a book",
+      "blurb": "Two hundred pages on the one thing you actually know about, at four hours a week, for about four years. A publisher in Indiana might take it.",
+      "kind": "study",
+      "apPerWeek": 1,
+      "weeks": 200,
+      "requires": [{ "type": "stat", "key": "theology", "op": ">=", "value": 55 }],
+      "milestones": [
+        { "at": 0.25, "line": "The book has a shape: four chapters drafted and the argument of the fifth on an envelope.", "effects": [{ "target": "stat", "key": "knowledge", "delta": 2 }] },
+        { "at": 0.6, "line": "A publisher in Indiana has read sixty pages and wants the rest by Advent, which is not possible and will happen anyway.", "effects": [{ "target": "stat", "key": "theology", "delta": 2 }, { "target": "reputation", "key": "rome", "delta": 2 }] }
+      ],
+      "done": {
+        "line": "The book is out. Three hundred copies to seminaries, a review in a journal eleven people read, and a box of them in the rectory hall that will still be there when you are moved.",
+        "effects": [
+          { "target": "reputation", "key": "public", "delta": 8 },
+          { "target": "reputation", "key": "rome", "delta": 6 },
+          { "target": "reputation", "key": "chancery", "delta": 4 },
+          { "target": "stat", "key": "theology", "delta": 4 },
+          { "target": "trait", "key": "has written a book" },
+          { "target": "flag", "key": "work:published", "value": true }
+        ]
+      },
+      "risk": {
+        "chance": 0.3,
+        "unless": [{ "type": "stat", "key": "knowledge", "op": ">=", "value": 65 }],
+        "line": "The manuscript is finished and nobody wants it. Two presses say no kindly and one does not answer, and it sits in the drawer under the engineer's report.",
+        "effects": [{ "target": "stat", "key": "piety", "delta": -2 }, { "target": "stat", "key": "knowledge", "delta": 3 }, { "target": "flag", "key": "work:unpublished", "value": true }]
+      }
+    },
+    {
+      "id": "radio",
+      "label": "An hour a week on the radio",
+      "blurb": "The diocesan station wants somebody who can talk for an hour without notes and not be dull. Sunday evenings, live, with telephone calls.",
+      "kind": "public",
+      "apPerWeek": 1,
+      "weeks": 156,
+      "requires": [{ "type": "stat", "key": "charisma", "op": ">=", "value": 55 }],
+      "milestones": [
+        { "at": 0.3, "line": "The Sunday hour has regulars: a woman from Waukegan who telephones every week, and a man who disagrees with you professionally.", "effects": [{ "target": "reputation", "key": "public", "delta": 4 }] },
+        { "at": 0.7, "line": "A station two dioceses over has picked up the hour, which nobody at the chancery knew was possible.", "effects": [{ "target": "reputation", "key": "public", "delta": 5 }, { "target": "reputation", "key": "chancery", "delta": -2 }] }
+      ],
+      "done": {
+        "line": "Three years of Sunday evenings. People you have never met know your voice, stop you in car parks in other counties, and tell you what you said in 2016.",
+        "effects": [
+          { "target": "reputation", "key": "public", "delta": 12 },
+          { "target": "stat", "key": "charisma", "delta": 3 },
+          { "target": "outspokenness", "key": "", "delta": 6 },
+          { "target": "trait", "key": "known from the radio" },
+          { "target": "flag", "key": "work:broadcast", "value": true }
+        ]
+      },
+      "risk": {
+        "chance": 0.25,
+        "unless": [{ "type": "reputation", "key": "chancery", "op": ">=", "value": 30 }],
+        "line": "The station drops the hour after a caller asks about something and you answer honestly. Nobody says that is why.",
+        "effects": [{ "target": "reputation", "key": "public", "delta": 3 }, { "target": "reputation", "key": "chancery", "delta": -5 }, { "target": "flag", "key": "work:taken_off_air", "value": true }]
+      }
+    },
+    {
+      "id": "lectures",
+      "label": "A lecture series around the diocese",
+      "blurb": "Six evenings, six parish halls, the same six talks, four hundred miles a term. Somebody has to explain this stuff to grown adults.",
+      "kind": "public",
+      "apPerWeek": 1,
+      "weeks": 104,
+      "requires": [{ "type": "stat", "key": "knowledge", "op": ">=", "value": 55 }],
+      "milestones": [
+        { "at": 0.4, "line": "The series has outgrown the halls it was booked into, and two pastors have asked for it in Lent.", "effects": [{ "target": "reputation", "key": "brother_priests", "delta": 4 }] }
+      ],
+      "done": {
+        "line": "Two years of evenings, about nine hundred people, and a diocese where a surprising number of laypeople can now tell you what the Church actually teaches about the thing they were angry about.",
+        "effects": [
+          { "target": "reputation", "key": "public", "delta": 7 },
+          { "target": "reputation", "key": "brother_priests", "delta": 6 },
+          { "target": "reputation", "key": "chancery", "delta": 4 },
+          { "target": "stat", "key": "charisma", "delta": 2 },
+          { "target": "flag", "key": "work:lecturer", "value": true }
+        ]
+      }
+    },
+    {
+      "id": "translation",
+      "label": "Translate something nobody has translated",
+      "blurb": "A fourteenth-century text nobody has put into English, at three hours a week, with a Latin dictionary from the seminary you were not supposed to keep.",
+      "kind": "study",
+      "apPerWeek": 1,
+      "weeks": 260,
+      "requires": [{ "type": "credential", "key": "STL" }],
+      "milestones": [
+        { "at": 0.3, "line": "Book one is done and is bad, and you begin it again knowing what the man actually sounds like.", "effects": [{ "target": "stat", "key": "knowledge", "delta": 3 }] },
+        { "at": 0.75, "line": "A scholar in Louvain has written to say that your reading of a passage in book three is wrong, at length, with warmth.", "effects": [{ "target": "reputation", "key": "rome", "delta": 4 }, { "target": "stat", "key": "theology", "delta": 2 }] }
+      ],
+      "done": {
+        "line": "Five years. A university press takes it. It will be the standard English text for forty years and be read by perhaps two thousand people, all of whom needed it.",
+        "effects": [
+          { "target": "reputation", "key": "rome", "delta": 12 },
+          { "target": "stat", "key": "knowledge", "delta": 6 },
+          { "target": "credential", "key": "translator" },
+          { "target": "trait", "key": "translated a text nobody else would" },
+          { "target": "flag", "key": "work:translated", "value": true }
+        ]
+      }
+    },
+    {
+      "id": "pilgrimage",
+      "label": "Lead a parish pilgrimage",
+      "blurb": "Forty-one parishioners, a coach, an airline, the Holy Land or Rome, and a year of Tuesday evenings arranging it.",
+      "kind": "parish",
+      "apPerWeek": 1,
+      "weeks": 60,
+      "milestones": [
+        { "at": 0.5, "line": "Forty-one are signed up, two have died since signing, and the deposit is paid.", "effects": [{ "target": "reputation", "key": "parishioners", "delta": 3 }] }
+      ],
+      "done": {
+        "line": "Eleven days. Mass on Calvary at six in the morning with forty-one people from one parish, and a man of sixty who had not been to confession since his divorce asking you in the hotel corridor.",
+        "effects": [
+          { "target": "reputation", "key": "parishioners", "delta": 12 },
+          { "target": "stat", "key": "piety", "delta": 4 },
+          { "target": "ministry", "key": "confessions", "delta": 30 },
+          { "target": "bond", "key": "@bonded_parishioner", "value": "travelled:eleven days in the Holy Land" },
+          { "target": "flag", "key": "work:pilgrimage", "value": true }
+        ]
+      },
+      "risk": {
+        "chance": 0.2,
+        "line": "The trip is cancelled six weeks out by something nobody controls, the deposits take a year to come back, and two families blame the parish.",
+        "effects": [{ "target": "reputation", "key": "parishioners", "delta": -6 }, { "target": "money", "key": "cash", "delta": -4000 }, { "target": "flag", "key": "work:pilgrimage_lost", "value": true }]
+      }
+    },
+    {
+      "id": "prison",
+      "label": "The county jail, Thursday mornings",
+      "blurb": "Forty minutes out, a locker for your keys, a room with a table, and men who have nobody else coming. No stipend, no notice from anybody.",
+      "kind": "outside",
+      "apPerWeek": 1,
+      "weeks": 208,
+      "milestones": [
+        { "at": 0.35, "line": "Eleven men come to the Thursday room now, and one of them has asked to be baptized.", "effects": [{ "target": "stat", "key": "piety", "delta": 3 }, { "target": "ministry", "key": "baptisms", "delta": 1 }] },
+        { "at": 0.8, "line": "A man you saw for two years is out, and is at the eight o'clock on Sunday, at the back, in a jacket that does not fit.", "effects": [{ "target": "stat", "key": "piety", "delta": 3 }, { "target": "reputation", "key": "parishioners", "delta": 2 }] }
+      ],
+      "done": {
+        "line": "Four years of Thursdays. Nobody in the diocese knows you do this except the chaplain's office and about two hundred men, some of whom write.",
+        "effects": [
+          { "target": "stat", "key": "piety", "delta": 8 },
+          { "target": "reputation", "key": "public", "delta": 4 },
+          { "target": "ministry", "key": "confessions", "delta": 400 },
+          { "target": "trait", "key": "went to the jail on Thursdays" },
+          { "target": "flag", "key": "work:prison", "value": true }
+        ]
+      }
+    },
+    {
+      "id": "board",
+      "label": "A seat on the hospital board",
+      "blurb": "The Catholic hospital wants a priest at the table who can read a balance sheet and will say the awkward thing about the ethical directives.",
+      "kind": "outside",
+      "apPerWeek": 1,
+      "weeks": 156,
+      "requires": [{ "type": "stat", "key": "administration", "op": ">=", "value": 55 }],
+      "milestones": [
+        { "at": 0.5, "line": "You have read four hundred pages of board papers and stopped one thing that should have been stopped.", "effects": [{ "target": "reputation", "key": "public", "delta": 3 }, { "target": "stat", "key": "administration", "delta": 2 }] }
+      ],
+      "done": {
+        "line": "Three years at that table. The chaplaincy is funded, the directives held in a merger, and every senior person in that building takes your telephone call.",
+        "effects": [
+          { "target": "reputation", "key": "public", "delta": 8 },
+          { "target": "reputation", "key": "chancery", "delta": 6 },
+          { "target": "stat", "key": "administration", "delta": 3 },
+          { "target": "flag", "key": "work:board", "value": true }
+        ]
+      }
+    },
+    {
+      "id": "retreats",
+      "label": "Preach retreats for other parishes",
+      "blurb": "Three or four a year, somebody else's people, a weekend at a time, and a stipend the parish does not see.",
+      "kind": "outside",
+      "apPerWeek": 1,
+      "weeks": 156,
+      "requires": [{ "type": "reputation", "key": "brother_priests", "op": ">=", "value": 25 }],
+      "milestones": [
+        { "at": 0.4, "line": "Four parishes have had you now and two have asked for you again, which is the whole test.", "effects": [{ "target": "reputation", "key": "brother_priests", "delta": 5 }] }
+      ],
+      "done": {
+        "line": "Three years of other men's parishes. Eleven pastors owe you a weekend, a great many people have heard the six talks, and you know exactly which of the six is the one that does the work.",
+        "effects": [
+          { "target": "reputation", "key": "brother_priests", "delta": 10 },
+          { "target": "reputation", "key": "public", "delta": 5 },
+          { "target": "stat", "key": "charisma", "delta": 3 },
+          { "target": "ministry", "key": "confessions", "delta": 250 },
+          { "target": "flag", "key": "work:retreat_preacher", "value": true }
+        ]
+      }
+    }
+  ]
+}

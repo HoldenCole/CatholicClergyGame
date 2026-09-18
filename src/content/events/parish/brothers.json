@@ -1,0 +1,273 @@
+{
+  "_notes": "The men he was ordained with, and the thing he is making besides the parish (DESIGN §8.8, §9.5). Scenes that come out of having kept up, or not having.",
+  "events": [
+    {
+      "id": "br_the_one_who_stopped_answering",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["friendship_vs_duty", "doubt"],
+      "severity": "NOTABLE",
+      "category": "classmate",
+      "baseWeight": 12,
+      "suppressYears": 6,
+      "requires": [{ "type": "years_ordained", "op": ">=", "value": 8 }],
+      "title": "Nobody Has Heard From Him Since Lent",
+      "body": "{@closest_classmate} has stopped answering. Not dramatically: he answers the parish telephone and says the right things and does not ring back, and has missed two of the three things the class does, and the man who tells you this at a funeral says it in the voice people use when they have decided it is somebody else's problem. He is an hour and forty minutes away.",
+      "choices": [
+        {
+          "id": "get_in_the_car",
+          "label": "Get in the car on your day off, unannounced",
+          "default": true,
+          "outcome": "He is genuinely glad and genuinely embarrassed and the rectory is in a state that tells you most of it before he says anything. You stay six hours. He starts answering the telephone again, and it is not fixed, and he is not alone in it any more.",
+          "effects": [
+            { "target": "relationship", "key": "@closest_classmate", "delta": 14 },
+            { "target": "reputation", "key": "brother_priests", "delta": 5 },
+            { "target": "strain", "key": "", "delta": 3 },
+            { "target": "flag", "key": "br_drove_out", "value": true }
+          ]
+        },
+        {
+          "id": "write_to_him",
+          "label": "Write him an actual letter",
+          "outcome": "Four paragraphs on paper, which nobody does any more and which he keeps. He answers in three weeks, briefly and warmly, and is at the next thing the class does, and stands with you at it.",
+          "effects": [
+            { "target": "relationship", "key": "@closest_classmate", "delta": 7 },
+            { "target": "reputation", "key": "brother_priests", "delta": 2 }
+          ]
+        },
+        {
+          "id": "tell_the_vicar",
+          "label": "Telephone the vicar for clergy, quietly",
+          "outcome": "It is the responsible thing and the chancery does have a duty of care, and a man from the office visits in June. He knows within a fortnight who telephoned, and is civil to you for the rest of his life.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": 4 },
+            { "target": "relationship", "key": "@closest_classmate", "delta": -10 },
+            { "target": "flag", "key": "br_reported_him", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "br_the_favour_he_calls_in",
+      "phase": ["pastor", "administrator"],
+      "pressure": ["friendship_vs_duty", "competence"],
+      "severity": "NOTABLE",
+      "category": "classmate",
+      "baseWeight": 12,
+      "suppressYears": 4,
+      "requires": [{ "type": "years_ordained", "op": ">=", "value": 6 }],
+      "title": "He Needs The Weekend",
+      "body": "{@brother_priest} telephones on a Friday morning, which is when men telephone about weekends. His mother is dying four states away and there is nobody to say his three Masses, and the diocese's supply list has two retired men on it and both are away. He is not a close friend. He is a man you were ordained with who has never asked you for anything.",
+      "choices": [
+        {
+          "id": "take_them",
+          "label": "Take his Masses as well as your own",
+          "default": true,
+          "outcome": "Six Masses in one weekend, two churches, a hundred and ten miles, and the eleven o'clock in a parish that has never seen you. You are wrecked by Sunday night. He is at his mother's bed on the Saturday morning and she dies on the Sunday afternoon, and he says it to you once, four years later, at a deanery meeting.",
+          "effects": [
+            { "target": "relationship", "key": "@brother_priest", "delta": 20 },
+            { "target": "reputation", "key": "brother_priests", "delta": 8 },
+            { "target": "strain", "key": "", "delta": 8 },
+            { "target": "flag", "key": "br_took_the_weekend", "value": true }
+          ]
+        },
+        {
+          "id": "find_him_somebody",
+          "label": "Spend the morning on the telephone and find him somebody else",
+          "outcome": "Nine calls and a friar who owes you one, and it is sorted by lunchtime and costs you a morning rather than a weekend. He is grateful to the friar and grateful to you, in that order, which is the correct order and is not the same as the other thing.",
+          "effects": [
+            { "target": "relationship", "key": "@brother_priest", "delta": 8 },
+            { "target": "reputation", "key": "brother_priests", "delta": 3 }
+          ]
+        },
+        {
+          "id": "say_no",
+          "label": "Say no; you have a parish of your own and a weekend that is already full",
+          "outcome": "It is true and it is reasonable and you feel it in your chest for about eleven years. He gets somebody. The presbyterate is a small place and everyone finds out who said yes.",
+          "effects": [
+            { "target": "relationship", "key": "@brother_priest", "delta": -8 },
+            { "target": "reputation", "key": "brother_priests", "delta": -5 },
+            { "target": "flag", "key": "br_said_no", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "br_the_class_dinner",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["ambition_vs_integrity", "friendship_vs_duty"],
+      "severity": "ROUTINE",
+      "category": "classmate",
+      "baseWeight": 12,
+      "suppressYears": 4,
+      "requires": [{ "type": "years_ordained", "op": ">=", "value": 5 }],
+      "title": "The Class Dinner, Every October",
+      "body": "Eleven of you in the back room of a place that does a roast, once a year, since 1999. Two have made monsignor and one is in the chancery and one is on leave and everybody knows and nobody says. The conversation is two-thirds shop and one-third the thing you actually came for, and it does not arrive until after nine, and only if somebody makes it arrive.",
+      "choices": [
+        {
+          "id": "make_it_arrive",
+          "label": "Say the true thing about your own year and let the table follow",
+          "default": true,
+          "outcome": "You say what the year actually was, including the bad month, and the table goes quiet and then goes somewhere it has not been in four years. Three men telephone you in the following fortnight. One of them had not told anybody either.",
+          "effects": [
+            { "target": "reputation", "key": "brother_priests", "delta": 7 },
+            { "target": "stat", "key": "piety", "delta": 2 },
+            { "target": "honesty", "key": "", "delta": 3 },
+            { "target": "flag", "key": "br_the_true_dinner", "value": true }
+          ]
+        },
+        {
+          "id": "work_the_room",
+          "label": "Spend the evening with the two who are going somewhere",
+          "outcome": "A useful evening, professionally speaking. The chancery man tells you two things worth knowing and you are seated next to him at the next one of these, and the eight men at the other end of the table notice where you sat.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": 5 },
+            { "target": "reputation", "key": "brother_priests", "delta": -3 }
+          ]
+        },
+        {
+          "id": "sit_with_the_one_on_leave",
+          "label": "Sit with the man on leave and talk about anything else",
+          "outcome": "Two hours on baseball and a seminary professor and not one question about what happened. He is at the next dinner, and the one after, and he tells somebody years later that this was the reason.",
+          "effects": [
+            { "target": "reputation", "key": "brother_priests", "delta": 6 },
+            { "target": "relationship", "key": "@random_classmate", "delta": 15 },
+            { "target": "stat", "key": "piety", "delta": 2 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "br_the_book_is_reviewed",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["ambition_vs_integrity", "belief_vs_safety"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 12,
+      "suppressYears": 8,
+      "requires": [{ "type": "flag", "key": "work:published", "value": true }],
+      "title": "The Review",
+      "body": "It runs in a journal that matters to about four hundred people, all of whom you will meet eventually. It is not a bad review. It is worse than that: it is a fair review that grants the book's argument, admires two chapters, and then explains in a short and devastating paragraph what you did not understand about the thing you spent four years on, and the reviewer is right.",
+      "choices": [
+        {
+          "id": "write_to_the_reviewer",
+          "label": "Write to him and say he is right",
+          "default": true,
+          "outcome": "Half a page, no defence, one question about the paragraph. He answers at three times the length and they begin a correspondence that runs eleven years and produces a second book that is better than the first.",
+          "effects": [
+            { "target": "reputation", "key": "rome", "delta": 6 },
+            { "target": "stat", "key": "theology", "delta": 3 },
+            { "target": "honesty", "key": "", "delta": 3 },
+            { "target": "flag", "key": "br_the_correspondence", "value": true }
+          ]
+        },
+        {
+          "id": "answer_in_print",
+          "label": "Answer in print",
+          "outcome": "Twelve hundred words defending a position you already suspect is wrong, which the journal prints because a controversy sells. You win on points in front of four hundred people and lose something you will not get back until you admit it.",
+          "effects": [
+            { "target": "reputation", "key": "public", "delta": 3 },
+            { "target": "reputation", "key": "rome", "delta": -4 },
+            { "target": "outspokenness", "key": "", "delta": 4 }
+          ]
+        },
+        {
+          "id": "say_nothing",
+          "label": "Say nothing and go and do the eight o'clock",
+          "outcome": "The eight o'clock has eleven people in it and does not care about the journal. You read the paragraph twice more that year and once more at sixty, and by then you agree with it entirely.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 2 },
+            { "target": "stat", "key": "theology", "delta": 1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "br_the_hour_goes_wrong",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["belief_vs_safety", "loyalty_vs_honesty"],
+      "severity": "MAJOR",
+      "category": "scandal",
+      "baseWeight": 11,
+      "suppressYears": 8,
+      "requires": [{ "type": "flag", "key": "work:broadcast", "value": true }],
+      "title": "A Caller On Sunday Night",
+      "body": "Live, at twenty past eight, a woman telephones the radio hour and asks a question about something the diocese has been in the paper for, and she is not hostile and she is not a plant and she deserves an answer. There are about nine thousand people listening. The producer is making a motion through the glass that means move on, and you have four seconds.",
+      "choices": [
+        {
+          "id": "answer_her",
+          "label": "Answer her, carefully and completely",
+          "default": true,
+          "outcome": "Ninety seconds, no hedging, nothing that is not true, and a sentence about what the Church owes people that gets clipped and shared. The chancery telephones on Monday morning and is not sure whether to be pleased, and the town is entirely sure.",
+          "effects": [
+            { "target": "reputation", "key": "public", "delta": 10 },
+            { "target": "reputation", "key": "chancery", "delta": -6 },
+            { "target": "outspokenness", "key": "", "delta": 6 },
+            { "target": "flag", "key": "br_answered_on_air", "value": true }
+          ]
+        },
+        {
+          "id": "take_it_off_air",
+          "label": "Ask her to hold and take it off the air",
+          "outcome": "You talk to her for twenty minutes after the hour with the microphone dead and it is the better pastoral conversation and nine thousand people heard a priest change the subject.",
+          "effects": [
+            { "target": "reputation", "key": "public", "delta": -3 },
+            { "target": "reputation", "key": "chancery", "delta": 3 },
+            { "target": "stat", "key": "piety", "delta": 1 }
+          ]
+        },
+        {
+          "id": "give_the_line",
+          "label": "Give the diocese's statement, word for word",
+          "outcome": "It is accurate, it was written by lawyers, and every single person listening can hear which of the two it is. The producer relaxes. The woman thanks you politely and does not telephone again.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": 5 },
+            { "target": "reputation", "key": "public", "delta": -6 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "br_thursday_at_the_jail",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["doubt", "belief_vs_safety"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 12,
+      "suppressYears": 6,
+      "requires": [{ "type": "flag", "key": "work:prison", "value": true }],
+      "title": "He Asks You To Tell His Mother",
+      "body": "A man in the Thursday room, twenty-six, four years into a long sentence, asks you to go and see his mother, who is in your county and has not spoken to him since the trial and does not know he has started coming to the room. He wants you to tell her that he is sorry. He does not want you to ask her for anything, and says so twice, and the second time he says it in a way that makes clear he has thought about the difference.",
+      "choices": [
+        {
+          "id": "go_and_tell_her",
+          "label": "Go, and say exactly what he asked and nothing more",
+          "default": true,
+          "outcome": "She lets you in because of the collar and is hard all the way through and does not cry until the door. She does not write to him. Eleven months later she is in the visitors' hall, and you find out from him, on a Thursday, in the room.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 5 },
+            { "target": "reputation", "key": "public", "delta": 2 },
+            { "target": "flag", "key": "br_told_the_mother", "value": true }
+          ]
+        },
+        {
+          "id": "write_for_him",
+          "label": "Help him write it himself instead",
+          "outcome": "Four drafts over four Thursdays, and the fourth is his and is better than anything you would have said. He sends it. She does not answer, and he is not destroyed by that, because he had already decided the point was the sending.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 4 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "flag", "key": "br_the_four_drafts", "value": true }
+          ]
+        },
+        {
+          "id": "keep_the_wall",
+          "label": "Tell him you cannot carry messages out of that room",
+          "outcome": "It is a defensible line and there are chaplains who hold it for good reasons. He accepts it without argument, which is worse, and the room is the same the next Thursday and something in it is not.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": -1 }
+          ]
+        }
+      ]
+    }
+  ]
+}
