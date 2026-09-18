@@ -1,0 +1,515 @@
+{
+  "_notes": "The second half of a life, facing the institution: the board that stopped considering him, the deanery, the men he was ordained with, the chancery that has changed hands twice. Open scenes, not sealed; the seal is parish/direction.json.",
+  "events": [
+    {
+      "id": "li_the_young_chancellor",
+      "phase": ["administrator", "pastor"],
+      "pressure": ["loyalty_vs_honesty", "competence"],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 12,
+      "suppressYears": 6,
+      "requires": [{ "type": "years_ordained", "op": ">=", "value": 20 }],
+      "title": "The Man Signing The Letters Is Forty-One",
+      "body": "The new chancellor was in high school when you were made a pastor. He is bright, fluent in a vocabulary of mission alignment and strategic clustering that did not exist in your seminary, and he has sent you a form with eleven questions about your parish's vitality metrics, due in nine days. He is not an enemy. He is in every way the diocese's future and he has never buried a child or run a boiler through a February, and both of those facts are relevant to the form.",
+      "choices": [
+        {
+          "id": "fill_it_in_properly",
+          "label": "Fill it in properly, and add one page he did not ask for",
+          "default": true,
+          "outcome": "The eleven answers are honest and the extra page is about the four things the form cannot measure, written without sarcasm. He telephones about the extra page. It goes into the presentation he makes to the bishop in March, credited, which you did not expect.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": 6 },
+            { "target": "stat", "key": "administration", "delta": 1 },
+            { "target": "flag", "key": "li_wrote_the_extra_page", "value": true }
+          ]
+        },
+        {
+          "id": "answer_minimally",
+          "label": "Answer the eleven questions and nothing more",
+          "outcome": "Nine minutes, filed on time, entirely correct. You are a compliant unit of the diocese and he learns nothing about the parish that the database did not already say.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": 1 }
+          ]
+        },
+        {
+          "id": "tell_him_what_you_think_of_forms",
+          "label": "Tell him what you think of the form",
+          "outcome": "You are witty about strategic clustering in an email that goes to him and, because he forwards things, to two other desks. Several older pastors hear about it and love you for it. The man who will be running personnel in ten years now has a file note.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": -7 },
+            { "target": "reputation", "key": "brother_priests", "delta": 5 },
+            { "target": "outspokenness", "key": "", "delta": 4 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "li_passed_over_again",
+      "phase": ["administrator", "pastor", "parochial_vicar"],
+      "pressure": ["ambition_vs_integrity", "doubt"],
+      "severity": "MAJOR",
+      "category": "assignment",
+      "baseWeight": 13,
+      "suppressYears": 5,
+      "requires": [
+        { "type": "flag", "key": "passed_over", "value": true },
+        { "type": "years_ordained", "op": ">=", "value": 15 }
+      ],
+      "title": "They Have Stopped Considering You",
+      "body": "It is not that you were passed over; it is that you have worked out, from the pattern of the last three appointments, that you are no longer on the list at all. Nobody tells a man this. There is no letter. There is simply a category into which you have been quietly moved, somewhere around the time the last bishop left, and the evidence is entirely circumstantial and entirely convincing.",
+      "choices": [
+        {
+          "id": "ask_the_vicar_straight",
+          "label": "Ask the vicar for clergy straight out where you stand",
+          "default": true,
+          "outcome": "He is uncomfortable for about four seconds and then tells you the truth, which is more than most men get: two specific things, one of which you can do something about and one of which is your age. Knowing is worse for a week and better for a decade.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": 2 },
+            { "target": "honesty", "key": "", "delta": 3 },
+            { "target": "flag", "key": "li_knows_where_he_stands", "value": true }
+          ]
+        },
+        {
+          "id": "build_something_here",
+          "label": "Stop looking up, and build something where you are",
+          "outcome": "You put the energy that was going into the middle distance into the parish in front of you, and within two years the parish is visibly different and you are noticeably easier to be around. The board notices, in the way it notices things, far too late to matter and just in time to matter.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 6 },
+            { "target": "stat", "key": "piety", "delta": 3 },
+            { "target": "flag", "key": "li_stopped_looking_up", "value": true }
+          ]
+        },
+        {
+          "id": "let_it_sour",
+          "label": "Say nothing, and let it sit",
+          "outcome": "It sits. It comes out sideways at the deanery meeting in the spring, in a remark about the cathedral that is funnier than it is fair, and two men laugh and one looks at his hands.",
+          "effects": [
+            { "target": "reputation", "key": "brother_priests", "delta": -3 },
+            { "target": "stat", "key": "piety", "delta": -2 },
+            { "target": "flag", "key": "li_soured", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "li_the_deanery_is_clustering",
+      "phase": ["pastor", "administrator"],
+      "pressure": ["money", "competence"],
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 13,
+      "suppressYears": 10,
+      "once": true,
+      "requires": [{ "type": "years_ordained", "op": ">=", "value": 16 }],
+      "title": "Three Parishes, One Pastor",
+      "body": "The plan comes down from the chancery with a map on it: the deanery's eleven parishes become seven, and two of the four to be suppressed are in your deanery, and one of the remaining pastors will be asked to hold three churches. The meeting is next month. Everyone in the room will be protecting something — a building, a school, a Polish Mass that has run since 1931 — and somebody is going to say out loud that the old men should retire and free up the parishes.",
+      "choices": [
+        {
+          "id": "argue_for_the_people",
+          "label": "Come with the numbers and argue for the communities, not the buildings",
+          "default": true,
+          "outcome": "You do the work: sacramental counts, drive times, who is eighty and cannot drive at night, which two of the four could merge without wrecking anything. It is the only document in the room made of facts, and two of your four recommendations survive into the final plan.",
+          "effects": [
+            { "target": "reputation", "key": "brother_priests", "delta": 5 },
+            { "target": "reputation", "key": "chancery", "delta": 5 },
+            { "target": "stat", "key": "administration", "delta": 2 },
+            { "target": "flag", "key": "li_shaped_the_cluster", "value": true }
+          ]
+        },
+        {
+          "id": "defend_your_own",
+          "label": "Defend your parish and let the others defend theirs",
+          "outcome": "Your parish survives untouched, which was never seriously in doubt, and you spend the meeting doing it anyway. The pastor of the smallest church watches you do it. He is closed in June and moved to a rectory with three churches and no housekeeper.",
+          "effects": [
+            { "target": "reputation", "key": "brother_priests", "delta": -5 },
+            { "target": "reputation", "key": "parishioners", "delta": 2 }
+          ]
+        },
+        {
+          "id": "volunteer_for_the_three",
+          "label": "Volunteer to be the man who takes the three",
+          "outcome": "The chancery is astonished and accepts in eleven days. Three churches, four hundred miles a month, two Polish funerals a week in a language you do not have, and the hardest and best five years of your priesthood.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": 10 },
+            { "target": "reputation", "key": "brother_priests", "delta": 6 },
+            { "target": "ap", "key": "", "delta": -2 },
+            { "target": "flag", "key": "li_took_the_three", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "li_the_bishop_who_does_not_know_you",
+      "phase": ["pastor", "administrator", "parochial_vicar"],
+      "pressure": ["loyalty_vs_honesty", "ambition_vs_integrity"],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 12,
+      "suppressYears": 6,
+      "requires": [
+        { "type": "flag", "key": "new_bishop_pending", "value": false },
+        { "type": "years_ordained", "op": ">=", "value": 18 }
+      ],
+      "title": "The Third Bishop",
+      "body": "The third bishop of your priesthood is installed in October and does not know your name, and there are a hundred and ninety priests in this diocese. The men who are going to matter to him are already circling: two of them were at the reception before the crozier was cold. You have a parish forty minutes from the cathedral, twenty-odd years of file, and one chance in the first eighteen months to be a name rather than a line.",
+      "choices": [
+        {
+          "id": "invite_him_for_something_real",
+          "label": "Invite him to something in the parish that is genuinely worth his afternoon",
+          "default": true,
+          "outcome": "Not a dinner: the school's centenary, or the confirmation of thirty adults, or a thing your people built. He comes, sees a parish that works, and remembers the room rather than you, which is the correct order and does you more good than flattery would have.",
+          "effects": [
+            { "target": "relationship", "key": "@bishop", "delta": 8 },
+            { "target": "reputation", "key": "chancery", "delta": 4 },
+            { "target": "reputation", "key": "parishioners", "delta": 3 }
+          ]
+        },
+        {
+          "id": "wait_to_be_found",
+          "label": "Do the work and let him find you or not",
+          "outcome": "There is a great deal to be said for this and you say most of it to yourself over the following three years, during which he learns the names of eleven priests and yours is not among them.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 2 },
+            { "target": "reputation", "key": "chancery", "delta": -2 }
+          ]
+        },
+        {
+          "id": "join_the_circle",
+          "label": "Be at the next three things he attends",
+          "outcome": "It works: by spring he knows your name and your parish and one fact about you. You have also become, to a dozen men who have known you for twenty years, one of the ones who circles, and they are not entirely wrong.",
+          "effects": [
+            { "target": "relationship", "key": "@bishop", "delta": 6 },
+            { "target": "reputation", "key": "chancery", "delta": 5 },
+            { "target": "reputation", "key": "brother_priests", "delta": -5 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "li_the_man_in_trouble",
+      "phase": ["pastor", "administrator"],
+      "pressure": ["friendship_vs_duty", "loyalty_vs_honesty"],
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 12,
+      "suppressYears": 8,
+      "requires": [{ "type": "years_ordained", "op": ">=", "value": 14 }],
+      "title": "A Brother Priest Is In Trouble With The Money",
+      "body": "{@deanery_priest} has a parish with a hole in its accounts and has been moving money between funds for three years to cover a building he should never have started. He tells you at a dinner, badly, after too much of the wine, and then tells you he is telling you because you are the only one who will not go straight to the chancery. There is no indication that anything went into his pocket. There is no indication that it did not.",
+      "choices": [
+        {
+          "id": "make_him_self_report",
+          "label": "Give him a week to go to the chancery himself, and go with him",
+          "default": true,
+          "outcome": "He goes on the sixth day with you sitting beside him. It is survivable because he came in rather than was found, and he is moved to a small parish with a finance council that has teeth. He does not forgive you for a year and then he does, at length.",
+          "effects": [
+            { "target": "relationship", "key": "@deanery_priest", "delta": 6 },
+            { "target": "reputation", "key": "chancery", "delta": 6 },
+            { "target": "honesty", "key": "", "delta": 4 },
+            { "target": "flag", "key": "li_walked_him_in", "value": true }
+          ]
+        },
+        {
+          "id": "report_it_yourself",
+          "label": "Telephone the vicar general in the morning",
+          "outcome": "It is the correct thing by every rule and it is done behind him. The chancery handles it properly. He learns within a fortnight where it came from, and the deanery knows by Easter, and men are careful about what they say in front of you for years.",
+          "effects": [
+            { "target": "relationship", "key": "@deanery_priest", "delta": -20 },
+            { "target": "reputation", "key": "chancery", "delta": 8 },
+            { "target": "reputation", "key": "brother_priests", "delta": -6 }
+          ]
+        },
+        {
+          "id": "keep_his_confidence",
+          "label": "Say nothing to anyone and try to help him fix it quietly",
+          "outcome": "Two years of a second set of books and a loan from a friend of his family, and it very nearly works. When it comes apart in the audit you are in it: not culpable, and not nowhere either, and the question of what you knew is asked of you twice by men with files.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": -10 },
+            { "target": "relationship", "key": "@deanery_priest", "delta": 10 },
+            { "target": "flag", "key": "li_kept_his_secret", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "li_the_dean_asks_you",
+      "phase": ["pastor"],
+      "pressure": ["competence", "ambition_vs_integrity"],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 12,
+      "suppressYears": 8,
+      "requires": [
+        { "type": "years_ordained", "op": ">=", "value": 15 },
+        { "type": "life", "key": "posts", "op": ">=", "value": 3 }
+      ],
+      "title": "They Want You To Be Dean",
+      "body": "The dean is retiring and the deanery's pastors have been asked, informally, whom they would accept. Your name has come back from six of the nine. It is an unpaid job made of other men's problems: the priest who is drinking, the parish whose books are wrong, the funeral cover in August, and the meetings at which the chancery says things and the deanery says nothing. The last dean aged ten years in four.",
+      "choices": [
+        {
+          "id": "take_it",
+          "label": "Take it, and do it as a service rather than a step",
+          "default": true,
+          "outcome": "Three years of telephone calls at bad hours and one intervention that works. Your own parish gets a little less of you and the deanery gets a man who answers, and when you move on, two pastors say the thing at your farewell that men do not usually say to each other.",
+          "effects": [
+            { "target": "reputation", "key": "brother_priests", "delta": 8 },
+            { "target": "reputation", "key": "chancery", "delta": 4 },
+            { "target": "ap", "key": "", "delta": -1 },
+            { "target": "flag", "key": "li_took_the_deanery", "value": true }
+          ]
+        },
+        {
+          "id": "decline_it",
+          "label": "Decline, and say honestly why",
+          "outcome": "You tell them what you have in front of you at the parish and that you would do it badly, and they take it well because it is obviously true. Somebody less suited takes it and the August cover is a mess for four years.",
+          "effects": [
+            { "target": "reputation", "key": "brother_priests", "delta": -2 },
+            { "target": "stat", "key": "piety", "delta": 1 }
+          ]
+        },
+        {
+          "id": "take_it_for_the_file",
+          "label": "Take it, mostly because of how it reads in the file",
+          "outcome": "It does read well in the file and the chancery does notice. You also spend three years doing a job you did not want for men you are now slightly resentful of, which shows, eventually, in a meeting in November.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": 6 },
+            { "target": "reputation", "key": "brother_priests", "delta": -3 },
+            { "target": "stat", "key": "piety", "delta": -2 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "li_the_funeral_of_a_classmate",
+      "phase": ["pastor", "administrator", "parochial_vicar"],
+      "pressure": ["doubt", "friendship_vs_duty"],
+      "severity": "MAJOR",
+      "category": "classmate",
+      "baseWeight": 13,
+      "suppressYears": 6,
+      "requires": [{ "type": "years_ordained", "op": ">=", "value": 22 }],
+      "title": "A Cathedral Full Of Priests In Black",
+      "body": "He was sixty-one and it was his heart at the desk on a Tuesday, and the cathedral is full of priests who have not seen each other since the last one of these. The family has asked you to preach because you were his friend in the seminary, forty years ago, before either of you knew what the job was. His sister wants you to say that he was happy. You are not certain he was happy, and there are three hundred people who loved him in the nave.",
+      "choices": [
+        {
+          "id": "preach_the_man",
+          "label": "Preach the actual man, with the difficult parts folded in gently",
+          "default": true,
+          "outcome": "You say what he was: funny, difficult, lonely in the way that particular generation of priests was lonely, and faithful for thirty-six years without ever once finding it easy. Four priests tell you afterward that they want you to do theirs. His sister holds on to you at the door.",
+          "effects": [
+            { "target": "reputation", "key": "brother_priests", "delta": 7 },
+            { "target": "stat", "key": "piety", "delta": 3 },
+            { "target": "honesty", "key": "", "delta": 3 },
+            { "target": "flag", "key": "li_preached_a_brother", "value": true }
+          ]
+        },
+        {
+          "id": "give_the_sister_what_she_asked",
+          "label": "Give the sister the homily she asked for",
+          "outcome": "A warm, generous, entirely defensible homily about a happy priest. She is consoled and it is the right pastoral call and every priest in the building knows that you did not say the true thing, and several of them are relieved.",
+          "effects": [
+            { "target": "reputation", "key": "public", "delta": 2 },
+            { "target": "reputation", "key": "brother_priests", "delta": -2 }
+          ]
+        },
+        {
+          "id": "preach_the_priesthood",
+          "label": "Preach about what the diocese asks of men like him, with the bishop in the sanctuary",
+          "outcome": "You say, carefully and in front of everybody, that he died at a desk in a rectory where he lived alone and that the diocese knew he was struggling. It is the most honest thing said in that building in a decade and it costs you something with two rows of the sanctuary.",
+          "effects": [
+            { "target": "reputation", "key": "brother_priests", "delta": 10 },
+            { "target": "reputation", "key": "chancery", "delta": -7 },
+            { "target": "outspokenness", "key": "", "delta": 6 },
+            { "target": "flag", "key": "li_said_it_at_the_funeral", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "li_the_audit",
+      "phase": ["pastor", "administrator"],
+      "pressure": ["money", "competence"],
+      "severity": "NOTABLE",
+      "category": "finance",
+      "baseWeight": 12,
+      "suppressYears": 7,
+      "requires": [{ "type": "years_ordained", "op": ">=", "value": 12 }],
+      "title": "The Diocesan Audit",
+      "body": "Two accountants for three days, with a checklist of forty-one items, most of which concern things the previous pastor did or did not do in 2009. Your books are honest. Your books are also kept the way you have kept books for fifteen years, which is not the way the new manual says, and there is a second collection from four years ago that went to a family in trouble and is recorded as parish charity in your own handwriting with no minute of the council.",
+      "choices": [
+        {
+          "id": "show_them_everything",
+          "label": "Show them everything, including the second collection, and explain it",
+          "default": true,
+          "outcome": "You put it in front of them yourself on the first morning. They write it up as a governance finding rather than anything else, the council minutes it retroactively, and the report says that the pastor was fully cooperative, which is a sentence that is read carefully in the chancery.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": 6 },
+            { "target": "stat", "key": "administration", "delta": 2 },
+            { "target": "honesty", "key": "", "delta": 2 }
+          ]
+        },
+        {
+          "id": "hope_they_miss_it",
+          "label": "Answer what is asked and no more",
+          "outcome": "They find it on the second afternoon, because that is the job, and the question is now why it was not mentioned. Nothing improper happened and the report says finding, twice, and the chancery reads the word twice too.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": -6 },
+            { "target": "flag", "key": "li_the_finding", "value": true }
+          ]
+        },
+        {
+          "id": "fix_the_system",
+          "label": "Use the three days to rebuild how the parish keeps its books",
+          "outcome": "You take the checklist as a gift, put a real system in with the bookkeeper, and hand the council a set of accounts in June that a stranger could read. It costs four weekends and it is the thing your successor will thank you for without knowing your name.",
+          "effects": [
+            { "target": "stat", "key": "administration", "delta": 4 },
+            { "target": "reputation", "key": "chancery", "delta": 3 },
+            { "target": "flag", "key": "li_books_rebuilt", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "li_the_seminarian_placed_with_you",
+      "phase": ["pastor"],
+      "pressure": ["competence", "friendship_vs_duty"],
+      "severity": "NOTABLE",
+      "category": "formation",
+      "baseWeight": 12,
+      "suppressYears": 5,
+      "requires": [
+        { "type": "life", "key": "formed", "op": ">=", "value": 2 },
+        { "type": "years_ordained", "op": ">=", "value": 18 }
+      ],
+      "title": "They Send You The Difficult One",
+      "body": "The vocation director telephones before the letter, which is how you know. The seminarian coming for the summer is bright, devout, rigid in a way that his year has made fashionable, and has been moved from another parish where he told the pastor that the parish's Mass was irreverent. They are sending him to you because the rector thinks you might get through, and because if he cannot be got through to, somebody with twenty years needs to say so on paper.",
+      "choices": [
+        {
+          "id": "work_him_hard_and_kindly",
+          "label": "Work him hard, be kind, and let the parish do the teaching",
+          "default": true,
+          "outcome": "Ten weeks of hospital rounds, funerals, a family with a dying child, and the woman at the food pantry who asks him questions he cannot answer out of a manual. He is not converted. He is cracked open about an inch, and at the end he asks you one real question in the car.",
+          "effects": [
+            { "target": "pillar", "key": "pastoral", "delta": 2 },
+            { "target": "reputation", "key": "chancery", "delta": 5 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "flag", "key": "li_cracked_him_open", "value": true }
+          ]
+        },
+        {
+          "id": "argue_theology_with_him",
+          "label": "Take him on, argument for argument, all summer",
+          "outcome": "You win most of them and he concedes none, and the summer is ten weeks of two men enjoying themselves for the wrong reasons. You write an accurate evaluation that changes nothing about him.",
+          "effects": [
+            { "target": "stat", "key": "theology", "delta": 2 },
+            { "target": "reputation", "key": "chancery", "delta": 1 }
+          ]
+        },
+        {
+          "id": "write_the_honest_letter",
+          "label": "Give him the summer, then write the letter the rector is actually asking for",
+          "outcome": "You write four paragraphs saying that he is intelligent and devout and cannot yet be with people who are not like him, and that another summer will not fix it. The rector uses it. He is not ordained with his year, and you are the reason, and you would do it again and it sits in you.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": 7 },
+            { "target": "honesty", "key": "", "delta": 4 },
+            { "target": "stat", "key": "piety", "delta": -1 },
+            { "target": "flag", "key": "li_wrote_the_hard_letter", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "li_the_retired_predecessor",
+      "phase": ["pastor", "administrator"],
+      "pressure": ["friendship_vs_duty", "competence"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 11,
+      "suppressYears": 6,
+      "requires": [{ "type": "weeks_served", "op": ">=", "value": 104 }],
+      "title": "The Man Who Was Here Before You",
+      "body": "He retired two towns over and comes back for funerals, and people ask him to do their weddings, and last month he told the parish council's longest-serving member that the new windows were a mistake. He is not malicious; he gave this parish twenty-two years and does not know how to stop. Three people have now told you, separately, with the pleasure people take in telling a priest such things.",
+      "choices": [
+        {
+          "id": "invite_him_in",
+          "label": "Invite him for supper and give him something real to do here",
+          "default": true,
+          "outcome": "Supper, and then the Thursday morning Mass and the nursing home round, which he takes on gratefully and does well. He stops commenting on the windows within a season, because a man with work to do has less to say about other men's work.",
+          "effects": [
+            { "target": "reputation", "key": "brother_priests", "delta": 5 },
+            { "target": "reputation", "key": "parishioners", "delta": 3 },
+            { "target": "ap", "key": "", "delta": 1 },
+            { "target": "flag", "key": "li_gave_him_thursdays", "value": true }
+          ]
+        },
+        {
+          "id": "tell_him_to_stop",
+          "label": "Tell him, plainly, to stop commenting in the parish",
+          "outcome": "A short conversation in the sacristy that both of you handle correctly and neither of you enjoys. He stops, and stops coming, and the eleven people who loved him notice that he stopped coming.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": -3 },
+            { "target": "relationship", "key": "@brother_priest", "delta": -8 }
+          ]
+        },
+        {
+          "id": "let_it_go",
+          "label": "Let him say what he likes about the windows",
+          "outcome": "He says what he likes about the windows for another six years. It costs you nothing you cannot afford and it costs the parish council one resignation, and on the whole the arithmetic is fine.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "reputation", "key": "parishioners", "delta": -1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "li_asked_to_do_the_hard_visit",
+      "phase": ["pastor", "administrator"],
+      "pressure": ["loyalty_vs_honesty", "friendship_vs_duty"],
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 11,
+      "suppressYears": 8,
+      "requires": [
+        { "type": "years_ordained", "op": ">=", "value": 20 },
+        { "type": "reputation", "key": "chancery", "op": ">=", "value": 30 }
+      ],
+      "title": "The Bishop Wants You To Go And See Him",
+      "body": "A pastor in the next deanery has not filed anything in nine months, has not been seen at a deanery meeting in two years, and did not answer the chancery's letter. The bishop does not want to send a canonical visitation and does want somebody to drive out there on a Tuesday, unannounced, and find out what is actually going on, and report back honestly. He has asked you because you are the kind of man another man might open the door to.",
+      "choices": [
+        {
+          "id": "go_as_a_priest",
+          "label": "Go, with no clipboard, and stay as long as it takes",
+          "default": true,
+          "outcome": "The house is filthy and he has not said Mass in the church since Lent and he is not drinking, which is somehow worse. You stay eleven hours. What you write afterward is four sentences long and gets him to a place that helps, and he telephones you a year later from a small parish and sounds like a man.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": 7 },
+            { "target": "reputation", "key": "brother_priests", "delta": 6 },
+            { "target": "stat", "key": "piety", "delta": 3 },
+            { "target": "flag", "key": "li_went_out_there", "value": true }
+          ]
+        },
+        {
+          "id": "go_and_report_fully",
+          "label": "Go, and give the chancery the whole picture in writing",
+          "outcome": "Three pages, accurate, unsparing, and unquestionably the right document for a diocese with a duty of care. He is removed within the month and knows who drove out on the Tuesday, and what you did was correct and he does not telephone you a year later.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": 9 },
+            { "target": "reputation", "key": "brother_priests", "delta": -4 },
+            { "target": "flag", "key": "li_wrote_the_report", "value": true }
+          ]
+        },
+        {
+          "id": "decline_the_errand",
+          "label": "Tell the bishop to send the vicar for clergy, whose job it is",
+          "outcome": "You are right about whose job it is and he sends the vicar for clergy, who arrives with a clipboard and gets eleven minutes at the door. The chancery notes, without resentment, that you did not do the thing you were asked.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": -4 },
+            { "target": "stat", "key": "piety", "delta": -1 }
+          ]
+        }
+      ]
+    }
+  ]
+}

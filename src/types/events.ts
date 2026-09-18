@@ -194,7 +194,9 @@ export type EffectTarget =
   /** Move a posting's dial (study.place): key is the dial id, delta. Nothing happens outside a posting. */
   | 'place'
   /** Count in a posting's book (study.record): key is the entry, delta. Nothing happens outside a posting. */
-  | 'record';
+  | 'record'
+  /** How worn the man is, 0..100: a scene that costs him a month of sleep, or gives one back. */
+  | 'strain';
 
 export interface Effect {
   target: EffectTarget;
