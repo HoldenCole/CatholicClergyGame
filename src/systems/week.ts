@@ -25,6 +25,7 @@ import { decayWeek } from './stats';
 import { applyReputation, fadeReputation } from './reputation';
 import { terrainOf } from './assignment';
 import { averageVitality, groupRelief, groupsWeek, finishFounding } from './groups';
+import { ministryWeek } from './ministry';
 import type { Rng } from '@/engine/rng';
 
 /** Tunables for the weekly loop. DESIGN 2.6 and 8.1; numbers not in the design are invented. */
@@ -380,6 +381,9 @@ export function resolveWeek(state: GameState, rng: Rng): { state: GameState; led
   bonuses.collections += preached.collections;
   const target = attendanceTarget(next, care, mass.pull + bonuses.pull + confessorPull(next));
   const attendance = parish.attendance + (target - parish.attendance) * WEEK.attendanceFollow;
+
+  // The book of a life: what this week counted. DESIGN §8.6.
+  next = ministryWeek(next, plan.obligations, plan.discretionary.extra_confessions ?? 0);
 
   // Finance.
   const world = next.world!;

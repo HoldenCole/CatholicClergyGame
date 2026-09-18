@@ -62,8 +62,9 @@ import { DEFAULT_SETTINGS } from '@/systems/workweek';
 import type { GameSettings } from '@/types';
 import { setPreference, type Preference } from '@/systems/assignment';
 import { setInterest as doSetInterest } from '@/systems/interests';
+import { fileRequest as doFileRequest, withdrawRequest as doWithdrawRequest } from '@/systems/request';
 import { setLearning as doSetLearning } from '@/systems/languages';
-import type { DecorPlace, LiturgicalTopic } from '@/types';
+import type { DecorPlace, LiturgicalTopic, RequestTarget } from '@/types';
 import { anthropicProvider, type Provider } from '@/llm/provider';
 import { DEFAULT_LLM, loadLlmSettings, saveLlmSettings, type LlmSettings } from '@/llm/settings';
 import { skinArc, skinEvent, skinOutcome } from '@/llm/skin';
@@ -150,6 +151,9 @@ export interface GameStore {
   setPreference(pref: Preference): void;
   /** Indicate interest: the Gregorian, a parish, the posts. */
   setInterest(key: string, on: boolean): void;
+  /** Write to the vicar for clergy asking for one named parish or posting. DESIGN §7.6. */
+  fileRequest(target: RequestTarget): void;
+  withdrawRequest(): void;
   /** Take up a language in the routine's study hours, or put it down. */
   setLearning(id: string | null): void;
   setDiscretionary(actionId: string, ap: number): void;
@@ -650,6 +654,12 @@ export const useGameStore = create<GameStore>()((set, get) => ({
   },
   setInterest(key, on) {
     update(set, get, (game) => doSetInterest(game, key, on));
+  },
+  fileRequest(target) {
+    update(set, get, (game) => doFileRequest(game, target));
+  },
+  withdrawRequest() {
+    update(set, get, (game) => doWithdrawRequest(game));
   },
   setLearning(id) {
     update(set, get, (game) => doSetLearning(game, id));

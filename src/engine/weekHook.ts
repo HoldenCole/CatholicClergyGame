@@ -25,6 +25,8 @@ import { seminaryWeek } from '@/systems/seminaryWeek';
 import { studyWeek } from '@/systems/studyWeek';
 import { endStudy } from './study';
 import { appointmentStep, APPOINTMENT_FLAGS } from './appointment';
+import { clearRequestAnswer, closeRequest, requestAnswerDue } from '@/systems/request';
+import { requestedChoice } from '@/systems/choice';
 import { confessorWeek } from '@/systems/confessor';
 import { turnaroundStep } from '@/systems/trajectory';
 import { visitationStep } from '@/systems/visitation';
@@ -204,6 +206,17 @@ export function parishWeekHook(deps: EventDeps): WeekHook {
     const letter = letterStep(state, rng, deps);
     if (letter.moved || letter.state.pending.length > 0) return letter.state;
     state = letter.state;
+    // The vicar for clergy's answer to the letter the man wrote himself. DESIGN §7.6.
+    if (requestAnswerDue(state)) {
+      const asked = requestedChoice(state);
+      if (asked) {
+        return addDigestLine(
+          { ...clearRequestAnswer(state), mode: { kind: 'assignment_choice', options: asked.options, why: asked.why } },
+          "The envelope on the hall table has the chancery's return address and your own name spelled right for once.",
+        );
+      }
+      state = closeRequest(clearRequestAnswer(state), 'lapsed');
+    }
     // The vicar for clergy's letter about a summer on loan: go, and the away week takes it from here.
     if (state.flags['supply:pending'] && !state.away) {
       state = goSupply(state, rng.derive(`supply:${state.clock.week}`));

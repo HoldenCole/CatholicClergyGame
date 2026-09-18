@@ -3,6 +3,7 @@ import { allOffers } from '@/content/offers';
 import { currentPreference, PREFERENCES, PREFERENCE_LABEL } from '@/systems/assignment';
 import { INTEREST_DEFS, INTERESTS, interestsOf, parishInterest } from '@/systems/interests';
 import { chancesFor } from '@/systems/openings';
+import { canRequest, postLabel, REQUESTABLE_POSTS, requestChance, requestOf, requestWord } from '@/systems/request';
 import { CATEGORY_WORD, offerDoors } from '@/systems/doors';
 import { formationStanding, summersOnRecord } from '@/systems/standing';
 import type { Opening, Parish } from '@/types';
@@ -31,6 +32,8 @@ export default function JobsPanel() {
   const setPreference = useGameStore((s) => s.setPreference);
   const setInterest = useGameStore((s) => s.setInterest);
   const apply = useGameStore((s) => s.applyForOpening);
+  const file = useGameStore((s) => s.fileRequest);
+  const withdraw = useGameStore((s) => s.withdrawRequest);
   if (!game?.character) return null;
   const inParish = !!game.parish;
   const pref = currentPreference(game);
@@ -140,6 +143,58 @@ export default function JobsPanel() {
           {applications.length > 0 && <p className="ink-faint mt-2 text-xs">{applications.map((a) => a.text).join(' ')}</p>}
         </Sheet>
       )}
+
+
+      {game.flags.ordained && (() => {
+        const gate = canRequest(game);
+        const standing = requestOf(game);
+        const chance = requestChance(game);
+        const years = standing ? Math.floor((game.clock.week - standing.week) / 52) : 0;
+        const parishes = [...(game.world?.parishes ?? [])].filter((p) => p.id !== game.parish?.parishId).sort((a, b) => a.name.localeCompare(b.name));
+        return (
+          <Sheet title="The letter to the vicar for clergy">
+            <p className="ink-muted text-xs leading-relaxed">
+              Not the form that names a kind of parish: a letter that names a place. One stands at a time, the chancery counts how often you have asked, and the board reads it when your years here end &mdash; sooner if you are strong or the place is short. You may say no when it comes, and that is remembered too.
+            </p>
+            {!gate.ok ? (
+              <p className="ink-faint mt-2 text-xs">{gate.why}</p>
+            ) : standing ? (
+              <>
+                <p className="mt-2 text-sm">
+                  In the file: <span className="font-semibold">{standing.label}</span>
+                  <span className="ink-faint text-xs">{years > 0 ? ` · standing ${years} year${years === 1 ? '' : 's'}` : ' · just written'}{standing.asked > 1 ? ` · your ${standing.asked}${standing.asked === 2 ? 'nd' : standing.asked === 3 ? 'rd' : 'th'} letter` : ''}</span>
+                </p>
+                <p className="ink-muted mt-1 text-xs">{requestWord(chance)}{chance.reasons.length ? ` (${chance.reasons.slice(0, 3).join(', ')})` : ''}</p>
+                <button className="pbtn mt-2 px-2 py-0.5 text-xs" onClick={() => withdraw()} title="Take it back. Nothing is held against you but the asking.">
+                  withdraw the letter
+                </button>
+              </>
+            ) : (
+              <>
+                <div className="mt-2 flex items-center gap-2 text-xs">
+                  <span className="ink-muted">A parish:</span>
+                  <select
+                    className="rounded border rule bg-white/40 px-1 py-0.5"
+                    value=""
+                    onChange={(e) => e.target.value && file({ kind: 'parish', parishId: e.target.value })}
+                  >
+                    <option value="">name one</option>
+                    {parishes.map((p) => <option key={p.id} value={p.id}>{p.name}, {p.place}</option>)}
+                  </select>
+                </div>
+                <div className="mt-2 flex flex-wrap gap-1">
+                  {REQUESTABLE_POSTS.map((id) => (
+                    <button key={id} className="pbtn px-2 py-0.5 text-xs" onClick={() => file({ kind: 'post', offerId: id })} title="Ask for this posting by name. The bishop decides, and the letter that answers it may take years.">
+                      {postLabel(id)}
+                    </button>
+                  ))}
+                </div>
+                <p className="ink-faint mt-2 text-xs">A mitre is not on this list. Bishops are the nuncio&rsquo;s business, and a man who writes to the chancery asking for one has said something about himself.</p>
+              </>
+            )}
+          </Sheet>
+        );
+      })()}
 
       <Sheet title="Doors open to you">
         {ready.length === 0 ? (

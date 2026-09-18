@@ -11,6 +11,8 @@ import type { CareerEntry, Project } from './career';
 import type { Opening } from './promotion';
 import type { DecorState, Permission } from './decor';
 import type { Institute } from './religious';
+import type { CareerRequest } from './request';
+import type { Ministry } from './ministry';
 
 /** A rolled diocese the player may choose, held only during creation. */
 export interface DioceseCandidate {
@@ -115,6 +117,12 @@ export interface GameState {
   founding: Founding | null;
   /** Openings the personnel board currently has. Refreshed each career year. */
   openings: Opening[];
+  /** The letter in the vicar for clergy's file: the post he has asked for. DESIGN §7.6. Absent in older saves. */
+  request?: CareerRequest | null;
+  /** Every request he has made, answered or not, for the file. */
+  requests?: CareerRequest[];
+  /** The book: what his ministry has counted. DESIGN §8.6. Absent in older saves. */
+  ministry?: Ministry;
   /** The pastor's current project, if any. DESIGN 8.3 */
   /** The pastor's projects, several at once. `project` is kept for older saves and mirrors the first. */
   project: Project | null;

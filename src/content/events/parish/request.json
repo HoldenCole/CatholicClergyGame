@@ -1,0 +1,325 @@
+{
+  "_notes": "The letter to the vicar for clergy (DESIGN §7.6), and the long view of a ministry (§8.6). What a man asks for is heard by more people than he wrote to.",
+  "events": [
+    {
+      "id": "rq_why_that_one",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["ambition_vs_integrity", "loyalty_vs_honesty"],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 12,
+      "suppressYears": 3,
+      "requires": [{ "type": "flag", "key": "request:standing", "value": true }],
+      "title": "He Asks Why That One",
+      "body": "The vicar for clergy catches you after the deanery meeting with your own letter folded in his jacket pocket, which means he has been carrying it for a while and meant to do this here rather than in an office where it would be a meeting. He is not unfriendly. He wants to know why that one, in your own words, and he says that what you tell him goes no further than the file, which is both true and the reason he is asking.",
+      "choices": [
+        {
+          "id": "the_true_reason",
+          "label": "Tell him the actual reason, whatever it is",
+          "default": true,
+          "outcome": "You say it plainly, including the part that is about you and not about the parish. He listens, says nothing for a moment, and then tells you that men who say the honest version get read more carefully than men who recite the mission statement, and that he cannot promise you anything. He writes two lines in the file. You would like to know what they say.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": 4 },
+            { "target": "honesty", "key": "", "delta": 3 },
+            { "target": "flag", "key": "rq_said_why", "value": true }
+          ]
+        },
+        {
+          "id": "the_institutional_answer",
+          "label": "Give him the answer a personnel file likes to hear",
+          "outcome": "Need, gifts, the Spanish, the school. He nods along and writes one line instead of two. It is not a bad answer and it is not yours, and he has been doing this for eleven years, so he knows the difference and does not say so.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": 1 }
+          ]
+        },
+        {
+          "id": "ask_him_straight",
+          "label": "Ask him what it would take",
+          "outcome": "He tells you, which surprises you: two more years where you are, a pastor who will say the right thing about you, and the man there to retire or be moved, in that order. It is not encouragement. It is the actual list, and having it is worth more than being encouraged.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": 2 },
+            { "target": "flag", "key": "rq_knows_the_list", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rq_the_neighbor_heard",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["friendship_vs_duty", "ambition_vs_integrity"],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 9,
+      "suppressYears": 4,
+      "requires": [
+        { "type": "flag", "key": "request:for_parish", "value": true },
+        { "type": "years_ordained", "op": ">=", "value": 4 }
+      ],
+      "title": "It Got Around",
+      "body": "Nothing at the chancery stays at the chancery. {@deanery_priest} says it at the coffee afterward, lightly, in front of three other men: that he hears you have written in about a certain parish, and that its pastor is not dead yet. Everybody laughs. One of them does not.",
+      "choices": [
+        {
+          "id": "own_it",
+          "label": "Say yes, you wrote, and say what you wrote",
+          "default": true,
+          "outcome": "You say it in the room, without apologizing for it, and the temperature goes down rather than up. Two of them say afterward that they have never written a letter in their lives and probably should have. One of them does not speak to you about it again, and did want that parish.",
+          "effects": [
+            { "target": "reputation", "key": "brother_priests", "delta": 2 },
+            { "target": "relationship", "key": "@deanery_priest", "delta": -4 }
+          ]
+        },
+        {
+          "id": "laugh_it_off",
+          "label": "Laugh with them and change the subject",
+          "outcome": "It works, in the room. It does not work for long: a man who will not say what he has asked for is assumed to have asked for more than he did, and by Lent the version going around has you writing to the nuncio.",
+          "effects": [
+            { "target": "reputation", "key": "brother_priests", "delta": -2 },
+            { "target": "flag", "key": "rq_ducked_it", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rq_the_people_hear",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["loyalty_vs_honesty"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 8,
+      "suppressYears": 4,
+      "requires": [
+        { "type": "flag", "key": "request:standing", "value": true },
+        { "type": "weeks_served", "op": ">=", "value": 104 }
+      ],
+      "title": "Are You Leaving Us",
+      "body": "{@bonded_parishioner} stops you at the door after the nine o'clock, with a face that has already decided what the answer is. Somebody's cousin works in the chancery mailroom. She does not ask whether the rumor is true; she asks whether you are leaving them, which is a different question and the one that actually matters to her.",
+      "choices": [
+        {
+          "id": "tell_her",
+          "label": "Tell her the truth: you have asked, and the bishop decides",
+          "default": true,
+          "outcome": "She takes it better than you expected and worse than she lets on. By the following Sunday the whole parish knows, and half of them are proud of you and half of them have started treating you like a man already gone, which changes how they ask you for things.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": -3 },
+            { "target": "honesty", "key": "", "delta": 2 },
+            { "target": "bond", "key": "@bonded_parishioner", "value": "told:you had asked to be moved" }
+          ]
+        },
+        {
+          "id": "say_nothing_is_settled",
+          "label": "Say that nothing is settled, which is true",
+          "outcome": "It is true and it is not an answer, and she has raised four children and knows an unanswer when she hears one. She says of course, Father, and pats your arm, and tells the parking lot that you are going.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": -1 }
+          ]
+        },
+        {
+          "id": "promise_nothing_changes",
+          "label": "Promise her that nothing changes until it changes",
+          "outcome": "You mean it, and it holds until the letter comes. If it comes, she will remember the promise the way people remember promises: not as the sentence you said, but as the thing she wanted it to mean.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "flag", "key": "rq_promised_them", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rq_room_was_made",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["ambition_vs_integrity", "friendship_vs_duty"],
+      "severity": "MAJOR",
+      "category": "assignment",
+      "baseWeight": 14,
+      "suppressYears": 6,
+      "once": true,
+      "requires": [{ "type": "flag", "key": "request:granted", "value": true }],
+      "title": "Somebody Was Moved",
+      "body": "A man does not simply arrive at a parish; a place is made for him. You learn, in the way these things are learned, who was moved so that you could be sent: a priest eleven years older than you, with a sister in the hospital in that town, who had asked to stay and was told that the diocese needed him elsewhere. Nobody says it was because of your letter. Your letter is in the file with his.",
+      "choices": [
+        {
+          "id": "write_to_him",
+          "label": "Write to him before you arrive",
+          "default": true,
+          "outcome": "You write four sentences and throw away eleven drafts of the fifth. He answers two weeks later, briefly and without warmth, to tell you where the boiler key is kept and which of the ushers will test you. Years later, at a funeral, he says the letter was decent of you and that he was too angry that spring to say so.",
+          "effects": [
+            { "target": "reputation", "key": "brother_priests", "delta": 3 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "flag", "key": "rq_wrote_to_him", "value": true }
+          ]
+        },
+        {
+          "id": "say_nothing",
+          "label": "Say nothing and take up the work",
+          "outcome": "There is nothing to say that is not about you, and you have a parish to run. It sits there anyway, in the way the sacristan looks at you in the first month, and in the fact that his name is still on the mailbox in June.",
+          "effects": [
+            { "target": "reputation", "key": "brother_priests", "delta": -2 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rq_after_the_no",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["ambition_vs_integrity"],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 11,
+      "suppressYears": 5,
+      "once": true,
+      "requires": [{ "type": "flag", "key": "request:refused", "value": true }],
+      "title": "You Asked, And Then You Didn't Go",
+      "body": "The vicar for clergy is perfectly civil about it. He says of course, that a man must know his own mind, that the parish is fortunate. Then he says the other thing, in the same tone: that the board moved three men around your letter, and that the next one you write will be read against this one, and that he tells you this as a kindness because nobody told him at your age.",
+      "choices": [
+        {
+          "id": "take_the_correction",
+          "label": "Take it, and say you understand what it cost",
+          "default": true,
+          "outcome": "You say it without excuses, and he relaxes by about a degree. It does not undo anything. It does mean that when you write again, in some other year, the letter will be read by a man who thinks you are honest rather than flighty, which is the whole of what you can salvage.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": 3 },
+            { "target": "honesty", "key": "", "delta": 2 }
+          ]
+        },
+        {
+          "id": "explain_yourself",
+          "label": "Explain why you stayed",
+          "outcome": "The reasons are good and he has heard good reasons before. He writes nothing down, which is worse than if he had.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": -1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rq_the_file_closed",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["doubt", "ambition_vs_integrity"],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 10,
+      "suppressYears": 4,
+      "requires": [{ "type": "flag", "key": "request:lapsed", "value": true }],
+      "title": "Four Years In The File",
+      "body": "It is not a rejection, because nothing was rejected. The letter simply sat in a folder through two personnel boards and a change of secretary, and now a form letter says the file is closed and that you are free to write again at any time. The parish you asked for got somebody else in a year you were not considered, and nobody thought to tell you, because from their side there was nothing to tell.",
+      "choices": [
+        {
+          "id": "write_again",
+          "label": "Write again, the same day, and say so",
+          "default": true,
+          "outcome": "The second letter is shorter than the first and better. Persistence reads as one of two things in a chancery, and which one depends entirely on whether the man is any good, which is not something you get to decide about yourself.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": 1 },
+            { "target": "flag", "key": "rq_wrote_again", "value": true }
+          ]
+        },
+        {
+          "id": "let_it_go",
+          "label": "Let it go, and be where you are",
+          "outcome": "You put the form letter in the drawer with the others and go and do the eight o'clock. Something eases that you had not noticed was tight, and something else closes quietly, and both of those are true at once for about a year.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 2 },
+            { "target": "reputation", "key": "parishioners", "delta": 2 }
+          ]
+        },
+        {
+          "id": "ask_the_dean",
+          "label": "Ask the dean to find out what actually happened",
+          "outcome": "{@dean} makes one telephone call and reports back that there was no decision about you at all, which is the answer, and the hardest one: you were not weighed and found wanting, you were not weighed.",
+          "effects": [
+            { "target": "relationship", "key": "@dean", "delta": 2 },
+            { "target": "reputation", "key": "chancery", "delta": -1 },
+            { "target": "flag", "key": "rq_learned_nothing_happened", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rq_the_register",
+      "phase": ["pastor", "administrator"],
+      "pressure": ["doubt"],
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 10,
+      "suppressYears": 6,
+      "requires": [{ "type": "years_ordained", "op": ">=", "value": 18 }],
+      "title": "Your Own Hand, Twenty Years Ago",
+      "body": "A woman needs a copy of her baptismal certificate for a wedding and the entry is in a book you have to take down off the high shelf. You find it, and the hand in the margin is your own, from a parish you left in another decade, in the ink of a pen you can still picture. You baptized her. You do not remember it at all. Two lines below is a name you do remember, because you buried his father the same month.",
+      "choices": [
+        {
+          "id": "sit_with_it",
+          "label": "Sit in the sacristy a while with the book open",
+          "default": true,
+          "outcome": "Half an hour goes somewhere. The register is not a record of your career; it is a record of a Tuesday afternoon in a town you have not thought about in years, repeated a few thousand times, and every line of it happened whether or not you can recall it. You put the book back higher than you need to and say the six o'clock.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 3 },
+            { "target": "flag", "key": "rq_read_the_register", "value": true }
+          ]
+        },
+        {
+          "id": "copy_it_and_move_on",
+          "label": "Make the copy, stamp it, and get on with the day",
+          "outcome": "You stamp it, sign it, hand it across the desk, and the woman says thank you Father and goes to get married. There are eleven other things before supper and you do all of them, and the book sits on the desk until Thursday.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 1 }
+          ]
+        },
+        {
+          "id": "write_to_her",
+          "label": "Tell her you were the one who baptized her",
+          "outcome": "She cries, which you did not expect, and asks you to do the wedding, which the other parish will not love. You say yes. Her mother sends a photograph afterward of a priest with dark hair holding a baby over a font, and you keep it in the breviary where the ribbon is.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 3 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "bond", "key": "@bonded_parishioner", "value": "married:the child you baptized" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rq_silver_jubilee",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["doubt", "ambition_vs_integrity"],
+      "severity": "MAJOR",
+      "category": "personal",
+      "baseWeight": 16,
+      "suppressYears": 20,
+      "once": true,
+      "requires": [{ "type": "years_ordained", "op": ">=", "value": 25 }],
+      "title": "Twenty-Five Years",
+      "body": "The parish wants to do something and the diocese does the thing it does: a Mass at the cathedral in June for the jubilarians, twenty-five years and fifty, with the bishop presiding and a lunch afterward in the hall with the round tables. Four of the men you were ordained with are on the list. Two are not, for the two reasons men are not. The secretary needs to know by Friday how many are coming from your side, and whether you want to preach at the parish's own celebration or have somebody else do it.",
+      "choices": [
+        {
+          "id": "preach_it_yourself",
+          "label": "Preach at it yourself, and tell them the truth about the twenty-five years",
+          "default": true,
+          "outcome": "You preach about what the years actually were, which is mostly funerals and boilers and the eight o'clock, and about the two men not on the list, carefully and without names. Nobody expected that homily. An old woman tells you afterward that it was the first time a priest had said out loud what she had always suspected the job was, and that she liked him better for it.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 6 },
+            { "target": "reputation", "key": "brother_priests", "delta": 3 },
+            { "target": "stat", "key": "piety", "delta": 2 }
+          ]
+        },
+        {
+          "id": "let_the_dean_preach",
+          "label": "Let the dean preach and sit in the front pew for once",
+          "outcome": "{@dean} is generous about you for eleven minutes and gets one story wrong in a way that makes it better. Sitting in a pew during a Mass about you is one of the strangest hours of your life, and you are grateful and uncomfortable in roughly equal measure.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 3 },
+            { "target": "relationship", "key": "@dean", "delta": 3 }
+          ]
+        },
+        {
+          "id": "keep_it_small",
+          "label": "Go to the cathedral, skip the parish party, say the six o'clock",
+          "outcome": "You go to the cathedral because the bishop asked, shake hands at the lunch, and are home in time for the six o'clock with eleven people in it, which is what the twenty-five years have actually consisted of. The parish is a little hurt and says it is fine.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": -2 },
+            { "target": "stat", "key": "piety", "delta": 3 },
+            { "target": "flag", "key": "rq_quiet_jubilee", "value": true }
+          ]
+        }
+      ]
+    }
+  ]
+}

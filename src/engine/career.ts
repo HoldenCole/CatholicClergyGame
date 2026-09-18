@@ -14,6 +14,11 @@ import { deliverLetter, yearInReview } from '@/systems/review';
 import { closeTenure } from '@/systems/tenures';
 import { seeYear } from './see';
 import { withChoice } from '@/systems/choice';
+import { closeRequest, markRequested, requestOf, requestYear } from '@/systems/request';
+import { ministryLine } from '@/systems/ministry';
+
+/** What a letter naming a parish is worth when the board has nothing else in mind. Invented. */
+const REQUEST_WEIGHT = 45;
 
 /** Invented. DESIGN 7.3: retirement letters go in at 75 and are often not accepted for years. */
 export const CAREER = {
@@ -93,6 +98,11 @@ export function careerYear(state: GameState, rng: Rng): GameState {
 
   const openings = refreshOpenings(next, rng.derive(`openings:${state.clock.week}`));
   next = addDigest(openings.state, openings.lines);
+  // The letter in the vicar for clergy's file: acted on, left to stand, or closed. DESIGN §7.6.
+  next = markRequested(next);
+  const asked = requestYear(next, rng.derive(`request:${state.clock.week}`));
+  next = asked.state;
+  if (asked.line) next = addDigest(next, [asked.line]);
 
   // A pastor's six-year term, renewed without ceremony unless content says otherwise. DESIGN §8.1
   if (next.assignment?.role === 'pastor' && next.parish && next.parish.weeksServed >= CAREER.pastorTermYears * 52 && !next.flags.term_renewed) {
@@ -137,8 +147,23 @@ export function die(state: GameState): GameState {
   };
 }
 
+/**
+ * Leaving a post: the tenure is written, the project is handed on, a parish
+ * that leaned on him personally thins, and the people's regard comes with him
+ * only in part. The caller clears the parish and sets the new assignment.
+ */
+export function moveOut(state: GameState, rng: Rng, left: string): GameState {
+  let next = closeTenure(state, left);
+  next = handoffProject(next, rng.derive(`handoff:${state.clock.week}`)).state;
+  next = leaveCollapse(next);
+  const c = next.character!;
+  const carried = Math.round(c.reputation.parishioners * ARC.parishionersCarryover);
+  return { ...next, character: { ...c, reputation: { ...c.reputation, parishioners: carried } } };
+}
+
 /** The personnel board considers the player against the openings when his arc ends. DESIGN 7.1 */
 export function boardDecision(state: GameState, rng: Rng): { decisions: Decision[]; won: Decision | null } {
+  state = markRequested(state);
   const me = playerCandidate(state);
   const bishop = state.world!.diocese.hidden.bishop;
   const need = Math.min(100, state.world!.diocese.hidden.shortage * 20);
@@ -169,12 +194,10 @@ export function letterFor(state: GameState, opening: Opening, role: Assignment['
  */
 export function nextAssignment(state: GameState, rng: Rng): { state: GameState; decisions: Decision[] } {
   const { decisions, won } = boardDecision(state, rng);
-  let next = closeTenure(state, state.study ? 'the years ended' : won ? (won.opening.kind === 'pastor' ? 'appointed pastor elsewhere' : 'moved by the board') : 'moved by the board');
-  next = handoffProject(next, rng.derive(`handoff:${state.clock.week}`)).state;
-  next = leaveCollapse(next);
-  const c = next.character!;
-  const carried = Math.round(c.reputation.parishioners * ARC.parishionersCarryover);
-  next = { ...next, character: { ...c, reputation: { ...c.reputation, parishioners: carried } } };
+  let next = moveOut(state, rng, state.study ? 'the years ended' : won ? (won.opening.kind === 'pastor' ? 'appointed pastor elsewhere' : 'moved by the board') : 'moved by the board');
+  // The parish he asked for by name, when the board has no opening of its own to send him to. DESIGN §7.6.
+  const askedFor = requestOf(next)?.target;
+  const askedParishId = askedFor?.kind === 'parish' ? askedFor.parishId : null;
 
   let assignment: Assignment;
   if (won) {
@@ -189,7 +212,7 @@ export function nextAssignment(state: GameState, rng: Rng): { state: GameState; 
     const here = next.world!.parishes.find((p) => p.id === next.parish!.parishId)!;
     const stay = rng.derive(`renew:${next.clock.week}`).chance(CAREER.pastorStaysChance);
     const others = next.world!.parishes.filter((p) => p.id !== here.id);
-    const parish = stay || others.length === 0 ? here : rng.derive(`lateral:${next.clock.week}`).weighted(others, (p) => 10 + (p.needsSpanish && next.flags.speaks_spanish ? 20 : 0) + (p.kind === 'difficult' ? 8 : 0));
+    const parish = stay || others.length === 0 ? here : rng.derive(`lateral:${next.clock.week}`).weighted(others, (p) => 10 + (p.needsSpanish && next.flags.speaks_spanish ? 20 : 0) + (p.kind === 'difficult' ? 8 : 0) + (p.id === askedParishId ? REQUEST_WEIGHT : 0));
     const opening: Opening = { id: `${role}_${next.clock.week}`, kind: role === 'pastor' ? 'pastor' : 'administrator', parishId: parish.id, urgency: 50, needsSpanish: parish.needsSpanish, needsAdmin: false, alignment: parish.alignment, week: next.clock.week, label: `${role === 'pastor' ? 'Pastor' : 'Administrator'} of ${parish.name}` };
     const lost = decisions.find((d) => d.opening.parishId) ?? decisions[0];
     const reasons = parish.id === here.id ? ['Renewed where you are; the board saw no reason to move a pastor who is holding a parish'] : (lost ? lost.reasons : ['A pastor is moved as a pastor, and this parish needed one']);
@@ -204,7 +227,7 @@ export function nextAssignment(state: GameState, rng: Rng): { state: GameState; 
     // A man who told the chancery he would take the hard parish gets it (offer content sets the flag).
     const others = next.world!.parishes.filter((p) => p.id !== next.parish?.parishId);
     const hard = next.flags.took_the_hard_parish && !next.flags.hard_parish_honored ? others.find((p) => p.kind === 'difficult') : undefined;
-    const parish = hard ?? rng.derive(`posting:${next.clock.week}`).weighted(others, (p) => 10 + (p.needsSpanish && next.flags.speaks_spanish ? 20 : 0) + (parishInterest(next) === p.id ? INTERESTS.postingWeight : 0));
+    const parish = hard ?? rng.derive(`posting:${next.clock.week}`).weighted(others, (p) => 10 + (p.needsSpanish && next.flags.speaks_spanish ? 20 : 0) + (parishInterest(next) === p.id ? INTERESTS.postingWeight : 0) + (p.id === askedParishId ? REQUEST_WEIGHT : 0));
     if (hard) next = { ...next, flags: { ...next.flags, hard_parish_honored: true } };
     const opening: Opening = { id: `vicar_${next.clock.week}`, kind: 'parochial_vicar', parishId: parish.id, urgency: 50, needsSpanish: parish.needsSpanish, needsAdmin: false, alignment: parish.alignment, week: next.clock.week, label: `Parochial Vicar of ${parish.name}` };
     const lost = decisions.find((d) => d.opening.parishId) ?? decisions[0];
@@ -216,7 +239,11 @@ export function nextAssignment(state: GameState, rng: Rng): { state: GameState; 
     }
     next = note(next, 'assignment', `Sent as parochial vicar to ${parish.name}, ${parish.place}.`);
   }
-  const moved: GameState = { ...next, assignment, parish: null, founding: null, project: null, projects: [], mode: { kind: 'assignment', assignment }, flags: { ...next.flags, transfers: Number(next.flags.transfers ?? 0) + 1 } };
+  let moved: GameState = { ...next, assignment, parish: null, founding: null, project: null, projects: [], mode: { kind: 'assignment', assignment }, flags: { ...next.flags, transfers: Number(next.flags.transfers ?? 0) + 1 } };
+  // The letter is answered by the board itself when it sends him where he asked.
+  if (askedParishId && assignment.parishId === askedParishId) {
+    moved = note(closeRequest(moved, 'granted'), 'assignment', `The board gave you what you asked for: ${moved.world!.parishes.find((p) => p.id === askedParishId)?.name ?? 'the parish'}.`);
+  }
   // A man the chancery rates is asked which he would rather.
   return { state: won ? withChoice(moved, rng.derive('choice'), 'board', assignment) : moved, decisions };
 }
@@ -275,7 +302,9 @@ export function careerSummary(state: GameState, ending: 'retired' | 'died' | 'le
     ? ` Of the ${classmates.length} men you entered with, ${classmates.filter((n) => n.status === 'left').length} left, ${classmates.filter((n) => n.status === 'dead').length} died, and ${classmates.filter((n) => n.tags.includes('chancery')).length} ended in the chancery.`
     : '';
   const lines = entries.filter((e) => e.kind !== 'note').slice(-6).map((e) => renderText(e.text, state));
-  return [opening, arc, bishops, record + legacy + cohort, '', ...lines].join('\n');
+  // The book: what the years actually counted, which is not a score. DESIGN §8.6.
+  const book = ministryLine(state);
+  return [opening, arc, bishops, record + legacy + cohort, ...(book ? [`You said ${book}`] : []), '', ...lines].join('\n');
 }
 
 /**
@@ -284,12 +313,7 @@ export function careerSummary(state: GameState, ending: 'retired' | 'died' | 'le
  */
 export function directedTransfer(state: GameState, rng: Rng, kind: string, role: Assignment['role']): { state: GameState; moved: boolean } {
   if (!state.world) return { state, moved: false };
-  let next = closeTenure(state, "moved at the bishop's asking");
-  next = handoffProject(next, rng.derive(`handoff:${state.clock.week}`)).state;
-  next = leaveCollapse(next);
-  const c = next.character!;
-  const carried = Math.round(c.reputation.parishioners * ARC.parishionersCarryover);
-  next = { ...next, character: { ...c, reputation: { ...c.reputation, parishioners: carried } } };
+  let next = moveOut(state, rng, "moved at the bishop's asking");
   const others = next.world!.parishes.filter((p) => p.id !== next.parish?.parishId);
   const parish = others.find((p) => p.kind === kind) ?? rng.derive(`directed:${next.clock.week}`).pick(others);
   const opening: Opening = { id: `directed_${next.clock.week}`, kind: role === 'pastor' ? 'pastor' : role === 'administrator' ? 'administrator' : 'parochial_vicar', parishId: parish.id, urgency: 70, needsSpanish: parish.needsSpanish, needsAdmin: false, alignment: parish.alignment, week: next.clock.week, label: `${parish.name}, ${parish.place}` };

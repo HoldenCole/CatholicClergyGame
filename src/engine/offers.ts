@@ -7,6 +7,7 @@ import type { Rng } from './rng';
 import { resolveSelector, selectorsIn } from './selectors';
 import { askToGo } from './appointment';
 import { hasInterest, INTERESTS } from '@/systems/interests';
+import { REQUEST, requestOf } from '@/systems/request';
 
 /** Tunables. Invented. */
 export const OFFERS = {
@@ -54,6 +55,9 @@ export function offerWeight(def: OfferDef, state: GameState): number {
   if (def.cluster) w *= Math.pow(OFFERS.clusterMultiplier, state.clusters[def.cluster] ?? 0);
   if (state.flags[onFileFlag(def)]) w *= OFFERS.deferredWeight;
   if (def.interest && hasInterest(state, def.interest)) w *= INTERESTS.offerWeight;
+  // A letter naming this posting is louder than an interest on file. DESIGN §7.6.
+  const asked = requestOf(state)?.target;
+  if (asked?.kind === 'post' && asked.offerId === def.id) w *= REQUEST.offerWeight;
   return Math.max(0, w);
 }
 

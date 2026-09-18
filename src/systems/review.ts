@@ -6,6 +6,8 @@ import { isFigure } from './reputation';
 import { bondWord } from './bonds';
 import { studyProgram } from '@/content/study';
 import { placeWord } from './studyWeek';
+import { ministryLine } from './ministry';
+import { requestChance, requestOf, requestWord } from './request';
 
 /** The reputation and stat words the sheets use. */
 function word(v: number): string {
@@ -67,6 +69,10 @@ export function yearInReview(state: GameState): { letter: Letter; baseline: NonN
   const bondsThisYear = Object.values(state.npcs).flatMap((n) => (n.bonds ?? []).filter((b) => b.week > week - 52 && b.week <= week).map((b) => ({ n, b })));
   if (bondsThisYear.length) rows.push({ label: 'The people this year', value: bondsThisYear.slice(0, 4).map(({ n, b }) => `${bondWord(b)} (${n.name.last})`).join('; ') + (bondsThisYear.length > 4 ? `; and ${bondsThisYear.length - 4} more` : '') });
   rows.push({ label: 'You', value: `${strainWord(strainOf(state))}, ${Math.round(years)} years a priest` });
+  const book = ministryLine(state);
+  if (book) rows.push({ label: 'The book, so far', value: book.replace(/\.$/, '') });
+  const asked = requestOf(state);
+  if (asked) rows.push({ label: 'In the file', value: `${asked.label}. ${requestWord(requestChance(state))}` });
 
   // Where he is headed.
   const top = state.openings.map((o) => ({ o, ch: chancesFor(state, o) })).filter((x) => !/Too soon|Not this one/.test(x.ch.verdict)).sort((a, b) => b.o.urgency - a.o.urgency)[0];

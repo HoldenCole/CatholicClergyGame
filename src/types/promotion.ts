@@ -21,6 +21,8 @@ export interface Opening {
   deaneryRivalId?: string;
   /** The player has put his name forward for it. */
   applied?: boolean;
+  /** It is the post he wrote to the vicar for clergy and asked for. DESIGN §7.6. */
+  requested?: boolean;
 }
 
 /** A candidate as the personnel board sees him. Built from the player or from an NPC priest. */
