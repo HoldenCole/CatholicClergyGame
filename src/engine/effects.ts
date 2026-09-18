@@ -213,6 +213,9 @@ export function applyEffect(
       if (!state.parish) return state;
       return { ...state, parish: { ...state.parish, finance: { ...state.parish.finance, cash: state.parish.finance.cash + delta } } };
     }
+    // What a scene takes out of a man, or gives back. Kept in the same 0..100 as the week's wear.
+    case 'strain':
+      return { ...state, strain: Math.max(0, Math.min(100, (state.strain ?? 0) + delta)) };
     case 'ap': {
       if (!state.parish) return state;
       return { ...state, parish: { ...state.parish, apNextWeek: state.parish.apNextWeek + delta } };

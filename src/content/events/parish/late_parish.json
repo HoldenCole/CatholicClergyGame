@@ -1,0 +1,521 @@
+{
+  "_notes": "The parish a man has run for years: the school, the staff, the buildings, the money, and the people he has now known for decades. Open scenes for the second half of a life.",
+  "events": [
+    {
+      "id": "lp_close_the_school",
+      "phase": ["pastor", "administrator"],
+      "pressure": ["money", "loyalty_vs_honesty"],
+      "severity": "MAJOR",
+      "category": "finance",
+      "baseWeight": 14,
+      "suppressYears": 12,
+      "once": true,
+      "requires": [
+        { "type": "parish", "key": "school", "value": "struggling" },
+        { "type": "weeks_served", "op": ">=", "value": 104 }
+      ],
+      "title": "The School Cannot Be Carried Another Year",
+      "body": "One hundred and eleven children where there were four hundred, a subsidy from the parish of nine thousand dollars a month, and a building that needs a roof in three years. The board has known for eighteen months and the parents have not, and the parents include four families who have been here five generations and one who has quietly paid other people's tuition since 2011. Whatever is decided, it will be decided by you, in your name, and the word that goes on the sign outside is either closed or not.",
+      "choices": [
+        {
+          "id": "close_it_properly",
+          "label": "Close it, with a year's notice and every family placed",
+          "default": true,
+          "outcome": "Fourteen months of anger, three meetings you will remember for the rest of your life, every child placed somewhere by August, and a final Mass in the gym. The parish is solvent and something is gone from it that will not come back, and both of those are your doing.",
+          "effects": [
+            { "target": "money", "key": "cash", "delta": 60000 },
+            { "target": "reputation", "key": "parishioners", "delta": -12 },
+            { "target": "reputation", "key": "chancery", "delta": 6 },
+            { "target": "flag", "key": "lp_closed_the_school", "value": true }
+          ]
+        },
+        {
+          "id": "fight_for_it",
+          "label": "Fight for it: a campaign, a merger, a new model, anything",
+          "outcome": "You go to the donors, the diocese, a foundation, and the other parish whose school is also dying, and you get three of the four to move. The school lives, smaller and merged and under a name nobody likes, and the parish carries less of it. It costs you eighteen months of evenings.",
+          "effects": [
+            { "target": "money", "key": "cash", "delta": -25000 },
+            { "target": "reputation", "key": "parishioners", "delta": 10 },
+            { "target": "ap", "key": "", "delta": -2 },
+            { "target": "flag", "key": "lp_saved_the_school", "value": true }
+          ]
+        },
+        {
+          "id": "leave_it_to_the_next_man",
+          "label": "Hold on and leave the decision to whoever comes after",
+          "outcome": "Another three years of nine thousand a month, a roof that goes from three years away to now, and a decision that is worse when it is finally made. The man who makes it says nothing about you in public and everything in the rectory.",
+          "effects": [
+            { "target": "money", "key": "cash", "delta": -40000 },
+            { "target": "reputation", "key": "parishioners", "delta": 4 },
+            { "target": "reputation", "key": "chancery", "delta": -5 },
+            { "target": "flag", "key": "lp_left_the_school", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lp_the_organist_cannot_play",
+      "phase": ["pastor", "administrator"],
+      "pressure": ["friendship_vs_duty", "competence"],
+      "severity": "NOTABLE",
+      "category": "admin",
+      "baseWeight": 12,
+      "suppressYears": 8,
+      "requires": [{ "type": "weeks_served", "op": ">=", "value": 156 }],
+      "title": "Thirty-One Years At That Organ",
+      "body": "She played at the weddings of half the parish and at the funerals of the other half, and for the last year and a half her hands have been going. Everybody hears it. Nobody has said anything, because everybody knows what that organ is to her and what she was to this parish when it had nothing. The choir has begun to work around her. Two families have said something to you at the door, gently, and one of them was not gentle.",
+      "choices": [
+        {
+          "id": "make_a_place_for_her",
+          "label": "Create something for her to be: director emerita, the Christmas Mass, the choir's training",
+          "default": true,
+          "outcome": "You spend two hours at her kitchen table and offer her the thing that is true: that the parish needs her voice on the music and not her hands on the keys. She cries and accepts and plays at Midnight Mass for four more years, badly and beloved, and trains the girl who takes over.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 6 },
+            { "target": "money", "key": "cash", "delta": -4000 },
+            { "target": "flag", "key": "lp_the_organist_kept", "value": true }
+          ]
+        },
+        {
+          "id": "let_her_go",
+          "label": "Thank her, and end it cleanly",
+          "outcome": "A plaque, a reception, a card signed by the choir, and it is over in a month. The music is better by Advent. She comes to the eight o'clock for a year and then goes to the parish across town, and you both pretend the two things are unconnected.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": -5 },
+            { "target": "flag", "key": "lp_the_organist_let_go", "value": true }
+          ]
+        },
+        {
+          "id": "wait_her_out",
+          "label": "Say nothing; she is seventy-nine and it will resolve itself",
+          "outcome": "It resolves itself in about three years, during which the eleven o'clock is hard to sit through and the good singers go to the vigil Mass. She dies at the console in a manner of speaking, which is what she would have wanted and is not what the parish needed.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": -3 },
+            { "target": "stat", "key": "piety", "delta": 1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lp_the_donor_wants_something",
+      "phase": ["pastor"],
+      "pressure": ["money", "belief_vs_safety"],
+      "severity": "MAJOR",
+      "category": "finance",
+      "baseWeight": 12,
+      "suppressYears": 8,
+      "requires": [{ "type": "years_ordained", "op": ">=", "value": 12 }],
+      "title": "The Gift With A Condition On It",
+      "body": "Four hundred thousand dollars for the roof, which is precisely what the roof costs, from a family that has been in this parish since it was a mission church. The condition is not scandalous and is not nothing: the chapel is to be named for the donor's father, the donor is to be on the finance council, and the pastor is to understand that the parish's position on a certain local matter should remain what it has been. It is put to you over lunch by a man who has never once been vulgar about money.",
+      "choices": [
+        {
+          "id": "take_the_roof_refuse_the_council",
+          "label": "Take the gift and the name, and refuse the council seat and the understanding",
+          "default": true,
+          "outcome": "You say which two you can accept and which two you cannot, at the table, without heat. He is silent for some time and then says that his father would have said the same, and writes the cheque. The chapel carries the name. Nothing is understood.",
+          "effects": [
+            { "target": "money", "key": "cash", "delta": 400000 },
+            { "target": "reputation", "key": "parishioners", "delta": 4 },
+            { "target": "honesty", "key": "", "delta": 4 },
+            { "target": "flag", "key": "lp_took_the_roof", "value": true }
+          ]
+        },
+        {
+          "id": "take_it_all",
+          "label": "Take the gift on his terms; the roof is real and the terms are vague",
+          "outcome": "The roof is done by autumn and the parish is dry for forty years. He is on the council, and at the third meeting the vague thing becomes specific, and you discover what you sold on a Tuesday in November.",
+          "effects": [
+            { "target": "money", "key": "cash", "delta": 400000 },
+            { "target": "reputation", "key": "chancery", "delta": -3 },
+            { "target": "honesty", "key": "", "delta": -5 },
+            { "target": "flag", "key": "lp_owes_the_donor", "value": true }
+          ]
+        },
+        {
+          "id": "refuse_it",
+          "label": "Refuse the gift entirely",
+          "outcome": "You thank him and decline, and you are correct, and the roof is still leaking in four years and the parish knows there was an offer. Two of the families closest to his stop giving at the old level, quietly, for reasons nobody states.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": -4 },
+            { "target": "stat", "key": "piety", "delta": 3 },
+            { "target": "flag", "key": "lp_refused_the_gift", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lp_the_flowers_are_hers",
+      "phase": ["pastor", "administrator"],
+      "pressure": ["competence", "friendship_vs_duty"],
+      "severity": "ROUTINE",
+      "category": "admin",
+      "baseWeight": 11,
+      "suppressYears": 6,
+      "requires": [{ "type": "weeks_served", "op": ">=", "value": 104 }],
+      "title": "Nobody Else Is Allowed To Touch The Flowers",
+      "body": "She has done the sanctuary flowers since 1994 and does them beautifully and has now driven off the fourth volunteer in six years, most recently a woman of thirty-one who wanted to help and was told, in front of two others, that she did not know what she was doing. It is a small kingdom and it is a real one, and a parish is made of about forty of these.",
+      "choices": [
+        {
+          "id": "have_the_conversation",
+          "label": "Have the conversation about how she treats the people who offer",
+          "default": true,
+          "outcome": "She is wounded and defensive for ten minutes and then, unexpectedly, admits that she is frightened of being replaced. You tell her she is not being replaced and that she is going to train two people, and she does, and one of them lasts.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 3 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "flag", "key": "lp_the_flowers_shared", "value": true }
+          ]
+        },
+        {
+          "id": "let_her_have_it",
+          "label": "Let her have the flowers; you have a parish to run",
+          "outcome": "A perfectly reasonable allocation of a pastor's attention, and the flowers are the best in the deanery. The woman of thirty-one joins the parish across town, where somebody asked her to run something within a month.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": -2 }
+          ]
+        },
+        {
+          "id": "go_to_the_volunteer",
+          "label": "Go and find the woman of thirty-one and give her something else entirely",
+          "outcome": "You telephone her, apologize on the parish's behalf, and hand her the thing nobody is doing: the young families. In four years there are sixty of them where there were none, and the flowers go on being magnificent and unshared.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 5 },
+            { "target": "group", "key": "vitality", "delta": 8 },
+            { "target": "flag", "key": "lp_found_her_a_place", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lp_the_second_generation",
+      "phase": ["pastor", "administrator"],
+      "pressure": ["doubt"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 12,
+      "suppressYears": 6,
+      "requires": [
+        { "type": "ministry", "key": "baptisms", "op": ">=", "value": 300 },
+        { "type": "years_ordained", "op": ">=", "value": 20 }
+      ],
+      "title": "You Baptized Her Mother",
+      "body": "The baptism on Sunday is of a child whose mother you baptized in the same font, and whose grandmother you buried, and whose great-grandmother told you in 1998 that you were too young to be a priest. There is a photograph on the wall at the reception with you in it, twenty-five years and forty pounds ago. Somebody at the table says that you have been here forever, meaning it entirely kindly, and you feel the sentence land in two different ways at once.",
+      "choices": [
+        {
+          "id": "say_it_at_the_font",
+          "label": "Say it out loud at the font: the three generations, by name",
+          "default": true,
+          "outcome": "You name the grandmother in the rite and the whole side of the church makes a sound. It takes eleven seconds and it tells the parish something about what a parish is that no homily of yours has managed in a decade.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 5 },
+            { "target": "stat", "key": "piety", "delta": 3 },
+            { "target": "flag", "key": "lp_three_generations", "value": true }
+          ]
+        },
+        {
+          "id": "keep_it_to_yourself",
+          "label": "Keep it to yourself and do the rite",
+          "outcome": "You do a good baptism and go to the reception and eat a small sandwich, and the thought of the three generations sits behind your eyes for the rest of the afternoon without being said to anybody.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 2 }
+          ]
+        },
+        {
+          "id": "ask_for_the_photograph",
+          "label": "Ask the family for a copy of the photograph",
+          "outcome": "They send it framed, with the date on the back in the grandmother's handwriting, and it goes on the wall of the office where you can see it from the desk. Several parishioners assume it is your own family. You do not correct all of them.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 3 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "flag", "key": "lp_the_photograph", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lp_the_neighborhood_changed",
+      "phase": ["pastor", "administrator"],
+      "pressure": ["belief_vs_safety", "competence"],
+      "severity": "MAJOR",
+      "category": "admin",
+      "baseWeight": 13,
+      "suppressYears": 10,
+      "requires": [
+        { "type": "weeks_served", "op": ">=", "value": 208 },
+        { "type": "ethnic", "key": "latino", "op": ">=", "value": 0.25 }
+      ],
+      "title": "The Parish Is Not The Parish It Was",
+      "body": "Twenty years ago the noon Mass had forty people in it and now it has six hundred and the eight o'clock has ninety, and the parish council has eleven members of whom one speaks Spanish. The festival committee, the finance council, the money, and the memory of the parish all belong to the eight o'clock; the children, the baptisms, and the future belong to the noon. Nobody is behaving badly. It has simply become two parishes that share a car park, and somebody is going to have to say so.",
+      "choices": [
+        {
+          "id": "make_one_parish",
+          "label": "Say it out loud and rebuild the council, the festival and the money as one parish",
+          "default": true,
+          "outcome": "Two years of hard meetings, three resignations, one shouted Sunday, a bilingual council of fourteen, and a festival that makes more money than it ever has. The oldest families are split down the middle about you and the parish is one parish for the first time since 1998.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": -4 },
+            { "target": "money", "key": "cash", "delta": 18000 },
+            { "target": "stat", "key": "charisma", "delta": 2 },
+            { "target": "flag", "key": "lp_one_parish", "value": true }
+          ]
+        },
+        {
+          "id": "keep_the_peace",
+          "label": "Keep the two running side by side and manage the seams",
+          "outcome": "It works, in the sense that nothing breaks. Both communities are served, neither is at home in the other's building, and the man who comes after you inherits the same conversation ten years further along and with less money.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 3 },
+            { "target": "flag", "key": "lp_two_parishes", "value": true }
+          ]
+        },
+        {
+          "id": "start_with_the_money",
+          "label": "Start where it actually bites: move the budget and the festival first",
+          "outcome": "You do not hold a single meeting about unity. You move four line items and give the noon Mass the festival's Saturday, and the people follow the money the way they always do, and by the third year the council has changed without anybody having a meeting about the council.",
+          "effects": [
+            { "target": "stat", "key": "administration", "delta": 2 },
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "flag", "key": "lp_moved_the_money", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lp_the_rectory_is_too_big",
+      "phase": ["pastor", "administrator"],
+      "pressure": ["body_vs_vow", "doubt"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 11,
+      "suppressYears": 8,
+      "requires": [{ "type": "years_ordained", "op": ">=", "value": 20 }],
+      "title": "A House Built For Four Priests",
+      "body": "Nine bedrooms, two staircases, a housekeeper's flat nobody has lived in since 1989, and one man. You eat standing up at the counter most nights. There is a wing you have not been into since the summer and a dining room that is used twice a year, and the heating bill for the whole thing is eleven hundred dollars in January. It is not loneliness exactly. It is the specific sensation of rattling around inside an institution's optimism from 1961.",
+      "choices": [
+        {
+          "id": "put_people_in_it",
+          "label": "Fill it: a seminarian in summer, a retired priest, the food pantry in the basement",
+          "default": true,
+          "outcome": "Within a year there are two other people at that table most evenings and the basement has four thousand pounds of food going through it a month. The heating bill is the same and is buying something now.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 5 },
+            { "target": "stat", "key": "piety", "delta": 3 },
+            { "target": "flag", "key": "lp_filled_the_rectory", "value": true }
+          ]
+        },
+        {
+          "id": "close_the_wing",
+          "label": "Shut the wing, move into three rooms, and give the rest to the parish",
+          "outcome": "Three rooms, a smaller bill, and two meeting spaces the parish did not have. It is sensible and slightly monastic and the council is delighted, and you notice that you sleep better in the small room at the back.",
+          "effects": [
+            { "target": "money", "key": "cash", "delta": 6000 },
+            { "target": "stat", "key": "piety", "delta": 2 },
+            { "target": "flag", "key": "lp_three_rooms", "value": true }
+          ]
+        },
+        {
+          "id": "eat_out_more",
+          "label": "Take supper with people three nights a week instead",
+          "outcome": "The Hennessys on Tuesday, the deanery on Thursday, whoever will have you on Sunday. It solves the evenings and not the house, and you become a man whose parishioners know what he likes for dessert.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 4 },
+            { "target": "stat", "key": "charisma", "delta": 1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lp_the_centenary",
+      "phase": ["pastor", "administrator"],
+      "pressure": ["competence", "doubt"],
+      "severity": "NOTABLE",
+      "category": "admin",
+      "baseWeight": 12,
+      "suppressYears": 15,
+      "once": true,
+      "requires": [{ "type": "weeks_served", "op": ">=", "value": 156 }],
+      "title": "A Hundred Years Of This Parish",
+      "body": "The centenary falls in your time, which is luck, and the committee wants a book, a Mass with the bishop, a dinner, and a time capsule. In the basement there are eleven boxes of parish records: the founding pastor's letters in a hand nobody can read, photographs of a church that burned in 1948, the baptismal register from the influenza year with six entries in one week, and a ledger showing what the parish paid the sisters, which is a number you would rather the sisters' successors did not read out at the dinner.",
+      "choices": [
+        {
+          "id": "tell_the_whole_hundred_years",
+          "label": "Have the book tell all of it, including the parts that are not flattering",
+          "default": true,
+          "outcome": "The ledger goes in, and the fire, and the pastor in the fifties who was moved for reasons the file does not state, and the influenza week. The book is the best thing the parish produces in your time there and the diocese's archivist asks for three copies.",
+          "effects": [
+            { "target": "reputation", "key": "public", "delta": 5 },
+            { "target": "reputation", "key": "parishioners", "delta": 4 },
+            { "target": "honesty", "key": "", "delta": 3 },
+            { "target": "flag", "key": "lp_the_whole_hundred", "value": true }
+          ]
+        },
+        {
+          "id": "a_handsome_book",
+          "label": "Make it handsome and warm and leave the awkward parts out",
+          "outcome": "A lovely book with good photographs that every family buys two of. It is a hundred years of a parish with nothing difficult in it, which is not a hundred years of anything.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 5 },
+            { "target": "money", "key": "cash", "delta": 4000 }
+          ]
+        },
+        {
+          "id": "put_the_work_into_the_records",
+          "label": "Spend the money on having the records properly archived instead",
+          "outcome": "No book, a modest Mass, and eleven boxes that are now catalogued, acid-free and readable in two hundred years. Almost nobody notices. A graduate student writes about this parish in 2041 because of what you did with four thousand dollars.",
+          "effects": [
+            { "target": "money", "key": "cash", "delta": -4000 },
+            { "target": "reputation", "key": "parishioners", "delta": -1 },
+            { "target": "stat", "key": "knowledge", "delta": 2 },
+            { "target": "flag", "key": "lp_archived_it", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lp_the_staff_member_who_must_go",
+      "phase": ["pastor"],
+      "pressure": ["friendship_vs_duty", "money"],
+      "severity": "MAJOR",
+      "category": "admin",
+      "baseWeight": 12,
+      "suppressYears": 7,
+      "requires": [{ "type": "weeks_served", "op": ">=", "value": 104 }],
+      "title": "You Have To Let Somebody Go",
+      "body": "The budget will not close, and the honest arithmetic says one salaried position has to end. The obvious one is the person who does the least, who has been here nineteen years, who is sixty-three, whose husband is ill, and who is the sister-in-law of the man who chairs the finance council. The less obvious one is the newest and best, who would find another job in a month and whose work the parish would miss for a decade.",
+      "choices": [
+        {
+          "id": "do_the_hard_right_one",
+          "label": "End the nineteen-year position, generously and in person",
+          "default": true,
+          "outcome": "Six months' notice, a reference, the health cover carried until her husband's surgery, and a conversation you conduct yourself rather than through the business manager. The finance council chairman does not speak to you for a year. The parish's books close.",
+          "effects": [
+            { "target": "money", "key": "cash", "delta": 26000 },
+            { "target": "reputation", "key": "parishioners", "delta": -6 },
+            { "target": "stat", "key": "administration", "delta": 2 },
+            { "target": "flag", "key": "lp_let_her_go", "value": true }
+          ]
+        },
+        {
+          "id": "cut_the_newest",
+          "label": "Cut the newest position; it hurts fewer people",
+          "outcome": "It is quiet, nobody is angry, and the parish loses the one person who was making anything new happen. Two years later you are paying a consultant to do a worse version of what she did.",
+          "effects": [
+            { "target": "money", "key": "cash", "delta": 22000 },
+            { "target": "group", "key": "vitality", "delta": -10 },
+            { "target": "flag", "key": "lp_cut_the_best", "value": true }
+          ]
+        },
+        {
+          "id": "find_the_money",
+          "label": "Refuse the choice and go and find the money",
+          "outcome": "You put a personal appeal in the bulletin, take four people to lunch, and come back with enough for two years. It works and it is exhausting and it postpones a decision that the parish's size is going to force anyway.",
+          "effects": [
+            { "target": "money", "key": "cash", "delta": 44000 },
+            { "target": "ap", "key": "", "delta": -1 },
+            { "target": "reputation", "key": "parishioners", "delta": 3 },
+            { "target": "flag", "key": "lp_found_the_money", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lp_the_one_you_were_closest_to",
+      "phase": ["pastor", "administrator", "parochial_vicar"],
+      "pressure": ["doubt", "friendship_vs_duty"],
+      "severity": "MAJOR",
+      "category": "parish_death",
+      "baseWeight": 13,
+      "suppressYears": 8,
+      "requires": [
+        { "type": "bond", "kind": "any", "op": ">=", "value": 3 },
+        { "type": "years_ordained", "op": ">=", "value": 12 }
+      ],
+      "title": "The One You Would Have Called A Friend",
+      "body": "He fixed the boiler, drove the van, told you the truth about the parish when nobody else would, and sat in the kitchen on the night of the funeral you could not get through. He is in the bed by the window and there are three days in it at the most, and his wife has asked you to do the funeral and you have already said yes, and you have not yet worked out how a man preaches at the funeral of the only person in a parish he could talk to.",
+      "choices": [
+        {
+          "id": "say_it_to_him_now",
+          "label": "Say it to him now, while he can hear it",
+          "default": true,
+          "outcome": "You tell him what he was to you, badly, in a room with a machine in it, and he says something rude and grips your hand hard enough to hurt. Three days later the funeral is nearly impossible and you get through it because it has already been said.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 4 },
+            { "target": "reputation", "key": "parishioners", "delta": 4 },
+            { "target": "bond", "key": "@bonded_parishioner", "value": "buried:the friend who told you the truth" },
+            { "target": "flag", "key": "lp_said_it_in_time", "value": true }
+          ]
+        },
+        {
+          "id": "ask_another_priest",
+          "label": "Ask another priest to do the funeral, and sit with the family",
+          "outcome": "{@dean} does it and does it well, and you sit in the third pew with the man's wife and grandchildren and are, for one hour, not the priest. Several people in that church do not understand why. His wife does.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 3 },
+            { "target": "reputation", "key": "parishioners", "delta": -2 },
+            { "target": "relationship", "key": "@dean", "delta": 5 },
+            { "target": "flag", "key": "lp_sat_in_the_pew", "value": true }
+          ]
+        },
+        {
+          "id": "do_it_professionally",
+          "label": "Do the funeral yourself, and keep yourself entirely out of the homily",
+          "outcome": "It is a fine funeral, about him and his wife and the resurrection, with not one sentence about what he was to the priest saying the Mass. You hold up perfectly until the cemetery, and the men from the parish see you at the car and have the decency to look elsewhere.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 3 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "flag", "key": "lp_kept_it_out", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lp_the_building_you_will_not_see_finished",
+      "phase": ["pastor"],
+      "pressure": ["money", "ambition_vs_integrity"],
+      "severity": "NOTABLE",
+      "category": "finance",
+      "baseWeight": 11,
+      "suppressYears": 10,
+      "requires": [
+        { "type": "age", "op": ">=", "value": 66 },
+        { "type": "years_ordained", "op": ">=", "value": 30 }
+      ],
+      "title": "A Project Longer Than Your Term",
+      "body": "The parish needs a new hall, properly needs it, and the campaign and the building will take six years. You are sixty-something. The realistic arithmetic is that you will raise the money, sign the contracts, take the criticism, and hand a building site to a man you have not met, who will cut the ribbon and be photographed under a roof you paid for.",
+      "choices": [
+        {
+          "id": "start_it_anyway",
+          "label": "Start it anyway, and build it so that a stranger can finish it",
+          "default": true,
+          "outcome": "You raise it, contract it, document everything to a standard that makes your successor's first year survivable, and put the last item on the agenda before you go. Your name is on nothing. The parish has a hall for fifty years.",
+          "effects": [
+            { "target": "money", "key": "cash", "delta": -30000 },
+            { "target": "reputation", "key": "parishioners", "delta": 6 },
+            { "target": "reputation", "key": "chancery", "delta": 5 },
+            { "target": "flag", "key": "lp_built_for_a_stranger", "value": true }
+          ]
+        },
+        {
+          "id": "leave_it_for_him",
+          "label": "Leave the whole thing for whoever comes, with the case written up",
+          "outcome": "You write forty pages of case and costings and site survey and hand it on, having spent nothing and started nothing. It is honest and it is dull, and it gets built eight years later for twice the money.",
+          "effects": [
+            { "target": "stat", "key": "administration", "delta": 2 },
+            { "target": "reputation", "key": "parishioners", "delta": -2 }
+          ]
+        },
+        {
+          "id": "build_something_smaller",
+          "label": "Build the half of it that can be finished in two years",
+          "outcome": "Not the hall: the roof, the lift, and the bathrooms that the parish's actual old people actually need. It is unglamorous, it is done by the following autumn, and three people cry at the blessing of a wheelchair ramp.",
+          "effects": [
+            { "target": "money", "key": "cash", "delta": -80000 },
+            { "target": "reputation", "key": "parishioners", "delta": 8 },
+            { "target": "building", "key": "hall", "delta": 12 },
+            { "target": "flag", "key": "lp_built_the_half", "value": true }
+          ]
+        }
+      ]
+    }
+  ]
+}

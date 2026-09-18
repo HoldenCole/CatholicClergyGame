@@ -4,6 +4,7 @@ import { SEALED_TARGETS } from '@/engine/internalForum';
 import { evaluateCondition } from '@/engine/conditions';
 import { parishState } from '../systems/week.test';
 import { ministryWeek } from '@/systems/ministry';
+import { applyEffects } from '@/engine/effects';
 import type { GameState, Quality } from '@/types';
 
 const STANDARD: Record<string, Quality> = { sunday_masses: 'standard', weekday_masses: 'standard', confessions: 'standard', meetings: 'standard', sacramental_prep: 'standard' };
@@ -27,6 +28,18 @@ describe('content pools', () => {
         for (const eff of ch.effects) expect(SEALED_TARGETS, `${e.id} › ${ch.id}`).toContain(eff.target);
       }
     }
+  });
+
+  it('the second half of a life has its own thirty-three scenes, all gated late', () => {
+    const late = allEvents.filter((e) => e.id.startsWith('li_') || e.id.startsWith('lp_') || e.id.startsWith('ls_'));
+    expect(late.length).toBe(33);
+    for (const e of late) {
+      expect(e.requires?.length, e.id).toBeGreaterThan(0);
+      const gates = (e.requires ?? []).map((c) => c.type);
+      expect(gates.some((t) => ['years_ordained', 'age', 'weeks_served', 'life', 'ministry', 'parish', 'ethnic', 'bond', 'flag', 'reputation'].includes(t)), e.id).toBe(true);
+    }
+    // None of them is sealed: the seal belongs to direction alone.
+    expect(late.every((e) => !e.internalForum)).toBe(true);
   });
 
   it('the milestones of the book are gated on the book, not on luck', () => {
@@ -66,6 +79,15 @@ describe('engine/conditions: the book and the life', () => {
     expect(evaluateCondition({ type: 'life', key: 'turnarounds', op: '>=', value: 1 }, s)).toBe(true);
     // The open post counts with the closed ones.
     expect(evaluateCondition({ type: 'life', key: 'posts', op: '>=', value: 2 }, s)).toBe(true);
+  });
+
+  it('a scene can wear a man out, or give him a month back, within the same nought to a hundred', () => {
+    const tired = applyEffects({ ...base, strain: 20 }, [{ target: 'strain', key: '', delta: 12 }], {}, 'a hard year');
+    expect(tired.strain).toBe(32);
+    const rested = applyEffects(tired, [{ target: 'strain', key: '', delta: -40 }], {}, 'the rota');
+    expect(rested.strain).toBe(0);
+    const maxed = applyEffects({ ...base, strain: 95 }, [{ target: 'strain', key: '', delta: 30 }], {}, 'everything at once');
+    expect(maxed.strain).toBe(100);
   });
 
   it('a group condition can see that a sister runs it', () => {
