@@ -22,3 +22,5 @@ export * from './religious';
 export * from './talks';
 export * from './tenure';
 export * from './see';
+export * from './request';
+export * from './ministry';

@@ -477,6 +477,18 @@ Every opportunity has: **requirements** (hard gates), **a cost** (AP over a peri
 5. **A "figure" (§5.6) generates his own offers**, independent of the chancery. That is what the status is for.
 6. **A run with no opportunities is a design failure.** Every build, including the low-stat generalist, must have a reachable ladder — his is the parish itself: the hard assignment nobody wanted, the parish everyone had written off.
 
+### 7.6 Asking to be moved
+
+*Added in playtesting.* §7.4 is a form naming a **kind** of place. This is a letter naming **a place**: an ordained priest writes to the vicar for clergy and asks for one particular parish, or for one of the postings (the hospital, the Newman Center, Rome, the tribunal, the seminary chair, the bishop's own desk). It sits in the file until it is answered.
+
+1. **One request stands at a time.** Filing a second withdraws the first, and the chancery counts how many times a man has asked. Past the first in five years, asking costs chancery regard: a man who asks for everything is a man who is never where he is.
+2. **The ordinary answer is the board.** The request is read when his arc ends, where it weighs more than a name put in for an opening (§7.1), and it can put a parish or a posting on the desk that would not otherwise have been offered.
+3. **A strong man, or an urgent need, moves sooner.** Once a year the vicar for clergy may act on a standing request in the middle of an arc. The chance is built from what the chancery thinks of him, whether the place he asked for is actually open or short, the diocese's own shortage, the bishop's regard, and how long he has stood in his present post. A man his parish cannot spare is held where he is, exactly as §4.3 says: competence is a cage.
+4. **A granted request is an offer, not an order.** The letter lays the post he asked for beside the post he holds, and he may stay. Staying costs — he asked, the chancery moved, and he said no.
+5. **The years are a gate, not a wish.** A vicar may ask for a pastorate; he is granted the parish as its vicar until the canonical years are there, unless the board would have made him pastor anyway.
+6. **Requests lapse.** Four years unanswered and the vicar for clergy closes the file with a line. He may ask again.
+7. **No one asks for a mitre.** The episcopal postings are the nuncio's business and cannot be requested.
+
 ---
 
 ## 8. The parish
@@ -535,6 +547,15 @@ Multi-year efforts consuming AP and money: renovation, restoration, debt retirem
 **The pastor's temperament.** A vicar's pastor is a mentor, a micromanager, or absent, rolled once and kept. A mentor leaves him the music and the homily dial and makes his hours with the people pay a little more; a micromanager wants his reports; an absent pastor leaves him most of the Mass and the desk, and his Masses. Each has its scenes and a yearly talk.
 
 **The men you form.** In June a seminarian may come for ten weeks, carrying a block of the week; at the end the man writes his evaluation (strong, reserved, concerned), and an unwritten one writes itself. Four years on, a man he formed may be sent back as his parochial vicar, remembering what was written. A parish big enough may have a permanent deacon on staff, with his own scenes and half a block back.
+
+### 8.6 The book: what a ministry adds up to
+
+*Added in playtesting.* The game keeps a running count of what the man has actually done, and it is the one place in the game where numbers are the point rather than a thing to be hidden.
+
+Counted: Masses celebrated, confessions heard, baptisms, first communions, confirmations prepared, weddings, funerals, anointings, and receptions into the Church. They accrue from the week as it was actually worked — the obligations kept and at what quality, the parish's size and how full it is, its generational shape (an aging parish buries more than it baptizes), and how many priests are in the house to share the work — and they keep accruing through a posting and through the years as a bishop, at that place's own rates.
+
+The Profile sheet reads it back with the rest of a life: his name and age, the years since ordination, every parish and posting in order, the men he formed and where they are now, the vocations that came out of his parishes, the parishes he was given dying and handed on alive, the offices he has held, the degrees, and the groups he founded. It is the one screen that answers "what have I done with forty years", and it is written in whole numbers and plain sentences.
+
 
 ## 9. Generation
 

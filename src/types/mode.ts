@@ -45,6 +45,11 @@ export interface AssignmentOption {
   office?: string;
   /** A posting instead of a parish: the offer whose program it is. */
   posting?: string;
+  /**
+   * A mid-arc answer to a request (DESIGN §7.6): the man is still in his post,
+   * so 'go' must close it before the move, and 'stay' moves nothing at all.
+   */
+  requested?: 'go' | 'stay';
 }
 
 export interface Letter {

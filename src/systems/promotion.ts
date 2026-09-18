@@ -44,6 +44,8 @@ export const PROMOTION = {
   affiliationSwing: 12,
   /** A man who put his name forward is at least considered on purpose. */
   askedBonus: 6,
+  /** A letter to the vicar for clergy naming this post is worth more than a name on a list. DESIGN §7.6. */
+  requestedBonus: 14,
   /** The parish nobody wanted, turned around: the board remembers. */
   turnaroundBonus: 14,
 } as const;
@@ -154,6 +156,10 @@ export function scoreCandidate(c: Candidate, opening: Opening, bishop: Pick<Bish
   if (opening.applied && c.isPlayer) {
     total += PROMOTION.askedBonus;
     reasons.push('he asked for it');
+  }
+  if (opening.requested && c.isPlayer) {
+    total += PROMOTION.requestedBonus;
+    reasons.push('he wrote to the vicar for clergy and asked for this one by name');
   }
   if (c.indispensable && opening.kind !== 'parochial_vicar') {
     total -= PROMOTION.indispensablePenalty;

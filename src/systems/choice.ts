@@ -5,12 +5,15 @@ import { holdsOrHeld } from './offices';
 import { beginStudy } from '@/engine/study';
 import { officeDef } from '@/content/parish';
 import { offerById } from '@/content/offers';
+import { studyProgram } from '@/content/study';
 import { PROBLEM_LABEL } from '@/generation/parishes';
 import { scoreParish } from './assignment';
 import { hasInterest, INTERESTS, parishInterest } from './interests';
 import { formationStanding, parishPrestige } from './standing';
 import { parishKindWord } from './placement';
 import { hoursOf } from './week';
+import { clearRequestAnswer, closeRequest, refuseRequestedMove, requestOf, roleForRequest } from './request';
+import { moveOut } from '@/engine/career';
 
 /**
  * A strong man is given a choice. At ordination for the top of the class,
@@ -221,6 +224,66 @@ export function buildChoice(state: GameState, rng: Rng, occasion: Occasion, fall
   return { options, why };
 }
 
+
+/**
+ * The answer to a letter. DESIGN §7.6: the vicar for clergy has acted on the
+ * request, and the post the man asked for is laid on the desk beside the post
+ * he holds. He may stay, and staying costs, because he asked.
+ */
+export function requestedChoice(state: GameState): { options: AssignmentOption[]; why: string } | null {
+  const r = requestOf(state);
+  const world = state.world;
+  const here = world?.parishes.find((p) => p.id === state.parish?.parishId);
+  if (!r || !world || !here || !state.assignment) return null;
+  const options: AssignmentOption[] = [];
+
+  if (r.target.kind === 'parish') {
+    const wanted = r.target.parishId;
+    const parish = world.parishes.find((p) => p.id === wanted);
+    if (!parish || parish.id === here.id) return null;
+    const role = roleForRequest(state, parish);
+    const title = role === 'pastor' ? 'Pastor' : role === 'administrator' ? 'Administrator' : 'Parochial vicar';
+    const opt = option(
+      state,
+      'requested',
+      `${title} of ${parish.name}`,
+      `The parish you wrote about. The vicar for clergy found a way, which means somebody else was moved to make the room, and both of you know it.`,
+      parish,
+      role,
+      ['You asked for this one by name', role === 'parochial_vicar' ? 'The canons want the years before a pastorate; the parish is yours as its vicar until they are there' : 'The board would rather send a man where he asked to go'],
+    );
+    options.push({ ...opt, requested: 'go' });
+  } else {
+    const def = offerById(r.target.offerId);
+    const program = def?.accept.commitment?.away ? studyProgram(def.accept.commitment.away) : undefined;
+    if (!def || !program) return null;
+    const years = Math.round((def.accept.commitment?.weeks ?? 156) / 52);
+    options.push({
+      id: 'requested',
+      headline: program.label,
+      blurb: `The posting you wrote about, and the bishop has agreed to it. ${program.residence.charAt(0).toUpperCase()}${program.residence.slice(1)}, ${years} year${years === 1 ? '' : 's'}, and no parish of your own until it ends.`,
+      assignment: state.assignment,
+      prestige: 'the diocese reads a man by what it lets him leave a parish for',
+      time: `${program.residence}, all of it`,
+      involves: [program.classes, `You asked for it, which the chancery has written down`, 'A parish again when the years end'],
+      posting: def.id,
+      requested: 'go',
+    });
+  }
+
+  options.push({
+    id: 'stay',
+    headline: `Stay at ${here.name}`,
+    blurb: 'Write back and say that on reflection you are needed here. It is allowed, it is done, and it is remembered: you asked, the chancery moved, and you said no.',
+    assignment: state.assignment,
+    prestige: 'nothing changes, which is its own answer',
+    time: 'the parish, as before',
+    involves: ['The work you are in the middle of stays yours', 'The chancery marks the file', 'You may write again, and the next letter is read more slowly'],
+    requested: 'stay',
+  });
+  return { options, why: `You wrote to the vicar for clergy about ${r.label}, and he has answered. The bishop will sign either letter.` };
+}
+
 /** Put the choice in front of the man, or fall back to the single letter. */
 export function withChoice(state: GameState, rng: Rng, occasion: Occasion, fallback: Assignment): GameState {
   const choice = buildChoice(state, rng, occasion, fallback);
@@ -233,11 +296,21 @@ export function chooseAssignment(state: GameState, id: string, rng: Rng): GameSt
   if (state.mode.kind !== 'assignment_choice') return state;
   const opt = state.mode.options.find((o) => o.id === id);
   if (!opt) throw new Error('no such option');
+  // The answer to his own letter: staying is a refusal, and going closes the post he is in. DESIGN §7.6.
+  if (opt.requested === 'stay') return { ...refuseRequestedMove(state), mode: { kind: 'clock' } };
   let next: GameState = { ...state, career: [...state.career, { week: state.clock.week, kind: 'assignment', text: `Chose, when the bishop asked: ${opt.headline.toLowerCase()}.` }] };
+  if (opt.requested === 'go') next = closeRequest(clearRequestAnswer(next), 'granted');
   if (opt.posting) {
     const def = offerById(opt.posting)!;
     next = { ...next, mode: { kind: 'clock' } };
-    return beginStudy({ ...next, assignment: null }, def, false, rng);
+    // A man still in a parish keeps his letter until beginStudy closes the tenure with it; at a
+    // board or at ordination the post is already closed and the assignment is only in the way.
+    return beginStudy({ ...next, assignment: next.parish ? next.assignment : null }, def, false, rng);
+  }
+  // A move he asked for happens in the middle of an arc: the post he holds must be closed first.
+  if (opt.requested === 'go' && next.parish) {
+    next = moveOut(next, rng, 'moved at your own asking');
+    next = { ...next, parish: null, founding: null, project: null, projects: [], flags: { ...next.flags, transfers: Number(next.flags.transfers ?? 0) + 1 } };
   }
   if (opt.office && !holdsOrHeld(next, opt.office)) {
     const o = officeDef(opt.office)!;

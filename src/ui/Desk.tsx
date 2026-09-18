@@ -16,6 +16,7 @@ import OffersPanel from './seminary/OffersPanel';
 import FormationPanel from './seminary/FormationPanel';
 import DigestPanel from './DigestPanel';
 import JobsPanel from './JobsPanel';
+import ProfilePanel from './ProfilePanel';
 import ClubsPanel from './ClubsPanel';
 import InterruptSettings from './InterruptSettings';
 import SavePanel from './SavePanel';
@@ -24,6 +25,7 @@ import FurnishPanel from './scenes/FurnishPanel';
 
 const LABEL: Record<Sheet, string> = {
   week: 'Week',
+  profile: 'You',
   parish: 'Parish',
   map: 'Map',
   deanery: 'Deanery',
@@ -51,7 +53,7 @@ export default function Desk() {
   if (!game) return null;
   const inParish = !!game.parish;
   const away = !!game.study;
-  const tabs: Sheet[] = inParish ? ['week', 'parish', 'people', 'deanery', 'map', 'jobs', 'clubs', 'letters', 'record', 'settings'] : away ? (game.see ? ['week', 'see', 'jobs', 'letters', 'record', 'settings'] : game.study?.place ? ['week', 'place', 'jobs', 'letters', 'record', 'settings'] : ['week', 'jobs', 'letters', 'record', 'settings']) : ['week', 'formation', 'jobs', 'clubs', 'letters', 'record', 'settings'];
+  const tabs: Sheet[] = inParish ? ['week', 'parish', 'people', 'deanery', 'map', 'jobs', 'profile', 'clubs', 'letters', 'record', 'settings'] : away ? (game.see ? ['week', 'see', 'jobs', 'profile', 'letters', 'record', 'settings'] : game.study?.place ? ['week', 'place', 'jobs', 'profile', 'letters', 'record', 'settings'] : ['week', 'jobs', 'profile', 'letters', 'record', 'settings']) : ['week', 'formation', 'jobs', 'profile', 'clubs', 'letters', 'record', 'settings'];
   if (furnishing) tabs.push('furnish');
   const open = sheet ?? 'week';
   const letters = game.offers.length;
@@ -82,6 +84,7 @@ export default function Desk() {
           </>
         )}
         {open === 'jobs' && <JobsPanel />}
+        {open === 'profile' && <ProfilePanel />}
         {open === 'clubs' && <ClubsPanel />}
         {open === 'letters' && <OffersPanel />}
         {open === 'record' && <DigestPanel />}

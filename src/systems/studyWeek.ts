@@ -12,6 +12,7 @@ import { applySeeHours } from '@/engine/see';
 import { describeUnmet } from './doors';
 import { freeHourShift } from './workweek';
 import { strainAfterWeek, strainOf, WEEK } from './week';
+import { ministryAwayWeek } from './ministry';
 
 /** Free hours a week away: lectures, the chapel, and the house rule take the rest. */
 export function studyBudget(state: GameState): number {
@@ -133,7 +134,8 @@ export function studyWeek(state: GameState, rng: Rng): { state: GameState; line:
     moves.push({ week: state.clock.week, key: 'piety', delta: -WEEK.strainPietyDrain, why: 'worn out' });
   }
   const character = { ...next.character!, stats, reputation, credentials };
-  const result: GameState = { ...next, ...(see ? { see } : {}), strain, movers: [...(next.movers ?? []), ...moves.filter((m) => m.delta !== 0)], npcs: { ...next.npcs, ...npcs }, flags: { ...next.flags, ...flags }, character, study: { ...study, hoursLogged, taken, ...(place ? { place } : {}), ...(record ? { record } : {}), ...(freed.length ? { routine: Object.fromEntries(Object.entries(study.routine).filter(([k]) => !freed.includes(k))) } : {}) } };
+  // The book of a life goes on in a posting: the wards, the campus chapel, the residence. DESIGN §8.6.
+  const result: GameState = ministryAwayWeek({ ...next, ...(see ? { see } : {}), strain, movers: [...(next.movers ?? []), ...moves.filter((m) => m.delta !== 0)], npcs: { ...next.npcs, ...npcs }, flags: { ...next.flags, ...flags }, character, study: { ...study, hoursLogged, taken, ...(place ? { place } : {}), ...(record ? { record } : {}), ...(freed.length ? { routine: Object.fromEntries(Object.entries(study.routine).filter(([k]) => !freed.includes(k))) } : {}) } });
   if (freed.length) earned.push(`The ${freed.map((id) => studyActivities.find((a) => a.id === id)?.label ?? id).join(' and ')} hours are yours again; put them somewhere.`);
   const head = program?.classes ?? 'Lectures';
   const body = phrases.length ? `${head}; ${phrases.join(', ')}.` : `${head}, and the free hours went to the city.`;
