@@ -64,6 +64,8 @@ import { setPreference, type Preference } from '@/systems/assignment';
 import { setInterest as doSetInterest } from '@/systems/interests';
 import { fileRequest as doFileRequest, withdrawRequest as doWithdrawRequest } from '@/systems/request';
 import { answerAsk as doAnswerAsk, askFavour as doAskFavour } from '@/systems/houses';
+import { askBrother as doAskBrother } from '@/systems/brothers';
+import { dropWork as doDropSideWork, startWork as doStartSideWork } from '@/systems/sidework';
 import { setLearning as doSetLearning } from '@/systems/languages';
 import type { DecorPlace, HouseFavourId, LiturgicalTopic, RequestTarget } from '@/types';
 import { anthropicProvider, type Provider } from '@/llm/provider';
@@ -159,6 +161,11 @@ export interface GameStore {
   askHouseFavour(houseId: string, favourId: HouseFavourId): void;
   /** Answer what a house has asked of the parish. */
   answerHouseAsk(houseId: string, yes: boolean): void;
+  /** Take on, or put down, the thing he does besides the parish. DESIGN §8.8. */
+  startSideWork(id: string): void;
+  dropSideWork(): void;
+  /** Call in a favour from a man he was ordained with. DESIGN §9.5. */
+  askBrother(npcId: string, favourId: string): void;
   /** Take up a language in the routine's study hours, or put it down. */
   setLearning(id: string | null): void;
   setDiscretionary(actionId: string, ap: number): void;
@@ -679,6 +686,23 @@ export const useGameStore = create<GameStore>()((set, get) => ({
   answerHouseAsk(houseId, yes) {
     update(set, get, (game) => {
       const res = doAnswerAsk(game, houseId, yes);
+      set({ lastHouseLine: res.line });
+      return res.state;
+    });
+  },
+  startSideWork(id) {
+    update(set, get, (game) => doStartSideWork(game, id));
+  },
+  dropSideWork() {
+    update(set, get, (game) => {
+      const res = doDropSideWork(game);
+      if (res.line) set({ lastHouseLine: res.line });
+      return res.state;
+    });
+  },
+  askBrother(npcId, favourId) {
+    update(set, get, (game) => {
+      const res = doAskBrother(game, npcId, favourId);
       set({ lastHouseLine: res.line });
       return res.state;
     });

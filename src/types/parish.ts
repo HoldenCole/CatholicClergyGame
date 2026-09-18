@@ -47,6 +47,32 @@ export type ActionLocation =
   | 'study'
   | 'chapel';
 
+/** The thing a priest does besides the parish, for years. parish/works.json — DESIGN §8.8. */
+export interface SideWorkDef {
+  id: string;
+  label: string;
+  blurb: string;
+  kind: 'study' | 'public' | 'parish' | 'outside';
+  /** Blocks of the week it takes, every week, until it is done. */
+  apPerWeek: number;
+  weeks: number;
+  requires?: Condition[];
+  /** Points along the way, as a fraction of the weeks: a line and what it does. */
+  milestones: { at: number; line: string; effects: Effect[] }[];
+  done: { line: string; effects: Effect[] };
+  /** What happens instead when it comes to nothing, and what saves a man from that. */
+  risk?: { chance: number; unless?: Condition[]; line: string; effects: Effect[] };
+}
+
+/** A side work in hand. */
+export interface SideWorkState {
+  id: string;
+  startWeek: number;
+  endWeek: number;
+  /** Milestones already passed, by index. */
+  passed: number[];
+}
+
 /** A named thing wrong with one parish in particular. parish/issues.json — DESIGN §8.7. */
 export interface ParishIssueDef {
   id: string;

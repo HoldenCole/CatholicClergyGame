@@ -27,6 +27,8 @@ import { terrainOf } from './assignment';
 import { averageVitality, groupRelief, groupsWeek, finishFounding } from './groups';
 import { ministryWeek } from './ministry';
 import { houseHelp, houseRelief, houseWeek } from './houses';
+import { workLoad } from './sidework';
+import { brothersWeek } from './brothers';
 import type { Rng } from '@/engine/rng';
 
 /** Tunables for the weekly loop. DESIGN 2.6 and 8.1; numbers not in the design are invented. */
@@ -201,7 +203,7 @@ export function planWeek(state: GameState): Plan {
   const parish = state.parish!;
   const budget = weekBudget(state);
   // The men around him give blocks back below the floor: a neighbor's cover, a seminarian, a deacon, the vicar he formed.
-  const fixed = Math.max(0, seasonalLoad(state) + adminFloorFor(state) + commitmentAp(state) + (state.founding?.apPerWeek ?? 0) + (state.parish?.work?.apPerWeek ?? 0) + clubHours(state) + bossLoad(state) - fundBonuses(state).relief) - coverRelief(state) - helpRelief(state) - houseHelp(state);
+  const fixed = Math.max(0, seasonalLoad(state) + adminFloorFor(state) + commitmentAp(state) + (state.founding?.apPerWeek ?? 0) + (state.parish?.work?.apPerWeek ?? 0) + clubHours(state) + bossLoad(state) + workLoad(state) - fundBonuses(state).relief) - coverRelief(state) - helpRelief(state) - houseHelp(state);
   // The groups relieve what they run; a standing confessor from the priory relieves the box. DESIGN §9.4a.
   const houses = houseRelief(state);
   const groups = groupRelief(state);
@@ -389,6 +391,8 @@ export function resolveWeek(state: GameState, rng: Rng): { state: GameState; led
 
   // An hour in the priory parlor or the abbey guesthouse, and what it builds. DESIGN §9.4a.
   next = houseWeek(next, plan.discretionary.priory ?? 0);
+  // The hours with brother priests land on one man at a time, and the rest drift. DESIGN §9.5.
+  next = brothersWeek(next, plan.discretionary.brother_priests ?? 0, rng.derive(`brothers:${state.clock.week}`));
 
   // The book of a life: what this week counted. DESIGN §8.6.
   next = ministryWeek(next, plan.obligations, plan.discretionary.extra_confessions ?? 0);

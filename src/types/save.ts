@@ -5,7 +5,7 @@ import type { Mode } from './mode';
 import type { Npc } from './npc';
 import type { ActiveOffer, Commitment, OfferRecord } from './offers';
 import type { Assignment, Diocese, Parish, World } from './world';
-import type { ParishState } from './parish';
+import type { ParishState, SideWorkState } from './parish';
 import type { Founding, Group } from './groups';
 import type { CareerEntry, Project } from './career';
 import type { Opening } from './promotion';
@@ -129,6 +129,8 @@ export interface GameState {
   houses?: Record<string, HouseStanding>;
   /** Things that are happening over years rather than in a week. DESIGN §12.5. */
   arcs?: ActiveArc[];
+  /** The thing he does besides the parish, and how far along it is. DESIGN §8.8. */
+  sideWork?: SideWorkState | null;
   /** Named things wrong with this parish in particular, by id in content. DESIGN §8.7. */
   parishIssues?: Record<string, string[]>;
   /** The pastor's current project, if any. DESIGN 8.3 */
