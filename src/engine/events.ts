@@ -2,7 +2,8 @@ import type { Choice, GameEvent, GameState, HistoryEntry, PendingEvent } from '@
 import { evaluateAll, evaluateCondition } from './conditions';
 import { applyInternalForum } from './internalForum';
 import { applyEffects } from './effects';
-import type { Rng } from './rng';
+import { advanceArc, arcOf, dueArc } from '@/systems/arcs';
+import { createRng, type Rng } from './rng';
 import { resolveSelector, selectorsIn } from './selectors';
 import { recordPosition } from '@/systems/reputation';
 import { groupMatches } from './conditions';
@@ -46,13 +47,28 @@ export function isEligible(event: GameEvent, state: GameState): boolean {
   return true;
 }
 
+/**
+ * How much the draw forgets. DESIGN §12.2: a scene the player has seen before
+ * is not forbidden — a parish does have the same argument twice — but it must
+ * be rarer than one he has not, and rarer again the more recently it came.
+ */
+export const REPEATS = { window: 12 * WEEKS_PER_YEAR, seenAgain: 0.35, perExtra: 0.55, floor: 0.06 } as const;
+
+/** What the last dozen years of this man's life do to the weight of one scene. */
+export function repeatFactor(event: GameEvent, state: GameState): number {
+  const since = state.clock.week - REPEATS.window;
+  const seen = state.history.filter((h) => h.eventId === event.id && h.week >= since).length;
+  if (seen === 0) return 1;
+  return Math.max(REPEATS.floor, REPEATS.seenAgain * Math.pow(REPEATS.perExtra, seen - 1));
+}
+
 /** DESIGN.md §12.2: the draw is weighted by character, not uniform. */
 export function eventWeight(event: GameEvent, state: GameState): number {
   let w = event.baseWeight;
   for (const b of event.bias ?? []) {
     if (evaluateCondition(b.when, state)) w *= b.multiplier;
   }
-  return Math.max(0, w);
+  return Math.max(0, w * repeatFactor(event, state));
 }
 
 /** All selectors an event mentions in text, choices, conditions, and effects. */
@@ -177,6 +193,9 @@ export function applyChoice(
 ): ApplyResult {
   const choice = event.choices.find((c) => c.id === choiceId);
   if (!choice) throw new Error(`event ${event.id} has no choice ${choiceId}`);
+  // An arc's stage: note where it stood, so a choice that moved it is not moved again. DESIGN §12.5.
+  const arcDue = dueArc(state);
+  const arcBefore = arcDue?.eventId === event.id ? arcOf(state, arcDue.arc.id) : undefined;
   if (!evaluateAll(choice.requires, state, pending.bindings)) {
     throw new Error(`choice ${choiceId} of ${event.id} is not available`);
   }
@@ -195,6 +214,13 @@ export function applyChoice(
         week: state.clock.week,
       }),
     };
+  }
+  // The stage has been played: unless the choice itself moved the arc, it moves on.
+  if (arcBefore && arcDue) {
+    const now = arcOf(next, arcDue.arc.id);
+    if (now && now.stage === arcBefore.stage && now.dueWeek === arcBefore.dueWeek && now.endedWeek === undefined) {
+      next = advanceArc(next, arcDue.arc.id, createRng(`${next.seed}:arc-step:${arcDue.arc.id}:${next.clock.week}`));
+    }
   }
   if (choice.opensThread) {
     next = {

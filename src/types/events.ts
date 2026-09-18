@@ -114,6 +114,10 @@ export type Condition =
   | { type: 'ministry'; key: MinistryKey; op: Op; value: number }
   /** What a life adds up to besides the sacraments: posts held, men formed, parishes turned, vocations sent. */
   | { type: 'life'; key: 'posts' | 'formed' | 'turnarounds' | 'vocations' | 'offices'; op: Op; value: number }
+  /** An arc of his life (DESIGN §12.5): running now, ended, or ended a particular way. */
+  | { type: 'arc'; key: string; value: 'running' | 'ended' | string }
+  /** Something wrong with this parish in particular (DESIGN §8.7): an issue id, or a thing it touches. */
+  | { type: 'parish_issue'; key: string }
   /**
    * Extension: some group of the current parish matches. When an event
    * carries group conditions, @group_leader binds to a matching group.
@@ -196,7 +200,11 @@ export type EffectTarget =
   /** Count in a posting's book (study.record): key is the entry, delta. Nothing happens outside a posting. */
   | 'record'
   /** How worn the man is, 0..100: a scene that costs him a month of sleep, or gives one back. */
-  | 'strain';
+  | 'strain'
+  /** Move an arc (DESIGN §12.5): key is the arc id, value "end", "hold:<weeks>" or a stage id to jump to. */
+  | 'arc'
+  /** Write into the book of a ministry (DESIGN §8.6): key is what was counted, delta how many. */
+  | 'ministry';
 
 export interface Effect {
   target: EffectTarget;

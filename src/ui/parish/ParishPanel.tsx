@@ -5,6 +5,7 @@ import { hoursOf } from '@/systems/week';
 import { NEED_LABEL } from '@/generation/diocese';
 import { diocesePresets } from '@/content/dioceses';
 import { workAvailability } from '@/systems/problems';
+import { parishIssueDef } from '@/content/parish';
 import { fundableGroups, mayInvest, spendAvailability, spendable, spendWords, SPENDING } from '@/systems/spending';
 import { explainAlignment, explainAttendance, explainCollections, explainReputation, explainStat, reasonsLine } from '@/systems/movers';
 import type { ConstituencyKey } from '@/types';
@@ -243,6 +244,24 @@ export default function ParishPanel() {
         <p className="ink-muted mt-3 text-xs">
           What the parish sings, how the altar stands, where the choir is: <button className="pbtn-link" onClick={() => furnish('church')}>the church</button> is yours to change, within what the bishop allows.
         </p>
+      </Sheet>
+      <Sheet title="What is wrong with this parish in particular">
+        {(() => {
+          const issues = (parish.issues ?? []).map((id) => parishIssueDef(id)).filter((d): d is NonNullable<typeof d> => !!d);
+          if (!issues.length) return <p className="ink-faint text-sm">Nothing this parish is known for. Rare, and it will not last.</p>;
+          return (
+            <ul className="flex flex-col gap-1.5 text-sm">
+              {issues.map((d) => (
+                <li key={d.id}>
+                  <span className="font-semibold">{d.label}</span>
+                  <span className="ink-faint ml-2 text-xs">{d.touches}</span>
+                  <div className="ink-muted text-xs">{d.blurb}</div>
+                </li>
+              ))}
+            </ul>
+          );
+        })()}
+        <p className="ink-faint mt-2 text-xs">The diocese writes down one problem. These are the things the pastor finds in the first year, and no two parishes have the same set.</p>
       </Sheet>
       <Sheet title="The rectory and the office">
         <ul className="flex flex-col gap-1.5 text-sm">

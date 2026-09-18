@@ -1,6 +1,7 @@
 import { useGameStore } from '@/engine/store';
 import { useState } from 'react';
 import { publicRecord } from '@/systems/record';
+import { arcHistory, arcLines } from '@/systems/arcs';
 import { LANE_LABEL, readDigest, type Lane } from '@/systems/digest';
 import { whatIsGoingOn } from '@/systems/digest';
 import type { DigestWeek } from '@/types';
@@ -85,6 +86,30 @@ export default function DigestPanel() {
     <>
       <WeeksSheet digest={game.digest} going={game.parish ? whatIsGoingOn(game) : []} />
       {game.character && (
+        <>
+        <Sheet title="What is running">
+          {(() => {
+            const open = arcLines(game);
+            const done = arcHistory(game);
+            if (!open.length && !done.length) return <p className="ink-faint text-sm">Nothing long is running. Things that take years open on their own, in a parish a man has been in a while.</p>;
+            return (
+              <>
+                <ul className="flex flex-col gap-2 text-sm">
+                  {open.map((a) => (
+                    <li key={a.title}>
+                      <div className="font-semibold">{a.title}<span className="ink-faint ml-2 text-xs">{a.years >= 1 ? `${a.years} year${a.years === 1 ? '' : 's'} in` : 'just begun'}</span></div>
+                      <div className="ink-muted text-xs">{a.line}</div>
+                    </li>
+                  ))}
+                </ul>
+                {done.length > 0 && (
+                  <p className="ink-faint mt-2 text-xs">Finished: {done.map((d) => `${d.title} (${d.outcome.replace(/_/g, ' ')}, ${d.years} year${d.years === 1 ? '' : 's'})`).join('; ')}.</p>
+                )}
+              </>
+            );
+          })()}
+        </Sheet>
+
         <Sheet title="The public record">
           <p className="text-sm">You are {record.standing}. {record.bishopLine}</p>
           {record.rows.length === 0 ? (
@@ -103,6 +128,7 @@ export default function DigestPanel() {
             </ul>
           )}
         </Sheet>
+        </>
       )}
       {notes.length > 0 && (
         <Sheet title="The file">

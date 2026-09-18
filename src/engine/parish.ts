@@ -6,6 +6,7 @@ import { formDeanery } from '@/systems/deanery';
 import { generateGroups } from '@/systems/groups';
 import { resolveWeek } from '@/systems/week';
 import { takeSnapshot } from '@/systems/trajectory';
+import { arcsOnMove } from '@/systems/arcs';
 import { seasonOf } from './time';
 import { fromDayNumber } from './calendar';
 import ambient from '@/content/parish/ambient.json';
@@ -117,8 +118,10 @@ export function startAssignment(state: GameState, rng: Rng): GameState {
     flags,
     mode: { kind: 'clock' },
   };
-  const arrival = takeSnapshot(started);
-  const settled = arrival ? { ...started, parish: { ...parishState, arrival } } : started;
+  // An arc that belonged to the last parish ends there: he is not present to see how it comes out. §12.5
+  const moved = arcsOnMove(started).state;
+  const arrival = takeSnapshot(moved);
+  const settled = arrival ? { ...moved, parish: { ...parishState, arrival } } : moved;
   return placeAmongPriests(settled, rng);
 }
 

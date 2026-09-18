@@ -27,6 +27,7 @@ import { endStudy } from './study';
 import { appointmentStep, APPOINTMENT_FLAGS } from './appointment';
 import { clearRequestAnswer, closeRequest, requestAnswerDue } from '@/systems/request';
 import { expireAsks } from '@/systems/houses';
+import { ARCS, dueArc, endArc, maybeOpenArc } from '@/systems/arcs';
 import { requestedChoice } from '@/systems/choice';
 import { confessorWeek } from '@/systems/confessor';
 import { turnaroundStep } from '@/systems/trajectory';
@@ -286,6 +287,17 @@ export function parishWeekHook(deps: EventDeps): WeekHook {
       const letter = deps.lookup('ta_bishops_letter');
       if (letter) next = fireOrResolve(next, letter, rng.derive(`turnaround-letter:${next.clock.week}`), deps);
       if (next.mode.kind !== 'clock' || next.pending.length > 0) return next;
+    }
+    // Arcs: a quarter may open one, and a stage that is due brings its scene. DESIGN §12.5.
+    if (next.clock.week % ARCS.everyWeeks === 0) next = maybeOpenArc(next, rng.derive(`arc-open:${next.clock.week}`)).state;
+    const due = dueArc(next);
+    if (due) {
+      const scene = deps.lookup(due.eventId);
+      if (!scene) next = endArc(next, due.arc.id, 'done');
+      else {
+        next = fireOrResolve(next, scene, rng.derive(`arc:${due.arc.id}:${next.clock.week}`), deps);
+        if (next.mode.kind !== 'clock' || next.pending.length > 0) return next;
+      }
     }
     const box = confessorWeek(next);
     next = box.state;

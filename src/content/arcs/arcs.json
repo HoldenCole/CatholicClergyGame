@@ -1,0 +1,63 @@
+{
+  "_notes": "Arcs: things that happen over years (DESIGN §12.5). Each stage names a scene authored with beat \"arc\", which the general draw never touches; the gaps between stages are real years. An arc that does not travel belongs to the parish and is lost when the man is moved.",
+  "arcs": [
+    {
+      "id": "arc_family",
+      "title": "The Hennessy family",
+      "line": "A family of this parish you have been in the middle of since the boy started serving.",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "weight": 12,
+      "requires": [{ "type": "weeks_served", "op": ">=", "value": 26 }],
+      "stages": [
+        { "id": "server", "event": "ax_family_the_server", "after": [2, 8] },
+        { "id": "father", "event": "ax_family_the_father", "after": [45, 90] },
+        { "id": "hospital", "event": "ax_family_the_hospital", "after": [40, 85] },
+        { "id": "funeral", "event": "ax_family_the_funeral", "after": [30, 70] },
+        { "id": "after", "event": "ax_family_ten_years_on", "after": [150, 260] }
+      ]
+    },
+    {
+      "id": "arc_wing",
+      "title": "The old school wing",
+      "line": "A building the parish cannot afford to keep or to lose, and every meeting about it is about something else.",
+      "phase": ["pastor", "administrator"],
+      "weight": 11,
+      "requires": [{ "type": "parish_issue", "key": "buildings" }],
+      "stages": [
+        { "id": "report", "event": "ax_wing_the_report", "after": [3, 12] },
+        { "id": "meeting", "event": "ax_wing_the_meeting", "after": [20, 45] },
+        { "id": "money", "event": "ax_wing_the_money", "after": [40, 90] },
+        { "id": "end", "event": "ax_wing_the_end", "after": [50, 110] }
+      ]
+    },
+    {
+      "id": "arc_vocation",
+      "title": "The boy who served the eight o'clock",
+      "line": "A server you have known since he was eleven, and what he is turning into.",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "weight": 10,
+      "travels": true,
+      "requires": [{ "type": "years_ordained", "op": ">=", "value": 3 }],
+      "stages": [
+        { "id": "server", "event": "ax_vocation_the_server", "after": [4, 16] },
+        { "id": "question", "event": "ax_vocation_the_question", "after": [130, 220] },
+        { "id": "seminary", "event": "ax_vocation_the_seminary", "after": [60, 120] },
+        { "id": "ordination", "event": "ax_vocation_the_ordination", "after": [230, 300] }
+      ]
+    },
+    {
+      "id": "arc_enemy",
+      "title": "The man who writes the letters",
+      "line": "One parishioner who has decided about you, and will not be talked out of it.",
+      "phase": ["pastor", "administrator"],
+      "weight": 10,
+      "requires": [{ "type": "weeks_served", "op": ">=", "value": 52 }],
+      "stages": [
+        { "id": "first", "event": "ax_enemy_the_first_letter", "after": [2, 10] },
+        { "id": "petition", "event": "ax_enemy_the_petition", "after": [30, 70] },
+        { "id": "chancery", "event": "ax_enemy_the_chancery", "after": [35, 80] },
+        { "id": "end", "event": "ax_enemy_the_end", "after": [60, 140] }
+      ]
+    }
+  ]
+}

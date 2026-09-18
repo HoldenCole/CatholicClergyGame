@@ -220,6 +220,8 @@ export interface Parish {
   groupIds: string[];
   /** One live problem, by id in content. */
   problem: string;
+  /** Two to four named things wrong with this parish in particular. DESIGN §8.7. */
+  issues?: string[];
   /** The Mass as it is said here: dial id -> option id. Rolled at generation; the pastor changes it. */
   /** Where it sits on the map of the diocese, 0..100 each way; the cathedral at the center. */
   x?: number;

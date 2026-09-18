@@ -8,7 +8,7 @@ import type { Group } from '@/types';
 import { vitalityBand } from '@/systems/groups';
 import { currentDecor } from '@/systems/decorState';
 import { isFigure } from '@/systems/reputation';
-import { obligationDefs } from '@/content/parish';
+import { obligationDefs, parishIssueDef } from '@/content/parish';
 import { lifeCount, ministryOf } from '@/systems/ministry';
 import type { ObligationKey, Quality } from '@/types';
 
@@ -114,6 +114,20 @@ export function evaluateCondition(
       return compare(cond.op, ministryOf(state)[cond.key] ?? 0, cond.value);
     case 'life':
       return compare(cond.op, lifeCount(state, cond.key), cond.value);
+    // An arc of his life, and a thing wrong with this parish in particular. DESIGN §12.5, §8.7.
+    case 'arc': {
+      const arc = (state.arcs ?? []).find((a) => a.id === cond.key);
+      if (!arc) return false;
+      if (cond.value === 'running') return arc.endedWeek === undefined;
+      if (cond.value === 'ended') return arc.endedWeek !== undefined;
+      return arc.outcome === cond.value;
+    }
+    case 'parish_issue': {
+      const pid = state.assignment?.parishId;
+      const parish = pid ? state.world?.parishes.find((p) => p.id === pid) : undefined;
+      const issues = parish?.issues ?? [];
+      return issues.includes(cond.key) || issues.some((id) => parishIssueDef(id)?.touches === cond.key);
+    }
     case 'arc_weeks_left':
       return !!state.parish && compare(cond.op, state.parish.arcEndWeek - state.clock.week, cond.value);
     case 'bishop_alignment':

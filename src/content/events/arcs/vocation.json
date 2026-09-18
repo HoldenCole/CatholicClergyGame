@@ -1,0 +1,176 @@
+{
+  "_notes": "The boy who served the eight o'clock: four stages across twelve or fifteen years, and this one travels with the man from parish to parish.",
+  "events": [
+    {
+      "id": "ax_vocation_the_server",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "beat": "arc",
+      "pressure": ["competence"],
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 10,
+      "suppressYears": 40,
+      "once": true,
+      "title": "He Asks What The Words Mean",
+      "body": "He is eleven and serves the weekday Mass and has begun asking questions in the sacristy afterward that are not eleven-year-old questions: why that word and not the other one, what happens if the priest says it wrong, why the little cloth. He asks them the way some children ask about aircraft. His mother thinks it is a phase. The sacristan, who has watched forty years of servers, said something to you about him in November and then said never mind.",
+      "choices": [
+        {
+          "id": "answer_him_properly",
+          "label": "Answer every question at full strength, as if he were twenty-five",
+          "default": true,
+          "outcome": "You never once talk down to him, which is the entire method and takes four minutes a week. By thirteen he knows more liturgy than the parish council and has begun correcting the other servers, which will need managing.",
+          "effects": [
+            { "target": "stat", "key": "theology", "delta": 1 },
+            { "target": "bond", "key": "@bonded_parishioner", "value": "taught:the boy who asks the questions" },
+            { "target": "flag", "key": "ax_vocation_answered", "value": true }
+          ]
+        },
+        {
+          "id": "give_him_a_book",
+          "label": "Give him the book and let him come back with the hard parts",
+          "outcome": "He reads it in nine days and comes back with four questions and a list of things he thinks are contradictions, two of which are contradictions. You spend a winter of Tuesdays on it.",
+          "effects": [
+            { "target": "stat", "key": "knowledge", "delta": 1 },
+            { "target": "flag", "key": "ax_vocation_the_book", "value": true }
+          ]
+        },
+        {
+          "id": "keep_it_light",
+          "label": "Keep it light; he is eleven",
+          "outcome": "You are warm and brief and he goes on serving, and the questions go somewhere else, or nowhere. Some of them find the answers on the internet, which is where the ones nobody answers go.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ax_vocation_the_question",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "beat": "arc",
+      "pressure": ["friendship_vs_duty", "ambition_vs_integrity"],
+      "severity": "MAJOR",
+      "category": "personal",
+      "baseWeight": 10,
+      "suppressYears": 40,
+      "once": true,
+      "title": "Seventeen, And He Says It Out Loud",
+      "body": "He is seventeen, he has a girlfriend and a place at a state university and a father with a business he is expected to take over, and he says it in a car park in a way that suggests he has been rehearsing since he was fourteen. He wants to know whether you think he should. He also wants to know, and this is the real question, whether you would do it again.",
+      "choices": [
+        {
+          "id": "answer_the_real_question",
+          "label": "Answer the second question honestly, whatever the honest answer is",
+          "default": true,
+          "outcome": "You tell him about the Tuesdays and the rectory at ten at night and the funeral of the child, and that you would, and why, and it takes twenty minutes and is not an advertisement. He says thank you and goes to the university anyway, which is the right order.",
+          "effects": [
+            { "target": "honesty", "key": "", "delta": 4 },
+            { "target": "stat", "key": "piety", "delta": 3 },
+            { "target": "flag", "key": "ax_vocation_told_him_true", "value": true }
+          ]
+        },
+        {
+          "id": "send_him_to_the_vocation_director",
+          "label": "Put him in front of the vocation director and step back",
+          "outcome": "Procedurally correct, and the director is good, and the boy comes back from the discernment weekend flat in a way you cannot place. He says it was fine. It was fine. He wanted it to be you and he will not say so.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": 4 },
+            { "target": "flag", "key": "ax_vocation_handed_off", "value": true }
+          ]
+        },
+        {
+          "id": "push_him",
+          "label": "Tell him the diocese needs men like him",
+          "outcome": "It works, in the sense that he applies. The diocese does need men like him, and that is not a reason a man should enter, and you will think about the sentence you used in three different years.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": 5 },
+            { "target": "stat", "key": "piety", "delta": -2 },
+            { "target": "flag", "key": "ax_vocation_pushed", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ax_vocation_the_seminary",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "beat": "arc",
+      "pressure": ["friendship_vs_duty", "doubt"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 10,
+      "suppressYears": 40,
+      "once": true,
+      "title": "He Telephones From The Seminary In February",
+      "body": "Second year, February, the month that takes them. He is not leaving. He is sitting on a fire escape with a telephone saying that the house is full of men he cannot talk to, that a formator has told him he is rigid, that he cannot pray, and that he has begun wondering whether the thing that got him here was you rather than God. He has telephoned you and not his spiritual director, which is both a compliment and a problem.",
+      "choices": [
+        {
+          "id": "send_him_back_to_his_director",
+          "label": "Listen for an hour, then make him take all of it to his own director",
+          "default": true,
+          "outcome": "You do not solve it, which is the point, and you make him promise to say the fire-escape sentence to the man whose job it is. He does. It is the making of his second year and he tells you so at his ordination.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 3 },
+            { "target": "flag", "key": "ax_vocation_sent_him_back", "value": true }
+          ]
+        },
+        {
+          "id": "be_his_director",
+          "label": "Be the man he telephones, for the next four years",
+          "outcome": "You take the calls, and there are about nine a year, and you are good at it and it is not your job and it quietly means he never builds the thing he needs in the house he is actually living in.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": -1 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "flag", "key": "ax_vocation_the_calls", "value": true }
+          ]
+        },
+        {
+          "id": "tell_him_to_come_home",
+          "label": "Tell him that leaving is allowed and nobody would think less of him",
+          "outcome": "Nobody has said that to him since he entered and the relief in the silence is audible from three hundred miles away. He stays. Men who have been told they may go stay differently from men who have not.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 4 },
+            { "target": "honesty", "key": "", "delta": 3 },
+            { "target": "flag", "key": "ax_vocation_may_go", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ax_vocation_the_ordination",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "beat": "arc",
+      "pressure": ["doubt"],
+      "severity": "MAJOR",
+      "category": "personal",
+      "baseWeight": 10,
+      "suppressYears": 40,
+      "once": true,
+      "title": "The Cathedral, In June, And He Is Third From The End",
+      "body": "Fifteen years from the sacristy questions. He is twenty-six and prostrate on a cathedral floor and his mother is crying in the fourth row and his father, who wanted the business, is holding the programme like a man holding a rail. He has asked you to vest and to be the priest who vests him afterward, which is the thing a man asks of one person in his life.",
+      "choices": [
+        {
+          "id": "vest_him",
+          "label": "Vest him, and say nothing clever",
+          "default": true,
+          "outcome": "Chasuble over the head in the sacristy in front of nobody, forty seconds, and neither of you gets a word out. He says the first Mass in your parish on the Sunday and you sit in the congregation and cannot sing.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 6 },
+            { "target": "reputation", "key": "parishioners", "delta": 5 },
+            { "target": "ministry", "key": "ordinations", "delta": 0 },
+            { "target": "arc", "key": "arc_vocation", "value": "ordained" }
+          ]
+        },
+        {
+          "id": "tell_him_the_one_thing",
+          "label": "Tell him, in the sacristy, the one thing you wish you had been told",
+          "outcome": "You say it in eleven words and he remembers them for thirty years and repeats them to a server of his own in 2041. It is not advice about prayer or about bishops. It is about how to be alone on a Tuesday.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 5 },
+            { "target": "honesty", "key": "", "delta": 3 },
+            { "target": "arc", "key": "arc_vocation", "value": "ordained" },
+            { "target": "flag", "key": "ax_vocation_the_eleven_words", "value": true }
+          ]
+        }
+      ]
+    }
+  ]
+}

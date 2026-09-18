@@ -18,6 +18,19 @@ import { applyStat } from '@/systems/stats';
 import { closeTenure } from '@/systems/tenures';
 import { resolveSelector } from './selectors';
 import { noteMovers } from '@/systems/movers';
+import { moveArc } from '@/systems/arcs';
+import { ministryOf } from '@/systems/ministry';
+import type { MinistryKey } from '@/types';
+import { createRng, type Rng } from './rng';
+
+/**
+ * Effects carry no generator, and an arc's next stage needs one. The seed and
+ * the week are both in the state, so the same save moves the same way: this is
+ * the seeded rng of CLAUDE.md rule 2, reached by another door.
+ */
+function rngFor(state: GameState, key: string): Rng {
+  return createRng(`${state.seed}:arc:${key}:${state.clock.week}`);
+}
 
 export class EffectError extends Error {
   override name = 'EffectError';
@@ -213,6 +226,15 @@ export function applyEffect(
       if (!state.parish) return state;
       return { ...state, parish: { ...state.parish, finance: { ...state.parish.finance, cash: state.parish.finance.cash + delta } } };
     }
+    // A scene that counts in the book: a wedding done as a favour, a deathbed reception. DESIGN §8.6.
+    case 'ministry': {
+      const book = ministryOf(state);
+      const k = effect.key as MinistryKey;
+      return { ...state, ministry: { ...book, [k]: (book[k] ?? 0) + delta } };
+    }
+    // A choice that moves an arc of a life: end it, hold it, or jump it to a stage. DESIGN §12.5.
+    case 'arc':
+      return moveArc(state, effect.key, String(effect.value ?? 'end'), rngFor(state, effect.key));
     // What a scene takes out of a man, or gives back. Kept in the same 0..100 as the week's wear.
     case 'strain':
       return { ...state, strain: Math.max(0, Math.min(100, (state.strain ?? 0) + delta)) };

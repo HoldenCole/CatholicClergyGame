@@ -1,0 +1,221 @@
+{
+  "_notes": "The Hennessy family, five stages across ten or twelve years (DESIGN §12.5). Every scene here is beat \"arc\": the general draw never touches them, the arc brings them, and the gaps between them are years.",
+  "events": [
+    {
+      "id": "ax_family_the_server",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "beat": "arc",
+      "pressure": ["friendship_vs_duty"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 10,
+      "suppressYears": 40,
+      "once": true,
+      "title": "The Boy Is At Every Mass",
+      "body": "The Hennessy boy is nine and serves the eight o'clock four mornings a week, which nobody asked him to do. His mother brings him and waits at the back with a paperback. His father has not been inside this building since the baptism and drops them at the kerb, engine running, and pulls away before the bell. The boy knows where everything in the sacristy is kept and has begun putting it away better than the sacristan does.",
+      "choices": [
+        {
+          "id": "make_him_useful",
+          "label": "Give him a job with his name on it",
+          "default": true,
+          "outcome": "Master of the servers, at nine, which he takes with the gravity of a man appointed to something. He writes a rota in pencil. It is the first thing in his life anybody has put him in charge of, and his mother tells you eleven years later what that did to him.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 3 },
+            { "target": "bond", "key": "@bonded_parishioner", "value": "formed:the boy who served the eight o'clock" },
+            { "target": "flag", "key": "ax_family_the_job", "value": true }
+          ]
+        },
+        {
+          "id": "go_out_to_the_car",
+          "label": "Go out to the car one morning and say hello to the father",
+          "outcome": "He is startled and civil and does not turn the engine off. Four sentences about the weather and the boy. You do it again the next week, and the week after, and in the third month he turns the engine off.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "flag", "key": "ax_family_the_father_spoken_to", "value": true }
+          ]
+        },
+        {
+          "id": "let_them_be",
+          "label": "Leave them to it; the boy is happy and the father is not your business",
+          "outcome": "Perfectly defensible, and the boy goes on serving and the car goes on pulling away. Some families come in over twenty years and some do not, and a priest cannot make it happen by wanting it.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ax_family_the_father",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "beat": "arc",
+      "pressure": ["friendship_vs_duty", "loyalty_vs_honesty"],
+      "severity": "MAJOR",
+      "category": "personal",
+      "baseWeight": 10,
+      "suppressYears": 40,
+      "once": true,
+      "title": "The Father, In The Car Park, At Nine At Night",
+      "body": "He is in the car park when you come out of the hall, and has been there some time. He does not want to come in. He wants to ask you something at a distance of about four feet, in the dark, with his hands in his pockets, and what he asks, after a long approach about the boy's serving, is whether a man who has not been to confession since 1994 and has done the things he has done can come back, and he means tonight, and he is not sober.",
+      "choices": [
+        {
+          "id": "sit_down_in_the_car_park",
+          "label": "Sit down on the wall with him and let it take as long as it takes",
+          "default": true,
+          "outcome": "Two hours on a cold wall and the church unlocked afterward, and a man of forty-four crying in a pew at midnight. He comes to the eight o'clock on the Thursday and stands at the back like his wife used to. It does not fix his drinking. It fixes something.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 5 },
+            { "target": "stat", "key": "piety", "delta": 4 },
+            { "target": "flag", "key": "ax_family_he_came_back", "value": true },
+            { "target": "bond", "key": "@bonded_parishioner", "value": "heard:the father in the car park" }
+          ]
+        },
+        {
+          "id": "make_an_appointment",
+          "label": "Tell him to come Saturday, when he is not drinking",
+          "outcome": "It is the textbook answer and it is defensible and he says yes, and Saturday comes and goes. He is in the car park again eleven months later, in the same state, and you handle it differently that time.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": -1 },
+            { "target": "flag", "key": "ax_family_he_did_not_come", "value": true }
+          ]
+        },
+        {
+          "id": "hear_him_there",
+          "label": "Hear his confession where he stands, in the car park",
+          "outcome": "There in the dark with the sodium light on, because a man asking is a man asking and the form is sufficient. He does not remember all of it in the morning. He remembers that it happened and that he was not turned away.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 5 },
+            { "target": "reputation", "key": "parishioners", "delta": 3 },
+            { "target": "flag", "key": "ax_family_he_came_back", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ax_family_the_hospital",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "beat": "arc",
+      "pressure": ["friendship_vs_duty", "doubt"],
+      "severity": "MAJOR",
+      "category": "parish_death",
+      "baseWeight": 10,
+      "suppressYears": 40,
+      "once": true,
+      "title": "It Is The Mother",
+      "body": "It was never going to be the father. The mother has been carrying something for a year and a half without telling anybody, and the scan has been done, and she telephones you herself from the hospital car park because she wants to practise saying it out loud before she says it to her husband and her son. She is forty-one. She wants to know what she should tell the boy, who is fourteen now and has stopped serving and started arguing.",
+      "choices": [
+        {
+          "id": "tell_her_to_tell_him_everything",
+          "label": "Tell her the boy can carry the truth, and offer to be there when she says it",
+          "default": true,
+          "outcome": "The three of them at the kitchen table and you in the fourth chair, and it is the worst hour of that house's life and it is done properly. The boy says almost nothing and then asks one question about pain that his father could not have asked.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 4 },
+            { "target": "stat", "key": "piety", "delta": 3 },
+            { "target": "flag", "key": "ax_family_the_kitchen_table", "value": true }
+          ]
+        },
+        {
+          "id": "let_her_choose",
+          "label": "Tell her it is hers to tell, in her own time, and that you will be at the end of the telephone",
+          "outcome": "She tells the boy in March and the husband in February and does it her way, which is her right. You are at the end of the telephone eleven times between then and the summer, twice after midnight.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 3 },
+            { "target": "strain", "key": "", "delta": 5 }
+          ]
+        },
+        {
+          "id": "take_the_husband",
+          "label": "Take the husband on yourself, because he is the one who will break",
+          "outcome": "You are right that he is the one who will break, and you spend the spring in a garage with a man who cannot say any of it in the house. He does not drink through it, which nobody expected, including him.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 3 },
+            { "target": "reputation", "key": "parishioners", "delta": 3 },
+            { "target": "flag", "key": "ax_family_the_garage", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ax_family_the_funeral",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "beat": "arc",
+      "pressure": ["doubt", "friendship_vs_duty"],
+      "severity": "MAJOR",
+      "category": "parish_death",
+      "baseWeight": 10,
+      "suppressYears": 40,
+      "once": true,
+      "title": "A Church That Will Not Hold Them",
+      "body": "She died on a Tuesday and the church will not hold the people who come. The boy is fifteen and is a pallbearer because he insisted, and is four inches shorter than the other five. The father has asked you for one thing, which is that you do not say she is in a better place. He has asked twice, and the second time he took hold of your arm.",
+      "choices": [
+        {
+          "id": "preach_the_thing_he_asked_for",
+          "label": "Preach what a husband asked for and what a church needs, both at once",
+          "default": true,
+          "outcome": "You do not say the sentence. You say what she actually did with forty-one years and what the Church actually claims, in the fewest words you have ever used on it, and you look at the boy twice and the father once. Nine people tell you afterward it was the best homily they ever heard and you know exactly which two sentences did it.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 10 },
+            { "target": "stat", "key": "piety", "delta": 4 },
+            { "target": "bond", "key": "@bonded_parishioner", "value": "buried:the boy's mother" },
+            { "target": "flag", "key": "ax_family_the_homily", "value": true }
+          ]
+        },
+        {
+          "id": "keep_the_boy_close",
+          "label": "Put the boy to work: the servers, the candles, a job at his own mother's funeral",
+          "outcome": "He has something to do with his hands for ninety minutes, which is the only mercy available to a fifteen-year-old in that building. He puts the thurible away afterward in the right place without being told, and then sits on the sacristy floor for twenty minutes, and you sit on it too.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 6 },
+            { "target": "stat", "key": "piety", "delta": 3 },
+            { "target": "flag", "key": "ax_family_the_sacristy_floor", "value": true }
+          ]
+        },
+        {
+          "id": "do_the_funeral_well",
+          "label": "Do a fine funeral and let the family have the day",
+          "outcome": "It is a fine funeral, correct in every part, and you are at the door for ninety minutes shaking hands. The father says thank you Father in the voice people use, and the arm-taking of the week before is not mentioned by either of you again.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 4 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ax_family_ten_years_on",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "beat": "arc",
+      "pressure": ["doubt"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 10,
+      "suppressYears": 40,
+      "once": true,
+      "title": "The Boy Is Twenty-Five",
+      "body": "He finds you, which takes some doing, because you are two parishes from where they knew you. He is twenty-five, he is engaged, he has his mother's way of looking at the floor when he is about to say something, and he would like you to do the wedding. He also says, in the car park afterward because it is apparently a family tradition, that he stopped believing any of it at nineteen and started again at twenty-three and that his father is eleven years sober.",
+      "choices": [
+        {
+          "id": "do_the_wedding",
+          "label": "Do the wedding, wherever it is, whatever it takes",
+          "default": true,
+          "outcome": "You drive four hours and stand in another man's sanctuary with permission, and his father is in the front row in a suit and does not drink at the reception. The boy's daughter is baptized by you eighteen months later, which makes three generations of that family in your hands.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 4 },
+            { "target": "stat", "key": "piety", "delta": 5 },
+            { "target": "ministry", "key": "weddings", "delta": 1 },
+            { "target": "flag", "key": "ax_family_the_wedding", "value": true }
+          ]
+        },
+        {
+          "id": "ask_him_what_happened_at_nineteen",
+          "label": "Ask him what happened at nineteen, and at twenty-three",
+          "outcome": "He tells you, and it takes an hour, and neither half of it is about anything you did. It is the most useful hour anybody spends on you that year: you have been preaching to people like him for a decade on an entirely wrong theory of what they are doing.",
+          "effects": [
+            { "target": "stat", "key": "knowledge", "delta": 2 },
+            { "target": "stat", "key": "piety", "delta": 3 },
+            { "target": "flag", "key": "ax_family_learned_something", "value": true }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -557,6 +557,13 @@ Counted: Masses celebrated, confessions heard, baptisms, first communions, confi
 The Profile sheet reads it back with the rest of a life: his name and age, the years since ordination, every parish and posting in order, the men he formed and where they are now, the vocations that came out of his parishes, the parishes he was given dying and handed on alive, the offices he has held, the degrees, and the groups he founded. It is the one screen that answers "what have I done with forty years", and it is written in whole numbers and plain sentences.
 
 
+### 8.7 What is wrong with this parish in particular
+
+*Added in playtesting.* The diocese writes down one problem (§8.2). These are the two to four other things the pastor finds in the first year, rolled at generation from a pool of named troubles and weighted by what the parish actually is: the 1961 school wing with asbestos in the lagging, the car park that belongs on paper to the family that owns the hardware store, the two choirs who have not spoken since 2004, the festival that has never shown anybody a ledger.
+
+They are not a mechanic on their own. They are what the Parish sheet lists in the pastor's own words, what a `parish_issue` condition gates a scene on — by name, or by what it touches (buildings, money, people, liturgy, school, neighborhood, history) — and what an arc can be built on. Two parishes of the same kind never play the same, and a man moved after eight years finds a different set of things to worry about.
+
+
 ## 9. Generation
 
 ### 9.1 Dioceses
@@ -867,6 +874,27 @@ interface GameEvent {
 Seminary is the smallest self-contained chunk and the right first target. The late pool is what a long run is made of: the board that has stopped considering him, the deanery clustering, the school that cannot be carried, the organist whose hands have gone, the neighborhood that changed around a parish, the night road at seventy, and the arrangements a man eventually has to make. The religious and internal-forum pool is complete at 55: 22 sealed scenes (8 in the seminary, 14 across the priesthood) and 33 open ones (7 in the seminary, 26 in the parish years). The authored total across every pool now stands well past the V1 target.
 
 ---
+
+### 12.5 Arcs: the things that take years
+
+*Added in playtesting.* A scene is a week. An arc is the decade in which a family comes apart, a building is fought over, or a boy who served the eight o'clock turns into a priest.
+
+An arc is authored as a list of **stages**, each naming one scene and a range of weeks to wait before it comes. Its scenes carry `beat: "arc"`, so the general draw never touches them: only the arc brings them, in order, with real years in between.
+
+Rules:
+
+1. **They open on their own.** Once a quarter the game may open one, weighted, from those whose conditions hold. At most two run at a time: more than that and a life is a soap opera.
+2. **Once in a life.** A man does not bury the same family twice; an arc that has opened cannot open again, ended or not.
+3. **A stage waits for its week and for its conditions**, and then arrives as an ordinary scene with an ordinary decision.
+4. **Playing the stage advances it.** A choice may instead move the arc itself with the `arc` effect: `end` (with a word for how it ended), `hold:<weeks>`, or the id of a stage to jump to. Branching is therefore authored, not scripted around.
+5. **Some travel and some do not.** An arc that belongs to a parish ends the day the man is moved — he is not there to see how it comes out and nobody writes to tell him. One that belongs to him goes in the car.
+6. **Content can read them back.** An `arc` condition asks whether one is running, has ended, or ended a particular way, so later scenes know what a man carries.
+7. **The Record sheet says what is running**, with the years so far, and lists what has finished and how.
+
+### 12.6 The draw forgets slowly
+
+A scene the player has seen is not forbidden — a parish does have the same argument twice — but it must be rarer than one he has not, and rarer again the more recently it came. On top of each event's own suppression window, the draw multiplies its weight by a factor from the last twelve years of the man's own history: about a third for one sighting, and down from there to a floor. Nothing is ever excluded by this alone.
+
 
 ## 13. Technical
 
