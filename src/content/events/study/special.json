@@ -1,0 +1,788 @@
+{
+  "_notes": "The special assignments (DESIGN §7.7): the state penitentiary (study:prison), the missions (study:mission), the deployment (study:deployment), the seminary's spiritual director (study:formation), and the schools office (study:schools). Three scenes each. Phase is study; the engine sets the flag. There is no parish: selectors are @bishop, @brother_priest, @closest_classmate, @vicar_for_clergy only. The two direction hours at the seminary (sp_for_hour, sp_for_knock) are internalForum and write stat and flag only; the book's hours count from the activity, never from the room. The last corridor, the casualty, and the man who has not prayed are authored only (no flavorPrompt). Dials written (place): prison tiers/administration/chapel/outside; mission stations/language/people/house; deployment unit/command/chapel; formation men/rector/house; schools schools/board/enrolment/teachers. Books written (record): prison confessions/walked/attended; mission baptized/buried/miles; deployment masses/confessions/anointed/attended/letters; schools saved/closed/principals. Flags written: sp_pri_seal_kept, sp_pri_seal_tier_closed, sp_pri_walked_him, sp_pri_bus_fare, sp_pri_called_brother, sp_pri_stood_with_him, sp_pri_refused_publicly, sp_pri_attended_silent, sp_mis_grandmother, sp_mis_card, sp_mis_forty_baptized, sp_mis_came_back_easter, sp_mis_crossed, sp_mis_waited, sp_mis_plane, sp_dep_hood, sp_dep_tent, sp_dep_private_kept, sp_dep_private_reported, sp_dep_private_surgeon, sp_dep_casualty_stayed, sp_dep_medevac, sp_dep_memorial_said_it, sp_for_told_my_year, sp_for_sent_to_rector, sp_for_sat_silence, sp_for_rector_refused, sp_for_rector_breached, sp_for_rector_rule_aloud, sp_for_knock_free, sp_for_knock_easter, sp_for_knock_own, sp_sch_closed_first, sp_sch_merged, sp_sch_reserve_year, sp_sch_pay_plan, sp_sch_pay_vocation, sp_sch_pay_fund, sp_sch_backed_principal, sp_sch_pastor_won, sp_sch_moved_principal.",
+  "events": [
+    {
+      "id": "sp_pri_grille",
+      "phase": "study",
+      "pressure": ["loyalty_vs_honesty", "belief_vs_safety"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 12,
+      "suppressYears": 3,
+      "requires": [{ "type": "flag", "key": "study:prison", "value": true }],
+      "title": "The Grille",
+      "body": "In segregation the confessional is an actual grille, steel, with a slot for the tray, and you sit on a folding chair on the corridor side with a guard eleven feet down the tier pretending not to listen. The man on the other side has asked for you three Thursdays running and said nothing worth the walk. This Thursday he says it. It is not what he is in for. It is the other thing, the thing from the county with no arrest, and he says the name of the road. He wants absolution and he is not, you think, sorry in the way that word usually means, but he is in the way that a man is who has carried something for nine years and finally put it down. On Friday the warden's secretary calls to say the warden would like a word, and the word, when you get there, is that the investigators from the county would very much like to know what the man in segregation talks about on Thursdays.",
+      "choices": [
+        {
+          "id": "keep_the_seal",
+          "label": "Tell the warden the seal is the seal, and that you will keep coming on Thursdays",
+          "default": true,
+          "outcome": "He says he understood that would be the answer and that he had to ask, and that the investigators will not be told you were asked. Whether that is true you never learn. On the tiers it is known by Sunday that the priest was called upstairs and came back down the same man. Segregation asks for you more. The warden's secretary is cooler on the phone, for a season.",
+          "effects": [
+            { "target": "place", "key": "administration", "delta": -6 },
+            { "target": "place", "key": "tiers", "delta": 10 },
+            { "target": "record", "key": "confessions", "delta": 1 },
+            { "target": "stat", "key": "piety", "delta": 3 },
+            { "target": "flag", "key": "sp_pri_seal_kept", "value": true }
+          ]
+        },
+        {
+          "id": "close_the_tier",
+          "label": "Keep the seal, and stop hearing confessions in segregation so there is nothing to be asked about",
+          "outcome": "Nobody can subpoena a conversation that does not happen. The warden is satisfied, the investigators go away, and the man on the other side of the grille asks for you on the fourth Thursday and is told the chaplain no longer comes to that unit. You said nothing. You also stopped being there, which the tier reads as the same thing said more slowly.",
+          "effects": [
+            { "target": "place", "key": "administration", "delta": 6 },
+            { "target": "place", "key": "tiers", "delta": -10 },
+            { "target": "stat", "key": "piety", "delta": -2 },
+            { "target": "stat", "key": "administration", "delta": 1 },
+            { "target": "flag", "key": "sp_pri_seal_tier_closed", "value": true }
+          ]
+        },
+        {
+          "id": "tell_the_bishop",
+          "label": "Tell the warden no, then telephone {@bishop} before anyone else does",
+          "requires": [{ "type": "relationship", "npcId": "@bishop", "op": ">=", "value": 10 }],
+          "outcome": "The bishop says that he is glad you called and that the diocesan attorney will write to the county, on letterhead, a paragraph that ends the matter before it can begin. It ends. The warden hears that the priest went over his head and does not forget it. The bishop hears that the priest did not, and does not forget that either.",
+          "effects": [
+            { "target": "place", "key": "administration", "delta": -4 },
+            { "target": "place", "key": "tiers", "delta": 8 },
+            { "target": "relationship", "key": "@bishop", "delta": 6 },
+            { "target": "reputation", "key": "chancery", "delta": 2 },
+            { "target": "flag", "key": "sp_pri_seal_kept", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sp_pri_walk",
+      "phase": "study",
+      "pressure": ["friendship_vs_duty", "money"],
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 12,
+      "suppressYears": 1,
+      "requires": [{ "type": "flag", "key": "study:prison", "value": true }],
+      "title": "Release Day",
+      "body": "You baptized him at Easter with a plastic basin and a towel from the laundry, and on Tuesday he walks out of the gate with a paper bag and forty dollars and the shirt he was arrested in eleven years ago, which fits differently now. He has a sister in the city who said she would come. She has not come. The bus stop is two miles down a road with no shoulder, and the last bus is at four, and it is ten past three, and he is standing outside the gate looking at the road the way a man looks at the ocean. You have the truck. You also have the four o'clock in the chapel and a warden who has said twice, gently, that chaplains do not give rides.",
+      "flavorPrompt": "The paper bag, the shirt from eleven years ago, the road with no shoulder, the sister who did not come.",
+      "choices": [
+        {
+          "id": "drive_him",
+          "label": "Drive him to the bus, and wait until it comes",
+          "default": true,
+          "outcome": "He does not say anything for the first mile and then says everything. The bus is late and you sit on the bench with him and buy two coffees from the machine. When it comes he shakes your hand with both of his. The warden hears. He says nothing, which is his way of saying he will say something next time.",
+          "effects": [
+            { "target": "record", "key": "walked", "delta": 1 },
+            { "target": "place", "key": "outside", "delta": 4 },
+            { "target": "place", "key": "administration", "delta": -2 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "flag", "key": "sp_pri_walked_him", "value": true }
+          ]
+        },
+        {
+          "id": "bus_fare",
+          "label": "Give him the parish address in the city, bus fare, and a blessing at the gate",
+          "outcome": "He puts the address in his shirt pocket and pats it twice. He walks. You watch him to the bend and go in for the four o'clock, and say it for him, and do not know whether he made the bus until a postcard comes in August that says he did and that the pastor in the city gave him a job cutting grass.",
+          "effects": [
+            { "target": "record", "key": "walked", "delta": 1 },
+            { "target": "place", "key": "outside", "delta": 2 },
+            { "target": "flag", "key": "sp_pri_bus_fare", "value": true }
+          ]
+        },
+        {
+          "id": "call_brother",
+          "label": "Call {@brother_priest}, whose parish is four blocks from the station, and ask him to meet the bus",
+          "requires": [{ "type": "relationship", "npcId": "@brother_priest", "op": ">=", "value": 10 }],
+          "outcome": "He is on the platform at a quarter to six with a sandwich and a bed for the week and the name of a man who hires. This becomes an arrangement. Over the next year six men walk out of the gate with that parish's telephone number in their pocket, and the parish begins, quietly, to be known for it.",
+          "effects": [
+            { "target": "record", "key": "walked", "delta": 1 },
+            { "target": "place", "key": "outside", "delta": 8 },
+            { "target": "relationship", "key": "@brother_priest", "delta": 5 },
+            { "target": "reputation", "key": "brother_priests", "delta": 2 },
+            { "target": "flag", "key": "sp_pri_called_brother", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sp_pri_last_corridor",
+      "phase": "study",
+      "pressure": ["belief_vs_safety", "doubt"],
+      "severity": "MAJOR",
+      "category": "parish_death",
+      "baseWeight": 8,
+      "suppressYears": 4,
+      "once": true,
+      "requires": [
+        { "type": "flag", "key": "study:prison", "value": true },
+        { "type": "place", "key": "tiers", "op": ">=", "value": 8 }
+      ],
+      "title": "The Last Corridor",
+      "body": "The date has been set for nineteen years and then, in a week, it is real. He is Catholic, in the way men on that corridor are, which is more than most, and he has asked for you and no one else. The warden explains the procedure in a voice he has used before: you may be with him until the last hour, you may be in the witness room, you may not speak in the chamber. The bishop's office sends a statement for you to read outside the gate, on the diocese's behalf, against the thing about to happen, and the warden has read it too, and has said, without saying it, that a chaplain who reads it will not be a chaplain here long. On Wednesday night he asks you to hear his confession, and then to stay, and then whether you think God is in that room.",
+      "choices": [
+        {
+          "id": "stand_with_him",
+          "label": "Hear him, stay to the end, and stand in the witness room where he can see you",
+          "default": true,
+          "outcome": "He looks at you through the glass until he cannot. You say the prayers under your breath because the rules say no louder. Afterward the warden walks you to the gate himself, which he has not done before, and you sit in the truck for forty minutes before you can drive. The bishop's statement goes unread. The tiers know you were there, and that is a different kind of known.",
+          "effects": [
+            { "target": "record", "key": "attended", "delta": 1 },
+            { "target": "record", "key": "confessions", "delta": 1 },
+            { "target": "place", "key": "tiers", "delta": 12 },
+            { "target": "place", "key": "administration", "delta": 4 },
+            { "target": "stat", "key": "piety", "delta": 4 },
+            { "target": "strain", "key": "", "delta": 12 },
+            { "target": "flag", "key": "sp_pri_stood_with_him", "value": true }
+          ]
+        },
+        {
+          "id": "read_the_statement",
+          "label": "Stay to the last hour, then read the diocese's statement at the gate, on camera",
+          "outcome": "You are on the eleven o'clock news for forty seconds in a collar in front of a fence. The bishop calls to say thank you. The warden calls to say your badge will be at the desk when you next come and that you will be escorted. The chapel is still yours. The upstairs is not. On the tiers the men are divided about it, which surprises you, and should not have.",
+          "effects": [
+            { "target": "record", "key": "attended", "delta": 1 },
+            { "target": "record", "key": "confessions", "delta": 1 },
+            { "target": "place", "key": "administration", "delta": -14 },
+            { "target": "place", "key": "outside", "delta": 8 },
+            { "target": "place", "key": "tiers", "delta": 2 },
+            { "target": "relationship", "key": "@bishop", "delta": 6 },
+            { "target": "reputation", "key": "chancery", "delta": 3 },
+            { "target": "outspokenness", "key": "", "delta": 4 },
+            { "target": "strain", "key": "", "delta": 14 },
+            { "target": "flag", "key": "sp_pri_refused_publicly", "value": true }
+          ]
+        },
+        {
+          "id": "the_hour_only",
+          "label": "Hear him, stay the last hour, and go home before the chamber",
+          "outcome": "You tell him you cannot watch it, and he says he understands, and you both know he would rather you had lied. He dies at 12:14 with the warden's chaplain from the other denomination in the witness room. You say the Mass for him at seven. The statement goes unread and the warden is grateful, and you are ashamed of being glad about that.",
+          "effects": [
+            { "target": "record", "key": "confessions", "delta": 1 },
+            { "target": "place", "key": "administration", "delta": 2 },
+            { "target": "place", "key": "tiers", "delta": -6 },
+            { "target": "stat", "key": "piety", "delta": -2 },
+            { "target": "strain", "key": "", "delta": 8 },
+            { "target": "flag", "key": "sp_pri_attended_silent", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sp_mis_grandmother",
+      "phase": "study",
+      "pressure": ["competence"],
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 12,
+      "suppressYears": 2,
+      "requires": [{ "type": "flag", "key": "study:mission", "value": true }],
+      "title": "The Grandmother's Word",
+      "body": "The laminated card has the words of consecration and absolution in the language, phonetically, and you have been reading off it for three months, and the people are kind about it. At the fourth station there is a grandmother who has buried two husbands and a bishop's worth of priests and who has, apparently, decided you are worth the trouble. She sends word by her granddaughter that if you come on Tuesdays and Fridays at four she will teach you to say it properly, and that you will drink what she gives you and not ask. Tuesdays and Fridays at four are seventy miles from the house, and the truck needs a clutch.",
+      "flavorPrompt": "The laminated card, the grandmother who has decided, the seventy miles, the clutch.",
+      "choices": [
+        {
+          "id": "sit_with_her",
+          "label": "Go, twice a week, and drink what she gives you",
+          "default": true,
+          "outcome": "By Advent you can say the absolution without the card and by Lent you can hear a confession and understand most of it, which changes what a confession is. She never once says you are doing well. In the spring she tells the granddaughter you may be spoken to now, which the station takes as a ruling.",
+          "effects": [
+            { "target": "place", "key": "language", "delta": 12 },
+            { "target": "place", "key": "people", "delta": 6 },
+            { "target": "record", "key": "miles", "delta": 1400 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "strain", "key": "", "delta": 3 },
+            { "target": "flag", "key": "sp_mis_grandmother", "value": true }
+          ]
+        },
+        {
+          "id": "the_card",
+          "label": "Send thanks, keep the card, and take the granddaughter as an interpreter at the stations",
+          "outcome": "The granddaughter is good and the card is adequate and the stations all get their Mass, which is the thing the mission bishop asked for. The grandmother does not send word again. At the fourth station the older people keep going to confession to the catechist instead, which is not a sacrament, and everyone understands why.",
+          "effects": [
+            { "target": "place", "key": "language", "delta": -2 },
+            { "target": "place", "key": "stations", "delta": 4 },
+            { "target": "place", "key": "people", "delta": -3 },
+            { "target": "flag", "key": "sp_mis_card", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sp_mis_backlog",
+      "phase": "study",
+      "pressure": ["competence", "belief_vs_safety"],
+      "severity": "NOTABLE",
+      "category": "parish_death",
+      "baseWeight": 10,
+      "suppressYears": 3,
+      "once": true,
+      "requires": [
+        { "type": "flag", "key": "study:mission", "value": true },
+        { "type": "place", "key": "stations", "op": ">=", "value": 4 }
+      ],
+      "title": "Forty Baptisms",
+      "body": "The sixth station has not seen a priest in two years and four months, and the catechist has kept a list. Forty-one names, ages one month to nine years, with the godparents already chosen and in some cases already dead. The families have walked in from three villages and are sitting on the ground outside the chapel with the children in their good clothes. The catechist has taught them what he could. The diocesan norms at home ask for a preparation course, an interview with the parents, and a registered godparent in good standing, and you know the norms by heart and you can hear, from the chapel steps, a baby who has been crying since the walk began.",
+      "flavorPrompt": "Forty-one names on the catechist's list, the good clothes, the families sitting on the ground, the two years and four months.",
+      "choices": [
+        {
+          "id": "baptize_them",
+          "label": "Teach for the morning, then baptize all forty-one before the light goes",
+          "default": true,
+          "outcome": "It takes until dark. The catechist holds the book and the register and you lose your voice at thirty, and finish. The godparents who are dead are named anyway. Afterward the station kills a goat, and the truck does not leave until morning, and when it does the people stand along the road for a mile, which they have not done before.",
+          "effects": [
+            { "target": "record", "key": "baptized", "delta": 41 },
+            { "target": "ministry", "key": "baptisms", "delta": 41 },
+            { "target": "place", "key": "people", "delta": 10 },
+            { "target": "place", "key": "stations", "delta": 4 },
+            { "target": "stat", "key": "piety", "delta": 2 },
+            { "target": "strain", "key": "", "delta": 6 },
+            { "target": "flag", "key": "sp_mis_forty_baptized", "value": true }
+          ]
+        },
+        {
+          "id": "come_back",
+          "label": "Baptize the infants and the sick, teach the rest, and come back at Easter for the others",
+          "outcome": "Eleven today. The catechist runs the course you leave him and does it better than you would have. At Easter you come back with the bishop's own truck and do thirty in a Vigil that goes until two, with the families understanding what they are saying, and the mission bishop hears of it and calls it the way it should be done. The three villages talk about the wait for years.",
+          "effects": [
+            { "target": "record", "key": "baptized", "delta": 41 },
+            { "target": "ministry", "key": "baptisms", "delta": 41 },
+            { "target": "place", "key": "people", "delta": 4 },
+            { "target": "place", "key": "language", "delta": 3 },
+            { "target": "place", "key": "house", "delta": 3 },
+            { "target": "stat", "key": "theology", "delta": 1 },
+            { "target": "flag", "key": "sp_mis_came_back_easter", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sp_mis_river",
+      "phase": "study",
+      "pressure": ["belief_vs_safety"],
+      "severity": "NOTABLE",
+      "category": "parish_death",
+      "baseWeight": 10,
+      "suppressYears": 3,
+      "requires": [{ "type": "flag", "key": "study:mission", "value": true }],
+      "title": "The River Road",
+      "body": "The rains came early and the ford at the second station is a river with a road under it somewhere. A boy comes to the house at five in the morning, wet to the chest, to say that his grandfather across the water is dying and has asked for the priest, and that the water is at the door handles and going down, they think, by evening. The truck is high but it is not a boat. The mission bishop has said, twice, that he has buried one priest in that river and will not bury another, and that a man who dies on the far side of a ford dies unanointed either way, so use your head.",
+      "flavorPrompt": "The boy wet to the chest, the door handles, the ford that is a river, the bishop who has buried one priest already.",
+      "choices": [
+        {
+          "id": "cross",
+          "label": "Cross now, in low gear, with the boy standing on the hood to read the water",
+          "outcome": "The water comes over the floor and the engine does not die, and you are across, and he is alive, and you anoint him and give him Viaticum and he dies at noon with the whole station in the room. You bury him on Thursday when the water is down. The mission bishop hears and says nothing for a week and then says that he is glad, and that you are never to do it again, and you both know how that goes.",
+          "effects": [
+            { "target": "record", "key": "buried", "delta": 1 },
+            { "target": "record", "key": "miles", "delta": 40 },
+            { "target": "ministry", "key": "anointings", "delta": 1 },
+            { "target": "place", "key": "people", "delta": 12 },
+            { "target": "place", "key": "house", "delta": -2 },
+            { "target": "stat", "key": "piety", "delta": 3 },
+            { "target": "strain", "key": "", "delta": 10 },
+            { "target": "flag", "key": "sp_mis_crossed", "value": true }
+          ]
+        },
+        {
+          "id": "wait",
+          "label": "Wait for the water, and go the moment the ford shows",
+          "default": true,
+          "outcome": "The ford shows at four and you are across by half past and he died at two. You anoint him anyway, conditionally, and stay for the wake and bury him on Thursday. Nobody says you should have come sooner. The boy does not look at you. The mission bishop says you did the right thing, and it is true, and it is not what the station will remember.",
+          "effects": [
+            { "target": "record", "key": "buried", "delta": 1 },
+            { "target": "record", "key": "miles", "delta": 40 },
+            { "target": "place", "key": "people", "delta": -5 },
+            { "target": "place", "key": "house", "delta": 3 },
+            { "target": "strain", "key": "", "delta": 4 },
+            { "target": "flag", "key": "sp_mis_waited", "value": true }
+          ]
+        },
+        {
+          "id": "the_plane",
+          "label": "Radio the mission's pilot and go over the water instead of through it",
+          "requires": [{ "type": "place", "key": "stations", "op": ">=", "value": 10 }],
+          "outcome": "The plane is on the strip by seven and over the river by a quarter past and you walk the last mile from the field. He is alive. The pilot waits, which he does not usually do, and flies you back with the family's thanks in the form of a chicken. The mission bishop tells the story afterward as if it were the plan all along.",
+          "effects": [
+            { "target": "record", "key": "buried", "delta": 1 },
+            { "target": "ministry", "key": "anointings", "delta": 1 },
+            { "target": "place", "key": "people", "delta": 8 },
+            { "target": "place", "key": "stations", "delta": 3 },
+            { "target": "stat", "key": "administration", "delta": 1 },
+            { "target": "flag", "key": "sp_mis_plane", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sp_dep_hood",
+      "phase": "study",
+      "pressure": ["competence"],
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 12,
+      "suppressYears": 1,
+      "requires": [{ "type": "flag", "key": "study:deployment", "value": true }],
+      "title": "The Hood of the Truck",
+      "body": "The chapel tent is on a pallet somewhere between here and the port, and has been for nine days, and it is Sunday. The battalion is spread over four sites and the site you are at has a motor pool, a wall of blast barriers, wind, and a hundred and ten men, of whom perhaps thirty would come to Mass if there were a Mass. There is a truck. There is a hood. The first sergeant has offered a folding table from supply and a corner of the maintenance bay out of the wind, and has also said, not unkindly, that the men are due at the range at eleven and it is ten past ten.",
+      "flavorPrompt": "The chapel on a pallet at the port, the wall of blast barriers, the hood, the range at eleven.",
+      "choices": [
+        {
+          "id": "the_hood",
+          "label": "Say Mass on the hood, in the wind, now, and be done by ten to eleven",
+          "default": true,
+          "outcome": "The wind takes the purificator twice. A specialist holds the missal with both hands. Thirty-four men come and a few more stand by the barriers with their helmets off, and the first sergeant, who is not Catholic, keeps the range waiting nine minutes and does not say why. It is the Mass the deployment remembers.",
+          "effects": [
+            { "target": "record", "key": "masses", "delta": 1 },
+            { "target": "ministry", "key": "masses", "delta": 1 },
+            { "target": "place", "key": "unit", "delta": 8 },
+            { "target": "stat", "key": "piety", "delta": 2 },
+            { "target": "flag", "key": "sp_dep_hood", "value": true }
+          ]
+        },
+        {
+          "id": "the_bay",
+          "label": "Take the maintenance bay and the folding table, and do it properly after the range",
+          "outcome": "The bay smells of diesel and the table is level and you have candles, and twenty men come at four in the afternoon when the range is done, tired, and it is a good Mass. The first sergeant has a plywood altar built by Wednesday. The tent, when it comes, is set up beside the bay, and nobody uses the tent.",
+          "effects": [
+            { "target": "record", "key": "masses", "delta": 1 },
+            { "target": "ministry", "key": "masses", "delta": 1 },
+            { "target": "place", "key": "chapel", "delta": 8 },
+            { "target": "place", "key": "unit", "delta": 2 },
+            { "target": "flag", "key": "sp_dep_tent", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sp_dep_sergeants",
+      "phase": "study",
+      "pressure": ["friendship_vs_duty", "loyalty_vs_honesty"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 11,
+      "suppressYears": 2,
+      "requires": [{ "type": "flag", "key": "study:deployment", "value": true }],
+      "title": "The Private Who Will Not Get on the Truck",
+      "body": "The first sergeant comes to the tent at six with his cover in his hand, which is how you know. A private in Bravo, nineteen, has sat down beside the truck for the morning convoy and will not get on it, and has not said why, and the platoon sergeant is minutes from writing it up as refusal, which is a word with a court attached. The first sergeant would like you to talk to him. The company commander would like you to talk to him and then tell the company commander what he said. The private, when you get there, is sitting in the dust with his rifle across his knees, and asks whether what he tells you goes anywhere.",
+      "flavorPrompt": "The first sergeant with his cover in his hand, the private in the dust, the word with a court attached.",
+      "choices": [
+        {
+          "id": "keep_it",
+          "label": "Tell him it goes nowhere, hear him, and get him on the truck yourself",
+          "default": true,
+          "outcome": "It is a letter from home and a thing that happened on the last convoy, and none of it is refusal, and all of it is nineteen. He gets on the truck at 7:40 with you walking beside him. The company commander asks what he said and you say the private is on the truck, and the commander looks at you a long time and lets it go, this once. The platoon knows by noon that the chaplain does not report. That is worth a great deal down here, and something up there.",
+          "effects": [
+            { "target": "record", "key": "confessions", "delta": 1 },
+            { "target": "place", "key": "unit", "delta": 10 },
+            { "target": "place", "key": "command", "delta": -5 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "flag", "key": "sp_dep_private_kept", "value": true }
+          ]
+        },
+        {
+          "id": "report",
+          "label": "Hear him, then tell the commander what he needs to know to keep the boy out of a court",
+          "outcome": "You tell the commander enough, and no more, and the commander is fair with it and the private is moved to the rear detachment with a note about family hardship, which is true. He does not speak to you again. The platoon learns that the chaplain talks to the commander, which is a thing they had suspected of every chaplain, now confirmed of this one.",
+          "effects": [
+            { "target": "place", "key": "command", "delta": 8 },
+            { "target": "place", "key": "unit", "delta": -10 },
+            { "target": "honesty", "key": "", "delta": -1 },
+            { "target": "flag", "key": "sp_dep_private_reported", "value": true }
+          ]
+        },
+        {
+          "id": "the_surgeon",
+          "label": "Walk him to the battalion surgeon yourself, and let the medical channel carry it",
+          "requires": [{ "type": "stat", "key": "charisma", "op": ">=", "value": 50 }],
+          "outcome": "The surgeon is a good one and writes what surgeons write, which the commander cannot argue with and the platoon cannot call a betrayal. The private is on light duty for a week and on the truck the week after, and speaks to you on Sundays. The first sergeant says that was neatly done, which from him is a decoration.",
+          "effects": [
+            { "target": "place", "key": "unit", "delta": 5 },
+            { "target": "place", "key": "command", "delta": 5 },
+            { "target": "stat", "key": "administration", "delta": 1 },
+            { "target": "flag", "key": "sp_dep_private_surgeon", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sp_dep_casualty",
+      "phase": "study",
+      "pressure": ["doubt", "belief_vs_safety"],
+      "severity": "MAJOR",
+      "category": "parish_death",
+      "baseWeight": 8,
+      "suppressYears": 4,
+      "once": true,
+      "requires": [{ "type": "flag", "key": "study:deployment", "value": true }],
+      "title": "The Day That Is Not Most Days",
+      "body": "Most days are the flight line and the chow hall and the same eleven men at Mass. This is not most days. The radio in the aid station says what it says and forty minutes later the trucks come in and the doors open and you are needed at three litters at once, and one of them is a sergeant you played cards with on Tuesday, and he knows you, and he is trying to say something with his hand. The surgeon is working on the second litter and says your name without looking up, which means the second one is the one. You have oil in your pocket. There is a specialist standing at the door who is not hurt and cannot move.",
+      "choices": [
+        {
+          "id": "stay",
+          "label": "Anoint the second, then the sergeant, then sit with the specialist; write the letters tonight",
+          "default": true,
+          "outcome": "The second one dies with your hand on his forehead and the sergeant does not, and will walk. The specialist sits with you on the sandbags for an hour and says nothing and then says all of it. You write three letters that night, in your own hand, to people who will read them in a kitchen, and one of them is the one the sergeant asked you to write with his hand. The battalion does not thank a chaplain for this. It does something else, which is decide he is theirs.",
+          "effects": [
+            { "target": "record", "key": "anointed", "delta": 2 },
+            { "target": "record", "key": "attended", "delta": 1 },
+            { "target": "record", "key": "letters", "delta": 3 },
+            { "target": "ministry", "key": "anointings", "delta": 2 },
+            { "target": "place", "key": "unit", "delta": 12 },
+            { "target": "place", "key": "command", "delta": 4 },
+            { "target": "stat", "key": "piety", "delta": 3 },
+            { "target": "strain", "key": "", "delta": 16 },
+            { "target": "flag", "key": "sp_dep_casualty_stayed", "value": true }
+          ]
+        },
+        {
+          "id": "medevac",
+          "label": "Anoint them both, then go out on the medevac with the sergeant",
+          "outcome": "The helicopter is forty minutes to the hospital and he is awake for thirty of them and holds your wrist. At the hospital there is a chaplain and there is nothing for you to do, and you find a ride back the next day. The specialist at the door was sat with by the first sergeant, who is not trained for it and did it anyway. The letters get written on the third night, late.",
+          "effects": [
+            { "target": "record", "key": "anointed", "delta": 2 },
+            { "target": "record", "key": "letters", "delta": 2 },
+            { "target": "ministry", "key": "anointings", "delta": 2 },
+            { "target": "place", "key": "unit", "delta": 8 },
+            { "target": "place", "key": "command", "delta": -2 },
+            { "target": "strain", "key": "", "delta": 18 },
+            { "target": "flag", "key": "sp_dep_medevac", "value": true }
+          ]
+        },
+        {
+          "id": "memorial",
+          "label": "Do all of it, and at the memorial say the thing the colonel asked you not to say",
+          "requires": [{ "type": "outspokenness", "op": ">=", "value": 55 }],
+          "outcome": "The colonel wanted a memorial about sacrifice. You give one about the man, and about the order that put him on that road, in words that are careful and not careful enough, and four hundred men hear it and the colonel hears it. He does not speak to you for eleven days. The battalion sergeant major, who buries more men than the colonel, shakes your hand at the door.",
+          "effects": [
+            { "target": "record", "key": "anointed", "delta": 2 },
+            { "target": "record", "key": "attended", "delta": 1 },
+            { "target": "record", "key": "letters", "delta": 3 },
+            { "target": "ministry", "key": "anointings", "delta": 2 },
+            { "target": "place", "key": "unit", "delta": 14 },
+            { "target": "place", "key": "command", "delta": -12 },
+            { "target": "outspokenness", "key": "", "delta": 3 },
+            { "target": "strain", "key": "", "delta": 16 },
+            { "target": "flag", "key": "sp_dep_memorial_said_it", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sp_for_hour",
+      "phase": "study",
+      "internalForum": true,
+      "pressure": ["doubt", "competence"],
+      "severity": "NOTABLE",
+      "category": "formation",
+      "baseWeight": 12,
+      "suppressYears": 2,
+      "requires": [{ "type": "flag", "key": "study:formation", "value": true }],
+      "title": "The Man Who Has Not Prayed",
+      "body": "He is a third-year, well thought of, the kind the rector points to on open days, and he has been coming to you for an hour a month since September saying the right things. In February he sits down and does not say the right things. He says he has not prayed, actually prayed, in over a year, and that he has been going to the chapel and kneeling and thinking about the reading list, and that nobody knows, and that he is telling you because it is the one room where telling it does not go on a form. He asks whether he should leave. What is said in this room stays in it; the rector will never hear a word of it from you, and he knows that, which is why he is here.",
+      "choices": [
+        {
+          "id": "your_own_year",
+          "label": "Tell him about the year you had like it, honestly",
+          "default": true,
+          "outcome": "You have never told anyone about that year and you tell a twenty-five-year-old in a cardigan, and it is the right thing, and it costs you. He stops looking at the floor. He does not decide anything in the hour, which is correct; he comes back in March, and in March there is something to talk about.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 3 },
+            { "target": "flag", "key": "sp_for_told_my_year", "value": true }
+          ]
+        },
+        {
+          "id": "the_rector",
+          "label": "Tell him this is a thing the rector should hear, from him, and that you cannot carry it there",
+          "outcome": "He looks betrayed for a second and then understands that you have told him the opposite of what he feared: that the room is sealed and he must be the one to open a door if one is to be opened. He does not go to the rector that month. He keeps coming to you. Whether he goes at all, you learn only if he tells you.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "flag", "key": "sp_for_sent_to_rector", "value": true }
+          ]
+        },
+        {
+          "id": "silence",
+          "label": "Say nothing, and let the hour be the first hour in a year he has not performed",
+          "outcome": "It is a long fifty minutes. At the end of it he says thank you, which you did not earn, and asks whether he can come every two weeks instead of every month. In the corridor afterward he is exactly as he was, and only you know that the man the rector points to has begun, very slightly, to pray.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 2 },
+            { "target": "flag", "key": "sp_for_sat_silence", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sp_for_rector_asks",
+      "phase": "study",
+      "pressure": ["loyalty_vs_honesty", "friendship_vs_duty"],
+      "severity": "NOTABLE",
+      "category": "formation",
+      "baseWeight": 11,
+      "suppressYears": 3,
+      "requires": [{ "type": "flag", "key": "study:formation", "value": true }],
+      "title": "The Rector Asks",
+      "body": "The rector is a careful man and he does it carefully, over the cheese, with the faculty table half-listening. There is a third-year, he says, whom the formation team has some questions about, nothing serious, a matter of affect, and he understands you see the man, and he wonders, in general terms, whether there is anything the team ought to be aware of. Everyone at the table knows the rule. Everyone at the table also knows that a director who says nothing is saying something, and that a director who says there is nothing to worry about has just said a great deal. The rector waits with his knife in his hand.",
+      "flavorPrompt": "The cheese, the faculty table half-listening, the knife in the rector's hand, the rule everyone knows.",
+      "choices": [
+        {
+          "id": "refuse",
+          "label": "Say you cannot say anything, not even that there is nothing to say",
+          "default": true,
+          "outcome": "The rector nods and says of course, and the table talks about the basketball. In the corridor a second-year who was serving the table tells the house by breakfast that the new director will not talk, which is the best thing that could be said of you and was said by accident. The rector is cooler for a month. The men are not.",
+          "effects": [
+            { "target": "place", "key": "rector", "delta": -6 },
+            { "target": "place", "key": "men", "delta": 10 },
+            { "target": "stat", "key": "piety", "delta": 2 },
+            { "target": "flag", "key": "sp_for_rector_refused", "value": true }
+          ]
+        },
+        {
+          "id": "nothing_to_worry",
+          "label": "Say there is nothing you would worry about, which happens to be true",
+          "outcome": "It is true, and it helps the man, and it is a breach, because next year when the rector asks about a different man and you say you cannot say, he will know what that means. The rector is warmer. You go up to your room and sit for a while with what you have taught him the silence means.",
+          "effects": [
+            { "target": "place", "key": "rector", "delta": 6 },
+            { "target": "place", "key": "men", "delta": -8 },
+            { "target": "honesty", "key": "", "delta": -1 },
+            { "target": "stat", "key": "piety", "delta": -2 },
+            { "target": "flag", "key": "sp_for_rector_breached", "value": true }
+          ]
+        },
+        {
+          "id": "the_rule_aloud",
+          "label": "Say the rule out loud, to the whole table, pleasantly, as if he had asked you to",
+          "requires": [{ "type": "stat", "key": "charisma", "op": ">=", "value": 55 }],
+          "outcome": "You say that the internal forum is the one place in the house where a man can be honest and that you would be a poor director and a worse priest if you brought a crumb of it to this table, and that you know he agrees, and he does, in front of the faculty, because he has to. He is embarrassed and grateful in roughly equal parts. The house hears about it by night prayer and the chapel, that week, is fuller.",
+          "effects": [
+            { "target": "place", "key": "rector", "delta": 2 },
+            { "target": "place", "key": "men", "delta": 8 },
+            { "target": "place", "key": "house", "delta": 6 },
+            { "target": "outspokenness", "key": "", "delta": 2 },
+            { "target": "flag", "key": "sp_for_rector_rule_aloud", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sp_for_knock",
+      "phase": "study",
+      "internalForum": true,
+      "pressure": ["doubt", "friendship_vs_duty"],
+      "severity": "NOTABLE",
+      "category": "formation",
+      "baseWeight": 11,
+      "suppressYears": 2,
+      "requires": [
+        { "type": "flag", "key": "study:formation", "value": true },
+        { "type": "place", "key": "men", "op": ">=", "value": 5 }
+      ],
+      "title": "The One Who Knocks at Midnight",
+      "body": "The knock is at ten past twelve and you know before you open the door which one it is, because there is always one, and this year it is the deacon who is to be ordained in June. He has the letter to the bishop in his hand, written, not sent. He says he does not think he can do it, and that he is not sure whether that is a vocation ending or a man being frightened three months out, and that he came to you because you are the one person in the house who cannot tell anyone he came. He sits on the end of the bed. It is the internal forum at midnight, and he has asked you what you would do.",
+      "choices": [
+        {
+          "id": "free_to_go",
+          "label": "Tell him that leaving is not failing, and that the letter can be sent or burned and either is honest",
+          "default": true,
+          "outcome": "He cries, which he had not expected to do, and says that nobody in eight years has told him he was allowed to go. Whether he sends the letter is his. He is at Morning Prayer at seven, which means nothing either way. You do not know until June, and in June you find out with everyone else, and that is how it must be.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 2 },
+            { "target": "flag", "key": "sp_for_knock_free", "value": true }
+          ]
+        },
+        {
+          "id": "until_easter",
+          "label": "Ask him to give it until Easter, and to come to you every week between",
+          "outcome": "He agrees, because a deadline is a kind of mercy. Six Tuesdays at nine. By the fourth he is talking about the parish he might be sent to rather than the letter, and by the sixth the letter is not mentioned, and you do not mention it either, and you are not sure, later, whether you helped him decide or helped him not to.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "flag", "key": "sp_for_knock_easter", "value": true }
+          ]
+        },
+        {
+          "id": "what_i_would_do",
+          "label": "Tell him exactly what you would do, because he asked",
+          "outcome": "You tell him. It is the most honest hour you have had in the house and possibly the least wise, because he is not you and a director who answers that question has stopped directing. He thanks you. He does what you said. You carry that, either way, for the rest of the assignment, and know that it is not yours to carry and carry it anyway.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": -1 },
+            { "target": "stat", "key": "charisma", "delta": 2 },
+            { "target": "flag", "key": "sp_for_knock_own", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sp_sch_close",
+      "phase": "study",
+      "pressure": ["money", "ambition_vs_integrity"],
+      "severity": "MAJOR",
+      "category": "finance",
+      "baseWeight": 10,
+      "suppressYears": 3,
+      "requires": [{ "type": "flag", "key": "study:schools", "value": true }],
+      "title": "The School That Cannot Be Saved",
+      "body": "St. Casimir's has ninety-one children in a building for four hundred, a boiler from the Truman administration, a pastor who was a pupil there, and a deficit the parish has covered from a bequest that runs out in June. The board has the numbers. The board has had the numbers for three years and has voted every year to look again. The parish two miles over has room. The teachers at St. Casimir's have been told nothing and have heard everything, and the pastor has said, to the newspaper, that as long as he is pastor the doors stay open. The bishop has said that the superintendent will bring a recommendation to the March meeting, and it is February.",
+      "flavorPrompt": "The Truman boiler, ninety-one children, the bequest that runs out in June, the pastor who was a pupil there.",
+      "choices": [
+        {
+          "id": "close_it",
+          "label": "Recommend closure, and say it to the parish before the board does",
+          "default": true,
+          "outcome": "You drive out on a Tuesday and stand in the gym with the parents and say it, plainly, with the numbers on a sheet they can take home, and the pastor sitting in the front row not looking at you. It is the worst night of the year. The board votes with you in March, gratefully, because someone else said it first. The children go two miles over and the enrolment there rises, and the pastor does not speak to you again.",
+          "effects": [
+            { "target": "record", "key": "closed", "delta": 1 },
+            { "target": "place", "key": "board", "delta": 10 },
+            { "target": "place", "key": "schools", "delta": 4 },
+            { "target": "place", "key": "enrolment", "delta": 2 },
+            { "target": "place", "key": "teachers", "delta": -4 },
+            { "target": "reputation", "key": "brother_priests", "delta": -3 },
+            { "target": "stat", "key": "administration", "delta": 2 },
+            { "target": "strain", "key": "", "delta": 6 },
+            { "target": "flag", "key": "sp_sch_closed_first", "value": true }
+          ]
+        },
+        {
+          "id": "merge",
+          "label": "Merge it: one school on two campuses for a year, then one campus, with the teachers kept",
+          "outcome": "It is a closure with a longer name and everyone knows it, and it is also true that every teacher who wants a job has one in September and the pastor gets to say the school did not close on his watch. The board grumbles about the year's cost. The parents two miles over grumble about the new children. In a year there is one school and it is full, and the boiler is scrap.",
+          "effects": [
+            { "target": "record", "key": "closed", "delta": 1 },
+            { "target": "record", "key": "saved", "delta": 1 },
+            { "target": "place", "key": "board", "delta": 2 },
+            { "target": "place", "key": "teachers", "delta": 8 },
+            { "target": "place", "key": "enrolment", "delta": 4 },
+            { "target": "place", "key": "schools", "delta": 6 },
+            { "target": "stat", "key": "administration", "delta": 2 },
+            { "target": "flag", "key": "sp_sch_merged", "value": true }
+          ]
+        },
+        {
+          "id": "one_more_year",
+          "label": "Ask the board for one more year on the diocesan reserve, and go find the children yourself",
+          "requires": [{ "type": "place", "key": "board", "op": ">=", "value": 10 }],
+          "outcome": "The board gives you the year because you have earned the asking, and tells you it is the last one. You spend it in the parishes on that side of town with a sign-up sheet. In September there are a hundred and twenty children, which is not enough, and the year after that there are a hundred and fifty, which nearly is. The reserve is down by what a boiler costs. The pastor dies in that second year with the doors open, which is what he wanted.",
+          "effects": [
+            { "target": "record", "key": "saved", "delta": 1 },
+            { "target": "place", "key": "board", "delta": -8 },
+            { "target": "place", "key": "enrolment", "delta": 6 },
+            { "target": "place", "key": "teachers", "delta": 4 },
+            { "target": "reputation", "key": "brother_priests", "delta": 3 },
+            { "target": "strain", "key": "", "delta": 8 },
+            { "target": "flag", "key": "sp_sch_reserve_year", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sp_sch_pay",
+      "phase": "study",
+      "pressure": ["money", "loyalty_vs_honesty"],
+      "severity": "NOTABLE",
+      "category": "finance",
+      "baseWeight": 11,
+      "suppressYears": 3,
+      "requires": [{ "type": "flag", "key": "study:schools", "value": true }],
+      "title": "Sixty Per Cent",
+      "body": "The principal at the cathedral school, who is the best you have, hands you her resignation in October with an offer letter from the public district clipped to it, and the number on the letter is what she would make in a year and a half here. She does not want to go. She has two children in college. Your teachers make sixty per cent of the public scale and have been told, for thirty years, that it is a vocation, and the board's finance chair has said the same thing to you in almost the same words. The board meets Thursday. Eleven schools, three hundred teachers, and the same letter from the district in eleven principals' desks by spring, if the district is sensible, and it is.",
+      "flavorPrompt": "The resignation with the district's letter clipped to it, sixty per cent, thirty years of it being a vocation.",
+      "choices": [
+        {
+          "id": "the_plan",
+          "label": "Go to the board with a three-year plan to seventy-five per cent, and the resignation on the table",
+          "default": true,
+          "outcome": "The finance chair says it cannot be done and you show him how it can, school by school, with the tuition going up nine per cent and two positions unfilled and the diocesan assessment argued down. It passes, barely. The principal tears up the letter in your office. The teachers hear the number and do not celebrate, because it is a plan, but they stay, which is what a plan is for.",
+          "effects": [
+            { "target": "place", "key": "board", "delta": 4 },
+            { "target": "place", "key": "teachers", "delta": 10 },
+            { "target": "place", "key": "enrolment", "delta": -2 },
+            { "target": "stat", "key": "administration", "delta": 3 },
+            { "target": "flag", "key": "sp_sch_pay_plan", "value": true }
+          ]
+        },
+        {
+          "id": "a_vocation",
+          "label": "Accept the resignation, tell the board it is a vocation, and hold the line on tuition",
+          "outcome": "The board is relieved. The principal goes, and is missed, and her replacement is adequate. In the spring two more go, and the year after that four, and the ones who stay are the ones with a husband's insurance or nowhere else. The tuition stays low and the enrolment holds and the schools are, by degrees, less good, and nobody can point to the meeting where it happened.",
+          "effects": [
+            { "target": "place", "key": "board", "delta": 6 },
+            { "target": "place", "key": "teachers", "delta": -12 },
+            { "target": "place", "key": "schools", "delta": -4 },
+            { "target": "flag", "key": "sp_sch_pay_vocation", "value": true }
+          ]
+        },
+        {
+          "id": "the_fund",
+          "label": "Go around the board: a named endowment for teachers' pay, raised from three donors by Christmas",
+          "requires": [{ "type": "stat", "key": "administration", "op": ">=", "value": 65 }],
+          "outcome": "Three lunches, one of them with a man who had a nun in fourth grade he has never forgotten, and by Advent there is a fund with a name on it that pays a supplement the board did not have to vote for and cannot easily take away. The board is annoyed and impressed. The principal stays. The district's letters go into eleven desks in spring and come back out unsigned.",
+          "effects": [
+            { "target": "place", "key": "board", "delta": 8 },
+            { "target": "place", "key": "teachers", "delta": 12 },
+            { "target": "place", "key": "enrolment", "delta": 2 },
+            { "target": "place", "key": "schools", "delta": 4 },
+            { "target": "stat", "key": "administration", "delta": 2 },
+            { "target": "flag", "key": "sp_sch_pay_fund", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sp_sch_principal",
+      "phase": "study",
+      "pressure": ["friendship_vs_duty", "ambition_vs_integrity"],
+      "severity": "NOTABLE",
+      "category": "admin",
+      "baseWeight": 11,
+      "suppressYears": 2,
+      "requires": [{ "type": "flag", "key": "study:schools", "value": true }],
+      "title": "The Pastor Wants Him Gone",
+      "body": "The principal at St. Brendan's has raised the enrolment by a third in two years, has the teachers' loyalty, has a waiting list for kindergarten, and has told the pastor twice, in front of the staff, that the parish cannot go on taking the school's tuition to pay the church's light bill. The pastor is {@brother_priest}, and he was ordained with you, and he has telephoned to say, as one priest to another, that he wants the principal's contract not renewed, and that he would take it as a kindness if the superintendent's office made that its own recommendation so that it does not look like the pastor. The principal has heard. He has not asked you for anything, which is its own kind of asking.",
+      "flavorPrompt": "The enrolment up a third, the light bill paid from tuition, the telephone call as one priest to another.",
+      "choices": [
+        {
+          "id": "back_him",
+          "label": "Renew the principal over the pastor's head, and tell the pastor why in his own rectory",
+          "default": true,
+          "outcome": "You drive out and say it at his kitchen table: the school is the best thing in the parish and the man running it is the reason, and the light bill is a separate conversation you will help him have with the finance council. He says that you have changed. The contract is renewed. The enrolment goes up again. At the deanery the pastors take note that the superintendent will side with a layman against a priest, and are divided about it.",
+          "effects": [
+            { "target": "record", "key": "principals", "delta": 1 },
+            { "target": "place", "key": "teachers", "delta": 8 },
+            { "target": "place", "key": "schools", "delta": 6 },
+            { "target": "place", "key": "enrolment", "delta": 3 },
+            { "target": "relationship", "key": "@brother_priest", "delta": -10 },
+            { "target": "reputation", "key": "brother_priests", "delta": -3 },
+            { "target": "flag", "key": "sp_sch_backed_principal", "value": true }
+          ]
+        },
+        {
+          "id": "pastor_wins",
+          "label": "Let the pastor have it: the pastor is the pastor, and the recommendation goes out over your name",
+          "outcome": "The principal goes to the public district in June and takes two teachers with him, and the waiting list goes with them. The pastor is grateful and says so at the deanery, which helps you there and nowhere else. The new principal is the pastor's choice and the light bill is paid. In two years the enrolment is back where it was before, and the pastor does not connect the two.",
+          "effects": [
+            { "target": "place", "key": "teachers", "delta": -8 },
+            { "target": "place", "key": "schools", "delta": -4 },
+            { "target": "place", "key": "enrolment", "delta": -4 },
+            { "target": "relationship", "key": "@brother_priest", "delta": 8 },
+            { "target": "reputation", "key": "brother_priests", "delta": 3 },
+            { "target": "honesty", "key": "", "delta": -1 },
+            { "target": "flag", "key": "sp_sch_pastor_won", "value": true }
+          ]
+        },
+        {
+          "id": "move_him",
+          "label": "Move the principal to the biggest school in the system, and give the pastor someone he can live with",
+          "requires": [{ "type": "place", "key": "schools", "op": ">=", "value": 10 }],
+          "outcome": "The cathedral school has needed a principal like him for a decade and now has one, and St. Brendan's gets a good, quieter man who pays the light bill without saying so in front of the staff. The pastor thinks he won. The principal knows he did. The teachers at St. Brendan's are sorry and the teachers at the cathedral are not, and the system is, on the whole, better run than it was in September.",
+          "effects": [
+            { "target": "record", "key": "principals", "delta": 2 },
+            { "target": "place", "key": "schools", "delta": 10 },
+            { "target": "place", "key": "teachers", "delta": 4 },
+            { "target": "place", "key": "board", "delta": 3 },
+            { "target": "relationship", "key": "@brother_priest", "delta": 3 },
+            { "target": "stat", "key": "administration", "delta": 2 },
+            { "target": "flag", "key": "sp_sch_moved_principal", "value": true }
+          ]
+        }
+      ]
+    }
+  ]
+}

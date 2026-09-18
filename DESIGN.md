@@ -489,6 +489,21 @@ Every opportunity has: **requirements** (hard gates), **a cost** (AP over a peri
 6. **Requests lapse.** Four years unanswered and the vicar for clergy closes the file with a line. He may ask again.
 7. **No one asks for a mitre.** The episcopal postings are the nuncio's business and cannot be requested.
 
+### 7.7 Special assignments
+
+*Added in playtesting.* The ladder is vicar, pastor, the chancery. These are the posts beside it — each a full posting like the hospital chaplaincy (§7.5): a place with its own dials, a book of what the years there counted, six ways to spend the hours of the week, its own scenes, and a parish again when it ends. They arrive as offers, gated on who the man is, and all but one can be asked for by letter (§7.6).
+
+| Post | Years | What it is |
+|---|---|---|
+| **Chaplain of the state penitentiary** | 3 | Two thousand men, a chapel with bolted benches, a room a mile from the gate. The tiers, the grille that is actually a grille, the last corridor, the gate on release days. Counts for nothing at the deanery and something with the bishop. |
+| **On loan to the missions** | 3 | A bishop with eleven priests for forty thousand square miles borrows a man. Six stations, a truck, a wood stove, a language learned from a grandmother, a two-year backlog of baptisms done in an afternoon. The chancery counts the years as years away, which they are. |
+| **Deployed as chaplain** | 1 | Orders, not an appointment: the Guard battalion he drills with deploys and its chaplain goes with it. Mass on the hood of a truck, the flight line at two in the morning, the sergeants, the days that are not most days, and letters written for men who could not. The bishop has no say and says so. Requires the reserve commission. |
+| **Spiritual director at the seminary** | 4 | Not a professor: a director. Twenty men an hour each a month in a room where nothing said leaves, the corridor at ten at night, the one who knocks at midnight. Its direction scenes are sealed (CLAUDE.md rule 7); its book counts hours, never names. Requires that he kept a director himself. |
+| **Superintendent of schools** | 4 | Eleven schools, four thousand children, a board of donors and lawyers, and the school that cannot be saved. The post for a man who can read a balance sheet; every pastor with a school telephones before eight. |
+
+Design rules: each must be **legible in hindsight** (the penitentiary comes to the man who went to the county jail on Thursdays; the deployment to the man who took the reserve commission); each must **cost the parish** he leaves; and none is a promotion — the board reads the file that comes home, and what it says depends on the dials.
+
+
 ---
 
 ## 8. The parish

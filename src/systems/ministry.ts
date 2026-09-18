@@ -47,6 +47,12 @@ export const MINISTRY = {
     vicar_general: { masses: 7, confessions: 2, confirmations: 1.2, funerals: 0.2 },
     rome_stl: { masses: 7, confessions: 1, baptisms: 0.05 },
     cua_jcl: { masses: 7, confessions: 2, weddings: 0.1, funerals: 0.1 },
+    // The special assignments. DESIGN §7.7.
+    penitentiary_chaplain: { masses: 6, confessions: 18, baptisms: 0.15, converts: 0.2, anointings: 0.3, funerals: 0.15 },
+    mission_loan: { masses: 10, confessions: 9, baptisms: 1.6, weddings: 0.4, funerals: 0.6, firstCommunions: 1.2, confirmations: 0.8, anointings: 0.7 },
+    deployment: { masses: 8, confessions: 10, anointings: 0.4, funerals: 0.1, converts: 0.1 },
+    seminary_director: { masses: 7, confessions: 8 },
+    schools_superintendent: { masses: 7, confessions: 1.5, confirmations: 0.6 },
   } as Record<string, Partial<Record<MinistryKey, number>>>,
   /** A bishop's week: the confirmations of a whole diocese, and the ordinations of one June. */
   see: { masses: 8, confirmations: 22, ordinations: 0.06, funerals: 0.2 } as Partial<Record<MinistryKey, number>>,

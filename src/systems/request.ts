@@ -65,6 +65,11 @@ export const REQUESTABLE_POSTS: readonly string[] = [
   'pv_seminary_faculty',
   'pv_bishops_secretary',
   'pa_vicar_general',
+  // The special assignments. DESIGN §7.7. A man may ask for the penitentiary or the missions; a deployment comes on orders.
+  'pa_penitentiary_chaplain',
+  'pv_mission_loan',
+  'pa_seminary_director',
+  'pa_schools_superintendent',
 ] as const;
 
 /** The letter standing in the file, if one is. */

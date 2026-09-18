@@ -5,6 +5,8 @@ import type { ActionLocation, ObligationKey } from '@/types';
  * systems already own: a discretionary action (by location), an obligation
  * dial, a panel, or another scene. Coordinates are percentages of the scene.
  */
+import type { StudyCity } from '@/types';
+
 export type SceneId = 'church' | 'rectory' | 'office' | 'hall' | 'chapel' | 'street' | 'study' | 'seminary_room' | 'seminary_hall' | 'chancery' | 'study_room' | 'study_city';
 
 export type HotspotBinding =
@@ -277,10 +279,16 @@ export const STUDY_CHANCERY = postScene('The chancery', 'Back to the rectory', [
 export const STUDY_AUXILIARY = postScene('The chancery', 'Back to the rectory', ['confirmation_circuit', 'the_vicariate', 'standing_in', 'seminary_board', 'spanish_parishes', 'auxiliary_press']);
 export const STUDY_SEE = postScene('The see', "Back to the bishop's house", ['cathedral_and_confirmations', 'see_personnel', 'see_closings', 'see_money', 'see_seminary', 'see_rome']);
 export const STUDY_SEMINARY = postScene('The seminary', 'Back to your rooms', ['lectures', 'seminary_direction', 'formation_reports', 'seminary_supply', 'seminary_writing', 'lectures']);
+// The special assignments. DESIGN §7.7.
+export const STUDY_PRISON = postScene('The penitentiary', 'Back to your room', ['tiers', 'prison_mass', 'prison_confessions', 'warden', 'death_row', 'gate']);
+export const STUDY_MISSION = postScene('The missions', 'Back to the rectory', ['stations', 'mission_language', 'mission_road', 'mission_sacraments', 'mission_house', 'mission_letters']);
+export const STUDY_DEPLOYMENT = postScene('The deployment', 'Back to the cot', ['field_mass', 'flight_line', 'command_tent', 'the_sergeants', 'casualty', 'letters_home']);
+export const STUDY_FORMATION = postScene('The seminary', 'Back to your suite', ['direction_hours', 'house_chapel', 'the_corridor', 'rector_counsel', 'director_retreats', 'the_one_who_knocks']);
+export const STUDY_SCHOOLS = postScene('The schools office', 'Back to the apartment', ['principals', 'school_board', 'enrolment', 'the_school_to_close', 'teachers_pay', 'school_visits']);
 
-export function sceneById(id: SceneId, city: 'rome' | 'washington' | 'residence' | 'campus' | 'hospital' | 'seminary' | 'chancery' | 'auxiliary' | 'see' = 'rome'): SceneDef {
+export function sceneById(id: SceneId, city: StudyCity = 'rome'): SceneDef {
   if (id === 'study_room') return city === 'rome' || city === 'washington' ? STUDY_ROOM : { ...STUDY_ROOM_RESIDENCE, label: city === 'residence' ? STUDY_ROOM_RESIDENCE.label : city === 'see' ? "The bishop's house" : 'Your rooms', hotspots: STUDY_ROOM_RESIDENCE.hotspots.map((h) => (h.binds.kind === 'study_action' ? { ...h, binds: { kind: 'panel', panel: 'routine' } as const, label: 'The desk: the week' } : h)) };
-  if (id === 'study_city') return city === 'residence' ? STUDY_HOUSE : city === 'campus' ? STUDY_CAMPUS : city === 'hospital' ? STUDY_HOSPITAL : city === 'seminary' ? STUDY_SEMINARY : city === 'chancery' ? STUDY_CHANCERY : city === 'auxiliary' ? STUDY_AUXILIARY : city === 'see' ? STUDY_SEE : city === 'washington' ? STUDY_CITY_DC : STUDY_CITY;
+  if (id === 'study_city') return city === 'residence' ? STUDY_HOUSE : city === 'campus' ? STUDY_CAMPUS : city === 'hospital' ? STUDY_HOSPITAL : city === 'seminary' ? STUDY_SEMINARY : city === 'chancery' ? STUDY_CHANCERY : city === 'auxiliary' ? STUDY_AUXILIARY : city === 'see' ? STUDY_SEE : city === 'prison' ? STUDY_PRISON : city === 'mission' ? STUDY_MISSION : city === 'deployment' ? STUDY_DEPLOYMENT : city === 'formation' ? STUDY_FORMATION : city === 'schools' ? STUDY_SCHOOLS : city === 'washington' ? STUDY_CITY_DC : STUDY_CITY;
   if (id === 'seminary_room') return SEMINARY_SCENE;
   if (id === 'seminary_hall') return SEMINARY_HALL;
   if (id === 'chancery') return CHANCERY_SCENE;
