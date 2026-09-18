@@ -1,3 +1,4 @@
+import type { OrderPresence } from './houses';
 import type { DioceseSize, FinancialState, Institution, ParishKind } from './world';
 
 /**
@@ -57,4 +58,10 @@ export interface DiocesePreset {
   /** Heritage weights for the presbyterate and laity. */
   heritage: Record<string, number>;
   seminaryName: string;
+  /**
+   * The orders told apart (DESIGN §9.4b), by institute id: how present each is
+   * here, and a line of what it holds. A bias for the roll, in the same shape a
+   * custom diocese would use; a preset without it rolls on charism alone.
+   */
+  orders?: Partial<Record<string, { presence: OrderPresence; line?: string }>>;
 }

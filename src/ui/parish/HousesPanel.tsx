@@ -1,5 +1,5 @@
 import { useGameStore } from '@/engine/store';
-import { askDef, favourOffers, houseLine, housesOf, regardWord, standingOf } from '@/systems/houses';
+import { askDef, castOf, favourOffers, houseKindLine, houseLine, housesOf, regardWord, standingOf } from '@/systems/houses';
 import Sheet from '../Sheet';
 
 /**
@@ -27,11 +27,19 @@ export default function HousesPanel() {
         {houses.map((h) => {
           const s = standingOf(game, h.id);
           const asked = s.ask ? askDef(s.ask.id) : undefined;
-          const mine = offers.filter((o) => o.house.id === h.id);
+          const mine = offers.filter((o) => o.house.id === h.id && (!o.def.order || o.def.order === h.order));
           return (
             <li key={h.id}>
               <div className="font-semibold">{h.name}</div>
               <div className="ink-muted text-xs leading-relaxed">{h.line}</div>
+              {houseKindLine(h) && <div className="ink-faint mt-1 text-xs leading-relaxed">{houseKindLine(h)}</div>}
+              {castOf(game, h).length > 0 && (
+                <ul className="mt-1 text-xs">
+                  {castOf(game, h).map(({ npc, line }) => (
+                    <li key={npc.id}><span className="font-semibold">{npc.title} {npc.name.first} {npc.name.last}</span><span className="ink-muted">, {line}</span></li>
+                  ))}
+                </ul>
+              )}
               <div className="ink text-xs mt-1">{houseLine(game, h)}</div>
               {asked && s.ask && (
                 <div className="mt-2 rounded border rule bg-white/40 px-2 py-1.5">

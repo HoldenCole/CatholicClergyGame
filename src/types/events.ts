@@ -132,7 +132,7 @@ export type Condition =
   /** The calendar year of the current week: the 2021 norms on the older Mass, and the like. */
   | { type: 'calendar_year'; op: Op; value: number }
   /** Whether the diocese has a religious house, of a charism if given. */
-  | { type: 'house'; charism?: 'contemplative' | 'active'; value: boolean }
+  | { type: 'house'; charism?: 'contemplative' | 'active'; order?: string; value: boolean }
   /** The diocese by preset id, one or several: storm country, the Gulf, the coasts. */
   | { type: 'diocese'; value: string | string[] }
   /** The calendar month of the current week, 1..12. */

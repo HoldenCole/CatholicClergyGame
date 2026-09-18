@@ -192,7 +192,7 @@ export function evaluateCondition(
       return compare(cond.op, state.character?.confessor ?? 0, cond.value);
     case 'house': {
       const houses = state.world?.diocese.visible.houses ?? [];
-      return houses.some((h) => !cond.charism || h.charism === cond.charism) === cond.value;
+      return houses.some((h) => (!cond.charism || h.charism === cond.charism) && (!cond.order || h.order === cond.order)) === cond.value;
     }
     case 'not':
       return !evaluateCondition(cond.inner, state, bindings);

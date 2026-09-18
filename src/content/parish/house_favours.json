@@ -1,5 +1,5 @@
 {
-  "_notes": "What a religious house will do for a parish, and what it asks in return (DESIGN \u00a79.4a). A favour is gated on the standing a priest has built; an ask is answered yes or no, and silence is a no.",
+  "_notes": "What a religious house will do for a parish, and what it asks in return (DESIGN §9.4a). A favour is gated on the standing a priest has built; an ask is answered yes or no, and silence is a no. A favour or an ask with `order` is only done, or only asked, by a house of that order (DESIGN §9.4b); its `effects` are authored here and applied when it is given.",
   "favours": [
     {
       "id": "prayers",
@@ -53,6 +53,153 @@
       "gives": "two blocks of the week back, and a second priest in the house",
       "bar": 65,
       "standing": true
+    },
+    {
+      "id": "course",
+      "label": "Ask the lector to teach a course in the hall",
+      "blurb": "Six Thursday nights on the Creed, article by article, from a man who teaches it for a living and preaches it for free.",
+      "gives": "a parish that knows what it says on Sunday, and a hall full on a weeknight",
+      "charism": "active",
+      "order": "dominican",
+      "bar": 25,
+      "money": 600,
+      "cooldown": 104,
+      "effects": [
+        {
+          "target": "reputation",
+          "key": "parishioners",
+          "delta": 4
+        },
+        {
+          "target": "stat",
+          "key": "theology",
+          "delta": 2
+        },
+        {
+          "target": "flag",
+          "key": "house:course",
+          "value": true
+        }
+      ],
+      "role": "lector"
+    },
+    {
+      "id": "opinion",
+      "label": "Ask the lector for a written opinion",
+      "blurb": "Four pages with footnotes that say what you said, in language the chancery cannot call an opinion. It goes in the file with your name beside his.",
+      "gives": "a stand of yours put on paper by a man the chancery cannot move",
+      "charism": "active",
+      "order": "dominican",
+      "bar": 40,
+      "cooldown": 156,
+      "effects": [
+        {
+          "target": "reputation",
+          "key": "chancery",
+          "delta": 3
+        },
+        {
+          "target": "reputation",
+          "key": "rome",
+          "delta": 2
+        },
+        {
+          "target": "flag",
+          "key": "house:opinion",
+          "value": true
+        }
+      ],
+      "role": "lector"
+    },
+    {
+      "id": "kitchen",
+      "label": "Ask the friars to run a kitchen out of your hall",
+      "blurb": "A hot meal on Tuesdays for whoever comes, their brother in charge, their volunteers, and a line down the block, indefinitely.",
+      "gives": "the parish's poor in the parish's own hall, and a city that knows whose hall it is",
+      "charism": "active",
+      "order": "franciscan",
+      "bar": 25,
+      "standing": true,
+      "effects": [
+        {
+          "target": "reputation",
+          "key": "public",
+          "delta": 5
+        },
+        {
+          "target": "reputation",
+          "key": "parishioners",
+          "delta": 2
+        }
+      ],
+      "role": "kitchen"
+    },
+    {
+      "id": "mercy",
+      "label": "Ask the friary to take the parish's winter",
+      "blurb": "The coal fund, the Christmas baskets, the families you have been carrying on the parish's money: theirs until Easter, and they will not hear of being paid back.",
+      "gives": "a winter the parish's books do not have to carry, and the families carried anyway",
+      "charism": "active",
+      "order": "franciscan",
+      "bar": 15,
+      "cooldown": 52,
+      "effects": [
+        {
+          "target": "money",
+          "key": "",
+          "delta": 900
+        },
+        {
+          "target": "reputation",
+          "key": "parishioners",
+          "delta": 4
+        },
+        {
+          "target": "strain",
+          "key": "",
+          "delta": -6
+        },
+        {
+          "target": "flag",
+          "key": "house:mercy",
+          "value": true
+        }
+      ]
+    },
+    {
+      "id": "school_place",
+      "label": "Ask for a place at their school for a family of the parish",
+      "blurb": "A boy who could not have gone, in a blazer on the first Monday of September: the tuition halved by the headmaster, the rest found somewhere.",
+      "gives": "one family of the parish that will never forget it, and the ones who hear",
+      "charism": "active",
+      "order": "augustinian",
+      "bar": 20,
+      "cooldown": 52,
+      "effects": [
+        {
+          "target": "reputation",
+          "key": "parishioners",
+          "delta": 5
+        },
+        {
+          "target": "flag",
+          "key": "house:school_place",
+          "value": true
+        }
+      ],
+      "role": "headmaster"
+    },
+    {
+      "id": "common_table",
+      "label": "Ask for a place at their table",
+      "blurb": "Dinner at the priory on Thursdays at six, from now on: the prior at the head, the argument of the week, and nobody asking about the parish unless you bring it up.",
+      "gives": "a chair at a table, once a week, for a man who has no community and was not supposed to need one",
+      "charism": "active",
+      "order": "augustinian",
+      "bar": 30,
+      "standing": true,
+      "effects": [],
+      "role": "prior"
     }
   ],
   "asks": [
@@ -88,6 +235,28 @@
       "label": "Take a man of theirs for a while",
       "blurb": "One of their young men needs parish experience and a room, and they are asking you rather than the chancery.",
       "costs": "a room, a summer, and a man who is not yours to form"
+    },
+    {
+      "id": "disputation",
+      "label": "Their lector wants your hall for a disputation",
+      "blurb": "A public argument, Thursday night, their lector against a professor from the state university, on whether God can be known: two hundred chairs, a moderator, and whatever gets said.",
+      "costs": "the hall for a night, the chairs, and whatever your name is under by Friday",
+      "order": "dominican"
+    },
+    {
+      "id": "transitus",
+      "label": "The Transitus in your church",
+      "blurb": "The evening of the third of October: the friars keep the death of Francis by candlelight, with the readings and the Canticle, and they would like to keep it in your church because theirs is too small for who comes.",
+      "costs": "the church for an October evening, the sacristan, and the neighbours' parking",
+      "order": "franciscan"
+    },
+    {
+      "id": "school_dinner",
+      "label": "A table at their school's dinner",
+      "blurb": "The annual dinner for the school's fund, a table of ten, and the parish's name on the programme beside the families who send their boys there.",
+      "costs": "a table's worth of the parish's money, and an evening in a jacket",
+      "money": 1500,
+      "order": "augustinian"
     }
   ]
 }

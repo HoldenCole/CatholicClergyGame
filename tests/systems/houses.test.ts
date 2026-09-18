@@ -39,7 +39,7 @@ describe('generation/houses', () => {
       }
     }
     expect(counts.size).toBeGreaterThanOrEqual(3);
-    expect(orders.size).toBe(8);
+    expect(orders.size).toBe(9);
     for (const n of orders.values()) expect(n).toBeGreaterThan(50);
     expect(alignments.size).toBeGreaterThan(40);
   });
