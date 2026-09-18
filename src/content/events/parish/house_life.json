@@ -1,0 +1,275 @@
+{
+  "_notes": "Living with the order next door (DESIGN §9.4a): what an arrangement is actually like once it is running, and what it is like when the provincial ends it.",
+  "events": [
+    {
+      "id": "hl_the_friar_is_better_at_it",
+      "phase": ["pastor", "administrator"],
+      "pressure": ["competence", "ambition_vs_integrity"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 12,
+      "suppressYears": 6,
+      "requires": [{ "type": "house", "charism": "active", "value": true }],
+      "title": "His Line Is Longer Than Yours",
+      "body": "The friar has been coming out for the Saturday hours for a year and a half and the confessional situation in this parish has changed. There are people in that line who have not been to confession since the Clinton administration and who drove past two other churches to sit in it. He is not better than you at anything you can name. He is a stranger who leaves at five, which turns out to be an enormous professional advantage, and you have caught yourself counting.",
+      "choices": [
+        {
+          "id": "ask_him_what_he_does",
+          "label": "Ask him, straight out, what he says in there",
+          "default": true,
+          "outcome": "He is embarrassed and then useful: three things, all of them about how he opens rather than how he absolves, and one of them you have been doing wrong since 1994. Your own line is longer by Advent, which does not shorten his.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 2 },
+            { "target": "relationship", "key": "@religious", "delta": 6 },
+            { "target": "reputation", "key": "parishioners", "delta": 3 },
+            { "target": "flag", "key": "hl_asked_the_friar", "value": true }
+          ]
+        },
+        {
+          "id": "add_your_own_hour",
+          "label": "Put your own hour on the other side of the week and say nothing",
+          "outcome": "Thursday evenings, unadvertised beyond a line in the bulletin, and it fills slowly with the people who want their own priest after all. Two confessionals in one parish is an embarrassment of riches that nobody in the deanery has.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 5 },
+            { "target": "ap", "key": "", "delta": -1 },
+            { "target": "stat", "key": "piety", "delta": 2 }
+          ]
+        },
+        {
+          "id": "let_it_be",
+          "label": "Let it be what it is",
+          "outcome": "The people are being confessed, which is the entire object of the exercise, and the fact that it stings is a fact about you and not about the parish. You go on doing the funerals he does not do.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "honesty", "key": "", "delta": 2 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hl_mission_week",
+      "phase": ["pastor", "administrator"],
+      "pressure": ["belief_vs_safety", "competence"],
+      "severity": "MAJOR",
+      "category": "group",
+      "baseWeight": 13,
+      "suppressYears": 5,
+      "requires": [{ "type": "house", "charism": "active", "value": true }],
+      "title": "The Wednesday Of The Mission",
+      "body": "Five nights, and the Wednesday is the night it turns. The preacher has done this two hundred times and knows exactly where the week breaks, and tonight he preaches on something the parish has been carefully not discussing for eleven years, and then sits down in the confessional at nine o'clock. There are sixty people in the line and two priests in the building, and one of them is you.",
+      "choices": [
+        {
+          "id": "hear_them_till_it_ends",
+          "label": "Sit down in the other box and stay until the line is gone",
+          "default": true,
+          "outcome": "It is a quarter past eleven when the last one goes, and you have heard things from people whose Christmas cards you have been getting for a decade. Your back is ruined and the parish is different for a year and a half.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 8 },
+            { "target": "stat", "key": "piety", "delta": 4 },
+            { "target": "strain", "key": "", "delta": 4 },
+            { "target": "flag", "key": "hl_the_wednesday", "value": true }
+          ]
+        },
+        {
+          "id": "work_the_door",
+          "label": "Take the door and the coffee and let him have the night",
+          "outcome": "You greet four hundred people and make two urns of coffee and are the reason eleven of them came back on the Thursday. It is the less glamorous half of the same work, and the preacher says so at the end of the week.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 5 },
+            { "target": "relationship", "key": "@religious", "delta": 5 }
+          ]
+        },
+        {
+          "id": "worry_about_the_sermon",
+          "label": "Take him aside about what he preached on",
+          "outcome": "He hears you out and says, without heat, that he can say it because he leaves on Saturday and you cannot because you do not, and that the line outside suggests the parish wanted it said. Both of you are partly right and the conversation is not comfortable.",
+          "effects": [
+            { "target": "relationship", "key": "@religious", "delta": -5 },
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "flag", "key": "hl_worried_about_the_mission", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hl_their_man_in_your_rectory",
+      "phase": ["pastor"],
+      "pressure": ["competence", "loyalty_vs_honesty"],
+      "severity": "MAJOR",
+      "category": "admin",
+      "baseWeight": 12,
+      "suppressYears": 6,
+      "requires": [{ "type": "house", "value": true }],
+      "title": "His Rule And Your Parish",
+      "body": "The order priest in your rectory is a gift and a puzzle. He is up at five for their Office and unavailable from five to six in the evening for the same reason; he takes no stipend and hands the Mass offerings to his house; he cannot come to the diocesan convocation because his chapter meets that week; and he has begun, gently, to do the youth ministry in a way that is his order's way and not this parish's. He is also two priests' worth of help and the best confessor the school has had.",
+      "choices": [
+        {
+          "id": "write_the_arrangement_down",
+          "label": "Sit down with him and write down what is his and what is the parish's",
+          "default": true,
+          "outcome": "One page: his hours, his Office, his chapter, the parish's Masses, and who decides the youth programme, which turns out to be him with your sign-off. Both of you sign it. It is the most useful hour either of you spends that year and his provincial asks for a copy.",
+          "effects": [
+            { "target": "stat", "key": "administration", "delta": 2 },
+            { "target": "relationship", "key": "@religious", "delta": 8 },
+            { "target": "flag", "key": "hl_the_agreement", "value": true }
+          ]
+        },
+        {
+          "id": "let_him_run",
+          "label": "Let him do it his way and see what happens",
+          "outcome": "What happens is that the youth programme becomes very good and entirely his, that forty families become attached to an order rather than to a parish, and that when his provincial recalls him in the third year the whole thing goes with him.",
+          "effects": [
+            { "target": "group", "key": "vitality", "delta": 12 },
+            { "target": "flag", "key": "hl_his_programme", "value": true }
+          ]
+        },
+        {
+          "id": "insist_on_the_parish_way",
+          "label": "Tell him the parish does it the parish's way",
+          "outcome": "He accepts it immediately and without argument, because obedience is a thing he practises professionally, and the programme becomes yours and duller. Something goes out of the rectory at supper, and he asks his provincial in the spring whether there is work elsewhere.",
+          "effects": [
+            { "target": "relationship", "key": "@religious", "delta": -12 },
+            { "target": "group", "key": "vitality", "delta": -6 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hl_the_provincial_takes_him",
+      "phase": ["pastor", "administrator"],
+      "pressure": ["friendship_vs_duty", "competence"],
+      "severity": "MAJOR",
+      "category": "admin",
+      "baseWeight": 12,
+      "suppressYears": 5,
+      "requires": [{ "type": "house", "value": true }],
+      "title": "Six Weeks, And The Arrangement Ends",
+      "body": "The letter is to him with a copy to you and it is polite and final: the chapter has assigned him elsewhere from the first of August. Whatever he was doing here — the Saturdays, the school, the two blocks of your week — stops in six weeks, and there is no appeal, no successor named, and no obligation on the house to replace him. The parish will ask you on the Sunday why the Saturday confessions are ending, in a tone that suggests you could have prevented it.",
+      "choices": [
+        {
+          "id": "tell_them_the_truth_about_orders",
+          "label": "Explain from the pulpit what a religious actually is",
+          "default": true,
+          "outcome": "Three minutes on vows, obedience, and provinces, and why this parish had eighteen months of something it was never owed. The parish is disappointed and stops being aggrieved, and four people go to his farewell Mass at the priory an hour away.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 4 },
+            { "target": "stat", "key": "theology", "delta": 1 },
+            { "target": "relationship", "key": "@religious", "delta": 5 }
+          ]
+        },
+        {
+          "id": "ask_for_another",
+          "label": "Write to the provincial and ask for another man",
+          "outcome": "The answer comes in eleven days: they have forty-one men under sixty for eleven works, they are grateful for the welcome he had, and they will keep you in mind. It is not a no and it is not a yes and it is the honest state of a province in 2019.",
+          "effects": [
+            { "target": "flag", "key": "hl_asked_for_another", "value": true },
+            { "target": "reputation", "key": "brother_priests", "delta": 1 }
+          ]
+        },
+        {
+          "id": "take_it_badly",
+          "label": "Tell the prior what this does to the parish",
+          "outcome": "You say it in a telephone call you regret by the second sentence, and the prior, who has had this call from four pastors, is patient in a way that makes it worse. The house is correct with you for a long time afterward.",
+          "effects": [
+            { "target": "relationship", "key": "@religious", "delta": -10 },
+            { "target": "reputation", "key": "parishioners", "delta": 1 },
+            { "target": "flag", "key": "hl_took_it_badly", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hl_the_abbey_is_selling_the_farm",
+      "phase": ["pastor", "administrator", "parochial_vicar"],
+      "pressure": ["money", "belief_vs_safety"],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 11,
+      "suppressYears": 8,
+      "requires": [{ "type": "house", "charism": "contemplative", "value": true }],
+      "title": "The Abbey Is Selling The Bottom Land",
+      "body": "Nineteen monks, a median age of seventy-six, four hundred acres, and a bakery that no longer pays for the roof. They are selling the bottom land to a developer, and the diocese would like them to sell it to the diocese instead at a price that is friendlier to the diocese, and the abbot has telephoned you because you are the priest who actually comes out there and because a letter from a parish pastor is read differently from a letter from a monk.",
+      "choices": [
+        {
+          "id": "write_for_the_abbey",
+          "label": "Write what the abbey is worth, and what it is owed",
+          "default": true,
+          "outcome": "Two pages about eighty years of retreats, vocations, and a guesthouse that never asked anybody what they could pay. It goes in the file. The abbey gets its price and the chancery notes the name on the letter, and both of those are permanent.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": -5 },
+            { "target": "relationship", "key": "@religious", "delta": 14 },
+            { "target": "honesty", "key": "", "delta": 3 },
+            { "target": "flag", "key": "hl_backed_the_abbey", "value": true }
+          ]
+        },
+        {
+          "id": "stay_out",
+          "label": "Tell the abbot, kindly, that you cannot write against the diocese",
+          "outcome": "He says of course and means it, because obedience is his whole subject, and the land goes at the diocese's price. The guesthouse closes four years later. There is no proving the two facts are connected and you think about it anyway.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": 2 },
+            { "target": "relationship", "key": "@religious", "delta": -8 }
+          ]
+        },
+        {
+          "id": "broker_it",
+          "label": "Get the two sides in one room and broker something",
+          "outcome": "Four months, two dinners, one walk around the bottom land with the vicar general in unsuitable shoes, and a price that neither side likes and both sign. You are thanked by nobody and are the reason it did not go to the developer.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": 4 },
+            { "target": "relationship", "key": "@religious", "delta": 8 },
+            { "target": "stat", "key": "administration", "delta": 2 },
+            { "target": "flag", "key": "hl_brokered_the_land", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hl_the_guesthouse_in_january",
+      "phase": ["pastor", "administrator", "parochial_vicar"],
+      "pressure": ["doubt", "body_vs_vow"],
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 11,
+      "suppressYears": 4,
+      "requires": [
+        { "type": "house", "charism": "contemplative", "value": true },
+        { "type": "strain", "op": ">=", "value": 40 }
+      ],
+      "title": "They Left The Light On For You",
+      "body": "You telephoned at four in the afternoon in January and said you did not know why you were telephoning, and the guestmaster said come tonight, the room is there. It is an hour and a half in the dark and the food is bad and the bed is narrow and there are nineteen men who will be up at three whether you are or not. Nobody asks you anything. Somebody has left a lamp on in the corridor and a note with your name spelled right.",
+      "choices": [
+        {
+          "id": "stay_two_nights",
+          "label": "Stay the two nights and cancel the Tuesday",
+          "default": true,
+          "outcome": "The Tuesday survives being cancelled. You sleep eleven hours, walk to the end of the bottom land, say nothing to anybody but the guestmaster, and drive back on Wednesday a man who can be spoken to again.",
+          "effects": [
+            { "target": "strain", "key": "", "delta": -14 },
+            { "target": "stat", "key": "piety", "delta": 4 },
+            { "target": "flag", "key": "hl_the_two_nights", "value": true }
+          ]
+        },
+        {
+          "id": "one_night",
+          "label": "One night, and back for the eight o'clock",
+          "outcome": "One night is not enough and is a great deal better than none, and you are back in the sacristy at ten to eight with the smell of that corridor still on your coat.",
+          "effects": [
+            { "target": "strain", "key": "", "delta": -6 },
+            { "target": "stat", "key": "piety", "delta": 2 }
+          ]
+        },
+        {
+          "id": "ask_to_come_back_regularly",
+          "label": "Ask the guestmaster whether you could come every month",
+          "outcome": "He says that is what the room is for and writes your name in a book that has other priests' names in it going back to 1961. You keep it up for eleven years and it is the reason you do not come apart in the year that nearly does it.",
+          "effects": [
+            { "target": "strain", "key": "", "delta": -8 },
+            { "target": "stat", "key": "piety", "delta": 5 },
+            { "target": "flag", "key": "hl_the_standing_room", "value": true }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -26,6 +26,7 @@ import { applyReputation, fadeReputation } from './reputation';
 import { terrainOf } from './assignment';
 import { averageVitality, groupRelief, groupsWeek, finishFounding } from './groups';
 import { ministryWeek } from './ministry';
+import { houseHelp, houseRelief, houseWeek } from './houses';
 import type { Rng } from '@/engine/rng';
 
 /** Tunables for the weekly loop. DESIGN 2.6 and 8.1; numbers not in the design are invented. */
@@ -200,8 +201,12 @@ export function planWeek(state: GameState): Plan {
   const parish = state.parish!;
   const budget = weekBudget(state);
   // The men around him give blocks back below the floor: a neighbor's cover, a seminarian, a deacon, the vicar he formed.
-  const fixed = Math.max(0, seasonalLoad(state) + adminFloorFor(state) + commitmentAp(state) + (state.founding?.apPerWeek ?? 0) + (state.parish?.work?.apPerWeek ?? 0) + clubHours(state) + bossLoad(state) - fundBonuses(state).relief) - coverRelief(state) - helpRelief(state);
-  const relief = groupRelief(state);
+  const fixed = Math.max(0, seasonalLoad(state) + adminFloorFor(state) + commitmentAp(state) + (state.founding?.apPerWeek ?? 0) + (state.parish?.work?.apPerWeek ?? 0) + clubHours(state) + bossLoad(state) - fundBonuses(state).relief) - coverRelief(state) - helpRelief(state) - houseHelp(state);
+  // The groups relieve what they run; a standing confessor from the priory relieves the box. DESIGN §9.4a.
+  const houses = houseRelief(state);
+  const groups = groupRelief(state);
+  const relief: Partial<Record<string, number>> = { ...groups };
+  for (const [k, v] of Object.entries(houses)) relief[k] = (relief[k] ?? 0) + (v ?? 0);
   const obligations = { ...parish.routine.obligations };
   const stats = state.character?.stats;
   const mandatoryOf = () => Math.max(0, fixed + OBLIGATION_KEYS.reduce((n, k) => n + obligationAp(k, obligations[k], (relief as Record<string, number>)[k] ?? 0, stats), 0));
@@ -381,6 +386,9 @@ export function resolveWeek(state: GameState, rng: Rng): { state: GameState; led
   bonuses.collections += preached.collections;
   const target = attendanceTarget(next, care, mass.pull + bonuses.pull + confessorPull(next));
   const attendance = parish.attendance + (target - parish.attendance) * WEEK.attendanceFollow;
+
+  // An hour in the priory parlor or the abbey guesthouse, and what it builds. DESIGN §9.4a.
+  next = houseWeek(next, plan.discretionary.priory ?? 0);
 
   // The book of a life: what this week counted. DESIGN §8.6.
   next = ministryWeek(next, plan.obligations, plan.discretionary.extra_confessions ?? 0);
