@@ -63,8 +63,9 @@ import type { GameSettings } from '@/types';
 import { setPreference, type Preference } from '@/systems/assignment';
 import { setInterest as doSetInterest } from '@/systems/interests';
 import { fileRequest as doFileRequest, withdrawRequest as doWithdrawRequest } from '@/systems/request';
+import { answerAsk as doAnswerAsk, askFavour as doAskFavour } from '@/systems/houses';
 import { setLearning as doSetLearning } from '@/systems/languages';
-import type { DecorPlace, LiturgicalTopic, RequestTarget } from '@/types';
+import type { DecorPlace, HouseFavourId, LiturgicalTopic, RequestTarget } from '@/types';
 import { anthropicProvider, type Provider } from '@/llm/provider';
 import { DEFAULT_LLM, loadLlmSettings, saveLlmSettings, type LlmSettings } from '@/llm/settings';
 import { skinArc, skinEvent, skinOutcome } from '@/llm/skin';
@@ -154,6 +155,10 @@ export interface GameStore {
   /** Write to the vicar for clergy asking for one named parish or posting. DESIGN §7.6. */
   fileRequest(target: RequestTarget): void;
   withdrawRequest(): void;
+  /** Ask a religious house of the diocese for one of its favours. DESIGN §9.4a. */
+  askHouseFavour(houseId: string, favourId: HouseFavourId): void;
+  /** Answer what a house has asked of the parish. */
+  answerHouseAsk(houseId: string, yes: boolean): void;
   /** Take up a language in the routine's study hours, or put it down. */
   setLearning(id: string | null): void;
   setDiscretionary(actionId: string, ap: number): void;
@@ -204,6 +209,8 @@ export interface GameStore {
   setCover(npcId: string | null): void;
   evaluateSeminarian(verdict: 'strong' | 'reserved' | 'concerned'): void;
   lastFurnishLine: string | null;
+  /** What the house said, for the sheet to print once. */
+  lastHouseLine: string | null;
 
   /** The skinning layer. Off by default; the game is complete without it. */
   llm: LlmSettings;
@@ -324,6 +331,7 @@ export const useGameStore = create<GameStore>()((set, get) => ({
   lastOfferOutcome: null,
   lastTalk: null,
   lastFurnishLine: null,
+  lastHouseLine: null,
   slots: typeof window === 'undefined' ? [] : listSlots(),
   slotId: null,
   github: typeof window === 'undefined' ? null : loadGithub(),
@@ -660,6 +668,20 @@ export const useGameStore = create<GameStore>()((set, get) => ({
   },
   withdrawRequest() {
     update(set, get, (game) => doWithdrawRequest(game));
+  },
+  askHouseFavour(houseId, favourId) {
+    update(set, get, (game, r) => {
+      const res = doAskFavour(game, houseId, favourId, r);
+      set({ lastHouseLine: res.line });
+      return res.state;
+    });
+  },
+  answerHouseAsk(houseId, yes) {
+    update(set, get, (game) => {
+      const res = doAnswerAsk(game, houseId, yes);
+      set({ lastHouseLine: res.line });
+      return res.state;
+    });
   },
   setLearning(id) {
     update(set, get, (game) => doSetLearning(game, id));

@@ -4,6 +4,7 @@ import { awayPlace, awayPlaces } from '@/content/parish';
 import { evaluateAll } from '@/engine/conditions';
 import { applyEffects } from '@/engine/effects';
 import { describeUnmet } from './doors';
+import { houseCoversSupply, houseWith } from './houses';
 import { controlsMoney } from './finance';
 import { strainOf } from './week';
 import { diocesePresets, presetById } from '@/content/dioceses';
@@ -50,7 +51,8 @@ export function awayAvailability(state: GameState): AwayAvailability[] {
     if (def.kind === 'retreat' && !retreatDue(state)) return { def, available: false, why: 'Made this year' };
     if (def.kind === 'vacation' && vacationLeft(state) < def.weeks) return { def, available: false, why: vacationLeft(state) <= 0 ? 'No weeks left this year' : `Only ${vacationLeft(state)} week left this year` };
     if (def.requires && !evaluateAll(def.requires, state)) return { def, available: false, why: `needs ${def.requires.map((c) => describeUnmet(c, state)).find((w): w is string => !!w) ?? 'something else'}` };
-    if (controlsMoney(state) && (state.parish.finance.cash < def.supply * def.weeks)) return { def, available: false, why: 'The parish cannot pay a supply priest' };
+    // A house that covers the parish takes no stipend. DESIGN §9.4a.
+    if (!houseCoversSupply(state) && controlsMoney(state) && (state.parish.finance.cash < def.supply * def.weeks)) return { def, available: false, why: 'The parish cannot pay a supply priest' };
     return { def, available: true, why: null };
   });
 }
@@ -131,7 +133,8 @@ export function awayWeek(state: GameState, rng: Rng, pool: GameEvent[]): { state
   const strain = Math.max(0, strainOf(state) - def.strain);
   next = { ...next, strain };
   next = applyEffects(next, def.weekly, {}, def.label);
-  if (controlsMoney(next) && next.parish) next = { ...next, parish: { ...next.parish, finance: { ...next.parish.finance, cash: next.parish.finance.cash - def.supply } } };
+  const covered = houseCoversSupply(next);
+  if (!covered && controlsMoney(next) && next.parish) next = { ...next, parish: { ...next.parish, finance: { ...next.parish.finance, cash: next.parish.finance.cash - def.supply } } };
   const first = away.weeksLeft === def.weeks;
   const candidates = first ? pool.filter((e) => e.beat === 'away' && evaluateAll(e.requires ?? [], next)) : [];
   const event = candidates.length ? rng.derive(`away:${state.clock.week}`).pick(candidates.sort((a, b) => (a.id < b.id ? -1 : 1))) : null;
@@ -143,7 +146,9 @@ export function awayWeek(state: GameState, rng: Rng, pool: GameEvent[]): { state
     const there = pool.length ? rng.derive(`supply-line:${state.clock.week}`).pick(pool) : 'A parish that is not yours, and a week that is.';
     line = weeksLeft > 0 ? `On loan in ${preset.see}, week ${def.weeks - weeksLeft}: ${there}` : `Home from ${preset.see}. Twelve weeks of somebody else's parishes, and a friend who will call.`;
   } else {
-    line = weeksLeft > 0 ? `Away: ${def.label.toLowerCase()}. The supply priest has the Masses.` : `Back from ${def.kind === 'retreat' ? 'the retreat' : 'vacation'}: ${def.label.toLowerCase()}.`;
+    const cover = covered ? houseWith(next, 'supply') : undefined;
+    const who = cover ? `${cover.name} has the Masses, and will not hear of a stipend.` : 'The supply priest has the Masses.';
+    line = weeksLeft > 0 ? `Away: ${def.label.toLowerCase()}. ${who}` : `Back from ${def.kind === 'retreat' ? 'the retreat' : 'vacation'}: ${def.label.toLowerCase()}.`;
   }
   if (weeksLeft > 0) next = { ...next, away: { ...away, weeksLeft } };
   else {

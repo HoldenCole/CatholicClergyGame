@@ -672,6 +672,27 @@ Religious NPCs make the `rome` constituency live earlier, because institutes are
 
 ---
 
+### 9.4a The order next door
+
+*Added in playtesting.* §9.4 gives a diocese its institutes and its religious. This is what a parish priest can actually **do** with them, and what they do to him.
+
+Each religious house of the diocese (the abbey, the friary, the Carmel) carries a **standing** with this priest: −100 to 100, built only by turning up — an hour a week in the routine, the guesthouse, Vespers, the parlor — and by saying yes when the house asks for something. It cools slowly when nobody goes. It is not reputation: no constituency sees it, the chancery has no view on it, and it cannot be bought.
+
+**What standing buys**, each gated on a bar and spending some of itself in the asking:
+
+| Favour | Needs | What it does |
+|---|---|---|
+| Their prayers for the parish, by name | nothing | the people know somebody prays for them who has never met them |
+| A retreat at their house | a little | the canonical retreat, made properly, for nothing |
+| A confessor every Saturday | a working relationship | most of the confessions hour back, and a box that is never empty |
+| A preached parish mission | a real friendship | a parish that is different in April; the parish pays them |
+| Supply cover when he is away | a real friendship | a retreat or a fortnight that costs the parish nothing |
+| A priest of theirs for the parish | years of it | two blocks of the week back, and a second priest in the house |
+
+**What the house asks in return**: a priest for their community Mass while their chaplain is ill, a second collection for their missions, their novena in his church, a letter backing them when the diocese wants their land, a young man of theirs boarded for a summer. Saying yes builds standing faster than any hour; saying no costs a little; **silence is a no**, and the clock answers for him in six weeks.
+
+**The asymmetry is the point.** Every arrangement runs at the provincial's pleasure: once a year he may end one, less often where the standing is high, and the notice is six weeks and the reason is a house in another state. A pastor cannot appeal it, cannot hire around it, and cannot hold it against them, and the parish notices the Saturday confessional is dark.
+
 ## 10. Special interest groups
 
 The parish's living layer and the most direct way the player changes anything.

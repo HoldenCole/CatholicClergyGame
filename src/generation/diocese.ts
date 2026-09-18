@@ -14,7 +14,7 @@ import type { Rng } from '@/engine/rng';
 import { generateBishop, PRIORITY_LABEL, temperamentLine } from './bishop';
 import { generateChancery } from './chancery';
 import { generateParishes } from './parishes';
-import { generateHouses } from './houses';
+import { generateHouses, linkHouses } from './houses';
 import { generateInstitutes, generateReligious } from './institutes';
 
 export interface GeneratedDiocese {
@@ -67,7 +67,10 @@ export function generateDiocese(rng: Rng, preset: DiocesePreset, year: number): 
   const bishop = generateBishop(rng.derive('bishop'), preset, year);
   const chancery = generateChancery(rng.derive('chancery'), preset, year, bishop.profile.alignment);
   const institutes = generateInstitutes(rng.derive('institutes'), preset);
-  const religious = generateReligious(rng.derive('religious'), institutes, year);
+  const castRolled = generateReligious(rng.derive('religious'), institutes, year);
+  // The houses of the diocese and the institutes are the same religious from two sides. §9.4a
+  const linked = linkHouses(generateHouses(rng.derive('houses'), preset.size), institutes, castRolled);
+  const religious = linked.religious;
   const generated = generateParishes(rng.derive('parishes'), preset, year);
   const parishes = generated.map((g) => g.parish);
   const pastors = generated.map((g) => g.pastor);
@@ -131,7 +134,7 @@ export function generateDiocese(rng: Rng, preset: DiocesePreset, year: number): 
       character,
       opportunities,
       institutions: preset.institutions,
-      houses: generateHouses(rng.derive('houses'), preset.size),
+      houses: linked.houses,
       complication: rng.pick(preset.complications),
     },
     hidden: {

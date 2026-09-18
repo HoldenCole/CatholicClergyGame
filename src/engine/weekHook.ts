@@ -26,6 +26,7 @@ import { studyWeek } from '@/systems/studyWeek';
 import { endStudy } from './study';
 import { appointmentStep, APPOINTMENT_FLAGS } from './appointment';
 import { clearRequestAnswer, closeRequest, requestAnswerDue } from '@/systems/request';
+import { expireAsks } from '@/systems/houses';
 import { requestedChoice } from '@/systems/choice';
 import { confessorWeek } from '@/systems/confessor';
 import { turnaroundStep } from '@/systems/trajectory';
@@ -206,6 +207,10 @@ export function parishWeekHook(deps: EventDeps): WeekHook {
     const letter = letterStep(state, rng, deps);
     if (letter.moved || letter.state.pending.length > 0) return letter.state;
     state = letter.state;
+    // A house asked for something and nobody answered: the clock says no. DESIGN §9.4a.
+    const asks = expireAsks(state);
+    state = asks.state;
+    for (const line of asks.lines) state = addDigestLine(state, line);
     // The vicar for clergy's answer to the letter the man wrote himself. DESIGN §7.6.
     if (requestAnswerDue(state)) {
       const asked = requestedChoice(state);

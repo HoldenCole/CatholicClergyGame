@@ -16,6 +16,7 @@ import { seeYear } from './see';
 import { withChoice } from '@/systems/choice';
 import { closeRequest, markRequested, requestOf, requestYear } from '@/systems/request';
 import { ministryLine } from '@/systems/ministry';
+import { housesYear } from '@/systems/houses';
 
 /** What a letter naming a parish is worth when the board has nothing else in mind. Invented. */
 const REQUEST_WEIGHT = 45;
@@ -82,6 +83,10 @@ export function careerYear(state: GameState, rng: Rng): GameState {
   const sisters = religiousYear(next, rng.derive(`sisters:${state.clock.week}`));
   next = sisters.state;
   if (sisters.lines.length) next = addDigest(next, sisters.lines);
+  // The houses of the diocese: an arrangement withdrawn, or something asked of the parish. DESIGN §9.4a.
+  const houses = housesYear(next, rng.derive(`houses:${state.clock.week}`));
+  next = houses.state;
+  if (houses.lines.length) next = addDigest(next, houses.lines);
 
   const succession = next.see ? { state: next, newBishop: null, lines: [] as string[], letter: undefined } : successionYear(next, rng.derive(`succession:${state.clock.week}`));
   next = succession.state;

@@ -122,6 +122,8 @@ export interface ReligiousHouse {
   /** How many live there. */
   size: number;
   line: string;
+  /** The institute the house belongs to (content/institutes.json), when one matches. §9.4 */
+  instituteId?: string;
 }
 
 /** Everything the preview must not show. DESIGN.md §3.1a "Hidden from the preview". */

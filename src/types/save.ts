@@ -13,6 +13,7 @@ import type { DecorState, Permission } from './decor';
 import type { Institute } from './religious';
 import type { CareerRequest } from './request';
 import type { Ministry } from './ministry';
+import type { HouseStanding } from './houses';
 
 /** A rolled diocese the player may choose, held only during creation. */
 export interface DioceseCandidate {
@@ -123,6 +124,8 @@ export interface GameState {
   requests?: CareerRequest[];
   /** The book: what his ministry has counted. DESIGN §8.6. Absent in older saves. */
   ministry?: Ministry;
+  /** What each religious house of the diocese thinks of him, and what stands between them. DESIGN §9.4a. */
+  houses?: Record<string, HouseStanding>;
   /** The pastor's current project, if any. DESIGN 8.3 */
   /** The pastor's projects, several at once. `project` is kept for older saves and mirrors the first. */
   project: Project | null;
