@@ -69,6 +69,10 @@ function autoplay(maxSteps = 5000): GameState {
       case 'evaluation':
         s.getState().acknowledgeEvaluation();
         break;
+      case 'director':
+        s.getState().chooseDirector(game.mode.options[0]!.npcId, true);
+        break;
+
       case 'clock':
         s.getState().setSpeed('SKIP');
         s.getState().runToStop();
@@ -103,6 +107,14 @@ describe('engine/store with real content', () => {
     for (const p of started.world!.parishes) expect(started.npcs[p.pastorId]?.tags).toContain('pastor');
     expect(Object.values(started.npcs).filter((n) => n.role === 'official').length).toBeGreaterThanOrEqual(6);
     s.chooseEmphasis({ human: 3, spiritual: 3, intellectual: 2, pastoral: 2 });
+    // Year one asks for a spiritual director before the clock runs. DESIGN §6.6.
+    const afterEmphasis = useGameStore.getState().game!;
+    expect(afterEmphasis.mode.kind).toBe('director');
+    if (afterEmphasis.mode.kind === 'director') {
+      expect(afterEmphasis.mode.options.length).toBeGreaterThanOrEqual(2);
+      useGameStore.getState().chooseDirector(afterEmphasis.mode.options[0]!.npcId, true);
+    }
+    expect(useGameStore.getState().game!.character!.direction).toBeTruthy();
     useGameStore.getState().setSpeed('MANUAL');
     let fired = 0;
     for (let guard = 0; guard < 60 && useGameStore.getState().game!.mode.kind === 'clock'; guard++) {

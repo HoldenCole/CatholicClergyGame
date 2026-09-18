@@ -39,6 +39,13 @@ export interface WeekUsage {
   adminAp: number;
   theologyUsed: boolean;
   knowledgeUsed: boolean;
+  /**
+   * Multiplier on the Piety drain. 1 is the full drain; a kept hour of
+   * spiritual direction with the right man takes nearly half of it off, and a
+   * director who cannot hear this trouble is slightly worse than none.
+   * DESIGN.md §4.2 and §9.4; systems/direction.ts owns the number.
+   */
+  pietyFactor?: number;
 }
 
 /**
@@ -53,7 +60,7 @@ export function decayWeek(stats: Stats, usage: WeekUsage): Stats {
     ...stats,
     theology: usage.theologyUsed ? stats.theology : floored(stats.theology, DECAY.atrophyPerWeek),
     knowledge: usage.knowledgeUsed ? stats.knowledge : floored(stats.knowledge, DECAY.atrophyPerWeek),
-    piety: floored(stats.piety, DECAY.pietyBasePerWeek + DECAY.pietyPerAdminAp * Math.max(0, usage.adminAp)),
+    piety: floored(stats.piety, (DECAY.pietyBasePerWeek + DECAY.pietyPerAdminAp * Math.max(0, usage.adminAp)) * (usage.pietyFactor ?? 1)),
   };
 }
 

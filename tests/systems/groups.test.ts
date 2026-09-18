@@ -21,7 +21,9 @@ describe('systems/groups', () => {
         types.add(g.type);
         const leader = s.npcs[g.leaderId]!;
         expect(leader.tags).toContain(`leader:${g.id}`);
-        expect(leader.role).toBe('lay');
+        // A congregation present in the diocese may be running it: DESIGN §10.5.
+        expect(leader.role).toBe(g.religiousLed ? 'religious' : 'lay');
+        if (g.religiousLed) expect(leader.title).toBe('Sr.');
         expect(new Set(gs.map((x) => x.type)).size).toBe(gs.length);
       }
     }

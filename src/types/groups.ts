@@ -53,6 +53,15 @@ export interface Group {
   hostile: boolean;
   /** The player has singled this group out: sustaining hours go to focused groups first. */
   focus?: boolean;
+  /**
+   * Led by a sister or a religious brother. DESIGN.md §10.5: it is her assigned
+   * mission, not her hobby, so it decays far slower and costs less to sustain,
+   * cannot be suppressed, and can be taken away by her superior with six weeks'
+   * notice for reasons that have nothing to do with the parish.
+   */
+  religiousLed?: boolean;
+  /** The institute she answers to, which is not the diocese. */
+  institute?: string;
 }
 
 export interface GroupTypeDef {

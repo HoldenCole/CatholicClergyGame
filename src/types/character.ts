@@ -1,3 +1,4 @@
+import type { Direction } from './religious';
 import type { Reputation, Stats } from './stats';
 import type { PositionRecord } from './stats';
 
@@ -96,6 +97,8 @@ export interface PersonName {
 }
 
 export interface Character {
+  /** The standing spiritual direction relationship. DESIGN.md §9.4. */
+  direction?: Direction;
   name: PersonName;
   portrait: string;
   entryYear: number;

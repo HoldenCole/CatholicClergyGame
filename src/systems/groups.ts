@@ -1,5 +1,7 @@
-import type { Effect, GameState, Group, GroupType, LeaderAgenda, Npc, Parish, Vitality } from '@/types';
+import type { Effect, GameState, Group, GroupType, Institute, LeaderAgenda, Npc, Parish, Vitality } from '@/types';
+import { TEMPERAMENTS } from '@/types';
 import type { Rng } from '@/engine/rng';
+import { CLERGY_HERITAGE, rollFemaleName, rollHeritage } from '@/generation/names';
 import { groupTypeDef, groupTypeDefs } from '@/content/parish';
 import { applyEffects } from '@/engine/effects';
 import { generateParishPeople } from '@/generation/parishPeople';
@@ -18,6 +20,19 @@ export const GROUPS = {
   suppressedComplaintChance: 0.08,
   /** Founding: chance a leader is found, from charisma and lay support. */
   foundingBase: 0.35,
+  /** A group led by a religious. DESIGN §10.5. */
+  religious: {
+    /** Share of the ordinary decay it takes: she shows up whether encouraged or not. */
+    decay: 0.25,
+    /** Hours go further: she is competent and does not need managing. */
+    sustain: 1.6,
+    /** Chance per year her superior moves her, for reasons unrelated to the parish. */
+    reassignedPerYear: 0.08,
+    /** What the group loses when she goes. */
+    lossVitality: 25,
+    /** Groups of a parish that a present congregation may be leading. */
+    chance: 0.45,
+  },
 } as const;
 
 export function vitalityBand(v: number): Vitality {
@@ -31,14 +46,31 @@ const BAND_SCALE: Record<Vitality, number> = { thriving: 1, steady: 0.5, declini
 const AGENDAS: LeaderAgenda[] = ['saintly', 'empire', 'political', 'tired', 'new', 'grieving'];
 
 /** A lay leader NPC for a group, drawn from the parish's people or made fresh. */
-function makeLeader(rng: Rng, state: GameState, parish: Parish, group: Pick<Group, 'id' | 'alignment'>, year: number): Npc {
+function makeLeader(rng: Rng, state: GameState, parish: Parish, group: Pick<Group, 'id' | 'alignment'>, year: number, house?: Institute): Npc {
   const presetId = state.world!.diocese.presetId;
   const fresh = generateParishPeople(rng.derive(`leader:${group.id}`), parish, presetId, year).filter((n) => n.tags.includes('parishioner'))[0]!;
-  return {
+  const base = {
     ...fresh,
     id: `${group.id}_leader`,
     alignment: Math.max(-100, Math.min(100, group.alignment + rng.int(-15, 15))),
     tags: [`leader:${group.id}`, `parish:${parish.id}`, 'lay_leader'],
+  };
+  if (!house) return base;
+  // A sister of a congregation present in the diocese. She answers to her superior,
+  // states disagreement plainly, and is not intimidated by the pastor. DESIGN §10.5.
+  const heritage = rollHeritage(rng, CLERGY_HERITAGE);
+  return {
+    ...base,
+    name: rollFemaleName(rng, heritage),
+    role: 'religious',
+    title: 'Sr.',
+    birthYear: year - rng.int(45, 78),
+    alignment: Math.max(-100, Math.min(100, Math.round(house.alignment + rng.gaussian() * 12))),
+    charism: house.charism,
+    temperament: rng.pick([...TEMPERAMENTS]),
+    institute: house.id,
+    relationship: rng.int(-5, 15),
+    tags: [...base.tags, 'religious', `institute:${house.id}`],
   };
 }
 
@@ -60,7 +92,10 @@ export function generateGroups(rng: Rng, state: GameState, parish: Parish, year:
     const id = `${parish.id}_g${i + 1}`;
     const alignment = Math.max(-100, Math.min(100, Math.round(def.alignmentMean + parish.alignment * 0.3 + rng.gaussian() * 20)));
     const partial = { id, alignment };
-    const leader = makeLeader(rng, state, parish, partial, year);
+    // A congregation present in the diocese may already be running this one. DESIGN §10.5.
+    const sisters = (state.world?.institutes ?? []).filter((x) => x.women);
+    const house = sisters.length && rng.chance(GROUPS.religious.chance) && ['st_vincent_de_paul', 'rcia', 'bible_study', 'youth', 'prayer_adoration', 'grief_support'].includes(type) ? rng.pick(sisters) : undefined;
+    const leader = makeLeader(rng, state, parish, partial, year, house);
     const name = type === 'ethnic_community' ? ethnicName(parish, rng, def.names) : rng.pick(def.names);
     groups.push({
       id,
@@ -76,6 +111,7 @@ export function generateGroups(rng: Rng, state: GameState, parish: Parish, year:
       foundedWeek: state.clock.week - rng.int(52, 52 * 25),
       suppressed: false,
       hostile: false,
+      ...(house ? { religiousLed: true, institute: house.id } : {}),
     });
     leaders.push(leader);
   });
@@ -163,7 +199,7 @@ export function groupsWeek(state: GameState, sustainAp: number, rng: Rng): { sta
   const playerAlignment = state.character.alignment;
 
   for (const g of groups) {
-    let v = g.vitality - GROUPS.decayPerWeek;
+    let v = g.vitality - GROUPS.decayPerWeek * (g.religiousLed ? GROUPS.religious.decay : 1);
     if (g.suppressed) {
       v -= GROUPS.suppressedDecay;
       if (rng.chance(GROUPS.suppressedComplaintChance)) {
@@ -175,7 +211,7 @@ export function groupsWeek(state: GameState, sustainAp: number, rng: Rng): { sta
       }
     } else if (!g.hostile && (shares[g.id] ?? 0) > 0) {
       const gap = Math.abs(g.alignment - playerAlignment);
-      v += shares[g.id]! * GROUPS.vitalityPerAp * frictionFor(g, playerAlignment);
+      v += shares[g.id]! * GROUPS.vitalityPerAp * frictionFor(g, playerAlignment) * (g.religiousLed ? GROUPS.religious.sustain : 1);
       if (gap > GROUPS.frictionGap) {
         const leader = next.npcs[g.leaderId];
         if (leader) next = { ...next, npcs: { ...next.npcs, [leader.id]: { ...leader, relationship: Math.max(-100, leader.relationship - 0.3) } } };
@@ -201,6 +237,8 @@ export function groupsWeek(state: GameState, sustainAp: number, rng: Rng): { sta
 export function suppressGroup(state: GameState, groupId: string, suppressed = true): GameState {
   const g = state.groups[groupId];
   if (!g) return state;
+  // §10.5: she cannot be removed. The verb does not exist.
+  if (g.religiousLed) throw new Error('a sister is not yours to remove: her superior assigned her, and only her superior can move her');
   return { ...state, groups: { ...state.groups, [groupId]: { ...g, suppressed } } };
 }
 
@@ -297,4 +335,30 @@ export function replaceLeader(state: GameState, groupId: string, rng: Rng, year:
       : `${leader.name.first} ${leader.name.last} leads ${g.name} now. ${oldName} was thanked from the pulpit and sat very still.`;
   next = { ...next, career: [...next.career, { week: next.clock.week, kind: 'note', text: `Put ${leader.name.first} ${leader.name.last} over ${g.name}.` }] };
   return { state: next, line };
+}
+
+/**
+ * A year passes and a superior somewhere decides something. DESIGN §10.5: a
+ * sister is not the pastor's to keep, and the group she built may not survive
+ * her going. Six weeks' notice, for reasons unrelated to the player.
+ */
+export function religiousYear(state: GameState, rng: Rng): { state: GameState; lines: string[] } {
+  const led = parishGroups(state).filter((g) => g.religiousLed);
+  if (led.length === 0) return { state, lines: [] };
+  const lines: string[] = [];
+  const groups = { ...state.groups };
+  for (const g of led) {
+    if (!rng.chance(GROUPS.religious.reassignedPerYear)) continue;
+    const leader = state.npcs[g.leaderId];
+    groups[g.id] = {
+      ...g,
+      vitality: Math.max(0, g.vitality - GROUPS.religious.lossVitality),
+      religiousLed: false,
+      ...(g.institute ? { institute: g.institute } : {}),
+    };
+    lines.push(
+      `${leader ? `${leader.title} ${leader.name.last}` : 'The sister'} has been moved by her superior, with six weeks' notice and for reasons that have nothing to do with this parish. ${g.name} is a lay group now, and smaller.`,
+    );
+  }
+  return { state: { ...state, groups }, lines };
 }

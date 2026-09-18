@@ -9,6 +9,7 @@ import EventPanel from './seminary/EventPanel';
 import SummerPanel from './seminary/SummerPanel';
 import EvaluationPanel from './seminary/EvaluationPanel';
 import OrdinationPanel from './seminary/OrdinationPanel';
+import DirectorPanel from './seminary/DirectorPanel';
 import AssignmentPanel from './seminary/AssignmentPanel';
 import AssignmentChoicePanel from './seminary/AssignmentChoicePanel';
 import LetterPanel from './LetterPanel';
@@ -69,6 +70,7 @@ export default function App() {
     game.mode.kind === 'summer' ? <SummerPanel /> :
     game.mode.kind === 'evaluation' ? <EvaluationPanel /> :
     game.mode.kind === 'ordination' ? <OrdinationPanel /> :
+    game.mode.kind === 'director' ? <DirectorPanel /> :
     game.mode.kind === 'assignment' ? <AssignmentPanel /> :
     game.mode.kind === 'assignment_choice' ? <AssignmentChoicePanel /> :
     game.mode.kind === 'letter' ? <LetterPanel /> :

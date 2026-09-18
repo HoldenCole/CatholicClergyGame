@@ -1,3 +1,4 @@
+import type { DirectorOption } from './religious';
 import type { EvaluationRecord } from './seminary';
 import type { Assignment } from './world';
 
@@ -19,6 +20,8 @@ export type Mode =
   | { kind: 'summer'; year: number }
   | { kind: 'evaluation'; record: EvaluationRecord }
   | { kind: 'ordination' }
+  /** Y1: the man chooses a spiritual director from those offered. DESIGN.md §6.6, §9.4. */
+  | { kind: 'director'; options: DirectorOption[] }
   | { kind: 'assignment'; assignment: Assignment }
   /** The bishop offers the man a choice; each option says what it involves. */
   | { kind: 'assignment_choice'; options: AssignmentOption[]; why: string }

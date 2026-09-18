@@ -1,6 +1,7 @@
 import type { Stats } from './stats';
 import type { Career, Field, Origin, PersonName } from './character';
 import type { Milestone } from './career';
+import type { Charism, Temperament } from './religious';
 
 export type NpcRole =
   | 'classmate'
@@ -9,7 +10,9 @@ export type NpcRole =
   | 'priest'
   | 'lay'
   | 'official'
-  | 'bishop';
+  | 'bishop'
+  /** Outside the player's ladder entirely: DESIGN.md §9.4. */
+  | 'religious';
 
 export type NpcStatus = 'active' | 'left' | 'dead' | 'retired' | 'dismissed';
 
@@ -79,6 +82,11 @@ export interface Npc {
   status: NpcStatus;
   /** Selector tags, e.g. "rector", "spiritual_director", "mother". */
   tags: string[];
+  /** Religious only: the institute he or she belongs to, and what it is for. */
+  institute?: string;
+  charism?: Charism;
+  /** What this one is like in the room, which decides what direction from them is good for. */
+  temperament?: Temperament;
   /** Classmates only. */
   formation?: {
     entryAge: number;

@@ -1,6 +1,8 @@
 import { handOnOffices, isMoveTo, keepOffices, officesHeld } from '@/systems/offices';
 import type { Beat, GameEvent, GameState, Pillar, SeminaryState, SummerAssignment } from '@/types';
 import { PILLARS } from '@/types';
+import { divergeStep, exNoviceStep } from '@/systems/diverge';
+import { directorOptions } from '@/systems/direction';
 import { evaluateAll } from './conditions';
 import { applyEffects } from './effects';
 import type { Rng } from './rng';
@@ -107,7 +109,7 @@ export function chooseEmphasis(state: GameState, emphasis: Record<Pillar, number
     { kind: 'assignment' as const, week: start + YEAR_SHAPE.summerWeek, label: `Summer assignment, year ${sem.year}` },
     { kind: 'evaluation' as const, week: start + YEAR_SHAPE.evaluationWeek, label: `Annual evaluation, year ${sem.year}` },
   ].sort((a, b) => a.week - b.week);
-  return driftAtYearStart(
+  let next = driftAtYearStart(
     {
       ...withEmphasis,
       beats,
@@ -116,6 +118,22 @@ export function chooseEmphasis(state: GameState, emphasis: Record<Pillar, number
     },
     rng,
   );
+  // A man of the class may discern out into an order, and another may arrive from
+  // one he left. DESIGN §6.7: they diverge rather than disappear.
+  const gone = divergeStep(next, rng.derive(`diverge:${sem.year}`));
+  next = gone.state;
+  const came = exNoviceStep(next, rng.derive(`ex_novice:${sem.year}`), gameYearOf(next.clock));
+  next = came.state;
+  for (const line of [gone.line, came.line]) {
+    if (line) next = { ...next, digest: [...next.digest.slice(0, -1), withLine(next.digest[next.digest.length - 1], line)] };
+  }
+  // Year one: the formation office asks who he will see, which is presented as an
+  // administrative matter and is one of the most consequential choices in the game.
+  if (sem.year === 1 && !next.flags['direction:chosen']) {
+    const options = directorOptions(next, rng.derive('directors'));
+    if (options.length >= 2) return { ...next, mode: { kind: 'director', options } };
+  }
+  return next;
 }
 
 /** Whether this week is a played week, and which structural beat (if any) it must carry. */

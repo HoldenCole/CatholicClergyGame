@@ -1,6 +1,7 @@
 import { noteStatChange } from './movers';
 import type { Archetype, EvaluationRecord, EvaluationResult, GameState, Pillar, SeminaryState, StatKey } from '@/types';
 import { ARCHETYPES, PILLARS } from '@/types';
+import { directionWeek, pietyFactor } from './direction';
 import { applyStat, decayWeek } from './stats';
 import { creationContent } from '@/content/creation';
 
@@ -100,12 +101,16 @@ export function formationWeek(state: GameState): GameState {
     }
   }
   const studied = stats;
+  // The hour with the director slows the drain in the seminary as in the parish. DESIGN §9.4.
+  const directionHours = state.seminary?.routine?.direction ?? 0;
   stats = decayWeek(stats, {
     adminAp: 0,
     theologyUsed: !!e && e.intellectual > 0,
     knowledgeUsed: !!e && e.intellectual > 0,
+    pietyFactor: pietyFactor(state, directionHours),
   });
-  let next = noteStatChange(state, c.stats, studied, "the year's emphasis");
+  let next = directionWeek(state, directionHours);
+  next = noteStatChange(next, c.stats, studied, "the year's emphasis");
   next = noteStatChange(next, studied, stats, 'unused, and fading');
   return { ...next, character: { ...c, stats }, seminary: { ...sem, pillarScores } };
 }

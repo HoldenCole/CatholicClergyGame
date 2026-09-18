@@ -4,6 +4,7 @@ import { decorOptions } from '@/systems/decorState';
 import { FEAST_KEYS } from '@/engine/feasts';
 import { actionDefs, liturgyDials, obligationDefs } from '@/content/parish';
 import { studyPrograms } from '@/content/study';
+import { SEALED_TARGETS } from '@/engine/internalForum';
 const PLACE_DIALS = new Set(studyPrograms.flatMap((p) => p.place?.dials.map((d) => d.id) ?? []));
 const BOOK_KEYS = new Set(studyPrograms.flatMap((p) => p.place?.book?.map((b) => b.id) ?? []));
 const LITURGY_DIALS = new Set(liturgyDials.map((d) => d.id));
@@ -59,6 +60,10 @@ const SELECTORS = [
   '@resident',
   '@seminarian',
   '@deacon',
+  '@director',
+  '@diverged_classmate',
+  '@religious',
+  '@principal',
 ];
 const GROUP_KEYS = ['type', 'vitality', 'hostile', 'suppressed', 'foundedByPlayer', 'agenda'];
 const GROUP_EFFECT_KEYS = ['vitality', 'size', 'hostile', 'suppressed', 'dissolve'];
@@ -299,6 +304,14 @@ function checkEvent(ev: GameEvent, file: string, problems: Problem[], ids: Set<s
     }
     for (const token of tokensIn(ch.label + ' ' + (ch.outcome ?? ''))) {
       if (token.startsWith('@') && !SELECTORS.includes(token)) problems.push(`${cw}: unknown selector ${token}`);
+    }
+  }
+  // CLAUDE.md rule 7: a sealed scene may write only what stays inside the room.
+  if (ev.internalForum) {
+    for (const ch of ev.choices ?? []) {
+      for (const e of ch.effects ?? []) {
+        if (!SEALED_TARGETS.includes(e.target)) problems.push(`${where} › ${ch.id}: the internal forum is sealed; ${e.target} would be visible outside it`);
+      }
     }
   }
   if (ev.severity === 'ROUTINE') {

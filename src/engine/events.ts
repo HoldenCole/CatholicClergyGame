@@ -1,5 +1,6 @@
 import type { Choice, GameEvent, GameState, HistoryEntry, PendingEvent } from '@/types';
 import { evaluateAll, evaluateCondition } from './conditions';
+import { applyInternalForum } from './internalForum';
 import { applyEffects } from './effects';
 import type { Rng } from './rng';
 import { resolveSelector, selectorsIn } from './selectors';
@@ -179,7 +180,10 @@ export function applyChoice(
   if (!evaluateAll(choice.requires, state, pending.bindings)) {
     throw new Error(`choice ${choiceId} of ${event.id} is not available`);
   }
-  let next = applyEffects(state, choice.effects, pending.bindings, event.title);
+  // The seal, enforced here so no authored scene can leak by oversight. CLAUDE.md rule 7.
+  let next = event.internalForum
+    ? applyInternalForum(state, choice.effects, pending.bindings, event.title)
+    : applyEffects(state, choice.effects, pending.bindings, event.title);
 
   if (choice.volume && choice.positionTopic !== undefined && choice.positionValue !== undefined && next.character) {
     next = {
