@@ -1,0 +1,483 @@
+{
+  "_notes": "The orders told apart (DESIGN §9.4b): three scenes each for a Dominican priory (house: dominican), a Franciscan friary (house: franciscan), and an Augustinian priory (house: augustinian) in the diocese. Selectors are institute-scoped: @dominican_lector, @dominican_student, @franciscan_guardian, @franciscan_kitchen, @augustinian_prior, @augustinian_headmaster resolve to that institute's man with that role, so a scene about the lector fires only in a diocese that rolled one. Standing favours leave flags the scenes read: house:kitchen, house:common_table, house:school_place. The brother's death is authored only (no flavorPrompt). Flags written: or_op_disputation_moderated, or_op_disputation_absent, or_op_disputation_answered, or_op_student_pulpit, or_op_student_kept, or_op_student_sent_home, or_op_rosary_founded, or_op_rosary_refused, or_op_rosary_joined, or_ofm_neighbours_held, or_ofm_neighbours_moved, or_ofm_neighbours_council, or_ofm_transitus_kept, or_ofm_transitus_refused, or_ofm_transitus_shared, or_ofm_brother_buried, or_ofm_brother_preached, or_ofm_brother_line, or_osa_table_told, or_osa_table_deflected, or_osa_table_stayed, or_osa_place_paid, or_osa_place_asked, or_osa_place_let_go, or_osa_century_defended, or_osa_century_bishop, or_osa_century_silent.",
+  "events": [
+    {
+      "id": "or_op_disputation",
+      "phase": ["pastor", "administrator", "parochial_vicar"],
+      "pressure": ["belief_vs_safety", "loyalty_vs_honesty"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 11,
+      "suppressYears": 4,
+      "requires": [{ "type": "house", "order": "dominican", "value": true }],
+      "title": "The Disputation",
+      "body": "{@dominican_lector} has agreed to argue, in public, on a Thursday night, with a professor of philosophy from the state university on whether the existence of God can be known by reason, and the priory's hall seats sixty and the professor's students alone are two hundred. He would like your hall. He would also like you to moderate, because a Dominican moderating a Dominican is not a disputation, and because, he says, you have the face for it. The professor is good. The lector is better and does not know how to hide it. The parish council chair has already asked whether it is wise to let the university into the hall, and the chancery has not asked anything yet, which is how the chancery asks.",
+      "flavorPrompt": "Two hundred chairs, a professor and a friar in white, the parish council chair's question, the chancery's silence.",
+      "choices": [
+        {
+          "id": "moderate",
+          "label": "Give him the hall and take the chair yourself",
+          "default": true,
+          "outcome": "The hall is full at seven and the doors are open at half past. The professor is gracious and sharp and the lector is sharper and, three times, gracious. You keep time and say very little and the little you say is quoted in the student paper. The chancery reads the student paper. Nothing is said. Something is noted, on both sides of the ledger.",
+          "effects": [
+            { "target": "reputation", "key": "public", "delta": 5 },
+            { "target": "alignment", "key": "", "delta": -3 },
+            { "target": "stat", "key": "theology", "delta": 2 },
+            { "target": "relationship", "key": "@dominican_lector", "delta": 8 },
+            { "target": "flag", "key": "or_op_disputation_moderated", "value": true }
+          ]
+        },
+        {
+          "id": "hall_only",
+          "label": "Give him the hall, and be elsewhere that night",
+          "outcome": "The priory finds its own moderator, a lawyer from the Third Order, and it goes well and the student paper covers it and your name is on the building and nowhere else. The lector understands and does not say so. The council chair is relieved. You hear about the best exchange of the evening from four different people and are sorry to have missed it.",
+          "effects": [
+            { "target": "reputation", "key": "public", "delta": 2 },
+            { "target": "relationship", "key": "@dominican_lector", "delta": -3 },
+            { "target": "flag", "key": "or_op_disputation_absent", "value": true }
+          ]
+        },
+        {
+          "id": "answer_the_professor",
+          "label": "Moderate, and when the professor turns on the Church's record, answer him yourself",
+          "requires": [{ "type": "stat", "key": "theology", "op": ">=", "value": 60 }],
+          "outcome": "It was not your evening and for four minutes it is. The professor had moved from Aquinas to the Inquisition, as they do, and you answer from the chair, with dates, and the lector, who could have, lets you. The hall does not applaud a moderator. It does something quieter. The student paper's headline is about you. The chancery reads it twice.",
+          "effects": [
+            { "target": "reputation", "key": "public", "delta": 7 },
+            { "target": "alignment", "key": "", "delta": -4 },
+            { "target": "reputation", "key": "chancery", "delta": -2 },
+            { "target": "outspokenness", "key": "", "delta": 3 },
+            { "target": "relationship", "key": "@dominican_lector", "delta": 10 },
+            { "target": "flag", "key": "or_op_disputation_answered", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "or_op_student_brother",
+      "phase": ["pastor", "administrator"],
+      "pressure": ["friendship_vs_duty", "competence"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 11,
+      "suppressYears": 3,
+      "requires": [{ "type": "house", "order": "dominican", "value": true }],
+      "title": "The Student Brother",
+      "body": "The priory has sent {@dominican_student} to the parish for the summer, a student brother in a white habit that is still too clean, three years from ordination, to learn what a parish is. He cannot say Mass and cannot hear confessions and so he does everything else, and on the second Sunday you let him preach, because a deacon may, and he preaches for eleven minutes without a note on the parable of the sower and the church is silent in the way it is silent perhaps twice a year. Afterward the sacristan says, not unkindly, that it was a shame you had the ten o'clock. In July the prior telephones to ask, in general terms, how the brother is doing, and whether the parish might be a place he could come back to, later, as a priest.",
+      "flavorPrompt": "The habit too clean, eleven minutes without a note, the sacristan's remark, the prior's telephone call.",
+      "choices": [
+        {
+          "id": "give_him_the_pulpit",
+          "label": "Give him the pulpit every other Sunday and tell the prior the truth",
+          "default": true,
+          "outcome": "He preaches six more times and the ten o'clock grows, slightly, on his Sundays, and you notice and let it. You tell the prior he is the best preacher you have heard under forty and that the parish would take him back on any terms the province offers. The prior says that is what he had hoped, and that the province will remember. Whether it does is the province's business.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 4 },
+            { "target": "relationship", "key": "@dominican_student", "delta": 12 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "flag", "key": "or_op_student_pulpit", "value": true }
+          ]
+        },
+        {
+          "id": "keep_the_pulpit",
+          "label": "Keep the pulpit, give him the hospital and the school, and say he did well",
+          "outcome": "He does the hospital and the school very well and does not preach again that summer, and does not ask why. The prior is told he did well, which is true and not the truth. The parish remembers the one Sunday. So do you, for a while, in the way a man remembers a thing he is not proud of and would do again.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 1 },
+            { "target": "relationship", "key": "@dominican_student", "delta": -4 },
+            { "target": "honesty", "key": "", "delta": -1 },
+            { "target": "flag", "key": "or_op_student_kept", "value": true }
+          ]
+        },
+        {
+          "id": "send_him_back_early",
+          "label": "Tell the prior the parish is the wrong place for him: he needs the university, not the sick calls",
+          "requires": [{ "type": "relationship", "npcId": "@dominican_student", "op": ">=", "value": 15 }],
+          "outcome": "You say it because it is true: a man who preaches like that on the sower should be reading for a doctorate, not doing the eleven o'clock at the nursing home, and a parish will use him up. The prior hears it. In September the brother is sent to the house of studies instead, and writes to you at Christmas, every year, from wherever he is.",
+          "effects": [
+            { "target": "relationship", "key": "@dominican_student", "delta": 6 },
+            { "target": "reputation", "key": "brother_priests", "delta": 2 },
+            { "target": "flag", "key": "or_op_student_sent_home", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "or_op_rosary_confraternity",
+      "phase": ["pastor", "administrator"],
+      "pressure": ["belief_vs_safety", "loyalty_vs_honesty"],
+      "severity": "ROUTINE",
+      "category": "group",
+      "baseWeight": 10,
+      "suppressYears": 4,
+      "requires": [{ "type": "house", "order": "dominican", "value": true }],
+      "title": "The Rosary Confraternity",
+      "body": "A woman of the parish has been going to the priory on Sundays and has come back with a pamphlet, a prior's blessing, and a plan: a Rosary Confraternity in the parish, which is an old Dominican thing with a register and an enrolment and a promise to say fifteen decades a week, and the priory will send {@dominican} to enrol whoever comes. She has fourteen names. The parish council's liturgy committee has heard the word confraternity and has feelings about the nineteenth century. The priory has not asked you for anything; the priory has simply assumed, which is what the priory does.",
+      "flavorPrompt": "The pamphlet and the fourteen names, the register, the liturgy committee's feelings about the nineteenth century.",
+      "choices": [
+        {
+          "id": "found_it",
+          "label": "Let it be founded, and be enrolled yourself on the first night",
+          "default": true,
+          "outcome": "Twenty-two come, not fourteen, and the friar enrols them with the old formula and the parish has a thing on Tuesday evenings that is entirely the people's and entirely the priory's and only slightly yours. The liturgy committee does not attend. Three of the twenty-two are men under forty, which the priory notices and you do too.",
+          "effects": [
+            { "target": "alignment", "key": "", "delta": -3 },
+            { "target": "reputation", "key": "parishioners", "delta": 3 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "flag", "key": "or_op_rosary_founded", "value": true }
+          ]
+        },
+        {
+          "id": "refuse",
+          "label": "Tell her the parish has a rosary group already and does not need a register",
+          "outcome": "It does, on Wednesdays, four women and a candle. She says that is not the same thing and she is right. She keeps going to the priory, and a few of the fourteen go with her, and the priory says nothing about it because the priory does not have to.",
+          "effects": [
+            { "target": "alignment", "key": "", "delta": 2 },
+            { "target": "flag", "key": "or_op_rosary_refused", "value": true }
+          ]
+        },
+        {
+          "id": "join_but_not_lead",
+          "label": "Let it be founded, and stay out of it: it is theirs and the priory's",
+          "outcome": "It is founded. You are not in the register. It runs on Tuesdays, and the friar comes once a quarter, and it is the healthiest group in the parish for a decade because nobody in the rectory ever touched it. The woman who started it sends you a Mass card at Christmas that is slightly cool.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "flag", "key": "or_op_rosary_joined", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "or_ofm_the_neighbours",
+      "phase": ["pastor", "administrator"],
+      "pressure": ["belief_vs_safety", "money"],
+      "severity": "NOTABLE",
+      "category": "parish_death",
+      "baseWeight": 12,
+      "suppressYears": 3,
+      "requires": [
+        { "type": "house", "order": "franciscan", "value": true },
+        { "type": "flag", "key": "house:kitchen", "value": true }
+      ],
+      "title": "The Line Down the Block",
+      "body": "The friars' kitchen in the hall has been running on Tuesdays for a while now, and the line at eleven runs from the hall door to the corner and round it, and the people in it are the people who are in such lines. The neighbours on the side street have a petition. It is polite. It mentions property values and a needle found in a hedge and a man who slept in a doorway, and it is signed by four families of the parish, two of them on the finance council, and it asks that the kitchen be moved to the friary where it belongs. {@franciscan_kitchen}, who runs it, has read the petition and said nothing, and is peeling potatoes in your hall as if it were his.",
+      "flavorPrompt": "The polite petition, the needle in the hedge, four signatures from the parish, the brother peeling potatoes.",
+      "choices": [
+        {
+          "id": "hold",
+          "label": "Keep the kitchen where it is, and say so from the pulpit on Sunday",
+          "default": true,
+          "outcome": "You preach on the sheep and the goats and do not mention the petition and everyone knows. Two of the four families are quieter after that and one is louder. The line stays. The finance council's next meeting is cool. The brother says nothing about any of it, and on the following Tuesday there is a friar at the corner keeping the line tidy, which nobody asked for and which helps.",
+          "effects": [
+            { "target": "reputation", "key": "public", "delta": 4 },
+            { "target": "reputation", "key": "parishioners", "delta": -3 },
+            { "target": "alignment", "key": "", "delta": 2 },
+            { "target": "relationship", "key": "@franciscan_kitchen", "delta": 8 },
+            { "target": "money", "key": "", "delta": -400 },
+            { "target": "flag", "key": "or_ofm_neighbours_held", "value": true }
+          ]
+        },
+        {
+          "id": "move_it",
+          "label": "Ask the friars to take it back to the friary, with thanks",
+          "outcome": "They take it back without a word, and the line forms at the friary door on Tuesdays instead, a mile away, and the hall is quiet and the petition is withdrawn. The brother is as kind to you as ever. The guardian, when you next see him, is correct. The people who were in the line do not sign petitions and are not on the finance council.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 3 },
+            { "target": "reputation", "key": "public", "delta": -3 },
+            { "target": "relationship", "key": "@franciscan_kitchen", "delta": -6 },
+            { "target": "stat", "key": "piety", "delta": -1 },
+            { "target": "flag", "key": "or_ofm_neighbours_moved", "value": true }
+          ]
+        },
+        {
+          "id": "council",
+          "label": "Bring the four families and the brother into the same room and let him talk",
+          "requires": [{ "type": "stat", "key": "charisma", "op": ">=", "value": 50 }],
+          "outcome": "He talks for six minutes about who is in the line, by name, and one of the finance council men knows one of the names. The petition is not withdrawn; it is forgotten. Two of the four families are serving soup by Lent, which is the thing the brother was after all along and did not say.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 3 },
+            { "target": "reputation", "key": "public", "delta": 4 },
+            { "target": "relationship", "key": "@franciscan_kitchen", "delta": 10 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "flag", "key": "or_ofm_neighbours_council", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "or_ofm_transitus",
+      "phase": ["pastor", "administrator", "parochial_vicar"],
+      "pressure": ["loyalty_vs_honesty"],
+      "severity": "ROUTINE",
+      "category": "group",
+      "baseWeight": 12,
+      "suppressYears": 2,
+      "requires": [
+        { "type": "house", "order": "franciscan", "value": true },
+        { "type": "month", "op": ">=", "value": 9 },
+        { "type": "month", "op": "<=", "value": 10 }
+      ],
+      "title": "The Third of October",
+      "body": "{@franciscan_guardian} telephones about the evening of the third: the Transitus, the friars' keeping of the death of Francis, by candlelight, with the reading of the account and the Canticle sung and the blessing with the relic, and the friary chapel holds ninety and last year two hundred came and stood in the yard. He would like your church, which holds six hundred, and he would like you to say a word, and he says, without saying it, that the Secular Franciscans of the parish, of whom there are more than you knew, have already assumed the answer is yes. It is the same night as the finance council.",
+      "flavorPrompt": "Candlelight, the Canticle, two hundred in the yard last year, the finance council on the same night.",
+      "choices": [
+        {
+          "id": "keep_it",
+          "label": "Give them the church, move the council, and be there in choir",
+          "default": true,
+          "outcome": "Four hundred come. The church is dark except for the candles and the friars sing the Canticle in a way that makes the Secular Franciscans cry and the sacristan, who is not one, also. You say your word, which is short. The finance council meets on the fifth and is fine about it. The friars leave the church cleaner than they found it, which is a rule of theirs.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 3 },
+            { "target": "reputation", "key": "public", "delta": 2 },
+            { "target": "stat", "key": "piety", "delta": 2 },
+            { "target": "relationship", "key": "@franciscan_guardian", "delta": 8 },
+            { "target": "flag", "key": "or_ofm_transitus_kept", "value": true }
+          ]
+        },
+        {
+          "id": "refuse",
+          "label": "Say the church is booked, which it is, and offer next year",
+          "outcome": "The guardian says of course. The Transitus is kept in the friary yard under a tarpaulin because it rains, and three hundred stand in it, and the Secular Franciscans of the parish are among them, and they tell each other where they were on the third and where you were. The finance council goes well.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": -2 },
+            { "target": "relationship", "key": "@franciscan_guardian", "delta": -5 },
+            { "target": "flag", "key": "or_ofm_transitus_refused", "value": true }
+          ]
+        },
+        {
+          "id": "share_it",
+          "label": "Give them the church, and ask the guardian to let the parish's own poor be fed in the hall after",
+          "requires": [{ "type": "relationship", "npcId": "@franciscan_guardian", "op": ">=", "value": 10 }],
+          "outcome": "He says that is exactly what Francis would have wanted and that he is ashamed not to have thought of it. The church is full and afterward the hall is fuller, and the people who were in the pews are serving the people who were not, and the guardian says at the door that this parish is more Franciscan than it knows.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 4 },
+            { "target": "reputation", "key": "public", "delta": 4 },
+            { "target": "stat", "key": "piety", "delta": 2 },
+            { "target": "money", "key": "", "delta": -300 },
+            { "target": "relationship", "key": "@franciscan_guardian", "delta": 12 },
+            { "target": "flag", "key": "or_ofm_transitus_shared", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "or_ofm_the_brother_dies",
+      "phase": ["pastor", "administrator"],
+      "pressure": ["doubt", "competence"],
+      "severity": "MAJOR",
+      "category": "parish_death",
+      "baseWeight": 6,
+      "suppressYears": 12,
+      "once": true,
+      "requires": [
+        { "type": "house", "order": "franciscan", "value": true },
+        { "type": "relationship", "npcId": "@franciscan_kitchen", "op": ">=", "value": 10 }
+      ],
+      "title": "The Brother",
+      "body": "{@franciscan_kitchen} died on a Tuesday, at the stove, between the soup and the bread, and the friars finished the serving before they called anyone because that is what he would have done. He was not a priest. He was the best-known man of the friary and, the paper says on Thursday, of the city, and the paper is right. The guardian has telephoned: the friary chapel holds ninety and the mayor is coming and the men from the line are coming and the guardian would like your church, and he would like you to preach, because the brother used to say, apparently, that you were the only pastor in the diocese who came into the kitchen and picked up a knife. You did that twice.",
+      "choices": [
+        {
+          "id": "preach",
+          "label": "Give the church, and preach him as he was",
+          "default": true,
+          "outcome": "The church holds six hundred and there are men standing in the aisles who have never been in it, and the mayor is in the fourth pew because the front ones were taken by the line. You preach nine minutes on a man who peeled potatoes for thirty years and it is the best homily of your life because you say nothing that is not true. The friars carry him out. The line follows.",
+          "effects": [
+            { "target": "reputation", "key": "public", "delta": 8 },
+            { "target": "reputation", "key": "parishioners", "delta": 4 },
+            { "target": "stat", "key": "piety", "delta": 3 },
+            { "target": "stat", "key": "charisma", "delta": 2 },
+            { "target": "npc", "key": "@franciscan_kitchen", "value": "dead" },
+            { "target": "ministry", "key": "funerals", "delta": 1 },
+            { "target": "strain", "key": "", "delta": 8 },
+            { "target": "flag", "key": "or_ofm_brother_preached", "value": true }
+          ]
+        },
+        {
+          "id": "give_the_church",
+          "label": "Give the church, and let the guardian preach: he knew him",
+          "outcome": "The guardian preaches, and it is a friar's homily for a friar, and the church is full and you concelebrate and say nothing, which is correct and is also the safer thing, and you know which it was. The line follows him out. The paper quotes the guardian.",
+          "effects": [
+            { "target": "reputation", "key": "public", "delta": 3 },
+            { "target": "npc", "key": "@franciscan_kitchen", "value": "dead" },
+            { "target": "ministry", "key": "funerals", "delta": 1 },
+            { "target": "strain", "key": "", "delta": 4 },
+            { "target": "flag", "key": "or_ofm_brother_buried", "value": true }
+          ]
+        },
+        {
+          "id": "the_line",
+          "label": "Give the church, and on the Tuesday after, be at the stove yourself",
+          "requires": [{ "type": "flag", "key": "house:kitchen", "value": true }],
+          "outcome": "The guardian preaches and it is good. The Tuesday after, the kitchen in your hall opens at eleven with a friar and you at the stove, and the line comes, and the men in it know, and one of them says the brother would have said you were holding the knife wrong. You hold it wrong for a year of Tuesdays. The friary counts you one of theirs after that, and so, oddly, does the line.",
+          "effects": [
+            { "target": "reputation", "key": "public", "delta": 6 },
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "stat", "key": "piety", "delta": 3 },
+            { "target": "npc", "key": "@franciscan_kitchen", "value": "dead" },
+            { "target": "ministry", "key": "funerals", "delta": 1 },
+            { "target": "ap", "key": "", "delta": -1 },
+            { "target": "strain", "key": "", "delta": 6 },
+            { "target": "flag", "key": "or_ofm_brother_line", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "or_osa_the_table",
+      "phase": ["pastor", "administrator", "parochial_vicar"],
+      "pressure": ["doubt", "body_vs_vow"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 12,
+      "suppressYears": 3,
+      "requires": [
+        { "type": "house", "order": "augustinian", "value": true },
+        { "type": "flag", "key": "house:common_table", "value": true }
+      ],
+      "title": "Thursday at Six",
+      "body": "You have had a chair at the priory's table for some months now: dinner at six, {@augustinian_prior} at the head, the argument of the week, the wine that is not good and is always poured. Tonight the argument is about the diocese's new pastoral plan and it is a good one and you are enjoying it, and then the prior, who has been watching you for a while in the way priors do, waits for a pause and asks, in front of the whole table, whether you have anyone. Not a parish. Anyone. A friend. Someone who would know if you were ill. The table goes quiet, not unkindly. Six men who eat together every night of their lives are looking at a man who eats alone, and they are asking because they are the only people in the diocese who would think to.",
+      "flavorPrompt": "The bad wine, the argument about the pastoral plan, the prior's question, six men looking at one.",
+      "choices": [
+        {
+          "id": "tell_them",
+          "label": "Tell them the truth: no, not really, not for years",
+          "default": true,
+          "outcome": "Nobody says anything for a moment and then the prior says, well, you have now, and passes the potatoes, and the argument resumes as if nothing had happened, and something has. The following Thursday there is a place laid for you before you arrive. You are telephoned, in February, when you are ill, by a man who noticed you had missed a week.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 2 },
+            { "target": "strain", "key": "", "delta": -10 },
+            { "target": "relationship", "key": "@augustinian_prior", "delta": 12 },
+            { "target": "flag", "key": "or_osa_table_told", "value": true }
+          ]
+        },
+        {
+          "id": "deflect",
+          "label": "Say the parish is your family, and mean it as a joke",
+          "outcome": "It gets the laugh it was meant to get, and the prior lets it go, and the argument resumes. On the drive home you are aware of having been asked a real question by real people and having answered it the way a man answers at a deanery lunch. The chair is still yours. It is a little further from the head of the table than it was.",
+          "effects": [
+            { "target": "relationship", "key": "@augustinian_prior", "delta": -3 },
+            { "target": "flag", "key": "or_osa_table_deflected", "value": true }
+          ]
+        },
+        {
+          "id": "stay_the_night",
+          "label": "Answer him after the others have gone up, in the kitchen, drying the dishes",
+          "requires": [{ "type": "relationship", "npcId": "@augustinian_prior", "op": ">=", "value": 15 }],
+          "outcome": "He washes and you dry, and you tell him, and he says that the rule his order lives under was written for exactly this and that a diocesan priest is asked to live a common life alone, which is a contradiction the Church has never resolved and simply asks men to carry. He says the chair is yours for as long as you want it. You want it for a long time.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 3 },
+            { "target": "strain", "key": "", "delta": -14 },
+            { "target": "relationship", "key": "@augustinian_prior", "delta": 15 },
+            { "target": "flag", "key": "or_osa_table_stayed", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "or_osa_the_place",
+      "phase": ["pastor", "administrator"],
+      "pressure": ["money", "friendship_vs_duty"],
+      "severity": "NOTABLE",
+      "category": "finance",
+      "baseWeight": 11,
+      "suppressYears": 3,
+      "requires": [
+        { "type": "house", "order": "augustinian", "value": true },
+        { "type": "flag", "key": "house:school_place", "value": true }
+      ],
+      "title": "The Rest of the Tuition",
+      "body": "The boy from the parish has been at the Augustinians' school since September in a blazer that was somebody else's, and he is doing well, and the headmaster halved the tuition as he said he would, and the rest was to be found. It has not been found. The mother is in your office on a Tuesday with a letter from the bursar that is polite and final, and she is not asking you for money because she would rather die, and she is telling you the boy will finish the year at the public school, which is a lie she is telling herself. {@augustinian_headmaster} has already telephoned to say, carefully, that the school has a fund but that the fund has a board and the board has rules.",
+      "flavorPrompt": "The blazer that was somebody else's, the bursar's letter, the mother who would rather die than ask, the fund with a board.",
+      "choices": [
+        {
+          "id": "pay_it",
+          "label": "Pay the rest from the parish, quietly, and tell nobody but the bursar",
+          "default": true,
+          "outcome": "It is four thousand dollars the parish has and should not spend and does. The boy stays. The mother never knows for certain and knows entirely. The finance council finds a line in the accounts in March and you tell them what it was and two of them are angry and one of them writes a cheque for the following year, which is how these things go.",
+          "effects": [
+            { "target": "money", "key": "", "delta": -4000 },
+            { "target": "reputation", "key": "parishioners", "delta": 3 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "flag", "key": "or_osa_place_paid", "value": true }
+          ]
+        },
+        {
+          "id": "ask_the_headmaster",
+          "label": "Go to the headmaster and ask him to go to his board",
+          "outcome": "He goes, because you asked and because he wanted to be asked. The board meets and finds a rule it did not know it had and the boy stays, and the headmaster is owed something by the board now, on your account. He does not mention it. He remembers it. The mother is told the school found it, which is true.",
+          "effects": [
+            { "target": "relationship", "key": "@augustinian_headmaster", "delta": 8 },
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "flag", "key": "or_osa_place_asked", "value": true }
+          ]
+        },
+        {
+          "id": "let_it_go",
+          "label": "Tell her the public school is a good school, which it is",
+          "outcome": "It is a good school and he does well there and the blazer goes into a drawer. The headmaster, when he hears, says nothing to you and something to the prior. The mother comes to Mass as before. She does not come to the office again, for anything, for years.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": -3 },
+            { "target": "relationship", "key": "@augustinian_headmaster", "delta": -5 },
+            { "target": "flag", "key": "or_osa_place_let_go", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "or_osa_a_century",
+      "phase": ["pastor"],
+      "pressure": ["loyalty_vs_honesty", "ambition_vs_integrity"],
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 8,
+      "suppressYears": 8,
+      "once": true,
+      "requires": [
+        { "type": "house", "order": "augustinian", "value": true },
+        { "type": "years_ordained", "op": ">=", "value": 10 }
+      ],
+      "title": "A Hundred Years",
+      "body": "The Augustinians have held their parish across the deanery since before the diocese had a cathedral, and this year it is a hundred years, and there is to be a Mass with the bishop and a dinner. The bishop has asked you to speak at the dinner, as the dean's man, and has said, in the car, that it would be helpful if what you said left room for the future, because the province is down to eleven men under sixty and the bishop would like the parish back in five years and would like the friars to feel it was their idea. {@augustinian_prior} has asked you, separately, to say something true. The two requests are not the same request, and both men will be at the table.",
+      "flavorPrompt": "A hundred years, eleven men under sixty, the bishop's phrase about the future, the prior's word true.",
+      "choices": [
+        {
+          "id": "say_something_true",
+          "label": "Say what the friars have been to that parish for a century, and nothing about the future",
+          "default": true,
+          "outcome": "You speak for seven minutes about four pastors and a school and a soup line in 1932 and the common table, and the friars at the head table do not look at each other, and the prior does not look at you, and the bishop applauds with the room. In the car he says it was a fine speech. He does not say anything else. The parish stays theirs, for now, and the priory counts you as a friend of the house from that night.",
+          "effects": [
+            { "target": "relationship", "key": "@augustinian_prior", "delta": 14 },
+            { "target": "reputation", "key": "brother_priests", "delta": 2 },
+            { "target": "relationship", "key": "@bishop", "delta": -5 },
+            { "target": "reputation", "key": "chancery", "delta": -3 },
+            { "target": "honesty", "key": "", "delta": 2 },
+            { "target": "flag", "key": "or_osa_century_defended", "value": true }
+          ]
+        },
+        {
+          "id": "leave_room",
+          "label": "Say what the bishop asked: a century of gift, and the diocese ready to carry it forward",
+          "outcome": "It is a good speech and it is a chancery speech and everyone at the head table hears the sentence about the future for exactly what it is. The bishop is grateful. The prior is polite. The parish is diocesan in four years, not five, and the friars go quietly, and you are not invited to the priory's table again, and understand why.",
+          "effects": [
+            { "target": "relationship", "key": "@bishop", "delta": 8 },
+            { "target": "reputation", "key": "chancery", "delta": 5 },
+            { "target": "relationship", "key": "@augustinian_prior", "delta": -15 },
+            { "target": "honesty", "key": "", "delta": -2 },
+            { "target": "flag", "key": "or_osa_century_bishop", "value": true }
+          ]
+        },
+        {
+          "id": "decline_to_speak",
+          "label": "Tell the bishop, before the dinner, that you would rather not be the one",
+          "requires": [{ "type": "relationship", "npcId": "@bishop", "op": ">=", "value": 20 }],
+          "outcome": "He looks at you for a moment and then says that is fair, and gives the speech to the vicar general, who gives the speech the bishop wanted. The prior notices who did not give it. So does the bishop. Neither says anything. It is the kind of nothing that goes in two files.",
+          "effects": [
+            { "target": "relationship", "key": "@bishop", "delta": -2 },
+            { "target": "relationship", "key": "@augustinian_prior", "delta": 5 },
+            { "target": "flag", "key": "or_osa_century_silent", "value": true }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -724,6 +724,22 @@ Each religious house of the diocese (the abbey, the friary, the Carmel) carries 
 
 **The asymmetry is the point.** Every arrangement runs at the provincial's pleasure: once a year he may end one, less often where the standing is high, and the notice is six weeks and the reason is a house in another state. A pastor cannot appeal it, cannot hire around it, and cannot hold it against them, and the parish notices the Saturday confessional is dark.
 
+### 9.4b Three orders, told apart
+
+*Added in playtesting.* §9.4 and §9.4a treat every active house alike: a confessor, a mission, a man for the rectory. A Dominican priory, a Franciscan friary, and an Augustinian priory are not the same neighbour, and the difference is data (`content/orders.json`), not a switch on the order's name. An **order profile** gives the order its own words (the house, the superior, the family, the governance, the habit), its own people beyond the roles every institute fills, the favours only it does, the asks only it makes, and the lines the sheet uses when one of its favours is given. Any order can be given a profile; three have one.
+
+| | **Dominicans** (OP) | **Franciscans** (OFM) | **Augustinians** (OSA) |
+|---|---|---|---|
+| The house | a priory under a prior, elected for three years | a friary under a guardian | a priory under a prior, with the table at the centre of it |
+| The family | friars, cloistered nuns, apostolic sisters, lay Dominicans | Friars Minor, Capuchins, Conventuals, TOR, Poor Clares, Secular Franciscans | friars, contemplative nuns, the Recollects, teaching sisters |
+| Their people | the **prior** (always); the **lector** who has read everything, or a **student brother** who preaches better than he knows | the **guardian** (always); the **brother who runs the kitchen**, or the **friar in the box on Saturdays** | the **prior** (always); the **headmaster** of their school, or the **pastor of the parish they have held a century** |
+| What only they do | a **course in the hall** (six Thursdays on the Creed); a **written opinion** from the lector that puts a stand of yours on paper the chancery cannot move | a **kitchen in your hall** on Tuesdays, standing; **the parish's winter** taken off the books | a **place at their school** for a family of the parish; a **chair at their table** on Thursdays, standing, the one arrangement that helps the man rather than the parish |
+| What only they ask | the hall for a **public disputation** | your church for the **Transitus** on the 3rd of October | a **table at the school's dinner** |
+
+**The house is the institute.** A house whose order has an institute in the diocese is that institute's house, linked by id, never by charism alone: the Dominicans of §9.4 and the priory of §9.4a are the same men, and they are generated first, before the pool fills the count. Every favour's effects are authored on the favour and applied when it is given (CLAUDE.md rule 1); a standing favour leaves a flag (`house:<id>`) that scenes read, and loses it when the provincial ends the arrangement.
+
+**Dioceses differ.** A preset may say how present each order is (`orders`: strong, present, thin, none) and give a line of what it holds here, which is appended to the house's line in the preview because it is public knowledge. *Strong* means the institute is always present — Villanova does not roll away from Philadelphia; *none* means never; the rest weight the roll. The lines name real houses and provinces where the author was sure of them and stay general where he was not. A custom diocese without the block rolls on charism alone, in the same schema.
+
 ### 9.5 The men you were ordained with
 
 *Added in playtesting.* A diocesan priest has no community and no rule. What he has instead is twenty men who were in the same building at twenty-four, and whichever of them he has bothered to keep up with.

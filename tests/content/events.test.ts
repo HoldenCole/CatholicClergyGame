@@ -6,6 +6,7 @@ import { actionDefs, liturgyDials, obligationDefs } from '@/content/parish';
 import { studyPrograms } from '@/content/study';
 import { SEALED_TARGETS } from '@/engine/internalForum';
 import { arcDefs } from '@/content/arcs';
+import { orderDefs } from '@/content/houses';
 const ARC_IDS = new Set(arcDefs.map((a) => a.id));
 const ARC_STAGES = new Set(arcDefs.flatMap((a) => a.stages.map((s) => s.id)));
 const PLACE_DIALS = new Set(studyPrograms.flatMap((p) => p.place?.dials.map((d) => d.id) ?? []));
@@ -15,6 +16,7 @@ const LITURGY_OPTIONS = new Set(liturgyDials.flatMap((d) => d.options.map((o) =>
 import { CONSTITUENCY_KEYS, EVENT_CATEGORIES, SEVERITIES, STAT_KEYS, PILLARS, ARCHETYPES } from '@/types';
 import type { Condition, Effect, GameEvent } from '@/types';
 
+const HOUSE_ORDERS = orderDefs.map((o) => o.id);
 const PHASES = ['seminary', 'study', 'parochial_vicar', 'administrator', 'pastor', 'chancery', 'bishop'];
 const PRESSURES = [
   'loyalty_vs_honesty',
@@ -67,6 +69,10 @@ const SELECTORS = [
   '@diverged_classmate',
   '@religious',
   '@principal',
+  '@dominican', '@franciscan', '@augustinian',
+  '@dominican_prior', '@dominican_lector', '@dominican_student',
+  '@franciscan_guardian', '@franciscan_kitchen', '@franciscan_confessor',
+  '@augustinian_prior', '@augustinian_headmaster', '@augustinian_old_pastor',
 ];
 const MINISTRY_COND_KEYS = ['masses', 'confessions', 'baptisms', 'firstCommunions', 'confirmations', 'weddings', 'funerals', 'anointings', 'converts', 'ordinations'];
 const LIFE_KEYS = ['posts', 'formed', 'turnarounds', 'vocations', 'offices'];
@@ -139,7 +145,7 @@ function checkCondition(c: Condition, where: string, problems: Problem[]): void 
       if (!['readings', 'the_parish', 'the_news', 'the_bishop', 'the_money', 'vocations'].includes(c.value)) problems.push(`${where}: bad homily topic ${c.value}`);
       break;
     case 'house':
-      if (typeof c.value !== 'boolean' || (c.charism !== undefined && !['contemplative', 'active'].includes(c.charism))) problems.push(`${where}: bad house condition`);
+      if (typeof c.value !== 'boolean' || (c.charism !== undefined && !['contemplative', 'active'].includes(c.charism)) || (c.order !== undefined && !HOUSE_ORDERS.includes(c.order))) problems.push(`${where}: bad house condition`);
       break;
     case 'diocese':
       if (!(typeof c.value === 'string' || (Array.isArray(c.value) && c.value.every((v: unknown) => typeof v === 'string')))) problems.push(`${where}: bad diocese condition`);

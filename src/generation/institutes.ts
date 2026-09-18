@@ -1,4 +1,5 @@
-import type { BishopRelation, DiocesePreset, Institute, InstituteDef, InstituteTrajectory, InstituteWork, Npc, Temperament } from '@/types';
+import type { BishopRelation, DiocesePreset, Institute, InstituteDef, InstituteTrajectory, InstituteWork, Npc, OrderPresence, Temperament } from '@/types';
+import { orderProfile } from '@/content/orders';
 import { TEMPERAMENTS } from '@/types';
 import type { Rng } from '@/engine/rng';
 import { instituteDef, instituteDefs } from '@/content/institutes';
@@ -29,10 +30,16 @@ function worksAvailable(preset: DiocesePreset): InstituteWork[] {
   return out;
 }
 
+/** What the preset says of an order's presence here, as a weight. DESIGN §9.4b. */
+const PRESENCE_WEIGHT: Record<OrderPresence, number> = { strong: 5, present: 1.6, thin: 0.4, none: 0 };
+
 /** How likely this diocese is to have that institute at all. */
 function weightFor(def: InstituteDef, preset: DiocesePreset, available: InstituteWork[]): number {
   if (!def.works.some((w) => available.includes(w))) return 0;
+  const presence = preset.orders?.[def.id]?.presence;
+  if (presence === 'none') return 0;
   let w = 10;
+  if (presence) w *= PRESENCE_WEIGHT[presence];
   // The presbyterate's own tilt pulls institutes toward it: a traditional bloc keeps a traditional house alive.
   w *= 1 + (def.lean * preset.dispositionBias) / 10_000;
   if (def.charism === 'tradition') w *= preset.dispositionBias <= -10 ? 2.2 : preset.dispositionBias >= 20 ? 0.25 : 0.8;
@@ -53,6 +60,8 @@ export function generateInstitutes(rng: Rng, preset: DiocesePreset): Institute[]
   // At least one women's congregation: they run the schools and the hospitals, and the pastor answers to none of them.
   const women = pool.filter((d) => d.women);
   if (women.length) chosen.push(rng.weighted(women, (d) => weightFor(d, preset, available)));
+  // An order the preset calls strong here is here: Villanova does not roll away from Philadelphia.
+  for (const d of pool.filter((d) => preset.orders?.[d.id]?.presence === 'strong' && !chosen.some((c) => c.id === d.id))) chosen.push(d);
   while (chosen.length < count) {
     const rest = pool.filter((d) => !chosen.some((c) => c.id === d.id));
     if (rest.length === 0) break;
@@ -129,19 +138,33 @@ export function generateReligious(rng: Rng, institutes: Institute[], year: numbe
     ...WOMEN_ROLES.filter((r) => held.has(r.needs) && institutes.some((i) => i.women && i.works.includes(r.needs))),
   ];
   const want = Math.min(rng.int(RELIGIOUS.cast[0], RELIGIOUS.cast[1]), roles.length);
+  const picked: { tag: string; house: Institute; women: boolean; title?: string; young?: boolean }[] = [];
   for (const role of rng.shuffle(roles).slice(0, want)) {
     const women = WOMEN_ROLES.some((r) => r.tag === role.tag);
     const house = rng.pick(institutes.filter((i) => i.women === women && i.works.includes(role.needs)));
     if (!house) continue;
-    const birthYear = year - rng.int(38, 74);
+    picked.push({ tag: role.tag, house, women });
+  }
+  // The people an order told apart has of its own: the superior always, one of the others rolled. DESIGN §9.4b.
+  for (const house of institutes) {
+    const profile = orderProfile(house.defId);
+    if (!profile) continue;
+    const mine = profile.people.filter((p) => !p.needs || house.works.includes(p.needs as InstituteWork));
+    const always = mine.filter((p) => p.always);
+    const rest = mine.filter((p) => !p.always);
+    const chosen = [...always, ...(rest.length ? [rng.pick(rest)] : [])];
+    for (const p of chosen) picked.push({ tag: `religious:${p.role}`, house, women: false, ...(p.title ? { title: p.title } : {}), ...(p.young ? { young: true } : {}) });
+  }
+  for (const { tag, house, women, title, young } of picked) {
+    const birthYear = year - (young ? rng.int(24, 31) : rng.int(38, 74));
     const heritage = rollHeritage(rng, CLERGY_HERITAGE);
     const era = eraForBirthYear(birthYear);
     const def = instituteDefs.find((d) => d.id === house.defId)!;
     const npc = finishNpc(rng, {
-      id: `religious_${house.defId}_${role.tag.split(':')[1]}`,
+      id: `religious_${house.defId}_${tag.split(':')[1]}`,
       name: women ? rollFemaleName(rng, heritage) : rollMaleName(rng, heritage, era),
       role: 'religious',
-      title: rng.pick([...def.titles]),
+      title: title ?? rng.pick([...def.titles]),
       birthYear,
       origin: 'suburban',
       // Their gifts follow the charism; everything else rolls free, as a classmate's does.
@@ -154,10 +177,21 @@ export function generateReligious(rng: Rng, institutes: Institute[], year: numbe
       institute: house.id,
       charism: house.charism,
       temperament: temperamentFor(rng, house.charism),
-      tags: [...npc.tags, 'religious', role.tag, `institute:${house.id}`],
+      tags: [...npc.tags, 'religious', tag, `institute:${house.id}`],
     });
   }
   return out;
+}
+
+/** What a religious does, for the sheets: the generic roles, and the orders' own. */
+export function religiousRoleLine(npc: Npc): string | undefined {
+  const tag = npc.tags.find((t) => t.startsWith('religious:'));
+  if (!tag) return undefined;
+  const generic = [...MEN_ROLES, ...WOMEN_ROLES].find((r) => r.tag === tag);
+  if (generic) return generic.line;
+  const role = tag.slice('religious:'.length);
+  const inst = npc.tags.find((t) => t.startsWith('institute:inst_'))?.slice('institute:inst_'.length);
+  return inst ? orderProfile(inst)?.people.find((p) => p.role === role)?.line : undefined;
 }
 
 function charismStats(charism: string): Partial<Record<'administration' | 'charisma' | 'theology' | 'knowledge' | 'piety', number>> {

@@ -21,7 +21,10 @@ import type { Rng } from './rng';
  *   @diverged_classmate                           the man who left formation for an order
  *   @religious                                    a random religious of the diocese
  *   @principal                                    the sister who runs the parish school
+ *   @dominican @franciscan @augustinian           a random man of that institute in the diocese (DESIGN §9.4b)
+ *   @dominican_lector, @franciscan_kitchen, ...   the man of that institute with that role (religious:<role>)
  */
+const ORDER_SELECTOR = /^(dominican|franciscan|augustinian)(?:_([a-z_]+))?$/;
 export function isSelector(key: string): boolean {
   return key.startsWith('@');
 }
@@ -110,6 +113,15 @@ export function resolveSelector(state: GameState, key: string, rng?: Rng): Npc |
     default: {
       const m = /^classmate:(\d+)$/.exec(name);
       if (m) return classmates[Number(m[1])] ?? null;
+      const o = ORDER_SELECTOR.exec(name);
+      if (o) {
+        const institute = `inst_${o[1]}s`;
+        const role = o[2] ? `religious:${o[2]}` : undefined;
+        const men = Object.values(state.npcs)
+          .filter((n) => n.status === 'active' && n.role === 'religious' && n.institute === institute && (!role || n.tags.includes(role)))
+          .sort((a, b) => (a.id < b.id ? -1 : 1));
+        return men.length ? (rng && !role ? rng.pick(men) : men[0]!) : null;
+      }
       const pid = state.assignment?.parishId;
       // Parish staff are tagged with both their job and their parish.
       if (pid && ['secretary', 'dre', 'music_director', 'maintenance', 'seminarian', 'deacon'].includes(name)) {

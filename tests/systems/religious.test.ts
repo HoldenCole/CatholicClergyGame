@@ -4,6 +4,7 @@ import { generateCandidates } from '@/generation/world';
 import { generateInstitutes, generateReligious, RELIGIOUS } from '@/generation/institutes';
 import { diocesePresets, presetById } from '@/content/dioceses';
 import { instituteDefs } from '@/content/institutes';
+import { orderProfile } from '@/content/orders';
 import { chooseDirector, DIRECTION, directionKept, directionLine, directionWeek, directionYear, directorOptions, endDirection, matchFor, pietyFactor, troubleOf } from '@/systems/direction';
 import { divergeStep, exNoviceStep } from '@/systems/diverge';
 import { GROUPS, religiousYear, suppressGroup } from '@/systems/groups';
@@ -47,7 +48,8 @@ describe('generation/institutes', () => {
       const institutes = generateInstitutes(createRng(`r-${i}`), presetById('chicago')!);
       const cast = generateReligious(createRng(`cast-${i}`), institutes, 2010);
       expect(cast.length).toBeGreaterThan(0);
-      expect(cast.length).toBeLessThanOrEqual(RELIGIOUS.cast[1]);
+      // The orders told apart add their own people: the superior and one more, each. DESIGN §9.4b.
+      expect(cast.length).toBeLessThanOrEqual(RELIGIOUS.cast[1] + 2 * institutes.filter((i) => orderProfile(i.defId)).length);
       for (const n of cast) {
         expect(n.role).toBe('religious');
         expect(n.tags).toContain('religious');

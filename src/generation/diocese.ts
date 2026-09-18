@@ -14,7 +14,7 @@ import type { Rng } from '@/engine/rng';
 import { generateBishop, PRIORITY_LABEL, temperamentLine } from './bishop';
 import { generateChancery } from './chancery';
 import { generateParishes } from './parishes';
-import { generateHouses, linkHouses } from './houses';
+import { generateHouses, linkHouses, presenceLines } from './houses';
 import { generateInstitutes, generateReligious } from './institutes';
 
 export interface GeneratedDiocese {
@@ -69,7 +69,8 @@ export function generateDiocese(rng: Rng, preset: DiocesePreset, year: number): 
   const institutes = generateInstitutes(rng.derive('institutes'), preset);
   const castRolled = generateReligious(rng.derive('religious'), institutes, year);
   // The houses of the diocese and the institutes are the same religious from two sides. §9.4a
-  const linked = linkHouses(generateHouses(rng.derive('houses'), preset.size), institutes, castRolled);
+  const linkedRaw = linkHouses(generateHouses(rng.derive('houses'), preset.size, institutes), institutes, castRolled);
+  const linked = { ...linkedRaw, houses: presenceLines(linkedRaw.houses, institutes, preset) };
   const religious = linked.religious;
   const generated = generateParishes(rng.derive('parishes'), preset, year);
   const parishes = generated.map((g) => g.parish);

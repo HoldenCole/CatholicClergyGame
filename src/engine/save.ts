@@ -44,7 +44,7 @@ function giveEveryParishItsPlace(state: GameState): void {
 function giveEveryDioceseItsHouses(state: GameState): void {
   const world = state.world;
   if (!world || world.diocese.visible.houses) return;
-  world.diocese.visible.houses = generateHouses(createRng(`${state.seed}:houses`), world.diocese.visible.size);
+  world.diocese.visible.houses = generateHouses(createRng(`${state.seed}:houses`), world.diocese.visible.size, world.institutes ?? []);
 }
 
 /**
