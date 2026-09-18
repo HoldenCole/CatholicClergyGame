@@ -1,0 +1,577 @@
+{
+  "_notes": "Milestones of the book (DESIGN §8.6): the scenes that come when the numbers in a man's file cross a line he never set out to cross. Read the ministry and life conditions; nothing here is a reward, and several of them are a weight.",
+  "events": [
+    {
+      "id": "mi_thousandth_baptism",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["doubt"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 13,
+      "suppressYears": 25,
+      "once": true,
+      "requires": [{ "type": "ministry", "key": "baptisms", "op": ">=", "value": 1000 }],
+      "title": "A Thousand Children",
+      "body": "The secretary works it out because she is the kind of woman who works things out: with the registers from the two parishes before this one, counting the summer you covered for the man with the heart attack, you have baptized about a thousand people. She tells you at the door of the office with the number written on a sticky note, pleased with herself, and goes back to the bulletin. A thousand. You can remember perhaps forty of them by name, and one by weight, because his mother handed him over shaking and you thought for a second you would drop him.",
+      "choices": [
+        {
+          "id": "let_her_tell_them",
+          "label": "Let her put it in the bulletin",
+          "default": true,
+          "outcome": "It runs in the bulletin under the Mass times, and for two Sundays people bring you photographs of christening gowns and tell you which of the thousand is theirs. Three families come who have not been to Mass in years, because you baptized their eldest and they wanted you to see her.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 5 },
+            { "target": "flag", "key": "mi_thousand_known", "value": true }
+          ]
+        },
+        {
+          "id": "keep_it_quiet",
+          "label": "Ask her to keep it off the bulletin",
+          "outcome": "She is disappointed and does as you ask. You take the number to the chapel instead and do nothing with it there except sit, which is the only thing you can think of that is not about you.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 4 }
+          ]
+        },
+        {
+          "id": "write_to_the_first",
+          "label": "Find the first one in the register and write to her",
+          "outcome": "The first is a woman of twenty-some years now with an address the parish has not updated since she was confirmed. The letter comes back. You try the mother's, and get an answer at Christmas: she is a nurse in another state, she still has the candle, and no, she does not go anymore, and she is glad you wrote.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 2 },
+            { "target": "honesty", "key": "", "delta": 1 },
+            { "target": "flag", "key": "mi_wrote_the_first", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mi_ten_thousand_masses",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["doubt", "competence"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 12,
+      "suppressYears": 30,
+      "once": true,
+      "requires": [{ "type": "ministry", "key": "masses", "op": ">=", "value": 10000 }],
+      "title": "The Ten Thousandth",
+      "body": "You do the arithmetic in the sacristy because a seminarian asked you, idly, how many Masses a priest says in a lifetime, and you find that you went past ten thousand somewhere in the last few years without noticing which one it was. It might have been a Tuesday with eleven people. It was almost certainly a Tuesday with eleven people. The seminarian thinks the number is enormous. You are trying to decide whether it is enormous or whether it is simply what happens when a man does the same thing every morning for a quarter of a century.",
+      "choices": [
+        {
+          "id": "tell_him_the_truth",
+          "label": "Tell him what the Tuesdays are actually like",
+          "default": true,
+          "outcome": "You tell him that most of them are not moving, that you have caught yourself planning the boiler repair during the canon, and that you have never once regretted going in. He looks slightly frightened and slightly relieved. It is the most useful thing you say to him all summer.",
+          "effects": [
+            { "target": "reputation", "key": "brother_priests", "delta": 2 },
+            { "target": "stat", "key": "piety", "delta": 2 },
+            { "target": "flag", "key": "mi_told_him_the_tuesdays", "value": true }
+          ]
+        },
+        {
+          "id": "say_something_edifying",
+          "label": "Say the edifying thing instead",
+          "outcome": "You give him the answer about the infinite value of every Mass, which is true, and which he could have got from a book. He writes it down. You go and vest for the six o'clock feeling like a man who has quoted somebody else about his own life.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": -1 },
+            { "target": "reputation", "key": "chancery", "delta": 1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mi_five_hundred_funerals",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["doubt", "body_vs_vow"],
+      "severity": "MAJOR",
+      "category": "parish_death",
+      "baseWeight": 14,
+      "suppressYears": 25,
+      "once": true,
+      "requires": [{ "type": "ministry", "key": "funerals", "op": ">=", "value": 500 }],
+      "title": "Five Hundred Graves",
+      "body": "It is a graveside in February and the wind is coming off something flat and you realize, while the family is arranging itself, that you have done this about five hundred times. You know the words without the book. You know exactly how long to wait before you begin, and which sentence makes the son's shoulders drop, and where to stand so that the widow has somewhere to look that is not the hole. This is a skill. It took twenty years to build and it is entirely made of other people's worst days, and you have begun to wonder what it has done to you that you can do it so well.",
+      "choices": [
+        {
+          "id": "take_it_to_direction",
+          "label": "Take it to your director, or to the one man you can say it to",
+          "default": true,
+          "outcome": "Saying it out loud takes four minutes and changes nothing about February. But it stops being a thing you are carrying alone, and the next graveside is the same work with a little less weight behind your eyes.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 3 },
+            { "target": "flag", "key": "mi_said_the_graves_aloud", "value": true }
+          ]
+        },
+        {
+          "id": "stay_at_the_grave",
+          "label": "Stay at the grave after they have gone",
+          "outcome": "You stay until the men with the machine start looking at their watches, and then you stay in the car in the cemetery lot for another ten minutes. Nobody knows you do this. You have done it at perhaps a hundred of the five hundred, which is its own kind of record.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 2 },
+            { "target": "reputation", "key": "parishioners", "delta": 2 }
+          ]
+        },
+        {
+          "id": "get_in_the_car",
+          "label": "Get in the car; there is a wedding rehearsal at four",
+          "outcome": "There is a wedding rehearsal at four and a finance council at seven and you are perfectly functional at both. Something is being set aside rather than dealt with, and a man can set things aside for a very long time before the bill comes.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": -2 },
+            { "target": "flag", "key": "mi_set_it_aside", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mi_the_box",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["doubt", "belief_vs_safety"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 12,
+      "suppressYears": 20,
+      "once": true,
+      "requires": [{ "type": "ministry", "key": "confessions", "op": ">=", "value": 8000 }],
+      "title": "The Same Six Sins",
+      "body": "Saturday afternoon, the light through the screen, the smell of the old wood and whatever the cleaner uses. Thousands of hours in this box by now. You have heard, you would estimate, six sins, over and over, in about four hundred arrangements, from people who each believe theirs is the unspeakable one. The extraordinary thing is not the repetition. The extraordinary thing is that you have never once been bored in here, and you are bored at finance council every single month.",
+      "choices": [
+        {
+          "id": "sit_longer",
+          "label": "Sit an extra hour, and let the word get round that you do",
+          "default": true,
+          "outcome": "You put another hour on the schedule and do not advertise it beyond a line in the bulletin. It fills within two months, mostly with people from other parishes, which is a compliment nobody says out loud and a small irritation to two of your neighbors.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 4 },
+            { "target": "stat", "key": "piety", "delta": 2 },
+            { "target": "reputation", "key": "brother_priests", "delta": -1 }
+          ]
+        },
+        {
+          "id": "go_yourself",
+          "label": "Go and make your own confession, properly, to somebody who knows you",
+          "outcome": "You drive forty minutes to a man who will not be careful with you, and you are on the other side of the screen for the first time in longer than you would like to admit in writing. It is uncomfortable and it puts something back that had been quietly draining.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 5 },
+            { "target": "flag", "key": "mi_went_to_confession", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mi_ruby_jubilee",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["doubt", "ambition_vs_integrity"],
+      "severity": "MAJOR",
+      "category": "personal",
+      "baseWeight": 15,
+      "suppressYears": 12,
+      "once": true,
+      "requires": [{ "type": "years_ordained", "op": ">=", "value": 40 }],
+      "title": "Forty Years",
+      "body": "Forty years. The diocesan paper wants four hundred words and a photograph, and the young woman who telephones about it has clearly been given a list of questions: the most rewarding moment, the biggest change in the Church, your advice to young men considering the priesthood. She is perfectly nice. The questions are the wrong questions, and the true answers to them are respectively a night you cannot print, an answer that would start an argument, and nothing you could say in four hundred words to a twenty-two-year-old who will not believe you anyway.",
+      "choices": [
+        {
+          "id": "answer_honestly",
+          "label": "Give her the real answers and let the editor cut them",
+          "default": true,
+          "outcome": "The editor cuts two of the three and runs the third whole, and the third is the one about what the work actually costs and why you would do it again. Six priests write to you about it. Two of them you have never met, and one of them is thinking about leaving.",
+          "effects": [
+            { "target": "reputation", "key": "brother_priests", "delta": 5 },
+            { "target": "reputation", "key": "public", "delta": 3 },
+            { "target": "outspokenness", "key": "", "delta": 4 }
+          ]
+        },
+        {
+          "id": "give_her_the_copy",
+          "label": "Give her the four hundred words she came for",
+          "outcome": "You give her rewarding, changed, and generous, in a pleasant order, and she is grateful because it is due Thursday. The piece runs with a photograph from 1986 that the office had on file, in which you have considerably more hair and considerably less idea.",
+          "effects": [
+            { "target": "reputation", "key": "public", "delta": 2 }
+          ]
+        },
+        {
+          "id": "decline_the_piece",
+          "label": "Ask her to write about the parish instead",
+          "outcome": "She writes about the parish: the food pantry, the school, the woman who has arranged the flowers since Ford was president. You are in it twice, in passing. It is a better piece than the one she was sent for and the parish is quietly thrilled to be seen.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 6 },
+            { "target": "reputation", "key": "public", "delta": 1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mi_golden_jubilee",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["doubt"],
+      "severity": "MAJOR",
+      "category": "personal",
+      "baseWeight": 16,
+      "suppressYears": 12,
+      "once": true,
+      "requires": [{ "type": "years_ordained", "op": ">=", "value": 50 }],
+      "title": "Fifty Years, And Who Is Left",
+      "body": "Fifty years a priest. Of the men ordained with you, the list the chancery sends for the anniversary Mass has fewer names on it than the class photograph, and the photograph is on the wall of a corridor in a seminary that has been sold. The bishop who ordained you is in the crypt. The rector is in the crypt. Three of your classmates are in the crypt and two are in nursing homes in other states and one, the best preacher of the lot, has not spoken to the Church since 1979 and is still alive in Arizona.",
+      "choices": [
+        {
+          "id": "telephone_arizona",
+          "label": "Telephone Arizona",
+          "default": true,
+          "outcome": "He is astonished, then rude, then not rude. You talk for an hour about the seminary kitchen and a professor you both hated, and he does not ask about God and you do not raise it. He says, at the end, that he thinks about it. You say you know. You call again in the spring.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 3 },
+            { "target": "reputation", "key": "brother_priests", "delta": 3 },
+            { "target": "flag", "key": "mi_called_arizona", "value": true }
+          ]
+        },
+        {
+          "id": "say_the_mass_for_them",
+          "label": "Say the anniversary Mass for the dead of your class",
+          "outcome": "You say it for them by name at the cathedral with the bishop in choir, and the reading of the names takes longer than the homily, and several of the widows of the class — their sisters, their nieces — are in the third pew, having driven a long way to hear a name said out loud.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 4 },
+            { "target": "reputation", "key": "brother_priests", "delta": 4 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mi_the_men_you_formed",
+      "phase": ["administrator", "pastor"],
+      "pressure": ["competence", "friendship_vs_duty"],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 13,
+      "suppressYears": 10,
+      "requires": [
+        { "type": "life", "key": "formed", "op": ">=", "value": 5 },
+        { "type": "years_ordained", "op": ">=", "value": 20 }
+      ],
+      "title": "They Are Running Parishes Now",
+      "body": "At the clergy study day you count them: four men in that room spent a summer with you as seminarians, and two of them are pastors, and one has the tribunal, and the fourth is the one who telephones you when a funeral goes wrong. They still call you Father and one of them still calls you Boss. It is a strange thing to have a share in the way four men do their work, and stranger to notice which of your own bad habits you can see in them from across a room.",
+      "choices": [
+        {
+          "id": "take_them_to_dinner",
+          "label": "Take the four of them to dinner and say nothing wise",
+          "default": true,
+          "outcome": "Four hours and a bill you do not let them split. They tell stories about that summer in which you are considerably more patient than you remember being, and one of them tells the other three the thing you said to him in a car in 1998 that he has never forgotten, and you have no memory of saying it.",
+          "effects": [
+            { "target": "reputation", "key": "brother_priests", "delta": 5 },
+            { "target": "stat", "key": "piety", "delta": 2 },
+            { "target": "flag", "key": "mi_the_four", "value": true }
+          ]
+        },
+        {
+          "id": "tell_the_one_thing",
+          "label": "Tell the one who is drowning what you can see from across the room",
+          "outcome": "You say it in the parking lot, quietly, and he is angry for about nine seconds and then he is not. He asks how you knew and you tell him it is because you did it yourself for six years and nobody said anything to you. He gets a spiritual director in March.",
+          "effects": [
+            { "target": "relationship", "key": "@brother_priest", "delta": 10 },
+            { "target": "reputation", "key": "brother_priests", "delta": 3 },
+            { "target": "stat", "key": "piety", "delta": 1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mi_one_you_formed_leaves",
+      "phase": ["administrator", "pastor"],
+      "pressure": ["friendship_vs_duty", "doubt"],
+      "severity": "MAJOR",
+      "category": "personal",
+      "baseWeight": 10,
+      "suppressYears": 15,
+      "once": true,
+      "requires": [
+        { "type": "life", "key": "formed", "op": ">=", "value": 3 },
+        { "type": "years_ordained", "op": ">=", "value": 18 }
+      ],
+      "title": "One Of Yours Is Leaving",
+      "body": "He drives out to tell you himself rather than let you hear it, which is decent of him and costs him two hours each way. He is thirty-eight. He has asked for the dispensation and he expects it will take years and he is going anyway; there is a woman, and he says so plainly and does not make it the whole reason, because it is not the whole reason. He wrote his first homily at your kitchen table. He wants to know whether you think he is a coward, and he actually wants the answer, not the reassurance.",
+      "choices": [
+        {
+          "id": "answer_the_question",
+          "label": "Answer the question he asked",
+          "default": true,
+          "outcome": "You tell him no, and that you think he is wrong, and that both of those are true at once. He cries at the kitchen table, which is not what either of you planned for the afternoon, and then he asks you to keep writing to him, and you say you will, and you do, for the rest of your life.",
+          "effects": [
+            { "target": "honesty", "key": "", "delta": 4 },
+            { "target": "stat", "key": "piety", "delta": 2 },
+            { "target": "flag", "key": "mi_kept_writing", "value": true }
+          ]
+        },
+        {
+          "id": "the_pastoral_answer",
+          "label": "Give him the gentle answer and leave the door open",
+          "outcome": "You are kind, and careful, and he leaves not quite having been met. The letters stop after the second Christmas. You hear from somebody else that he teaches high school now and is well, and that he asked after you.",
+          "effects": [
+            { "target": "reputation", "key": "brother_priests", "delta": 1 },
+            { "target": "stat", "key": "piety", "delta": -1 }
+          ]
+        },
+        {
+          "id": "tell_him_to_wait",
+          "label": "Ask him for a year before he does anything final",
+          "outcome": "He says no, because he has already had three of them and did not tell you about any of them, and that is the part that stays with you afterward: not that he is going, but that he was gone for three years while you were pleased with how he was getting on.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": -2 },
+            { "target": "flag", "key": "mi_did_not_see_it", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mi_three_parishes_turned",
+      "phase": ["administrator", "pastor"],
+      "pressure": ["competence", "ambition_vs_integrity"],
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 14,
+      "suppressYears": 12,
+      "once": true,
+      "requires": [{ "type": "life", "key": "turnarounds", "op": ">=", "value": 3 }],
+      "title": "The Man They Send",
+      "body": "The vicar for clergy says it as a compliment, over a lunch he is paying for, and it lands like a door closing: you are the man they send. Three parishes now, each of them written off before you got there, each of them standing when you left. There is a fourth. It is worse than the other three and it is two hundred miles from anyone you know, and he has not asked yet, he is telling you that he is going to ask, which is a courtesy and also a way of making the answer harder.",
+      "choices": [
+        {
+          "id": "say_yes_again",
+          "label": "Say yes before he finishes asking",
+          "default": true,
+          "outcome": "He is relieved and grateful and the chancery's regard for you goes up another notch, and you move again, at an age when men stop moving. It is the work you are best at in the world. Nobody has asked in fifteen years what it takes out of you, including you.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": 8 },
+            { "target": "flag", "key": "mi_the_fixer", "value": true },
+            { "target": "stat", "key": "piety", "delta": -1 }
+          ]
+        },
+        {
+          "id": "name_the_price",
+          "label": "Say yes, and tell him what it has cost, and what you want",
+          "outcome": "You name it: a vicar of your own choosing, the assessment deferred two years, and his word that this is the last one. He agrees to two of the three on the spot and writes the third down, which in that office is the same as agreeing. It is the first time you have ever negotiated with the chancery and you should have done it a decade ago.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": 5 },
+            { "target": "money", "key": "cash", "delta": 20000 },
+            { "target": "honesty", "key": "", "delta": 2 },
+            { "target": "flag", "key": "mi_named_the_price", "value": true }
+          ]
+        },
+        {
+          "id": "say_no",
+          "label": "Say no, and say that you would like to stay somewhere long enough to be buried from it",
+          "outcome": "He takes it better than you feared and worse than he lets on, and the word goes round the chancery that you have stopped being available, which is both a loss and the first unhurried year you have had since your thirties.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": -6 },
+            { "target": "stat", "key": "piety", "delta": 4 },
+            { "target": "reputation", "key": "parishioners", "delta": 4 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mi_first_parish_calls",
+      "phase": ["administrator", "pastor"],
+      "pressure": ["doubt", "friendship_vs_duty"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 11,
+      "suppressYears": 15,
+      "once": true,
+      "requires": [
+        { "type": "life", "key": "posts", "op": ">=", "value": 4 },
+        { "type": "years_ordained", "op": ">=", "value": 25 }
+      ],
+      "title": "They Want You Back For The Anniversary",
+      "body": "Your first parish is having an anniversary and the committee has found you. They want the priest who was there in those years, and the letter is signed by a woman whose wedding you did in your second summer, and who encloses a photograph of you at about twenty-nine looking like somebody's nephew in a borrowed cassock. Half the people who would remember you are dead. The pastor there now was eight years old when you left, and has written separately, politely, to say he hopes you will come and that the parish talks about you more than it talks about him.",
+      "choices": [
+        {
+          "id": "go_back",
+          "label": "Go, and preach, and be careful of the man whose parish it is now",
+          "default": true,
+          "outcome": "You go, and you are careful: you praise his work from the pulpit twice and mean it once, and you spend the reception asking about their grandchildren rather than telling stories about yourself. He thanks you afterward in a way that says he had braced for the other kind of visit.",
+          "effects": [
+            { "target": "reputation", "key": "brother_priests", "delta": 4 },
+            { "target": "reputation", "key": "public", "delta": 2 },
+            { "target": "stat", "key": "piety", "delta": 2 }
+          ]
+        },
+        {
+          "id": "go_and_hold_court",
+          "label": "Go, and enjoy it",
+          "outcome": "You have a wonderful afternoon. Everybody says the place has not been the same, loudly, within earshot of the man it has not been the same for, and you do not stop them, and you know exactly what you are doing while you do not stop them.",
+          "effects": [
+            { "target": "reputation", "key": "public", "delta": 4 },
+            { "target": "reputation", "key": "brother_priests", "delta": -4 },
+            { "target": "flag", "key": "mi_held_court", "value": true }
+          ]
+        },
+        {
+          "id": "send_a_letter",
+          "label": "Send a letter to be read out, and stay where you are",
+          "outcome": "You write something true and short about the people who are dead now, and a parishioner reads it at the reception, and it is the part of the afternoon they talk about. You say the six o'clock at home that evening as usual.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 2 },
+            { "target": "reputation", "key": "parishioners", "delta": 2 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mi_the_vocations_you_sent",
+      "phase": ["administrator", "pastor"],
+      "pressure": ["competence"],
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 15,
+      "suppressYears": 8,
+      "requires": [{ "type": "life", "key": "vocations", "op": ">=", "value": 2 }],
+      "title": "Ordination Day, And Two Of Them Are Yours",
+      "body": "The cathedral in June, and on the list are two names from your parishes: the one who served your Masses for four years and could not be got rid of, and the late one, the engineer, who came to you at thirty-one and asked the question as though he expected to be laughed at. Both of them ask you to vest and to be among the priests who lay hands on them. The vocations director, who has a quota and a target and a poster campaign, watches you do it with an expression that is mostly professional envy.",
+      "choices": [
+        {
+          "id": "vest_and_say_nothing",
+          "label": "Vest, lay hands, say nothing about it to anybody",
+          "default": true,
+          "outcome": "You lay hands on both of them in the row of priests and neither moment lasts more than four seconds, and then you are at the reception eating a small sandwich. It is the single most productive thing you have done with your discretionary hours in twenty years and there is no metric in the diocese that captures it.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 5 },
+            { "target": "reputation", "key": "chancery", "delta": 4 },
+            { "target": "reputation", "key": "parishioners", "delta": 4 }
+          ]
+        },
+        {
+          "id": "say_it_to_the_bishop",
+          "label": "Let the bishop know where they came from",
+          "outcome": "He knows already — he reads the files — but hearing it at the reception with the two of them standing there does something, and the phrase a parish that produces priests goes into whatever part of his mind decides things about men. It is not humble and it is not untrue.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": 8 },
+            { "target": "relationship", "key": "@bishop", "delta": 6 },
+            { "target": "stat", "key": "piety", "delta": 1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mi_the_night_calls",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["body_vs_vow", "doubt"],
+      "severity": "NOTABLE",
+      "category": "parish_death",
+      "baseWeight": 12,
+      "suppressYears": 18,
+      "once": true,
+      "requires": [{ "type": "ministry", "key": "anointings", "op": ">=", "value": 400 }],
+      "title": "Three In The Morning, Again",
+      "body": "The telephone at ten past three, the drive with the oils on the passenger seat, the nurse holding the door with her foot. You are very good at this and you are fifty-something and your hands were cold on the stairs. Four hundred times, by the count somebody would have to keep for you. The man in the bed is not conscious and his daughter is, and it is for her as much as for him, and you have known that for twenty years and it has never once made you resent the drive.",
+      "choices": [
+        {
+          "id": "stay_till_it_is_over",
+          "label": "Stay until it is over, and drive back in the light",
+          "default": true,
+          "outcome": "It takes until twenty past five. You say the prayers for the dead with the daughter and a nurse who joins in from the doorway, and you drive home into a sunrise over the expressway, and you say the seven o'clock on no sleep and preach badly and nobody minds.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 4 },
+            { "target": "stat", "key": "piety", "delta": 3 }
+          ]
+        },
+        {
+          "id": "anoint_and_go",
+          "label": "Anoint him, bless her, and go home to bed",
+          "outcome": "You do the sacrament properly and completely in eleven minutes and are back in bed by four. This is entirely sufficient and you have done it a hundred times and the daughter thanks you sincerely. Something in you notices the eleven minutes, and files it.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 1 }
+          ]
+        },
+        {
+          "id": "train_the_others",
+          "label": "Start teaching the parish what to do before they call you",
+          "outcome": "You put four sessions on the calendar for families with someone dying at home: what to ask for, when to call, what happens, what the oils are. Forty people come to the first one and cry at the third. The calls do not stop, but they start coming earlier, when there is still time.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 5 },
+            { "target": "stat", "key": "knowledge", "delta": 1 },
+            { "target": "flag", "key": "mi_taught_the_dying", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mi_last_of_the_class",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["doubt"],
+      "severity": "MAJOR",
+      "category": "classmate",
+      "baseWeight": 13,
+      "suppressYears": 15,
+      "once": true,
+      "requires": [{ "type": "age", "op": ">=", "value": 70 }],
+      "title": "The Class Photograph",
+      "body": "The photograph from the year of ordination has been in the bottom drawer through six rectories. Twenty-odd young men on the steps in identical black, most of them squinting. You go through them with a pen on the back, which is a thing you have seen old priests do and swore you never would: died, died, left, chancery, died, Arizona, nursing home, left, bishop somewhere down south, died. There are four of you still in harness. You are one of the four, and the pen is in your hand, and somebody will do this with you on it.",
+      "choices": [
+        {
+          "id": "write_to_the_other_three",
+          "label": "Write to the other three",
+          "default": true,
+          "outcome": "Three letters, and three answers within the month, including one from the bishop down south who telephones instead and talks for fifty minutes about a professor you all feared. The four of you agree to meet in the spring. Three of you manage it.",
+          "effects": [
+            { "target": "reputation", "key": "brother_priests", "delta": 4 },
+            { "target": "stat", "key": "piety", "delta": 3 },
+            { "target": "flag", "key": "mi_the_four_left", "value": true }
+          ]
+        },
+        {
+          "id": "say_mass_for_the_dead",
+          "label": "Put the photograph on the desk and say Mass for all of them, one a week",
+          "outcome": "One name a week, in the six o'clock, for as many weeks as there are names. Nobody in the congregation knows what you are doing. The sacristan notices by the fourth week and starts putting the photograph on the credence table without being asked.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 5 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mi_seventy_four",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["doubt", "competence"],
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 16,
+      "suppressYears": 10,
+      "once": true,
+      "requires": [{ "type": "age", "op": ">=", "value": 74 }],
+      "title": "The Letter You Will Have To Write",
+      "body": "Canon 401 says that at seventy-five a man submits his resignation. You will write it next year. Everybody knows this and nobody mentions it, and meanwhile the parish council has begun to speak about the capital campaign in a tense that carefully does not include you, and the young pastor at the next parish has started saying we ought to think about the long term in a voice that means something specific. You feel perfectly well. You have also noticed that you now schedule the eight o'clock funerals on a Tuesday because of the stairs.",
+      "choices": [
+        {
+          "id": "plan_the_handover",
+          "label": "Start handing things over on purpose, a year early",
+          "default": true,
+          "outcome": "You write down what only you know — the boiler, the family that gives, the ones to visit at Christmas, which of the school board to trust — and you begin giving pieces of it away. Your successor, whoever he turns out to be, will never know what he was spared, and the parish will not fall over the day you go.",
+          "effects": [
+            { "target": "reputation", "key": "brother_priests", "delta": 4 },
+            { "target": "reputation", "key": "chancery", "delta": 4 },
+            { "target": "flag", "key": "mi_handed_over_early", "value": true }
+          ]
+        },
+        {
+          "id": "hold_on",
+          "label": "Hold on to everything and let them wait for the letter",
+          "outcome": "You are the pastor until the day you are not, and you run it the way you have run it, and the parish council learns to ask twice. When it ends it will end suddenly, and the man who follows you will spend a year finding out what was in your head.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": -3 },
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "flag", "key": "mi_held_on", "value": true }
+          ]
+        },
+        {
+          "id": "ask_for_the_year",
+          "label": "Tell the bishop now what you would like the last years to be",
+          "outcome": "You write to him before he writes to you, and ask for what you actually want: to stay through the school's centenary, and then a small parish or a chaplaincy with a chapel and no boiler. Men who ask this early get asked back; men who wait to be told get told.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": 6 },
+            { "target": "relationship", "key": "@bishop", "delta": 4 },
+            { "target": "flag", "key": "mi_asked_for_the_last_years", "value": true }
+          ]
+        }
+      ]
+    }
+  ]
+}

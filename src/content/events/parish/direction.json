@@ -1,0 +1,609 @@
+{
+  "_notes": "Spiritual direction after ordination (DESIGN §9.4, CLAUDE.md rule 7). Every scene here is internalForum: the engine will refuse any effect that is not a stat, a flag, or a thread, and the content validator refuses it first. Nothing said in these rooms may reach the reputation, the evaluation, or any NPC's knowledge.",
+  "events": [
+    {
+      "id": "sd_p_first_year_out",
+      "phase": ["parochial_vicar"],
+      "internalForum": true,
+      "pressure": ["doubt", "competence"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 13,
+      "suppressYears": 6,
+      "once": true,
+      "requires": [
+        { "type": "flag", "key": "direction:chosen", "value": true },
+        { "type": "years_ordained", "op": "<=", "value": 2 }
+      ],
+      "title": "The First Hour Since Everything Changed",
+      "body": "In the seminary you brought him your prayer, because you had nothing else to bring. Now you have a parish, a pastor who does not read, a funeral on Thursday and a woman who telephones at eleven at night, and you sit down in his room and find that you do not know what an hour of direction is for anymore. He lets the silence run. Then he asks one question, which is not how the parish is going, and not whether you are praying, but whether you have said anything true out loud since June.",
+      "choices": [
+        {
+          "id": "admit_no",
+          "label": "Admit that you have not, not once",
+          "default": true,
+          "outcome": "You have been a priest for ten months and performing one for nine of them. Saying that in his room does not fix it. It does mean there is now one hour a month in which you are not performing, which he tells you is the whole apparatus, and is not a small thing at all.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 3 },
+            { "target": "flag", "key": "sd_told_the_truth_out_loud", "value": true }
+          ]
+        },
+        {
+          "id": "report_the_parish",
+          "label": "Give him the parish report instead",
+          "outcome": "You talk about the Thursday funeral and the pastor and the woman who telephones, competently, for fifty minutes. He listens and says nothing and does not rescue you, and you drive home with the feeling of having spent an hour on the wrong thing entirely.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": -1 }
+          ]
+        },
+        {
+          "id": "say_you_are_frightened",
+          "label": "Tell him you are frightened of the next forty years",
+          "outcome": "He says that is the correct response to the next forty years and that the men who are not frightened at ten months are the ones he worries about. He gives you one thing to do daily, small enough that you cannot use the parish as an excuse, and asks you about it every month for six years.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 4 },
+            { "target": "flag", "key": "sd_the_daily_thing", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sd_p_the_drive",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "internalForum": true,
+      "pressure": ["competence", "doubt"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 12,
+      "suppressYears": 5,
+      "requires": [
+        { "type": "flag", "key": "direction:chosen", "value": true },
+        { "type": "strain", "op": ">=", "value": 45 }
+      ],
+      "title": "Ninety Minutes Each Way",
+      "body": "His house is an hour and a half away and the month is a bad one: the school roof, the funeral of a child, three weekends of confirmations, a vicar who is not working out. You have the car keys in your hand and the honest calculation in your head, which is that three hours of driving would fix a great deal of what is wrong with this week. He would understand. He would say so, and mean it, and there would be no consequence of any kind, and that is exactly what makes it a decision rather than a scheduling problem.",
+      "choices": [
+        {
+          "id": "go_anyway",
+          "label": "Drive",
+          "default": true,
+          "outcome": "You drive. You are ten minutes late and you talk for the first twenty about the roof, and then you stop talking about the roof. The three hours do not come back from anywhere. The week is worse for it and you are not.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 3 },
+            { "target": "flag", "key": "sd_kept_the_hour", "value": true }
+          ]
+        },
+        {
+          "id": "telephone_instead",
+          "label": "Telephone him instead and do the hour badly",
+          "outcome": "Forty minutes on the telephone with the office door shut, which is not nothing and is not the thing. He does not say so. He says he will see you next month, in a tone that is perfectly kind and that you think about on and off for a week.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 1 }
+          ]
+        },
+        {
+          "id": "cancel_it",
+          "label": "Cancel, and put the three hours into the roof",
+          "outcome": "The roof gets sorted. So does the vicar, eventually. The hour does not get rescheduled that month, or, as it turns out, the month after, and by the spring the standing appointment has quietly become an occasional one.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": -2 },
+            { "target": "flag", "key": "sd_slipped", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sd_p_he_asks_about_ambition",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "internalForum": true,
+      "pressure": ["ambition_vs_integrity", "doubt"],
+      "severity": "MAJOR",
+      "category": "personal",
+      "baseWeight": 14,
+      "suppressYears": 8,
+      "requires": [
+        { "type": "flag", "key": "direction:chosen", "value": true },
+        { "type": "years_ordained", "op": ">=", "value": 6 }
+      ],
+      "title": "He Asks What You Want",
+      "body": "He has never once asked about your career and you have assumed that was a policy. Today he asks, directly: what do you actually want. Not what would be good for the diocese and not what you would accept if offered. He points out that you have mentioned the chancery four times in three months without noticing, and that you talk about the man who got the parish you wanted in the voice you use for a toothache. Nothing said here leaves this room, and he is the only person alive you could answer honestly.",
+      "choices": [
+        {
+          "id": "say_the_true_want",
+          "label": "Say the ambitious thing out loud, in full",
+          "default": true,
+          "outcome": "It sounds worse out loud than it does in your head, and then, after about a minute, it stops sounding like anything except a fact about a man. He does not rebuke it. He says that ambition unexamined runs the man, and ambition said out loud once a month is just another thing he carries, and asks you to bring it every time from now on.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 3 },
+            { "target": "flag", "key": "sd_named_the_ambition", "value": true },
+            { "target": "thread", "key": "sd_ambition", "open": true }
+          ]
+        },
+        {
+          "id": "deny_it",
+          "label": "Tell him you want whatever they give you",
+          "outcome": "He accepts the answer without argument, which is worse than if he had pushed, because you can hear it yourself in the car afterward: four times in three months, and the toothache voice, and the answer you just gave a man who cannot report you to anyone.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": -2 },
+            { "target": "flag", "key": "sd_denied_the_ambition", "value": true }
+          ]
+        },
+        {
+          "id": "turn_it_round",
+          "label": "Ask him what he wanted, at your age",
+          "outcome": "He tells you, which he has never done before: the chair he wanted, the man who got it, and the eleven years it took him to stop going over the decision at night. Then he says that the ones who never say it are the ones who are still going over it at eighty, and the hour ends.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 2 },
+            { "target": "flag", "key": "sd_he_told_you_his", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sd_p_dark_night",
+      "phase": ["parochial_vicar", "administrator", "pastor", "study"],
+      "internalForum": true,
+      "pressure": ["doubt", "belief_vs_safety"],
+      "severity": "MAJOR",
+      "category": "personal",
+      "baseWeight": 16,
+      "suppressYears": 6,
+      "requires": [
+        { "type": "flag", "key": "direction:chosen", "value": true },
+        { "type": "stat", "key": "piety", "op": "<=", "value": 34 }
+      ],
+      "title": "Nothing At All, For Fourteen Months",
+      "body": "You tell him the length of it because the length is the part that frightens you: fourteen months in which prayer has been an empty room. Not doubt, exactly. You still say the words and you still believe the words are true and you still put the host in people's hands and mean it. There is simply nobody there when you sit down, and there has been nobody there since a Tuesday in the autumn of last year, and you have gone on running a parish through the whole of it without telling a living soul.",
+      "choices": [
+        {
+          "id": "let_him_name_it",
+          "label": "Let him tell you what it is",
+          "default": true,
+          "outcome": "He is not alarmed, which is itself the medicine. He says the name for it, gives you two pages of John of the Cross and forbids you to read anything else about it, and tells you not to change a single thing you are doing. Nothing improves for another nine months. You stop being frightened of it in about three weeks.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 5 },
+            { "target": "flag", "key": "sd_named_the_dark", "value": true },
+            { "target": "thread", "key": "sd_dark_night", "open": true }
+          ]
+        },
+        {
+          "id": "ask_if_you_should_go",
+          "label": "Ask him whether a man who feels nothing should still be doing this",
+          "outcome": "He says yes, and says why, and the why is not comforting and is not about feelings at all. You do not entirely accept it. You do write down what he said on the back of an envelope and you find it in a breviary four years later and it is true by then.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 2 },
+            { "target": "flag", "key": "sd_asked_if_he_should_go", "value": true },
+            { "target": "thread", "key": "doubt", "open": true }
+          ]
+        },
+        {
+          "id": "make_it_smaller",
+          "label": "Downplay it and change the subject to the parish",
+          "outcome": "You get away with it, because he will not chase a man who has closed a door. The fourteen months become sixteen, and you carry them alone for another year, and the hour each month becomes a report on a building.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": -3 },
+            { "target": "flag", "key": "sd_closed_the_door", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sd_p_the_glass",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "internalForum": true,
+      "pressure": ["body_vs_vow", "doubt"],
+      "severity": "MAJOR",
+      "category": "personal",
+      "baseWeight": 11,
+      "suppressYears": 10,
+      "once": true,
+      "requires": [
+        { "type": "flag", "key": "direction:chosen", "value": true },
+        { "type": "strain", "op": ">=", "value": 60 },
+        { "type": "years_ordained", "op": ">=", "value": 8 }
+      ],
+      "title": "The Amount, Said Out Loud",
+      "body": "It is not a crisis. Nobody has noticed, nothing has gone wrong, you have never once said Mass unfit and you would know. It is the arithmetic that has begun to bother you: the rectory is empty at ten, and the bottle that used to last the month now lasts rather less than a fortnight, and you have started to be aware of where it is in the evening in a way you were not aware five years ago. He is the only person on earth you can say the actual number to, and he does not react to the number at all, only asks how long it has been that number.",
+      "choices": [
+        {
+          "id": "say_the_number",
+          "label": "Say the number, and the trend, and let him ask the second question",
+          "default": true,
+          "outcome": "The second question is worse than the first and you answer it too. He does not lecture you and does not make you promise anything that night. He asks you to write it down for one month and bring the paper, and the paper is the thing that changes it, because a page is harder to argue with than an evening.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 4 },
+            { "target": "flag", "key": "sd_wrote_it_down", "value": true },
+            { "target": "thread", "key": "sd_the_glass", "open": true }
+          ]
+        },
+        {
+          "id": "raise_it_and_retreat",
+          "label": "Raise it, then say it is fine and move on",
+          "outcome": "You put it in the room and take it back out again in the same minute, and he lets you, because a man cannot be marched. It stays in the room anyway, unfinished, which is not the same as untouched.",
+          "effects": [
+            { "target": "flag", "key": "sd_raised_the_glass", "value": true },
+            { "target": "stat", "key": "piety", "delta": 1 }
+          ]
+        },
+        {
+          "id": "do_not_raise_it",
+          "label": "Talk about the school roof for an hour",
+          "outcome": "The roof is genuinely a problem and the hour is genuinely spent on it. You drive home past the same shop you always pass, and everything is exactly as it was, which is the point and is not good news.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": -2 },
+            { "target": "flag", "key": "sd_did_not_raise_it", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sd_p_the_friendship",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "internalForum": true,
+      "pressure": ["body_vs_vow", "loyalty_vs_honesty"],
+      "severity": "MAJOR",
+      "category": "personal",
+      "baseWeight": 11,
+      "suppressYears": 10,
+      "once": true,
+      "requires": [
+        { "type": "flag", "key": "direction:chosen", "value": true },
+        { "type": "years_ordained", "op": ">=", "value": 5 }
+      ],
+      "title": "The Person You Look Forward To",
+      "body": "Nothing has happened. Nothing is going to happen; you are quite clear about that and so, you think, is she, and it is the kind of friendship a priest is supposed to be able to have. What you bring to the room is smaller and harder: that you have begun to arrange your week around a meeting that could be at any time, that you were disappointed in a specific way when she cancelled, and that you did not tell the pastor you were having lunch. It is the not-telling you cannot get past, because you have never in your life bothered not to mention a lunch.",
+      "choices": [
+        {
+          "id": "bring_the_whole_thing",
+          "label": "Bring all of it, including the disappointment",
+          "default": true,
+          "outcome": "He does not flinch and does not moralize and does not ask her name, and afterward you understand that he has heard this exact hour from twenty men and that none of them were monsters either. He gives you two rules, both of them about calendars rather than feelings, and they hold.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 4 },
+            { "target": "flag", "key": "sd_named_the_friendship", "value": true },
+            { "target": "thread", "key": "sd_the_friendship", "open": true }
+          ]
+        },
+        {
+          "id": "bring_the_theory",
+          "label": "Discuss celibacy in general terms for an hour",
+          "outcome": "A good discussion, genuinely interesting, entirely theoretical, and he lets you have it because he can see you are not ready. You leave with the specific thing exactly where it was and a much better grasp of the literature.",
+          "effects": [
+            { "target": "stat", "key": "theology", "delta": 1 },
+            { "target": "flag", "key": "sd_kept_it_theoretical", "value": true }
+          ]
+        },
+        {
+          "id": "decide_it_yourself",
+          "label": "Do not raise it; handle it yourself, cleanly, this week",
+          "outcome": "You handle it: fewer lunches, the door open, the pastor told about the next one. It works, and it costs a friendship that was doing you good, and the whole transaction happens inside your own head where nobody can ask you a second question about it.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "flag", "key": "sd_handled_it_alone", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sd_p_the_anger",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "internalForum": true,
+      "pressure": ["loyalty_vs_honesty", "doubt"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 12,
+      "suppressYears": 6,
+      "requires": [
+        { "type": "flag", "key": "direction:chosen", "value": true },
+        { "type": "reputation", "key": "chancery", "op": "<=", "value": 0 }
+      ],
+      "title": "What You Actually Think Of Them",
+      "body": "You arrive with it already lit: the letter from the chancery, the tone of it, the man who wrote it who has never run anything, the assessment, the eleven forms, the bishop's silence when it would have cost him nothing to speak. You say things in that room about named men that you would not say in a rectory kitchen, and he lets the whole thing run out, which takes about nine minutes. Then he asks whether you would like to look at it, or whether you would rather just have said it, and tells you that either is a legitimate use of the hour.",
+      "choices": [
+        {
+          "id": "look_at_it",
+          "label": "Look at it",
+          "default": true,
+          "outcome": "Underneath the letter and the forms there is something older and duller: that you expected the institution to be fair, and have never once adjusted that expectation, and have spent fifteen years being freshly surprised. He does not tell you to stop being angry. He tells you to be angry about the actual thing.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 3 },
+            { "target": "flag", "key": "sd_looked_at_the_anger", "value": true }
+          ]
+        },
+        {
+          "id": "just_say_it",
+          "label": "Just have said it",
+          "outcome": "You take the nine minutes and no more, and he says a psalm at the end that is considerably ruder about enemies than anything you managed, and you drive home lighter and no wiser, which is a perfectly good outcome for one hour in a month.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 2 },
+            { "target": "flag", "key": "sd_vented", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sd_p_the_boredom",
+      "phase": ["administrator", "pastor"],
+      "internalForum": true,
+      "pressure": ["doubt", "competence"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 12,
+      "suppressYears": 8,
+      "requires": [
+        { "type": "flag", "key": "direction:chosen", "value": true },
+        { "type": "years_ordained", "op": ">=", "value": 14 }
+      ],
+      "title": "The Middle Of It",
+      "body": "You are good at the job. The parish runs, the books balance, the homilies are better than they were at thirty and take half the time. And you sat in the car outside the hospital last Tuesday for four minutes before going in, not because you were afraid of anything, but because you could not think of a reason to hurry. You tell him it is not despair and not doubt and not burnout, and that it does not have a name, and he says that it has had a name since the fourth century and that the desert fathers wrote more about it than about anything else.",
+      "choices": [
+        {
+          "id": "take_the_prescription",
+          "label": "Take whatever he prescribes, however unglamorous",
+          "default": true,
+          "outcome": "The prescription is a rule about the hour you get up, a limit on the evening, one afternoon a week outside the parish doing something with your hands, and the same hospital round on the same day whether or not you feel like it. It is medieval and it is dull and by Advent you notice that the four minutes in the car have stopped.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 4 },
+            { "target": "flag", "key": "sd_the_rule", "value": true }
+          ]
+        },
+        {
+          "id": "propose_a_change",
+          "label": "Tell him you think you need a new assignment",
+          "outcome": "He asks whether the last three moves fixed it and for how long each time, and you do the arithmetic in the room, out loud, and arrive somewhere you did not intend to arrive. He does not say that a man cannot outrun this by moving. He lets you say it.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 2 },
+            { "target": "flag", "key": "sd_saw_the_pattern", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sd_p_he_tells_you_to_stop",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "internalForum": true,
+      "pressure": ["competence", "body_vs_vow"],
+      "severity": "MAJOR",
+      "category": "personal",
+      "baseWeight": 13,
+      "suppressYears": 6,
+      "requires": [
+        { "type": "flag", "key": "direction:chosen", "value": true },
+        { "type": "strain", "op": ">=", "value": 70 }
+      ],
+      "title": "He Tells You To Put Something Down",
+      "body": "He has been mild for four years and today he is not. He says that you are running at a rate that has a fixed ending, that he has watched three men do exactly this, that one of them is dead and one of them is out and one of them is a very tired man in a small parish, and that you have said the word fine eleven times in forty minutes. He wants you to put one thing down. Not to delegate it, not to do it better: to put it down and let it be visibly not done, and to tell him next month what happened when you did.",
+      "choices": [
+        {
+          "id": "put_it_down",
+          "label": "Choose the thing and put it down",
+          "default": true,
+          "outcome": "You pick the one that will be noticed, because the ones nobody notices are not the problem. Two people complain. The world does not end, the parish does not fall over, and you sleep through a night in the second week for the first time since Lent.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 4 },
+            { "target": "flag", "key": "sd_put_something_down", "value": true },
+            { "target": "thread", "key": "sd_the_pace", "open": true }
+          ]
+        },
+        {
+          "id": "argue",
+          "label": "Argue that there is nothing that can be put down",
+          "outcome": "You make the case, item by item, and it is an extremely good case, and he listens to all of it and then says one sentence about the three men again. Nothing gets put down. He writes nothing, because he writes nothing, and asks you the same question in four weeks.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": -1 },
+            { "target": "flag", "key": "sd_argued_the_pace", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sd_p_twenty_years_of_thursdays",
+      "phase": ["administrator", "pastor"],
+      "internalForum": true,
+      "pressure": ["doubt", "friendship_vs_duty"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 11,
+      "suppressYears": 12,
+      "once": true,
+      "requires": [
+        { "type": "flag", "key": "direction:chosen", "value": true },
+        { "type": "years_ordained", "op": ">=", "value": 20 }
+      ],
+      "title": "The Longest Conversation Of Your Life",
+      "body": "Twenty-some years of the same room, the same chair, the same small window. He is old now and repeats one story about a bishop in the seventies, and you let him, because you have heard it eleven times and it gets better. It occurs to you in the middle of the hour that this is the longest single conversation of your life, longer than anything you had with your father, and that there is nobody else alive who knows the whole of it: the dark year, the woman, the parish you nearly wrecked, the thing you have never told anyone else and told him in 1998.",
+      "choices": [
+        {
+          "id": "say_thank_you",
+          "label": "Say it to him, plainly, while he is alive to hear it",
+          "default": true,
+          "outcome": "He is embarrassed, waves it off, and then does not wave it off. He says that he has had perhaps six men over fifty years who stayed the whole way, and that you are one, and that it has been a privilege, and then he tells the bishop story again from the beginning.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 5 },
+            { "target": "flag", "key": "sd_said_thank_you", "value": true }
+          ]
+        },
+        {
+          "id": "get_on_with_the_hour",
+          "label": "Notice it, and get on with the hour",
+          "outcome": "You do the hour properly and the thought sits at the back of it, and you intend to say something next month, and next month there is a funeral and a roof, and then there is the thing that happens later that you cannot arrange around.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "flag", "key": "sd_did_not_say_it", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sd_p_the_last_hour",
+      "phase": ["administrator", "pastor", "parochial_vicar"],
+      "internalForum": true,
+      "pressure": ["doubt", "friendship_vs_duty"],
+      "severity": "MAJOR",
+      "category": "personal",
+      "baseWeight": 14,
+      "suppressYears": 15,
+      "once": true,
+      "requires": [
+        { "type": "flag", "key": "direction:chosen", "value": true },
+        { "type": "years_ordained", "op": ">=", "value": 22 }
+      ],
+      "title": "He Will Not See The Autumn",
+      "body": "They have moved him to the infirmary wing and the room smells of the thing those rooms smell of, and he is entirely himself, only slower and with a blanket over his knees in July. He asks for your hour anyway. He does the hour. Halfway through he says, in the same voice he uses for everything, that there will not be many more, and then asks his usual question about the daily thing, and waits for the answer as though the answer still matters, which is the argument for the whole of his life's work.",
+      "choices": [
+        {
+          "id": "do_the_hour",
+          "label": "Do the hour properly, as if it were any month",
+          "default": true,
+          "outcome": "You bring him the actual material of your actual soul, as you have every month for years, and he works with it, and it is a good hour. He dies in September. You keep doing the daily thing for the rest of your life and you never tell anyone why it is the particular thing it is.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 6 },
+            { "target": "flag", "key": "sd_the_last_hour_kept", "value": true }
+          ]
+        },
+        {
+          "id": "ask_for_his_own",
+          "label": "Ask him what he is doing with this, himself",
+          "outcome": "He tells you. It is not serene and it is not a lesson; it involves fear of a specific and ordinary kind, and one sentence about his mother. You are the only person he says it to, and he says it because the room has always gone both ways when it needed to.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 4 },
+            { "target": "flag", "key": "sd_heard_his_fear", "value": true }
+          ]
+        },
+        {
+          "id": "make_it_a_visit",
+          "label": "Put the hour aside and just sit with him",
+          "outcome": "You talk about the seventies bishop and a restaurant that has closed, and hold his hand at the end because he puts it out, and it is a good afternoon and not the hour. He asks the daily-thing question at the door anyway, because he is who he is.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 3 },
+            { "target": "flag", "key": "sd_just_sat_with_him", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sd_p_no_one_now",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "internalForum": true,
+      "pressure": ["doubt"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 13,
+      "suppressYears": 5,
+      "requires": [{ "type": "flag", "key": "direction:lost", "value": true }],
+      "title": "Two Years Without One",
+      "body": "It has been two years since the last hour with anybody. You meant to find someone; you asked two men in the first six months and both were kind and busy, and then a parish happened, and now it is two years, and the thing that used to get said out loud once a month has been getting said to nobody at all. You notice it mostly in the shape of your own thoughts, which have begun to run in grooves, and in the fact that you now have several opinions about yourself that have never been contradicted by anyone.",
+      "choices": [
+        {
+          "id": "ask_a_third_man",
+          "label": "Ask a third man, and keep asking until somebody says yes",
+          "default": true,
+          "outcome": "The fourth one says yes: a friar an hour away with a bad back and no interest in your career. It is awkward for three months, because starting again at your age means saying the whole story to a stranger, and then one Thursday it is not awkward.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 3 },
+            { "target": "flag", "key": "sd_found_a_new_man", "value": true }
+          ]
+        },
+        {
+          "id": "the_retreat_instead",
+          "label": "Book a week of directed retreat and call it covered",
+          "outcome": "A good week, a real conversation, eight months of benefit. It is a week a year standing in for an hour a month, which is roughly the arrangement of a man who eats one enormous meal on Sundays.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 2 },
+            { "target": "flag", "key": "sd_retreat_instead", "value": true }
+          ]
+        },
+        {
+          "id": "decide_you_do_not_need_one",
+          "label": "Decide, honestly, that you do not need one",
+          "outcome": "You may be right. Plenty of good priests have run on their own for decades. What you cannot do from inside your own head is check, and you know that, and you decide it anyway, and the grooves get a little deeper.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": -2 },
+            { "target": "flag", "key": "sd_no_director_by_choice", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sd_p_the_younger_man",
+      "phase": ["administrator", "pastor"],
+      "internalForum": true,
+      "pressure": ["competence", "doubt"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 11,
+      "suppressYears": 8,
+      "once": true,
+      "requires": [
+        { "type": "flag", "key": "direction:lost", "value": true },
+        { "type": "years_ordained", "op": ">=", "value": 25 }
+      ],
+      "title": "He Is Thirty-Six",
+      "body": "The man who has agreed to take you on was in fourth grade when you were ordained. He is well trained, considerably better trained than your last director was at his age, and he has the disconcerting habit of saying I do not know when he does not know. Sitting down in front of him you notice how much of you wants to establish, in the first ten minutes, that you have been doing this a very long time and do not require the basics.",
+      "choices": [
+        {
+          "id": "sit_down_as_a_beginner",
+          "label": "Sit down as a beginner and let him work",
+          "default": true,
+          "outcome": "It costs about four minutes of pride and buys you eight years of someone who is not impressed by you. Within a year he has asked you two questions no one has asked you since your thirties, and one of them is about your father.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 4 },
+            { "target": "flag", "key": "sd_began_again", "value": true }
+          ]
+        },
+        {
+          "id": "manage_the_hour",
+          "label": "Run the hour yourself, gently, so that he does not have to",
+          "outcome": "You are extremely good at this: you decide the material, you supply the insight, you thank him warmly at the door. He knows exactly what is happening and is thirty-six and does not yet have the nerve to say so, and the arrangement lasts two comfortable and useless years.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": -1 },
+            { "target": "flag", "key": "sd_managed_the_hour", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sd_p_away_from_home",
+      "phase": ["study"],
+      "internalForum": true,
+      "pressure": ["doubt", "loyalty_vs_honesty"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 13,
+      "suppressYears": 5,
+      "requires": [{ "type": "flag", "key": "direction:chosen", "value": true }],
+      "title": "Four Thousand Miles From The Hour",
+      "body": "Your director is an ocean or a time zone away and the arrangement you made in the airport has not survived contact with the timetable: letters take three weeks, the telephone is expensive and always the wrong hour, and you have now missed four months. The house here has a man who does direction for the residents, recommended, competent, and entirely unknown to you, and taking him would mean telling the whole story again to somebody who will not be there when you go home.",
+      "choices": [
+        {
+          "id": "take_the_local_man",
+          "label": "Take the man here for the years you are here",
+          "default": true,
+          "outcome": "You tell the story again, badly, in a room with a view of a courtyard, and he is good, and the years here get looked after by somebody who can see your face. You write to the other man at Christmas and pick the thread up when you get home, a little frayed and not broken.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 3 },
+            { "target": "flag", "key": "sd_local_director_away", "value": true }
+          ]
+        },
+        {
+          "id": "keep_the_letters",
+          "label": "Keep it going by letter, however slow",
+          "outcome": "Three weeks each way, which means a question in October is answered in November about a man who has changed by then. It is a thin line and it holds, and the letters are better than the hours in one respect: you have them still, in a box.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 2 },
+            { "target": "flag", "key": "sd_kept_the_letters", "value": true }
+          ]
+        },
+        {
+          "id": "let_it_lapse",
+          "label": "Let it lapse until you are home",
+          "outcome": "Two or three years is not long in a life and the work here is demanding and nobody is watching. You are a different man at the end of it in ways that nobody looked at while they were happening, and some of them you do not find out about for a decade.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": -3 },
+            { "target": "flag", "key": "sd_lapsed_abroad", "value": true }
+          ]
+        }
+      ]
+    }
+  ]
+}

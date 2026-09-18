@@ -65,7 +65,9 @@ const SELECTORS = [
   '@religious',
   '@principal',
 ];
-const GROUP_KEYS = ['type', 'vitality', 'hostile', 'suppressed', 'foundedByPlayer', 'agenda'];
+const MINISTRY_COND_KEYS = ['masses', 'confessions', 'baptisms', 'firstCommunions', 'confirmations', 'weddings', 'funerals', 'anointings', 'converts', 'ordinations'];
+const LIFE_KEYS = ['posts', 'formed', 'turnarounds', 'vocations', 'offices'];
+const GROUP_KEYS = ['type', 'vitality', 'hostile', 'suppressed', 'foundedByPlayer', 'agenda', 'religiousLed'];
 const GROUP_EFFECT_KEYS = ['vitality', 'size', 'hostile', 'suppressed', 'dissolve'];
 const PARISH_KEYS = ['kind', 'terrain', 'school', 'problem', 'needsSpanish', 'wealth', 'generational'];
 const ROLES = ['parochial_vicar', 'administrator', 'pastor'];
@@ -173,6 +175,12 @@ function checkCondition(c: Condition, where: string, problems: Problem[]): void 
       break;
     case 'record':
       if (!BOOK_KEYS.has(c.key) || !hasOp(c.op) || typeof c.value !== 'number') problems.push(`${where}: bad record condition ${c.key}`);
+      break;
+    case 'ministry':
+      if (!MINISTRY_COND_KEYS.includes(c.key) || !hasOp(c.op) || typeof c.value !== 'number') problems.push(`${where}: bad ministry condition ${c.key}`);
+      break;
+    case 'life':
+      if (!LIFE_KEYS.includes(c.key) || !hasOp(c.op) || typeof c.value !== 'number') problems.push(`${where}: bad life condition ${c.key}`);
       break;
     case 'group':
       if (!GROUP_KEYS.includes(c.key) || c.value === undefined) problems.push(`${where}: bad group condition`);

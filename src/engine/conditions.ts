@@ -9,14 +9,17 @@ import { vitalityBand } from '@/systems/groups';
 import { currentDecor } from '@/systems/decorState';
 import { isFigure } from '@/systems/reputation';
 import { obligationDefs } from '@/content/parish';
+import { lifeCount, ministryOf } from '@/systems/ministry';
 import type { ObligationKey, Quality } from '@/types';
 
 function compare(op: '>=' | '<=', actual: number, value: number): boolean {
   return op === '>=' ? actual >= value : actual <= value;
 }
 
-export function groupMatches(g: Group, key: 'type' | 'vitality' | 'hostile' | 'suppressed' | 'foundedByPlayer' | 'agenda', value: string | boolean): boolean {
+export function groupMatches(g: Group, key: 'type' | 'vitality' | 'hostile' | 'suppressed' | 'foundedByPlayer' | 'agenda' | 'religiousLed', value: string | boolean): boolean {
   if (key === 'vitality') return vitalityBand(g.vitality) === value;
+  // A group a sister runs answers to her superior, not to the pastor. DESIGN §10.5.
+  if (key === 'religiousLed') return !!g.religiousLed === value;
   return g[key] === value;
 }
 
@@ -106,6 +109,11 @@ export function evaluateCondition(
       return !!state.study?.place && compare(cond.op, state.study.place[cond.key] ?? 0, cond.value);
     case 'record':
       return !!state.study && compare(cond.op, state.study.record?.[cond.key] ?? 0, cond.value);
+    // The book of a whole ministry, and what a life adds up to beside it. DESIGN §8.6.
+    case 'ministry':
+      return compare(cond.op, ministryOf(state)[cond.key] ?? 0, cond.value);
+    case 'life':
+      return compare(cond.op, lifeCount(state, cond.key), cond.value);
     case 'arc_weeks_left':
       return !!state.parish && compare(cond.op, state.parish.arcEndWeek - state.clock.week, cond.value);
     case 'bishop_alignment':
