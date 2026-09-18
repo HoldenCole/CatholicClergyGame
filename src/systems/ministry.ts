@@ -115,6 +115,32 @@ export function ministryAwayWeek(state: GameState): GameState {
   return { ...state, ministry: add(ministryOf(state), rates) };
 }
 
+/** The parishes a hard case is written into: a turnaround only counts where the place was hard. */
+const HARD = new Set(['difficult', 'struggling_urban', 'rural']);
+
+/**
+ * What a life adds up to besides the sacraments, for content to read:
+ * posts held, men formed, parishes turned, vocations sent, offices held.
+ */
+export function lifeCount(state: GameState, key: 'posts' | 'formed' | 'turnarounds' | 'vocations' | 'offices'): number {
+  switch (key) {
+    case 'posts':
+      return (state.tenures ?? []).length + (state.parish || state.study ? 1 : 0);
+    case 'formed':
+      return (state.formed ?? []).length;
+    case 'vocations':
+      return Number(state.flags['vocation:entered'] ?? 0);
+    case 'offices':
+      return Object.keys(state.flags).filter((k) => (k.startsWith('office:') || k.startsWith('held:office:')) && state.flags[k]).length;
+    case 'turnarounds':
+      return (state.tenures ?? []).filter((t) => {
+        if (t.kind !== 'parish' || !/^(turning|coming along)/i.test(t.verdict ?? '')) return false;
+        const parish = t.parishId ? state.world?.parishes.find((p) => p.id === t.parishId) : undefined;
+        return !!parish && HARD.has(parish.kind);
+      }).length;
+  }
+}
+
 export const MINISTRY_LABEL: Record<MinistryKey, string> = {
   masses: 'Masses celebrated',
   confessions: 'Confessions heard',

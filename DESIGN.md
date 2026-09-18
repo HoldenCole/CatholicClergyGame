@@ -839,9 +839,10 @@ interface GameEvent {
 | Diocesan and succession | 30 |
 | Special opportunities (§7.5) | 45 |
 | Religious, direction, and the internal forum (§9.4) | 55 |
-| **Total** | **~530** |
+| Milestones of the book (§8.6) | 14 |
+| **Total** | **~545** |
 
-Seminary is the smallest self-contained chunk and the right first target.
+Seminary is the smallest self-contained chunk and the right first target. The religious and internal-forum pool is complete at 55: 22 sealed scenes (8 in the seminary, 14 across the priesthood) and 33 open ones (7 in the seminary, 26 in the parish years). The authored total across every pool now stands well past the V1 target.
 
 ---
 

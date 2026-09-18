@@ -1,0 +1,696 @@
+{
+  "_notes": "Religious in the diocese (DESIGN §9.4, §10.5): the sisters, the friars, the monastery, the provincial who is not the bishop. The four asymmetries in play — they were here first, they answer elsewhere, they can be taken away, and they do not need the pastor's permission to exist.",
+  "events": [
+    {
+      "id": "in_the_school_is_closing",
+      "phase": ["pastor", "administrator"],
+      "pressure": ["money", "friendship_vs_duty"],
+      "severity": "MAJOR",
+      "category": "finance",
+      "baseWeight": 12,
+      "suppressYears": 12,
+      "once": true,
+      "requires": [{ "type": "house", "charism": "active", "value": true }],
+      "title": "The Sisters Are Withdrawing From The School",
+      "body": "The provincial writes to you and to the principal on the same day, which is courteous and changes nothing: there are eleven sisters under sixty in the whole province and four schools, and yours is the one with the smallest community and the furthest drive. They will finish the year. {@principal} has been in that building for nineteen years and found out by letter, the same as you. The parish will hear about it within the week and will assume, because parishes do, that you could have stopped it if you had wanted to.",
+      "choices": [
+        {
+          "id": "go_to_the_provincial",
+          "label": "Drive to the provincial house and make the case in person",
+          "default": true,
+          "outcome": "Four hours each way for a courteous hour in a parlor with a photograph of the foundress. She does not have the sisters. She shows you the actuarial page, which is the real argument and which nobody in the parish will ever see, and she agrees to leave two for another two years because you came. It is a stay, not a reprieve.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 4 },
+            { "target": "relationship", "key": "@principal", "delta": 8 },
+            { "target": "flag", "key": "in_two_more_years", "value": true }
+          ]
+        },
+        {
+          "id": "tell_the_parish_first",
+          "label": "Tell the parish yourself, at every Mass, before the rumor",
+          "outcome": "You say it plainly from the pulpit, with the numbers, and you say that no one in this building failed and that the province is out of sisters. It is a hard weekend and it stops the other story before it starts, and the sisters hear what you said and are grateful in a reserved way.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 3 },
+            { "target": "reputation", "key": "chancery", "delta": 2 },
+            { "target": "relationship", "key": "@principal", "delta": 5 }
+          ]
+        },
+        {
+          "id": "plan_for_lay_leadership",
+          "label": "Start hiring the lay principal now, quietly",
+          "outcome": "It is the responsible thing and it is eight months early, and the sisters find out that the search has begun before the school year is over. Nobody says anything unkind. Something in the relationship with that community does not come back.",
+          "effects": [
+            { "target": "money", "key": "cash", "delta": -12000 },
+            { "target": "relationship", "key": "@principal", "delta": -10 },
+            { "target": "flag", "key": "in_lay_principal_search", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "in_the_sister_who_was_here_first",
+      "phase": ["pastor", "administrator"],
+      "pressure": ["loyalty_vs_honesty", "competence"],
+      "severity": "NOTABLE",
+      "category": "group",
+      "baseWeight": 13,
+      "suppressYears": 6,
+      "requires": [{ "type": "group", "key": "religiousLed", "value": true }],
+      "title": "She Was Here Before You",
+      "body": "{@group_leader} has run that program for eleven years, through three pastors, and she runs it well and she runs it her way. You have a change you want made — a schedule, a text, a way of doing the sacramental preparation that you believe in — and you have discovered that you cannot simply direct it, because she is not your employee and not your volunteer: she is a Sister of a congregation, assigned by her superior, and the worst you could do is ask her superior to remove her, which you are not going to do over a schedule.",
+      "choices": [
+        {
+          "id": "persuade_her",
+          "label": "Make the case to her as one adult to another",
+          "default": true,
+          "outcome": "It takes two conversations, and in the second she concedes half and wins half, and the half she wins is the half where she was right and you had not thought it through. The program changes, and the manner of the changing is remembered on both sides for years.",
+          "effects": [
+            { "target": "relationship", "key": "@group_leader", "delta": 6 },
+            { "target": "group", "key": "vitality", "delta": 8 },
+            { "target": "flag", "key": "in_persuaded_the_sister", "value": true }
+          ]
+        },
+        {
+          "id": "pull_rank",
+          "label": "Tell her it is the pastor's decision, because it is",
+          "outcome": "Canonically you are on firm ground and she does what you ask, exactly and without warmth, for the next four years. The program survives. Two of the four volunteers she brought in drift away, and the thing that made it hers goes with them.",
+          "effects": [
+            { "target": "relationship", "key": "@group_leader", "delta": -12 },
+            { "target": "group", "key": "vitality", "delta": -14 },
+            { "target": "reputation", "key": "parishioners", "delta": -2 }
+          ]
+        },
+        {
+          "id": "leave_it_alone",
+          "label": "Leave it alone and put your energy somewhere it is wanted",
+          "outcome": "The program goes on being hers and being good, and you get your Thursday evenings back. You will not have the thing done your way in this parish, and you can live with that, and there is a version of you at thirty who could not have.",
+          "effects": [
+            { "target": "group", "key": "vitality", "delta": 3 },
+            { "target": "stat", "key": "piety", "delta": 1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "in_the_friar_preaches_the_mission",
+      "phase": ["pastor", "administrator", "parochial_vicar"],
+      "pressure": ["belief_vs_safety", "competence"],
+      "severity": "NOTABLE",
+      "category": "group",
+      "baseWeight": 12,
+      "suppressYears": 5,
+      "requires": [{ "type": "house", "value": true }],
+      "title": "The Parish Mission",
+      "body": "The friars who preach missions have a week free in Lent and the parish has not had one since before your time. {@religious} arrives on the Sunday with one bag and a portable amplifier he does not need, and preaches for five nights to a church that fills more each night, and says things from your pulpit in a register you do not have and would not attempt. On the Wednesday there are sixty people in line for confession at nine at night and you and he hear them until eleven.",
+      "choices": [
+        {
+          "id": "work_the_week_with_him",
+          "label": "Clear the week and work it beside him",
+          "default": true,
+          "outcome": "You hear confessions until your back gives out and do the door and the coffee and let him have the pulpit entirely. The parish is different in April in a way that lasts about eighteen months, which is what a mission does, and four of the sixty come back for good.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 6 },
+            { "target": "stat", "key": "piety", "delta": 3 },
+            { "target": "flag", "key": "in_the_mission_week", "value": true }
+          ]
+        },
+        {
+          "id": "keep_the_pulpit",
+          "label": "Preach the Sunday yourself and give him the weeknights",
+          "outcome": "A reasonable division and the week is still good. He is entirely gracious about it and you notice, on the Tuesday, that you are watching the line at his confessional and counting.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 3 },
+            { "target": "relationship", "key": "@religious", "delta": -2 }
+          ]
+        },
+        {
+          "id": "ask_him_how",
+          "label": "Ask him, afterward, how he does it",
+          "outcome": "He says two useful things and one that stings: that he can say anything because he leaves on Saturday, and that you can say almost anything because you do not, and that these are different jobs and the second one is harder and worth more.",
+          "effects": [
+            { "target": "relationship", "key": "@religious", "delta": 8 },
+            { "target": "stat", "key": "charisma", "delta": 2 },
+            { "target": "flag", "key": "in_learned_from_the_friar", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "in_the_monastery_bread",
+      "phase": ["pastor", "administrator", "parochial_vicar"],
+      "pressure": ["doubt"],
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 11,
+      "suppressYears": 4,
+      "requires": [{ "type": "house", "charism": "contemplative", "value": true }],
+      "title": "A Day At The Monastery",
+      "body": "The guestmaster says come whenever, which monasteries say and mean, and you have an unexpected Tuesday. Vigils at half past three if you want it, and nobody minds if you do not. They sing badly and slowly and entirely without self-consciousness, and the bread at breakfast is theirs, and one of them, who has not left this valley since 1974, asks you what the diocese is like now with a curiosity that is completely free of gossip.",
+      "choices": [
+        {
+          "id": "stay_the_night",
+          "label": "Stay the night and get up for Vigils",
+          "default": true,
+          "outcome": "Half past three in a cold church with nine old men and a candle. You do nothing useful for eighteen hours and come back with the strange sensation of having remembered something rather than learned it. You start going twice a year.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 4 },
+            { "target": "flag", "key": "in_the_monastery_habit", "value": true }
+          ]
+        },
+        {
+          "id": "day_only",
+          "label": "Take the day, and drive back for the evening Mass",
+          "outcome": "Six hours, a walk, one conversation, and the bread. It is not the same as the night and it is a great deal better than the Tuesday you would otherwise have had.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 2 }
+          ]
+        },
+        {
+          "id": "ask_for_prayers",
+          "label": "Ask them to pray for the parish by name, and mean it",
+          "outcome": "The prior writes the parish into the book, which is a real thing they do and read from, and tells you they will keep it for a year. You tell the parish. It is surprising how many people are consoled by the existence of nine old men in a valley.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 3 },
+            { "target": "stat", "key": "piety", "delta": 2 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "in_the_novice_from_your_parish",
+      "phase": ["pastor", "administrator"],
+      "pressure": ["friendship_vs_duty", "competence"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 11,
+      "suppressYears": 8,
+      "requires": [{ "type": "house", "value": true }],
+      "title": "She Is Not Going To The Diocese",
+      "body": "A young woman of the parish, twenty-three, has been coming to the early Mass for two years and has now asked to see you, and what she wants to say is that she is entering a religious community — not one of the local ones, a house eight hundred miles away with a long habit and a waiting list. Her mother is against it and is going to telephone you tomorrow. She wants to know what you think, and she has already decided, and both of those are true.",
+      "choices": [
+        {
+          "id": "back_her",
+          "label": "Tell her you think she should go, and tell her mother the same",
+          "default": true,
+          "outcome": "The telephone call from her mother lasts fifty minutes and is not friendly. You take it anyway and say the same thing you said to the daughter. She enters in September. The family is cool with you for two years and at her vows her mother finds you in the crowd and does not say anything, only holds on to your arm.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": -2 },
+            { "target": "stat", "key": "piety", "delta": 3 },
+            { "target": "flag", "key": "in_sent_a_sister", "value": true }
+          ]
+        },
+        {
+          "id": "slow_her_down",
+          "label": "Tell her to wait a year and finish the degree",
+          "outcome": "Sensible, and it is what her mother wants, and it is what you would tell a seminarian. She waits. She goes anyway the following August, one year older and not one bit less certain, and she tells you afterward that the year was wasted and she is grateful you did not fight her.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "flag", "key": "in_sent_a_sister", "value": true }
+          ]
+        },
+        {
+          "id": "point_her_local",
+          "label": "Point her at the sisters here, where the diocese could use her",
+          "outcome": "She goes to look at the local community out of respect for you and comes back knowing more clearly than before that it is the other one. You have used up a conversation on a preference of yours, and she is kind about it, which is worse.",
+          "effects": [
+            { "target": "relationship", "key": "@principal", "delta": 3 },
+            { "target": "stat", "key": "piety", "delta": -1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "in_the_provincial_visits",
+      "phase": ["pastor", "administrator"],
+      "pressure": ["loyalty_vs_honesty", "competence"],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 11,
+      "suppressYears": 6,
+      "requires": [{ "type": "group", "key": "religiousLed", "value": true }],
+      "title": "Her Superior Would Like A Word",
+      "body": "The provincial is in town for the visitation of the local house and would like twenty minutes with you, and the twenty minutes is about {@group_leader}: how she is, whether the work is right for her, whether the parish is a good place for her to be. It is a performance review of a woman who does not work for you, conducted by the person who can move her tomorrow, and what you say in this room will have consequences you will not be told about.",
+      "choices": [
+        {
+          "id": "say_what_is_true",
+          "label": "Say what is actually true, the good and the difficult",
+          "default": true,
+          "outcome": "You give her the honest picture including the two things that are hard, and you say plainly that you would keep her. The provincial writes nothing down and thanks you. The sister stays four more years, and you never learn whether the conversation was why.",
+          "effects": [
+            { "target": "honesty", "key": "", "delta": 3 },
+            { "target": "relationship", "key": "@group_leader", "delta": 2 },
+            { "target": "flag", "key": "in_spoke_to_the_provincial", "value": true }
+          ]
+        },
+        {
+          "id": "praise_only",
+          "label": "Praise her without qualification and ask for nothing",
+          "outcome": "A warm twenty minutes that commits you to nothing. The provincial is a shrewd woman who has been doing visitations for nine years and knows an unqualified reference when she hears one, and draws her own conclusions about the parish rather than the sister.",
+          "effects": [
+            { "target": "relationship", "key": "@group_leader", "delta": 1 }
+          ]
+        },
+        {
+          "id": "ask_for_more",
+          "label": "Ask her for a second sister",
+          "outcome": "She laughs, not unkindly, and explains the arithmetic of a province with a median age of seventy-four. Then she says that if anything ever frees up she will remember that somebody asked, which in her world is not nothing.",
+          "effects": [
+            { "target": "relationship", "key": "@group_leader", "delta": 3 },
+            { "target": "flag", "key": "in_asked_for_a_second_sister", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "in_the_order_priest_supplies",
+      "phase": ["pastor", "administrator"],
+      "pressure": ["belief_vs_safety", "loyalty_vs_honesty"],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 12,
+      "suppressYears": 5,
+      "requires": [{ "type": "house", "value": true }],
+      "title": "The Supply Priest Says Something",
+      "body": "You were away for the weekend and {@religious} took the Masses, which was generous of his house and saved you a supply stipend. He also preached, at all four, on a matter of some heat, in terms that are perfectly defensible in a lecture hall and are not what this parish is used to hearing at ten o'clock. Nine people have telephoned. Two of them have written to the chancery. He has gone back to his priory and is, canonically, not yours to correct.",
+      "choices": [
+        {
+          "id": "answer_it_yourself",
+          "label": "Answer it yourself from the pulpit, without attacking him",
+          "default": true,
+          "outcome": "You preach the following Sunday on the same matter, carefully, completely, and in this parish's language, and you do not mention him once. Seven of the nine are satisfied. The chancery reads both letters and one homily and concludes that the parish is in competent hands.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 4 },
+            { "target": "reputation", "key": "chancery", "delta": 3 },
+            { "target": "stat", "key": "theology", "delta": 1 }
+          ]
+        },
+        {
+          "id": "telephone_the_prior",
+          "label": "Telephone his prior",
+          "outcome": "The prior is polite and entirely uninterested in disciplining a man of fifty-eight over a homily, and says so in the gentlest possible way. What you have actually achieved is that the priory will be slower to lend you a man in August.",
+          "effects": [
+            { "target": "relationship", "key": "@religious", "delta": -8 },
+            { "target": "flag", "key": "in_complained_to_the_prior", "value": true }
+          ]
+        },
+        {
+          "id": "let_it_pass",
+          "label": "Let it pass and answer the nine individually",
+          "outcome": "Nine telephone calls over four evenings, each one about twenty minutes. It works, it costs you a week of evenings, and nothing is said publicly, which some of the nine take as agreement with him.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 1 },
+            { "target": "stat", "key": "piety", "delta": -1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "in_the_house_is_closing",
+      "phase": ["pastor", "administrator", "parochial_vicar"],
+      "pressure": ["doubt", "money"],
+      "severity": "MAJOR",
+      "category": "personal",
+      "baseWeight": 11,
+      "suppressYears": 15,
+      "once": true,
+      "requires": [{ "type": "house", "value": true }],
+      "title": "They Are Selling The Motherhouse",
+      "body": "The building has been on that hill since 1891 and had a hundred and forty sisters in it in 1962 and has nineteen now, all but three of them over eighty. The congregation is selling to a developer who will keep the facade, and the remaining sisters are going to a managed community two states away, and there is a final Mass in the chapel on a Saturday in June to which every priest of the diocese is invited and about forty come. Several of them were taught by these women.",
+      "choices": [
+        {
+          "id": "go_and_preach_it",
+          "label": "Go, and say out loud what they built",
+          "default": true,
+          "outcome": "You are asked to preach because you are the only one who telephoned to ask what they would like said. You go and find the numbers: the schools, the hospital, the orphanage that became the clinic, sixty years of teachers for a diocese that never paid them. Nineteen women in the front pews, and a diocese that has not thought about them in a decade.",
+          "effects": [
+            { "target": "reputation", "key": "brother_priests", "delta": 4 },
+            { "target": "reputation", "key": "public", "delta": 3 },
+            { "target": "stat", "key": "piety", "delta": 3 },
+            { "target": "flag", "key": "in_preached_the_motherhouse", "value": true }
+          ]
+        },
+        {
+          "id": "bring_the_parish",
+          "label": "Fill a bus from the parish",
+          "outcome": "Forty-one people from the parish, eleven of whom were taught by one of the nineteen and can name her. The sisters are overwhelmed in a way that they are too well trained to show for more than a second. The bus costs three hundred dollars and is the best three hundred dollars the parish spends that year.",
+          "effects": [
+            { "target": "money", "key": "cash", "delta": -300 },
+            { "target": "reputation", "key": "parishioners", "delta": 5 },
+            { "target": "stat", "key": "piety", "delta": 2 }
+          ]
+        },
+        {
+          "id": "send_regrets",
+          "label": "Send regrets; it is a Saturday and there are two weddings",
+          "outcome": "There are two weddings and they are real and you do them well. Nobody says a word about your absence, because the whole point of these women is that they never once made a claim on anybody's attention.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": -2 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "in_the_diverged_man_returns",
+      "phase": ["pastor", "administrator", "parochial_vicar"],
+      "pressure": ["friendship_vs_duty", "doubt"],
+      "severity": "MAJOR",
+      "category": "classmate",
+      "baseWeight": 13,
+      "suppressYears": 10,
+      "requires": [{ "type": "flag", "key": "classmate:diverged", "value": true }],
+      "title": "He Is Back, In A Habit",
+      "body": "{@diverged_classmate} is in the diocese for three days to preach at a house of his order and has telephoned to say he would like supper, and arrives in a habit and sandals in February, driving a fourteen-year-old car belonging to the community. He is not interested in who got which parish. He asks about your mother by name. Halfway through the meal you realize you have been talking for forty minutes about the chancery to a man who has no idea what any of the names mean and is listening anyway, out of love, and you stop.",
+      "choices": [
+        {
+          "id": "ask_about_his_life",
+          "label": "Stop, and ask him about his own twenty years",
+          "default": true,
+          "outcome": "Poverty, obedience, four moves he did not choose, a stretch in a place he hated, and a peace that is not a technique. He does not offer it as a rebuke and you do not take it as one, and you are both awake at one in the morning at the kitchen table like men of twenty-four.",
+          "effects": [
+            { "target": "relationship", "key": "@diverged_classmate", "delta": 12 },
+            { "target": "stat", "key": "piety", "delta": 4 },
+            { "target": "flag", "key": "in_the_long_supper", "value": true }
+          ]
+        },
+        {
+          "id": "ask_him_the_real_question",
+          "label": "Ask him whether he thinks you should have gone that way too",
+          "outcome": "He says no, immediately and without flattery, and gives a reason about your temperament that is accurate and slightly unflattering and that nobody else has ever said to you. You think about it for a decade.",
+          "effects": [
+            { "target": "relationship", "key": "@diverged_classmate", "delta": 8 },
+            { "target": "stat", "key": "piety", "delta": 2 },
+            { "target": "flag", "key": "in_asked_the_real_question", "value": true }
+          ]
+        },
+        {
+          "id": "keep_it_light",
+          "label": "Keep it to the seminary stories and the food",
+          "outcome": "A pleasant evening of 1987 and a bottle of the decent wine, and he leaves at half past nine because his community rises early. Nothing is said. He writes at Christmas, as he has every year, and you mean to answer.",
+          "effects": [
+            { "target": "relationship", "key": "@diverged_classmate", "delta": 2 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "in_the_third_order_asks",
+      "phase": ["pastor", "administrator", "parochial_vicar"],
+      "pressure": ["belief_vs_safety", "competence"],
+      "severity": "NOTABLE",
+      "category": "group",
+      "baseWeight": 11,
+      "suppressYears": 6,
+      "requires": [{ "type": "house", "value": true }],
+      "title": "A Chapter In The Parish Hall",
+      "body": "Eleven lay people, most of them over sixty and three of them under thirty, want to meet monthly in the hall as a chapter of a third order, with a friar coming out twice a year for professions. They are entirely within their rights, they have the priory's blessing, and they are asking you as a courtesy rather than for permission. They would also like the seven o'clock Mass on the feast of their founder, which is a Thursday and is currently the school Mass.",
+      "choices": [
+        {
+          "id": "give_them_the_hall",
+          "label": "Give them the hall and the Thursday, and go to the first meeting",
+          "default": true,
+          "outcome": "The hall costs you nothing and the Thursday costs you a conversation with the principal. You go to the first meeting and the fourth, and discover that three of the most reliable people in the parish are in that room and that one of them has been waiting nine years for somebody to let her have this.",
+          "effects": [
+            { "target": "group", "key": "vitality", "delta": 10 },
+            { "target": "reputation", "key": "parishioners", "delta": 3 },
+            { "target": "flag", "key": "in_the_chapter", "value": true }
+          ]
+        },
+        {
+          "id": "hall_but_not_the_mass",
+          "label": "The hall yes, the school Mass no",
+          "outcome": "A reasonable line and they accept it without complaint and take the eight o'clock instead. It is remembered as the first time you said no to them, and it colors the next three requests, none of which is unreasonable either.",
+          "effects": [
+            { "target": "group", "key": "vitality", "delta": 3 }
+          ]
+        },
+        {
+          "id": "keep_them_at_arms_length",
+          "label": "Suggest they meet at the priory, where they belong",
+          "outcome": "It is forty minutes away and four of the eleven cannot drive at night, and within a year there are seven of them and the two under thirty have stopped coming to your parish as well.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": -3 },
+            { "target": "flag", "key": "in_turned_the_chapter_away", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "in_the_sister_is_reassigned",
+      "phase": ["pastor", "administrator"],
+      "pressure": ["friendship_vs_duty", "competence"],
+      "severity": "MAJOR",
+      "category": "group",
+      "baseWeight": 12,
+      "suppressYears": 7,
+      "requires": [{ "type": "group", "key": "religiousLed", "value": true }],
+      "title": "Six Weeks, And She Is Gone",
+      "body": "The letter is to her and the copy is to you, and it is four lines: the community needs her in the other house from the first of August. She has run that work for six years and has two people half-trained and a program that runs because she is in it. She is not upset in any way you can see, because she took a vow about exactly this in 1979 and has kept it four times already, and she asks only whether she may tell the volunteers herself.",
+      "choices": [
+        {
+          "id": "let_her_hand_it_over",
+          "label": "Give her the six weeks entirely: no other duties, hand it over properly",
+          "default": true,
+          "outcome": "Six weeks of nothing but handover, and she writes everything down, which she has never had time to do. The program dips and does not die. Her successor is a lay woman who works from the sister's notebook for four years.",
+          "effects": [
+            { "target": "group", "key": "vitality", "delta": -8 },
+            { "target": "relationship", "key": "@group_leader", "delta": 8 },
+            { "target": "flag", "key": "in_handover_done_right", "value": true }
+          ]
+        },
+        {
+          "id": "ask_for_her_to_stay",
+          "label": "Write to her superior and ask for one more year",
+          "outcome": "You write a good letter and the answer comes in nine days and is no, with reasons, and the reasons are about a house with a dying sister in it and not about you. She hears that you wrote, which matters to her more than the answer.",
+          "effects": [
+            { "target": "relationship", "key": "@group_leader", "delta": 10 },
+            { "target": "group", "key": "vitality", "delta": -14 },
+            { "target": "flag", "key": "in_asked_for_one_more_year", "value": true }
+          ]
+        },
+        {
+          "id": "take_it_over_yourself",
+          "label": "Announce that you will run it yourself until somebody is found",
+          "outcome": "You take on eight hours a week that you do not have, and the program keeps its numbers for a year and a half, and two other things in your week quietly rot while nobody is looking at them.",
+          "effects": [
+            { "target": "group", "key": "vitality", "delta": 4 },
+            { "target": "ap", "key": "", "delta": -2 },
+            { "target": "flag", "key": "in_running_it_myself", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "in_the_hospital_sisters",
+      "phase": ["pastor", "administrator", "parochial_vicar"],
+      "pressure": ["money", "belief_vs_safety"],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 10,
+      "suppressYears": 8,
+      "requires": [{ "type": "house", "charism": "active", "value": true }],
+      "title": "The Hospital Is Being Sold",
+      "body": "The sisters built that hospital in 1908 and have been the sponsoring congregation ever since, and now the system is being merged into a secular network because there are four sisters left on the board and none under seventy-five. There are questions of what stays: the chapel, the chaplaincy, the crucifixes, the ethical directives. The local sister on the board, whom you know, telephones to ask whether you will come to the community meeting, because a priest in the room changes what gets said.",
+      "choices": [
+        {
+          "id": "go_and_speak",
+          "label": "Go, and speak for the chapel and the chaplaincy in public",
+          "default": true,
+          "outcome": "You say the three things that must be written into the sale and you say them on the record with a reporter present. Two of the three make it into the agreement. The third does not, and the chapel is still there eleven years later, which is not nothing.",
+          "effects": [
+            { "target": "reputation", "key": "public", "delta": 5 },
+            { "target": "reputation", "key": "chancery", "delta": 2 },
+            { "target": "flag", "key": "in_spoke_for_the_hospital", "value": true }
+          ]
+        },
+        {
+          "id": "work_it_privately",
+          "label": "Work it privately with the chancery and the lawyers",
+          "outcome": "Three months of telephone calls nobody will ever know about, and the ethical directives survive the merger in a form the diocese can live with. No one thanks you because no one is aware, and the chancery is aware.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": 6 },
+            { "target": "stat", "key": "administration", "delta": 1 }
+          ]
+        },
+        {
+          "id": "stay_out",
+          "label": "Stay out of it; it is the bishop's business and the sisters'",
+          "outcome": "It is genuinely not your business and you have a parish. The chapel becomes a meditation room in the second year after the sale, and the sister who telephoned does not telephone again.",
+          "effects": [
+            { "target": "relationship", "key": "@religious", "delta": -6 },
+            { "target": "reputation", "key": "public", "delta": -1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "in_the_contemplative_asks_you",
+      "phase": ["pastor", "administrator", "parochial_vicar"],
+      "pressure": ["competence", "doubt"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 10,
+      "suppressYears": 8,
+      "requires": [{ "type": "house", "charism": "contemplative", "value": true }],
+      "title": "They Want A Chaplain",
+      "body": "The nuns need a priest for Mass four mornings a week and confessions on Saturdays; their chaplain of twenty-two years has died. It is a forty-minute drive at half past six in the morning, in addition to everything else, for a community of fourteen women who will pray for you daily for the rest of your life and will never once ask you for anything else. The prioress puts it to you without a trace of pressure, which is the most effective way it has ever been put to you.",
+      "choices": [
+        {
+          "id": "take_it",
+          "label": "Take it, four mornings a week",
+          "default": true,
+          "outcome": "The alarm at five, the dark road, the grille, the fourteen voices. It costs you the best hours of four mornings and it turns out to be the thing that holds the rest of the week upright. You keep it for eleven years and hand it on reluctantly.",
+          "effects": [
+            { "target": "ap", "key": "", "delta": -2 },
+            { "target": "stat", "key": "piety", "delta": 6 },
+            { "target": "flag", "key": "in_the_nuns_chaplain", "value": true }
+          ]
+        },
+        {
+          "id": "take_saturdays",
+          "label": "Take the Saturdays only, and find them a retired man for the mornings",
+          "outcome": "You find them Monsignor somebody in the next deanery who is delighted to be asked, and you keep the confessions, and the arrangement works. The fourteen add you to the book anyway.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 3 },
+            { "target": "reputation", "key": "brother_priests", "delta": 2 }
+          ]
+        },
+        {
+          "id": "decline_it",
+          "label": "Say no; the parish has first claim",
+          "outcome": "It is the correct answer and the prioress says so, warmly, and means it. The community goes without daily Mass for three months until the chancery finds somebody, and you think about those three months more than you expected to.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": -2 },
+            { "target": "flag", "key": "in_declined_the_nuns", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "in_the_habit_question",
+      "phase": ["pastor", "administrator"],
+      "pressure": ["belief_vs_safety", "loyalty_vs_honesty"],
+      "severity": "NOTABLE",
+      "category": "group",
+      "baseWeight": 10,
+      "suppressYears": 6,
+      "requires": [{ "type": "group", "key": "religiousLed", "value": true }],
+      "title": "A Parishioner Asks Why She Does Not Wear One",
+      "body": "It is asked at the back of church, in front of four other people, in the voice of somebody who has been waiting for the chance: why does the sister who runs the program not dress like a sister. The woman asking has a daughter in the program and has been reading things on the internet about congregations like hers. The sister is eleven feet away, stacking chairs, and has heard the whole question, and goes on stacking chairs.",
+      "choices": [
+        {
+          "id": "answer_it_properly",
+          "label": "Answer it properly, there, with the history",
+          "default": true,
+          "outcome": "You explain what her congregation actually did in 1968 and why, and what her constitutions say, and that she is under vows and has been for thirty-one years, and that the dress is a matter for her chapter and not for this hallway. The woman is not persuaded and is silenced, which is different and is enough.",
+          "effects": [
+            { "target": "relationship", "key": "@group_leader", "delta": 8 },
+            { "target": "reputation", "key": "parishioners", "delta": 1 },
+            { "target": "stat", "key": "knowledge", "delta": 1 }
+          ]
+        },
+        {
+          "id": "deflect_it",
+          "label": "Deflect it lightly and move everybody along",
+          "outcome": "A joke, a hand on an elbow, and the hallway empties. Nothing is said and nothing is settled, and the sister goes on stacking chairs, and the question is asked again in six weeks by somebody else.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 1 },
+            { "target": "relationship", "key": "@group_leader", "delta": -2 }
+          ]
+        },
+        {
+          "id": "agree_with_the_woman",
+          "label": "Say that you would rather see the habit too",
+          "outcome": "It is an honest opinion and you are entitled to it, and you have said it eleven feet from a woman under vows in front of four parishioners. The program continues. She is correct and formal with you for the remaining years, and the volunteers pick a side within a month.",
+          "effects": [
+            { "target": "relationship", "key": "@group_leader", "delta": -14 },
+            { "target": "group", "key": "vitality", "delta": -10 },
+            { "target": "outspokenness", "key": "", "delta": 3 },
+            { "target": "flag", "key": "in_sided_against_the_sister", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "in_the_order_wants_the_parish",
+      "phase": ["pastor"],
+      "pressure": ["ambition_vs_integrity", "competence"],
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 10,
+      "suppressYears": 12,
+      "once": true,
+      "requires": [
+        { "type": "house", "value": true },
+        { "type": "years_ordained", "op": ">=", "value": 12 }
+      ],
+      "title": "The Bishop Is Thinking Of Giving It To An Order",
+      "body": "It reaches you sideways, as these things do: the bishop is short of men and one of the orders has offered to staff two parishes, and yours has been mentioned, because it is large and because the order already has a house in the county. If it happens, the parish becomes theirs — three of them where there is one of you — and you go wherever you go. Nothing has been decided. The vicar for clergy would like to know, informally, how you would feel about it.",
+      "choices": [
+        {
+          "id": "argue_for_the_parish",
+          "label": "Argue for what the parish needs, whoever provides it",
+          "default": true,
+          "outcome": "You write two pages on what three men in that rectory could do that one cannot, and what would be lost, and you do not argue for yourself anywhere in it. The chancery is slightly thrown by this. The decision goes the other way in the end, and the way you argued is remembered longer than the decision.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": 6 },
+            { "target": "honesty", "key": "", "delta": 3 },
+            { "target": "flag", "key": "in_argued_for_the_parish", "value": true }
+          ]
+        },
+        {
+          "id": "fight_to_keep_it",
+          "label": "Fight to keep it",
+          "outcome": "You make the case for yourself, hard, with the parish council behind you and two letters from prominent parishioners. It works. It also tells the chancery something about you that will be recalled the next time your name is on a list for anything.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": -5 },
+            { "target": "reputation", "key": "parishioners", "delta": 4 },
+            { "target": "flag", "key": "in_fought_for_the_parish", "value": true }
+          ]
+        },
+        {
+          "id": "offer_to_go",
+          "label": "Say that if three men are better than one, you will go where you are sent",
+          "outcome": "The vicar for clergy tells the bishop, in those words, and the bishop remembers it for a decade. It is entirely sincere and it is also the single most useful sentence you have ever said about your own career, and you know both of those while you are saying it.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": 10 },
+            { "target": "relationship", "key": "@bishop", "delta": 6 },
+            { "target": "stat", "key": "piety", "delta": 1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "in_the_retreat_with_the_order",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["doubt", "belief_vs_safety"],
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 11,
+      "suppressYears": 5,
+      "requires": [{ "type": "house", "value": true }],
+      "title": "Their Retreat Or The Diocese's",
+      "body": "Canon law owes you a retreat every year and the diocese runs one: a hotel conference center, a speaker flown in, thirty priests, decent food, and a schedule with free afternoons that are mostly golf. The order's retreat house offers the other kind: eight days of silence, a director who will see you daily, a room with a bed and a chair, and no golf of any description. Both weeks cost the parish the same thing, which is you.",
+      "choices": [
+        {
+          "id": "the_silent_eight",
+          "label": "The eight days of silence",
+          "default": true,
+          "outcome": "Three days of climbing the walls, and then something gives, and the last four are the most useful days you have had in years. You come back quieter and the parish notices without being able to say what changed.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 6 },
+            { "target": "flag", "key": "in_the_silent_retreat", "value": true }
+          ]
+        },
+        {
+          "id": "the_diocesan_week",
+          "label": "The diocesan week, and the thirty priests",
+          "outcome": "A decent speaker, two long evenings with men you only see at funerals, and a golf game in which you are beaten badly by a seventy-year-old pastor. It is not much of a retreat and it is a great deal of fraternity, and you needed some.",
+          "effects": [
+            { "target": "reputation", "key": "brother_priests", "delta": 5 },
+            { "target": "stat", "key": "piety", "delta": 1 }
+          ]
+        }
+      ]
+    }
+  ]
+}

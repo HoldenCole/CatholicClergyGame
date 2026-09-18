@@ -21,7 +21,14 @@ describe('divergence', () => {
     expect(statGap).toBeGreaterThan(8);
     const repGap = (['parishioners', 'chancery', 'brother_priests', 'public', 'rome'] as const).reduce((n, k) => n + Math.abs(ca.reputation[k] - cb.reputation[k]), 0);
     expect(repGap).toBeGreaterThan(5);
-    expect(JSON.stringify(ca.positions)).not.toBe(JSON.stringify(cb.positions));
+    // The record: two men who both keep their heads down for four years is a legitimate pair of
+    // runs, so the stands are compared where either man took one, and the marks on the file always.
+    if (ca.positions.length || cb.positions.length) expect(JSON.stringify(ca.positions)).not.toBe(JSON.stringify(cb.positions));
+    const marks = (flags: Record<string, unknown>) => new Set(Object.keys(flags).filter((k) => flags[k] === true));
+    const ma = marks(a.flags);
+    const mb = marks(b.flags);
+    const apart = [...ma].filter((k) => !mb.has(k)).length + [...mb].filter((k) => !ma.has(k)).length;
+    expect(apart).toBeGreaterThanOrEqual(3);
     const relGap = Object.keys(a.npcs).reduce((n, id) => n + Math.abs((a.npcs[id]?.relationship ?? 0) - (b.npcs[id]?.relationship ?? 0)), 0);
     expect(relGap).toBeGreaterThan(20);
     // The histories are not the same story.

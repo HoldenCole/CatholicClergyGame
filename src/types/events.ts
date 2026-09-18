@@ -3,6 +3,7 @@ import type { ConstituencyKey, Phase, StatKey, Volume } from './stats';
 import type { Season } from './time';
 import type { DecorPlace, DecorSlot } from './decor';
 import type { LiturgicalStance, LiturgicalTopic } from './world';
+import type { MinistryKey } from './ministry';
 
 /** Drives interrupts. See DESIGN.md §12.3. */
 export type Severity = 'ROUTINE' | 'NOTABLE' | 'MAJOR' | 'CRITICAL';
@@ -109,11 +110,15 @@ export type Condition =
   | { type: 'place'; key: string; op: Op; value: number }
   /** A posting's book (study.record): how many of a thing the years there have counted. */
   | { type: 'record'; key: string; op: Op; value: number }
+  /** The book of a whole ministry (DESIGN §8.6): Masses said, confessions heard, baptisms, funerals. */
+  | { type: 'ministry'; key: MinistryKey; op: Op; value: number }
+  /** What a life adds up to besides the sacraments: posts held, men formed, parishes turned, vocations sent. */
+  | { type: 'life'; key: 'posts' | 'formed' | 'turnarounds' | 'vocations' | 'offices'; op: Op; value: number }
   /**
    * Extension: some group of the current parish matches. When an event
    * carries group conditions, @group_leader binds to a matching group.
    */
-  | { type: 'group'; key: 'type' | 'vitality' | 'hostile' | 'suppressed' | 'foundedByPlayer' | 'agenda'; value: string | boolean }
+  | { type: 'group'; key: 'type' | 'vitality' | 'hostile' | 'suppressed' | 'foundedByPlayer' | 'agenda' | 'religiousLed'; value: string | boolean }
   /** A feast that falls in the current week, as the parish keeps it (engine/feasts.ts). */
   | { type: 'feast'; key: string }
   /** The share of the parish from one community: latino, vietnamese, polish, filipino, korean, nigerian, indian... */

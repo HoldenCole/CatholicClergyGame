@@ -169,7 +169,10 @@ export async function listRemote(cfg: GithubConfig): Promise<RemoteSave[]> {
       sha: f.sha,
     };
   });
-  return saves.sort((a, b) => (a.savedAt < b.savedAt ? 1 : a.savedAt > b.savedAt ? -1 : 0));
+  // Newest first. Two saves written in the same millisecond tie on the timestamp, so the
+  // index's own order breaks it: writeRemote appends the one just written to the end.
+  const order = new Map(index.map((m, i) => [m.path, i]));
+  return saves.sort((a, b) => (a.savedAt < b.savedAt ? 1 : a.savedAt > b.savedAt ? -1 : (order.get(b.path) ?? -1) - (order.get(a.path) ?? -1)));
 }
 
 type IndexEntry = Omit<RemoteSave, 'sha'>;

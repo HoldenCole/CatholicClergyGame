@@ -1,0 +1,313 @@
+{
+  "_notes": "Religious in the seminary (DESIGN §6.6, §6.7): the friars who teach, the sisters nobody sees, the house that is not the diocese, and the question a man in a habit eventually puts to you.",
+  "events": [
+    {
+      "id": "sm_rl_the_friar_teaches",
+      "phase": ["seminary"],
+      "yearGate": [2, 3, 4],
+      "pressure": ["competence", "belief_vs_safety"],
+      "severity": "NOTABLE",
+      "category": "formation",
+      "baseWeight": 12,
+      "suppressYears": 4,
+      "title": "The Friar Who Teaches Dogma",
+      "body": "{@religious} has taught the treatise on grace in this house for nineteen years and does it in a white habit with a piece of chalk and no notes. He is the hardest marker on the faculty and the only one who stays behind after class. The diocesan men complain about him constantly and queue outside his door constantly, and he has a way of answering a question with the history of the question that half the class finds maddening and half will still be using at fifty.",
+      "choices": [
+        {
+          "id": "go_to_his_door",
+          "label": "Queue at his door with the thing you do not understand",
+          "default": true,
+          "outcome": "Forty minutes on a single article, at the end of which you understand it and understand that you did not understand it before, which is a different and worse feeling. He tells you to come back Thursday. You go every Thursday for two years.",
+          "effects": [
+            { "target": "stat", "key": "theology", "delta": 4 },
+            { "target": "pillar", "key": "intellectual", "delta": 3 },
+            { "target": "relationship", "key": "@religious", "delta": 8 }
+          ]
+        },
+        {
+          "id": "learn_the_exam",
+          "label": "Work out what he wants on the examination and give him that",
+          "outcome": "You get the mark. He writes on the paper, in a small hand, that this is correct and that you have not thought about any of it, and you carry the sentence around for rather longer than you carry the treatise.",
+          "effects": [
+            { "target": "stat", "key": "theology", "delta": 2 },
+            { "target": "flag", "key": "sm_rl_played_the_exam", "value": true }
+          ]
+        },
+        {
+          "id": "complain_with_the_rest",
+          "label": "Join the complaint that a friar does not understand diocesan life",
+          "outcome": "It is a popular line in the common room and there is a grain of truth in it, and it saves you the Thursdays. He is unfailingly courteous to you for the remaining years, in the way of a man who has heard it in every class since 1981.",
+          "effects": [
+            { "target": "relationship", "key": "@religious", "delta": -5 },
+            { "target": "relationship", "key": "@random_classmate", "delta": 3 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sm_rl_the_silent_retreat",
+      "phase": ["seminary"],
+      "yearGate": [1, 2, 3, 4, 5, 6],
+      "pressure": ["doubt"],
+      "severity": "NOTABLE",
+      "category": "formation",
+      "baseWeight": 12,
+      "suppressYears": 3,
+      "title": "The Trappist Preaches The Retreat",
+      "body": "The annual retreat is preached this year by a monk of sixty from an abbey four hours north, who gives four conferences in eight days and spends the rest of the time available in a room off the corridor, and says at the first conference that he has nothing to sell you and no advice about your vocation. He speaks slowly and leaves long gaps. By the third day half the house has been in to see him and the other half is making jokes about the gaps.",
+      "choices": [
+        {
+          "id": "go_in_and_say_the_thing",
+          "label": "Go in and say the thing you have not said to the formation team",
+          "default": true,
+          "outcome": "You say it to a man you will never see again, which is why you can say it, and he does not flinch and does not give advice. He gives you a psalm and a way of sitting with it and tells you that it will take about four years. It takes about four years.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 5 },
+            { "target": "pillar", "key": "spiritual", "delta": 3 },
+            { "target": "flag", "key": "sm_rl_said_it_to_the_monk", "value": true }
+          ]
+        },
+        {
+          "id": "keep_the_silence",
+          "label": "Keep the silence properly and speak to nobody at all",
+          "outcome": "Eight days of actual silence, which nobody in the house manages, including the faculty. You are very tired by the sixth day and clearer by the eighth, and you find out what you are like without an audience.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 4 },
+            { "target": "pillar", "key": "human", "delta": 2 }
+          ]
+        },
+        {
+          "id": "make_the_jokes",
+          "label": "Be with the half making the jokes",
+          "outcome": "They are good jokes and the week passes quickly and you sleep a great deal. On the last morning he says one sentence in the final conference that lands in you sideways anyway, and you resent it slightly.",
+          "effects": [
+            { "target": "relationship", "key": "@random_classmate", "delta": 4 },
+            { "target": "stat", "key": "piety", "delta": -1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sm_rl_drive_him_to_the_monastery",
+      "phase": ["seminary"],
+      "yearGate": [2, 3, 4],
+      "pressure": ["friendship_vs_duty", "doubt"],
+      "severity": "MAJOR",
+      "category": "classmate",
+      "baseWeight": 13,
+      "suppressYears": 5,
+      "once": true,
+      "title": "He Wants You To Drive Him Up There",
+      "body": "{@closest_classmate} asks you, in the corridor, not to say anything, and then asks whether you will drive him to a monastery three hours away for a weekend visit. He has been reading things and going quiet at recreation, and he has not told the rector or his vocation director, because the moment he tells them he has started something he cannot stop. He wants you because you will not talk him out of it and will not talk him into it either, which is a great deal of confidence to place in a man of twenty-four.",
+      "choices": [
+        {
+          "id": "drive_him",
+          "label": "Drive him, wait, and say nothing the whole way home",
+          "default": true,
+          "outcome": "Three hours up with the radio on, a weekend in a guest wing, and three hours back in which he says almost nothing and you ask almost nothing. He goes, in the end, eighteen months later. He tells you, years afterward, that the silence in the car was the kindest thing anybody did for him in the seminary.",
+          "effects": [
+            { "target": "relationship", "key": "@closest_classmate", "delta": 12 },
+            { "target": "pillar", "key": "human", "delta": 3 },
+            { "target": "flag", "key": "sm_rl_drove_him", "value": true }
+          ]
+        },
+        {
+          "id": "drive_and_argue",
+          "label": "Drive him, and argue for the diocese the whole way home",
+          "outcome": "You make the case for parishes and people and the streets, and it is a good case and he has heard it from everybody. He thanks you at the door and stops telling you things. He goes anyway, and you find out with everybody else.",
+          "effects": [
+            { "target": "relationship", "key": "@closest_classmate", "delta": -6 },
+            { "target": "flag", "key": "sm_rl_argued_with_him", "value": true }
+          ]
+        },
+        {
+          "id": "tell_the_director",
+          "label": "Tell him he must tell his vocation director, and refuse until he does",
+          "outcome": "You are procedurally right and it is the end of the friendship in the form it had. He tells the director, is handled correctly and kindly, and goes. He is civil to you for the next two years and never asks you for anything again.",
+          "effects": [
+            { "target": "relationship", "key": "@closest_classmate", "delta": -12 },
+            { "target": "reputation", "key": "chancery", "delta": 2 },
+            { "target": "flag", "key": "sm_rl_reported_him", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sm_rl_the_sisters_in_the_kitchen",
+      "phase": ["seminary"],
+      "yearGate": [1, 2, 3],
+      "pressure": ["competence"],
+      "severity": "ROUTINE",
+      "category": "formation",
+      "baseWeight": 11,
+      "suppressYears": 4,
+      "title": "The Women Nobody In This Building Can Name",
+      "body": "Four sisters of a congregation you have never heard of run the kitchen and the infirmary and have done since the building opened. They are up before the house and in the chapel before that. Ninety young men eat three meals a day here and you realize, standing at the counter in February, that you can name one of the four, and that you have called her Sister for two years without ever asking which Sister.",
+      "choices": [
+        {
+          "id": "learn_the_names",
+          "label": "Learn all four names and use them",
+          "default": true,
+          "outcome": "It takes one afternoon and a small amount of embarrassment. Sister Bernadette has been here thirty-one years and has watched four hundred priests go through, and she tells you which of them come back and which do not, and it is not the list you would have guessed.",
+          "effects": [
+            { "target": "pillar", "key": "human", "delta": 3 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "flag", "key": "sm_rl_knew_their_names", "value": true }
+          ]
+        },
+        {
+          "id": "work_in_the_kitchen",
+          "label": "Ask to work in the kitchen on Saturdays",
+          "outcome": "Nobody has asked in eleven years. You peel things badly for a term and get an education in the house that no formation conference could provide, including which of the faculty are kind to staff when nobody is looking.",
+          "effects": [
+            { "target": "pillar", "key": "human", "delta": 4 },
+            { "target": "pillar", "key": "pastoral", "delta": 2 },
+            { "target": "flag", "key": "sm_rl_kitchen_saturdays", "value": true }
+          ]
+        },
+        {
+          "id": "notice_and_move_on",
+          "label": "Notice it, and go to class",
+          "outcome": "You go to class, because there is a class, and the thought is gone by the second period. It comes back in about fifteen years when you are a pastor and cannot remember the name of the woman who cleans your own church.",
+          "effects": [
+            { "target": "pillar", "key": "human", "delta": -1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sm_rl_the_refectory_argument",
+      "phase": ["seminary"],
+      "yearGate": [2, 3, 4, 5],
+      "pressure": ["belief_vs_safety", "ambition_vs_integrity"],
+      "severity": "NOTABLE",
+      "category": "formation",
+      "baseWeight": 12,
+      "suppressYears": 3,
+      "title": "Seculars And Religious, At Supper",
+      "body": "It starts as a joke at the end of the table and turns into the argument the house has about once a term: that the orders take the men who cannot face a parish, or, from the other side, that the diocesan clergy are civil servants with cars and no vows worth the name. Two of the men at the table are seriously considering an order and are sitting very still. {@rival_classmate} is enjoying himself and is about to say the thing about poverty that will end the evening badly.",
+      "choices": [
+        {
+          "id": "shut_it_down",
+          "label": "Shut it down before he says it",
+          "default": true,
+          "outcome": "You get in first with something dull about the different charisms and the table groans and the moment passes and nobody is humiliated in public over what they might be discerning. One of the two finds you afterward to say thank you without saying what for.",
+          "effects": [
+            { "target": "pillar", "key": "human", "delta": 3 },
+            { "target": "relationship", "key": "@rival_classmate", "delta": -3 },
+            { "target": "relationship", "key": "@random_classmate", "delta": 5 }
+          ]
+        },
+        {
+          "id": "take_the_argument_seriously",
+          "label": "Take the argument seriously and make the case for diocesan life",
+          "outcome": "You say what a secular priest actually is: no community, no habit, no rule, a bishop and a parish and the day in front of him, and that the lack of a rule is not a lack of severity. It is the best thing you say at that table all year and two men remember it years later.",
+          "effects": [
+            { "target": "stat", "key": "theology", "delta": 2 },
+            { "target": "outspokenness", "key": "", "delta": 3 },
+            { "target": "pillar", "key": "intellectual", "delta": 2 }
+          ]
+        },
+        {
+          "id": "enjoy_it",
+          "label": "Enjoy it and let him say the thing about poverty",
+          "outcome": "He says it and it is funny and cruel and the table laughs and the two quiet men do not. One of them leaves the house in March. It would be convenient to believe the two facts are unconnected.",
+          "effects": [
+            { "target": "relationship", "key": "@rival_classmate", "delta": 4 },
+            { "target": "pillar", "key": "human", "delta": -2 },
+            { "target": "flag", "key": "sm_rl_let_it_run", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sm_rl_a_week_at_the_priory",
+      "phase": ["seminary"],
+      "yearGate": [3, 4, 5],
+      "pressure": ["competence", "doubt"],
+      "severity": "NOTABLE",
+      "category": "formation",
+      "baseWeight": 11,
+      "suppressYears": 4,
+      "title": "A Week At Their Soup Kitchen",
+      "body": "The pastoral placement this term is a week with the friars in the city: three hundred meals a day out of a basement, a queue from eleven o'clock, a brother of seventy-eight on the door who knows four hundred people by name and which of them are dangerous. You expected to be moved. What you actually feel by the Wednesday is useless, because you are slow at the trays and frightened of the man who shouts, and the brother of seventy-eight is neither.",
+      "choices": [
+        {
+          "id": "ask_him_to_teach_you",
+          "label": "Ask the old brother to teach you the door",
+          "default": true,
+          "outcome": "Two days on the door beside him. He teaches you three rules, all of them about the face and none of them about words, and by Friday you have talked a man down from something without noticing that you were doing it. It is the most useful week of your formation.",
+          "effects": [
+            { "target": "pillar", "key": "pastoral", "delta": 5 },
+            { "target": "stat", "key": "charisma", "delta": 2 },
+            { "target": "flag", "key": "sm_rl_the_door", "value": true }
+          ]
+        },
+        {
+          "id": "stay_on_the_trays",
+          "label": "Stay on the trays and get good at the trays",
+          "outcome": "By Friday you are fast and the kitchen is glad of you and you have spoken to almost nobody in the queue. It is real work, honestly done, and you go back to the house with clean hands in a way that is not entirely a compliment.",
+          "effects": [
+            { "target": "pillar", "key": "pastoral", "delta": 2 },
+            { "target": "pillar", "key": "human", "delta": 1 }
+          ]
+        },
+        {
+          "id": "ask_why_they_do_it",
+          "label": "Ask the friars, in the evening, why they live like this",
+          "outcome": "The answer takes an hour and involves three of them disagreeing with each other about their own founder, and none of it is sentimental, and one of them says the thing about the vow of poverty being mostly about the telephone bill. You write four pages that night.",
+          "effects": [
+            { "target": "stat", "key": "theology", "delta": 2 },
+            { "target": "pillar", "key": "spiritual", "delta": 2 },
+            { "target": "relationship", "key": "@religious", "delta": 5 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sm_rl_the_question_put_to_you",
+      "phase": ["seminary"],
+      "yearGate": [3, 4, 5],
+      "pressure": ["doubt", "ambition_vs_integrity"],
+      "severity": "MAJOR",
+      "category": "formation",
+      "baseWeight": 12,
+      "suppressYears": 6,
+      "once": true,
+      "title": "He Asks Whether You Have Ever Considered It",
+      "body": "{@religious} asks it in the corridor after the last class of term, without preamble and without any apparent interest in the answer: whether you have ever considered the life. He is not recruiting; his own house takes two men a year and turns most away. He says that a man who has never once asked himself the question is a man who chose the diocese by default, and that choosing by default is a perfectly ordinary way to arrive at a good life and is not the same as choosing.",
+      "choices": [
+        {
+          "id": "sit_with_the_question",
+          "label": "Take the question seriously for a month",
+          "default": true,
+          "outcome": "A month of genuinely asking, with your director, and at the end of it you know why you are diocesan: not because it is easier, which it is not, but for a reason you can now say in one sentence. You say that sentence to yourself at three bad moments over the next thirty years.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 3 },
+            { "target": "pillar", "key": "spiritual", "delta": 3 },
+            { "target": "flag", "key": "sm_rl_chose_on_purpose", "value": true }
+          ]
+        },
+        {
+          "id": "answer_at_once",
+          "label": "Answer him at once: no, and here is why",
+          "outcome": "You give a fluent and entirely honest answer in about ninety seconds. He nods and says that was quick, in a tone that is not quite a compliment, and wishes you a good Christmas.",
+          "effects": [
+            { "target": "stat", "key": "theology", "delta": 1 },
+            { "target": "flag", "key": "sm_rl_answered_fast", "value": true }
+          ]
+        },
+        {
+          "id": "admit_you_wonder",
+          "label": "Admit that you wonder, and that it frightens you",
+          "outcome": "He says that is the honest position and that most men who end up diocesan have been through it, and gives you the name of a house that will let you come for a week in the summer without anyone in the seminary being told. You go. You come home and you stay diocesan, and something has been settled.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 4 },
+            { "target": "relationship", "key": "@religious", "delta": 8 },
+            { "target": "flag", "key": "sm_rl_the_week_away", "value": true }
+          ]
+        }
+      ]
+    }
+  ]
+}
