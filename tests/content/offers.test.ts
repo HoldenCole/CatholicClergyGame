@@ -3,6 +3,9 @@ import { allOffers, offerFiles } from '@/content/offers';
 import { clubDefs } from '@/content/clubs';
 import { CONSTITUENCY_KEYS, STAT_KEYS, PILLARS, ARCHETYPES } from '@/types';
 import type { Condition, Effect, OfferDef } from '@/types';
+import programs from '@/content/study/programs.json';
+
+const PROGRAM_IDS = (programs as { id: string }[]).map((p) => p.id);
 
 const PHASES = ['seminary', 'parochial_vicar', 'administrator', 'pastor', 'chancery', 'bishop', 'study'];
 const CATEGORIES = ['academic', 'chancery', 'patronage', 'social', 'seminary'];
@@ -80,7 +83,7 @@ function checkOffer(o: OfferDef, file: string, problems: string[], ids: Set<stri
       if (!Array.isArray(c.weekly)) problems.push(`${where}: commitment.weekly`);
       else c.weekly.forEach((e) => checkEffect(e, `${where} › weekly`, problems));
     }
-    if (c.away !== undefined && !['rome_stl', 'cua_jcl', 'bishops_secretary', 'university_chaplain', 'hospital_chaplain', 'seminary_faculty', 'vicar_general', 'auxiliary_bishop', 'diocesan_bishop'].includes(c.away)) problems.push(`${where}: unknown away program ${c.away}`);
+    if (c.away !== undefined && !PROGRAM_IDS.includes(c.away)) problems.push(`${where}: unknown away program ${c.away}`);
     if (typeof c.completeOutcome !== 'string' || c.completeOutcome.length < 20) problems.push(`${where}: commitment.completeOutcome`);
   }
   if (o.failure) {

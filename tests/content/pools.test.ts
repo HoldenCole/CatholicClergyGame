@@ -21,8 +21,8 @@ describe('content pools', () => {
 
   it('every direction scene is sealed, and every sealed scene writes only what stays in the room', () => {
     const sealed = allEvents.filter((e) => e.internalForum);
-    expect(sealed.length).toBe(22);
-    for (const e of allEvents.filter((x) => x.id.startsWith('sd_'))) expect(e.internalForum, e.id).toBe(true);
+    expect(sealed.length).toBe(24); // 22 direction scenes, and the two direction hours of the seminary's director (sp_for_)
+    for (const e of allEvents.filter((x) => x.id.startsWith('sd_') || x.id === 'sp_for_hour' || x.id === 'sp_for_knock')) expect(e.internalForum, e.id).toBe(true);
     for (const e of sealed) {
       for (const ch of e.choices) {
         for (const eff of ch.effects) expect(SEALED_TARGETS, `${e.id} › ${ch.id}`).toContain(eff.target);

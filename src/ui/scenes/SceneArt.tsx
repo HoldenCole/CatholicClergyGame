@@ -48,6 +48,9 @@ export default function SceneArt({ scene, season, state, plain = false }: { scen
       {scene === 'study_city' && (state.study?.city === 'residence' || state.study?.city === 'chancery' || state.study?.city === 'auxiliary' || state.study?.city === 'see') && <Chancery ambient={ambient('chancery')} rank="corner" bishopName={bishop ? `${bishop.title} ${bishop.name.first} ${bishop.name.last}` : 'The bishop'} />}
       {scene === 'study_city' && state.study?.city === 'seminary' && <SeminaryHall />}
       {scene === 'study_city' && state.study?.city === 'hospital' && <Chapel />}
+      {scene === 'study_city' && (state.study?.city === 'prison' || state.study?.city === 'schools') && <Hall />}
+      {scene === 'study_city' && (state.study?.city === 'mission' || state.study?.city === 'deployment') && <Street terrain={state.study?.city === 'mission' ? 'rural' : 'urban'} />}
+      {scene === 'study_city' && state.study?.city === 'formation' && <SeminaryHall />}
       {scene === 'study_city' && state.study?.city === 'campus' && <Hall />}
       {scene === 'study_city' && (state.study?.city === 'rome' || state.study?.city === 'washington' || !state.study) && <StudyCity city={state.study?.city ?? 'rome'} />}
       {scene === 'chancery' && <Chancery ambient={ambient('chancery')} rank={chanceryRank(state) ?? 'modest'} bishopName={bishop ? `${bishop.title} ${bishop.name.first} ${bishop.name.last}` : 'The bishop'} />}

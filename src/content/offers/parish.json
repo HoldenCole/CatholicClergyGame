@@ -6221,6 +6221,687 @@
         ],
         "outcome": "You tell the nuncio that the diocese you have is the one you were given, and that it is not finished. He says the Holy Father will understand, in the voice of a man who will report otherwise. Rome does not ask twice."
       }
+    },
+    {
+      "id": "pa_penitentiary_chaplain",
+      "category": "chancery",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "title": "Chaplain of the State Penitentiary",
+      "body": "The Department of Corrections has a chaplain's post at the penitentiary an hour north, full time, and the last Catholic to hold it retired after nineteen years and told the bishop that the only thing that matters is whether the man they send will go on the tiers. {@bishop} has asked whether you would. Two thousand men, a chapel with bolted benches, a room a mile from the gate, and no parish for three years. It counts for nothing at the deanery and something with the bishop, and the priests who have done it preach differently for the rest of their lives.",
+      "requires": [
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 3
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "chaplain:penitentiary",
+            "value": true
+          }
+        },
+        {
+          "type": "any",
+          "inner": [
+            {
+              "type": "flag",
+              "key": "chaplain:prison",
+              "value": true
+            },
+            {
+              "type": "flag",
+              "key": "work:prison",
+              "value": true
+            },
+            {
+              "type": "flag",
+              "key": "career:social_work",
+              "value": true
+            },
+            {
+              "type": "flag",
+              "key": "career:attorney",
+              "value": true
+            },
+            {
+              "type": "stat",
+              "key": "piety",
+              "op": ">=",
+              "value": 60
+            }
+          ]
+        }
+      ],
+      "weight": 30,
+      "bias": [
+        {
+          "when": {
+            "type": "flag",
+            "key": "chaplain:prison",
+            "value": true
+          },
+          "multiplier": 2.0
+        },
+        {
+          "when": {
+            "type": "flag",
+            "key": "past:activism",
+            "value": true
+          },
+          "multiplier": 1.3
+        }
+      ],
+      "windowWeeks": 4,
+      "once": true,
+      "cluster": "parish",
+      "accept": {
+        "effects": [
+          {
+            "target": "flag",
+            "key": "chaplain:penitentiary",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "public",
+            "delta": 2
+          },
+          {
+            "target": "reputation",
+            "key": "parishioners",
+            "delta": -4
+          }
+        ],
+        "outcome": "The first day is the count, the search, the locker for your keys, and a guard who says Father as though it were a question. A man on the third tier asks whether you are staying. You say three years. He says they all say that.",
+        "commitment": {
+          "label": "The penitentiary",
+          "weeks": 156,
+          "apPerWeek": 0,
+          "onComplete": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 4
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": 6
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 3
+            },
+            {
+              "target": "archetype",
+              "key": "pastoral",
+              "delta": 3
+            },
+            {
+              "target": "trait",
+              "key": "went on the tiers"
+            }
+          ],
+          "completeOutcome": "Three years inside a wall. Two hundred confessions a year through a grille, eleven men baptized, four walked to the gate who did not come back, and a warden who telephones you at home. The bishop reads the file and understands, for the first time, what he sent you to.",
+          "away": "penitentiary_chaplain"
+        }
+      },
+      "decline": {
+        "effects": [
+          {
+            "target": "flag",
+            "key": "refused_penitentiary",
+            "value": true
+          }
+        ],
+        "outcome": "You say the parish needs you, which it does. A priest from another diocese takes the post and leaves after eight months, and the tiers go without a priest for a year, and one of the men writes to the bishop to ask why."
+      }
+    },
+    {
+      "id": "pv_mission_loan",
+      "category": "patronage",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "title": "On Loan to the Missions",
+      "body": "A bishop of a diocese with eleven priests for forty thousand square miles has written to {@bishop} asking for a man for three years, and {@bishop} has said he would ask. Six mission stations, none with a resident priest, a truck, a rectory with a wood stove, and a people who have waited two years for baptisms and weddings. It is the priesthood in its plainest form and the loneliest. Men come back from it changed, and the chancery counts the years as years away, which they are.",
+      "requires": [
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 3
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "mission:loaned",
+            "value": true
+          }
+        },
+        {
+          "type": "any",
+          "inner": [
+            {
+              "type": "flag",
+              "key": "summer:mission",
+              "value": true
+            },
+            {
+              "type": "flag",
+              "key": "speaks_spanish",
+              "value": true
+            },
+            {
+              "type": "flag",
+              "key": "pref_rural",
+              "value": true
+            },
+            {
+              "type": "flag",
+              "key": "pref_wherever",
+              "value": true
+            },
+            {
+              "type": "stat",
+              "key": "piety",
+              "op": ">=",
+              "value": 55
+            }
+          ]
+        }
+      ],
+      "weight": 28,
+      "bias": [
+        {
+          "when": {
+            "type": "flag",
+            "key": "summer:mission",
+            "value": true
+          },
+          "multiplier": 2.0
+        },
+        {
+          "when": {
+            "type": "flag",
+            "key": "pref_wherever",
+            "value": true
+          },
+          "multiplier": 1.5
+        }
+      ],
+      "windowWeeks": 4,
+      "once": true,
+      "cluster": "parish",
+      "accept": {
+        "effects": [
+          {
+            "target": "flag",
+            "key": "mission:loaned",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "chancery",
+            "delta": 4
+          },
+          {
+            "target": "reputation",
+            "key": "parishioners",
+            "delta": -5
+          }
+        ],
+        "outcome": "The truck the diocese bought used starts on the third try. The first station is a church with a wood stove and a family who have driven since dawn to have a baby baptized who is walking now. You do it that afternoon, and the grandmother tells you afterward, through her grandson, what she thinks of the last two years.",
+        "commitment": {
+          "label": "The missions",
+          "weeks": 156,
+          "apPerWeek": 0,
+          "onComplete": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 5
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 8
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 3
+            },
+            {
+              "target": "archetype",
+              "key": "missionary",
+              "delta": 4
+            },
+            {
+              "target": "trait",
+              "key": "was the priest of six churches"
+            }
+          ],
+          "completeOutcome": "Three years, forty thousand miles, a language you can confess people in now, and a people who did not want you to go. The bishop who lent you writes to the bishop who borrowed you, and the file that comes home says a thing about you that nothing in the diocese could have said.",
+          "away": "mission_loan"
+        }
+      },
+      "decline": {
+        "effects": [
+          {
+            "target": "flag",
+            "key": "refused_mission",
+            "value": true
+          }
+        ],
+        "outcome": "You say no, kindly, and the bishop finds somebody else or does not. The stations go on being visited twice a year by a man from the city, and a couple who waited for you marry in front of a deacon."
+      }
+    },
+    {
+      "id": "pv_deployment",
+      "category": "patronage",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "title": "Orders",
+      "body": "The orders come from the Guard, not the diocese: the battalion you drill with is deploying for a year, and a chaplain deploys with it. {@bishop} has no say and says so, decently, at the door of his office. A plywood chapel, a cot, nineteen-year-olds who will ask you whether God minds, the flight line at two in the morning, and the days that are not most days. The parish will have a supply priest and a photograph of you on the bulletin board.",
+      "requires": [
+        {
+          "type": "flag",
+          "key": "chaplain:military",
+          "value": true
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "deployed",
+            "value": true
+          }
+        },
+        {
+          "type": "age",
+          "op": "<=",
+          "value": 52
+        }
+      ],
+      "weight": 35,
+      "bias": [
+        {
+          "when": {
+            "type": "stat",
+            "key": "charisma",
+            "op": ">=",
+            "value": 55
+          },
+          "multiplier": 1.3
+        }
+      ],
+      "windowWeeks": 4,
+      "once": true,
+      "cluster": "parish",
+      "accept": {
+        "effects": [
+          {
+            "target": "flag",
+            "key": "deployed",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "public",
+            "delta": 4
+          },
+          {
+            "target": "reputation",
+            "key": "parishioners",
+            "delta": 2
+          }
+        ],
+        "outcome": "The parish gives you a send-off with a cake and a flag, which you had not expected, and a man who was in Vietnam takes your hand at the door and does not say anything. Ten days later you say Mass on the hood of a truck at dawn for eleven men who needed it.",
+        "commitment": {
+          "label": "The deployment",
+          "weeks": 52,
+          "apPerWeek": 0,
+          "onComplete": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": 8
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 4
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "trait",
+              "key": "deployed with the battalion"
+            }
+          ],
+          "completeOutcome": "A year. Four hundred Masses in the field, a great many letters written for men who could not, the days that were not most days, and a homecoming at an airfield at three in the morning with a parish delegation of forty holding a sign with your name spelled right. You preach differently afterward, and you sleep differently too.",
+          "away": "deployment"
+        }
+      },
+      "decline": {
+        "effects": [
+          {
+            "target": "flag",
+            "key": "refused_deployment",
+            "value": true
+          }
+        ],
+        "outcome": "Orders are orders; you ask the bishop to ask the Guard, and the Guard says no, and you go anyway, or you resign the commission, and the file says which."
+      }
+    },
+    {
+      "id": "pa_seminary_director",
+      "category": "academic",
+      "phase": [
+        "administrator",
+        "pastor"
+      ],
+      "title": "The Rector Asks For A Spiritual Director",
+      "body": "The rector needs a spiritual director for the house: not a professor, a director. Twenty men an hour each a month in a room where nothing said leaves, the corridor at ten at night, the chapel in choir, and the one who knocks at midnight. He has asked {@bishop} for you because of what your own director said about you twenty years ago, which is the only reference that counts for this. It is four years in a suite in the faculty wing and it is the priesthood of the next forty years, an hour at a time.",
+      "requires": [
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 12
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "seminary:director",
+            "value": true
+          }
+        },
+        {
+          "type": "stat",
+          "key": "piety",
+          "op": ">=",
+          "value": 58
+        },
+        {
+          "type": "flag",
+          "key": "direction:chosen",
+          "value": true
+        }
+      ],
+      "weight": 26,
+      "bias": [
+        {
+          "when": {
+            "type": "flag",
+            "key": "sd_kept_the_hour",
+            "value": true
+          },
+          "multiplier": 1.6
+        },
+        {
+          "when": {
+            "type": "flag",
+            "key": "direction:lost",
+            "value": true
+          },
+          "multiplier": 0.7
+        }
+      ],
+      "windowWeeks": 4,
+      "once": true,
+      "cluster": "parish",
+      "accept": {
+        "effects": [
+          {
+            "target": "flag",
+            "key": "seminary:director",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "chancery",
+            "delta": 3
+          },
+          {
+            "target": "reputation",
+            "key": "parishioners",
+            "delta": -3
+          }
+        ],
+        "outcome": "The first man comes in on a Tuesday and says nothing for eleven minutes, and you let him, and then he says the true thing. You have been on the other side of this chair for thirty years and it is entirely different from this side and entirely the same.",
+        "commitment": {
+          "label": "Spiritual director at the seminary",
+          "weeks": 208,
+          "apPerWeek": 0,
+          "onComplete": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 6
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": 6
+            },
+            {
+              "target": "archetype",
+              "key": "pastoral",
+              "delta": 2
+            },
+            {
+              "target": "trait",
+              "key": "directed the seminary"
+            }
+          ],
+          "completeOutcome": "Four years and eighty men, a third of whom are priests of this diocese now and know you by the chair. Nothing you said in that room is anywhere but in them. The rector says at your leaving that the house prays differently, and cannot say why, and you can.",
+          "away": "seminary_director"
+        }
+      },
+      "decline": {
+        "effects": [
+          {
+            "target": "flag",
+            "key": "refused_seminary_director",
+            "value": true
+          }
+        ],
+        "outcome": "You tell the rector you are a parish priest, which is true. He finds somebody, and the house has a director on a list for four years, and three men leave who might not have."
+      }
+    },
+    {
+      "id": "pa_schools_superintendent",
+      "category": "chancery",
+      "phase": [
+        "administrator",
+        "pastor"
+      ],
+      "title": "Superintendent of Schools",
+      "body": "The superintendent is retiring and {@bishop} wants a priest in the chair rather than the consultant the board prefers: eleven schools, four thousand children, a budget the size of a small diocese, principals who are running out of time, a board of donors and lawyers, and the school that cannot be saved. It is four years in a chancery apartment with the numbers, and every pastor with a school will telephone you before eight in the morning, and one of them will blame you in his bulletin.",
+      "requires": [
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 8
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "schools:superintendent",
+            "value": true
+          }
+        },
+        {
+          "type": "stat",
+          "key": "administration",
+          "op": ">=",
+          "value": 60
+        },
+        {
+          "type": "any",
+          "inner": [
+            {
+              "type": "flag",
+              "key": "career:teacher",
+              "value": true
+            },
+            {
+              "type": "flag",
+              "key": "career:management",
+              "value": true
+            },
+            {
+              "type": "flag",
+              "key": "career:accountant",
+              "value": true
+            },
+            {
+              "type": "flag",
+              "key": "lp_saved_the_school",
+              "value": true
+            },
+            {
+              "type": "reputation",
+              "key": "chancery",
+              "op": ">=",
+              "value": 40
+            }
+          ]
+        }
+      ],
+      "weight": 26,
+      "bias": [
+        {
+          "when": {
+            "type": "flag",
+            "key": "career:teacher",
+            "value": true
+          },
+          "multiplier": 1.8
+        },
+        {
+          "when": {
+            "type": "flag",
+            "key": "lp_saved_the_school",
+            "value": true
+          },
+          "multiplier": 1.6
+        }
+      ],
+      "windowWeeks": 4,
+      "once": true,
+      "cluster": "parish",
+      "accept": {
+        "effects": [
+          {
+            "target": "flag",
+            "key": "schools:superintendent",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "chancery",
+            "delta": 5
+          },
+          {
+            "target": "reputation",
+            "key": "parishioners",
+            "delta": -3
+          }
+        ],
+        "outcome": "The first week is a binder of four hundred pages and a principal who resigns on the Thursday. The board meets on the Tuesday and one of the lawyers asks what a priest knows about a balance sheet, and you tell him, and he does not ask again.",
+        "commitment": {
+          "label": "Superintendent of schools",
+          "weeks": 208,
+          "apPerWeek": 0,
+          "onComplete": [
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 10
+            },
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": 5
+            },
+            {
+              "target": "archetype",
+              "key": "administrative",
+              "delta": 4
+            },
+            {
+              "target": "trait",
+              "key": "ran the schools"
+            }
+          ],
+          "completeOutcome": "Four years. Two schools closed properly and one saved that nobody thought could be, eleven principals appointed, the teachers paid a little more, and a diocese that now thinks of you as the man who can run something. The board gives you a plaque and a pastor with a school gives you a look.",
+          "away": "schools_superintendent"
+        }
+      },
+      "decline": {
+        "effects": [
+          {
+            "target": "flag",
+            "key": "refused_superintendent",
+            "value": true
+          }
+        ],
+        "outcome": "You say no and the board gets its consultant, and the schools are run competently by a man who has never said Mass in one, and the pastor with a school telephones you anyway, before eight."
+      }
     }
   ]
 }
