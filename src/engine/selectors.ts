@@ -17,6 +17,10 @@ import type { Rng } from './rng';
  *   @bonded_parishioner                           one of them the priest has already done something for
  *   @brother_priest                               a random active priest of the diocese, not the pastor
  *   @vicar_general @chancellor @vicar_for_clergy  chancery officials by office tag
+ *   @director                                     the standing spiritual director (DESIGN §9.4)
+ *   @diverged_classmate                           the man who left formation for an order
+ *   @religious                                    a random religious of the diocese
+ *   @principal                                    the sister who runs the parish school
  */
 export function isSelector(key: string): boolean {
   return key.startsWith('@');
@@ -40,6 +44,22 @@ export function resolveSelector(state: GameState, key: string, rng?: Rng): Npc |
     case 'random_classmate':
       // Without dice (an eligibility check), any classmate stands in; the roll happens when the letter is written.
       return classmates.length ? (rng ? rng.pick(classmates) : classmates[0]!) : null;
+    case 'director': {
+      const id = state.character?.direction?.npcId;
+      const npc = id ? state.npcs[id] : undefined;
+      if (npc && npc.status === 'active') return npc;
+      return Object.values(state.npcs).find((n) => n.status === 'active' && n.tags.includes('spiritual_director')) ?? null;
+    }
+    case 'diverged_classmate': {
+      const gone = Object.values(state.npcs).filter((n) => n.status === 'active' && n.tags.includes('diverged')).sort((a, b) => (a.id < b.id ? -1 : 1));
+      return gone.length ? (rng ? rng.pick(gone) : gone[0]!) : null;
+    }
+    case 'religious': {
+      const all = Object.values(state.npcs).filter((n) => n.status === 'active' && n.role === 'religious' && !n.tags.includes('diverged')).sort((a, b) => (a.id < b.id ? -1 : 1));
+      return all.length ? (rng ? rng.pick(all) : all[0]!) : null;
+    }
+    case 'principal':
+      return Object.values(state.npcs).find((n) => n.status === 'active' && n.tags.includes('religious:principal')) ?? null;
     case 'resident': {
       const id = state.parish?.resident?.npcId;
       const npc = id ? state.npcs[id] : undefined;

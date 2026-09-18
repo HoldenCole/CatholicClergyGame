@@ -218,6 +218,12 @@ export interface Choice {
 
 export interface GameEvent {
   id: string;
+  /**
+   * The internal forum: spiritual direction and confession. CLAUDE.md rule 7.
+   * Such a scene is structurally incapable of writing to reputation, the
+   * evaluation, or anything another NPC can see.
+   */
+  internalForum?: boolean;
   /** One phase, or several for events that belong to the whole career. */
   phase: Phase | Phase[];
   yearGate?: number[];

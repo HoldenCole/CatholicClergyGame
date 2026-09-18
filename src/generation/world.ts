@@ -28,6 +28,7 @@ export function installWorld(state: GameState, candidate: Candidate, year: numbe
     parishes: candidate.parishes,
     generatedYear: year,
     bishopHistory: [candidate.diocese.hidden.bishop.npcId],
+    institutes: candidate.institutes ?? [],
   };
   // The rolled dioceses stay until the run begins, so the choice can be changed.
   const flags: GameState['flags'] = { ...state.flags };

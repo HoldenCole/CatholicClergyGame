@@ -32,7 +32,12 @@ No preset-only code paths.
 **6. The diocese preview reads from the generated world, never from the preset.**
 The world generates first; the preview renders the rolled state. There must be an explicit `visible` / `hidden` split in the diocese type, and the preview component may only read `visible` fields. If a preview shows something the design says is hidden, that is a bug regardless of how useful it looks.
 
-**7. Opportunities are offers evaluated against state, not scripted grants.**
+**7. The internal forum is sealed, and the engine enforces it.**
+Spiritual direction scenes (`DESIGN.md` §9.4) must be **structurally incapable** of writing to the reputation, evaluation, or NPC-knowledge systems. Enforce this in the engine, not per event: a scene flagged `internalForum: true` runs through a resolver that accepts only stat, flag, and thread effects and throws on anything else. There is a test that asserts a reputation effect on an internal-forum event fails loudly.
+
+This is the one place in the game where the player can be honest. If it ever leaks, the mechanic is dead and so is the relationship it was built for.
+
+**8. Opportunities are offers evaluated against state, not scripted grants.**
 The offer engine checks requirements, opens a window, and expires. Never hardcode "at year 5, offer Rome." Declining must always write a consequence. Multi-year commitments run in the background and must survive save/load mid-commitment — test this specifically.
 
 ---

@@ -4,6 +4,7 @@ import type {
   DiocesePreset,
   FinancialState,
   Institution,
+  Institute,
   Npc,
   Parish,
   ScandalHandling,
@@ -14,11 +15,14 @@ import { generateBishop, PRIORITY_LABEL, temperamentLine } from './bishop';
 import { generateChancery } from './chancery';
 import { generateParishes } from './parishes';
 import { generateHouses } from './houses';
+import { generateInstitutes, generateReligious } from './institutes';
 
 export interface GeneratedDiocese {
   diocese: Diocese;
   parishes: Parish[];
   npcs: Npc[];
+  /** The institutes present, and the religious among the npcs come from them. DESIGN.md §9.4. */
+  institutes?: Institute[];
 }
 
 export function clergyNeedOf(shortage: number): ClergyNeed {
@@ -62,6 +66,8 @@ const INSTITUTION_LINES: Record<Institution, string> = {
 export function generateDiocese(rng: Rng, preset: DiocesePreset, year: number): GeneratedDiocese {
   const bishop = generateBishop(rng.derive('bishop'), preset, year);
   const chancery = generateChancery(rng.derive('chancery'), preset, year, bishop.profile.alignment);
+  const institutes = generateInstitutes(rng.derive('institutes'), preset);
+  const religious = generateReligious(rng.derive('religious'), institutes, year);
   const generated = generateParishes(rng.derive('parishes'), preset, year);
   const parishes = generated.map((g) => g.parish);
   const pastors = generated.map((g) => g.pastor);
@@ -139,7 +145,7 @@ export function generateDiocese(rng: Rng, preset: DiocesePreset, year: number): 
       hiddenComplication: rng.pick(preset.hiddenComplications),
     },
   };
-  return { diocese, parishes, npcs: [bishop.npc, ...chancery, ...pastors] };
+  return { diocese, parishes, npcs: [bishop.npc, ...chancery, ...pastors, ...religious], institutes };
 }
 
 function round2(x: number): number {

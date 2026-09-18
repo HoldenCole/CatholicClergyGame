@@ -10,6 +10,7 @@ import type { Founding, Group } from './groups';
 import type { CareerEntry, Project } from './career';
 import type { Opening } from './promotion';
 import type { DecorState, Permission } from './decor';
+import type { Institute } from './religious';
 
 /** A rolled diocese the player may choose, held only during creation. */
 export interface DioceseCandidate {
@@ -17,6 +18,8 @@ export interface DioceseCandidate {
   diocese: Diocese;
   parishes: Parish[];
   npcs: Npc[];
+  /** Institutes present in that diocese. Absent in saves written before §9.4. */
+  institutes?: Institute[];
 }
 import type { SeminaryState } from './seminary';
 import type { Phase } from './stats';

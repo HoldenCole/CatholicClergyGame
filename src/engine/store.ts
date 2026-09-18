@@ -47,6 +47,7 @@ import type { GroupType, ProjectType } from '@/types';
 import { pushProject as doPushProject, startProject as doStartProject } from '@/systems/projects';
 import { setDial as doSetDial } from '@/systems/liturgy';
 import { chooseAssignment as doChooseAssignment } from '@/systems/choice';
+import { chooseDirector as doChooseDirector } from '@/systems/direction';
 import { furnish as doFurnish, petition as doPetition } from '@/systems/decor';
 import { setHomily as doSetHomily } from '@/systems/homily';
 import { writeColumn as doWriteColumn } from '@/systems/press';
@@ -206,6 +207,8 @@ export interface GameStore {
   /** Called after the state changes: skins whatever is newly waiting, in the background. */
   requestSkins(): void;
   chooseEmphasis(emphasis: Record<Pillar, number>): void;
+  /** Y1: take one of the men offered as spiritual director, and say whether he is confessor too. */
+  chooseDirector(npcId: string, confessorToo: boolean): void;
   chooseSummer(id: SummerAssignment): void;
   /** Resolve the event at the head of the pending queue. */
   resolveEvent(choiceId: string): void;
@@ -593,6 +596,9 @@ export const useGameStore = create<GameStore>()((set, get) => ({
   },
   chooseEmphasis(emphasis) {
     update(set, get, (game, r) => pickEmphasis(game, emphasis, r));
+  },
+  chooseDirector(npcId, confessorToo) {
+    update(set, get, (game) => ({ ...doChooseDirector(game, npcId, confessorToo), mode: { kind: 'clock' } }));
   },
   chooseSummer(id) {
     update(set, get, (game) => pickSummer(game, id));

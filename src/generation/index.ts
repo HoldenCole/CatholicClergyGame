@@ -6,6 +6,7 @@ import { SEMINARY_NAMES, startSeminary } from '@/engine/seminary';
 import { generateClass } from './classmates';
 import { generateFamily } from './family';
 import { generateFormators } from './formators';
+import { makeFormatorsReligious } from './institutes';
 import { presetById } from '@/content/dioceses';
 
 /**
@@ -21,7 +22,11 @@ export function generateRun(state: GameState, answers: CreationAnswers, rng: Rng
   const originOpt = creationContent.origins.find((o) => o.id === answers.origin)!;
   const npcs: Npc[] = [
     ...generateFamily(rng.derive('family'), character, familyOpt, originOpt),
-    ...generateFormators(rng.derive('formators'), answers.entryYear, { includeBishop: !state.world }),
+    ...makeFormatorsReligious(
+      rng.derive('faculty'),
+      generateFormators(rng.derive('formators'), answers.entryYear, { includeBishop: !state.world }),
+      state.world?.institutes ?? [],
+    ),
     ...generateClass(rng.derive('classmates'), answers.entryYear),
   ];
   // Merge: the world's bishop, chancery, and pastors are already in the state.

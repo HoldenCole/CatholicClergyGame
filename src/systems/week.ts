@@ -16,6 +16,7 @@ import { noticeQuarter } from './notice';
 import { applyEffects } from '@/engine/effects';
 import { noteStatChange } from './movers';
 import { confessorPull } from './confessor';
+import { directionWeek, pietyFactor } from './direction';
 import { learnWeek } from './languages';
 import { evaluateAll } from '@/engine/conditions';
 import { commitmentAp } from '@/engine/offers';
@@ -353,7 +354,10 @@ export function resolveWeek(state: GameState, rng: Rng): { state: GameState; led
   next = learned.state;
   if (learned.line) lines.push(learned.line);
   const c = next.character!;
-  const decayed = decayWeek(c.stats, { adminAp, theologyUsed, knowledgeUsed });
+  // The hour with the director, and what it takes off the drain. DESIGN §9.4.
+  const directionHours = plan.discretionary.direction ?? 0;
+  next = directionWeek(next, directionHours);
+  const decayed = decayWeek(c.stats, { adminAp, theologyUsed, knowledgeUsed, pietyFactor: pietyFactor(next, directionHours) });
   next = noteStatChange(next, c.stats, decayed, 'unused, and fading');
   next = { ...next, character: fadeReputation({ ...c, stats: decayed }) };
   // DESIGN §3.2: home terrain is a standing pull on lay support, for or against.

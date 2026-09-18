@@ -5,6 +5,8 @@ import { decide } from '@/systems/promotion';
 import { openingBlurb, playerCandidate, refreshOpenings, rivalsFor } from '@/systems/openings';
 import { advanceTrajectories, rollTrajectories } from '@/systems/trajectories';
 import { driftRome, successionYear } from '@/systems/succession';
+import { directionYear } from '@/systems/direction';
+import { religiousYear } from '@/systems/groups';
 import { handoffProject } from '@/systems/projects';
 import { ARC } from './parish';
 import { renderText } from './text';
@@ -66,6 +68,15 @@ export function isCareerYear(state: GameState): boolean {
 export function careerYear(state: GameState, rng: Rng): GameState {
   let next = driftRome(state, rng.derive(`rome:${state.clock.week}`));
   const years = Math.round(yearsOrdained(next));
+
+  // A provincial in another city decides something: the director is moved, or a
+  // sister who runs a group is. Neither is the bishop's to keep. DESIGN §9.4, §10.5.
+  const direction = directionYear(next, rng.derive(`direction:${state.clock.week}`));
+  next = direction.state;
+  if (direction.line) next = addDigest(next, [direction.line]);
+  const sisters = religiousYear(next, rng.derive(`sisters:${state.clock.week}`));
+  next = sisters.state;
+  if (sisters.lines.length) next = addDigest(next, sisters.lines);
 
   const succession = next.see ? { state: next, newBishop: null, lines: [] as string[], letter: undefined } : successionYear(next, rng.derive(`succession:${state.clock.week}`));
   next = succession.state;

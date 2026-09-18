@@ -1,3 +1,4 @@
+import type { Institute } from './religious';
 import type { Npc } from './npc';
 
 /** DESIGN.md §9.1. The five presets keep their character; everything else rolls. */
@@ -239,6 +240,8 @@ export interface World {
   generatedYear: number;
   /** Bishops who have held the see during the run, newest last. */
   bishopHistory: string[];
+  /** Institutes present in the diocese. DESIGN.md §9.4. */
+  institutes?: Institute[];
 }
 
 export type Role = 'parochial_vicar' | 'administrator' | 'pastor';

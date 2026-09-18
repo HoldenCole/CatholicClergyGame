@@ -1,0 +1,673 @@
+{
+  "_notes": "Spiritual direction and the internal forum (DESIGN.md §6.6, §9.4). Every event here carries `internalForum: true` and therefore may write ONLY stat, flag, and thread effects: engine/internalForum.ts throws on anything else, and tests/content asserts it. Nothing said in these rooms reaches the rector, the evaluation, or any other NPC. Selector: @director. Flags: sd_honest_from_the_start, sd_guarded, sd_mutual, sd_disclosed, sd_carrying_it, sd_fled_direction, sd_refused_disclosure, sd_dark_night_kept, sd_eleven_months, sd_let_it_go, sd_heard_his, sd_changed_director, sd_stayed_mismatched, sd_split_the_work, sd_returned, sd_alone_by_choice, sd_one_room, sd_two_rooms, sd_corrected_him, sd_deferred, sd_managed_him. Thread: sd_secret, opened when the man keeps something back and resolved when he discloses it or refuses for good.",
+  "events": [
+    {
+      "id": "sd_the_first_hour",
+      "phase": "seminary",
+      "internalForum": true,
+      "yearGate": [
+        1,
+        2
+      ],
+      "pressure": [
+        "doubt"
+      ],
+      "severity": "ROUTINE",
+      "category": "formation",
+      "baseWeight": 12,
+      "suppressYears": 2,
+      "once": true,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "direction:chosen",
+          "value": true
+        }
+      ],
+      "title": "The First Hour",
+      "body": "He asks what you pray with, and you tell him, and he says nothing for long enough that you start to fill the silence, which you suspect is the point. Then he asks the second question, which is what you are afraid of, and you give him the answer you have been giving people since you were nineteen, and he lets it stand for a moment before saying, mildly, that it is a very good answer and he would like the other one at some point, no hurry. The clock on his shelf is forty minutes slow. Nothing said in this room is written down, goes into your file, or is available to the rector, and he tells you so at the start the way a man says a thing he has said a thousand times and still means.",
+      "flavorPrompt": "A slow clock, a long silence, and the answer under the answer.",
+      "choices": [
+        {
+          "id": "the_real_one",
+          "label": "Give him the other answer, the one you do not say aloud",
+          "default": true,
+          "outcome": "You say it badly and it takes three tries, and when it is out he does not react at all, which is the kindest thing anyone has done for you in a year. He says that this will be the work, then, and writes nothing down. You walk back across the quad lighter than you came, and nobody you pass has any idea why.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "sd_honest_from_the_start",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "hold_it_back",
+          "label": "Give him the answer you always give, and see what he does with it",
+          "outcome": "He takes it at face value, or appears to, and the hour is pleasant and useless. You do this for two years before you stop. He never once pushes, and you understand eventually that he was waiting, and that the waiting cost him something.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": -1
+            },
+            {
+              "target": "flag",
+              "key": "sd_guarded",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "ask_him_first",
+          "label": "Ask him what he is afraid of, before you answer anything",
+          "outcome": "It is a piece of impertinence and he laughs at it, and then he answers it, seriously, for about four minutes. You are twenty-three and you have never heard a priest talk like that. Whatever else happens between you, the direction is real from that afternoon.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "sd_mutual",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sd_the_seal_tested",
+      "phase": "seminary",
+      "internalForum": true,
+      "yearGate": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "pressure": [
+        "loyalty_vs_honesty",
+        "doubt"
+      ],
+      "severity": "MAJOR",
+      "category": "formation",
+      "baseWeight": 9,
+      "suppressYears": 4,
+      "once": true,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "direction:chosen",
+          "value": true
+        }
+      ],
+      "title": "What He Cannot Do",
+      "body": "You tell him the thing, whatever it is for you: the drinking in the summer, the money, the man in the corridor, the night in the city you have not told anyone about. He listens the whole way through without moving. Then he says the thing that makes this room different from every other room in the building: he cannot tell anyone. Not the rector, not the formation advisor, not the bishop, not under any circumstance, not if he is asked directly. It does not go in the evaluation because he does not write the evaluation and may not be consulted for it. And then he says the other half, which is that he thinks you should go and tell the rector yourself, and that he will not stop asking, and that he cannot make you, and that both of those are true at once and he is sorry about it.",
+      "choices": [
+        {
+          "id": "tell_the_rector",
+          "label": "Go and tell the rector yourself, in your own words, before the term ends",
+          "outcome": "It costs you the whole of a Thursday and most of your composure. The rector is not kind about it and is not unkind either, and the thing goes into the external forum where it can be dealt with, which is where it needed to be. Your director never mentions it again, except once, years later, at your ordination, when he says only that he was glad.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "sd_disclosed",
+              "value": true
+            }
+          ],
+          "resolvesThread": "sd_secret"
+        },
+        {
+          "id": "not_yet",
+          "label": "Tell him you cannot, not yet, and go back next week anyway",
+          "default": true,
+          "outcome": "He accepts it and asks again in three weeks, and again after Christmas, and again in the spring. He never once threatens and never once lets it go, and you keep coming, which is its own answer. The thing sits between you for two years, known to two men and no one else on earth.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "sd_carrying_it",
+              "value": true
+            }
+          ],
+          "opensThread": "sd_secret"
+        },
+        {
+          "id": "change_director",
+          "label": "Stop going to him, and find someone who will not ask",
+          "outcome": "You give a reason about scheduling and he takes it without argument, which is worse than an argument. The next man is easier and asks nothing, and the thing goes quiet rather than away, and there is nobody now who knows it and is still pushing.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": -3
+            },
+            {
+              "target": "flag",
+              "key": "sd_fled_direction",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sd_he_asks_again",
+      "phase": "seminary",
+      "internalForum": true,
+      "yearGate": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "severity": "NOTABLE",
+      "category": "formation",
+      "baseWeight": 8,
+      "suppressYears": 3,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "direction:chosen",
+          "value": true
+        },
+        {
+          "type": "thread",
+          "key": "sd_secret",
+          "open": true
+        }
+      ],
+      "title": "He Has Not Let It Go",
+      "body": "It is eleven months later and you had begun to think he had forgotten, which you did not really think. He waits until the hour is nearly over and then asks, in the same voice he uses for everything, whether you have done anything about the thing you told him in the spring of last year. He is not angry. He is not going to be angry about it this time either, or the next time. He simply will not stop asking, because he believes it is killing something in you slowly, and the only tool he has is the question.",
+      "choices": [
+        {
+          "id": "do_it_now",
+          "label": "Go this week. Not because he asked; because he has been asking for a year",
+          "default": true,
+          "outcome": "It is easier than it was last spring, which you did not expect, and the rector's face does something complicated that turns out to be relief. Your director says nothing at all the next week. You notice that he has stopped watching the clock.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "sd_disclosed",
+              "value": true
+            }
+          ],
+          "resolvesThread": "sd_secret"
+        },
+        {
+          "id": "tell_him_no",
+          "label": "Tell him plainly that the answer is no, and that he should stop asking",
+          "outcome": "He says that he will stop, and he does, absolutely, from that afternoon, and the hour afterwards is somehow worse for it. You got what you asked for. He keeps seeing you for another eleven years and never raises it again, and you think about it most Thursdays.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": -1
+            },
+            {
+              "target": "flag",
+              "key": "sd_refused_disclosure",
+              "value": true
+            }
+          ],
+          "resolvesThread": "sd_secret"
+        }
+      ]
+    },
+    {
+      "id": "sd_dark_afternoon",
+      "phase": "seminary",
+      "internalForum": true,
+      "yearGate": [
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "pressure": [
+        "doubt",
+        "belief_vs_safety"
+      ],
+      "severity": "NOTABLE",
+      "category": "formation",
+      "baseWeight": 9,
+      "suppressYears": 3,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "direction:chosen",
+          "value": true
+        }
+      ],
+      "title": "Nothing There",
+      "body": "The prayer has been dry since October and it is now February. Not doubt exactly: the propositions are all still where you left them and you could defend every one of them in a seminar tomorrow. It is that the room is empty when you go in, and has been for four months, and you have kept going in because that is what you were told to do and because stopping would mean admitting something. You tell him this expecting to be given a method. He asks how long, and you tell him, and he says, quietly, that four months is not very long, in the way a doctor says a number that is frightening until you hear how he says it.",
+      "choices": [
+        {
+          "id": "keep_the_hour",
+          "label": "Keep going in every morning at six, empty or not, for as long as it takes",
+          "default": true,
+          "outcome": "It lasts another seven months. He asks about it every week and never once suggests you are doing it wrong. On a Tuesday in September something is there again, unremarkably, as though it had never gone, and you sit in the chapel afterwards for a long time. He says only that this is how it usually goes and that you should write down the date, because you will need it in twenty years.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 4
+            },
+            {
+              "target": "flag",
+              "key": "sd_eleven_months",
+              "value": true
+            },
+            {
+              "target": "flag",
+              "key": "sd_dark_night_kept",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "cut_it_back",
+          "label": "Cut the hour to twenty minutes and stop pretending",
+          "outcome": "He does not argue. The twenty minutes become ten, and by Lent they are whatever is left of the morning, and the dryness stops being a season and starts being the arrangement. Nobody notices for years. You notice every day.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": -4
+            },
+            {
+              "target": "flag",
+              "key": "sd_let_it_go",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "ask_what_he_does",
+          "label": "Ask him what he does, himself, when it goes like this",
+          "outcome": "He tells you. It takes a while and it is not a technique, and one part of it is something that happened to him in 1979 that he has clearly told almost nobody. You leave with nothing usable and everything you needed, which is the difference between a director who matches and one who does not.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "sd_heard_his",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sd_wrong_man",
+      "phase": "seminary",
+      "internalForum": true,
+      "yearGate": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "pressure": [
+        "competence",
+        "doubt"
+      ],
+      "severity": "NOTABLE",
+      "category": "formation",
+      "baseWeight": 8,
+      "suppressYears": 4,
+      "once": true,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "direction:chosen",
+          "value": true
+        }
+      ],
+      "title": "The Wrong Man For This",
+      "body": "He is a good priest and he is no use to you, and you have both known it since about November. Whatever you bring him, he answers with order: a schedule, a rule of life, a reasonable adjustment. What you have is not disorder. When you told him the prayer had gone dark he suggested moving the holy hour to the evening. There is nothing wrong with the advice and there is no one behind it. The seminary assigns a director and assumes the matter is closed; the matter is not closed, and changing is allowed, and everyone will notice.",
+      "choices": [
+        {
+          "id": "change_him",
+          "label": "Ask the formation office for someone else, and say why plainly",
+          "default": true,
+          "outcome": "The conversation is as awkward as you feared and he is more gracious than you deserved, and says, without any edge at all, that he had wondered and should have raised it himself. The new man is slower and harder and right. You lost a year and you are not getting it back.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "sd_changed_director",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "stay_out_of_kindness",
+          "label": "Stay, because changing would hurt him and he has been decent to you",
+          "outcome": "You keep the hour for six more years out of politeness, and bring him the things he is able to answer, and carry the rest alone. It is a small dishonesty and it costs a small amount every week for a very long time.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": -3
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "sd_stayed_mismatched",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "use_him_differently",
+          "label": "Keep him for what he is good at, and take the rest to the chapel alone",
+          "outcome": "It half works, which is more than nothing. He sorts your week and your week does need sorting. The other thing stays where it is, unspoken and unheld, and you develop the habit of managing it yourself, which will be a problem in about fifteen years.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": -1
+            },
+            {
+              "target": "flag",
+              "key": "sd_split_the_work",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sd_no_director",
+      "phase": "seminary",
+      "internalForum": true,
+      "yearGate": [
+        3,
+        4,
+        5
+      ],
+      "pressure": [
+        "doubt"
+      ],
+      "severity": "ROUTINE",
+      "category": "formation",
+      "baseWeight": 10,
+      "suppressYears": 3,
+      "requires": [
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "direction:chosen",
+            "value": true
+          }
+        }
+      ],
+      "title": "Nobody Asks You Anything",
+      "body": "You have not been to direction since the first term, and nobody has said a word about it, which is how you know the system assumes a man will go. The rector's evaluation cannot mention it because the rector does not know. What has happened instead is small and cumulative: nobody has asked you a question you could not answer for two years, and you have got very good at the answers, and there is a part of you that has not been spoken aloud since you were twenty-one. One of the men in the year above, who is ordained in June, says at supper that the thing he would tell a first-year is to find a director and lie to him for a year until you stop.",
+      "choices": [
+        {
+          "id": "go_back",
+          "label": "Go back. Ask for an hour, and take whoever they give you",
+          "default": true,
+          "outcome": "The first hour is mortifying and the fourth is not. He is not the man you would have chosen and he asks the question nobody has asked you in two years, and you find that you cannot answer it, and that this is the most interesting thing that has happened to you since candidacy.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "direction:chosen",
+              "value": true
+            },
+            {
+              "target": "flag",
+              "key": "sd_returned",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "keep_going_alone",
+          "label": "You are doing fine. Keep going",
+          "outcome": "You are doing fine. The evaluations are good and the prayer is regular and nothing in particular is wrong. Piety is not a thing that collapses; it is a thing that leaks, and there is no week where you could point at it and say that was the week.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": -2
+            },
+            {
+              "target": "flag",
+              "key": "sd_alone_by_choice",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sd_split_the_roles",
+      "phase": "seminary",
+      "internalForum": true,
+      "yearGate": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "pressure": [
+        "loyalty_vs_honesty",
+        "doubt"
+      ],
+      "severity": "ROUTINE",
+      "category": "formation",
+      "baseWeight": 7,
+      "suppressYears": 4,
+      "once": true,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "direction:chosen",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "direction:split",
+          "value": true
+        }
+      ],
+      "title": "Two Rooms",
+      "body": "You go to him for direction and to the other man for confession, which is permitted, ordinary, and read by everyone in the house as a decision about something. The internal forum is one seal and two rooms, and men split them for good reasons and for bad ones. Yours, if you are honest in the hour where you are obliged to be, is that there is a thing you are willing to have absolved and not willing to have discussed. Your director has not asked about it. He has noticed, because noticing is most of the job.",
+      "choices": [
+        {
+          "id": "bring_it_to_direction",
+          "label": "Take it into the other room too, where it will be talked about and not just forgiven",
+          "default": true,
+          "outcome": "Absolution deals with the act and direction deals with the twenty years, and you had been using the first to avoid the second. He is not surprised. He has been waiting since October, and says so, and then gets to work.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "sd_one_room",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "keep_them_apart",
+          "label": "Keep the rooms separate. It is allowed, and it is yours to decide",
+          "outcome": "It is allowed and it is yours to decide. It also means that the one man who could help you with it is the man who is never told, and that arrangement holds for as long as you keep it, which turns out to be a very long time.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": -1
+            },
+            {
+              "target": "flag",
+              "key": "sd_two_rooms",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sd_he_is_wrong",
+      "phase": "seminary",
+      "internalForum": true,
+      "yearGate": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "pressure": [
+        "doubt",
+        "competence"
+      ],
+      "severity": "ROUTINE",
+      "category": "formation",
+      "baseWeight": 8,
+      "suppressYears": 3,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "direction:chosen",
+          "value": true
+        }
+      ],
+      "title": "He Is Wrong About This",
+      "body": "He has given you a reading of yourself that is confident, coherent, and wrong. Not slightly: wrong about what you are afraid of and wrong about why you are here, in a way that suggests he has met this pattern in twenty other men and filed you with them. You could accept it, because he is sixty-one and you are twenty-four and he has been doing this longer than you have been alive. You could also say so, in the one room where saying so costs nothing at all, because nothing said in it goes anywhere.",
+      "choices": [
+        {
+          "id": "say_so",
+          "label": "Tell him he is wrong, and say what the right reading is",
+          "default": true,
+          "outcome": "It takes you the whole hour and you are not good at it, and near the end he stops you and asks you to say the middle part again. He was wrong. He says so, plainly, without any performance about it. Afterwards he is harder on you and better, because he has stopped working from the file in his head.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "sd_corrected_him",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "let_it_stand",
+          "label": "Let it stand. He has been doing this for thirty years",
+          "outcome": "You let it stand, and he builds on it, and for four years the direction is about a man who is not quite you. It is not useless. It is just not about you, and by the time you say so the habit of not saying so is the more important fact.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": -2
+            },
+            {
+              "target": "flag",
+              "key": "sd_deferred",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "test_him",
+          "label": "Give him the version he expects, and watch what he does with it",
+          "outcome": "He does exactly what you predicted, which proves your point and teaches you nothing, and leaves you a little cheaper than you were at the start of the hour. You are twenty-four and already good at managing priests. That is not nothing, and it is not good news.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": -2
+            },
+            {
+              "target": "flag",
+              "key": "sd_managed_him",
+              "value": true
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

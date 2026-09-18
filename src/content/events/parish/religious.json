@@ -1,0 +1,939 @@
+{
+  "_notes": "Religious institutes, the principal, the reassignment shock, and the classmate who diverged (DESIGN.md §9.4, §10.5, §6.7). These are NOT internal-forum scenes and write to reputation freely. Selectors: @diverged_classmate, @religious, @principal. Flags: rl_said_goodbye, rl_new_director, rl_no_director, rl_handover, rl_learned_the_limit, rl_took_it_on, rl_backed_the_principal, rl_overruled_the_principal, rl_principal_ally, rl_protected_tuition, rl_cut_tuition, rl_principal_fundraiser, rl_honest_broker, rl_chancery_man, rl_stayed_out, rl_silent, rl_backed_him, rl_used_a_proxy, rl_preached_them_out, rl_preached_the_future, rl_gave_her_the_ambo, rl_diverged_friend, rl_diverged_polite, rl_asked_him, rl_the_question, rl_wrote_to_him, rl_the_tone, rl_preached_against_him, rl_wrote_the_carmel, rl_said_mass_carmel, rl_kept_the_letters.",
+  "events": [
+    {
+      "id": "rl_director_reassigned",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "pressure": [
+        "friendship_vs_duty",
+        "doubt"
+      ],
+      "severity": "MAJOR",
+      "category": "personal",
+      "baseWeight": 9,
+      "suppressYears": 5,
+      "once": true,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "direction:lost",
+          "value": true
+        }
+      ],
+      "title": "Six Weeks' Notice",
+      "body": "The letter is from him and it is four lines long, because that is the kind of letter a man writes when there is nothing to negotiate. His provincial is moving him in June: another house, another state, a work that needs him more than this one does. He did not ask for it and he did not object to it, because that is what the vow means and he took it in 1971. Twenty-two years of Thursdays. He suggests, in the fourth line, two men who might take you on, and says that neither of them is him, which is the only joke in the letter and is not really a joke.",
+      "choices": [
+        {
+          "id": "go_and_say_it",
+          "label": "Drive up before June and say the thing you have never said to him",
+          "default": true,
+          "outcome": "You say it badly, standing in a corridor with a box of his books at your feet, and he listens the way he has listened for twenty-two years and then tells you what he has thought about you since the second year, which you had no idea of. You write to each other four times a year until he dies. It is not the same. It is not nothing.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "rl_said_goodbye",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "take_a_name",
+          "label": "Take one of the two names and start again in July",
+          "outcome": "The new man is competent and twenty years younger and does not know that you had a bad 1987. You spend the first eighteen months explaining things that used to be assumed. It gets better, slowly, the way it did the first time, which you had forgotten took years.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "rl_new_director",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "let_it_lapse",
+          "label": "Let it lapse. You are forty-six and you can carry your own week",
+          "outcome": "You can carry your own week. You carry it for the next several years, and nobody asks you a question you cannot answer, and the drain that direction was slowing goes back to its ordinary rate, which is the rate at which it was always going to go.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": -2
+            },
+            {
+              "target": "flag",
+              "key": "rl_no_director",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rl_sister_reassigned",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "pressure": [
+        "competence",
+        "friendship_vs_duty"
+      ],
+      "severity": "NOTABLE",
+      "category": "group",
+      "baseWeight": 8,
+      "suppressYears": 4,
+      "once": true,
+      "title": "The Provincial Has Decided",
+      "body": "Sister has run the St. Vincent de Paul conference here for nineteen years, which means she has run the parish's entire relationship with the poor of this town for nineteen years, and she is being moved in six weeks to a house in another diocese because her congregation is down to eleven women under seventy and the other work needs her more. She tells you in the office on a Tuesday, standing, because she does not sit down for conversations under ten minutes. She is not upset, or is not showing it. She asks whether you would like her to train someone before she goes, in the tone of a woman who has already picked the someone.",
+      "choices": [
+        {
+          "id": "let_her_train",
+          "label": "Say yes, and give her whatever she needs for six weeks",
+          "default": true,
+          "outcome": "She picks a retired schoolteacher nobody would have thought of and spends six weeks handing over a system nobody knew existed: the list, the discretionary fund, the four families you never ask about at the council. It survives. It is three-quarters of what it was, which is three-quarters more than it would have been.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "rl_handover",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "ask_the_bishop",
+          "label": "Write to the chancery and ask them to intervene with her provincial",
+          "outcome": "The chancellor's reply is polite and explains, at length, that the bishop has no authority over the internal assignments of a pontifical-right institute, which you knew. Her provincial answers your letter directly, kindly, and not at all. She goes in June. The conference limps for two years.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": -1
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "rl_learned_the_limit",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "take_it_yourself",
+          "label": "Take the conference on yourself rather than hand it to an amateur",
+          "outcome": "It is four hours a week you do not have and you do it properly for about five months. The list gets shorter because you are not her, and two of the families stop coming because they were her families, not the parish's. You learn something about what a sister actually does, roughly a year too late to say so to her.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": -2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "rl_took_it_on",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rl_principal_first",
+      "phase": [
+        "pastor",
+        "administrator"
+      ],
+      "pressure": [
+        "competence",
+        "friendship_vs_duty"
+      ],
+      "severity": "NOTABLE",
+      "category": "admin",
+      "baseWeight": 10,
+      "suppressYears": 4,
+      "once": true,
+      "requires": [
+        {
+          "type": "parish",
+          "key": "school",
+          "value": "parish_k8"
+        }
+      ],
+      "title": "Whose School",
+      "body": "You have canonical authority over the school. She has run it for thirty-one years. Both of those are true and only one of them is in the parents' minds when they park in the lot. The first real test comes in your second month: she has excluded a family's third-grader for the year over something the mother describes to you, at length and in tears, as a misunderstanding, and which the file describes as the fourth incident. She did not consult you. She was not required to and she knows you know that, and she is standing in your office now because she heard the mother was here.",
+      "choices": [
+        {
+          "id": "back_her",
+          "label": "Back her, to the mother's face, and tell her afterwards that you want the call next time",
+          "default": true,
+          "outcome": "The mother leaves angry and writes to the chancery, where it dies. Sister says nothing about it for a week and then leaves a note on your desk with the file, and a line at the bottom saying you will have the call next time. You get the call every time after that, for eleven years.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": -2
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "rl_backed_the_principal",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "overrule_her",
+          "label": "Overrule her. The boy is eight and the family has been here four generations",
+          "outcome": "You reverse it and the mother is grateful and the school learns in about ninety minutes that the pastor can be gone around. Sister does not fight you. She simply stops bringing you anything, ever, and runs the school at arm's length for as long as you are here, which is entirely within her rights and costs you more than you saved.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": -2
+            },
+            {
+              "target": "flag",
+              "key": "rl_overruled_the_principal",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "the_third_way",
+          "label": "Ask her, alone, what she would do if the decision were the parish's and not the school's",
+          "requires": [
+            {
+              "type": "stat",
+              "key": "charisma",
+              "op": ">=",
+              "value": 50
+            }
+          ],
+          "outcome": "It is the first time anyone has asked her that. She thinks about it for a day and comes back with something neither of you would have reached alone: the boy stays, under conditions, and the conditions are hers. The mother accepts. Sister decides that afternoon that you are worth talking to, and that decision is worth more to this parish than the school budget.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "rl_principal_ally",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rl_principal_budget",
+      "phase": [
+        "pastor"
+      ],
+      "pressure": [
+        "money",
+        "competence"
+      ],
+      "severity": "NOTABLE",
+      "category": "finance",
+      "baseWeight": 9,
+      "suppressYears": 4,
+      "once": true,
+      "requires": [
+        {
+          "type": "parish",
+          "key": "school",
+          "value": "parish_k8"
+        }
+      ],
+      "title": "The Line She Will Not Cut",
+      "body": "The school loses money, as it has since 1974, and this year the subsidy is the difference between a balanced parish budget and an unbalanced one. You bring her a number. She brings you a list, in order, of what that number costs: the aide in the second grade, the music teacher, the tuition assistance that keeps four families in the building. She has done this before with three pastors and has the figures for all of them. At the bottom of her list, underlined once, is the line she says she will not cut, and it is the tuition assistance, and she does not say what she will do if you cut it anyway.",
+      "choices": [
+        {
+          "id": "protect_the_line",
+          "label": "Protect the assistance and find the money somewhere that hurts you instead",
+          "default": true,
+          "outcome": "You cut the parish's own budget: the second collection, the hall, the thing you wanted for the church. Four families stay in the school and nobody outside the office ever knows why. She notices what you cut, because she reads the parish report, and does not mention it, which is how women like her say thank you.",
+          "effects": [
+            {
+              "target": "money",
+              "key": "parish",
+              "delta": -18000
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "rl_protected_tuition",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "cut_it",
+          "label": "Cut it. The parish cannot subsidise a school that cannot balance",
+          "outcome": "Two of the four families leave for the public school in August and one leaves the parish altogether. The budget balances. She implements the decision faithfully and completely, because she is under obedience and you are the pastor, and something between you is different afterwards in a way that never quite gets named.",
+          "effects": [
+            {
+              "target": "money",
+              "key": "parish",
+              "delta": 18000
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": -4
+            },
+            {
+              "target": "flag",
+              "key": "rl_cut_tuition",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "send_her_to_the_donors",
+          "label": "Send her to the donors herself, and let her make the case in her own words",
+          "requires": [
+            {
+              "type": "role",
+              "value": "pastor"
+            }
+          ],
+          "outcome": "She has never been asked to do this and is visibly unsure about it, and then she is extraordinary: thirty-one years of names and faces, and a way of describing a child that no fundraising letter has ever managed. She raises most of it in a month. The donors ask for her the next year, not for you.",
+          "effects": [
+            {
+              "target": "money",
+              "key": "parish",
+              "delta": 12000
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "rl_principal_fundraiser",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rl_parish_back",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "pressure": [
+        "loyalty_vs_honesty",
+        "ambition_vs_integrity"
+      ],
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 8,
+      "suppressYears": 5,
+      "once": true,
+      "title": "Eighty Years",
+      "body": "The order has held that parish since 1912 and the bishop wants it back. The arithmetic is not complicated: they have four men in the province under fifty and he has a presbyterate to place, and the agreement from 1912 is a letter in a file that two canonists read differently. What makes it your problem is that both sides have decided you are reasonable. The vicar for clergy wants you to sound out their superior informally, so the chancery is not on record. Their superior has already invited you to lunch, which means he wants the same thing from the other direction, and thinks you are the honest one.",
+      "choices": [
+        {
+          "id": "tell_both_the_truth",
+          "label": "Go to the lunch, and tell each side exactly what the other said",
+          "default": true,
+          "outcome": "It is not what either of them wanted and it is the only thing that gets it settled. They negotiate directly and badly for a year and land somewhere neither likes, which is what a settlement is. Both of them regard you afterwards as a man who cannot be used, which closes some doors and opens better ones.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "rl_honest_broker",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "serve_the_chancery",
+          "label": "Do what the vicar asked, and report what you learn",
+          "outcome": "You are useful, and the chancery notices, and the province finds out inside six weeks because provinces always do. The parish goes back to the diocese in the end. Their superior is unfailingly courteous to you for the next twenty years and never tells you anything again, and neither does any other religious in the diocese.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": -3
+            },
+            {
+              "target": "flag",
+              "key": "rl_chancery_man",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "stay_out",
+          "label": "Decline both lunches and let the two of them talk to each other",
+          "outcome": "Nobody is offended and nobody is helped, and it takes three more years than it needed to. You keep your hands clean, which in this diocese is sometimes read as prudence and sometimes as a man who will not be relied on, and you do not get to choose which.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "rl_stayed_out",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rl_he_said_it_publicly",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "pressure": [
+        "ambition_vs_integrity",
+        "belief_vs_safety"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 9,
+      "suppressYears": 4,
+      "once": true,
+      "title": "The One Who Can Say It",
+      "body": "He said it at a public lecture with a reporter in the room, and it is in the paper, and it is the thing half the presbyterate thinks and none of them can say. The bishop has been asked for a comment and has none, because the man is a religious of pontifical right and the bishop's authority over what he says in a lecture hall runs to approximately nothing. Three priests have already told you at the deanery lunch that somebody ought to back him up. You notice that all three of them are telling you rather than doing it, and that he has no career to lose and you have one.",
+      "choices": [
+        {
+          "id": "say_nothing",
+          "label": "Say nothing, in public or at the deanery, and let it pass",
+          "default": true,
+          "outcome": "It passes in nine days. He takes the weight of it alone and is entirely unbothered, which is the whole point of a man with no ladder to fall off. You are not on any list afterwards, for or against, and you think about the lunch occasionally.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "rl_silent",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "back_him",
+          "label": "Say the same thing, in your own name, where it can be quoted",
+          "outcome": "It is quoted. The chancery does not discipline you because there is nothing to discipline, and the file gets a clipping, and a certain kind of priest starts treating you as one of theirs, which you may or may not have wanted. He writes you a note that says only that he had not expected company.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": -4
+            },
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "rl_backed_him",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "use_him",
+          "label": "Feed him the next thing you want said, and let him say it",
+          "outcome": "He says it, because he agrees with it and because he is not stupid about what is happening. It works. It works several times over the following years, and the arrangement is never once discussed between you, and it is the most dishonourable useful thing you do in this decade.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": -2
+            },
+            {
+              "target": "flag",
+              "key": "rl_used_a_proxy",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rl_collapsing_order",
+      "phase": [
+        "pastor",
+        "administrator"
+      ],
+      "pressure": [
+        "competence",
+        "doubt"
+      ],
+      "severity": "NOTABLE",
+      "category": "admin",
+      "baseWeight": 8,
+      "suppressYears": 5,
+      "once": true,
+      "title": "The Last Ones",
+      "body": "The community that has staffed the high school since 1931 is withdrawing. Not closing the school: withdrawing, because there are nine of them left and the youngest is sixty-eight, and the province has decided, correctly, that they cannot staff it and their own infirmary at the same time. The diocese absorbs the school, which means the diocese absorbs the salaries, the building, and the 1931 endowment that turns out to be smaller than everyone assumed. There is a Mass of thanksgiving in June, and somebody has to preach it, and the pastor of the parish attached to the school is you.",
+      "choices": [
+        {
+          "id": "preach_them",
+          "label": "Preach the ninety-four years, by name, and do not mention the future once",
+          "default": true,
+          "outcome": "You get the list from their archivist and read the names of every sister who taught in that building, which takes eleven minutes, and the church is silent for all of it. Two of the nine cry. It is the best thing you do that year and it changes nothing about the arithmetic, and both of those are fine.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "rl_preached_them_out",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "preach_the_future",
+          "label": "Preach the future: what the school becomes now, and who pays for it",
+          "outcome": "It is a good and necessary talk about a transition, delivered at a funeral. The parents find it reassuring. The nine sisters are gracious afterwards in the way of women who have been gracious about worse, and the archivist does not send you the list she had prepared.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": -1
+            },
+            {
+              "target": "flag",
+              "key": "rl_preached_the_future",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "ask_them_to_preach",
+          "label": "Ask their superior to speak instead, and take the chair yourself",
+          "outcome": "The chancery would have preferred a priest. She speaks for six minutes without notes about a woman who taught there in 1948, and the building empties afterwards more slowly than it has in years. You are asked about it at the deanery for a decade, mostly by men who think you should not have done it.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": -2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "rl_gave_her_the_ambo",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rl_diverged_mission",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "pressure": [
+        "friendship_vs_duty",
+        "doubt"
+      ],
+      "severity": "NOTABLE",
+      "category": "classmate",
+      "baseWeight": 9,
+      "suppressYears": 4,
+      "once": true,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "classmate:diverged",
+          "value": true
+        }
+      ],
+      "title": "He Is Preaching Your Parish Mission",
+      "body": "The mission band assigned to this deanery this Lent includes {@diverged_classmate}, who slept four doors down from you for two years and left in the spring of the third for an order you had to look up. He is in your rectory for five nights. He is greyer and considerably calmer and he preaches, on the second night, better than you have ever preached, to your people, about a subject you would not have dared. At supper afterwards he asks how you are, and it becomes apparent over about ninety seconds that he means it and that he has no stake whatsoever in the answer.",
+      "choices": [
+        {
+          "id": "tell_him_the_truth",
+          "label": "Tell him. All of it, including the part about the bishop",
+          "default": true,
+          "outcome": "You talk until two in the morning at your own kitchen table and he says almost nothing, and what he does say is not advice. He has nothing to gain from you and nothing to lose to you, and that turns out to be the rarest thing in your life. He writes at Christmas for the next thirty years.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@diverged_classmate",
+              "delta": 12
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "rl_diverged_friend",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "the_diocesan_version",
+          "label": "Give him the version you give the deanery, and ask about the order",
+          "outcome": "It is a pleasant five nights. He takes the version at face value, because he is not in the business of prising men open any more, and leaves on Saturday, and the parish talks about his preaching until Pentecost. You think about the kitchen table for a while afterwards.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "rl_diverged_polite",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "ask_if_he_regrets_it",
+          "label": "Ask him, straight out, whether he ever regrets going",
+          "outcome": "He says no, and then he says that he regrets that the answer is no, which takes you a week to understand. Then he asks you the same question about staying, and you find that you are not going to be able to answer it tonight, and he does not push, and it sits with you for years.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "rl_asked_him",
+              "value": true
+            },
+            {
+              "target": "flag",
+              "key": "rl_the_question",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rl_diverged_famous",
+      "phase": [
+        "administrator",
+        "pastor"
+      ],
+      "pressure": [
+        "ambition_vs_integrity",
+        "doubt"
+      ],
+      "severity": "ROUTINE",
+      "category": "classmate",
+      "baseWeight": 8,
+      "suppressYears": 5,
+      "once": true,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "classmate:diverged",
+          "value": true
+        },
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 12
+        }
+      ],
+      "title": "He Is On The Radio",
+      "body": "{@diverged_classmate} has a book out. Not a parish-bulletin book: a real one, with a second printing, and an interview on the national Catholic station that your housekeeper listened to and mentioned twice. He was, when you knew him, the fourth or fifth most impressive man in your year. He is now, by any measure the world uses, the most well-known priest either of you will ever meet, and he got there by leaving the ladder you are still climbing, which is either an argument about the ladder or about him and you cannot tell which.",
+      "choices": [
+        {
+          "id": "write_to_him",
+          "label": "Write to him. Say you are glad, and mean it",
+          "default": true,
+          "outcome": "You mean it about eighty per cent, which is a respectable figure. He writes back within the week, at length, and asks four questions about your parish that show he read what you sent properly. The eighty per cent goes up. It is easier to be glad about him after that, which is not the same as being glad, but it does.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@diverged_classmate",
+              "delta": 8
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "rl_wrote_to_him",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "say_nothing",
+          "label": "Say nothing, and notice how that feels",
+          "outcome": "It feels like very little for about a year and then it feels like something at the deanery lunch when a younger priest mentions the book and you hear your own voice say that you knew him, in a tone you did not choose. You go home and think about that tone for a long while.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": -2
+            },
+            {
+              "target": "flag",
+              "key": "rl_the_tone",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "preach_his_argument",
+          "label": "Take the argument of the book and preach it, better, to your eleven o'clock",
+          "outcome": "You do it for four weeks and it is the best month of preaching you have ever done, because you are arguing with somebody. Two of your people buy the book. You are still the man in the room where the thing actually happens to actual families, which is the answer to the whole question and does not always feel like one.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "rl_preached_against_him",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rl_the_monastery_letter",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "pressure": [
+        "doubt",
+        "belief_vs_safety"
+      ],
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 7,
+      "suppressYears": 4,
+      "once": true,
+      "title": "The Letter From The Enclosure",
+      "body": "The prioress writes twice a year, to every priest of the diocese, a short letter saying that the community is praying for him by name in a particular week. Yours arrives on a Tuesday in a month when nothing in particular is wrong, and the week she names is the week in February when the thing happened that you have told nobody, and there is no possible way she knows, and you sit in the office with the letter for some time. The postscript asks whether there is anything you would like them to pray for specifically, and provides no space to write it in.",
+      "choices": [
+        {
+          "id": "write_back",
+          "label": "Write back and tell her the specific thing",
+          "default": true,
+          "outcome": "You write two pages to a woman you have never met behind a grille eleven miles away, and post it before you can reconsider. The reply is four lines and does not refer to the content at all, and one of the lines is a sentence you will still be able to quote in thirty years.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 4
+            },
+            {
+              "target": "flag",
+              "key": "rl_wrote_the_carmel",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "go_there",
+          "label": "Drive out and say Mass for them",
+          "outcome": "You say Mass at seven behind a grille for eleven women you cannot see properly, and it is the least professional and most attentive half hour of your priesthood that year. Afterwards the extern sister hands you a paper bag of something baked and a note that says only that they will keep doing February.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "rl_said_mass_carmel",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "file_it",
+          "label": "Put it in the drawer with the other one",
+          "outcome": "There is another one, from two years ago, in the same drawer. You are not a man who is going to write to a monastery about February. The letters keep coming twice a year regardless, which is the arrangement, and you keep every one of them, which is also an arrangement.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "rl_kept_the_letters",
+              "value": true
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

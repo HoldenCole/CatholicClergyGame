@@ -221,6 +221,8 @@ Scale 0–100. Gains go logarithmic above 70. **Two stats above 70 by mid-career
 
 The intellectual and spiritual life require maintenance; the political skills do not. **This asymmetry is the thesis of the game in one table.**
 
+**Piety's only reliable maintenance channel is a standing spiritual director** (§9.4). Everything else pauses the drain; direction slows it. A man without one is not merely unlucky, he is running the game's central stat on a leak.
+
 ### 4.3 Every high stat carries a cost
 
 - **High Administration** — the chancery finds you too useful where you are and buries you in committees. Promotion to *pastor* may actually slow.
@@ -342,11 +344,34 @@ Dismissal is reachable only through sustained neglect or a serious event, never 
 
 **They persist for the entire game.** In thirty years one is the chancellor, one is a pastor across town, one has left the priesthood, one is dead, and one is on the same terna list. Seminary is where the player decides whether he will have allies.
 
-### 6.6 Exit payload
+### 6.6 Religious in the seminary
+
+Most seminary faculty are religious, and these are the player's first religious contacts. The formation staff generates from the institutes present in the diocese (§9.4) plus one or two from outside: the Dominican who teaches philosophy, the Benedictine spiritual director, the Jesuit running the pastoral year, the diocesan rector over all of them.
+
+**They persist for the entire game.** A formator who thought well of the player writes to his bishop at exactly the right moment twenty years later, and one who did not remembers that too.
+
+**Choosing a spiritual director (Y1).** Three or four are offered, mostly religious, each with a visible charism and temperament and a hidden depth. It is presented as a minor administrative choice and is in fact one of the most consequential decisions in the game. See §9.4 for the internal forum and the mechanics.
+
+### 6.7 The classmate who becomes a religious
+
+One or two men per cohort discern out of diocesan formation and into an order, usually Y2–Y3, sometimes in the wake of the Y4 candidacy crisis.
+
+**They do not leave the game. They diverge.** The man comes off the diocesan ladder permanently and re-enters as a religious NPC years later: a Dominican preaching a mission at the player's parish, a Jesuit at the university who has quietly become more famous than the player ever will be.
+
+The mechanical consequence is the interesting part. He now has **nothing to gain from the player and nothing to lose to him.**
+
+- If the relationship was strong, he becomes a lifelong friend with no agenda, and a second honest channel alongside the spiritual director.
+- If it was competitive, the competition simply evaporates, which is its own kind of complicated. He got out of the race the player is still running, and he seems happier.
+
+**The reverse fires occasionally:** a man arrives in Y5 or Y6 from a religious novitiate he left, and nobody quite asks why. He carries a visible question mark and a set of contacts inside his former institute.
+
+### 6.8 Exit payload
 
 Ordination emits: final stats, alignment, archetype, credentials, private and public position records, classmate roster with relationship values, evaluation history, latent risks, and submitted assignment preferences.
 
 ---
+
+Also emitted: **the standing spiritual director relationship, the formation faculty roster, and any classmates who diverged into religious life.**
 
 ## 7. Promotion and assignment
 
@@ -558,9 +583,71 @@ Each NPC carries **one hidden trait** the player discovers only through interact
 
 **Trajectories roll at ordination**, seeded from stats, ambition, and relationship with the player, then simulate forward in the background. The player should be genuinely surprised who ends up where.
 
+**Departure to a religious institute is a trajectory, not a removal.** It moves the NPC off the diocesan ladder and into the religious cast (§9.4), where he keeps his record and his relationship with the player and loses every reason to compete with him.
+
 ### 9.3 Bishop succession
 
 On death or retirement, the successor rolls with weight from Rome's current temperament, the outgoing bishop's residual influence, and the diocese's state (financial crisis → a fixer; scandal → an outsider). Every chancery relationship is instantly revalued and every public statement is re-read against a new standard.
+
+### 9.4 Religious institutes and religious NPCs
+
+Religious priests, brothers, and sisters are **standing characters**, not event flavor. Four asymmetries make them structurally different, and each is a mechanic rather than a colour:
+
+1. **They are outside the player's ladder.** A religious never competes for a parish or a place on a terna, so he is the only cleric the player can be entirely honest with. Given that the game is largely about the gap between private belief and public record, that role has to exist somewhere.
+2. **Neither the player nor the bishop controls them.** They answer to a provincial in another city, under obedience.
+3. **They hold institutions the player needs and does not own:** university, hospital system, retreat house, high school, and often a parish.
+4. **Charism cuts across the diocesan factions.** A Dominican and a Jesuit are not the same man, and neither maps cleanly onto traditional ↔ progressive.
+
+#### Generation
+
+Each diocese rolls **2–4 institutes present**, weighted by the preset: a Jesuit university in Chicago or Washington, a traditional institute where the traditional bloc is strong, teaching and nursing congregations everywhere. Each institute carries charism, size and trajectory (growing, stable, collapsing), alignment, works held in the diocese, and **relationship with the bishop** (warm, correct, or openly strained).
+
+From those institutes, generate **4–6 named religious** as persistent NPCs, rolled on the same independent-attribute model as classmates (§9.2), plus a charism and a provincial. Standing roles worth filling:
+
+- **The university theologian** — credentialed, published, sometimes a problem for the bishop. Academic-track gateway.
+- **The order-run parish's pastor** — a peer with a different rulebook, in the middle of the friction below.
+- **The hospital chaplain** — the man who has been present at more deaths than anyone else in the diocese.
+- **The retreat master** — spiritual-direction gateway.
+- **The itinerant preacher** — booked by every parish for missions, knows everyone, carries gossip across the whole diocese. An excellent information source.
+- **The contemplative** — a monk or a prioress. Rarely seen, and the source of the few genuinely unnerving spiritual events in the game.
+
+#### Spiritual direction and the internal forum
+
+Piety otherwise only decays (§4.2), which is thematically right and mechanically thin.
+
+**The relationship begins in seminary Y1, not at ordination.** The player chooses a spiritual director from three or four offered, most of them religious (§6.6). Kept, that relationship can run forty years and is the longest single thread in the game.
+
+**The internal forum is a real canonical seal and the game uses it exactly as it exists.** Formation separates the internal forum, spiritual director and confessor, from the external forum of the rector and formation faculty who write evaluations. The director cannot be consulted by the formation team, cannot contribute to an evaluation, and cannot disclose anything said to him.
+
+Mechanically: **nothing said in spiritual direction ever produces a reputation effect, an evaluation change, or a flag visible to any other NPC. Ever.** The guarantee is built into the engine, not into individual events: a spiritual-direction scene is structurally incapable of writing to the reputation system. See `CLAUDE.md`.
+
+**The seal is also the best dilemma in the seminary arc.** The director cannot report the player, but he can insist the player go and disclose it himself, and he can refuse to let it go across multiple years. He pushes; he cannot act; the choice stays with the player. Author heavily against this.
+
+The roles may be split: choose a director in Y1 and either keep him as confessor or use someone else. **Splitting them is a slightly guarded move and NPCs read it that way.**
+
+The relationship provides:
+
+- A recurring **1 AP** spend that **slows Piety decay** rather than merely pausing it, the only reliable maintenance channel in the game.
+- A charism-and-temperament match determining **which crisis events the player can survive**. A brisk, practical director is useless during a dark night; a contemplative is useless to a man drowning in administration. A mismatch is worse than no director at all.
+
+Directors can be changed, at a cost. They can die. They can be reassigned by a provincial with no notice. **That loss lands hard**, and the replacement is never as good immediately.
+
+#### Women religious
+
+- **The principal.** Runs the parish school. At pastor tier one of the best conflict NPCs in the game: the player holds canonical authority over the school, she holds thirty years of actual authority over it, and both of them know whose side the parents will take. She is also his most effective ally if he can get her there.
+- **The local superior.** Runs a community and a work, a clinic, a shelter, a food program. Has opinions about the player and expresses them.
+- **The contemplative prioress.** A monastery praying for the diocese. Appears rarely, carries disproportionate weight.
+- **Parish staff sisters.** DRE, pastoral associate, sacristan. Common, and they change how a parish runs (§10.5).
+
+#### Friction with the diocese
+
+- The bishop wants a parish back from an order that has held it for eighty years, and the player is somewhere in the middle.
+- A religious says something publicly that the bishop must answer for but cannot discipline.
+- An order's institution adopts a policy the diocese opposes.
+- An institute is collapsing from lack of vocations and must withdraw from its works, leaving the diocese to absorb them.
+- A religious is available to say things a diocesan priest cannot risk saying, and can be used as a proxy, which is a real and slightly dishonourable option.
+
+Religious NPCs make the `rome` constituency live earlier, because institutes are international and report through their own generalates, and they build the data model the religious-life expansion needs (§16).
 
 ---
 
@@ -595,6 +682,21 @@ Groups carry alignment. A traditional priest inheriting a progressive social jus
 ### 10.4 Scale
 
 At pastor level the player manages a portfolio rather than individuals. Post-V1 at diocesan level, groups become **movements** — Cursillo, Charismatic Renewal, Opus Dei, Neocatechumenal Way, diocesan TLM communities — where supporting or suppressing one is a major political act.
+
+### 10.5 Religious-led groups
+
+A group led by a sister or a religious brother is a different object from a lay-led one.
+
+| Property | Lay-led | Religious-led |
+|---|---|---|
+| Vitality decay | Normal | **Far slower** — it is her assigned mission, not her hobby. She shows up whether encouraged or not. |
+| AP to sustain | Normal | **Lower.** She is competent and does not need managing. |
+| Suppress / let die | Available | **Unavailable.** The verb does not exist. She cannot be removed. |
+| Loss risk | Leader may quit or be fired | **Her superior can reassign her** with six weeks' notice, for reasons unrelated to the player or the parish. The group she built may not survive it. |
+| Deference | Varies | **Low.** She answers to her community, states disagreement plainly, and is not intimidated by the pastor. |
+| Agenda | Often personal empire-building | Charism-driven. Different, not absent. |
+
+So a parish with two sister-run groups is stable, cheap to maintain, and partly outside the player's control. **That is a meaningfully different parish to play**, and generation deliberately produces some of each. Parish staff sisters — DRE, pastoral associate, sacristan — follow the same rules.
 
 ---
 
@@ -715,7 +817,8 @@ interface GameEvent {
 | Personal, spiritual, crisis | 50 |
 | Diocesan and succession | 30 |
 | Special opportunities (§7.5) | 45 |
-| **Total** | **~475** |
+| Religious, direction, and the internal forum (§9.4) | 55 |
+| **Total** | **~530** |
 
 Seminary is the smallest self-contained chunk and the right first target.
 
@@ -761,7 +864,9 @@ Rationale: the game is 95% text, menus, stat panels, and dialogue trees, which i
 
 **Phase 3 — Parish loop.** AP allocation, obligations with quality dials, the standing routine, digest weeks, liturgical calendar, parish finance. ~150 events. *Done when ten years pass as a parochial vicar and feel different from each other.*
 
-**Phase 4 — Groups.** Generation, the three verbs, lay leader NPCs, vitality decay, group events. ~60 events.
+**Phase 4 — Groups and religious.** Generation, the three verbs, lay leader NPCs, vitality decay, group events; institutes, the religious cast, spiritual direction and the internal forum, religious-led groups. Both are parish-adjacent NPC layers on the same relationship machinery, so building them together is cheaper than splitting them. ~115 events. *Done when the player has a spiritual director whose loss would matter.*
+
+One exception to that ordering: **the Y1 director selection and the religious formation faculty belong in Phase 1**, because they are part of the seminary flow. The NPC records and the selection scene are built there; the decay modifier and crisis matching can follow.
 
 **Phase 5 — Promotion.** Full scoring engine, competing candidates, terna simulation, the pastor tier with projects and authority, bishop succession. *Done when V1's arc completes.*
 
@@ -769,7 +874,7 @@ Rationale: the game is 95% text, menus, stat panels, and dialogue trees, which i
 
 **Phase 7 — Polish.** Art, sound, UI pass, balance, records and career summary screen.
 
-**Post-V1:** chancery tier · auxiliary and diocesan bishop · custom dioceses · religious orders · cardinal · papal conclave.
+**Post-V1:** chancery tier · auxiliary and diocesan bishop · custom dioceses · cardinal · papal conclave. The expansions are §16.
 
 ---
 
@@ -778,3 +883,17 @@ Rationale: the game is 95% text, menus, stat panels, and dialogue trees, which i
 A player can review five generated dioceses and choose one knowingly, create a character with a distinct background and a real tie to that diocese, live seven years of seminary that vary meaningfully between runs, be ordained, be assigned somewhere by an algorithm that considered him as a candidate, spend a decade or more as a parochial vicar in a parish with its own politics and groups, receive and refuse offers that arrived because of specific things he built, survive at least one bishop succession, be appointed pastor of a parish through a decision he can trace to specific things he did, run that parish for several years, and reach a career summary that reads like a life rather than a score.
 
 Two playthroughs from the same starting choices should diverge visibly by the fourth seminary year.
+
+---
+
+## 16. Expansion roadmap
+
+Ordered by how much each builds on existing systems rather than running parallel to them.
+
+**E1 — Rome.** *First.* Additive rather than parallel: it touches every existing system and needs almost no new machinery. The Pope as a rolled NPC (two to four papacies per career), documents as the content vehicle (encyclical, exhortation, motu proprio, dicastery instruction, responsum, off-the-cuff papal remark), and the **implementation cascade** — Rome issues, the bishop interprets, the player is the last interpreter standing in front of actual people. Plus conclave, interregnum as a distinct state where all appointments freeze, the apostolic nuncio as a power centre separate from the bishop, and **reversal**: you spent two years implementing something painful, you lost families over it, and the new pope has undone it. Makes the dormant `rome` constituency live and gives the public record (§5.4) its real teeth. ~30 documents, ~50 events.
+
+**E2 — Province and conference.** Metropolitan archbishops, suffragan dioceses, the national conference, priest loans across diocesan lines, regional reputation. **Not a standalone expansion**: it is a prerequisite for the bishop tier and belongs in that work.
+
+**E3 — Religious life.** A full parallel campaign: a second character-creation flow, novitiate and juniorate instead of seminary, vows instead of incardination, community instead of parish, *elected* superiors instead of appointed pastors, and a ladder running to provincial, abbot, or superior general. Reuses the event engine and little else. Ship only when the diocesan game is genuinely finished. The base-game religious NPCs (§9.4) build the data model in advance.
+
+**E4 — Crossing over.** Diocesan-to-religious transition and back, biritual and bi-status clergy, a diocesan priest joining an institute in midlife. Depends entirely on E3.

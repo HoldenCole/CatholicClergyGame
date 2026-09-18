@@ -55,6 +55,10 @@ export function playCareer(seed: string, diocese: string, maxWeeks: number, a: C
       case 'assignment': s.getState().acceptAssignment(); break;
       case 'assignment_choice': s.getState().chooseAssignment(game.mode.options[policy === 'last' ? game.mode.options.length - 1 : 0]!.id); break;
       case 'letter': s.getState().readLetter(); break;
+      case 'director':
+        s.getState().chooseDirector(game.mode.options[0]!.npcId, true);
+        break;
+
       case 'clock':
         if (game.parish && (game.parish.routine.discretionary.groups ?? 0) === 0) s.getState().setDiscretionary('groups', 1);
         s.getState().setSpeed('SKIP');
