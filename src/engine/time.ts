@@ -57,6 +57,16 @@ export function weekOfYear(clock: Clock, week = clock.week): number {
   return Math.floor((sundayOf(clock, week) - yearStartDay(clock, k)) / 7) + 1;
 }
 
+/**
+ * The year of a man's priesthood, counted from the week he was ordained: the
+ * seminary's academic year stops meaning anything once he has a parish. The
+ * first year is year 1, and the week within it runs 1..52.
+ */
+export function priesthoodYear(week: number, ordinationWeek: number): { year: number; week: number } {
+  const since = Math.max(0, week - ordinationWeek);
+  return { year: Math.floor(since / 52) + 1, week: (since % 52) + 1 };
+}
+
 export function isYearStart(clock: Clock, week = clock.week): boolean {
   return week > 0 && gameYearOf(clock, week) !== gameYearOf(clock, week - 1);
 }

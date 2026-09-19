@@ -1,5 +1,5 @@
 import { useGameStore } from '@/engine/store';
-import { dateOf, gameYearOf, seasonOf, weekOfYear } from '@/engine/time';
+import { dateOf, gameYearOf, priesthoodYear, seasonOf, weekOfYear } from '@/engine/time';
 import { formatDate, SEASON_LABELS } from '@/engine/calendar';
 import type { StopReason } from '@/engine/clock';
 import { eventById } from '@/content';
@@ -59,6 +59,9 @@ export default function Hud() {
   // A decision on the table holds the clock: the buttons that would move it go quiet until it is answered.
   const held = game.pending.length > 0 || game.mode.kind !== 'clock';
   const stop = game.pending[0] ? describeStop({ kind: 'event', event: game.pending[0] }) : describeStop(lastStop);
+  // The seminary counts academic years; a priest counts from the day he was ordained.
+  const ordained = typeof game.flags.ordination_week === 'number' && clock.week >= game.flags.ordination_week ? priesthoodYear(clock.week, game.flags.ordination_week) : null;
+  const yearLine = ordained ? `year ${ordained.year} ordained, week ${ordained.week}` : `year ${gameYearOf(clock)}, week ${weekOfYear(clock)}`;
 
   return (
     <header className="plate hud flex items-center justify-between gap-6 px-5 py-2">
@@ -69,7 +72,7 @@ export default function Hud() {
           {c ? `${c.name.first} ${c.name.last}, ` : ''}{game.study ? `${game.see ? `Bishop of ${game.see.see}` : game.study.city === 'rome' || game.study.city === 'washington' ? `Studying in ${game.study.city === 'rome' ? 'Rome' : 'Washington'}` : game.study.label}, year ${Math.floor((clock.week - game.study.startWeek) / 52) + 1}` : (PHASE_LABELS[game.phase] ?? game.phase)}
         </span>
         <span className="truncate text-sm opacity-80">
-          Week of {formatDate(dateOf(clock))} · {SEASON_LABELS[seasonOf(clock)]} · year {gameYearOf(clock)}, week {weekOfYear(clock)}
+          Week of {formatDate(dateOf(clock))} · {SEASON_LABELS[seasonOf(clock)]} · {yearLine}
         </span>
       </div>
       <div className="flex shrink-0 items-center gap-2">
