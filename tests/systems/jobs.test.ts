@@ -109,3 +109,13 @@ describe('assignments that mean something', () => {
     expect(whyNot(rome, low)).toMatch(/years ordained|theology|chancery|Rome/);
   });
 });
+
+describe('the reason a door is shut, on a scene', () => {
+  it('a flag that names a past is put into words; a flag a scene set for itself is left unnamed', () => {
+    const s = parishState('doors-flags');
+    expect(describeUnmet({ type: 'flag', key: 'career:physician', value: true }, s)).toBe('a past as a physician');
+    expect(describeUnmet({ type: 'flag', key: 'career:attorney', value: true }, s)).toBe('a past as an attorney');
+    expect(describeUnmet({ type: 'flag', key: 'late_vocation', value: true }, s)).toBe('a late vocation');
+    expect(describeUnmet({ type: 'flag', key: 'pv_rect_count_documented', value: true }, s)).toBeNull();
+  });
+});

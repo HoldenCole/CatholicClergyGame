@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import type { DecorPlace } from '@/types';
 import type { SceneId } from './scenes/scenes';
+import type { Lane } from '@/systems/digest';
 
 /** The sheets on the desk. One is open at a time. */
 export type Sheet = 'week' | 'profile' | 'parish' | 'map' | 'deanery' | 'see' | 'place' | 'people' | 'jobs' | 'clubs' | 'letters' | 'record' | 'formation' | 'settings' | 'furnish';
@@ -49,6 +50,9 @@ interface UiState {
   preview: { place: DecorPlace; optionId: string } | null;
   /** An option picked on the furnish sheet, held in the scene until bought or dismissed. */
   selected: { place: DecorPlace; optionId: string } | null;
+  /** The lane the record is filtered to; kept while the desk is open, never saved. */
+  digestLane: Lane | 'all';
+  setDigestLane(lane: UiState['digestLane']): void;
   openSheet(sheet: Sheet | null): void;
   setScene(scene: SceneId): void;
   furnish(place: DecorPlace | null): void;
@@ -67,6 +71,8 @@ export const useUiStore = create<UiState>((set) => ({
     }),
   sheet: null,
   scene: null,
+  digestLane: 'all',
+  setDigestLane: (digestLane) => set({ digestLane }),
   furnishing: null,
   preview: null,
   selected: null,

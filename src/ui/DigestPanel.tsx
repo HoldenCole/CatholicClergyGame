@@ -6,6 +6,7 @@ import { LANE_LABEL, readDigest, type Lane } from '@/systems/digest';
 import { whatIsGoingOn } from '@/systems/digest';
 import type { DigestWeek } from '@/types';
 import Sheet from './Sheet';
+import { useUiStore } from './uiStore';
 
 const SHOWN = 26;
 const LANES: Lane[] = ['decided', 'money', 'parish', 'people', 'diocese', 'you', 'around'];
@@ -17,9 +18,12 @@ function arrow(sign: -1 | 0 | 1): string {
 
 /** The weeks, read: a month at a glance, then each week in lanes with the money and the pews against the week before. */
 function WeeksSheet({ digest, going }: { digest: DigestWeek[]; going: string[] }) {
-  const [filter, setFilter] = useState<Lane | 'all'>('all');
+  // The filter is kept across the desk's tabs, so a man reading the money does not start over each time he looks away.
+  const filter = useUiStore((s) => s.digestLane);
+  const setFilter = useUiStore((s) => s.setDigestLane);
   const [flavor, setFlavor] = useState(false);
-  const weeks = readDigest(digest, SHOWN);
+  const [more, setMore] = useState(0);
+  const weeks = readDigest(digest, SHOWN + more);
   const shown = weeks.filter((w) => filter === 'all' ? true : (w.lanes[filter]?.length ?? 0) > 0);
   return (
     <Sheet title="The weeks">
@@ -69,6 +73,9 @@ function WeeksSheet({ digest, going }: { digest: DigestWeek[]; going: string[] }
             </li>
           ))}
         </ol>
+      )}
+      {digest.length > SHOWN + more && (
+        <button className="pbtn-link mt-2 text-xs" onClick={() => setMore(more + 52)}>Another year of weeks</button>
       )}
     </Sheet>
   );

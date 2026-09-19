@@ -2,6 +2,7 @@ import { useGameStore } from '@/engine/store';
 import { dateOf, gameYearOf, seasonOf, weekOfYear } from '@/engine/time';
 import { formatDate, SEASON_LABELS } from '@/engine/calendar';
 import type { StopReason } from '@/engine/clock';
+import { eventById } from '@/content';
 import { SPEEDS, type Speed } from '@/types';
 import Portrait from './portraits/Portrait';
 import { portraitForCharacter, yearOf } from './portraits/spec';
@@ -29,7 +30,10 @@ function describeStop(stop: StopReason | null): string | null {
   switch (stop.kind) {
     case 'paused': return 'Paused.';
     case 'manual': return 'The week is over.';
-    case 'event': return `Something ${stop.event.severity === 'CRITICAL' ? 'that cannot wait' : 'worth your attention'}.`;
+    case 'event': {
+      const title = eventById(stop.event.eventId)?.title;
+      return title ? `${stop.event.severity === 'CRITICAL' ? 'It cannot wait' : 'This week'}: ${title.replace(/\{[^}]*\}/g, '').replace(/\s+/g, ' ').trim()}.` : `Something ${stop.event.severity === 'CRITICAL' ? 'that cannot wait' : 'worth your attention'}.`;
+    }
     case 'beat': return `${stop.beat.label}.`;
     case 'mode': return 'A decision is waiting.';
     case 'offer': return stop.lapsing ? 'A letter lapses next week.' : 'A letter has come.';
@@ -52,7 +56,9 @@ export default function Hud() {
   const { clock, speed } = game;
   const continuous = speed === 'AUTO' || speed === 'SKIP';
   const c = game.character;
-  const stop = describeStop(lastStop);
+  // A decision on the table holds the clock: the buttons that would move it go quiet until it is answered.
+  const held = game.pending.length > 0 || game.mode.kind !== 'clock';
+  const stop = game.pending[0] ? describeStop({ kind: 'event', event: game.pending[0] }) : describeStop(lastStop);
 
   return (
     <header className="plate hud flex items-center justify-between gap-6 px-5 py-2">
@@ -79,10 +85,16 @@ export default function Hud() {
             </button>
           ))}
         </div>
-        {speed === 'MANUAL' && <HudButton onClick={() => tick()}>Next week</HudButton>}
-        {continuous && <HudButton onClick={() => setRunning(!running)}>{running ? 'Hold' : 'Go'}</HudButton>}
-        {continuous && !running && <HudButton onClick={() => runToStop()}>To the next stop</HudButton>}
-        <HudButton onClick={() => rewind()} disabled={!previous} title="Take back the last week that resolved itself">Take it back</HudButton>
+        {held ? (
+          <span className="text-xs text-[#e6c25a]" title="The clock waits on what is on the table">Decide first</span>
+        ) : (
+          <>
+            {speed === 'MANUAL' && <HudButton onClick={() => tick()} title="N, or the space bar">Next week</HudButton>}
+            {continuous && <HudButton onClick={() => setRunning(!running)} title="N, or the space bar">{running ? 'Hold' : 'Go'}</HudButton>}
+            {continuous && !running && <HudButton onClick={() => runToStop()}>To the next stop</HudButton>}
+          </>
+        )}
+        <HudButton onClick={() => rewind()} disabled={!previous || held} title="Take back the last week that resolved itself (Z)">Take it back</HudButton>
       </div>
     </header>
   );

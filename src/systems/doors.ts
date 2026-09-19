@@ -22,6 +22,24 @@ const FLAG_WORD: Record<string, string> = {
   can_celebrate_tlm: 'faculties for the older form of the Mass', built_adoration_chapel: 'an adoration chapel', 'partner:house': 'an arrangement with a religious house', chapel_restored: 'the chapel restored',
 };
 
+/** A flag that names a past or a tie, in words; the ones a scene sets for itself are left unnamed. */
+function flagWord(key: string): string | null {
+  const [head, rest] = key.split(':') as [string, string | undefined];
+  const word = rest?.replace(/_/g, ' ');
+  if (!word) return key === 'late_vocation' ? 'a late vocation' : key === 'sober' ? 'a sober record' : null;
+  switch (head) {
+    case 'career': return `a past as ${/^[aeiou]/.test(word) ? 'an' : 'a'} ${word}`;
+    case 'past': return `the ${word} in your past`;
+    case 'tie': return `${word} ties to the diocese`;
+    case 'family': return `a family like that: ${word}`;
+    case 'house': return `the ${word} arrangement with a house`;
+    case 'summer': return `a summer at the ${word}`;
+    case 'chaplain': return `the ${word} chaplaincy`;
+    case 'study': return `time at the ${word}`;
+    default: return null;
+  }
+}
+
 function personWord(state: GameState, selector: string): string {
   const npc = resolveSelector(state, selector);
   return npc ? `${npc.title ? `${npc.title} ` : ''}${npc.name.last}` : selector.replace('@', '').replace(/_/g, ' ');
@@ -46,7 +64,7 @@ export function describeUnmet(cond: Condition, state: GameState): string | null 
     case 'reputation': return cond.op === '>=' ? `better standing with ${REP_WORD[cond.key] ?? cond.key}` : `less notice from ${REP_WORD[cond.key] ?? cond.key}`;
     case 'relationship': return cond.op === '>=' ? `a better footing with ${personWord(state, cond.npcId)}` : `a cooler footing with ${personWord(state, cond.npcId)}`;
     case 'credential': return CRED_WORD[cond.key] ?? cond.key.replace(/_/g, ' ');
-    case 'flag': return cond.value ? (FLAG_WORD[cond.key] ?? null) : (FLAG_WORD[cond.key] ? `not ${FLAG_WORD[cond.key]}` : null);
+    case 'flag': return cond.value ? (FLAG_WORD[cond.key] ?? flagWord(cond.key)) : (FLAG_WORD[cond.key] ? `not ${FLAG_WORD[cond.key]}` : null);
     case 'alignment': return cond.op === '>=' ? 'a more progressive record' : 'a more traditional record';
     case 'outspokenness': return cond.op === '>=' ? 'a louder public record' : 'a quieter public record';
     case 'years_ordained': return cond.op === '>=' ? `${cond.value} years ordained` : 'fewer years ordained';

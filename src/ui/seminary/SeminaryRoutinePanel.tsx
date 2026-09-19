@@ -26,7 +26,7 @@ export default function SeminaryRoutinePanel() {
       </Sheet>
       <Sheet title="Your hours">
         <ul className="flex flex-col gap-1.5">
-          {seminaryActivities.map((a) => {
+          {seminaryActivities.filter((a) => a.location !== 'language' || (routine[a.id] ?? 0) > 0 || (sem.hoursLogged?.[a.id] ?? 0) > 0).map((a) => {
             const ap = routine[a.id] ?? 0;
             const offered = seminaryActivityOffered(game, a);
             const canAdd = offered && ap < a.maxAp && left > 0;
@@ -53,6 +53,21 @@ export default function SeminaryRoutinePanel() {
             );
           })}
         </ul>
+        {(() => {
+          // The languages, folded: one row each once begun, and a list to begin another from, so nine tongues do not crowd the week.
+          const folded = seminaryActivities.filter((a) => a.location === 'language' && !((routine[a.id] ?? 0) > 0 || (sem.hoursLogged?.[a.id] ?? 0) > 0) && seminaryActivityOffered(game, a));
+          if (!folded.length) return null;
+          return (
+            <div className="mt-2 flex flex-wrap items-center gap-2 text-xs">
+              <span className="ink-muted">Begin a language:</span>
+              <select className="rounded border rule bg-white/40 px-1 py-0.5" value="" disabled={left <= 0} onChange={(e) => { if (e.target.value) setActivity(e.target.value, 1); }}>
+                <option value="">{left > 0 ? 'choose one' : 'no hours left'}</option>
+                {folded.map((a) => <option key={a.id} value={a.id}>{a.label}</option>)}
+              </select>
+              <span className="ink-faint">An hour a week; the ones you have begun stay in the list above.</span>
+            </div>
+          );
+        })()}
         <p className="ink-faint mt-3 text-xs">The year's emphasis still shapes the year. These hours are what you do with the rest of it, and the people you do it with; what they build, they build for good, and the evaluation will say so.</p>
       </Sheet>
     </>
