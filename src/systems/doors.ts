@@ -30,7 +30,7 @@ function flagWord(key: string): string | null {
   switch (head) {
     case 'career': return `a past as ${/^[aeiou]/.test(word) ? 'an' : 'a'} ${word}`;
     case 'past': return `the ${word} in your past`;
-    case 'tie': return `${word} ties to the diocese`;
+    case 'tie': return word === 'son' ? 'roots in the diocese' : word === 'convert' ? 'having been received into the Church here' : `to have come here for the ${word}`;
     case 'family': return `a family like that: ${word}`;
     case 'house': return `the ${word} arrangement with a house`;
     case 'summer': return `a summer at the ${word}`;

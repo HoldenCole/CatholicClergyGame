@@ -15,8 +15,17 @@ import {
 import { resolvePending, seminaryWeekHook, type EventDeps } from '@/engine/weekHook';
 import { seminaryState, testEvent, testNpc } from '../helpers/fixtures';
 import { emphasisPointsFor } from '@/systems/formation';
+import { chooseDirector } from '@/systems/direction';
 import type { GameEvent, GameState, Pillar } from '@/types';
 import { buildSave, deserialize, rngFromSave, serialize } from '@/engine/save';
+
+/** The year's emphasis chosen, and the Y1 director question that follows it answered. */
+const emphasis: typeof chooseEmphasis = (...args) => pastDirector(chooseEmphasis(...args));
+
+/** The formation office's Y1 question, answered with the first man so the clock can go on. */
+function pastDirector(s: GameState): GameState {
+  return s.mode.kind === 'director' ? { ...chooseDirector(s, s.mode.options[0]!.npcId), mode: { kind: 'clock' } } : s;
+}
 
 const E = (h: number, s: number, i: number, p: number): Record<Pillar, number> => ({ human: h, spiritual: s, intellectual: i, pastoral: p });
 
@@ -72,7 +81,7 @@ function withFormators(state: GameState): GameState {
 /** Drive one formation year to its evaluation, taking the first choice everywhere. */
 function playYear(state: GameState, rng: ReturnType<typeof createRng>, d: EventDeps, speed: GameState['speed'] = 'AUTO'): GameState {
   const extra = emphasisPointsFor(state) - 10;
-  let s = chooseEmphasis({ ...state, speed }, E(3, 3, 2 + extra, 2), rng);
+  let s = emphasis({ ...state, speed }, E(3, 3, 2 + extra, 2), rng);
   for (let guard = 0; guard < 200; guard++) {
     const r = runClock(s, rng, { maxWeeks: 60, hook: seminaryWeekHook(d) });
     s = r.state;
@@ -82,6 +91,11 @@ function playYear(state: GameState, rng: ReturnType<typeof createRng>, d: EventD
     }
     if (s.mode.kind === 'summer') {
       s = chooseSummer(s, 'hard_parish');
+      continue;
+    }
+    // Year one asks who he will see; the test takes the first man offered.
+    if (s.mode.kind === 'director') {
+      s = pastDirector(s);
       continue;
     }
     if (s.mode.kind === 'evaluation') return s;
@@ -95,7 +109,7 @@ describe('engine/seminary', () => {
   it('starts in year one waiting for an emphasis, then schedules the year', () => {
     const s0 = startSeminary(seminaryState(), ['c1', 'c2', 'c3']);
     expect(s0.mode).toEqual({ kind: 'year_start', year: 1 });
-    const s1 = chooseEmphasis(s0, E(3, 3, 2, 2), createRng('sched'));
+    const s1 = emphasis(s0, E(3, 3, 2, 2), createRng('sched'));
     expect(s1.mode.kind).toBe('clock');
     const sem = s1.seminary!;
     expect(sem.playedWeeks.length).toBeGreaterThanOrEqual(2);
@@ -105,15 +119,15 @@ describe('engine/seminary', () => {
       expect(w).toBeLessThanOrEqual(YEAR_SHAPE.lastPlayedWeek);
     }
     expect(s1.beats.map((b) => b.kind)).toEqual(['assignment', 'evaluation']);
-    expect(() => chooseEmphasis(s0, E(9, 1, 0, 0), createRng('x'))).toThrow();
+    expect(() => emphasis(s0, E(9, 1, 0, 0), createRng('x'))).toThrow();
   });
 
   it('MANUAL: events queue at played weeks and the clock waits for a choice', () => {
     const d = deps();
     const rng = createRng('manual');
-    let s = chooseEmphasis({ ...withFormators(startSeminary(seminaryState(), ['c1'])), speed: 'MANUAL' }, E(3, 3, 2, 2), rng);
+    let s = emphasis({ ...withFormators(startSeminary(seminaryState(), ['c1'])), speed: 'MANUAL' }, E(3, 3, 2, 2), rng);
     const firstPlayed = s.seminary!.playedWeeks[0]!;
-    while (s.clock.week < firstPlayed) s = runClock(s, rng, { hook: seminaryWeekHook(d) }).state;
+    while (s.clock.week < firstPlayed) s = pastDirector(runClock(s, rng, { hook: seminaryWeekHook(d) }).state);
     expect(s.pending).toHaveLength(1);
     expect(s.pending[0]!.eventId).toMatch(/^y1_/);
     const blocked = runClock(s, rng, { hook: seminaryWeekHook(d) });
@@ -127,7 +141,7 @@ describe('engine/seminary', () => {
   it('AUTO: routine events auto-resolve with the default and notable ones stop the clock', () => {
     const d = deps();
     const rng = createRng('auto');
-    let s = chooseEmphasis({ ...withFormators(startSeminary(seminaryState(), ['c1'])), speed: 'AUTO' }, E(3, 3, 2, 2), rng);
+    let s = emphasis({ ...withFormators(startSeminary(seminaryState(), ['c1'])), speed: 'AUTO' }, E(3, 3, 2, 2), rng);
     const r = runClock(s, rng, { maxWeeks: 60, hook: seminaryWeekHook(d) });
     s = r.state;
     // Either it stopped on a notable event or reached the summer with routine ones resolved.
@@ -143,7 +157,7 @@ describe('engine/seminary', () => {
   it('SKIP runs through notable events to the summer beat', () => {
     const d = deps();
     const rng = createRng('skip');
-    const s = chooseEmphasis({ ...withFormators(startSeminary(seminaryState(), ['c1'])), speed: 'SKIP' }, E(3, 3, 2, 2), rng);
+    const s = emphasis({ ...withFormators(startSeminary(seminaryState(), ['c1'])), speed: 'SKIP' }, E(3, 3, 2, 2), rng);
     const r = runClock(s, rng, { maxWeeks: 60, hook: seminaryWeekHook(d) });
     expect(r.state.mode.kind).toBe('summer');
     expect(r.state.pending).toHaveLength(0);
@@ -172,11 +186,11 @@ describe('engine/seminary', () => {
     const rng = createRng('beat');
     let s = withFormators(startSeminary(seminaryState(), ['c1']));
     s = { ...s, seminary: { ...s.seminary!, year: 4 }, mode: { kind: 'year_start', year: 4 } };
-    s = chooseEmphasis({ ...s, speed: 'MANUAL' }, E(3, 3, 2, 2), rng);
+    s = emphasis({ ...s, speed: 'MANUAL' }, E(3, 3, 2, 2), rng);
     const last = s.seminary!.playedWeeks[s.seminary!.playedWeeks.length - 1]!;
     let sawBeat = false;
     while (s.clock.week < last) {
-      s = runClock(s, rng, { hook: seminaryWeekHook(d) }).state;
+      s = pastDirector(runClock(s, rng, { hook: seminaryWeekHook(d) }).state);
       if (s.pending.length) {
         if (s.clock.week === last) {
           expect(playedWeekBeat({ ...s, clock: { ...s.clock } }).played).toBe(true);
@@ -221,8 +235,8 @@ describe('engine/seminary', () => {
     const rngA = createRng('save');
     const rngB = createRng('save');
     const start = withFormators(startSeminary(seminaryState('save'), ['c1', 'c2']));
-    let a = chooseEmphasis({ ...start, speed: 'SKIP' }, E(2, 3, 3, 2), rngA);
-    let b = chooseEmphasis({ ...start, speed: 'SKIP' }, E(2, 3, 3, 2), rngB);
+    let a = emphasis({ ...start, speed: 'SKIP' }, E(2, 3, 3, 2), rngA);
+    let b = emphasis({ ...start, speed: 'SKIP' }, E(2, 3, 3, 2), rngB);
     a = runClock(a, rngA, { maxWeeks: 20, hook: seminaryWeekHook(d) }).state;
     b = runClock(b, rngB, { maxWeeks: 20, hook: seminaryWeekHook(d) }).state;
     const save = deserialize(serialize(buildSave(b, rngB, null)));

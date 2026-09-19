@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { creationContent as content } from '@/content/creation';
 import { useGameStore } from '@/engine/store';
-import { careerAvailability, entryAge, maxYearsWorked, validateAnswers } from '@/systems/creation';
+import { careerAvailability, entryAge, maxYearsWorked, tieAvailability, validateAnswers } from '@/systems/creation';
 import type { CreationAnswers, CreationOption } from '@/types';
 import OptionList from './OptionList';
 import DioceseCards from './DioceseCards';
@@ -141,10 +141,10 @@ export default function CreationScreen() {
           <p className="ink-muted text-sm">You asked to be surprised. Choosing a diocese by name now gives up the surprise and its small bonus.</p>
         )}
         {step === 'origin' && (
-          <OptionList options={content.origins} selected={full.origin} onSelect={(o) => choose('origin', o, { origin: o.id })} />
+          <OptionList options={content.origins} selected={full.origin} onSelect={(o) => choose('origin', o, { origin: o.id, ...(tieAvailability({ origin: o.id }, content).find((t) => t.option.id === full.tie)?.available ? {} : { tie: tieAvailability({ origin: o.id }, content).find((t) => t.available)!.option.id }) })} />
         )}
         {step === 'tie' && (
-          <OptionList options={content.ties} selected={full.tie} onSelect={(o) => choose('tie', o, { tie: o.id })} />
+          <OptionList options={content.ties} selected={full.tie} onSelect={(o) => choose('tie', o, { tie: o.id })} shut={(o) => tieAvailability(full, content).find((t) => t.option.id === o.id)?.why ?? null} />
         )}
         {step === 'path' && (
           <OptionList

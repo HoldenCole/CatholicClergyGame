@@ -1,0 +1,781 @@
+{
+  "_notes": "The background comes back (DESIGN §3, 'background is a set of content seeds'). Scenes for the parish years gated on what a man chose at creation: the tie (tie:convert, tie:school, tie:seminary, tie:transfer), the career (career:nurse, career:police_fire, career:sales, career:attorney, career:military, career:farm), the motive (motive:running, motive:priest, motive:grief), and the past (past:debt). Weights are a little under an ordinary event's and suppression runs long, so each is a thing that happens once or twice in a career and is recognisably his. The man from the old life (bg_running) and the collections letter (bg_debt) are authored only. Flags written: bg_vigil_preached, bg_vigil_stood, bg_vigil_quiet, bg_convert_funeral_prayed, bg_convert_funeral_refused, bg_convert_funeral_stood, bg_nurse_chart_read, bg_nurse_chart_left, bg_nurse_chart_stayed, bg_police_went, bg_police_called, bg_police_stayed_out, bg_sales_campaign_own, bg_sales_campaign_hired, bg_sales_campaign_refused, bg_attorney_read_it, bg_attorney_left_it, bg_attorney_settled, bg_flag_sanctuary, bg_flag_narthex, bg_flag_preached, bg_farm_walked, bg_farm_blessed, bg_farm_bank, bg_running_door_open, bg_running_door_shut, bg_running_told_director, bg_priest_preached, bg_priest_sat, bg_priest_missed, bg_grief_mass_said, bg_grief_mass_private, bg_grief_mass_preached, bg_debt_told_manager, bg_debt_hid, bg_debt_paid, bg_school_lecture, bg_school_declined, bg_school_column, bg_seminary_why_true, bg_seminary_why_line, bg_transfer_answered, bg_transfer_let_stand, bg_transfer_asked_file.",
+  "events": [
+    {
+      "id": "bg_convert_vigil",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["doubt", "belief_vs_safety"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 9,
+      "suppressYears": 6,
+      "requires": [
+        { "type": "flag", "key": "tie:convert", "value": true },
+        { "type": "season", "value": "lent" }
+      ],
+      "title": "The Man Who Stood For You",
+      "body": "The parish has four catechumens this year and the Vigil is three weeks off, and the RCIA director asks whether you would say a word to them on the last Thursday about what it was like. You have not said a word about what it was like to anyone since the night itself. The man who stood for you at the font, your sponsor, is seventy-four now and has driven forty minutes to sit in the back of the hall because he heard you were speaking, and he has brought the photograph, the one with the candle, in which you look frightened, because you were.",
+      "flavorPrompt": "Four catechumens, the photograph with the candle, the man who drove forty minutes, the word about what it was like.",
+      "choices": [
+        {
+          "id": "say_it",
+          "label": "Tell them the whole of it: the year before, the night, and the ten years since",
+          "default": true,
+          "outcome": "You talk for twenty minutes and it is the most honest homily you have given, and it is not a homily. Two of the four cry. Your sponsor does not, and shakes your hand at the door with both of his, and says he has waited eleven years to hear you say it. The RCIA director asks whether you would do it every year. You say yes before you have thought about it.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 4 },
+            { "target": "stat", "key": "charisma", "delta": 2 },
+            { "target": "reputation", "key": "parishioners", "delta": 5 },
+            { "target": "honesty", "key": "", "delta": 2 },
+            { "target": "flag", "key": "bg_vigil_preached", "value": true }
+          ]
+        },
+        {
+          "id": "stand_for_one",
+          "label": "Say a few careful words, and ask whether one of the four has no sponsor yet",
+          "outcome": "One does not: a man of fifty whose wife will not come. You stand for him at the Vigil, in the place where your own sponsor stood, and your sponsor sits in the third pew and watches you do it and understands exactly what you are doing. The man of fifty calls you every Easter for the rest of your life.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 3 },
+            { "target": "reputation", "key": "parishioners", "delta": 3 },
+            { "target": "ministry", "key": "converts", "delta": 1 },
+            { "target": "flag", "key": "bg_vigil_stood", "value": true }
+          ]
+        },
+        {
+          "id": "keep_it",
+          "label": "Say the safe things, and keep the night to yourself",
+          "outcome": "You say what any priest would say about the sacraments, competently, for twelve minutes. The catechumens are grateful. Your sponsor drives home with the photograph in his coat, and does not mention it, and you are aware for a week afterward of having declined to be known.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": -1 },
+            { "target": "honesty", "key": "", "delta": -1 },
+            { "target": "flag", "key": "bg_vigil_quiet", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bg_convert_funeral",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["loyalty_vs_honesty", "friendship_vs_duty"],
+      "severity": "MAJOR",
+      "category": "personal",
+      "baseWeight": 6,
+      "suppressYears": 20,
+      "once": true,
+      "requires": [
+        { "type": "flag", "key": "tie:convert", "value": true },
+        { "type": "years_ordained", "op": ">=", "value": 4 }
+      ],
+      "title": "Your Father's Funeral",
+      "body": "Your father was not Catholic and did not become one, and was decent about yours in the way of a man who thought it would pass. He has died in the town you left, and the family, which is not Catholic either, would like you to do something at the funeral home, because you are the one who does that sort of thing, and they have no idea what the sort of thing is. Your mother asks whether you can say a Mass for him. Your brother asks whether you can just say a few words and not make it a thing. The funeral home has a room and a lectern and a man in a grey suit who would like to know by Thursday.",
+      "choices": [
+        {
+          "id": "pray_with_them",
+          "label": "Lead the prayers a priest may lead for anyone, in your collar, and say the Mass for him afterward at home",
+          "default": true,
+          "outcome": "You read the psalm and the Gospel and commend him, and it takes eleven minutes, and your brother says afterward that it was fine, actually, which from him is a great deal. The Mass is said on a Tuesday morning in your own church with eight people who did not know him, and it is the one you needed. Your mother comes to it. She has not been in a church in thirty years.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 3 },
+            { "target": "relationship", "key": "@mother", "delta": 8 },
+            { "target": "relationship", "key": "@sibling", "delta": 4 },
+            { "target": "ministry", "key": "funerals", "delta": 1 },
+            { "target": "strain", "key": "", "delta": 6 },
+            { "target": "flag", "key": "bg_convert_funeral_prayed", "value": true }
+          ]
+        },
+        {
+          "id": "few_words",
+          "label": "Do what your brother asked: a few words as his son, no collar, no prayers",
+          "outcome": "You speak as a son for four minutes and it is good and it is not what you are, and everyone in the room knows there is a priest in it who has decided not to be one for the afternoon. Your mother says nothing. On the drive back you pull over once. The Mass for him is said, later, alone, with nobody told.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": -2 },
+            { "target": "relationship", "key": "@sibling", "delta": 8 },
+            { "target": "relationship", "key": "@mother", "delta": -3 },
+            { "target": "strain", "key": "", "delta": 8 },
+            { "target": "flag", "key": "bg_convert_funeral_refused", "value": true }
+          ]
+        },
+        {
+          "id": "stand_at_the_back",
+          "label": "Let the family have the service they want, and stand at the back in your collar",
+          "outcome": "A friend of his from the plant speaks, and a niece reads a poem, and you stand at the back where everyone can see you and nobody has to ask you anything. It is the coward's option and the kind one, and you cannot tell which. Your mother holds your arm at the graveside and says he was proud of you and never knew how to say so.",
+          "effects": [
+            { "target": "relationship", "key": "@mother", "delta": 4 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "strain", "key": "", "delta": 5 },
+            { "target": "flag", "key": "bg_convert_funeral_stood", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bg_nurse_the_chart",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["competence", "loyalty_vs_honesty"],
+      "severity": "NOTABLE",
+      "category": "parish_death",
+      "baseWeight": 9,
+      "suppressYears": 4,
+      "requires": [{ "type": "flag", "key": "career:nurse", "value": true }],
+      "title": "The Chart",
+      "body": "{@parishioner} is in the ICU after the stroke and the family is in the corridor being told things by a resident who is doing his best, and one of the nurses on the floor recognises you from a floor you worked ten years ago and says, quietly, that you might want to look at the chart before you talk to the family, because the resident is being kind and the chart is not. You know how to read a chart. You are not, this afternoon, a nurse; you are the priest, and the family is looking at you the way families look at the one person in the corridor they think will tell them the truth.",
+      "flavorPrompt": "The ICU corridor, the resident doing his best, the nurse who remembers you, the chart that is not kind.",
+      "choices": [
+        {
+          "id": "read_it",
+          "label": "Read the chart, and tell the family in plain words what the resident could not",
+          "default": true,
+          "outcome": "You tell them, in the corridor, that he will not wake up, and that they should say what they have to say tonight. They say it. He dies at four in the morning with the whole family in the room, which would not have happened if they had waited for the attending. The resident finds you afterward and thanks you, and then asks how you knew.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 2 },
+            { "target": "stat", "key": "charisma", "delta": 2 },
+            { "target": "reputation", "key": "parishioners", "delta": 5 },
+            { "target": "ministry", "key": "anointings", "delta": 1 },
+            { "target": "flag", "key": "bg_nurse_chart_read", "value": true }
+          ]
+        },
+        {
+          "id": "leave_it",
+          "label": "Leave the chart to the doctors: you are here as the priest",
+          "outcome": "You anoint him and pray with the family and say nothing about the chart, and the attending comes at nine the next morning and says what you already knew, and by then two of the children have gone home. The nurse does not say anything. She does not have to.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "reputation", "key": "parishioners", "delta": 1 },
+            { "target": "ministry", "key": "anointings", "delta": 1 },
+            { "target": "flag", "key": "bg_nurse_chart_left", "value": true }
+          ]
+        },
+        {
+          "id": "stay_the_night",
+          "label": "Read it, say nothing, and stay the night so that you are there when it turns",
+          "outcome": "You sit in the chair by the bed for eleven hours and the family goes home and comes back and goes home again, and when it turns at four you telephone them, and they are there in twenty minutes, and it is close enough. The nurse brings you coffee at two and says it is good to see you on a floor again.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 3 },
+            { "target": "reputation", "key": "parishioners", "delta": 4 },
+            { "target": "ministry", "key": "anointings", "delta": 1 },
+            { "target": "strain", "key": "", "delta": 6 },
+            { "target": "ap", "key": "", "delta": -1 },
+            { "target": "flag", "key": "bg_nurse_chart_stayed", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bg_police_the_call",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["belief_vs_safety", "friendship_vs_duty"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 9,
+      "suppressYears": 4,
+      "requires": [{ "type": "flag", "key": "career:police_fire", "value": true }],
+      "title": "The Dispatcher Calls You First",
+      "body": "The dispatcher is a woman you worked nights with for six years, and she calls the rectory at eleven, on her own line, to say there is a domestic on a street in the parish and the man has a name you will know from the eight o'clock Mass and the woman has asked for a priest and the cars are four minutes out. She is not supposed to make this call. She is making it because she knows you will go, and because she knows what you used to be, and because a man in a collar who can also read a room is worth more on that porch than a man in a collar who cannot.",
+      "flavorPrompt": "The dispatcher's own line, the name from the eight o'clock, the cars four minutes out, the porch.",
+      "choices": [
+        {
+          "id": "go",
+          "label": "Go, and be on the porch before the cars are",
+          "default": true,
+          "outcome": "You are on the porch in three minutes and talking through the screen door in four, and the man knows you and is ashamed of himself in front of you in a way he would not be in front of the officers, and when the cars come it is over. The sergeant knows you too and writes it up as a welfare check. The woman comes to the rectory the next week. That is the part that matters, and it takes a year.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 5 },
+            { "target": "reputation", "key": "public", "delta": 3 },
+            { "target": "stat", "key": "charisma", "delta": 2 },
+            { "target": "strain", "key": "", "delta": 6 },
+            { "target": "flag", "key": "bg_police_went", "value": true }
+          ]
+        },
+        {
+          "id": "call_it_in_properly",
+          "label": "Tell her you will come when the officers have it, and go then",
+          "outcome": "The officers have it in six minutes and it is ugly for four of them. You come at half past, and sit with the woman in the kitchen while the man is in the back of a car, and it is useful, and it is not what the dispatcher called you for. She does not call again. She was not supposed to, and she knows it.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "flag", "key": "bg_police_called", "value": true }
+          ]
+        },
+        {
+          "id": "stay_out",
+          "label": "Tell her you are not on the job any more, and to let the officers do theirs",
+          "outcome": "It is the correct answer and the pastor would say so and the diocesan attorney would say so twice. The officers handle it. The woman is told a priest was asked for and was not available, which is what the record says. You see the man at the eight o'clock the following Sunday and he cannot look at you, and neither of you knows why.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": -3 },
+            { "target": "stat", "key": "piety", "delta": -1 },
+            { "target": "flag", "key": "bg_police_stayed_out", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bg_sales_the_campaign",
+      "phase": ["pastor", "administrator"],
+      "pressure": ["money", "ambition_vs_integrity"],
+      "severity": "NOTABLE",
+      "category": "finance",
+      "baseWeight": 9,
+      "suppressYears": 5,
+      "requires": [{ "type": "flag", "key": "career:sales", "value": true }],
+      "title": "The Consultant's Pitch",
+      "body": "The diocese has recommended a firm for the capital campaign, and the firm has sent a man in a good suit with a binder and a feasibility study and a fee of eleven per cent of whatever is raised, and he is very good, and you know exactly how good because you used to do this for a living. You know what the binder cost. You know the study was written before he met you. You know the close is coming at the twenty-minute mark and you know what it will be. He does not know that you know, and the finance council is nodding.",
+      "flavorPrompt": "The good suit, the binder, eleven per cent, the close at the twenty-minute mark, the council nodding.",
+      "choices": [
+        {
+          "id": "run_it_yourself",
+          "label": "Thank him, and run the campaign yourself with the council and a card table",
+          "default": true,
+          "outcome": "It takes eighteen months and a great deal of your week, and it raises seventy per cent of what the firm promised, which is more than the firm would have netted after its fee, and every dollar of it came through a conversation somebody in the parish had with somebody else. The chancery's development office is annoyed and impressed in about equal parts.",
+          "effects": [
+            { "target": "money", "key": "", "delta": 60000 },
+            { "target": "reputation", "key": "parishioners", "delta": 5 },
+            { "target": "reputation", "key": "chancery", "delta": -2 },
+            { "target": "stat", "key": "administration", "delta": 3 },
+            { "target": "ap", "key": "", "delta": -2 },
+            { "target": "strain", "key": "", "delta": 8 },
+            { "target": "flag", "key": "bg_sales_campaign_own", "value": true }
+          ]
+        },
+        {
+          "id": "hire_them_on_your_terms",
+          "label": "Hire the firm, and negotiate the fee down to six per cent before he leaves the room",
+          "outcome": "He is startled and then delighted, because a man who knows the game is easier to work with than one who does not, and the campaign runs on his machinery and your judgment and raises what he promised. The diocese uses the six per cent as a benchmark for a decade and does not say where it came from.",
+          "effects": [
+            { "target": "money", "key": "", "delta": 85000 },
+            { "target": "reputation", "key": "chancery", "delta": 4 },
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "stat", "key": "administration", "delta": 2 },
+            { "target": "flag", "key": "bg_sales_campaign_hired", "value": true }
+          ]
+        },
+        {
+          "id": "no_campaign",
+          "label": "Tell the council what the binder cost, and that the parish will not be sold anything this year",
+          "outcome": "It is satisfying for a quarter of an hour and then the roof is still the roof. The council is relieved to have been told the truth and less relieved in March. The man in the suit sends a Christmas card, which is what a professional does, and you find you admire it.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "honesty", "key": "", "delta": 1 },
+            { "target": "flag", "key": "bg_sales_campaign_refused", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bg_attorney_the_complaint",
+      "phase": ["pastor", "administrator"],
+      "pressure": ["loyalty_vs_honesty", "money"],
+      "severity": "NOTABLE",
+      "category": "admin",
+      "baseWeight": 9,
+      "suppressYears": 5,
+      "requires": [{ "type": "flag", "key": "career:attorney", "value": true }],
+      "title": "The Complaint",
+      "body": "A woman fell on the church steps in January and her attorney has filed, and the diocesan attorney has telephoned to say that the diocese will handle it and that you are not to speak to anyone about it, and has sent you the complaint as a courtesy, and you have read it, because you cannot not read a complaint, and you can see three things wrong with the diocese's position and one thing badly wrong with hers. The diocesan attorney is a decent man who bills by the hour and has not noticed the badly wrong thing. The woman is a parishioner. Her attorney is somebody you were at law school with.",
+      "flavorPrompt": "The steps in January, the courtesy copy, the three things and the one, the classmate on the other side.",
+      "choices": [
+        {
+          "id": "write_the_memo",
+          "label": "Write the diocesan attorney a two-page memo on what he has missed, and let him take the credit",
+          "default": true,
+          "outcome": "He calls the next morning, cautious, and then grateful, and the matter settles in April for a third of what it would have. The chancery hears that the parish's pastor read the file better than the firm and files that fact where it files things. Your classmate calls to say nice work, and means it, and asks you to lunch.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": 5 },
+            { "target": "stat", "key": "administration", "delta": 2 },
+            { "target": "money", "key": "", "delta": 4000 },
+            { "target": "flag", "key": "bg_attorney_read_it", "value": true }
+          ]
+        },
+        {
+          "id": "leave_the_law",
+          "label": "Put the complaint in a drawer: you left the law, and the diocese told you not to",
+          "outcome": "The diocese handles it and handles it adequately and it settles in September for what these things settle for. Nobody knows you saw the badly wrong thing. You know. It sits in the drawer with the complaint for the rest of your time in that rectory, and you take it out once, in a bad week, and read it again.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "flag", "key": "bg_attorney_left_it", "value": true }
+          ]
+        },
+        {
+          "id": "settle_it_at_the_door",
+          "label": "Go and see the woman yourself, as her pastor, and find out what she actually wants",
+          "requires": [{ "type": "reputation", "key": "parishioners", "op": ">=", "value": 20 }],
+          "outcome": "She wants the steps fixed and her physical therapy paid and an apology from somebody, and her attorney wanted the rest. You tell the diocesan attorney what she wants, and it is done in a month for a tenth of the reserve, and she is at the ten o'clock the following Sunday on a cane. Your classmate is annoyed, briefly, and then not, because he has known you a long time.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 6 },
+            { "target": "reputation", "key": "chancery", "delta": 3 },
+            { "target": "money", "key": "", "delta": -6000 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "flag", "key": "bg_attorney_settled", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bg_military_the_flag",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["belief_vs_safety"],
+      "severity": "ROUTINE",
+      "category": "group",
+      "baseWeight": 9,
+      "suppressYears": 4,
+      "requires": [
+        { "type": "flag", "key": "career:military", "value": true },
+        { "type": "month", "op": ">=", "value": 5 },
+        { "type": "month", "op": "<=", "value": 5 }
+      ],
+      "title": "The Flag in the Sanctuary",
+      "body": "The VFW post has heard there is a priest in the parish who served, and the commander, who is eighty-one and has a hat, would like the Memorial Day Mass done properly this year: the colours in the sanctuary, the roll of the dead read from the pulpit, taps at the end, and you in the uniform if the diocese allows it, which the diocese does not. The liturgy committee has a view about flags in the sanctuary, which is the view the rubrics have. The commander has buried forty men from this parish and read every one of their names.",
+      "flavorPrompt": "The commander's hat, the colours, the roll of the dead, taps, and the liturgy committee's view.",
+      "choices": [
+        {
+          "id": "narthex_and_names",
+          "label": "The colours in the narthex, the names read after Communion, taps at the door: all of it, in its place",
+          "default": true,
+          "outcome": "The commander wanted the sanctuary and gets the narthex and, after a moment, understands that the names are the thing, and they are read, all forty, from the pulpit, by you, and the church is very quiet, and at the door afterward taps is played by a boy from the high school who gets it right. The committee is satisfied. So is the post, which had not expected to be.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 4 },
+            { "target": "reputation", "key": "public", "delta": 3 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "flag", "key": "bg_flag_narthex", "value": true }
+          ]
+        },
+        {
+          "id": "give_him_the_sanctuary",
+          "label": "Give him the sanctuary: he has earned it and the committee has not",
+          "outcome": "The colours stand by the altar and the post is moved to tears and the liturgy committee writes to the bishop, who writes to you, mildly, and you write back that you buried forty men's names that day and would do it again. He lets it go. The committee does not, for a year.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 3 },
+            { "target": "reputation", "key": "public", "delta": 4 },
+            { "target": "reputation", "key": "chancery", "delta": -3 },
+            { "target": "alignment", "key": "", "delta": -2 },
+            { "target": "outspokenness", "key": "", "delta": 2 },
+            { "target": "flag", "key": "bg_flag_sanctuary", "value": true }
+          ]
+        },
+        {
+          "id": "preach_it",
+          "label": "Keep the rubrics, and preach on the forty names as a man who knows what the names cost",
+          "requires": [{ "type": "stat", "key": "charisma", "op": ">=", "value": 50 }],
+          "outcome": "You preach for nine minutes on two of the names, whom you looked up, and on what it is to have written a letter home for a man, which you have. The commander stands at the end of it, unbidden, and so does the post, and so, after a moment, does the church. Nobody mentions the flag afterward. The post sends four men to the Easter Vigil the following year.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 6 },
+            { "target": "reputation", "key": "public", "delta": 4 },
+            { "target": "stat", "key": "charisma", "delta": 2 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "flag", "key": "bg_flag_preached", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bg_farm_the_bank",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["money", "friendship_vs_duty"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 9,
+      "suppressYears": 5,
+      "requires": [
+        { "type": "any", "inner": [
+          { "type": "flag", "key": "career:farm", "value": true },
+          { "type": "flag", "key": "origin:rural", "value": true }
+        ] }
+      ],
+      "title": "The Farm Is Going",
+      "body": "{@parishioner} farms four hundred acres his grandfather cleared and the bank has given him until the spring, and he has told nobody, and he tells you, at the fence, because you are the one priest in the diocese who knows what a bushel is worth this year and what the note on a combine looks like. He does not want money. He wants to be told, by someone who knows, whether it is over. It is over. He has a wife who does not know how bad it is and two sons who have already decided to leave.",
+      "flavorPrompt": "Four hundred acres, the note on the combine, the fence, the wife who does not know, the sons who have decided.",
+      "choices": [
+        {
+          "id": "walk_the_fields",
+          "label": "Walk the fields with him and tell him the truth, and then sit with his wife while he tells her",
+          "default": true,
+          "outcome": "You tell him it is over and he already knew, and he is grateful in the way a man is grateful for a diagnosis. The telling of the wife is worse. She holds it together until you are gone, and then, he says, did not for a week, and then did. The auction is in April and half the parish comes and buys nothing, which is what they can do. He keeps the house and forty acres. He is at Mass the Sunday after, in the same pew.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 5 },
+            { "target": "stat", "key": "piety", "delta": 2 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "bond", "key": "@parishioner", "value": "helped:the year the farm went" },
+            { "target": "strain", "key": "", "delta": 5 },
+            { "target": "flag", "key": "bg_farm_walked", "value": true }
+          ]
+        },
+        {
+          "id": "bless_the_fields",
+          "label": "Bless the fields at Rogation, which you have not done in this parish, and say nothing about the bank",
+          "outcome": "The Rogation procession has not been done in this parish since 1974 and forty people come, in boots, and you bless the fields of a man who will not have them by summer and he knows it and you know it and the forty do not. It is not nothing. It is not what he asked for. He tells his wife in March, alone, and it goes badly, and he does not blame you and you blame yourself.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 3 },
+            { "target": "stat", "key": "piety", "delta": 2 },
+            { "target": "flag", "key": "bg_farm_blessed", "value": true }
+          ]
+        },
+        {
+          "id": "call_the_bank",
+          "label": "Telephone the bank's loan officer, whom you know, and ask what a restructuring would take",
+          "requires": [{ "type": "stat", "key": "administration", "op": ">=", "value": 45 }],
+          "outcome": "The loan officer is a parishioner of the next parish over and would rather not foreclose on a farm in May, and a restructuring takes the sons staying two more years, which they do, grudgingly, and the forty acres become a hundred and sixty, and the farm goes on. The bank is not charitable. It is practical, which you helped it notice.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 6 },
+            { "target": "reputation", "key": "public", "delta": 2 },
+            { "target": "stat", "key": "administration", "delta": 2 },
+            { "target": "bond", "key": "@parishioner", "value": "helped:the farm that was kept" },
+            { "target": "flag", "key": "bg_farm_bank", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bg_running_the_door",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["loyalty_vs_honesty", "doubt"],
+      "severity": "MAJOR",
+      "category": "personal",
+      "baseWeight": 6,
+      "suppressYears": 10,
+      "once": true,
+      "requires": [
+        { "type": "flag", "key": "motive:running", "value": true },
+        { "type": "years_ordained", "op": ">=", "value": 3 }
+      ],
+      "title": "Somebody From Before",
+      "body": "A man is at the rectory door on a Tuesday evening whom you have not seen since the year before you entered, and who knew you then, and who knows the thing you were running from because he was part of it. He is not threatening. He is, in fact, in trouble of his own, and has found you the way people find priests, and does not seem to have thought through what it means that the priest is you. He would like to come in. The housekeeper is in the kitchen. The pastor is at a meeting. Everything you have made of yourself since is in the house behind you.",
+      "choices": [
+        {
+          "id": "let_him_in",
+          "label": "Let him in, hear him, and let the old life sit in the parlor for an evening",
+          "default": true,
+          "outcome": "He talks for two hours and it is his trouble and not yours, and at the end of it he says, looking around the parlor, that you got out, and you say that you did, and he says he is glad, and means it. He does not come back. You sit in the parlor for a while after he goes with the thing you ran from sitting across from you, and it is smaller than you remembered, and it is not gone.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 3 },
+            { "target": "honesty", "key": "", "delta": 2 },
+            { "target": "strain", "key": "", "delta": 8 },
+            { "target": "flag", "key": "bg_running_door_open", "value": true }
+          ]
+        },
+        {
+          "id": "the_step",
+          "label": "Talk to him on the step, give him the number of the shelter and twenty dollars, and close the door",
+          "outcome": "It takes six minutes and it is done well, in the way you do the door for anyone, and he goes, and the housekeeper asks who it was and you say a man looking for help. It is true. It is also the first time you have lied about it inside the rectory, and the door, when it closes, closes on more than him.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": -2 },
+            { "target": "honesty", "key": "", "delta": -2 },
+            { "target": "strain", "key": "", "delta": 4 },
+            { "target": "flag", "key": "bg_running_door_shut", "value": true }
+          ]
+        },
+        {
+          "id": "tell_the_director",
+          "label": "Let him in, and the next week tell your director the whole of what he came from",
+          "requires": [{ "type": "flag", "key": "direction:chosen", "value": true }],
+          "outcome": "You have kept it out of that room for years, which your director suspected and never said. You put it in the room. He does not react the way you were braced for, because nobody does, and asks one question you have never been asked, and the thing that has run alongside you since the seminary slows, for the first time, to a walk.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 5 },
+            { "target": "honesty", "key": "", "delta": 3 },
+            { "target": "strain", "key": "", "delta": -6 },
+            { "target": "flag", "key": "bg_running_told_director", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bg_priest_who_marked_you",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["friendship_vs_duty"],
+      "severity": "MAJOR",
+      "category": "parish_death",
+      "baseWeight": 6,
+      "suppressYears": 20,
+      "once": true,
+      "requires": [
+        { "type": "flag", "key": "motive:priest", "value": true },
+        { "type": "years_ordained", "op": ">=", "value": 5 }
+      ],
+      "title": "The Priest Who Marked You",
+      "body": "{@mentor_priest} is dying in the priests' retirement home, slowly and with his mind, and has asked the vicar for clergy for one thing, which is that you preach his funeral, and the vicar for clergy has passed it on with the note that this is irregular and that the man's own classmates might expect the honour. He was the reason you are a priest. He has never once said so and you have never once told him. He has a fortnight, the doctors think, and he is lucid in the mornings.",
+      "choices": [
+        {
+          "id": "go_and_tell_him",
+          "label": "Drive out every morning of the fortnight, and on the first one tell him what he was to you",
+          "default": true,
+          "outcome": "He says he knew, which he did, and that he had wondered whether you would say it, and then talks about something else, and for eleven mornings you sit with a man who is teaching you how to die the way he taught you everything. You preach the funeral for six minutes and the presbyterate, which had expected you to be sentimental, is quiet afterward in the way men are when it was true.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 5 },
+            { "target": "stat", "key": "charisma", "delta": 2 },
+            { "target": "reputation", "key": "brother_priests", "delta": 6 },
+            { "target": "ministry", "key": "funerals", "delta": 1 },
+            { "target": "npc", "key": "@mentor_priest", "value": "dead" },
+            { "target": "strain", "key": "", "delta": 8 },
+            { "target": "flag", "key": "bg_priest_preached", "value": true }
+          ]
+        },
+        {
+          "id": "sit_and_say_nothing",
+          "label": "Go when you can, sit with him, and let the thing go unsaid as it always has been",
+          "outcome": "You go four times and it is good and it is enough and it is not what you wanted to say, and he dies on a Wednesday and you preach the funeral well, on the readings, and a classmate of his says afterward that it was a fine homily and that you must have known him well. You say you did. It is the one homily you would give again differently.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 2 },
+            { "target": "reputation", "key": "brother_priests", "delta": 3 },
+            { "target": "ministry", "key": "funerals", "delta": 1 },
+            { "target": "npc", "key": "@mentor_priest", "value": "dead" },
+            { "target": "strain", "key": "", "delta": 6 },
+            { "target": "flag", "key": "bg_priest_sat", "value": true }
+          ]
+        },
+        {
+          "id": "let_the_classmates",
+          "label": "Tell the vicar for clergy his classmates should have it, and go to the funeral in choir",
+          "outcome": "A classmate preaches, and it is affectionate and long and about the seminary in 1968, and you sit in choir and think about the afternoon in the sacristy when you were sixteen and he said the thing that started all of this. You did not go out to the home. You had a parish. You tell yourself that for some years.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": -2 },
+            { "target": "reputation", "key": "brother_priests", "delta": 1 },
+            { "target": "npc", "key": "@mentor_priest", "value": "dead" },
+            { "target": "strain", "key": "", "delta": 4 },
+            { "target": "flag", "key": "bg_priest_missed", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bg_grief_the_anniversary",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["doubt"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 8,
+      "suppressYears": 5,
+      "requires": [{ "type": "flag", "key": "motive:grief", "value": true }],
+      "title": "The Anniversary",
+      "body": "It is the week of the anniversary, the loss that put you on this road, and the intention book has a line open at the seven o'clock on the day, and the secretary asks, as she asks every week, whether there is a Mass you want listed. You have never listed it. You have said the Mass every year, privately, with nobody told, which is allowed and which your director once called a way of keeping the door shut. This year there is a woman in the parish whose loss is the same as yours, this month, and she has asked whether there is anything the Church does.",
+      "flavorPrompt": "The open line in the intention book, the secretary's weekly question, the woman with the same loss.",
+      "choices": [
+        {
+          "id": "list_it",
+          "label": "List the Mass by name in the bulletin, and invite the woman to it",
+          "default": true,
+          "outcome": "The name is in the bulletin and eleven people come to the seven o'clock who would not have, and the woman is one of them, and afterward she asks who it was and you tell her, standing in the sacristy, and it is the first time you have said it to a parishioner. She comes to the seven o'clock on Tuesdays after that. So, you notice, do you.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 4 },
+            { "target": "reputation", "key": "parishioners", "delta": 3 },
+            { "target": "honesty", "key": "", "delta": 2 },
+            { "target": "strain", "key": "", "delta": -4 },
+            { "target": "flag", "key": "bg_grief_mass_said", "value": true }
+          ]
+        },
+        {
+          "id": "keep_it_private",
+          "label": "Say the Mass as you always have, and sit with the woman separately",
+          "outcome": "The Mass is said at seven with four people who do not know what it is for, and the woman is seen on Thursday in the office and is helped, competently, and neither thing touches the other. Your director, when you tell him, says nothing, which is his way of saying what he said the first time.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "reputation", "key": "parishioners", "delta": 1 },
+            { "target": "flag", "key": "bg_grief_mass_private", "value": true }
+          ]
+        },
+        {
+          "id": "preach_it",
+          "label": "Say the Mass, and preach the Sunday on the loss, by name, for the first time",
+          "requires": [{ "type": "stat", "key": "charisma", "op": ">=", "value": 45 }],
+          "outcome": "You have never preached it and you preach it for seven minutes and the church does the thing churches do when a priest has stopped performing, and afterward at the door four people tell you about theirs. The woman is one of them. The parish is different with you afterward: not closer, exactly; more honest, which is harder.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 3 },
+            { "target": "stat", "key": "charisma", "delta": 3 },
+            { "target": "reputation", "key": "parishioners", "delta": 5 },
+            { "target": "honesty", "key": "", "delta": 3 },
+            { "target": "strain", "key": "", "delta": 4 },
+            { "target": "flag", "key": "bg_grief_mass_preached", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bg_debt_the_letter",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["money", "loyalty_vs_honesty"],
+      "severity": "NOTABLE",
+      "category": "finance",
+      "baseWeight": 8,
+      "suppressYears": 8,
+      "once": true,
+      "requires": [{ "type": "flag", "key": "past:debt", "value": true }],
+      "title": "The Letter From Before",
+      "body": "The bankruptcy was discharged years ago and the file was closed and you told the vocation director everything, and none of that prevents a collections agency in another state from buying a debt that was already dead and writing to you at the rectory, because the rectory is where you are, in an envelope the business manager opens because she opens the mail. It is not a large amount. It is not owed. It is a thing the parish now knows about its pastor that it did not know on Monday, and the business manager, who is discreet, has put the letter on your desk without a word, face down.",
+      "choices": [
+        {
+          "id": "tell_her",
+          "label": "Tell the business manager the whole of it, plainly, and ask her to file the letter where she files nonsense",
+          "default": true,
+          "outcome": "She says that she has worked for three pastors and that this is the first one who has ever told her anything, and that the letter is nonsense and she will write to them on parish letterhead, which she does, and which ends it. She is a different kind of colleague after that, and the parish's books, which she runs, are opened to you in a way they were not.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "honesty", "key": "", "delta": 2 },
+            { "target": "stat", "key": "administration", "delta": 1 },
+            { "target": "flag", "key": "bg_debt_told_manager", "value": true }
+          ]
+        },
+        {
+          "id": "say_nothing",
+          "label": "Take the letter, say nothing, and deal with it from home",
+          "outcome": "You write to the agency from your own address with the discharge papers and it ends. The business manager never mentions it, and you never learn whether she read it, and for the rest of your years there you are aware of a small locked room between you and the one person in the building who knows where the money is.",
+          "effects": [
+            { "target": "honesty", "key": "", "delta": -1 },
+            { "target": "strain", "key": "", "delta": 3 },
+            { "target": "flag", "key": "bg_debt_hid", "value": true }
+          ]
+        },
+        {
+          "id": "pay_it",
+          "label": "Pay it, though it is not owed, so that it is gone",
+          "outcome": "Four hundred dollars of your own money to a firm that had no right to it, and it is gone, and it was not worth four hundred dollars, and it was. The business manager sees the cheque stub, because she sees everything, and says nothing, and thinks something, and you will never know what.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": -1 },
+            { "target": "strain", "key": "", "delta": 2 },
+            { "target": "flag", "key": "bg_debt_paid", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bg_school_the_lecture",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "pressure": ["ambition_vs_integrity"],
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 9,
+      "suppressYears": 5,
+      "requires": [
+        { "type": "flag", "key": "tie:school", "value": true },
+        { "type": "years_ordained", "op": ">=", "value": 3 }
+      ],
+      "title": "Your Old Professor Writes",
+      "body": "The professor who thought you were wasting yourself has written, on university letterhead, to say that the department runs a lecture series for the public and that a former student who is now a priest would draw, and that he would like you to speak on whatever you like, and that he still thinks you are wasting yourself and would like the chance to say so to your face over dinner. The lecture is public. The paper covers the series. The bishop reads the paper. Your old professor is an atheist of the cheerful kind and will introduce you.",
+      "flavorPrompt": "University letterhead, the public series, the cheerful atheist's introduction, the bishop's newspaper.",
+      "choices": [
+        {
+          "id": "give_it",
+          "label": "Give the lecture, on the thing you actually think, and take the dinner",
+          "default": true,
+          "outcome": "Two hundred come, half of them students who came for the argument, and you give them one, and the professor introduces you with real affection and heckles you once, and the paper's headline is fair. At dinner he says you are still wasting yourself and that it was a good lecture, and you say those cannot both be true, and he says watch him.",
+          "effects": [
+            { "target": "reputation", "key": "public", "delta": 5 },
+            { "target": "stat", "key": "knowledge", "delta": 2 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "outspokenness", "key": "", "delta": 2 },
+            { "target": "flag", "key": "bg_school_lecture", "value": true }
+          ]
+        },
+        {
+          "id": "decline",
+          "label": "Decline, warmly: the parish is where you are, and the lecture hall is where you were",
+          "outcome": "He writes back to say that this is exactly what he meant, and that he will ask again in five years, and he does. The parish never knows it was chosen over a lecture hall, which is the point, and which is also a little disappointing.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "flag", "key": "bg_school_declined", "value": true }
+          ]
+        },
+        {
+          "id": "column_instead",
+          "label": "Offer him an essay for the university magazine instead, on why you left the field",
+          "requires": [{ "type": "stat", "key": "knowledge", "op": ">=", "value": 50 }],
+          "outcome": "It runs at three thousand words and is reprinted twice, and it is the most-read thing you will write, and the professor sends a copy to every colleague who ever asked what became of you, with a note that says: this. The vocation director puts it in the packet he gives to inquirers. It is in the packet for twenty years.",
+          "effects": [
+            { "target": "reputation", "key": "public", "delta": 4 },
+            { "target": "reputation", "key": "chancery", "delta": 2 },
+            { "target": "stat", "key": "knowledge", "delta": 2 },
+            { "target": "flag", "key": "published", "value": true },
+            { "target": "flag", "key": "bg_school_column", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bg_seminary_why_here",
+      "phase": ["parochial_vicar"],
+      "pressure": ["loyalty_vs_honesty"],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 9,
+      "suppressYears": 10,
+      "once": true,
+      "requires": [{ "type": "flag", "key": "tie:seminary", "value": true }],
+      "title": "Why Here",
+      "body": "{@vicar_for_clergy} has you in for the first-year interview, which is a courtesy and a file, and at the end of it, closing the folder, asks the question nobody asked at the seminary because the seminary was glad to have you: why this diocese? You had a reason. You have told it to no one in full. He is not asking as a trap. He is asking because the personnel board will ask him, and because a man with no roots here is a man the board cannot predict, and he would like to be able to.",
+      "flavorPrompt": "The first-year interview, the folder closing, the question nobody asked, the board that cannot predict you.",
+      "choices": [
+        {
+          "id": "tell_him",
+          "label": "Tell him the real reason, in full, for the first time",
+          "default": true,
+          "outcome": "He listens without writing and then says that it is a better reason than most men have for being anywhere, and that he will not put it in the file, and does not. The board, when it asks, is told that the man is here on purpose and knows why. It is enough. He is warmer to you after that in a way the file cannot account for.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": 5 },
+            { "target": "relationship", "key": "@vicar_for_clergy", "delta": 12 },
+            { "target": "honesty", "key": "", "delta": 2 },
+            { "target": "flag", "key": "bg_seminary_why_true", "value": true }
+          ]
+        },
+        {
+          "id": "the_line",
+          "label": "Give him the line you gave the seminary: the need, the bishop, the city",
+          "outcome": "It is a good line and he has heard it from a dozen men and writes down three words. The board is told that the man is here for the usual reasons, which it takes to mean none, and places you accordingly for a decade. The reason stays yours. It is worth something to have kept it. It is not clear what.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": 1 },
+            { "target": "flag", "key": "bg_seminary_why_line", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bg_transfer_the_question",
+      "phase": ["parochial_vicar", "administrator"],
+      "pressure": ["loyalty_vs_honesty", "ambition_vs_integrity"],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 9,
+      "suppressYears": 10,
+      "once": true,
+      "requires": [
+        { "type": "flag", "key": "tie:transfer", "value": true },
+        { "type": "years_ordained", "op": ">=", "value": 2 }
+      ],
+      "title": "The Question Mark",
+      "body": "{@brother_priest} tells you, at a deanery lunch, as a kindness, that there is a story going round the presbyterate about why you left your first seminary, and that the story is not the one you would tell, and that it has reached the vicar for clergy, who has not asked you about it and is not going to. The story is wrong. It is also the kind of wrong that is worse than the truth in one way and better in another, and the file has had a question mark after your name since you arrived, and this is what a question mark grows into if nobody answers it.",
+      "flavorPrompt": "The deanery lunch, the story going round, the vicar who will not ask, the question mark grown up.",
+      "choices": [
+        {
+          "id": "answer_it",
+          "label": "Go to the vicar for clergy unasked, and tell him what actually happened",
+          "default": true,
+          "outcome": "He is surprised to be told and then relieved, and says that he had assumed something worse and something better and neither was this, and that he will say so where it needs saying. The story does not die, because stories do not, but it stops growing. The question mark in the file becomes a sentence, which is what you wanted.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": 6 },
+            { "target": "reputation", "key": "brother_priests", "delta": 4 },
+            { "target": "honesty", "key": "", "delta": 2 },
+            { "target": "relationship", "key": "@brother_priest", "delta": 5 },
+            { "target": "flag", "key": "bg_transfer_answered", "value": true }
+          ]
+        },
+        {
+          "id": "let_it_stand",
+          "label": "Let the story stand: answering it dignifies it, and the truth is nobody's business",
+          "outcome": "The story stands, and grows a little, and stops, and becomes one of the things that is known about you in the diocese that is not true, of which every priest has one or two. The vicar for clergy never asks. The board reads a question mark for another five years and places you where question marks are placed.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": -3 },
+            { "target": "reputation", "key": "brother_priests", "delta": -2 },
+            { "target": "flag", "key": "bg_transfer_let_stand", "value": true }
+          ]
+        },
+        {
+          "id": "ask_for_the_file",
+          "label": "Ask the vicar for clergy, formally, what the file says about you, which is your right",
+          "requires": [{ "type": "stat", "key": "administration", "op": ">=", "value": 45 }],
+          "outcome": "He shows you, which he must, and it is thinner than you feared and the question mark is a real question mark, in pencil, in the vocation director's hand. You answer it, on paper, in two paragraphs, and the paragraphs go in the file. The vicar for clergy is impressed and slightly alarmed by a man who knows canon 220. Both are useful.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": 4 },
+            { "target": "stat", "key": "administration", "delta": 2 },
+            { "target": "honesty", "key": "", "delta": 1 },
+            { "target": "flag", "key": "bg_transfer_asked_file", "value": true }
+          ]
+        }
+      ]
+    }
+  ]
+}

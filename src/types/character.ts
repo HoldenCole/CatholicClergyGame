@@ -12,7 +12,7 @@ export type Origin =
   | 'lapsed';
 
 /** DESIGN.md §3.2a */
-export type DioceseTie = 'son' | 'school' | 'seminary' | 'transfer';
+export type DioceseTie = 'son' | 'school' | 'seminary' | 'transfer' | 'convert';
 
 /** DESIGN.md §3.3. Entry age is derived from the path plus years worked. */
 export type EntryPath =

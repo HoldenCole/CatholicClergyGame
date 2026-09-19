@@ -6,6 +6,7 @@ import type {
   CreationOption,
   GameState,
   Hook,
+  TieOption,
 } from '@/types';
 import { MAX_ENTRY_AGE, SEMINARY_YEARS } from '@/types';
 import { applyEffects } from '@/engine/effects';
@@ -59,11 +60,26 @@ export function availableCareers(answers: Pick<CreationAnswers, 'path' | 'field'
   return careerAvailability(answers, content).filter((c) => c.available).map((c) => c.option);
 }
 
+/**
+ * Which ties to the diocese this origin admits. A man from a convert household
+ * is nobody's altar boy here, so he cannot be a son of the diocese; only a man
+ * who came into the Church from a convert or a lapsed home can have been
+ * received here as an adult.
+ */
+export function tieAvailability(answers: Pick<CreationAnswers, 'origin'>, content: CreationContent): { option: TieOption; available: boolean; why: string | null }[] {
+  return content.ties.map((option) => {
+    if (option.id === 'son' && answers.origin === 'convert') return { option, available: false, why: 'A convert household has no altar boys the old pastor remembers.' };
+    if (option.id === 'convert' && answers.origin !== 'convert' && answers.origin !== 'lapsed') return { option, available: false, why: 'A man raised in the Church was not received into it as an adult.' };
+    return { option, available: true, why: null };
+  });
+}
+
 export function validateAnswers(answers: CreationAnswers, content: CreationContent): string[] {
   const errors: string[] = [];
   if (!answers.firstName.trim() || !answers.lastName.trim()) errors.push('A name is required.');
   if (!content.origins.some((o) => o.id === answers.origin)) errors.push('Unknown origin.');
   if (!content.ties.some((t) => t.id === answers.tie)) errors.push('Unknown diocese tie.');
+  else if (!tieAvailability(answers, content).find((t) => t.option.id === answers.tie)?.available) errors.push('That tie to the diocese is not open to this origin.');
   const path = pathOf(answers, content);
   if (!path) errors.push('Unknown path.');
   else {

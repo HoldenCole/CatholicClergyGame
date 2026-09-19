@@ -183,6 +183,36 @@ export function generateReligious(rng: Rng, institutes: Institute[], year: numbe
   return out;
 }
 
+/**
+ * A Dominican who comes to the seminary to direct: the Order of Preachers
+ * staffs seminaries everywhere, and a house of formation without one is rare.
+ * Rolled like any religious, outside the diocese's own institutes, so that the
+ * men offered in Y1 are never all of one house. DESIGN §6.6.
+ */
+export function visitingDirector(rng: Rng, year: number, defId = 'dominicans', n = 0): Npc {
+  const def = instituteDef(defId)!;
+  const birthYear = year - rng.int(42, 70);
+  const heritage = rollHeritage(rng, CLERGY_HERITAGE);
+  const npc = finishNpc(rng, {
+    id: `religious_${defId}_visiting_${n}`,
+    name: rollMaleName(rng, heritage, eraForBirthYear(birthYear)),
+    role: 'religious',
+    title: 'Fr.',
+    birthYear,
+    origin: 'suburban',
+    stats: addStats(rollBaseStats(rng, 34, 62), charismStats(def.charism)),
+    relationship: rng.int(0, 15),
+  });
+  return {
+    ...npc,
+    alignment: rollAlignment(rng, def.lean, 18),
+    institute: `inst_${defId}`,
+    charism: def.charism,
+    temperament: temperamentFor(rng, def.charism),
+    tags: [...npc.tags, 'religious', 'visiting_director', `institute:inst_${defId}`],
+  };
+}
+
 /** What a religious does, for the sheets: the generic roles, and the orders' own. */
 export function religiousRoleLine(npc: Npc): string | undefined {
   const tag = npc.tags.find((t) => t.startsWith('religious:'));
