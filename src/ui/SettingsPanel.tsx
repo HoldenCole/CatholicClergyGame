@@ -38,6 +38,7 @@ export default function SettingsPanel() {
         <span>A note explaining the first week of each phase</span>
       </label>
       <p className="ink-faint mt-1 text-xs">Kept in this browser, not in the save.</p>
+      <p className="ink-muted mt-2 text-xs">The keys: <span className="font-mono">N</span> or the space bar for the next week, or Go and Hold when the clock runs on its own; <span className="font-mono">1</span>–<span className="font-mono">9</span> for the choices on a scene; <span className="font-mono">Z</span> to take the week back.</p>
     </Sheet>
     {game && settings && (
       <Sheet title="The week">

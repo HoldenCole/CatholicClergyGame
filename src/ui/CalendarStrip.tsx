@@ -4,6 +4,7 @@ import { SEASON_LABELS } from '@/engine/calendar';
 import { upcomingFeasts } from '@/engine/feasts';
 import { offerById } from '@/content/offers';
 import { pendingAppointment } from '@/engine/appointment';
+import { housesOf } from '@/systems/houses';
 
 const SEASON_COLOR: Record<string, string> = { advent: '#6b4fa0', christmas: '#e6dcc4', ordinary: '#3f7a3f', lent: '#6b4fa0', holy_week: '#8a1f1f', easter: '#e6dcc4' };
 
@@ -17,6 +18,8 @@ export default function CalendarStrip() {
   const week = game.clock.week;
   const letters = game.offers.map((o) => ({ id: o.offerId, title: offerById(o.offerId)?.title ?? 'a letter', weeks: o.expiresWeek - week })).filter((l) => l.weeks >= 0);
   const asked = pendingAppointment(game);
+  // An ask from a house waits on the People sheet; silence is a no, so the strip says how long is left.
+  const asks = Object.values(game.houses ?? {}).filter((s) => s.ask).map((s) => ({ name: housesOf(game).find((h) => h.id === s.houseId)?.name ?? 'A house', weeks: s.ask!.dueWeek - week })).filter((a) => a.weeks >= 0);
   return (
     <div className="mx-auto flex max-w-[1400px] items-center gap-3 px-5 pt-2 text-xs text-[#cbbfa4]">
       <span className="inline-block h-2.5 w-2.5 rounded-full border border-black/30" style={{ background: SEASON_COLOR[season] ?? '#3f7a3f' }} title="The liturgical color of the week" />
@@ -29,6 +32,12 @@ export default function CalendarStrip() {
         </span>
       )}
       {(letters.length > 0 || asked) && <span className="opacity-40">·</span>}
+      {asks.length > 0 && (
+        <span className="shrink-0 text-[#e6c25a]">
+          {asks.map((a) => `${a.name} waits on an answer${a.weeks === 0 ? ' this week' : `, ${a.weeks} week${a.weeks === 1 ? '' : 's'}`}`).join(' · ')}
+        </span>
+      )}
+      {asks.length > 0 && <span className="opacity-40">·</span>}
       <span className="truncate">
         {ahead.length === 0
           ? 'Nothing on the calendar for a while.'

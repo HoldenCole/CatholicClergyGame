@@ -90,6 +90,17 @@ export default function CreationScreen() {
       ? revealFor({ diocese: game.world.diocese, npcs: Object.values(game.npcs) }, revealField, createRng(`${game.seed}:reveal`))
       : null;
 
+  // Whether this step can be left, and leaving it: the Continue button, and the Enter key in a field.
+  const blocked =
+    (step === 'name' && (!answers.firstName.trim() || !answers.lastName.trim())) ||
+    (step === 'face' && !parseSpec(answers.portrait)) ||
+    (step === 'diocese' && !worldChosen && !dioceseChoice);
+  const advance = () => {
+    if (blocked || step === 'summary') return;
+    if (step === 'diocese' && dioceseChoice && (dioceseChoice !== game?.world?.diocese.presetId || game?.flags.surprise_me)) chooseDiocese(dioceseChoice);
+    next();
+  };
+
   return (
     <div className="felt min-h-screen">
       <header className="plate flex items-baseline justify-between px-6 py-2">
@@ -98,7 +109,7 @@ export default function CreationScreen() {
           Step {idx + 1} of {ORDER.length} · entering seminary in {startYear}
         </span>
       </header>
-      <main className="paper paper-tilt-l mx-auto my-6 flex max-w-4xl flex-col gap-5 px-8 py-6">
+      <main className="paper paper-tilt-l mx-auto my-6 flex max-w-4xl flex-col gap-5 px-8 py-6" onKeyDown={(e) => { if (e.key === 'Enter' && (e.target as HTMLElement).tagName === 'INPUT') { e.preventDefault(); advance(); } }}>
         <div>
           <h2 className="title text-2xl">{q.title}</h2>
           <p className="ink-muted mt-1">{q.prompt}</p>
@@ -180,15 +191,8 @@ export default function CreationScreen() {
           {step !== 'summary' ? (
             <button
               className="pbtn pbtn-primary"
-              onClick={() => {
-                if (step === 'diocese' && dioceseChoice && (dioceseChoice !== game?.world?.diocese.presetId || game?.flags.surprise_me)) chooseDiocese(dioceseChoice);
-                next();
-              }}
-              disabled={
-                (step === 'name' && (!answers.firstName.trim() || !answers.lastName.trim())) ||
-                (step === 'face' && !parseSpec(answers.portrait)) ||
-                (step === 'diocese' && !worldChosen && !dioceseChoice)
-              }
+              onClick={advance}
+              disabled={blocked}
             >
               Continue
             </button>

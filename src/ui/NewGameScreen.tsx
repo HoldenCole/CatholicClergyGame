@@ -86,7 +86,11 @@ export default function NewGameScreen() {
             {slots.length > 0 && <h2 className="heading text-sm">A new man</h2>}
             <label className="flex flex-col gap-1 text-sm">
               <span className="heading">Seed</span>
-              <input className="pinput font-mono" value={seed} onChange={(e) => setSeed(e.target.value)} />
+              <span className="flex items-center gap-2">
+                <input className="pinput min-w-0 flex-1 font-mono" value={seed} onChange={(e) => setSeed(e.target.value)} />
+                <button type="button" className="pbtn px-2 py-1 text-xs" title="A different seed rolls a different man, diocese, and life" onClick={() => setSeed(`run-${Date.now().toString(36)}-${Math.floor(Math.random() * 1e6).toString(36)}`)}>Another</button>
+              </span>
+              <span className="ink-faint text-xs">The same seed and the same choices give the same life; change it for a different one.</span>
             </label>
             <label className="flex flex-col gap-1 text-sm">
               <span className="heading">Seminary entry year</span>

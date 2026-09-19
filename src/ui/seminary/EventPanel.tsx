@@ -5,6 +5,7 @@ import { renderText } from '@/engine/text';
 import { eventKey } from '@/llm/skin';
 import Panel from '../Panel';
 import { choiceMeaning } from '@/systems/choiceMeaning';
+import { describeUnmet } from '@/systems/doors';
 import Portrait from '../portraits/Portrait';
 import { portraitForNpc, yearOf } from '../portraits/spec';
 
@@ -39,21 +40,27 @@ export default function EventPanel() {
       </div>
       <div className="scroll-paper mt-3 max-h-[320px] overflow-y-auto whitespace-pre-line pr-2 leading-relaxed">{prose[eventKey(pending)] ?? r(event.body)}</div>
       <ul className="mt-4 flex flex-col gap-1">
-        {choices.map(({ choice, available }) => (
+        {(() => { let n = 0; return choices.map(({ choice, available }) => {
+          const key = available ? ++n : 0;
+          // Why a door is shut, in the words the offers use, so a greyed choice is a thing to work toward.
+          const why = available ? null : (choice.requires ?? []).map((c) => describeUnmet(c, game)).find((w): w is string => !!w) ?? null;
+          return (
           <li key={choice.id}>
-            <button disabled={!available} onClick={() => resolve(choice.id)} className="choice">
+            <button disabled={!available} onClick={() => resolve(choice.id)} className="choice" title={available && key <= 9 ? `Press ${key}` : undefined}>
+              {key > 0 && key <= 9 && <span className="ink-faint mr-2 font-mono text-xs">{key}</span>}
               {r(choice.label)}
               {choice.volume && choice.volume !== 'private' && (
                 <span className="heading ml-2 ink-wine">{choice.volume === 'public' ? 'on the record' : 'said aloud'}</span>
               )}
-              {!available && <span className="ink-faint ml-2 text-xs">not open to you</span>}
+              {!available && <span className="ink-faint ml-2 text-xs">{why ? `needs ${why}` : 'not open to you'}</span>}
               {(() => {
                 const meaning = choiceMeaning(choice);
                 return meaning ? <span className="ink-faint mt-0.5 block text-xs font-normal">{meaning}</span> : null;
               })()}
             </button>
           </li>
-        ))}
+          );
+        }); })()}
       </ul>
     </Panel>
   );

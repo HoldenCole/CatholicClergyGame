@@ -59,6 +59,8 @@ export default function Desk() {
   if (furnishing) tabs.push('furnish');
   const open = sheet ?? 'week';
   const letters = game.offers.length;
+  // A house of the diocese has asked the parish for something, and silence answers it in six weeks.
+  const asks = Object.values(game.houses ?? {}).filter((s) => s.ask).length;
 
   return (
     <div className="desk flex h-[calc(100vh-88px)] min-h-[560px] flex-col">
@@ -67,6 +69,7 @@ export default function Desk() {
           <button key={t} className={'tab ' + (t === open ? 'tab-active' : '')} onClick={() => openSheet(t)}>
             {LABEL[t]}
             {t === 'letters' && letters > 0 && <span className="tab-dot" aria-label={`${letters} waiting`} />}
+            {t === 'people' && asks > 0 && <span className="tab-dot" aria-label={`${asks} asked of the parish`} />}
           </button>
         ))}
       </div>

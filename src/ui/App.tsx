@@ -2,6 +2,9 @@ import { useEffect } from 'react';
 import { useGameStore } from '@/engine/store';
 import NewGameScreen from './NewGameScreen';
 import { useClockRunner } from './useClockRunner';
+import { useHotkeys } from './useHotkeys';
+import { dateOf } from '@/engine/time';
+import { formatDate } from '@/engine/calendar';
 import CreationScreen from './creation/CreationScreen';
 import EndedScreen from './EndedScreen';
 import EmphasisPanel from './seminary/EmphasisPanel';
@@ -27,6 +30,7 @@ export default function App() {
   const openSheet = useUiStore((s) => s.openSheet);
   const prefs = useUiStore((s) => s.prefs);
   useClockRunner();
+  useHotkeys();
 
   // Reading preferences: the type size and whether anything moves.
   useEffect(() => {
@@ -53,6 +57,12 @@ export default function App() {
       document.removeEventListener('visibilitychange', onHidden);
     };
   }, []);
+
+  // The tab's title says who and when, so a run is findable among the browser's tabs.
+  useEffect(() => {
+    const c = game?.character;
+    document.title = game && c && game.mode.kind !== 'creation' ? `Vocation · ${game.flags.ordained ? 'Fr. ' : ''}${c.name.last} · ${formatDate(dateOf(game.clock))}` : 'Vocation';
+  }, [game]);
 
   // A letter arriving opens the letters sheet; nothing else moves the desk on its own.
   useEffect(() => {
