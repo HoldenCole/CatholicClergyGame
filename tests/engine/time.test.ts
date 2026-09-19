@@ -5,6 +5,7 @@ import {
   dateOf,
   describeWeek,
   gameYearOf,
+  priesthoodYear,
   isYearStart,
   seasonOf,
   weekOfYear,
@@ -59,5 +60,14 @@ describe('engine/time', () => {
     // 28 Nov 2021 is the First Sunday of Advent: week 14.
     expect(dateOf(clock, 14)).toEqual({ year: 2021, month: 11, day: 28 });
     expect(seasonOf(clock, 14)).toBe('advent');
+  });
+});
+
+describe('the year of a priesthood', () => {
+  it('counts from the week of ordination, first year first, and the week within it', () => {
+    expect(priesthoodYear(300, 300)).toEqual({ year: 1, week: 1 });
+    expect(priesthoodYear(351, 300)).toEqual({ year: 1, week: 52 });
+    expect(priesthoodYear(352, 300)).toEqual({ year: 2, week: 1 });
+    expect(priesthoodYear(300 + 52 * 6 + 33, 300)).toEqual({ year: 7, week: 34 });
   });
 });
