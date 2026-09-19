@@ -2,7 +2,7 @@ import { handOnOffices, isMoveTo, keepOffices, officesHeld } from '@/systems/off
 import type { Beat, GameEvent, GameState, Pillar, SeminaryState, SummerAssignment } from '@/types';
 import { PILLARS } from '@/types';
 import { divergeStep, exNoviceStep } from '@/systems/diverge';
-import { directorOptions } from '@/systems/direction';
+import { offerDirectors } from '@/systems/direction';
 import { evaluateAll } from './conditions';
 import { applyEffects } from './effects';
 import type { Rng } from './rng';
@@ -130,8 +130,9 @@ export function chooseEmphasis(state: GameState, emphasis: Record<Pillar, number
   // Year one: the formation office asks who he will see, which is presented as an
   // administrative matter and is one of the most consequential choices in the game.
   if (sem.year === 1 && !next.flags['direction:chosen']) {
-    const options = directorOptions(next, rng.derive('directors'));
-    if (options.length >= 2) return { ...next, mode: { kind: 'director', options } };
+    const offered = offerDirectors(next, rng.derive('directors'));
+    next = offered.state;
+    if (offered.options.length >= 2) return { ...next, mode: { kind: 'director', options: offered.options } };
   }
   return next;
 }

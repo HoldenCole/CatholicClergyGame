@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { creationContent as content } from '@/content/creation';
+import { allEvents } from '@/content';
 import { newGame } from '@/engine/game';
 import {
   applyCreation,
@@ -9,6 +10,7 @@ import {
   entryAge,
   ordinationAge,
   validateAnswers,
+  tieAvailability,
 } from '@/systems/creation';
 import type { CreationAnswers } from '@/types';
 
@@ -31,7 +33,7 @@ const base: CreationAnswers = {
 describe('systems/creation', () => {
   it('content is complete', () => {
     expect(content.origins).toHaveLength(6);
-    expect(content.ties).toHaveLength(4);
+    expect(content.ties).toHaveLength(5);
     expect(content.paths).toHaveLength(6);
     expect(content.fields).toHaveLength(8);
     expect(content.careers).toHaveLength(15);
@@ -156,5 +158,37 @@ describe('systems/creation', () => {
     const attorney = content.careers.find((c) => c.id === 'attorney')!;
     expect(careerGain(attorney, 8)).toBe(8);
     expect(careerGain(attorney, 16)).toBe(12);
+  });
+});
+
+describe('the convert\'s tie to the diocese', () => {
+  it('a convert household cannot be a son of the diocese, and only a convert or a lapsed home can have been received here', () => {
+    const open = (origin: CreationAnswers['origin']) => tieAvailability({ origin }, content).filter((t) => t.available).map((t) => t.option.id);
+    expect(open('urban_ethnic')).toEqual(['son', 'school', 'seminary', 'transfer']);
+    expect(open('convert')).toEqual(['school', 'seminary', 'transfer', 'convert']);
+    expect(open('lapsed')).toEqual(['son', 'school', 'seminary', 'transfer', 'convert']);
+    expect(tieAvailability({ origin: 'convert' }, content).find((t) => t.option.id === 'son')!.why).toMatch(/altar boys/);
+    expect(validateAnswers({ ...base, origin: 'urban_ethnic', tie: 'convert' }, content)).toContain('That tie to the diocese is not open to this origin.');
+    expect(validateAnswers({ ...base, origin: 'convert', tie: 'son' }, content)).toContain('That tie to the diocese is not open to this origin.');
+    expect(validateAnswers({ ...base, origin: 'convert', tie: 'convert' }, content)).toEqual([]);
+    const built = applyCreation(newGame({ seed: 'conv' }).state, { ...base, origin: 'convert', tie: 'convert' }, content);
+    expect(built.flags['tie:convert']).toBe(true);
+    expect(built.flags.convert).toBe(true);
+    expect(built.flags.outsider).toBe(true);
+    expect(built.character!.hooks.some((h) => h.id === 'sponsor')).toBe(true);
+  });
+
+  it('every career does something, and the background comes back as scenes across the parish years', () => {
+    for (const c of content.careers) expect(c.effects.length, c.id).toBeGreaterThan(0);
+    const pool = allEvents.filter((e) => e.id.startsWith('bg_'));
+    expect(pool.length).toBe(15);
+    const keys = new Set<string>();
+    for (const e of pool) {
+      const flags = JSON.stringify(e.requires).match(/"key":"(career|tie|motive|past|origin):[a-z_]+"/g) ?? [];
+      expect(flags.length, e.id).toBeGreaterThan(0);
+      for (const f of flags) keys.add(f);
+      expect(e.phase).not.toBe('seminary');
+    }
+    expect(keys.size).toBeGreaterThanOrEqual(13);
   });
 });

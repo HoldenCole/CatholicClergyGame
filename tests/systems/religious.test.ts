@@ -5,7 +5,8 @@ import { generateInstitutes, generateReligious, RELIGIOUS } from '@/generation/i
 import { diocesePresets, presetById } from '@/content/dioceses';
 import { instituteDefs } from '@/content/institutes';
 import { orderProfile } from '@/content/orders';
-import { chooseDirector, DIRECTION, directionKept, directionLine, directionWeek, directionYear, directorOptions, endDirection, matchFor, pietyFactor, troubleOf } from '@/systems/direction';
+import { chooseDirector, DIRECTION, directionKept, directionLine, directionWeek, directionYear, endDirection, matchFor, offerDirectors, pietyFactor, troubleOf } from '@/systems/direction';
+import { instituteDef } from '@/content/institutes';
 import { divergeStep, exNoviceStep } from '@/systems/diverge';
 import { GROUPS, religiousYear, suppressGroup } from '@/systems/groups';
 import { decayWeek } from '@/systems/stats';
@@ -91,9 +92,42 @@ describe('systems/direction', () => {
     return chooseDirector(staged, npc.id);
   }
 
+  it('the men offered are priests, never all of one house, and two of them are Dominicans', () => {
+    for (let i = 0; i < 40; i++) {
+      const s = withFaculty(`dir-${i}`);
+      const women = Object.values(s.npcs).filter((n) => n.role === 'religious' && instituteDef(n.institute!.replace('inst_', ''))?.women);
+      const offered = offerDirectors(s, createRng(`o-${i}`));
+      expect(offered.options.length).toBeGreaterThanOrEqual(DIRECTION.offered[0]);
+      expect(offered.options.length).toBeLessThanOrEqual(DIRECTION.offered[1]);
+      const men = offered.options.map((o) => offered.state.npcs[o.npcId]!);
+      for (const n of men) {
+        expect(n, `${i}`).toBeDefined();
+        expect(['Fr.', 'Msgr.']).toContain(n.title);
+        expect(women.some((w) => w.id === n.id)).toBe(false);
+        expect(n.tags.includes('rector') || n.tags.includes('formation_advisor')).toBe(false);
+      }
+      const dominicans = men.filter((n) => n.institute === 'inst_dominicans');
+      expect(dominicans.length, `${i}`).toBe(DIRECTION.dominicans);
+      // The rest come one from each other house before any house repeats: three men are never three of one order.
+      const others = men.filter((n) => n.institute !== 'inst_dominicans').map((n) => n.institute ?? 'diocesan');
+      expect(others.length).toBeGreaterThanOrEqual(1);
+      const houses = new Set(Object.values(s.npcs).filter((n) => (n.role === 'religious' || n.role === 'formator') && n.institute !== 'inst_dominicans' && (n.title === 'Fr.' || n.title === 'Msgr.') && !n.tags.some((t) => t === 'rector' || t === 'formation_advisor' || t === 'diverged')).map((n) => n.institute ?? 'diocesan'));
+      expect(new Set(others).size).toBe(Math.min(others.length, houses.size));
+      // A diocese without Dominicans of its own gets visiting friars, who are in the state and can be chosen.
+      const visiting = men.filter((n) => n.tags.includes('visiting_director'));
+      const own = Object.values(s.npcs).filter((n) => n.institute === 'inst_dominicans' && n.title === 'Fr.').length;
+      expect(visiting.length).toBe(Math.max(0, DIRECTION.dominicans - Math.min(own, DIRECTION.dominicans)));
+      for (const v of visiting) expect(chooseDirector(offered.state, v.id).character!.direction!.npcId).toBe(v.id);
+      // Deterministic for a seed.
+      expect(offerDirectors(s, createRng(`o-${i}`)).options).toEqual(offered.options);
+    }
+  });
+
   it('the choice is offered in words a man can act on, and taking one records the relationship', () => {
-    const s = withFaculty('offer');
-    const options = directorOptions(s, createRng('o'));
+    const s0 = withFaculty('offer');
+    const offered = offerDirectors(s0, createRng('o'));
+    const s = offered.state;
+    const options = offered.options;
     expect(options.length).toBeGreaterThanOrEqual(1);
     for (const o of options) {
       expect(o.good).toMatch(/^good to a man with /);

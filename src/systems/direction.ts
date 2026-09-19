@@ -1,6 +1,8 @@
 import type { Charism, Direction, DirectorOption, GameState, Match, Npc, Temperament, Trouble } from '@/types';
 import type { Rng } from '@/engine/rng';
 import { instituteDef } from '@/content/institutes';
+import { visitingDirector } from '@/generation/institutes';
+import { dateOf } from '@/engine/time';
 
 /**
  * Spiritual direction. DESIGN.md §9.4.
@@ -17,6 +19,8 @@ import { instituteDef } from '@/content/institutes';
 export const DIRECTION = {
   /** Men offered in Y1. */
   offered: [3, 4] as [number, number],
+  /** Dominicans among them, always: they staff seminaries everywhere. */
+  dominicans: 2,
   /** How much of the Piety drain a week of kept direction takes off, at a good match. */
   slow: { good: 0.55, fair: 0.35, poor: 0.1 } as Record<Match, number>,
   /** A mismatch is worse than nothing: the hour is spent and the man is not heard. */
@@ -139,29 +143,72 @@ export function directionWeek(state: GameState, hours: number): GameState {
   };
 }
 
-/** Three or four men, mostly religious, each plainly good for one thing and plainly not for another. */
-export function directorOptions(state: GameState, rng: Rng): DirectorOption[] {
-  const pool = Object.values(state.npcs).filter(
-    (n) => n.status === 'active' && (n.role === 'religious' || n.tags.includes('spiritual_director') || n.role === 'formator') && !n.tags.includes('rector') && !n.tags.includes('formation_advisor'),
-  );
+/** A man who may direct: a priest, never a sister, a brother, or a lay professor, and not the men of the external forum. */
+function mayDirect(n: Npc): boolean {
+  if (n.status !== 'active') return false;
+  if (n.tags.includes('rector') || n.tags.includes('formation_advisor') || n.tags.includes('diverged')) return false;
+  if (!(n.role === 'religious' || n.tags.includes('spiritual_director') || n.role === 'formator')) return false;
+  if (n.title !== 'Fr.' && n.title !== 'Msgr.') return false;
+  const def = n.institute ? instituteDef(n.institute.replace('inst_', '')) : undefined;
+  return !def?.women;
+}
+
+function houseOf(n: Npc): string {
+  return n.institute ?? 'diocesan';
+}
+
+function toOption(n: Npc): DirectorOption {
+  const temperament: Temperament = n.temperament ?? 'warm';
+  const charism: Charism = n.charism ?? 'contemplative';
+  const house = n.institute ? instituteDef(n.institute.replace('inst_', '')) : undefined;
+  const serves = SERVES[temperament];
+  const poorAt = (Object.keys(TROUBLE_WORD) as Trouble[]).find((t) => !serves.includes(t) && !(CHARISM_HELPS[charism] ?? []).includes(t))!;
+  return {
+    npcId: n.id,
+    name: `${n.title} ${n.name.first} ${n.name.last}`,
+    line: house ? `${house.short.replace(/^the /, 'a ').replace(/s$/, '')}, ${TEMPERAMENT_WORD[temperament]}` : `a diocesan priest, ${TEMPERAMENT_WORD[temperament]}`,
+    charism,
+    temperament,
+    good: `good to a man with ${TROUBLE_WORD[serves[0]!]}`,
+    poor: `no use at all to a man with ${TROUBLE_WORD[poorAt]}`,
+  };
+}
+
+/**
+ * The men offered in Y1. Two Dominicans always, because the Order of Preachers
+ * staffs seminaries everywhere; when the diocese has fewer than two, visiting
+ * friars are added to the house and to the state. The rest come one from each
+ * other house and the diocese, so three men are never three of one order.
+ */
+export function offerDirectors(state: GameState, rng: Rng): { state: GameState; options: DirectorOption[] } {
+  let next = state;
+  const pool = () => Object.values(next.npcs).filter(mayDirect).sort((a, b) => a.id.localeCompare(b.id));
+  const dominicans = () => pool().filter((n) => n.institute === 'inst_dominicans');
+  const year = dateOf(next.clock).year;
+  for (let i = 0; dominicans().length < DIRECTION.dominicans && i < DIRECTION.dominicans; i++) {
+    const friar = visitingDirector(rng.derive(`visiting:${i}`), year, 'dominicans', i);
+    next = { ...next, npcs: { ...next.npcs, [friar.id]: friar } };
+  }
   const want = rng.int(DIRECTION.offered[0], DIRECTION.offered[1]);
-  const chosen = rng.shuffle(pool).slice(0, Math.max(0, Math.min(want, pool.length)));
-  return chosen.map((n) => {
-    const temperament: Temperament = n.temperament ?? 'warm';
-    const charism: Charism = n.charism ?? 'contemplative';
-    const house = n.institute ? instituteDef(n.institute.replace('inst_', '')) : undefined;
-    const serves = SERVES[temperament];
-    const poorAt = (Object.keys(TROUBLE_WORD) as Trouble[]).find((t) => !serves.includes(t) && !(CHARISM_HELPS[charism] ?? []).includes(t))!;
-    return {
-      npcId: n.id,
-      name: `${n.title} ${n.name.first} ${n.name.last}`,
-      line: house ? `${house.short.replace(/^the /, 'a ').replace(/s$/, '')}, ${TEMPERAMENT_WORD[temperament]}` : `a diocesan priest, ${TEMPERAMENT_WORD[temperament]}`,
-      charism,
-      temperament,
-      good: `good to a man with ${TROUBLE_WORD[serves[0]!]}`,
-      poor: `no use at all to a man with ${TROUBLE_WORD[poorAt]}`,
-    };
-  });
+  const chosen: Npc[] = rng.shuffle(dominicans()).slice(0, DIRECTION.dominicans);
+  // One from each other house, in a rolled order, then whoever is left if the houses run out.
+  const rest = pool().filter((n) => !chosen.includes(n) && n.institute !== 'inst_dominicans');
+  const houses = rng.shuffle([...new Set(rest.map(houseOf))]);
+  for (const h of houses) {
+    if (chosen.length >= want) break;
+    const men = rest.filter((n) => houseOf(n) === h);
+    chosen.push(rng.pick(men));
+  }
+  for (const n of rng.shuffle(rest.filter((n) => !chosen.includes(n)))) {
+    if (chosen.length >= want) break;
+    chosen.push(n);
+  }
+  return { state: next, options: chosen.map(toOption) };
+}
+
+/** The options alone, from the men already in the state. Tests and sheets use it; the seminary uses offerDirectors. */
+export function directorOptions(state: GameState, rng: Rng): DirectorOption[] {
+  return offerDirectors(state, rng).options;
 }
 
 /** The choice is made. The chosen man is tagged so every authored scene that wants a director finds him. */
