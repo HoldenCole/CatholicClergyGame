@@ -29,6 +29,8 @@ export function availableProjects(state: GameState): { def: ProjectDef; availabl
     if (running.length >= projectCap(state)) return { def, available: false, why: running.length === 1 ? 'One project is what you can carry; more administration would carry more' : `${running.length} projects is what you can carry` };
     if (def.requires?.school && (!parish || parish.school === 'none')) return { def, available: false, why: 'No school' };
     if (def.requires?.debt && (!parish || (state.parish?.finance.debt ?? 0) <= 0)) return { def, available: false, why: 'No debt to retire' };
+    if (def.requires?.spanish && !parish?.needsSpanish) return { def, available: false, why: 'The parish has no second language to speak' };
+    if (def.requires?.hall && (parish?.buildings.hall ?? 0) < 40) return { def, available: false, why: 'The hall could not take it' };
     return { def, available: true, why: null };
   });
 }
@@ -64,8 +66,10 @@ export function pushProject(state: GameState, type: ProjectType, on: boolean): G
   return { ...state, projects, project: projects[0] ?? null };
 }
 
-/** Completion effects on the parish record and the player. Invented, following DESIGN 8.3. */
+/** Completion effects on the parish record and the player. Invented, following DESIGN 8.3; a project that writes its own carries them. */
 function completionEffects(type: ProjectType): Effect[] {
+  const own = projectDef(type).onComplete;
+  if (own) return own;
   switch (type) {
     case 'renovation':
     case 'restoration':
@@ -82,6 +86,8 @@ function completionEffects(type: ProjectType): Effect[] {
       return [{ target: 'reputation', key: 'parishioners', delta: 8 }, { target: 'reputation', key: 'public', delta: 6 }, { target: 'archetype', key: 'missionary', delta: 2 }];
     case 'capital_campaign':
       return [{ target: 'money', key: 'cash', delta: 450000 }, { target: 'reputation', key: 'parishioners', delta: -4 }, { target: 'reputation', key: 'chancery', delta: 6 }];
+    default:
+      return [];
   }
 }
 
@@ -138,6 +144,15 @@ function oneProjectWeek(state: GameState, p: Project): { state: GameState; proje
 function applyProjectToParishes(parishes: Parish[], p: Project, alignment: number): Parish[] {
   return parishes.map((parish) => {
     if (parish.id !== p.parishId) return parish;
+    // A project that says what it does to the record: buildings raised to at least so much, households found or drawn.
+    const own = projectDef(p.type).parish;
+    if (own) {
+      const buildings = { ...parish.buildings };
+      for (const [k, v] of Object.entries(own.buildings ?? {}) as ['church' | 'rectory' | 'hall' | 'school', number][]) {
+        if (buildings[k] !== null && buildings[k] !== undefined) buildings[k] = Math.max(buildings[k]!, v);
+      }
+      return { ...parish, buildings, households: parish.households + (own.households ?? 0) };
+    }
     switch (p.type) {
       case 'renovation':
         return { ...parish, buildings: { ...parish.buildings, church: 95, hall: Math.max(parish.buildings.hall, 70) } };

@@ -179,6 +179,8 @@ export interface SpendDef {
   weekly?: Effect[];
   /** Names a religious house of this charism in the label and blurb, where they say {house}. */
   house?: 'contemplative' | 'active' | 'any';
+  /** Weeks before a 'once' spend can be made again: a gift to a cause is yearly, not weekly. */
+  cooldown?: number;
   /** Standing programs: what a fund does to the parish every week while it runs. */
   pull?: number;
   growth?: number;

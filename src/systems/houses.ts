@@ -1,7 +1,8 @@
-import type { GameState, HouseArrangement, HouseAskId, HouseFavourId, HouseStanding, Npc, ObligationKey, ReligiousHouse } from '@/types';
+import type { GameState, HouseArrangement, HouseAskId, HouseFavourId, HouseStanding, HouseWorkDef, HouseWorkId, Npc, ObligationKey, ReligiousHouse } from '@/types';
 import type { HouseAskDef, HouseFavourDef } from '@/types';
 import type { Rng } from '@/engine/rng';
-import { houseAsks as HOUSE_ASKS, houseFavours as HOUSE_FAVOURS } from '@/content/parish';
+import { houseAsks as HOUSE_ASKS, houseFavours as HOUSE_FAVOURS, houseWorks as HOUSE_WORKS } from '@/content/parish';
+import { orderDefs } from '@/content/houses';
 import { profileForHouse } from '@/content/orders';
 import { applyEffects } from '@/engine/effects';
 import { religiousRoleLine } from '@/generation/institutes';
@@ -40,6 +41,13 @@ export const HOUSES = {
   missionCooldown: 52 * 4,
   /** What a chair at the Augustinians' table takes off the week's wear. DESIGN §9.4b. */
   tableRelief: 0.6,
+  /** Growing the order (DESIGN §9.4c): what a wing adds, what a foundation starts with, how often a patron's house grows. */
+  expandBy: 3,
+  foundSize: [3, 5] as [number, number],
+  foundRegard: 60,
+  patronGrowPerYear: 0.7,
+  /** Regard a work of theirs is worth: the house does not forget who built the wing. */
+  workRegard: 10,
 } as const;
 
 export function favourDef(id: HouseFavourId): HouseFavourDef | undefined {
@@ -263,9 +271,14 @@ export function housesYear(state: GameState, rng: Rng): { state: GameState; line
             ? `The friars have had to close the Tuesday kitchen in the hall: the brother who ran it has been moved, and the line down the block will find the friary's own door.`
             : gone.id === 'common_table'
               ? `The prior has written, kindly, that the table is the community's and the community has asked for it back. There is no Thursday now.`
+              : gone.id === 'patron'
+                ? `The provincial has written to thank the parish for its years as ${house.name}'s patron and to say the house will stand on its own now, which is what a patron is for.`
               : `${house.name} has had to end the arrangement. Nobody is at fault and it is not appealable.`,
     );
   }
+  const patron = patronYear(next, rng);
+  next = patron.state;
+  lines.push(...patron.lines);
   const asked = rng.derive(`ask:${next.clock.week}`).chance(HOUSES.askPerYear) ? raiseHouseAsk(next, rng.derive(`which-ask:${next.clock.week}`)) : { state: next, line: null };
   next = asked.state;
   if (asked.line) lines.push(asked.line);
@@ -282,6 +295,112 @@ export function expireAsks(state: GameState): { state: GameState; lines: string[
     next = answered.state;
     const house = housesOf(next).find((h) => h.id === s.houseId);
     lines.push(`${house?.name ?? 'The house'} did not hear back about what they asked, and has made other arrangements.`);
+  }
+  return { state: next, lines };
+}
+
+/**
+ * Whether this man is one of theirs, or as good as: a standing at the bar, an
+ * order priest in his rectory, or the flag a scene sets when he is professed
+ * in their third order. DESIGN §9.4c.
+ */
+export function connectedTo(state: GameState, house: ReligiousHouse, bar = 0): boolean {
+  const s = standingOf(state, house.id);
+  const theirs = !!state.flags[`third_order:${house.order}`] || s.arrangements.some((a) => a.id === 'vicar' || a.id === 'common_table' || a.id === 'patron');
+  return theirs || s.regard >= bar;
+}
+
+export function workDef(id: HouseWorkId): HouseWorkDef | undefined {
+  return HOUSE_WORKS.find((w) => w.id === id);
+}
+
+export interface WorkOffer {
+  house: ReligiousHouse;
+  def: HouseWorkDef;
+  available: boolean;
+  why: string;
+  standing: boolean;
+}
+
+/** The works of growth, per house: what stands in the way of each. Only for a house he is connected to. */
+export function houseWorkOffers(state: GameState): WorkOffer[] {
+  const out: WorkOffer[] = [];
+  for (const house of housesOf(state)) {
+    const s = standingOf(state, house.id);
+    for (const def of HOUSE_WORKS) {
+      const running = s.arrangements.some((a) => a.id === def.id);
+      const last = s.lastUsed?.[def.id];
+      const why =
+        !connectedTo(state, house, def.bar) ? `Needs ${regardWord(def.bar)}, or to be one of theirs` :
+        running ? 'Standing' :
+        def.id === 'found' && (house.foundedWeek || state.flags[`founded:${house.order}`]) ? 'An order is founded once in a life' :
+        def.id === 'found' && !orderDefs.find((o) => o.id === house.order)?.names.some((n) => !housesOf(state).some((h) => h.name === n)) ? 'They have no name left to give a house' :
+        def.cooldown && typeof last === 'number' && state.clock.week - last < def.cooldown ? `Not again for ${Math.ceil((def.cooldown - (state.clock.week - last)) / 52)} years` :
+        !state.parish ? 'You have no parish to give from' :
+        (state.parish.finance.cash ?? 0) < def.money ? 'The parish cannot pay for it' :
+        '';
+      out.push({ house, def, available: !why, why, standing: running });
+    }
+  }
+  return out;
+}
+
+/** Do a work of growth for a house: a wing, a foundation, or a patronage taken on. */
+export function doHouseWork(state: GameState, houseId: string, id: HouseWorkId, rng: Rng): FavourResult {
+  const offer = houseWorkOffers(state).find((o) => o.house.id === houseId && o.def.id === id);
+  if (!offer?.available) throw new Error(offer?.why || 'they cannot take that');
+  const { house, def } = offer;
+  const s = standingOf(state, houseId);
+  let next: GameState = state;
+  if (next.parish) next = { ...next, parish: { ...next.parish, finance: { ...next.parish.finance, cash: next.parish.finance.cash - def.money } } };
+  const setHouses = (houses: ReligiousHouse[]): GameState => ({ ...next, world: { ...next.world!, diocese: { ...next.world!.diocese, visible: { ...next.world!.diocese.visible, houses } } } });
+  let line: string;
+  if (id === 'expand') {
+    next = setHouses(housesOf(next).map((h) => (h.id === houseId ? { ...h, size: h.size + HOUSES.expandBy } : h)));
+    next = withStanding(next, { ...s, regard: Math.min(100, s.regard + HOUSES.workRegard), lastUsed: { ...(s.lastUsed ?? {}), expand: state.clock.week } });
+    line = `${house.name} has a new wing, and by Advent three more of them in it: the provincial sends men to a house with room. The prior says the parish's name at the blessing, twice.`;
+  } else if (id === 'found') {
+    const order = orderDefs.find((o) => o.id === house.order)!;
+    const name = rng.pick(order.names.filter((n) => !housesOf(next).some((h) => h.name === n)));
+    const size = rng.int(HOUSES.foundSize[0], HOUSES.foundSize[1]);
+    const founded: ReligiousHouse = {
+      ...house,
+      id: `house:${house.order}:${state.clock.week}`,
+      name,
+      size,
+      setting: 'city',
+      alignment: Math.max(-100, Math.min(100, house.alignment + rng.int(-10, 10))),
+      line: `${name}, a new foundation of ${order.label} made from ${house.name}: ${size} ${order.members} in a former convent, with a chapel the bishop blessed and a book that names the pastor who asked for it.`,
+      foundedWeek: state.clock.week,
+      motherId: house.id,
+    };
+    next = setHouses([...housesOf(next), founded]);
+    next = withStanding(next, { ...s, regard: Math.min(100, s.regard + HOUSES.workRegard) });
+    next = withStanding(next, { houseId: founded.id, regard: HOUSES.foundRegard, sinceWeek: state.clock.week, asked: 0, given: 0, arrangements: [] });
+    next = { ...next, flags: { ...next.flags, [`founded:${house.order}`]: true } };
+    line = `${name} is founded: ${size} ${order.members} sent from ${house.name}, a convent bought and given, the bishop at the blessing with the prior beside him and you beside the prior. Its book begins with your name.`;
+  } else {
+    next = withStanding(next, { ...s, arrangements: [...s.arrangements, { id: 'patron', since: state.clock.week }], regard: Math.min(100, s.regard + HOUSES.workRegard) });
+    next = { ...next, flags: { ...next.flags, 'house:patron': true } };
+    line = `You are ${house.name}'s patron: a gift each year, the parish's young men pointed their way, and their vocations director at your Sunday Mass. They will grow, a man at a time, and they know whom to thank.`;
+  }
+  return { state: { ...next, career: [...next.career, { week: state.clock.week, kind: 'note', text: `${def.label} at ${house.name}: $${def.money.toLocaleString()} from the parish.` }] }, line };
+}
+
+/** A patron's year: the gift goes out, and the house grows by a man, most years. */
+export function patronYear(state: GameState, rng: Rng): { state: GameState; lines: string[] } {
+  const lines: string[] = [];
+  let next = state;
+  for (const s of Object.values(next.houses ?? {})) {
+    if (!s.arrangements.some((a) => a.id === 'patron')) continue;
+    const house = housesOf(next).find((h) => h.id === s.houseId);
+    const def = workDef('patron');
+    if (!house || !def) continue;
+    if (next.parish) next = { ...next, parish: { ...next.parish, finance: { ...next.parish.finance, cash: next.parish.finance.cash - def.money } } };
+    if (rng.derive(`patron:${house.id}:${next.clock.week}`).chance(HOUSES.patronGrowPerYear)) {
+      next = { ...next, world: { ...next.world!, diocese: { ...next.world!.diocese, visible: { ...next.world!.diocese.visible, houses: housesOf(next).map((h) => (h.id === house.id ? { ...h, size: h.size + 1 } : h)) } } } };
+      lines.push(`${house.name} has taken a man this year, one the parish sent, and the prior writes to say so.`);
+    }
   }
   return { state: next, lines };
 }

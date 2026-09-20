@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import type { HouseWorkId } from '@/types';
 import type {
   CreationAnswers,
   EventCategory,
@@ -63,7 +64,7 @@ import type { GameSettings } from '@/types';
 import { setPreference, type Preference } from '@/systems/assignment';
 import { setInterest as doSetInterest } from '@/systems/interests';
 import { fileRequest as doFileRequest, withdrawRequest as doWithdrawRequest } from '@/systems/request';
-import { answerAsk as doAnswerAsk, askFavour as doAskFavour } from '@/systems/houses';
+import { answerAsk as doAnswerAsk, askFavour as doAskFavour, doHouseWork as doWork } from '@/systems/houses';
 import { askBrother as doAskBrother } from '@/systems/brothers';
 import { dropWork as doDropSideWork, startWork as doStartSideWork } from '@/systems/sidework';
 import { setLearning as doSetLearning } from '@/systems/languages';
@@ -161,6 +162,10 @@ export interface GameStore {
   askHouseFavour(houseId: string, favourId: HouseFavourId): void;
   /** Answer what a house has asked of the parish. */
   answerHouseAsk(houseId: string, yes: boolean): void;
+  /** A work of growth for a house he is connected to: a wing, a foundation, a patronage. DESIGN §9.4c. */
+  doHouseWork(houseId: string, id: HouseWorkId): void;
+  /** The letter has been opened on the desk; it no longer lies over the scene. */
+  markOfferRead(offerId: string): void;
   /** Take on, or put down, the thing he does besides the parish. DESIGN §8.8. */
   startSideWork(id: string): void;
   dropSideWork(): void;
@@ -682,6 +687,16 @@ export const useGameStore = create<GameStore>()((set, get) => ({
       set({ lastHouseLine: res.line });
       return res.state;
     });
+  },
+  doHouseWork(houseId, id) {
+    update(set, get, (game, r) => {
+      const res = doWork(game, houseId, id, r.derive(`house-work:${houseId}:${id}:${game.clock.week}`));
+      set({ lastHouseLine: res.line });
+      return res.state;
+    });
+  },
+  markOfferRead(offerId) {
+    update(set, get, (game) => ({ ...game, offers: game.offers.map((o) => (o.offerId === offerId ? { ...o, read: true } : o)) }));
   },
   answerHouseAsk(houseId, yes) {
     update(set, get, (game) => {

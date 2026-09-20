@@ -1,5 +1,5 @@
 import { useGameStore } from '@/engine/store';
-import { askDef, castOf, favourOffers, houseKindLine, houseLine, housesOf, regardWord, standingOf } from '@/systems/houses';
+import { askDef, castOf, connectedTo, favourOffers, houseKindLine, houseLine, housesOf, houseWorkOffers, regardWord, standingOf } from '@/systems/houses';
 import Sheet from '../Sheet';
 
 /**
@@ -11,11 +11,13 @@ export default function HousesPanel() {
   const game = useGameStore((s) => s.game);
   const ask = useGameStore((s) => s.askHouseFavour);
   const answer = useGameStore((s) => s.answerHouseAsk);
+  const work = useGameStore((s) => s.doHouseWork);
   const line = useGameStore((s) => s.lastHouseLine);
   if (!game) return null;
   const houses = housesOf(game);
   if (houses.length === 0) return null;
   const offers = favourOffers(game);
+  const works = houseWorkOffers(game);
 
   return (
     <Sheet title="The houses of the diocese">
@@ -69,6 +71,24 @@ export default function HousesPanel() {
                   </li>
                 ))}
               </ul>
+              {connectedTo(game, h, 45) && (
+                <div className="mt-2 rounded border rule bg-white/30 px-2 py-1.5">
+                  <div className="ink-faint text-[11px] uppercase tracking-[0.18em]">Their future here</div>
+                  <ul className="mt-1 flex flex-col gap-1">
+                    {works.filter((w) => w.house.id === h.id).map((w) => (
+                      <li key={w.def.id} className="flex items-start justify-between gap-2 text-sm">
+                        <div className="min-w-0">
+                          <div>{w.def.label}{w.standing && <span className="ink-faint text-xs"> · standing</span>}</div>
+                          <div className="ink-faint text-xs">{w.def.gives} · ${w.def.money.toLocaleString()}{w.def.standing ? ' a year' : ''}</div>
+                        </div>
+                        <button className="pbtn shrink-0 px-2 py-0 text-xs" disabled={!w.available} title={w.available ? w.def.blurb : w.why} onClick={() => work(h.id, w.def.id)}>
+                          {w.available ? 'do it' : w.why.toLowerCase()}
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </li>
           );
         })}

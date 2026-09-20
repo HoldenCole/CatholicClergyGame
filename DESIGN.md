@@ -529,6 +529,10 @@ Design rules: each must be **legible in hindsight** (the penitentiary comes to t
 
 Multi-year efforts consuming AP and money: renovation, restoration, debt retirement, saving or closing the school, liturgical change, founding a mission, a capital campaign. **Projects survive transfers only if the successor keeps them.**
 
+*Added in playtesting:* ten more, each written on the project itself (what finishing it does to the man, and what it does to the parish record) rather than in code — a rectory rebuilt, a columbarium that pays for the roof, a food pantry, a census that finds the families, a parish made bilingual, the parish history written, a youth center in the hall, the cemetery restored, the bells rehung, a grotto. A project may require the parish's second language or a hall that could take it.
+
+**The bishop's causes.** Among the spends (§8.2) are four gifts a pastor can make in the parish's name to what the bishop cares about — the appeal over its goal, a burse at the seminary, the retired priests' fund, his own cause of the decade. Each moves the bishop and the chancery, costs the parish, and costs a little with the people who notice where the money went; each can be given only so often.
+
 ---
 
 ### 8.4 The chapel, the monastery, and the older form
@@ -581,7 +585,7 @@ They are not a mechanic on their own. They are what the Parish sheet lists in th
 
 ### 8.8 The thing he does besides the parish
 
-*Added in playtesting.* A parish will take every hour a man has. What makes two priests of the same rank into two different men is what else they did with thirty years: a book, an hour a week on the diocesan radio, a lecture series around the deaneries, a translation nobody else would attempt, a pilgrimage led, Thursday mornings at the county jail, a seat on the hospital board, retreats preached in other men's parishes.
+*Added in playtesting.* It is shown on the You sheet, with the man, because it is his and not the parish's. A parish will take every hour a man has. What makes two priests of the same rank into two different men is what else they did with thirty years: a book, an hour a week on the diocesan radio, a lecture series around the deaneries, a translation nobody else would attempt, a pilgrimage led, Thursday mornings at the county jail, a seat on the hospital board, retreats preached in other men's parishes.
 
 One at a time. It takes an hour or two of every week — off the top of the same budget as everything else — for two to five years, passes **milestones** that report themselves in the digest and move stats and standing, and then **lands or does not**: some works carry a real chance of coming to nothing, unless the man has built the thing that saves them (the book wants learning behind it; the radio hour wants a chancery that is not looking for a reason). Coming to nothing is also something that happened to a man, and the flags remember it.
 
@@ -723,6 +727,18 @@ Each religious house of the diocese (the abbey, the friary, the Carmel) carries 
 **What the house asks in return**: a priest for their community Mass while their chaplain is ill, a second collection for their missions, their novena in his church, a letter backing them when the diocese wants their land, a young man of theirs boarded for a summer. Saying yes builds standing faster than any hour; saying no costs a little; **silence is a no**, and the clock answers for him in six weeks.
 
 **The asymmetry is the point.** Every arrangement runs at the provincial's pleasure: once a year he may end one, less often where the standing is high, and the notice is six weeks and the reason is a house in another state. A pastor cannot appeal it, cannot hire around it, and cannot hold it against them, and the parish notices the Saturday confessional is dark.
+
+### 9.4c Growing the order
+
+*Added in playtesting.* A man **connected** to an order — standing at the bar, an order priest in his rectory, a chair at their table, or professed in their third order — can do more than ask favours of it. He can help it grow in his diocese, and the growth is on the map afterward:
+
+| Work | Costs | What it does |
+|---|---|---|
+| **Help them build** | a gift to the building fund; once in five years | a wing on the house: three more of them, sent by a provincial who sends men where there is room |
+| **Found a house of theirs** | a convent bought and given; once for an order in a life | a second house of the order in the diocese, made from the first, three to five men, its book beginning with his name; it starts with a standing of its own |
+| **Be their patron** | a gift each year, standing | the house grows by a man most years, and counts him one of its own; the provincial may end it when the house can stand alone |
+
+The mother house keeps its standing; a foundation has its own. Every house of an order is a house for favours and asks alike.
 
 ### 9.4b Three orders, told apart
 

@@ -124,6 +124,9 @@ export interface ReligiousHouse {
   line: string;
   /** The institute the house belongs to (content/institutes.json), when one matches. §9.4 */
   instituteId?: string;
+  /** A foundation made in the run (DESIGN §9.4c): the week, and the house it was made from. */
+  foundedWeek?: number;
+  motherId?: string;
 }
 
 /** Everything the preview must not show. DESIGN.md §3.1a "Hidden from the preview". */
