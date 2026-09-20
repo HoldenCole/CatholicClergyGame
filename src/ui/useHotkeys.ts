@@ -39,7 +39,7 @@ export function useHotkeys(): void {
       const key = e.key.toLowerCase();
       if (key === 'n' || key === ' ') {
         // A decision on the table holds the clock; the key does not push past it.
-        if (pending || game.mode.kind !== 'clock') return;
+        if (pending || game.mode.kind !== 'clock' || game.offers.some((o) => !o.read)) return;
         e.preventDefault();
         if (game.speed === 'MANUAL') st.tick();
         else if (game.speed === 'AUTO' || game.speed === 'SKIP') st.setRunning(!st.running);

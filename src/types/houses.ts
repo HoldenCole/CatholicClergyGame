@@ -12,7 +12,9 @@ import type { Effect } from './events';
 export type HouseFavourId =
   | 'prayers' | 'confessor' | 'mission' | 'supply' | 'retreat' | 'vicar'
   // The favours only one order does. DESIGN §9.4b.
-  | 'course' | 'opinion' | 'kitchen' | 'mercy' | 'school_place' | 'common_table';
+  | 'course' | 'opinion' | 'kitchen' | 'mercy' | 'school_place' | 'common_table'
+  // Growing the order, for a man connected to it (DESIGN §9.4c): a standing patronage.
+  | 'patron';
 
 export type HouseAskId = 'say_their_mass' | 'collection' | 'novena' | 'back_them' | 'take_a_man' | 'disputation' | 'transitus' | 'school_dinner';
 
@@ -35,8 +37,8 @@ export interface HouseStanding {
   asked: number;
   given: number;
   arrangements: HouseArrangement[];
-  /** Weeks a one-off favour was last had, by id, so a mission is not a yearly event. */
-  lastUsed?: Partial<Record<HouseFavourId, number>>;
+  /** Weeks a one-off favour or work was last had, by id, so a mission is not a yearly event. */
+  lastUsed?: Partial<Record<HouseFavourId | HouseWorkId, number>>;
   /** An ask from the house, waiting for an answer. */
   ask?: { id: HouseAskId; week: number; dueWeek: number };
 }
@@ -80,6 +82,23 @@ export interface HouseAskDef {
   charism?: 'contemplative' | 'active';
   /** Only a house of this order asks it. */
   order?: string;
+}
+
+/** The works of a man connected to an order: its growth in his diocese. content/parish/house_favours.json `works`. */
+export type HouseWorkId = 'expand' | 'found' | 'patron';
+
+export interface HouseWorkDef {
+  id: HouseWorkId;
+  label: string;
+  blurb: string;
+  gives: string;
+  /** Standing it takes, unless he is one of theirs. */
+  bar: number;
+  /** What the parish gives their building fund. */
+  money: number;
+  /** Weeks before it can be done again; a foundation is once for an order. */
+  cooldown?: number;
+  standing?: boolean;
 }
 
 /**

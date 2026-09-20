@@ -1,4 +1,4 @@
-import type { HouseAskDef, HouseFavourDef, ParishIssueDef, SideWorkDef, ActionDef, AwayPlaceDef, GroupTypeDef, HomilyDef, ObligationDef, ProblemFixDef, SacrificeDef, SeasonalLoad, SpendDef, TalkDef, LiturgyDialDef, OfficeDef } from '@/types';
+import type { HouseAskDef, HouseFavourDef, HouseWorkDef, ParishIssueDef, SideWorkDef, ActionDef, AwayPlaceDef, GroupTypeDef, HomilyDef, ObligationDef, ProblemFixDef, SacrificeDef, SeasonalLoad, SpendDef, TalkDef, LiturgyDialDef, OfficeDef } from '@/types';
 import obligations from './obligations.json';
 import actions from './actions.json';
 import groups from './groups.json';
@@ -27,6 +27,7 @@ export const homilyDefs = (homilies as { topics: HomilyDef[] }).topics;
 export const awayPlaces = (away as { places: AwayPlaceDef[] }).places;
 export const houseFavours = (houseFavoursJson as unknown as { favours: HouseFavourDef[] }).favours;
 export const houseAsks = (houseFavoursJson as unknown as { asks: HouseAskDef[] }).asks;
+export const houseWorks = (houseFavoursJson as unknown as { works: HouseWorkDef[] }).works;
 export const parishIssueDefs = (issuesJson as unknown as { issues: ParishIssueDef[] }).issues;
 export const sideWorkDefs = (worksJson as unknown as { works: SideWorkDef[] }).works;
 

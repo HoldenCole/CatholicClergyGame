@@ -57,7 +57,7 @@ export default function Hud() {
   const continuous = speed === 'AUTO' || speed === 'SKIP';
   const c = game.character;
   // A decision on the table holds the clock: the buttons that would move it go quiet until it is answered.
-  const held = game.pending.length > 0 || game.mode.kind !== 'clock';
+  const held = game.pending.length > 0 || game.mode.kind !== 'clock' || game.offers.some((o) => !o.read);
   const stop = game.pending[0] ? describeStop({ kind: 'event', event: game.pending[0] }) : describeStop(lastStop);
   // The seminary counts academic years; a priest counts from the day he was ordained.
   const ordained = typeof game.flags.ordination_week === 'number' && clock.week >= game.flags.ordination_week ? priesthoodYear(clock.week, game.flags.ordination_week) : null;
@@ -89,7 +89,7 @@ export default function Hud() {
           ))}
         </div>
         {held ? (
-          <span className="text-xs text-[#e6c25a]" title="The clock waits on what is on the table">Decide first</span>
+          <span className="text-xs text-[#e6c25a]" title="The clock waits on what is on the table">{game.pending.length === 0 && game.mode.kind === 'clock' ? 'Read the letter first' : 'Decide first'}</span>
         ) : (
           <>
             {speed === 'MANUAL' && <HudButton onClick={() => tick()} title="N, or the space bar">Next week</HudButton>}

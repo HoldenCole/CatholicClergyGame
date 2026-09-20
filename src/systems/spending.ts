@@ -58,6 +58,12 @@ export function spendAvailability(state: GameState): SpendAvailability[] {
     if (!parish || !controlsMoney(state)) return { def, standing, available: false, why: "The pastor's to spend" };
     if (standing) return { def, standing, available: false, why: 'Standing' };
     if (parish.finance.debt > 0 && def.kind === 'once') return { def, standing, available: false, why: 'The debt comes first' };
+    // A gift to a cause is yearly, not weekly: the last one is remembered by week.
+    const last = state.flags[`spent:${def.id}`];
+    if (def.cooldown && typeof last === 'number' && state.clock.week - last < def.cooldown) {
+      const years = Math.ceil((def.cooldown - (state.clock.week - last)) / 52);
+      return { def, standing, available: false, why: `Not again for ${years} year${years === 1 ? '' : 's'}` };
+    }
     if (def.requires && !evaluateAll(def.requires, state)) {
       const why = def.requires.map((c) => describeUnmet(c, state)).find((w): w is string => !!w) ?? 'not here';
       return { def, standing, available: false, why: `needs ${why}` };
@@ -74,7 +80,7 @@ export function spend(state: GameState, id: string): GameState {
   const def = a.def;
   const finance = { ...state.parish.finance, cash: state.parish.finance.cash - def.cost };
   if (def.kind === 'fund') finance.funds = { ...(finance.funds ?? {}), [id]: state.clock.week };
-  let next: GameState = { ...state, parish: { ...state.parish, finance } };
+  let next: GameState = { ...state, parish: { ...state.parish, finance }, flags: def.cooldown ? { ...state.flags, [`spent:${id}`]: state.clock.week } : state.flags };
   next = applyEffects(next, def.effects, {}, spendWords(state, def).label);
   return { ...next, career: [...next.career, { week: next.clock.week, kind: 'project', text: `${spendWords(state, def).label}: $${def.cost.toLocaleString()} from the parish.` }] };
 }

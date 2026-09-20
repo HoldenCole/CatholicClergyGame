@@ -11,6 +11,7 @@ import ClassmatesPanel from './parish/ClassmatesPanel';
 import PeoplePanel from './parish/PeoplePanel';
 import HousesPanel from './parish/HousesPanel';
 import WorkPanel from './parish/WorkPanel';
+import SideWorkPanel from './parish/SideWorkPanel';
 import SeePanel from './study/SeePanel';
 import PlacePanel from './study/PlacePanel';
 import ProjectsPanel from './parish/ProjectsPanel';
@@ -91,7 +92,12 @@ export default function Desk() {
           </>
         )}
         {open === 'jobs' && <JobsPanel />}
-        {open === 'profile' && <ProfilePanel />}
+        {open === 'profile' && (
+          <>
+            <ProfilePanel />
+            <SideWorkPanel />
+          </>
+        )}
         {open === 'clubs' && <ClubsPanel />}
         {open === 'letters' && <OffersPanel />}
         {open === 'record' && <DigestPanel />}

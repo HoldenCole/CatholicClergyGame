@@ -1,10 +1,372 @@
 [
-  { "type": "renovation", "label": "Renovate the church", "blurb": "New roof, new wiring, the sanctuary repainted. Two years of scaffolding and a parish that will complain about the color.", "weeks": 100, "apPerWeek": 1, "cost": 600000 },
-  { "type": "restoration", "label": "Restore the church", "blurb": "Put back what the 1970s took out. A longer job, a louder argument, and a building people will drive to see.", "weeks": 150, "apPerWeek": 1, "cost": 900000 },
-  { "type": "debt_retirement", "label": "Retire the debt", "blurb": "Every spare dollar to the diocese and the bank until the number is zero. Nothing to show for it but the number.", "weeks": 120, "apPerWeek": 1, "cost": 0, "requires": { "debt": true } },
-  { "type": "save_school", "label": "Save the school", "blurb": "Enrollment, tuition assistance, a principal who can sell it. It may not work, and you will have made promises.", "weeks": 104, "apPerWeek": 2, "cost": 300000, "requires": { "school": true } },
-  { "type": "close_school", "label": "Close the school", "blurb": "The numbers say so. Say it to the parents. A year of meetings and a building to find a use for.", "weeks": 52, "apPerWeek": 2, "cost": 50000, "requires": { "school": true } },
-  { "type": "liturgical_change", "label": "Change the liturgy", "blurb": "The music, the ad orientem question, the Latin, the altar rail or its removal. Cheap in money, expensive in everything else.", "weeks": 40, "apPerWeek": 1, "cost": 20000 },
-  { "type": "found_mission", "label": "Found a mission", "blurb": "A storefront chapel, a Mass in a school gym, in the part of the parish nobody comes from. Yours for as long as you are here.", "weeks": 80, "apPerWeek": 2, "cost": 150000 },
-  { "type": "capital_campaign", "label": "Run a capital campaign", "blurb": "Consultants, pledge cards, a thermometer in the vestibule. Raises money and enemies in proportion.", "weeks": 60, "apPerWeek": 2, "cost": 80000 }
+  {
+    "type": "renovation",
+    "label": "Renovate the church",
+    "blurb": "New roof, new wiring, the sanctuary repainted. Two years of scaffolding and a parish that will complain about the color.",
+    "weeks": 100,
+    "apPerWeek": 1,
+    "cost": 600000
+  },
+  {
+    "type": "restoration",
+    "label": "Restore the church",
+    "blurb": "Put back what the 1970s took out. A longer job, a louder argument, and a building people will drive to see.",
+    "weeks": 150,
+    "apPerWeek": 1,
+    "cost": 900000
+  },
+  {
+    "type": "debt_retirement",
+    "label": "Retire the debt",
+    "blurb": "Every spare dollar to the diocese and the bank until the number is zero. Nothing to show for it but the number.",
+    "weeks": 120,
+    "apPerWeek": 1,
+    "cost": 0,
+    "requires": {
+      "debt": true
+    }
+  },
+  {
+    "type": "save_school",
+    "label": "Save the school",
+    "blurb": "Enrollment, tuition assistance, a principal who can sell it. It may not work, and you will have made promises.",
+    "weeks": 104,
+    "apPerWeek": 2,
+    "cost": 300000,
+    "requires": {
+      "school": true
+    }
+  },
+  {
+    "type": "close_school",
+    "label": "Close the school",
+    "blurb": "The numbers say so. Say it to the parents. A year of meetings and a building to find a use for.",
+    "weeks": 52,
+    "apPerWeek": 2,
+    "cost": 50000,
+    "requires": {
+      "school": true
+    }
+  },
+  {
+    "type": "liturgical_change",
+    "label": "Change the liturgy",
+    "blurb": "The music, the ad orientem question, the Latin, the altar rail or its removal. Cheap in money, expensive in everything else.",
+    "weeks": 40,
+    "apPerWeek": 1,
+    "cost": 20000
+  },
+  {
+    "type": "found_mission",
+    "label": "Found a mission",
+    "blurb": "A storefront chapel, a Mass in a school gym, in the part of the parish nobody comes from. Yours for as long as you are here.",
+    "weeks": 80,
+    "apPerWeek": 2,
+    "cost": 150000
+  },
+  {
+    "type": "capital_campaign",
+    "label": "Run a capital campaign",
+    "blurb": "Consultants, pledge cards, a thermometer in the vestibule. Raises money and enemies in proportion.",
+    "weeks": 60,
+    "apPerWeek": 2,
+    "cost": 80000
+  },
+  {
+    "type": "new_rectory",
+    "label": "Rebuild the rectory",
+    "blurb": "The house the diocese has been meaning to condemn since the last pastor. A year and a half of living over the parish office, and a house a priest could bring his mother to.",
+    "weeks": 70,
+    "apPerWeek": 1,
+    "cost": 350000,
+    "onComplete": [
+      {
+        "target": "reputation",
+        "key": "parishioners",
+        "delta": 4
+      },
+      {
+        "target": "reputation",
+        "key": "chancery",
+        "delta": 3
+      },
+      {
+        "target": "strain",
+        "key": "",
+        "delta": -6
+      }
+    ],
+    "parish": {
+      "buildings": {
+        "rectory": 95
+      }
+    }
+  },
+  {
+    "type": "columbarium",
+    "label": "Build a columbarium",
+    "blurb": "A wall of niches in the garden behind the church, blessed, sold at a price the parish sets, and full within a decade. The parish buries its own again, and the niches pay for the roof.",
+    "weeks": 52,
+    "apPerWeek": 1,
+    "cost": 120000,
+    "onComplete": [
+      {
+        "target": "money",
+        "key": "cash",
+        "delta": 95000
+      },
+      {
+        "target": "reputation",
+        "key": "parishioners",
+        "delta": 4
+      },
+      {
+        "target": "flag",
+        "key": "built_columbarium",
+        "value": true
+      }
+    ]
+  },
+  {
+    "type": "food_pantry",
+    "label": "Open a food pantry",
+    "blurb": "A room off the hall with shelving, a freezer, a Tuesday morning, and the St. Vincent de Paul men running it. The town finds out which church feeds people.",
+    "weeks": 40,
+    "apPerWeek": 1,
+    "cost": 40000,
+    "onComplete": [
+      {
+        "target": "reputation",
+        "key": "public",
+        "delta": 6
+      },
+      {
+        "target": "reputation",
+        "key": "parishioners",
+        "delta": 4
+      },
+      {
+        "target": "stat",
+        "key": "piety",
+        "delta": 1
+      },
+      {
+        "target": "flag",
+        "key": "parish_pantry",
+        "value": true
+      }
+    ]
+  },
+  {
+    "type": "parish_census",
+    "label": "Take a census",
+    "blurb": "Every door in the parish knocked on, by volunteers with clipboards, over a winter. You find the families who stopped coming and the ones who never registered, and the parish learns what it actually is.",
+    "weeks": 30,
+    "apPerWeek": 2,
+    "cost": 10000,
+    "onComplete": [
+      {
+        "target": "reputation",
+        "key": "parishioners",
+        "delta": 4
+      },
+      {
+        "target": "stat",
+        "key": "administration",
+        "delta": 3
+      },
+      {
+        "target": "flag",
+        "key": "parish_census",
+        "value": true
+      }
+    ],
+    "parish": {
+      "households": 80
+    }
+  },
+  {
+    "type": "bilingual_parish",
+    "label": "Make the parish bilingual",
+    "blurb": "A Spanish Mass that is not an afterthought, a bulletin in two languages, the sacraments prepared in both, a council with both on it. A year of two parishes learning to be one.",
+    "weeks": 60,
+    "apPerWeek": 2,
+    "cost": 30000,
+    "requires": {
+      "spanish": true
+    },
+    "onComplete": [
+      {
+        "target": "reputation",
+        "key": "parishioners",
+        "delta": 6
+      },
+      {
+        "target": "reputation",
+        "key": "public",
+        "delta": 3
+      },
+      {
+        "target": "reputation",
+        "key": "chancery",
+        "delta": 3
+      },
+      {
+        "target": "flag",
+        "key": "bilingual_parish",
+        "value": true
+      }
+    ],
+    "parish": {
+      "households": 120
+    }
+  },
+  {
+    "type": "parish_history",
+    "label": "Write the parish history",
+    "blurb": "The archives opened, the old people interviewed before it is too late, the photographs found in a closet, and a book on the table in the vestibule by the anniversary. A parish that knows its story behaves like one.",
+    "weeks": 52,
+    "apPerWeek": 1,
+    "cost": 15000,
+    "onComplete": [
+      {
+        "target": "reputation",
+        "key": "parishioners",
+        "delta": 5
+      },
+      {
+        "target": "reputation",
+        "key": "public",
+        "delta": 3
+      },
+      {
+        "target": "stat",
+        "key": "knowledge",
+        "delta": 2
+      },
+      {
+        "target": "flag",
+        "key": "parish_history",
+        "value": true
+      }
+    ]
+  },
+  {
+    "type": "youth_center",
+    "label": "Open a youth center",
+    "blurb": "The hall's back rooms gutted and given to the young people: a gym floor, a kitchen, a door that is open on Friday nights. A year and a half, and a parish the teenagers do not leave at fourteen.",
+    "weeks": 80,
+    "apPerWeek": 2,
+    "cost": 200000,
+    "requires": {
+      "hall": true
+    },
+    "onComplete": [
+      {
+        "target": "reputation",
+        "key": "parishioners",
+        "delta": 8
+      },
+      {
+        "target": "reputation",
+        "key": "public",
+        "delta": 5
+      },
+      {
+        "target": "flag",
+        "key": "youth_center",
+        "value": true
+      }
+    ],
+    "parish": {
+      "buildings": {
+        "hall": 85
+      }
+    }
+  },
+  {
+    "type": "cemetery",
+    "label": "Restore the cemetery",
+    "blurb": "The stones righted, the fence mended, the records put in order, the Sunday in November when the parish walks it. The dead are the parish too, and the living notice who looks after them.",
+    "weeks": 45,
+    "apPerWeek": 1,
+    "cost": 60000,
+    "onComplete": [
+      {
+        "target": "reputation",
+        "key": "parishioners",
+        "delta": 5
+      },
+      {
+        "target": "reputation",
+        "key": "public",
+        "delta": 3
+      },
+      {
+        "target": "stat",
+        "key": "piety",
+        "delta": 1
+      },
+      {
+        "target": "flag",
+        "key": "cemetery_restored",
+        "value": true
+      }
+    ]
+  },
+  {
+    "type": "bells",
+    "label": "Ring the bells again",
+    "blurb": "The tower shored up, the bells rehung, the carillon repaired or the one bell made to swing. The Angelus at noon over a town that had forgotten the sound.",
+    "weeks": 36,
+    "apPerWeek": 1,
+    "cost": 90000,
+    "onComplete": [
+      {
+        "target": "reputation",
+        "key": "parishioners",
+        "delta": 4
+      },
+      {
+        "target": "reputation",
+        "key": "public",
+        "delta": 5
+      },
+      {
+        "target": "flag",
+        "key": "bells_ring",
+        "value": true
+      }
+    ],
+    "parish": {
+      "buildings": {
+        "church": 80
+      }
+    }
+  },
+  {
+    "type": "grotto",
+    "label": "Build a grotto",
+    "blurb": "Our Lady in the corner of the lot, in stone, with a kneeler and a rack of candles that burn all night. Nothing in the budget, and the thing people photograph.",
+    "weeks": 26,
+    "apPerWeek": 1,
+    "cost": 35000,
+    "onComplete": [
+      {
+        "target": "stat",
+        "key": "piety",
+        "delta": 2
+      },
+      {
+        "target": "reputation",
+        "key": "parishioners",
+        "delta": 4
+      },
+      {
+        "target": "flag",
+        "key": "grotto",
+        "value": true
+      }
+    ]
+  }
 ]

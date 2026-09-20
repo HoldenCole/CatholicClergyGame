@@ -1,3 +1,4 @@
+import type { Effect } from './events';
 /** A classmate's rolled future. DESIGN 9.2: trajectories roll at ordination and simulate forward. */
 export type MilestoneKind = 'pastor' | 'chancery' | 'rome_study' | 'left' | 'died' | 'scandal' | 'bishop_elsewhere' | 'retired';
 
@@ -17,7 +18,18 @@ export type ProjectType =
   | 'close_school'
   | 'liturgical_change'
   | 'found_mission'
-  | 'capital_campaign';
+  | 'capital_campaign'
+  // Added in playtesting: their outcomes are written on the project itself (DESIGN §8.3).
+  | 'new_rectory'
+  | 'columbarium'
+  | 'food_pantry'
+  | 'parish_census'
+  | 'bilingual_parish'
+  | 'parish_history'
+  | 'youth_center'
+  | 'cemetery'
+  | 'bells'
+  | 'grotto';
 
 export interface ProjectDef {
   type: ProjectType;
@@ -27,7 +39,11 @@ export interface ProjectDef {
   apPerWeek: number;
   /** Total cost, drawn weekly from parish cash. */
   cost: number;
-  requires?: { school?: boolean; debt?: boolean };
+  requires?: { school?: boolean; debt?: boolean; spanish?: boolean; hall?: boolean };
+  /** What finishing it does to the man and his standing; the first seven projects keep theirs in code. */
+  onComplete?: Effect[];
+  /** What finishing it does to the parish record: buildings raised to at least these, households added. */
+  parish?: { buildings?: Partial<Record<'church' | 'rectory' | 'hall' | 'school', number>>; households?: number };
 }
 
 export interface Project {

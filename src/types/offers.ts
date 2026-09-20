@@ -61,6 +61,8 @@ export interface OfferDef {
 export interface ActiveOffer {
   offerId: string;
   arrivedWeek: number;
+  /** Opened on the desk: until it is, the letter lies over the scene and holds the clock. */
+  read?: boolean;
   /** Absolute week after which the offer lapses. Equal to arrivedWeek for one-scene offers. */
   expiresWeek: number;
   bindings: Record<string, string>;

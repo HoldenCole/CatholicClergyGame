@@ -1,5 +1,5 @@
 {
-  "_notes": "What a pastor can do with money that is not owed (DESIGN \u00a78.2, playtesting). 'once' spends apply their effects when bought; 'fund' spends stand, draw their upkeep from cash each week and apply their weekly effects while the cash lasts. Conditions use the ordinary schema; 'parish' conditions read the current parish. The investment is engine-side (systems/spending.ts, endowment). Standing programs (marketing, the school, the staff, formation, online) are funds too: they run every week until wound up and can be set up again; besides `weekly` effects a fund may carry `pull` (attendance target while it stands), `growth` (households a year, as a share), `school` (school condition a week), `groups` (vitality a week to every supported group), `relief` (a block of the week the staff carry), and `collections` (a share on every collection). Chapel and monastery spends (playtesting): a spend may carry `house` so its {house} reads as the diocese's house of that charism; 'house' conditions check the diocese has one.",
+  "_notes": "What a pastor can do with money that is not owed (DESIGN §8.2, playtesting). 'once' spends apply their effects when bought; 'fund' spends stand, draw their upkeep from cash each week and apply their weekly effects while the cash lasts. Conditions use the ordinary schema; 'parish' conditions read the current parish. The investment is engine-side (systems/spending.ts, endowment). Standing programs (marketing, the school, the staff, formation, online) are funds too: they run every week until wound up and can be set up again; besides `weekly` effects a fund may carry `pull` (attendance target while it stands), `growth` (households a year, as a share), `school` (school condition a week), `groups` (vitality a week to every supported group), `relief` (a block of the week the staff carry), and `collections` (a share on every collection). Chapel and monastery spends (playtesting): a spend may carry `house` so its {house} reads as the diocese's house of that charism; 'house' conditions check the diocese has one. The bishop's causes (the appeal over its goal, a seminary burse, the retired priests, his own cause) are 'once' spends with a cooldown: a gift the bishop reads, at a cost to the parish and a little to the people who notice where their money went.",
   "spends": [
     {
       "id": "tuition_fund",
@@ -666,6 +666,131 @@
         }
       ],
       "relief": 1
+    },
+    {
+      "id": "bishops_appeal",
+      "kind": "once",
+      "label": "The bishop's annual appeal, over the goal",
+      "blurb": "Every parish is assessed a goal for the appeal and most scrape to it. A cheque that clears the goal by a margin arrives on the bishop's desk with the pastor's name on it, and is noticed there before it is noticed anywhere else.",
+      "cost": 12000,
+      "cooldown": 52,
+      "effects": [
+        {
+          "target": "relationship",
+          "key": "@bishop",
+          "delta": 6
+        },
+        {
+          "target": "reputation",
+          "key": "chancery",
+          "delta": 4
+        },
+        {
+          "target": "reputation",
+          "key": "parishioners",
+          "delta": -1
+        },
+        {
+          "target": "flag",
+          "key": "gave:appeal",
+          "value": true
+        }
+      ]
+    },
+    {
+      "id": "seminary_burse",
+      "kind": "once",
+      "label": "A burse for the seminary",
+      "blurb": "A named fund at the seminary, in the parish's name, that pays a man's tuition for a year. The bishop reads the list of burses aloud at the ordination dinner, and remembers who is on it.",
+      "cost": 25000,
+      "cooldown": 104,
+      "effects": [
+        {
+          "target": "relationship",
+          "key": "@bishop",
+          "delta": 10
+        },
+        {
+          "target": "reputation",
+          "key": "chancery",
+          "delta": 6
+        },
+        {
+          "target": "reputation",
+          "key": "brother_priests",
+          "delta": 2
+        },
+        {
+          "target": "flag",
+          "key": "gave:burse",
+          "value": true
+        }
+      ]
+    },
+    {
+      "id": "retired_priests",
+      "kind": "once",
+      "label": "The retired priests' fund",
+      "blurb": "The men in the home the diocese never quite pays for. A gift there is read by the bishop, who will be in it one day, and by every priest over sixty, who will be sooner.",
+      "cost": 8000,
+      "cooldown": 52,
+      "effects": [
+        {
+          "target": "relationship",
+          "key": "@bishop",
+          "delta": 3
+        },
+        {
+          "target": "reputation",
+          "key": "brother_priests",
+          "delta": 6
+        },
+        {
+          "target": "reputation",
+          "key": "chancery",
+          "delta": 2
+        },
+        {
+          "target": "flag",
+          "key": "gave:retired",
+          "value": true
+        }
+      ]
+    },
+    {
+      "id": "cathedral_fund",
+      "kind": "once",
+      "label": "The bishop's own cause",
+      "blurb": "The cathedral roof, the Catholic Charities building, the new seminary wing: whatever he has put his name to this decade. A gift to it from a parish is a gift to him, and both of you know it, and the parish's name goes on the wall.",
+      "cost": 40000,
+      "cooldown": 156,
+      "effects": [
+        {
+          "target": "relationship",
+          "key": "@bishop",
+          "delta": 12
+        },
+        {
+          "target": "reputation",
+          "key": "chancery",
+          "delta": 8
+        },
+        {
+          "target": "reputation",
+          "key": "public",
+          "delta": 2
+        },
+        {
+          "target": "reputation",
+          "key": "parishioners",
+          "delta": -2
+        },
+        {
+          "target": "flag",
+          "key": "gave:bishops_cause",
+          "value": true
+        }
+      ]
     }
   ]
 }
