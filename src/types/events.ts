@@ -165,6 +165,8 @@ export type EffectTarget =
   | 'province'
   /** E3 §3.14: a man crosses over (key: selector; value 'enter_order' for a diocesan priest, 'leave_order' for a friar). */
   | 'crossing'
+  /** E3 §9: the house he founded (key 'budget' | 'vocation' | 'reputation:<key>' | 'revise:<dial>' | 'fail' | 'invite'; delta for the numbers, value for a dial's option or a diocese). */
+  | 'foundation'
   | 'stat'
   | 'reputation'
   | 'relationship'

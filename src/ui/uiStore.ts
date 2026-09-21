@@ -4,7 +4,7 @@ import type { SceneId } from './scenes/scenes';
 import type { Lane } from '@/systems/digest';
 
 /** The sheets on the desk. One is open at a time. */
-export type Sheet = 'week' | 'house' | 'profile' | 'parish' | 'map' | 'deanery' | 'see' | 'place' | 'people' | 'jobs' | 'clubs' | 'letters' | 'record' | 'formation' | 'settings' | 'furnish';
+export type Sheet = 'week' | 'house' | 'profile' | 'parish' | 'map' | 'deanery' | 'see' | 'place' | 'people' | 'jobs' | 'clubs' | 'letters' | 'record' | 'formation' | 'foundation' | 'settings' | 'furnish';
 
 /** Reading preferences: kept in the browser, never in the save. */
 export interface Prefs {

@@ -81,7 +81,8 @@ function houseName(rng: Rng, order: OrderDef, kind: HouseKind, taken: Set<string
 }
 
 /** One friar. Students and novices are young; the professed follow the province's pyramid. */
-function friar(rng: Rng, order: OrderDef, house: Pick<OrderHouse, 'id' | 'alignment' | 'kind'>, year: number, n: number, standing: 'novice' | 'student' | 'professed', old: number): Npc {
+/** One friar of a house, rolled from independent attributes; a foundation's vocations use the same generator. */
+export function friar(rng: Rng, order: OrderDef, house: Pick<OrderHouse, 'id' | 'alignment' | 'kind'>, year: number, n: number | string, standing: 'novice' | 'student' | 'professed', old: number): Npc {
   const age = standing === 'novice' ? rng.int(21, 33) : standing === 'student' ? rng.int(24, 36) : rng.chance(old) ? rng.int(61, 88) : rng.int(32, 60);
   const birthYear = year - age;
   const heritage = rollHeritage(rng, CLERGY_HERITAGE);

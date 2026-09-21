@@ -11,6 +11,8 @@ import { diocesanClassmateYear } from './diocesanClassmates';
 import { directingYear, seminaryMenStart, seminaryMenYear } from './directing';
 import { provinceYear } from './foundations';
 import { crossingYear } from './crossing';
+import { foundingYear } from './founding';
+import { foundationsYear } from './foundationYear';
 import { endApostolate } from './requests';
 import { bishopAskDefs } from '@/content/religious';
 
@@ -71,6 +73,9 @@ export function religiousYear(state: GameState, rng: Rng): GameState {
   next = crossingYear(next, rng.derive(`crossing:${next.clock.week}`));
   next = provinceYear(next, rng.derive(`province:${next.clock.week}`));
   if (next.mode.kind !== 'clock') return next;
+  // The houses of his line, and the invitations and asks that start one. E3 §9.
+  next = foundationsYear(next, rng.derive(`foundations:${next.clock.week}`));
+  next = foundingYear(next, rng.derive(`founding:${next.clock.week}`));
   // The diocese's men: the classmates from the seminary lectures, the seminary's men when he teaches there, and the ones he directs. E3 §3.13.
   next = diocesanClassmateYear(next, rng.derive(`dcm:${next.clock.week}`));
   next = seminaryMenYear(seminaryMenStart(next, rng.derive(`dsem:${next.clock.week}`)), rng.derive(`dsem-year:${next.clock.week}`));

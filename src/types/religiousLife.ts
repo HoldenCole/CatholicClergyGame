@@ -285,7 +285,7 @@ export interface OrderDef {
   /** The stats an office weighs when the province is in that state; the chapter engine reads these. */
   officeWeights?: Partial<Record<'debt' | 'decline' | 'growth' | 'division', Partial<Record<StatKey, number>>>>;
   /** Names for the province's houses, by kind. */
-  houseNames: { priory: string[]; studium: string[]; novitiate: string[]; school: string[] };
+  houseNames: { priory: string[]; studium: string[]; novitiate: string[]; school: string[]; mission?: string[] };
   /** A line per province of the order, and which dioceses (by id) its territory holds. E3 §4.1. */
   provinces: ProvinceSeed[];
   /** Saints the order gives its names from, for the religious name and the houses. */
@@ -607,6 +607,138 @@ export interface ReligiousPlayerState {
    * the record.
    */
   legibility?: number;
+  /** A petition for a foundation, standing or lately answered. E3 §9.1. */
+  petition?: FoundationPetition;
+  /** Petitions made in this career, for the record and the second attempt. */
+  petitionsMade?: number;
+  /** The houses he founded and the ones his heirs founded from them. E3 §9. */
+  foundations?: Foundation[];
+  /** The charter being written, between approval and the house. */
+  charterDraft?: Charter;
+  foundationLine?: string;
+}
+
+
+/** The founding charter's dials. E3 §9.4. Options are data in content/religious/foundations.json. */
+export type CharterDial = 'observance' | 'liturgy' | 'primaryWork' | 'university' | 'poverty' | 'sizeTarget';
+export type CharterObservance = 'relaxed' | 'moderate' | 'strict';
+export type CharterLiturgy = 'vernacular' | 'mixed' | 'chanted' | 'order_rite';
+export type CharterWork = 'preaching' | 'teaching' | 'study' | 'parish' | 'evangelization' | 'poor_relief' | 'retreats';
+export type CharterUniversity = 'none' | 'adjacent' | 'embedded';
+export type CharterPoverty = 'moderate' | 'austere';
+export type CharterSize = 'small' | 'large';
+
+/** What a house is founded to be. The charism is the order's; everything below it is the founder's. E3 §9.4. */
+export interface Charter {
+  observance: CharterObservance;
+  liturgy: CharterLiturgy;
+  primaryWork: CharterWork;
+  university: CharterUniversity;
+  /** −100 traditional .. 100 progressive, within the charism. */
+  alignment: number;
+  poverty: CharterPoverty;
+  sizeTarget: CharterSize;
+  writtenWeek: number;
+}
+
+/** One option of one dial, as data: its label, its prose consequence, and what it does to the numbers. */
+export interface CharterOptionDef {
+  id: string;
+  label: string;
+  line: string;
+  /** Multiplier on the vocations a year; 1 is the middle. */
+  vocations?: number;
+  /** What it does to the house's observance and cohesion rest. */
+  observance?: number;
+  cohesion?: number;
+  /** Friction with the province's factions: 'observant' or 'progressive' means that faction dislikes it. */
+  friction?: 'observant' | 'progressive';
+  /** House reputations it feeds a year. */
+  reputations?: Partial<Record<ReputationKey, number>>;
+  /** Income a year to the house, before the men are fed. */
+  income?: number;
+  /** Which orders may write it (the Dominicans' own rite). Absent means any. */
+  orders?: OrderKey[];
+  /** Needs a university in the diocese. */
+  needsUniversity?: boolean;
+  /** The house kind founded for this work. */
+  houseKind?: HouseKind;
+  /** The men wanted before a daughter house can go out. */
+  daughterAt?: number;
+}
+
+/** A work the house adds once it has the men: a school, a chaplaincy, a retreat program, a shelter. E3 §9.5. */
+export interface FoundationWorkDef {
+  id: string;
+  label: string;
+  line: string;
+  /** Men the house needs first, and what it costs the house to open. */
+  men: number;
+  cost: number;
+  income?: number;
+  vocations?: number;
+  reputations?: Partial<Record<ReputationKey, number>>;
+  needsUniversity?: boolean;
+}
+
+/** A place the province could found a house, as the browser shows it. E3 §9.2. Read from the generated world, never a preset. */
+export interface FoundationSite {
+  dioceseId: string;
+  name: string;
+  see: string;
+  region: string;
+  /** 1..5, the central number. */
+  need: number;
+  /** The local bishop has asked for a house here. */
+  invited: boolean;
+  /** −100..100: the bishop's warmth toward the order, from the file when he knows the man, from the diocese when he does not. */
+  bishop: number;
+  presence: 'none' | 'thin' | 'present' | 'strong';
+  university: boolean;
+  /** 0..100: the age and religiosity of the Catholics here. */
+  climate: number;
+  cost: number;
+  /** Other orders at work here. */
+  others: number;
+  lines: string[];
+}
+
+/** The petition at chapter, or the provincial's ask, until it is answered. E3 §9.1, §9.3. */
+export interface FoundationPetition {
+  kind: 'petition' | 'asked';
+  dioceseId: string;
+  work: CharterWork;
+  week: number;
+  /** The bishop whose consent is being asked; a successor mid-process can kill it. */
+  bishopId: string;
+  decidedWeek?: number;
+  outcome?: 'approved' | 'province_refused' | 'bishop_refused' | 'declined' | 'lapsed';
+  line?: string;
+}
+
+/** A house the player founded, or one his heirs founded from it, as the persistent object he develops. E3 §9.5–9.7. */
+export interface Foundation {
+  houseId: string;
+  dioceseId: string;
+  foundedWeek: number;
+  charter: Charter;
+  /** The house this one went out from, when it is a daughter house. */
+  daughterOf?: string;
+  /** The man chosen to lead a daughter house: the heir, whose reading of the charter it inherits. */
+  heirId?: string;
+  /** Men who came to the order through this house, in order. */
+  vocationIds: string[];
+  /** Works added beyond the charter's, by id. */
+  works: string[];
+  /** The house's own reputations, on the §8 model. */
+  reputations: Partial<Record<ReputationKey, number>>;
+  /** Money the house holds, its own. */
+  budget: number;
+  status: 'alive' | 'failed';
+  failedWeek?: number;
+  failedWhy?: string;
+  /** Every revision of the charter after it was written, by whom. */
+  revisions: { week: number; by: string; dial: CharterDial; from: string; to: string }[];
 }
 
 /** A rolled province held in the save until one is chosen: its visible half for the cards, and the whole for installing. */

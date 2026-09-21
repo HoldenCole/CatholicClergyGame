@@ -12,6 +12,7 @@ import type {
   Speed,
   SummerAssignment,
   OrderKey, ReligiousAnswers, HorariumKey,
+  Charter, CharterDial, CharterWork,
 } from '@/types';
 import { SAVE_VERSION } from '@/types';
 import { noDraw, noHook, runClock, type StopReason, type WeekDraw, type WeekHook } from './clock';
@@ -37,6 +38,9 @@ import { answerDirectionAsk as answerDirectionAskSys, endDirectee as endDirectee
 import { setSpend as setSpendSys } from '@/systems/religious/spends';
 import { askHouseOffice as askHouseOfficeSys, endApostolate as endApostolateSys, fileRequest as fileFriarRequestSys, resignHouseOffice as resignHouseOfficeSys, withdrawRequest as withdrawFriarRequestSys } from '@/systems/religious/requests';
 import { decideAssignment, receiveAssignment, statePreference as statePreferenceSys } from '@/systems/religious/obedience';
+import { answerFoundationAsk as answerFoundationAskSys, petitionFoundation as petitionFoundationSys } from '@/systems/religious/founding';
+import { reviseCharter as reviseCharterSys, writeCharter as writeCharterSys } from '@/systems/religious/charter';
+import { addFoundationWork as addFoundationWorkSys, myFoundation, sendDaughter as sendDaughterSys } from '@/systems/religious/foundationYear';
 import { castVote, closeChapter, holdElection, resolveElection, returnToRanks, signalWillingness, speakFor, steerBloc } from '@/systems/religious/chapter';
 import { fromDayNumber } from './calendar';
 import { acceptAssignment as doAcceptAssignment } from './seminary';
@@ -131,6 +135,14 @@ export interface GameStore {
   setCappa(on: boolean): void;
   /** The friar's free blocks, by spend. E3 §3.3. */
   setSpend(id: string, ap: number): void;
+  /** Foundations: the petition, the provincial's ask, the charter, the works, and a daughter house. E3 §9. */
+  petitionFoundation(dioceseId: string, work: CharterWork): void;
+  answerFoundationAsk(accept: boolean): void;
+  setCharterDraft(patch: Partial<Charter>): void;
+  writeCharter(): void;
+  reviseFoundation(dial: CharterDial, to: string): void;
+  addFoundationWork(workId: string): void;
+  sendDaughter(heirId: string, dioceseId: string): void;
   endDirectee(npcId: string): void;
   /** The consultation and the letter. E3 §3.1. */
   statePreference(houseId: string | null, objection: boolean): void;
@@ -732,6 +744,38 @@ export const useGameStore = create<GameStore>()((set, get) => ({
   },
   answerDirectionAsk(yes) {
     update(set, get, (game) => answerDirectionAskSys(game, yes));
+  },
+  petitionFoundation(dioceseId, work) {
+    update(set, get, (game) => petitionFoundationSys(game, dioceseId, work));
+  },
+  answerFoundationAsk(accept) {
+    update(set, get, (game) => answerFoundationAskSys(game, accept));
+  },
+  setCharterDraft(patch) {
+    update(set, get, (game) => (game.religious?.charterDraft ? { ...game, religious: { ...game.religious, charterDraft: { ...game.religious.charterDraft, ...patch } } } : game));
+  },
+  writeCharter() {
+    update(set, get, (game, r) => (game.religious?.charterDraft ? writeCharterSys(game, game.religious.charterDraft, r.derive(`charter:${game.clock.week}`)) : game));
+  },
+  reviseFoundation(dial, to) {
+    update(set, get, (game) => {
+      const f = myFoundation(game);
+      return f ? reviseCharterSys(game, f.houseId, dial, to, 'player') : game;
+    });
+  },
+  addFoundationWork(workId) {
+    update(set, get, (game) => {
+      const f = myFoundation(game);
+      return f ? addFoundationWorkSys(game, f.houseId, workId) : game;
+    });
+  },
+  sendDaughter(heirId, dioceseId) {
+    update(set, get, (game, r) => {
+      const f = myFoundation(game);
+      if (!f) return game;
+      const res = sendDaughterSys(game, f.houseId, heirId, dioceseId, r.derive(`daughter:${game.clock.week}`));
+      return res.line ? { ...res.state, religious: { ...res.state.religious!, foundationLine: res.line } } : game;
+    });
   },
   setSpend(id, ap) {
     update(set, get, (game) => setSpendSys(game, id, ap));
