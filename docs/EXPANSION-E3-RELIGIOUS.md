@@ -243,6 +243,10 @@ The diocese's pastors ask for him the way the bishop does: through his superior.
 
 **Crossing over (E4's ground).** A scene marks a man with the `crossing` effect (`enter_order` on a diocesan priest or seminarian, `leave_order` on a friar); a year on, he crosses. A diocesan priest who enters becomes a novice of the province at the novitiate, his parish going to another priest of his diocese, and the bishop who lost him remembers it; a friar who leaves becomes a priest of the diocese he lived in. Engine: `systems/religious/crossing.ts`; scenes in `events/religious/shared_crossing.json`.
 
+### 3.15 The habit
+
+Portraits dress a religious in his institute's habit, as data on the institute (`habit` in `content/institutes.json`): the colour, a hood, a scapular, a cord or leather belt, a choir cloak, and for women a veil and coif. Dominicans are white with the capuce and scapular and a black cappa; Augustinians black with the capuce and the leather belt; Franciscans brown with the white cord; Capuchins chestnut with the long capuche; Carmelites brown with the white mantle; Benedictines black; the institutes in clerical black draw as priests. The player friar wears the habit from clothing (the novitiate's year) and may wear the cloak over it, a toggle on the House sheet kept in the save (`religious.cappa`); a friar of a cloaked order wears the cloak in his portrait some of the time.
+
 ## 4. Character creation changes
 
 The base creation flow is reused. Changes:

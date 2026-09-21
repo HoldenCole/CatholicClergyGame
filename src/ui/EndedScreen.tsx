@@ -2,7 +2,7 @@ import { useGameStore } from '@/engine/store';
 import { careerSummary } from '@/engine/career';
 import { lifeOf } from '@/systems/life';
 import Portrait from './portraits/Portrait';
-import { portraitForCharacter, portraitForNpc, yearOf } from './portraits/spec';
+import { portraitForNpc, portraitForPlayer, yearOf } from './portraits/spec';
 
 const ENDING_TITLE: Record<string, string> = {
   dismissed: 'Dismissed',
@@ -45,7 +45,7 @@ export default function EndedScreen() {
     <div className="felt min-h-screen p-6">
       <div className="paper paper-tilt-r mx-auto flex w-full max-w-3xl flex-col gap-4 px-8 py-8">
         <div className="flex items-start gap-4">
-          {c && <Portrait portrait={portraitForCharacter(c, year, game.flags.ordained_bishop ? 'bishop' : game.phase)} size={72} />}
+          {c && <Portrait portrait={portraitForPlayer(game)} size={72} />}
           <div className="min-w-0 flex-1">
             <h1 className="title text-2xl">{ENDING_TITLE[ending] ?? ending}</h1>
             {c && <p className="ink-muted text-sm">{c.name.first} {c.name.last}{life ? `, ${life.age}, ${life.years} years a priest` : game.seminary ? `, year ${game.seminary.year} of formation` : ''}.</p>}

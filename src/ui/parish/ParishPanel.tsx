@@ -20,7 +20,7 @@ import MassPanel from './MassPanel';
 import { currentPreference, PREFERENCES, PREFERENCE_LABEL } from '@/systems/assignment';
 import { TRAIT_LABEL } from '../portraits/traits';
 import Portrait from '../portraits/Portrait';
-import { portraitForCharacter, portraitForNpc, yearOf } from '../portraits/spec';
+import { portraitForNpc, portraitForPlayer, yearOf } from '../portraits/spec';
 
 function word(v: number): string {
   if (v >= 50) return 'devoted';
@@ -73,7 +73,7 @@ export default function ParishPanel() {
     <>
       <Sheet title={`${parish.name}, ${parish.place}${parish.founded ? ` (${parish.founded})` : ''}`}>
         <div className="flex items-start gap-4">
-          <Portrait portrait={portraitForCharacter(c, year, game.phase)} size={72} title={`${c.name.first} ${c.name.last}`} />
+          <Portrait portrait={portraitForPlayer(game)} size={72} title={`${c.name.first} ${c.name.last}`} />
           <p className="text-sm leading-relaxed">
             {c.name.first} {c.name.last}, {p.role.replace('_', ' ')}, {yearsIn === 0 ? 'first year' : `year ${yearsIn + 1}`}. {game.world.diocese.visible.name}
             {bishop ? `, under ${bishop.title} ${bishop.name.last}` : ''}.

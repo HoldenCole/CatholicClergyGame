@@ -4,7 +4,7 @@ import { requestHistory } from '@/systems/request';
 import { worksDone } from '@/systems/sidework';
 import Sheet from './Sheet';
 import Portrait from './portraits/Portrait';
-import { portraitForCharacter, yearOf } from './portraits/spec';
+import { portraitForPlayer } from './portraits/spec';
 
 /**
  * The profile: the one sheet that answers "what have I done with forty
@@ -15,7 +15,6 @@ export default function ProfilePanel() {
   const game = useGameStore((s) => s.game);
   if (!game?.character) return null;
   const p = profileOf(game);
-  const year = yearOf(game.clock.startDay, game.clock.week);
   const asked = requestHistory(game).filter((r) => r.outcome);
   const works = worksDone(game);
 
@@ -23,7 +22,7 @@ export default function ProfilePanel() {
     <>
       <Sheet title="The man">
         <div className="flex items-start gap-3">
-          <Portrait portrait={portraitForCharacter(game.character, year, game.see ? 'bishop' : game.phase)} size={64} />
+          <Portrait portrait={portraitForPlayer(game)} size={64} />
           <div className="min-w-0">
             <div className="text-lg font-semibold">{p.name}</div>
             <div className="ink-muted text-sm">
