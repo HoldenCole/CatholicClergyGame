@@ -1,0 +1,1186 @@
+{
+  "_notes": "Dominican career, fourth pool: the late years. The old friar's death, the age question, the young friar's question, the centenary, the leaver, the elder's speech, the last mission, Rome's letter, the novice who asked. E3 §11, §14.",
+  "events": [
+    {
+      "id": "opc_old_friar_dies_career",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "MAJOR",
+      "category": "personal",
+      "baseWeight": 10,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "doubt"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        },
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 12
+        }
+      ],
+      "title": "The Old Friar's Death",
+      "body": "{@old_friar} has died, in the house, in the night, with the prior and the infirmarian and you, since you were the one he asked for. He was the friar who sat in the back of the church in your first year and told you the truth about your preaching, and he has left, the prior says, a note about his funeral that has your name in it, and the note asks for a homily of four minutes and says that you will know why.",
+      "choices": [
+        {
+          "id": "four",
+          "label": "Preach four minutes, on one thing",
+          "outcome": "It is four minutes. The house weeps and the people from the church, who have come in numbers nobody expected, weep, and a student brother from the studium asks afterward how it was done, and you tell him: a man in the back of a church, forty years ago, and one thing.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "career:preached_the_four_minutes",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "long",
+          "label": "Preach the life; it deserves the length",
+          "outcome": "It is twenty minutes and it is good and it is not what he asked, and the house knows it, and forgives it, since it was love, and the prior says afterward that the old man would have timed it, and would have said it was a lecture, and would have been right.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": -1
+            }
+          ]
+        },
+        {
+          "id": "other",
+          "label": "Ask the prior to preach it, and sit in the back",
+          "outcome": "The prior preaches, well, and you sit where the old man sat, and hear it as he heard yours, and it is the homily you needed to hear, and you go to the prior afterward and tell him one thing, as you were told, and he keeps it.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "relationship",
+              "key": "@prior",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 3
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "opc_retirement_question",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "MAJOR",
+      "category": "personal",
+      "baseWeight": 12,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        },
+        {
+          "type": "age",
+          "op": ">=",
+          "value": 68
+        }
+      ],
+      "title": "The Age Question",
+      "body": "The province retires no one, since friars do not retire, and it also has an infirmary and a rota of men who are on it, and the prior has asked, gently, since you are of an age, whether you would like to be taken off the Sunday rota, and the eleven o'clock has been yours for a long time, and the question is not about the rota.",
+      "choices": [
+        {
+          "id": "keep",
+          "label": "Keep the eleven o'clock as long as you can stand at it",
+          "outcome": "You keep it. The people, who are old with you, keep coming. It is six more years and then it is the seven o'clock, and then the nursing home, and then the infirmary Mass, and it is preaching at every step, and the last homily is in the infirmary to nine men and it is four minutes.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "career:kept_the_eleven",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "give",
+          "label": "Give it up now, to a younger man, and take the confessional",
+          "outcome": "The younger man is good and the people are slow to think so and then do. The confessional is the work of the last years and it is, in the end, the larger work, and the line that used to be yours on Saturday is yours again, and it is the same people.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 2
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "career:took_the_confessional",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "write",
+          "label": "Give it up, and write the memoir the province keeps asking for",
+          "outcome": "The province keeps asking because it wants a record of the years before it, and you write it, and it is honest, which the province had not entirely wanted, and it is in the archive and read by every novice master after, and by nobody else, and that is enough.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 3
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "career:wrote_the_memoir",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "opc_young_friar_asks",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 10,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "doubt"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        },
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 18
+        }
+      ],
+      "title": "The Young Friar's Question",
+      "body": "A friar in his second year of priesthood has come to your cell, which young friars do not do, and asked the question nobody asked you: whether it was worth it. He is not in trouble. He is a good preacher and a good friar and he is tired in the way of a man who has been good for two years and would like to know how long it goes on. He has asked you because, he says, you are the one who looks as if he knows.",
+      "choices": [
+        {
+          "id": "yes",
+          "label": "Say yes, and tell him what it cost",
+          "outcome": "He listens for an hour. He is a friar for fifty years and tells the story of the hour at his own jubilee, and you are dead by then, and the story is true, mostly, and the cost is in it, which is why it is believed.",
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 4
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": 8
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "career:told_the_young_friar",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "office",
+          "label": "Say the Office with him, and let that be the answer",
+          "outcome": "He is puzzled and then not. It is the Dominican answer and you learned it from an old friar on a retreat and it works, mostly, and he says the Office with you every evening for the year he is in the house, and it is the year he needed.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 4
+            },
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "dont",
+          "label": "Say you do not know, and that he should ask again in twenty years",
+          "outcome": "He laughs, since it is honest, and asks again in twenty years, and by then you know, and tell him, and he is a prior by then and needed it more than he had at twenty-eight.",
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": 4
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "opc_house_hundredth",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "admin",
+      "baseWeight": 9,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        },
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 10
+        }
+      ],
+      "title": "The Priory's Centenary",
+      "body": "The priory is a hundred years old and the province has decided to notice. There is to be a Mass with the bishop, a dinner, a history, and a speech, and the prior has asked you to write the history, since you are the friar who has been in the house longest and, he says, the one who will tell the truth, and the house has had a hundred years, some of which the province would rather were not told.",
+      "choices": [
+        {
+          "id": "truth",
+          "label": "Write it whole: the good years and the two that were not",
+          "outcome": "The history is forty pages and the province reads it twice, once to be proud and once to be sure, and lets it stand, and the bishop, at the dinner, says he had not known the friars could write about themselves like that, and the two bad years are in it, briefly, and are the reason it is believed.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 3
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": -1
+            },
+            {
+              "target": "reputation",
+              "key": "local_bishop",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "career:wrote_the_centenary_whole",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "kind",
+          "label": "Write it kindly, and leave the two years to the archive",
+          "outcome": "It is a good history and a pleasant one and the province is glad of it, and the two years are in the archive where a student brother finds them in thirty years and writes a better history, and thanks you, in a footnote, for what you left out.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 3
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": -2
+            }
+          ]
+        },
+        {
+          "id": "people",
+          "label": "Write it about the people who came, not the friars who were here",
+          "outcome": "It is a history of a congregation: the woman who cleaned the church for fifty years, the man who fixed the organ, the families who were at every Mass, and the friars are in it as they were to those people, which is the true history, and the people at the dinner weep, and the province is puzzled and moved.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "career:wrote_the_people",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "opc_the_leaver_returns",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "classmate",
+      "baseWeight": 9,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "friendship_vs_duty"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        },
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 15
+        }
+      ],
+      "title": "The Man Who Left Comes Back",
+      "body": "A friar who left the order twenty years ago, well, to marry, has written to the prior asking to come to the priory for a Sunday, with his wife and his grown children, since one of the children is thinking of the order and the man would like him to see the house he left. The prior has said yes and has asked you to have them to lunch, since you were in the novitiate together and were friends, and have not spoken since the year he went.",
+      "choices": [
+        {
+          "id": "lunch",
+          "label": "Have them to lunch, and let the son see the house",
+          "outcome": "The lunch is long and the wife is kind and the son is serious, and the man walks the cloister afterward alone for a while, and the son enters two years later and is professed, and the man is at the profession in a suit, weeping, and you are beside him.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 2
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "career:the_leaver_lunch",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "walk",
+          "label": "Take him alone for the walk first, and then the lunch",
+          "outcome": "The walk is an hour and twenty years. He says he does not regret it and that he has missed it every day, which is true and is not a contradiction, and you say the same in reverse, which is also true, and the lunch is easy after that, and the son sees two men who know what the thing costs.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 4
+            },
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "career:walked_the_cloister",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "prior",
+          "label": "Ask the prior to host it; it is not yours to carry",
+          "outcome": "The prior hosts it, well, and the son sees the house and does not enter, and the man writes to you afterward, briefly, and does not say it was because of the walk you did not take, and you think it was, and are not sure.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": -1
+            },
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": -2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "opc_chapter_speech_late",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "MAJOR",
+      "category": "admin",
+      "baseWeight": 11,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        },
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 22
+        }
+      ],
+      "title": "The Elder's Speech",
+      "body": "The provincial chapter, and you are one of the old men now: the men the young friars look at across the aula to see how a vote should go. There is a motion on the floor about the studium, whether it should merge with another province's, and the young men are for it since it is sensible and the old men are against it since it is theirs, and the moderator has looked at you, and the aula has gone quiet, since you have not spoken at a chapter in years.",
+      "choices": [
+        {
+          "id": "for",
+          "label": "Speak for the merger: the province is not what it was, and the studium should be what it can",
+          "outcome": "The old men are silent and the young men are astonished. The motion carries by six. The studium merges in three years and is better and is not the province's, and the old men do not forgive you and do not need to, since they are dying, and the young men do not forget.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 3
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -3
+            },
+            {
+              "target": "reputation",
+              "key": "observant_bloc",
+              "delta": -3
+            },
+            {
+              "target": "flag",
+              "key": "chapter:spoke_for_the_merger",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "against",
+          "label": "Speak against it: a province without a studium is a province without a mind",
+          "outcome": "The young men are silent and the old men are moved. The motion fails by four. The studium struggles on for a decade and then merges anyway, worse, since it was forced, and the young men who were in the aula remember the speech and its cost, and some of them agree with it now.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "observant_bloc",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": -2
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": -2
+            },
+            {
+              "target": "flag",
+              "key": "chapter:spoke_against_the_merger",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "question",
+          "label": "Ask one question, and sit down",
+          "outcome": "The question is whether the province has counted the men it will have in ten years, and it has not, and the moderator sends the motion to a commission, and the commission counts, and the merger happens in five years on the numbers, and it is right, and nobody made a speech.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 2
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "chapter:asked_the_question",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "opc_the_last_mission",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "MAJOR",
+      "category": "personal",
+      "baseWeight": 10,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "body_vs_vow"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "preaching:mission",
+          "value": true
+        },
+        {
+          "type": "age",
+          "op": ">=",
+          "value": 62
+        }
+      ],
+      "title": "The Last Mission",
+      "body": "A pastor has written for a mission, four nights, the old kind, and the promoter of preaching has passed it to you with a note that says it is yours if you want it and that he will not send you again after, since the drive is long and the nights are late and the province has men younger than you, which is his kindness and is true. It is the parish where you preached your first mission, and the pastor is the curate who was there then.",
+      "choices": [
+        {
+          "id": "go",
+          "label": "Go, and preach it as you did the first time",
+          "outcome": "The first night forty come and the fourth night the church is full, as it was, and the pastor, who was a curate then, weeps on the last night, as the old pastor did, and says it was the same, and it was not, since you were, and he could tell, and it did not matter.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 2
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "career:the_last_mission",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "with",
+          "label": "Go, and take the youngest missioner to do the last night",
+          "outcome": "He does the last night and it is not as good and it is the future, and the pastor knows it, and the young man knows it, and you know it, and drive home in the dark with him and tell him the one thing, and he keeps it.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": 8
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "career:passed_the_mission",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "decline",
+          "label": "Decline; the last one was the last one",
+          "outcome": "The promoter sends a younger man. The pastor writes to you afterward, kindly, and says the young man was good and was not you, and you keep the letter, and it is the last letter from a parish you receive, and you know that too.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "opc_rome_year_returns",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "MAJOR",
+      "category": "assignment",
+      "baseWeight": 9,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "ambition_vs_integrity"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "career:rome_year",
+          "value": true
+        },
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 16
+        }
+      ],
+      "title": "What Rome Left",
+      "body": "The year in Rome is a decade behind you and it has left the things it leaves: a language, three friends in three countries, and a letter, this week, from one of them, who is now at the general curia and has asked whether you would come back for good, to a post that would be yours for six years and would take you from the province for the rest of your working life. {@prior} has seen the envelope and has not asked.",
+      "choices": [
+        {
+          "id": "go",
+          "label": "Go; the order is wider than the province",
+          "outcome": "Six years and then nine. You are a man of the order and not of the province, which is a real thing and a lonely one, and the province forgets you a little and the order does not, and you die in Rome, in the order's house, among men from forty countries, and one of them preaches, in Italian, four minutes.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -4
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": -3
+            },
+            {
+              "target": "flag",
+              "key": "career:went_to_rome_for_good",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "stay",
+          "label": "Stay; the province is where the vow was made",
+          "outcome": "The friend understands. Rome finds someone. The province, which never knew the letter came, has you for the rest of it, and it is a smaller life and a fuller one, and the language is used for visitors and the letters, and the three friends come to the jubilee.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": -1
+            },
+            {
+              "target": "flag",
+              "key": "career:stayed_from_rome",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "provincial",
+          "label": "Send the letter to the provincial and let obedience decide",
+          "outcome": "The provincial says no, since the province needs you, and it is obedience and it is also a relief, which you do not tell him, and he knows, and the friend in Rome writes once a year and never asks again, and it is a friendship that survived a no.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 2
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "opc_final_profession_witness",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "formation",
+      "baseWeight": 9,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        },
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 14
+        }
+      ],
+      "title": "The Novice Who Asked for You",
+      "body": "A novice of the province has asked that you receive his simple profession, which the constitutions allow when the prior of the novitiate delegates it, and the novice master has said yes, since the boy asked and the boy is the one who wrote to the province after a talk you gave at a college fifteen years ago and has, he says, been coming ever since. You do not remember the talk. He does, and quotes it, and you recognize it, and wish you had said it better.",
+      "choices": [
+        {
+          "id": "receive",
+          "label": "Receive it, and say the thing better this time",
+          "outcome": "You receive the vows. The homily is the talk from fifteen years ago, better, since you know now what it meant, and the novice master says it should be written down, and it is, and it is the talk the vocation director gives at colleges for a decade, and does not say whose it was, since it is the order's.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 4
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "career:received_the_vows",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "master",
+          "label": "Ask the novice master to receive them, and stand beside him",
+          "outcome": "The novice master receives them and you stand in the choir, and the boy looks for you and finds you, and that is the thing he wanted, and the novice master says afterward that it was right, since the vows are the order's and not a man's, and you agree, and are a little sorry.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 3
+            },
+            {
+              "target": "relationship",
+              "key": "@novice_master",
+              "delta": 4
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "talk",
+          "label": "Ask him what the talk was, and listen to your own words",
+          "outcome": "He tells you: an hour, at a college, on what a friar is for, and one sentence in it that he has carried for fifteen years, and it is not the sentence you would have chosen, and it was the right one, and you learn that the thing said is not the thing heard, and receive the vows knowing it.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "career:heard_the_sentence",
+              "value": true
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
