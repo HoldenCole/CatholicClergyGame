@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { allEvents, eventFiles } from '@/content';
 import { decorOptions } from '@/systems/decorState';
 import { FEAST_KEYS } from '@/engine/feasts';
+import { ORDER_FEAST_KEYS } from '@/systems/religious/feasts';
 import { actionDefs, liturgyDials, obligationDefs } from '@/content/parish';
 import { studyPrograms } from '@/content/study';
 import { SEALED_TARGETS } from '@/engine/internalForum';
@@ -143,7 +144,7 @@ function checkCondition(c: Condition, where: string, problems: Problem[]): void 
       if (typeof c.key !== 'string' || typeof c.open !== 'boolean') problems.push(`${where}: bad thread condition`);
       break;
     case 'feast':
-      if (!FEAST_KEYS.includes(c.key as never)) problems.push(`${where}: unknown feast ${c.key}`);
+      if (!FEAST_KEYS.includes(c.key as never) && !ORDER_FEAST_KEYS.includes(c.key)) problems.push(`${where}: unknown feast ${c.key}`);
       break;
     case 'ethnic':
       if (typeof c.key !== 'string' || !hasOp(c.op) || typeof c.value !== 'number') problems.push(`${where}: bad ethnic condition`);

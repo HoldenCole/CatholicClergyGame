@@ -3,6 +3,7 @@ import { frictionOf, leanOf, selectedOf } from '@/systems/liturgy';
 import type { Condition, GameState } from '@/types';
 import { dateOf, seasonOf } from './time';
 import { feastsOfWeek, type FeastKey } from './feasts';
+import { orderFeastsOfWeek } from '@/systems/religious/feasts';
 import { resolveSelector } from './selectors';
 
 import type { Group } from '@/types';
@@ -173,7 +174,9 @@ export function evaluateCondition(
     }
     case 'feast': {
       const parish = state.world?.parishes.find((p) => p.id === state.assignment?.parishId);
-      return feastsOfWeek(state.clock, parish).includes(cond.key as FeastKey);
+      if (feastsOfWeek(state.clock, parish).includes(cond.key as FeastKey)) return true;
+      // The order's own calendar, for a friar. E3: OrderDef.feasts.
+      return !!state.religious && orderFeastsOfWeek(state).some((f) => f.key === cond.key);
     }
     case 'ethnic': {
       const parish = state.world?.parishes.find((p) => p.id === state.assignment?.parishId);

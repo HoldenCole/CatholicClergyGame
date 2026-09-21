@@ -1,0 +1,257 @@
+{
+  "_notes": "Feasts every friar keeps whatever his order: the house's own patron (from the house's name, systems/religious/feasts.ts), the Order's dead, and All Saints of the Order.",
+  "events": [
+    {
+      "id": "shf_house_patron_the_neighbourhood",
+      "phase": [
+        "seminary",
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 18,
+      "suppressYears": 2,
+      "pressure": [
+        "friendship_vs_duty"
+      ],
+      "requires": [
+        {
+          "type": "feast",
+          "key": "house_patron"
+        }
+      ],
+      "title": "The House's Own Day",
+      "body": "The house's patronal feast, which is the neighbourhood's feast as much as the friars': the church full of people who never come otherwise, the older ones in the pews their parents sat in, a dinner in the hall the confraternity has cooked since dawn. After the Mass an old man at the door takes your hand and does not let go. He was baptized here, he says, and married here, and his wife is buried from here, and he has not been inside for nine years because of the pastor before last, who is dead now, and he wants to know whether it is all right for him to come back. Behind him {@prior} is greeting the alderman. The old man is waiting for an answer as if it were not obvious.",
+      "flavorPrompt": "The house's patronal feast, the neighbourhood in, and an old man at the door asking whether he may come back after nine years.",
+      "choices": [
+        {
+          "id": "walk_him_in",
+          "label": "Walk him back into the church yourself, now, and show him his pew",
+          "default": true,
+          "outcome": "You take him back in through the crowd to the pew he names, third from the front on the left, and he sits in it for a while with you standing beside him and the hall waiting. He is at the seven o'clock Mass the next morning and most mornings after. He tells the story at the feast every year, with you in it, and the story gets longer.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 5
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "house:patron_returned",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "of_course",
+          "label": "Tell him of course, and mean it, and go in to the dinner",
+          "outcome": "You say of course, and squeeze his hand, and he nods, and you go in to the dinner because the prior is signalling. He comes to the next feast and not in between. It was the right answer; it may not have been the whole one.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 1
+            }
+          ]
+        }
+      ],
+      "yearGate": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    },
+    {
+      "id": "shf_the_dead_the_necrology",
+      "phase": [
+        "seminary",
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "ROUTINE",
+      "category": "parish_death",
+      "baseWeight": 18,
+      "suppressYears": 3,
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "requires": [
+        {
+          "type": "any",
+          "inner": [
+            {
+              "type": "feast",
+              "key": "dominican_dead"
+            },
+            {
+              "type": "feast",
+              "key": "augustinian_dead"
+            }
+          ]
+        }
+      ],
+      "title": "The Necrology",
+      "body": "The anniversary of the Order's dead, and after the Mass the house's own necrology is read: every friar who died in this house, by name, with the year, back to the founding. The custom is that the youngest professed reads it. This year that is you, or it is the novice you are standing beside, depending on how {@prior} counts; he hands the book to you. Halfway down the second page is a name you know: a friar dismissed from the Order twenty years ago, for what the older men do not say, who died last winter in another city and whose name somebody has added in pencil. {@old_friar} is in the front row. He knew him. He is watching the page.",
+      "flavorPrompt": "The necrology read after the Mass for the Order's dead, and a dismissed friar's name added in pencil.",
+      "choices": [
+        {
+          "id": "read_it",
+          "label": "Read the pencilled name with the rest, in the same voice",
+          "default": true,
+          "outcome": "You read it in the same voice as the others, and nobody moves, and you go on. Afterwards {@old_friar} finds you in the cloister and says that he added the name, and that he had not been sure anyone would read it, and that he is glad it was you. The prior says nothing, which is the prior's way of saying that the pencil may stay.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 4
+            },
+            {
+              "target": "relationship",
+              "key": "@old_friar",
+              "delta": 10
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "house:pencilled_name",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "skip_it",
+          "label": "Skip the pencil; it is not the book",
+          "outcome": "You skip it. It is, after all, in pencil, and not the book, and the prior did not put it there. {@old_friar} does not come to recreation that evening. The name is in ink the next year, in the prior's hand, and you are not asked to read.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@old_friar",
+              "delta": -8
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -2
+            }
+          ]
+        }
+      ],
+      "yearGate": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    },
+    {
+      "id": "shf_all_saints_of_the_order",
+      "phase": [
+        "seminary"
+      ],
+      "campaign": "religious",
+      "severity": "ROUTINE",
+      "category": "formation",
+      "baseWeight": 14,
+      "once": true,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "any",
+          "inner": [
+            {
+              "type": "feast",
+              "key": "dominican_all_saints"
+            },
+            {
+              "type": "feast",
+              "key": "augustinian_all_saints"
+            }
+          ]
+        }
+      ],
+      "title": "All the Saints of the Order",
+      "body": "All Saints of the Order, and the litany at Vespers has more names in it than anyone in the house could place: the founder and the doctors and then a long descent through blesseds nobody has read about, sung by the cantor from a sheet. At recreation {@novice_master} asks the novices, as a game, to say who three of them were, any three. The other novices manage the founder and one more. You have been reading, in the hours you were supposed to be sleeping, and you could do eleven.",
+      "flavorPrompt": "The litany of the Order's saints, and a novice who has secretly read enough to name eleven of them.",
+      "choices": [
+        {
+          "id": "three",
+          "label": "Do three, and let it be",
+          "default": true,
+          "outcome": "You do three, and choose obscure ones, and the novice master looks at you for a moment longer than the game requires and moves on. Later that year he gives you the house's copy of the Order's history to catalogue, which is a chore and a compliment.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 1
+            },
+            {
+              "target": "relationship",
+              "key": "@novice_master",
+              "delta": 4
+            }
+          ]
+        },
+        {
+          "id": "eleven",
+          "label": "Do all eleven",
+          "outcome": "You do eleven, with dates, and the room goes quiet in the way rooms do when someone has shown off, and the novice master says, drily, that the Order has always had room for one of those. The other novices are cool with you for a week. One of them asks, in the second week, where you found the book.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -2
+            },
+            {
+              "target": "flag",
+              "key": "novice:knows_the_saints",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "suppressYears": 99,
+      "yearGate": [
+        1,
+        2
+      ]
+    }
+  ]
+}

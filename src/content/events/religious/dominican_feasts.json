@@ -1,0 +1,646 @@
+{
+  "_notes": "The Dominican calendar as scenes: the founder, the doctors, the Rosary, Martin, Albert. Keyed to OrderDef.feasts on the OP entry through the feast condition; fired feast-first on the week (engine/weekHook.ts feastScene).",
+  "events": [
+    {
+      "id": "opf_dominic_the_word_at_dinner",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 20,
+      "suppressYears": 2,
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        },
+        {
+          "type": "feast",
+          "key": "dominic"
+        }
+      ],
+      "title": "The Founder's Day",
+      "body": "The solemnity of St. Dominic, and the house is full: the province's men who could come, two of the sisters, the lay fraternity in the side pews, and the bishop's vicar general in choir because the bishop is in Rome. The Mass is sung, all of it, and the Salve at the end has the visitors trying to find the tune. At dinner the wine is the better wine and {@provincial} is at the head of the table. Over the cheese he taps a glass and says that the custom is for one of the house to say a word about the year, and that this year it is you, and sits down. Nobody warned you. {@prior} is looking at his plate. {@old_friar} is looking at you with the expression of a man who has been asked this himself, forty years ago, and remembers what he said.",
+      "flavorPrompt": "The founder's solemnity, a full table, and the provincial asking without warning for a word about the year.",
+      "choices": [
+        {
+          "id": "plainly",
+          "label": "Say what the year was, plainly, the hard parts included",
+          "default": true,
+          "outcome": "You say what the year was: the house's work and what it cost, the man who left, the debt, the thing the bishop asked for and the province said no to. You do not make a joke of it. The table is quiet. {@provincial} says, when you sit down, that it was the first honest one in some years, which the men on either side of him hear. {@old_friar} shakes your hand on the way out and does not let go for a moment.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 4
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "op:dominic_word",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "light",
+          "label": "Keep it light: the founder, the year's small mercies, a story on the prior",
+          "outcome": "You tell the one about {@prior} and the boiler, which the house has heard and the visitors have not, and the table laughs, and you say something about Dominic selling his books for the poor that lands well enough. It is the speech the custom wants. {@provincial} nods. Nobody remembers it in a week, which is what you intended.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 3
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": -2
+            }
+          ]
+        },
+        {
+          "id": "give_it_away",
+          "label": "Give the floor to the oldest man in the house",
+          "outcome": "You stand, and say the year is better told by someone who has seen fifty of them, and give the floor to {@old_friar}, who takes it. He speaks for twelve minutes about a prior nobody at the table knew and a winter with no heat, and by the end the novices are leaning in. {@provincial} says afterwards, quietly, that it was well done, and that next year he will ask you first.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 6
+            },
+            {
+              "target": "relationship",
+              "key": "@old_friar",
+              "delta": 8
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "opf_dominic_the_novice_clothing",
+      "phase": [
+        "seminary"
+      ],
+      "campaign": "religious",
+      "severity": "ROUTINE",
+      "category": "formation",
+      "baseWeight": 22,
+      "once": true,
+      "pressure": [
+        "doubt"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        },
+        {
+          "type": "feast",
+          "key": "dominic"
+        }
+      ],
+      "title": "Dominic's Day, the First",
+      "body": "Your first St. Dominic's day in the habit. The Mass is the longest you have sung, the dinner is the longest you have sat through, and between them {@novice_master} walks the novices to the cloister garden, where there is a statue of the founder nobody looks at the rest of the year, and says that each of you will say one sentence about why you are here. Not a speech. A sentence. The novice before you says something about the Rosary that he plainly believes. The one after you is going to say something clever; you can see him composing it. It is your turn, and the sentence you had ready is not the true one.",
+      "flavorPrompt": "A novice's first founder's day: one sentence in the cloister garden about why he is here, and the true one not the one he had ready.",
+      "choices": [
+        {
+          "id": "the_true_one",
+          "label": "Say the true one, whatever it sounds like",
+          "default": true,
+          "outcome": "You say it. It is not elegant and it is not about the founder; it is about a thing that happened to you at nineteen that you have told two people. The garden is quiet. {@novice_master} does not comment, then or later, but in the spring, when the vote on you comes, he says one sentence to the council that you will not hear and that carries it.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "relationship",
+              "key": "@novice_master",
+              "delta": 8
+            },
+            {
+              "target": "flag",
+              "key": "op:true_sentence",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "the_ready_one",
+          "label": "Say the one you had ready; it is true enough",
+          "outcome": "You say the one about preaching, which is true enough and sounds like a Dominican. The novice master nods the way he nods at everything. The clever one after you gets a laugh. Walking back, you are aware that you have spent the founder's day the way you spend most days, one step to the side of yourself, and that nobody noticed but you.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 1
+            }
+          ]
+        }
+      ],
+      "suppressYears": 99,
+      "yearGate": [
+        1,
+        2
+      ]
+    },
+    {
+      "id": "opf_thomas_disputation",
+      "phase": [
+        "seminary",
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "ROUTINE",
+      "category": "formation",
+      "baseWeight": 18,
+      "suppressYears": 2,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        },
+        {
+          "type": "feast",
+          "key": "thomas_aquinas"
+        }
+      ],
+      "title": "The Disputation",
+      "body": "The feast of Thomas, and the studium keeps it the old way: a public disputation in the hall after the Mass, a thesis defended by a student, objections from the floor, a professor to determine. This year the thesis is on the nature of law, the student defending is competent and terrified, and {@master_of_students} comes to you before it starts and says that the first objection is yours. He says it the way he says most things, as if it were already agreed. The hall has the diocesan seminarians in it, invited, sitting together at the back, and two professors from the university who did not have to come. The student is looking at you the way you once looked at whoever had your objection.",
+      "flavorPrompt": "The feast of Thomas kept with a public disputation, the first objection handed to the friar, and a terrified student defending.",
+      "choices": [
+        {
+          "id": "the_real_objection",
+          "label": "Make the real objection, the one the thesis cannot easily answer",
+          "default": true,
+          "outcome": "You make the objection that is actually a problem for the thesis, in form, three parts, and sit. The student goes white and then, after a long moment, answers it, not entirely but well, drawing a distinction you had not thought of. The professor determining says it was the best exchange of the day. The seminarians at the back are talking about it in the parking lot. The student finds you afterwards and says thank you, and means something more complicated than that.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "diocesan_clergy",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "op:disputed",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "a_kind_objection",
+          "label": "Make an objection he can answer, and let him shine",
+          "outcome": "You give him one he has surely prepared for, and he answers it cleanly, and the hall relaxes. It is a kindness and everyone in the front three rows knows it. {@master_of_students} says afterwards that the point of the day is the form and not the blood, and that you understood that, in a tone that could go either way.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@master_of_students",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "decline",
+          "label": "Ask him to give the objection to one of the students instead",
+          "outcome": "You say the objections should be the students', not the fathers', and he looks at you and then gives it to a second-year who has been waiting his whole life for it. The second-year does it badly and with enormous joy. The day is the students' day, which is what you said and, it turns out, what you meant.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            },
+            {
+              "target": "relationship",
+              "key": "@master_of_students",
+              "delta": -2
+            }
+          ]
+        }
+      ],
+      "yearGate": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    },
+    {
+      "id": "opf_catherine_the_fraternity",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "ROUTINE",
+      "category": "group",
+      "baseWeight": 16,
+      "suppressYears": 3,
+      "pressure": [
+        "friendship_vs_duty"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        },
+        {
+          "type": "feast",
+          "key": "catherine_siena"
+        }
+      ],
+      "title": "Catherine's People",
+      "body": "St. Catherine's day belongs to the laity. The Dominican fraternity fills the front pews, mostly women, mostly over sixty, with a few younger ones who found the Dialogue on their own and came looking for the people who read it. After the Mass their president finds you in the sacristy. Their chaplain, {@old_friar}, is eighty-one and has told them he cannot do the monthly meeting any more, and they have voted, without asking you, that they would like you. She says it the way people say things they have already decided. The meetings are the second Tuesday, the formation program is six years, and Catherine, she says, did not ask permission either.",
+      "flavorPrompt": "The lay fraternity on Catherine's day, asking for the friar as chaplain after the old one gives it up.",
+      "choices": [
+        {
+          "id": "take_them",
+          "label": "Take the fraternity, second Tuesdays and all",
+          "default": true,
+          "outcome": "You take them. The second Tuesday costs an evening and the formation program costs more than that, but they are the most serious lay people you have met in the order, and by the second year two of the younger ones are bringing friends. {@old_friar} comes to the first meeting to hand them over and says, in front of them, that they are the best thing he did in the house, which is not what he says about anything else.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "op:fraternity_chaplain",
+              "value": true
+            },
+            {
+              "target": "relationship",
+              "key": "@old_friar",
+              "delta": 6
+            }
+          ]
+        },
+        {
+          "id": "prior_decides",
+          "label": "Tell her the prior assigns chaplains, and let him",
+          "outcome": "You say that it is the prior's to give, which is true, and she says that she knows that and has already spoken to him, which is also true. {@prior} gives it to a younger man who wanted it, and the fraternity is polite to you for years afterwards in the way people are polite to someone who said no.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": -3
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": -1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "opf_rosary_the_procession",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "ROUTINE",
+      "category": "chancery",
+      "baseWeight": 18,
+      "suppressYears": 3,
+      "pressure": [
+        "belief_vs_safety"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        },
+        {
+          "type": "feast",
+          "key": "rosary"
+        }
+      ],
+      "title": "The Rosary Procession",
+      "body": "Our Lady of the Rosary, and the priory's procession goes around the block as it has since before anyone alive: the confraternity's banner, the statue on a platform carried by eight men who find it heavier every year, the rosary said aloud and the neighbourhood watching from its porches. This year the city has not renewed the street permit, because nobody applied, because the friar who applied every year is dead. A sergeant at the corner says he can let it go if it keeps to the sidewalk. The pastor of the diocesan parish four blocks away, {@deanery_priest}, has telephoned to say, pleasantly, that his people have been asking why the Dominicans get a procession and he does not, and whether it might be a joint thing next year.",
+      "flavorPrompt": "The Rosary procession without a permit, a sergeant willing to look away, and the diocesan pastor asking to share it.",
+      "choices": [
+        {
+          "id": "sidewalk",
+          "label": "Keep it to the sidewalk and go, banner and all",
+          "default": true,
+          "outcome": "You go on the sidewalk, single file where it narrows, the statue tilting at the corners, and the neighbourhood comes out anyway. The sergeant walks the last block with you and does not cross himself and does not not cross himself. A man on a porch takes his cap off. The permit is applied for the next week, in your name, and the confraternity has a new friar to apply for it, whether you wanted that or not.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "op:procession_kept",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "joint",
+          "label": "Call the pastor back and make it a joint procession, his parish and the priory",
+          "outcome": "You call {@deanery_priest} and say yes, and the route changes to take in his church, and his people join at the halfway point, doubling it. It is no longer entirely the priory's, which two of the older friars mind aloud at dinner. The pastor says, at the end, that it was the best thing to happen in his parish in a year, and says so to the dean.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "diocesan_clergy",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -2
+            },
+            {
+              "target": "relationship",
+              "key": "@deanery_priest",
+              "delta": 8
+            }
+          ]
+        },
+        {
+          "id": "inside",
+          "label": "Keep it inside the church this year, and apply properly for next",
+          "outcome": "You process around the inside of the church, which is long enough for three decades and no more, and the confraternity is disappointed in the way of people who have been disappointed by the Church before and expected it. The permit is applied for. Next year it goes around the block again and nobody remembers this one except the eight men, who were glad of the rest.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": -2
+            },
+            {
+              "target": "reputation",
+              "key": "local_bishop",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "opf_martin_the_door",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "ROUTINE",
+      "category": "finance",
+      "baseWeight": 18,
+      "suppressYears": 2,
+      "pressure": [
+        "money"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        },
+        {
+          "type": "feast",
+          "key": "martin_de_porres"
+        }
+      ],
+      "title": "Martin's Door",
+      "body": "St. Martin de Porres, and the house keeps it the way he would have: the poor of the neighbourhood fed at the priory door from noon. The brother who runs the kitchen has cooked for sixty. By half past twelve there are a hundred and forty, and the line goes down the block, because word has gone round the shelters that the Dominicans feed on Martin's day, and the shelters are full. The brother says, not to you exactly, that there is the community's own dinner in the refectory and it could go out the door in ten minutes if someone said so. {@prior} is at a funeral. The bursar is watching the line from the parlour window with the expression of a man doing arithmetic.",
+      "flavorPrompt": "Martin's day: the poor at the priory door, twice the number cooked for, and the community's own dinner sitting in the refectory.",
+      "choices": [
+        {
+          "id": "the_refectory",
+          "label": "Send the community's dinner out the door",
+          "default": true,
+          "outcome": "You say so. The community's dinner goes out the door in ten minutes and the house eats bread and soup at seven and nobody complains where you can hear it. The bursar says, later, that the food budget is the food budget. {@prior} hears about it at the funeral lunch, from a parishioner, and comes home and says nothing about it for three days, and then at chapter says that Martin would have done it, and that the house did it, and moves on.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "op:martins_door",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "the_parish",
+          "label": "Send the overflow to the diocesan parish's food pantry with a note",
+          "outcome": "You send the second half of the line four blocks to the parish pantry with a note in your hand, and the pantry, which is run by two women who have never turned anyone away, does not turn them away. The pastor telephones that evening. He is not angry, exactly. The two women are.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "diocesan_clergy",
+              "delta": -3
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "the_prior",
+          "label": "Wait for the prior; it is his house",
+          "outcome": "You wait. The kitchen stretches sixty to ninety with rice, and the last fifty go away with bread and an apology. {@prior} comes home and says you were right to wait, and you can see that he does not believe it and is saying it because it is the rule. The brother in the kitchen does not speak to you for a week.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -2
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": -2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "opf_albert_the_scientists",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 14,
+      "suppressYears": 3,
+      "pressure": [
+        "doubt",
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        },
+        {
+          "type": "feast",
+          "key": "albert_great"
+        }
+      ],
+      "title": "Albert's Mass",
+      "body": "St. Albert the Great, and the priory says a Mass for the scientists among the university's Catholics, as it has for years: a small crowd, the chaplain's idea originally, kept up out of stubbornness. This year eleven come, which is a record, and among them a graduate student in physics who stays afterwards and asks you, without preamble, whether you actually believe any of it or whether the Order is a way of being paid to read. She is not hostile. She is asking. Two of the older scientists are standing near enough to hear, and have, you suspect, wondered the same thing for thirty years without asking.",
+      "flavorPrompt": "Albert's Mass for the scientists, and a physics student asking the friar whether he believes it or is paid to read.",
+      "choices": [
+        {
+          "id": "answer_her",
+          "label": "Answer her honestly, the doubt included",
+          "default": true,
+          "outcome": "You say that you believe it, most days, and that on the other days you say the Office anyway, and that Albert dissected fish and wrote about the soul in the same year and did not find the two hard to hold. She listens. She comes to the Mass the next year and brings two people, one of whom stays afterwards with a question of her own. The Order is, in fact, a way of being paid to read, you add; it is just not only that. She laughs.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "op:alberts_question",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "the_argument",
+          "label": "Give her the argument: Albert, Thomas, the five ways in outline",
+          "outcome": "You give her the argument, well, in ten minutes, and she follows it, and says at the end that it is interesting, in the tone of someone who has been shown a proof of something she did not ask about. The older scientists nod. She does not come back, and you think about the question on and off for a year.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

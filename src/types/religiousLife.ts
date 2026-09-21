@@ -290,12 +290,27 @@ export interface OrderDef {
   provinces: ProvinceSeed[];
   /** Saints the order gives its names from, for the religious name and the houses. */
   saints: string[];
+  /** The order's own calendar: the founder, the doctors, the patrons, the devotions. Kept beside the parish's feasts. Dates near the Roman and proper calendars, flagged for verification. */
+  feasts: OrderFeastDef[];
   offices: OrderOfficeDef[];
   credentials: OrderCredentialDef[];
   /** The house's own offices, in the prior's gift. E3 §3.10. */
   houseOffices: HouseOfficeDef[];
   /** The works a friar may ask the provincial for. E3 §3.10. */
   apostolates: ApostolateDef[];
+}
+
+/** A day the order keeps. `kind` says what the day is to the order; scenes hang on `key`. */
+export interface OrderFeastDef {
+  key: string;
+  /** "St. Dominic" */
+  label: string;
+  month: number;
+  day: number;
+  rank: 'solemnity' | 'feast' | 'memorial';
+  kind: 'founder' | 'doctor' | 'patron' | 'saint' | 'devotion' | 'dead';
+  /** One line for the digest when no authored line is rolled. */
+  line: string;
 }
 
 /** What drew him to this order, and how he stands to its province. E3 §4.2–4.3. */

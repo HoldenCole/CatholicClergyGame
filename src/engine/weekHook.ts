@@ -32,6 +32,8 @@ import { requestWeek } from '@/systems/religious/requests';
 import { spendsWeek } from '@/systems/religious/spends';
 import { foundingWeek } from '@/systems/religious/founding';
 import { anniversaryWeek, nameDayWeek } from '@/systems/anniversaries';
+import { orderFeastLine, orderFeastsOfWeek } from '@/systems/religious/feasts';
+import { feastsOfWeek } from './feasts';
 import { sideWorkWeek } from '@/systems/sidework';
 import { requestedChoice } from '@/systems/choice';
 import { confessorWeek } from '@/systems/confessor';
@@ -203,6 +205,17 @@ export function studyWeekHook(deps: EventDeps): WeekHook {
 
 /** Roughly how often a friar's week without a parish loop carries a scene. Invented. */
 const FRIAR_EVENT_CHANCE = 0.12;
+/** On a week with a feast in it, the chance the feast's own scene fires, when one is eligible. */
+const FEAST_SCENE_CHANCE = 0.6;
+
+/** A scene that hangs on one of this week's feasts, drawn ahead of the ordinary pool. Null when none fires. */
+function feastScene(state: GameState, keys: readonly string[], rng: Rng, deps: EventDeps, chance: number): GameState | null {
+  if (!rng.chance(chance)) return null;
+  const pool = deps.pool.filter((e) => !e.beat && (e.requires ?? []).some((c) => c.type === 'feast' && keys.includes(c.key)));
+  if (!pool.length) return null;
+  const [event] = drawEvents(pool, state, rng, 1);
+  return event ? fireOrResolve(state, event, rng, deps) : null;
+}
 
 /**
  * A friar's week after ordination, when his work is the house's and not a
@@ -231,8 +244,16 @@ export function friarWeekHook(deps: EventDeps): WeekHook {
     const named = nameDayWeek(next);
     next = named.state;
     if (named.line) next = addDigestLine(next, named.line);
+    // The order's own calendar: the founder, the doctors, the patrons, the house's saint. E3 OrderDef.feasts.
+    const kept = orderFeastsOfWeek(next);
+    for (const f of kept) next = addDigestLine(next, orderFeastLine(f, rng.derive(`order-feast:${f.key}:${next.clock.week}`)));
     if (isCareerYear(next)) next = religiousYear(careerYear(next, rng), rng);
     if (next.mode.kind !== 'clock') return next;
+    // A feast is more than a line when there is a scene for it: the day itself draws first.
+    if (kept.length) {
+      const fired = feastScene(next, kept.map((f) => f.key), rng.derive(`feast-scene:${next.clock.week}`), deps, FEAST_SCENE_CHANCE);
+      if (fired) { next = fired; if (next.mode.kind !== 'clock') return next; }
+    }
     // The provincial's answer to the letter asking for a work. E3 §3.10.
     next = requestWeek(next, rng.derive(`request:${next.clock.week}`));
     if (next.mode.kind !== 'clock') return next;
@@ -409,7 +430,13 @@ export function parishWeekHook(deps: EventDeps): WeekHook {
       if (event) next = fireOrResolve(next, event, rng, deps);
       if (next.mode.kind !== 'clock' || next.pending.length > 0) return next;
     }
-    if (isPlayedWeek(next)) {
+    // The feasts of the parish's year draw their own scenes on their own week, played or not.
+    const parishRecord = next.world?.parishes.find((p) => p.id === next.assignment?.parishId);
+    const feastKeys = feastsOfWeek(next.clock, parishRecord);
+    const feastFired = feastKeys.length ? feastScene(next, feastKeys, rng.derive(`feast-scene:${next.clock.week}`), deps, FEAST_SCENE_CHANCE) : null;
+    if (feastFired) next = feastFired;
+    if (feastFired && (next.mode.kind !== 'clock' || next.pending.length > 0)) return next;
+    if (isPlayedWeek(next) && !feastFired) {
       // Beat events (a succession) fire only through their beat, never on an ordinary played week.
       const [event] = drawEvents(deps.pool.filter((e) => !e.beat), next, rng, 1, careRelief(next));
       if (event) next = fireOrResolve(next, event, rng, deps);
