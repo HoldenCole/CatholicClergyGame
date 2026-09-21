@@ -153,7 +153,7 @@ function foundationYearOne(state: GameState, f0: Foundation, rng: Rng): { state:
   const expected = expectedVocations(next, f);
   const count = Math.floor(expected) + (rng.derive('vocation').chance(expected - Math.floor(expected)) ? 1 : 0);
   if (count > 0) {
-    const forms = membersOf(next, house).length >= FOUNDATION_YEAR.formsAt || f.works.includes('novitiate');
+    const forms = membersOf(next, house).length >= (factors.formsAt ?? FOUNDATION_YEAR.formsAt) || f.works.includes('novitiate');
     const novitiate = Object.values(next.orderHouses ?? {}).find((h) => h.kind === 'novitiate' && h.provinceId === p.id);
     const target = forms || !novitiate ? house : novitiate;
     const npcs = { ...next.npcs };
@@ -235,7 +235,8 @@ function foundationYearOne(state: GameState, f0: Foundation, rng: Rng): { state:
   }
   // A successor revises the charter, when his reading differs; the founder's is kept when it does not.
   const prior = next.npcs[houses2[f.houseId]!.priorId];
-  if (!iAmPrior && prior && rng.derive('revise').chance(FOUNDATION_YEAR.reviseChance)) {
+  // A charter the chapter voted, or one written to be kept, stays a successor's hand a little.
+  if (!iAmPrior && prior && rng.derive('revise').chance(Math.max(0.02, FOUNDATION_YEAR.reviseChance - factors.keeps))) {
     const reading = readingOf(prior, f.charter);
     const diff = charterDiff(f.charter, reading);
     if (diff.length) {

@@ -1,4 +1,5 @@
-import type { Charter, CharterDial, CharterOptionDef, Foundation, GameState, Npc, ReputationKey } from '@/types';
+import type { Charter, CharterDial, CharterOptionDef, CharterWork, Foundation, GameState, Npc, ReputationKey } from '@/types';
+import { workNeeds } from './founding';
 import type { Rng } from '@/engine/rng';
 import { charterDials, charterOption, religiousOrder } from '@/content/religious';
 import { deliverLetter } from '@/systems/review';
@@ -22,44 +23,85 @@ export const CHARTER_RULES = {
   readingGap: 25,
 } as const;
 
-export const CHARTER_DIALS: readonly CharterDial[] = ['observance', 'liturgy', 'primaryWork', 'university', 'poverty', 'sizeTarget'] as const;
+export const CHARTER_DIALS: readonly CharterDial[] = ['primaryWork', 'secondaryWork', 'tertiaryWork', 'observance', 'liturgy', 'university', 'formation', 'hospitality', 'poverty', 'sizeTarget', 'governance', 'dress', 'language'] as const;
+
+/** The weight of the second and third works against the first. */
+export const WORK_SHARES: Record<'primaryWork' | 'secondaryWork' | 'tertiaryWork', number> = { primaryWork: 1, secondaryWork: 0.5, tertiaryWork: 0.25 };
+
+/** The option a charter holds on a dial: the later dials read as their first option when absent. */
+export function optionIdOf(charter: Charter, dial: CharterDial): string {
+  const v = charter[dial as keyof Charter];
+  if (v === undefined || v === null) return charterDials[dial][0]!.id;
+  return String(v);
+}
+
+/** The works of a charter, first to third, with their shares. */
+export function charterWorks(charter: Charter): { work: CharterWork; share: number }[] {
+  const out: { work: CharterWork; share: number }[] = [{ work: charter.primaryWork, share: 1 }];
+  if (charter.secondaryWork) out.push({ work: charter.secondaryWork, share: WORK_SHARES.secondaryWork });
+  if (charter.tertiaryWork) out.push({ work: charter.tertiaryWork, share: WORK_SHARES.tertiaryWork });
+  return out;
+}
 
 /** The option chosen on each dial. */
 export function charterOptions(charter: Charter): Record<CharterDial, CharterOptionDef> {
-  return { observance: charterOption('observance', charter.observance), liturgy: charterOption('liturgy', charter.liturgy), primaryWork: charterOption('primaryWork', charter.primaryWork), university: charterOption('university', charter.university), poverty: charterOption('poverty', charter.poverty), sizeTarget: charterOption('sizeTarget', charter.sizeTarget) };
+  const out = {} as Record<CharterDial, CharterOptionDef>;
+  for (const d of CHARTER_DIALS) out[d] = charterOption(d, optionIdOf(charter, d));
+  return out;
 }
 
 /** Whether an option may be written by this man in this diocese, and why not. */
-export function optionAllowed(state: GameState, dial: CharterDial, id: string, dioceseId: string): { ok: boolean; why?: string } {
+export function optionAllowed(state: GameState, dial: CharterDial, id: string, dioceseId: string, charter?: Charter): { ok: boolean; why?: string } {
   const def = charterOption(dial, id);
   const r = state.religious;
   if (def.orders && r && !def.orders.includes(r.order)) return { ok: false, why: 'Not this order\'s to write.' };
-  if (def.needsUniversity && !(worldOf(state, dioceseId)?.diocese.visible.institutions.includes('catholic_university'))) return { ok: false, why: 'No university in the diocese.' };
+  const world = worldOf(state, dioceseId);
+  if (def.needsUniversity && !(world?.diocese.visible.institutions.includes('catholic_university'))) return { ok: false, why: 'No university in the diocese.' };
+  if (def.needsLatino && !(world?.parishes.some((p) => p.terrain === 'latino'))) return { ok: false, why: 'No Spanish-speaking parishes in the diocese.' };
+  if (dial === 'primaryWork' || dial === 'secondaryWork' || dial === 'tertiaryWork') {
+    if (id !== 'none') {
+      const need = workNeeds(state, dioceseId)[id as CharterWork];
+      if (need?.filled) return { ok: false, why: need.why };
+      if (charter) {
+        const others = (['primaryWork', 'secondaryWork', 'tertiaryWork'] as const).filter((d) => d !== dial).map((d) => optionIdOf(charter, d));
+        if (others.includes(id)) return { ok: false, why: 'Already one of the house\'s works.' };
+      }
+    }
+    if (dial === 'tertiaryWork' && charter && optionIdOf(charter, 'secondaryWork') === 'none' && id !== 'none') return { ok: false, why: 'A third work wants a second first.' };
+  }
   return { ok: true };
 }
 
 /** What the dials sum to: the vocations multiplier, the observance the house keeps, its cohesion rest, income a year, house reputations a year, and the faction it rubs. */
-export function charterFactors(charter: Charter): { vocations: number; observance: number; cohesion: number; income: number; reputations: Partial<Record<ReputationKey, number>>; friction: { observant: number; progressive: number }; daughterAt: number } {
-  const opts = Object.values(charterOptions(charter));
+export function charterFactors(charter: Charter): { vocations: number; observance: number; cohesion: number; income: number; reputations: Partial<Record<ReputationKey, number>>; friction: { observant: number; progressive: number }; daughterAt: number; formsAt?: number; keeps: number } {
+  const opts = charterOptions(charter);
   const reputations: Partial<Record<ReputationKey, number>> = {};
   const friction = { observant: 0, progressive: 0 };
   let vocations = 1;
   let cohesion = CHARTER_RULES.cohesion;
   let income = 0;
   let daughterAt = 16;
-  for (const o of opts) {
-    vocations *= o.vocations ?? 1;
-    cohesion += o.cohesion ?? 0;
-    income += o.income ?? 0;
-    if (o.friction) friction[o.friction] += 1;
-    for (const [k, v] of Object.entries(o.reputations ?? {})) reputations[k as ReputationKey] = (reputations[k as ReputationKey] ?? 0) + (v ?? 0);
-    if (o.daughterAt) daughterAt = o.daughterAt;
+  let formsAt: number | undefined;
+  let keeps = 0;
+  for (const d of CHARTER_DIALS) {
+    const o = opts[d];
+    if (o.id === 'none' && (d === 'secondaryWork' || d === 'tertiaryWork')) continue;
+    // The second and third works count at a share of the first.
+    const share = d === 'secondaryWork' || d === 'tertiaryWork' ? WORK_SHARES[d] : 1;
+    vocations *= 1 + ((o.vocations ?? 1) - 1) * share;
+    cohesion += (o.cohesion ?? 0) * share;
+    income += (o.income ?? 0) * share;
+    if (o.friction && share === 1) friction[o.friction] += 1;
+    for (const [k, v] of Object.entries(o.reputations ?? {})) reputations[k as ReputationKey] = (reputations[k as ReputationKey] ?? 0) + (v ?? 0) * share;
+    if (o.daughterAt && d === 'primaryWork') daughterAt = o.daughterAt;
+    if (o.formsAt !== undefined) formsAt = o.formsAt;
+    keeps += o.keeps ?? 0;
   }
   // Size target sets the threshold last; the work only suggests it.
   const size = charterOption('sizeTarget', charter.sizeTarget);
   if (size.daughterAt) daughterAt = Math.round((daughterAt + size.daughterAt) / 2);
   // The house at odds with the province's fault line: friction with whichever side it sits away from.
-  return { vocations, observance: charterOption('observance', charter.observance).observance ?? 55, cohesion, income, reputations, friction, daughterAt };
+  return { vocations, observance: charterOption('observance', charter.observance).observance ?? 55, cohesion: Math.round(cohesion), income: Math.round(income), reputations, friction, daughterAt, ...(formsAt !== undefined ? { formsAt } : {}), keeps };
 }
 
 /** A man's own reading of a charter: what he would change, from who he is. Deterministic in the man. E3 §9.6–9.7. */
@@ -67,16 +109,20 @@ export function readingOf(npc: Npc, charter: Charter): Charter {
   const c = { ...charter };
   const gap = npc.alignment - charter.alignment;
   if (gap > CHARTER_RULES.readingGap) {
-    if (c.observance === 'strict') c.observance = 'moderate';
-    else if (c.observance === 'moderate' && npc.stats.piety < 45) c.observance = 'relaxed';
+    if (c.observance === 'primitive' || c.observance === 'strict') c.observance = 'moderate';
+    else if (c.observance === 'moderate' && npc.stats.piety < 45) c.observance = 'mitigated';
+    else if (c.observance === 'mitigated' && npc.stats.piety < 40) c.observance = 'relaxed';
     if (c.liturgy === 'order_rite' || c.liturgy === 'chanted') c.liturgy = 'mixed';
     else if (c.liturgy === 'mixed' && gap > 45) c.liturgy = 'vernacular';
+    if (c.dress === 'habit_always') c.dress = 'habit_in_house';
     c.alignment = Math.round((charter.alignment + npc.alignment) / 2);
   } else if (gap < -CHARTER_RULES.readingGap) {
-    if (c.observance === 'relaxed') c.observance = 'moderate';
+    if (c.observance === 'relaxed') c.observance = 'mitigated';
+    else if (c.observance === 'mitigated') c.observance = 'moderate';
     else if (c.observance === 'moderate' && npc.stats.piety >= 55) c.observance = 'strict';
-    if (c.liturgy === 'vernacular') c.liturgy = 'mixed';
+    if (c.liturgy === 'vernacular' || c.liturgy === 'polyphony') c.liturgy = 'mixed';
     else if (c.liturgy === 'mixed' && gap < -45) c.liturgy = 'chanted';
+    if (c.dress === 'clerics') c.dress = 'habit_in_house';
     c.alignment = Math.round((charter.alignment + npc.alignment) / 2);
   }
   if (npc.stats.administration >= 65 && c.sizeTarget === 'small') c.sizeTarget = 'large';
@@ -85,18 +131,18 @@ export function readingOf(npc: Npc, charter: Charter): Charter {
 
 /** The dials that differ between two charters. */
 export function charterDiff(a: Charter, b: Charter): { dial: CharterDial; from: string; to: string }[] {
-  return CHARTER_DIALS.filter((d) => a[d] !== b[d]).map((d) => ({ dial: d, from: String(a[d]), to: String(b[d]) }));
+  return CHARTER_DIALS.filter((d) => optionIdOf(a, d) !== optionIdOf(b, d)).map((d) => ({ dial: d, from: optionIdOf(a, d), to: optionIdOf(b, d) }));
 }
 
 export function dialLabel(dial: CharterDial): string {
-  return { observance: 'Observance', liturgy: 'Liturgy', primaryWork: 'Primary work', university: 'The university', poverty: 'Poverty', sizeTarget: 'Size' }[dial];
+  return { observance: 'Observance', liturgy: 'Liturgy', primaryWork: 'Primary work', secondaryWork: 'Second work', tertiaryWork: 'Third work', university: 'The university', poverty: 'Poverty', sizeTarget: 'Size', formation: 'Formation', hospitality: 'Hospitality', governance: 'Governance', dress: 'Dress', language: 'Language' }[dial];
 }
 
 /** The charter as flags, for the scenes: `charter:<dial>:<option>`, the old ones cleared. */
 export function charterFlags(flags: GameState['flags'], charter: Charter): GameState['flags'] {
   const out = { ...flags };
   for (const k of Object.keys(out)) if (k.startsWith('charter:')) delete out[k];
-  for (const d of CHARTER_DIALS) out[`charter:${d}:${String(charter[d])}`] = true;
+  for (const d of CHARTER_DIALS) out[`charter:${d}:${optionIdOf(charter, d)}`] = true;
   return out;
 }
 
@@ -106,14 +152,14 @@ export function writeCharter(state: GameState, charter: Charter, rng: Rng): Game
   const pet = r?.petition;
   const p = state.province;
   if (!r || !pet || pet.outcome !== 'approved' || !p) return state;
-  for (const d of CHARTER_DIALS) if (!optionAllowed(state, d, String(charter[d]), pet.dioceseId).ok) return state;
+  for (const d of CHARTER_DIALS) if (!optionAllowed(state, d, optionIdOf(charter, d), pet.dioceseId, charter).ok) return state;
   const week = state.clock.week;
   const factors = charterFactors(charter);
   const work = charterOption('primaryWork', charter.primaryWork);
   const kind = work.houseKind ?? 'priory';
   const site = foundationSites(state).find((s) => s.dioceseId === pet.dioceseId);
   const cost = site?.cost ?? 600_000;
-  const works = [charter.primaryWork, ...(charter.university !== 'none' ? ['chaplaincy'] : [])];
+  const works = [...charterWorks(charter).map((w) => w.work), ...(charter.university !== 'none' && !charterWorks(charter).some((w) => w.work === 'chaplaincy') ? ['chaplaincy'] : [])];
   const founded = foundHouse({ ...state, province: { ...p, finances: { ...p.finances, balance: p.finances.balance - cost } } }, pet.dioceseId, kind, rng.derive('found'), { priorId: 'player', size: CHARTER_RULES.size, observance: factors.observance, alignment: charter.alignment, works, budget: Math.round(cost * 0.15) });
   if (!founded.line) {
     // The province could not, after all, find the men: the approval lapses, and the idea stays filed.
@@ -144,11 +190,17 @@ export function reviseCharter(state: GameState, houseId: string, dial: CharterDi
   const r = state.religious;
   const f = r?.foundations?.find((x) => x.houseId === houseId);
   const house = state.orderHouses?.[houseId];
-  if (!r || !f || !house || String(f.charter[dial]) === to) return state;
+  if (!r || !f || !house || optionIdOf(f.charter, dial) === to) return state;
   if (!charterDials[dial].some((o) => o.id === to)) return state;
-  const charter = { ...f.charter, [dial]: to } as Charter;
+  if (!optionAllowed(state, dial, to, f.dioceseId, f.charter).ok) return state;
+  const charter = { ...f.charter } as Charter;
+  if ((dial === 'secondaryWork' || dial === 'tertiaryWork') && to === 'none') delete charter[dial];
+  else (charter as unknown as Record<string, string>)[dial] = to;
+  // A third work cannot stand without a second.
+  if (dial === 'secondaryWork' && to === 'none') delete charter.tertiaryWork;
   const factors = charterFactors(charter);
-  const revised: Foundation = { ...f, charter, revisions: [...f.revisions, { week: state.clock.week, by, dial, from: String(f.charter[dial]), to }] };
+  const revised: Foundation = { ...f, charter, revisions: [...f.revisions, { week: state.clock.week, by, dial, from: optionIdOf(f.charter, dial), to }] };
   const mine = !f.daughterOf;
-  return { ...state, religious: { ...r, foundations: r.foundations!.map((x) => (x.houseId === houseId ? revised : x)) }, orderHouses: { ...state.orderHouses, [houseId]: { ...house, observance: factors.observance } }, flags: mine ? charterFlags(state.flags, charter) : state.flags };
+  const works = [...new Set([...house.works.filter((w) => !charterWorks(f.charter).some((x) => x.work === w) || charterWorks(charter).some((x) => x.work === w)), ...charterWorks(charter).map((w) => w.work)])];
+  return { ...state, religious: { ...r, foundations: r.foundations!.map((x) => (x.houseId === houseId ? revised : x)) }, orderHouses: { ...state.orderHouses, [houseId]: { ...house, observance: factors.observance, works } }, flags: mine ? charterFlags(state.flags, charter) : state.flags };
 }
