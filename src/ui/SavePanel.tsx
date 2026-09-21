@@ -38,7 +38,7 @@ export default function SavePanel() {
 
   const save = (id?: string) => {
     clearError();
-    const label = name.trim();
+    const label = name.trim() || (game ? describeSave(game) : '');
     saveToSlot({ ...(id ? { id } : {}), ...(label ? { name: label } : {}) });
     setName('');
     setNote(useGameStore.getState().error ? null : id ? 'Saved over that one.' : 'Saved.');
@@ -92,7 +92,7 @@ export default function SavePanel() {
         <>
           <p className="ink-muted text-xs">This run: {describeSave(game)}.</p>
           <div className="mt-2 flex flex-wrap items-center gap-2">
-            <input className="pinput min-w-0 flex-1 text-sm" placeholder="Name this save (optional)" value={name} onChange={(e) => setName(e.target.value)} />
+            <input className="pinput min-w-0 flex-1 text-sm" placeholder={game ? describeSave(game) : 'Name this save'} value={name} onChange={(e) => setName(e.target.value)} />
             <button className="pbtn" disabled={full} onClick={() => save()}>Save to a new slot</button>
           </div>
           {full && <p className="ink-faint mt-1 text-xs">The shelf holds {SLOTS.max}. Save over one below, or delete one.</p>}

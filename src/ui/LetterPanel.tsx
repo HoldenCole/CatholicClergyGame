@@ -5,6 +5,7 @@ import Panel from './Panel';
 export default function LetterPanel() {
   const game = useGameStore((s) => s.game);
   const read = useGameStore((s) => s.readLetter);
+  const seek = useGameStore((s) => s.seekDirector);
   if (!game || game.mode.kind !== 'letter') return null;
   const l = game.mode.letter;
   return (
@@ -23,7 +24,10 @@ export default function LetterPanel() {
           ))}
         </dl>
       )}
-      <button className="pbtn pbtn-primary mt-4" onClick={read}>{l.sort === 'review' ? 'Another year' : 'Put it in the drawer'}</button>
+      <div className="mt-4 flex gap-2">
+        <button className="pbtn pbtn-primary" onClick={read}>{l.sort === 'review' ? 'Another year' : 'Put it in the drawer'}</button>
+        {l.action === 'seek_director' && <button className="pbtn" onClick={() => { read(); seek(); }}>Look for another</button>}
+      </div>
     </Panel>
   );
 }

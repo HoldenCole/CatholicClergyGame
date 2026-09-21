@@ -1,3 +1,5 @@
+import { obligationDefs } from '@/content/parish';
+import { spendDefs } from '@/content/religious';
 import type { GameState, Letter } from '@/types';
 import { sinceArrival } from './trajectory';
 import { careOf, strainOf, strainWord } from './week';
@@ -70,6 +72,16 @@ export function yearInReview(state: GameState): { letter: Letter; baseline: NonN
   }
   const bondsThisYear = Object.values(state.npcs).flatMap((n) => (n.bonds ?? []).filter((b) => b.week > week - 52 && b.week <= week).map((b) => ({ n, b })));
   if (bondsThisYear.length) rows.push({ label: 'The people this year', value: bondsThisYear.slice(0, 4).map(({ n, b }) => `${bondWord(b)} (${n.name.last})`).join('; ') + (bondsThisYear.length > 4 ? `; and ${bondsThisYear.length - 4} more` : '') });
+  // What he did with the hours: the friar's top spends, the pastor's obligations run full and at minimum.
+  if (state.religious && !state.parish) {
+    const top = Object.entries(state.religious.spends ?? {}).filter(([, ap]) => ap > 0).sort((a, b) => b[1] - a[1]).slice(0, 3).map(([id]) => spendDefs.find((d) => d.id === id)?.label.toLowerCase()).filter((x): x is string => !!x);
+    rows.push({ label: 'The hours went to', value: top.length ? top.join(', ') : 'nothing in particular' });
+  } else if (state.parish) {
+    const q = state.parish.routine.obligations;
+    const full = obligationDefs.filter((d) => q[d.key] === 'invested').map((d) => d.label.toLowerCase());
+    const min = obligationDefs.filter((d) => q[d.key] === 'min').map((d) => d.label.toLowerCase());
+    rows.push({ label: 'The hours went to', value: `${full.length ? `full on ${full.join(', ')}` : 'nothing run full'}${min.length ? `; the minimum on ${min.join(', ')}` : ''}` });
+  }
   rows.push({ label: 'You', value: `${strainWord(strainOf(state))}, ${Math.round(years)} years a priest` });
   const book = ministryLine(state);
   if (book) rows.push({ label: 'The book, so far', value: book.replace(/\.$/, '') });

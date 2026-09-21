@@ -1,5 +1,5 @@
 import { useGameStore } from '@/engine/store';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { publicRecord } from '@/systems/record';
 import { arcHistory, arcLines } from '@/systems/arcs';
 import { LANE_LABEL, readDigest, type Lane } from '@/systems/digest';
@@ -17,10 +17,18 @@ function arrow(sign: -1 | 0 | 1): string {
 }
 
 /** The weeks, read: a month at a glance, then each week in lanes with the money and the pews against the week before. */
-function WeeksSheet({ digest, going }: { digest: DigestWeek[]; going: string[] }) {
+function WeeksSheet({ digest, going, seed }: { digest: DigestWeek[]; going: string[]; seed: string }) {
   // The filter is kept across the desk's tabs, so a man reading the money does not start over each time he looks away.
   const filter = useUiStore((s) => s.digestLane);
   const setFilter = useUiStore((s) => s.setDigestLane);
+  // Where he stopped reading last time: a rule under it, and the mark moves to now once this visit is over.
+  const prefs = useUiStore((s) => s.prefs);
+  const setPrefs = useUiStore((s) => s.setPrefs);
+  const [seenTo] = useState(() => prefs.readWeeks?.[seed] ?? -1);
+  const top = digest.length ? Math.max(...digest.map((d) => d.week)) : -1;
+  useEffect(() => {
+    if (top >= 0 && (prefs.readWeeks?.[seed] ?? -1) < top) setPrefs({ readWeeks: { ...(prefs.readWeeks ?? {}), [seed]: top } });
+  }, [top, seed, prefs.readWeeks, setPrefs]);
   const [flavor, setFlavor] = useState(false);
   const [more, setMore] = useState(0);
   const weeks = readDigest(digest, SHOWN + more);
@@ -44,7 +52,8 @@ function WeeksSheet({ digest, going }: { digest: DigestWeek[]; going: string[] }
       ) : (
         <ol className="flex flex-col gap-2 text-sm">
           {shown.map((w) => (
-            <li key={w.week} className={'border-t rule pt-1.5 ' + (w.eventful ? '' : 'ink-muted')}>
+            <li key={w.week} className={'border-t rule pt-1.5 ' + (w.eventful ? '' : 'ink-muted') + (w.week === seenTo && seenTo < top ? ' border-t-2 border-[#7a1f1f]/50' : '')}>
+              {w.week === seenTo && seenTo < top && <div className="ink-wine mb-1 text-[11px] uppercase tracking-[0.18em]">You had read to here</div>}
               <div className="flex items-baseline gap-2">
                 <span className="ink-faint w-8 shrink-0 text-right text-xs">{w.week}</span>
                 <span className="flex-1 text-xs">{w.head}</span>
@@ -94,7 +103,7 @@ export default function DigestPanel() {
 
   return (
     <>
-      <WeeksSheet digest={game.digest} going={game.parish ? whatIsGoingOn(game) : []} />
+      <WeeksSheet digest={game.digest} going={game.parish ? whatIsGoingOn(game) : []} seed={game.seed} />
       {game.character && (
         <>
         <Sheet title="What is running">

@@ -91,6 +91,7 @@ export default function JobsPanel() {
               <p className="ink-muted text-xs leading-relaxed">
                 What you would go to if asked: the chancery reads it, the letters that match come likelier, and at ordination a good record turns an interest into a choice. Up to {INTERESTS.max} at once; more reads as asking for everything.
               </p>
+              {full && <p className="ink-faint mt-1 text-xs">{INTERESTS.max} is the most the chancery will read; drop one to add another.</p>}
               <div className="mt-2 flex flex-wrap gap-1">
                 {INTEREST_DEFS.map((d) => {
                   const on = have.includes(d.id);

@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useGameStore } from '@/engine/store';
 import { eventById } from '@/content';
 import { visibleChoices } from '@/engine/events';
+import { useUiStore } from './uiStore';
 
 /** Keys a typing field should keep for itself. */
 function inField(target: EventTarget | null): boolean {
@@ -37,6 +38,16 @@ export function useHotkeys(): void {
         return;
       }
       const key = e.key.toLowerCase();
+      // Escape closes whatever is on the table that has no decision in it: a letter, an offer unread, the furnishing.
+      if (key === 'escape') {
+        const ui = useUiStore.getState();
+        if (game.mode.kind === 'letter') { e.preventDefault(); st.readLetter(); return; }
+        const unread = game.offers.find((o) => !o.read);
+        if (game.mode.kind === 'clock' && unread) { e.preventDefault(); st.markOfferRead(unread.offerId); return; }
+        if (game.mode.kind === 'director' && !(game.phase === 'seminary' && (game.seminary?.year ?? 1) < 2 && !game.flags['direction:chosen'])) { e.preventDefault(); st.declineDirectors(); return; }
+        if (ui.furnishing) { e.preventDefault(); ui.furnish(null); return; }
+        return;
+      }
       if (key === 'n' || key === ' ') {
         // A decision on the table holds the clock; the key does not push past it.
         if (pending || game.mode.kind !== 'clock' || game.offers.some((o) => !o.read)) return;

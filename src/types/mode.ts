@@ -73,4 +73,6 @@ export interface Letter {
   /** Short rows the sheet can print, label and value. */
   rows?: { label: string; value: string }[];
   week: number;
+  /** A thing the letter lets the man do from it: look for a director again. */
+  action?: 'seek_director';
 }

@@ -181,7 +181,7 @@ function HouseSheet({ game, f, addWork, revise, heir, setHeir, where, setWhere, 
             return (
               <li key={w.id} className="flex items-start justify-between gap-2">
                 <span className={has ? '' : 'ink-muted'}><span className="font-medium">{w.label}</span> <span className="ink-faint">· {w.men} men · ${Math.round(w.cost / 1000)}k</span><br /><span className="ink-faint">{w.line}</span></span>
-                {has ? <span className="ink-faint shrink-0">open</span> : <button className="pbtn shrink-0 px-2 py-0 text-xs" disabled={!ok} title={!uni ? 'No university here.' : ''} onClick={() => addWork(w.id)}>Open it</button>}
+                {has ? <span className="ink-faint shrink-0">open</span> : ok ? <button className="pbtn shrink-0 px-2 py-0 text-xs" onClick={() => addWork(w.id)}>Open it</button> : <span className="ink-faint shrink-0 text-right">{!uni ? 'no university here' : members.length + 1 < w.men ? `${w.men - members.length - 1} more men` : 'not the money'}</span>}
               </li>
             );
           })}

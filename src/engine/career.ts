@@ -6,7 +6,7 @@ import { openingBlurb, playerCandidate, refreshOpenings, rivalsFor } from '@/sys
 import { advanceTrajectories, rollTrajectories } from '@/systems/trajectories';
 import { formerReligiousArrives, institutesYear } from '@/systems/institutesDrift';
 import { driftRome, successionYear } from '@/systems/succession';
-import { directionYear } from '@/systems/direction';
+import { directionOf, directionYear } from '@/systems/direction';
 import { religiousYear } from '@/systems/groups';
 import { handoffProject } from '@/systems/projects';
 import { ARC } from './parish';
@@ -78,9 +78,12 @@ export function careerYear(state: GameState, rng: Rng): GameState {
 
   // A provincial in another city decides something: the director is moved, or a
   // sister who runs a group is. Neither is the bishop's to keep. DESIGN §9.4, §10.5.
+  const hadDirector = !!directionOf(next);
   const direction = directionYear(next, rng.derive(`direction:${state.clock.week}`));
   next = direction.state;
   if (direction.line) next = addDigest(next, [direction.line]);
+  // A director lost comes as a letter with the next step in it, not only a line in the record.
+  if (hadDirector && !directionOf(next) && direction.line) next = deliverLetter(next, { sort: next.religious ? 'provincial' : 'bishop', title: 'Your director', body: [direction.line, 'The hour is empty now, and the drain on a man\'s prayer that it slowed is not. The men who would see you are on the You sheet, or from here.'], week: next.clock.week, action: 'seek_director' });
   const sisters = religiousYear(next, rng.derive(`sisters:${state.clock.week}`));
   next = sisters.state;
   if (sisters.lines.length) next = addDigest(next, sisters.lines);
