@@ -1,7 +1,8 @@
+import { useEffect } from 'react';
 import { useGameStore } from '@/engine/store';
 import { useUiStore } from './uiStore';
 
-type Key = 'seminary' | 'parish' | 'study' | 'posting';
+type Key = 'seminary' | 'parish' | 'study' | 'posting' | 'house';
 
 const TEXT: Record<Key, { title: string; from: string; paragraphs: string[] }> = {
   seminary: {
@@ -31,6 +32,15 @@ const TEXT: Record<Key, { title: string; from: string; paragraphs: string[] }> =
       'The diocese hears how you do here. Letters still come, and some will be about what you will be when you return.',
     ],
   },
+  house: {
+    title: 'A word from the prior',
+    from: 'Said at the door of your cell, the first evening',
+    paragraphs: [
+      'The bell is the week. The House sheet is the common life as you keep it and the permissions you ask for; the Week sheet is the hours the bell leaves you, and what they build, and the province comes to know a man by what he does with them. Jobs are the offices of the house in my gift and the works beyond it in the provincial\'s; you write, and you wait.',
+      'The order is in charge of you. The bishop may be fond of you or not; he asks the provincial for you, and the provincial answers. Letters come from him, from the provincial, and from your brothers, and silence on a letter is an answer the province remembers.',
+      'The You sheet is what you are known for, your director, and the desk. The Foundation sheet, when you are in solemn vows, is where a house of your own begins. The Record keeps the weeks. Space is the next one.',
+    ],
+  },
   posting: {
     title: 'A word from the man before you',
     from: 'A note in the top drawer',
@@ -46,6 +56,7 @@ function keyFor(game: NonNullable<ReturnType<typeof useGameStore.getState>['game
   if (game.parish) return 'parish';
   if (game.study) return game.study.city === 'rome' || game.study.city === 'washington' ? 'study' : 'posting';
   if (game.seminary) return 'seminary';
+  if (game.religious && game.flags.ordained) return 'house';
   return null;
 }
 
@@ -56,7 +67,20 @@ export default function Briefing() {
   const setPrefs = useUiStore((s) => s.setPrefs);
   if (!game || !prefs.briefings) return null;
   const key = keyFor(game);
-  if (!key || prefs.seen.includes(key)) return null;
+  const open = !!key && !prefs.seen.includes(key);
+  // Enter reads it: the note is in the way of the week, and a key is a button pressed sooner.
+  useEffect(() => {
+    if (!open || !key) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== 'Enter' && e.key !== 'Escape') return;
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      setPrefs({ seen: [...prefs.seen, key] });
+    };
+    window.addEventListener('keydown', onKey, true);
+    return () => window.removeEventListener('keydown', onKey, true);
+  }, [open, key, prefs.seen, setPrefs]);
+  if (!key || !open) return null;
   const t = TEXT[key];
   return (
     <div className="scrim absolute inset-0 z-20 flex items-start justify-center overflow-y-auto p-6">

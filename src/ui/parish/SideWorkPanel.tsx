@@ -36,7 +36,7 @@ export default function SideWorkPanel() {
             {offers.map((o) => (
               <li key={o.def.id} className="flex items-start justify-between gap-2">
                 <div className="min-w-0">
-                  <div>{o.def.label} <span className="ink-faint text-xs">· {desk ? `${o.def.apPerWeek} block${o.def.apPerWeek === 1 ? '' : 's'}` : `${hoursOf(o.def.apPerWeek)} hours`} a week · {o.def.weeks < 40 ? `${o.def.weeks} weeks` : `about ${Math.max(1, Math.round(o.def.weeks / 52))} year${Math.round(o.def.weeks / 52) === 1 ? '' : 's'}`}</span></div>
+                  <div>{o.def.label} <span className="ink-faint text-xs">· {desk ? `${o.def.apPerWeek} block${o.def.apPerWeek === 1 ? '' : 's'}` : `${hoursOf(o.def.apPerWeek)} hours`} a week · {o.def.weeks < 40 ? `${o.def.weeks} weeks` : (() => { const y = Math.max(1, Math.round(o.def.weeks / 52)); return `about ${y} year${y === 1 ? '' : 's'}`; })()}</span></div>
                   <div className="ink-muted text-xs">{o.def.blurb}</div>
                 </div>
                 <button className="pbtn shrink-0 px-2 py-0 text-xs" disabled={!o.available} title={o.available ? 'Take it on' : o.why} onClick={() => start(o.def.id)}>

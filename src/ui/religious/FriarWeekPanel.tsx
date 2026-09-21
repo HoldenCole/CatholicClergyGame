@@ -59,6 +59,7 @@ export default function FriarWeekPanel() {
             <p className="ink-muted text-xs leading-relaxed">
               After the common life, the office, the work, and the asks, {budget} block{budget === 1 ? '' : 's'} of the week are yours.
               {left > 0 ? ` ${left} still unspoken for; they go nowhere in particular.` : ' All of them are given.'} What they build, they build slowly, and the province comes to know you by it.
+              {used > 0 && <button className="pbtn-link ml-2" onClick={() => { for (const d of spendDefs) if ((spends[d.id] ?? 0) > 0) setSpend(d.id, 0); }}>clear them</button>}
             </p>
             <ul className="mt-2 flex flex-col gap-1.5">
               {spendDefs.map((d) => {

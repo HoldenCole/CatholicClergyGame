@@ -1,4 +1,4 @@
-import type { Chapter, ChapterLevel, ChapterOffice, GameState } from '@/types';
+import type { Letter, Chapter, ChapterLevel, ChapterOffice, GameState } from '@/types';
 import type { Rng } from '@/engine/rng';
 import { createRng } from '@/engine/rng';
 import { applyEffects } from '@/engine/effects';
@@ -269,4 +269,36 @@ export function chapterYear(state: GameState): GameState {
 export function termOver(state: GameState): boolean {
   const o = state.religious?.office;
   return !!o && state.clock.week >= o.endWeek;
+}
+
+/**
+ * A chapter the man is neither in nor before: not an elector, not a
+ * contender. He watches from the gallery, and there is nothing for him to
+ * decide, so the vote is held and confirmed at once and he reads the
+ * result as a letter. QOL: no clicking through a room he has no voice in.
+ */
+export function chapterFromTheGallery(state: GameState, rng: Rng): { state: GameState; letter?: Letter } {
+  const r = state.religious;
+  const chapter = r?.chapter;
+  if (!r || !chapter?.office) return { state };
+  if (chapter.electorIds.includes(PLAYER_ID) || chapter.candidateIds.includes(PLAYER_ID)) return { state };
+  let next = holdElection(state);
+  const out = next.religious?.chapter?.outcome;
+  if (!out) return { state };
+  next = resolveElection(next, rng, true);
+  const elected = next.npcs[next.religious?.chapter?.outcome?.electedId ?? ''];
+  const second = next.religious?.chapter?.outcome?.second;
+  const order = religiousOrder(r.order);
+  const what = chapter.office === 'prior' ? `prior of ${next.orderHouses?.[chapter.bodyId]?.name ?? 'the house'}` : chapter.office === 'provincial' ? order.governance.provincialTitle : 'the office';
+  const rounds = next.religious?.chapter?.ballots.length ?? 0;
+  next = closeChapter(next);
+  const letter: Letter = {
+    sort: 'provincial',
+    title: chapter.office === 'prior' ? 'The house has elected' : 'The chapter has elected',
+    body: [
+      `${elected ? `${elected.title} ${elected.name.last}` : 'A man'} is ${what}, elected on the ${rounds === 1 ? 'first' : rounds === 2 ? 'second' : rounds === 3 ? 'third' : `${rounds}th`} ballot${second ? ', after the first choice declined or was not confirmed' : ''}. You were not of the body this time, and heard it from the gallery, which is where most of a province hears most things.`,
+    ],
+    week: state.clock.week,
+  };
+  return { state: next, letter };
 }

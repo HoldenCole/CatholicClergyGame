@@ -32,6 +32,12 @@ export function refreshOpenings(state: GameState, rng: Rng): { state: GameState;
   if (!world) return { state, lines: [] };
   const year = calendarYear(state);
   const lines: string[] = [];
+  const churn: { line: string; known: boolean; why: string }[] = [];
+  const knows = (id: string): boolean => {
+    const n = state.npcs[id];
+    if (!n) return false;
+    return (state.parish?.deanery?.priestIds ?? []).includes(id) || (state.religious?.deanery?.priestIds ?? []).includes(id) || (state.religious?.diocesanClassmateIds ?? []).includes(id) || n.relationship >= 15 || n.tags.includes('spiritual_director') || n.tags.includes('mentor_priest');
+  };
   const npcs = { ...state.npcs };
   let openings = state.openings.filter((o) => state.clock.week - o.week < OPENINGS.openingLifeWeeks);
   const shortage = world.diocese.hidden.shortage;
@@ -48,7 +54,7 @@ export function refreshOpenings(state: GameState, rng: Rng): { state: GameState;
     else if (rng.chance(OPENINGS.transferChancePerYear)) why = 'moved';
     if (!why) return p;
     npcs[pastor.id] = { ...pastor, status: why === 'died' ? 'dead' : why === 'retired' ? 'retired' : 'active', tags: why === 'moved' ? pastor.tags.filter((t) => !t.startsWith('pastor:')) : pastor.tags };
-    lines.push(`${pastor.title} ${pastor.name.last} of ${p.name} has ${why === 'moved' ? 'been moved' : why}.`);
+    churn.push({ line: `${pastor.title} ${pastor.name.last} of ${p.name} has ${why === 'moved' ? 'been moved' : why}.`, known: knows(pastor.id), why });
     // A priest of the deanery may be said to want it.
     const neighbors = (state.parish?.deanery?.priestIds ?? []).filter((id) => npcs[id]?.status === 'active' && id !== pastor.id);
     const rival = neighbors.length && rng.chance(DEANERY_RIVAL_CHANCE) ? rng.pick([...neighbors].sort()) : undefined;
@@ -67,6 +73,15 @@ export function refreshOpenings(state: GameState, rng: Rng): { state: GameState;
     return p;
   });
 
+  // The men he knows by name; the rest as a count, so a friar's record is not a wall of pastors he never met.
+  const named = churn.filter((c) => c.known || (churn.length <= 3 && !state.religious));
+  for (const c of named) lines.push(c.line);
+  const rest = churn.filter((c) => !named.includes(c));
+  if (rest.length) {
+    const n = (why: string) => rest.filter((c) => c.why === why).length;
+    const parts = [n('moved') ? `${n('moved')} pastor${n('moved') === 1 ? '' : 's'} moved` : '', n('retired') ? `${n('retired')} retired` : '', n('died') ? `${n('died')} died` : ''].filter(Boolean);
+    lines.push(`Across the diocese, ${parts.join(', ')}${named.length ? ' besides' : ''}; the board has the openings.`);
+  }
   const elsewhere = rng.int(OPENINGS.elsewherePerYear[0], Math.min(OPENINGS.elsewherePerYear[1], shortage));
   for (let i = 0; i < elsewhere; i++) {
     openings.push({

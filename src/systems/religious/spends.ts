@@ -137,5 +137,13 @@ export function spendsWeek(state: GameState, rng: Rng): { state: GameState; line
   if (gap >= 10) next = applyEffects(next, [{ target: 'reputation', key: 'community', delta: -SPENDS.gapFriction * (gap / 10) }], {}, moved > rest ? 'stricter than the house' : 'laxer than the house');
   if (money && next.province) next = { ...next, province: { ...next.province, finances: { ...next.province.finances, balance: next.province.finances.balance + money } } };
   next = reputationsFade(next, worked);
+  // A week with none of the hours given still has a line, as the parish's does: the bell, and the hours that went nowhere.
+  if (!lines.length && kept.length === 0 && spendBudget(next) > 0) lines.push(QUIET_LINES[rng.int(0, QUIET_LINES.length - 1)]!);
   return { state: next, line: lines.length ? lines.join(' ') : null };
 }
+
+const QUIET_LINES = [
+  'The bell, the office, and the work; the hours that were yours went nowhere in particular.',
+  'The week was the house\'s. The free blocks were not given to anything, and the province does not count them.',
+  'Office, table, work, Compline. What was left over was left over.',
+];

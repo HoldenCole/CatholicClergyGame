@@ -106,7 +106,7 @@ export default function ProfilePanel() {
               <li key={`${t.startWeek}-${i}`}>
                 <div>
                   {t.label} <span className="ink-muted">of {t.place}</span>
-                  <span className="ink-faint ml-2 text-xs">{Math.max(1, Math.round((t.endWeek - t.startWeek) / 52))} year{Math.round((t.endWeek - t.startWeek) / 52) === 1 ? '' : 's'}{t.left ? ` · ${t.left}` : ''}</span>
+                  <span className="ink-faint ml-2 text-xs">{(() => { const y = Math.max(1, Math.round((t.endWeek - t.startWeek) / 52)); return `${y} year${y === 1 ? '' : 's'}`; })()}{t.left ? ` · ${t.left}` : ''}</span>
                 </div>
                 {t.verdict && <div className="ink-muted text-xs">{t.verdict}.</div>}
               </li>
