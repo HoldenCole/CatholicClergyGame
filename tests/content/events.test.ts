@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { allEvents, eventFiles } from '@/content';
 import { decorOptions } from '@/systems/decorState';
 import { FEAST_KEYS } from '@/engine/feasts';
+import { TOWN_PLACE_KINDS, TOWN_PLACE_STATES } from '@/types';
 import { ORDER_FEAST_KEYS } from '@/systems/religious/feasts';
 import { actionDefs, liturgyDials, obligationDefs } from '@/content/parish';
 import { studyPrograms } from '@/content/study';
@@ -91,7 +92,7 @@ const EFFECT_TARGETS = [
   'stat', 'reputation', 'relationship', 'flag', 'group', 'money', 'ap', 'thread', 'position',
   'pillar', 'alignment', 'outspokenness', 'honesty', 'credential', 'trait', 'archetype',
   'concern', 'risk', 'npc', 'end', 'decor', 'permission', 'trait_known', 'transfer', 'building', 'club', 'bond', 'place', 'record', 'strain', 'arc', 'ministry', 'foundation', 'known',
-  'province', 'crossing',
+  'province', 'crossing', 'town',
 ];
 const DECOR_PLACES = ['church', 'chapel', 'office', 'rectory', 'seminary_room', 'chancery'];
 const DECOR_SLOTS = ['sanctuary', 'altar_rail', 'orientation', 'confessionals', 'choir', 'statues', 'tabernacle', 'mass_form', 'music', 'style', 'devotion', 'seating', 'wall', 'desk', 'floor', 'corner'];
@@ -142,6 +143,12 @@ function checkCondition(c: Condition, where: string, problems: Problem[]): void 
       break;
     case 'thread':
       if (typeof c.key !== 'string' || typeof c.open !== 'boolean') problems.push(`${where}: bad thread condition`);
+      break;
+    case 'town':
+      if ((c.key !== 'any' && !TOWN_PLACE_KINDS.includes(c.key as never)) || !TOWN_PLACE_STATES.includes(c.value as never)) problems.push(`${where}: bad town condition`);
+      break;
+    case 'town_regard':
+      if ((c.key !== 'any' && !TOWN_PLACE_KINDS.includes(c.key as never)) || !hasOp(c.op) || typeof c.value !== 'number') problems.push(`${where}: bad town_regard condition`);
       break;
     case 'feast':
       if (!FEAST_KEYS.includes(c.key as never) && !ORDER_FEAST_KEYS.includes(c.key)) problems.push(`${where}: unknown feast ${c.key}`);
@@ -314,7 +321,7 @@ function checkEvent(ev: GameEvent, file: string, problems: Problem[], ids: Set<s
   });
   for (const token of tokensIn(ev.title + ' ' + ev.body)) {
     if (token.startsWith('@') && !SELECTORS.includes(token)) problems.push(`${where}: unknown selector ${token}`);
-    if (!token.startsWith('@') && !['name', 'first_name', 'surname', 'diocese', 'parish', 'seminary', 'school', 'city', 'residence', 'appointment', 'appointment_residence', 'appointment_from'].includes(token)) {
+    if (!token.startsWith('@') && !['name', 'first_name', 'surname', 'diocese', 'parish', 'seminary', 'school', 'city', 'residence', 'appointment', 'appointment_residence', 'appointment_from', 'town'].includes(token) && !(token.startsWith('town:') && TOWN_PLACE_KINDS.includes(token.slice(5) as never))) {
       problems.push(`${where}: unknown token {${token}}`);
     }
   }

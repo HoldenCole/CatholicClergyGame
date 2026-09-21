@@ -592,6 +592,18 @@ One at a time. It takes an hour or two of every week — off the top of the same
 It can be put down at any time, quietly, and nobody is told, because nobody was watching.
 
 
+### 8.9 The town as a place
+
+The parish's neighbourhood with a life of its own. Every parish has a **town**: five to seven *places* rolled once from archetypes by terrain (`content/town.json`; sixteen kinds: the diner, the employer, the high school, the funeral home, the bar, the field, the other church, the hall, the store, the library, city hall, the clinic, the shelter, the nursing home, the park, the station), named from pools over the parish's heritage and a street list, each with a blurb, a **state** (open, thriving, failing, closing, closed, new), a **regard** (−100..100, what its people make of him), and, where the archetype has one, an owner. The employer, the diner, and the funeral home come first where the terrain allows them. The town is kept in the save by parish, so a man who returns finds it as he left it, changed by the years between (`state.towns`).
+
+- **The week.** After the cast has had its chance, a quarter of ambient lines are about a place, in the state it is in; they sit in the Around lane.
+- **The year.** Places move (open → failing → closing → closed; open → thriving → open; a closed place is replaced, a year or more on, by something new of its kind). At most two changes a year. The employer and the station carry households with them: a closure costs the parish a share, an opening brings some. Each change is a line in the record and a row in the year in review.
+- **Scenes in the town.** `content/events/parish/town.json`: things that happen at the diner, the union hall, the school board, the funeral home, the bar, the field, the other church, the shelter, the station. They hang on `{ type: 'town', key, value }` (a kind of place in a state) and `{ type: 'town_regard', key, op, value }`. Text can name the places: `{town}`, `{town:diner}`, `{town:employer}`, and the rest, with the plain word where the town lacks the place.
+- **What the town remembers.** The effect `{ target: 'town', key, delta, value }` moves a kind's regard (or `any`) and, when `value` is a string, adds it to the town's memory, shown on the Town sheet. The town's regard is its own thing, beside the `public` constituency: the public is the diocese's press and its opinion; the town is the people at the counter.
+- **The sheet.** A Town tab under the parish: each place, its state and since when, its regard, its blurb; and the memory.
+
+Numbers (chances, household shares) are invented and live in the content file.
+
 ## 9. Generation
 
 ### 9.1 Dioceses

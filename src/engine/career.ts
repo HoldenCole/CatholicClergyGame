@@ -14,6 +14,7 @@ import { renderText } from './text';
 import { deliverLetter, yearInReview } from '@/systems/review';
 import { closeTenure } from '@/systems/tenures';
 import { castYearStep } from './parish';
+import { townYear } from '@/systems/town';
 import { seeYear } from './see';
 import { withChoice } from '@/systems/choice';
 import { closeRequest, markRequested, requestOf, requestYear } from '@/systems/request';
@@ -96,6 +97,10 @@ export function careerYear(state: GameState, rng: Rng): GameState {
   const cast = castYearStep(next, rng.derive(`cast:${state.clock.week}`));
   next = cast.state;
   if (cast.lines.length) next = addDigest(next, cast.lines);
+  // The town has its year: a place fails or closes or opens, and the parish feels it. DESIGN §8.9.
+  const town = townYear(next, rng.derive(`town:${state.clock.week}`));
+  next = town.state;
+  if (town.lines.length) next = addDigest(next, town.lines);
   // The orders come and go, and a man who left one may come as a curate. E3 §3.14, diocesan side.
   const drift = institutesYear(next, rng.derive(`institutes:${state.clock.week}`));
   next = drift.state;

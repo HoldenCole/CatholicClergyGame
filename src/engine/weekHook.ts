@@ -3,7 +3,7 @@ import { applyChoice, defaultChoice, drawEvents, fireEvent } from './events';
 import { evaluateAll } from './conditions';
 import { shouldInterrupt } from './interrupts';
 import { offersWeek } from './offers';
-import type { Rng } from './rng';
+import { createRng, type Rng } from './rng';
 import { formationBeats, markBeatFired, weekPool } from './seminary';
 import { isPlayedWeek, parishWeek } from './parish';
 import { careerYear, directedTransfer, isCareerYear, nextAssignment } from './career';
@@ -34,6 +34,7 @@ import { foundingWeek } from '@/systems/religious/founding';
 import { anniversaryWeek, nameDayWeek } from '@/systems/anniversaries';
 import { orderFeastLine, orderFeastsOfWeek } from '@/systems/religious/feasts';
 import { feastsOfWeek } from './feasts';
+import { ensureTown } from '@/systems/town';
 import { sideWorkWeek } from '@/systems/sidework';
 import { requestedChoice } from '@/systems/choice';
 import { confessorWeek } from '@/systems/confessor';
@@ -314,6 +315,8 @@ export function parishWeekHook(deps: EventDeps): WeekHook {
       if (away.mode.kind !== 'clock' || away.pending.length > 0) return away;
       return openMail(offersStep(away, rng, deps));
     }
+    // A save from before the town existed rolls it now, from the seed, so it is the same whenever it appears. DESIGN §8.9.
+    state = ensureTown(state, createRng(`${state.seed}:town:${state.assignment?.parishId}`));
     let next = religiousWeek(parishWeek(state, rng), rng);
     const ann = anniversaryWeek(next);
     next = ann.state;

@@ -3,6 +3,7 @@ import { resolveSelector } from './selectors';
 import { pendingAppointment, APPOINTMENT_FLAGS } from './appointment';
 import { offerById } from '@/content/offers';
 import { studyProgram } from '@/content/study';
+import { townTokens } from '@/systems/town';
 
 /** Tokens every piece of text can use, derived from state. Later phases add {diocese} and {parish}. */
 export function textExtras(state: GameState): Record<string, string> {
@@ -27,6 +28,7 @@ export function textExtras(state: GameState): Record<string, string> {
     const parish = state.world.parishes.find((p) => p.id === state.assignment!.parishId);
     if (parish) out.parish = parish.name;
   }
+  Object.assign(out, townTokens(state));
   return out;
 }
 

@@ -34,6 +34,7 @@ import type { StudyState } from './study';
 import type { ClubsState } from './clubs';
 import type { TalksState } from './talks';
 import type { Tenure } from './tenure';
+import type { Town } from './town';
 import type { SeeState } from './see';
 import type { Letter } from './mode';
 import type { Beat, Clock, Speed } from './time';
@@ -90,6 +91,8 @@ export interface GameState {
   see?: SeeState | null;
   /** Every post held, in order, written as each ends. Absent in older saves. */
   tenures?: Tenure[];
+  /** The town of each parish he has served, by parish id: places, their states, and what the town remembers. DESIGN §8.9. */
+  towns?: Record<string, Town>;
   /** Words had with people: cooldowns and the exchanges. Absent in older saves. */
   talks?: TalksState;
   /** Letters read, most recent last: the year in review, the new bishop's reading. */
