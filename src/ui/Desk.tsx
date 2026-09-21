@@ -83,7 +83,7 @@ export default function Desk() {
         {tabs.map((t) => (
           <button key={t} className={'tab ' + (t === open ? 'tab-active' : '')} onClick={() => openSheet(t)}>
             {LABEL[t]}
-            {t === 'letters' && letters > 0 && <span className="tab-dot" aria-label={`${letters} waiting`} />}
+            {t === 'letters' && letters > 0 && <span className="ink-wine ml-1 text-[11px]" aria-label={`${letters} waiting`}>{letters}</span>}
             {t === 'people' && asks > 0 && <span className="tab-dot" aria-label={`${asks} asked of the parish`} />}
           </button>
         ))}

@@ -15,6 +15,8 @@ export interface Prefs {
   /** The note left for the man on his first week in each phase. */
   briefings: boolean;
   seen: string[];
+  /** The last week of the record read, by seed, so the next visit shows where the new entries begin. */
+  readWeeks?: Record<string, number>;
 }
 
 const DEFAULT_PREFS: Prefs = { fontScale: 'normal', reducedMotion: false, hints: true, briefings: true, seen: [] };
