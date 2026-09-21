@@ -7,7 +7,7 @@ import { Chancery, chanceryRank, Office } from './art/office';
 import { Rectory, SeminaryHall, SeminaryRoom, Study } from './art/home';
 import { Chapel, Hall, Street } from './art/places';
 import { StudyCity, StudyRoom } from './art/away';
-import { portraitForCharacter, yearOf } from '../portraits/spec';
+import { portraitForPlayer } from '../portraits/spec';
 import { lookFor } from '../portraits/Portrait';
 
 /** Season tints the light through every window. */
@@ -31,7 +31,7 @@ export default function SceneArt({ scene, season, state, plain = false }: { scen
   const ambient = (place: Parameters<typeof ambientFor>[1]) => ambientFor(state, place);
   const bishopId = state.world?.diocese.hidden.bishop.npcId;
   const bishop = bishopId ? state.npcs[bishopId] : undefined;
-  const look = state.character ? lookFor(portraitForCharacter(state.character, yearOf(state.clock.startDay, state.clock.week), state.phase)) : undefined;
+  const look = state.character ? lookFor(portraitForPlayer(state)) : undefined;
   return (
     <svg viewBox="0 0 100 60" className="absolute inset-0 h-full w-full" preserveAspectRatio="none" aria-hidden>
       <Defs skyTop={skyTop} skyBottom={skyBottom} />

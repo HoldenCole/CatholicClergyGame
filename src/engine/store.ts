@@ -126,6 +126,8 @@ export interface GameStore {
   answerPastorAsk(yes: boolean): void;
   /** Direction given, under the seal. E3 §3.13. */
   answerDirectionAsk(yes: boolean): void;
+  /** The order's choir cloak on or off, in the portrait. */
+  setCappa(on: boolean): void;
   endDirectee(npcId: string): void;
   /** The consultation and the letter. E3 §3.1. */
   statePreference(houseId: string | null, objection: boolean): void;
@@ -727,6 +729,9 @@ export const useGameStore = create<GameStore>()((set, get) => ({
   },
   answerDirectionAsk(yes) {
     update(set, get, (game) => answerDirectionAskSys(game, yes));
+  },
+  setCappa(on) {
+    update(set, get, (game) => (game.religious ? { ...game, religious: { ...game.religious, cappa: on } } : game));
   },
   endDirectee(npcId) {
     update(set, get, (game) => endDirecteeSys(game, npcId));

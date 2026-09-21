@@ -1,4 +1,4 @@
-import type { Portrait as Spec, PortraitSpec } from './spec';
+import type { HabitLook, Portrait as Spec, PortraitSpec } from './spec';
 
 const SKIN = ['#f7e4d2', '#f1d4ba', '#e4bf9a', '#d3a276', '#ba8b5b', '#a06b43', '#7b4e2d', '#4f311d'];
 const SKIN_SHADE = ['#e0c3ab', '#d9b493', '#c79d76', '#b5835a', '#9c6c40', '#82522f', '#5e3a20', '#35211066'];
@@ -6,7 +6,7 @@ const SKIN_DEEP = ['#c9a48a', '#c19b78', '#ad8460', '#9d6d46', '#835932', '#6b42
 const HAIR = ['#1c1613', '#3a2416', '#6b4423', '#8f6d3f', '#d0aa4f', '#a4451c', '#7c3b1f', '#8f8c86'];
 const HAIR_LIGHT = ['#3a322d', '#5c3d2a', '#8d6238', '#b08a55', '#e9c878', '#c96a3a', '#a25a36', '#b6b3ac'];
 const EYES = ['#5a3a20', '#4f7ea8', '#5c7a4a', '#7a6a2e', '#2a2018'];
-const BACK: Record<Spec['dress'], string> = { lay_m: '#6f7f8a', lay_f: '#8a6f7f', seminarian: '#5f6f5a', priest: '#4a3a2e', monsignor: '#5a3a5a', bishop: '#6b2a5a' };
+const BACK: Record<Spec['dress'], string> = { lay_m: '#6f7f8a', lay_f: '#8a6f7f', seminarian: '#5f6f5a', priest: '#4a3a2e', monsignor: '#5a3a5a', bishop: '#6b2a5a', habit: '#5a5248' };
 
 function hairColor(spec: PortraitSpec, age: number): string {
   if (age >= 74) return '#e8e4dc';
@@ -41,7 +41,7 @@ let uid = 0;
 
 /** A face, drawn from its spec. Size is the rendered square in pixels. */
 export default function Portrait({ portrait, size = 56, title }: { portrait: Spec; size?: number; title?: string }) {
-  const { spec, dress, age, female } = portrait;
+  const { spec, dress, age, female, habit } = portrait;
   const skin = SKIN[spec.skin]!;
   const shade = SKIN_SHADE[spec.skin]!;
   const deep = SKIN_DEEP[spec.skin]!;
@@ -83,7 +83,7 @@ export default function Portrait({ portrait, size = 56, title }: { portrait: Spe
       <g clipPath={`url(#${id}c)`}>
         <rect width="100" height="110" fill={BACK[dress]} />
         <rect width="100" height="110" fill={`url(#${id}l)`} />
-        <Dress dress={dress} female={female} brass={`url(#${id}b)`} />
+        {dress === 'habit' && habit ? <Habit habit={habit} female={female} /> : <Dress dress={dress} female={female} brass={`url(#${id}b)`} />}
         {/* neck */}
         <path d="M41 66 h18 v14 q-9 5 -18 0 Z" fill={shade} />
         <path d="M41 66 h18 v4 q-9 6 -18 0 Z" fill={deep} opacity="0.45" />
@@ -129,6 +129,7 @@ export default function Portrait({ portrait, size = 56, title }: { portrait: Spe
         {!female && <Facial facial={spec.facial} hair={hair} light={light} rx={rx} ry={ry} jaw={jaw} />}
         <Hair spec={spec} female={female} hair={hair} light={light} rx={rx} ry={ry} age={age} shine={`url(#${id}h)`} />
         <Glasses glasses={spec.glasses} />
+        {dress === 'habit' && habit?.veil && <Veil habit={habit} rx={rx} ry={ry} cy={cy} />}
         {dress === 'bishop' && (
           <g>
             <path d={`M${50 - rx * 0.62} ${cy - ry + 7} q${rx * 0.62} -9 ${rx * 1.24} 0 q-${rx * 0.62} 3.2 -${rx * 1.24} 0 Z`} fill="#7a2a7a" />
@@ -358,6 +359,84 @@ function Hair({ spec, female, hair, light, rx, ry, age, shine }: { spec: Portrai
     case 11: return glossy(cap(rx, ry, { lift: 6, side: 1.5, low: 58, line: 'part_l' }), <g fill="none" stroke={light} strokeWidth="0.8" opacity="0.4"><path d={`M${50 - rx - 3} 56 q1 10 -1 20`} /><path d={`M${50 + rx + 3} 56 q-1 10 1 20`} /></g>);
     default: return glossy(cap(rx, ry, { lift: 5, side: 1.5, low: 48, line: 'straight' }));
   }
+}
+
+/** Darken a hex colour toward black by a share, for folds and the inside of a hood. */
+function darker(hex: string, share: number): string {
+  const n = parseInt(hex.slice(1), 16);
+  const r = Math.round(((n >> 16) & 255) * (1 - share));
+  const g = Math.round(((n >> 8) & 255) * (1 - share));
+  const b = Math.round((n & 255) * (1 - share));
+  return `#${((r << 16) | (g << 8) | b).toString(16).padStart(6, '0')}`;
+}
+
+/**
+ * A habit: the tunic over the shoulders, the hood down at the back of the
+ * neck, the scapular's strip, the cord or belt, and the choir cloak over it
+ * all when it is worn. The order's colours come from content/institutes.json.
+ */
+function Habit({ habit, female }: { habit: HabitLook; female: boolean }) {
+  const shoulders = 'M12 110 q2 -26 24 -30 h28 q22 4 24 30 Z';
+  const tunic = habit.color;
+  const shade = darker(tunic, 0.25);
+  const light = tunic === '#1c1917' ? '#fff' : '#000';
+  const cloak = habit.cappaOn && habit.cappa ? habit.cappa : null;
+  const outer = cloak ?? tunic;
+  const outerShade = darker(outer, 0.3);
+  return (
+    <g>
+      {/* the hood lies on the shoulders behind the neck: a rounded fold in the outer garment's colour, its inside darker */}
+      {habit.hood && !female && (
+        <g>
+          <path d={habit.longHood ? 'M28 84 q22 -22 44 0 q-22 4 -44 0 Z' : 'M31 84 q19 -17 38 0 q-19 4 -38 0 Z'} fill={outerShade} />
+          <path d={habit.longHood ? 'M31 84 q19 -17 38 0' : 'M33 84 q17 -13 34 0'} fill="none" stroke={darker(outer, 0.5)} strokeWidth="0.8" opacity="0.7" />
+        </g>
+      )}
+      <path d={shoulders} fill={outer} />
+      <path d={shoulders} fill={light} opacity={tunic === '#1c1917' ? 0.05 : 0.04} />
+      {/* the cloak opens in a V and shows the tunic and scapular beneath */}
+      {cloak && <path d="M36 110 q0 -22 14 -28 q14 6 14 28 Z" fill={tunic} />}
+      {cloak && <path d="M36 110 q0 -22 14 -28 M64 110 q0 -22 -14 -28" fill="none" stroke={darker(cloak, 0.4)} strokeWidth="1" />}
+      {/* the scapular: a strip down the front, its edges a shade darker */}
+      {habit.scapular && (
+        <g>
+          <path d="M41 82 h18 v28 h-18 Z" fill={tunic} />
+          <path d="M41 82 v28 M59 82 v28" fill="none" stroke={shade} strokeWidth="0.8" opacity="0.8" />
+        </g>
+      )}
+      {/* the neck opening and the fold */}
+      <path d="M38 80 q12 8 24 0 v3 q-12 8 -24 0 Z" fill={shade} opacity="0.6" />
+      <path d="M36 88 q14 5 28 0" fill="none" stroke={shade} strokeWidth="0.6" opacity="0.6" />
+      {/* the cord or the belt, at the waist */}
+      {habit.cord === 'white' && !cloak && (
+        <g>
+          <path d="M16 104 q34 5 68 0" fill="none" stroke="#e9e2cc" strokeWidth="2.2" />
+          <path d="M40 105 q1 4 0 8 M43 105.5 q1 4 0 8" fill="none" stroke="#e9e2cc" strokeWidth="1.8" strokeLinecap="round" />
+          <circle cx="40" cy="109" r="1.1" fill="#d6cfb6" /><circle cx="43" cy="110.5" r="1.1" fill="#d6cfb6" />
+        </g>
+      )}
+      {habit.cord === 'leather' && !cloak && !habit.scapular && <path d="M16 104 q34 5 68 0" fill="none" stroke="#3b2a1a" strokeWidth="2.6" />}
+      {habit.cord === 'leather' && !cloak && habit.scapular && <path d="M16 104 q12 3 25 3 M59 107 q13 0 25 -3" fill="none" stroke="#3b2a1a" strokeWidth="2.6" />}
+      {habit.cord === 'black' && !cloak && <path d="M16 104 q34 5 68 0" fill="none" stroke="#0a0908" strokeWidth="2.4" />}
+      {/* a sari's border, for the one habit that is a sari */}
+      {habit.band && habit.band !== '#f5f1e6' && female && <path d="M16 104 q34 5 68 0" fill="none" stroke={habit.band} strokeWidth="3" />}
+    </g>
+  );
+}
+
+/** A veil over the hair, with the coif's white band at the brow. */
+function Veil({ habit, rx, ry, cy }: { habit: HabitLook; rx: number; ry: number; cy: number }) {
+  const veil = habit.veil!;
+  const band = habit.band ?? '#f5f1e6';
+  const top = cy - ry;
+  return (
+    <g>
+      <path d={`M${50 - rx - 2} ${cy + 4} Q${50 - rx - 3} ${top + 2} 50 ${top - 3} Q${50 + rx + 3} ${top + 2} ${50 + rx + 2} ${cy + 4} L${50 + rx + 6} 82 L${50 - rx - 6} 82 Z`} fill={veil} />
+      <path d={`M${50 - rx - 2} ${cy + 4} Q${50 - rx - 3} ${top + 2} 50 ${top - 3} Q${50 + rx + 3} ${top + 2} ${50 + rx + 2} ${cy + 4}`} fill="none" stroke={darker(veil, 0.35)} strokeWidth="0.8" />
+      <path d={`M${50 - rx * 0.9} ${top + 6} Q50 ${top + 1} ${50 + rx * 0.9} ${top + 6} Q50 ${top + 8} ${50 - rx * 0.9} ${top + 6} Z`} fill={band} />
+      <path d={`M${50 - rx * 0.92} ${cy + 3} q0 -${ry * 0.9} ${rx * 0.92} -${ry * 0.95} q${rx * 0.92} 0.05 ${rx * 0.92} ${ry * 0.95}`} fill="none" stroke={band} strokeWidth="1.6" />
+    </g>
+  );
 }
 
 function Dress({ dress, female, brass }: { dress: Spec['dress']; female: boolean; brass: string }) {

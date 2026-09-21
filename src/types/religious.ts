@@ -45,6 +45,25 @@ export interface InstituteDef {
   titles: string[];
   /** One line for the sheet. */
   blurb: string;
+  /** What its people wear, for the portraits. */
+  habit: HabitDef;
+}
+
+/** A habit, as the portrait draws it: a colour, a hood, a scapular, a cord or belt, a cloak for choir, a veil. */
+export interface HabitDef {
+  color: string;
+  /** Clerical black: drawn as a priest. */
+  cassock?: boolean;
+  hood?: boolean;
+  longHood?: boolean;
+  scapular?: boolean;
+  cord?: 'white' | 'leather' | 'black';
+  /** A cloak worn over the habit in choir and outdoors, by colour: the Dominicans' black cappa, the Carmelites' white mantle. */
+  cappa?: string;
+  /** Women: the veil's colour, and the band or coif beneath it. */
+  veil?: string;
+  band?: string;
+  line: string;
 }
 
 /** An institute as it stands in this diocese. */

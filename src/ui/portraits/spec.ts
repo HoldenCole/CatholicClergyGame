@@ -1,4 +1,6 @@
-import type { Character, Npc } from '@/types';
+import type { Character, GameState, HabitDef, Npc } from '@/types';
+import { instituteDef } from '@/content/institutes';
+import { religiousOrder } from '@/content/religious';
 import { namePools, type Heritage } from '@/content/names';
 
 /**
@@ -31,13 +33,20 @@ export interface PortraitSpec {
   mark: number;
 }
 
-export type Dress = 'lay_m' | 'lay_f' | 'seminarian' | 'priest' | 'monsignor' | 'bishop';
+export type Dress = 'lay_m' | 'lay_f' | 'seminarian' | 'priest' | 'monsignor' | 'bishop' | 'habit';
+
+/** A habit as worn now: the order's, with the cloak on or off. */
+export interface HabitLook extends HabitDef {
+  cappaOn: boolean;
+}
 
 export interface Portrait {
   spec: PortraitSpec;
   dress: Dress;
   age: number;
   female: boolean;
+  /** dress habit: what the order wears. */
+  habit?: HabitLook;
 }
 
 export const SPEC_RANGES: Record<keyof PortraitSpec, number> = { skin: 8, hairColor: 8, hairStyle: 12, facial: 6, glasses: 5, face: 6, eyes: 5, mouth: 4, brows: 4, nose: 3, mark: 4 };
@@ -180,8 +189,25 @@ export function isFemaleName(first: string): boolean {
   return WOMEN.has(first);
 }
 
+/** The institute a religious belongs to, from the tags and the institute field, whichever names one. */
+export function instituteIdOf(npc: Pick<Npc, 'tags' | 'institute'>): string | null {
+  const order = npc.tags.find((t) => t.startsWith('order:'))?.slice('order:'.length);
+  if (order === 'OP' || order === 'OSA') return religiousOrder(order).instituteId;
+  const from = [npc.institute ?? '', ...npc.tags.filter((t) => t.startsWith('institute:'))].join(' ');
+  const m = /inst_([a-z_]+)/.exec(from);
+  return m ? m[1]! : null;
+}
+
+/** The habit of an institute, the cloak on or off; null when the institute wears clerical black. */
+export function habitFor(defId: string | null, cappaOn = false): HabitLook | null {
+  const def = defId ? instituteDef(defId) : undefined;
+  if (!def?.habit || def.habit.cassock) return null;
+  return { ...def.habit, cappaOn: cappaOn && !!def.habit.cappa };
+}
+
 function dressFor(npc: Npc, inSeminary: boolean): Dress {
   if (npc.role === 'bishop' || npc.tags.includes('bishop')) return 'bishop';
+  if (npc.role === 'religious' && habitFor(instituteIdOf(npc))) return 'habit';
   if (npc.title === 'Msgr.') return 'monsignor';
   if (npc.role === 'classmate') return inSeminary ? 'seminarian' : 'priest';
   if (npc.title === 'Fr.' || npc.title === 'Bishop' || npc.title === 'Archbishop' || npc.title === 'Rev.') return 'priest';
@@ -192,10 +218,35 @@ function dressFor(npc: Npc, inSeminary: boolean): Dress {
 /** The face of an NPC in a given calendar year. */
 export function portraitForNpc(npc: Npc, year: number, inSeminary = false): Portrait {
   const dress = dressFor(npc, inSeminary);
-  const female = dress === 'lay_f';
   const spec = specFrom(`${npc.id}:${npc.name.first}:${npc.name.last}`, heritageOfName(npc.name.last));
+  // A religious: the order's habit, and a woman's veil; a friar of a cloaked order wears the cloak some of the time.
+  if (dress === 'habit') {
+    const habit = habitFor(instituteIdOf(npc), roll(`${npc.id}/cappa`, 3) === 0)!;
+    const female = !!habit.veil || isFemaleName(npc.name.first);
+    if (female) spec.facial = 0;
+    return { spec, dress, age: Math.max(16, year - npc.birthYear), female, habit };
+  }
+  const female = dress === 'lay_f';
   if (female) spec.facial = 0;
   return { spec, dress, age: Math.max(16, year - npc.birthYear), female };
+}
+
+/** The player's face as the game stands: a friar in his order's habit once clothed, with the cloak if he wears it. */
+export function portraitForPlayer(game: Pick<GameState, 'character' | 'clock' | 'phase' | 'flags' | 'religious' | 'seminary' | 'see'>): Portrait {
+  const c = game.character!;
+  const year = yearOf(game.clock.startDay, game.clock.week);
+  const phase = game.flags.ordained_bishop || game.see ? 'bishop' : game.phase;
+  const r = game.religious;
+  if (r && phase !== 'bishop') {
+    const order = religiousOrder(r.order);
+    const clothed = phase !== 'seminary' || (game.seminary?.year ?? 1) >= (order.formation.find((f) => f.house === 'novitiate')?.year ?? 1);
+    const habit = clothed ? habitFor(order.instituteId, !!r.cappa) : null;
+    if (habit) {
+      const base = portraitForCharacter(c, year, phase);
+      return { ...base, dress: 'habit', habit };
+    }
+  }
+  return portraitForCharacter(c, year, phase);
 }
 
 /** The player's face: the chosen spec, or one from his name if the save predates faces. */

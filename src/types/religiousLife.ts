@@ -522,6 +522,8 @@ export interface ReligiousPlayerState {
   pastorTask?: PastorTask;
   /** What the prior said to a pastor's letter, for the sheet. */
   pastorAskLine?: string;
+  /** Wears the order's choir cloak (the Dominicans' black cappa) in his portrait. */
+  cappa?: boolean;
   /** The diocesan seminarians he studied beside at the union or the studium, who become the diocese's priests. E3 §3.13. */
   diocesanClassmateIds?: string[];
   /** The diocesan seminary's men, by diocese, generated when he teaches there. E3 §3.13. */

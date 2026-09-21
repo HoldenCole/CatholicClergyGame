@@ -5,6 +5,7 @@ import { formationStage } from '@/systems/religious/formation';
 import { pietyLabelsOf } from '@/systems/religious/feel';
 import { friendsOf } from '@/systems/religious/friendship';
 import { religiousOrder } from '@/content/religious';
+import { instituteDef } from '@/content/institutes';
 import { standing } from '@/systems/reputation';
 import type { Quality } from '@/types';
 import Panel from '../Panel';
@@ -26,6 +27,7 @@ function word(v: number): string {
 export default function HousePanel() {
   const game = useGameStore((s) => s.game);
   const setHorarium = useGameStore((s) => s.setHorarium);
+  const setCappa = useGameStore((s) => s.setCappa);
   if (!game?.religious) return null;
   const house = currentHouse(game);
   if (!house) return null;
@@ -37,6 +39,7 @@ export default function HousePanel() {
   const rep = game.character?.reputation;
   const friends = new Set(friendsOf(game).map((f) => f.id));
   const rows = horariumRows(game);
+  const habit = instituteDef(order.instituteId)?.habit;
   const load = rows.reduce((n, r) => n + r.ap, 0);
   return (
     <Panel title={house.name}>
@@ -73,6 +76,18 @@ export default function HousePanel() {
           ))}
         </ul>
       </div>
+      {habit && (
+        <div className="mt-4 text-sm">
+          <div className="heading text-sm">The habit</div>
+          <p className="ink-faint text-xs">{habit.line}</p>
+          {habit.cappa && (
+            <label className="mt-1 flex items-center gap-2 text-xs">
+              <input type="checkbox" checked={!!game.religious.cappa} onChange={(e) => setCappa(e.target.checked)} />
+              <span>Wear the {order.key === 'OP' ? 'black cappa and hood' : 'choir cloak'} over it</span>
+            </label>
+          )}
+        </div>
+      )}
       <div className="mt-4">
         <div className="heading text-sm">The men ({members.length})</div>
         <ul className="mt-1 grid grid-cols-2 gap-x-4 gap-y-1 text-sm">

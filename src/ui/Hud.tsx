@@ -8,7 +8,7 @@ import type { StopReason } from '@/engine/clock';
 import { eventById } from '@/content';
 import { SPEEDS, type Speed } from '@/types';
 import Portrait from './portraits/Portrait';
-import { portraitForCharacter, yearOf } from './portraits/spec';
+import { portraitForPlayer } from './portraits/spec';
 
 /** A friar's word on the plate: the stage of formation, the office held, or the posting. E3. */
 function friarWord(game: GameState): string | null {
@@ -85,7 +85,7 @@ export default function Hud() {
     <header className="plate hud flex items-center justify-between gap-6 px-5 py-2">
       <div className="flex min-w-0 items-center gap-4">
         <h1 className="title text-lg tracking-wide" style={{ color: '#e6c25a' }}>Vocation</h1>
-        {c && <Portrait portrait={portraitForCharacter(c, yearOf(clock.startDay, clock.week), game.flags.ordained_bishop ? 'bishop' : game.phase)} size={34} title={`${c.name.first} ${c.name.last}`} />}
+        {c && <Portrait portrait={portraitForPlayer(game)} size={34} title={`${c.name.first} ${c.name.last}`} />}
         <span className="truncate text-sm">
           {c ? `${c.name.first} ${c.name.last}, ` : ''}{game.study ? `${game.see ? `Bishop of ${game.see.see}` : game.study.city === 'rome' || game.study.city === 'washington' ? `Studying in ${game.study.city === 'rome' ? 'Rome' : 'Washington'}` : game.study.label}, year ${Math.floor((clock.week - game.study.startWeek) / 52) + 1}` : (friarWord(game) ?? PHASE_LABELS[game.phase] ?? game.phase)}
         </span>
