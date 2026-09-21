@@ -429,6 +429,15 @@ The pull between the library and the house. The brilliant student who cannot liv
 
 ---
 
+### 6.7 As built: the desk, the brothers' letters, the studium, the circles
+
+*Added at build time.*
+
+- **The desk** (`content/religious/projects.json`, on the base game's side-work engine): one project at a time beside the house's work, in blocks of the week until it lands or does not. Dominican: a research article, a medieval text translated, the licentiate at the studium and then the doctorate (credentials `stl`, `std`), a lecture course at the studium, a children's catechesis the novices give, a year of homilies, a series on the Summa for the radio, the Rosary confraternity's manual, a critical edition, the province's Latin put into English, a summer of parish missions. Augustinian: an edition of the Confessions with notes, a religion curriculum for the order's school. Any friar: a retreat manual, the house's history, the novices' reading, Thursdays at the jail. Projects feed the §8 reputations through the `known` effect, and a friar pastor keeps the parish's works beside them.
+- **A brother's letter** (`systems/religious/confrereAsks.ts`, `content/religious/confrereAsks.json`): a friar of the province, usually from another house, writes to the man himself: read his article, cover his lectures, translate his Latin, preach his mission two by two, sit in his box while he is in Rome, proofread the newsletter, take the novices' catechesis class, help with the chapter's report, write the necrology entry, read his thesis chapter, drive the old friar to dialysis. Six weeks to answer; yes takes blocks for the weeks and lands its effects and the brother's regard; no and silence are remembered. The chance rises with community and province standing and with the reputation the ask names.
+- **The studium** gains a studies posting (`studium_studies`) on both orders' apostolates, asked of the provincial like any other, beside the teaching one.
+- **The circles** (`content/clubs/religious.json`): a friar's circles are the order's, the diocesan tables (the deanery table, the Emmaus group, the liturgical commission, the canonists' lunch) closed to him unless he holds a parish. The province's Thomistic circle, the preaching band, the friars' schola, the Rosary confraternity's chaplains, the Lay Dominican chaplains, the justice and peace commission, the Thursday game, the young friars' table, the delegates' lunch, and the Augustinian reading circle; the fellows are friars of the order.
+
 ## 7. The Augustinians
 
 *The game of the heart and the household. Your output is community. The chapter is a family.*

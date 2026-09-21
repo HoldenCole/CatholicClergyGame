@@ -1,6 +1,7 @@
 import type { GameState, SideWorkDef } from '@/types';
 import type { Rng } from '@/engine/rng';
-import { sideWorkDef, sideWorkDefs } from '@/content/parish';
+import { sideWorkDefs } from '@/content/parish';
+import { friarProjectDefs } from '@/content/religious';
 import { evaluateAll } from '@/engine/conditions';
 import { applyEffects } from '@/engine/effects';
 import { describeUnmet } from './doors';
@@ -19,9 +20,21 @@ export const SIDE_WORK = {
   failAt: 1,
 } as const;
 
+/** A side work by id, the parish's or the friar's desk's. */
+export function anyWorkDef(id: string): SideWorkDef | undefined {
+  return sideWorkDefs.find((d) => d.id === id) ?? friarProjectDefs.find((d) => d.id === id);
+}
+
+/** What this man could take on: the parish's works with a parish, the desk's projects as a friar, both for a friar pastor. E3 §6.2. */
+export function workDefsFor(state: Pick<GameState, 'parish' | 'religious'>): SideWorkDef[] {
+  const r = state.religious;
+  const desk = r ? friarProjectDefs.filter((d) => !d.orders || d.orders.includes(r.order)) : [];
+  return state.parish ? [...sideWorkDefs, ...desk] : desk;
+}
+
 export function workOf(state: GameState): { state: NonNullable<GameState['sideWork']>; def: SideWorkDef } | null {
   const w = state.sideWork;
-  const def = w ? sideWorkDef(w.id) : undefined;
+  const def = w ? anyWorkDef(w.id) : undefined;
   return w && def ? { state: w, def } : null;
 }
 
@@ -33,9 +46,9 @@ export interface WorkOffer {
 
 /** Everything he could take on, and what stands in the way of each. */
 export function workOffers(state: GameState): WorkOffer[] {
-  return sideWorkDefs.map((def) => {
+  return workDefsFor(state).map((def) => {
     const why =
-      !state.parish ? 'Not from where you are' :
+      !state.parish && !(state.religious && state.flags.ordained) ? 'Not from where you are' :
       state.sideWork ? 'You have one in hand' :
       def.requires && !evaluateAll(def.requires, state) ? `needs ${def.requires.map((c) => describeUnmet(c, state)).find((w): w is string => !!w) ?? 'something else'}` :
       '';
@@ -67,7 +80,7 @@ export function dropWork(state: GameState): { state: GameState; line: string | n
       flags: { ...state.flags, [`work:dropped:${w.def.id}`]: true },
       career: [...state.career, { week: state.clock.week, kind: 'note', text: `Put down ${w.def.label.toLowerCase()}, ${done}% of the way in.` }],
     },
-    line: `You have stopped work on ${w.def.label.toLowerCase()}. Nobody is told, because nobody was watching, and the hours go back into the parish where they were always needed.`,
+    line: `You have stopped work on ${w.def.label.toLowerCase()}. Nobody is told, because nobody was watching, and the hours go back into ${state.parish ? 'the parish' : 'the house'} where they were always needed.`,
   };
 }
 
@@ -109,7 +122,8 @@ export function workLine(state: GameState): string | null {
   if (!w) return null;
   const left = Math.max(0, w.state.endWeek - state.clock.week);
   const years = Math.round((left / 52) * 10) / 10;
-  return `${w.def.label}: ${years >= 1 ? `about ${years} year${years === 1 ? '' : 's'} of it left` : `${left} weeks left`}, at an hour or two a week.`;
+  const pace = state.parish ? 'at an hour or two a week' : `at ${w.def.apPerWeek === 1 ? 'a block' : `${w.def.apPerWeek} blocks`} of the week`;
+  return `${w.def.label}: ${years >= 1 ? `about ${years} year${years === 1 ? '' : 's'} of it left` : `${left} weeks left`}, ${pace}.`;
 }
 
 /** What he has made of himself outside the parish, for the profile and the ending. */
@@ -128,6 +142,26 @@ const DONE_WORDS: Record<string, string> = {
   'work:translated': 'translated a text nobody else would',
   'work:pilgrimage': 'took forty-one of his people to the Holy Land',
   'work:prison': 'went to the county jail on Thursdays for four years',
+  'work:article': 'published a research article',
+  'work:translated_order': "translated a medieval text of the order",
+  'work:stl': 'took the licentiate at the studium',
+  'work:std': 'took the doctorate',
+  'work:std_abandoned': 'left a doctorate unfinished',
+  'work:lectured_studium': 'gave a course at the studium',
+  'work:catechesis': "wrote the children's catechesis the novices give",
+  'work:homilies': 'published a year of homilies',
+  'work:summa_series': 'gave a series on the Summa for the radio',
+  'work:rosary_manual': "wrote the Rosary confraternity's manual",
+  'work:critical_edition': 'edited a text of the order',
+  'work:edition_handed_on': 'handed a critical edition on unfinished',
+  'work:province_latin': "put the province's Latin into English",
+  'work:mission_summer': 'preached a summer of parish missions',
+  'work:confessions_edition': 'edited the Confessions for the schools',
+  'work:curriculum': "wrote the order's school its religion curriculum",
+  'work:retreat_manual': 'wrote a retreat manual the parishes use',
+  'work:house_history': "wrote the house's history",
+  'work:novices_reading': "set the novices' reading",
+  'work:jail_thursdays': 'went to the county jail on Thursdays for four years',
   'work:board': 'sat on the hospital board',
   'work:retreat_preacher': 'preached retreats in other men\'s parishes',
 };

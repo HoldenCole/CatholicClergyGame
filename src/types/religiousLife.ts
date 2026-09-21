@@ -385,6 +385,39 @@ export interface PastorAsk {
   priorSaidYes: boolean;
 }
 
+/** A brother of the province has written asking for help. E3 §6.2. Data in content/religious/confrereAsks.json. */
+export interface ConfrereAskDef {
+  id: string;
+  label: string;
+  blurb: string;
+  costs: string;
+  ap: number;
+  weeks: number;
+  requires?: Partial<Record<StatKey, number>>;
+  /** Only a friar known for this is asked. */
+  reputation?: ReputationKey;
+  orders?: OrderKey[];
+  /** The brother writes from another house, or from this one. */
+  from?: 'other' | 'any';
+  effects: { target: string; key: string; delta: number }[];
+}
+
+export interface ConfrereAsk {
+  defId: string;
+  npcId: string;
+  week: number;
+  dueWeek: number;
+}
+
+export interface ConfrereTask {
+  defId: string;
+  label: string;
+  npcId: string;
+  startWeek: number;
+  untilWeek: number;
+  ap: number;
+}
+
 export interface PastorTask {
   defId: string;
   label: string;
@@ -579,6 +612,10 @@ export interface ReligiousPlayerState {
   pastorTask?: PastorTask;
   /** What the prior said to a pastor's letter, for the sheet. */
   pastorAskLine?: string;
+  /** A brother's letter on the table, the help being given, and what was said. E3 §6.2. */
+  confrereAsk?: ConfrereAsk;
+  confrereTask?: ConfrereTask;
+  confrereAskLine?: string;
   /** Wears the order's choir cloak (the Dominicans' black cappa) in his portrait. */
   cappa?: boolean;
   /** What he is known for, 0..100 each, portable across every transfer. E3 §8. */

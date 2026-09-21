@@ -4,7 +4,7 @@ import { mayAskDispensation, preachingOf } from '@/systems/religious/study';
 import { currentHouse, membersOf } from '@/systems/religious/house';
 import { friendSlots, friendsOf, mayBefriend } from '@/systems/religious/friendship';
 import { officeOffers } from '@/systems/religious/offices';
-import { pastorAskDefs } from '@/content/religious';
+import { confrereAskDefs, pastorAskDefs } from '@/content/religious';
 import { religiousOrder } from '@/content/religious';
 import Panel from '../Panel';
 
@@ -16,6 +16,7 @@ export default function HouseAsksPanel() {
   const befriend = useGameStore((s) => s.befriend);
   const acceptOffice = useGameStore((s) => s.acceptOffice);
   const answerPastorAsk = useGameStore((s) => s.answerPastorAsk);
+  const answerConfrereAsk = useGameStore((s) => s.answerConfrereAsk);
   const line = useGameStore((s) => s.lastPriorLine);
   if (!game?.religious) return null;
   const house = currentHouse(game);
@@ -96,6 +97,26 @@ export default function HouseAsksPanel() {
             ) : null;
           })()}
           {game.religious.pastorTask && <p className="mt-1 text-xs">{game.religious.pastorTask.label}: {game.religious.pastorTask.ap} blocks a week, {Math.max(0, game.religious.pastorTask.untilWeek - game.clock.week)} weeks to go.</p>}
+        </div>
+      )}
+      {game.flags.ordained && (game.religious.confrereAsk || game.religious.confrereTask || game.religious.confrereAskLine) && (
+        <div className="mt-4 text-sm">
+          <div className="heading text-sm">Asked of you by a brother</div>
+          <p className="ink-faint text-xs">A friar of the province writes to you, not to the prior: a reader, a substitute, a second preacher. Six weeks to answer; a brother does not write twice.</p>
+          {game.religious.confrereAskLine && <p className="mt-1 rounded border rule bg-white/30 p-2 text-xs italic">{game.religious.confrereAskLine}</p>}
+          {game.religious.confrereAsk && (() => {
+            const ask = game.religious!.confrereAsk!;
+            const def = confrereAskDefs.find((d) => d.id === ask.defId);
+            const npc = game.npcs[ask.npcId];
+            return def ? (
+              <div className="mt-1 flex flex-wrap items-center gap-2">
+                <span><span className="font-medium">{def.label}</span>, for {npc ? `${npc.title} ${npc.name.last}` : 'a brother'} · {def.costs}. {ask.dueWeek - game.clock.week} weeks to answer.</span>
+                <button className="pbtn px-2 py-0.5 text-xs" onClick={() => answerConfrereAsk(true)}>Yes</button>
+                <button className="pbtn px-2 py-0.5 text-xs" onClick={() => answerConfrereAsk(false)}>No</button>
+              </div>
+            ) : null;
+          })()}
+          {game.religious.confrereTask && <p className="mt-1 text-xs">{game.religious.confrereTask.label}: {game.religious.confrereTask.ap} blocks a week, {Math.max(0, game.religious.confrereTask.untilWeek - game.clock.week)} weeks to go.</p>}
         </div>
       )}
       {game.flags.ordained && (

@@ -10,6 +10,7 @@ import { chanceryWeek } from './bishopAsks';
 import { friarDeaneryWeek } from './deanery';
 import { pastorAskWeek } from './pastorAsks';
 import { directingWeek } from './directing';
+import { confrereAskWeek } from './confrereAsks';
 
 /** One week of the common life: the horarium as kept, then the house's own drift. Nothing for a diocesan run. */
 export function religiousWeek(state: GameState, rng: Rng): GameState {
@@ -18,5 +19,5 @@ export function religiousWeek(state: GameState, rng: Rng): GameState {
   next = chanceryWeek(requestsWeek(dispensationWeek(preachingWeek(next))));
   next = restlessWeek(friendshipWeek(next));
   // The diocese around the order's parish, and the pastors who ask for him. E3 §3.12.
-  return directingWeek(pastorAskWeek(friarDeaneryWeek(next, rng.derive(`deanery:${state.clock.week}`))));
+  return confrereAskWeek(directingWeek(pastorAskWeek(friarDeaneryWeek(next, rng.derive(`deanery:${state.clock.week}`)))));
 }

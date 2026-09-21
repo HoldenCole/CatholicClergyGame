@@ -18,3 +18,4 @@ export * from './year';
 export * from './founding';
 export * from './charter';
 export * from './foundationYear';
+export * from './confrereAsks';

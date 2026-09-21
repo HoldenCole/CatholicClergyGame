@@ -1,4 +1,4 @@
-import type { Bond } from '@/types';
+import type { ReputationKey, Bond } from '@/types';
 import type {
   Archetype,
   ConstituencyKey,
@@ -23,6 +23,7 @@ import { noteMovers } from '@/systems/movers';
 import { moveArc } from '@/systems/arcs';
 import { provinceEffect } from '@/systems/religious/foundations';
 import { foundationEffect } from '@/systems/religious/foundationEffect';
+import { gainReputation } from '@/systems/religious/reputations';
 import { ministryOf } from '@/systems/ministry';
 import type { MinistryKey } from '@/types';
 import { createRng, type Rng } from './rng';
@@ -157,6 +158,9 @@ export function applyEffect(
       return provinceEffect(state, effect.key, typeof effect.value === 'string' ? effect.value : undefined, createRng(`${state.seed}:province:${effect.key}:${state.clock.week}`));
     // A man is marked to cross over; the year moves him. E3 §3.14.
     // A scene touches the house he founded: its money, its reputations, a vocation, a dial, or its end. E3 §9.
+    // What a friar is known for, held under its cap. E3 §8.
+    case 'known':
+      return state.religious ? gainReputation(state, effect.key as ReputationKey, effect.delta ?? 0) : state;
     case 'foundation':
       return foundationEffect(state, effect.key, effect.delta, typeof effect.value === 'string' ? effect.value : undefined, createRng(`${state.seed}:foundation:${effect.key}:${state.clock.week}`));
     case 'crossing': {

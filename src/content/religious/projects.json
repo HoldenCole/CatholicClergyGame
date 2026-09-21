@@ -1,0 +1,1423 @@
+{
+  "_notes": "E3 §6.2: the friar's desk. Projects a friar takes on beside the house's work, one at a time, on the base game's side-work engine (systems/sidework.ts). `orders` restricts a project to an order; absent, any friar. The `known` effect feeds the §8 reputations.",
+  "projects": [
+    {
+      "id": "op_article",
+      "label": "A research article",
+      "blurb": "Forty pages for a theological journal on the one question you have been circling since the studium: a year of evenings, a referee who does not like your Latin, and the possibility that it lands nowhere.",
+      "kind": "writing",
+      "apPerWeek": 1,
+      "weeks": 44,
+      "milestones": [
+        {
+          "at": 0.4,
+          "line": "The argument has found its shape, and the footnotes have found the shelf in the library nobody else uses.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 1
+            }
+          ]
+        }
+      ],
+      "done": {
+        "line": "The article is out. Nine people read it closely and one of them is the lector who taught you, who writes two lines that you keep.",
+        "effects": [
+          {
+            "target": "known",
+            "key": "professor",
+            "delta": 6
+          },
+          {
+            "target": "stat",
+            "key": "theology",
+            "delta": 2
+          },
+          {
+            "target": "stat",
+            "key": "knowledge",
+            "delta": 1
+          },
+          {
+            "target": "reputation",
+            "key": "province",
+            "delta": 2
+          },
+          {
+            "target": "flag",
+            "key": "work:article",
+            "value": true
+          }
+        ]
+      },
+      "requires": [
+        {
+          "type": "stat",
+          "key": "theology",
+          "op": ">=",
+          "value": 50
+        }
+      ],
+      "risk": {
+        "chance": 0.3,
+        "unless": [
+          {
+            "type": "stat",
+            "key": "theology",
+            "op": ">=",
+            "value": 65
+          }
+        ],
+        "line": "Two journals declined it, kindly. It is in a drawer, and it is better than the drawer knows.",
+        "effects": [
+          {
+            "target": "stat",
+            "key": "theology",
+            "delta": 1
+          },
+          {
+            "target": "flag",
+            "key": "work:article_declined",
+            "value": true
+          }
+        ]
+      },
+      "orders": [
+        "OP"
+      ]
+    },
+    {
+      "id": "op_translation",
+      "label": "Translate a medieval text of the order",
+      "blurb": "A thirteenth-century sermon collection nobody has put into English: two and a half years of Latin at the desk, a glossary, and an introduction that will be the only part anyone reads.",
+      "kind": "translation",
+      "apPerWeek": 1,
+      "weeks": 130,
+      "milestones": [
+        {
+          "at": 0.3,
+          "line": "The Latin has stopped fighting you. The preacher's voice comes through, which is the point.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "at": 0.7,
+          "line": "A university press has asked to see the introduction, which is not yet written.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 2
+            },
+            {
+              "target": "known",
+              "key": "professor",
+              "delta": 3
+            }
+          ]
+        }
+      ],
+      "done": {
+        "line": "The translation is out under the order's imprint. The preacher has an English voice for the first time in seven hundred years, and it is yours.",
+        "effects": [
+          {
+            "target": "known",
+            "key": "professor",
+            "delta": 8
+          },
+          {
+            "target": "credential",
+            "key": "translator"
+          },
+          {
+            "target": "stat",
+            "key": "knowledge",
+            "delta": 3
+          },
+          {
+            "target": "reputation",
+            "key": "province",
+            "delta": 3
+          },
+          {
+            "target": "reputation",
+            "key": "rome",
+            "delta": 2
+          },
+          {
+            "target": "flag",
+            "key": "work:translated_order",
+            "value": true
+          }
+        ]
+      },
+      "requires": [
+        {
+          "type": "any",
+          "inner": [
+            {
+              "type": "credential",
+              "key": "latin"
+            },
+            {
+              "type": "stat",
+              "key": "knowledge",
+              "op": ">=",
+              "value": 60
+            }
+          ]
+        }
+      ],
+      "risk": {
+        "chance": 0.25,
+        "unless": [
+          {
+            "type": "stat",
+            "key": "knowledge",
+            "op": ">=",
+            "value": 65
+          }
+        ],
+        "line": "The press declined it and so did the order's. It sits in a binder in the library, consulted by the two men who know it is there.",
+        "effects": [
+          {
+            "target": "stat",
+            "key": "knowledge",
+            "delta": 2
+          },
+          {
+            "target": "flag",
+            "key": "work:translation_shelved",
+            "value": true
+          }
+        ]
+      },
+      "orders": [
+        "OP"
+      ]
+    },
+    {
+      "id": "op_stl",
+      "label": "The licentiate at the studium",
+      "blurb": "Two and a half years of the studium's licence course beside the work: seminars on Thursday, a thesis on a question the lector approves, and the defence in front of men who taught you. The order's faculty confers it.",
+      "kind": "study",
+      "apPerWeek": 2,
+      "weeks": 130,
+      "milestones": [
+        {
+          "at": 0.35,
+          "line": "The coursework is done and the thesis has a title, which is a third of a thesis.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "at": 0.75,
+          "line": "The lector has read three chapters and says the fourth will decide it.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 1
+            }
+          ]
+        }
+      ],
+      "done": {
+        "line": "The licentiate is conferred in the studium's chapel with your house at the back. You may teach in the order's faculties now, and the province knows it.",
+        "effects": [
+          {
+            "target": "credential",
+            "key": "stl"
+          },
+          {
+            "target": "known",
+            "key": "professor",
+            "delta": 8
+          },
+          {
+            "target": "stat",
+            "key": "theology",
+            "delta": 3
+          },
+          {
+            "target": "reputation",
+            "key": "province",
+            "delta": 4
+          },
+          {
+            "target": "flag",
+            "key": "work:stl",
+            "value": true
+          }
+        ]
+      },
+      "requires": [
+        {
+          "type": "stat",
+          "key": "theology",
+          "op": ">=",
+          "value": 55
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "credential",
+            "key": "stl"
+          }
+        }
+      ],
+      "risk": {
+        "chance": 0.2,
+        "unless": [
+          {
+            "type": "stat",
+            "key": "theology",
+            "op": ">=",
+            "value": 70
+          }
+        ],
+        "line": "The thesis was not accepted. The lector was kind and the board was not, and the course is done without the degree.",
+        "effects": [
+          {
+            "target": "stat",
+            "key": "theology",
+            "delta": 1
+          },
+          {
+            "target": "flag",
+            "key": "work:stl_failed",
+            "value": true
+          }
+        ]
+      },
+      "orders": [
+        "OP"
+      ]
+    },
+    {
+      "id": "op_std",
+      "label": "The doctorate",
+      "blurb": "Four years on a dissertation, at the studium or by leave at the order's university, on a question nobody has answered because nobody has wanted to. The order sends its best minds to this and loses some of them in it.",
+      "kind": "study",
+      "apPerWeek": 2,
+      "weeks": 208,
+      "milestones": [
+        {
+          "at": 0.25,
+          "line": "The question has been narrowed to something a man can answer in four hundred pages.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "at": 0.5,
+          "line": "Two chapters are drafted and the director has stopped saying 'promising'.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 2
+            },
+            {
+              "target": "known",
+              "key": "professor",
+              "delta": 3
+            }
+          ]
+        },
+        {
+          "at": 0.8,
+          "line": "The last chapter is the hard one, and it is the one you started with.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 2
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 3
+            }
+          ]
+        }
+      ],
+      "done": {
+        "line": "The defence is public and long, and at the end the dean calls you doctor in front of the province. The order's faculties are open to you for life.",
+        "effects": [
+          {
+            "target": "credential",
+            "key": "std"
+          },
+          {
+            "target": "known",
+            "key": "professor",
+            "delta": 12
+          },
+          {
+            "target": "stat",
+            "key": "theology",
+            "delta": 4
+          },
+          {
+            "target": "reputation",
+            "key": "province",
+            "delta": 5
+          },
+          {
+            "target": "reputation",
+            "key": "rome",
+            "delta": 5
+          },
+          {
+            "target": "trait",
+            "key": "holds a doctorate"
+          },
+          {
+            "target": "flag",
+            "key": "work:std",
+            "value": true
+          }
+        ]
+      },
+      "requires": [
+        {
+          "type": "credential",
+          "key": "stl"
+        }
+      ],
+      "risk": {
+        "chance": 0.3,
+        "unless": [
+          {
+            "type": "stat",
+            "key": "knowledge",
+            "op": ">=",
+            "value": 70
+          }
+        ],
+        "line": "It was not finished. The years were, and the chapters are in a box, and the province is gracious about it in the way it is gracious about things it will remember.",
+        "effects": [
+          {
+            "target": "stat",
+            "key": "theology",
+            "delta": 2
+          },
+          {
+            "target": "reputation",
+            "key": "province",
+            "delta": -2
+          },
+          {
+            "target": "flag",
+            "key": "work:std_abandoned",
+            "value": true
+          }
+        ]
+      },
+      "orders": [
+        "OP"
+      ]
+    },
+    {
+      "id": "op_lecture_course",
+      "label": "A lecture course at the studium",
+      "blurb": "A semester's course for the students of the province: twenty-six lectures written from nothing, on a Tuesday, in a room where the lector who taught you sits in the back row.",
+      "kind": "teaching",
+      "apPerWeek": 1,
+      "weeks": 30,
+      "milestones": [
+        {
+          "at": 0.5,
+          "line": "The students have begun asking questions that are not on the syllabus, which is the sign.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 1
+            }
+          ]
+        }
+      ],
+      "done": {
+        "line": "The course is given. The students remember it or do not; two of them ask for direction; the lector says at recreation that you may teach.",
+        "effects": [
+          {
+            "target": "known",
+            "key": "professor",
+            "delta": 5
+          },
+          {
+            "target": "stat",
+            "key": "theology",
+            "delta": 2
+          },
+          {
+            "target": "stat",
+            "key": "charisma",
+            "delta": 1
+          },
+          {
+            "target": "reputation",
+            "key": "province",
+            "delta": 2
+          },
+          {
+            "target": "flag",
+            "key": "work:lectured_studium",
+            "value": true
+          }
+        ]
+      },
+      "requires": [
+        {
+          "type": "stat",
+          "key": "theology",
+          "op": ">=",
+          "value": 50
+        }
+      ],
+      "orders": [
+        "OP"
+      ]
+    },
+    {
+      "id": "op_childrens_catechesis",
+      "label": "A children's catechesis for the novices to give",
+      "blurb": "A series of twelve lessons for the parish schools, written for the novices to teach on Saturdays: the Creed in words an eight-year-old keeps, and the novices learning to speak to a room by speaking to children.",
+      "kind": "formation",
+      "apPerWeek": 1,
+      "weeks": 26,
+      "milestones": [
+        {
+          "at": 0.5,
+          "line": "The novices have given the first six lessons and one of them, who is afraid of rooms, was not afraid of that one.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "known",
+              "key": "spiritual_director",
+              "delta": 2
+            }
+          ]
+        }
+      ],
+      "done": {
+        "line": "The series is done and the parishes have asked for it again next year. The novices teach it now without you, which was the point, and the eight-year-olds know the Creed.",
+        "effects": [
+          {
+            "target": "known",
+            "key": "spiritual_director",
+            "delta": 4
+          },
+          {
+            "target": "known",
+            "key": "evangelist",
+            "delta": 3
+          },
+          {
+            "target": "reputation",
+            "key": "laity",
+            "delta": 4
+          },
+          {
+            "target": "stat",
+            "key": "piety",
+            "delta": 2
+          },
+          {
+            "target": "flag",
+            "key": "work:catechesis",
+            "value": true
+          }
+        ]
+      },
+      "requires": [
+        {
+          "type": "stat",
+          "key": "charisma",
+          "op": ">=",
+          "value": 40
+        }
+      ],
+      "orders": [
+        "OP"
+      ]
+    },
+    {
+      "id": "op_homily_book",
+      "label": "A year of homilies, edited",
+      "blurb": "The Sunday homilies of one liturgical year, written out, cut, and set in order: a book the parishes will buy and the province will read to see what you actually say.",
+      "kind": "writing",
+      "apPerWeek": 1,
+      "weeks": 60,
+      "milestones": [
+        {
+          "at": 0.5,
+          "line": "Lent is edited and reads like Lent. Ordinary Time is the problem it always was.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 1
+            },
+            {
+              "target": "known",
+              "key": "preacher",
+              "delta": 2
+            }
+          ]
+        }
+      ],
+      "done": {
+        "line": "The book of homilies is out under the order's imprint. It is on rectory shelves across the diocese, and a pastor two deaneries over preaches it without attribution, which is the highest praise a preacher gets.",
+        "effects": [
+          {
+            "target": "known",
+            "key": "preacher",
+            "delta": 7
+          },
+          {
+            "target": "reputation",
+            "key": "laity",
+            "delta": 4
+          },
+          {
+            "target": "reputation",
+            "key": "public",
+            "delta": 3
+          },
+          {
+            "target": "stat",
+            "key": "theology",
+            "delta": 1
+          },
+          {
+            "target": "flag",
+            "key": "work:homilies",
+            "value": true
+          }
+        ]
+      },
+      "requires": [
+        {
+          "type": "flag",
+          "key": "rep:preacher:known",
+          "value": true
+        }
+      ],
+      "orders": [
+        "OP"
+      ]
+    },
+    {
+      "id": "op_summa_series",
+      "label": "A series on the Summa for the radio",
+      "blurb": "Fifty-two short talks on the Summa for the Catholic station, or the podcast that has replaced it: twelve minutes a week on why the question matters, without the Latin, and with the Latin in the notes.",
+      "kind": "public",
+      "apPerWeek": 1,
+      "weeks": 52,
+      "milestones": [
+        {
+          "at": 0.4,
+          "line": "The station says the download numbers are the kind they show the board.",
+          "effects": [
+            {
+              "target": "known",
+              "key": "evangelist",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": 2
+            }
+          ]
+        }
+      ],
+      "done": {
+        "line": "The series is done and the station is rerunning it. Letters come from people who had not thought a friar could be listened to while driving.",
+        "effects": [
+          {
+            "target": "known",
+            "key": "evangelist",
+            "delta": 5
+          },
+          {
+            "target": "known",
+            "key": "preacher",
+            "delta": 3
+          },
+          {
+            "target": "known",
+            "key": "professor",
+            "delta": 2
+          },
+          {
+            "target": "reputation",
+            "key": "public",
+            "delta": 6
+          },
+          {
+            "target": "reputation",
+            "key": "laity",
+            "delta": 3
+          },
+          {
+            "target": "flag",
+            "key": "work:summa_series",
+            "value": true
+          }
+        ]
+      },
+      "requires": [
+        {
+          "type": "stat",
+          "key": "theology",
+          "op": ">=",
+          "value": 55
+        }
+      ],
+      "risk": {
+        "chance": 0.2,
+        "unless": [
+          {
+            "type": "stat",
+            "key": "charisma",
+            "op": ">=",
+            "value": 55
+          }
+        ],
+        "line": "The station dropped it after twenty weeks for something with a couple who argue about the news. The twenty are online, and they are good.",
+        "effects": [
+          {
+            "target": "known",
+            "key": "professor",
+            "delta": 2
+          },
+          {
+            "target": "flag",
+            "key": "work:series_dropped",
+            "value": true
+          }
+        ]
+      },
+      "orders": [
+        "OP"
+      ]
+    },
+    {
+      "id": "op_rosary_manual",
+      "label": "A manual for the Rosary confraternity",
+      "blurb": "Sixty pages for the confraternity the order keeps in the parishes: the mysteries with a paragraph each, the customs, the history nobody has told them, in a size that fits a purse.",
+      "kind": "writing",
+      "apPerWeek": 1,
+      "weeks": 30,
+      "milestones": [
+        {
+          "at": 0.5,
+          "line": "The confraternity's president has read the draft and has three corrections, all of them right.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 2
+            }
+          ]
+        }
+      ],
+      "done": {
+        "line": "The manual is printed and the confraternities of three dioceses use it. It is the most-read thing you will write, and your name is on the inside page in small type.",
+        "effects": [
+          {
+            "target": "known",
+            "key": "man_of_prayer",
+            "delta": 4
+          },
+          {
+            "target": "reputation",
+            "key": "laity",
+            "delta": 5
+          },
+          {
+            "target": "stat",
+            "key": "piety",
+            "delta": 2
+          },
+          {
+            "target": "flag",
+            "key": "work:rosary_manual",
+            "value": true
+          }
+        ]
+      },
+      "orders": [
+        "OP"
+      ]
+    },
+    {
+      "id": "op_critical_edition",
+      "label": "A critical edition",
+      "blurb": "Five years collating manuscripts of a text of the order that has never been properly edited: the variants, the apparatus, the introduction, the reviews in three languages. The order's scholarly reputation was built on work like this, and it is nearly impossible to finish.",
+      "kind": "study",
+      "apPerWeek": 2,
+      "weeks": 260,
+      "milestones": [
+        {
+          "at": 0.2,
+          "line": "The manuscripts are collated. There are eleven and they disagree about everything.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "at": 0.5,
+          "line": "The stemma is drawn and a colleague in Toulouse has written to say it is wrong, and then to say it is right.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 2
+            },
+            {
+              "target": "known",
+              "key": "professor",
+              "delta": 4
+            }
+          ]
+        },
+        {
+          "at": 0.8,
+          "line": "The apparatus is done. The introduction is not, and it is the part that decides whether the book is used or shelved.",
+          "effects": [
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 4
+            },
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 2
+            }
+          ]
+        }
+      ],
+      "done": {
+        "line": "The edition is out in the order's historical series. It will be the text for a century, and the reviews say so, and one of them is unkind about the introduction.",
+        "effects": [
+          {
+            "target": "known",
+            "key": "professor",
+            "delta": 15
+          },
+          {
+            "target": "reputation",
+            "key": "rome",
+            "delta": 6
+          },
+          {
+            "target": "reputation",
+            "key": "province",
+            "delta": 5
+          },
+          {
+            "target": "stat",
+            "key": "knowledge",
+            "delta": 4
+          },
+          {
+            "target": "trait",
+            "key": "edited a text"
+          },
+          {
+            "target": "flag",
+            "key": "work:critical_edition",
+            "value": true
+          }
+        ]
+      },
+      "requires": [
+        {
+          "type": "credential",
+          "key": "latin"
+        },
+        {
+          "type": "stat",
+          "key": "knowledge",
+          "op": ">=",
+          "value": 65
+        }
+      ],
+      "risk": {
+        "chance": 0.35,
+        "unless": [
+          {
+            "type": "stat",
+            "key": "knowledge",
+            "op": ">=",
+            "value": 75
+          }
+        ],
+        "line": "It is not finished and will not be by you. The collations go to a younger man who will finish it in a decade under his own name, with yours in the preface.",
+        "effects": [
+          {
+            "target": "stat",
+            "key": "knowledge",
+            "delta": 3
+          },
+          {
+            "target": "known",
+            "key": "professor",
+            "delta": 4
+          },
+          {
+            "target": "flag",
+            "key": "work:edition_handed_on",
+            "value": true
+          }
+        ]
+      },
+      "orders": [
+        "OP"
+      ]
+    },
+    {
+      "id": "op_chapter_acts",
+      "label": "Translating the province's Latin",
+      "blurb": "The acts of the general chapter, the constitutions' new paragraphs, the letters from the master's curia: the provincial has asked whether someone might put them into English the province can read, and the someone is you.",
+      "kind": "translation",
+      "apPerWeek": 1,
+      "weeks": 40,
+      "milestones": [
+        {
+          "at": 0.5,
+          "line": "The provincial has begun quoting your English at council, without attribution.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 2
+            }
+          ]
+        }
+      ],
+      "done": {
+        "line": "The translations are done and the province reads its own law in your sentences. The provincial's council knows whose they are, which is a kind of standing.",
+        "effects": [
+          {
+            "target": "reputation",
+            "key": "province",
+            "delta": 5
+          },
+          {
+            "target": "reputation",
+            "key": "superiors",
+            "delta": 4
+          },
+          {
+            "target": "stat",
+            "key": "knowledge",
+            "delta": 1
+          },
+          {
+            "target": "known",
+            "key": "confidant",
+            "delta": 3
+          },
+          {
+            "target": "flag",
+            "key": "work:province_latin",
+            "value": true
+          }
+        ]
+      },
+      "requires": [
+        {
+          "type": "credential",
+          "key": "latin"
+        }
+      ],
+      "orders": [
+        "OP"
+      ]
+    },
+    {
+      "id": "op_preaching_tour",
+      "label": "A summer of parish missions",
+      "blurb": "Twelve weeks on the road: a mission a week in a parish that asked, four nights each, the box after every night, and a different bed every Sunday. The order's oldest work, done the old way, and it costs the body what it always did.",
+      "kind": "preaching",
+      "apPerWeek": 3,
+      "weeks": 12,
+      "milestones": [
+        {
+          "at": 0.5,
+          "line": "Six parishes in. The homily has been cut to the thing that works and you have stopped counting the confessions.",
+          "effects": [
+            {
+              "target": "known",
+              "key": "preacher",
+              "delta": 4
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 4
+            }
+          ]
+        }
+      ],
+      "done": {
+        "line": "The summer is done. Twelve parishes remember the friar who came, and the pastors write to the prior for you by name, and you sleep for a week.",
+        "effects": [
+          {
+            "target": "known",
+            "key": "preacher",
+            "delta": 10
+          },
+          {
+            "target": "known",
+            "key": "confessor",
+            "delta": 4
+          },
+          {
+            "target": "reputation",
+            "key": "laity",
+            "delta": 6
+          },
+          {
+            "target": "reputation",
+            "key": "diocesan_clergy",
+            "delta": 4
+          },
+          {
+            "target": "strain",
+            "key": "",
+            "delta": 6
+          },
+          {
+            "target": "flag",
+            "key": "work:mission_summer",
+            "value": true
+          }
+        ]
+      },
+      "requires": [
+        {
+          "type": "flag",
+          "key": "rep:preacher:known",
+          "value": true
+        },
+        {
+          "type": "stat",
+          "key": "charisma",
+          "op": ">=",
+          "value": 50
+        }
+      ],
+      "orders": [
+        "OP"
+      ]
+    },
+    {
+      "id": "osa_confessions_notes",
+      "label": "An edition of the Confessions with notes",
+      "blurb": "A reader's edition of the Confessions for the order's schools, with your notes: two years of the one book the order is never done with, and the notes have to be better than the last man's.",
+      "kind": "study",
+      "apPerWeek": 1,
+      "weeks": 104,
+      "milestones": [
+        {
+          "at": 0.5,
+          "line": "Book Ten is annotated, which is where editions go to die, and it did not.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 2
+            },
+            {
+              "target": "known",
+              "key": "professor",
+              "delta": 3
+            }
+          ]
+        }
+      ],
+      "done": {
+        "line": "The edition is in the order's schools and two universities. The notes are yours and the students argue with them, which is what notes are for.",
+        "effects": [
+          {
+            "target": "known",
+            "key": "professor",
+            "delta": 8
+          },
+          {
+            "target": "stat",
+            "key": "theology",
+            "delta": 3
+          },
+          {
+            "target": "reputation",
+            "key": "province",
+            "delta": 3
+          },
+          {
+            "target": "flag",
+            "key": "work:confessions_edition",
+            "value": true
+          }
+        ]
+      },
+      "requires": [
+        {
+          "type": "stat",
+          "key": "theology",
+          "op": ">=",
+          "value": 55
+        }
+      ],
+      "orders": [
+        "OSA"
+      ]
+    },
+    {
+      "id": "osa_school_curriculum",
+      "label": "A religion curriculum for the order's school",
+      "blurb": "Four years of religion classes for the order's school, written from the desk: what a sixteen-year-old should know and the order of knowing it, tested on a class that will tell you.",
+      "kind": "teaching",
+      "apPerWeek": 1,
+      "weeks": 52,
+      "milestones": [
+        {
+          "at": 0.5,
+          "line": "The tenth grade has been through the first year of it and the teachers have stopped rewriting it in the margins.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            },
+            {
+              "target": "known",
+              "key": "professor",
+              "delta": 2
+            }
+          ]
+        }
+      ],
+      "done": {
+        "line": "The curriculum is adopted and the school prints it under the order's name. A generation of the city's Catholics will know what you decided they should.",
+        "effects": [
+          {
+            "target": "known",
+            "key": "professor",
+            "delta": 5
+          },
+          {
+            "target": "known",
+            "key": "evangelist",
+            "delta": 3
+          },
+          {
+            "target": "reputation",
+            "key": "laity",
+            "delta": 3
+          },
+          {
+            "target": "reputation",
+            "key": "province",
+            "delta": 3
+          },
+          {
+            "target": "flag",
+            "key": "work:curriculum",
+            "value": true
+          }
+        ]
+      },
+      "requires": [
+        {
+          "type": "stat",
+          "key": "theology",
+          "op": ">=",
+          "value": 45
+        }
+      ],
+      "orders": [
+        "OSA"
+      ]
+    },
+    {
+      "id": "fr_retreat_manual",
+      "label": "A retreat manual for the parishes",
+      "blurb": "A weekend retreat written out so a pastor can give it without you: the talks, the silences, the examination, the closing Mass. Two years of giving it and cutting what did not work.",
+      "kind": "writing",
+      "apPerWeek": 1,
+      "weeks": 80,
+      "milestones": [
+        {
+          "at": 0.5,
+          "line": "Three parishes have given it and one of them sent the sheets back with the corrections of a woman who has made forty retreats.",
+          "effects": [
+            {
+              "target": "known",
+              "key": "spiritual_director",
+              "delta": 2
+            }
+          ]
+        }
+      ],
+      "done": {
+        "line": "The manual is in use across the diocese. Retreats you never attend are given from it, which is the odd immortality of the thing.",
+        "effects": [
+          {
+            "target": "known",
+            "key": "spiritual_director",
+            "delta": 6
+          },
+          {
+            "target": "known",
+            "key": "man_of_prayer",
+            "delta": 3
+          },
+          {
+            "target": "reputation",
+            "key": "laity",
+            "delta": 4
+          },
+          {
+            "target": "flag",
+            "key": "work:retreat_manual",
+            "value": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "fr_house_history",
+      "label": "A history of the house",
+      "blurb": "The house's own history, from the archive in the basement and the old friars who remember: two years of Saturday mornings, and a book the province will buy forty copies of.",
+      "kind": "writing",
+      "apPerWeek": 1,
+      "weeks": 90,
+      "milestones": [
+        {
+          "at": 0.5,
+          "line": "The archive has given up a scandal of 1931 that the old friars had told you was a rumour.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 2
+            }
+          ]
+        }
+      ],
+      "done": {
+        "line": "The history is printed. The house has a past it can show visitors, and the old friars are in it by name, which is why they talked.",
+        "effects": [
+          {
+            "target": "known",
+            "key": "professor",
+            "delta": 3
+          },
+          {
+            "target": "reputation",
+            "key": "community",
+            "delta": 6
+          },
+          {
+            "target": "reputation",
+            "key": "province",
+            "delta": 3
+          },
+          {
+            "target": "stat",
+            "key": "knowledge",
+            "delta": 2
+          },
+          {
+            "target": "flag",
+            "key": "work:house_history",
+            "value": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "fr_novices_reading",
+      "label": "A reading course for the novices",
+      "blurb": "A year's reading list for the novitiate, with a Wednesday evening to talk about it: the order's own writers, in the order they should be met, chosen by a man who met them out of order.",
+      "kind": "formation",
+      "apPerWeek": 1,
+      "weeks": 48,
+      "milestones": [
+        {
+          "at": 0.5,
+          "line": "The novices have reached the hard book and one of them has decided it is his.",
+          "effects": [
+            {
+              "target": "known",
+              "key": "spiritual_director",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 1
+            }
+          ]
+        }
+      ],
+      "done": {
+        "line": "The year is done and the list is the novitiate's now. The men formed on it will quote those books for fifty years and will not always know why.",
+        "effects": [
+          {
+            "target": "known",
+            "key": "spiritual_director",
+            "delta": 5
+          },
+          {
+            "target": "known",
+            "key": "man_of_prayer",
+            "delta": 2
+          },
+          {
+            "target": "reputation",
+            "key": "province",
+            "delta": 3
+          },
+          {
+            "target": "stat",
+            "key": "theology",
+            "delta": 1
+          },
+          {
+            "target": "flag",
+            "key": "work:novices_reading",
+            "value": true
+          }
+        ]
+      },
+      "requires": [
+        {
+          "type": "stat",
+          "key": "theology",
+          "op": ">=",
+          "value": 45
+        }
+      ]
+    },
+    {
+      "id": "fr_jail_thursdays",
+      "label": "Thursdays at the jail",
+      "blurb": "The county jail on Thursday mornings: Mass in a room with a bolted table, the box that is a grille, and the men who write to you afterward from the state prison. Four years of it, unless the sheriff changes.",
+      "kind": "service",
+      "apPerWeek": 1,
+      "weeks": 200,
+      "milestones": [
+        {
+          "at": 0.3,
+          "line": "The first letter from the state prison came, from a man you gave absolution to in March.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "known",
+              "key": "advocate",
+              "delta": 3
+            }
+          ]
+        },
+        {
+          "at": 0.7,
+          "line": "The sheriff changed and the new one had to be persuaded. He was.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "known",
+              "key": "confidant",
+              "delta": 2
+            }
+          ]
+        }
+      ],
+      "done": {
+        "line": "Four years of Thursdays. The jail has a chaplain now, a diocesan deacon you trained, and the state prison's mail still comes to the house.",
+        "effects": [
+          {
+            "target": "known",
+            "key": "advocate",
+            "delta": 8
+          },
+          {
+            "target": "known",
+            "key": "confessor",
+            "delta": 3
+          },
+          {
+            "target": "stat",
+            "key": "piety",
+            "delta": 3
+          },
+          {
+            "target": "reputation",
+            "key": "laity",
+            "delta": 3
+          },
+          {
+            "target": "flag",
+            "key": "work:jail_thursdays",
+            "value": true
+          }
+        ]
+      }
+    }
+  ]
+}

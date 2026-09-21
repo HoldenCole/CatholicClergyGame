@@ -8,6 +8,10 @@ export interface ClubDef {
   id: string;
   /** Who may belong. */
   phase: 'seminary' | 'priest';
+  /** A circle of the diocese's priests, or of the order's friars; absent means either. E3 §6. */
+  campaign?: 'diocesan' | 'religious';
+  /** Religious circles of one order or two. */
+  orders?: string[];
   label: string;
   blurb: string;
   /** Free hours (seminary) or blocks (parish) a week it takes. */

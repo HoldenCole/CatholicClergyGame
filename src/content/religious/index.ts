@@ -6,7 +6,9 @@ import pastorAsksRaw from './pastorAsks.json';
 import reputationsRaw from './reputations.json';
 import spendsRaw from './spends.json';
 import foundationsRaw from './foundations.json';
-import type { BishopAskDef, PastorAskDef, ReputationDef, IdentityDef, FriarSpendDef, CharterDial, CharterOptionDef, FoundationWorkDef, HorariumDef, HorariumKey, OrderDef, OrderKey, PermissionDef, ProvinceSeed } from '@/types';
+import projectsRaw from './projects.json';
+import confrereAsksRaw from './confrereAsks.json';
+import type { BishopAskDef, PastorAskDef, ReputationDef, IdentityDef, FriarSpendDef, ConfrereAskDef, SideWorkDef, CharterDial, CharterOptionDef, FoundationWorkDef, HorariumDef, HorariumKey, OrderDef, OrderKey, PermissionDef, ProvinceSeed } from '@/types';
 
 /** The orders a friar can be professed into. E3 §6–7, as data. */
 const data = raw as unknown as { orders: OrderDef[]; provinceComplications: string[]; doctrinalTopics: string[] };
@@ -68,3 +70,9 @@ export function charterOption(dial: CharterDial, id: string): CharterOptionDef {
   if (!def) throw new Error(`no ${dial} option ${id}`);
   return def;
 }
+
+/** The friar's desk: projects taken on beside the house's work. E3 §6.2. */
+export const friarProjectDefs: SideWorkDef[] = (projectsRaw as unknown as { projects: SideWorkDef[] }).projects;
+
+/** Letters from brothers of the province asking for help. E3 §6.2. */
+export const confrereAskDefs: ConfrereAskDef[] = (confrereAsksRaw as unknown as { asks: ConfrereAskDef[] }).asks;
