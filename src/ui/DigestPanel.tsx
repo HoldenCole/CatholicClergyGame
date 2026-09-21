@@ -64,6 +64,9 @@ function WeeksSheet({ digest, going }: { digest: DigestWeek[]; going: string[] }
                   </div>
                 );
               })}
+              {filter === 'all' && !Object.entries(w.lanes).some(([lane, lines]) => lane !== 'money' && (lane !== 'around' || flavor) && lines.length > 0) && (
+                <div className="ml-10 ink-faint text-xs">Nothing to write down.</div>
+              )}
               {filter === 'money' && w.lanes.money && w.lanes.money.length > 1 && (
                 <div className="ml-10 flex gap-2"><span className="ink-faint w-16 shrink-0 text-[11px] uppercase tracking-[0.12em]">{LANE_LABEL.money}</span><span className="min-w-0 flex-1 leading-5">{w.lanes.money.filter((l) => !/^Collections \$/.test(l)).join(' ')}</span></div>
               )}

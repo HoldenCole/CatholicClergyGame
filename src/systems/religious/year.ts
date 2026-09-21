@@ -2,7 +2,8 @@ import type { GameState } from '@/types';
 import type { Rng } from '@/engine/rng';
 import { religiousOrder } from '@/content/religious';
 import { consult, dualAuthorityCheck, termEndWeek } from './obedience';
-import { chapterYear, openChapter, termOver } from './chapter';
+import { chapterFromTheGallery, chapterYear, openChapter, termOver } from './chapter';
+import { deliverLetter } from '@/systems/review';
 import { appointmentYear, conferCredentials } from './offices';
 import { currentHouse } from './house';
 import { BISHOP_ASKS, bishopAskYear } from './bishopAsks';
@@ -52,7 +53,9 @@ export function religiousYear(state: GameState, rng: Rng): GameState {
     const due = since === 0 ? (year * 52 + next.clock.week) % (order.governance.priorTermYears * 52) < 52 : next.clock.week - since >= order.governance.priorTermYears * 52;
     if (due && r.vows.solemnWeek !== undefined) {
       next = openChapter({ ...next, flags: { ...next.flags, [`chapter:house:${house.id}`]: next.clock.week } }, 'house', house.id, 'prior');
-      return { ...next, mode: { kind: 'chapter' } };
+      const gallery = chapterFromTheGallery(next, rng.derive(`gallery:${next.clock.week}`));
+      if (gallery.letter) next = deliverLetter(gallery.state, gallery.letter);
+      else return { ...next, mode: { kind: 'chapter' } };
     }
   }
   const p = next.province;
@@ -62,7 +65,9 @@ export function religiousYear(state: GameState, rng: Rng): GameState {
     const due = sinceProv === 0 ? provYear - p.provincialSince >= order.governance.provincialTermYears : next.clock.week - sinceProv >= order.governance.provincialTermYears * 52;
     if (due) {
       next = openChapter({ ...next, flags: { ...next.flags, 'chapter:provincial': next.clock.week } }, 'provincial', p.id, 'provincial');
-      return { ...next, mode: { kind: 'chapter' } };
+      const gallery = chapterFromTheGallery(next, rng.derive(`gallery:${next.clock.week}`));
+      if (gallery.letter) next = deliverLetter(gallery.state, gallery.letter);
+      else return { ...next, mode: { kind: 'chapter' } };
     }
   }
   // A work the bishop appointed to is his to end, and a bishop who has soured does. E3 §3.11.

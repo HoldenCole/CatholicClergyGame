@@ -60,3 +60,40 @@ describe('spiritual direction: the kind first, then the man (DESIGN §9.4)', () 
     expect(again.flags['direction:split']).toBe(true);
   });
 });
+
+describe('quality of life, round five', () => {
+  it('a chapter the man is neither in nor before resolves itself and comes as a letter', async () => {
+    const { chapterFromTheGallery, openChapter } = await import('@/systems/religious/chapter');
+    const { religiousOrder } = await import('@/content/religious');
+    const { generateProvince } = await import('@/generation/province');
+    const { installProvince } = await import('@/systems/religious/install');
+    const def = religiousOrder('OP');
+    const gen = generateProvince(createRng('gallery:province'), def, def.provinces[0]!, 2010);
+    const first = (gen.houses.find((h) => h.kind === 'priory') ?? gen.houses[0]!).id;
+    const s = installProvince(seminaryState('gallery'), gen, 2010, first);
+    // A man in simple vows is not an elector of the provincial chapter.
+    const opened = openChapter({ ...s, flags: { ...s.flags, ordained: true } }, 'provincial', s.province!.id, 'provincial');
+    expect(opened.religious!.chapter!.electorIds).not.toContain('player');
+    const res = chapterFromTheGallery(opened, createRng('g'));
+    expect(res.letter).toBeDefined();
+    expect(res.letter!.title).toContain('elected');
+    expect(res.state.religious!.chapter).toBeUndefined();
+    expect(res.state.province!.provincialId).toBeTruthy();
+    // An elector keeps his chapter.
+    const solemn = { ...opened, religious: { ...opened.religious!, vows: { ...opened.religious!.vows, solemnWeek: 1 }, office: { office: 'prior' as const, bodyId: first, startWeek: 0, endWeek: 999, consecutive: 1 } } };
+    const asElector = openChapter(solemn, 'provincial', s.province!.id, 'provincial');
+    if (asElector.religious!.chapter!.electorIds.includes('player')) expect(chapterFromTheGallery(asElector, createRng('g')).letter).toBeUndefined();
+  });
+
+  it("the diocese's churn names the men he knows and counts the rest", async () => {
+    const { refreshOpenings } = await import('@/systems/openings');
+    const s = parishState('churn');
+    let lines: string[] = [];
+    for (let i = 0; i < 30 && !lines.some((l) => l.startsWith('Across the diocese')); i++) lines = refreshOpenings({ ...s, clock: { ...s.clock, week: s.clock.week + 52 * i } }, createRng(`churn:${i}`)).lines;
+    const summary = lines.find((l) => l.startsWith('Across the diocese'));
+    expect(summary).toBeDefined();
+    expect(summary).toMatch(/moved|retired|died/);
+    // No more than a handful of named lines in any year.
+    expect(lines.filter((l) => / of .* has (been moved|retired|died)\.$/.test(l)).length).toBeLessThanOrEqual(6);
+  });
+});
