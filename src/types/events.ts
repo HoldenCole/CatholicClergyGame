@@ -125,6 +125,9 @@ export type Condition =
   | { type: 'group'; key: 'type' | 'vitality' | 'hostile' | 'suppressed' | 'foundedByPlayer' | 'agenda' | 'religiousLed'; value: string | boolean }
   /** A feast that falls in the current week, as the parish keeps it (engine/feasts.ts). */
   | { type: 'feast'; key: string }
+  /** DESIGN §8.13: the nights (key: company | rest | prayer | alone_weeks; or evenings, with value the EveningKind). */
+  | { type: 'night'; key: 'company' | 'rest' | 'prayer' | 'alone_weeks'; op: Op; value: number }
+  | { type: 'night'; key: 'evenings'; value: string }
   /** DESIGN §8.12: what the presbyterate is saying (key: about_you_false | about_you_true | about_other | reached_bishop), heard in the last half year and not yet answered. */
   | { type: 'rumour'; key: 'about_you_false' | 'about_you_true' | 'about_other' | 'reached_bishop' }
   /** DESIGN §8.11: someone in the man's orbit has this life open (key: a life id from content/lives.json; who narrows the class of person). */

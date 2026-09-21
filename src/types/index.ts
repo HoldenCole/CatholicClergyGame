@@ -30,3 +30,4 @@ export * from './campaign';
 export * from './religiousLife';
 export * from './town';
 export * from './talk';
+export * from './night';

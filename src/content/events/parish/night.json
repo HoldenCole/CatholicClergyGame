@@ -1,0 +1,946 @@
+{
+  "_notes": "The house at night (DESIGN §8.13): one scene a season in which the night is the whole of the story, hung on the nights through the night condition. The bottle is a thread here and nowhere else: authored, never a number, always with a way out, and the way out always written with respect.",
+  "events": [
+    {
+      "id": "nt_the_phone_at_eleven",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "severity": "ROUTINE",
+      "category": "parish_death",
+      "baseWeight": 16,
+      "suppressYears": 2,
+      "pressure": [
+        "body_vs_vow"
+      ],
+      "requires": [
+        {
+          "type": "night",
+          "key": "rest",
+          "op": "<=",
+          "value": 100
+        }
+      ],
+      "title": "The Phone at Eleven",
+      "body": "The phone at eleven is never nothing. The hospital: a man on the fourth floor, not a parishioner, the family asked for a priest, any priest, and the chaplain is off. You have been up since five and have the seven o'clock and the school Mass. The house is dark except the kitchen. The car keys are on the hook. It is twenty minutes each way and nobody would know if you said you could not.",
+      "flavorPrompt": "The hospital at eleven at night, a stranger dying, the keys on the hook.",
+      "choices": [
+        {
+          "id": "go",
+          "label": "Go, now, with the keys off the hook",
+          "default": true,
+          "outcome": "You go. He is unconscious and the family is not, and you anoint him and say the prayers and sit with the daughter for forty minutes while she tells you who he was. You are home at one and say the seven o'clock on four hours. The daughter writes in the spring. You do not remember his name and keep the letter.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 3
+            },
+            {
+              "target": "ministry",
+              "key": "anointings",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "the_next_parish",
+          "label": "Call the next parish; their man is younger",
+          "outcome": "You call the next parish and their man goes, and says nothing about it at the deanery meeting, which is how you know he minded. You sleep. The man on the fourth floor dies at three with a priest there, which is what matters, and what you tell yourself.",
+          "effects": [
+            {
+              "target": "strain",
+              "key": "",
+              "delta": -1
+            },
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": -2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": -1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "nt_friday_empty",
+      "phase": [
+        "administrator",
+        "pastor"
+      ],
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 18,
+      "suppressYears": 2,
+      "pressure": [
+        "doubt"
+      ],
+      "requires": [
+        {
+          "type": "night",
+          "key": "company",
+          "op": "<=",
+          "value": 35
+        }
+      ],
+      "title": "Friday",
+      "body": "Friday night in the rectory and the office closed at four. The housekeeper left a plate under foil. The church is dark across the lot and the town is at the game or the bar or each other's houses, and the phone has not rung since Tuesday. You have said the Office. You have eaten the plate. It is eight-fifteen. There is a book, a television, a car, and a priory forty minutes away where the friars eat at six and talk until ten and have said, twice, that you should come.",
+      "flavorPrompt": "Friday night alone in the rectory, the plate under foil, the priory forty minutes away.",
+      "choices": [
+        {
+          "id": "the_priory",
+          "label": "Drive to the priory, and make it a habit",
+          "default": true,
+          "outcome": "You drive to the priory and are late for supper and early for recreation and a friar you barely know hands you a glass and asks about the parish as if it were interesting. You go most Fridays after that. The house is still empty on the other nights, and a little less.",
+          "effects": [
+            {
+              "target": "flag",
+              "key": "night:priory_fridays",
+              "value": true
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": -3
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "call_someone",
+          "label": "Call a classmate, and talk until the game is over",
+          "outcome": "You call, and he is watching the game, and you watch it together forty miles apart and talk through it, about nothing. It is a Friday. You call again the next one.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@closest_classmate",
+              "delta": 6
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": -2
+            }
+          ]
+        },
+        {
+          "id": "sit_with_it",
+          "label": "Sit with it; the empty house is part of the vow",
+          "outcome": "You sit with it, in the chair, with the lamp, and it is what it is, and by ten it is something else, something nearer prayer than loneliness, or you decide it is. It comes back next Friday.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "nt_the_doorbell",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 14,
+      "suppressYears": 3,
+      "pressure": [
+        "belief_vs_safety"
+      ],
+      "requires": [
+        {
+          "type": "night",
+          "key": "rest",
+          "op": "<=",
+          "value": 100
+        },
+        {
+          "type": "parish",
+          "key": "terrain",
+          "value": "urban"
+        }
+      ],
+      "title": "The Doorbell at Midnight",
+      "body": "The doorbell at midnight and a man on the step you have seen on the church steps, not drunk, cold, asking for nothing in particular and everything. The rectory has a couch. The rectory has a rule about the couch, made by a pastor before you after a thing that happened. The shelter is full or closed or forty minutes away. He is not asking to come in. He is standing there.",
+      "flavorPrompt": "A man from the church steps at the rectory door at midnight, the couch, and the rule about the couch.",
+      "choices": [
+        {
+          "id": "the_hall",
+          "label": "Open the hall for the night, with a cot and the heat on",
+          "default": true,
+          "outcome": "You open the hall and find the cot from the Knights and turn the heat up, and he sleeps, and is gone by six with the cot folded. The rule about the couch holds. The hall is opened again, later, for others, and the finance council learns to say nothing.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "town",
+              "key": "shelter",
+              "delta": 4,
+              "value": "He opened the hall at midnight for a man on the step."
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "the_drive",
+          "label": "Drive him to the shelter, wherever it is tonight",
+          "outcome": "You drive him forty minutes and wait while they find a bed and drive back, and say the seven o'clock on five hours. He is on the church steps again in a week, and nods.",
+          "effects": [
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "the_rule",
+          "label": "Give him a blanket and the number, and keep the rule",
+          "outcome": "You give him the blanket from the hall closet and the number for the shelter and twenty dollars, and shut the door, and do not sleep for an hour. The rule holds. He is on the steps in the morning, asleep in the blanket.",
+          "effects": [
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": -1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "nt_christmas_night",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 20,
+      "suppressYears": 3,
+      "pressure": [
+        "doubt"
+      ],
+      "requires": [
+        {
+          "type": "night",
+          "key": "company",
+          "op": "<=",
+          "value": 100
+        },
+        {
+          "type": "feast",
+          "key": "christmas"
+        }
+      ],
+      "title": "Christmas Night",
+      "body": "The last Mass is over and the last car is gone and the church is locked, and it is Christmas night in the rectory. The housekeeper is with her family. The deacon is with his. You had four invitations and said no to all of them because a man cannot go to one, and now it is nine o'clock and the house has the smell of the incense on your clothes and nothing else in it. There is a plate in the refrigerator with a note. There is the telephone. There is the church across the lot, dark, with the crib in it.",
+      "flavorPrompt": "Christmas night alone in the rectory after the last Mass, the plate with a note, the dark church with the crib.",
+      "choices": [
+        {
+          "id": "the_crib",
+          "label": "Go over to the church and sit in front of the crib for an hour",
+          "default": true,
+          "outcome": "You go over with the keys and one light and sit in the front pew in front of the crib for an hour, which is the only hour of Christmas that was yours, and it is enough, most years.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": -2
+            }
+          ]
+        },
+        {
+          "id": "call_home",
+          "label": "Call home, late, and stay on until they are tired",
+          "outcome": "You call home and they put you on the speaker and the children shout, and your mother says did you eat, and you say yes, which is nearly true. It is the plate, afterwards, with the note, which says Merry Christmas, Father, in the housekeeper's hand.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@mother",
+              "delta": 4
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": -2
+            }
+          ]
+        },
+        {
+          "id": "one_invitation",
+          "label": "Go to one of the four, late, and let the other three mind",
+          "outcome": "You go to one, at nine-thirty, and they have kept a plate and a chair, and the other three hear about it by the Epiphany and mind in the way of people who had also kept a plate. It was warm, and it was a choice, and you make it again the next year, differently.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 1
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": -3
+            },
+            {
+              "target": "flag",
+              "key": "night:christmas_out",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "nt_the_letter_not_sent",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "severity": "ROUTINE",
+      "category": "chancery",
+      "baseWeight": 16,
+      "suppressYears": 2,
+      "pressure": [
+        "ambition_vs_integrity"
+      ],
+      "requires": [
+        {
+          "type": "night",
+          "key": "rest",
+          "op": "<=",
+          "value": 40
+        }
+      ],
+      "title": "The Letter at One",
+      "body": "One in the morning and you are at the desk with a letter to the bishop that you have written three times. It is a good letter. It says what you think about the thing the chancery did, and it says it well, and it is the kind of letter that is in a file for the rest of a man's life. You have not slept properly in a month. The envelope is addressed. The stamp is on it.",
+      "flavorPrompt": "A letter to the bishop written at one in the morning by a man who has not slept in a month.",
+      "choices": [
+        {
+          "id": "sleep_on_it",
+          "label": "Put it in the drawer and sleep; read it Thursday",
+          "default": true,
+          "outcome": "You put it in the drawer. On Thursday it reads as a letter written at one in the morning, and you keep the second paragraph and write the rest again, in daylight, and send that. The bishop answers it. The one in the drawer stays in the drawer.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 1
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": -1
+            }
+          ]
+        },
+        {
+          "id": "send_it",
+          "label": "Send it, tonight, before you can think better of it",
+          "outcome": "You walk it to the box at the corner at one in the morning. The bishop receives it Friday and answers it in a line that says he has received it. It is in the file. Some of it was right.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": -5
+            },
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "night:letter_sent",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "burn_it",
+          "label": "Burn it in the sink and go to bed",
+          "outcome": "You burn it in the kitchen sink and open the window and go to bed, and sleep, and the thing the chancery did goes on being done.",
+          "effects": [
+            {
+              "target": "strain",
+              "key": "",
+              "delta": -2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "nt_compline_in_the_dark",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 14,
+      "suppressYears": 3,
+      "pressure": [
+        "doubt"
+      ],
+      "requires": [
+        {
+          "type": "night",
+          "key": "prayer",
+          "op": ">=",
+          "value": 55
+        }
+      ],
+      "title": "Compline in the Dark",
+      "body": "You say Compline in the church at ten with the lights off, most nights, the sanctuary lamp the only light, and tonight when you finish the Salve there is someone in the back pew. A woman, older, coat on, who was there before you came in and did not move. She has been coming, she says, when you speak to her, for a month. She lets herself in through the sacristy door that the sacristan does not lock, and sits, and leaves when you leave. She is not asking for anything. She would like to go on coming.",
+      "flavorPrompt": "Compline alone in the dark church, and a woman in the back pew who has been coming for a month.",
+      "choices": [
+        {
+          "id": "let_her",
+          "label": "Let her, and say nothing to the sacristan about the door",
+          "default": true,
+          "outcome": "She comes. Some nights there are two of them, then four, and by Lent the ten o'clock Compline in the dark has eleven people and no announcement, and you say the Salve to them and to everyone. The sacristan finds the door unlocked and says nothing, which is his way of having been told.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "night:compline_kept",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "the_door",
+          "label": "Tell her the door will be locked, kindly, and give her a breviary",
+          "outcome": "You give her a breviary and say the door will be locked and she thanks you and does not come again. You lock the door yourself, at ten, and say the Salve to the lamp.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": -1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "nt_the_third_glass",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 30,
+      "suppressYears": 2,
+      "pressure": [
+        "body_vs_vow",
+        "doubt"
+      ],
+      "requires": [
+        {
+          "type": "night",
+          "key": "alone_weeks",
+          "op": ">=",
+          "value": 10
+        },
+        {
+          "type": "strain",
+          "op": ">=",
+          "value": 35
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "night:bottle",
+            "value": true
+          }
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "night:sober_once",
+            "value": true
+          }
+        }
+      ],
+      "title": "The Third Glass",
+      "body": "The nights have been alone for months and the days have been too much, and there has been a glass with the plate, and then a second with the news, and tonight there is a third, and the third is the one you notice. Not the drink; the noticing. The house is quiet. The bottle is the one a parishioner gave you at Christmas, and it is the second of those, and you have not told anyone that, because there is no one in the house to tell. You are not drunk. You are a man at a kitchen table at ten o'clock who has seen this in other men and did not think it was a thing that happened to him.",
+      "flavorPrompt": "The third glass at the kitchen table, noticed, by a man who has seen it in other men.",
+      "choices": [
+        {
+          "id": "the_sink",
+          "label": "Pour it down the sink, and call someone, now, while you would",
+          "default": true,
+          "outcome": "You pour it down the sink and the rest of the bottle after it, which is theatrical and works, and call a classmate at ten-fifteen and say a sentence you had not said aloud. He does not make anything of it, which is the right thing, and calls you Thursday, and the Thursday after. The glass with the plate stays one, mostly, and you count it, which is new.",
+          "effects": [
+            {
+              "target": "flag",
+              "key": "night:called",
+              "value": true
+            },
+            {
+              "target": "flag",
+              "key": "night:sober_once",
+              "value": true
+            },
+            {
+              "target": "relationship",
+              "key": "@closest_classmate",
+              "delta": 10
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": -3
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "the_doctor",
+          "label": "Make an appointment with the doctor in the morning, and say why",
+          "outcome": "You see the doctor on Thursday and say why, which is the hardest sentence of the year, and he is matter-of-fact about it in a way that helps, and gives you a number and a question to ask yourself each night. You ask it. The answer is not always the one you would like, and the asking is the thing.",
+          "effects": [
+            {
+              "target": "flag",
+              "key": "night:doctor",
+              "value": true
+            },
+            {
+              "target": "flag",
+              "key": "night:sober_once",
+              "value": true
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": -2
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "not_tonight",
+          "label": "Finish the glass; it is one night, and you will watch it",
+          "outcome": "You finish the glass and watch it, and it is one night, and then it is a way the nights go. Nobody notices for a while. You notice.",
+          "effects": [
+            {
+              "target": "flag",
+              "key": "night:bottle",
+              "value": true
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "nt_the_brother_who_noticed",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 32,
+      "suppressYears": 1,
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "night:bottle",
+          "value": true
+        },
+        {
+          "type": "night",
+          "key": "rest",
+          "op": "<=",
+          "value": 100
+        }
+      ],
+      "title": "The Brother Who Noticed",
+      "body": "{@deanery_priest} has noticed. He does not say so at the meeting. He comes to the rectory on a Tuesday afternoon without calling, which nobody does, and sits in the kitchen, and looks at the counter where the bottle is not, because you moved it, and says he has been where you are. He says it once, flatly, and then talks about the diocese for twenty minutes, and at the door he says the name of a man and a telephone number and that the man will not ask who gave it. He does not say anything else. He does not need to.",
+      "flavorPrompt": "A priest of the deanery in the kitchen on a Tuesday, who has been where you are, and a number at the door.",
+      "choices": [
+        {
+          "id": "the_truth",
+          "label": "Tell him the truth, all of it, in the kitchen",
+          "default": true,
+          "outcome": "You tell him. It takes eleven minutes and he does not interrupt. He says the number again, and that he will drive you if you like, and that he drove himself and would not recommend it. You call the number on Thursday. He drives you.",
+          "effects": [
+            {
+              "target": "flag",
+              "key": "night:told",
+              "value": true
+            },
+            {
+              "target": "relationship",
+              "key": "@deanery_priest",
+              "delta": 16
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": -2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "the_number",
+          "label": "Take the number and say nothing, and call it yourself",
+          "outcome": "You take the number and say thank you and nothing else, and he nods and goes, and you call it that night, and the man on the other end does not ask who gave it. It is a start, and it is yours, which you needed it to be.",
+          "effects": [
+            {
+              "target": "flag",
+              "key": "night:told",
+              "value": true
+            },
+            {
+              "target": "relationship",
+              "key": "@deanery_priest",
+              "delta": 6
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": -1
+            }
+          ]
+        },
+        {
+          "id": "deny",
+          "label": "Tell him he is mistaken, pleasantly, and see him out",
+          "outcome": "You say he is mistaken, pleasantly, and he says of course, and goes, and does not come back on a Tuesday. The number is on the counter where he left it. It stays there.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@deanery_priest",
+              "delta": -4
+            },
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": -2
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "nt_the_program",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 34,
+      "suppressYears": 1,
+      "pressure": [
+        "body_vs_vow",
+        "ambition_vs_integrity"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "night:bottle",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "night:told",
+          "value": true
+        }
+      ],
+      "title": "The Place the Diocese Sends Men",
+      "body": "The man on the phone has a place, and the place has a bed in three weeks, and it is ninety days, and the vicar for clergy will have to know, and will arrange the parish, and will say nothing to anyone, which is mostly true. Ninety days is a summer. The parish will be told a sabbatical, and some of them will know, and the ones who know will be the ones who have been where you are. Nobody is making you. That is the thing about it: nobody is making you, and the bed is there in three weeks.",
+      "flavorPrompt": "A bed in three weeks, ninety days, the vicar for clergy told, the parish told a sabbatical.",
+      "choices": [
+        {
+          "id": "go",
+          "label": "Go, for the ninety days, and let the vicar for clergy arrange the parish",
+          "default": true,
+          "outcome": "You go. The parish is told a sabbatical, and a retired priest says the Masses, and the ones who know say nothing and put a card in the drawer for when you are back. Ninety days is a summer. You come back thinner and stranger and sober, and the glass with the plate is water, and you count the days, which is what is done, and you are still counting.",
+          "effects": [
+            {
+              "target": "flag",
+              "key": "night:bottle",
+              "value": false
+            },
+            {
+              "target": "flag",
+              "key": "night:sober",
+              "value": true
+            },
+            {
+              "target": "flag",
+              "key": "night:sober_once",
+              "value": true
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": -15
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": -1
+            },
+            {
+              "target": "ap",
+              "key": "",
+              "delta": -3
+            }
+          ]
+        },
+        {
+          "id": "the_meetings",
+          "label": "Not the place; the meetings, Tuesdays, in the next town, and keep the parish",
+          "outcome": "You go to the meetings on Tuesdays in the church basement of a parish that is not yours, in a jacket that is not a collar, and say your first name, and the men there know exactly who you are and do not say so. It is slower than the place. It is yours. The glass with the plate is water, most nights, and you count the nights.",
+          "effects": [
+            {
+              "target": "flag",
+              "key": "night:bottle",
+              "value": false
+            },
+            {
+              "target": "flag",
+              "key": "night:sober",
+              "value": true
+            },
+            {
+              "target": "flag",
+              "key": "night:sober_once",
+              "value": true
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": -6
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "ap",
+              "key": "",
+              "delta": -0.5
+            }
+          ]
+        },
+        {
+          "id": "not_yet",
+          "label": "Not yet; after Easter, when the parish can spare you",
+          "outcome": "Easter comes and goes and the parish could spare you and you do not go. The man on the phone calls once more, and then does not. The bottle is where it was.",
+          "effects": [
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": -1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "nt_a_year_sober",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 20,
+      "once": true,
+      "suppressYears": 99,
+      "pressure": [
+        "doubt"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "night:sober",
+          "value": true
+        },
+        {
+          "type": "night",
+          "key": "rest",
+          "op": ">=",
+          "value": 0
+        }
+      ],
+      "title": "A Year",
+      "body": "A year, tonight, by the count you keep. Nobody in the parish knows the date and two men in the deanery do, and one of them has left a message on the machine that says only the number of days, and the other has left nothing, which is his way. The kitchen is the kitchen. The glass with the plate is water. There is a coin in your pocket from the basement of a church that is not yours, and it is the only thing you have ever been given that you carry.",
+      "flavorPrompt": "A year sober by the count kept, a message with a number of days, a coin in the pocket.",
+      "choices": [
+        {
+          "id": "say_it",
+          "label": "Say it aloud, to the two men, and to the parishioner who gave you the bottle",
+          "default": true,
+          "outcome": "You call the two men, and then you tell the parishioner who gave you the bottle at Christmas, gently, which was not necessary and was right, and he cries, and gives you a book the next Christmas. The year becomes two.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": 2
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": -3
+            }
+          ]
+        },
+        {
+          "id": "keep_it",
+          "label": "Keep it; it is yours, and the coin is enough",
+          "outcome": "You keep it. The coin is enough. The year becomes two, and the count is the count, and the kitchen is the kitchen.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": -2
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

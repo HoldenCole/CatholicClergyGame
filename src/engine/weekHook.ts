@@ -38,6 +38,7 @@ import { ensureTown } from '@/systems/town';
 import { mailWeek } from '@/systems/mail';
 import { openLives } from '@/systems/lives';
 import { heardRumours, talkWeek } from '@/systems/talk';
+import { markNightScene, nightSceneDue, nightWeek } from '@/systems/night';
 import { sideWorkWeek } from '@/systems/sidework';
 import { requestedChoice } from '@/systems/choice';
 import { confessorWeek } from '@/systems/confessor';
@@ -214,6 +215,15 @@ const FEAST_SCENE_CHANCE = 0.6;
 /** Any week, the chance a scene about someone's open life, or about what is being said, fires when one is eligible. DESIGN §8.11, §8.12. */
 const LIFE_SCENE_CHANCE = 0.06;
 
+/** One night a season in which the night is the whole story: a scene hung on the nights, drawn ahead of the pool. Null when none fits. DESIGN §8.13. */
+function nightScene(state: GameState, rng: Rng, deps: EventDeps): GameState | null {
+  const hangs = (c: Condition): boolean => c.type === 'night' || ((c.type === 'any' || c.type === 'all') && c.inner.some(hangs));
+  const pool = deps.pool.filter((e) => !e.beat && (e.requires ?? []).some(hangs));
+  if (!pool.length) return null;
+  const [event] = drawEvents(pool, state, rng, 1);
+  return event ? fireOrResolve(markNightScene(state), event, rng, deps) : null;
+}
+
 /** A scene that hangs on a life someone around him is carrying, or on the talk he has heard, drawn ahead of the ordinary pool. Null when none fires. */
 function lifeScene(state: GameState, rng: Rng, deps: EventDeps): GameState | null {
   if (!rng.chance(LIFE_SCENE_CHANCE) || (!openLives(state).length && !heardRumours(state).length)) return null;
@@ -284,6 +294,14 @@ export function friarWeekHook(deps: EventDeps): WeekHook {
       if (event) next = fireOrResolve(next, event, rng, deps);
     }
     if (next.mode.kind !== 'clock' || next.pending.length > 0) return next;
+    // The house at night. DESIGN §8.13.
+    const nights = nightWeek(next, rng.derive(`night:${next.clock.week}`));
+    next = nights.state;
+    if (nights.line) next = addDigestLine(next, nights.line);
+    if (nightSceneDue(next, rng.derive(`night-due:${next.clock.week}`))) {
+      const fired = nightScene(next, rng.derive(`night-scene:${next.clock.week}`), deps);
+      if (fired) { next = fired; if (next.mode.kind !== 'clock' || next.pending.length > 0) return next; }
+    }
     // What the men are saying. DESIGN §8.12.
     const said = talkWeek(next, rng.derive(`talk:${next.clock.week}`));
     next = said.state;
@@ -477,6 +495,14 @@ export function parishWeekHook(deps: EventDeps): WeekHook {
       next = nextAssignment(next, rng).state;
     }
     if (next.mode.kind !== 'clock' || next.pending.length > 0) return next;
+    // The house at night. DESIGN §8.13.
+    const nights = nightWeek(next, rng.derive(`night:${next.clock.week}`));
+    next = nights.state;
+    if (nights.line) next = addDigestLine(next, nights.line);
+    if (nightSceneDue(next, rng.derive(`night-due:${next.clock.week}`))) {
+      const fired = nightScene(next, rng.derive(`night-scene:${next.clock.week}`), deps);
+      if (fired) { next = fired; if (next.mode.kind !== 'clock' || next.pending.length > 0) return next; }
+    }
     // What the men are saying. DESIGN §8.12.
     const said = talkWeek(next, rng.derive(`talk:${next.clock.week}`));
     next = said.state;

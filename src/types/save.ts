@@ -36,6 +36,7 @@ import type { TalksState } from './talks';
 import type { Tenure } from './tenure';
 import type { Town } from './town';
 import type { TalkState } from './talk';
+import type { NightState } from './night';
 import type { SeeState } from './see';
 import type { Letter } from './mode';
 import type { Beat, Clock, Speed } from './time';
@@ -98,6 +99,8 @@ export interface GameState {
   talks?: TalksState;
   /** What the presbyterate is saying: the rumours, and the snapshot of the men it watches. DESIGN §8.12. */
   talk?: TalkState;
+  /** The house at night: the evenings, and what the nights are. DESIGN §8.13. */
+  night?: NightState;
   /** Letters read, most recent last: the year in review, the new bishop's reading. */
   letters?: Letter[];
   /** The mailbag: every letter from someone, and whether it was answered. DESIGN §8.10. */

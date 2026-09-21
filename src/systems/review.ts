@@ -13,6 +13,7 @@ import { requestChance, requestOf, requestWord } from './request';
 import { townReviewLine } from './town';
 import { livesReviewLine } from './lives';
 import { talkReviewLine } from './talk';
+import { nightReviewLine } from './night';
 
 /** The reputation and stat words the sheets use. */
 function word(v: number): string {
@@ -73,6 +74,8 @@ export function yearInReview(state: GameState): { letter: Letter; baseline: NonN
     const said = care >= 0.7 ? 'that they see you, in the hospital and at the door, and that it shows on Sunday' : care >= 0.4 ? 'that you are around, mostly, and that the homilies are yours' : care >= 0.15 ? 'that you are a hard man to find outside Mass' : 'that they see you at Mass and nowhere else';
     body.push(`The parish says ${said}. ${state.parish.recycledHomilyStreak >= 3 ? 'The homily has come from the file for weeks, and people have begun to say so.' : ''}`.trim());
   }
+  const nights = nightReviewLine(state);
+  if (nights) rows.push({ label: 'The nights', value: nights });
   const said = talkReviewLine(state, week - 52);
   if (said) rows.push({ label: 'What was said', value: said });
   const around = livesReviewLine(state);
