@@ -15,6 +15,7 @@ import { deliverLetter, yearInReview } from '@/systems/review';
 import { closeTenure } from '@/systems/tenures';
 import { castYearStep } from './parish';
 import { townYear } from '@/systems/town';
+import { livesYear } from '@/systems/lives';
 import { seeYear } from './see';
 import { withChoice } from '@/systems/choice';
 import { closeRequest, markRequested, requestOf, requestYear } from '@/systems/request';
@@ -97,6 +98,10 @@ export function careerYear(state: GameState, rng: Rng): GameState {
   const cast = castYearStep(next, rng.derive(`cast:${state.clock.week}`));
   next = cast.state;
   if (cast.lines.length) next = addDigest(next, cast.lines);
+  // The people around him have their year: a spouse ill, a job offer, a bottle, a parent dying. DESIGN §8.11.
+  const lives = livesYear(next, rng.derive(`lives:${state.clock.week}`));
+  next = lives.state;
+  if (lives.lines.length) next = addDigest(next, lives.lines);
   // The town has its year: a place fails or closes or opens, and the parish feels it. DESIGN §8.9.
   const town = townYear(next, rng.derive(`town:${state.clock.week}`));
   next = town.state;

@@ -57,7 +57,7 @@ export function choiceMeaning(choice: Choice): string | null {
   const cools: string[] = [];
   for (const e of effects) {
     if (e.target === 'reputation' && (e.delta ?? 0) !== 0 && Math.abs(e.delta ?? 0) >= 2) (e.delta! > 0 ? warms : cools).push(REP[e.key] ?? e.key.replace(/_/g, ' '));
-    if (e.target === 'relationship' && (e.delta ?? 0) !== 0 && Math.abs(e.delta ?? 0) >= 3) (e.delta! > 0 ? warms : cools).push(SELECTOR[e.key] ?? e.key.replace('@', '').replace(/_/g, ' '));
+    if (e.target === 'relationship' && (e.delta ?? 0) !== 0 && Math.abs(e.delta ?? 0) >= 3) (e.delta! > 0 ? warms : cools).push(SELECTOR[e.key] ?? (e.key.startsWith('@life:') ? 'the one it is about' : e.key.replace('@', '').replace(/_/g, ' ')));
   }
   const uniq = (xs: string[]) => [...new Set(xs)];
   if (warms.length || cools.length) {

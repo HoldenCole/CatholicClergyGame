@@ -1,3 +1,4 @@
+import { lifeLabel } from '@/systems/lives';
 import { useGameStore } from '@/engine/store';
 import { currentHouse, houseLine, membersOf, priorOf } from '@/systems/religious/house';
 import { horariumRows } from '@/systems/religious/horarium';
@@ -96,6 +97,7 @@ export default function HousePanel() {
               <Portrait portrait={portraitForNpc(m, year)} size={22} />
               <span>
                 {m.title} {m.name.first} {m.name.last}, {year - m.birthYear}
+                {lifeLabel(game, m) && <span className="ink-wine ml-2 text-xs">{lifeLabel(game, m)}</span>}
                 {m.tags.includes('prior') ? ' · prior' : m.tags.includes('novice_master') ? ' · novice master' : m.tags.includes('master_of_students') ? ' · master of students' : m.tags.includes('vows:novice') ? ' · novice' : m.tags.includes('vows:simple') ? ' · student' : ''}
                 {friends.has(m.id) ? ' · a close friend' : ''}
                 <span className="ink-faint"> · {word(m.relationship)}</span>

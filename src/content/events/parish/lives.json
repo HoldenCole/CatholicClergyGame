@@ -1,0 +1,375 @@
+{
+  "_notes": "Scenes that hang on the lives of the people around him (DESIGN §8.11): npc_life conditions and the @life:<id> selector, which is the person carrying that life.",
+  "events": [
+    {
+      "id": "lv_secretary_husband",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "severity": "ROUTINE",
+      "category": "admin",
+      "baseWeight": 20,
+      "suppressYears": 3,
+      "pressure": ["friendship_vs_duty", "money"],
+      "requires": [{ "type": "npc_life", "key": "ill_spouse", "who": "staff" }],
+      "title": "The Hours She Is Not Here",
+      "body": "{@life:ill_spouse}'s husband is ill, and the office is learning what that means: the phone unanswered from two, the bulletin late, the Mass intentions in the wrong week twice. Nobody says anything. {@life:ill_spouse} comes in at seven and leaves at one for the hospital and does the rest from her kitchen at night, and it is not enough, and she knows it, and has said, once, that if you need to find someone else she would understand. The finance council chair has said, separately, that the parish cannot pay two secretaries.",
+      "flavorPrompt": "The secretary's husband ill, the office slipping, and her offer to be replaced.",
+      "choices": [
+        {
+          "id": "carry_it",
+          "label": "Carry the office yourself in the afternoons, and tell her to go",
+          "default": true,
+          "outcome": "You take the afternoons: the phone, the bulletin, the intentions, badly at first. She goes to the hospital and does not have to ask. It costs you the afternoons for the year. She does not thank you, exactly; she puts the bulletin right on Monday mornings and looks at you differently, and the office knows what happened.",
+          "effects": [
+            { "target": "relationship", "key": "@life:ill_spouse", "delta": 14 },
+            { "target": "ap", "key": "", "delta": -1 },
+            { "target": "strain", "key": "", "delta": 3 },
+            { "target": "reputation", "key": "parishioners", "delta": 2 }
+          ]
+        },
+        {
+          "id": "a_volunteer",
+          "label": "Find a volunteer for the afternoons, one of the retired women",
+          "outcome": "One of the retired women takes the afternoons, and answers the phone in her own way, and the bulletin is on time and has opinions in it. {@life:ill_spouse} is grateful and a little displaced, and comes back to a desk with someone else's things on it.",
+          "effects": [
+            { "target": "relationship", "key": "@life:ill_spouse", "delta": 5 },
+            { "target": "reputation", "key": "parishioners", "delta": 1 }
+          ]
+        },
+        {
+          "id": "let_her_go",
+          "label": "Take her at her word, kindly, and let her go",
+          "outcome": "You say, kindly, that she should be with him, and that the parish will manage, and hire someone. She goes. She is at Mass every Sunday and does not come into the office again, and when her husband dies you do the funeral and she thanks you at the door like anyone.",
+          "effects": [
+            { "target": "npc", "key": "@life:ill_spouse", "value": "left" },
+            { "target": "relationship", "key": "@life:ill_spouse", "delta": -8 },
+            { "target": "reputation", "key": "parishioners", "delta": -2 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lv_dre_the_offer",
+      "phase": ["administrator", "pastor"],
+      "severity": "ROUTINE",
+      "category": "admin",
+      "baseWeight": 20,
+      "suppressYears": 3,
+      "pressure": ["money"],
+      "requires": [{ "type": "npc_life", "key": "job_offer", "who": "staff" }],
+      "title": "The Parish Across the River",
+      "body": "{@life:job_offer} has been offered the job across the river, and has finally said so, in your office, with the letter in her hand: more money, a title, a parish that can afford a title. She has not decided. She is telling you, she says, because she would rather you heard it from her, and because she would like to know whether there is any reason to stay that is not the people, who she loves, and the pay, which she does not. The finance council will say there is no money. There is some money.",
+      "flavorPrompt": "The DRE with an offer from across the river, asking whether there is a reason to stay.",
+      "choices": [
+        {
+          "id": "match_it",
+          "label": "Match the money, and find it in the budget somewhere",
+          "default": true,
+          "outcome": "You find it: the deferred maintenance is deferred another year. She stays, and knows what it cost, and is worth it. The finance council chair says nothing for a month and then says she was worth it, which is as close as he comes.",
+          "effects": [
+            { "target": "relationship", "key": "@life:job_offer", "delta": 12 },
+            { "target": "money", "key": "cash", "delta": -8000 },
+            { "target": "reputation", "key": "parishioners", "delta": 2 }
+          ]
+        },
+        {
+          "id": "the_title",
+          "label": "Give her the title and a little, and tell her the truth about the rest",
+          "outcome": "You give her a title that costs nothing and a raise that costs a little, and tell her the truth about the money, and she takes a week and stays, mostly for the people, and a little for the truth.",
+          "effects": [
+            { "target": "relationship", "key": "@life:job_offer", "delta": 8 },
+            { "target": "money", "key": "cash", "delta": -2500 }
+          ]
+        },
+        {
+          "id": "bless_her",
+          "label": "Tell her to take it; it is the better job",
+          "outcome": "You tell her to take it, because it is the better job and she is not a nun, and she takes it, with a cake and a card, and the parish loses the best thing in its office. She sends her replacement a note about where the files are.",
+          "effects": [
+            { "target": "npc", "key": "@life:job_offer", "value": "left" },
+            { "target": "relationship", "key": "@life:job_offer", "delta": 6 },
+            { "target": "reputation", "key": "parishioners", "delta": -3 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lv_deanery_the_bottle",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 26,
+      "suppressYears": 3,
+      "pressure": ["loyalty_vs_honesty", "friendship_vs_duty"],
+      "requires": [{ "type": "npc_life", "key": "drinking", "who": "clergy" }],
+      "title": "What the Deanery Knows",
+      "body": "{@life:drinking} is drinking again, and the deanery knows it the way a deanery knows things. He was late to the deanery meeting and smelled of mints. His parish's vigil Mass was said by a retired priest three Saturdays running. His secretary called your secretary about something that was not what she called about. Nobody has said it aloud. The dean has said, in your hearing, that {@life:drinking} seems tired. You have known him for years, or you have not, and either way you are the one who has noticed, which is a kind of responsibility.",
+      "flavorPrompt": "A priest of the deanery drinking again, everybody knowing, nobody saying.",
+      "choices": [
+        {
+          "id": "go_to_him",
+          "label": "Go to him, alone, and say it",
+          "default": true,
+          "outcome": "You drive over on a Tuesday and sit in his kitchen and say it. He denies it, and then he does not, and then he cries, and then he is angry, in that order, and you stay for all four. He does not go for help that month. He goes in the spring, and when he comes back he says it was the kitchen that did it, and you are not sure that is true and do not argue.",
+          "effects": [
+            { "target": "relationship", "key": "@life:drinking", "delta": 14 },
+            { "target": "reputation", "key": "brother_priests", "delta": 3 },
+            { "target": "strain", "key": "", "delta": 3 },
+            { "target": "stat", "key": "charisma", "delta": 1 }
+          ]
+        },
+        {
+          "id": "the_dean",
+          "label": "Tell the dean what you have seen, and let the diocese do what it does",
+          "outcome": "You tell the dean, plainly, and the dean tells the vicar for clergy, and the diocese does what it does: a phone call, a leave, a place three states away. {@life:drinking} knows who spoke. He is sober when he comes back and does not speak to you for two years and then does, at a funeral, briefly.",
+          "effects": [
+            { "target": "relationship", "key": "@life:drinking", "delta": -10 },
+            { "target": "reputation", "key": "chancery", "delta": 3 },
+            { "target": "reputation", "key": "brother_priests", "delta": -2 }
+          ]
+        },
+        {
+          "id": "cover",
+          "label": "Cover his Masses when he cannot, and say nothing",
+          "outcome": "You say the vigil at his parish when the retired priest cannot, and the noon on Wednesdays, and say nothing, for a year. It is what the presbyterate has always done and it is why the presbyterate is what it is. He does not thank you and does not get better and one Saturday there is nobody to say the vigil at either parish.",
+          "effects": [
+            { "target": "relationship", "key": "@life:drinking", "delta": 4 },
+            { "target": "reputation", "key": "brother_priests", "delta": 2 },
+            { "target": "strain", "key": "", "delta": 4 },
+            { "target": "ap", "key": "", "delta": -1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lv_classmate_the_funeral",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "severity": "ROUTINE",
+      "category": "classmate",
+      "baseWeight": 18,
+      "suppressYears": 3,
+      "pressure": ["friendship_vs_duty"],
+      "requires": [{ "type": "npc_life", "key": "caring_parent", "who": "classmate" }],
+      "title": "His Mother",
+      "body": "{@life:caring_parent}'s mother is dying, slowly, and he has been driving to the next county on his days off for a year and coming back grey. This week the call came: days, not weeks. He has not asked anyone for anything. The men who were ordained with you have a way of not asking. The funeral, when it comes, will be on a weekday, ninety miles away, in a parish none of you know, and the class will find out afterwards, unless someone finds out first.",
+      "flavorPrompt": "A classmate's mother dying ninety miles away, and the class's way of not asking.",
+      "choices": [
+        {
+          "id": "go_now",
+          "label": "Drive over now, before the funeral, and sit with him",
+          "default": true,
+          "outcome": "You drive the ninety miles on a Wednesday and sit in the hospital corridor with him for four hours and say almost nothing. His mother dies on the Friday. You concelebrate the funeral with six of the class who came because you called them. He does not say thank you for a year, and then does, at a diner, halfway.",
+          "effects": [
+            { "target": "relationship", "key": "@life:caring_parent", "delta": 16 },
+            { "target": "reputation", "key": "brother_priests", "delta": 2 },
+            { "target": "strain", "key": "", "delta": 2 },
+            { "target": "ap", "key": "", "delta": -1 }
+          ]
+        },
+        {
+          "id": "the_funeral",
+          "label": "Go to the funeral, and call the class so they come too",
+          "outcome": "You call the class and five of them come, in a row at the back, and he sees them from the altar and has to stop for a moment. It was the right thing and it was the easy thing, and he knows both.",
+          "effects": [
+            { "target": "relationship", "key": "@life:caring_parent", "delta": 8 },
+            { "target": "reputation", "key": "brother_priests", "delta": 2 }
+          ]
+        },
+        {
+          "id": "a_mass",
+          "label": "Say a Mass for her, and send a card",
+          "outcome": "You say the Mass and send the card, and he sends a card back, and the class finds out afterwards, and one of them asks why nobody went.",
+          "effects": [
+            { "target": "relationship", "key": "@life:caring_parent", "delta": 2 },
+            { "target": "reputation", "key": "brother_priests", "delta": -1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lv_maintenance_the_back",
+      "phase": ["administrator", "pastor"],
+      "severity": "ROUTINE",
+      "category": "admin",
+      "baseWeight": 16,
+      "suppressYears": 3,
+      "pressure": ["money"],
+      "requires": [{ "type": "npc_life", "key": "back_gone", "who": "staff" }],
+      "title": "The Boiler and the Back",
+      "body": "{@life:back_gone}'s back has gone, and he is doing the work anyway, with a face, one hand on the wall going down the boiler-room stairs. The boiler has not been looked at. The gutters have not been cleared. He will not say he cannot; he is sixty-one and has never said it. The finance council chair has said, with the kindness of a man who has never lifted a crib figure, that perhaps it is time.",
+      "flavorPrompt": "The maintenance man's back gone, the boiler unlooked-at, and the council's kindness.",
+      "choices": [
+        {
+          "id": "a_helper",
+          "label": "Hire a young man for the heavy work, under him",
+          "default": true,
+          "outcome": "You hire a young man from the parish for the lifting, and tell {@life:back_gone} he is to teach him, which is a way of saying the other thing. He teaches him, gruffly and completely, and the boiler is looked at, and the young man is still there when the old one retires, which is the point.",
+          "effects": [
+            { "target": "relationship", "key": "@life:back_gone", "delta": 10 },
+            { "target": "money", "key": "cash", "delta": -6000 },
+            { "target": "reputation", "key": "parishioners", "delta": 1 }
+          ]
+        },
+        {
+          "id": "yourself",
+          "label": "Do the heavy work yourself, with him watching",
+          "outcome": "You clear the gutters and carry the crib and go down the boiler-room stairs with him behind you telling you what to look at. It costs you a Saturday a month and something in the shoulders. He tells the counter at the diner that the pastor is not afraid of a ladder, which goes round.",
+          "effects": [
+            { "target": "relationship", "key": "@life:back_gone", "delta": 8 },
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "ap", "key": "", "delta": -0.5 },
+            { "target": "strain", "key": "", "delta": 2 }
+          ]
+        },
+        {
+          "id": "the_council",
+          "label": "Let the council have its way: a retirement lunch",
+          "outcome": "There is a lunch, and a speech, and he takes the keys off the ring one at a time and names what each is for, and the parish hires a company that sends a different man every week. The boiler is looked at by someone who does not know its sound.",
+          "effects": [
+            { "target": "npc", "key": "@life:back_gone", "value": "retired" },
+            { "target": "relationship", "key": "@life:back_gone", "delta": -4 },
+            { "target": "reputation", "key": "parishioners", "delta": -1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lv_parent_failing",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 24,
+      "suppressYears": 4,
+      "pressure": ["friendship_vs_duty"],
+      "requires": [{ "type": "npc_life", "key": "parent_ill", "who": "family" }],
+      "title": "The Calls Home",
+      "body": "{@life:parent_ill} is failing, in the way that is not one thing but several, and the calls home have become a different kind of call. Your sibling, or the neighbour, or the woman who comes in the mornings, is carrying it. You are three hours away, or eight, with a parish. The bishop's policy on family leave is a paragraph, and a generous one, and you have never read it, and you have read it now.",
+      "flavorPrompt": "A parent failing at a distance, the sibling carrying it, the diocese's paragraph on leave.",
+      "choices": [
+        {
+          "id": "a_month",
+          "label": "Ask for a month, and go home",
+          "default": true,
+          "outcome": "The bishop gives the month without a question, which you had not expected. You go home and do the mornings and the doctors and the sitting, and your sibling sleeps for the first time in a year. The parish manages, with a retired priest and the deacon, and is glad to have you back and says so.",
+          "effects": [
+            { "target": "relationship", "key": "@life:parent_ill", "delta": 12 },
+            { "target": "reputation", "key": "chancery", "delta": 1 },
+            { "target": "reputation", "key": "parishioners", "delta": -1 },
+            { "target": "ap", "key": "", "delta": -2 },
+            { "target": "strain", "key": "", "delta": -2 },
+            { "target": "stat", "key": "piety", "delta": 1 }
+          ]
+        },
+        {
+          "id": "the_weekends",
+          "label": "Drive home every Monday, and be back for the Tuesday funeral",
+          "outcome": "Mondays become the drive: three hours there, the afternoon, three hours back. It is a year of Mondays. The parish notices the Monday and forgives it, and your sibling notices the Monday and does not entirely.",
+          "effects": [
+            { "target": "relationship", "key": "@life:parent_ill", "delta": 6 },
+            { "target": "ap", "key": "", "delta": -1 },
+            { "target": "strain", "key": "", "delta": 4 }
+          ]
+        },
+        {
+          "id": "the_sibling",
+          "label": "Let your sibling carry it, and send money and calls",
+          "outcome": "You send what you can and call every night, and your sibling carries it, and says nothing about it for years, and then says something, once, that you do not forget.",
+          "effects": [
+            { "target": "relationship", "key": "@life:parent_ill", "delta": 2 },
+            { "target": "strain", "key": "", "delta": 2 },
+            { "target": "flag", "key": "family:sibling_carried_it", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lv_clergy_thinking_of_leaving",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 18,
+      "suppressYears": 3,
+      "pressure": ["loyalty_vs_honesty"],
+      "requires": [{ "type": "any", "inner": [{ "type": "npc_life", "key": "thinking_of_leaving", "who": "clergy" }, { "type": "npc_life", "key": "thinking_of_leaving", "who": "classmate" }] }],
+      "title": "A Night in the Kitchen",
+      "body": "{@life:thinking_of_leaving} is thinking about leaving. He has told two people, and one of them told you, which is how you know he wanted you to. He comes to the rectory on a Thursday night with a bottle of wine he does not open and sits in the kitchen and talks for three hours about everything except the thing, and then about the thing. He does not want advice. He wants, you think, to hear what it sounds like said aloud to a man who will not repeat it.",
+      "flavorPrompt": "A priest thinking of leaving, three hours in the rectory kitchen, and what he wants from it.",
+      "choices": [
+        {
+          "id": "listen",
+          "label": "Listen, all night if it takes it, and say nothing about staying",
+          "default": true,
+          "outcome": "You listen until two. You do not say stay, and you do not say go. He leaves the wine. Whatever he decides, he decides it knowing there is one kitchen where it was said aloud and did not go further, and he tells you, years later, that it was the kitchen that did it, whichever way it went.",
+          "effects": [
+            { "target": "relationship", "key": "@life:thinking_of_leaving", "delta": 14 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "strain", "key": "", "delta": 2 }
+          ]
+        },
+        {
+          "id": "the_case",
+          "label": "Make the case for staying, honestly, with your own doubts in it",
+          "outcome": "You make the case, with your own worst year in it, which he had not known about. He is quiet. It may have helped and it may have been the thing that let him go, and you will not know which.",
+          "effects": [
+            { "target": "relationship", "key": "@life:thinking_of_leaving", "delta": 8 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "reputation", "key": "brother_priests", "delta": 1 }
+          ]
+        },
+        {
+          "id": "the_vicar",
+          "label": "Tell him he should talk to the vicar for clergy, and offer to come",
+          "outcome": "You say the vicar for clergy is the man for this, and offer to go with him, and he says he will think about it, and puts the wine back in the bag. He does not come back on a Thursday.",
+          "effects": [
+            { "target": "relationship", "key": "@life:thinking_of_leaving", "delta": -6 },
+            { "target": "reputation", "key": "chancery", "delta": 1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lv_music_the_annulment",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "severity": "ROUTINE",
+      "category": "admin",
+      "baseWeight": 16,
+      "suppressYears": 3,
+      "pressure": ["belief_vs_safety"],
+      "requires": [{ "type": "npc_life", "key": "divorce", "who": "staff" }],
+      "title": "The Question Not Asked",
+      "body": "{@life:divorce}'s marriage is coming apart, and everyone in the office knows it, and nobody has said it to her. She runs the choir on Sundays with a face that does not move and rehearsals on Thursdays that run long because she does not want to go home. She has not asked you about the tribunal, or about anything. She has stopped receiving communion, which the front pews have noticed, and one of them has mentioned it to you, in the tone.",
+      "flavorPrompt": "The music director's marriage ending, communion stopped, the front pews noticing.",
+      "choices": [
+        {
+          "id": "ask_her",
+          "label": "Ask her, privately, how she is, and leave the tribunal out of it",
+          "default": true,
+          "outcome": "You ask on a Thursday after rehearsal, and she tells you, for an hour, and you say nothing about the tribunal or communion, and at the end she says thank you for not saying it. She asks about the tribunal herself, a year later, and you have the number ready.",
+          "effects": [
+            { "target": "relationship", "key": "@life:divorce", "delta": 12 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "reputation", "key": "parishioners", "delta": 1 }
+          ]
+        },
+        {
+          "id": "the_tribunal",
+          "label": "Tell her about the tribunal, gently, because someone should",
+          "outcome": "You tell her about the tribunal, gently, and she listens, and says she is not there yet, and is a little more careful around you after. The front pews are satisfied.",
+          "effects": [
+            { "target": "relationship", "key": "@life:divorce", "delta": 2 },
+            { "target": "reputation", "key": "traditional_bloc", "delta": 2 }
+          ]
+        },
+        {
+          "id": "the_front_pews",
+          "label": "Tell the front pews that a person's communion is her own business",
+          "outcome": "You say it to the one who mentioned it, plainly, and it goes round the front pews as a rebuke, which it was. {@life:divorce} hears, and does not say anything, and the Thursday rehearsals get shorter.",
+          "effects": [
+            { "target": "relationship", "key": "@life:divorce", "delta": 8 },
+            { "target": "reputation", "key": "traditional_bloc", "delta": -3 },
+            { "target": "reputation", "key": "parishioners", "delta": 1 }
+          ]
+        }
+      ]
+    }
+  ]
+}

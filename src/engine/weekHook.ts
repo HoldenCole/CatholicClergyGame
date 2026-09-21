@@ -1,4 +1,4 @@
-import type { Beat, GameEvent, GameState, OfferDef, PendingEvent, Role } from '@/types';
+import type { Beat, Condition, GameEvent, GameState, OfferDef, PendingEvent, Role } from '@/types';
 import { applyChoice, defaultChoice, drawEvents, fireEvent } from './events';
 import { evaluateAll } from './conditions';
 import { shouldInterrupt } from './interrupts';
@@ -36,6 +36,7 @@ import { orderFeastLine, orderFeastsOfWeek } from '@/systems/religious/feasts';
 import { feastsOfWeek } from './feasts';
 import { ensureTown } from '@/systems/town';
 import { mailWeek } from '@/systems/mail';
+import { openLives } from '@/systems/lives';
 import { sideWorkWeek } from '@/systems/sidework';
 import { requestedChoice } from '@/systems/choice';
 import { confessorWeek } from '@/systems/confessor';
@@ -209,6 +210,18 @@ export function studyWeekHook(deps: EventDeps): WeekHook {
 const FRIAR_EVENT_CHANCE = 0.12;
 /** On a week with a feast in it, the chance the feast's own scene fires, when one is eligible. */
 const FEAST_SCENE_CHANCE = 0.6;
+/** Any week, the chance a scene about someone's open life fires, when one is eligible. DESIGN §8.11. */
+const LIFE_SCENE_CHANCE = 0.06;
+
+/** A scene that hangs on a life someone around him is carrying, drawn ahead of the ordinary pool. Null when none fires. */
+function lifeScene(state: GameState, rng: Rng, deps: EventDeps): GameState | null {
+  if (!rng.chance(LIFE_SCENE_CHANCE) || !openLives(state).length) return null;
+  const hangs = (c: Condition): boolean => c.type === 'npc_life' || ((c.type === 'any' || c.type === 'all') && c.inner.some(hangs));
+  const pool = deps.pool.filter((e) => !e.beat && (e.requires ?? []).some(hangs));
+  if (!pool.length) return null;
+  const [event] = drawEvents(pool, state, rng, 1);
+  return event ? fireOrResolve(state, event, rng, deps) : null;
+}
 
 /** A scene that hangs on one of this week's feasts, drawn ahead of the ordinary pool. Null when none fires. */
 function feastScene(state: GameState, keys: readonly string[], rng: Rng, deps: EventDeps, chance: number): GameState | null {
@@ -256,6 +269,9 @@ export function friarWeekHook(deps: EventDeps): WeekHook {
       const fired = feastScene(next, kept.map((f) => f.key), rng.derive(`feast-scene:${next.clock.week}`), deps, FEAST_SCENE_CHANCE);
       if (fired) { next = fired; if (next.mode.kind !== 'clock') return next; }
     }
+    // Someone's life, when it crosses his. DESIGN §8.11.
+    const lived = lifeScene(next, rng.derive(`life-scene:${next.clock.week}`), deps);
+    if (lived) { next = lived; if (next.mode.kind !== 'clock') return next; }
     // The provincial's answer to the letter asking for a work. E3 §3.10.
     next = requestWeek(next, rng.derive(`request:${next.clock.week}`));
     if (next.mode.kind !== 'clock') return next;
@@ -442,7 +458,11 @@ export function parishWeekHook(deps: EventDeps): WeekHook {
     const feastFired = feastKeys.length ? feastScene(next, feastKeys, rng.derive(`feast-scene:${next.clock.week}`), deps, FEAST_SCENE_CHANCE) : null;
     if (feastFired) next = feastFired;
     if (feastFired && (next.mode.kind !== 'clock' || next.pending.length > 0)) return next;
-    if (isPlayedWeek(next) && !feastFired) {
+    // Someone's life, when it crosses his. DESIGN §8.11.
+    const lifeFired = !feastFired ? lifeScene(next, rng.derive(`life-scene:${next.clock.week}`), deps) : null;
+    if (lifeFired) next = lifeFired;
+    if (lifeFired && (next.mode.kind !== 'clock' || next.pending.length > 0)) return next;
+    if (isPlayedWeek(next) && !feastFired && !lifeFired) {
       // Beat events (a succession) fire only through their beat, never on an ordinary played week.
       const [event] = drawEvents(deps.pool.filter((e) => !e.beat), next, rng, 1, careRelief(next));
       if (event) next = fireOrResolve(next, event, rng, deps);

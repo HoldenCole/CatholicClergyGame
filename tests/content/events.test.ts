@@ -3,6 +3,7 @@ import { allEvents, eventFiles } from '@/content';
 import { decorOptions } from '@/systems/decorState';
 import { FEAST_KEYS } from '@/engine/feasts';
 import { TOWN_PLACE_KINDS, TOWN_PLACE_STATES } from '@/types';
+import { lifeDefs } from '@/systems/lives';
 import { ORDER_FEAST_KEYS } from '@/systems/religious/feasts';
 import { actionDefs, liturgyDials, obligationDefs } from '@/content/parish';
 import { studyPrograms } from '@/content/study';
@@ -82,6 +83,8 @@ const SELECTORS = [
   '@augustinian_prior', '@augustinian_headmaster', '@augustinian_old_pastor',
   '@prior', '@provincial', '@novice_master', '@master_of_students', '@confrere', '@old_friar',
 ];
+const LIFE_IDS = lifeDefs.map((l) => l.id);
+const LIVE_SELECTORS = LIFE_IDS.map((id) => `@life:${id}`);
 const MINISTRY_COND_KEYS = ['masses', 'confessions', 'baptisms', 'firstCommunions', 'confirmations', 'weddings', 'funerals', 'anointings', 'converts', 'ordinations'];
 const LIFE_KEYS = ['posts', 'formed', 'turnarounds', 'vocations', 'offices'];
 const GROUP_KEYS = ['type', 'vitality', 'hostile', 'suppressed', 'foundedByPlayer', 'agenda', 'religiousLed'];
@@ -118,7 +121,7 @@ function checkCondition(c: Condition, where: string, problems: Problem[]): void 
       break;
     case 'relationship':
       if (typeof c.npcId !== 'string' || !hasOp(c.op) || typeof c.value !== 'number') problems.push(`${where}: bad relationship condition`);
-      else if (c.npcId.startsWith('@') && !SELECTORS.includes(c.npcId)) problems.push(`${where}: unknown selector ${c.npcId}`);
+      else if (c.npcId.startsWith('@') && !SELECTORS.includes(c.npcId) && !LIVE_SELECTORS.includes(c.npcId)) problems.push(`${where}: unknown selector ${c.npcId}`);
       break;
     case 'credential':
       if (typeof c.key !== 'string') problems.push(`${where}: bad credential condition`);
@@ -143,6 +146,9 @@ function checkCondition(c: Condition, where: string, problems: Problem[]): void 
       break;
     case 'thread':
       if (typeof c.key !== 'string' || typeof c.open !== 'boolean') problems.push(`${where}: bad thread condition`);
+      break;
+    case 'npc_life':
+      if (!LIFE_IDS.includes(c.key) || (c.who !== undefined && !['staff', 'clergy', 'classmate', 'family', 'director', 'confrere'].includes(c.who))) problems.push(`${where}: bad npc_life condition`);
       break;
     case 'town':
       if ((c.key !== 'any' && !TOWN_PLACE_KINDS.includes(c.key as never)) || !TOWN_PLACE_STATES.includes(c.value as never)) problems.push(`${where}: bad town condition`);
@@ -260,7 +266,7 @@ function checkEffect(e: Effect, where: string, problems: Problem[]): void {
   }
   if (e.target === 'reputation' && !ALL_CONSTITUENCY_KEYS.includes(e.key as never)) problems.push(`${where}: bad reputation key ${e.key}`);
   if (e.target === 'archetype' && !ARCHETYPES.includes(e.key as never)) problems.push(`${where}: bad archetype ${e.key}`);
-  if ((e.target === 'relationship' || e.target === 'npc' || e.target === 'trait_known' || e.target === 'crossing') && e.key.startsWith('@') && !SELECTORS.includes(e.key)) {
+  if ((e.target === 'relationship' || e.target === 'npc' || e.target === 'trait_known' || e.target === 'crossing') && e.key.startsWith('@') && !SELECTORS.includes(e.key) && !LIVE_SELECTORS.includes(e.key)) {
     problems.push(`${where}: unknown selector ${e.key}`);
   }
   if (e.target === 'npc' && !NPC_STATUSES.includes(String(e.value))) problems.push(`${where}: npc effect needs a status value`);
@@ -320,7 +326,7 @@ function checkEvent(ev: GameEvent, file: string, problems: Problem[], ids: Set<s
     if (typeof b.multiplier !== 'number' || b.multiplier < 0) problems.push(`${where}: bias multiplier`);
   });
   for (const token of tokensIn(ev.title + ' ' + ev.body)) {
-    if (token.startsWith('@') && !SELECTORS.includes(token)) problems.push(`${where}: unknown selector ${token}`);
+    if (token.startsWith('@') && !SELECTORS.includes(token) && !LIVE_SELECTORS.includes(token)) problems.push(`${where}: unknown selector ${token}`);
     if (!token.startsWith('@') && !['name', 'first_name', 'surname', 'diocese', 'parish', 'seminary', 'school', 'city', 'residence', 'appointment', 'appointment_residence', 'appointment_from', 'town'].includes(token) && !(token.startsWith('town:') && TOWN_PLACE_KINDS.includes(token.slice(5) as never))) {
       problems.push(`${where}: unknown token {${token}}`);
     }
@@ -342,7 +348,7 @@ function checkEvent(ev: GameEvent, file: string, problems: Problem[], ids: Set<s
       if (typeof ch.positionTopic !== 'string' || typeof ch.positionValue !== 'number') problems.push(`${cw}: volume needs positionTopic and positionValue`);
     }
     for (const token of tokensIn(ch.label + ' ' + (ch.outcome ?? ''))) {
-      if (token.startsWith('@') && !SELECTORS.includes(token)) problems.push(`${cw}: unknown selector ${token}`);
+      if (token.startsWith('@') && !SELECTORS.includes(token) && !LIVE_SELECTORS.includes(token)) problems.push(`${cw}: unknown selector ${token}`);
     }
   }
   // CLAUDE.md rule 7: a sealed scene may write only what stays inside the room.

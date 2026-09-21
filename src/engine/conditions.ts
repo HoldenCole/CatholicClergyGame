@@ -5,6 +5,7 @@ import { dateOf, seasonOf } from './time';
 import { feastsOfWeek, type FeastKey } from './feasts';
 import { orderFeastsOfWeek } from '@/systems/religious/feasts';
 import { townCondition } from '@/systems/town';
+import { lifeCondition } from '@/systems/lives';
 import { resolveSelector } from './selectors';
 
 import type { Group } from '@/types';
@@ -176,6 +177,8 @@ export function evaluateCondition(
     case 'town':
     case 'town_regard':
       return townCondition(state, cond);
+    case 'npc_life':
+      return lifeCondition(state, cond);
     case 'feast': {
       const parish = state.world?.parishes.find((p) => p.id === state.assignment?.parishId);
       if (feastsOfWeek(state.clock, parish).includes(cond.key as FeastKey)) return true;

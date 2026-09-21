@@ -46,3 +46,9 @@ export function rollFemaleName(rng: Rng, heritage: Heritage, last?: string): Per
 export function rollSurname(rng: Rng, heritage: Heritage): string {
   return rng.pick(namePools[heritage].last);
 }
+
+/** Whether a first name comes from the women's pools: how a generated person's sex is read back when no tag says. */
+export function isWomansName(first: string): boolean {
+  const pools = Object.values(namePools) as { women: string[] }[];
+  return pools.some((p) => p.women.includes(first));
+}
