@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { useGameStore } from '@/engine/store';
 import { charterDials, foundationWorkDefs, religiousOrder } from '@/content/religious';
-import { canPetition, foundationSites, provinceScore, spareMen, workLabel, FOUNDING } from '@/systems/religious/founding';
-import { CHARTER_DIALS, charterFactors, dialLabel, optionAllowed } from '@/systems/religious/charter';
+import { canPetition, foundationSites, mostNeededWorks, provinceScore, spareMen, workLabel, workNeeds, FOUNDING } from '@/systems/religious/founding';
+import { CHARTER_DIALS, charterFactors, dialLabel, optionAllowed, optionIdOf } from '@/systems/religious/charter';
+import DialRow from './DialRow';
 import { canSendDaughter, expectedVocations, heirsOf, myFoundation } from '@/systems/religious/foundationYear';
 import { membersOf } from '@/systems/religious/house';
 import { reputationDef, reputationWord } from '@/systems/religious/reputations';
@@ -10,7 +11,7 @@ import { worldOf } from '@/systems/religious/transfer';
 import type { CharterWork, Foundation, FoundationSite } from '@/types';
 import Sheet from '../Sheet';
 
-const WORKS: CharterWork[] = ['preaching', 'teaching', 'study', 'parish', 'evangelization', 'poor_relief', 'retreats'];
+const WORKS: CharterWork[] = ['preaching', 'teaching', 'study', 'parish', 'evangelization', 'poor_relief', 'retreats', 'chaplaincy', 'media'];
 
 function needWord(n: number): string {
   return ['', 'comfortable', 'well served', 'stretched', 'short', 'desperate'][n] ?? '';
@@ -49,6 +50,11 @@ export default function FoundationPanel() {
   const picked = sites.find((s) => s.dioceseId === chosen);
   const score = picked ? provinceScore(game, { dioceseId: picked.dioceseId, work, kind: 'petition' }) : 0;
   const foundations = r.foundations ?? [];
+  const picksNeeds = chosen ? workNeeds(game, chosen) : undefined;
+  const picksMost = chosen ? mostNeededWorks(game, chosen) : [];
+  // A work the diocese already has from the order cannot be petitioned for: the choice falls to the most needed open one.
+  const openWorks = picksNeeds ? WORKS.filter((w) => !picksNeeds[w].filled) : WORKS;
+  const effectiveWork: CharterWork = picksNeeds && picksNeeds[work].filled ? (picksMost[0] ?? openWorks[0] ?? work) : work;
 
   return (
     <>
@@ -118,13 +124,16 @@ export default function FoundationPanel() {
               <div className="font-medium">{picked.name}</div>
               {picked.lines.map((l, i) => <p key={i} className="ink-muted text-xs leading-relaxed">{l}</p>)}
               <div className="mt-2 flex flex-wrap gap-1">
-                {WORKS.map((w) => <button key={w} className={'pbtn px-2 py-0 text-xs ' + (work === w ? 'pbtn-primary' : '')} onClick={() => setWork(w)}>{charterDials.primaryWork.find((o) => o.id === w)?.label}</button>)}
+                {WORKS.map((w) => {
+                  const n = picksNeeds?.[w];
+                  return <button key={w} className={'pbtn px-2 py-0 text-xs ' + (effectiveWork === w ? 'pbtn-primary ' : '') + (picksMost.includes(w) && effectiveWork !== w ? 'ring-1 ring-[#7a1f1f]/60' : '')} disabled={!!n?.filled} title={n?.filled ? n.why : n ? `${'●'.repeat(n.need)}${'○'.repeat(3 - n.need)} needed here` : ''} onClick={() => setWork(w)}>{charterDials.primaryWork.find((o) => o.id === w)?.label}{n && !n.filled && n.need > 0 ? <span className="ink-faint ml-1">{'●'.repeat(n.need)}</span> : ''}{picksMost.includes(w) ? <span className="ink-wine ml-1">· needed</span> : ''}</button>;
+                })}
               </div>
               <p className="ink-faint mt-2 text-xs">
                 As the province would read it now: {score >= 0.7 ? 'likely' : score >= 0.5 ? 'an even chance' : score >= 0.35 ? 'unlikely' : 'no'}; the bishop {warmthWord(picked.bishop)}. {spareMen(game) < FOUNDING.spare ? 'The province has no men to send, whatever it thinks of you.' : ''} {game.province && game.province.finances.retirementBurden > game.province.finances.balance ? 'The province is in retirement debt.' : ''}
               </p>
               {can.ok ? (
-                <button className="pbtn pbtn-primary mt-2 px-2 py-0.5 text-xs" onClick={() => { petition(picked.dioceseId, work); setChosen(null); }}>Petition the chapter</button>
+                <button className="pbtn pbtn-primary mt-2 px-2 py-0.5 text-xs" disabled={openWorks.length === 0} onClick={() => { petition(picked.dioceseId, effectiveWork); setChosen(null); }}>Petition the chapter{openWorks.length === 0 ? ': nothing the order does not already do here' : ''}</button>
               ) : (
                 <p className="ink-faint mt-2 text-xs">{can.why}</p>
               )}
@@ -154,18 +163,11 @@ function HouseSheet({ game, f, addWork, revise, heir, setHeir, where, setWhere, 
       {reps.length > 0 && <p className="ink-muted mt-1 text-xs">Known as {reps.map(([k, v]) => `the house of the ${reputationDef(k).label.toLowerCase()} (${reputationWord(v)})`).join(', ')}.</p>}
       <div className="mt-2">
         <div className="heading text-sm">The charter</div>
-        <ul className="mt-1 flex flex-col gap-1 text-xs">
+        <div className="mt-1 flex flex-col gap-1 text-xs">
           {CHARTER_DIALS.map((dial) => (
-            <li key={dial} className="flex flex-wrap items-center gap-1">
-              <span className="ink-faint w-24">{dialLabel(dial)}</span>
-              {charterDials[dial].map((o) => {
-                const on = String(f.charter[dial]) === o.id;
-                const allowed = optionAllowed(game, dial, o.id, f.dioceseId);
-                return <button key={o.id} className={'pbtn px-1.5 py-0 text-xs ' + (on ? 'pbtn-primary' : '')} disabled={!allowed.ok} title={allowed.why ?? o.line} onClick={() => revise(dial as never, o.id)}>{o.label}</button>;
-              })}
-            </li>
+            <DialRow key={dial} dial={dial} compact current={optionIdOf(f.charter, dial)} allowed={(id) => optionAllowed(game, dial, id, f.dioceseId, f.charter)} onPick={(id) => revise(dial as never, id)} needs={dial === 'primaryWork' || dial === 'secondaryWork' || dial === 'tertiaryWork' ? workNeeds(game, f.dioceseId) : undefined} most={mostNeededWorks(game, f.dioceseId)} />
           ))}
-        </ul>
+        </div>
         <p className="ink-faint mt-1 text-xs">Revising a dial is the prior&rsquo;s to do, and it is remembered against your name{factors.friction.progressive + factors.friction.observant > 0 ? '; the house sits at odds with part of the province as written' : ''}.</p>
         {f.revisions.length > 0 && <p className="ink-muted mt-1 text-xs">Revised: {f.revisions.map((v) => `${dialLabel(v.dial).toLowerCase()} to ${v.to.replace(/_/g, ' ')} (${v.by === 'player' ? 'you' : game.npcs[v.by]?.name.last ?? 'a successor'})`).join('; ')}.</p>}
       </div>

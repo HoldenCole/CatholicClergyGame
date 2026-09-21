@@ -1,14 +1,18 @@
 import { useGameStore } from '@/engine/store';
-import { charterDials, religiousOrder } from '@/content/religious';
-import { CHARTER_DIALS, dialLabel, optionAllowed } from '@/systems/religious/charter';
+import { religiousOrder } from '@/content/religious';
+import { CHARTER_DIALS, dialLabel, optionAllowed, optionIdOf } from '@/systems/religious/charter';
+import { mostNeededWorks, workNeeds } from '@/systems/religious/founding';
 import { worldOf } from '@/systems/religious/transfer';
-import type { CharterDial } from '@/types';
+import type { CharterDial, CharterWork } from '@/types';
 import Panel from '../Panel';
+import DialRow from './DialRow';
 
 /**
  * The charter: what the house is to be. The charism is the order's; the
  * dials are the founder's, each with its prose consequence and no
- * numbers. Written once; revised only by a prior. E3 §9.4.
+ * numbers. A work another house already does here is greyed; the works
+ * the diocese most needs are marked. Written once; revised only by a
+ * prior. E3 §9.4.
  */
 export default function CharterPanel() {
   const game = useGameStore((s) => s.game);
@@ -19,25 +23,21 @@ export default function CharterPanel() {
   const pet = game.religious.petition;
   const order = religiousOrder(game.religious.order);
   const name = worldOf(game, pet.dioceseId)?.diocese.visible.name ?? 'the diocese';
+  const needs = workNeeds(game, pet.dioceseId);
+  const most = mostNeededWorks(game, pet.dioceseId);
+  const problems = CHARTER_DIALS.filter((d) => !optionAllowed(game, d, optionIdOf(draft, d), pet.dioceseId, draft).ok);
+  const setDial = (dial: CharterDial, id: string) => {
+    if ((dial === 'secondaryWork' || dial === 'tertiaryWork') && id === 'none') setDraft({ [dial]: undefined } as never);
+    else setDraft({ [dial]: id } as never);
+  };
   return (
     <Panel title="The charter" tilt="l">
       <h2 className="title text-xl">A house in {name}</h2>
       <p className="mt-2 leading-relaxed">The province has voted it and the bishop has signed. What is left is the thing itself: under the charism of the {order.name}, which is fixed, everything below is yours. These interact, and the interactions are the house. Men who never met you will read this.</p>
-      <div className="mt-3 flex flex-col gap-3">
+      <p className="ink-faint mt-1 text-xs">Marks beside a work are the diocese&rsquo;s need for it; the works it needs most are named. A work greyed is one a house already does here. A second work counts at half, a third at a quarter.</p>
+      <div className="mt-3 flex max-h-[60vh] flex-col gap-3 overflow-y-auto pr-1">
         {CHARTER_DIALS.map((dial: CharterDial) => (
-          <div key={dial}>
-            <div className="heading text-sm">{dialLabel(dial)}</div>
-            <div className="mt-1 flex flex-wrap gap-1.5">
-              {charterDials[dial].map((o) => {
-                const allowed = optionAllowed(game, dial, o.id, pet.dioceseId);
-                const on = String(draft[dial]) === o.id;
-                return (
-                  <button key={o.id} className={'pbtn px-2 py-0.5 text-xs ' + (on ? 'pbtn-primary' : '')} disabled={!allowed.ok} title={allowed.why ?? ''} onClick={() => setDraft({ [dial]: o.id } as never)}>{o.label}</button>
-                );
-              })}
-            </div>
-            <p className="ink-muted mt-1 text-xs leading-relaxed">{charterDials[dial].find((o) => o.id === String(draft[dial]))?.line}</p>
-          </div>
+          <DialRow key={dial} dial={dial} current={optionIdOf(draft, dial)} allowed={(id) => optionAllowed(game, dial, id, pet.dioceseId, draft)} onPick={(id) => setDial(dial, id)} needs={dial === 'primaryWork' || dial === 'secondaryWork' || dial === 'tertiaryWork' ? needs : undefined} most={most} />
         ))}
         <div>
           <div className="heading text-sm">Alignment, within the charism</div>
@@ -46,8 +46,11 @@ export default function CharterPanel() {
         </div>
       </div>
       <div className="mt-4 flex gap-2">
-        <button className="pbtn pbtn-primary" onClick={write}>Write it, and send for the men</button>
+        <button className="pbtn pbtn-primary" disabled={problems.length > 0} onClick={write}>Write it, and send for the men</button>
+        {problems.length > 0 && <span className="ink-wine self-center text-xs">Not yet: {problems.map((d) => `${dialLabel(d).toLowerCase()} (${optionAllowed(game, d, optionIdOf(draft, d), pet.dioceseId, draft).why ?? 'not allowed'})`).join('; ')}.</span>}
       </div>
     </Panel>
   );
 }
+
+export type { CharterWork };

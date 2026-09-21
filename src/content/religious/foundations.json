@@ -1,47 +1,560 @@
 {
   "dials": {
     "observance": [
-      { "id": "relaxed", "label": "Relaxed", "line": "The office is said by those who are free; meals are when the work allows; the door is open late. Men who want to work will come, and men who want to pray will not.", "vocations": 0.65, "observance": 35, "cohesion": 4, "friction": "observant" },
-      { "id": "moderate", "label": "As the province keeps it", "line": "The common life as the constitutions have it and the province lives it, no more and no less. The house will be judged on its work, not its rule.", "vocations": 1, "observance": 55 },
-      { "id": "strict", "label": "Strict", "line": "The full office in choir, silence after Compline, the meals at the bell. Serious young men come for it and stay for it; a relaxed province will find the house a reproach, and say so at chapter.", "vocations": 1.5, "observance": 80, "cohesion": -3, "friction": "progressive", "reputations": { "man_of_prayer": 3 } }
+      {
+        "id": "relaxed",
+        "label": "Relaxed",
+        "line": "The office is said by those who are free; meals are when the work allows; the door is open late. Men who want to work will come, and men who want to pray will not.",
+        "vocations": 0.65,
+        "observance": 35,
+        "cohesion": 4,
+        "friction": "observant"
+      },
+      {
+        "id": "mitigated",
+        "label": "Mitigated",
+        "line": "The office in common morning and evening and the rest as the work allows; the bell for meals, not for silence. The old mitigated observance, which most of the order lived for centuries and some of it still does.",
+        "vocations": 0.85,
+        "observance": 45,
+        "cohesion": 2,
+        "friction": "observant"
+      },
+      {
+        "id": "moderate",
+        "label": "As the province keeps it",
+        "line": "The common life as the constitutions have it and the province lives it, no more and no less. The house will be judged on its work, not its rule.",
+        "vocations": 1,
+        "observance": 55
+      },
+      {
+        "id": "strict",
+        "label": "Strict",
+        "line": "The full office in choir, silence after Compline, the meals at the bell. Serious young men come for it and stay for it; a relaxed province will find the house a reproach, and say so at chapter.",
+        "vocations": 1.5,
+        "observance": 80,
+        "cohesion": -3,
+        "friction": "progressive",
+        "reputations": {
+          "man_of_prayer": 3
+        }
+      },
+      {
+        "id": "primitive",
+        "label": "The primitive observance",
+        "line": "The rule as it was first kept: the night office, the fasts, the silence, the chapter of faults. Rarer than strict and more visible; the young men it draws are few and entirely serious, and the province will call it a reproach or a museum depending on who is provincial.",
+        "vocations": 1.35,
+        "observance": 92,
+        "cohesion": -6,
+        "friction": "progressive",
+        "reputations": {
+          "man_of_prayer": 6
+        }
+      }
     ],
     "liturgy": [
-      { "id": "vernacular", "label": "Modern vernacular", "line": "The Mass and the office as the parish down the road has them, well done. Nobody drives across the diocese for it, and nobody is driven away.", "vocations": 0.85, "friction": "observant", "reputations": { "confessor": 1 } },
-      { "id": "mixed", "label": "The vernacular, with the office sung", "line": "Vespers sung most evenings and the Latin kept for the feasts. A middle that takes work to hold, and holds most people.", "vocations": 1, "reputations": { "liturgist": 2 } },
-      { "id": "chanted", "label": "Chanted Latin office", "line": "The hours chanted in Latin, the Mass in whichever language the people bring. The single most visible thing about the house: it draws a bloc from across the diocese and a certain kind of vocation, and it marks the house on the province's map.", "vocations": 1.3, "friction": "progressive", "reputations": { "liturgist": 4 } },
-      { "id": "order_rite", "label": "The order's own rite", "line": "The order's ancient rite restored for the conventual Mass and the office. Rare, controversial, magnetic. The house becomes the thing people mean when they argue about the order.", "vocations": 1.4, "friction": "progressive", "reputations": { "liturgist": 5, "man_of_prayer": 1 }, "orders": ["OP"] }
+      {
+        "id": "vernacular",
+        "label": "Modern vernacular",
+        "line": "The Mass and the office as the parish down the road has them, well done. Nobody drives across the diocese for it, and nobody is driven away.",
+        "vocations": 0.85,
+        "friction": "observant",
+        "reputations": {
+          "confessor": 1
+        }
+      },
+      {
+        "id": "mixed",
+        "label": "The vernacular, with the office sung",
+        "line": "Vespers sung most evenings and the Latin kept for the feasts. A middle that takes work to hold, and holds most people.",
+        "vocations": 1,
+        "reputations": {
+          "liturgist": 2
+        }
+      },
+      {
+        "id": "polyphony",
+        "label": "A sung Mass with a choir",
+        "line": "The vernacular office and a Sunday Mass with a real choir: polyphony on the feasts, a paid director, and the church full of people who came for the music and stayed for the rest. Costs money and draws it.",
+        "vocations": 1.05,
+        "income": 20000,
+        "reputations": {
+          "liturgist": 3
+        },
+        "friction": "observant"
+      },
+      {
+        "id": "chanted",
+        "label": "Chanted Latin office",
+        "line": "The hours chanted in Latin, the Mass in whichever language the people bring. The single most visible thing about the house: it draws a bloc from across the diocese and a certain kind of vocation, and it marks the house on the province's map.",
+        "vocations": 1.3,
+        "friction": "progressive",
+        "reputations": {
+          "liturgist": 4
+        }
+      },
+      {
+        "id": "order_rite",
+        "label": "The order's own rite",
+        "line": "The order's ancient rite restored for the conventual Mass and the office. Rare, controversial, magnetic. The house becomes the thing people mean when they argue about the order.",
+        "vocations": 1.4,
+        "friction": "progressive",
+        "reputations": {
+          "liturgist": 5,
+          "man_of_prayer": 1
+        },
+        "orders": [
+          "OP"
+        ]
+      }
     ],
     "primaryWork": [
-      { "id": "preaching", "label": "Preaching", "line": "Missions, retreats given out, the pulpit lent across the diocese. The house is known by what its men say elsewhere, and the money comes in stipends.", "vocations": 1.1, "income": 60000, "reputations": { "preacher": 4 }, "houseKind": "priory", "daughterAt": 15 },
-      { "id": "teaching", "label": "Teaching", "line": "A school, or the faculty of someone else's. Steady, respectable, and it wants men with degrees, which the province has fewer of every year.", "vocations": 0.9, "income": 90000, "reputations": { "professor": 4 }, "houseKind": "school", "daughterAt": 18 },
-      { "id": "study", "label": "A house of studies", "line": "Books, lectures, and the men the province sends to read. Prestige and publications and, most years, almost no vocations of its own.", "vocations": 0.7, "income": 30000, "reputations": { "professor": 5, "man_of_prayer": 1 }, "houseKind": "priory", "daughterAt": 20 },
-      { "id": "parish", "label": "A parish", "line": "A parish of the diocese entrusted to the order, and the house lives on it. The bishop likes this best; it ties the house to his shortage and his goodwill.", "vocations": 1, "income": 110000, "reputations": { "confessor": 3, "pastor_of_dying": 2 }, "houseKind": "parish", "daughterAt": 15 },
-      { "id": "evangelization", "label": "Evangelization", "line": "The campus, the street, the people who have not been in a church in twenty years. The most vocations of any work and the least money, and the diocese will not always know what to make of it.", "vocations": 1.3, "income": 25000, "reputations": { "evangelist": 5 }, "houseKind": "mission", "daughterAt": 14 },
-      { "id": "poor_relief", "label": "Poor relief", "line": "A shelter, a kitchen, a clinic if the money comes. The house is loved in its neighbourhood and thin everywhere else, and it will be the last the province closes.", "vocations": 1, "income": 40000, "reputations": { "advocate": 5 }, "houseKind": "mission", "daughterAt": 15 },
-      { "id": "retreats", "label": "Retreats", "line": "A house people come to. Direction, silence, the weekends that fill. It wants land and a director, and it builds the quiet reputation the province forgets it has.", "vocations": 0.9, "income": 70000, "reputations": { "spiritual_director": 4, "man_of_prayer": 2 }, "houseKind": "priory", "daughterAt": 16 }
+      {
+        "id": "preaching",
+        "label": "Preaching",
+        "line": "Missions, retreats given out, the pulpit lent across the diocese. The house is known by what its men say elsewhere, and the money comes in stipends.",
+        "vocations": 1.1,
+        "income": 60000,
+        "reputations": {
+          "preacher": 4
+        },
+        "houseKind": "priory",
+        "daughterAt": 15
+      },
+      {
+        "id": "teaching",
+        "label": "Teaching",
+        "line": "A school, or the faculty of someone else's. Steady, respectable, and it wants men with degrees, which the province has fewer of every year.",
+        "vocations": 0.9,
+        "income": 90000,
+        "reputations": {
+          "professor": 4
+        },
+        "houseKind": "school",
+        "daughterAt": 18
+      },
+      {
+        "id": "study",
+        "label": "A house of studies",
+        "line": "Books, lectures, and the men the province sends to read. Prestige and publications and, most years, almost no vocations of its own.",
+        "vocations": 0.7,
+        "income": 30000,
+        "reputations": {
+          "professor": 5,
+          "man_of_prayer": 1
+        },
+        "houseKind": "priory",
+        "daughterAt": 20
+      },
+      {
+        "id": "parish",
+        "label": "A parish",
+        "line": "A parish of the diocese entrusted to the order, and the house lives on it. The bishop likes this best; it ties the house to his shortage and his goodwill.",
+        "vocations": 1,
+        "income": 110000,
+        "reputations": {
+          "confessor": 3,
+          "pastor_of_dying": 2
+        },
+        "houseKind": "parish",
+        "daughterAt": 15
+      },
+      {
+        "id": "evangelization",
+        "label": "Evangelization",
+        "line": "The campus, the street, the people who have not been in a church in twenty years. The most vocations of any work and the least money, and the diocese will not always know what to make of it.",
+        "vocations": 1.3,
+        "income": 25000,
+        "reputations": {
+          "evangelist": 5
+        },
+        "houseKind": "mission",
+        "daughterAt": 14
+      },
+      {
+        "id": "poor_relief",
+        "label": "Poor relief",
+        "line": "A shelter, a kitchen, a clinic if the money comes. The house is loved in its neighbourhood and thin everywhere else, and it will be the last the province closes.",
+        "vocations": 1,
+        "income": 40000,
+        "reputations": {
+          "advocate": 5
+        },
+        "houseKind": "mission",
+        "daughterAt": 15
+      },
+      {
+        "id": "retreats",
+        "label": "Retreats",
+        "line": "A house people come to. Direction, silence, the weekends that fill. It wants land and a director, and it builds the quiet reputation the province forgets it has.",
+        "vocations": 0.9,
+        "income": 70000,
+        "reputations": {
+          "spiritual_director": 4,
+          "man_of_prayer": 2
+        },
+        "houseKind": "priory",
+        "daughterAt": 16
+      },
+      {
+        "id": "chaplaincy",
+        "label": "Chaplaincies",
+        "line": "The hospital, the jail, the university, the nursing homes: the house sends its men out to institutions that pay a little and need a great deal. The diocese loves it and forgets who does it.",
+        "vocations": 0.9,
+        "income": 80000,
+        "reputations": {
+          "pastor_of_dying": 4,
+          "confessor": 2
+        },
+        "houseKind": "mission",
+        "daughterAt": 16
+      },
+      {
+        "id": "media",
+        "label": "Media and the press",
+        "line": "A press, a journal, a studio, a website the province is nervous about. The order's oldest work in its newest form; it makes the house known far beyond the diocese, and known is not the same as loved.",
+        "vocations": 1,
+        "income": 45000,
+        "reputations": {
+          "professor": 3,
+          "evangelist": 3,
+          "preacher": 1
+        },
+        "houseKind": "priory",
+        "daughterAt": 16
+      }
     ],
     "university": [
-      { "id": "none", "label": "None", "line": "The house keeps to itself and its work. Nothing is owed to anyone with a board.", "vocations": 1 },
-      { "id": "adjacent", "label": "Adjacent", "line": "A chaplaincy at the university, a man or two lecturing. The students find the house, and the university does not own it.", "vocations": 1.1, "income": 20000, "reputations": { "professor": 1, "evangelist": 1 }, "needsUniversity": true },
-      { "id": "embedded", "label": "Embedded", "line": "Faculty appointments, a chaplaincy, a pipeline of student vocations, and a permanent negotiation with an institution that has its own agenda and a president who is not a friar.", "vocations": 1.3, "income": 80000, "reputations": { "professor": 3, "evangelist": 1 }, "needsUniversity": true }
+      {
+        "id": "none",
+        "label": "None",
+        "line": "The house keeps to itself and its work. Nothing is owed to anyone with a board.",
+        "vocations": 1
+      },
+      {
+        "id": "adjacent",
+        "label": "Adjacent",
+        "line": "A chaplaincy at the university, a man or two lecturing. The students find the house, and the university does not own it.",
+        "vocations": 1.1,
+        "income": 20000,
+        "reputations": {
+          "professor": 1,
+          "evangelist": 1
+        },
+        "needsUniversity": true
+      },
+      {
+        "id": "embedded",
+        "label": "Embedded",
+        "line": "Faculty appointments, a chaplaincy, a pipeline of student vocations, and a permanent negotiation with an institution that has its own agenda and a president who is not a friar.",
+        "vocations": 1.3,
+        "income": 80000,
+        "reputations": {
+          "professor": 3,
+          "evangelist": 1
+        },
+        "needsUniversity": true
+      },
+      {
+        "id": "faculty",
+        "label": "A faculty of its own",
+        "line": "The house runs a faculty: degrees under the order's own charter, a dean who is a friar, and a board that is not. Prestige, publications, the province's students sent to you, and a payroll.",
+        "vocations": 1.15,
+        "income": 40000,
+        "reputations": {
+          "professor": 5
+        },
+        "needsUniversity": false
+      }
     ],
     "poverty": [
-      { "id": "moderate", "label": "Moderate", "line": "Cars, a decent kitchen, the men's books. The house can do things, and nobody mistakes it for a hermitage.", "vocations": 1 },
-      { "id": "austere", "label": "Austere", "line": "Nothing the rule does not need. Credibility with the young and the poor, and a limit on what the house can ever do, since it cannot pay for it.", "vocations": 1.15, "income": -15000, "reputations": { "man_of_prayer": 2, "advocate": 1 } }
+      {
+        "id": "moderate",
+        "label": "Moderate",
+        "line": "Cars, a decent kitchen, the men's books. The house can do things, and nobody mistakes it for a hermitage.",
+        "vocations": 1
+      },
+      {
+        "id": "austere",
+        "label": "Austere",
+        "line": "Nothing the rule does not need. Credibility with the young and the poor, and a limit on what the house can ever do, since it cannot pay for it.",
+        "vocations": 1.15,
+        "income": -15000,
+        "reputations": {
+          "man_of_prayer": 2,
+          "advocate": 1
+        }
+      },
+      {
+        "id": "mendicant",
+        "label": "Mendicant",
+        "line": "No endowment and no salaries: the house lives on what is given that year, and asks. The order's first way, and it makes the house credible to the poor and impossible to plan for.",
+        "vocations": 1.2,
+        "income": -40000,
+        "reputations": {
+          "man_of_prayer": 3,
+          "advocate": 2
+        },
+        "friction": "progressive"
+      }
     ],
     "sizeTarget": [
-      { "id": "small", "label": "Small and deep", "line": "A dozen men who know each other. A daughter house goes out late, if ever, and the house is never large enough to be worth a chapter's quarrel.", "vocations": 0.9, "cohesion": 5, "daughterAt": 20 },
-      { "id": "large", "label": "Large and broad", "line": "Grow, and send men out. Daughter houses become possible sooner, and the house is watched sooner too.", "vocations": 1.1, "cohesion": -2, "daughterAt": 14 }
+      {
+        "id": "small",
+        "label": "Small and deep",
+        "line": "A dozen men who know each other. A daughter house goes out late, if ever, and the house is never large enough to be worth a chapter's quarrel.",
+        "vocations": 0.9,
+        "cohesion": 5,
+        "daughterAt": 20
+      },
+      {
+        "id": "middling",
+        "label": "Middling",
+        "line": "Fifteen or so, enough for the works and the office both. A daughter house is possible and not soon.",
+        "vocations": 1,
+        "daughterAt": 17
+      },
+      {
+        "id": "large",
+        "label": "Large and broad",
+        "line": "Grow, and send men out. Daughter houses become possible sooner, and the house is watched sooner too.",
+        "vocations": 1.1,
+        "cohesion": -2,
+        "daughterAt": 14
+      }
+    ],
+    "formation": [
+      {
+        "id": "none",
+        "label": "No men in formation",
+        "line": "The house is for professed men; its vocations go to the province's novitiate and come back formed by someone else.",
+        "vocations": 1
+      },
+      {
+        "id": "novitiate",
+        "label": "Takes novices",
+        "line": "A novitiate wing from the first year, if the province allows it: the men who come through the house are formed in it, by you, and vote in chapters for forty years. Costs a master and a corridor.",
+        "vocations": 1.15,
+        "income": -25000,
+        "formsAt": 5,
+        "reputations": {
+          "spiritual_director": 2
+        }
+      },
+      {
+        "id": "studentate",
+        "label": "A house of students",
+        "line": "The province's students in simple vows live here while they study: a young house, loud, and the province's future at your table every night.",
+        "vocations": 1.05,
+        "income": -15000,
+        "formsAt": 6,
+        "cohesion": -3,
+        "reputations": {
+          "professor": 2,
+          "spiritual_director": 1
+        }
+      }
+    ],
+    "hospitality": [
+      {
+        "id": "closed",
+        "label": "Closed",
+        "line": "The cloister is the house's. Guests are rare and short, and the men have the quiet the rule promised them.",
+        "vocations": 1,
+        "cohesion": 2
+      },
+      {
+        "id": "guests",
+        "label": "A guest wing",
+        "line": "Rooms for the priests who come to rest, the seminarians on retreat, the bishop's nephew. The house is known for its table, and the table costs.",
+        "vocations": 1.05,
+        "income": 10000,
+        "reputations": {
+          "confidant": 2,
+          "pastor_of_dying": 1
+        },
+        "cohesion": -1
+      },
+      {
+        "id": "retreatants",
+        "label": "Open to retreatants",
+        "line": "Laypeople in the house every weekend, the office with strangers in the stalls, the kitchen doubled. The house is the diocese's, and the men are never quite alone.",
+        "vocations": 1.1,
+        "income": 35000,
+        "reputations": {
+          "spiritual_director": 3,
+          "man_of_prayer": 1
+        },
+        "cohesion": -3
+      }
+    ],
+    "governance": [
+      {
+        "id": "prior",
+        "label": "The prior decides",
+        "line": "The constitutions' minimum: the prior governs, the chapter is consulted where it must be. Fast, clear, and the house is whatever its prior is.",
+        "vocations": 1,
+        "keeps": 0
+      },
+      {
+        "id": "chapter",
+        "label": "The chapter decides",
+        "line": "The house chapter votes on everything the constitutions let it and some things they do not. Slow, quarrelsome, and a charter the chapter voted is a charter a successor cannot quietly change.",
+        "vocations": 1,
+        "cohesion": 3,
+        "keeps": 0.25,
+        "reputations": {
+          "confidant": 1
+        }
+      }
+    ],
+    "dress": [
+      {
+        "id": "habit_always",
+        "label": "The habit everywhere",
+        "line": "The habit in the street, the hospital, the classroom. Visible, questioned, photographed; the young men who want that find it and the bishop's more nervous priests find it too.",
+        "vocations": 1.15,
+        "friction": "progressive",
+        "reputations": {
+          "evangelist": 2
+        }
+      },
+      {
+        "id": "habit_in_house",
+        "label": "The habit in the house",
+        "line": "The habit for the office and the church, clerics or a jacket beyond the door. The order's usual compromise, unremarkable, which is its point.",
+        "vocations": 1
+      },
+      {
+        "id": "clerics",
+        "label": "Clerics and a suit",
+        "line": "The habit for the feasts and the vows, and otherwise what a diocesan priest wears. The house passes in the city and the province's observant wing says so.",
+        "vocations": 0.85,
+        "friction": "observant"
+      }
+    ],
+    "language": [
+      {
+        "id": "english",
+        "label": "English",
+        "line": "The office, the preaching, the door in English. The diocese's Spanish parishes are someone else's.",
+        "vocations": 1
+      },
+      {
+        "id": "bilingual",
+        "label": "English and Spanish",
+        "line": "A Spanish Mass on Sunday, a friar who can hear confessions in it, and the Latino parishes of the diocese knowing the house's name. Vocations come from families that still send sons.",
+        "vocations": 1.2,
+        "reputations": {
+          "evangelist": 2,
+          "confessor": 1
+        },
+        "needsLatino": true
+      },
+      {
+        "id": "spanish",
+        "label": "Spanish first",
+        "line": "The house is the Latino parishes' house: the office in Spanish, the preaching in Spanish, English for the diocese's letters. The bishop is grateful and the province's older men are puzzled.",
+        "vocations": 1.3,
+        "reputations": {
+          "evangelist": 3,
+          "confessor": 2
+        },
+        "needsLatino": true,
+        "friction": "observant"
+      }
     ]
   },
   "works": [
-    { "id": "school", "label": "A school", "line": "A secondary school under the house, with lay teachers and two friars in the halls. Tuition and a pipeline, and a board of parents who did not take vows.", "men": 6, "cost": 400000, "income": 90000, "vocations": 0.15, "reputations": { "professor": 2, "builder": 2 } },
-    { "id": "chaplaincy", "label": "A university chaplaincy", "line": "The Newman centre by another name: a friar on campus every day and a chapel the students fill on Sunday nights.", "men": 4, "cost": 80000, "income": 15000, "vocations": 0.35, "reputations": { "evangelist": 3 }, "needsUniversity": true },
-    { "id": "retreat_program", "label": "A retreat program", "line": "Weekends and directed retreats, a calendar that fills a year out. It wants a director and a quiet wing.", "men": 5, "cost": 150000, "income": 60000, "vocations": 0.1, "reputations": { "spiritual_director": 3, "man_of_prayer": 1 } },
-    { "id": "shelter", "label": "A shelter", "line": "Beds, a kitchen, a caseworker the diocese pays half of. The neighbourhood's, more than the house's, within a year.", "men": 4, "cost": 120000, "income": -20000, "vocations": 0.1, "reputations": { "advocate": 4 } },
-    { "id": "hospital", "label": "A hospital chaplaincy", "line": "The wards and the night calls, under contract with the hospital system. The reputation the city keeps longest.", "men": 4, "cost": 20000, "income": 40000, "vocations": 0.05, "reputations": { "pastor_of_dying": 4, "confessor": 1 } },
-    { "id": "press", "label": "A press and a journal", "line": "A quarterly, a small press, a website that is read in Rome. Publications and prestige and a certain kind of enemy.", "men": 5, "cost": 60000, "income": 10000, "vocations": 0.05, "reputations": { "professor": 3, "preacher": 1 } },
-    { "id": "novitiate", "label": "Take novices", "line": "The house becomes a house of formation: the men who come through it are formed by you, and will vote in chapters for forty years.", "men": 8, "cost": 100000, "income": -30000, "vocations": 0.25, "reputations": { "spiritual_director": 2, "man_of_prayer": 1 } }
+    {
+      "id": "school",
+      "label": "A school",
+      "line": "A secondary school under the house, with lay teachers and two friars in the halls. Tuition and a pipeline, and a board of parents who did not take vows.",
+      "men": 6,
+      "cost": 400000,
+      "income": 90000,
+      "vocations": 0.15,
+      "reputations": {
+        "professor": 2,
+        "builder": 2
+      }
+    },
+    {
+      "id": "chaplaincy",
+      "label": "A university chaplaincy",
+      "line": "The Newman centre by another name: a friar on campus every day and a chapel the students fill on Sunday nights.",
+      "men": 4,
+      "cost": 80000,
+      "income": 15000,
+      "vocations": 0.35,
+      "reputations": {
+        "evangelist": 3
+      },
+      "needsUniversity": true
+    },
+    {
+      "id": "retreat_program",
+      "label": "A retreat program",
+      "line": "Weekends and directed retreats, a calendar that fills a year out. It wants a director and a quiet wing.",
+      "men": 5,
+      "cost": 150000,
+      "income": 60000,
+      "vocations": 0.1,
+      "reputations": {
+        "spiritual_director": 3,
+        "man_of_prayer": 1
+      }
+    },
+    {
+      "id": "shelter",
+      "label": "A shelter",
+      "line": "Beds, a kitchen, a caseworker the diocese pays half of. The neighbourhood's, more than the house's, within a year.",
+      "men": 4,
+      "cost": 120000,
+      "income": -20000,
+      "vocations": 0.1,
+      "reputations": {
+        "advocate": 4
+      }
+    },
+    {
+      "id": "hospital",
+      "label": "A hospital chaplaincy",
+      "line": "The wards and the night calls, under contract with the hospital system. The reputation the city keeps longest.",
+      "men": 4,
+      "cost": 20000,
+      "income": 40000,
+      "vocations": 0.05,
+      "reputations": {
+        "pastor_of_dying": 4,
+        "confessor": 1
+      }
+    },
+    {
+      "id": "press",
+      "label": "A press and a journal",
+      "line": "A quarterly, a small press, a website that is read in Rome. Publications and prestige and a certain kind of enemy.",
+      "men": 5,
+      "cost": 60000,
+      "income": 10000,
+      "vocations": 0.05,
+      "reputations": {
+        "professor": 3,
+        "preacher": 1
+      }
+    },
+    {
+      "id": "novitiate",
+      "label": "Take novices",
+      "line": "The house becomes a house of formation: the men who come through it are formed by you, and will vote in chapters for forty years.",
+      "men": 8,
+      "cost": 100000,
+      "income": -30000,
+      "vocations": 0.25,
+      "reputations": {
+        "spiritual_director": 2,
+        "man_of_prayer": 1
+      }
+    }
   ],
   "needLines": {
     "1": "A comfortable diocese with priests enough. A strong plan here is a hard sell.",

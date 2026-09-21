@@ -61,7 +61,10 @@ export const spendDefs: FriarSpendDef[] = (spendsRaw as unknown as { spends: Fri
 
 /** The founding charter's dials and the works a house can add. E3 §9.4–9.5. */
 const foundations = foundationsRaw as unknown as { dials: Record<CharterDial, CharterOptionDef[]>; works: FoundationWorkDef[]; needLines: Record<string, string> };
-export const charterDials: Record<CharterDial, CharterOptionDef[]> = foundations.dials;
+const rawDials = foundations.dials;
+/** The second and third works are the first's options at a share, with none first. */
+const NO_WORK: CharterOptionDef = { id: 'none', label: 'None', line: 'The house does the one thing, and does it wholly.' };
+export const charterDials: Record<CharterDial, CharterOptionDef[]> = { ...rawDials, secondaryWork: [NO_WORK, ...rawDials.primaryWork], tertiaryWork: [NO_WORK, ...rawDials.primaryWork] };
 export const foundationWorkDefs: FoundationWorkDef[] = foundations.works;
 export const needLines: Record<string, string> = foundations.needLines;
 

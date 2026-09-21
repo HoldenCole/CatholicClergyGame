@@ -1,4 +1,5 @@
 import type { CharterWork, FoundationPetition, FoundationSite, GameState, Letter } from '@/types';
+import { instituteDefs } from '@/content/institutes';
 import type { Rng } from '@/engine/rng';
 import { religiousOrder, needLines } from '@/content/religious';
 import { deliverLetter } from '@/systems/review';
@@ -34,7 +35,7 @@ export const FOUNDING = {
   /** Reputation fit to a work that counts as carrying the petition. */
   carriedAt: 45,
   /** How the charter's work reads against §8's works, for the fit. */
-  fitWork: { preaching: 'preaching', teaching: 'teaching', study: 'formation', parish: 'parish', evangelization: 'mission', poor_relief: 'mission', retreats: 'formation' } as Record<CharterWork, string>,
+  fitWork: { preaching: 'preaching', teaching: 'teaching', study: 'formation', parish: 'parish', evangelization: 'mission', poor_relief: 'mission', retreats: 'formation', chaplaincy: 'parish', media: 'teaching' } as Record<CharterWork, string>,
   /** A standing invitation a year: chance in a diocese of need three or more with a warm bishop; and how long it stands. */
   inviteChance: 0.1,
   inviteYears: 4,
@@ -124,6 +125,8 @@ export function petitionFoundation(state: GameState, dioceseId: string, work: Ch
   const r = state.religious;
   const world = worldOf(state, dioceseId);
   if (!r || !world || !canPetition(state).ok) return state;
+  // A work the order already does here is not a foundation the chapter will hear.
+  if (workNeeds(state, dioceseId)[work]?.filled) return state;
   const carried = reputationFit(state, FOUNDING.fitWork[work]) >= FOUNDING.carriedAt;
   const petition: FoundationPetition = { kind: 'petition', dioceseId, work, week: state.clock.week, bishopId: world.diocese.hidden.bishop.npcId };
   const ambition = Math.max(0, Math.min(100, r.perceivedAmbition + (carried ? FOUNDING.ambition.carried : FOUNDING.ambition.petition)));
@@ -151,7 +154,7 @@ export function answerFoundationAsk(state: GameState, accept: boolean): GameStat
 }
 
 export function workLabel(work: CharterWork): string {
-  return { preaching: 'preaching', teaching: 'teaching', study: 'a house of studies', parish: 'a parish', evangelization: 'evangelization', poor_relief: 'the poor', retreats: 'retreats' }[work];
+  return ({ preaching: 'preaching', teaching: 'teaching', study: 'a house of studies', parish: 'a parish', evangelization: 'evangelization', poor_relief: 'the poor', retreats: 'retreats', chaplaincy: 'chaplaincies', media: 'the press' } as Record<CharterWork, string>)[work];
 }
 
 /** The province's score for a petition, 0..1, before the roll. Exposed for the sheet's honest reading and the tests. */
@@ -251,4 +254,54 @@ export function foundingYear(state: GameState, rng: Rng): GameState {
 function bestWorkFor(key: string): CharterWork {
   const map: Record<string, CharterWork> = { preacher: 'preaching', professor: 'teaching', evangelist: 'evangelization', advocate: 'poor_relief', spiritual_director: 'retreats', man_of_prayer: 'retreats', confessor: 'parish', pastor_of_dying: 'parish', liturgist: 'preaching', builder: 'parish', confidant: 'teaching' };
   return map[key] ?? 'preaching';
+}
+
+/** The works a house could be founded for, each with its need here (0..3) and whether a house of the order, or another's, already fills it. E3 §9.4. */
+export interface WorkNeed {
+  need: number;
+  filled: boolean;
+  why: string;
+}
+
+export const CHARTER_WORKS: readonly CharterWork[] = ['preaching', 'teaching', 'study', 'parish', 'evangelization', 'poor_relief', 'retreats', 'chaplaincy', 'media'] as const;
+
+export function workNeeds(state: GameState, dioceseId: string): Record<CharterWork, WorkNeed> {
+  const world = worldOf(state, dioceseId);
+  const r = state.religious;
+  const out = {} as Record<CharterWork, WorkNeed>;
+  const order = r ? religiousOrder(r.order) : undefined;
+  const ours = Object.values(state.orderHouses ?? {}).filter((h) => h.dioceseId === dioceseId);
+  const ourWorks = new Set(ours.flatMap((h) => h.works));
+  const ourKinds = new Set(ours.map((h) => h.kind));
+  const studium = Object.values(state.orderHouses ?? {}).some((h) => h.kind === 'studium');
+  const v = world?.diocese.visible;
+  const institutions = v?.institutions ?? [];
+  const others = (v?.houses ?? []).filter((h) => !order || h.order !== order.houseOrderId);
+  const otherWorks = new Set(others.flatMap((h) => (h.instituteId ? instituteDefs.find((d) => d.id === (world?.institutes ?? []).find((i) => i.id === h.instituteId)?.defId)?.works ?? [] : [])));
+  const instituteWorks = new Set((world?.institutes ?? []).filter((i) => !order || i.defId !== order.instituteId).flatMap((i) => i.works));
+  const short = v?.clergyNeed === 'critically_short' ? 3 : v?.clergyNeed === 'stretched' ? 2 : v?.clergyNeed === 'adequate' ? 1 : 0;
+  const parishes = world?.parishes ?? [];
+  const poor = parishes.length ? parishes.filter((p) => p.wealth <= 2).length / parishes.length : 0;
+  const young = parishes.length ? parishes.filter((p) => p.generational === 'young').length / parishes.length : 0;
+  const latino = parishes.some((p) => p.terrain === 'latino');
+  const clamp = (n: number) => Math.max(0, Math.min(3, Math.round(n)));
+  const filledBy = (label: string) => `${label} already does it here.`;
+  out.preaching = ourWorks.has('preaching') || ourWorks.has('priory_church') ? { need: 0, filled: true, why: filledBy(`A house of the ${order?.short ?? 'order'}`) } : { need: clamp(1 + short * 0.5 + (others.filter((h) => h.charism === 'active').length ? -0.5 : 0.5)), filled: false, why: '' };
+  out.teaching = ourKinds.has('school') || ourWorks.has('teaching') || ourWorks.has('school') ? { need: 0, filled: true, why: filledBy(`The ${order?.short ?? 'order'}'s school`) } : { need: clamp((institutions.includes('school_network') ? 1.5 : 0.5) + (institutions.includes('catholic_university') ? 1 : 0) + (instituteWorks.has('high_school') || otherWorks.has('high_school') ? -1 : 0.5)), filled: false, why: '' };
+  out.study = studium ? { need: 0, filled: true, why: 'The province has its house of studies already.' } : { need: clamp(1 + (institutions.includes('major_seminary') || institutions.includes('catholic_university') ? 1 : 0)), filled: false, why: '' };
+  out.parish = { need: clamp(short + (state.flags[`parish_handed_back:${dioceseId}`] ? 1 : 0) - (ourKinds.has('parish') ? 1 : 0)), filled: false, why: '' };
+  out.evangelization = ourKinds.has('mission') || ourWorks.has('mission') || ourWorks.has('evangelization') ? { need: 0, filled: true, why: filledBy(`The ${order?.short ?? 'order'}'s mission house`) } : { need: clamp(1 + young * 2 + (institutions.includes('catholic_university') && !ourWorks.has('chaplaincy') ? 1 : 0) + (latino ? 0.5 : 0)), filled: false, why: '' };
+  out.poor_relief = ourWorks.has('poor_relief') || ourWorks.has('shelter') ? { need: 0, filled: true, why: filledBy(`The ${order?.short ?? 'order'}'s shelter`) } : { need: clamp(0.5 + poor * 3 - (instituteWorks.has('shelter') || instituteWorks.has('clinic') || institutions.includes('catholic_charities') ? 0.5 : 0)), filled: false, why: '' };
+  out.retreats = ourWorks.has('retreats') || ourWorks.has('retreat_program') ? { need: 0, filled: true, why: filledBy(`The ${order?.short ?? 'order'}'s retreat house`) } : { need: clamp(1.5 - (instituteWorks.has('retreat_house') || instituteWorks.has('monastery') ? 1 : 0) + (v?.size === 'large' || v?.size === 'huge' ? 0.5 : 0)), filled: false, why: '' };
+  out.chaplaincy = ourWorks.has('chaplaincy') && ours.some((h) => h.works.includes('hospital')) ? { need: 0, filled: true, why: filledBy(`The ${order?.short ?? 'order'}'s chaplains`) } : { need: clamp(0.5 + (institutions.includes('hospital_system') ? 1.5 : 0.5) + short * 0.3 - (instituteWorks.has('hospital') ? 0.5 : 0)), filled: false, why: '' };
+  out.media = ourWorks.has('media') || ourWorks.has('press') ? { need: 0, filled: true, why: filledBy(`The ${order?.short ?? 'order'}'s press`) } : { need: clamp(0.5 + (institutions.includes('diocesan_media') ? -0.5 : 1) + (v?.size === 'huge' ? 1 : v?.size === 'large' ? 0.5 : 0)), filled: false, why: '' };
+  return out;
+}
+
+/** The works most needed here: the top need, and any within one of it. */
+export function mostNeededWorks(state: GameState, dioceseId: string): CharterWork[] {
+  const needs = workNeeds(state, dioceseId);
+  const top = Math.max(...CHARTER_WORKS.map((w) => (needs[w].filled ? 0 : needs[w].need)));
+  if (top <= 0) return [];
+  return CHARTER_WORKS.filter((w) => !needs[w].filled && needs[w].need >= top);
 }

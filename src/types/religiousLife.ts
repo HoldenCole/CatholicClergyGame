@@ -657,13 +657,13 @@ export interface ReligiousPlayerState {
 
 
 /** The founding charter's dials. E3 §9.4. Options are data in content/religious/foundations.json. */
-export type CharterDial = 'observance' | 'liturgy' | 'primaryWork' | 'university' | 'poverty' | 'sizeTarget';
-export type CharterObservance = 'relaxed' | 'moderate' | 'strict';
-export type CharterLiturgy = 'vernacular' | 'mixed' | 'chanted' | 'order_rite';
-export type CharterWork = 'preaching' | 'teaching' | 'study' | 'parish' | 'evangelization' | 'poor_relief' | 'retreats';
-export type CharterUniversity = 'none' | 'adjacent' | 'embedded';
-export type CharterPoverty = 'moderate' | 'austere';
-export type CharterSize = 'small' | 'large';
+export type CharterDial = 'observance' | 'liturgy' | 'primaryWork' | 'secondaryWork' | 'tertiaryWork' | 'university' | 'poverty' | 'sizeTarget' | 'formation' | 'hospitality' | 'governance' | 'dress' | 'language';
+export type CharterObservance = 'relaxed' | 'mitigated' | 'moderate' | 'strict' | 'primitive';
+export type CharterLiturgy = 'vernacular' | 'mixed' | 'polyphony' | 'chanted' | 'order_rite';
+export type CharterWork = 'preaching' | 'teaching' | 'study' | 'parish' | 'evangelization' | 'poor_relief' | 'retreats' | 'chaplaincy' | 'media';
+export type CharterUniversity = 'none' | 'adjacent' | 'embedded' | 'faculty';
+export type CharterPoverty = 'moderate' | 'austere' | 'mendicant';
+export type CharterSize = 'small' | 'middling' | 'large';
 
 /** What a house is founded to be. The charism is the order's; everything below it is the founder's. E3 §9.4. */
 export interface Charter {
@@ -675,6 +675,15 @@ export interface Charter {
   alignment: number;
   poverty: CharterPoverty;
   sizeTarget: CharterSize;
+  /** Works beside the first, at a half and a quarter of its weight. Absent means none. */
+  secondaryWork?: CharterWork;
+  tertiaryWork?: CharterWork;
+  /** The later dials, absent in charters written before them: each reads as its first option. */
+  formation?: string;
+  hospitality?: string;
+  governance?: string;
+  dress?: string;
+  language?: string;
   writtenWeek: number;
 }
 
@@ -702,6 +711,12 @@ export interface CharterOptionDef {
   houseKind?: HouseKind;
   /** The men wanted before a daughter house can go out. */
   daughterAt?: number;
+  /** Men before the house forms its own; absent leaves the default. */
+  formsAt?: number;
+  /** How a successor's hand is stayed: added to the chance he keeps the charter as written. */
+  keeps?: number;
+  /** Needs parishes of the diocese in Spanish, or a university, or a house of formation's men. */
+  needsLatino?: boolean;
 }
 
 /** A work the house adds once it has the men: a school, a chaplaincy, a retreat program, a shelter. E3 §9.5. */

@@ -10,7 +10,10 @@ import { installProvince } from '@/systems/religious/install';
 import { membersOf } from '@/systems/religious/house';
 import { worldOf } from '@/systems/religious/transfer';
 import { answerFoundationAsk, bishopWarmth, canPetition, foundationSites, foundingWeek, foundingYear, petitionFoundation, provinceScore, FOUNDING } from '@/systems/religious/founding';
-import { charterFactors, readingOf, writeCharter, reviseCharter, optionAllowed } from '@/systems/religious/charter';
+import { charterFactors, charterWorks, readingOf, writeCharter, reviseCharter, optionAllowed, optionIdOf, CHARTER_DIALS } from '@/systems/religious/charter';
+import { charterDials } from '@/content/religious';
+import { reputationFit } from '@/systems/religious/reputations';
+import { mostNeededWorks, workNeeds, CHARTER_WORKS } from '@/systems/religious/founding';
 import { canSendDaughter, expectedVocations, foundationsYear, heirsOf, myFoundation, sendDaughter, addFoundationWork } from '@/systems/religious/foundationYear';
 
 function friar(seed: string, order: OrderKey = 'OP'): GameState {
@@ -42,12 +45,19 @@ function answered(s: GameState, seed = 'w'): GameState {
 
 const CHARTER = (patch: Partial<Charter> = {}): Charter => ({ observance: 'strict', liturgy: 'chanted', primaryWork: 'evangelization', university: 'none', alignment: -40, poverty: 'moderate', sizeTarget: 'large', writtenWeek: 0, ...patch });
 
+/** A work the order does not already do in that diocese: the one asked for when open, else the first open. */
+function openWork(s: GameState, did: string, want: Charter['primaryWork'] = 'evangelization'): Charter['primaryWork'] {
+  const needs = workNeeds(s, did);
+  return needs[want].filled ? CHARTER_WORKS.find((w) => !needs[w].filled)! : want;
+}
+
 function founded(seed: string, charter: Partial<Charter> = {}): { state: GameState; did: string } {
   const { state: s, did } = elsewhere(rich(friar(seed)), true);
-  const pet = petitionFoundation(s, did, charter.primaryWork ?? 'evangelization');
+  const work = openWork(s, did, charter.primaryWork ?? 'evangelization');
+  const pet = petitionFoundation(s, did, work);
   let next = answered(pet, `${seed}:ok`);
   expect(next.religious!.petition!.outcome).toBe('approved');
-  next = writeCharter(next, CHARTER(charter), createRng(`${seed}:charter`));
+  next = writeCharter(next, CHARTER({ ...charter, primaryWork: work }), createRng(`${seed}:charter`));
   return { state: next, did };
 }
 
@@ -84,32 +94,33 @@ describe('foundations: where, whether, and the charter (E3 §9.1–9.4)', () => 
     expect(canPetition({ ...base, religious: { ...base.religious!, vows: { renewals: [] } } }).ok).toBe(false);
     // Warm bishop, rich province, reputations that fit: approved, and the charter is asked for.
     const warm = elsewhere(base, true);
-    const pet = petitionFoundation(warm.state, warm.did, 'preaching');
+    const pet = petitionFoundation(warm.state, warm.did, openWork(warm.state, warm.did, 'preaching'));
     expect(pet.religious!.petition?.kind).toBe('petition');
-    expect(pet.religious!.perceivedAmbition).toBe(base.religious!.perceivedAmbition + FOUNDING.ambition.carried);
+    const carried = reputationFit(pet, FOUNDING.fitWork[pet.religious!.petition!.work]) >= FOUNDING.carriedAt;
+    expect(pet.religious!.perceivedAmbition).toBe(base.religious!.perceivedAmbition + (carried ? FOUNDING.ambition.carried : FOUNDING.ambition.petition));
     expect(provinceScore(pet, pet.religious!.petition!)).toBeGreaterThan(0.6);
     expect(foundingWeek(pet, createRng('early')).religious!.petition!.outcome).toBeUndefined();
     const yes = answered(pet, 'k1');
     expect(yes.religious!.petition!.outcome).toBe('approved');
     expect(yes.mode.kind).toBe('charter');
-    expect(yes.religious!.charterDraft?.primaryWork).toBe('preaching');
+    expect(yes.religious!.charterDraft?.primaryWork).toBe(pet.religious!.petition!.work);
     expect(yes.letters?.at(-1)?.title).toContain('approved');
     // The same petition, same seed, answers the same way.
     expect(answered(pet, 'k1').religious!.petition).toEqual(yes.religious!.petition);
     // A cold bishop is a hard gate whatever the province thinks.
     const cold = elsewhere(base, false);
-    const no = answered(petitionFoundation(cold.state, cold.did, 'preaching'), 'k1');
+    const no = answered(petitionFoundation(cold.state, cold.did, openWork(cold.state, cold.did, 'preaching')), 'k1');
     expect(no.religious!.petition!.outcome).toBe('bishop_refused');
     expect(no.flags['foundation:refused_week']).toBe(no.clock.week);
     expect(canPetition(no).ok).toBe(false);
     // A province in retirement debt refuses almost everything.
     const broke = { ...warm.state, province: { ...warm.state.province!, trajectory: 'shrinking' as const, finances: { balance: 10_000, retirementBurden: 50 } }, character: { ...warm.state.character!, reputation: { ...warm.state.character!.reputation, province: -40 } }, religious: { ...warm.state.religious!, perceivedAmbition: 90, reputations: {} } };
-    const refused = answered(petitionFoundation(broke, warm.did, 'study'), 'k2');
+    const refused = answered(petitionFoundation(broke, warm.did, openWork(broke, warm.did, 'retreats')), 'k2');
     expect(refused.religious!.petition!.outcome).toBe('province_refused');
     expect(refused.flags[`foundation:refused:${warm.did}`]).toBeDefined();
     // The second try in the same place scores higher than the first did.
     const again = { ...refused, clock: { ...refused.clock, week: refused.clock.week + FOUNDING.retryYears * 52 + 1 } };
-    expect(provinceScore(again, { dioceseId: warm.did, work: 'study', kind: 'petition' })).toBeGreaterThan(provinceScore(broke, { dioceseId: warm.did, work: 'study', kind: 'petition' }));
+    expect(provinceScore(again, { dioceseId: warm.did, work: 'retreats', kind: 'petition' })).toBeGreaterThan(provinceScore(broke, { dioceseId: warm.did, work: 'retreats', kind: 'petition' }));
     // A succession mid-process kills it.
     const changed = { ...pet, religious: { ...pet.religious!, petition: { ...pet.religious!.petition!, bishopId: 'someone_else' } }, character: { ...pet.character!, reputation: { ...pet.character!.reputation } } };
     const died = answered({ ...changed, religious: { ...changed.religious, dioceseFile: {} } }, 'k1');
@@ -156,6 +167,73 @@ describe('foundations: where, whether, and the charter (E3 §9.1–9.4)', () => 
     expect(readingOf(same, CHARTER()).observance).toBe('strict');
   });
 
+  it('a work another house already does here is greyed, the most needed are named, and the second and third works count at a share', () => {
+    const { state: s, did } = elsewhere(rich(friar('needs')), true);
+    const needs = workNeeds(s, did);
+    for (const w of CHARTER_WORKS) {
+      expect(needs[w].need).toBeGreaterThanOrEqual(0);
+      expect(needs[w].need).toBeLessThanOrEqual(3);
+      if (needs[w].filled) expect(needs[w].why.length).toBeGreaterThan(0);
+    }
+    // The province has a studium: a house of studies is filled, and greyed.
+    expect(needs.study.filled).toBe(true);
+    expect(optionAllowed(s, 'primaryWork', 'study', did).ok).toBe(false);
+    const most = mostNeededWorks(s, did);
+    expect(most.length).toBeGreaterThan(0);
+    for (const w of most) expect(needs[w].filled).toBe(false);
+    expect(Math.max(...most.map((w) => needs[w].need))).toBe(Math.max(...CHARTER_WORKS.filter((w) => !needs[w].filled).map((w) => needs[w].need)));
+    // A house of the order here that preaches fills preaching.
+    const h = Object.values(s.orderHouses!)[0]!;
+    const withHouse = { ...s, orderHouses: { ...s.orderHouses, [h.id]: { ...h, dioceseId: did, works: ['priory_church', 'preaching'] } } };
+    expect(workNeeds(withHouse, did).preaching.filled).toBe(true);
+    expect(workNeeds(withHouse, did).preaching.why).toContain('already');
+    // Second and third works: distinct from the first, the third wants a second, and each adds at its share.
+    const open = CHARTER_WORKS.filter((w) => !needs[w].filled);
+    expect(open.length).toBeGreaterThanOrEqual(3);
+    const [w1, w2, w3] = open as [typeof open[number], typeof open[number], typeof open[number]];
+    const one = CHARTER({ primaryWork: 'preaching' });
+    const two = CHARTER({ primaryWork: 'preaching', secondaryWork: 'poor_relief' });
+    const three = CHARTER({ primaryWork: w1, secondaryWork: w2, tertiaryWork: w3 });
+    expect(charterWorks(three).map((w) => w.share)).toEqual([1, 0.5, 0.25]);
+    expect(charterFactors(two).income).toBe(charterFactors(one).income + Math.round(charterDials.primaryWork.find((o) => o.id === 'poor_relief')!.income! * 0.5));
+    expect(charterFactors(two).reputations.advocate).toBe(2.5);
+    const third = charterDials.primaryWork.find((o) => o.id === w3)!;
+    const [rk, rv] = Object.entries(third.reputations ?? {})[0] as [keyof typeof needs extends never ? never : import('@/types').ReputationKey, number];
+    const withoutThird = charterFactors(CHARTER({ primaryWork: w1, secondaryWork: w2 }));
+    expect(charterFactors(three).reputations[rk]).toBeCloseTo((withoutThird.reputations[rk] ?? 0) + rv * 0.25, 5);
+    expect(optionAllowed(s, 'secondaryWork', 'preaching', did, one).ok).toBe(false);
+    expect(optionAllowed(s, 'tertiaryWork', 'retreats', did, one).ok).toBe(false);
+    expect(optionAllowed(s, 'tertiaryWork', 'retreats', did, two).ok).toBe(true);
+    // The later dials read as their first option on an older charter, and every dial has options.
+    for (const d of CHARTER_DIALS) {
+      expect(charterDials[d].length).toBeGreaterThan(1);
+      expect(charterDials[d].some((o) => o.id === optionIdOf(one, d))).toBe(true);
+    }
+    expect(optionIdOf(one, 'governance')).toBe('prior');
+    expect(optionIdOf(one, 'secondaryWork')).toBe('none');
+    // The new dials do what they say: a chapter-governed charter stays a successor's hand; a novitiate forms earlier; Spanish wants Spanish parishes.
+    expect(charterFactors(CHARTER({ governance: 'chapter' })).keeps).toBeGreaterThan(0);
+    expect(charterFactors(CHARTER({ formation: 'novitiate' })).formsAt).toBe(5);
+    expect(charterFactors(CHARTER({ observance: 'primitive' })).observance).toBeGreaterThan(charterFactors(CHARTER({ observance: 'strict' })).observance);
+    expect(charterFactors(CHARTER({ dress: 'habit_always' })).vocations).toBeGreaterThan(charterFactors(CHARTER({ dress: 'clerics' })).vocations);
+    const world = s.territory![did]!;
+    const latino = world.parishes.some((p) => p.terrain === 'latino');
+    expect(optionAllowed(s, 'language', 'spanish', did).ok).toBe(latino);
+    // Written with three works, the house carries all three; revised to none, the third goes with the second.
+    const pet = petitionFoundation(s, did, w1);
+    let next = answered(pet, 'needs:ok');
+    expect(next.religious!.petition!.outcome).toBe('approved');
+    next = writeCharter(next, three, createRng('needs:charter'));
+    const f = myFoundation(next)!;
+    expect(next.orderHouses![f.houseId]!.works).toEqual(expect.arrayContaining([w1, w2, w3]));
+    expect(next.flags[`charter:secondaryWork:${w2}`]).toBe(true);
+    const cut = reviseCharter(next, f.houseId, 'secondaryWork', 'none', 'player');
+    expect(myFoundation(cut)!.charter.secondaryWork).toBeUndefined();
+    expect(myFoundation(cut)!.charter.tertiaryWork).toBeUndefined();
+    expect(cut.orderHouses![f.houseId]!.works).not.toContain(w2);
+    expect(cut.flags['charter:secondaryWork:none']).toBe(true);
+  });
+
   it('writing the charter erects the house on it: the men are sent, the province pays, the founder is prior, and the diocese sees a new house', () => {
     const { state: s, did } = founded('write');
     const f = myFoundation(s)!;
@@ -189,7 +267,7 @@ describe('foundations: where, whether, and the charter (E3 §9.1–9.4)', () => 
 describe('foundations: the years (E3 §9.5–9.7)', () => {
   it('a strict, chanted, evangelizing house draws more men than a relaxed house of studies, and the run is deterministic', () => {
     const magnet = founded('years', {}).state;
-    const study = founded('years', { observance: 'relaxed', liturgy: 'vernacular', primaryWork: 'study', sizeTarget: 'small' }).state;
+    const study = founded('years', { observance: 'relaxed', liturgy: 'vernacular', primaryWork: 'retreats', sizeTarget: 'small' }).state;
     expect(expectedVocations(magnet, myFoundation(magnet)!)).toBeGreaterThan(expectedVocations(study, myFoundation(study)!) * 2);
     const a = years(magnet, 12, 'run');
     const b = years(study, 12, 'run');
@@ -209,7 +287,7 @@ describe('foundations: the years (E3 §9.5–9.7)', () => {
     if (fa.vocationIds.length >= 2) expect(a.npcs[fa.vocationIds[0]!]!.name.last === a.npcs[fa.vocationIds[1]!]!.name.last && a.npcs[fa.vocationIds[0]!]!.alignment === a.npcs[fa.vocationIds[1]!]!.alignment).toBe(false);
     // House reputations follow the charter.
     expect((fa.reputations.liturgist ?? 0) > 0 && (fa.reputations.evangelist ?? 0) > 0).toBe(true);
-    expect(fb.reputations.professor ?? 0).toBeGreaterThan(0);
+    expect(fb.reputations.spiritual_director ?? 0).toBeGreaterThan(0);
     expect(years(magnet, 12, 'run').religious!.foundations).toEqual(a.religious!.foundations);
     expect(a.flags['foundation:years']).toBe(12);
   });
@@ -287,7 +365,7 @@ describe('foundations: the years (E3 §9.5–9.7)', () => {
   it('early foundations fail often: a thin house under a bishop who resents religious closes, and the founder goes back to the ranks', () => {
     let failures = 0;
     for (let i = 0; i < 12 && failures === 0; i++) {
-      const { state: s, did } = founded(`fail${i}`, { primaryWork: 'study', observance: 'relaxed' });
+      const { state: s, did } = founded(`fail${i}`, { primaryWork: 'retreats', observance: 'relaxed' });
       const f = myFoundation(s)!;
       const house = s.orderHouses![f.houseId]!;
       const cold = { ...s, religious: { ...s.religious!, dioceseFile: { ...(s.religious!.dioceseFile ?? {}), [did]: { local_bishop: -95, laity: 0, bishopId: 'new_bishop', leftWeek: 0 } }, foundations: s.religious!.foundations!.map((x) => ({ ...x, budget: -500_000 })) }, character: { ...s.character!, reputation: { ...s.character!.reputation, local_bishop: -90 } }, orderHouses: { ...s.orderHouses, [f.houseId]: { ...house, memberIds: house.memberIds.slice(0, 2) } }, province: { ...s.province!, trajectory: 'shrinking' as const } };
@@ -320,7 +398,7 @@ describe('foundations: the years (E3 §9.5–9.7)', () => {
     expect(closed.religious!.office).toBeUndefined();
     // A save in the middle of a petition, and in the middle of the charter, reads back the same.
     const { state: p, did } = elsewhere(rich(friar('save')), true);
-    const pet = petitionFoundation(p, did, 'retreats');
+    const pet = petitionFoundation(p, did, openWork(p, did, 'retreats'));
     const rng = createRng(pet.seed);
     const json = serialize(buildSave(pet, rng, null));
     expect(serialize(deserialize(json))).toBe(json);
