@@ -241,6 +241,11 @@ export interface GameEvent {
   internalForum?: boolean;
   /** One phase, or several for events that belong to the whole career. */
   phase: Phase | Phase[];
+  /**
+   * Which campaign the scene belongs to. Absent means the base game
+   * (diocesan); 'religious' is a friar's scene; 'any' fires in both. E3 §11.
+   */
+  campaign?: 'diocesan' | 'religious' | 'any';
   yearGate?: number[];
   pressure: Pressure[];
   severity: Severity;

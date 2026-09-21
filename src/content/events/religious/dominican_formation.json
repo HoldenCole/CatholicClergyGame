@@ -1,0 +1,1002 @@
+{
+  "_notes": "Dominican formation, E3 §5.1 and §6.6. Fired for a friar of the Order of Preachers in his seven years; the year gates follow the order's stages. Sensitive matter stays authored.",
+  "events": [
+    {
+      "id": "opf_clothing",
+      "phase": [
+        "seminary"
+      ],
+      "campaign": "religious",
+      "severity": "ROUTINE",
+      "category": "formation",
+      "baseWeight": 14,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        }
+      ],
+      "title": "The Habit",
+      "body": "{@novice_master} lays the habit over your arm in the chapter room before the whole house, and says the name you will carry now. It is heavier than it looks, wool in a warm September, and it smells of the press and of someone else. The professed sing the antiphon badly and with feeling. Afterward there is cake, and {@old_friar} tells you the habit was lighter in his day and that you will grow into it, both of which are untrue.",
+      "choices": [
+        {
+          "id": "wear_it",
+          "label": "Wear it everywhere for a month, to learn it",
+          "outcome": "You wear it to the store, to the dentist, on the train. People stare, then ask, then tell you things. By the month's end you have stopped noticing it, which the novice master says is the point.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "habit:worn",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "as_required",
+          "label": "Wear it in the house and at Mass, as required",
+          "outcome": "You keep it for the chapel and the table, as the constitutions ask, and change for the world. Nobody says anything, which in a novitiate is not the same as no one noticing.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 1
+            }
+          ]
+        }
+      ],
+      "yearGate": [
+        1
+      ]
+    },
+    {
+      "id": "opf_night_office",
+      "phase": [
+        "seminary"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "formation",
+      "baseWeight": 10,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "body_vs_vow"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        }
+      ],
+      "title": "The Night Office",
+      "body": "The bell for Matins is at five-twenty, and the novitiate keeps it in the dark, in choir, with the psalms sung and no heat until seven. Three weeks in, you have not once been awake for the first antiphon, and {@novice_master} has not once said a word about it. {@confrere} sleeps through his alarm and is in his stall before you every morning, which you cannot explain. This morning you wake at four, and lie there, and it comes to you that the choice is whether to be the kind of man who is in the stall or the kind who is nearly.",
+      "choices": [
+        {
+          "id": "rise",
+          "label": "Get up. Be in the stall before the bell, every day",
+          "outcome": "The first week is a penance. The third is nothing. By Advent you are the man who lights the candles, and the old friars have stopped watching you, which is their highest praise.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 4
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "mostly",
+          "label": "Be there most mornings, and forgive yourself the rest",
+          "outcome": "You make four mornings in five and sleep the fifth without shame. The novice master's only comment, in March, is that the Office is sung by those who are there, which you take as you can.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "ask",
+          "label": "Ask the novice master whether the hour could be later",
+          "outcome": "He hears you out, agrees with every argument, and says the hour was set by men who had the same arguments, and kept it. You keep it. The asking is remembered, kindly and not.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@novice_master",
+              "delta": -3
+            },
+            {
+              "target": "outspokenness",
+              "key": "",
+              "delta": 2
+            }
+          ]
+        }
+      ],
+      "yearGate": [
+        1
+      ]
+    },
+    {
+      "id": "opf_constitutions",
+      "phase": [
+        "seminary"
+      ],
+      "campaign": "religious",
+      "severity": "ROUTINE",
+      "category": "formation",
+      "baseWeight": 9,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        }
+      ],
+      "title": "The Constitutions, Read Aloud",
+      "body": "{@novice_master} reads the constitutions to the novices in the hour after lunch, a chapter a day, in a voice that does not perform. Today it is the chapter on dispensation, and on how a prior may dispense a brother from the common observance for the sake of study or preaching, and how the dispensed man must not think himself dispensed from the brothers. {@confrere} asks whether that is a loophole. The novice master says it is a door, and that the order is full of doors, and that the difference between a door and a loophole is the man walking through it.",
+      "choices": [
+        {
+          "id": "study",
+          "label": "Say the study is what the order is for; the doors are there to be used",
+          "outcome": "He agrees, and says so, and adds that the men who use them best are the ones who did not need to be told. He looks at you a little longer than at the others.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -1
+            },
+            {
+              "target": "flag",
+              "key": "novitiate:study_minded",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "common",
+          "label": "Say the common life is what the order is for; the doors are for emergencies",
+          "outcome": "He says that is a good Cistercian answer and that you are not a Cistercian, but that the house would be better if more men thought so. The professed at the next table nod.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "novitiate:common_minded",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "quiet",
+          "label": "Say nothing, and read the chapter again that night",
+          "outcome": "You read it twice. It is subtler than either of the men arguing thought. You begin to keep a notebook of the constitutions, which will be with you for forty years.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 1
+            }
+          ]
+        }
+      ],
+      "yearGate": [
+        1
+      ]
+    },
+    {
+      "id": "opf_leaver",
+      "phase": [
+        "seminary"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "classmate",
+      "baseWeight": 10,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "friendship_vs_duty",
+        "doubt"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        }
+      ],
+      "title": "The One Who Leaves",
+      "body": "In February {@confrere} does not come to Lauds, and at breakfast his place is cleared. {@novice_master} says at chapter that he has gone home, that he asked to be prayed for, and that nothing more will be said. Nothing more is said. His cell is empty by noon; someone has already taken the better chair. He was, three days ago, the man in the class you would have picked to be prior one day. Novitiates lose men, everyone knows it, and nobody had told you it would be him.",
+      "choices": [
+        {
+          "id": "write",
+          "label": "Write to him, against the custom",
+          "outcome": "You write. He writes back, in April, from his parents' house, and says you were right to and that he is all right. You are not sure either is true. You keep the letter.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "relationship",
+              "key": "@novice_master",
+              "delta": -2
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "novitiate:wrote_leaver",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "pray",
+          "label": "Pray for him at the hour the house set, and let him go",
+          "outcome": "You do what the house does. It is what he asked. In the spring you find you have stopped seeing his empty stall, and you are not sure whether that is a grace or a loss.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "ask_why",
+          "label": "Ask the novice master, privately, what happened",
+          "outcome": "He says he will not tell you, and then says a little: that the man was good and not for this, and that the two are not the same, and that you will be asked one day to say this to someone. He asks whether you are asking for the man or for yourself.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@novice_master",
+              "delta": 2
+            },
+            {
+              "target": "concern",
+              "key": "Asks about the men who leave."
+            }
+          ]
+        }
+      ],
+      "yearGate": [
+        1
+      ]
+    },
+    {
+      "id": "opf_profession_eve",
+      "phase": [
+        "seminary"
+      ],
+      "campaign": "religious",
+      "severity": "MAJOR",
+      "category": "formation",
+      "baseWeight": 12,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        }
+      ],
+      "title": "The Night Before Profession",
+      "body": "The vote was yesterday; the novice master told you the number and not the names. Tonight the house keeps a vigil, and the novice who will profess in the morning is left alone in the chapel from Compline until the small hours, by custom, with the constitutions and a candle. A single vow of obedience, understood to contain the rest. You have read the formula until it has stopped meaning anything. At one in the morning {@old_friar} comes in, sits three stalls away, and says nothing for an hour, and then says that he professed in this chapel in a year you were not born, and that he has never once regretted it on a Tuesday.",
+      "choices": [
+        {
+          "id": "ask_him",
+          "label": "Ask him what he means about Tuesdays",
+          "outcome": "He says the vows are easy on feast days and at funerals, and that the life is Tuesdays. He says it as a warning and a comfort, and you take it as both.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "relationship",
+              "key": "@old_friar",
+              "delta": 8
+            },
+            {
+              "target": "flag",
+              "key": "profession:tuesdays",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "silence",
+          "label": "Sit with him in silence until he goes",
+          "outcome": "He goes at two, and touches your shoulder as he passes, and in the morning at the profession he is in the front stall with his eyes shut, which he is not known for.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            }
+          ]
+        }
+      ],
+      "yearGate": [
+        1
+      ]
+    },
+    {
+      "id": "opf_studium_arrival",
+      "phase": [
+        "seminary"
+      ],
+      "campaign": "religious",
+      "severity": "ROUTINE",
+      "category": "formation",
+      "baseWeight": 14,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        }
+      ],
+      "title": "The House of Studies",
+      "body": "The studium is not the novitiate. It is larger, older, more tired, and full of men who have already made the vow you made in June and who read at meals. The master of students, {@master_of_students}, gives you a cell with a desk that has been carved by three generations of student brothers and a reading list that begins with the Summa and does not end. Philosophy first, the Thomist way, two years of it. {@confrere} unpacks his books across the hall and has more of them than you. Vespers is chanted here by men who can chant, and your voice is suddenly not what it was in a house of eleven.",
+      "choices": [
+        {
+          "id": "library",
+          "label": "Find the library before you find your room",
+          "outcome": "You find it on the third floor, unheated, with a window on the cloister and the second edition of the Leonine in a case that does not lock. You do not leave until Vespers.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -1
+            }
+          ]
+        },
+        {
+          "id": "refectory",
+          "label": "Find the men before you find the books",
+          "outcome": "You sit at the long table and let the second-years talk, which they do. By supper you know who is dispensed, who is difficult, who sings, and which professor to fear. It is the more useful map.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 3
+            }
+          ]
+        }
+      ],
+      "yearGate": [
+        2
+      ]
+    },
+    {
+      "id": "opf_thomist_seminar",
+      "phase": [
+        "seminary"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "formation",
+      "baseWeight": 10,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "belief_vs_safety"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        }
+      ],
+      "title": "The Seminar on the Fifth Way",
+      "body": "The professor is a friar of seventy who has read the Summa in Latin every year since the fifties and does not use notes. He takes the fifth way apart for three hours, and at the end he asks you, by your religious name, whether you think it proves anything. {@confrere} has already given the answer from the manual. The professor did not like it. He is waiting. The master of students is in the back row, not for you, but he is there.",
+      "choices": [
+        {
+          "id": "yes",
+          "label": "Say it proves what it proves and that the manuals oversell it",
+          "outcome": "He is delighted. He spends twenty minutes on what it proves and what it does not, and tells the seminar that this is the first honest answer he has had in three years. {@confrere} does not speak to you at supper.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 3
+            },
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": -6
+            },
+            {
+              "target": "relationship",
+              "key": "@master_of_students",
+              "delta": 3
+            },
+            {
+              "target": "outspokenness",
+              "key": "",
+              "delta": 2
+            }
+          ],
+          "volume": "semi_public",
+          "positionTopic": "doctrine",
+          "positionValue": -10
+        },
+        {
+          "id": "manual",
+          "label": "Give the manual's answer, better than it was given",
+          "outcome": "He nods, says it is correct, and moves on. Correct is not what he wanted. But the master of students writes something down, and what he writes is not bad.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "doubt",
+          "label": "Say you are not sure it proves anything to a man who does not already believe",
+          "outcome": "The room goes quiet. The professor looks at you a long time and says that Thomas was not sure either, and that it is the only interesting answer, and that you should be careful whom you give it to. The master of students writes a great deal.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 2
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 3
+            },
+            {
+              "target": "concern",
+              "key": "Says at seminar that he is not sure the fifth way proves anything."
+            }
+          ],
+          "volume": "semi_public",
+          "positionTopic": "doctrine",
+          "positionValue": 20
+        }
+      ],
+      "yearGate": [
+        2,
+        3
+      ]
+    },
+    {
+      "id": "opf_renewal",
+      "phase": [
+        "seminary"
+      ],
+      "campaign": "religious",
+      "severity": "ROUTINE",
+      "category": "formation",
+      "baseWeight": 9,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        }
+      ],
+      "title": "The Renewal of Vows",
+      "body": "Once a year the simple profession is renewed, in chapter, before the prior and the house, and the constitutions say the community is consulted first. Consulted means a vote. You do not see the vote. You see {@master_of_students} at the door of your cell the evening before, which he does not do, saying that it went well and that two men had questions and that he had answered them. He does not say which men or which questions. In the morning you kneel and say the formula and the house says amen, and you spend the day looking at faces.",
+      "choices": [
+        {
+          "id": "let_it_go",
+          "label": "Let the two men have their questions; renew, and go on",
+          "outcome": "You renew, and go on. By Lent you have forgotten to wonder who they were, and by Easter one of them has asked you to help him with his Greek, which may or may not be an answer.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "find_out",
+          "label": "Find out who the two were",
+          "outcome": "It takes a week. One is a professed brother who thinks you are proud, which you are; the other is a student who wanted to know whether you would be sent for a degree. You cannot un-know either.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -3
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "studium:knows_doubters",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "yearGate": [
+        3,
+        5
+      ]
+    },
+    {
+      "id": "opf_first_ministry",
+      "phase": [
+        "seminary"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "parish_death",
+      "baseWeight": 10,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        }
+      ],
+      "title": "Sent Out on a Sunday",
+      "body": "In the fourth year the student brothers begin to be sent out on Sundays, in the habit, to the parishes that ask, to help with the children's catechesis or read at Mass or, at one parish downtown that has a pastor who does not care for friars, to do nothing much and be seen. {@master_of_students} sends you to that one. The pastor, {@brother_priest}, gives you the eight o'clock to serve at and no coffee. The people, on the other hand, have never seen a habit and want to touch it.",
+      "choices": [
+        {
+          "id": "win_pastor",
+          "label": "Make yourself useful to the pastor until he thaws",
+          "outcome": "It takes eleven Sundays. On the twelfth he gives you the children's liturgy and a key. He tells the master of students, months later and grudgingly, that you were not what he expected from your lot.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "relationship",
+              "key": "@brother_priest",
+              "delta": 12
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 3
+            }
+          ]
+        },
+        {
+          "id": "win_people",
+          "label": "Let the pastor be and give the people what they came for",
+          "outcome": "You stand in the vestibule after Mass and are talked to for an hour. By Advent there is a line. The pastor notices the line and does not like it, and tells the master of students so.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 6
+            },
+            {
+              "target": "relationship",
+              "key": "@brother_priest",
+              "delta": -8
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -1
+            }
+          ]
+        }
+      ],
+      "yearGate": [
+        4
+      ]
+    },
+    {
+      "id": "opf_dispensation_offer",
+      "phase": [
+        "seminary"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "formation",
+      "baseWeight": 11,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "ambition_vs_integrity"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        }
+      ],
+      "title": "The First Door",
+      "body": "{@master_of_students} calls you in during the fifth year and says the regent has noticed your Greek, and that there is a possibility, not an offer, of a dispensation from the common table and the day hours for a semester, to work on it, and that he does not recommend you take it. He says the men who take doors in their fifth year keep taking them. He says the regent disagrees with him. He asks what you think, and clearly does not want to be told what you think.",
+      "choices": [
+        {
+          "id": "take",
+          "label": "Say you would take it, if it were offered",
+          "outcome": "It is offered, and you take it, and the Greek comes. The table notices your absence more than you expected, and the master of students says nothing about it for the rest of the year, which is worse than anything he could have said.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -4
+            },
+            {
+              "target": "relationship",
+              "key": "@master_of_students",
+              "delta": -5
+            },
+            {
+              "target": "flag",
+              "key": "studium:took_door",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "decline",
+          "label": "Say you would rather not, this year",
+          "outcome": "He looks relieved and does not hide it. The regent, when you pass him in the cloister, says the Greek can wait and the brothers cannot, and you are not sure he believes it either.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 3
+            },
+            {
+              "target": "relationship",
+              "key": "@master_of_students",
+              "delta": 4
+            },
+            {
+              "target": "flag",
+              "key": "studium:kept_table",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "ask",
+          "label": "Ask him what he would have done at your age",
+          "outcome": "He laughs, which he does not do, and says he took every door there was and lost a friend for each one, and that he is master of students now and the friends are pastors in three states. He leaves the choice with you and it feels heavier.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@master_of_students",
+              "delta": 3
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 2
+            }
+          ]
+        }
+      ],
+      "yearGate": [
+        5
+      ]
+    },
+    {
+      "id": "opf_solemn_eve",
+      "phase": [
+        "seminary"
+      ],
+      "campaign": "religious",
+      "severity": "MAJOR",
+      "category": "formation",
+      "baseWeight": 14,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        }
+      ],
+      "title": "Before the Solemn Vows",
+      "body": "Solemn profession is the point of no return, and the house treats it as one. The vote was last week, in chapter, and the prior read the result aloud without the numbers, as the custom is when it is not close. Tomorrow you will kneel before {@provincial}, who has driven four hours for it, and put your hands in his and say for life. Tonight your mother has called and {@confrere} has not, and {@master_of_students} has left a note under your door with one line from Augustine, who is not the order's saint, and you understand why he chose it.",
+      "choices": [
+        {
+          "id": "call_back",
+          "label": "Call your mother back and talk until she is ready to hang up",
+          "outcome": "She is not ready for an hour and a half. She says she is proud and that she wishes it were otherwise, in that order, and that she will be in the second pew. She is.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "relationship",
+              "key": "@mother",
+              "delta": 6
+            },
+            {
+              "target": "flag",
+              "key": "solemn:called_home",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "chapel",
+          "label": "Take the note to the chapel and stay there",
+          "outcome": "You stay until Matins. The line was about the restless heart, and you turn it over for four hours, and by the end you are, for once, not restless. The provincial finds you asleep in the stall at five and does not wake you.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 4
+            },
+            {
+              "target": "relationship",
+              "key": "@provincial",
+              "delta": 3
+            }
+          ]
+        },
+        {
+          "id": "confrere",
+          "label": "Go and knock on {@confrere}'s door",
+          "outcome": "He is awake. He says he did not call because he did not know what to say, and then says it: that he voted for you and is not sure he was right, and that he will be in the choir tomorrow singing anyway. It is the truest thing anyone says to you all week.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": 10
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            }
+          ]
+        }
+      ],
+      "yearGate": [
+        6
+      ]
+    },
+    {
+      "id": "opf_deacon_year",
+      "phase": [
+        "seminary"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "formation",
+      "baseWeight": 11,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        }
+      ],
+      "title": "A Deacon in Community",
+      "body": "The seventh year: a deacon at a parish three mornings a week and a student brother the rest, living in the studium, preaching your first homilies to a congregation that does not know you are practising on them. {@master_of_students} listens to a recording of one and says it was a lecture with a blessing at the end. {@prior} says the same thing more kindly. The provincial's letter about your first assignment will come in June and you have been told, by everyone, not to ask what is in it.",
+      "choices": [
+        {
+          "id": "preach_shorter",
+          "label": "Cut the next homily in half and say one thing",
+          "outcome": "It is seven minutes. An old woman stops you after and says it was the first time she had understood a friar. The master of students, sent the recording, says only: better. You keep it to one thing for the rest of your life, mostly.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": -1
+            },
+            {
+              "target": "flag",
+              "key": "preaching:one_thing",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "preach_more",
+          "label": "Preach the lecture, better; the people can rise to it",
+          "outcome": "Some do. The ones who do come back, and bring a friend who reads. The ones who do not go to the other Mass. By spring you have a congregation of forty who would follow you to a seminar, and a pastor who has noticed the other Mass is fuller.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": -2
+            },
+            {
+              "target": "flag",
+              "key": "preaching:the_lecture",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "ask_letter",
+          "label": "Ask the provincial, in confession-adjacent tones, what is in the letter",
+          "outcome": "He says, in the same tones, that he does not know yet and that men who ask are usually sent to the place they were afraid of. He is joking. You are fairly sure he is joking.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@provincial",
+              "delta": -2
+            },
+            {
+              "target": "outspokenness",
+              "key": "",
+              "delta": 1
+            }
+          ]
+        }
+      ],
+      "yearGate": [
+        7
+      ]
+    }
+  ]
+}

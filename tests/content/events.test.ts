@@ -73,6 +73,7 @@ const SELECTORS = [
   '@dominican_prior', '@dominican_lector', '@dominican_student',
   '@franciscan_guardian', '@franciscan_kitchen', '@franciscan_confessor',
   '@augustinian_prior', '@augustinian_headmaster', '@augustinian_old_pastor',
+  '@prior', '@provincial', '@novice_master', '@master_of_students', '@confrere', '@old_friar',
 ];
 const MINISTRY_COND_KEYS = ['masses', 'confessions', 'baptisms', 'firstCommunions', 'confirmations', 'weddings', 'funerals', 'anointings', 'converts', 'ordinations'];
 const LIFE_KEYS = ['posts', 'formed', 'turnarounds', 'vocations', 'offices'];

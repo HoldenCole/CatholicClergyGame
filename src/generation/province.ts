@@ -168,14 +168,20 @@ export function generateProvince(rng: Rng, order: OrderDef, seed: ProvinceSeed, 
     };
     const members: Npc[] = [];
     for (let k = 0; k < size; k++) {
-      const standing = kind === 'novitiate' ? (k < Math.ceil(size * 0.6) ? 'novice' : 'professed') : kind === 'studium' ? (k < Math.ceil(size * 0.65) ? 'student' : 'professed') : 'professed';
+      const standing = kind === 'novitiate' ? (k < Math.min(size - 3, Math.ceil(size * 0.6)) ? 'novice' : 'professed') : kind === 'studium' ? (k < Math.ceil(size * 0.65) ? 'student' : 'professed') : 'professed';
       members.push(friar(hrng, order, house, year, k, standing, old));
     }
     // The prior: a solemnly professed man of the middle years, the one the house would follow.
     const eligible = members.filter((m) => m.tags.includes('vows:solemn') && !m.tags.includes('lay_brother') && year - m.birthYear >= 38 && year - m.birthYear <= 72);
-    const prior = (eligible.length ? eligible : members).map((m) => ({ m, s: m.stats.administration + m.stats.charisma + hrng.float(-20, 20) })).sort((a, b) => b.s - a.s)[0]!.m;
+    const professedMen = members.filter((m) => m.tags.includes('vows:solemn') && !m.tags.includes('lay_brother'));
+    const prior = (eligible.length ? eligible : professedMen.length ? professedMen : members).map((m) => ({ m, s: m.stats.administration + m.stats.charisma + hrng.float(-20, 20) })).sort((a, b) => b.s - a.s)[0]!.m;
     prior.tags.push('prior');
     house.priorId = prior.id;
+    // The formation houses have their own men: a novice master, a master of students, apart from the prior.
+    if (kind === 'novitiate' || kind === 'studium') {
+      const formator = (eligible.length > 1 ? eligible : members).filter((m) => m.id !== prior.id).sort((a, b) => b.stats.piety + b.stats.theology - (a.stats.piety + a.stats.theology))[0];
+      if (formator) formator.tags.push(kind === 'novitiate' ? 'novice_master' : 'master_of_students');
+    }
     house.memberIds = members.map((m) => m.id);
     houses.push(house);
     friars.push(...members);

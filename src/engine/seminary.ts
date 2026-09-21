@@ -1,3 +1,6 @@
+import { formationYearEnd, formationYearStart } from '@/systems/religious/formation';
+import { consult } from '@/systems/religious/obedience';
+import { createRng } from './rng';
 import { handOnOffices, isMoveTo, keepOffices, officesHeld } from '@/systems/offices';
 import type { Beat, GameEvent, GameState, Pillar, SeminaryState, SummerAssignment } from '@/types';
 import { PILLARS } from '@/types';
@@ -261,6 +264,15 @@ export function acknowledgeEvaluation(state: GameState): GameState {
 }
 
 function advanceYear(state: GameState): GameState {
+  // A religious year ends on the order's milestone: a profession the house votes on, a renewal, the solemn vows. E3 §5.
+  if (state.religious) {
+    const ended = formationYearEnd(state, createRng(`${state.seed}:formation:${state.clock.week}`));
+    state = ended.line ? addCareerNote(ended.state, ended.line) : ended.state;
+    if (ended.heldBack) {
+      const held = { ...state, seminary: { ...state.seminary!, heldBackCount: state.seminary!.heldBackCount + 1, emphasis: null } };
+      return { ...held, mode: { kind: 'year_start', year: held.seminary!.year } };
+    }
+  }
   const sem = state.seminary!;
   const milestones: Partial<SeminaryState> = {};
   if (sem.year === 4) milestones.candidacy = true;
@@ -269,11 +281,16 @@ function advanceYear(state: GameState): GameState {
   if (sem.year >= 7) {
     return { ...state, seminary: { ...sem, ...milestones }, mode: { kind: 'ordination' } };
   }
-  return {
+  const opened: GameState = {
     ...state,
     seminary: { ...sem, ...milestones, year: sem.year + 1, emphasis: null, playedWeeks: [] },
     mode: { kind: 'year_start', year: sem.year + 1 },
   };
+  return opened.religious ? formationYearStart(opened) : opened;
+}
+
+function addCareerNote(state: GameState, text: string): GameState {
+  return { ...state, career: [...state.career, { week: state.clock.week, kind: 'note', text }] };
 }
 
 /** DESIGN.md §6.4: voluntary departure, always available, always respected. */
@@ -305,6 +322,8 @@ export function ordain(state: GameState, rng: Rng): GameState {
   };
   if (!ordained.world) return { ...ordained, mode: { kind: 'clock' } };
   const withCareer = beginCareer(ordained, rng);
+  // A friar is not assigned by the bishop: the provincial consults him, and the letter follows. E3 §3.1.
+  if (withCareer.religious) return { ...consult(withCareer, rng.derive('consultation'), 'first'), mode: { kind: 'clock' } };
   const assignment = assignFirstParish(withCareer, rng.derive('assignment'));
   const noted: GameState = {
     ...withCareer,

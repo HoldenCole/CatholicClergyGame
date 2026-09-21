@@ -6,6 +6,8 @@ import { advanceArc, arcOf, dueArc } from '@/systems/arcs';
 import { createRng, type Rng } from './rng';
 import { resolveSelector, selectorsIn } from './selectors';
 import { recordPosition } from '@/systems/reputation';
+import { campaignOf } from '@/systems/campaign';
+import { positionWeight } from '@/systems/religious/study';
 import { groupMatches } from './conditions';
 import type { Condition } from '@/types';
 
@@ -21,8 +23,15 @@ export function eventInPhase(event: GameEvent, phase: GameState['phase']): boole
 }
 
 /** Whether an event may fire now. Suppression, once, and pending are all checked here. */
+/** A scene belongs to a campaign: the base game's unless it says otherwise. E3 §11. */
+export function eventInCampaign(event: GameEvent, state: Pick<GameState, 'campaign'>): boolean {
+  const mine = event.campaign ?? 'diocesan';
+  return mine === 'any' || mine === campaignOf(state);
+}
+
 export function isEligible(event: GameEvent, state: GameState): boolean {
   if (!eventInPhase(event, state.phase)) return false;
+  if (!eventInCampaign(event, state)) return false;
   if (event.yearGate && state.seminary && !event.yearGate.includes(state.seminary.year)) return false;
   if (event.once && state.firedOnce.includes(event.id)) return false;
   const until = state.suppressedUntil[event.id];
@@ -212,7 +221,7 @@ export function applyChoice(
         value: choice.positionValue,
         volume: choice.volume,
         week: state.clock.week,
-      }),
+      }, positionWeight(next, choice.positionTopic)),
     };
   }
   // The stage has been played: unless the choice itself moved the arc, it moves on.

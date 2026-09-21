@@ -82,34 +82,39 @@
           "guide": "novice master",
           "milestone": "simple_profession",
           "communityVote": true,
-          "line": "A brief postulancy folds into the start of the year. Clothing with the habit comes early, and a religious name with it. Then prayer, common life, chant, and the constitutions under the novice master, while the professed of the house watch and decide. At the year's end, a single vow of obedience, understood to hold the others."
+          "line": "A brief postulancy folds into the start of the year. Clothing with the habit comes early, and a religious name with it. Then prayer, common life, chant, and the constitutions under the novice master, while the professed of the house watch and decide. At the year's end, a single vow of obedience, understood to hold the others.",
+          "house": "novitiate"
         },
         {
           "year": 2,
           "label": "Studium: philosophy",
           "guide": "master of students",
           "milestone": "renewal",
-          "line": "The province's house of studies, and philosophy read the Thomist way. The master of students has you now."
+          "line": "The province's house of studies, and philosophy read the Thomist way. The master of students has you now.",
+          "house": "studium"
         },
         {
           "year": 3,
           "label": "Studium: philosophy",
           "guide": "master of students",
           "milestone": "renewal",
-          "line": "The second year of philosophy. Prior study counts here as it does in a seminary, and counts more for a man who came in with philosophy or theology."
+          "line": "The second year of philosophy. Prior study counts here as it does in a seminary, and counts more for a man who came in with philosophy or theology.",
+          "house": "studium"
         },
         {
           "year": 4,
           "label": "Theology I",
           "guide": "master of students",
-          "line": "The studium's first real evaluation, and the first part-time ministry outside the house."
+          "line": "The studium's first real evaluation, and the first part-time ministry outside the house.",
+          "house": "studium"
         },
         {
           "year": 5,
           "label": "Theology II",
           "guide": "master of students",
           "milestone": "renewal",
-          "line": "What you are for begins to show. The first study dispensations can be asked for now. Simple vows in their final period."
+          "line": "What you are for begins to show. The first study dispensations can be asked for now. Simple vows in their final period.",
+          "house": "studium"
         },
         {
           "year": 6,
@@ -117,14 +122,16 @@
           "guide": "master of students",
           "milestone": "solemn_profession",
           "communityVote": true,
-          "line": "Solemn vows, kneeling before the provincial: the point of no return. Diaconate follows."
+          "line": "Solemn vows, kneeling before the provincial: the point of no return. Diaconate follows.",
+          "house": "studium"
         },
         {
           "year": 7,
           "label": "Theology IV",
           "guide": "master of students",
           "milestone": "ordination",
-          "line": "A deacon in a parish, living in community. Ordination, and the first assignment after it."
+          "line": "A deacon in a parish, living in community. Ordination, and the first assignment after it.",
+          "house": "studium"
         }
       ],
       "mechanics": {
@@ -306,6 +313,159 @@
         "Sadoc",
         "Margaret",
         "Agnes"
+      ],
+      "offices": [
+        {
+          "id": "novice_master",
+          "label": "Novice master",
+          "kind": "appointed",
+          "termYears": 4,
+          "requires": {
+            "piety": 55,
+            "charisma": 45
+          },
+          "minYears": 8,
+          "house": "novitiate",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 6
+            }
+          ],
+          "line": "The men of the next forty years pass through your hands first."
+        },
+        {
+          "id": "master_of_students",
+          "label": "Master of students",
+          "kind": "appointed",
+          "termYears": 4,
+          "requires": {
+            "theology": 55,
+            "piety": 45
+          },
+          "minYears": 6,
+          "house": "studium",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 5
+            }
+          ],
+          "line": "Formation of the student brothers at the house of studies."
+        },
+        {
+          "id": "regent_of_studies",
+          "label": "Regent of studies",
+          "kind": "appointed",
+          "termYears": 6,
+          "requires": {
+            "theology": 70,
+            "knowledge": 60
+          },
+          "minYears": 12,
+          "house": "studium",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 8
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 4
+            }
+          ],
+          "line": "The intellectual life of the whole province is yours to keep or lose: the studium, the degrees, who is sent to Rome."
+        },
+        {
+          "id": "promoter_of_preaching",
+          "label": "Promoter of preaching",
+          "kind": "appointed",
+          "termYears": 4,
+          "requires": {
+            "charisma": 60,
+            "theology": 50
+          },
+          "minYears": 8,
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 4
+            }
+          ],
+          "line": "Missions, retreats, and the pulpit across the province."
+        },
+        {
+          "id": "vocation_director",
+          "label": "Vocation director",
+          "kind": "appointed",
+          "termYears": 3,
+          "requires": {
+            "charisma": 55
+          },
+          "minYears": 4,
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 3
+            }
+          ],
+          "line": "Every man who writes to the province writes to you first."
+        },
+        {
+          "id": "prior",
+          "label": "Prior",
+          "kind": "elected",
+          "termYears": 3,
+          "line": "The local superior, elected by the house."
+        },
+        {
+          "id": "provincial",
+          "label": "Prior provincial",
+          "kind": "elected",
+          "termYears": 4,
+          "line": "Elected by the provincial chapter; confirmed by the Master."
+        }
+      ],
+      "credentials": [
+        {
+          "id": "lector_theology",
+          "label": "Lector of Sacred Theology",
+          "afterYears": 3,
+          "work": "teaching",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 3
+            }
+          ],
+          "line": "The order's own teaching credential, after three years in the classroom."
+        },
+        {
+          "id": "master_theology",
+          "label": "Master of Sacred Theology",
+          "afterYears": 20,
+          "work": "teaching",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 15
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 10
+            }
+          ],
+          "line": "The order's highest academic honour, conferred late for a career of teaching and writing."
+        }
       ]
     },
     {
@@ -387,7 +547,8 @@
           "year": 1,
           "label": "Pre-novitiate",
           "guide": "formation director",
-          "line": "Living in an Augustinian community, working, praying with the friars, beginning studies. Low intensity, high discernment: the community forms its first opinion of you."
+          "line": "Living in an Augustinian community, working, praying with the friars, beginning studies. Low intensity, high discernment: the community forms its first opinion of you.",
+          "house": "priory"
         },
         {
           "year": 2,
@@ -395,7 +556,8 @@
           "guide": "novice director",
           "milestone": "simple_profession",
           "communityVote": true,
-          "line": "Reception of the habit. A year apart under the novice director: the Rule, the order's history, interiority. At the year's end, first profession of poverty, chastity, and obedience."
+          "line": "Reception of the habit. A year apart under the novice director: the Rule, the order's history, interiority. At the year's end, first profession of poverty, chastity, and obedience.",
+          "house": "novitiate"
         },
         {
           "year": 3,
@@ -403,7 +565,8 @@
           "guide": "formation director",
           "milestone": "renewal",
           "communityVote": true,
-          "line": "A theological union shared with other orders: you live and study beside Franciscans and Servites. Vows are renewed at the year's end, and the community is asked first."
+          "line": "A theological union shared with other orders: you live and study beside Franciscans and Servites. Vows are renewed at the year's end, and the community is asked first.",
+          "house": "studium"
         },
         {
           "year": 4,
@@ -411,7 +574,8 @@
           "guide": "formation director",
           "milestone": "renewal",
           "communityVote": true,
-          "line": "The second year of theology. Renewal again, and the community consulted again."
+          "line": "The second year of theology. Renewal again, and the community consulted again.",
+          "house": "studium"
         },
         {
           "year": 5,
@@ -419,21 +583,24 @@
           "guide": "formation director",
           "milestone": "solemn_profession",
           "communityVote": true,
-          "line": "Solemn profession, the point of no return, after the last of the annual gates."
+          "line": "Solemn profession, the point of no return, after the last of the annual gates.",
+          "house": "studium"
         },
         {
           "year": 6,
           "label": "Theology IV",
           "guide": "formation director",
           "milestone": "diaconate",
-          "line": "Diaconate, and part-time ministry in a parish or a school of the province."
+          "line": "Diaconate, and part-time ministry in a parish or a school of the province.",
+          "house": "studium"
         },
         {
           "year": 7,
           "label": "Pastoral year",
           "guide": "formation director",
           "milestone": "ordination",
-          "line": "A deacon's year in community. Ordination at its end, and the first assignment after it."
+          "line": "A deacon's year in community. Ordination at its end, and the first assignment after it.",
+          "house": "studium"
         }
       ],
       "mechanics": {
@@ -582,6 +749,155 @@
         "Fulgentius",
         "Magdalene",
         "Veronica"
+      ],
+      "offices": [
+        {
+          "id": "novice_director",
+          "label": "Novice director",
+          "kind": "appointed",
+          "termYears": 4,
+          "requires": {
+            "piety": 55,
+            "charisma": 50
+          },
+          "minYears": 8,
+          "house": "novitiate",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 6
+            }
+          ],
+          "line": "A year apart with the novices, and the Rule read aloud."
+        },
+        {
+          "id": "formation_director",
+          "label": "Formation director",
+          "kind": "appointed",
+          "termYears": 4,
+          "requires": {
+            "piety": 50,
+            "charisma": 45
+          },
+          "minYears": 6,
+          "house": "studium",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 5
+            }
+          ],
+          "line": "The student friars at the theological union, and their annual renewals."
+        },
+        {
+          "id": "vocation_director",
+          "label": "Vocation director",
+          "kind": "appointed",
+          "termYears": 3,
+          "requires": {
+            "charisma": 55
+          },
+          "minYears": 4,
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 3
+            }
+          ],
+          "line": "The men who write to the province write to you."
+        },
+        {
+          "id": "school_president",
+          "label": "School president",
+          "kind": "appointed",
+          "termYears": 5,
+          "requires": {
+            "administration": 60,
+            "charisma": 50
+          },
+          "minYears": 8,
+          "house": "school",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 5
+            }
+          ],
+          "line": "A budget, a faculty, parents, alumni, and a board: the pastor-equivalent of the education track."
+        },
+        {
+          "id": "mission_superior",
+          "label": "Mission superior",
+          "kind": "appointed",
+          "termYears": 4,
+          "requires": {
+            "piety": 50,
+            "administration": 45
+          },
+          "minYears": 8,
+          "house": "mission",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 8
+            }
+          ],
+          "line": "A long posting abroad, in a church that is not yours."
+        },
+        {
+          "id": "prior",
+          "label": "Prior",
+          "kind": "elected",
+          "termYears": 4,
+          "line": "The local superior, elected by the house."
+        },
+        {
+          "id": "provincial",
+          "label": "Prior provincial",
+          "kind": "elected",
+          "termYears": 4,
+          "line": "Elected by the provincial chapter; confirmed by the Prior General."
+        }
+      ],
+      "credentials": [
+        {
+          "id": "patristics",
+          "label": "Patristics",
+          "afterYears": 3,
+          "work": "teaching",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 5
+            }
+          ],
+          "line": "The order's own patristic institute in Rome: the Fathers, with Augustine at their heart."
+        },
+        {
+          "id": "educational_administration",
+          "label": "Educational administration",
+          "afterYears": 4,
+          "work": "school",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 3
+            }
+          ],
+          "line": "The credential the school track runs on."
+        }
       ]
     }
   ],
@@ -596,5 +912,14 @@
     "A priory the diocese would like back for a parish and the friars will not leave.",
     "A visitation from the general curia announced for next year, and no one sure why.",
     "A generation of friars in their seventies who run everything and a generation in their thirties who wait."
+  ],
+  "doctrinalTopics": [
+    "doctrine",
+    "liturgy",
+    "latin_mass",
+    "ad_orientem",
+    "altar_rail",
+    "morals",
+    "scripture"
   ]
 }

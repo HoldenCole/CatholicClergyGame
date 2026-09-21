@@ -61,12 +61,13 @@ export function emptyReputation(value = 0): Reputation {
  * is said (a man becomes what he keeps saying), and public volume accumulates
  * outspokenness. Private positions cost no outspokenness.
  */
-export function recordPosition(character: Character, record: PositionRecord): Character {
-  const drift = (record.value - character.alignment) * ALIGNMENT_DRIFT_PER_POSITION;
+export function recordPosition(character: Character, record: PositionRecord, weight = 1): Character {
+  // The weight is how much a position of this man on this topic counts: 1 for a priest; more for a man people expect to be right (E3 §6.2).
+  const drift = (record.value - character.alignment) * ALIGNMENT_DRIFT_PER_POSITION * weight;
   return {
     ...character,
     alignment: clampSigned(character.alignment + drift),
-    outspokenness: Math.min(100, character.outspokenness + OUTSPOKENNESS_PER_VOLUME[record.volume]),
+    outspokenness: Math.min(100, character.outspokenness + OUTSPOKENNESS_PER_VOLUME[record.volume] * weight),
     positions: [...character.positions, record],
   };
 }

@@ -22,6 +22,38 @@ export interface FormationStage {
   milestone?: 'clothing' | 'simple_profession' | 'renewal' | 'solemn_profession' | 'diaconate' | 'ordination';
   /** The community votes on a profession or a renewal this year. */
   communityVote?: boolean;
+  /** The kind of house the year is lived in; a move at the year's start when it changes. */
+  house?: HouseKind;
+  line: string;
+}
+
+/** An office of the province, appointed by the provincial or elected by a chapter. E3 §6.3, §7.3. */
+export interface OrderOfficeDef {
+  id: string;
+  label: string;
+  kind: 'appointed' | 'elected';
+  /** Years a term runs. */
+  termYears: number;
+  /** What the provincial looks for, as stat floors. */
+  requires?: Partial<Record<StatKey, number>>;
+  /** Years ordained before it is offered. */
+  minYears?: number;
+  /** The kind of house the office is held in, if it is tied to one. */
+  house?: HouseKind;
+  /** Standing when appointed. */
+  effects?: { target: string; key: string; delta: number }[];
+  line: string;
+}
+
+/** A credential of the order's own. E3 §6.4, §7.4. */
+export interface OrderCredentialDef {
+  id: string;
+  label: string;
+  /** Years of the work named before it can be conferred. */
+  afterYears: number;
+  /** The work that counts: a house work or an office id. */
+  work: string;
+  effects?: { target: string; key: string; delta: number }[];
   line: string;
 }
 
@@ -95,6 +127,21 @@ export interface OrderDef {
   provinces: ProvinceSeed[];
   /** Saints the order gives its names from, for the religious name and the houses. */
   saints: string[];
+  offices: OrderOfficeDef[];
+  credentials: OrderCredentialDef[];
+}
+
+/** What drew him to this order, and how he stands to its province. E3 §4.2–4.3. */
+export type WhyOrder = 'charism' | 'friar_mentor' | 'intellectual' | 'community' | 'left_diocesan' | 'alumnus';
+export type ProvinceTie = 'near_house' | 'educated' | 'outside';
+
+export interface ReligiousAnswers {
+  order: OrderKey;
+  provinceId: string;
+  why: WhyOrder;
+  tie: ProvinceTie;
+  /** Dominicans only: the name taken at clothing. */
+  religiousName?: string;
 }
 
 /** A real province of a real order: its name and territory; everything in it is generated. */
@@ -304,6 +351,10 @@ export interface ReligiousPlayerState {
   declined?: Partial<Record<ChapterOffice, number>>;
   /** The chapter in session, if one is. */
   chapter?: Chapter;
+  /** An appointed office held now. */
+  appointment?: { id: string; startWeek: number; endWeek: number };
+  why?: WhyOrder;
+  tie?: ProvinceTie;
   /**
    * How readily the province can say what he is, 0..100. E3 §8.3: the
    * electorate votes for a reputation, not a stat sheet. Fed by the

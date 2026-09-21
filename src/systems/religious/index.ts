@@ -7,3 +7,7 @@ export * from './install';
 export * from './week';
 export * from './electorate';
 export * from './chapter';
+export * from './study';
+export * from './formation';
+export * from './offices';
+export * from './newGame';
