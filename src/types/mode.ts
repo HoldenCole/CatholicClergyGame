@@ -66,7 +66,7 @@ export interface AssignmentOption {
 
 export interface Letter {
   /** What kind of letter, for the sheet's heading and the record. */
-  sort: 'review' | 'bishop' | 'provincial';
+  sort: 'review' | 'bishop' | 'provincial' | 'confrere';
   title: string;
   /** Prose paragraphs. */
   body: string[];

@@ -1,0 +1,460 @@
+[
+  {
+    "id": "province_thomists",
+    "phase": "priest",
+    "campaign": "religious",
+    "label": "The province's Thomistic circle",
+    "blurb": "The friars of the province who still read the Summa on Tuesday nights, in the studium's small room or by a call when the houses are far. A question a week, a lector who chairs it, and the order's oldest argument kept warm.",
+    "hours": 1,
+    "fellows": 4,
+    "builds": "theology, the professors' regard",
+    "onJoin": [
+      {
+        "target": "flag",
+        "key": "club:province_thomists",
+        "value": true
+      }
+    ],
+    "onLeave": [
+      {
+        "target": "flag",
+        "key": "club:province_thomists",
+        "value": false
+      }
+    ],
+    "weekly": [
+      {
+        "target": "stat",
+        "key": "theology",
+        "delta": 0.05
+      },
+      {
+        "target": "stat",
+        "key": "knowledge",
+        "delta": 0.02
+      },
+      {
+        "target": "known",
+        "key": "professor",
+        "delta": 0.08
+      }
+    ],
+    "orders": [
+      "OP"
+    ],
+    "requires": [
+      {
+        "type": "stat",
+        "key": "theology",
+        "op": ">=",
+        "value": 45
+      }
+    ],
+    "credentialAfter": {
+      "weeks": 156,
+      "flag": "read_the_summa_twice",
+      "line": "Three years of Tuesdays: you have read the Summa through, and the lector who chairs it has stopped correcting you."
+    }
+  },
+  {
+    "id": "preaching_band",
+    "phase": "priest",
+    "campaign": "religious",
+    "label": "The preaching band",
+    "blurb": "The itinerant preachers of the province, who compare missions, trade homilies, and drive each other to parishes that asked. A friar in it is a friar the pastors have heard of.",
+    "hours": 1,
+    "fellows": 3,
+    "builds": "the pulpit, a preacher's name",
+    "onJoin": [
+      {
+        "target": "flag",
+        "key": "club:preaching_band",
+        "value": true
+      }
+    ],
+    "onLeave": [
+      {
+        "target": "flag",
+        "key": "club:preaching_band",
+        "value": false
+      }
+    ],
+    "weekly": [
+      {
+        "target": "known",
+        "key": "preacher",
+        "delta": 0.1
+      },
+      {
+        "target": "stat",
+        "key": "charisma",
+        "delta": 0.02
+      },
+      {
+        "target": "reputation",
+        "key": "laity",
+        "delta": 0.05
+      }
+    ],
+    "orders": [
+      "OP"
+    ],
+    "inviteOnly": true,
+    "hint": "a preacher the parishes ask for by name",
+    "requires": [
+      {
+        "type": "flag",
+        "key": "rep:preacher:known",
+        "value": true
+      }
+    ]
+  },
+  {
+    "id": "friars_schola",
+    "phase": "priest",
+    "campaign": "religious",
+    "label": "The friars' schola",
+    "blurb": "The men of the house who sing the office properly, and the feast days when the province's chant is heard by the city. An hour of rehearsal a week and a standard the others are grateful for.",
+    "hours": 1,
+    "fellows": 3,
+    "builds": "the office, a liturgist's ear",
+    "onJoin": [
+      {
+        "target": "flag",
+        "key": "club:friars_schola",
+        "value": true
+      }
+    ],
+    "onLeave": [
+      {
+        "target": "flag",
+        "key": "club:friars_schola",
+        "value": false
+      }
+    ],
+    "weekly": [
+      {
+        "target": "known",
+        "key": "liturgist",
+        "delta": 0.08
+      },
+      {
+        "target": "stat",
+        "key": "piety",
+        "delta": 0.03
+      }
+    ],
+    "credentialAfter": {
+      "weeks": 104,
+      "flag": "sings_the_office",
+      "line": "Two years of rehearsals: you can carry the office alone now, and are asked to."
+    }
+  },
+  {
+    "id": "rosary_confraternity",
+    "phase": "priest",
+    "campaign": "religious",
+    "label": "The Rosary confraternity's chaplains",
+    "blurb": "The friars who keep the order's confraternity in the parishes: a monthly evening, the mysteries preached, a thousand members who know your face and pray for you by name.",
+    "hours": 1,
+    "fellows": 3,
+    "builds": "the people, a name in the parishes",
+    "onJoin": [
+      {
+        "target": "flag",
+        "key": "club:rosary_confraternity",
+        "value": true
+      }
+    ],
+    "onLeave": [
+      {
+        "target": "flag",
+        "key": "club:rosary_confraternity",
+        "value": false
+      }
+    ],
+    "weekly": [
+      {
+        "target": "reputation",
+        "key": "laity",
+        "delta": 0.12
+      },
+      {
+        "target": "known",
+        "key": "man_of_prayer",
+        "delta": 0.05
+      },
+      {
+        "target": "stat",
+        "key": "piety",
+        "delta": 0.02
+      }
+    ],
+    "orders": [
+      "OP"
+    ]
+  },
+  {
+    "id": "lay_dominicans",
+    "phase": "priest",
+    "campaign": "religious",
+    "label": "The Lay Dominican chaplains",
+    "blurb": "The friars who direct the lay chapters: professionals, retirees, a dentist who reads more theology than you do. A monthly chapter meeting and the order's reach into the city's houses.",
+    "hours": 1,
+    "fellows": 3,
+    "builds": "the laity, the order's third branch",
+    "onJoin": [
+      {
+        "target": "flag",
+        "key": "club:lay_dominicans",
+        "value": true
+      }
+    ],
+    "onLeave": [
+      {
+        "target": "flag",
+        "key": "club:lay_dominicans",
+        "value": false
+      }
+    ],
+    "weekly": [
+      {
+        "target": "reputation",
+        "key": "laity",
+        "delta": 0.08
+      },
+      {
+        "target": "known",
+        "key": "evangelist",
+        "delta": 0.05
+      },
+      {
+        "target": "known",
+        "key": "spiritual_director",
+        "delta": 0.03
+      }
+    ],
+    "orders": [
+      "OP"
+    ]
+  },
+  {
+    "id": "justice_commission",
+    "phase": "priest",
+    "campaign": "religious",
+    "label": "The province's justice and peace commission",
+    "blurb": "The friars who write the province's statements, keep the shelter's board, and are at the state house when the bishops are not. Read one way by the province and the other by the chancery.",
+    "hours": 1,
+    "fellows": 3,
+    "builds": "the poor, an advocate's name",
+    "onJoin": [
+      {
+        "target": "flag",
+        "key": "club:justice_commission",
+        "value": true
+      }
+    ],
+    "onLeave": [
+      {
+        "target": "flag",
+        "key": "club:justice_commission",
+        "value": false
+      }
+    ],
+    "weekly": [
+      {
+        "target": "known",
+        "key": "advocate",
+        "delta": 0.1
+      },
+      {
+        "target": "reputation",
+        "key": "public",
+        "delta": 0.05
+      },
+      {
+        "target": "reputation",
+        "key": "laity",
+        "delta": 0.03
+      }
+    ],
+    "leaning": 0.5
+  },
+  {
+    "id": "friars_ball",
+    "phase": "priest",
+    "campaign": "religious",
+    "label": "The friars' Thursday game",
+    "blurb": "Basketball in the school gym, or the field behind the priory, with the men from the other house who are younger and faster. The body kept in order, and the province's gossip at the water fountain.",
+    "hours": 1,
+    "fellows": 4,
+    "builds": "the body, brothers across the houses",
+    "onJoin": [
+      {
+        "target": "flag",
+        "key": "club:friars_ball",
+        "value": true
+      }
+    ],
+    "onLeave": [
+      {
+        "target": "flag",
+        "key": "club:friars_ball",
+        "value": false
+      }
+    ],
+    "weekly": [
+      {
+        "target": "reputation",
+        "key": "community",
+        "delta": 0.1
+      },
+      {
+        "target": "stat",
+        "key": "charisma",
+        "delta": 0.01
+      }
+    ],
+    "stamina": 1.5
+  },
+  {
+    "id": "young_friars_table",
+    "phase": "priest",
+    "campaign": "religious",
+    "label": "The young friars' table",
+    "blurb": "The men professed within ten years of each other, who eat together at the province's gatherings and call each other at midnight. What the diocesan priests have in a classmates' union, the province has here.",
+    "hours": 1,
+    "fellows": 4,
+    "builds": "brothers, the news before the council hears it",
+    "onJoin": [
+      {
+        "target": "flag",
+        "key": "club:young_friars_table",
+        "value": true
+      }
+    ],
+    "onLeave": [
+      {
+        "target": "flag",
+        "key": "club:young_friars_table",
+        "value": false
+      },
+      {
+        "target": "reputation",
+        "key": "community",
+        "delta": -4
+      }
+    ],
+    "weekly": [
+      {
+        "target": "reputation",
+        "key": "community",
+        "delta": 0.12
+      },
+      {
+        "target": "reputation",
+        "key": "province",
+        "delta": 0.04
+      },
+      {
+        "target": "stat",
+        "key": "piety",
+        "delta": -0.01
+      }
+    ]
+  },
+  {
+    "id": "delegates_lunch",
+    "phase": "priest",
+    "campaign": "religious",
+    "label": "The delegates' lunch",
+    "blurb": "The men who have sat at a provincial chapter, who lunch when the provincial is in town and know what the council will do before it does. By invitation, and the invitation is the province's own reading of a man.",
+    "hours": 1,
+    "fellows": 3,
+    "builds": "the province, standing with the council",
+    "onJoin": [
+      {
+        "target": "flag",
+        "key": "club:delegates_lunch",
+        "value": true
+      }
+    ],
+    "onLeave": [
+      {
+        "target": "flag",
+        "key": "club:delegates_lunch",
+        "value": false
+      }
+    ],
+    "weekly": [
+      {
+        "target": "reputation",
+        "key": "province",
+        "delta": 0.08
+      },
+      {
+        "target": "reputation",
+        "key": "superiors",
+        "delta": 0.06
+      },
+      {
+        "target": "known",
+        "key": "confidant",
+        "delta": 0.05
+      }
+    ],
+    "inviteOnly": true,
+    "hint": "a man the province has sent to chapter",
+    "requires": [
+      {
+        "type": "flag",
+        "key": "chapter:delegate",
+        "value": true
+      }
+    ]
+  },
+  {
+    "id": "osa_reading_circle",
+    "phase": "priest",
+    "campaign": "religious",
+    "label": "The Augustinian reading circle",
+    "blurb": "The friars of the province who read Augustine together, a book a season, on a call across the houses and once a year in one room. The order's own text kept in the order's own mouths.",
+    "hours": 1,
+    "fellows": 3,
+    "builds": "theology, the heart's argument",
+    "onJoin": [
+      {
+        "target": "flag",
+        "key": "club:osa_reading_circle",
+        "value": true
+      }
+    ],
+    "onLeave": [
+      {
+        "target": "flag",
+        "key": "club:osa_reading_circle",
+        "value": false
+      }
+    ],
+    "weekly": [
+      {
+        "target": "stat",
+        "key": "theology",
+        "delta": 0.05
+      },
+      {
+        "target": "known",
+        "key": "professor",
+        "delta": 0.05
+      },
+      {
+        "target": "stat",
+        "key": "piety",
+        "delta": 0.02
+      }
+    ],
+    "orders": [
+      "OSA"
+    ]
+  }
+]

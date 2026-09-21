@@ -217,6 +217,13 @@ export function friarWeekHook(deps: EventDeps): WeekHook {
     const spent = spendsWeek(next, rng.derive(`spends:${next.clock.week}`));
     next = spent.state;
     if (spent.line) next = addDigestLine(next, spent.line);
+    // The desk: the project beside the house's work, and the circles he belongs to. E3 §6.2.
+    const desk = sideWorkWeek(next, rng.derive(`sidework:${next.clock.week}`));
+    next = desk.state;
+    if (desk.line) next = addDigestLine(next, desk.line);
+    const circles = clubsWeek(next);
+    next = circles.state;
+    for (const line of circles.lines) next = addDigestLine(next, line);
     if (isCareerYear(next)) next = religiousYear(careerYear(next, rng), rng);
     if (next.mode.kind !== 'clock') return next;
     // The provincial's answer to the letter asking for a work. E3 §3.10.

@@ -10,6 +10,8 @@ import { needOf } from './obedience';
 import { apostolateDef, directingLoad, houseOfficeLoad, pastorTaskLoad } from './requests';
 import { currentPosting } from './transfer';
 import { reputationOf } from './reputations';
+import { confrereTaskLoad } from './confrereAsks';
+import { workLoad } from '@/systems/sidework';
 
 /**
  * The bishop asks the order. E3 §3.11. A bishop may be fond of a friar and
@@ -50,7 +52,7 @@ function yearsOrdained(state: GameState): number {
 
 /** The blocks his week already owes: the common life, the friends, the office, the work. */
 export function friarLoad(state: GameState): number {
-  return horariumLoad(state) + friendshipLoad(state) + houseOfficeLoad(state) + (apostolateDef(state)?.ap ?? 0) + pastorTaskLoad(state) + directingLoad(state);
+  return horariumLoad(state) + friendshipLoad(state) + houseOfficeLoad(state) + (apostolateDef(state)?.ap ?? 0) + pastorTaskLoad(state) + directingLoad(state) + confrereTaskLoad(state) + workLoad(state);
 }
 
 /** The asks a bishop's office could make of the provincial for this man now. */

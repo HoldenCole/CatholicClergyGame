@@ -24,8 +24,17 @@ export function isMember(state: GameState, id: string): boolean {
 
 /** The clubs of the man's phase: seminary clubs for a seminarian, priests' circles for a priest with a parish. */
 export function clubsForPhase(state: GameState): ClubDef[] {
-  const phase = state.phase === 'seminary' ? 'seminary' : state.parish ? 'priest' : null;
-  return phase ? clubDefs.filter((c) => c.phase === phase) : [];
+  const r = state.religious;
+  const friar = !!r && !!state.flags.ordained;
+  const phase = state.phase === 'seminary' && !friar ? 'seminary' : state.parish || friar ? 'priest' : null;
+  if (!phase) return [];
+  // A friar's circles are the order's; a diocesan priest's are the diocese's; a friar pastor sits at both tables where the diocese's is open to him. E3 §6.
+  return clubDefs.filter((c) => c.phase === phase && (!c.campaign || (c.campaign === 'religious' ? friar : !r || !!state.parish)) && (!c.orders || (r && c.orders.includes(r.order))));
+}
+
+/** Whether a priest's circles meet this week: a parish, or a friar's house. */
+export function circlesMeet(state: GameState): boolean {
+  return !!state.parish || (!!state.religious && !!state.flags.ordained);
 }
 
 /** Hours (seminary) or blocks (parish) the memberships take each week. */
@@ -52,7 +61,7 @@ export function clubAvailability(state: GameState): ClubAvailability[] {
   return clubsForPhase(state).map((def) => {
     const member = !!clubs.memberships[def.id];
     if (member) return { def, member, open: false, why: null };
-    if (state.phase === 'seminary' && (state.seminary?.year ?? 1) < CLUBS.seminaryFromYear) return { def, member, open: false, why: 'not in the propaedeutic year' };
+    if (def.phase === 'seminary' && (state.seminary?.year ?? 1) < CLUBS.seminaryFromYear) return { def, member, open: false, why: 'not in the propaedeutic year' };
     const leftAt = clubs.left[def.id];
     if (leftAt !== undefined && state.clock.week - leftAt < CLUBS.rejoinAfterWeeks) return { def, member, open: false, why: 'you left; they remember' };
     if (def.inviteOnly) return { def, member, open: false, why: 'by invitation' };
@@ -63,8 +72,10 @@ export function clubAvailability(state: GameState): ClubAvailability[] {
 }
 
 function pickFellows(state: GameState, def: ClubDef, rng: Rng): string[] {
+  // A religious circle's fellows are friars of the order; a diocesan table's are the diocese's priests.
+  const orderKey = state.religious ? `order:${state.religious.order}` : '';
   const pool = Object.values(state.npcs).filter((n) =>
-    n.status === 'active' && (def.phase === 'seminary' ? n.role === 'classmate' : n.role === 'priest' || (n.role === 'classmate' && !n.tags.includes('on_leave'))),
+    n.status === 'active' && (def.campaign === 'religious' ? n.role === 'religious' && n.tags.includes(orderKey) && n.id !== 'player' : def.phase === 'seminary' ? n.role === 'classmate' : n.role === 'priest' || (n.role === 'classmate' && !n.tags.includes('on_leave'))),
   );
   const out: string[] = [];
   let rest = pool;
@@ -120,7 +131,7 @@ export function clubsWeek(state: GameState): { state: GameState; lines: string[]
     const def = clubDef(id);
     if (!def) continue;
     // Seminary clubs only meet in seminary; a priest's circles only while he has a parish.
-    const meets = def.phase === 'seminary' ? state.phase === 'seminary' : !!state.parish;
+    const meets = def.phase === 'seminary' ? state.phase === 'seminary' : circlesMeet(state);
     if (!meets) {
       memberships[id] = m;
       continue;

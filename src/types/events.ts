@@ -167,6 +167,8 @@ export type EffectTarget =
   | 'crossing'
   /** E3 §9: the house he founded (key 'budget' | 'vocation' | 'reputation:<key>' | 'revise:<dial>' | 'fail' | 'invite'; delta for the numbers, value for a dial's option or a diocese). */
   | 'foundation'
+  /** E3 §8: what a friar is known for (key: a ReputationKey; delta), held under its cap. */
+  | 'known'
   | 'stat'
   | 'reputation'
   | 'relationship'

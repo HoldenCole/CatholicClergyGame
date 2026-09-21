@@ -52,7 +52,9 @@ export interface SideWorkDef {
   id: string;
   label: string;
   blurb: string;
-  kind: 'study' | 'public' | 'parish' | 'outside';
+  kind: 'study' | 'public' | 'parish' | 'outside' | 'writing' | 'translation' | 'teaching' | 'formation' | 'preaching' | 'service';
+  /** A friar's desk project (content/religious/projects.json): the orders it belongs to, or any order when absent. E3 §6.2. */
+  orders?: string[];
   /** Blocks of the week it takes, every week, until it is done. */
   apPerWeek: number;
   weeks: number;

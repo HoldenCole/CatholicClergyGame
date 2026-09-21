@@ -38,6 +38,7 @@ import { answerDirectionAsk as answerDirectionAskSys, endDirectee as endDirectee
 import { setSpend as setSpendSys } from '@/systems/religious/spends';
 import { askHouseOffice as askHouseOfficeSys, endApostolate as endApostolateSys, fileRequest as fileFriarRequestSys, resignHouseOffice as resignHouseOfficeSys, withdrawRequest as withdrawFriarRequestSys } from '@/systems/religious/requests';
 import { decideAssignment, receiveAssignment, statePreference as statePreferenceSys } from '@/systems/religious/obedience';
+import { answerConfrereAsk as answerConfrereAskSys } from '@/systems/religious/confrereAsks';
 import { answerFoundationAsk as answerFoundationAskSys, petitionFoundation as petitionFoundationSys } from '@/systems/religious/founding';
 import { reviseCharter as reviseCharterSys, writeCharter as writeCharterSys } from '@/systems/religious/charter';
 import { addFoundationWork as addFoundationWorkSys, myFoundation, sendDaughter as sendDaughterSys } from '@/systems/religious/foundationYear';
@@ -129,6 +130,8 @@ export interface GameStore {
   answerBishopAsk(accept: boolean): void;
   /** A pastor of the diocese asked the prior for him, and the prior said yes. E3 §3.12. */
   answerPastorAsk(yes: boolean): void;
+  /** A brother of the province asked for help. E3 §6.2. */
+  answerConfrereAsk(yes: boolean): void;
   /** Direction given, under the seal. E3 §3.13. */
   answerDirectionAsk(yes: boolean): void;
   /** The order's choir cloak on or off, in the portrait. */
@@ -741,6 +744,9 @@ export const useGameStore = create<GameStore>()((set, get) => ({
   },
   answerPastorAsk(yes) {
     update(set, get, (game) => answerPastorAskSys(game, yes));
+  },
+  answerConfrereAsk(yes) {
+    update(set, get, (game) => answerConfrereAskSys(game, yes));
   },
   answerDirectionAsk(yes) {
     update(set, get, (game) => answerDirectionAskSys(game, yes));
