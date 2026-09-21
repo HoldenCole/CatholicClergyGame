@@ -1,3 +1,4 @@
+import { lifeLabel } from '@/systems/lives';
 import { useGameStore } from '@/engine/store';
 import { classmateLines } from '@/systems/classmates';
 import Sheet from '../Sheet';
@@ -25,6 +26,7 @@ export default function ClassmatesPanel() {
             <Portrait portrait={portraitForNpc(npc, year, true)} size={22} />
             <span className="flex-1">
               {npc.title ? `${npc.title} ` : ''}{npc.name.first} {npc.name.last}, {post}
+              {lifeLabel(game, npc) && <span className="ink-wine ml-2 text-xs">{lifeLabel(game, npc)}</span>}
               {up && <span className="ink-wine ml-2 text-xs">ahead of you</span>}
               {npc.traitKnown && <span className="ink-faint ml-2 text-xs">{TRAIT_LABEL[npc.hiddenTrait]}</span>}
             </span>

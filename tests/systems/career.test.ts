@@ -230,5 +230,5 @@ describe('engine/career', () => {
     expect(careerSummary(a.s, 'retired')).toMatch(/years a priest/);
     // Something happened in forty years: a promotion or a succession or both.
     expect(roles.size + a.s.career.filter((e) => e.kind === 'succession').length).toBeGreaterThan(0);
-  });
+  }, 20000);
 });

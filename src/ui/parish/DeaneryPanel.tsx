@@ -1,3 +1,4 @@
+import { lifeLabel } from '@/systems/lives';
 import { useGameStore } from '@/engine/store';
 import { coverAvailability, deaneryPriests } from '@/systems/deanery';
 import { friarDeaneryPriests } from '@/systems/religious/deanery';
@@ -37,6 +38,7 @@ export default function DeaneryPanel() {
               <Portrait portrait={portraitForNpc(npc, year)} size={22} />
               <span className="min-w-0 flex-1">
                 {npc.title} {npc.name.first} {npc.name.last}, {year - npc.birthYear}{isDean ? ', dean' : ''}
+                {lifeLabel(game, npc) && <span className="ink-wine ml-2 text-xs">{lifeLabel(game, npc)}</span>}
                 <span className="ink-faint block text-xs">{parish.name}, {parish.place}, {milesWord(miles)}</span>
               </span>
               <span className="ink-muted">{relationshipWord(npc.relationship)}</span>

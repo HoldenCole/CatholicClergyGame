@@ -613,6 +613,15 @@ The mailbag: the place the past reaches him from. A few times a year a letter co
 - **The mailbag** on the Letters sheet: every letter, from whom, and whether it was answered, so the drawer's contents are visible and the unanswered asks are marked.
 - Never a mechanic to be optimized: the letters are small, the effects are small, and the point is that the past keeps writing.
 
+### 8.11 Lives that move without you
+
+Every named person in the man's orbit carries a clock of their own: the staff of his parish and its deacon, the pastor he serves under and the priests of the deanery, his classmates, his family, his director, the brothers of his house. A year at a time (`content/lives.json`, `systems/lives.ts`), one of the lives there may begin for one of them: a spouse ill, a job offer, a baby coming, a parent dying slowly, a marriage coming apart, an illness of their own, the bottle, burnout, the thought of leaving, a parent failing, a sibling moving away, a back gone, a son thinking of the seminary, a grandchild. It runs its years and resolves one way or another (recovered or widowed; stayed or left; treatment, a quiet move, or the priesthood left), with a status for the person where it ends that way, a permanent mark, and small effects on the man.
+
+- **Rolled from each person's own state**: who they are to him, their age, their sex, whether they are married; at most three begin a year; each life once per person.
+- **Surfacing when they cross his path**: the beginning and the end are lines in the record; the sheets (staff, deanery, classmates, the house) show the open life under the name; the year in review has a row for who around him is carrying something. Deaths are notes in the career; a director's death ends the direction; a member of staff who dies or retires leaves the desk empty for the staff system to fill.
+- **Scenes hang on them**: `{ type: 'npc_life', key, who? }` and the selector `@life:<id>`, which resolves to the person carrying that life, so a scene can be about *the* secretary whose husband is ill or *the* priest of the deanery who is drinking. The cast round (§8.2) moves the parish's lay people; this moves everyone else.
+- Numbers (the chance a year, the years a life runs, the odds of each ending) are invented and live in the content file.
+
 ## 9. Generation
 
 ### 9.1 Dioceses

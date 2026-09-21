@@ -125,6 +125,8 @@ export type Condition =
   | { type: 'group'; key: 'type' | 'vitality' | 'hostile' | 'suppressed' | 'foundedByPlayer' | 'agenda' | 'religiousLed'; value: string | boolean }
   /** A feast that falls in the current week, as the parish keeps it (engine/feasts.ts). */
   | { type: 'feast'; key: string }
+  /** DESIGN §8.11: someone in the man's orbit has this life open (key: a life id from content/lives.json; who narrows the class of person). */
+  | { type: 'npc_life'; key: string; who?: 'staff' | 'clergy' | 'classmate' | 'family' | 'director' | 'confrere' }
   /** DESIGN §8.9: a place of the town is in that state (key: a TownPlaceKind, or 'any'). */
   | { type: 'town'; key: string; value: string }
   /** DESIGN §8.9: the regard of a place's people for him (key: a TownPlaceKind, or 'any' for the town's average). */

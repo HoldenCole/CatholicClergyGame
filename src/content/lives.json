@@ -1,0 +1,201 @@
+{
+  "_notes": "Lives that move without you (DESIGN §8.11). Every named person in the man's orbit carries a clock: a year at a time, one of these may begin for them (a spouse ill, a job offer, a parent dying, a bottle), runs its years, and resolves one way or another. `who` is the class of person it fits (staff, clergy, classmate, family, director, confrere); `tags` narrows it (a staff desk, mother/father/sibling); `women`/`men` restrict by sex where the text needs it; `ages` by age. `line` is written when it begins, with {name} (how the sheet names them), {first}, {he}/{his}/{him}, {role} (the secretary, Fr. So-and-so, your mother); `label` is the short state on the sheets. `resolve` lists how it ends after `years`: a status for the person (dead, left, retired), a permanent mark, effects on the man, and a line. Numbers invented.",
+  "chancePerYear": 0.14,
+  "startsPerYear": 3,
+  "lives": [
+    {
+      "id": "ill_spouse",
+      "who": ["staff", "family", "clergy"],
+      "tags": ["secretary", "dre", "music_director", "maintenance", "deacon", "sibling", "mother", "father"],
+      "married": true,
+      "weight": 10,
+      "years": [1, 2],
+      "label": "{his} husband ill",
+      "label_man": "{his} wife ill",
+      "line": "{name}'s husband is ill, the kind that has a name now, and {he} is at the hospital more than {he} is anywhere else.",
+      "line_man": "{name}'s wife is ill, the kind that has a name now, and {he} is at the hospital more than {he} is anywhere else.",
+      "resolve": [
+        { "kind": "recovered", "weight": 6, "line": "{name}'s husband is better, or as better as he will be, and {he} is back to {his} hours and does not talk about it.", "line_man": "{name}'s wife is better, or as better as she will be, and {he} is back to {his} hours and does not talk about it." },
+        { "kind": "widowed", "weight": 4, "mark": "widowed", "line": "{name}'s husband died on a Thursday. You did the funeral. {He} was back at {his} desk the Monday after, because the desk was the one thing that had not changed.", "line_man": "{name}'s wife died on a Thursday. You did the funeral. {He} was back the Monday after, because the work was the one thing that had not changed.", "effects": [{ "target": "relationship", "key": "@life", "delta": 6 }] }
+      ]
+    },
+    {
+      "id": "job_offer",
+      "who": ["staff"],
+      "tags": ["dre", "music_director", "secretary"],
+      "ages": [24, 58],
+      "weight": 8,
+      "years": [1, 1],
+      "label": "looking at another job",
+      "line": "{name} has been offered a job at the parish across the river, more money and a title, and has not said so, and everyone in the office knows.",
+      "resolve": [
+        { "kind": "stayed", "weight": 5, "line": "{name} turned the other parish down and did not say why, and is a little more {his} own since." , "effects": [{ "target": "relationship", "key": "@life", "delta": 4 }] },
+        { "kind": "left", "weight": 5, "status": "left", "line": "{name} gave notice for the job across the river, with a cake in the office and a card everyone signed.", "effects": [{ "target": "reputation", "key": "parishioners", "delta": -1 }] }
+      ]
+    },
+    {
+      "id": "new_baby",
+      "who": ["staff", "family"],
+      "tags": ["secretary", "dre", "music_director", "sibling"],
+      "women": true,
+      "ages": [24, 41],
+      "weight": 6,
+      "years": [1, 1],
+      "label": "expecting",
+      "line": "{name} is expecting, and told the office before {he} told {his} mother, and the office has opinions about the leave.",
+      "resolve": [
+        { "kind": "born", "weight": 10, "line": "{name} had a girl, and brought her to the office at nine days old, and you baptized her a month later.", "effects": [{ "target": "relationship", "key": "@life", "delta": 6 }, { "target": "bond", "key": "@life", "value": "baptized:her daughter" }] }
+      ]
+    },
+    {
+      "id": "caring_parent",
+      "who": ["staff", "clergy", "classmate", "confrere"],
+      "ages": [38, 66],
+      "weight": 9,
+      "years": [1, 3],
+      "label": "a parent dying, slowly",
+      "line": "{name}'s mother is dying, slowly, in the next county, and {he} drives there on {his} days off and comes back grey.",
+      "resolve": [
+        { "kind": "died", "weight": 10, "mark": "bereaved", "line": "{name}'s mother died. {He} took a week, and came back, and was {himself} again by Advent, or near enough.", "effects": [{ "target": "relationship", "key": "@life", "delta": 4 }] }
+      ]
+    },
+    {
+      "id": "divorce",
+      "who": ["staff", "family"],
+      "tags": ["secretary", "dre", "music_director", "maintenance", "sibling"],
+      "married": true,
+      "ages": [28, 60],
+      "weight": 6,
+      "years": [1, 2],
+      "label": "a marriage coming apart",
+      "line": "{name}'s marriage is coming apart, and the office knows it before {he} says it, and nobody says it to {him}.",
+      "resolve": [
+        { "kind": "divorced", "weight": 7, "mark": "divorced", "line": "{name}'s divorce went through in the spring. {He} did not ask you about the tribunal, and you did not raise it, and {he} is at Mass every Sunday and does not receive." },
+        { "kind": "mended", "weight": 3, "line": "{name} and {his} husband are trying again, and it shows, and nobody in the office mentions it." }
+      ]
+    },
+    {
+      "id": "own_illness",
+      "who": ["staff", "clergy", "classmate", "family", "director", "confrere"],
+      "ages": [45, 90],
+      "weight": 9,
+      "years": [1, 2],
+      "label": "ill",
+      "line": "{name} is ill, the kind with a name and a schedule, and is keeping on as if it had neither.",
+      "resolve": [
+        { "kind": "recovered", "weight": 6, "line": "{name} is through it, thinner, and back to the work, and does not want it mentioned." },
+        { "kind": "died", "weight": 2, "status": "dead", "line": "{name} died in the spring, after a year of it. You were there at the end, or you were not, and either is a thing to carry.", "effects": [{ "target": "strain", "key": "", "delta": 3 }, { "target": "stat", "key": "piety", "delta": 1 }] },
+        { "kind": "retired", "weight": 2, "status": "retired", "line": "{name} has retired on account of {his} health, earlier than {he} meant to, with a lunch and a speech and a chair nobody sits in." }
+      ]
+    },
+    {
+      "id": "drinking",
+      "who": ["clergy", "classmate", "confrere"],
+      "ages": [35, 70],
+      "weight": 7,
+      "years": [1, 3],
+      "label": "drinking again",
+      "line": "{name} is drinking again. The deanery knows it the way a deanery knows things: nobody has said it aloud, and everybody has stopped serving wine.",
+      "resolve": [
+        { "kind": "treatment", "weight": 5, "mark": "treated", "line": "{name} went away for three months to the place the diocese sends men, and came back, and is sober, and is a different man to be in a room with, quieter and kinder.", "effects": [{ "target": "relationship", "key": "@life", "delta": 4 }] },
+        { "kind": "moved", "weight": 3, "line": "{name} was moved quietly to a parish in the far corner of the diocese, which is how the diocese says what it will not say." },
+        { "kind": "left", "weight": 2, "status": "left", "line": "{name} has left the priesthood, or the priesthood has left him; the letter from the chancery said only that he was on leave, and he did not come back.", "effects": [{ "target": "reputation", "key": "brother_priests", "delta": -1 }] }
+      ]
+    },
+    {
+      "id": "burnout",
+      "who": ["clergy", "classmate", "confrere"],
+      "ages": [32, 62],
+      "weight": 7,
+      "years": [1, 2],
+      "label": "worn out",
+      "line": "{name} is worn out in the way the older men recognise and the younger men mistake for laziness, and has stopped returning calls.",
+      "resolve": [
+        { "kind": "sabbatical", "weight": 6, "line": "{name} took a sabbatical, four months, somewhere with sea in it, and came back with a beard and something of {himself}." },
+        { "kind": "left", "weight": 2, "status": "left", "line": "{name} did not come back from the sabbatical. The letter to the presbyterate was two lines long and everyone read it twice.", "effects": [{ "target": "reputation", "key": "brother_priests", "delta": -1 }, { "target": "strain", "key": "", "delta": 2 }] },
+        { "kind": "carried_on", "weight": 2, "line": "{name} carried on, which is what most of them do, and is a little less than {he} was, which is also what most of them do." }
+      ]
+    },
+    {
+      "id": "thinking_of_leaving",
+      "who": ["clergy", "classmate", "confrere"],
+      "ages": [30, 55],
+      "weight": 5,
+      "years": [1, 2],
+      "label": "thinking about leaving",
+      "line": "{name} is thinking about leaving. {He} has told two people, and one of them told you, which is how you know {he} wanted you to.",
+      "resolve": [
+        { "kind": "stayed", "weight": 6, "line": "{name} stayed. Nobody knows what decided it, and {he} does not say, and is at the deanery meetings again, at the back.", "effects": [{ "target": "relationship", "key": "@life", "delta": 3 }] },
+        { "kind": "left", "weight": 4, "status": "left", "line": "{name} left the priesthood in the spring, with a letter to the men that was honest and short, and a woman nobody had met.", "effects": [{ "target": "reputation", "key": "brother_priests", "delta": -1 }, { "target": "strain", "key": "", "delta": 1 }] }
+      ]
+    },
+    {
+      "id": "parent_ill",
+      "who": ["family"],
+      "tags": ["mother", "father"],
+      "ages": [62, 95],
+      "weight": 10,
+      "years": [1, 3],
+      "label": "failing",
+      "line": "{name} is failing, in the way that is not one thing but several, and the calls home have become a different kind of call.",
+      "resolve": [
+        { "kind": "steadied", "weight": 4, "line": "{name} has steadied, with a walker and a woman who comes in the mornings, and is cross about both." },
+        { "kind": "died", "weight": 6, "status": "dead", "line": "{name} died. You said the funeral Mass, because who else, and got through it, and the week after was the hardest of the year.", "effects": [{ "target": "strain", "key": "", "delta": 5 }, { "target": "stat", "key": "piety", "delta": 1 }] }
+      ]
+    },
+    {
+      "id": "moving_away",
+      "who": ["family"],
+      "tags": ["sibling"],
+      "ages": [25, 60],
+      "weight": 5,
+      "years": [1, 1],
+      "label": "moving away",
+      "line": "{name} is moving across the country for work, with the children, and has said it as if it were nothing, which is how you know it is not.",
+      "resolve": [
+        { "kind": "moved", "weight": 10, "mark": "far", "line": "{name} moved. The calls are Sunday nights now, and the children are voices, and Christmas is every other year." }
+      ]
+    },
+    {
+      "id": "back_gone",
+      "who": ["staff"],
+      "tags": ["maintenance"],
+      "ages": [45, 70],
+      "weight": 7,
+      "years": [1, 1],
+      "label": "{his} back gone",
+      "line": "{name}'s back has gone, lifting the crib figures, and {he} is doing the work anyway with a face, and the boiler is not getting looked at.",
+      "resolve": [
+        { "kind": "mended", "weight": 6, "line": "{name}'s back is better, or {he} says so, and the boiler has been looked at." },
+        { "kind": "retired", "weight": 4, "status": "retired", "line": "{name} retired on the back, with a lunch, and took the keys off the ring one at a time and named what each was for." }
+      ]
+    },
+    {
+      "id": "vocation_child",
+      "who": ["staff", "family"],
+      "tags": ["secretary", "dre", "sibling"],
+      "ages": [42, 65],
+      "weight": 4,
+      "years": [1, 2],
+      "label": "a son thinking of the seminary",
+      "line": "{name}'s son is thinking about the seminary, and {name} has told you as if confessing something, and asked you not to encourage him, and to encourage him.",
+      "resolve": [
+        { "kind": "entered", "weight": 5, "line": "{name}'s son entered the seminary in August. {Name} cried in the office, and would not say whether from one thing or the other.", "effects": [{ "target": "relationship", "key": "@life", "delta": 8 }, { "target": "reputation", "key": "chancery", "delta": 1 }] },
+        { "kind": "did_not", "weight": 5, "line": "{name}'s son did not enter, in the end, and is at the state university, and {name} is relieved and will not say so." }
+      ]
+    },
+    {
+      "id": "grandchild",
+      "who": ["staff", "family"],
+      "tags": ["secretary", "dre", "music_director", "maintenance", "mother", "father"],
+      "ages": [50, 85],
+      "weight": 5,
+      "years": [1, 1],
+      "label": "a grandchild coming",
+      "line": "{name} is to be a grandparent, and has told everyone twice, and has a photograph of a photograph.",
+      "resolve": [
+        { "kind": "born", "weight": 10, "line": "{name}'s grandchild was born, and the photograph is on the desk now where the old one was, and you are asked about the baptism weekly." , "effects": [{ "target": "relationship", "key": "@life", "delta": 3 }] }
+      ]
+    }
+  ]
+}

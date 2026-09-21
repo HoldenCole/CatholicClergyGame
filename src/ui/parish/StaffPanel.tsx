@@ -1,3 +1,4 @@
+import { lifeLabel } from '@/systems/lives';
 import { useGameStore } from '@/engine/store';
 import { candidateLine, mayManageStaff, STAFF_LABEL, staffOf } from '@/systems/staff';
 import { relationshipWord } from '@/systems/classmates';
@@ -28,6 +29,7 @@ export default function StaffPanel() {
                 <span className="min-w-0 flex-1">
                   {npc.name.first} {npc.name.last}, {STAFF_LABEL[tag]}
                   {game.flags[`staff:new:${tag}`] ? <span className="ink-faint ml-2 text-xs">new</span> : ''}
+                  {lifeLabel(game, npc) && <span className="ink-wine ml-2 text-xs">{lifeLabel(game, npc)}</span>}
                 </span>
                 <span className="ink-muted">{relationshipWord(npc.relationship)}</span>
                 <TalkButton npcId={npc.id} />

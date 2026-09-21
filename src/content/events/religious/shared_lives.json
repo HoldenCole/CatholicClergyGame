@@ -1,0 +1,91 @@
+{
+  "_notes": "The lives of the brothers of the house (DESIGN §8.11), for a friar: npc_life conditions with who confrere.",
+  "events": [
+    {
+      "id": "shl_confrere_the_bottle",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 24,
+      "suppressYears": 3,
+      "pressure": ["loyalty_vs_honesty"],
+      "requires": [{ "type": "npc_life", "key": "drinking", "who": "confrere" }],
+      "title": "The Brother Who Drinks",
+      "body": "{@life:drinking} is drinking again, and a house cannot not know it: the door at one, the Office missed, the smell at breakfast that the cook pretends is the cleaning fluid. {@prior} knows. The prior's way of knowing things is to wait, which has worked before and is not working now. The chapter is Thursday. You have sat next to {@life:drinking} at table for years, and last night he said something to you, walking back from Compline, that was not quite asking.",
+      "flavorPrompt": "A brother of the house drinking, the prior waiting, and a word after Compline that was not quite asking.",
+      "choices": [
+        {
+          "id": "say_it_to_him",
+          "label": "Go to his cell, and say it",
+          "default": true,
+          "outcome": "You knock at ten and say it, and he is angry, and then he is not, and you sit on the floor of his cell because there is one chair and he is in it. He goes to the prior himself in the morning, which is the thing you could not have done for him. The province sends him to the place it sends men. He comes back.",
+          "effects": [
+            { "target": "relationship", "key": "@life:drinking", "delta": 16 },
+            { "target": "reputation", "key": "community", "delta": 4 },
+            { "target": "strain", "key": "", "delta": 3 }
+          ]
+        },
+        {
+          "id": "the_prior",
+          "label": "Go to the prior, and say the house cannot wait",
+          "outcome": "You go to {@prior} and say it, and he says he knows, and you say the house cannot wait, and he looks at you for a while and agrees. It is done by Thursday. {@life:drinking} knows who went, and does not forgive it for a year, and then does, because he is sober and knows what sober cost.",
+          "effects": [
+            { "target": "relationship", "key": "@life:drinking", "delta": -6 },
+            { "target": "reputation", "key": "superiors", "delta": 3 },
+            { "target": "reputation", "key": "community", "delta": 1 }
+          ]
+        },
+        {
+          "id": "raise_it_at_chapter",
+          "label": "Raise it at chapter, with him in the room",
+          "outcome": "You raise it at chapter, carefully, without his name, and everyone knows the name, and he walks out, and the prior ends the chapter. It is dealt with, afterwards, by the province, and the house is quieter for a season, and some of the men think you were brave and some think you were something else.",
+          "effects": [
+            { "target": "relationship", "key": "@life:drinking", "delta": -14 },
+            { "target": "reputation", "key": "community", "delta": -3 },
+            { "target": "reputation", "key": "superiors", "delta": 2 },
+            { "target": "reputation", "key": "observant_bloc", "delta": 3 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "shl_confrere_the_parent",
+      "phase": ["seminary", "parochial_vicar", "administrator", "pastor"],
+      "campaign": "religious",
+      "yearGate": [1, 2, 3, 4, 5, 6, 7],
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 16,
+      "suppressYears": 3,
+      "pressure": ["friendship_vs_duty"],
+      "requires": [{ "type": "npc_life", "key": "caring_parent", "who": "confrere" }],
+      "title": "The Brother's Mother",
+      "body": "{@life:caring_parent}'s mother is dying, slowly, two states away, and the house has been covering his Office and his work while he drives there on the days the prior can spare him. This week the call came. The constitutions say a friar may go home for a death; the budget says the bus. {@prior} has asked whether anyone will drive him, which is the prior's way of asking you.",
+      "flavorPrompt": "A confrere's mother dying two states away, and the prior asking whether anyone will drive him.",
+      "choices": [
+        {
+          "id": "drive_him",
+          "label": "Drive him, and stay for the funeral",
+          "default": true,
+          "outcome": "You drive the nine hours and sit in a kitchen you do not know while a family you do not know does what families do, and concelebrate the funeral, and drive the nine hours back with him silent beside you. The house covers your work. He does not mention it, and sits next to you at table for the rest of his life.",
+          "effects": [
+            { "target": "relationship", "key": "@life:caring_parent", "delta": 16 },
+            { "target": "reputation", "key": "community", "delta": 4 },
+            { "target": "strain", "key": "", "delta": 3 }
+          ]
+        },
+        {
+          "id": "the_bus",
+          "label": "Let him take the bus, and cover his work while he is gone",
+          "outcome": "He takes the bus. You take his Masses and his class for the fortnight, and the house notices that too, and he comes back grey and does not talk about the bus.",
+          "effects": [
+            { "target": "relationship", "key": "@life:caring_parent", "delta": 5 },
+            { "target": "reputation", "key": "community", "delta": 2 },
+            { "target": "strain", "key": "", "delta": 2 }
+          ]
+        }
+      ]
+    }
+  ]
+}

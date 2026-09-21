@@ -42,7 +42,7 @@ export function generateStaffMember(rng: Rng, parish: Parish, presetId: string, 
     birthYear,
     origin: parish.terrain === 'latino' ? 'latino_immigrant' : parish.terrain === 'rural' ? 'rural' : parish.terrain === 'suburban' ? 'suburban' : 'urban_ethnic',
     stats: addStats(rollBaseStats(rng, 20, 55), spec.tag === 'maintenance' ? { administration: 10 } : spec.tag === 'music_director' ? { charisma: 10 } : {}),
-    tags: [spec.tag, `parish:${parish.id}`, 'staff'],
+    tags: [spec.tag, `parish:${parish.id}`, 'staff', ...(woman ? ['woman'] : []), ...(age >= 28 && age < 68 && rng.chance(0.65) ? ['married'] : [])],
     alignment: rollAlignment(rng, parish.alignment * 0.5, 30),
     relationship: Math.round(rng.gaussian() * 6),
   });
