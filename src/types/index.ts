@@ -26,3 +26,5 @@ export * from './request';
 export * from './ministry';
 export * from './houses';
 export * from './arcs';
+export * from './campaign';
+export * from './religiousLife';

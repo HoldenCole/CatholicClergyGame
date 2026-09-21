@@ -4,6 +4,7 @@ import { ARCHETYPES, PILLARS } from '@/types';
 import { directionWeek, pietyFactor } from './direction';
 import { applyStat, decayWeek } from './stats';
 import { creationContent } from '@/content/creation';
+import { pillarsOf } from './campaign';
 
 /** Tunables. Formulas not in DESIGN.md are invented and marked. */
 export const FORMATION = {
@@ -26,19 +27,16 @@ export const FORMATION = {
   zeroStreakDismissal: 3,
 } as const;
 
-const PILLAR_STATS: Record<Pillar, { key: StatKey; share: number }[]> = {
-  human: [{ key: 'charisma', share: 1 }],
-  spiritual: [{ key: 'piety', share: 1 }],
-  intellectual: [
-    { key: 'theology', share: 0.6 },
-    { key: 'knowledge', share: 0.4 },
-  ],
-  pastoral: [
-    { key: 'charisma', share: 0.5 },
-    { key: 'piety', share: 0.3 },
-    { key: 'administration', share: 0.2 },
-  ],
-};
+/**
+ * What each pillar feeds. The mapping is data: the campaign's, or the order's
+ * once a man is professed into one (E3 §5, §13.3). The base game's table is
+ * the diocesan entry of content/campaigns.json, unchanged.
+ */
+function pillarStats(state: Pick<GameState, 'campaign' | 'religious'>): Record<Pillar, { key: StatKey; share: number }[]> {
+  const out = {} as Record<Pillar, { key: StatKey; share: number }[]>;
+  for (const p of pillarsOf(state)) out[p.id] = p.stats;
+  return out;
+}
 
 export function zeroPillars(): Record<Pillar, number> {
   return { human: 0, spiritual: 0, intellectual: 0, pastoral: 0 };
@@ -90,12 +88,13 @@ export function formationWeek(state: GameState): GameState {
   const e = sem.emphasis;
   let stats = c.stats;
   const pillarScores = { ...sem.pillarScores };
+  const feeds = pillarStats(state);
   if (e) {
     for (const p of PILLARS) {
       const points = e[p];
       if (points === 0) continue;
       pillarScores[p] += (points * FORMATION.pillarPerPoint) / FORMATION.academicWeeks;
-      for (const { key, share } of PILLAR_STATS[p]) {
+      for (const { key, share } of feeds[p]) {
         stats = applyStat(stats, key, (points * FORMATION.statPerPoint * share) / FORMATION.academicWeeks);
       }
     }

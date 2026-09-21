@@ -40,6 +40,21 @@ This is the one place in the game where the player can be honest. If it ever lea
 **8. Opportunities are offers evaluated against state, not scripted grants.**
 The offer engine checks requirements, opens a window, and expires. Never hardcode "at year 5, offer Rome." Declining must always write a consequence. Multi-year commitments run in the background and must survive save/load mid-commitment — test this specifically.
 
+**9. Orders are data.** (Expansion E3, `docs/EXPANSION-E3-RELIGIOUS.md` §18.)
+Every order-specific behaviour is a flag or a parameter on `OrderDef.mechanics` in `content/religious/orders.json`. No `if (order === 'OP')` anywhere in `/src/engine`, `/src/systems`, or `/src/generation`; a test greps for it. If a mechanic cannot be expressed as data, extend `OrderDef` and say so.
+
+**10. The chapter engine is deterministic and exhaustively tested.**
+Same seed, same electorate, same ballots, every time (`systems/ballot.ts` and, above it, the chapter engine). Majority rules, narrowing, confirmation refusal, declined elections, and ambition effects are table-driven cases.
+
+**11. The base game must not regress.**
+R1.0 changed core abstractions (campaign, constituency sets, pillars, preset-free dioceses, the electorate). The full base-game suite passes unchanged before any religious content is written, and a save without `campaign` reads as the diocesan game it was.
+
+**12. Verify canonical details before hardcoding them.**
+Term lengths, formation stages, and governance rules are configurable defaults in the order data, close to real practice and flagged for verification; never literals scattered through the code.
+
+**13. Real orders, generated people and institutions.**
+Never name a real living friar. The orders' schools, colleges, and priories are generated analogs, named from the order's own pools, never the real institution by name. Dioceses beyond the presets are generated from a real see city and generic pools (`generation/dioceseSynth.ts`); they name no real church.
+
 ---
 
 ## Working style

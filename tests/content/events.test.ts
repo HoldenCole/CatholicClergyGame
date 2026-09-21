@@ -13,7 +13,7 @@ const PLACE_DIALS = new Set(studyPrograms.flatMap((p) => p.place?.dials.map((d) 
 const BOOK_KEYS = new Set(studyPrograms.flatMap((p) => p.place?.book?.map((b) => b.id) ?? []));
 const LITURGY_DIALS = new Set(liturgyDials.map((d) => d.id));
 const LITURGY_OPTIONS = new Set(liturgyDials.flatMap((d) => d.options.map((o) => `${d.id}:${o.id}`)));
-import { CONSTITUENCY_KEYS, EVENT_CATEGORIES, SEVERITIES, STAT_KEYS, PILLARS, ARCHETYPES } from '@/types';
+import { ALL_CONSTITUENCY_KEYS, EVENT_CATEGORIES, SEVERITIES, STAT_KEYS, PILLARS, ARCHETYPES } from '@/types';
 import type { Condition, Effect, GameEvent } from '@/types';
 
 const HOUSE_ORDERS = orderDefs.map((o) => o.id);
@@ -105,7 +105,7 @@ function checkCondition(c: Condition, where: string, problems: Problem[]): void 
       if (!STAT_KEYS.includes(c.key) || !hasOp(c.op) || typeof c.value !== 'number') problems.push(`${where}: bad stat condition`);
       break;
     case 'reputation':
-      if (!CONSTITUENCY_KEYS.includes(c.key) || !hasOp(c.op) || typeof c.value !== 'number') problems.push(`${where}: bad reputation condition`);
+      if (!ALL_CONSTITUENCY_KEYS.includes(c.key) || !hasOp(c.op) || typeof c.value !== 'number') problems.push(`${where}: bad reputation condition`);
       break;
     case 'relationship':
       if (typeof c.npcId !== 'string' || !hasOp(c.op) || typeof c.value !== 'number') problems.push(`${where}: bad relationship condition`);
@@ -243,7 +243,7 @@ function checkEffect(e: Effect, where: string, problems: Problem[]): void {
     const ok = v === 'end' || v === 'advance' || /^hold:\d+$/.test(v) || ARC_STAGES.has(v) || /^[a-z_]+$/.test(v);
     if (!ok) problems.push(`${where}: bad arc move ${v}`);
   }
-  if (e.target === 'reputation' && !CONSTITUENCY_KEYS.includes(e.key as never)) problems.push(`${where}: bad reputation key ${e.key}`);
+  if (e.target === 'reputation' && !ALL_CONSTITUENCY_KEYS.includes(e.key as never)) problems.push(`${where}: bad reputation key ${e.key}`);
   if (e.target === 'archetype' && !ARCHETYPES.includes(e.key as never)) problems.push(`${where}: bad archetype ${e.key}`);
   if ((e.target === 'relationship' || e.target === 'npc' || e.target === 'trait_known') && e.key.startsWith('@') && !SELECTORS.includes(e.key)) {
     problems.push(`${where}: unknown selector ${e.key}`);

@@ -11,8 +11,13 @@ export function clampSigned(value: number): number {
   return Math.min(100, Math.max(-100, value));
 }
 
+/** A constituency's standing: the religious keys read as 0 until something has written them. */
+export function standing(rep: Reputation, key: ConstituencyKey): number {
+  return rep[key] ?? 0;
+}
+
 export function applyReputation(rep: Reputation, key: ConstituencyKey, delta: number): Reputation {
-  return { ...rep, [key]: clampSigned(rep[key] + delta) };
+  return { ...rep, [key]: clampSigned(standing(rep, key) + delta) };
 }
 
 /** One value's weekly drift back toward ±floor. Below the floor it stays put. */
@@ -30,7 +35,7 @@ function fadeToward(value: number, floor: number, rate: number): number {
 export function fadeReputation(character: Character): Character {
   const rep = { ...character.reputation };
   for (const key of Object.keys(rep) as ConstituencyKey[]) {
-    rep[key] = fadeToward(rep[key], REPUTATION_REST.floor, REPUTATION_REST.ratePerWeek);
+    rep[key] = fadeToward(rep[key] ?? 0, REPUTATION_REST.floor, REPUTATION_REST.ratePerWeek);
   }
   return {
     ...character,

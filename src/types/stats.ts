@@ -11,8 +11,12 @@ export const STAT_KEYS: readonly StatKey[] = [
 
 export type Stats = Record<StatKey, number>;
 
-/** Standing with each constituency, −100..+100. See DESIGN.md §5.1. */
-export type ConstituencyKey =
+/**
+ * Standing with each constituency, −100..+100. See DESIGN.md §5.1. The keys
+ * are the union of every campaign's set; which of them are live in a run is
+ * data (content/campaigns.json), read through systems/campaign.ts. E3 §3.9.
+ */
+export type DiocesanConstituencyKey =
   | 'chancery'
   | 'brother_priests'
   | 'parishioners'
@@ -21,7 +25,20 @@ export type ConstituencyKey =
   | 'public'
   | 'rome';
 
-export const CONSTITUENCY_KEYS: readonly ConstituencyKey[] = [
+/** The religious campaign's set. `progressive_bloc` and `rome` are shared keys with their own labels there. */
+export type ReligiousConstituencyKey =
+  | 'community'
+  | 'province'
+  | 'superiors'
+  | 'local_bishop'
+  | 'laity'
+  | 'order'
+  | 'observant_bloc';
+
+export type ConstituencyKey = DiocesanConstituencyKey | ReligiousConstituencyKey;
+
+/** The diocesan campaign's constituencies, the base game's set, in the order the sheets show them. */
+export const CONSTITUENCY_KEYS: readonly DiocesanConstituencyKey[] = [
   'chancery',
   'brother_priests',
   'parishioners',
@@ -31,7 +48,24 @@ export const CONSTITUENCY_KEYS: readonly ConstituencyKey[] = [
   'rome',
 ] as const;
 
-export type Reputation = Record<ConstituencyKey, number>;
+export const RELIGIOUS_CONSTITUENCY_KEYS: readonly ReligiousConstituencyKey[] = [
+  'community',
+  'province',
+  'superiors',
+  'local_bishop',
+  'laity',
+  'order',
+  'observant_bloc',
+] as const;
+
+export const ALL_CONSTITUENCY_KEYS: readonly ConstituencyKey[] = [...CONSTITUENCY_KEYS, ...RELIGIOUS_CONSTITUENCY_KEYS] as const;
+
+/**
+ * The base keys are always present; the religious keys exist only once
+ * something has written them, so a diocesan save is byte-for-byte what it was.
+ * Read a key through `standing()` in systems/reputation.ts rather than by index.
+ */
+export type Reputation = Record<DiocesanConstituencyKey, number> & Partial<Record<ReligiousConstituencyKey, number>>;
 
 /** How loudly a position was taken. See DESIGN.md §5.2. */
 export type Volume = 'private' | 'semi_public' | 'public';
