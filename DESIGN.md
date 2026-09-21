@@ -633,6 +633,16 @@ A rumour engine (`content/rumours.json`, `systems/talk.ts`). What the priests of
 - **Answering it.** Scenes hang on the talk (`rumour` condition; `@rumour_subject` selector for the man being talked about; `rumour` effect to answer the latest): set the record straight at the meeting, own the true one, let it lie, defend the man they are talking about or join in, and what the bishop says with his hand on the door. The deanery and house sheets show what he has heard; the year in review counts what went round about him, how much was untrue, and whether the bishop heard.
 - Numbers (the share that is true, the chance a fact becomes talk, the hearing chances, the bishop's delay) are invented and live in the content file.
 
+### 8.13 The house at night
+
+The rectory after the office closes; the priory after Compline. What a man does with an evening alone, who calls, what he reads, whether he sleeps. A small nightly state (`NightState`: the evenings as a habit; company, rest, and the breviary as three numbers the sheets show only as words), kept in `content/night.json` and moved by `systems/night.ts`.
+
+- **The evenings** are chosen on the Week tab and cost no hours, because they are outside the week's hours: company (the parlour open, dinner at the deacon's), quiet (the door shut at seven), reading, the phone (a classmate, your mother, the man who left), the breviary (Compline in the dark church), the television. Each pulls the nights toward its own targets; a vicar's rectory has a pastor in it and a friar's house has a community, so the same habit lands differently.
+- **The week draws from it.** Rest decides how much a plain week recovers strain (from 0.6 of the base at no rest to 1.2 at full); the night office kept is a little piety a week; the phone warms the closest classmate. Strain pushes rest down, so a bad month makes worse nights, which make a worse month. Company under a floor with strain over a ceiling counts the alone weeks.
+- **One scene a season in which the night is the whole of the story** (`night` condition; drawn ahead of the pool at most once in thirteen weeks): the phone at eleven, Friday in the empty rectory, the doorbell at midnight, Christmas night after the last Mass, the letter written at one in the morning, Compline in the dark and the woman in the back pew; and for a friar, the light under a door in the great silence and the common room at nine.
+- **The bottle** is never a number and never a dial. It is a thread of authored scenes (§11): the third glass, noticed, after months of alone nights and too-much days, with a sink and a phone and a doctor on offer; the brother who noticed, with a number at the door; the place the diocese sends men, or the meetings on Tuesdays in the next town; a year, by the count kept. Every step has a way out, the way out is always written with respect, and the sheet says only that there is a bottle in the evenings, or the date he has been sober since.
+- Numbers (the targets, the follow, the rest factor, the scene cadence) are invented and live in the content file and `NIGHT`.
+
 ## 9. Generation
 
 ### 9.1 Dioceses

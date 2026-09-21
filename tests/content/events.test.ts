@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { allEvents, eventFiles } from '@/content';
 import { decorOptions } from '@/systems/decorState';
 import { FEAST_KEYS } from '@/engine/feasts';
-import { TOWN_PLACE_KINDS, TOWN_PLACE_STATES } from '@/types';
+import { TOWN_PLACE_KINDS, TOWN_PLACE_STATES, EVENING_KINDS } from '@/types';
 import { lifeDefs } from '@/systems/lives';
 import { ORDER_FEAST_KEYS } from '@/systems/religious/feasts';
 import { actionDefs, liturgyDials, obligationDefs } from '@/content/parish';
@@ -146,6 +146,10 @@ function checkCondition(c: Condition, where: string, problems: Problem[]): void 
       break;
     case 'thread':
       if (typeof c.key !== 'string' || typeof c.open !== 'boolean') problems.push(`${where}: bad thread condition`);
+      break;
+    case 'night':
+      if (c.key === 'evenings') { if (!EVENING_KINDS.includes(c.value as never)) problems.push(`${where}: bad night evenings`); }
+      else if (!['company', 'rest', 'prayer', 'alone_weeks'].includes(c.key) || !hasOp(c.op) || typeof c.value !== 'number') problems.push(`${where}: bad night condition`);
       break;
     case 'rumour':
       if (!['about_you_false', 'about_you_true', 'about_other', 'reached_bishop'].includes(c.key)) problems.push(`${where}: bad rumour condition`);

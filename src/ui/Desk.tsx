@@ -11,6 +11,7 @@ import ClassmatesPanel from './parish/ClassmatesPanel';
 import PeoplePanel from './parish/PeoplePanel';
 import TownPanel from './parish/TownPanel';
 import TalkPanel from './parish/TalkPanel';
+import NightPanel from './NightPanel';
 import HousesPanel from './parish/HousesPanel';
 import WorkPanel from './parish/WorkPanel';
 import SideWorkPanel from './parish/SideWorkPanel';
@@ -93,6 +94,7 @@ export default function Desk() {
       </div>
       <div className="scroll-paper paper flex-1 overflow-y-auto">
         {open === 'week' && (inParish ? <RoutinePanel /> : away ? <StudyRoutinePanel /> : game.religious && game.flags.ordained ? <FriarWeekPanel /> : <SeminaryRoutinePanel />)}
+        {open === 'week' && (inParish || (friar && !away)) && <NightPanel />}
         {open === 'house' && (
           <>
             <HousePanel />

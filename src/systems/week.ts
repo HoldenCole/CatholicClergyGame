@@ -33,6 +33,7 @@ import { workLoad } from './sidework';
 import { brothersWeek } from './brothers';
 import type { Rng } from '@/engine/rng';
 import { horariumLoad } from './religious/horarium';
+import { restFactor } from './night';
 import { friendshipLoad } from './religious/friendship';
 
 /** Tunables for the weekly loop. DESIGN 2.6 and 8.1; numbers not in the design are invented. */
@@ -174,7 +175,8 @@ export function strainOf(state: GameState): number {
 export function strainAfterWeek(state: GameState, sacrificed: number, extra: number): number {
   const gained = Math.max(0, (sacrificed + extra * WEEK.strainPerExtraBlock) * wearOf(state) - staminaOf(state));
   const before = strainOf(state);
-  return Math.max(0, Math.min(100, before + (gained > 0 ? gained : -(WEEK.strainRecovery + staminaOf(state)))));
+  // The nights decide how much a plain week rests him. DESIGN §8.13.
+  return Math.max(0, Math.min(100, before + (gained > 0 ? gained : -(WEEK.strainRecovery + staminaOf(state)) * restFactor(state))));
 }
 
 export function strainWord(strain: number): string {
