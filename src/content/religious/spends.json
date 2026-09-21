@@ -1,0 +1,385 @@
+{
+  "_notes": "The friar's discretionary week. E3 §3.3 'Discretionary spends': what a friar gives his free blocks to, on top of the horarium, the office, and the work. Rates are per block per week; a reputation at three blocks a week is known in about two years and well known in four. Reputations accrue only as far as the stat gates allow (systems/religious/reputations.ts). Sunday supply pays the house; observance moves the friar's own observance against the house's. Tunables invented.",
+  "spends": [
+    {
+      "id": "study",
+      "label": "Study",
+      "blurb": "The library, the desk, the argument with a dead man. The largest single category for a religious.",
+      "maxAp": 4,
+      "stats": {
+        "theology": 0.06,
+        "knowledge": 0.04
+      },
+      "reputations": {
+        "professor": 0.087
+      },
+      "observance": 0,
+      "digest": [
+        "The desk had you for the evenings.",
+        "The library, and the argument with Thomas.",
+        "Hours at the desk, and the house noticed the light."
+      ]
+    },
+    {
+      "id": "research",
+      "label": "Degree and research work",
+      "blurb": "A multi-year background commitment: a thesis, an edition, a book. Far more common here than in a diocese.",
+      "maxAp": 4,
+      "requires": {
+        "theology": 45
+      },
+      "stats": {
+        "theology": 0.05,
+        "knowledge": 0.07
+      },
+      "reputations": {
+        "professor": 0.125
+      },
+      "digest": [
+        "The chapter is a page longer.",
+        "The research went on; the footnotes are the year.",
+        "An afternoon in the archive that did not end."
+      ]
+    },
+    {
+      "id": "teaching",
+      "label": "Teaching",
+      "blurb": "A house of studies, a school, a university. For many friars the primary work, not a side path.",
+      "maxAp": 4,
+      "needs": "teaching_or_school",
+      "stats": {
+        "theology": 0.04,
+        "charisma": 0.03,
+        "knowledge": 0.02
+      },
+      "reputations": {
+        "professor": 0.125
+      },
+      "standing": {
+        "laity": 0.08
+      },
+      "digest": [
+        "Four sections, and one of them woke up.",
+        "The lecture, and the questions after it that were the lecture.",
+        "Grading, which is teaching by other means."
+      ]
+    },
+    {
+      "id": "confessions",
+      "label": "Confessions",
+      "blurb": "The box, week after week. Friars are the Church's confessors, and this is central here in a way it never is for a busy pastor.",
+      "maxAp": 4,
+      "stats": {
+        "piety": 0.05,
+        "charisma": 0.02
+      },
+      "reputations": {
+        "confessor": 0.138
+      },
+      "standing": {
+        "laity": 0.12
+      },
+      "digest": [
+        "The Saturday line, and the Tuesday one that has begun.",
+        "Confessions until the church was dark.",
+        "The box, and the man who came back."
+      ]
+    },
+    {
+      "id": "missions",
+      "label": "Preaching missions and retreats",
+      "blurb": "Travel, days at a time, four nights in a parish that did not want one.",
+      "maxAp": 3,
+      "needs": "ordained",
+      "requires": {
+        "charisma": 40
+      },
+      "stats": {
+        "charisma": 0.06,
+        "theology": 0.02
+      },
+      "reputations": {
+        "preacher": 0.138
+      },
+      "standing": {
+        "laity": 0.12,
+        "order": 0.04,
+        "community": -0.06
+      },
+      "strain": 0.06,
+      "digest": [
+        "Four nights in a parish two dioceses over.",
+        "A retreat weekend, and the drive back in the dark.",
+        "The mission, and the pastor's confessional line after it."
+      ]
+    },
+    {
+      "id": "supply",
+      "label": "Sunday supply",
+      "blurb": "Covering Masses at diocesan parishes. Unglamorous, recurring, and valuable: money for the house, your name across a whole diocese, and your Sundays gone.",
+      "maxAp": 3,
+      "needs": "ordained",
+      "reputations": {
+        "preacher": 0.05,
+        "pastor_of_dying": 0.025
+      },
+      "standing": {
+        "laity": 0.15,
+        "diocesan_clergy": 0.12,
+        "community": 0.03
+      },
+      "money": 250,
+      "strain": 0.04,
+      "digest": [
+        "Two Masses in a parish forty miles off, and the pastor's thanks.",
+        "Sunday supply: the envelope for the house, the drive, the people who asked your name.",
+        "A parish the diocese cannot staff had a friar this Sunday."
+      ]
+    },
+    {
+      "id": "observance",
+      "label": "Monastic observance",
+      "blurb": "Silence, lectio, adoration, the night office, manual labour, chant, fasting. Builds piety and the reputation for holiness, and advances nothing worldly whatsoever.",
+      "maxAp": 4,
+      "stats": {
+        "piety": 0.09
+      },
+      "reputations": {
+        "man_of_prayer": 0.125,
+        "liturgist": 0.025
+      },
+      "observance": 0.6,
+      "standing": {
+        "observant_bloc": 0.08,
+        "community": 0.03
+      },
+      "digest": [
+        "The night office, alone, and the silence after it.",
+        "Lectio, and the hour of adoration nobody scheduled.",
+        "The garden, the fast, the chant practised twice."
+      ]
+    },
+    {
+      "id": "liturgy",
+      "label": "The liturgy",
+      "blurb": "Invested liturgy, the chant, the ceremonies, and training others in them. Beautiful worship draws people, and divides them.",
+      "maxAp": 3,
+      "requires": {
+        "knowledge": 35
+      },
+      "stats": {
+        "knowledge": 0.04,
+        "piety": 0.03
+      },
+      "reputations": {
+        "liturgist": 0.138
+      },
+      "observance": 0.2,
+      "standing": {
+        "observant_bloc": 0.12,
+        "progressive_bloc": -0.06,
+        "laity": 0.06
+      },
+      "digest": [
+        "The schola, and the Sunday that was sung.",
+        "Vespers rehearsed until it was Vespers.",
+        "The ceremonies taught to men who had not been taught them."
+      ]
+    },
+    {
+      "id": "direction",
+      "label": "Spiritual direction of others",
+      "blurb": "Hours with men who have asked, sealed. You form the formators.",
+      "maxAp": 3,
+      "needs": "ordained",
+      "requires": {
+        "piety": 40
+      },
+      "stats": {
+        "piety": 0.04,
+        "knowledge": 0.02
+      },
+      "reputations": {
+        "spiritual_director": 0.125
+      },
+      "digest": [
+        "Three hours in the parlour with the door closed.",
+        "Direction, which is mostly listening.",
+        "A man who said the thing, and the hour it took."
+      ]
+    },
+    {
+      "id": "writing",
+      "label": "Writing and publishing",
+      "blurb": "Articles, a column, a book. The province reads it, and so, sometimes, does the world.",
+      "maxAp": 3,
+      "requires": {
+        "knowledge": 40
+      },
+      "stats": {
+        "knowledge": 0.05,
+        "theology": 0.03
+      },
+      "reputations": {
+        "professor": 0.075,
+        "preacher": 0.037
+      },
+      "standing": {
+        "order": 0.05,
+        "laity": 0.03
+      },
+      "digest": [
+        "Six hundred words that took the week.",
+        "A chapter drafted and thrown away.",
+        "The column went in; the letters came back."
+      ]
+    },
+    {
+      "id": "community",
+      "label": "Community building",
+      "blurb": "The old friar who needs company, the young one who needs a listener, the table kept late. What the house is for.",
+      "maxAp": 3,
+      "stats": {
+        "charisma": 0.04,
+        "piety": 0.02
+      },
+      "reputations": {
+        "spiritual_director": 0.037
+      },
+      "standing": {
+        "community": 0.2
+      },
+      "cohesion": 0.15,
+      "digest": [
+        "The table ran late on purpose.",
+        "An evening with the old friar, who talked.",
+        "The house was a little more one this week."
+      ]
+    },
+    {
+      "id": "mercy",
+      "label": "Works of mercy",
+      "blurb": "The shelter, the kitchen, the prison, the immigrant office. The poor, and public witness for them.",
+      "maxAp": 3,
+      "stats": {
+        "piety": 0.04,
+        "charisma": 0.03
+      },
+      "reputations": {
+        "advocate": 0.125,
+        "evangelist": 0.037
+      },
+      "standing": {
+        "laity": 0.1,
+        "progressive_bloc": 0.08
+      },
+      "digest": [
+        "The kitchen on Tuesday, and the line down the block.",
+        "The jail, and the man who wanted to talk.",
+        "A letter to the paper about the shelter, signed."
+      ]
+    },
+    {
+      "id": "evangelization",
+      "label": "Campus and street work",
+      "blurb": "The unchurched and the curious: the campus, the RCIA, the street, the door. Vocations follow evangelists.",
+      "maxAp": 3,
+      "requires": {
+        "charisma": 40
+      },
+      "stats": {
+        "charisma": 0.06,
+        "piety": 0.02
+      },
+      "reputations": {
+        "evangelist": 0.138
+      },
+      "standing": {
+        "laity": 0.12,
+        "order": 0.04
+      },
+      "digest": [
+        "Thursday night on the campus, which ran late.",
+        "Two inquirers who came back, and one who did not.",
+        "The door, and the man who had a question."
+      ]
+    },
+    {
+      "id": "hospital",
+      "label": "The hospital and the dying",
+      "blurb": "Hospitals, hospice, deathbeds, grief. The least glamorous work and the one laypeople never forget.",
+      "maxAp": 3,
+      "needs": "ordained",
+      "stats": {
+        "piety": 0.05,
+        "charisma": 0.02
+      },
+      "reputations": {
+        "pastor_of_dying": 0.138,
+        "confessor": 0.025
+      },
+      "standing": {
+        "laity": 0.12,
+        "local_bishop": 0.04
+      },
+      "strain": 0.05,
+      "digest": [
+        "Two in the morning, the intensive care unit, and a family told.",
+        "The hospice, where nobody is in a hurry.",
+        "A deathbed, and the prayers said right."
+      ]
+    },
+    {
+      "id": "building",
+      "label": "Buildings, budgets, and broken things",
+      "blurb": "The roof, the books, the failing work turned around. You get sent where things are broken.",
+      "maxAp": 3,
+      "requires": {
+        "administration": 35
+      },
+      "stats": {
+        "administration": 0.07
+      },
+      "reputations": {
+        "builder": 0.138
+      },
+      "standing": {
+        "community": 0.06,
+        "superiors": 0.05
+      },
+      "digest": [
+        "The roof, the contractor, and the number that was wrong.",
+        "A budget balanced by Thursday.",
+        "The boiler, which is the parish."
+      ]
+    },
+    {
+      "id": "benefactors",
+      "label": "Benefactors and the civic table",
+      "blurb": "Donors, the chancery, the county foundation, the men who fund a roof. Money and access, faintly suspect among the brothers.",
+      "maxAp": 2,
+      "requires": {
+        "charisma": 40,
+        "knowledge": 35
+      },
+      "stats": {
+        "knowledge": 0.04,
+        "charisma": 0.03
+      },
+      "reputations": {
+        "confidant": 0.138
+      },
+      "standing": {
+        "local_bishop": 0.06,
+        "laity": 0.03,
+        "community": -0.04
+      },
+      "money": 400,
+      "digest": [
+        "Dinner with a man whose name is on a wing.",
+        "The foundation board, and the mayor's speech.",
+        "A cheque for the house, and a lunch that cost it."
+      ]
+    }
+  ]
+}

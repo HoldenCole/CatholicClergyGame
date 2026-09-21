@@ -8,6 +8,7 @@ import { needOf } from './obedience';
 import { friarLoad, BISHOP_ASKS } from './bishopAsks';
 import { preachingOf } from './study';
 import { friarDeaneryPriests } from './deanery';
+import { reputationOf } from './reputations';
 
 /**
  * The diocese's pastors ask the prior for him. E3 §3.12. A pastor who has
@@ -65,7 +66,8 @@ export function pastorAskYear(state: GameState, rng: Rng): GameState {
   const house = currentHouse(state);
   if (!r || !c || !house || !state.flags.ordained || r.pastorAsk || r.pastorTask) return state;
   const p = PASTOR_ASKS;
-  const chance = p.base + (c.reputation.laity ?? 0) * p.perLaity + (c.reputation.diocesan_clergy ?? 0) * p.perClergy + (preachingOf(state) ?? 0) * p.perPreaching;
+  const known = Math.max(reputationOf(state, 'preacher'), reputationOf(state, 'confessor'), reputationOf(state, 'pastor_of_dying'));
+  const chance = p.base + (c.reputation.laity ?? 0) * p.perLaity + (c.reputation.diocesan_clergy ?? 0) * p.perClergy + (preachingOf(state) ?? 0) * p.perPreaching + known * 0.003;
   if (!rng.chance(Math.max(0.05, Math.min(0.9, chance)))) return state;
   const pastors = pastorsOf(state);
   const defs = eligiblePastorAsks(state);

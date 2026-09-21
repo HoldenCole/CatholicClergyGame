@@ -1,6 +1,7 @@
 import { cohesionPietyFactor } from './religious/house';
 import { friendPietyFactor } from './religious/friendship';
 import { restlessPietyFactor } from './religious/restless';
+import { identityPietyFactor } from './religious/reputations';
 import type { Charism, Direction, DirectorOption, GameState, Match, Npc, Temperament, Trouble } from '@/types';
 import type { Rng } from '@/engine/rng';
 import { instituteDef } from '@/content/institutes';
@@ -127,7 +128,7 @@ export function directionKept(state: GameState): boolean {
  */
 export function pietyFactor(state: GameState, hours: number): number {
   // The house he lives in modulates the drain for an order whose mechanics say so. E3 §7.2.
-  return directionFactor(state, hours) * cohesionPietyFactor(state) * friendPietyFactor(state) * restlessPietyFactor(state);
+  return directionFactor(state, hours) * cohesionPietyFactor(state) * friendPietyFactor(state) * restlessPietyFactor(state) * identityPietyFactor(state);
 }
 
 function directionFactor(state: GameState, hours: number): number {

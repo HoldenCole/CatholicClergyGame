@@ -9,6 +9,7 @@ import { friendshipLoad } from './friendship';
 import { needOf } from './obedience';
 import { apostolateDef, directingLoad, houseOfficeLoad, pastorTaskLoad } from './requests';
 import { currentPosting } from './transfer';
+import { reputationOf } from './reputations';
 
 /**
  * The bishop asks the order. E3 §3.11. A bishop may be fond of a friar and
@@ -101,10 +102,12 @@ export function bishopAskYear(state: GameState, rng: Rng): GameState {
   if (state.mode.kind !== 'clock' || yearsOrdained(state) < BISHOP_ASKS.minYears) return state;
   const regard = c.reputation.local_bishop ?? 0;
   if (regard < BISHOP_ASKS.minRegard) return state;
-  if (!rng.chance(BISHOP_ASKS.base + regard * BISHOP_ASKS.perRegard)) return state;
+  const known = Math.max(0, ...bishopAskDefs.flatMap((d) => (d.reputations ?? []).map((k) => reputationOf(state, k))));
+  if (!rng.chance(BISHOP_ASKS.base + regard * BISHOP_ASKS.perRegard + known * 0.002)) return state;
   const defs = eligibleAsks(state);
   if (!defs.length) return state;
-  const def = rng.pick(defs);
+  // Bishops ask for a man by what he is known for. E3 §8.3.
+  const def = rng.weighted(defs, (d) => 1 + (d.reputations ?? []).reduce((n, k) => n + reputationOf(state, k), 0) / 40);
   const { answer, why } = provincialAnswers(state, def);
   const ap = def.kind === 'chancery' ? def.ap : (religiousOrder(r.order).apostolates.find((a) => a.id === def.apostolate)?.ap ?? def.ap);
   const ask: BishopAsk = { defId: def.id, label: def.label, dioceseId: state.world?.diocese.presetId ?? '', week: state.clock.week, ap, answer, why };

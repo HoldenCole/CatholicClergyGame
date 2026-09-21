@@ -92,6 +92,21 @@ The quality-dial rule from the base game applies. **Skipping common prayer is vi
 
 Assignment work (parish, school, teaching, preaching) then takes its own mandatory floor on top. **The religious player has less discretionary time than the diocesan priest**, offset by carrying almost no administrative load unless he is a superior.
 
+#### Discretionary spends
+
+The religious activity set differs from the diocesan one and weights toward study, prayer, and the confessional:
+
+- **Study** — the largest single category for religious, and protected for Dominicans (§6.2)
+- **Degree and research work** — a multi-year background commitment, far more common than in a diocesan career
+- **Teaching** — a house of studies, a school, a university. For many friars this is the primary work, not a side path.
+- **Confessions** — friars are the Church's confessors. Central here in a way it never quite is for a busy pastor.
+- **Preaching missions and retreats** — travel, days at a time
+- **Sunday supply** — going out to cover Masses at diocesan parishes. Unglamorous, recurring, and valuable: it brings money into the house, spreads the player's name across a whole diocese rather than one parish, and costs him his Sundays. The most reliable slow builder of broad lay reputation in the religious game.
+- **Monastic observance** — extended silence, lectio divina, adoration, the night office, manual labor, chant, fasting. Builds Piety and the *man of prayer* reputation (§8) and advances nothing worldly whatsoever. **This tension is the point.** A friar can spend thirty years becoming holy and remain entirely unelectable.
+- **Spiritual direction of others** · **writing and publishing** · **community building** · **works of mercy**
+
+Track a personal **observance** value alongside the house's, and let the gap between them generate friction in both directions.
+
 ### 3.4 Poverty
 
 The player has no money. Mass stipends, salaries, speaking fees, and gifts all go to the community.
@@ -139,6 +154,7 @@ Each elector NPC scores every eligible friar on:
 - **Seniority and age** — too young is presumptuous; too old is a caretaker
 - **Province need** — the chapter's reading of what the moment requires
 - **Perceived ambition** — **a strong negative**
+- **Legibility** — whether the electors can describe this man in one phrase, driven by his highest reputations (§8.3). A competent friar nobody can characterize is not electable.
 
 Each elector votes for his top-scoring candidate. Ballots are simulated round by round:
 
@@ -688,6 +704,32 @@ interface House {
   budget: number;
 }
 
+type ReputationKey =
+  | 'confessor' | 'preacher' | 'professor' | 'spiritual_director'
+  | 'evangelist' | 'liturgist' | 'man_of_prayer' | 'builder'
+  | 'advocate' | 'pastor_of_dying' | 'confidant';
+
+interface Foundation {
+  id: string;
+  houseId: string;
+  founderId: string;
+  parentHouseId?: string;              // set for daughter houses
+  dioceseId: string;
+  foundedWeek: number;
+  charter: {
+    observance: number;                // 0 relaxed .. 100 strict
+    liturgy: string;                   // per-order enum, incl. OP proper rite
+    primaryWork: string;
+    universityRelation: 'none' | 'adjacent' | 'embedded';
+    alignment: number;                 // -100 trad .. +100 prog
+    poverty: number;
+    sizeTarget: number;
+  };
+  charterRevisions: { week: number; byId: string; changes: string[] }[];
+  vocationsAttracted: number;
+  status: 'proposed' | 'approved' | 'active' | 'struggling' | 'suppressed';
+}
+
 type ChapterLevel = 'house' | 'provincial' | 'general';
 
 interface Chapter {
@@ -711,7 +753,10 @@ interface ReligiousPlayerState {
     solemnWeek?: number;
   };
   perceivedAmbition: number;           // 0–100, partly hidden
-  preachingReputation?: number;        // OP
+  observance: number;                  // personal, vs the house's
+  reputations: Record<ReputationKey, number>;   // 0–100, portable, see §8
+  identities: string[];                // derived from reputation mixes
+  foundedHouseIds: string[];
   closeFriendIds?: string[];           // OSA
   dispensed?: { from: string[]; untilWeek: number };
   termsServed: { office: string; startWeek: number; endWeek: number }[];
@@ -744,7 +789,9 @@ Before any order-specific work:
 | Dominican career | 60 |
 | Augustinian formation | 50 |
 | Augustinian career | 60 |
-| **Total** | **~325** |
+| Reputations and identity mixes | 45 |
+| Foundations: petition, charter, growth, daughter houses, failure | 70 |
+| **Total** | **~440** |
 
 ---
 
@@ -760,9 +807,15 @@ Before any order-specific work:
 
 **R1.4 — Augustinians.** Order definition, province data, cohesion-modulated Piety, friendship slots, the restless-heart curve, annual vow renewals, education and mission tracks, content. *Done when the build test in §10 passes: the same character in both orders feels like two games by year ten.*
 
-**R1.5 — Integration.** E1 hooks, migration of base-game religious NPCs onto the new model, provincial-level content, the rare general-curia events.
+**R1.5 — Reputations.** The eleven reputation tracks, accrual and decay, identity mixes, the legibility term in elector scoring, and NPC behavior driven by reputation. *Done when two friars with identical stats but different reputations receive visibly different assignments and election results.*
 
-**Round 1 is done when** a player can choose either order and a province, pass through novitiate and vows to ordination, serve in several dioceses under obedience, live through chapters he can watch ballot by ballot, be elected to office, serve a term, and return to the ranks.
+**R1.6 — Foundations.** Location browser with need scoring, the two-key approval model, the charter, vocations, house development, daughter houses, charter revision by successors, and failure. **This is the payoff phase and the reason to build the rest.** *Done when a player can found a house at forty, grow it, send out a daughter house, lose the superiorship, and return at seventy to find it changed.*
+
+**R1.7 — Integration.** E1 hooks, migration of base-game religious NPCs onto the new model, provincial-level content, the rare general-curia events.
+
+**Round 1 is done when** a player can choose either order and a province, pass through novitiate and vows to ordination, serve in several dioceses under obedience, build a reputation the province can name in one phrase, live through chapters he can watch ballot by ballot, be elected to office, serve a term, return to the ranks, and — if he earns it — found a house that outlives him.
+
+**If the schedule slips, cut elsewhere and keep R1.6.** The foundation layer is what makes this expansion worth building.
 
 ---
 

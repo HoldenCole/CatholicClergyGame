@@ -6,6 +6,7 @@ import { religiousOrder } from '@/content/religious';
 import { PROVINCE } from '@/generation/province';
 import { currentHouse, houseLine, membersOf } from './house';
 import { currentPosting, moveToHouse } from './transfer';
+import { phraseOf, reputationFit } from './reputations';
 
 /**
  * Obedience and mobility. E3 §3.1: the provincial assigns every friar for
@@ -46,7 +47,9 @@ export function fitOf(state: GameState, house: OrderHouse): number {
   const work = house.works[0] ?? 'priory_church';
   const base = work === 'formation' ? s.piety * 0.5 + s.charisma * 0.3 + s.theology * 0.2 : work === 'teaching' ? s.theology * 0.5 + s.knowledge * 0.5 : work === 'school' ? s.administration * 0.5 + s.charisma * 0.5 : work === 'parish' ? s.charisma * 0.5 + s.administration * 0.3 + s.piety * 0.2 : s.charisma * 0.4 + s.theology * 0.3 + s.piety * 0.3;
   const alignment = 100 - Math.abs(c.alignment - house.alignment) / 2;
-  return Math.round(base * 0.7 + alignment * 0.3);
+  // The provincial assigns against what a man is known for. E3 §8.3.
+  const known = reputationFit(state, work);
+  return Math.round(base * 0.5 + alignment * 0.2 + known * 0.3);
 }
 
 /** What the posting would do for a young friar's formation, 0..100: a kind he has not lived. */
@@ -94,6 +97,7 @@ export function decideAssignment(state: GameState, rng: Rng): GameState {
       let score = o.need * w.need + o.fit * w.fit + o.formation * w.formation + rng.float(-w.noise, w.noise);
       if (o.need >= 60) reasons.push('the province needs a man there');
       if (o.fit >= 65) reasons.push('the work suits him');
+      if (reputationFit(state, o.work) >= 40 && phraseOf(state)) reasons.push(`the province knows him as ${phraseOf(state)}`);
       if (o.formation >= 60) reasons.push('a young friar should see it');
       if (c.preference === o.houseId) {
         score += 100 * w.preference;

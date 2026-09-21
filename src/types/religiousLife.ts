@@ -124,6 +124,8 @@ export interface BishopAskDef {
   requires?: Partial<Record<StatKey, number>>;
   minYears?: number;
   weekly?: { target: string; key: string; delta: number }[];
+  /** The reputations that make a bishop think of him for it. E3 §8.3. */
+  reputations?: ReputationKey[];
   /** What the bishop's office says it wants him for. */
   line: string;
 }
@@ -149,6 +151,61 @@ export interface DioceseFile {
   diocesan_clergy?: number;
   bishopId: string;
   leftWeek: number;
+}
+
+/** What a friar is known for: the eleven portable reputations. E3 §8. */
+export type ReputationKey = 'confessor' | 'preacher' | 'professor' | 'spiritual_director' | 'evangelist' | 'liturgist' | 'man_of_prayer' | 'builder' | 'advocate' | 'pastor_of_dying' | 'confidant';
+
+export const REPUTATION_KEYS: readonly ReputationKey[] = ['confessor', 'preacher', 'professor', 'spiritual_director', 'evangelist', 'liturgist', 'man_of_prayer', 'builder', 'advocate', 'pastor_of_dying', 'confidant'] as const;
+
+export interface ReputationDef {
+  id: ReputationKey;
+  label: string;
+  /** "the preacher": how the province says it in one phrase. */
+  phrase: string;
+  /** The stats that cap it: it cannot outrun their average by much. */
+  gates: StatKey[];
+  /** How well the reputation fits a house's work, for the provincial's assignment. */
+  works: Record<string, number>;
+  line: string;
+}
+
+/** Two reputations make an identity, with its own effects. E3 §8.2. */
+export interface IdentityDef {
+  id: string;
+  label: string;
+  mix: [ReputationKey, ReputationKey];
+  line: string;
+  /** Added to the provincial's fit for a house of that work. */
+  assignmentBias?: Record<string, number>;
+  pietyDecayFactor?: number;
+  legibilityPenalty?: number;
+  foundationBonus?: number;
+  romeDrift?: number;
+  hostility?: number;
+  bishopFriction?: number;
+}
+
+/** Something a friar gives his free blocks to each week. E3 §3.3. */
+export interface FriarSpendDef {
+  id: string;
+  label: string;
+  blurb: string;
+  maxAp: number;
+  /** ordained: a priest's work; teaching_or_school: the house teaches or runs a school. */
+  needs?: 'ordained' | 'teaching_or_school';
+  requires?: Partial<Record<StatKey, number>>;
+  stats?: Partial<Record<StatKey, number>>;
+  reputations?: Partial<Record<ReputationKey, number>>;
+  standing?: Partial<Record<string, number>>;
+  /** His own observance against the house's, per block. */
+  observance?: number;
+  /** The house's cohesion, per block. */
+  cohesion?: number;
+  /** Dollars a block a week to the province. */
+  money?: number;
+  strain?: number;
+  digest: string[];
 }
 
 /** A credential of the order's own. E3 §6.4, §7.4. */
@@ -524,6 +581,14 @@ export interface ReligiousPlayerState {
   pastorAskLine?: string;
   /** Wears the order's choir cloak (the Dominicans' black cappa) in his portrait. */
   cappa?: boolean;
+  /** What he is known for, 0..100 each, portable across every transfer. E3 §8. */
+  reputations?: Partial<Record<ReputationKey, number>>;
+  /** The identities his reputations make, by id. */
+  identities?: string[];
+  /** His own observance, 0..100, against the house's. E3 §3.3. */
+  observance?: number;
+  /** Free blocks a week by spend id. E3 §3.3. */
+  spends?: Record<string, number>;
   /** The diocesan seminarians he studied beside at the union or the studium, who become the diocese's priests. E3 §3.13. */
   diocesanClassmateIds?: string[];
   /** The diocesan seminary's men, by diocese, generated when he teaches there. E3 §3.13. */
