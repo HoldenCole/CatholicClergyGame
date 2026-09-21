@@ -62,7 +62,9 @@ describe('the year in review', () => {
     let s: GameState = { ...parishState('review-hook'), speed: 'SKIP' };
     s = { ...s, flags: { ...s.flags, ordination_week: s.clock.week } };
     const rng = createRng('rh');
-    const r = runClock(s, rng, { maxWeeks: 60, hook: parishWeekHook(noDeps) });
+    let r = runClock(s, rng, { maxWeeks: 60, hook: parishWeekHook(noDeps) });
+    // The mailbag may write first; a letter from someone is read and the clock goes on to the review.
+    while (r.state.mode.kind === 'letter' && r.state.mode.letter.sort === 'mail') r = runClock(readLetter(r.state), rng, { maxWeeks: 60 - (r.state.clock.week - s.clock.week), hook: parishWeekHook(noDeps) });
     expect(r.state.mode.kind).toBe('letter');
     expect(r.state.clock.week).toBe(s.clock.week + 52);
     // Arc end and anniversary on the same week: the board comes first, the letter waits.

@@ -128,8 +128,6 @@ export function seminaryWeekHook(deps: EventDeps): WeekHook {
     }
     // The house's invitations and the chancery's summers come by letter, week by week, like everyone else's.
     if (next.mode.kind !== 'clock' || next.pending.length > 0) return next;
-    // The mailbag: a letter from someone, now and then. DESIGN §8.10.
-    next = mailWeek(next, rng.derive(`mail:${next.clock.week}`));
     return religiousModeStep(openMail(offersStep(next, rng, deps)));
   };
 }
@@ -203,8 +201,6 @@ export function studyWeekHook(deps: EventDeps): WeekHook {
       if (event) next = fireOrResolve(next, event, rng, deps);
     }
     if (next.mode.kind !== 'clock' || next.pending.length > 0) return next;
-    // The mailbag: a letter from someone, now and then. DESIGN §8.10.
-    next = mailWeek(next, rng.derive(`mail:${next.clock.week}`));
     return religiousModeStep(openMail(offersStep(next, rng, deps)));
   };
 }
