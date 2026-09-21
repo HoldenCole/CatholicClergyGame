@@ -10,6 +10,7 @@ import GroupsPanel from './parish/GroupsPanel';
 import ClassmatesPanel from './parish/ClassmatesPanel';
 import PeoplePanel from './parish/PeoplePanel';
 import TownPanel from './parish/TownPanel';
+import TalkPanel from './parish/TalkPanel';
 import HousesPanel from './parish/HousesPanel';
 import WorkPanel from './parish/WorkPanel';
 import SideWorkPanel from './parish/SideWorkPanel';
@@ -102,7 +103,12 @@ export default function Desk() {
         {open === 'parish' && <ParishPanel />}
         {open === 'town' && <TownPanel />}
         {open === 'map' && <MapPanel />}
-        {open === 'deanery' && <DeaneryPanel />}
+        {open === 'deanery' && (
+          <>
+            <DeaneryPanel />
+            <TalkPanel />
+          </>
+        )}
         {open === 'see' && <SeePanel />}
         {open === 'place' && <PlacePanel />}
         {open === 'people' && (

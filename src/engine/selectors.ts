@@ -1,5 +1,6 @@
 import type { GameState, Npc } from '@/types';
 import { lifeSelector } from '@/systems/lives';
+import { rumourSubject } from '@/systems/talk';
 import type { Rng } from './rng';
 
 /**
@@ -175,6 +176,7 @@ export function resolveSelector(state: GameState, key: string, rng?: Rng): Npc |
       // The person in his orbit carrying a life: @life:drinking, @life:ill_spouse. DESIGN §8.11.
       const life = /^life:([a-z_]+)$/.exec(name);
       if (life) return lifeSelector(state, life[1]!);
+      if (name === 'rumour_subject') return rumourSubject(state);
       const o = ORDER_SELECTOR.exec(name);
       if (o) {
         const institute = `inst_${o[1]}s`;

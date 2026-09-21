@@ -1,0 +1,178 @@
+{
+  "_notes": "Scenes that hang on what the presbyterate is saying (DESIGN §8.12): rumour conditions, the @rumour_subject selector, and the rumour effect that answers the latest one.",
+  "events": [
+    {
+      "id": "rm_set_the_record",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 22,
+      "suppressYears": 1,
+      "pressure": ["loyalty_vs_honesty"],
+      "requires": [{ "type": "rumour", "key": "about_you_false" }],
+      "title": "What They Are Saying",
+      "body": "It has reached you, the way these things do: sideways, from a man who meant well, at the end of a conversation about something else. The presbyterate is saying a thing about you, and the thing is not true. Not the kind of untrue that is a lie; the kind that is a story with your name in it that has improved in the telling. The deanery meets Tuesday. Twelve men in a rectory dining room, coffee, the dean's agenda, and the story sitting in the room whether or not anyone says it.",
+      "flavorPrompt": "A false story going round the presbyterate with the priest's name in it, and the deanery meeting Tuesday.",
+      "choices": [
+        {
+          "id": "set_it_straight",
+          "label": "Say it at the meeting, plainly, and set it straight",
+          "default": true,
+          "outcome": "You raise it under any other business, in one sentence, and say what actually happened, in two. The room is quiet. The dean says thank you, Father, in a tone. It stops, mostly; a story corrected in front of twelve men does not travel much further, though it travels a little. The bishop hears the corrected version, which is the point.",
+          "effects": [
+            { "target": "rumour", "key": "correct", "value": "" },
+            { "target": "reputation", "key": "brother_priests", "delta": 2 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "strain", "key": "", "delta": 1 }
+          ]
+        },
+        {
+          "id": "laugh",
+          "label": "Laugh it off with the dean in the parking lot, and let that do the work",
+          "outcome": "You tell the dean the true version in the parking lot as a funny story, and he laughs, and tells it as a funny story, which is how the men prefer it. It travels as a joke instead of a scandal. Whether the bishop hears the joke or the other thing depends on who tells him.",
+          "effects": [
+            { "target": "rumour", "key": "correct", "value": "" },
+            { "target": "reputation", "key": "brother_priests", "delta": 1 },
+            { "target": "strain", "key": "", "delta": -1 }
+          ]
+        },
+        {
+          "id": "let_it_lie",
+          "label": "Let it lie; a man who answers every story becomes a story",
+          "outcome": "You say nothing. It goes round for a season and then it is replaced by the next thing, as they all are. Some of the men remember it as true. One of them is the vicar for clergy.",
+          "effects": [
+            { "target": "rumour", "key": "let_lie", "value": "" },
+            { "target": "strain", "key": "", "delta": -1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rm_the_true_one",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 16,
+      "suppressYears": 2,
+      "pressure": ["loyalty_vs_honesty"],
+      "requires": [{ "type": "rumour", "key": "about_you_true" }],
+      "title": "The True One",
+      "body": "The men are saying a thing about you, and this time it is true. It is not the whole truth; it is the part of it that makes a story, with the reasons left out, which is what a story is. You could tell the reasons. Twelve men at a deanery meeting would listen, or would look at their coffee. Or you could let the true thing be said, and be the man it is said about, which is a kind of honesty too.",
+      "flavorPrompt": "A true story going round about the priest, shorn of its reasons, and the choice of owning it.",
+      "choices": [
+        {
+          "id": "own_it",
+          "label": "Own it, aloud, reasons and all",
+          "default": true,
+          "outcome": "You say it yourself at the meeting: yes, that is what happened, and this is why. Two of the men look at their coffee and three look at you, and one says, afterwards, that he would have done the same, which is more than he has ever said to you. The story goes round with the reasons attached, for a while.",
+          "effects": [
+            { "target": "rumour", "key": "own", "value": "" },
+            { "target": "reputation", "key": "brother_priests", "delta": 3 },
+            { "target": "reputation", "key": "chancery", "delta": -1 },
+            { "target": "stat", "key": "piety", "delta": 1 }
+          ]
+        },
+        {
+          "id": "say_nothing",
+          "label": "Say nothing; it is true, and that is enough",
+          "outcome": "You let it be said. It is true, after all. The men make of it what they make, and the bishop hears the story without the reasons, and you are, for a season, the man in the story.",
+          "effects": [
+            { "target": "rumour", "key": "let_lie", "value": "" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rm_the_man_they_talk_about",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 18,
+      "suppressYears": 1,
+      "pressure": ["friendship_vs_duty"],
+      "requires": [{ "type": "rumour", "key": "about_other" }],
+      "title": "The Man They Are Talking About",
+      "body": "The men are talking about {@rumour_subject}, and the talk has reached the point where it is said in front of you as if you would agree with it. You have heard it twice now, in two versions, and the versions do not match, which tells you something about the talk and nothing about the man. He is at the deanery meeting Tuesday, at the end of the table, and he knows, the way a man knows when the room has been discussing him. The dean is letting it run, because the dean lets things run.",
+      "flavorPrompt": "A priest of the deanery being talked about in front of the player, and the man at the end of the table.",
+      "choices": [
+        {
+          "id": "defend",
+          "label": "Say, in front of them, that you do not believe it",
+          "default": true,
+          "outcome": "You say it at the meeting, once, evenly: that you have heard two versions and do not believe either. The room changes. {@rumour_subject} does not look at you and does not have to. The talk goes on, quieter, somewhere you are not, and he sits next to you at the next meeting and the one after.",
+          "effects": [
+            { "target": "rumour", "key": "defend", "value": "" },
+            { "target": "relationship", "key": "@rumour_subject", "delta": 12 },
+            { "target": "reputation", "key": "brother_priests", "delta": 1 },
+            { "target": "stat", "key": "charisma", "delta": 1 }
+          ]
+        },
+        {
+          "id": "ask_him",
+          "label": "Ask him yourself, alone, what is true",
+          "outcome": "You drive over on a Wednesday and ask him. He tells you, or he tells you a version, and either way you are the one man in the deanery who asked instead of repeating. He does not forget it. You do not repeat what he said, which he also does not forget.",
+          "effects": [
+            { "target": "rumour", "key": "defend", "value": "" },
+            { "target": "relationship", "key": "@rumour_subject", "delta": 8 },
+            { "target": "strain", "key": "", "delta": 1 }
+          ]
+        },
+        {
+          "id": "join_in",
+          "label": "Say what you have heard; it is what the table is for",
+          "outcome": "You add your version to the two already going round, and the table enjoys it, and you are a little more one of them for a season. {@rumour_subject} hears that you were among the tellers. He is polite to you for years.",
+          "effects": [
+            { "target": "rumour", "key": "join", "value": "" },
+            { "target": "relationship", "key": "@rumour_subject", "delta": -10 },
+            { "target": "reputation", "key": "brother_priests", "delta": 2 },
+            { "target": "stat", "key": "piety", "delta": -1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rm_the_bishop_heard",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 24,
+      "suppressYears": 2,
+      "pressure": ["ambition_vs_integrity"],
+      "requires": [{ "type": "rumour", "key": "reached_bishop" }],
+      "title": "The Bishop Has Heard",
+      "body": "The bishop mentions it. Not at a meeting about it; at the end of a meeting about something else, standing, with his hand on the door: he has heard a thing about you, and says what he has heard, and looks at you, and waits. He is not asking whether it is true. He is telling you that he knows what is being said, and giving you a moment to say something, or not, before the door opens and the next appointment is in the room.",
+      "flavorPrompt": "The bishop, hand on the door, saying what he has heard about the priest and waiting.",
+      "choices": [
+        {
+          "id": "explain",
+          "label": "Say what actually happened, in three sentences",
+          "default": true,
+          "outcome": "You say it in three sentences, which he counts. He nods and opens the door. The next time it comes up, if it comes up, it is your version he has, which is worth more than the correction.",
+          "effects": [
+            { "target": "rumour", "key": "correct", "value": "" },
+            { "target": "reputation", "key": "chancery", "delta": 3 },
+            { "target": "stat", "key": "charisma", "delta": 1 }
+          ]
+        },
+        {
+          "id": "ask_who",
+          "label": "Ask him who told him",
+          "outcome": "You ask who told him, and he says that is not the question, and opens the door. You are right that it is a fair question and wrong to have asked it, and he remembers both.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": -3 },
+            { "target": "reputation", "key": "brother_priests", "delta": -1 }
+          ]
+        },
+        {
+          "id": "nothing",
+          "label": "Say that it is not worth his time, and leave it",
+          "outcome": "You say it is not worth his time, and he agrees, and opens the door, and the story stays in the file as the story.",
+          "effects": [
+            { "target": "rumour", "key": "let_lie", "value": "" },
+            { "target": "reputation", "key": "chancery", "delta": -1 }
+          ]
+        }
+      ]
+    }
+  ]
+}

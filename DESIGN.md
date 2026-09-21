@@ -622,6 +622,17 @@ Every named person in the man's orbit carries a clock of their own: the staff of
 - **Scenes hang on them**: `{ type: 'npc_life', key, who? }` and the selector `@life:<id>`, which resolves to the person carrying that life, so a scene can be about *the* secretary whose husband is ill or *the* priest of the deanery who is drinking. The cast round (§8.2) moves the parish's lay people; this moves everyone else.
 - Numbers (the chance a year, the years a life runs, the odds of each ending) are invented and live in the content file.
 
+### 8.12 The presbyterate as people who talk
+
+A rumour engine (`content/rumours.json`, `systems/talk.ts`). What the priests of the diocese say about each other and about him, seeded by what actually happened and distorted as it travels; wrong as often as right; a man's standing with his brothers moved by what is said as much as by what he did. The bishop hears the same things a step later.
+
+- **Seeded by what happened.** About him, from his own record: a parish turned around or going under, a column, a stand taken in public, a promotion or a passing-over, a request to be moved, the hall opened to the shelter, the lot sold, looking worn out. About the men he watches (the deanery, the pastor above him, his classmates, the brothers of his house), from a snapshot diffed week to week: a man moved, made pastor, named to the chancery or a see, put on leave, dead, gone; a life opened (drinking, burnout, thinking of leaving, ill, a parent dying).
+- **True or distorted.** A rumour is true a little more than half the time; the rest are distortions with a motive supplied or a fact improved. Each kind has both.
+- **It goes round at once, and reaches him later.** Talk about him moves his standing with his brothers the week it starts. He hears a rumour later, at a venue: the deanery meeting, the dean in the parking lot, the priests' dinner, the confessors' dinner in Lent, the cathedral sacristy before the Chrism Mass, a classmate on the phone, a funeral lunch; a friar hears it at table, after chapter, from the provincial's secretary. Talk about himself reaches him only half the time.
+- **The bishop a step later.** A rumour about him reaches the bishop six to fourteen weeks on unless he has set it straight, and moves the chancery's view by most of what it did to his brothers'. A note goes in the career.
+- **Answering it.** Scenes hang on the talk (`rumour` condition; `@rumour_subject` selector for the man being talked about; `rumour` effect to answer the latest): set the record straight at the meeting, own the true one, let it lie, defend the man they are talking about or join in, and what the bishop says with his hand on the door. The deanery and house sheets show what he has heard; the year in review counts what went round about him, how much was untrue, and whether the bishop heard.
+- Numbers (the share that is true, the chance a fact becomes talk, the hearing chances, the bishop's delay) are invented and live in the content file.
+
 ## 9. Generation
 
 ### 9.1 Dioceses

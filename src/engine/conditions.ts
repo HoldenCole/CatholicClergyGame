@@ -6,6 +6,7 @@ import { feastsOfWeek, type FeastKey } from './feasts';
 import { orderFeastsOfWeek } from '@/systems/religious/feasts';
 import { townCondition } from '@/systems/town';
 import { lifeCondition } from '@/systems/lives';
+import { rumourCondition } from '@/systems/talk';
 import { resolveSelector } from './selectors';
 
 import type { Group } from '@/types';
@@ -179,6 +180,8 @@ export function evaluateCondition(
       return townCondition(state, cond);
     case 'npc_life':
       return lifeCondition(state, cond);
+    case 'rumour':
+      return rumourCondition(state, cond);
     case 'feast': {
       const parish = state.world?.parishes.find((p) => p.id === state.assignment?.parishId);
       if (feastsOfWeek(state.clock, parish).includes(cond.key as FeastKey)) return true;

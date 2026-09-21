@@ -1,0 +1,51 @@
+{
+  "_notes": "What the house says (DESIGN §8.12), for a friar.",
+  "events": [
+    {
+      "id": "sht_the_refectory",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "campaign": "religious",
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 20,
+      "suppressYears": 1,
+      "pressure": ["loyalty_vs_honesty"],
+      "requires": [{ "type": "rumour", "key": "about_you_false" }],
+      "title": "What the House Is Saying",
+      "body": "A house of twelve men has no secrets and many stories, and this week the story is you. It is not true, or it is true the way stories in a house are true: a thing you did, with the reasons filed off and a motive supplied. {@old_friar} told you, in the cloister, because he thought you should know, and because he is the one in the house who tells people things. The recreation is at eight. The prior will be there, and so will whoever started it, and so will you.",
+      "flavorPrompt": "A false story about the friar going round the house, told to him in the cloister by the old man.",
+      "choices": [
+        {
+          "id": "say_it_at_recreation",
+          "label": "Say it at recreation, once, to the room",
+          "default": true,
+          "outcome": "You say it to the room at eight, in two sentences, and go back to the newspaper. Nobody answers, which is the house's way of agreeing. The story stops. The one who started it passes you the salt at supper the next day, which is the house's way of apologising.",
+          "effects": [
+            { "target": "rumour", "key": "correct", "value": "" },
+            { "target": "reputation", "key": "community", "delta": 3 },
+            { "target": "relationship", "key": "@old_friar", "delta": 4 }
+          ]
+        },
+        {
+          "id": "the_prior",
+          "label": "Tell the prior the true version, and let him deal with it",
+          "outcome": "You tell {@prior}, who says he had heard, and had not believed it, and says something at chapter that names nobody and settles it. The house notes that you went to the prior, which some think right and some think weak.",
+          "effects": [
+            { "target": "rumour", "key": "correct", "value": "" },
+            { "target": "reputation", "key": "superiors", "delta": 2 },
+            { "target": "reputation", "key": "community", "delta": -1 }
+          ]
+        },
+        {
+          "id": "let_it",
+          "label": "Let it lie; a house forgets by Advent",
+          "outcome": "You let it lie, and the house forgets by Advent, mostly, and the provincial's secretary hears it on visitation from someone who had not forgotten.",
+          "effects": [
+            { "target": "rumour", "key": "let_lie", "value": "" },
+            { "target": "strain", "key": "", "delta": -1 }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -35,6 +35,7 @@ import type { ClubsState } from './clubs';
 import type { TalksState } from './talks';
 import type { Tenure } from './tenure';
 import type { Town } from './town';
+import type { TalkState } from './talk';
 import type { SeeState } from './see';
 import type { Letter } from './mode';
 import type { Beat, Clock, Speed } from './time';
@@ -95,6 +96,8 @@ export interface GameState {
   towns?: Record<string, Town>;
   /** Words had with people: cooldowns and the exchanges. Absent in older saves. */
   talks?: TalksState;
+  /** What the presbyterate is saying: the rumours, and the snapshot of the men it watches. DESIGN §8.12. */
+  talk?: TalkState;
   /** Letters read, most recent last: the year in review, the new bishop's reading. */
   letters?: Letter[];
   /** The mailbag: every letter from someone, and whether it was answered. DESIGN §8.10. */
