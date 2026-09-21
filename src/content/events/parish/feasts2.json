@@ -1,0 +1,1060 @@
+{
+  "_notes": "Second pool of feast scenes for the parish year, one for each feast the first pool left without: Candlemas, St. Joseph, the Annunciation, Palm Sunday, Good Friday, Easter, Divine Mercy, the Ascension, the Sacred Heart, Peter and Paul, All Saints, Advent, the Immaculate Conception, the Holy Family, and the Santo Niño and the Korean Martyrs for their communities. Fired feast-first on the week (engine/weekHook.ts feastScene).",
+  "events": [
+    {
+      "id": "fe_candlemas_the_order",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "severity": "ROUTINE",
+      "category": "finance",
+      "baseWeight": 14,
+      "suppressYears": 3,
+      "pressure": [
+        "money"
+      ],
+      "requires": [
+        {
+          "type": "feast",
+          "key": "candlemas"
+        }
+      ],
+      "title": "The Year's Candles",
+      "body": "Candlemas, and the blessing of the candles in the vestibule before the procession in, and the year's order of candles for {parish} sitting on {@secretary}'s desk waiting for a signature. The sacristan wants beeswax, as the rubrics prefer and the parish has never bought; the difference is eleven hundred dollars. The supplier has thrown in a case of the votive lights the parish burns by the hundred, on the understanding that the order is signed by Friday. The candles you are blessing this morning are the cheap ones, and they smoke.",
+      "flavorPrompt": "Candlemas and the year's candle order: beeswax or the cheap ones that smoke.",
+      "choices": [
+        {
+          "id": "beeswax",
+          "label": "Beeswax; the altar is not the place to save eleven hundred dollars",
+          "default": true,
+          "outcome": "You sign for beeswax. The sacristan carries the invoice around for a week like a relic. The candles burn clean and the church smells, faintly, of honey, and nobody in the pews notices, and the finance council does.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "candles:beeswax",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "cheap",
+          "label": "The cheap ones; eleven hundred dollars is the boiler's",
+          "outcome": "You sign for the usual. The sacristan says nothing in a way that fills the sacristy. The candles smoke through the year, and in November the boiler goes anyway.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 1
+            },
+            {
+              "target": "relationship",
+              "key": "@secretary",
+              "delta": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fe_st_joseph_the_table",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "severity": "ROUTINE",
+      "category": "group",
+      "baseWeight": 14,
+      "suppressYears": 3,
+      "pressure": [
+        "friendship_vs_duty"
+      ],
+      "requires": [
+        {
+          "type": "feast",
+          "key": "st_joseph"
+        }
+      ],
+      "title": "The St. Joseph Table",
+      "body": "St. Joseph's day, and the Italian families of {parish} have built the table in the hall as their grandmothers did: three tiers of bread shaped into crosses and wreaths, fava beans, oranges, fish, no meat, a statue at the top, and a sign saying the food goes to the poor afterwards. The women who built it have been up since four. The Lenten fast is on, it is a Friday, and the diocese's regulations are pinned to the bulletin board by someone who wanted them seen. The oldest of the women asks you to bless the table and then to eat, in that order, and does not look as though she will accept the first without the second.",
+      "flavorPrompt": "The St. Joseph table on a Lenten Friday, blessed and then eaten, and the fast pinned to the board.",
+      "choices": [
+        {
+          "id": "eat",
+          "label": "Bless it and eat, and let the feast be the feast",
+          "default": true,
+          "outcome": "You bless the table and you eat, standing, from a paper plate, and the women watch you eat the way women of that generation watch a priest eat, and are satisfied. The solemnity lifts the fast, which you say from the front of the hall for the benefit of whoever pinned the regulations. The bread goes to the shelter on Monday.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "feast:joseph_table",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "bless_only",
+          "label": "Bless it and take a piece of bread for later",
+          "outcome": "You bless the table and take a piece of bread in a napkin and say you will have it at supper, and the oldest of the women says, in Italian, something her daughter does not translate. The table is as good as ever. You are not asked to bless it next year; the deacon is.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": -2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fe_annunciation_the_weekday",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 12,
+      "suppressYears": 3,
+      "pressure": [
+        "doubt"
+      ],
+      "requires": [
+        {
+          "type": "feast",
+          "key": "annunciation"
+        }
+      ],
+      "title": "A Solemnity on a Tuesday",
+      "body": "The Annunciation falls on a Tuesday in Lent and is kept by the daily Mass crowd, eleven people, and the school, if there is one, and nobody else. The Gloria is sung for the first time since Ash Wednesday, by eleven people, badly, and you find that it moves you in a way the Easter Gloria will not. After Mass a woman of the eleven says that her daughter, thirty-eight and married eleven years, has told her that morning that she is pregnant, and that she came to tell Our Lady before she told anyone else, and that she is telling you second. She would like the Mass tomorrow said for the child, and she would like it not to be announced.",
+      "flavorPrompt": "The Annunciation on a Lenten weekday, the Gloria sung by eleven, and a grandmother's news told to Our Lady first.",
+      "choices": [
+        {
+          "id": "the_mass",
+          "label": "Say the Mass, unannounced, and say nothing to anyone",
+          "default": true,
+          "outcome": "You say the Mass on Wednesday for an intention you do not announce, and she is there, and at the end she nods once. In December she brings the daughter, and in the spring the child, and the whole parish knows by then, and you never say that you knew first.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "feast:annunciation_intention",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fe_palm_sunday_the_passion",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 16,
+      "suppressYears": 2,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "feast",
+          "key": "palm_sunday"
+        }
+      ],
+      "title": "Crucify Him",
+      "body": "Palm Sunday, and the Passion read in parts: a narrator, a voice for Christ, a voice for the rest, and the crowd's lines for the whole church. The lector who was to read the narrator has the flu and {@secretary} has found a replacement at nine o'clock, a man from the choir who reads well and has never done it. The crowd, at the ten-thirty, says Crucify him too quietly, as it always does, as if embarrassed. At the seven o'clock the church was half empty and the words carried. You have the homily in your pocket and it is about something else. You have four minutes, because the Passion is long and the ushers are looking at the parking.",
+      "flavorPrompt": "Palm Sunday, the Passion in parts, a substitute narrator, and a crowd that will not say Crucify him aloud.",
+      "choices": [
+        {
+          "id": "the_four_minutes",
+          "label": "Preach for four minutes on why they would not say it",
+          "default": true,
+          "outcome": "You put the homily back in your pocket and speak for four minutes on the crowd's line and why the church would not say it aloud, and the church is quiet in the way that means it has been caught. At the noon Mass, unprompted, the crowd says it louder. Two people are angry about that, and say so at the door, and you let them.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "feast:crucify_him",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "no_homily",
+          "label": "Let the Passion be the homily and sit down",
+          "outcome": "You sit. The rubrics allow it and the ushers are grateful. The church leaves quietly, palms in hand. Nobody says anything at the door, which is what silence after the Passion is meant to be, or what you tell yourself.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": -1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fe_good_friday_the_cross",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 16,
+      "suppressYears": 2,
+      "pressure": [
+        "body_vs_vow"
+      ],
+      "requires": [
+        {
+          "type": "feast",
+          "key": "good_friday"
+        }
+      ],
+      "title": "The Wood of the Cross",
+      "body": "Good Friday, three o'clock, and the veneration of the cross: the whole church coming forward one by one to kiss the wood, forty minutes of it, the line not thinning. You are holding the cross. A man you know comes forward, a man you have refused absolution to twice this year and who has not come back, and kneels, and kisses the wood, and looks up at you with an expression you cannot read, and goes back to his pew. Behind him is his wife, who does not know about the twice. Behind her is a child. The line goes on. You are holding the cross and your arms have started to shake and there are two hundred people still to come.",
+      "flavorPrompt": "Good Friday veneration: a man refused absolution twice kisses the cross, his wife behind him, and the priest's arms shaking.",
+      "choices": [
+        {
+          "id": "hold_it",
+          "label": "Hold the cross to the end, whatever the arms do",
+          "default": true,
+          "outcome": "You hold it. Your arms shake and then stop shaking, and the two hundred come, and the last of them is an old woman who has to be helped to her knees and takes a long time. Afterwards the sacristan takes the cross from you and you find you cannot straighten your fingers for a minute. The man is at the Vigil. He does not come to confession. He comes to Mass, every Sunday, for years, and you leave that where it is.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "feast:held_the_cross",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "hand_it_on",
+          "label": "Hand the cross to the deacon or a server and step back",
+          "outcome": "You hand it to the server at your elbow, who is fifteen and holds it as if it might break, and you stand beside him for the rest. Nobody in the line notices or minds. Your arms recover. Something else does not, quite; you think about the man for the rest of the week and do nothing.",
+          "effects": [
+            {
+              "target": "strain",
+              "key": "",
+              "delta": -1
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": -1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fe_easter_the_full_church",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 16,
+      "suppressYears": 2,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "feast",
+          "key": "easter"
+        }
+      ],
+      "title": "The Church Full",
+      "body": "Easter Sunday, and every Mass full, chairs in the aisles, the ten-thirty starting late because the eight-thirty would not leave, the lilies on every step and {@secretary} at the door with the extra bulletins. Half the people in the pews you will not see again until Christmas. You know it and they know it and the homily is the one chance. You have written one about the Resurrection, which is the correct subject, and in the sacristy, vesting, you find you want to say something else: to the ones who came today and will not come back, directly, about why. The deacon is watching you the way deacons watch a priest who is about to change his mind.",
+      "flavorPrompt": "Easter Sunday, the church full of people who will not be back until Christmas, and the one homily.",
+      "choices": [
+        {
+          "id": "to_them",
+          "label": "Preach to the ones who will not be back, without scolding",
+          "default": true,
+          "outcome": "You preach to them: not a scolding, a welcome that is also a question, and it is the best three minutes you have done in a year. A woman in the fourth row cries, which may be the lilies. A dozen of them are there on the second Sunday of Easter, which is a dozen more than usual, and four of them are there in June. The rest are not, and were never going to be.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 4
+            },
+            {
+              "target": "flag",
+              "key": "feast:easter_welcome",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "the_resurrection",
+          "label": "Preach the Resurrection, as written, to everyone",
+          "outcome": "You preach the Resurrection, as written, and it is good, and it is for everyone, and nobody could tell you what it said by Tuesday. The collection is the year's largest and the parking lot the year's worst. It was Easter; it did not need you to make it something.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fe_divine_mercy_the_chaplet",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "severity": "ROUTINE",
+      "category": "group",
+      "baseWeight": 12,
+      "suppressYears": 3,
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "requires": [
+        {
+          "type": "feast",
+          "key": "divine_mercy"
+        }
+      ],
+      "title": "The Hour of Mercy",
+      "body": "Divine Mercy Sunday, and the chaplet at three: the image on the altar, a smaller crowd than the novena had promised, forty people and a man leading it who has led it for nine years and treats the parish's newer devotions as his. He has asked, this year, for the church to be open for confession from two to four as the feast asks, and for the plenary indulgence to be announced, and for the image to be moved permanently to the sanctuary, where the pastor before you would not have it. The finance council chair, who is not devout in this direction, has said in your hearing that the whole business is Polish and recent.",
+      "flavorPrompt": "Divine Mercy at three, the chaplet's leader asking for the image in the sanctuary, and a council chair who thinks it recent.",
+      "choices": [
+        {
+          "id": "confessions_yes",
+          "label": "Hear confessions from two, announce the indulgence, and leave the image where it is",
+          "default": true,
+          "outcome": "You sit in the confessional from two, and a line forms for the first time since Lent, and the indulgence is announced, and the image stays in the side chapel with fresh flowers. The chaplet's leader takes two out of three. The council chair notices nothing, which was the point.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "the_sanctuary",
+          "label": "Move the image into the sanctuary for good",
+          "outcome": "You move it. The chaplet's leader is transfigured. The council chair says that you have made the church look like a shrine and two of the older parishioners agree, and three of the younger ones do not, and the argument runs for a month in the bulletin's letters and then stops, because the image is there and people stop seeing it.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "progressive_bloc",
+              "delta": -3
+            },
+            {
+              "target": "flag",
+              "key": "decor:mercy_image",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fe_ascension_first_communion",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "severity": "ROUTINE",
+      "category": "group",
+      "baseWeight": 14,
+      "suppressYears": 2,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "feast",
+          "key": "ascension"
+        }
+      ],
+      "title": "First Communion",
+      "body": "The Ascension, kept on the Sunday as the region keeps it, and the first communion class makes its communion at the ten-thirty: twenty-three children in white, photographed to distraction, the church full of grandparents. {@dre} has drilled them for six months. In the front pew a boy of eight has his hands folded and his face set and is, you can see from the altar, going to be sick. His mother has seen it too. The line is forming. He is fourth.",
+      "flavorPrompt": "First communions on Ascension Sunday, and a boy fourth in line who is going to be sick.",
+      "choices": [
+        {
+          "id": "to_him",
+          "label": "Go down to him, now, and bring him up first, quietly",
+          "default": true,
+          "outcome": "You step down and go to him and say his name and bring him up first, alone, before the line, and he receives and goes back and is not sick, and the photographs are wrong and nobody minds. His mother writes you a note that {@secretary} keeps in the drawer for years. The other twenty-two follow in order.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "relationship",
+              "key": "@dre",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "feast:first_communion_first",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "let_it_run",
+          "label": "Let the line run as rehearsed; he will manage",
+          "outcome": "He manages, barely, and is sick in the vestibule afterwards, and the photographs are perfect. {@dre} says the rehearsal held. His mother does not say anything.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@dre",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": -1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fe_sacred_heart_enthronement",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 12,
+      "suppressYears": 3,
+      "pressure": [
+        "friendship_vs_duty"
+      ],
+      "requires": [
+        {
+          "type": "feast",
+          "key": "sacred_heart"
+        }
+      ],
+      "title": "The Enthronement",
+      "body": "The Sacred Heart, a Friday in June, and three families have asked for the enthronement in their homes: the old devotion, the image blessed and hung in the living room, the family kneeling, the prayer read from a card. Two of the homes are ordinary. The third is the home of a man who runs the parish's finances, whose wife has asked for the enthronement without telling him and who, when you arrive at seven, is not there, and does not come, and whose absence the wife explains three different ways in the first ten minutes. The children are in their good clothes. The image is on the wall already.",
+      "flavorPrompt": "The Sacred Heart enthroned in three homes, and in the third the husband absent and the wife explaining.",
+      "choices": [
+        {
+          "id": "go_on",
+          "label": "Enthrone the image with the family that is there, and say nothing of who is not",
+          "default": true,
+          "outcome": "You do it with the wife and the children, and the prayer, and the card, and you say nothing about the empty chair, and when you are leaving the wife says thank you in a way that means for that. The husband thanks you the next Sunday, stiffly, for coming to his home. Something in the house has moved; you do not know which way.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "feast:enthroned_absent",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "another_evening",
+          "label": "Offer to come back another evening when he can be there",
+          "outcome": "You say the enthronement is the family's and the family should be all there, and offer another evening, and the wife says yes and does not call. The image stays on the wall unblessed, or blessed by her. He does not mention it.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": -1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fe_peter_paul_the_pence",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "severity": "ROUTINE",
+      "category": "finance",
+      "baseWeight": 12,
+      "suppressYears": 3,
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "requires": [
+        {
+          "type": "feast",
+          "key": "sts_peter_paul"
+        }
+      ],
+      "title": "Peter's Pence",
+      "body": "Sts. Peter and Paul, and the Peter's Pence collection, taken as a second collection at every Mass for the Holy Father's charities. The chancery's letter is to be read from the pulpit. A parishioner has written to you, a long letter, well argued, about what Rome has done with the money in recent years, with clippings, and asks that the parish not take the collection this year, or that you read her letter beside the chancery's. She signs it with her name and her forty years in the parish. The counters have the envelopes ready.",
+      "flavorPrompt": "Peter's Pence on Peter and Paul, the chancery's letter, and a parishioner's long letter asking the parish not to take it.",
+      "choices": [
+        {
+          "id": "take_it",
+          "label": "Read the chancery's letter, take the collection, and answer hers in person",
+          "default": true,
+          "outcome": "You read the letter and take the collection and, on Tuesday, sit in her kitchen for an hour and let her say all of it. You do not agree with all of it. She gives, that Sunday, to the poor box instead, and tells you so, and you tell her that is allowed. The collection is about the usual.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "beside_it",
+          "label": "Read the chancery's letter and, beside it, say that some in the parish have questions and where they may write",
+          "outcome": "You read the chancery's letter and add two sentences of your own, that some in the parish have questions about the collection and that the nuncio's office has an address, and the collection is down a third. The chancery hears, as it hears everything. The woman's next letter is shorter.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": -4
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": -2
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "progressive_bloc",
+              "delta": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fe_all_saints_the_costumes",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "severity": "ROUTINE",
+      "category": "group",
+      "baseWeight": 12,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "feast",
+          "key": "all_saints"
+        }
+      ],
+      "title": "Dressed as Saints",
+      "body": "All Saints, and the school Mass, and the children come dressed as saints: a dozen Marys, three Francises with stuffed birds, a Michael with a sword the principal has confiscated, and one boy, about nine, dressed as something nobody can identify, in a brown robe with a rope and a cardboard box on his head. He says he is St. Isidore, and that his grandfather was a farmer, and that the box is a beehive, and the class laughs. He is not laughing. You are at the ambo and the children are lined up to say who they are.",
+      "flavorPrompt": "All Saints at the school Mass, a dozen Marys, and one boy as St. Isidore with a beehive on his head.",
+      "choices": [
+        {
+          "id": "isidore",
+          "label": "Ask him about Isidore, in front of everyone, and let him tell it",
+          "default": true,
+          "outcome": "You ask him to tell the church about Isidore, and he does, about the angels ploughing while the saint prayed, and the grandfather, and the bees, and the church listens, and the class stops laughing. The principal gives Michael his sword back at the door. The boy's grandfather, it turns out, is in the third pew, and has not been to Mass in some years.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "feast:isidore",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "move_on",
+          "label": "Smile, say St. Isidore, and move down the line",
+          "outcome": "You say St. Isidore, patron of farmers, and move on, and the Marys say Mary, and the Mass is the Mass. The boy is fine. He is nine; he is always fine.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fe_advent_the_schedule",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "severity": "ROUTINE",
+      "category": "admin",
+      "baseWeight": 14,
+      "suppressYears": 2,
+      "pressure": [
+        "money",
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "feast",
+          "key": "advent_start"
+        }
+      ],
+      "title": "The Christmas Schedule",
+      "body": "The first Sunday of Advent, the wreath blessed and the first candle lit by the youngest family, who were late, and the first question at the door: when will the Christmas Mass schedule be out. The schedule is the year's argument. The four o'clock vigil is the one everyone wants and the one the church cannot hold; the midnight is the one the choir wants and forty people come to; the pastor before you added a two o'clock that the older people call the early bird and the younger ones call the getaway. {@secretary} needs it for the bulletin by Wednesday. The music director has opinions and has scheduled a meeting to have them.",
+      "flavorPrompt": "Advent begins with the question of the Christmas schedule: the four o'clock nobody fits in, the midnight nobody comes to.",
+      "choices": [
+        {
+          "id": "two_vigils",
+          "label": "Two vigils, four and six, and a midnight, and no two o'clock",
+          "default": true,
+          "outcome": "Four, six, midnight, and the morning. The two o'clock people write. The four o'clock is still full and the six is half, and the midnight has the choir and eighty people, which is double. It is the schedule the parish keeps for a decade and calls, by the end, the way it has always been.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "christmas:schedule_set",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "as_before",
+          "label": "Keep the schedule as it was; Advent is not the time",
+          "outcome": "You keep it as it was, and the four o'clock overflows into the hall with a speaker that works most of the time, and the two o'clock has its forty, and the midnight its forty, and the music director says at the meeting that he has never been listened to and will not be, which is true and not your fault.",
+          "effects": [
+            {
+              "target": "strain",
+              "key": "",
+              "delta": -1
+            },
+            {
+              "target": "relationship",
+              "key": "@music_director",
+              "delta": -3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fe_immaculate_conception_noon",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 12,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "feast",
+          "key": "immaculate_conception"
+        }
+      ],
+      "title": "The Noon Mass",
+      "body": "The Immaculate Conception, a holy day of obligation in Advent, and the noon Mass is the one the workers come to: in from the offices and the shops, forty minutes, back by one. You have twenty-two minutes for a Mass with a homily and the Gloria in it, and the lector is reading slowly, and at the sign of peace a man three pews back takes a call on his phone and stays on it. The people around him are looking at you. The people behind them are looking at their watches.",
+      "flavorPrompt": "The noon holy day Mass for the downtown workers, twenty-two minutes, and a man on his phone at the sign of peace.",
+      "choices": [
+        {
+          "id": "the_pace",
+          "label": "Keep the pace, say nothing, and have them out by twelve-forty",
+          "default": true,
+          "outcome": "You keep the pace and say nothing and they are out by twelve-forty, the man on the phone included, who is off it by communion. The noon crowd comes back on the next holy day and the next, which is the whole of what the noon Mass is for. Nobody remembers the phone by Friday.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "the_phone",
+          "label": "Stop, and wait, and look at him until he puts it away",
+          "outcome": "You stop. The church waits. He puts the phone away, red, and the Mass goes on, and the workers are out at twelve-fifty and late back, and the story goes round the offices and is told for and against you in about equal parts. He does not come to the next holy day. The noon crowd is a little smaller and a little quieter.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": -1
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": -1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fe_holy_family_the_vows",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 12,
+      "suppressYears": 3,
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "requires": [
+        {
+          "type": "feast",
+          "key": "holy_family"
+        }
+      ],
+      "title": "Fifty Years",
+      "body": "The Holy Family, the Sunday in the octave of Christmas, and the blessing of families at the end of Mass, and a couple renewing their vows after fifty years, in the front pew, with their children and grandchildren behind them and a photographer who has been told twice about the flash. It is a good thing and the parish likes it. Before the Mass, in the sacristy, the wife takes you aside and says that she does not want to say the words, that she has been married fifty years and stayed and it was not always for love, and that she will stand up there for the children and she would like you to know that she will be saying it to God and not to him. She is dry-eyed. He is in the pew, waiting.",
+      "flavorPrompt": "Fifty years renewed on Holy Family Sunday, and a wife who tells the priest beforehand what the words will and will not mean.",
+      "choices": [
+        {
+          "id": "to_god",
+          "label": "Tell her that is who the words are said to, and go on",
+          "default": true,
+          "outcome": "You say that the vow was always said to God, in front of the man, and that she is not the first to notice, and that fifty years of staying is the vow kept whatever it was for. She looks at you for a moment and nods. She says the words. The photographer uses the flash. The parish sees a couple renewing their vows after fifty years and is right to.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "feast:fifty_years",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "the_blessing_only",
+          "label": "Offer to bless the family without the vows, and let her decide",
+          "outcome": "You offer to bless them as a family and leave the vows out, and she says the children would ask why, and says the words after all, and you are not sure you helped. The photographs are lovely.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fe_santo_nino_the_images",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "severity": "ROUTINE",
+      "category": "group",
+      "baseWeight": 14,
+      "suppressYears": 3,
+      "pressure": [
+        "friendship_vs_duty"
+      ],
+      "requires": [
+        {
+          "type": "feast",
+          "key": "santo_nino"
+        }
+      ],
+      "title": "The Santo Niño",
+      "body": "The feast of the Santo Niño, and the Filipino community of {parish} has it in hand: the images of the Child carried in procession, a hundred of them held up at the blessing like tickets, the Sinulog dancers in the aisle, a choir in Tagalog, and a hall that smells of lumpia by noon. The ten-thirty runs forty minutes over and the eleven-forty-five is waiting in the parking lot. The eleven-forty-five is the parish's older Anglo crowd, and one of them has come into the sacristy to say that this happens every January and that the parish is not, as far as he knows, in Manila.",
+      "flavorPrompt": "The Santo Niño feast running the ten-thirty forty minutes over, and the next Mass's crowd in the parking lot.",
+      "choices": [
+        {
+          "id": "let_it_run",
+          "label": "Let the feast run, and go out to the parking lot and say so",
+          "default": true,
+          "outcome": "You go out to the parking lot in your vestments and say that the feast will be over in ten minutes and that there is lumpia in the hall for anyone who wants it, and a few of them, not many, go to the hall. The man from the sacristy does not. The next year the Santo Niño Mass is moved to its own time in the afternoon, at the community's own asking, and is fuller for it.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "feast:santo_nino_lot",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "cut_it",
+          "label": "Ask the community to end the procession now, for the next Mass",
+          "outcome": "You ask, gently, through the community's leader, and the dancers stop, and the images are blessed in a hurry, and the eleven-forty-five starts eleven minutes late instead of forty. The community is polite about it for a year. The man from the sacristy says nothing, which is his thanks.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": -2
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fe_korean_martyrs_the_names",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "severity": "ROUTINE",
+      "category": "group",
+      "baseWeight": 14,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "feast",
+          "key": "korean_martyrs"
+        }
+      ],
+      "title": "A Hundred and Three",
+      "body": "The Korean Martyrs, and the Korean community of {parish} keeps it with a Mass in Korean and a lunch that lasts until evening. A Korean priest from the city was to come and preach and has telephoned to say his car will not start. The community's leader asks whether you will say the Mass, in English, with the readings in Korean, and whether you will read the names of the hundred and three at the end, which the visiting priest does every year, and which are in a booklet in a romanization you have never seen. There are forty minutes.",
+      "flavorPrompt": "The Korean Martyrs, the visiting priest's car dead, and the hundred and three names in a romanization the pastor has never seen.",
+      "choices": [
+        {
+          "id": "read_them",
+          "label": "Read the names, all of them, badly if need be",
+          "default": true,
+          "outcome": "You read the names. You get the first twenty wrong and the community corrects you, gently, aloud, name by name, and by the fortieth you have the sound of it, and by the last, Andrew Kim Taegon and Paul Chong Hasang, the church is saying them with you. The lunch lasts until evening. The community asks for you the next year, and the visiting priest's car is fine.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 4
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "feast:hundred_and_three",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "the_leader",
+          "label": "Say the Mass and have the community's leader read the names",
+          "outcome": "You say the Mass and the leader reads the names, well, and it is right that he does, and the community thanks you for the Mass. It is a good feast. It is theirs, and you were the priest at it.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 2
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

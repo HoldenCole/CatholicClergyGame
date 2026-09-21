@@ -1,0 +1,574 @@
+{
+  "_notes": "The Augustinian calendar as scenes: the father, Monica, the Conversion, Good Counsel, Rita, Nicholas. Keyed to OrderDef.feasts on the OSA entry through the feast condition; fired feast-first on the week.",
+  "events": [
+    {
+      "id": "osaf_augustine_the_confessions",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 20,
+      "suppressYears": 2,
+      "pressure": [
+        "doubt"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OSA",
+          "value": true
+        },
+        {
+          "type": "feast",
+          "key": "augustine"
+        }
+      ],
+      "title": "The Father's Day",
+      "body": "The solemnity of St. Augustine. The province's men who could come came, the bishop stayed for dinner, and at table, as the custom is, the Confessions are read instead of the usual: the eighth book, the garden, the child's voice over the wall. The reader this year is {@confrere}, and halfway through the passage his voice goes and he stops, and the refectory waits, and he starts again and gets through it. Afterwards, in the cloister, he tells you what it was. He has been thinking about leaving. Not planning; thinking. The passage caught him in the middle of the thought. He is telling you because you were next to him, and because it is the father's day, and because he has to tell someone. He asks you not to tell {@prior}.",
+      "flavorPrompt": "The Confessions read at table on the father's day, a confrere's voice going in the garden passage, and what it was.",
+      "choices": [
+        {
+          "id": "keep_it",
+          "label": "Keep it, and be the one he talks to",
+          "default": true,
+          "outcome": "You keep it. Over the autumn he talks to you three more times, in the cloister, never in a room, and by Advent the thought has turned into something else: not a decision to stay, exactly, but a decision to stop deciding for a while. He stays. Years later he tells you it was the father's day that did it, and the fact that you did not go to the prior. You are not sure he is right, and you do not say so.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": 12
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "osa:kept_a_confidence",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "the_prior",
+          "label": "Tell him you cannot keep it from the prior, and go with him",
+          "outcome": "You say that you will not go behind his back but that the prior has to know, and that you will go with him. He is angry, and then he is not, and the two of you knock on {@prior}'s door at nine that night. The prior listens, says almost nothing, and gives him a year at another house. He goes. Whether he comes back is his story and not yours; the house thinks you did right, mostly.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 4
+            },
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": -6
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "the_book",
+          "label": "Say nothing of your own; give him the ninth book to read",
+          "outcome": "You say that the eighth book is about the garden and the ninth is about what came after, and that he should read the ninth, and leave it there. He reads it. He does not talk to you about it again; he talks to {@old_friar}, who is better at this than you are, and who tells you nothing. The confrere stays. You are left with the feeling of having handed something on rather than carried it, which is not nothing.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": 4
+            },
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "osaf_augustine_the_novice",
+      "phase": [
+        "seminary"
+      ],
+      "campaign": "religious",
+      "severity": "ROUTINE",
+      "category": "formation",
+      "baseWeight": 22,
+      "once": true,
+      "pressure": [
+        "doubt"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OSA",
+          "value": true
+        },
+        {
+          "type": "feast",
+          "key": "augustine"
+        }
+      ],
+      "title": "Tolle, Lege",
+      "body": "Your first St. Augustine's day in the habit. At the Mass the Gospel is followed by the passage from the Confessions, the child's voice, take up and read, and you have heard it before and it does something to you this time that it did not do before, in the middle of the second reading, in front of the province. You get through the Mass. At the dinner {@novice_master} watches you not eat and says nothing. In the evening, at recreation, he sits down beside you and says that the father heard a child's voice and you are twenty-six and have heard something too, and that he would like to know what, and that you may say it or not.",
+      "flavorPrompt": "A novice on his first Augustine's day, caught by the take-up-and-read passage in front of the province, and the novice master asking what he heard.",
+      "choices": [
+        {
+          "id": "say_it",
+          "label": "Say what it was",
+          "default": true,
+          "outcome": "You say it. It comes out badly and he does not help. When you have finished he says that it is a good sign, not a proof, and that most of the men who have sat where you are sitting heard something on this day or on another and that the ones who did not are not worse for it. He goes to bed. You do not, for a while. In the spring his report on you has a sentence in it about the father's day that the council reads twice.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "relationship",
+              "key": "@novice_master",
+              "delta": 8
+            },
+            {
+              "target": "flag",
+              "key": "osa:tolle_lege",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "not_yet",
+          "label": "Say you would rather not, not yet",
+          "outcome": "You say not yet. He nods and talks about the football, and you understand that the door is open and will stay open, and that he will not ask again. It is a month before you use it, and when you do, it is easier for having waited, or you tell yourself so.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "relationship",
+              "key": "@novice_master",
+              "delta": 3
+            }
+          ]
+        }
+      ],
+      "suppressYears": 99,
+      "yearGate": [
+        1,
+        2
+      ]
+    },
+    {
+      "id": "osaf_monica_the_mothers",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 18,
+      "suppressYears": 2,
+      "pressure": [
+        "friendship_vs_duty"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OSA",
+          "value": true
+        },
+        {
+          "type": "feast",
+          "key": "monica"
+        }
+      ],
+      "title": "Monica's Mass",
+      "body": "St. Monica, and the Mass for mothers: the church fuller than a weekday has any right to be, women of every age, some of them with sons to pray for and saying so. Afterwards a woman waits until the sacristy is empty. Her son is thirty-four and has not spoken to her in six years. She does not know why; she has a guess. He lives forty minutes away. She has come to Monica's Mass for six years and this is the first time she has asked a priest anything. She would like a Mass said. She would also like, she says, and stops, and says it, for someone to go and see him, because she cannot, and because Monica had a bishop to talk to and she has you.",
+      "flavorPrompt": "Monica's Mass for mothers, and a woman whose son has not spoken to her in six years asking the friar to go and see him.",
+      "choices": [
+        {
+          "id": "go",
+          "label": "Go and see the son, without promising anything",
+          "default": true,
+          "outcome": "You drive the forty minutes on a Thursday. He opens the door and knows who you are before you speak, which tells you something. He does not let you in. He talks on the step for twenty minutes, and the guess she had was wrong, and the truth is worse and not hers to fix. You do not carry it back to her whole. You say that he is alive and working and that he asked, at the end, whether she was well. That last part is true. She lights a candle at Monica's altar every week after that, and so, for a while, do you.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 5
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "osa:monicas_son",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "the_mass",
+          "label": "Say the Mass, and tell her the going is not yours to do",
+          "outcome": "You say the Mass, with her in the front pew, and afterwards you tell her, as gently as you have ever said anything, that a priest turning up on his doorstep is not what would bring him back, and that Monica's part was the years of waiting and not the bishop. She takes it. She keeps coming. Whether you were right is not something you will find out.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "osaf_conversion_the_renewal",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "ROUTINE",
+      "category": "formation",
+      "baseWeight": 16,
+      "suppressYears": 3,
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OSA",
+          "value": true
+        },
+        {
+          "type": "feast",
+          "key": "conversion_augustine"
+        }
+      ],
+      "title": "The Renewal",
+      "body": "The Conversion of St. Augustine, and in this province the custom is that the professed renew their vows at the end of the Mass, quietly, together, the formula read from a card. It takes ninety seconds. This year {@confrere} is standing beside you and when the moment comes he does not say the words. He holds the card and his mouth does not move, and he looks straight ahead, and then it is over and the Mass ends and he goes to the sacristy and hangs up his alb like anyone else. Nobody saw but you. At dinner he is ordinary. That night there is a knock at your door, and it is not him; it is {@prior}, who saw after all, and who asks you what you saw.",
+      "flavorPrompt": "The vows renewed on the Conversion, a confrere silent at the words, and the prior asking what the friar saw.",
+      "choices": [
+        {
+          "id": "the_truth",
+          "label": "Tell the prior what you saw, and that it is the confrere's to explain",
+          "default": true,
+          "outcome": "You say that he did not say the words, and that you do not know why, and that it is his to say. {@prior} nods and says that is what he saw too and that he wanted to know he had not imagined it. He talks to the confrere the next day, for two hours, with the door shut. The confrere renews his vows in private a month later, in the chapel, with the prior and you as witnesses, and does not say why then either, and does not have to.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            },
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": 4
+            }
+          ]
+        },
+        {
+          "id": "nothing",
+          "label": "Say you were looking at the card",
+          "outcome": "You say you were reading the card and saw nothing, which is a lie, and {@prior} knows it and lets it go. You go to the confrere yourself in the morning. He says that he was not sure he meant it and would not say it if he did not, and that he means it now, or nearly, and thanks you for not telling. The prior finds out anyway in the spring, from the confrere himself, and does not mention the lie to you, which is its own kind of mention.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": 8
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": -3
+            },
+            {
+              "target": "flag",
+              "key": "osa:covered_for_him",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "osaf_good_counsel_the_novena",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "ROUTINE",
+      "category": "chancery",
+      "baseWeight": 16,
+      "suppressYears": 3,
+      "pressure": [
+        "money"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OSA",
+          "value": true
+        },
+        {
+          "type": "feast",
+          "key": "good_counsel"
+        }
+      ],
+      "title": "Good Counsel",
+      "body": "Our Mother of Good Counsel, and the novena that ends in it has filled the church nine nights running with people the diocesan parishes have not seen in years: the devotion travels by word of mouth and by a website somebody's nephew built. The collection over nine nights is more than the house takes in a month. On the feast itself the pastor of the parish whose territory the priory sits in, {@deanery_priest}, comes to the Mass in choir, which is gracious, and afterwards says to you, in the sacristy, that his own collections have been down for the nine nights and that he assumes some arrangement can be made, since the people are, after all, his.",
+      "flavorPrompt": "The Good Counsel novena filling the priory church with the diocese's people, and the territorial pastor asking for a share of nine nights' collections.",
+      "choices": [
+        {
+          "id": "a_share",
+          "label": "Send him a share, unasked for by the prior, and say why",
+          "default": true,
+          "outcome": "You take it to {@prior}, who is not pleased, and then is, when you put it as the price of nine nights' peace. A tenth goes to the parish with a letter. The pastor is surprised and, being surprised, is generous back: the parish bulletin carries the novena the next year and the crowd is larger. The bursar says the arithmetic did not work and the prior says arithmetic is not what the house is for.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "diocesan_clergy",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "local_bishop",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -1
+            },
+            {
+              "target": "relationship",
+              "key": "@deanery_priest",
+              "delta": 8
+            }
+          ]
+        },
+        {
+          "id": "his_people",
+          "label": "Tell him the people came to Our Lady, not to a territory",
+          "outcome": "You say, pleasantly, that the people came to the novena and not to the priory, and that the novena is Our Lady's, and that if his parish would like to hold one you will preach it. He does not take it well. The dean hears a version. The house keeps the money and the priory church is a little more the neighbourhood's, and a little less the diocese's, than it was.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "diocesan_clergy",
+              "delta": -5
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "osaf_rita_the_impossible",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 18,
+      "suppressYears": 2,
+      "pressure": [
+        "belief_vs_safety"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OSA",
+          "value": true
+        },
+        {
+          "type": "feast",
+          "key": "rita"
+        }
+      ],
+      "title": "Rita's Roses",
+      "body": "St. Rita of Cascia, patron of impossible cases, and the church has more roses in it than a florist and more people than a Sunday, each with a rose and a reason. You bless roses at every Mass and hear more confessions than in Lent. In the line for the blessing at noon is a man of about fifty who has no rose. When he gets to you he says that his case is that he wants to stop drinking and has not, for eleven years, and that he was told Rita was for the impossible and he thought he would see. He is not drunk. He is not sober either. There are forty people behind him with roses.",
+      "flavorPrompt": "Rita's day, roses and impossible cases, and a man with no rose who wants to stop drinking and has not for eleven years.",
+      "choices": [
+        {
+          "id": "step_out",
+          "label": "Step out of the line with him, and let the roses wait",
+          "default": true,
+          "outcome": "You give the blessing to {@confrere} and take the man to the parlour. You give him twenty minutes and a telephone number and a rose from the altar, and say that the rose is Rita's and the number is his. Whether he calls it is his story. He comes back the next Rita's day, with a rose, and says eight months, and says it to you as if you had done something, which you had not, quite.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 4
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "osa:ritas_man",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "bless_and_send",
+          "label": "Bless him where he stands and tell him to come back Tuesday",
+          "outcome": "You put your hand on his head and say the blessing and tell him to come back Tuesday at four, and he says he will, and the line moves. He does not come Tuesday. He may have come to a different church; you tell yourself that. The roses are blessed on time.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 1
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "osaf_nicholas_the_bread",
+      "phase": [
+        "seminary",
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "ROUTINE",
+      "category": "admin",
+      "baseWeight": 16,
+      "suppressYears": 3,
+      "pressure": [
+        "money"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OSA",
+          "value": true
+        },
+        {
+          "type": "feast",
+          "key": "nicholas_tolentino"
+        }
+      ],
+      "title": "Nicholas's Bread",
+      "body": "St. Nicholas of Tolentino, and the bread: small rolls blessed at the Mass and given out in paper bags, for the sick, as the custom is. The kitchen has baked four hundred. A woman in the line takes three bags, and then comes round again for three more, and the friar handing them out, a novice, looks at you. She says they are for the nursing home on the avenue, where she volunteers, where there are ninety residents, most of them Catholic, none of them able to come. Behind her the line is long and the bread is not. {@prior} is saying the Mass and cannot be asked.",
+      "flavorPrompt": "The blessed bread of St. Nicholas, a woman taking bags for a nursing home of ninety, and the bread running short.",
+      "choices": [
+        {
+          "id": "the_nursing_home",
+          "label": "Give her what she needs, and go to the nursing home yourself with the rest",
+          "default": true,
+          "outcome": "You give her the bags and, when the line is done and the bread is gone, you drive to the nursing home with the crumbs and the blessing and say a Mass in the dayroom for thirty people in wheelchairs, which was not in the day's plan and becomes part of it every year after. The kitchen bakes six hundred the next year. The woman is there every year, taking bags.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 4
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "osa:nicholas_dayroom",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "one_each",
+          "label": "One bag each, and the nursing home can send for its own next year",
+          "outcome": "You say one each, kindly, and she goes with three, and the line gets its bread, and the nursing home gets nothing this year. She writes to the prior. The prior says at chapter that the bread is for the sick and that next year the nursing home will be first, and looks at you when he says it, not unkindly.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": -2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 1
+            }
+          ]
+        }
+      ],
+      "yearGate": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    }
+  ]
+}

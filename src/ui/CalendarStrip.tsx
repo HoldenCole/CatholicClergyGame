@@ -5,6 +5,7 @@ import { upcomingFeasts } from '@/engine/feasts';
 import { offerById } from '@/content/offers';
 import { pendingAppointment } from '@/engine/appointment';
 import { housesOf } from '@/systems/houses';
+import { upcomingOrderFeasts } from '@/systems/religious/feasts';
 
 const SEASON_COLOR: Record<string, string> = { advent: '#6b4fa0', christmas: '#e6dcc4', ordinary: '#3f7a3f', lent: '#6b4fa0', holy_week: '#8a1f1f', easter: '#e6dcc4' };
 
@@ -14,7 +15,11 @@ export default function CalendarStrip() {
   if (!game) return null;
   const parish = game.world?.parishes.find((p) => p.id === game.assignment?.parishId);
   const season = seasonOf(game.clock);
-  const ahead = upcomingFeasts(game.clock, parish, 5);
+  const parishAhead = upcomingFeasts(game.clock, parish, 5);
+  // A friar keeps two calendars: the parish's, and the order's own days among them.
+  const ahead = game.religious
+    ? [...parishAhead, ...upcomingOrderFeasts(game, 4).map((f) => ({ key: `order:${f.key}`, label: f.label.charAt(0).toUpperCase() + f.label.slice(1), weeks: f.weeks, day: f.day }))].sort((a, b) => a.day - b.day).slice(0, 5)
+    : parishAhead;
   const week = game.clock.week;
   const letters = game.offers.map((o) => ({ id: o.offerId, title: offerById(o.offerId)?.title ?? 'a letter', weeks: o.expiresWeek - week })).filter((l) => l.weeks >= 0);
   const asked = pendingAppointment(game);
