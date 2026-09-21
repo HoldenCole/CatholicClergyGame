@@ -8,7 +8,7 @@ export default function LetterPanel() {
   if (!game || game.mode.kind !== 'letter') return null;
   const l = game.mode.letter;
   return (
-    <Panel title={l.sort === 'review' ? 'The year in review' : "The bishop's desk"} tilt={l.sort === 'review' ? 'l' : 'r'}>
+    <Panel title={l.sort === 'review' ? 'The year in review' : l.sort === 'provincial' ? "The provincial's desk" : "The bishop's desk"} tilt={l.sort === 'review' ? 'l' : 'r'}>
       <h2 className="title text-xl">{l.title}</h2>
       {l.body.map((p, i) => (
         <p key={i} className="mt-2 leading-relaxed">{p}</p>

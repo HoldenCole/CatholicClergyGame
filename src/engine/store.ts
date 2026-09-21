@@ -31,6 +31,7 @@ import { askPermission as askPermissionSys } from '@/systems/religious/poverty';
 import { askDispensation as askDispensationSys } from '@/systems/religious/study';
 import { befriend as befriendSys } from '@/systems/religious/friendship';
 import { appointOffice } from '@/systems/religious/offices';
+import { askHouseOffice as askHouseOfficeSys, endApostolate as endApostolateSys, fileRequest as fileFriarRequestSys, resignHouseOffice as resignHouseOfficeSys, withdrawRequest as withdrawFriarRequestSys } from '@/systems/religious/requests';
 import { decideAssignment, receiveAssignment, statePreference as statePreferenceSys } from '@/systems/religious/obedience';
 import { castVote, closeChapter, holdElection, resolveElection, returnToRanks, signalWillingness, speakFor, steerBloc } from '@/systems/religious/chapter';
 import { fromDayNumber } from './calendar';
@@ -110,6 +111,12 @@ export interface GameStore {
   askDispensation(): void;
   befriend(npcId: string): void;
   acceptOffice(id: string): void;
+  /** Asking for a work: an office of the house from the prior, a work beyond the house from the provincial. E3 §3.10. */
+  askHouseOffice(id: string): void;
+  resignHouseOffice(): void;
+  fileFriarRequest(apostolateId: string, houseId?: string): void;
+  withdrawFriarRequest(): void;
+  endApostolate(): void;
   /** The consultation and the letter. E3 §3.1. */
   statePreference(houseId: string | null, objection: boolean): void;
   letProvincialDecide(): void;
@@ -682,6 +689,25 @@ export const useGameStore = create<GameStore>()((set, get) => ({
   },
   acceptOffice(id) {
     update(set, get, (game) => appointOffice(game, id));
+  },
+  askHouseOffice(id) {
+    update(set, get, (game, r) => {
+      const res = askHouseOfficeSys(game, id, r.derive(`house-office:${id}:${game.clock.week}`));
+      set({ lastPriorLine: res.line });
+      return res.state;
+    });
+  },
+  resignHouseOffice() {
+    update(set, get, (game) => resignHouseOfficeSys(game));
+  },
+  fileFriarRequest(apostolateId, houseId) {
+    update(set, get, (game) => fileFriarRequestSys(game, apostolateId, houseId));
+  },
+  withdrawFriarRequest() {
+    update(set, get, (game) => withdrawFriarRequestSys(game));
+  },
+  endApostolate() {
+    update(set, get, (game) => endApostolateSys(game, 'resigned'));
   },
   statePreference(houseId, objection) {
     update(set, get, (game) => statePreferenceSys(game, houseId, objection));

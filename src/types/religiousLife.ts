@@ -45,6 +45,64 @@ export interface OrderOfficeDef {
   line: string;
 }
 
+/**
+ * An office of the house, in the prior's gift: the procurator, the sacristan,
+ * the local promoter of vocations. Asked at the table and answered there.
+ * E3 §3.10. It costs blocks every week and pays a little back.
+ */
+export interface HouseOfficeDef {
+  id: string;
+  label: string;
+  /** Blocks a week it takes. */
+  ap: number;
+  /** What the prior looks for, as stat floors. */
+  requires?: Partial<Record<StatKey, number>>;
+  /** Solemnly professed only, or ordained only. */
+  vows?: 'simple' | 'solemn';
+  ordained?: boolean;
+  /** What a week of it does, small. */
+  weekly?: { target: string; key: string; delta: number }[];
+  line: string;
+}
+
+/**
+ * A work beyond the house's own, asked of the provincial by letter. E3 §3.10.
+ * A local one is done from the house he lives in and needs the diocese to
+ * have the institution; a house one moves him to a house of that kind.
+ */
+export interface ApostolateDef {
+  id: string;
+  label: string;
+  kind: 'local' | 'house';
+  /** kind house: the kind of house it lives in, and the work there. */
+  houseKind?: HouseKind;
+  work?: string;
+  /** kind local: the diocese must hold this institution (types/world.ts). None: every diocese has one. */
+  institution?: string;
+  /** The bishop appoints to it on the provincial's presentation: the local standing is engaged. */
+  bishop?: boolean;
+  /** Blocks a week, when local. */
+  ap: number;
+  requires?: Partial<Record<StatKey, number>>;
+  minYears?: number;
+  /** What a week of it does, small. */
+  weekly?: { target: string; key: string; delta: number }[];
+  line: string;
+}
+
+/** The letter to the provincial asking for a work. One stands at a time. E3 §3.10. */
+export interface FriarRequest {
+  apostolateId: string;
+  /** kind house: the house asked for. */
+  houseId?: string;
+  label: string;
+  week: number;
+  /** Letters written in this career, this one included. */
+  asked: number;
+  answeredWeek?: number;
+  outcome?: 'granted' | 'refused' | 'withdrawn';
+}
+
 /** A credential of the order's own. E3 §6.4, §7.4. */
 export interface OrderCredentialDef {
   id: string;
@@ -129,6 +187,10 @@ export interface OrderDef {
   saints: string[];
   offices: OrderOfficeDef[];
   credentials: OrderCredentialDef[];
+  /** The house's own offices, in the prior's gift. E3 §3.10. */
+  houseOffices: HouseOfficeDef[];
+  /** The works a friar may ask the provincial for. E3 §3.10. */
+  apostolates: ApostolateDef[];
 }
 
 /** What drew him to this order, and how he stands to its province. E3 §4.2–4.3. */
@@ -353,6 +415,14 @@ export interface ReligiousPlayerState {
   chapter?: Chapter;
   /** An appointed office held now. */
   appointment?: { id: string; startWeek: number; endWeek: number };
+  /** An office of the house he holds, in the prior's gift. E3 §3.10. */
+  houseOffice?: { id: string; startWeek: number };
+  /** A local work beyond the house's own, done from it. E3 §3.10. */
+  apostolate?: { id: string; dioceseId: string; label: string; startWeek: number };
+  /** The letter to the provincial that stands now, or the last one answered. */
+  request?: FriarRequest;
+  /** Letters to the provincial written in this career. */
+  requestsMade?: number;
   why?: WhyOrder;
   tie?: ProvinceTie;
   /**
