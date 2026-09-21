@@ -11,3 +11,6 @@ export * from './study';
 export * from './formation';
 export * from './offices';
 export * from './newGame';
+export * from './friendship';
+export * from './restless';
+export * from './feel';
