@@ -33,6 +33,7 @@ import { befriend as befriendSys } from '@/systems/religious/friendship';
 import { appointOffice } from '@/systems/religious/offices';
 import { answerBishopAsk as answerBishopAskSys } from '@/systems/religious/bishopAsks';
 import { answerPastorAsk as answerPastorAskSys } from '@/systems/religious/pastorAsks';
+import { answerDirectionAsk as answerDirectionAskSys, endDirectee as endDirecteeSys } from '@/systems/religious/directing';
 import { askHouseOffice as askHouseOfficeSys, endApostolate as endApostolateSys, fileRequest as fileFriarRequestSys, resignHouseOffice as resignHouseOfficeSys, withdrawRequest as withdrawFriarRequestSys } from '@/systems/religious/requests';
 import { decideAssignment, receiveAssignment, statePreference as statePreferenceSys } from '@/systems/religious/obedience';
 import { castVote, closeChapter, holdElection, resolveElection, returnToRanks, signalWillingness, speakFor, steerBloc } from '@/systems/religious/chapter';
@@ -123,6 +124,9 @@ export interface GameStore {
   answerBishopAsk(accept: boolean): void;
   /** A pastor of the diocese asked the prior for him, and the prior said yes. E3 §3.12. */
   answerPastorAsk(yes: boolean): void;
+  /** Direction given, under the seal. E3 §3.13. */
+  answerDirectionAsk(yes: boolean): void;
+  endDirectee(npcId: string): void;
   /** The consultation and the letter. E3 §3.1. */
   statePreference(houseId: string | null, objection: boolean): void;
   letProvincialDecide(): void;
@@ -720,6 +724,12 @@ export const useGameStore = create<GameStore>()((set, get) => ({
   },
   answerPastorAsk(yes) {
     update(set, get, (game) => answerPastorAskSys(game, yes));
+  },
+  answerDirectionAsk(yes) {
+    update(set, get, (game) => answerDirectionAskSys(game, yes));
+  },
+  endDirectee(npcId) {
+    update(set, get, (game) => endDirecteeSys(game, npcId));
   },
   statePreference(houseId, objection) {
     update(set, get, (game) => statePreferenceSys(game, houseId, objection));

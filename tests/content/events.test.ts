@@ -62,6 +62,11 @@ const SELECTORS = [
   '@group_leader',
   '@dean',
   '@deanery_priest',
+  '@diocesan_classmate',
+  '@closest_diocesan_classmate',
+  '@diocesan_seminarian',
+  '@directee',
+  '@former_friar',
   '@resident',
   '@seminarian',
   '@deacon',
@@ -85,6 +90,7 @@ const EFFECT_TARGETS = [
   'stat', 'reputation', 'relationship', 'flag', 'group', 'money', 'ap', 'thread', 'position',
   'pillar', 'alignment', 'outspokenness', 'honesty', 'credential', 'trait', 'archetype',
   'concern', 'risk', 'npc', 'end', 'decor', 'permission', 'trait_known', 'transfer', 'building', 'club', 'bond', 'place', 'record', 'strain', 'arc', 'ministry',
+  'province', 'crossing',
 ];
 const DECOR_PLACES = ['church', 'chapel', 'office', 'rectory', 'seminary_room', 'chancery'];
 const DECOR_SLOTS = ['sanctuary', 'altar_rail', 'orientation', 'confessionals', 'choir', 'statues', 'tabernacle', 'mass_form', 'music', 'style', 'devotion', 'seating', 'wall', 'desk', 'floor', 'corner'];
@@ -246,7 +252,7 @@ function checkEffect(e: Effect, where: string, problems: Problem[]): void {
   }
   if (e.target === 'reputation' && !ALL_CONSTITUENCY_KEYS.includes(e.key as never)) problems.push(`${where}: bad reputation key ${e.key}`);
   if (e.target === 'archetype' && !ARCHETYPES.includes(e.key as never)) problems.push(`${where}: bad archetype ${e.key}`);
-  if ((e.target === 'relationship' || e.target === 'npc' || e.target === 'trait_known') && e.key.startsWith('@') && !SELECTORS.includes(e.key)) {
+  if ((e.target === 'relationship' || e.target === 'npc' || e.target === 'trait_known' || e.target === 'crossing') && e.key.startsWith('@') && !SELECTORS.includes(e.key)) {
     problems.push(`${where}: unknown selector ${e.key}`);
   }
   if (e.target === 'npc' && !NPC_STATUSES.includes(String(e.value))) problems.push(`${where}: npc effect needs a status value`);

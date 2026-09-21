@@ -1,5 +1,6 @@
 import { formationYearEnd, formationYearStart } from '@/systems/religious/formation';
 import { consult } from '@/systems/religious/obedience';
+import { diocesanClassmatesOrdain, diocesanClassmatesStart } from '@/systems/religious/diocesanClassmates';
 import { createRng } from './rng';
 import { handOnOffices, isMoveTo, keepOffices, officesHeld } from '@/systems/offices';
 import type { Beat, GameEvent, GameState, Pillar, SeminaryState, SummerAssignment } from '@/types';
@@ -286,7 +287,8 @@ function advanceYear(state: GameState): GameState {
     seminary: { ...sem, ...milestones, year: sem.year + 1, emphasis: null, playedWeeks: [] },
     mode: { kind: 'year_start', year: sem.year + 1 },
   };
-  return opened.religious ? formationYearStart(opened) : opened;
+  // The studium's first year brings the diocesan seminary's men to the same lectures. E3 §3.13.
+  return opened.religious ? diocesanClassmatesStart(formationYearStart(opened), createRng(`${state.seed}:dcm:${state.clock.week}`)) : opened;
 }
 
 function addCareerNote(state: GameState, text: string): GameState {
@@ -323,7 +325,7 @@ export function ordain(state: GameState, rng: Rng): GameState {
   if (!ordained.world) return { ...ordained, mode: { kind: 'clock' } };
   const withCareer = beginCareer(ordained, rng);
   // A friar is not assigned by the bishop: the provincial consults him, and the letter follows. E3 §3.1.
-  if (withCareer.religious) return { ...consult(withCareer, rng.derive('consultation'), 'first'), mode: { kind: 'clock' } };
+  if (withCareer.religious) return { ...consult(diocesanClassmatesOrdain(withCareer, rng.derive('dcm-ordain')), rng.derive('consultation'), 'first'), mode: { kind: 'clock' } };
   const assignment = assignFirstParish(withCareer, rng.derive('assignment'));
   const noted: GameState = {
     ...withCareer,

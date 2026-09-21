@@ -42,7 +42,7 @@ export function inDiocese(state: GameState, npc: Npc): boolean {
 
 function activeClassmates(state: GameState): Npc[] {
   return Object.values(state.npcs)
-    .filter((n) => n.role === 'classmate' && n.status === 'active')
+    .filter((n) => n.role === 'classmate' && n.status === 'active' && !n.tags.includes('diocesan_classmate') && !n.tags.includes('diocesan_seminarian'))
     .sort((a, b) => (a.id < b.id ? -1 : 1));
 }
 
@@ -98,6 +98,28 @@ export function resolveSelector(state: GameState, key: string, rng?: Rng): Npc |
       const house = state.religious?.houseId ? state.orderHouses?.[state.religious.houseId] : undefined;
       const men = (house?.memberIds ?? []).map((id) => state.npcs[id]).filter((n): n is Npc => !!n && n.status === 'active').sort((a, b) => a.birthYear - b.birthYear || (a.id < b.id ? -1 : 1));
       return men[0] ?? null;
+    }
+    // The diocese's men a friar knows: the seminary's classmates, its seminarians, the ones he directs. E3 §3.13.
+    case 'diocesan_classmate':
+    case 'closest_diocesan_classmate': {
+      const men = (state.religious?.diocesanClassmateIds ?? []).map((id) => state.npcs[id]).filter((n): n is Npc => !!n && n.status === 'active');
+      if (!men.length) return null;
+      if (name === 'closest_diocesan_classmate') return men.reduce((best, n) => (n.relationship > best.relationship ? n : best), men[0]!);
+      return rng ? rng.pick(men) : men[0]!;
+    }
+    case 'diocesan_seminarian': {
+      const did = state.world?.diocese.presetId ?? '';
+      const men = (state.religious?.seminarians?.[did] ?? []).map((id) => state.npcs[id]).filter((n): n is Npc => !!n && n.status === 'active');
+      return men.length ? (rng ? rng.pick(men) : men[0]!) : null;
+    }
+    case 'directee': {
+      const men = (state.religious?.directees ?? []).map((d) => state.npcs[d.npcId]).filter((n): n is Npc => !!n && n.status === 'active');
+      return men.length ? (rng ? rng.pick(men) : men[0]!) : null;
+    }
+    // A priest who was a religious, now a curate of this parish. E3 §3.14.
+    case 'former_friar': {
+      const pid = state.assignment?.parishId;
+      return Object.values(state.npcs).find((n) => n.status === 'active' && n.tags.includes('ex_religious') && (!pid || n.tags.includes(`parish:${pid}`))) ?? null;
     }
     case 'resident': {
       const id = state.parish?.resident?.npcId;

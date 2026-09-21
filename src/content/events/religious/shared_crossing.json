@@ -1,0 +1,476 @@
+{
+  "_notes": "Shared religious life: crossing over, from the province's side. E3 §3.14. The confrere who leaves is marked by the crossing effect and goes a year on; the diocesan priest who entered is a novice of the province.",
+  "events": [
+    {
+      "id": "cr_novice_from_the_diocese",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "formation",
+      "baseWeight": 11,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "crossing:someone_entered",
+          "value": true
+        }
+      ],
+      "title": "The Novice Who Was a Pastor",
+      "body": "The novitiate has a novice of forty-four this year who was a pastor of the diocese until Easter, and the province has sent him to your house for a month, as it sends novices, and he has sat at your table and said, over the soup, that he has not eaten with other priests every night since the seminary and does not know what to do with his hands.",
+      "choices": [
+        {
+          "id": "hands",
+          "label": "Tell him what to do with his hands: pass the bread",
+          "outcome": "He laughs and passes it, and it is the first thing, and the month is the second, and he says at profession that a friar told him to pass the bread and that it was the whole of the formation, and the novice master does not disagree.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "crossing:passed_the_bread",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "parish",
+          "label": "Ask him about his parish, since he will not be asked",
+          "outcome": "He talks for an hour about a parish he will never see again, and it is a grief and he had not known it was, and you sit with it, and he is a better novice for having said it, and writes to the parish once, which the novice master allows.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "crossing:heard_his_parish",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "bishop",
+          "label": "Ask him what his bishop said",
+          "outcome": "He tells you: that a bishop cannot keep a man from a vocation and that this one had tried, and that the letter of release was cold, and that the chancery had lost a pastor and did not forgive the order, and you learn what the diocese thinks of a man who crosses, from the man.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "local_bishop",
+              "delta": -1
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "crossing:heard_the_bishop",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cr_bishop_letter_after",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 9,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "crossing:someone_entered",
+          "value": true
+        },
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 2
+        }
+      ],
+      "title": "The Bishop's Letter After",
+      "body": "The bishop of the diocese that lost a priest to the order has written to the provincial, and the provincial has sent the letter to the house with a note that says only that the house should know what the diocese thinks, and the letter says that the diocese does not recruit from the order's novitiates and would be glad of the courtesy in return, and names you, as the friar who was seen with the man.",
+      "choices": [
+        {
+          "id": "answer",
+          "label": "Write to the bishop's office yourself: what was said, and what was not",
+          "outcome": "The letter is honest and the office reads it as one, and the bishop is not mollified and is informed, and the provincial says you should have let him answer, and says it mildly, since the letter was good.",
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 4
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "local_bishop",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": -1
+            },
+            {
+              "target": "flag",
+              "key": "crossing:answered_the_bishop",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "provincial",
+          "label": "Let the provincial answer, and say nothing",
+          "outcome": "The provincial answers in a page that is the order's whole position on vocations, and the bishop's office files it, and the friars in that diocese are cool with the chancery for a reign, and the man is a friar, and it was worth it, the province thinks.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "local_bishop",
+              "delta": -3
+            }
+          ]
+        },
+        {
+          "id": "visit",
+          "label": "Ask to see the bishop",
+          "outcome": "He sees you, for ten minutes, and says the thing, and you say that a man's vocation is his, and he says he knows, and that he had liked that pastor, and it is the first honest thing said between the diocese and the order about the man, and the bishop's office is a little warmer after, oddly.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "local_bishop",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "diocesan_clergy",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "crossing:saw_the_bishop",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cr_confrere_leaves_for_diocese",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "classmate",
+      "baseWeight": 9,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "friendship_vs_duty"
+      ],
+      "requires": [
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 5
+        }
+      ],
+      "title": "The Confrere Who Goes to the Diocese",
+      "body": "{@confrere} has told the prior and then the house, at chapter, that he is leaving the order for the diocese, since the bishop has offered him a parish and incardination and he has not, he says, been a friar in his heart for five years, and the house is quiet in the way houses are when a thing has been said that half of them had known.",
+      "choices": [
+        {
+          "id": "bless",
+          "label": "Say at chapter that the house should let him go with a blessing",
+          "outcome": "The house does, mostly. He is a pastor of the diocese in a year and comes to supper on Thursdays, since the house allows it, and is the diocese's man who knows a house, and says the blessing was the thing, and the prior says you said what he should have.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 3
+            },
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": 8
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "crossing:blessed_the_leaver",
+              "value": true
+            },
+            {
+              "target": "crossing",
+              "key": "@confrere",
+              "value": "leave_order"
+            }
+          ]
+        },
+        {
+          "id": "argue",
+          "label": "Argue with him, once, in his cell",
+          "outcome": "He listens and goes anyway, since he had decided, and the argument is between you for a decade until it is not, and he says at your jubilee that the argument was the last time the order fought for him, and that he had wanted it to.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": -3
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "crossing:argued_with_the_leaver",
+              "value": true
+            },
+            {
+              "target": "crossing",
+              "key": "@confrere",
+              "value": "leave_order"
+            }
+          ]
+        },
+        {
+          "id": "mark",
+          "label": "Say nothing at chapter, and help him pack",
+          "outcome": "It is the kindest thing and the quietest, and the house says the friar who helped him pack was the one who understood, and he is a diocesan priest, and the box with his books has your handwriting on it, and he keeps the box.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 1
+            },
+            {
+              "target": "crossing",
+              "key": "@confrere",
+              "value": "leave_order"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cr_meets_the_leaver_as_curate",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "group",
+      "baseWeight": 8,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "crossing:confrere_left",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "deanery:friar",
+          "value": true
+        }
+      ],
+      "title": "The Friar Who Left, at the Deanery",
+      "body": "The deanery meeting has a new curate at it, and he was a friar of the province until two years ago, and he has come across the room in a clerical shirt to say that he had hoped the friar would be here, since nobody else in the deanery knows what he was, and that the pastor he works for thinks the Office is a hobby.",
+      "choices": [
+        {
+          "id": "office",
+          "label": "Say the Office with him after the meeting, in the car",
+          "outcome": "It is Vespers in a parked car in a rectory lot, and it is the first time in two years he has said it with anyone, and the deanery has two men in it who say the Office together on second Tuesdays, and the pastor he works for never knows why his curate is better on Wednesdays.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "diocesan_clergy",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "crossing:office_in_the_car",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "thursday",
+          "label": "Ask him to supper at the house on a Thursday",
+          "outcome": "He comes, and the house is careful and then is not, and he is the man who left at a table of the men who stayed, and it is the best supper of the year, and the prior says a man who left is still a man who knows the bread, and he comes most Thursdays.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "diocesan_clergy",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "crossing:leaver_at_supper",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "distance",
+          "label": "Be civil, and keep the distance the province would want",
+          "outcome": "He understands, since he was a friar, and is hurt, and the deanery has two men who nod, and he is a good curate and a lonely one, and you think about it on second Tuesdays for a year.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "diocesan_clergy",
+              "delta": -1
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": -1
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

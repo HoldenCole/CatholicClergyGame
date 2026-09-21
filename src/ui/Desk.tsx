@@ -28,6 +28,7 @@ import FurnishPanel from './scenes/FurnishPanel';
 import HousePanel from './religious/HousePanel';
 import HouseAsksPanel from './religious/HouseAsksPanel';
 import FriarWeekPanel from './religious/FriarWeekPanel';
+import DiocesanMenPanel from './religious/DiocesanMenPanel';
 
 const LABEL: Record<Sheet, string> = {
   week: 'Week',
@@ -89,6 +90,7 @@ export default function Desk() {
           <>
             <HousePanel />
             <HouseAsksPanel />
+            <DiocesanMenPanel />
           </>
         )}
         {open === 'parish' && <ParishPanel />}

@@ -522,6 +522,15 @@ export interface ReligiousPlayerState {
   pastorTask?: PastorTask;
   /** What the prior said to a pastor's letter, for the sheet. */
   pastorAskLine?: string;
+  /** The diocesan seminarians he studied beside at the union or the studium, who become the diocese's priests. E3 §3.13. */
+  diocesanClassmateIds?: string[];
+  /** The diocesan seminary's men, by diocese, generated when he teaches there. E3 §3.13. */
+  seminarians?: Record<string, string[]>;
+  /** The men he directs: diocesan seminarians and priests, under the seal. E3 §3.13. */
+  directees?: { npcId: string; sinceWeek: number; kind: 'seminarian' | 'priest' }[];
+  /** A man who has asked him for direction, on the table. */
+  directionAsk?: { npcId: string; week: number; kind: 'seminarian' | 'priest' };
+  directingLine?: string;
   why?: WhyOrder;
   tie?: ProvinceTie;
   /**

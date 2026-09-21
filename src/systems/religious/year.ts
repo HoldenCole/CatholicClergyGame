@@ -7,6 +7,10 @@ import { appointmentYear, conferCredentials } from './offices';
 import { currentHouse } from './house';
 import { BISHOP_ASKS, bishopAskYear } from './bishopAsks';
 import { pastorAskYear } from './pastorAsks';
+import { diocesanClassmateYear } from './diocesanClassmates';
+import { directingYear, seminaryMenStart, seminaryMenYear } from './directing';
+import { provinceYear } from './foundations';
+import { crossingYear } from './crossing';
 import { endApostolate } from './requests';
 import { bishopAskDefs } from '@/content/religious';
 
@@ -63,6 +67,14 @@ export function religiousYear(state: GameState, rng: Rng): GameState {
   if (work && (work.id.startsWith('chancery:') || bishopAskDefs.some((d) => d.apostolate === work.id)) && (next.character?.reputation.local_bishop ?? 0) <= BISHOP_ASKS.bishopEndsAt && rng.derive(`bishop-ends:${next.clock.week}`).chance(BISHOP_ASKS.bishopEndsChance)) {
     next = endApostolate(next, 'bishop');
   }
+  // Men crossing over, both ways; and the province closing or founding a house, which stops the clock with a letter. E3 §3.14.
+  next = crossingYear(next, rng.derive(`crossing:${next.clock.week}`));
+  next = provinceYear(next, rng.derive(`province:${next.clock.week}`));
+  if (next.mode.kind !== 'clock') return next;
+  // The diocese's men: the classmates from the seminary lectures, the seminary's men when he teaches there, and the ones he directs. E3 §3.13.
+  next = diocesanClassmateYear(next, rng.derive(`dcm:${next.clock.week}`));
+  next = seminaryMenYear(seminaryMenStart(next, rng.derive(`dsem:${next.clock.week}`)), rng.derive(`dsem-year:${next.clock.week}`));
+  next = directingYear(next, rng.derive(`directing:${next.clock.week}`));
   // A pastor of the diocese may write to the prior for him. E3 §3.12.
   next = pastorAskYear(next, rng.derive(`pastor-ask:${next.clock.week}`));
   // The bishop's office may write to the provincial for him. E3 §3.11.
