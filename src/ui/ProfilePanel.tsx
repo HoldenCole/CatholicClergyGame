@@ -6,6 +6,7 @@ import Sheet from './Sheet';
 import Portrait from './portraits/Portrait';
 import { portraitForPlayer } from './portraits/spec';
 import { identitiesOf, phraseOf, reputationDef, reputationWord, topReputations, REPUTATIONS } from '@/systems/religious/reputations';
+import { directionLine, directionOf, directorNpc, DIRECTOR_KIND_WORD, kindOf, maySeekDirector } from '@/systems/direction';
 
 /**
  * The profile: the one sheet that answers "what have I done with forty
@@ -14,8 +15,11 @@ import { identitiesOf, phraseOf, reputationDef, reputationWord, topReputations, 
  */
 export default function ProfilePanel() {
   const game = useGameStore((s) => s.game);
+  const seek = useGameStore((s) => s.seekDirector);
   if (!game?.character) return null;
   const p = profileOf(game);
+  const seeking = maySeekDirector(game);
+  const director = directorNpc(game);
   const asked = requestHistory(game).filter((r) => r.outcome);
   const works = worksDone(game);
 
@@ -33,6 +37,17 @@ export default function ProfilePanel() {
             <div className="ink-faint mt-1 text-xs">{p.line}</div>
           </div>
         </div>
+      </Sheet>
+
+      <Sheet title="Direction">
+        <p className="text-sm leading-relaxed">{directionLine(game)}{director ? ` ${DIRECTOR_KIND_WORD[kindOf(director)].label}.` : ''}</p>
+        {!directionOf(game) && (
+          <div className="mt-2 flex items-center gap-2">
+            <button className="pbtn px-2 py-0.5 text-xs" disabled={!seeking.ok} title={seeking.why ?? ''} onClick={seek}>Look for a director</button>
+            {!seeking.ok && <span className="ink-faint text-xs">{seeking.why}</span>}
+          </div>
+        )}
+        <p className="ink-faint mt-2 text-xs">The one place a man can be honest. Nothing said there reaches anyone; a director who cannot hear what you are carrying is worse than none, and the kind of man decides most of that.</p>
       </Sheet>
 
       {game.religious && game.flags.ordained && (() => {
