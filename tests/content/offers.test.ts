@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { allOffers, offerFiles } from '@/content/offers';
 import { clubDefs } from '@/content/clubs';
-import { CONSTITUENCY_KEYS, STAT_KEYS, PILLARS, ARCHETYPES } from '@/types';
+import { ALL_CONSTITUENCY_KEYS, STAT_KEYS, PILLARS, ARCHETYPES } from '@/types';
 import type { Condition, Effect, OfferDef } from '@/types';
 import programs from '@/content/study/programs.json';
 
@@ -28,7 +28,7 @@ function checkCondition(c: Condition, where: string, problems: string[]): void {
   }
   if (c.type === 'relationship' && c.npcId.startsWith('@') && !SELECTORS.includes(c.npcId)) problems.push(`${where}: unknown selector ${c.npcId}`);
   if (c.type === 'stat' && !STAT_KEYS.includes(c.key)) problems.push(`${where}: bad stat ${c.key}`);
-  if (c.type === 'reputation' && !CONSTITUENCY_KEYS.includes(c.key)) problems.push(`${where}: bad reputation ${c.key}`);
+  if (c.type === 'reputation' && !ALL_CONSTITUENCY_KEYS.includes(c.key)) problems.push(`${where}: bad reputation ${c.key}`);
   if (c.type === 'pillar' && !PILLARS.includes(c.key)) problems.push(`${where}: bad pillar ${c.key}`);
   if (c.type === 'not') checkCondition(c.inner, where, problems);
   if (c.type === 'any' || c.type === 'all') c.inner.forEach((i) => checkCondition(i, where, problems));
@@ -38,7 +38,7 @@ function checkEffect(e: Effect, where: string, problems: string[]): void {
   if (!EFFECT_TARGETS.includes(e.target)) problems.push(`${where}: bad effect target ${e.target}`);
   if (e.target === 'stat' && !STAT_KEYS.includes(e.key as never)) problems.push(`${where}: bad stat ${e.key}`);
   if (e.target === 'pillar' && !PILLARS.includes(e.key as never)) problems.push(`${where}: bad pillar ${e.key}`);
-  if (e.target === 'reputation' && !CONSTITUENCY_KEYS.includes(e.key as never)) problems.push(`${where}: bad reputation ${e.key}`);
+  if (e.target === 'reputation' && !ALL_CONSTITUENCY_KEYS.includes(e.key as never)) problems.push(`${where}: bad reputation ${e.key}`);
   if (e.target === 'archetype' && !ARCHETYPES.includes(e.key as never)) problems.push(`${where}: bad archetype ${e.key}`);
   if ((e.target === 'relationship' || e.target === 'npc') && e.key.startsWith('@') && !SELECTORS.includes(e.key)) problems.push(`${where}: unknown selector ${e.key}`);
   if (e.target === 'end') problems.push(`${where}: offers may not end the run`);

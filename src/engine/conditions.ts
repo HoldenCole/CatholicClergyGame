@@ -1,3 +1,4 @@
+import { resolveConstituency } from '@/systems/campaign';
 import { frictionOf, leanOf, selectedOf } from '@/systems/liturgy';
 import type { Condition, GameState } from '@/types';
 import { dateOf, seasonOf } from './time';
@@ -37,7 +38,7 @@ export function evaluateCondition(
     case 'stat':
       return !!c && compare(cond.op, c.stats[cond.key], cond.value);
     case 'reputation':
-      return !!c && compare(cond.op, c.reputation[cond.key], cond.value);
+      return !!c && compare(cond.op, c.reputation[resolveConstituency(state, cond.key)] ?? 0, cond.value);
     case 'relationship': {
       const id = bindings[cond.npcId] ?? cond.npcId;
       const npc = resolveSelector(state, id);

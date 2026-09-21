@@ -111,7 +111,7 @@ const WOMEN_ROLES = [
 ];
 
 /** The temperament a charism tends to produce, rolled around rather than fixed. */
-function temperamentFor(rng: Rng, charism: string): Temperament {
+export function temperamentFor(rng: Rng, charism: string): Temperament {
   const lean: Record<string, Temperament> = {
     preaching: 'scholarly',
     scholarship: 'scholarly',

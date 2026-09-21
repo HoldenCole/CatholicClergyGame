@@ -14,6 +14,7 @@ import type {
 } from '@/types';
 import { currentDecor, placeKey } from '@/systems/decorState';
 import { applyReputation, clampSigned } from '@/systems/reputation';
+import { resolveConstituency } from '@/systems/campaign';
 import { applyStat } from '@/systems/stats';
 import { closeTenure } from '@/systems/tenures';
 import { resolveSelector } from './selectors';
@@ -61,7 +62,7 @@ export function applyEffect(
       const c = requireCharacter(state, effect);
       return {
         ...state,
-        character: { ...c, reputation: applyReputation(c.reputation, effect.key as ConstituencyKey, delta) },
+        character: { ...c, reputation: applyReputation(c.reputation, resolveConstituency(state, effect.key as ConstituencyKey), delta) },
       };
     }
     case 'relationship': {

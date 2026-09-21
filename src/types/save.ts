@@ -15,6 +15,8 @@ import type { CareerRequest } from './request';
 import type { Ministry } from './ministry';
 import type { HouseStanding } from './houses';
 import type { ActiveArc } from './arcs';
+import type { CampaignKind } from './campaign';
+import type { OrderHouse, Province, ReligiousPlayerState } from './religiousLife';
 
 /** A rolled diocese the player may choose, held only during creation. */
 export interface DioceseCandidate {
@@ -110,6 +112,18 @@ export interface GameState {
   clusters: Record<string, number>;
   /** The five rolled dioceses, until one is chosen. */
   candidates: DioceseCandidate[] | null;
+  /**
+   * Which game this is. Absent means the base game (diocesan), so every
+   * save before E3 reads as it did. `world.diocese` is always the diocese
+   * the man is in now; for a religious it is the current posting and the
+   * province is home. E3 §13.1.
+   */
+  campaign?: CampaignKind;
+  /** The player as a religious, once professed into a province. E3 §12. */
+  religious?: ReligiousPlayerState;
+  /** The home institution of the religious campaign, and its houses by id. */
+  province?: Province;
+  orderHouses?: Record<string, OrderHouse>;
   world: World | null;
   assignment: Assignment | null;
   /** The live parish loop, once assigned. */
