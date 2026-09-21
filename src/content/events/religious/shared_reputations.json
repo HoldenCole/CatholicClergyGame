@@ -1,0 +1,4644 @@
+{
+  "_notes": "Shared religious life: reputations and identity mixes. E3 §8. Hangs on rep:<key>:known|high, rep:overshoot:<key>, and identity:<id>, which systems/religious/reputations.ts sets. The scenes in the box carry internalForum: true.",
+  "events": [
+    {
+      "id": "rp_confessor_the_line",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "parish_death",
+      "baseWeight": 10,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "rep:confessor:known",
+          "value": true
+        }
+      ],
+      "title": "The Line",
+      "body": "It has become a line. The Saturday box at the priory church used to be a friar and an empty aisle and now it is forty people, some of them from parishes across the diocese, and {@prior} has said at recreation that the church's heating bill has gone up on Saturdays, which is a joke, and that the other confessors have noticed, which is not.",
+      "choices": [
+        {
+          "id": "hours",
+          "label": "Add a weekday afternoon",
+          "outcome": "The line divides and does not shorten, and you hear more confessions in a year than most priests in ten, and the diocese's priests have begun to send their hard cases, which is the thing the reputation is for and the thing it costs.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "diocesan_clergy",
+              "delta": 3
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "rp:confessor:added_hours",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "share",
+          "label": "Send half the line to the other boxes",
+          "outcome": "Some go and some wait, and the other confessors get the ones who go and are good for them, and the joke at recreation stops, and the line is the church's and not yours, which was the better thing.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "close",
+          "label": "Keep to the hour, and let the line be what it is",
+          "outcome": "The line is what it is: long, patient, and slowly furious, and the pastor next door says at the deanery that the friar rations mercy, and it is unfair and it is said.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": -3
+            },
+            {
+              "target": "reputation",
+              "key": "diocesan_clergy",
+              "delta": -2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rp_confessor_the_priest_comes",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 9,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "rep:confessor:high",
+          "value": true
+        }
+      ],
+      "title": "The Priest in the Box",
+      "body": "A priest of the diocese has come to your box on a Tuesday, a man you know from the deanery, and has said the thing, and it is a thing the diocese would act on if it knew, and it will not know, since the seal is the seal, and he has asked, at the end, whether you will still nod to him at the deanery, and you will.",
+      "choices": [
+        {
+          "id": "nod",
+          "label": "Nod to him at the deanery, as before",
+          "outcome": "You do, for years, and he is a better priest for having said it and a worse one on the days he is not, and the diocese never knows, and the seal holds, and it is the quiet, enormous, unusable power the reputation was always going to be.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "rp:confessor:the_priest",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "direction",
+          "label": "Say he should have a director, and that it cannot be you",
+          "outcome": "He finds one, on your word, and it is the right thing, and the box is the box after that, and he does not come again, and you carry what he said as confessors do, alone.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "weekly",
+          "label": "Say to come every Tuesday",
+          "outcome": "He comes every Tuesday for a decade, and it is the confessional and not direction, and it holds him, and the deanery notices only that he is easier, and says the friar must be good company, which is a sentence that could get you both in trouble and does not.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            }
+          ]
+        }
+      ],
+      "internalForum": true
+    },
+    {
+      "id": "rp_confessor_someone_who_matters",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "MAJOR",
+      "category": "personal",
+      "baseWeight": 7,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "rep:confessor:high",
+          "value": true
+        },
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 8
+        }
+      ],
+      "title": "Someone Who Matters",
+      "body": "The man in the box on Thursday is someone who matters: the diocese's, or the city's, or the state's, and he has come across town in a car with a driver who waited outside, and he has said what men who matter say, and asked for nothing but absolution, and you have given it, and he has gone, and nobody will ever know he was there, including the province, which would give a great deal to.",
+      "choices": [
+        {
+          "id": "nothing",
+          "label": "Say nothing to anyone, ever",
+          "outcome": "It is the reputation's whole meaning: he comes back, twice a year, for twenty years, and you know a thing about the city that would change it, and you do not, and the province thinks you a quiet man, which you are, and a man with a secret, which you are.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "rp:confessor:someone_who_matters",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "pray",
+          "label": "Say nothing, and pray for him by name in the Office, silently",
+          "outcome": "It is allowed and it is the thing you can do, and you do it for twenty years, and when he dies the city buries him and you are in the back, and nobody knows why the friar came, and the seal is kept to the grave.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 4
+            },
+            {
+              "target": "flag",
+              "key": "rp:confessor:prayed_for_him",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "internalForum": true
+    },
+    {
+      "id": "rp_preacher_invitation_outside",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "assignment",
+      "baseWeight": 10,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "rep:preacher:known",
+          "value": true
+        }
+      ],
+      "title": "The Invitation From Outside",
+      "body": "The letter is from a diocese two provinces over, from a cathedral rector who heard you at a conference and would like the Lenten series at the cathedral, four Sundays, expenses paid to the house, and {@prior} has put it on the table with the words that the house cannot lose you for four Sundays in Lent and that the province would like it to.",
+      "choices": [
+        {
+          "id": "go",
+          "label": "Go; it is what the reputation is for",
+          "outcome": "Four Sundays in a cathedral you had never seen, and a bishop in the front row, and a name that now travels: the invitations come from outside the province after that, and the province learns to lend you, and the house learns to cover.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -2
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "rp:preacher:went_outside",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "two",
+          "label": "Offer two of the four, and the house the other two",
+          "outcome": "The rector takes two, since two of a friar is more than he had, and the house has you for Passiontide, and the prior says it was the right trade, and the reputation travels a little less far and holds.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "stay",
+          "label": "Stay; the house comes first in Lent",
+          "outcome": "The rector finds a Jesuit. The house has its Lent. The reputation stays the province's, which is a size, and the prior says at Easter that you chose the house, and the house knows it, and it is worth something at the next chapter.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": -1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rp_preacher_the_wrong_thing",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "scandal",
+      "baseWeight": 9,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "belief_vs_safety"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "rep:preacher:known",
+          "value": true
+        }
+      ],
+      "title": "The Sermon That Went Round",
+      "body": "A homily went round the province: someone recorded it and someone else sent it on, and it is the one where you said a thing about the diocese's schools that was true and was not yours to say, and the bishop's office has written to the provincial, and the provincial has written to the prior, and the prior has said at breakfast that the reputation cuts both ways and that this is the other way.",
+      "choices": [
+        {
+          "id": "stand",
+          "label": "Stand by it, to the provincial, in a page",
+          "outcome": "The provincial reads the page and says it was a good homily and a bad Sunday, and answers the bishop's office in a paragraph that does not apologize, and the reputation is a little larger and a little more dangerous, and the bishop's office keeps the recording.",
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 4
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "local_bishop",
+              "delta": -5
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "rp:preacher:stood_by_it",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "clarify",
+          "label": "Preach the next Sunday on what you meant",
+          "outcome": "The clarification is heard by the people who heard the first one and by none of the people who heard about it, and the bishop's office reads the second recording and is mollified a little, and the province says the friar can preach himself out of anything, which is praise with a warning in it.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "local_bishop",
+              "delta": -1
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 1
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "apologize",
+          "label": "Write to the bishop's office and apologize",
+          "outcome": "The office is gracious and files the letter, and the diocese's priests say the friar folded, and the reputation is a little smaller in the deanery and no smaller in the pews, and the prior says it was the wise thing and does not say it was the right one.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "local_bishop",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "diocesan_clergy",
+              "delta": -2
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": -1
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rp_preacher_media",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 8,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "rep:preacher:high",
+          "value": true
+        }
+      ],
+      "title": "The Microphone",
+      "body": "A Catholic radio network has asked for a weekly ten minutes, recorded at the priory, on the Sunday readings, and it is a thing the reputation opens and the constitutions have no view on, and the provincial has said yes if the prior does, and the prior has said yes if you understand that a friar on the radio is a friar the province hears every week.",
+      "choices": [
+        {
+          "id": "yes",
+          "label": "Take the ten minutes",
+          "outcome": "Ten minutes a week for a decade. The name is a national one by the third year and the province hears every word and has opinions, and the invitations come from places you have not been, and the house says you are the radio friar, which is not entirely kind.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -2
+            },
+            {
+              "target": "flag",
+              "key": "rp:preacher:radio",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "year",
+          "label": "Take it for a year, and see",
+          "outcome": "A year is enough to know: the name travels and the week does not have room, and you give it up with a good successor found, and the network says the friar left it better, and the house has you back at recreation.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "no",
+          "label": "Say the pulpit is the pulpit and the radio is not",
+          "outcome": "The network finds a diocesan priest who is very good on the radio, and the reputation stays a preacher's and not a broadcaster's, and the old friar says it was the Dominican answer or the Augustinian one, and either way the right one.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "observant_bloc",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rp_professor_doctoral_student",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "formation",
+      "baseWeight": 9,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "rep:professor:known",
+          "value": true
+        }
+      ],
+      "title": "The Doctoral Student",
+      "body": "A student at the university has asked you to direct a doctorate, which the university allows a friar with your name to do, and the student is brilliant and difficult and has chosen a topic the order has opinions about, and the regent has said it is your reputation and your decision and that he would like to read the thesis before the order does.",
+      "choices": [
+        {
+          "id": "take",
+          "label": "Direct it",
+          "outcome": "Four years of Tuesdays. The thesis is good and the order argues about it, and the student is a professor within a decade and calls you his director in every preface, and the reputation has a student now, which is what makes it a school.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "rp:professor:directed_a_doctorate",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "topic",
+          "label": "Direct it, if the topic is changed",
+          "outcome": "The topic is changed and the thesis is safe and dull, and the student finishes and is a professor and does not call you his director, and the regent is relieved, and you are not sure it was worth the relief.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": -1
+            }
+          ]
+        },
+        {
+          "id": "no",
+          "label": "Send him to the university's own faculty",
+          "outcome": "He goes, and writes the thesis, and it is famous, and the order is in it and you are not, and the regent says you were prudent, which from a regent is a small word.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": -1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rp_professor_doctrinal_dispute",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 9,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "belief_vs_safety"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "rep:professor:high",
+          "value": true
+        }
+      ],
+      "title": "Asked to Rule",
+      "body": "A dispute in the diocese, doctrinal and public, and the bishop's office has asked, through the prior, whether the friar who is known as a professor would write a page saying what the Church teaches, for the diocesan paper, since the diocese has no one it trusts to and a professor's name would settle it.",
+      "choices": [
+        {
+          "id": "write",
+          "label": "Write the page",
+          "outcome": "It is right and it is read and it settles the thing, mostly, and the people who were wrong say the friar was the bishop's man, and the people who were right say the friar was the professor, and both are true, and the bishop's office has your name for the next one.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "local_bishop",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "progressive_bloc",
+              "delta": -2
+            },
+            {
+              "target": "flag",
+              "key": "rp:professor:ruled",
+              "value": true
+            }
+          ],
+          "volume": "public",
+          "positionTopic": "doctrine",
+          "positionValue": -15
+        },
+        {
+          "id": "careful",
+          "label": "Write it, and say where the Church has not spoken",
+          "outcome": "It is more honest and settles less, and the bishop's office is less pleased and the university more, and the reputation is a professor's and not a bishop's man's, which is a distinction that matters in twenty years.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 3
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "local_bishop",
+              "delta": 1
+            }
+          ],
+          "volume": "public",
+          "positionTopic": "doctrine",
+          "positionValue": 0
+        },
+        {
+          "id": "decline",
+          "label": "Say a professor argues and does not rule",
+          "outcome": "The office is disappointed and finds a canonist, who rules, and the dispute goes on, and the reputation is intact and useless, and the regent says it was the right answer and that regents are not asked.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "local_bishop",
+              "delta": -2
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rp_professor_not_published",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 8,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "rep:professor:known",
+          "value": true
+        },
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 15
+        }
+      ],
+      "title": "Fifteen Years Since",
+      "body": "The regent has said it kindly, at table, in front of the student brothers: that the friar is the professor, and has not published in fifteen years, and that a professor who does not publish is a lecturer with a reputation, and the student brothers have looked at their plates, and one of them has looked at you.",
+      "choices": [
+        {
+          "id": "write",
+          "label": "Write the thing, this year",
+          "outcome": "It takes the year and every evening and it is the best thing you have written, since it was written by a man who had been told, and the regent reads it first and says nothing for a week and then says it was worth fifteen years, and the reputation is earned again.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 3
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "rp:professor:published_again",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "teach",
+          "label": "Say the classroom is the publication",
+          "outcome": "The regent says it is the argument every lecturer makes, and the student brothers, who are the classroom, say nothing, and the reputation fades a little each year and the students remember, which is a kind of publication, and not the kind the regent meant.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "quiet",
+          "label": "Say nothing, and let it be true",
+          "outcome": "It is true, and the province stops saying the professor and starts saying the old professor, and it is a decade before you notice the difference, and by then it is the difference.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": -1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rp_director_formators",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "MAJOR",
+      "category": "personal",
+      "baseWeight": 8,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "rep:spiritual_director:high",
+          "value": true
+        },
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 8
+        }
+      ],
+      "title": "The Formators Come",
+      "body": "The novice master has asked to be directed by you, and then the master of students, and the man who directs the formators is the man who forms the province, and the provincial has noticed, and has said, at visitation, that a friar who has the formators' confidence has a great deal, and that he would like to know what is said, and knows he cannot.",
+      "choices": [
+        {
+          "id": "take",
+          "label": "Take them both, and tell the provincial nothing",
+          "outcome": "The provincial does not ask twice. The two men are better formators for it, and the province's next twenty years are shaped in a parlour on Tuesdays by a man who never says a word about it, and the reputation is the one the doc calls unusable, and it is used.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "rp:director:the_formators",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "one",
+          "label": "Take one; two formators is the province's whole formation in one room",
+          "outcome": "The novice master comes, and the master of students finds another, and the province's formation is in two rooms, which is safer, and the provincial says it was wise, and the master of students does not say it was a refusal, and it was.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 1
+            }
+          ]
+        }
+      ],
+      "internalForum": true
+    },
+    {
+      "id": "rp_director_network",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 7,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "friendship_vs_duty"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "rep:spiritual_director:high",
+          "value": true
+        },
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 12
+        }
+      ],
+      "title": "The Men Who Trust You",
+      "body": "They are a network now, the men you have directed over the years: a prior, two pastors, a chancery man, a seminary rector, and they trust you completely and you can never discuss them, and one of them has been elected provincial, and has asked you to be on his council, since he trusts you, and a director on the council of his directee is a thing the constitutions do not forbid and should.",
+      "choices": [
+        {
+          "id": "no",
+          "label": "Decline the council, and keep the room",
+          "outcome": "He understands, since you formed him to, and the room is the room for another decade, and the province has a provincial who is directed and a director who is not on his council, which is the right shape, and nobody but the two of you knows why the seat was declined.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "rp:director:declined_the_council",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "yes",
+          "label": "Take the seat, and end the direction",
+          "outcome": "The direction ends, kindly, and the seat is a good one and the provincial is a good provincial, and the room he used to have is empty, and he finds another director, and it is not the same, and he says so, once.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": -1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rp_evangelist_vocations_follow",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "assignment",
+      "baseWeight": 9,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "rep:evangelist:known",
+          "value": true
+        }
+      ],
+      "title": "Vocations Follow",
+      "body": "Three of the young men who came to the Thursday night on the campus have written to the vocation director, and the vocation director has written to the prior to say that the friar on the campus is the province's whole intake this year, and to ask whether the friar could be spared to the campus full time, and the house has heard, and has a view.",
+      "choices": [
+        {
+          "id": "yes",
+          "label": "Ask to go full time",
+          "outcome": "The provincial sends you. Five men in five years, and two stay, and the house you left says the campus took its best man and the novitiate says it took its best three, and the reputation is the one the province cannot afford to lose and cannot keep at a table.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -3
+            },
+            {
+              "target": "flag",
+              "key": "rp:evangelist:campus_full_time",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "thursday",
+          "label": "Keep the Thursday, and the house the rest",
+          "outcome": "The Thursday goes on and the men keep coming, slower, and the house keeps you, and the vocation director says it was the right compromise and that he would have liked the other, and the intake is two a year and it is enough.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "send",
+          "label": "Send the vocation director to the Thursday instead",
+          "outcome": "He comes and is good and is not you, and the Thursday is smaller, and the men who came for the friar find him at the priory instead, some of them, and the house says the campus was never the point, and it was.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": -1
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rp_evangelist_famous_convert",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "scandal",
+      "baseWeight": 8,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "rep:evangelist:known",
+          "value": true
+        }
+      ],
+      "title": "The Famous Convert",
+      "body": "A man the city knows has been received into the Church at your hands, in the priory church, and the paper has run it, and the reputation has jumped a size overnight, and the man has said, to the paper, that the friar is the reason, and he is not, quite, and the province has begun to send you the inquirers it cannot handle.",
+      "choices": [
+        {
+          "id": "work",
+          "label": "Do the work the reputation now says you do",
+          "outcome": "The inquirers come and you sit with them, week after week, for years, and the reputation is earned after the fact, which is the honest way to have an unearned one, and the famous convert is at your jubilee, and says it again, and it is true now.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "rp:evangelist:earned_it_after",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "say",
+          "label": "Say, to the paper, that it was not you",
+          "outcome": "The paper prints it and nobody believes it, and the reputation is what it is, and the honesty is on the record, and the convert says at your jubilee that the friar was too modest, and the province agrees, and you know.",
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "enjoy",
+          "label": "Let the reputation carry you for a while",
+          "outcome": "It carries you to two dinners and a conference and a season of being the friar who converted the man, and then an inquirer asks a real question and you do not have the answer, in public, and the reputation is the size of the answer after that.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": -2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": -1
+            },
+            {
+              "target": "flag",
+              "key": "rp:evangelist:overshot",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rp_liturgist_sung_office",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "group",
+      "baseWeight": 9,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "belief_vs_safety"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "rep:liturgist:known",
+          "value": true
+        }
+      ],
+      "title": "The Sung Office",
+      "body": "The house sings the Office now, because you taught it to, and people have begun to come to Vespers from across the diocese, and the bishop's office has asked whether the friars are running a Latin Mass society without permission, which they are not, and the progressive men of the province have said at chapter that the house is a museum, and the observant men have said it is the order.",
+      "choices": [
+        {
+          "id": "keep",
+          "label": "Keep it, and invite the bishop to Vespers",
+          "outcome": "He comes, and it is sung, and he says afterward that he had not heard the Office sung since the seminary and that the diocese should, and the office's question is withdrawn, and the province's argument is not, and the reputation is the liturgist's, which is polarizing by nature.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "local_bishop",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "observant_bloc",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "progressive_bloc",
+              "delta": -4
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "rp:liturgist:bishop_at_vespers",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "vernacular",
+          "label": "Sing it in English, half the week",
+          "outcome": "The house grumbles and the people come anyway, and the progressive men say it is still a museum and the observant say it is a compromise, and the bishop's office is satisfied, and the reputation is a little less sharp and holds.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "progressive_bloc",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "observant_bloc",
+              "delta": -1
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "stop",
+          "label": "Stop the singing until the chapter has spoken",
+          "outcome": "The chapter speaks for a year and says nothing, and the Office is recited, and the people stop coming, and the old friar does not speak to you for a season, and the reputation fades, since it was the Office and the Office is not sung.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "progressive_bloc",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "observant_bloc",
+              "delta": -4
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": -3
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": -1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rp_liturgist_train_the_diocese",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 8,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "rep:liturgist:high",
+          "value": true
+        }
+      ],
+      "title": "The Diocese Wants the Ceremonies",
+      "body": "The bishop's office has asked, through the provincial, whether the friar known for the liturgy would run a week for the diocese's deacons and the seminary's men on the ceremonies, since the diocese has nobody who knows them and the friars do, and the provincial has said yes if the house can spare the week.",
+      "choices": [
+        {
+          "id": "yes",
+          "label": "Run the week",
+          "outcome": "Forty deacons and seminarians in a chapel for a week, and the diocese's liturgy is different for twenty years because of it, and the bishop's office says so, and the reputation is the diocese's now and not only the house's.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "local_bishop",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "diocesan_clergy",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "rp:liturgist:trained_the_diocese",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "book",
+          "label": "Write the week as a booklet instead",
+          "outcome": "The booklet is used for thirty years, in three dioceses, and nobody knows who wrote it, since the order's name is on it, and the bishop's office is grateful and less so, and the week is not run, and the reputation is on paper.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "local_bishop",
+              "delta": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rp_prayer_the_province_protects",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "MAJOR",
+      "category": "personal",
+      "baseWeight": 9,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "rep:man_of_prayer:high",
+          "value": true
+        }
+      ],
+      "title": "The Province Protects Him",
+      "body": "The provincial has said it, at visitation, to the prior, and the prior has told you: that the province has decided the friar is a man of prayer and will not be sent to the school, the parish, or the curia, since a province needs such men and uses them up when it uses them, and that you should know it has been decided, and that it is a kindness with a cage in it.",
+      "choices": [
+        {
+          "id": "accept",
+          "label": "Accept it, and pray",
+          "outcome": "It is the life, then: the cell, the choir, the night office, and the men who come to the door, and the province's assignment letters never come, and you are the friar the young men are sent to see, and are never elected to anything, and had not wanted to be, and it is enough, and is a cage.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "rp:prayer:protected",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "ask",
+          "label": "Ask the provincial for a parish anyway",
+          "outcome": "He is startled and gives it, since he cannot refuse a man of prayer a parish, and the parish is the better for a pastor who prays and you are the worse for a parish, and the province says it should have kept you in the choir, and you are not sorry.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": -1
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": -1
+            },
+            {
+              "target": "flag",
+              "key": "rp:prayer:asked_out",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "hidden",
+          "label": "Say the reputation is not earned, and that the province should not build on it",
+          "outcome": "The prior says the province will build on what it sees, and what it sees is a man in the choir at five, and that the humility is the reputation's last brick, and you learn that the reputation for holiness is the one you cannot decline.",
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rp_prayer_the_young_men_sent",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "formation",
+      "baseWeight": 7,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "rep:man_of_prayer:known",
+          "value": true
+        }
+      ],
+      "title": "The Young Men Sent to See",
+      "body": "The novice master sends the novices to sit with you, one at a time, for an hour, since you are the man of prayer, and the novices do not know what to say, and neither do you, and the hour is the hour, and one of them has asked, at the end, what you do in the night office, since he has heard about it.",
+      "choices": [
+        {
+          "id": "tell",
+          "label": "Tell him: nothing, and the nothing takes the night",
+          "outcome": "He is quiet and then understands, or does not, and enters the choir at three the next morning and is there for a decade, and the novice master says the friar made a man of prayer out of a boy who came to see one, which is how it goes.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "rp:prayer:the_novice",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "show",
+          "label": "Say nothing, and bring him at three",
+          "outcome": "He comes, once, and sleeps through half of it, and is embarrassed, and comes again, and the second time is the thing, and he is the man the novices are sent to in thirty years.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rp_builder_sent_where_broken",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "assignment",
+      "baseWeight": 9,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "rep:builder:known",
+          "value": true
+        }
+      ],
+      "title": "Sent Where It Is Broken",
+      "body": "The letter is the provincial's and it is the one the reputation was always going to bring: the school is broke, the parish is broke, the house is broke, and the province has one man it sends where things are broken, and it is you, again, to a place you have never seen that has a roof, a debt, and a board, and no money.",
+      "choices": [
+        {
+          "id": "go",
+          "label": "Go, and fix it",
+          "outcome": "Three years. The roof, the debt, the board, and the money, and it is fixed, and the province sends you to the next one, and the reputation is a sentence as much as a blessing, and you are fifty-eight and have never had a house that was not broken when you came.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 3
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 4
+            },
+            {
+              "target": "flag",
+              "key": "rp:builder:fixed_another",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "terms",
+          "label": "Go, on condition it is the last",
+          "outcome": "The provincial agrees, in writing, and it is the last for four years, and then it is not, since provincials change and letters do not bind them, and you fix that one too, and the reputation has a file.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 2
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "no",
+          "label": "Ask to be sent somewhere that works",
+          "outcome": "He sends someone else, who does not fix it, and it closes, and the province says the builder was tired, which is true, and does not ask again for a decade, and the decade is the first quiet one of your life.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": -3
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "rp:builder:asked_for_quiet",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rp_builder_the_board",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "finance",
+      "baseWeight": 8,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "money"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "rep:builder:high",
+          "value": true
+        }
+      ],
+      "title": "The Board Wants a Number",
+      "body": "The board of the work you are fixing has asked for a number: the year it will be solvent, and you have a number and it is not the one they want, and the chair has said, kindly, that the friar is known for turning things around and that the board would like to be told it will be turned around, and the province is listening on the telephone.",
+      "choices": [
+        {
+          "id": "true",
+          "label": "Give the true number",
+          "outcome": "The board is silent and then, since it is a good board, grateful, and the number is met, a year late, and the chair says the friar was the first man to tell them the truth in a decade, and the reputation is the honest builder's, which is a rarer one.",
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 4
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "rp:builder:the_true_number",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "hopeful",
+          "label": "Give the number they want, and work for it",
+          "outcome": "It is not met, and the board remembers, and the province says the friar overpromised, and the work survives anyway, since you worked for it, and the reputation is a little smaller and the work is open.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": -1
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": -1
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": -2
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rp_advocate_the_paper",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "scandal",
+      "baseWeight": 9,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "belief_vs_safety"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "rep:advocate:known",
+          "value": true
+        }
+      ],
+      "title": "The Column in the Paper",
+      "body": "The paper has asked for a column on the shelter, under your name, and the shelter needs it and the bishop's office does not, since the column will say what the county is not doing, and the county's commissioner is on the diocesan finance council, and the prior has said the reputation is yours and so is the column.",
+      "choices": [
+        {
+          "id": "write",
+          "label": "Write it, and name the county",
+          "outcome": "The county is furious and the shelter is funded by Lent, since the column shamed a committee, and the bishop's office is cold for a season and the commissioner resigns from the finance council, and the reputation is the advocate's, which comes with reliable enemies.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "local_bishop",
+              "delta": -4
+            },
+            {
+              "target": "reputation",
+              "key": "progressive_bloc",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "rp:advocate:named_the_county",
+              "value": true
+            }
+          ],
+          "volume": "public",
+          "positionTopic": "social",
+          "positionValue": 30
+        },
+        {
+          "id": "soft",
+          "label": "Write it, and name nobody",
+          "outcome": "It is read and does nothing, and the shelter is funded the next year by a bequest, and the bishop's office says the friar was responsible, and the county does not know the column ran, and the reputation is a little less sharp.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "local_bishop",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "no",
+          "label": "Say the friars serve the poor and do not write about it",
+          "outcome": "The shelter is not funded and closes in two years, and the line down the block goes to the county, which does not want it, and the prior says the friars kept out of politics, and the old friar says the friars kept out.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": -2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": -1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rp_advocate_the_jail",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "MAJOR",
+      "category": "scandal",
+      "baseWeight": 8,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "rep:advocate:high",
+          "value": true
+        }
+      ],
+      "title": "The Man in the Jail",
+      "body": "A man you visit in the jail has been sentenced to the thing the state does, and his lawyer has asked whether the friar known for speaking for the poor would speak for him, publicly, at the hearing, and the bishop's office has said the diocese's position is the Church's and that a friar may say it, and the province has said nothing, which is a yes.",
+      "choices": [
+        {
+          "id": "speak",
+          "label": "Speak at the hearing",
+          "outcome": "You speak. It changes nothing for the man and something for the state, in a decade, and the paper prints the friar's name beside the man's, and the reputation is the prophet's after that and not only the advocate's, and the bishop's office is quiet and the province is proud, quietly.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "local_bishop",
+              "delta": -2
+            },
+            {
+              "target": "flag",
+              "key": "rp:advocate:spoke_at_the_hearing",
+              "value": true
+            }
+          ],
+          "volume": "public",
+          "positionTopic": "social",
+          "positionValue": 35
+        },
+        {
+          "id": "visit",
+          "label": "Visit him, and say nothing publicly",
+          "outcome": "The visits are the thing he has, and the hearing is what it is, and the state does the thing, and you are there, and the paper does not know, and the reputation is the confessor's more than the advocate's that year, and it was the harder half.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 1
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "rp:advocate:visited_to_the_end",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rp_dying_the_call",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "parish_death",
+      "baseWeight": 9,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "body_vs_vow"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "rep:pastor_of_dying:known",
+          "value": true
+        }
+      ],
+      "title": "The Call at Two",
+      "body": "The hospital has begun to call the priory for you by name, at two in the morning, since the nurses have learned which friar comes, and {@prior} has said at chapter that the house cannot be the diocese's night chaplaincy and that the friar cannot be either, and the pager is on the table between you.",
+      "choices": [
+        {
+          "id": "keep",
+          "label": "Keep the pager",
+          "outcome": "It rings for twenty years. You are the priest the city's dying meet, and the laity never forget it, and the house covers Lauds for you most mornings and grumbles and is proud, and the reputation is the least glamorous and the deepest.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -1
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 4
+            },
+            {
+              "target": "flag",
+              "key": "rp:dying:kept_the_pager",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "share",
+          "label": "Take the pager three nights, and teach two other friars the rest",
+          "outcome": "The two friars learn and are good and the hospital learns three names, and the house is the diocese's night chaplaincy after all, which the prior did not want and is proud of, and the reputation is the house's as much as yours.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 3
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "give",
+          "label": "Give the pager to the diocesan chaplain",
+          "outcome": "He is good and is not called by name, and the nurses ask for the friar for a year and then stop, and the reputation fades to the confessional, where it is still useful, and the house sleeps.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": -2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": -1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rp_dying_the_bishop_dies",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 7,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "rep:pastor_of_dying:high",
+          "value": true
+        },
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 10
+        }
+      ],
+      "title": "The Bishop's Deathbed",
+      "body": "The bishop is dying and his secretary has telephoned the priory, since the bishop has asked, in the way of a man who has heard which friar the dying ask for, whether the friar would come, and the chancery is in the corridor and the auxiliary is in the room, and the bishop has sent them out.",
+      "choices": [
+        {
+          "id": "go",
+          "label": "Go, and stay",
+          "outcome": "You stay two days. What is said is the seal's. He dies with a friar at the bed and the auxiliary in the corridor, and the diocese knows it, and the next bishop is told, and the reputation is the one they call at two in the morning, and the chancery is one of them now.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 4
+            },
+            {
+              "target": "flag",
+              "key": "rp:dying:the_bishop",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "anoint",
+          "label": "Anoint him, and leave the rest to his own",
+          "outcome": "The auxiliary is grateful and the bishop is not, quite, and dies with his own around him, which is right, and the friar is remembered as the one who came and went, and the new bishop hears both halves.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            }
+          ]
+        }
+      ],
+      "internalForum": true
+    },
+    {
+      "id": "rp_confidant_the_donor",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "finance",
+      "baseWeight": 9,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "money"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "rep:confidant:known",
+          "value": true
+        }
+      ],
+      "title": "The Donor's Table",
+      "body": "The man whose name is on the hospital wing has asked the friar to dinner, again, and this time has said what he wants, which is the friar's ear on where his money goes in the diocese, and the friar's word to the bishop on where it should, and the house has said at recreation that the friar eats out a great deal.",
+      "choices": [
+        {
+          "id": "yes",
+          "label": "Be the ear, and the word",
+          "outcome": "The money goes where it should, mostly, for a decade, and the bishop's office learns to ask the friar, and the house says the friar is faintly suspect, and the friar is, and the shelter has a roof because of it.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "local_bishop",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -3
+            },
+            {
+              "target": "flag",
+              "key": "rp:confidant:the_ear",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "house",
+          "label": "Bring him to the house's table instead",
+          "outcome": "He comes, and eats what the friars eat, and gives to the house and not through it, and the house is suspicious and then fond, and the reputation is a different one after that: the friar the donor came to supper with, which the house can live with.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "local_bishop",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "no",
+          "label": "Say a friar has no ear to sell",
+          "outcome": "He laughs, and gives elsewhere, and the bishop's office wonders what the friar said, and the house is glad, and the reputation is a little smaller and the poverty a little more real.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "observant_bloc",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "local_bishop",
+              "delta": -2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rp_confidant_suspect_at_chapter",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "admin",
+      "baseWeight": 8,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "ambition_vs_integrity"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "rep:confidant:known",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "chapter:refused:prior",
+          "value": false
+        }
+      ],
+      "title": "Suspect at Chapter",
+      "body": "The chapter is electing and your name has come up, in the second ballot, and it has gone down in the third, and {@confrere} has said afterward, in the car, that the friar is the one the donors ask for and the brothers do not, and that the province trusts him with everything and elects him to nothing, and that he had thought you should know.",
+      "choices": [
+        {
+          "id": "hear",
+          "label": "Hear it, and give the donors up for a year",
+          "outcome": "The year is a year of the house and the box, and the donors find another friar or do not, and the reputation fades a little and the brothers notice, and the next chapter you are on the fourth ballot, which is farther than the third.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": -1
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "rp:confidant:gave_them_up",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "keep",
+          "label": "Keep the donors; the province needs the money more than it needs you elected",
+          "outcome": "It is true, and the province's schools are open because of it, and you are never elected to anything, and the men who are elected ask you for the money, and you give it, and it is the fixer's life, and it has a dignity.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -1
+            },
+            {
+              "target": "flag",
+              "key": "rp:confidant:kept_them",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rp_overshoot_asked_to_prove",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 9,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "ambition_vs_integrity"
+      ],
+      "requires": [
+        {
+          "type": "any",
+          "inner": [
+            {
+              "type": "flag",
+              "key": "rep:overshoot:preacher",
+              "value": true
+            },
+            {
+              "type": "flag",
+              "key": "rep:overshoot:professor",
+              "value": true
+            },
+            {
+              "type": "flag",
+              "key": "rep:overshoot:evangelist",
+              "value": true
+            },
+            {
+              "type": "flag",
+              "key": "rep:overshoot:confessor",
+              "value": true
+            },
+            {
+              "type": "flag",
+              "key": "rep:overshoot:liturgist",
+              "value": true
+            },
+            {
+              "type": "flag",
+              "key": "rep:overshoot:builder",
+              "value": true
+            },
+            {
+              "type": "flag",
+              "key": "rep:overshoot:advocate",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "title": "Asked to Do the Thing",
+      "body": "The reputation has outrun the man: a lucky sermon, a flattering profile, one famous week, and now the province has sent you to do the thing you are known for, in public, and it is a thing you are not, quite, able to do, and the room is full, and the prior is in it.",
+      "choices": [
+        {
+          "id": "try",
+          "label": "Do it, as well as you can",
+          "outcome": "It is not as good as the reputation and it is not bad, and the room knows the difference and forgives it, mostly, and the reputation shrinks to the size of the man, which is the honest size, and the prior says you were better than he feared.",
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": -1
+            },
+            {
+              "target": "flag",
+              "key": "rp:overshoot:tried",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "work",
+          "label": "Ask for a year to become what they think you are",
+          "outcome": "The prior gives it, since it is the right ask. The year is the hardest work of your life and at the end of it the reputation is earned, late, and the room the next time does not know it was ever unearned.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 3
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "rp:overshoot:earned_it",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "decline",
+          "label": "Decline, and say why",
+          "outcome": "It is honest and the province is puzzled and the reputation is a little smaller and a little truer, and the prior says it was the first time he had heard a friar decline a reputation, and that it should happen more.",
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": -1
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rp_id_lined_up_for",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "MAJOR",
+      "category": "personal",
+      "baseWeight": 10,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "identity:lined_up_for",
+          "value": true
+        }
+      ],
+      "title": "The One They Line Up For",
+      "body": "It has a name now, in the province: the one they line up for. The line on Saturdays, the men of prayer sent to see you, the province's refusal to give you a school or a curia, and the provincial has written to say that the province would like to keep you where you are for as long as you live, which is the kindest letter a provincial writes and the only one that is a sentence.",
+      "choices": [
+        {
+          "id": "stay",
+          "label": "Stay, for as long as you live",
+          "outcome": "You stay. The line is the life and the choir is the rest of it, and the house changes around you three times and you do not, and men come from three dioceses on Saturdays, and you are buried from the church with the line in the pews, and it is the reputation the doc calls enormous and unusable, and it was used, on them.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "rp:id:stayed_for_life",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "move",
+          "label": "Ask, once, to be sent somewhere the line is not",
+          "outcome": "He sends you, once, for three years, to a house with no line, and it is a rest and a loss, and the line finds you in the second year, since lines do, and the provincial says the province tried, and brings you back.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 1
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": -2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rp_id_public_intellectual",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "MAJOR",
+      "category": "personal",
+      "baseWeight": 9,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "identity:public_intellectual",
+          "value": true
+        }
+      ],
+      "title": "The Public Intellectual",
+      "body": "The invitations have crossed the Atlantic: a lecture in Rome, a chapter in a book, a name the dicasteries have heard, and the provincial has said that the province has a public intellectual and does not know what to do with one, and that the house would like him at Vespers occasionally, and the regent would like him to write the thing Rome asked for.",
+      "choices": [
+        {
+          "id": "rome",
+          "label": "Write the thing Rome asked for",
+          "outcome": "It is read in Rome and argued about in three languages, and the order's general curia asks for the friar by name for a commission, and the province lends him, and the reputation is the order's now and the house's a little, and the house says so.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 4
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -3
+            },
+            {
+              "target": "flag",
+              "key": "rp:id:wrote_for_rome",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "vespers",
+          "label": "Be at Vespers, and write less",
+          "outcome": "Vespers, and the house has its intellectual at the table, and the thing Rome asked for is written by someone else, adequately, and the name travels less far and the house is one, and the provincial says the friar chose the house, and the regent says the friar chose wrong, and both are true.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": -1
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": -1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rp_id_founder_asked",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "MAJOR",
+      "category": "assignment",
+      "baseWeight": 10,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "identity:founder",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "foundation:asked",
+          "value": false
+        }
+      ],
+      "title": "The Founder",
+      "body": "The provincial has come to the house on purpose, and has said it at the table, to you, in front of the brothers: that the province has a need in a city where it has no house, and a bishop who has asked, and one man whose reputations fit it, and that the chapter would back a foundation if the friar would lead it, and that the friar should think about it, since the chapter is in June.",
+      "choices": [
+        {
+          "id": "yes",
+          "label": "Say you will think about it, and mean yes",
+          "outcome": "June comes and the chapter says yes, since the provincial had said it at a table, and the foundation is yours to make, and the reputation the doc calls the strongest gate on founding a house has opened it.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "rp:id:founder_asked",
+              "value": true
+            },
+            {
+              "target": "flag",
+              "key": "foundation:asked",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "who",
+          "label": "Ask who else the province had in mind",
+          "outcome": "He says nobody, and says it without flattery, and you say yes then, since a province with one man for a thing should send him, and the chapter agrees, and the foundation is yours.",
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "rp:id:founder_asked",
+              "value": true
+            },
+            {
+              "target": "flag",
+              "key": "foundation:asked",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "no",
+          "label": "Say a founder should be younger, and name one",
+          "outcome": "He looks at the young man you named and is not convinced, and the foundation waits a decade for a founder, and the young man is it, in a decade, and says you named him, and it is a different house than yours would have been, and it stands.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": -1
+            },
+            {
+              "target": "flag",
+              "key": "rp:id:founder_declined",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rp_id_reformer",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "MAJOR",
+      "category": "admin",
+      "baseWeight": 9,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "identity:reformer",
+          "value": true
+        }
+      ],
+      "title": "The Reformer",
+      "body": "The province has split over you: the sung Office, the lectures, the thing you wrote about what the order's liturgy should be, and the chapter has two blocs now and one of them is named for you, which you did not ask for, and {@provincial} has said that a reformer is a man the province either follows or removes, and that he has not decided which.",
+      "choices": [
+        {
+          "id": "lead",
+          "label": "Lead the bloc, openly",
+          "outcome": "It is the province's argument for a decade and you are its face, and the observant men follow and the progressive men do not forgive, and the chapters are contested and alive, and you are elected to something or never are, and either way the province is different for it.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 3
+            },
+            {
+              "target": "outspokenness",
+              "key": "",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "observant_bloc",
+              "delta": 8
+            },
+            {
+              "target": "reputation",
+              "key": "progressive_bloc",
+              "delta": -8
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "rp:id:led_the_bloc",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "quiet",
+          "label": "Say the sung Office is the house's and not a bloc's",
+          "outcome": "The bloc is disappointed and forms anyway around someone louder, and the house sings the Office and the province argues about someone else, and the provincial says the friar was wise, and the old friar says the friar was the reformer and refused the reform, and both are right.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "observant_bloc",
+              "delta": -2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rp_id_formator",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "MAJOR",
+      "category": "formation",
+      "baseWeight": 9,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "identity:formator",
+          "value": true
+        }
+      ],
+      "title": "The Formator",
+      "body": "The provincial has named you to the formation house, since the province has decided you are the formator, and the men you will form will fill the province in twenty years and vote in every chapter after, and the novice master has said, handing you the keys, that a formator is the one man in the province who governs it without ever being elected, and that the constitutions have never noticed.",
+      "choices": [
+        {
+          "id": "take",
+          "label": "Take the house, and form them as you were formed",
+          "outcome": "Twenty years, and the province is your students: priors, a provincial, the men at every table, and they say your sentences without knowing whose they are, and you are elected to nothing and govern everything, which the doc says, and is true.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 4
+            },
+            {
+              "target": "flag",
+              "key": "rp:id:formed_the_province",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "differently",
+          "label": "Take the house, and form them differently than you were",
+          "outcome": "It is a risk and a generation, and the men are not like you and are like each other, and the province in twenty years is a province you did not expect and they did, and the novice master says it was the braver thing.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 2
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rp_id_fixer",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "assignment",
+      "baseWeight": 9,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "ambition_vs_integrity"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "identity:fixer",
+          "value": true
+        }
+      ],
+      "title": "The Fixer",
+      "body": "Trusted with everything and elected to nothing: the province's phrase for you, said at recreation by a man who meant it kindly, and the next letter is another broken work in another city, and the chapter is in June, and your name will be on the second ballot and not the third, and you know it.",
+      "choices": [
+        {
+          "id": "go",
+          "label": "Go, and fix it, and let the chapter do what it does",
+          "outcome": "It is fixed, and the chapter elects someone else, and it is the life, and the province's works are open because of it, and at your jubilee the provincial says the province owes you more than it ever gave, which is true and is the fixer's epitaph.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 2
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "rp:id:the_fixer_went",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "stay",
+          "label": "Ask to stay where you are, once",
+          "outcome": "The provincial is startled and agrees, since the fixer has never asked, and the broken work is fixed by someone worse, and the chapter, for once, gets to the third ballot with your name on it, since you were at the table that year.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": -1
+            },
+            {
+              "target": "flag",
+              "key": "rp:id:the_fixer_stayed",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rp_id_prophet",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 9,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "belief_vs_safety"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "identity:prophet",
+          "value": true
+        }
+      ],
+      "title": "The Prophet",
+      "body": "The name is the prophet, and it is not entirely a compliment: the pulpit and the poor and the paper, and permanent friction with someone, and this year the someone is the bishop, who has written to the provincial to say the friar's public witness is the friar's and not the diocese's, and the provincial has written back to say that it is the order's, and the two letters are on the table.",
+      "choices": [
+        {
+          "id": "keep",
+          "label": "Keep preaching it",
+          "outcome": "The friction is permanent, as the doc says, and the pulpit is full, and the bishop's office is cold for a reign, and the poor have a friar, and the province has a prophet it cannot use for anything else and would not trade, and says so, once, at chapter.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "local_bishop",
+              "delta": -5
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "rp:id:kept_preaching",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "bishop",
+          "label": "Go to the bishop, and say it to him",
+          "outcome": "It is an hour and it is honest and he is not moved and is informed, and the friction is a little less permanent, and the pulpit is what it was, and the prophet has had a conversation, which prophets rarely do.",
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "local_bishop",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rp_the_phrase",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 9,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "any",
+          "inner": [
+            {
+              "type": "flag",
+              "key": "rep:confessor:high",
+              "value": true
+            },
+            {
+              "type": "flag",
+              "key": "rep:preacher:high",
+              "value": true
+            },
+            {
+              "type": "flag",
+              "key": "rep:professor:high",
+              "value": true
+            },
+            {
+              "type": "flag",
+              "key": "rep:spiritual_director:high",
+              "value": true
+            },
+            {
+              "type": "flag",
+              "key": "rep:evangelist:high",
+              "value": true
+            },
+            {
+              "type": "flag",
+              "key": "rep:liturgist:high",
+              "value": true
+            },
+            {
+              "type": "flag",
+              "key": "rep:man_of_prayer:high",
+              "value": true
+            },
+            {
+              "type": "flag",
+              "key": "rep:builder:high",
+              "value": true
+            },
+            {
+              "type": "flag",
+              "key": "rep:advocate:high",
+              "value": true
+            },
+            {
+              "type": "flag",
+              "key": "rep:pastor_of_dying:high",
+              "value": true
+            },
+            {
+              "type": "flag",
+              "key": "rep:confidant:high",
+              "value": true
+            }
+          ]
+        },
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 8
+        }
+      ],
+      "title": "The Phrase",
+      "body": "{@confrere} has said it in the car, driving back from chapter: that the province has a phrase for every man it elects, and that for you it has one, and he has said what it is, and it is not the one you would have chosen and it is not wrong, and he has asked whether you knew.",
+      "choices": [
+        {
+          "id": "knew",
+          "label": "Say you knew",
+          "outcome": "He says that a man who knows his phrase is a man who chose it, and that the province elects those, and you are on a ballot within the decade, and it is the phrase they say when they vote.",
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "rp:the_phrase:knew",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "didnt",
+          "label": "Say you did not",
+          "outcome": "He says that is the better answer, since the men who do not know are the ones the province trusts, and it is true, and you know now, and it is a thing you cannot un-know, and the ballot comes anyway.",
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "change",
+          "label": "Ask what it would take to change it",
+          "outcome": "He laughs and says a decade, and it takes one, and the second phrase is the one you would have chosen, and the province says it in the car on the way back from a chapter you were not elected at, and it is enough.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 1
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "rp:the_phrase:changed",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rp_nobody_can_say",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 9,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 15
+        },
+        {
+          "type": "flag",
+          "key": "rep:confessor:known",
+          "value": false
+        },
+        {
+          "type": "flag",
+          "key": "rep:preacher:known",
+          "value": false
+        },
+        {
+          "type": "flag",
+          "key": "rep:professor:known",
+          "value": false
+        },
+        {
+          "type": "flag",
+          "key": "rep:spiritual_director:known",
+          "value": false
+        },
+        {
+          "type": "flag",
+          "key": "rep:evangelist:known",
+          "value": false
+        },
+        {
+          "type": "flag",
+          "key": "rep:liturgist:known",
+          "value": false
+        },
+        {
+          "type": "flag",
+          "key": "rep:man_of_prayer:known",
+          "value": false
+        },
+        {
+          "type": "flag",
+          "key": "rep:builder:known",
+          "value": false
+        },
+        {
+          "type": "flag",
+          "key": "rep:advocate:known",
+          "value": false
+        },
+        {
+          "type": "flag",
+          "key": "rep:pastor_of_dying:known",
+          "value": false
+        },
+        {
+          "type": "flag",
+          "key": "rep:confidant:known",
+          "value": false
+        }
+      ],
+      "title": "The Man Nobody Can Describe",
+      "body": "Fifteen years ordained, and the chapter has not put your name on a ballot, and {@old_friar} has told you why, since nobody else would: that the province cannot say what you are in one phrase, that you are competent at everything and known for nothing, and that a province does not elect a man it cannot describe, and that it is not too late, and it is nearly.",
+      "choices": [
+        {
+          "id": "choose",
+          "label": "Choose one thing, and give the years to it",
+          "outcome": "You choose. The years go to it and it is the thing the province says of you within a decade, and your name is on a ballot at sixty, which is late and is on it, and the old friar, who is dead by then, would have said so.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "rp:chose_a_thing",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "fine",
+          "label": "Say you would rather be competent at everything",
+          "outcome": "He says the province will use you for everything and elect you to nothing, and it does, and it is a good life and a quiet one, and the chapters are things you vote at, and it was chosen, which is the difference.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "rp:chose_nothing",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rp_preacher_provincial_wants_missions",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "assignment",
+      "baseWeight": 8,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "rep:preacher:known",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "office:promoter_of_preaching",
+          "value": false
+        }
+      ],
+      "title": "The Promoter's Book",
+      "body": "The promoter of preaching has your name at the top of his book, and the book is the province's missions for a year, and he has asked for eight weeks of it, in eight parishes, since the reputation is the province's to spend, and the prior has said the house will manage and has said it in the voice of a man counting.",
+      "choices": [
+        {
+          "id": "eight",
+          "label": "Give him the eight",
+          "outcome": "Eight parishes and eight lines for confession and a name in eight dioceses, and the house manages, grey, and the promoter's book has you at the top for a decade, and the reputation is the province's whole preaching some years.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -3
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 4
+            },
+            {
+              "target": "flag",
+              "key": "rp:preacher:eight_weeks",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "four",
+          "label": "Give him four",
+          "outcome": "Four is what the house can bear, and the promoter takes it and says so, and the reputation is spent at half, which lasts longer, and the prior says four was the number.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 1
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rp_confessor_the_penitent_returns",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 7,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "rep:confessor:high",
+          "value": true
+        }
+      ],
+      "title": "The One Who Came Back",
+      "body": "A man who confessed a thing to you ten years ago has come back, to the same box, on the same Saturday, and said that he has kept what you said to him then, and that it changed the decade, and he does not know that you do not remember him, since a confessor does not, and he has asked whether you do.",
+      "choices": [
+        {
+          "id": "truth",
+          "label": "Say the truth: that you do not, and that it is the seal's mercy",
+          "outcome": "He is quiet and then says that it is better so, and goes, and comes back on Saturdays for the rest of his life, and you never know which one he is, and it is the reputation's exact shape.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "rp:confessor:did_not_remember",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "kind",
+          "label": "Say you remember, which is a kindness and a lie",
+          "outcome": "He is glad, and goes, and you carry the lie in the box, which is the one place a confessor should not, and confess it yourself on Tuesday, and the other friar says it was a small one, and it was, and it was there.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": -1
+            }
+          ]
+        }
+      ],
+      "internalForum": true
+    },
+    {
+      "id": "rp_dying_the_hospice_asks",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "assignment",
+      "baseWeight": 8,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "rep:pastor_of_dying:high",
+          "value": true
+        },
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 6
+        }
+      ],
+      "title": "The Hospice Wants a Chaplain",
+      "body": "The hospice has asked the provincial for the friar by name, full time, since the dying have begun to ask for him, and the provincial has said the province can spare him if the house can, and the house has said it can, since it is the work the reputation was for, and the prior has said the friar should decide, since it is the rest of his life.",
+      "choices": [
+        {
+          "id": "yes",
+          "label": "Go to the hospice",
+          "outcome": "Fifteen years of it, and the city's dying meet a friar, and the laity never forget, and the province, which does not count it, counts it at your funeral, which is full of people nobody in the province knows, who came because you came.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "local_bishop",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 1
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "rp:dying:the_hospice",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "half",
+          "label": "Go three days a week",
+          "outcome": "The hospice takes three, and the house has four, and it is the shape of a life, and the dying have a friar three days and a diocesan priest four, and the reputation is the house's and the hospice's, and holds.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rp_evangelist_the_street",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "parish_death",
+      "baseWeight": 8,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "rep:evangelist:known",
+          "value": true
+        }
+      ],
+      "title": "The Street",
+      "body": "You have taken the habit to the street, since evangelists do, a Saturday at the market with a table and a sign, and the house has said it is undignified and the province has said it is the order, and a woman has stopped at the table and said she was baptized forty years ago and has not been in a church since, and asked what the friar is selling.",
+      "choices": [
+        {
+          "id": "nothing",
+          "label": "Say nothing, and ask her to sit",
+          "outcome": "She sits, and it is an hour, and she is at Mass in a month and at the RCIA in a year, and she brings two others to the table, and the table is a thing the city knows within five years, and the house stops saying undignified.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "rp:evangelist:the_table",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "answer",
+          "label": "Answer the question",
+          "outcome": "It is a good answer and she takes it and does not sit, and comes back in a year with a different question, and the table is there, since you kept it, and the second question is the one.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rp_professor_the_faculty_seat",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "MAJOR",
+      "category": "assignment",
+      "baseWeight": 8,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "ambition_vs_integrity"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "rep:professor:high",
+          "value": true
+        }
+      ],
+      "title": "The Faculty Seat",
+      "body": "The university has offered a chair, tenured, in the friar's name, which the order allows and the province distrusts, since a tenured friar is a friar the province cannot move, and the provincial has said the seat is the province's to accept and that the friar should say whether he wants it, since a man who wants a chair is a man the province watches.",
+      "choices": [
+        {
+          "id": "accept",
+          "label": "Accept it, and say the province may move you anyway",
+          "outcome": "The university agrees, in writing, and the province does not move you for twenty years, since it has a chair, and the reputation is the professor's whole and the province's small, and the chapters do not elect a tenured man, and you had not asked them to.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": -2
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "rp:professor:the_chair",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "decline",
+          "label": "Decline it; a friar is moved",
+          "outcome": "The university is puzzled and offers it to a layman, and the province moves you in four years, to a parish, and the reputation fades in the parish and the parish is the better for a professor, and the provincial says the friar chose obedience over a chair, which the province noticed.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": -1
+            },
+            {
+              "target": "flag",
+              "key": "rp:professor:declined_the_chair",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rp_liturgist_the_bloc",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "admin",
+      "baseWeight": 8,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "rep:liturgist:known",
+          "value": true
+        }
+      ],
+      "title": "The Liturgy Bloc",
+      "body": "The observant men of the province have decided you are theirs, since the Office is sung in your house, and have asked you to speak at chapter for the order's own rite in every house, and the progressive men have decided you are the other thing, and you have not said a word at chapter yet, and the moderator has looked at you.",
+      "choices": [
+        {
+          "id": "speak",
+          "label": "Speak for the sung Office, and against making it a rule",
+          "outcome": "Both blocs are disappointed and the chapter is grateful, and the Office is sung where it is sung and recited where it is not, and the reputation is the liturgist's and not a bloc's, and it is a distinction you keep for the rest of your life, with effort.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "observant_bloc",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "progressive_bloc",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "rp:liturgist:spoke_for_both",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "rule",
+          "label": "Speak for the rite in every house",
+          "outcome": "The observant men cheer and the progressive men leave the aula, and the motion fails by six, and the province has a bloc with your name on it, and the reputation is the reformer's after that, whether or not you meant it.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "outspokenness",
+              "key": "",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "observant_bloc",
+              "delta": 8
+            },
+            {
+              "target": "reputation",
+              "key": "progressive_bloc",
+              "delta": -8
+            },
+            {
+              "target": "flag",
+              "key": "rp:liturgist:spoke_for_the_rule",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "silent",
+          "label": "Say nothing",
+          "outcome": "The motion fails without you and both blocs say you were careful, and the sung Office goes on in your house, unremarked, which is the safest place for it, and the reputation is the house's, and small.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": -1
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rp_builder_school_president",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "assignment",
+      "baseWeight": 8,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "rep:builder:high",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "office:school_president",
+          "value": false
+        }
+      ],
+      "title": "The Board Asks for the Builder",
+      "body": "The order's school has asked the provincial for the friar known for fixing things, as president, since the school is what needs fixing, and the provincial has said yes if the friar will, and the friar has fixed three things and never run one, and the board has a budget the province has never seen.",
+      "choices": [
+        {
+          "id": "yes",
+          "label": "Take the presidency",
+          "outcome": "Six years. The school is solvent and the board is obedient, nearly, and the alumni love the friar who saved it, and the reputation is the builder's and the school president's both, and the province says the builder can run a thing after all.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 4
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 2
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "office:school_president",
+              "value": true
+            },
+            {
+              "target": "flag",
+              "key": "rp:builder:the_presidency",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "fix",
+          "label": "Take it for two years, to fix it, and then hand it on",
+          "outcome": "Two years and the books are right, and the layman who follows keeps them right, and the province says the builder fixed the school and left, which is what builders do, and the board is grateful and a little abandoned.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "rp:builder:fixed_and_left",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rp_advocate_immigrants",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "group",
+      "baseWeight": 8,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "rep:advocate:known",
+          "value": true
+        }
+      ],
+      "title": "The Immigrant Office",
+      "body": "The diocese's immigrant office has lost its funding and its priest, and the families have begun to come to the priory, since the friar is the one who speaks for them, and the prior has said the priory cannot be an office and the friar cannot be one either, and the families are in the parlour on Tuesday.",
+      "choices": [
+        {
+          "id": "office",
+          "label": "Make the parlour the office, Tuesdays",
+          "outcome": "Tuesdays are the families for a decade, and the county learns which door, and the bishop's office is grateful and does not fund it, and the house grumbles and feeds them, and the reputation is the advocate's, with the prophet's coming.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "progressive_bloc",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "local_bishop",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -1
+            },
+            {
+              "target": "flag",
+              "key": "rp:advocate:tuesdays",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "fund",
+          "label": "Go to the donors for the office's funding",
+          "outcome": "The donors fund it, since you asked, and the office reopens with a lay director, and the families have a door that is not the priory's, and the reputation is the advocate's and the confidant's both, which is an odd pair and a useful one.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "local_bishop",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rp_director_seminary_asks",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 8,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "rep:spiritual_director:known",
+          "value": true
+        },
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 5
+        }
+      ],
+      "title": "The Seminary Asks for a Director",
+      "body": "The diocesan seminary's rector has asked the provincial whether the friar known as a director would take the seminary's men, six of them, since the seminary has no one they trust with the internal forum, and the provincial has said the province can spare the hours if the friar can, and the hours are Tuesdays and Thursdays for years.",
+      "choices": [
+        {
+          "id": "yes",
+          "label": "Take the six",
+          "outcome": "Six men, and then six more, and the diocese's next priests are directed by a friar, and none of them can say what was said and all of them can say who said it, and the reputation is the formator's beginning, and the rector's successor asks again.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "local_bishop",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "diocesan_clergy",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 2
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "rp:director:the_seminary",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "three",
+          "label": "Take three, and train a diocesan priest to take the rest",
+          "outcome": "The diocesan priest learns, in a year of Tuesdays with you, and takes the rest, and the seminary has a director of its own because a friar formed one, which is the reputation's whole meaning.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "local_bishop",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "diocesan_clergy",
+              "delta": 4
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rp_prayer_the_night_office",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 8,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "rep:man_of_prayer:known",
+          "value": true
+        }
+      ],
+      "title": "The Night Office",
+      "body": "You have kept the night office alone for a year, since the house does not, and the old friar has come at three on a Tuesday and stood in the choir door and said nothing and gone, and come again on Thursday, and this time has come in, and sat in his stall, and it is two men at three in the morning now, and the house does not know.",
+      "choices": [
+        {
+          "id": "welcome",
+          "label": "Say nothing, and leave his stall's light on",
+          "outcome": "It is two men for a year and three for the next, and the house knows by then and does not say, and the night office is the house's in a decade, kept by men who came one at a time to a lit stall, and the reputation is the man of prayer's, and the house's.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "observant_bloc",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "rp:prayer:the_lit_stall",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "ask",
+          "label": "Ask him, after, why he came",
+          "outcome": "He says he had kept it fifty years ago and stopped, and that he had seen the light, and that he would like to keep it until he dies, and does, and you are with him the night he does, in the choir, at three.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "relationship",
+              "key": "@old_friar",
+              "delta": 8
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rp_confidant_the_chancery_calls",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 8,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "rep:confidant:high",
+          "value": true
+        }
+      ],
+      "title": "The Chancery Calls",
+      "body": "The chancellor has telephoned, which chancellors do not do to friars, to ask the friar's view on a thing the diocese is deciding, since the friar knows the people who will fund it or not, and the friar's view is the province's business and not the diocese's, and the prior is standing in the corridor.",
+      "choices": [
+        {
+          "id": "give",
+          "label": "Give the view",
+          "outcome": "It is a good view and the diocese takes it and it is right, and the chancellor calls again, and the friar is the diocese's confidant now and the province's suspect, and the shelter and the school have money, and the brothers have a look.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "local_bishop",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -3
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": -1
+            },
+            {
+              "target": "flag",
+              "key": "rp:confidant:the_chancery",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "prior",
+          "label": "Say the prior should be asked",
+          "outcome": "The chancellor asks the prior, who has no view and says so, and the diocese decides without the friar, and decides badly, and the chancellor does not call again, and the reputation is smaller and the brothers are easier.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "local_bishop",
+              "delta": -2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

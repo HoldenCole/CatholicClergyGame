@@ -34,6 +34,7 @@ import { appointOffice } from '@/systems/religious/offices';
 import { answerBishopAsk as answerBishopAskSys } from '@/systems/religious/bishopAsks';
 import { answerPastorAsk as answerPastorAskSys } from '@/systems/religious/pastorAsks';
 import { answerDirectionAsk as answerDirectionAskSys, endDirectee as endDirecteeSys } from '@/systems/religious/directing';
+import { setSpend as setSpendSys } from '@/systems/religious/spends';
 import { askHouseOffice as askHouseOfficeSys, endApostolate as endApostolateSys, fileRequest as fileFriarRequestSys, resignHouseOffice as resignHouseOfficeSys, withdrawRequest as withdrawFriarRequestSys } from '@/systems/religious/requests';
 import { decideAssignment, receiveAssignment, statePreference as statePreferenceSys } from '@/systems/religious/obedience';
 import { castVote, closeChapter, holdElection, resolveElection, returnToRanks, signalWillingness, speakFor, steerBloc } from '@/systems/religious/chapter';
@@ -128,6 +129,8 @@ export interface GameStore {
   answerDirectionAsk(yes: boolean): void;
   /** The order's choir cloak on or off, in the portrait. */
   setCappa(on: boolean): void;
+  /** The friar's free blocks, by spend. E3 §3.3. */
+  setSpend(id: string, ap: number): void;
   endDirectee(npcId: string): void;
   /** The consultation and the letter. E3 §3.1. */
   statePreference(houseId: string | null, objection: boolean): void;
@@ -729,6 +732,9 @@ export const useGameStore = create<GameStore>()((set, get) => ({
   },
   answerDirectionAsk(yes) {
     update(set, get, (game) => answerDirectionAskSys(game, yes));
+  },
+  setSpend(id, ap) {
+    update(set, get, (game) => setSpendSys(game, id, ap));
   },
   setCappa(on) {
     update(set, get, (game) => (game.religious ? { ...game, religious: { ...game.religious, cappa: on } } : game));

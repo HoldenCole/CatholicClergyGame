@@ -5,6 +5,7 @@ import { worksDone } from '@/systems/sidework';
 import Sheet from './Sheet';
 import Portrait from './portraits/Portrait';
 import { portraitForPlayer } from './portraits/spec';
+import { identitiesOf, phraseOf, reputationDef, reputationWord, topReputations, REPUTATIONS } from '@/systems/religious/reputations';
 
 /**
  * The profile: the one sheet that answers "what have I done with forty
@@ -34,6 +35,33 @@ export default function ProfilePanel() {
         </div>
       </Sheet>
 
+      {game.religious && game.flags.ordained && (() => {
+        const top = topReputations(game).filter((r) => r.value >= 20);
+        const ids = identitiesOf(game);
+        const phrase = phraseOf(game);
+        const mine = game.religious.observance;
+        return (
+          <Sheet title="What you are known for">
+            <p className="text-sm leading-relaxed">
+              {phrase ? `The province, asked, would say: ${phrase}.` : 'The province could not yet say what you are in one phrase, and a man it cannot describe it does not elect.'}
+              {mine !== undefined ? ` Your own observance: ${mine >= 70 ? 'strict' : mine >= 45 ? 'as the house keeps it' : 'relaxed'}.` : ''}
+            </p>
+            {top.length > 0 && (
+              <ul className="mt-2 flex flex-col gap-0.5 text-sm">
+                {top.map((r) => (
+                  <li key={r.key}><span className="font-medium">{reputationDef(r.key).label}</span>: {reputationWord(r.value)}{game.flags[`rep:overshoot:${r.key}`] ? <span className="ink-wine"> · more than you have earned</span> : ''}. <span className="ink-faint text-xs">{reputationDef(r.key).line}</span></li>
+                ))}
+              </ul>
+            )}
+            {ids.length > 0 && (
+              <ul className="mt-2 flex flex-col gap-0.5 text-sm">
+                {ids.map((d) => <li key={d.id}><span className="font-medium">{d.label}.</span> <span className="ink-muted">{d.line}</span></li>)}
+              </ul>
+            )}
+            <p className="ink-faint mt-2 text-xs">A reputation is built by the hours, week after week, and held under the stats behind it; it travels with you when every local standing resets, and fades only when wholly unused. Known from {REPUTATIONS.known}.</p>
+          </Sheet>
+        );
+      })()}
       <Sheet title="The book">
         {p.ministry.length === 0 ? (
           <p className="ink-faint text-sm">Nothing counted yet. The book opens at ordination.</p>

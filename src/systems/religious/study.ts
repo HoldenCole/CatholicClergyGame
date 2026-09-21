@@ -90,7 +90,8 @@ export function dispensationWeek(state: GameState): GameState {
 export function preachingOf(state: Pick<GameState, 'religious'>): number | undefined {
   const r = state.religious;
   if (!r || !religiousOrder(r.order).mechanics.preachingReputation) return undefined;
-  return r.preachingReputation ?? 0;
+  // The order's own preaching reputation and the portable one of §8 are one thing seen from two sides.
+  return Math.max(r.preachingReputation ?? 0, r.reputations?.preacher ?? 0);
 }
 
 function setPreaching(state: GameState, value: number): GameState {

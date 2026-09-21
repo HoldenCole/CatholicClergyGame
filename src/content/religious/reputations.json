@@ -1,0 +1,25 @@
+{
+  "_notes": "What a friar is known for. E3 §8. Eleven portable reputations, 0..100, gated by stats: you cannot become known as a confessor with low Piety however many hours you sit in the box. Identities are mixes of two, and the province describes the man in one phrase. Effects on assignment fit are per work of a house (obedience.fitOf). Tunables invented.",
+  "reputations": [
+    { "id": "confessor", "label": "Confessor", "phrase": "the one they line up for on Saturdays", "gates": ["piety", "theology"], "works": { "priory_church": 1, "parish": 1 }, "line": "Penitents travel to you. Other priests come to you. Eventually people who matter come to you, and you cannot tell anyone." },
+    { "id": "preacher", "label": "Preacher", "phrase": "the preacher", "gates": ["charisma", "theology"], "works": { "priory_church": 1, "parish": 0.7, "preaching": 1.2 }, "line": "Invitations from outside the province. The fastest route to becoming a figure." },
+    { "id": "professor", "label": "Professor", "phrase": "the professor", "gates": ["theology", "knowledge"], "works": { "teaching": 1.2, "school": 0.8, "formation": 0.5 }, "line": "Faculty appointments, doctoral students, academic networks, credibility in doctrinal disputes." },
+    { "id": "spiritual_director", "label": "Spiritual director", "phrase": "the one the formators go to", "gates": ["piety", "knowledge"], "works": { "formation": 1.2, "priory_church": 0.4 }, "line": "You form the formators. Directees become a network of men who trust you completely, and whom you can never discuss." },
+    { "id": "evangelist", "label": "Evangelist", "phrase": "the evangelist", "gates": ["charisma", "piety"], "works": { "mission": 1.2, "school": 0.6, "parish": 0.5 }, "line": "Draws the unchurched and the curious. Vocations follow evangelists." },
+    { "id": "liturgist", "label": "Liturgist", "phrase": "the one whose Office is sung", "gates": ["knowledge", "theology"], "works": { "priory_church": 1, "parish": 0.6 }, "line": "Beautiful worship draws people from outside the parish. Polarizing by nature." },
+    { "id": "man_of_prayer", "label": "Man of prayer", "phrase": "a man of prayer", "gates": ["piety"], "works": { "formation": 0.8, "priory_church": 0.5 }, "line": "The reputation for holiness. Slows the decay of piety; the province protects such men, and elects them to nothing." },
+    { "id": "builder", "label": "Builder", "phrase": "the one they send where things are broken", "gates": ["administration"], "works": { "school": 1, "parish": 0.8, "curia": 1 }, "line": "You get sent where things are broken. A blessing and a sentence." },
+    { "id": "advocate", "label": "Advocate", "phrase": "the one who speaks for the poor", "gates": ["charisma", "piety"], "works": { "mission": 0.8, "parish": 0.6 }, "line": "Public standing, moral authority, and reliable political enemies." },
+    { "id": "pastor_of_dying", "label": "Pastor of the dying", "phrase": "the one they call at two in the morning", "gates": ["piety", "charisma"], "works": { "parish": 0.8, "priory_church": 0.5 }, "line": "The least glamorous reputation and the one laypeople never forget." },
+    { "id": "confidant", "label": "Confidant", "phrase": "the one the donors ask for", "gates": ["knowledge", "charisma"], "works": { "curia": 1, "school": 0.6 }, "line": "Money and access. Faintly suspect among the brothers." }
+  ],
+  "identities": [
+    { "id": "lined_up_for", "label": "The one they line up for", "mix": ["confessor", "man_of_prayer"], "line": "Massive lay draw, strong protection of piety, and a province that shields him from administrative assignments.", "assignmentBias": { "curia": -30, "school": -15, "priory_church": 20 }, "pietyDecayFactor": 0.8 },
+    { "id": "public_intellectual", "label": "The public intellectual", "mix": ["professor", "preacher"], "line": "National reach, media, invitations; Rome notices.", "assignmentBias": { "teaching": 20, "preaching": 20 }, "romeDrift": 1 },
+    { "id": "founder", "label": "The founder", "mix": ["evangelist", "builder"], "line": "The strongest gate on founding a house.", "assignmentBias": { "mission": 15, "parish": 10 }, "foundationBonus": 25 },
+    { "id": "reformer", "label": "The reformer", "mix": ["liturgist", "professor"], "line": "Influential and polarizing; the province splits over him.", "assignmentBias": { "priory_church": 15, "teaching": 10 }, "hostility": 1 },
+    { "id": "formator", "label": "The formator", "mix": ["spiritual_director", "professor"], "line": "Shapes a generation; his students fill the province in twenty years.", "assignmentBias": { "formation": 30 } },
+    { "id": "fixer", "label": "The fixer", "mix": ["builder", "confidant"], "line": "Sent everywhere, trusted with everything, elected to nothing.", "assignmentBias": { "curia": 25, "school": 20, "parish": 10 }, "legibilityPenalty": 15 },
+    { "id": "prophet", "label": "The prophet", "mix": ["advocate", "preacher"], "line": "Public power, and permanent friction with someone.", "assignmentBias": { "mission": 15, "priory_church": 10 }, "bishopFriction": 1 }
+  ]
+}

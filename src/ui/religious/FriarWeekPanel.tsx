@@ -5,6 +5,9 @@ import { currentPosting } from '@/systems/religious/transfer';
 import { friendshipLoad } from '@/systems/religious/friendship';
 import { apostolateDef, houseOfficeDef, requestsLoad } from '@/systems/religious/requests';
 import { chanceryAskDef } from '@/systems/religious/bishopAsks';
+import { spendBudget, spendBuilds, spendCost, spendOffered, spendsOf, spendsUsed } from '@/systems/religious/spends';
+import { spendDefs } from '@/content/religious';
+import Sheet from '../Sheet';
 import { religiousOrder } from '@/content/religious';
 import Panel from '../Panel';
 import DigestPanel from '../DigestPanel';
@@ -23,6 +26,7 @@ const WORK: Record<string, string> = {
 /** An ordained friar's week without a parish loop of his own: the house's, and the posting's. E3 §3.3. */
 export default function FriarWeekPanel() {
   const game = useGameStore((s) => s.game);
+  const setSpend = useGameStore((s) => s.setSpend);
   if (!game?.religious) return null;
   const house = currentHouse(game);
   const posting = currentPosting(game);
@@ -45,6 +49,41 @@ export default function FriarWeekPanel() {
         </p>
         <p className="ink-faint mt-2 text-xs">The provincial assigns you for a term of three to six years and consults you before each letter. A parish entrusted to the order is held by two keys. Chapters elect the prior and the provincial, and you watch the ballots.</p>
       </Panel>
+      {game.flags.ordained && (() => {
+        const budget = spendBudget(game);
+        const used = spendsUsed(game);
+        const left = Math.round((budget - used) * 4) / 4;
+        const spends = spendsOf(game);
+        return (
+          <Sheet title="Your hours">
+            <p className="ink-muted text-xs leading-relaxed">
+              After the common life, the office, the work, and the asks, {budget} block{budget === 1 ? '' : 's'} of the week are yours.
+              {left > 0 ? ` ${left} still unspoken for; they go nowhere in particular.` : ' All of them are given.'} What they build, they build slowly, and the province comes to know you by it.
+            </p>
+            <ul className="mt-2 flex flex-col gap-1.5">
+              {spendDefs.map((d) => {
+                const ap = spends[d.id] ?? 0;
+                const offered = spendOffered(game, d);
+                const cost = spendCost(game, d.id, 1);
+                const canAdd = offered.ok && ap < d.maxAp && left >= cost - 1e-6;
+                return (
+                  <li key={d.id} className="flex items-center justify-between gap-2 text-sm">
+                    <span className={'min-w-0 ' + (offered.ok ? '' : 'ink-faint')} title={d.blurb}>
+                      {d.label}
+                      <span className="ink-faint ml-2 text-xs">{offered.ok ? spendBuilds(d) : offered.why}{cost !== 1 && offered.ok ? ` · ${cost} a block` : ''}</span>
+                    </span>
+                    <div className="flex shrink-0 items-center gap-1">
+                      <button className="pbtn px-2 py-0 text-xs" disabled={ap === 0} onClick={() => setSpend(d.id, ap - 1)}>−</button>
+                      <span className="w-5 text-center font-mono text-xs">{ap}</span>
+                      <button className="pbtn px-2 py-0 text-xs" disabled={!canAdd} onClick={() => setSpend(d.id, ap + 1)}>+</button>
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
+          </Sheet>
+        );
+      })()}
       <DigestPanel />
     </>
   );

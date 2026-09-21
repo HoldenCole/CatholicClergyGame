@@ -3,6 +3,7 @@ import { createRng } from '@/engine/rng';
 import { religiousOrder } from '@/content/religious';
 import { dateOf } from '@/engine/time';
 import { membersOf } from './house';
+import { legibilityFromReputations } from './reputations';
 
 /**
  * Who votes, who may be elected, and how each elector scores each man.
@@ -115,7 +116,9 @@ export function playerLegibility(state: GameState): number {
   const r = state.religious;
   if (!r) return 20;
   if (r.legibility !== undefined) return r.legibility;
-  return Math.max(0, Math.min(100, 20 + r.termsServed.length * 15 + (r.office ? 15 : 0) + (r.preachingReputation ?? 0) * 0.4));
+  // The electorate votes for a reputation, not a stat sheet: what he is known for makes him legible, and offices held a little. E3 §8.3.
+  const byOffice = 20 + r.termsServed.length * 15 + (r.office ? 15 : 0) + (r.preachingReputation ?? 0) * 0.4;
+  return Math.max(0, Math.min(100, Math.max(byOffice, legibilityFromReputations(state) + r.termsServed.length * 5)));
 }
 
 /** The body a chapter sits for: the house's solemnly professed, or the province's delegates. */

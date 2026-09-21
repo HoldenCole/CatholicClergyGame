@@ -3,7 +3,9 @@ import horariumRaw from './horarium.json';
 import permissionsRaw from './permissions.json';
 import bishopAsksRaw from './bishopAsks.json';
 import pastorAsksRaw from './pastorAsks.json';
-import type { BishopAskDef, PastorAskDef, HorariumDef, HorariumKey, OrderDef, OrderKey, PermissionDef, ProvinceSeed } from '@/types';
+import reputationsRaw from './reputations.json';
+import spendsRaw from './spends.json';
+import type { BishopAskDef, PastorAskDef, ReputationDef, IdentityDef, FriarSpendDef, HorariumDef, HorariumKey, OrderDef, OrderKey, PermissionDef, ProvinceSeed } from '@/types';
 
 /** The orders a friar can be professed into. E3 §6–7, as data. */
 const data = raw as unknown as { orders: OrderDef[]; provinceComplications: string[]; doctrinalTopics: string[] };
@@ -45,3 +47,11 @@ export const bishopAskDefs: BishopAskDef[] = (bishopAsksRaw as unknown as { asks
 
 /** What a pastor of the diocese may write to the prior for. E3 §3.12. */
 export const pastorAskDefs: PastorAskDef[] = (pastorAsksRaw as unknown as { asks: PastorAskDef[] }).asks;
+
+/** What a friar is known for, and the identities two reputations make. E3 §8. */
+const reps = reputationsRaw as unknown as { reputations: ReputationDef[]; identities: IdentityDef[] };
+export const reputationDefs: ReputationDef[] = reps.reputations;
+export const identityDefs: IdentityDef[] = reps.identities;
+
+/** The friar's discretionary week. E3 §3.3. */
+export const spendDefs: FriarSpendDef[] = (spendsRaw as unknown as { spends: FriarSpendDef[] }).spends;
