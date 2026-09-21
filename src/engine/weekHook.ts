@@ -35,6 +35,7 @@ import { anniversaryWeek, nameDayWeek } from '@/systems/anniversaries';
 import { orderFeastLine, orderFeastsOfWeek } from '@/systems/religious/feasts';
 import { feastsOfWeek } from './feasts';
 import { ensureTown } from '@/systems/town';
+import { mailWeek } from '@/systems/mail';
 import { sideWorkWeek } from '@/systems/sidework';
 import { requestedChoice } from '@/systems/choice';
 import { confessorWeek } from '@/systems/confessor';
@@ -127,6 +128,8 @@ export function seminaryWeekHook(deps: EventDeps): WeekHook {
     }
     // The house's invitations and the chancery's summers come by letter, week by week, like everyone else's.
     if (next.mode.kind !== 'clock' || next.pending.length > 0) return next;
+    // The mailbag: a letter from someone, now and then. DESIGN §8.10.
+    next = mailWeek(next, rng.derive(`mail:${next.clock.week}`));
     return religiousModeStep(openMail(offersStep(next, rng, deps)));
   };
 }
@@ -200,6 +203,8 @@ export function studyWeekHook(deps: EventDeps): WeekHook {
       if (event) next = fireOrResolve(next, event, rng, deps);
     }
     if (next.mode.kind !== 'clock' || next.pending.length > 0) return next;
+    // The mailbag: a letter from someone, now and then. DESIGN §8.10.
+    next = mailWeek(next, rng.derive(`mail:${next.clock.week}`));
     return religiousModeStep(openMail(offersStep(next, rng, deps)));
   };
 }
@@ -266,6 +271,8 @@ export function friarWeekHook(deps: EventDeps): WeekHook {
       if (event) next = fireOrResolve(next, event, rng, deps);
     }
     if (next.mode.kind !== 'clock' || next.pending.length > 0) return next;
+    // The mailbag: a letter from someone, now and then. DESIGN §8.10.
+    next = mailWeek(next, rng.derive(`mail:${next.clock.week}`));
     return religiousModeStep(openMail(offersStep(next, rng, deps)));
   };
 }
@@ -449,6 +456,8 @@ export function parishWeekHook(deps: EventDeps): WeekHook {
       next = nextAssignment(next, rng).state;
     }
     if (next.mode.kind !== 'clock' || next.pending.length > 0) return next;
+    // The mailbag: a letter from someone, now and then. DESIGN §8.10.
+    next = mailWeek(next, rng.derive(`mail:${next.clock.week}`));
     return religiousModeStep(openMail(offersStep(next, rng, deps)));
   };
 }

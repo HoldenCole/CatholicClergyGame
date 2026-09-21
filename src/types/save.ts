@@ -1,7 +1,7 @@
 import type { Character } from './character';
 import type { HistoryEntry, PendingEvent } from './events';
 import type { InterruptConfig } from './interrupts';
-import type { Mode } from './mode';
+import type { MailRecord, Mode } from './mode';
 import type { Npc } from './npc';
 import type { ActiveOffer, Commitment, OfferRecord } from './offers';
 import type { Assignment, Diocese, Parish, World } from './world';
@@ -97,6 +97,8 @@ export interface GameState {
   talks?: TalksState;
   /** Letters read, most recent last: the year in review, the new bishop's reading. */
   letters?: Letter[];
+  /** The mailbag: every letter from someone, and whether it was answered. DESIGN §8.10. */
+  mail?: MailRecord[];
   /** Letters waiting behind the one in hand. */
   letterQueue?: Letter[];
   /** Where the man stood at the last review, so the next can say what moved. */
