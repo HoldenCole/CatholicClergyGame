@@ -1,4 +1,4 @@
-import type { CalendarDate, GameState } from '@/types';
+import type { CalendarDate, CampaignKind, GameState } from '@/types';
 import { defaultInterruptConfig } from './interrupts';
 import { createRng, type Rng } from './rng';
 import { createClock } from './time';
@@ -8,6 +8,8 @@ export interface NewGameOptions {
   /** The date seminary opens. Defaults to late August of `startYear`. */
   start?: CalendarDate;
   startYear?: number;
+  /** The base game unless said otherwise. E3 §12. */
+  campaign?: CampaignKind;
 }
 
 /** Seminary years conventionally open in the second half of August. */
@@ -58,6 +60,7 @@ export function newGame(options: NewGameOptions): { state: GameState; rng: Rng }
     romeTemperament: 0,
     decor: {},
     permissions: {},
+    ...(options.campaign && options.campaign !== 'diocesan' ? { campaign: options.campaign } : {}),
   };
   return { state, rng };
 }

@@ -17,6 +17,7 @@ import type { HouseStanding } from './houses';
 import type { ActiveArc } from './arcs';
 import type { CampaignKind } from './campaign';
 import type { OrderHouse, Province, ReligiousPlayerState } from './religiousLife';
+import type { ProvinceCandidateRecord } from './religiousLife';
 
 /** A rolled diocese the player may choose, held only during creation. */
 export interface DioceseCandidate {
@@ -112,6 +113,8 @@ export interface GameState {
   clusters: Record<string, number>;
   /** The five rolled dioceses, until one is chosen. */
   candidates: DioceseCandidate[] | null;
+  /** The religious campaign's rolled provinces of the chosen order, until one is chosen. */
+  provinceCandidates?: ProvinceCandidateRecord[] | null;
   /**
    * Which game this is. Absent means the base game (diocesan), so every
    * save before E3 reads as it did. `world.diocese` is always the diocese

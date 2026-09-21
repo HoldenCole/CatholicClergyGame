@@ -1,5 +1,6 @@
+import { pillarLabel } from '@/systems/campaign';
 import { useGameStore } from '@/engine/store';
-import { PILLARS, type EvaluationResult, type Pillar } from '@/types';
+import { PILLARS, type EvaluationResult } from '@/types';
 import { FORMATION } from '@/systems/formation';
 import { hoursGainsSentence } from '@/systems/seminaryWeek';
 import { summersOnRecord } from '@/systems/standing';
@@ -12,7 +13,6 @@ const RESULT_TEXT: Record<EvaluationResult, { title: string; body: string }> = {
   DISMISSED: { title: 'Dismissed', body: 'The seminary will not recommend you for continued formation. The vocation director will call.' },
 };
 
-const PILLAR_LABEL: Record<Pillar, string> = { human: 'Human', spiritual: 'Spiritual', intellectual: 'Intellectual', pastoral: 'Pastoral' };
 
 export function pillarWord(score: number): string {
   if (score <= 0) return 'neglected';
@@ -38,7 +38,7 @@ export default function EvaluationPanel() {
       <dl className="mt-4 grid grid-cols-4 gap-3">
         {PILLARS.map((p) => (
           <div key={p}>
-            <dt className="heading">{PILLAR_LABEL[p]}</dt>
+            <dt className="heading">{pillarLabel(game, p)}</dt>
             <dd className="text-lg">{pillarWord(rec.pillars[p])}</dd>
           </div>
         ))}

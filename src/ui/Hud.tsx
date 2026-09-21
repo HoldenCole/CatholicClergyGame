@@ -1,3 +1,6 @@
+import type { GameState } from '@/types';
+import { formationStage } from '@/systems/religious/formation';
+import { religiousOrder } from '@/content/religious';
 import { useGameStore } from '@/engine/store';
 import { dateOf, gameYearOf, priesthoodYear, seasonOf, weekOfYear } from '@/engine/time';
 import { formatDate, SEASON_LABELS } from '@/engine/calendar';
@@ -6,6 +9,21 @@ import { eventById } from '@/content';
 import { SPEEDS, type Speed } from '@/types';
 import Portrait from './portraits/Portrait';
 import { portraitForCharacter, yearOf } from './portraits/spec';
+
+/** A friar's word on the plate: the stage of formation, the office held, or the posting. E3. */
+function friarWord(game: GameState): string | null {
+  const r = game.religious;
+  if (!r) return null;
+  if (!game.flags.ordained) {
+    const stage = formationStage(game);
+    return stage ? (stage.house === 'novitiate' ? 'Novice' : stage.house === 'priory' ? 'Pre-novice' : 'Student brother') : 'Novice';
+  }
+  const order = religiousOrder(r.order);
+  if (r.office) return r.office.office === 'prior' ? 'Prior' : 'Prior provincial';
+  if (r.appointment) return order.offices.find((o) => o.id === r.appointment!.id)?.label ?? 'Friar';
+  const work = r.assignments.find((a) => a.endWeek === undefined)?.work;
+  return work === 'parish' ? 'Friar, at the parish' : work === 'school' ? 'Friar, at the school' : work === 'teaching' ? 'Friar, teaching' : work === 'formation' ? 'Friar, in formation work' : 'Friar';
+}
 
 const PHASE_LABELS: Record<string, string> = {
   seminary: 'Seminarian',
@@ -69,7 +87,7 @@ export default function Hud() {
         <h1 className="title text-lg tracking-wide" style={{ color: '#e6c25a' }}>Vocation</h1>
         {c && <Portrait portrait={portraitForCharacter(c, yearOf(clock.startDay, clock.week), game.flags.ordained_bishop ? 'bishop' : game.phase)} size={34} title={`${c.name.first} ${c.name.last}`} />}
         <span className="truncate text-sm">
-          {c ? `${c.name.first} ${c.name.last}, ` : ''}{game.study ? `${game.see ? `Bishop of ${game.see.see}` : game.study.city === 'rome' || game.study.city === 'washington' ? `Studying in ${game.study.city === 'rome' ? 'Rome' : 'Washington'}` : game.study.label}, year ${Math.floor((clock.week - game.study.startWeek) / 52) + 1}` : (PHASE_LABELS[game.phase] ?? game.phase)}
+          {c ? `${c.name.first} ${c.name.last}, ` : ''}{game.study ? `${game.see ? `Bishop of ${game.see.see}` : game.study.city === 'rome' || game.study.city === 'washington' ? `Studying in ${game.study.city === 'rome' ? 'Rome' : 'Washington'}` : game.study.label}, year ${Math.floor((clock.week - game.study.startWeek) / 52) + 1}` : (friarWord(game) ?? PHASE_LABELS[game.phase] ?? game.phase)}
         </span>
         <span className="truncate text-sm opacity-80">
           Week of {formatDate(dateOf(clock))} · {SEASON_LABELS[seasonOf(clock)]} · {yearLine}

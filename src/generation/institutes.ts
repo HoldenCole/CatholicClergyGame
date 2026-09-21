@@ -1,3 +1,4 @@
+import { religiousOrders } from '@/content/religious';
 import type { BishopRelation, DiocesePreset, Institute, InstituteDef, InstituteTrajectory, InstituteWork, Npc, OrderPresence, Temperament } from '@/types';
 import { orderProfile } from '@/content/orders';
 import { TEMPERAMENTS } from '@/types';
@@ -171,13 +172,15 @@ export function generateReligious(rng: Rng, institutes: Institute[], year: numbe
       stats: addStats(rollBaseStats(rng, 34, 62), charismStats(house.charism)),
       relationship: rng.int(-5, 20),
     });
+    // A religious of an order the expansion plays carries the order's key, so the same scenes and selectors see him. E3 §11.
+    const orderKey = religiousOrders.find((o) => o.instituteId === house.defId)?.key;
     out.push({
       ...npc,
       alignment: rollAlignment(rng, house.alignment, 14),
       institute: house.id,
       charism: house.charism,
       temperament: temperamentFor(rng, house.charism),
-      tags: [...npc.tags, 'religious', tag, `institute:${house.id}`],
+      tags: [...npc.tags, 'religious', tag, `institute:${house.id}`, ...(orderKey ? [`order:${orderKey}`] : [])],
     });
   }
   return out;
@@ -209,7 +212,7 @@ export function visitingDirector(rng: Rng, year: number, defId = 'dominicans', n
     institute: `inst_${defId}`,
     charism: def.charism,
     temperament: temperamentFor(rng, def.charism),
-    tags: [...npc.tags, 'religious', 'visiting_director', `institute:inst_${defId}`],
+    tags: [...npc.tags, 'religious', 'visiting_director', `institute:inst_${defId}`, ...(religiousOrders.find((o) => o.instituteId === defId) ? [`order:${religiousOrders.find((o) => o.instituteId === defId)!.key}`] : [])],
   };
 }
 

@@ -1,3 +1,5 @@
+import { pillarLabel } from '@/systems/campaign';
+import { formationStage } from '@/systems/religious/formation';
 import { useState } from 'react';
 import { useGameStore } from '@/engine/store';
 import { emphasisPointsFor, FORMATION, validateEmphasis } from '@/systems/formation';
@@ -9,6 +11,14 @@ const PILLAR_TEXT: Record<Pillar, { label: string; blurb: string }> = {
   spiritual: { label: 'Spiritual', blurb: 'The hours, the chapel at six, direction, silence.' },
   intellectual: { label: 'Intellectual', blurb: 'The library, the languages, the argument you lose and then win.' },
   pastoral: { label: 'Pastoral', blurb: 'The parish on weekends, the hospital, the people who need something.' },
+};
+
+/** What each pillar is in a house of formation, for a friar; the ids are the base game's. E3 §5. */
+const RELIGIOUS_BLURB: Record<Pillar, string> = {
+  human: 'The table, recreation, the brother you cannot stand, being a man the house can live with.',
+  spiritual: 'The Office in choir, the cell, silence, the Rule read every morning.',
+  intellectual: 'The studium, the Fathers, the argument you lose and then win.',
+  pastoral: 'The Sunday parishes, the pulpit, the people who need something.',
 };
 
 const YEAR_TEXT: Record<number, string> = {
@@ -27,6 +37,7 @@ export default function EmphasisPanel() {
   const leave = useGameStore((s) => s.leaveSeminary);
   const [alloc, setAlloc] = useState<Record<Pillar, number>>({ human: 3, spiritual: 3, intellectual: 2, pastoral: 2 });
   if (!game?.seminary || game.mode.kind !== 'year_start') return null;
+  const stage = formationStage(game);
   const points = emphasisPointsFor(game);
   const used = PILLARS.reduce((n, p) => n + alloc[p], 0);
   const error = validateEmphasis(alloc, points);
@@ -36,14 +47,14 @@ export default function EmphasisPanel() {
 
   return (
     <Panel title={`Year ${year} · the year's emphasis`} tilt="r">
-      <p className="leading-relaxed">{YEAR_TEXT[year]}</p>
+      <p className="leading-relaxed">{stage?.line ?? YEAR_TEXT[year]}</p>
       <p className="ink-muted mt-2 text-sm">
         Where the year goes. You have {points} measures to give{points > FORMATION.emphasisPoints ? ', more than the boys, because you have studied before' : ''}. A pillar given nothing is noticed.
       </p>
       <ul className="mt-4 flex flex-col gap-2">
         {PILLARS.map((p) => (
           <li key={p} className="flex items-center gap-4">
-            <div className="w-28 font-medium">{PILLAR_TEXT[p].label}</div>
+            <div className="w-28 font-medium">{pillarLabel(game, p)}</div>
             <div className="flex items-center gap-1">
               <button className="pbtn px-2 py-0 text-sm" onClick={() => bump(p, -1)}>−</button>
               <div className="flex w-24 gap-0.5">
@@ -53,7 +64,7 @@ export default function EmphasisPanel() {
               </div>
               <button className="pbtn px-2 py-0 text-sm" onClick={() => bump(p, 1)}>+</button>
             </div>
-            <div className="ink-muted text-sm">{PILLAR_TEXT[p].blurb}</div>
+            <div className="ink-muted text-sm">{game.religious ? RELIGIOUS_BLURB[p] : PILLAR_TEXT[p].blurb}</div>
           </li>
         ))}
       </ul>

@@ -27,7 +27,15 @@ export type Mode =
   | { kind: 'assignment_choice'; options: AssignmentOption[]; why: string }
   /** A letter that stops the clock until read: the year in review, a new bishop's reading of the file. */
   | { kind: 'letter'; letter: Letter }
-  | { kind: 'ended'; ending: Ending; summary: string };
+  | { kind: 'ended'; ending: Ending; summary: string }
+  /** The provincial's consultation before an assignment: the friar states a preference or objects. E3 §3.1. */
+  | { kind: 'consultation' }
+  /** The provincial's letter has come: taken with good grace, reluctance, or refused. */
+  | { kind: 'obedience_letter' }
+  /** A chapter in session: the ballots, watched round by round. E3 §3.6. */
+  | { kind: 'chapter' }
+  /** A term of office has run out: the return to the ranks, well or badly. E3 §3.7. */
+  | { kind: 'term_end' };
 
 /** One assignment on offer, with its breakdown. systems/choice.ts */
 export interface AssignmentOption {
