@@ -1,0 +1,2058 @@
+{
+  "_notes": "Dominican formation, the theology years to ordination. E3 §5.1: the studium's judgment, the campus, the homiletics room, the thesis, the dispensed semester, the regent, the close vote, the deacon's parish, the retreat, the class, the first Mass, the master of students' last word.",
+  "events": [
+    {
+      "id": "opf_theology_first_eval",
+      "phase": [
+        "seminary"
+      ],
+      "campaign": "religious",
+      "severity": "MAJOR",
+      "category": "personal",
+      "baseWeight": 12,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        }
+      ],
+      "title": "The Studium's First Judgment",
+      "body": "The fourth year begins with the evaluation the studium takes seriously: the faculty in a room, the student brother outside it, and then the master of students reading a page that decides whether you are a man the province will send for a degree, or a man it will send to a parish, or a man it is not sure of. Yours says the second and the third. {@master_of_students} says the faculty was divided, and that the ones who were for you were the ones who preach, and that the ones against were the ones who publish.",
+      "choices": [
+        {
+          "id": "accept",
+          "label": "Say the parish is where you meant to go",
+          "outcome": "He looks at you for a while and says that men who say that in the fourth year sometimes mean it, and that the province will hold you to it, and it does, and the parishes are glad of it for thirty years.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 3
+            },
+            {
+              "target": "relationship",
+              "key": "@master_of_students",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "studium:chose_the_parish",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "degree",
+          "label": "Say you would like to be the first kind of man, and ask what it would take",
+          "outcome": "He tells you: two years of the kind of work that publishes, and less of the kind that preaches. You do the work. The next evaluation says the first thing, and the faculty who preach say nothing, and you hear it.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": -1
+            },
+            {
+              "target": "flag",
+              "key": "studium:chose_the_degree",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "ask",
+          "label": "Ask which of the faculty was not sure",
+          "outcome": "He will not say, and then says it was the professor of homiletics, who thought you preached to the six, and you go to him that week and ask what he saw, and it is the most useful hour of the year.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 1
+            },
+            {
+              "target": "relationship",
+              "key": "@master_of_students",
+              "delta": 2
+            }
+          ]
+        }
+      ],
+      "yearGate": [
+        4
+      ]
+    },
+    {
+      "id": "opf_campus_ministry_sunday",
+      "phase": [
+        "seminary"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "parish_death",
+      "baseWeight": 10,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "belief_vs_safety"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        }
+      ],
+      "title": "The Campus Chaplaincy",
+      "body": "The studium sends fourth-year brothers to the order's campus ministry at the university on Sunday evenings: a Mass at nine in a room that was a lecture hall, two hundred students, a chaplain who is a friar and tired, and after Mass the thing the chaplain calls the hour, which is students with questions and pizza. This Sunday the chaplain is ill and has left you the hour, and the first question, from a boy in the front, is whether the Church has ever been wrong about anything.",
+      "choices": [
+        {
+          "id": "yes",
+          "label": "Say yes, and name three things",
+          "outcome": "The room goes quiet and then does not stop for an hour. Two students come back the next week to argue and one to be received into the Church eighteen months later, and the chaplain, told, says that was the answer he would have given and that he is glad it was a student brother who gave it, since it is on your file and not his.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 3
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 4
+            },
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "observant_bloc",
+              "delta": -2
+            },
+            {
+              "target": "flag",
+              "key": "studium:said_yes_on_campus",
+              "value": true
+            }
+          ],
+          "volume": "semi_public",
+          "positionTopic": "doctrine",
+          "positionValue": 15
+        },
+        {
+          "id": "distinguish",
+          "label": "Distinguish: what the Church teaches and what churchmen have done",
+          "outcome": "It is correct and it is an hour, and the students follow it, mostly, and the boy in the front says at the end that it was a lawyer's answer, and he is not wrong, and he comes back anyway, since lawyers have their uses.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "question",
+          "label": "Ask him what he has in mind",
+          "outcome": "He has a great deal in mind and it takes forty minutes, and the room learns more from his list than from any answer, and the chaplain says the next week that the boy has stopped asking that question and started asking better ones.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 3
+            }
+          ]
+        }
+      ],
+      "yearGate": [
+        4,
+        5
+      ]
+    },
+    {
+      "id": "opf_preaching_practicum",
+      "phase": [
+        "seminary"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 11,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        }
+      ],
+      "title": "The Homiletics Room",
+      "body": "The studium has a room for it: a lectern, a camera, eleven chairs, and the professor of homiletics, a friar who preached missions for twenty years and has opinions about every second of a homily. You have preached eight minutes on the Prodigal Son and he has played it back with the sound off, so the class can watch your hands, and then with the picture off, so they can hear your voice, and then he has asked the class what the homily was about, and nobody can say.",
+      "choices": [
+        {
+          "id": "again",
+          "label": "Ask to do it again, tomorrow, on one thing",
+          "outcome": "You do it on the father's running. Four minutes. The class can say what it was about. The professor says nothing for a long moment and then says that is preaching and the other was talking, and you have the difference for life.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 4
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "studium:one_thing_learned",
+              "value": true
+            },
+            {
+              "target": "relationship",
+              "key": "@master_of_students",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "defend",
+          "label": "Say the homily was about mercy, and the class was not listening",
+          "outcome": "The professor says the class was listening as a parish listens, which is badly, and that a homily that requires listening is a lecture, and plays it a third time, and you hear it, and it is a lecture.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 1
+            },
+            {
+              "target": "outspokenness",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": -1
+            }
+          ]
+        },
+        {
+          "id": "watch",
+          "label": "Say nothing, and watch the others preach",
+          "outcome": "Eleven homilies. You learn more from the seven bad ones than from the four good. The professor, at term's end, says you were the student who watched, and that watchers preach late and preach well, and you do.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ]
+        }
+      ],
+      "yearGate": [
+        4,
+        5
+      ]
+    },
+    {
+      "id": "opf_thesis_choice",
+      "phase": [
+        "seminary"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 10,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        }
+      ],
+      "title": "The Licentiate Question",
+      "body": "The fifth-year brothers choose a thesis and the choice is watched: a man who chooses Thomas on grace is a man for the studium; a man who chooses the sacraments in a parish is a man for the parishes; a man who chooses something nobody has heard of is either brilliant or lost. {@master_of_students} has said the choice is yours and that the regent will read it, and the regent, {@confrere} says, reads thesis titles the way other men read tea leaves.",
+      "choices": [
+        {
+          "id": "thomas",
+          "label": "Thomas, on a question the studium has argued for a century",
+          "outcome": "The regent is pleased and says so, and the thesis is good and dull and is read by the four men who read such things, and one of them is the regent, and it is the beginning of his interest in you, which is a career.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 4
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "studium:thesis_thomas",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "preaching",
+          "label": "Preaching, the order's own theology of it, from the early friars",
+          "outcome": "The regent says it is a pastoral topic, which is not praise, and the professor of homiletics says it is the first real thesis the studium has had on the thing the order is for, and the two of them argue about it at table, and the thesis is read by the preachers.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "studium:thesis_preaching",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "odd",
+          "label": "Something nobody has heard of: a heresy of the fourteenth century, and what it got right",
+          "outcome": "The regent reads the title twice and asks to see you. He says it is either brilliant or lost and asks which, and you say you will know by June, and he says that is the only honest answer, and the thesis is, in the end, brilliant, and read by nobody, and he keeps a copy.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 4
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "studium:thesis_odd",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "yearGate": [
+        5
+      ]
+    },
+    {
+      "id": "opf_dispensation_taken",
+      "phase": [
+        "seminary"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 10,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "studium:took_door",
+          "value": true
+        }
+      ],
+      "title": "The Dispensed Semester",
+      "body": "The dispensation was granted and this is what it is: the bell rings and you do not rise, the table is set and your place is not, the house sings Vespers under your window while you read. The Greek comes. It comes faster than you had hoped. It also comes at a price you had not priced: {@confrere} has stopped knocking, since you are working, and the old friar who used to correct your chant has stopped nodding in the cloister, since you are not in it.",
+      "choices": [
+        {
+          "id": "table",
+          "label": "Go down to supper anyway, every night, dispensed or not",
+          "outcome": "The house is startled and then not. The Greek comes a little slower and the house comes back, and the master of students says at the evaluation that you took a dispensation and did not use it, which is either a waste or a wisdom, and he thinks the second.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 4
+            },
+            {
+              "target": "relationship",
+              "key": "@master_of_students",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "studium:dispensed_but_at_table",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "work",
+          "label": "Use it fully; that is what it is for",
+          "outcome": "The Greek comes fully. By June you read Chrysostom at sight. The house, which covered for you, is polite. The old friar nods in the cloister again in the autumn, once, and it is a while before he does it twice.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 4
+            },
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -4
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": -1
+            },
+            {
+              "target": "flag",
+              "key": "studium:dispensed_fully",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "end",
+          "label": "Give it back after a month",
+          "outcome": "The prior tears the paper up without ceremony. The Greek comes in the small hours instead, for a year, and you are at the table and in the stall and grey, and the master of students says you look like a Dominican, which is a compliment with a diagnosis in it.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 3
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 4
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            }
+          ]
+        }
+      ],
+      "yearGate": [
+        5
+      ]
+    },
+    {
+      "id": "opf_regent_invites",
+      "phase": [
+        "seminary"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 9,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "ambition_vs_integrity"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        },
+        {
+          "type": "stat",
+          "key": "theology",
+          "op": ">=",
+          "value": 55
+        }
+      ],
+      "title": "Tea With the Regent",
+      "body": "The regent of studies has asked you to tea, which he does with two student brothers a year, and the two are the ones the province will send to Rome, and everyone in the studium knows it by the time the kettle is on. He talks about the order's intellectual life for an hour, in the way of a man who is the order's intellectual life in this province, and then asks whether you have ever thought of Rome, and it is clear he has thought of it for you.",
+      "choices": [
+        {
+          "id": "yes",
+          "label": "Say yes, and that you would go if sent",
+          "outcome": "He nods and says he will speak to the provincial, and does, and the province's calendar has a mark on it four years out that is you, and the house, which knows, treats you with a new carefulness that is not quite warmth.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -2
+            },
+            {
+              "target": "flag",
+              "key": "studium:rome_marked",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "parish",
+          "label": "Say you had thought of the parishes, and mean it",
+          "outcome": "He is disappointed and courteous. He says the parishes will be glad of you, and they are, and the second student brother goes to Rome, and is a professor for forty years, and you are not sorry, mostly.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 3
+            },
+            {
+              "target": "relationship",
+              "key": "@master_of_students",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "studium:rome_declined",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "ask",
+          "label": "Ask him what Rome did to him",
+          "outcome": "He is silent and then tells you: six years, a doctorate, a language, and a return to a province that had forgotten him, and that he would do it again, and would not send a man who had not asked that question. He sends you.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 2
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "relationship",
+              "key": "@master_of_students",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "studium:rome_marked",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "yearGate": [
+        5
+      ]
+    },
+    {
+      "id": "opf_confrere_leaves_studium",
+      "phase": [
+        "seminary"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "classmate",
+      "baseWeight": 9,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "friendship_vs_duty"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        }
+      ],
+      "title": "He Is Going Home",
+      "body": "{@confrere} has told the master of students that he is leaving, in the fifth year, with simple vows a year from expiry, and the master of students has agreed, since the constitutions allow it and the man is sure. He has told you second. He is not unhappy. He says the studium showed him what he is for and it is not this, and that he will teach, somewhere, and marry, probably, and that he wanted to say it to a friend before the house made it a story.",
+      "choices": [
+        {
+          "id": "bless",
+          "label": "Tell him you are glad he knows, and drive him to the station",
+          "outcome": "You drive him. He teaches high school for thirty years and marries a woman who sends the priory a card every Christmas. He is at your ordination, in the back, in a suit, and you see him and do not lose your place.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": 12
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "argue",
+          "label": "Argue, once: a year from vows is not the year to decide",
+          "outcome": "He listens and says the year is why, since after it there would be no deciding, and you cannot answer that, and he goes, and the argument is between you for a decade until it is not.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": -4
+            },
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "observant_bloc",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "master",
+          "label": "Ask the master of students whether there was anything to be done",
+          "outcome": "He says no, and that a man who is sure should go, and that the ones who stay unsure are the trouble, and asks whether you are sure, and you are, and he writes it down, since it was the question he had been waiting to ask.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@master_of_students",
+              "delta": 4
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 2
+            }
+          ]
+        }
+      ],
+      "yearGate": [
+        5
+      ]
+    },
+    {
+      "id": "opf_solemn_vote_close",
+      "phase": [
+        "seminary"
+      ],
+      "campaign": "religious",
+      "severity": "MAJOR",
+      "category": "personal",
+      "baseWeight": 11,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "vows:refused",
+          "value": false
+        }
+      ],
+      "title": "The Close Vote",
+      "body": "The vote on your solemn profession was close. The prior read the result without the numbers, which is the custom when it is not, and the house has been quiet with you for a week in a way that means the numbers were known anyway. {@master_of_students} has said it was the provincial's council that carried it and that two men of the house spoke against, on a matter of temperament, and that he will not say who, and that you profess in a month and should decide what to do with the week.",
+      "choices": [
+        {
+          "id": "nothing",
+          "label": "Do nothing different; profess, and let the house see the man it voted on",
+          "outcome": "You profess. The two men are in choir. One of them, years later, tells you it was him and why and that he was wrong, and the other never does, and you live in three houses with him and never know.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 3
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "studium:close_vote_borne",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "find",
+          "label": "Find out who the two were",
+          "outcome": "You find out in a day. Both are men you had thought liked you. The knowing changes the month before profession into a month of watching them, and you profess watching them, and it is a worse profession for it.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -3
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": -1
+            }
+          ]
+        },
+        {
+          "id": "ask",
+          "label": "Ask the master of students what the matter of temperament was",
+          "outcome": "He tells you, since you asked plainly: that you are quick, and men are afraid of quick men in a house. It is true. You are quick for the rest of your life and learn, slowly, to be slow at the table, and it is the thing the two men gave you.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@master_of_students",
+              "delta": 4
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "studium:learned_slowness",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "yearGate": [
+        6
+      ]
+    },
+    {
+      "id": "opf_diaconate_placement",
+      "phase": [
+        "seminary"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "parish_death",
+      "baseWeight": 10,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        }
+      ],
+      "title": "The Deacon's Parish",
+      "body": "Diaconate, and the studium places its deacons in the city's parishes for the year: a Sunday homily, baptisms, the marriage preparation nobody wants. Yours is a parish the order does not run, with a diocesan pastor, {@brother_priest}, who was a classmate of the master of students and has asked for a Dominican deacon on purpose, since, he says, his people have never heard one preach and he would like to know what the fuss is about.",
+      "choices": [
+        {
+          "id": "preach",
+          "label": "Preach as the studium taught you, and let the fuss be what it is",
+          "outcome": "The first Sunday is a lecture and the second is not. By Advent the pastor has moved you to the eleven o'clock and the people have begun to ask for the friar, and he says at Christmas, not entirely pleased, that he sees what the fuss is about.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 5
+            },
+            {
+              "target": "relationship",
+              "key": "@brother_priest",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "deacon:preached_the_fuss",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "learn",
+          "label": "Preach short, and learn the parish from the pastor",
+          "outcome": "He teaches you a parish in a year: the families, the money, the woman who runs the altar society. It is the education the studium could not give and he gives it gladly, and says at the end that you were the first Dominican he had met who wanted it.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "relationship",
+              "key": "@brother_priest",
+              "delta": 10
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "deacon:learned_the_parish",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "marriage",
+          "label": "Take the marriage preparation seriously, since nobody does",
+          "outcome": "Eleven couples. You learn more about the laity in eleven Saturdays than in six years of the studium, and two of the couples are at your ordination, and one of them names a son after you, which the constitutions have no view on.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 4
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 1
+            }
+          ]
+        }
+      ],
+      "yearGate": [
+        6,
+        7
+      ]
+    },
+    {
+      "id": "opf_first_assignment_rumor",
+      "phase": [
+        "seminary"
+      ],
+      "campaign": "religious",
+      "severity": "ROUTINE",
+      "category": "assignment",
+      "baseWeight": 9,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        }
+      ],
+      "title": "Where They Will Send You",
+      "body": "The seventh year, and the studium is doing what it does in the spring: guessing. The provincial's letters come in June and every student brother has heard, from a friend of a friend of the council, where he is going. {@confrere} has heard the studium for you. The old friar has heard the mission. The master of students has said nothing, since he knows, and has looked at you at supper in a way that could mean anything, and you have four weeks.",
+      "choices": [
+        {
+          "id": "ask",
+          "label": "Ask the master of students, since he knows",
+          "outcome": "He says he does, and will not say, and that a man who asks is a man who wants to know whether he can bear it, and that you can, wherever it is, and it is somewhere you had not guessed, and you can.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@master_of_students",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "ignore",
+          "label": "Ignore it; the letter will come",
+          "outcome": "The letter comes. It is somewhere you had not guessed. The old friar says he had heard it, which he had not, and the master of students says at your ordination that you were the only man in the class who did not ask, and it is on the file.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "studium:did_not_ask",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "hope",
+          "label": "Let it be known, quietly, where you would like to go",
+          "outcome": "It reaches the provincial's office, since everything does. The letter names the place you hoped for, or does not, and either way the office knows you hoped, and the next letter, years on, remembers a man who hoped.",
+          "effects": [
+            {
+              "target": "outspokenness",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": -1
+            }
+          ]
+        }
+      ],
+      "yearGate": [
+        7
+      ]
+    },
+    {
+      "id": "opf_ordination_retreat",
+      "phase": [
+        "seminary"
+      ],
+      "campaign": "religious",
+      "severity": "MAJOR",
+      "category": "personal",
+      "baseWeight": 12,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "doubt"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        }
+      ],
+      "title": "The Retreat Before Ordination",
+      "body": "The week before ordination the class goes to the province's retreat house, in silence, with an old friar who has preached this retreat for twenty years and says the same things, which are the right things. On the fourth day he takes each man alone and asks one question, and yours is this: what he will do on the first day he does not want to be a priest, since there will be one, and he would like to know now.",
+      "choices": [
+        {
+          "id": "office",
+          "label": "Say you will say the Office",
+          "outcome": "He nods. He says that is the Dominican answer and that it works, mostly, and that on the day it does not work you should telephone him, and he gives you a number, and you use it once, eleven years later, and he is still there.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 4
+            },
+            {
+              "target": "relationship",
+              "key": "@old_friar",
+              "delta": 8
+            },
+            {
+              "target": "flag",
+              "key": "ordination:the_number",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "brother",
+          "label": "Say you will go and find a brother",
+          "outcome": "He says that is the better answer and the harder one, since the brother may not be there, and that you should keep the friendships that will be, and you think of two names, and keep them.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "dont_know",
+          "label": "Say you do not know",
+          "outcome": "He says that is the honest answer and that the men who had a plan were the ones who needed him most, and that you should come back to this house every year, and you do, most years, and it is the retreat that holds the life together.",
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "ordination:returns_to_retreat",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "yearGate": [
+        7
+      ]
+    },
+    {
+      "id": "opf_class_photo",
+      "phase": [
+        "seminary"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "classmate",
+      "baseWeight": 10,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        }
+      ],
+      "title": "The Class at Profession",
+      "body": "The photograph is taken on the steps of the studium the week before ordination: the class, in the habit, with the master of students at one end and the prior at the other. There were nine of you in the novitiate and there are five on the steps. {@confrere} is beside you, as he has been for six years, and the photographer has asked everyone to look at the camera, and you are looking at the two empty places at the end of the row where two men would have been.",
+      "choices": [
+        {
+          "id": "count",
+          "label": "Count the four at the ordination Mass, in the intercessions, by name",
+          "outcome": "The master of students hears the names and closes his eyes. Two of the four are at the Mass, at the back. One writes afterward to say he heard his name and did not know what to do with it, and did something, and it was good.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "ordination:named_the_four",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "five",
+          "label": "Look at the camera; five is the class",
+          "outcome": "It is. The photograph is on your desk for the rest of your life and you look at it, some years, and count to nine, and the master of students, at his own funeral, has the same photograph on the coffin.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "write",
+          "label": "Write to the four, that week",
+          "outcome": "Three write back. One does not, and then does, ten years later, with a photograph of his children, and asks whether the offer of prayers still stands, and it does, and you have kept the class, which was the point of a class.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "ordination:wrote_the_four",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "yearGate": [
+        7
+      ]
+    },
+    {
+      "id": "opf_first_mass_planning",
+      "phase": [
+        "seminary"
+      ],
+      "campaign": "religious",
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 10,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        }
+      ],
+      "title": "The First Mass",
+      "body": "The order has a custom about a new priest's first Mass: it is said in the studium chapel, with the house, simply, and then a second at home, in the parish that made him, with the family and the tinsel. The master of students has asked which you want first, since the province sometimes lets a man go home first, and your mother has telephoned twice about the second, and the house has opinions about the first, and {@old_friar} has said that his was in a field, in a war, and that the tinsel is not the point.",
+      "choices": [
+        {
+          "id": "house",
+          "label": "The house first: the brothers, and no tinsel",
+          "outcome": "The house sings it. The old man serves, at seventy-eight, and is exact. Your mother, at the back, weeps at the wrong moments and the right ones, and the tinsel is the next week and is also good.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 4
+            },
+            {
+              "target": "relationship",
+              "key": "@old_friar",
+              "delta": 5
+            },
+            {
+              "target": "flag",
+              "key": "ordination:first_mass_house",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "home",
+          "label": "Home first: the parish that made you",
+          "outcome": "The parish makes a day of it. There is a banner. The pastor who baptized you preaches and cannot finish. The house, the next week, sings it simply, and the old man says the field was better, and does not mean it unkindly.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 4
+            },
+            {
+              "target": "relationship",
+              "key": "@mother",
+              "delta": 8
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "both",
+          "label": "Ask whether the house might come to the parish",
+          "outcome": "The prior says yes and eleven friars in white sit in the front pews of a suburban church, and the parish does not know what to do with them and does it anyway, and the two worlds meet for an afternoon, and it is the best Mass you will say for years.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 3
+            },
+            {
+              "target": "relationship",
+              "key": "@mother",
+              "delta": 4
+            },
+            {
+              "target": "flag",
+              "key": "ordination:house_came_home",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "yearGate": [
+        7
+      ]
+    },
+    {
+      "id": "opf_master_of_students_farewell",
+      "phase": [
+        "seminary"
+      ],
+      "campaign": "religious",
+      "severity": "MAJOR",
+      "category": "personal",
+      "baseWeight": 11,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        }
+      ],
+      "title": "The Master of Students' Last Word",
+      "body": "The night before you leave the studium for good, {@master_of_students} has each new priest to his room, one at a time, for the conversation the constitutions do not require and he has never missed. Yours is short. He says the file goes to the provincial tomorrow and that he has written one sentence at the end that he did not read to you at the evaluations, and that he will tell you what it was if you ask, and that most men do not.",
+      "choices": [
+        {
+          "id": "ask",
+          "label": "Ask",
+          "outcome": "He tells you. It is a sentence about what you are for, and it is not the thing you would have said, and it is true, and it takes ten years to know that it was, and the provincial reads it before every letter he sends you.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "relationship",
+              "key": "@master_of_students",
+              "delta": 6
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "ordination:asked_the_sentence",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "dont",
+          "label": "Do not ask; let the sentence be his",
+          "outcome": "He nods and says most men do not and that they are the ones who trust him, and shakes your hand, which he has not done in seven years, and the sentence is on the file and you never read it, and it decides three assignments.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "relationship",
+              "key": "@master_of_students",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "thank",
+          "label": "Thank him for seven years before he can say anything",
+          "outcome": "He is silent and then says that no one has, in twenty years of this conversation, and that he does not know what to do with it, and does nothing, and it is the last time you see him well, and you are glad it was that.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "relationship",
+              "key": "@master_of_students",
+              "delta": 10
+            },
+            {
+              "target": "flag",
+              "key": "ordination:thanked_the_master",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "yearGate": [
+        7
+      ]
+    },
+    {
+      "id": "opf_parish_deacon_conflict",
+      "phase": [
+        "seminary"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "parish_death",
+      "baseWeight": 9,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        }
+      ],
+      "title": "The Pastor's Homily",
+      "body": "You are a deacon at a parish the order does not run and the pastor has preached, this Sunday, a homily that was wrong about a thing the studium spent a year on, in a way that mattered, to four hundred people. He is a good pastor and a poor theologian and he has asked you in the sacristy, taking off the chasuble, what you thought, and he means it as a kindness to the student, and the studium is in your mouth.",
+      "choices": [
+        {
+          "id": "say",
+          "label": "Say what the studium would say, gently, with the distinction",
+          "outcome": "He listens, and is silent, and says he had not thought of it that way, and preaches the correction the next Sunday, badly, and you are the deacon who corrected the pastor, and the parish half knows, and he does not mind, which is his greatness.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 2
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 3
+            },
+            {
+              "target": "relationship",
+              "key": "@brother_priest",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "deacon:corrected_the_pastor",
+              "value": true
+            }
+          ],
+          "volume": "private",
+          "positionTopic": "doctrine",
+          "positionValue": -10
+        },
+        {
+          "id": "praise",
+          "label": "Praise what was good in it, which was the rest",
+          "outcome": "He is pleased. The error stands. You preach the correction yourself, three Sundays later, as if it were your own thought, and the parish hears both and does not notice, and the pastor does, and says nothing, and it is a kindness returned.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "relationship",
+              "key": "@brother_priest",
+              "delta": 6
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": -1
+            }
+          ]
+        },
+        {
+          "id": "later",
+          "label": "Say nothing in the sacristy, and write him a note in the week",
+          "outcome": "The note is careful. He reads it and thanks you and does not change the homily, since he has preached it for twenty years and will again, and you have learned that a note is not a conversation and that the sacristy was the place.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 1
+            },
+            {
+              "target": "relationship",
+              "key": "@brother_priest",
+              "delta": 1
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            }
+          ]
+        }
+      ],
+      "yearGate": [
+        6,
+        7
+      ]
+    },
+    {
+      "id": "opf_veritas_first_time",
+      "phase": [
+        "seminary"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "parish_death",
+      "baseWeight": 9,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        }
+      ],
+      "title": "Being Asked to Be Right",
+      "body": "A parishioner at the deacon's parish has asked you, at the door, in front of others, a question about a matter the Church is arguing about this year, and she has asked it of you because you are a Dominican, since, she says, the Dominicans are supposed to know. It is the first time anyone has expected you to be right because of the habit. The answer you have is the studium's, and it is careful, and she wants a sentence.",
+      "choices": [
+        {
+          "id": "sentence",
+          "label": "Give her the sentence",
+          "outcome": "It is a good sentence and it goes round the parish in a week, attached to your name and the order's, and the pastor hears it from three people and says at supper that the Dominicans have spoken, and it is only half a joke.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 4
+            },
+            {
+              "target": "outspokenness",
+              "key": "",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "deacon:gave_the_sentence",
+              "value": true
+            }
+          ],
+          "volume": "public",
+          "positionTopic": "doctrine",
+          "positionValue": -10
+        },
+        {
+          "id": "careful",
+          "label": "Give her the careful answer, all of it",
+          "outcome": "She listens and thanks you and says she had hoped for a sentence, and goes, and you have been right and unhelpful, which the professor of homiletics warned you about, and you hear him.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 0
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "ask",
+          "label": "Ask her what she thinks first",
+          "outcome": "She thinks a great deal and says it, and the people at the door listen, and by the end she has answered her own question better than the studium would have, and says the Dominicans are good at that, and you let her.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ]
+        }
+      ],
+      "yearGate": [
+        6,
+        7
+      ]
+    },
+    {
+      "id": "opf_old_friar_dies_studium",
+      "phase": [
+        "seminary"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 8,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        }
+      ],
+      "title": "The Old Professor",
+      "body": "The old professor of philosophy, the one who read the Summa every year since the fifties, has died in his chair in the library with the Prima Pars open, which the studium agrees is how he would have wanted it and which the master of students says is exactly how he did not, since he had wanted to finish it. The funeral is Thursday. The student brothers are to sing. The prior has asked for a brother to speak at the wake, since the old man had no family, and the class has looked at you.",
+      "choices": [
+        {
+          "id": "speak",
+          "label": "Speak: the seminar on the fifth way, and what he said about honest answers",
+          "outcome": "The wake laughs and weeps. The master of students says afterward that the old man would have corrected two things and been pleased by the rest, and you are the brother who spoke, which in a studium is the beginning of being the brother who speaks.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 4
+            },
+            {
+              "target": "flag",
+              "key": "studium:spoke_at_the_wake",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "sing",
+          "label": "Sing, with the class, and let the professed speak",
+          "outcome": "The class sings the Office of the Dead as he taught it, and the regent speaks, and it is right, and you had nothing to say that the singing did not say, and you knew it.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "finish",
+          "label": "Finish the article he was reading, that night, aloud, in the library, alone",
+          "outcome": "Nobody hears it. You read the rest of the question to the empty chair, and it is the best hour of your studies, and you never tell anyone, and it is in you at every seminar you teach for forty years.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "studium:finished_his_article",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "yearGate": [
+        4,
+        5,
+        6
+      ]
+    },
+    {
+      "id": "opf_summer_mission_team",
+      "phase": [
+        "seminary"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "assignment",
+      "baseWeight": 10,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        }
+      ],
+      "title": "The Summer Mission Team",
+      "body": "The province sends its senior student brothers out in July as a preaching team: four men, a van, six parishes in six weeks, a mission of four nights in each, the old kind, with the young men preaching under a friar who has done it for thirty years and corrects them in the van. It is the closest the studium comes to the thing the order is for, and you have been put on the team, and the first parish is Sunday, and the old friar has given you the fourth night, which is the hard one.",
+      "choices": [
+        {
+          "id": "hard",
+          "label": "Take the fourth night as it is: the last things, and mercy",
+          "outcome": "The first parish is terrible and the sixth is not. By August you can preach the fourth night in your sleep and do, once, and the old friar says in the van that you have the thing, and does not say what it is, and you know.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 4
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "studium:mission_team",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "trade",
+          "label": "Ask for the second night instead, which is easier",
+          "outcome": "He gives it to you and gives the fourth to {@confrere}, who is worse at it and better by August, and the old friar says in the van that the fourth night is the one that makes a preacher, and looks at the road.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": -2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 0
+            }
+          ]
+        },
+        {
+          "id": "van",
+          "label": "Learn the van: the driving, the sacristies, the old man's stories",
+          "outcome": "You drive four thousand miles and hear thirty years of missions, and preach the second night adequately, and the old friar says you will be a good prior, which from him is a diagnosis, and you are.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 2
+            },
+            {
+              "target": "relationship",
+              "key": "@old_friar",
+              "delta": 8
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            }
+          ]
+        }
+      ],
+      "yearGate": [
+        5,
+        6
+      ]
+    },
+    {
+      "id": "opf_the_last_renewal",
+      "phase": [
+        "seminary"
+      ],
+      "campaign": "religious",
+      "severity": "MAJOR",
+      "category": "personal",
+      "baseWeight": 10,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "doubt"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        }
+      ],
+      "title": "The Last Simple Vows",
+      "body": "The simple vows are in their final period and the constitutions say that at the end of it a man either professes solemnly or goes, and the house is beginning to look at the fifth-year brothers the way a house does: as men who will be brothers for life or not at all, in a year. {@old_friar} has said at recreation that a man should spend the last year of simple vows as though he had already made the solemn ones, and see whether he can bear it, and has looked at nobody.",
+      "choices": [
+        {
+          "id": "as_if",
+          "label": "Live the year as though the vows were solemn",
+          "outcome": "It is the best year of the studium. Nothing is held back. The house sees it and the vote, when it comes, is not close, and the old man says at your profession that you had already made it in September, and he is right.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 4
+            },
+            {
+              "target": "flag",
+              "key": "studium:lived_as_solemn",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "test",
+          "label": "Live the year as a test, and keep the question open",
+          "outcome": "The question stays open all year and it is a hard year, since a question is heavy, and the vote is close, and you profess with the question in your mouth, and it closes in the chapel, at the moment, which is what the old men said would happen.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 3
+            }
+          ]
+        },
+        {
+          "id": "ask_old",
+          "label": "Ask the old man what he did in his last year",
+          "outcome": "He says he was in a war and did not have the luxury, and that he professed in a field and has never once regretted it on a Tuesday, and you have heard that before and it is better the second time.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@old_friar",
+              "delta": 6
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 1
+            }
+          ]
+        }
+      ],
+      "yearGate": [
+        5
+      ]
+    }
+  ]
+}
