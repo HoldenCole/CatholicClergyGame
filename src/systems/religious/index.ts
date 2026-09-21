@@ -5,3 +5,5 @@ export * from './transfer';
 export * from './obedience';
 export * from './install';
 export * from './week';
+export * from './electorate';
+export * from './chapter';

@@ -167,15 +167,35 @@ export interface Province {
 
 export type ChapterLevel = 'house' | 'provincial' | 'general';
 
+export type ChapterOffice = 'prior' | 'provincial' | 'general';
+
+/** What the player did at this chapter, each remembered by the electorate. E3 §3.6 "Player agency". */
+export interface ChapterActions {
+  /** The man he votes for, every round. */
+  vote?: string;
+  /** Men he spoke for in the discussion. Twice is too visibly. */
+  spokeFor: string[];
+  /** He quietly steered a bloc. */
+  steered?: string;
+  /** What he let be known of his own willingness, privately and carefully. */
+  signal?: 'willing' | 'unwilling';
+}
+
 export interface Chapter {
   id: string;
   level: ChapterLevel;
   week: number;
+  /** The house or the province it sits for. */
+  bodyId: string;
   electorIds: string[];
-  /** The office being filled, if electoral. */
-  office?: string;
-  ballots: { round: number; tallies: Record<string, number> }[];
-  outcome?: { electedId: string; accepted: boolean; confirmed: boolean };
+  /** The office being filled, if electoral, and who may be elected to it. */
+  office?: ChapterOffice;
+  candidateIds: string[];
+  actions: ChapterActions;
+  ballots: { round: number; tallies: Record<string, number>; field: string[]; absolute: boolean }[];
+  /** How the vote ended, once run. */
+  ended?: 'majority' | 'narrowed' | 'plurality';
+  outcome?: { electedId: string; accepted: boolean; confirmed: boolean; /** Elected after a first choice declined or was refused. */ second?: boolean };
 }
 
 /** The common life's mandatory obligations. E3 §3.3; content/religious/horarium.json. */
@@ -278,4 +298,17 @@ export interface ReligiousPlayerState {
   closeFriendIds?: string[];
   dispensed?: { from: string[]; untilWeek: number };
   termsServed: { office: string; startWeek: number; endWeek: number }[];
+  /** The office he holds now, if any, and since when. */
+  office?: { office: ChapterOffice; bodyId: string; startWeek: number; endWeek: number; consecutive: number };
+  /** Elections declined, by office: twice ends the question. */
+  declined?: Partial<Record<ChapterOffice, number>>;
+  /** The chapter in session, if one is. */
+  chapter?: Chapter;
+  /**
+   * How readily the province can say what he is, 0..100. E3 §8.3: the
+   * electorate votes for a reputation, not a stat sheet. Fed by the
+   * reputations of §8 once they exist; until then by offices held and
+   * the record.
+   */
+  legibility?: number;
 }
