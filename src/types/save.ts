@@ -124,6 +124,8 @@ export interface GameState {
   /** The home institution of the religious campaign, and its houses by id. */
   province?: Province;
   orderHouses?: Record<string, OrderHouse>;
+  /** The province's other dioceses, each as it was when he left it, by preset id; `world` is the one he is in. */
+  territory?: Record<string, World>;
   world: World | null;
   assignment: Assignment | null;
   /** The live parish loop, once assigned. */

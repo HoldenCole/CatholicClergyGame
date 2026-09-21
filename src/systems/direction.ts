@@ -1,3 +1,4 @@
+import { cohesionPietyFactor } from './religious/house';
 import type { Charism, Direction, DirectorOption, GameState, Match, Npc, Temperament, Trouble } from '@/types';
 import type { Rng } from '@/engine/rng';
 import { instituteDef } from '@/content/institutes';
@@ -123,6 +124,11 @@ export function directionKept(state: GameState): boolean {
  * spent anyway.
  */
 export function pietyFactor(state: GameState, hours: number): number {
+  // The house he lives in modulates the drain for an order whose mechanics say so. E3 §7.2.
+  return directionFactor(state, hours) * cohesionPietyFactor(state);
+}
+
+function directionFactor(state: GameState, hours: number): number {
   const d = directionOf(state);
   if (!d) return 1;
   if (hours <= 0) return directionKept(state) ? 1 - DIRECTION.slow[matchFor(d, troubleOf(state))] * 0.4 : 1;

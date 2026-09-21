@@ -34,6 +34,7 @@ import { confessorWeek } from '@/systems/confessor';
 import { turnaroundStep } from '@/systems/trajectory';
 import { visitationStep } from '@/systems/visitation';
 import { careOf, WEEK } from '@/systems/week';
+import { religiousWeek } from '@/systems/religious/week';
 import { renderText } from './text';
 import type { WeekHook } from './clock';
 
@@ -238,7 +239,7 @@ export function parishWeekHook(deps: EventDeps): WeekHook {
       if (away.mode.kind !== 'clock' || away.pending.length > 0) return away;
       return openMail(offersStep(away, rng, deps));
     }
-    let next = parishWeek(state, rng);
+    let next = religiousWeek(parishWeek(state, rng), rng);
     if (isYearStart(next.clock)) {
       const owed = retreatYearEnd(next);
       next = owed.state;
