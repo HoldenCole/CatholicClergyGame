@@ -1,0 +1,920 @@
+{
+  "_notes": "Augustinian career, E3 §7.7: the house that quietly failed, the friend transferred, the school, the mission, the third forgiveness, the crisis that ends higher.",
+  "events": [
+    {
+      "id": "osac_cohesion_failed",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 10,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "friendship_vs_duty",
+        "loyalty_vs_honesty"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OSA",
+          "value": true
+        }
+      ],
+      "title": "The House Where No One Will Say So",
+      "body": "The house has eleven men and, as far as anyone will admit, no trouble. Recreation is at seven and lasts twenty minutes. The table is quiet in a way that is not silence. {@prior} says the house is at peace, and means it, and {@old_friar} has eaten in his room for three weeks with a knee that does not seem to hurt him on the stairs. You have been here four months. The Rule says one heart, and this house has eleven, politely, and you can feel your own prayer going the way of the recreation room, a little shorter every night.",
+      "choices": [
+        {
+          "id": "name_it",
+          "label": "Name it at chapter: that the house is not at peace, it is quiet",
+          "outcome": "The room goes still. The prior is hurt and does not hide it. Then {@old_friar} says, from the door, that you are right, and comes back to the table the next night, and the recreation lasts an hour for the first time in a year. The prior forgives you in about six months.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 6
+            },
+            {
+              "target": "relationship",
+              "key": "@prior",
+              "delta": -6
+            },
+            {
+              "target": "relationship",
+              "key": "@old_friar",
+              "delta": 8
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "outspokenness",
+              "key": "",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "osa:named_the_quiet",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "one_man",
+          "label": "Do not name it; go to the old man's room with a bottle",
+          "outcome": "He lets you in on the third try. He has a grief he has not told the house and a quarrel with the prior he has not told God, and by the end of the bottle he has told you both. He is at the table on Sunday. The house does not know why. You do.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "relationship",
+              "key": "@old_friar",
+              "delta": 12
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "osa:heard_the_grief",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "prayer",
+          "label": "Keep your own prayer and let the house be what it is",
+          "outcome": "Your prayer goes the way of the recreation room for a year. The prior is transferred in June, the new one is loud, and the house comes back to life without you, and you notice, and it is a lesson you did not want.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": -3
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -2
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "osac_friend_transferred",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "assignment",
+      "baseWeight": 10,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "friendship_vs_duty"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OSA",
+          "value": true
+        }
+      ],
+      "title": "The Letter for Him",
+      "body": "The consultation this year was not yours. It was his: {@confrere}, who has been your closest friend since the union, has been asked for by the province in the West, for the school there, and the provincial has said yes. He tells you in the cloister with the letter in his hand and does not say anything else for a while. Three states and a time zone. The Rule has a great deal to say about the common life and nothing about the telephone. He will go in August. He asks what you think, and he does not mean about the school.",
+      "choices": [
+        {
+          "id": "go",
+          "label": "Tell him to go, and that you will keep it up, whatever it costs",
+          "outcome": "He goes. You call on Sundays after Vespers, every Sunday, for years, and it costs you an hour and something you cannot name, and it holds. Men in the house notice the Sunday hour and say nothing. Some of them envy it.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": 10
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -1
+            },
+            {
+              "target": "flag",
+              "key": "osa:kept_the_friend",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "ask_stay",
+          "label": "Ask him to ask the provincial to leave him here",
+          "outcome": "He asks. The provincial says no, kindly, and later says to you, not kindly, that a man who asks his friend to refuse an assignment has asked him to refuse the order. It is remembered at the next consultation, which is yours.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": -6
+            },
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": 4
+            },
+            {
+              "target": "relationship",
+              "key": "@provincial",
+              "delta": -4
+            },
+            {
+              "target": "flag",
+              "key": "osa:asked_friend_stay",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "let_go",
+          "label": "Say it is the life, and let it go with him",
+          "outcome": "He goes, and the calls thin out by Advent, and stop by Lent, and you do not blame him and he does not blame you, and at a chapter eleven years later you see him across the room and he is a stranger who knows your name. It is the life.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": -2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 1
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "osa:let_the_friend_go",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "osac_school_finances",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "finance",
+      "baseWeight": 9,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "money"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OSA",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "office:school_president",
+          "value": true
+        }
+      ],
+      "title": "The Alumni Dinner",
+      "body": "You are at the school now, in some office or other, and the alumni dinner is the night the place lives on: three hundred men in black tie who loved the friars at seventeen and have not been to Mass since, and who give, and who expect. The president has asked you to say grace and then to sit with the class of a year that gave more than any other and is angry about the new gym. {@old_friar}, who taught most of the room, is at the head table being adored. The books say the school will not make it to the year after next without this room.",
+      "choices": [
+        {
+          "id": "ask",
+          "label": "Sit with them, hear the anger, and ask them for the gym anyway",
+          "outcome": "They give. It is less than last year and more than the president feared, and one of them takes you aside and says the friars used to ask for nothing and he misses it, and gives the most. You are on the board's list of men who can do this, which is a list you did not want to be on.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 4
+            },
+            {
+              "target": "flag",
+              "key": "osa:asked_alumni",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "friars",
+          "label": "Talk to them about the friars they knew, and let the president ask",
+          "outcome": "You talk about the old man at the head table for an hour and the class weeps and gives, and the president does the asking, and the gym is funded, and you have learned something about what the order is to these men that the books do not say.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 5
+            },
+            {
+              "target": "relationship",
+              "key": "@old_friar",
+              "delta": 5
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "osa:told_the_friars",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "honest",
+          "label": "Tell the table the truth: the school is two years from closing",
+          "outcome": "The table goes quiet. Then it gives, more than any year on record, because they had not been told and it turns out they wanted to be. The president is furious for a week and then not. The province hears you can be trusted with a room.",
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 4
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 3
+            },
+            {
+              "target": "relationship",
+              "key": "@prior",
+              "delta": -2
+            },
+            {
+              "target": "flag",
+              "key": "osa:told_the_truth",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "osac_mission_call",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "assignment",
+      "baseWeight": 8,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "friendship_vs_duty"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OSA",
+          "value": true
+        }
+      ],
+      "title": "The Mission",
+      "body": "The province's mission abroad has lost a man, and the provincial's letter asks, which is not the same as tells, whether you would go for four years: a country whose language you do not speak, a church that is not yours and does not need to be told so, and a house of three friars who have been there so long they are not sure they are from here anymore. {@prior} says it is the best thing the province does and the surest way to be forgotten by it. {@confrere} says go. Your mother, on the phone, says nothing for a long time.",
+      "choices": [
+        {
+          "id": "go",
+          "label": "Say yes",
+          "outcome": "Four years. You come back with a language, a limp, a sense of what the Church is that you cannot explain at the table, and standing with the order across the world that the province does not quite know what to do with. The house you return to has changed the furniture.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 12
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": -2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 4
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "osa:mission_served",
+              "value": true
+            },
+            {
+              "target": "flag",
+              "key": "language:mission",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "no",
+          "label": "Say no, and say why: the house, the school, the friend",
+          "outcome": "The provincial writes back that he understands, and sends a man who did not have your reasons, and you hear from him at Christmas for four years, and each letter is a small accusation you wrote yourself.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": -3
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": -1
+            },
+            {
+              "target": "flag",
+              "key": "osa:mission_declined",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "two",
+          "label": "Say yes, for two years, not four",
+          "outcome": "He takes it, since two is more than none. You go and come back before you have learned the language, which everyone there and here agrees was the wrong length, and you are not sure they are wrong.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 5
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "osa:mission_short",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "osac_third_forgiveness",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 9,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "friendship_vs_duty",
+        "loyalty_vs_honesty"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OSA",
+          "value": true
+        }
+      ],
+      "title": "The Third Time",
+      "body": "The Rule says the brother who has hurt another must ask pardon before sundown, and {@confrere} has asked it twice this year, for the same thing, in the same words, and has done it again: the money from the Sunday supply that did not reach the procurator, or not all of it, and the story about why. He is at your door at five, the sun going down as the Rule requires, asking. He is not lying about being sorry. He was not lying the last two times. {@prior} does not know yet.",
+      "choices": [
+        {
+          "id": "forgive",
+          "label": "Forgive him, the third time, and say nothing to the prior",
+          "outcome": "You forgive him. It is the Rule. It is also, you know, the thing that lets him do it a fourth time, and he does, in the spring, and the prior finds out and asks how long you knew, and you tell him.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": 6
+            },
+            {
+              "target": "relationship",
+              "key": "@prior",
+              "delta": -6
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": -2
+            },
+            {
+              "target": "flag",
+              "key": "osa:forgave_thrice",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "forgive_tell",
+          "label": "Forgive him, and walk him to the prior's door yourself",
+          "outcome": "He goes in. The prior is kinder than either of you expected, and harder, and the man is moved to a house with no supply work and a procurator who counts. He writes to you at Christmas and says you were right, and you are still not sure.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": 2
+            },
+            {
+              "target": "relationship",
+              "key": "@prior",
+              "delta": 5
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "osa:walked_him_in",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "refuse",
+          "label": "Refuse him pardon until he has gone to the prior",
+          "outcome": "The sun goes down on it, which the Rule forbids, and you both know it. He goes to the prior in the morning, on his own, and is moved, and does not write. You keep the Rule's letter for the rest of your life and are not sure you kept its meaning that night.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": -2
+            },
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": -10
+            },
+            {
+              "target": "relationship",
+              "key": "@prior",
+              "delta": 3
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "osa:refused_pardon",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "osac_return_from_mission",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "assignment",
+      "baseWeight": 8,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OSA",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "osa:mission_served",
+          "value": true
+        }
+      ],
+      "title": "Home to a Province That Does Not Know You",
+      "body": "You came back in June. The province you left has had a chapter, a new provincial, and two house closures, and the men who were young are middle-aged, and the men who were middle-aged are dead or at the retirement house. At the table they ask about the mission and stop listening after two sentences, not unkindly. {@provincial} is a man you have met once. He has an assignment for you that has nothing to do with anything you learned, and he says it gently, and you understand that the province forgot you because it had to.",
+      "choices": [
+        {
+          "id": "accept",
+          "label": "Take the assignment, and let the mission be yours alone",
+          "outcome": "You take it. The mission stays in you like a language nobody here speaks, and you speak it to God, mostly, and to one old friar who was there in the sixties, and it is enough. The house learns, slowly, that you are steadier than you were.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "osa:mission_kept_inside",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "tell",
+          "label": "Make them listen: at chapter, at recreation, in the paper",
+          "outcome": "Some listen. The province's paper runs your piece and three men write to ask about going. The provincial finds the pieces useful and the man tiresome, in about equal measure, and says so to someone who tells you.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -3
+            },
+            {
+              "target": "outspokenness",
+              "key": "",
+              "delta": 4
+            },
+            {
+              "target": "flag",
+              "key": "osa:mission_told",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "ask_back",
+          "label": "Ask to be sent back",
+          "outcome": "He says no, this year, and perhaps not next. You stay, and the assignment is fine, and every August you write the letter again, and one year, later than you think, the answer changes.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": -2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "osa:asked_return",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "osac_crisis_night",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 9,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "doubt"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OSA",
+          "value": true
+        },
+        {
+          "type": "stat",
+          "key": "piety",
+          "op": "<=",
+          "value": 35
+        }
+      ],
+      "title": "The Night It Goes Dark",
+      "body": "It is not a scandal or a death. It is a Tuesday in February, and you have been at the school or the parish for eleven hours, and at Vespers you find you are saying the psalms and hearing nothing, and have been for weeks, and that the house you love is a house of strangers tonight, and that the God more inward than your inmost self is not there, or you are not. The Rule says one heart. Yours is restless, which Augustine said it would be, and you had thought he meant before.",
+      "choices": [
+        {
+          "id": "friend",
+          "label": "Knock on a friend's door at eleven, and say so",
+          "outcome": "He lets you in. He does not fix it. He sits on the floor with you until one and says the Confessions were written by a man who had this every year, and that you will have it every year, and that the house is for exactly this. It is the beginning of the way out.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "osa:crisis_told_friend",
+              "value": true
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": -2
+            }
+          ]
+        },
+        {
+          "id": "alone",
+          "label": "Keep it to yourself; the house has enough",
+          "outcome": "You keep it for two months. It is worse for being kept, and the house notices anyway, in the way houses do, and {@prior} finally asks, and you tell him, and he says he wished you had come sooner and that they always wish that.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": -2
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 4
+            },
+            {
+              "target": "relationship",
+              "key": "@prior",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "osa:crisis_alone",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "confessions",
+          "label": "Read the Confessions, the tenth book, all night",
+          "outcome": "You read until Lauds. He had it. He had it worse and later and longer and he came out somewhere higher, and that is what the book is for. You sing Lauds hearing something. It does not last. It comes back.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "osa:read_book_ten",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "osac_chapter_family",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "group",
+      "baseWeight": 8,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "ambition_vs_integrity"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OSA",
+          "value": true
+        }
+      ],
+      "title": "A Chapter Like a Family",
+      "body": "The provincial chapter meets every four years and it is not a senate. There are forty men in a room who have lived together, in various combinations, for thirty years, and the business is done in an afternoon and the rest of the week is the men. An election is coming and nobody has said a name aloud, because that is not done; instead {@old_friar} sits by you at supper and says, of a man across the room, that he was a good prior once, and of another, that his mother is unwell, and you understand that you are being told how to vote and by whom.",
+      "choices": [
+        {
+          "id": "hear",
+          "label": "Hear him; the old men know the province",
+          "outcome": "You vote as the old men lean and so does the room, and the man elected is a good one, and you have learned how the province decides, which is slowly, at supper, and by remembering.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 3
+            },
+            {
+              "target": "relationship",
+              "key": "@old_friar",
+              "delta": 4
+            },
+            {
+              "target": "flag",
+              "key": "osa:voted_with_elders",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "own",
+          "label": "Vote your own mind, and tell no one",
+          "outcome": "The count is close and the other man wins, and nobody knows how you voted, and the old man at supper the next night says the province will be fine, and looks at you a little longer than he needs to.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 1
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "osa:voted_alone",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "ask",
+          "label": "Ask the old man, plainly, whom he means",
+          "outcome": "He is delighted to be asked plainly and tells you plainly, and then tells you why, for an hour, and it is the best account of the province's last thirty years you will ever hear, and it is not about the man at all.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 3
+            },
+            {
+              "target": "relationship",
+              "key": "@old_friar",
+              "delta": 8
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 2
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

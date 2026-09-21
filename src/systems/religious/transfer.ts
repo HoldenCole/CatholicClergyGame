@@ -1,6 +1,7 @@
 import type { GameState, ReligiousAssignment, World } from '@/types';
 import { HOUSE, houseById, houseLine } from './house';
 import { defaultHorarium } from './horarium';
+import { splitFriends } from './friendship';
 
 /**
  * Reassignment across dioceses. E3 §3.1: each assignment places the friar
@@ -53,6 +54,8 @@ export function moveToHouse(state: GameState, houseId: string, work: string, opt
     const c = next.character;
     if (c) next = { ...next, character: { ...c, reputation: { ...c.reputation, community: Math.round((c.reputation.community ?? 0) * TRANSFER.carry.community) || 0 } } };
   }
+  // Friends left behind: for an order that keeps such bonds, the move that hurts most. E3 §7.2.
+  if (r.houseId !== houseId) next = splitFriends(next, r.houseId);
   const assignments = r.assignments.map((a, i) => (i === r.assignments.length - 1 && a.endWeek === undefined ? { ...a, endWeek: week } : a));
   const posting: ReligiousAssignment = { houseId, dioceseId: house.dioceseId, work, startWeek: week, ...(opts.dual ? { dual: true } : {}), ...(opts.grace ? { grace: opts.grace } : {}) };
   next = {

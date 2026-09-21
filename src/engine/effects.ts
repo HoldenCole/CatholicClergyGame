@@ -15,6 +15,7 @@ import type {
 import { currentDecor, placeKey } from '@/systems/decorState';
 import { applyReputation, clampSigned } from '@/systems/reputation';
 import { resolveConstituency } from '@/systems/campaign';
+import { statDeltaFactor } from '@/systems/religious/restless';
 import { applyStat } from '@/systems/stats';
 import { closeTenure } from '@/systems/tenures';
 import { resolveSelector } from './selectors';
@@ -56,7 +57,8 @@ export function applyEffect(
   switch (effect.target) {
     case 'stat': {
       const c = requireCharacter(state, effect);
-      return { ...state, character: { ...c, stats: applyStat(c.stats, effect.key as StatKey, delta) } };
+      // An order's mechanics can widen a stat's swing (the restless heart, E3 §7.2); 1 for everyone else.
+      return { ...state, character: { ...c, stats: applyStat(c.stats, effect.key as StatKey, delta * statDeltaFactor(state, effect.key as StatKey, delta)) } };
     }
     case 'reputation': {
       const c = requireCharacter(state, effect);

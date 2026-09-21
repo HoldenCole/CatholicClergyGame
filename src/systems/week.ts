@@ -31,6 +31,7 @@ import { workLoad } from './sidework';
 import { brothersWeek } from './brothers';
 import type { Rng } from '@/engine/rng';
 import { horariumLoad } from './religious/horarium';
+import { friendshipLoad } from './religious/friendship';
 
 /** Tunables for the weekly loop. DESIGN 2.6 and 8.1; numbers not in the design are invented. */
 export const WEEK = {
@@ -204,7 +205,7 @@ export function planWeek(state: GameState): Plan {
   const parish = state.parish!;
   const budget = weekBudget(state);
   // The men around him give blocks back below the floor: a neighbor's cover, a seminarian, a deacon, the vicar he formed.
-  const fixed = Math.max(0, seasonalLoad(state) + adminFloorFor(state) + commitmentAp(state) + (state.founding?.apPerWeek ?? 0) + (state.parish?.work?.apPerWeek ?? 0) + clubHours(state) + bossLoad(state) + workLoad(state) + horariumLoad(state) - fundBonuses(state).relief) - coverRelief(state) - helpRelief(state) - houseHelp(state);
+  const fixed = Math.max(0, seasonalLoad(state) + adminFloorFor(state) + commitmentAp(state) + (state.founding?.apPerWeek ?? 0) + (state.parish?.work?.apPerWeek ?? 0) + clubHours(state) + bossLoad(state) + workLoad(state) + horariumLoad(state) + friendshipLoad(state) - fundBonuses(state).relief) - coverRelief(state) - helpRelief(state) - houseHelp(state);
   // The groups relieve what they run; a standing confessor from the priory relieves the box. DESIGN §9.4a.
   const houses = houseRelief(state);
   const groups = groupRelief(state);

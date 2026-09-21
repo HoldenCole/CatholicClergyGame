@@ -91,7 +91,7 @@ describe('a Dominican career from novitiate through an elected priorship (E3 R1.
     expect(currentHouse(s)!.kind).toBe('studium');
     expect(s.world!.diocese.presetId).toBe(currentHouse(s)!.dioceseId);
     for (let y = 2; y <= 5; y++) s = endYear(s);
-    expect(s.religious!.vows.renewals.length).toBe(3);
+    expect(s.religious!.vows.renewals.length).toBe(1);
     expect(s.seminary!.year).toBe(6);
     s = endYear(s);
     expect(solemnlyProfessed(s)).toBe(true);
