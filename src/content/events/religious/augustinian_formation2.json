@@ -1,0 +1,2302 @@
+{
+  "_notes": "Augustinian formation, second pool: the pre-novitiate priory, the novitiate, and the first years of the theological union. Friends, the Rule, the Confessions, the community consulted. E3 §12, §14.",
+  "events": [
+    {
+      "id": "osaf_arrival_priory",
+      "phase": [
+        "seminary"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 12,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OSA",
+          "value": true
+        }
+      ],
+      "title": "The First Night in the Priory",
+      "body": "The pre-novitiate is a room on the second floor of a working priory, with a bed, a desk, a crucifix, and a window onto the parking lot of the parish the friars run. Nobody has told you what to do. Supper was at six and the friars talked about the parish's boiler and a funeral and a baseball game, and {@confrere}, the other pre-novice, has knocked on your door to ask whether you had understood any of it either, and whether this is what it is.",
+      "choices": [
+        {
+          "id": "yes",
+          "label": "Say this is what it is, and that is the point",
+          "outcome": "He looks at you and then laughs, and it is the first thing that makes the two of you friends. The formation director, told of it in the spring, says that the men who understand the first supper are the ones who stay, and that most do not understand it until the third year.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": 6
+            },
+            {
+              "target": "flag",
+              "key": "osa:understood_the_supper",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "dont",
+          "label": "Say you do not know, and that you will find out together",
+          "outcome": "It is the honest answer and the useful one. You find out together over a year, at the table, and it is the finding out that is the pre-novitiate, and he is one of your three, in the end, and it began at the door.",
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": 5
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "ask",
+          "label": "Go down and ask the oldest friar what the point was",
+          "outcome": "{@old_friar} is in the parlour with the paper. He says the point was the boiler, since the boiler is the parish and the parish is why the house exists, and that you should learn to care about boilers, and that you are the first pre-novice in a decade to ask, and he remembers it.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@old_friar",
+              "delta": 6
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "osa:asked_about_the_boiler",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "yearGate": [
+        1
+      ]
+    },
+    {
+      "id": "osaf_parish_work",
+      "phase": [
+        "seminary"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "parish_death",
+      "baseWeight": 11,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OSA",
+          "value": true
+        }
+      ],
+      "title": "The Parish Wants Hands",
+      "body": "The pre-novices work: the formation director has said so, and the parish the priory runs has a food pantry on Tuesdays, a school that needs a man to watch the playground, and a pastor who is a friar and short of everyone. The formation director has said you should choose, and that what you choose will be the first thing the community knows about you, and that he will not tell you what to choose.",
+      "choices": [
+        {
+          "id": "pantry",
+          "label": "The pantry: the poor are the Rule's first concern",
+          "outcome": "Tuesdays are boxes and a line and a woman who runs it who has run it for twenty years and has opinions about friars. By spring she has an opinion about you, and it is good, and she tells the pastor, and the pastor tells the community, and it is the first thing they know.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "osa:chose_the_pantry",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "school",
+          "label": "The school: the order teaches",
+          "outcome": "The playground is forty children and a whistle. The principal, a laywoman, says within a month that you should teach, and you do, one class, badly and then not, and the formation director hears that the school wants you, which is a thing the province notices in a man.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "osa:chose_the_school",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "pastor",
+          "label": "The pastor: whatever he needs, which is everything",
+          "outcome": "It is everything: funerals to serve, a boiler to watch, a census to type. You learn the parish from the inside in a year and the pastor says at the evaluation that he would take you as a curate tomorrow, and the formation director writes it down.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "relationship",
+              "key": "@prior",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "osa:chose_the_pastor",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "yearGate": [
+        1
+      ]
+    },
+    {
+      "id": "osaf_first_friend",
+      "phase": [
+        "seminary"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "classmate",
+      "baseWeight": 10,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "friendship_vs_duty"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OSA",
+          "value": true
+        }
+      ],
+      "title": "The Friend at the Table",
+      "body": "There is a friar in the house, a young one, four years ordained, who has begun to sit beside you at supper and to talk to you as if you were a friar and not a pre-novice. It is what the order says it is for, one mind and one heart, and it is also a thing the formation director watches, since a pre-novice with a friend in the house is a pre-novice the house has half decided about, and the other pre-novice has noticed.",
+      "choices": [
+        {
+          "id": "accept",
+          "label": "Let it be a friendship, and see where it goes",
+          "outcome": "It goes where such things go in the order: a walk on Sundays, a confidence, a man who tells you the truth about the house. He is one of your three for thirty years and is at your deathbed or you at his, and it began with a chair at supper.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": 8
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "osa:first_friend_early",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "careful",
+          "label": "Be careful; the other pre-novice is alone",
+          "outcome": "You sit with the other pre-novice more. The young friar understands, since he is a friar, and the friendship is slower and holds, and the other pre-novice, who would have been alone, is not, and stays, which he might not have.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 3
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "osa:looked_after_the_other",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "director",
+          "label": "Ask the formation director whether it is allowed",
+          "outcome": "He laughs, which he does not often, and says it is the whole of the Rule, and that a pre-novice who asks permission for a friend will have trouble with the vow of poverty, since he will ask permission for everything, and you take the point.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@master_of_students",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 1
+            }
+          ]
+        }
+      ],
+      "yearGate": [
+        1
+      ]
+    },
+    {
+      "id": "osaf_confessions_read",
+      "phase": [
+        "seminary"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 11,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "doubt"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OSA",
+          "value": true
+        }
+      ],
+      "title": "Book Ten",
+      "body": "The formation director has given each pre-novice the Confessions and said to read it slowly, and you have reached the tenth book, where the man stops telling his life and starts telling his mind, and you have stopped, since it is the first thing you have read that seems to be about you and not about him. The director has asked at the weekly meeting where you are in it, and you have said the tenth book, and he has waited.",
+      "choices": [
+        {
+          "id": "say",
+          "label": "Say what it did",
+          "outcome": "It takes twenty minutes and he does not interrupt. At the end he says that the tenth book is where the order begins, for most men, and that the ones it does not happen to are the ones to watch, and that he will not be watching you, and it is on the file as a good thing.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 3
+            },
+            {
+              "target": "relationship",
+              "key": "@master_of_students",
+              "delta": 4
+            },
+            {
+              "target": "flag",
+              "key": "osa:book_ten_early",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "finish",
+          "label": "Say you will finish it first and then say",
+          "outcome": "You finish it. Books eleven to thirteen are about time and creation and are not about you, and the director says that the men who finish before they speak are the theologians, and that the order needs them too, and you are not sure it was a compliment.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "nothing",
+          "label": "Say it was interesting",
+          "outcome": "He looks at you and lets it go, and you understand in the third year that he did not let it go, since it is the first thing he says at the renewal, kindly, and it is a question, and you answer it then.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": -1
+            },
+            {
+              "target": "relationship",
+              "key": "@master_of_students",
+              "delta": -1
+            },
+            {
+              "target": "flag",
+              "key": "osa:book_ten_deferred",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "yearGate": [
+        1
+      ]
+    },
+    {
+      "id": "osaf_leaving_pre_novice",
+      "phase": [
+        "seminary"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "classmate",
+      "baseWeight": 10,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "friendship_vs_duty"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OSA",
+          "value": true
+        }
+      ],
+      "title": "The Other One Goes",
+      "body": "{@confrere} has decided to leave at Christmas. He told the formation director on Tuesday and you on Wednesday, and the house on Thursday, at supper, in a sentence, and the house said the things houses say, which were kind. He is not unhappy. He says the year showed him what he wanted and it is not this, and asks whether you will drive him to the bus, since the friars are working and he does not want to ask them.",
+      "choices": [
+        {
+          "id": "drive",
+          "label": "Drive him",
+          "outcome": "It is an hour and the bus is late. He says, at the end, that you should stay, since it fits you, and that he can see it and you cannot yet, and you keep the sentence, and it is the reason you stay through the second year, which is the hard one.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": 8
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "osa:drove_the_leaver",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "ask",
+          "label": "Ask him what the year showed him",
+          "outcome": "He tells you, for the hour, and it is a good account of the order from a man who is leaving it, which is the only kind you cannot get inside, and you understand the house better for it, and he writes at Easter for ten years.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 2
+            },
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": 5
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "alone",
+          "label": "Let a friar drive him; you are not sure you can",
+          "outcome": "The friar drives him and he understands, since he was not sure either. You are the only pre-novice for six months and the house is careful with you, and it is a lonely spring and a formative one, and you are still there in September.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 1
+            }
+          ]
+        }
+      ],
+      "yearGate": [
+        1
+      ]
+    },
+    {
+      "id": "osaf_novitiate_silence",
+      "phase": [
+        "seminary"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "formation",
+      "baseWeight": 12,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "friendship_vs_duty"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OSA",
+          "value": true
+        }
+      ],
+      "title": "The Novitiate House",
+      "body": "The novitiate is a different house in a different town, six novices from three provinces and a novice director who has done it for twelve years and speaks quietly. The first month is the Rule, a chapter a day, and a silence after Compline that the house keeps and that you have never kept, and on the ninth night you hear a novice weeping through the wall, and the silence says you may not go, and the Rule says something else.",
+      "choices": [
+        {
+          "id": "go",
+          "label": "Go to him",
+          "outcome": "He is from another province and homesick in a way that is not about home. You sit with him an hour. The novice director knows by morning, since he knows everything, and says nothing for a week, and then says the Rule was written for that, and the silence for everything else.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "osa:broke_the_silence",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "morning",
+          "label": "Keep the silence, and find him at breakfast",
+          "outcome": "You find him. It is enough, nearly. He stays, and says in the third year that he had wanted someone to come, and that he understood why no one did, and that both were true, and it is a lesson about the order you do not forget.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "observant_bloc",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "director",
+          "label": "Go to the novice director's door instead",
+          "outcome": "He is awake, since he is always awake, and goes himself, and it is right, since it was his to do, and he says to you afterward that you did the second-best thing and that the best thing would have been to go, and that he would have forgiven the silence.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@novice_master",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            }
+          ]
+        }
+      ],
+      "yearGate": [
+        2
+      ]
+    },
+    {
+      "id": "osaf_rule_argument",
+      "phase": [
+        "seminary"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 11,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OSA",
+          "value": true
+        }
+      ],
+      "title": "The Rule, Chapter Five",
+      "body": "The novices read the Rule aloud and the fifth chapter, on the care of the body and the things held in common, has produced an argument at the novices' table about whether the novice who has been sent a laptop by his mother may keep it, and the novice director has come in on the argument and sat down and said that he would like to hear it out, and that the novice with the laptop should speak last.",
+      "choices": [
+        {
+          "id": "common",
+          "label": "Say it goes in the common room, and anyone uses it",
+          "outcome": "The novice with the laptop is hurt and then, in a month, not, since the common room has a laptop now and he uses it as much as anyone, and the novice director says it was the Rule's answer and that it was said kindly, which is the harder half.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "observant_bloc",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "osa:laptop_in_common",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "keep",
+          "label": "Say he keeps it; the Rule is about the heart, not the inventory",
+          "outcome": "The novice director says that is the modern reading and is not wrong and has emptied houses, and that a novice should try the other reading for a year and see what it does to the heart, and you do, and it does something.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "observant_bloc",
+              "delta": -2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "him",
+          "label": "Ask the novice what he would like to do with it",
+          "outcome": "He says, after a while, that he would like to give it to the common room and had not known how, and does, and the argument is over, and the novice director says you found the Augustinian answer, which is the one the man finds himself.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "osa:let_him_find_it",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "yearGate": [
+        2
+      ]
+    },
+    {
+      "id": "osaf_novice_director_history",
+      "phase": [
+        "seminary"
+      ],
+      "campaign": "religious",
+      "severity": "ROUTINE",
+      "category": "formation",
+      "baseWeight": 9,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OSA",
+          "value": true
+        }
+      ],
+      "title": "The Order's Story",
+      "body": "The novice director teaches the history of the order on Thursdays and has reached the part where it nearly died, twice, and been revived by men nobody remembers, and has asked each novice to say which of the order's centuries he would have wanted to live in, and why, and the answers have gone round the table, and yours is last.",
+      "choices": [
+        {
+          "id": "bad",
+          "label": "The worst century; the one where it nearly died",
+          "outcome": "He is pleased and says why: that the men who want the bad century are the ones who will stay through a bad decade, and that the order has one coming, and you are professed into it, and he was right.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 1
+            },
+            {
+              "target": "relationship",
+              "key": "@novice_master",
+              "delta": 4
+            },
+            {
+              "target": "flag",
+              "key": "osa:chose_the_bad_century",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "golden",
+          "label": "The one with the great schools and the great friars",
+          "outcome": "He says everyone wants that one and that it was built by the men from the century before, who had nothing, and that a novice should know which he is, and you think about it for a year and are not sure, and it is a good uncertainty.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "this",
+          "label": "This one",
+          "outcome": "He says that is the right answer and the least interesting, and that he would like you to say why, and you cannot, quite, and he says that you will be able to in the third year, and you are, and it is a different answer.",
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "osa:chose_this_century",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "yearGate": [
+        2
+      ]
+    },
+    {
+      "id": "osaf_family_visit_novitiate",
+      "phase": [
+        "seminary"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 9,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OSA",
+          "value": true
+        }
+      ],
+      "title": "Visiting Sunday",
+      "body": "The novitiate has one visiting Sunday a season and your family has come, all of them, in two cars, and has been given the parlour and lunch and an hour with the novice director, who has said to them what he says to families, which is that the order does not take sons, it borrows them. Your mother has said, in the parking lot, that she does not understand what you do all day and would like to, and your father has said nothing, which is his way.",
+      "choices": [
+        {
+          "id": "tell",
+          "label": "Tell her: the bell, the Rule, the silence, the boiler",
+          "outcome": "She listens and understands some of it and says, at the end, that it sounds like a farm, which it does, and your father says that is not nothing, and it is the most he says, and they drive home easier than they came.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "osa:told_the_family",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "father",
+          "label": "Walk with your father alone",
+          "outcome": "He says he had not thought it would be this and does not say what he had thought, and asks whether you are happy, and you say yes, since it is nearly true, and he nods, and it is the conversation you have with him for the next twenty years, in different words.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "osa:walked_with_father",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "director",
+          "label": "Ask the novice director to explain it to them again",
+          "outcome": "He does, differently, and it does not help, since it is not a thing that can be explained, and your mother says so, kindly, and he agrees, and says that is why he says the thing about borrowing, and she likes him for it.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@novice_master",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": -1
+            }
+          ]
+        }
+      ],
+      "yearGate": [
+        2
+      ]
+    },
+    {
+      "id": "osaf_novice_vote_watch",
+      "phase": [
+        "seminary"
+      ],
+      "campaign": "religious",
+      "severity": "MAJOR",
+      "category": "classmate",
+      "baseWeight": 11,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "friendship_vs_duty"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OSA",
+          "value": true
+        }
+      ],
+      "title": "The Vote on the Others",
+      "body": "The community votes on the novices before profession and the novices know it, and know the week, and the house is strange for the week, and one of the six, a good man and an odd one, is the one the house is not sure of. He knows it. He has asked you, in the garden, what you think the house will do, and you have heard, since you hear things, that it is close, and that {@old_friar} is against.",
+      "choices": [
+        {
+          "id": "tell",
+          "label": "Tell him it is close and that the old friar is against",
+          "outcome": "He goes to the old friar, which you had not thought he would, and they talk for an afternoon, and the old friar changes his vote, and says at recreation that a novice who comes to be argued with is a novice worth keeping, and the odd one is professed, and is a good friar, oddly.",
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 3
+            },
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": 6
+            },
+            {
+              "target": "relationship",
+              "key": "@old_friar",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "osa:told_him_the_vote",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "dont",
+          "label": "Say you do not know, since it is not yours to know",
+          "outcome": "He believes you, mostly. The vote is close and carries. He does not learn how close until years later, from someone else, and asks you then whether you knew, and you say yes, and he understands why you did not say, and is a long time forgiving it.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 2
+            },
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": -3
+            }
+          ]
+        },
+        {
+          "id": "speak",
+          "label": "Go to the old friar yourself and speak for him",
+          "outcome": "The old friar hears you out and says a novice speaking for a novice is either charity or a faction, and asks which, and you say charity, and he says he will take your word, and does, and votes for him, and watches you both.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "relationship",
+              "key": "@old_friar",
+              "delta": 3
+            },
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "osa:spoke_for_the_odd_one",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "yearGate": [
+        2
+      ]
+    },
+    {
+      "id": "osaf_profession_morning",
+      "phase": [
+        "seminary"
+      ],
+      "campaign": "religious",
+      "severity": "MAJOR",
+      "category": "personal",
+      "baseWeight": 13,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OSA",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "vows:refused",
+          "value": false
+        }
+      ],
+      "title": "The Morning of Profession",
+      "body": "Simple profession, and the vows are for a year, which the order does on purpose, and the novice director has said the night before that a man who professes for a year should mean it for a life and hold it for a year, and that the difference is the whole of the Augustinian thing. The chapel is full of friars and family. The formula is on a card. Your hands are not steady.",
+      "choices": [
+        {
+          "id": "life",
+          "label": "Mean it for a life, and say the year",
+          "outcome": "The hands steady. The words are the year's words and the meaning is the other thing, and the novice director, who receives the vows, looks at you as if he can tell, and says at the lunch that some men profess for a year and some for a life, and that the formula is the same, and does not say which you were.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "vows:meant_for_life",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "year",
+          "label": "Mean the year; it is what the words say",
+          "outcome": "It is honest and the novice director says so, later: that the men who mean the year renew it more carefully, and that the order has both kinds and needs both, and that he will be interested to see which you are at the third renewal, and so are you.",
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "vows:meant_the_year",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "hands",
+          "label": "Look at the family, and let the hands do what they do",
+          "outcome": "Your mother is weeping and your father is not, and the hands shake through the formula and it does not matter, since the words are said, and the old friar says afterward that his shook too, fifty years ago, and that a man whose hands do not shake at profession is a man who has not understood it.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "relationship",
+              "key": "@old_friar",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "vows:hands_shook",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "yearGate": [
+        2
+      ]
+    },
+    {
+      "id": "osaf_union_first_class",
+      "phase": [
+        "seminary"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "formation",
+      "baseWeight": 11,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OSA",
+          "value": true
+        }
+      ],
+      "title": "The Union's First Lecture",
+      "body": "The theological union is a building shared by four orders and a lecture hall with a Franciscan at the lectern and Servites in the back row and Augustinians, six of you, in the middle, since the middle is where the Augustinians sit, {@confrere} says, by long custom. The Franciscan has said that the theology of grace is where the orders differ most and least, and has asked the Augustinians to say what their founder thought, since he thought the most about it.",
+      "choices": [
+        {
+          "id": "say",
+          "label": "Say it: the whole of the Augustinian teaching on grace, as far as you have it",
+          "outcome": "It is more than you had and less than he wanted and it is right, mostly, and the Franciscan says so and disagrees with half of it, and the argument is the first day of a three-year friendship with the Franciscan, who is the best teacher you have.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 3
+            },
+            {
+              "target": "outspokenness",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "osa:spoke_first_at_the_union",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "defer",
+          "label": "Say the Augustinians have read him and not understood him, which is the tradition",
+          "outcome": "The hall laughs and the Franciscan does, and says that is the most Augustinian thing anyone has said in his class, and moves on, and you have said a true thing and a clever one and are not sure which he liked.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 1
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "servite",
+          "label": "Ask the Servites what they think, since nobody does",
+          "outcome": "The Servites are startled and then grateful and say something good about Mary and grace that nobody in the hall had thought of, and the Franciscan writes it down, and the Servites sit in the middle after that, some days, and the union is a little different.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "osa:asked_the_servites",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "yearGate": [
+        3
+      ]
+    },
+    {
+      "id": "osaf_first_renewal_ask",
+      "phase": [
+        "seminary"
+      ],
+      "campaign": "religious",
+      "severity": "MAJOR",
+      "category": "formation",
+      "baseWeight": 12,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OSA",
+          "value": true
+        }
+      ],
+      "title": "The Community Is Asked",
+      "body": "The first renewal, and the constitutions say the community is consulted, which means that every friar of the house has been asked about you and the formation director has the answers on a page, and has asked you to his office before the vote to say what the page says, since he thinks a man should hear it. It is mostly good. One line is not, and it is from a friar you had thought liked you, and it says that you are the last to the table and the first to leave it.",
+      "choices": [
+        {
+          "id": "true",
+          "label": "Say it is true, and ask what he would have you do",
+          "outcome": "The formation director says it is the right question and that he does not know, and that the friar who wrote it might, and you go to the friar, and it is a hard conversation and a good one, and you are at the table early for the rest of your life, and it is the friar's doing.",
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 4
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 4
+            },
+            {
+              "target": "relationship",
+              "key": "@old_friar",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "osa:heard_the_line",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "explain",
+          "label": "Explain: the studies, the union, the hours",
+          "outcome": "He listens and says that the studies are the point and so is the table, and that the order has lost men to both, and that the line stands and so does the vote, which carries, and you renew, and are late to the table for another year, and then are not.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -1
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "who",
+          "label": "Ask who wrote it",
+          "outcome": "He will not say and does not need to, since you know, and you watch the friar for a season and it changes the season and not the friar, and the formation director says at the next renewal that you should not have asked, and he was right.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": -1
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 2
+            }
+          ]
+        }
+      ],
+      "yearGate": [
+        3
+      ]
+    },
+    {
+      "id": "osaf_franciscan_argument",
+      "phase": [
+        "seminary"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "classmate",
+      "baseWeight": 9,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "friendship_vs_duty"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OSA",
+          "value": true
+        }
+      ],
+      "title": "The Franciscan Says a Thing",
+      "body": "The Franciscan student who has become your friend at the union has said, at lunch, that the Augustinians are a middling order: not the preachers, not the poor, not the scholars, and that he means it as a compliment, since middling is where most of the Church lives. {@confrere} has left the table. The Franciscan has looked at you to see whether you will.",
+      "choices": [
+        {
+          "id": "agree",
+          "label": "Agree with him, and say why it is the point",
+          "outcome": "You say it: that the order is for the ordinary, that the Rule was written for a house and not a movement, that one mind and one heart is a middling thing and the hardest. The Franciscan says he had not thought of it that way, and neither, until you said it, had you.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "osa:middling_defended",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "answer",
+          "label": "Answer him: the schools, the missions, the men in the parishes",
+          "outcome": "It is a list and it is a good one and he says it proves his point, since every order has a list, and the argument goes on for two years and is the making of the friendship, and you are both a little right.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "outspokenness",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "go",
+          "label": "Leave the table, with your confrere",
+          "outcome": "Your confrere is grateful. The Franciscan is puzzled and then apologizes, badly, and it is a month before the lunches are easy, and your confrere says, in the month, that you did not have to, and you did not, and it was the right month to have done it.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": -1
+            }
+          ]
+        }
+      ],
+      "yearGate": [
+        3
+      ]
+    },
+    {
+      "id": "osaf_house_cohesion_low",
+      "phase": [
+        "seminary"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "group",
+      "baseWeight": 10,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OSA",
+          "value": true
+        }
+      ],
+      "title": "The House Is Not One",
+      "body": "The house you live in during theology is not one mind and one heart this year: two friars have stopped speaking, the prior is tired, and the table is a place people leave. The formation director has said that a student brother should study and not fix the house, and has said it in a voice that means he wishes someone would fix the house, and {@old_friar}, who has seen this before, has said at recreation that houses heal from the bottom.",
+      "choices": [
+        {
+          "id": "bottom",
+          "label": "Start from the bottom: be at every meal, every Office, and talk to both",
+          "outcome": "It takes the year. The two friars do not speak to each other and both speak to you, and by Easter they speak through you, and by summer without you, and the prior says at the renewal that the house is better and does not know why, and the old friar does.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 5
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "osa:healed_from_the_bottom",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "study",
+          "label": "Study, as the director said, and let the house be the house",
+          "outcome": "The house is the house for two years. The two friars are moved. The house heals when they go, which is how houses usually heal, and you learn that, too, and it is a colder lesson and a true one.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -1
+            }
+          ]
+        },
+        {
+          "id": "prior",
+          "label": "Go to the prior and ask what a student brother can do",
+          "outcome": "He says: nothing, and then, after a while: sit with him at supper, since nobody does, and you do, and it is the prior who is the bottom of the house, it turns out, and the house heals a little from him.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@prior",
+              "delta": 6
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "osa:sat_with_the_prior",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "yearGate": [
+        3,
+        4
+      ]
+    },
+    {
+      "id": "osaf_summer_mission_osa",
+      "phase": [
+        "seminary"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "assignment",
+      "baseWeight": 10,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OSA",
+          "value": true
+        }
+      ],
+      "title": "The Summer in the Mission",
+      "body": "The province sends a student brother each summer to the mission, six weeks, and the formation director has said it is yours if you want it, and that it is not required, and that the men who go come back one of two ways and he cannot tell in advance which. It is a mountain parish in a country whose language you have a year of, run by two old friars of the province who have been there since before you were born.",
+      "choices": [
+        {
+          "id": "go",
+          "label": "Go to the mountain",
+          "outcome": "Six weeks. The language comes and the altitude does not. The two old friars are the happiest men you have met in the order and the poorest, and one of them says on the last night that the province will need someone when they are gone, and looks at you, and you come back the first way, which is wanting to go back.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "osa:summer_mission",
+              "value": true
+            },
+            {
+              "target": "flag",
+              "key": "language:mission",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "stay",
+          "label": "Stay; the studies need the summer",
+          "outcome": "The formation director says it is a reasonable choice and does not say it is the right one. Another brother goes and comes back the second way, which is not wanting to, and the mission is a thing you have not seen, and it is on the file as a thing you did not see.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": -1
+            }
+          ]
+        },
+        {
+          "id": "ask",
+          "label": "Ask which way he came back, when he went",
+          "outcome": "He says he did not go, and has wondered for thirty years, and that you should go so that one of you knows, and you go, and write to him from the mountain, and he keeps the letter on his desk for the rest of his time in the office.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@master_of_students",
+              "delta": 6
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "osa:summer_mission",
+              "value": true
+            },
+            {
+              "target": "flag",
+              "key": "language:mission",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "yearGate": [
+        3,
+        4
+      ]
+    },
+    {
+      "id": "osaf_second_friend",
+      "phase": [
+        "seminary"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "classmate",
+      "baseWeight": 9,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OSA",
+          "value": true
+        }
+      ],
+      "title": "The Second Chair",
+      "body": "There are two now: the friar from the pre-novitiate year and a student brother at the union who is from another province and will go back to it, and the order says three, and the formation director has said, at the monthly meeting, that a man should choose his friends in the order carefully since he will bury them or they him, and that two is a good number for a student brother, and that the third should be an old man.",
+      "choices": [
+        {
+          "id": "old",
+          "label": "Take the advice; find the old man",
+          "outcome": "{@old_friar} is not looking for a friend and has one by Lent, since you sat with him, and he tells you the order's last fifty years from the inside and dies in your fourth year of priesthood with you in the room, and you are glad you took the advice and he never knew it was advice.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@old_friar",
+              "delta": 10
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "osa:third_is_the_old_friar",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "two",
+          "label": "Two is enough; friendships are not a quota",
+          "outcome": "The two hold. The formation director says nothing more. The third comes on its own, in the tenth year of priesthood, and is a surprise, and is a layman, which the director had not thought of and would have approved.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            },
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "union",
+          "label": "The third is the Franciscan at the union",
+          "outcome": "The formation director raises an eyebrow and says the Rule does not specify, and the Franciscan is your friend for life and the two orders have, in you two, a bridge nobody built on purpose, and it is used, twice, when the orders need it.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "osa:franciscan_is_the_third",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "yearGate": [
+        3,
+        4
+      ]
+    },
+    {
+      "id": "osaf_doubt_at_union",
+      "phase": [
+        "seminary"
+      ],
+      "campaign": "religious",
+      "severity": "MAJOR",
+      "category": "personal",
+      "baseWeight": 11,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "doubt"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OSA",
+          "value": true
+        }
+      ],
+      "title": "The Question in the Library",
+      "body": "It has come in the library, in the second year of theology, over a book about the historical Jesus by a man who does not believe in him: the question, the whole one, and it has sat with you for a week and you have said nothing, since a student brother who says it is a student brother the community is asked about at the renewal, and the renewal is in April.",
+      "choices": [
+        {
+          "id": "director",
+          "label": "Tell the formation director",
+          "outcome": "He says he has been waiting for it since the tenth book, and that it comes to every Augustinian who reads, and that the order was founded by a man who had it for nine years, and asks whether you would like to talk about it or be left alone with it, and you say both, and he does both.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 4
+            },
+            {
+              "target": "relationship",
+              "key": "@master_of_students",
+              "delta": 5
+            },
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "osa:told_the_doubt",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "friend",
+          "label": "Tell the friend, not the director",
+          "outcome": "The friend listens and does not fix it, which is the right thing, and says he has it too, some days, and that they should say the Office together on those days, and you do, and it is the friendship that carries it, which is what the order says friendship is for.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": 8
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "osa:doubt_with_friend",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "alone",
+          "label": "Carry it alone until the renewal, and see",
+          "outcome": "It lasts until Advent. You renew in April with it half gone and half not, and it is the formation director who says, at the meeting, that he could see something and had waited to be told, and that you should not do that again, and you do not, quite.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 4
+            },
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "osa:doubt_alone_union",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "yearGate": [
+        3,
+        4
+      ]
+    },
+    {
+      "id": "osaf_provincial_visits_studium",
+      "phase": [
+        "seminary"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 9,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OSA",
+          "value": true
+        }
+      ],
+      "title": "The Provincial Comes to Supper",
+      "body": "{@provincial} has come to the house for a night, as he does once a year, and has sat at the student brothers' end of the table on purpose, and has asked each of you, in turn, what the province should do differently, since he says the student brothers are the only friars who will tell him, and the others have said careful things, and it is your turn.",
+      "choices": [
+        {
+          "id": "say",
+          "label": "Say it: the thing the house says at recreation and nobody says to him",
+          "outcome": "The table goes still. He writes it down, in a book he keeps, and says it is the first useful thing he has heard on a visitation in a year, and the prior looks at you for a week as if you had let something out, which you had, and it was time.",
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 4
+            },
+            {
+              "target": "outspokenness",
+              "key": "",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 3
+            },
+            {
+              "target": "relationship",
+              "key": "@provincial",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -1
+            },
+            {
+              "target": "flag",
+              "key": "osa:told_the_provincial",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "careful",
+          "label": "Say a careful thing, like the others",
+          "outcome": "He nods and moves on. It is the safe answer and the house approves of it, and a year later the provincial says, passing you in a corridor, that he had hoped for more from you, and you find you had hoped for more from you too.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": -1
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": -1
+            }
+          ]
+        },
+        {
+          "id": "ask",
+          "label": "Ask him what he would do differently, if he were a student brother",
+          "outcome": "He laughs and answers, at length, and it is the best hour the student brothers have had with a provincial, and he says at the end that you turned the question, which is a skill, and that the province needs men who can turn a question and also men who answer one, and that he will watch to see which you are.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 1
+            },
+            {
+              "target": "relationship",
+              "key": "@provincial",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 2
+            }
+          ]
+        }
+      ],
+      "yearGate": [
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "id": "osaf_school_visit_year_three",
+      "phase": [
+        "seminary"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "assignment",
+      "baseWeight": 9,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OSA",
+          "value": true
+        }
+      ],
+      "title": "The Order's College",
+      "body": "The province runs a college, or half runs it, since the trustees are mostly laymen now and the friars on the faculty are eleven and old. The formation director has sent the student brothers for a weekend, to see it, and the president, a friar, has given you an hour in his office and said that the college will need friars who can teach and friars who can raise money and that the order does not form the second kind, and has asked which you are.",
+      "choices": [
+        {
+          "id": "teach",
+          "label": "Say the first",
+          "outcome": "He says good, since the first is the one the college was for, and that you should do a doctorate, and says it to the formation director, and the province has a mark on its calendar six years out that is you, and the union's Franciscan says you have been claimed.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "osa:marked_for_the_college",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "money",
+          "label": "Say the second, and that someone has to",
+          "outcome": "He looks at you for a long moment and says nobody has said that in his office in ten years, and that he will remember it, and does, and you are on the college's board in your fifteenth year of priesthood and its president in your twentieth, and it began with a sentence you were not sure of.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "osa:said_the_money",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "neither",
+          "label": "Say you are for the parishes",
+          "outcome": "He is not surprised, since most are. The college gets other men, or does not, and is a lay college with an Augustinian name by the time you are old, and you are in a parish, and are not sorry, and go to the college's Mass once a year, and it is a good Mass, and there is one friar at it.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 1
+            }
+          ]
+        }
+      ],
+      "yearGate": [
+        3,
+        4
+      ]
+    },
+    {
+      "id": "osaf_renewal_two",
+      "phase": [
+        "seminary"
+      ],
+      "campaign": "religious",
+      "severity": "MAJOR",
+      "category": "formation",
+      "baseWeight": 12,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OSA",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "vows:refused",
+          "value": false
+        }
+      ],
+      "title": "The Second Renewal",
+      "body": "The second renewal, and it is easier than the first, which is its danger, the formation director says: the community has decided about you and the vote is not close and the vows are a formula you have said before, and he would like you to say, before the vote, why you are renewing, in a sentence, since a man who cannot say it in a sentence should not say it at all.",
+      "choices": [
+        {
+          "id": "sentence",
+          "label": "Say the sentence",
+          "outcome": "It is a good sentence. He writes it down and gives it back to you at solemn profession, a year later, and asks whether it is still true, and it is, and it is the sentence you say to novices for forty years, and they do not know where it came from.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "relationship",
+              "key": "@master_of_students",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "osa:said_the_sentence",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "paragraph",
+          "label": "Say it in a paragraph, since a sentence is not enough",
+          "outcome": "He listens to the paragraph and says it was four sentences and that any of them would have done, and that a man who needs four is a man who is not sure which, and to think about it for the year, and you do, and it is the second one.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "cant",
+          "label": "Say you cannot, and that you are renewing anyway",
+          "outcome": "He is quiet and then says that is a sentence, and that it is the sentence most friars would give if they were honest, and that the order is built on men who could not say it and stayed, and the vote carries, and you renew, and it is the truest of the three.",
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 4
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "osa:renewed_without_the_sentence",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "yearGate": [
+        4
+      ]
+    }
+  ]
+}
