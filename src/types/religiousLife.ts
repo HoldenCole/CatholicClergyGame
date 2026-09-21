@@ -1,5 +1,6 @@
 import type { PillarDef } from './campaign';
 import type { StatKey } from './stats';
+import type { Quality } from './parish';
 
 /**
  * The religious campaign's data model. E3 §12. Orders are data: every
@@ -177,10 +178,92 @@ export interface Chapter {
   outcome?: { electedId: string; accepted: boolean; confirmed: boolean };
 }
 
+/** The common life's mandatory obligations. E3 §3.3; content/religious/horarium.json. */
+export type HorariumKey = 'hours' | 'conventual_mass' | 'common_table' | 'house_chapter';
+
+export const HORARIUM_KEYS: readonly HorariumKey[] = ['hours', 'conventual_mass', 'common_table', 'house_chapter'] as const;
+
+export interface HorariumDef {
+  key: HorariumKey;
+  label: string;
+  /** AP per quality; `invested` null where the table has no such level. */
+  ap: { min: number; standard: number; invested: number | null };
+  blurb: { min: string; standard: string; invested: string };
+  /** Per-week movement at each quality: standing with the house, its cohesion, and piety. `standard` is neutral. */
+  effects: Record<Quality, { community: number; cohesion: number; piety: number }>;
+  /** Everyone sees who is not in choir: the standing cost of the minimum is this much larger when observance is high. */
+  visible?: boolean;
+}
+
+/** A personal expense the prior can grant or refuse. E3 §3.4; content/religious/permissions.json. */
+export interface PermissionDef {
+  id: string;
+  label: string;
+  blurb: string;
+  /** What it costs the house. */
+  cost: number;
+  /** How readily a prior grants it, 0..1, before relationship, budget, temperament, and precedent. */
+  ease: number;
+  /** Weeks before it can be asked again. */
+  cooldown: number;
+  /** Set when granted, for content: `permission:<flag>`. */
+  flag?: string;
+  line: { granted: string; refused: string };
+}
+
+export interface PermissionRecord {
+  id: string;
+  week: number;
+  granted: boolean;
+}
+
+/** One posting under obedience. E3 §3.1, §3.8. */
+export interface ReligiousAssignment {
+  houseId: string;
+  dioceseId: string;
+  /** What he is sent to do there: one of the house's works. */
+  work: string;
+  startWeek: number;
+  endWeek?: number;
+  /** A parish entrusted to the order: the bishop appointed him on the provincial's presentation, and either can remove him. */
+  dual?: boolean;
+  /** How he took the letter. */
+  grace?: 'good' | 'reluctant' | 'refused';
+}
+
+export interface ConsultationOption {
+  houseId: string;
+  work: string;
+  /** The provincial's inputs, 0..100 each. */
+  need: number;
+  fit: number;
+  formation: number;
+  line: string;
+}
+
+/** The talk before the letter: preferences stated, an objection made or not, then the provincial decides. E3 §3.1. */
+export interface Consultation {
+  week: number;
+  options: ConsultationOption[];
+  /** The house he asked for, if any. */
+  preference?: string;
+  /** He objected on real grounds. */
+  objection?: boolean;
+  /** Why it opened: the term ended, the bishop wanted the parish back, the province needed him elsewhere. */
+  reason: 'term' | 'bishop' | 'province' | 'withdrawal' | 'first';
+  decided?: { houseId: string; work: string; reasons: string[] };
+}
+
 export interface ReligiousPlayerState {
   order: OrderKey;
   provinceId: string;
   houseId: string;
+  /** The common life as he keeps it. */
+  horarium: Record<HorariumKey, Quality>;
+  permissions: PermissionRecord[];
+  assignments: ReligiousAssignment[];
+  consultation?: Consultation;
+  obedience: { accepted: number; reluctant: number; refused: number };
   religiousName?: string;
   vows: {
     simpleWeek?: number;

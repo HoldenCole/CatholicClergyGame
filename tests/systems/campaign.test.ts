@@ -11,7 +11,7 @@ import { ALL_CONSTITUENCY_KEYS, CONSTITUENCY_KEYS, PILLARS, RELIGIOUS_CONSTITUEN
 
 function friar(seed = 'friar'): GameState {
   const s = seminaryState(seed);
-  const religious: ReligiousPlayerState = { order: 'OP', provinceId: 'op_st_joseph', houseId: 'op_st_joseph:house1', vows: { renewals: [] }, perceivedAmbition: 10, termsServed: [] };
+  const religious: ReligiousPlayerState = { order: 'OP', provinceId: 'op_st_joseph', houseId: 'op_st_joseph:house1', horarium: { hours: 'standard', conventual_mass: 'standard', common_table: 'standard', house_chapter: 'standard' }, permissions: [], assignments: [], obedience: { accepted: 0, reluctant: 0, refused: 0 }, vows: { renewals: [] }, perceivedAmbition: 10, termsServed: [] };
   return { ...s, campaign: 'religious', religious };
 }
 
