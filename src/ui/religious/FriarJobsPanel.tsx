@@ -2,6 +2,7 @@ import { useGameStore } from '@/engine/store';
 import { religiousOrder } from '@/content/religious';
 import { apostolateDef, apostolateOffers, houseOfficeDef, houseOfficeOffers, requestChance, requestWord, REQUESTS } from '@/systems/religious/requests';
 import { currentHouse, priorOf } from '@/systems/religious/house';
+import { chanceryAskDef } from '@/systems/religious/bishopAsks';
 import Sheet from '../Sheet';
 
 /**
@@ -23,8 +24,9 @@ export default function FriarJobsPanel() {
   const house = currentHouse(game);
   const prior = house ? priorOf(game, house) : undefined;
   const held = houseOfficeDef(game);
-  const work = apostolateDef(game);
+  const work = apostolateDef(game) ?? chanceryAskDef(game);
   const offices = houseOfficeOffers(game);
+  const bishopAsk = r.bishopAsk;
   const offers = game.flags.ordained ? apostolateOffers(game) : [];
   const local = offers.filter((o) => o.def.kind === 'local');
   const moves = offers.filter((o) => o.def.kind === 'house');
@@ -86,6 +88,10 @@ export default function FriarJobsPanel() {
               <button className="pbtn mt-1 px-2 py-0.5 text-xs" onClick={endApostolate}>Give it up</button>
             </div>
           )}
+          <p className="ink-faint mt-2 text-xs">
+            The bishop cannot assign you. He may be fond of you and of the order, or not; when he wants you for something he writes to the {title}, who spares you, refuses, or lets you do both if the week has room.
+            {bishopAsk ? ` The last time, for ${bishopAsk.label.toLowerCase()}, the ${title} ${bishopAsk.answer === 'refused' ? 'said no' : bishopAsk.outcome === 'accepted' ? 'left it to you and you took it' : bishopAsk.outcome === 'declined' ? 'left it to you and you declined' : 'left it to you'}.` : ''}
+          </p>
           <div className="mt-3">
             <div className="heading text-sm">In this diocese, from the house</div>
             <ul className="mt-1 grid grid-cols-2 gap-2 text-sm">

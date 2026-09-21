@@ -2,7 +2,7 @@ import type { ApostolateDef, Effect, GameState, HouseOfficeDef, Letter, OrderHou
 import type { Rng } from '@/engine/rng';
 import { applyEffects } from '@/engine/effects';
 import { dateOf, priesthoodYear } from '@/engine/time';
-import { religiousOrder } from '@/content/religious';
+import { bishopAskDefs, religiousOrder } from '@/content/religious';
 import { currentHouse, houseById, houseLine, priorOf } from './house';
 import { needOf, fitOf } from './obedience';
 import { currentPosting, moveToHouse } from './transfer';
@@ -152,6 +152,9 @@ export function apostolateDef(state: GameState): ApostolateDef | undefined {
 }
 
 export function apostolateLoad(state: GameState): number {
+  const id = state.religious?.apostolate?.id;
+  // A chancery post taken at the bishop's ask carries its own blocks. E3 §3.11.
+  if (id?.startsWith('chancery:')) return bishopAskDefs.find((d) => d.kind === 'chancery' && `chancery:${d.office}` === id)?.ap ?? 0;
   return apostolateDef(state)?.ap ?? 0;
 }
 
@@ -302,7 +305,13 @@ export function requestsWeek(state: GameState): GameState {
   return applyEffects(state, effects, {}, 'the work of the week');
 }
 
-/** The week's blocks the office and the work take, for the sheet. */
+/** Blocks a pastor's ask takes this week, while it runs. E3 §3.12. */
+export function pastorTaskLoad(state: GameState): number {
+  const t = state.religious?.pastorTask;
+  return t && state.clock.week < t.untilWeek ? t.ap : 0;
+}
+
+/** The week's blocks the office, the work, and a pastor's ask take, for the sheet. */
 export function requestsLoad(state: GameState): number {
-  return houseOfficeLoad(state) + apostolateLoad(state);
+  return houseOfficeLoad(state) + apostolateLoad(state) + pastorTaskLoad(state);
 }

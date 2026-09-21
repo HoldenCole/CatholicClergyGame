@@ -1,7 +1,9 @@
 import raw from './orders.json';
 import horariumRaw from './horarium.json';
 import permissionsRaw from './permissions.json';
-import type { HorariumDef, HorariumKey, OrderDef, OrderKey, PermissionDef, ProvinceSeed } from '@/types';
+import bishopAsksRaw from './bishopAsks.json';
+import pastorAsksRaw from './pastorAsks.json';
+import type { BishopAskDef, PastorAskDef, HorariumDef, HorariumKey, OrderDef, OrderKey, PermissionDef, ProvinceSeed } from '@/types';
 
 /** The orders a friar can be professed into. E3 §6–7, as data. */
 const data = raw as unknown as { orders: OrderDef[]; provinceComplications: string[]; doctrinalTopics: string[] };
@@ -37,3 +39,9 @@ export function horariumDef(key: HorariumKey): HorariumDef {
 
 /** What a friar may ask his prior for. E3 §3.4. */
 export const permissionDefs: PermissionDef[] = (permissionsRaw as unknown as { permissions: PermissionDef[] }).permissions;
+
+/** What a bishop may ask the provincial for. E3 §3.11. */
+export const bishopAskDefs: BishopAskDef[] = (bishopAsksRaw as unknown as { asks: BishopAskDef[] }).asks;
+
+/** What a pastor of the diocese may write to the prior for. E3 §3.12. */
+export const pastorAskDefs: PastorAskDef[] = (pastorAsksRaw as unknown as { asks: PastorAskDef[] }).asks;

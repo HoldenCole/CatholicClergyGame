@@ -1,0 +1,1551 @@
+{
+  "_notes": "Shared religious life: the deanery for a friar pastor. E3 §3.12. Hangs on deanery:friar, which the deanery system sets when the posting is the order's parish.",
+  "events": [
+    {
+      "id": "rd_first_meeting",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "group",
+      "baseWeight": 14,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "deanery:friar",
+          "value": true
+        }
+      ],
+      "title": "The First Deanery Meeting",
+      "body": "The deanery meets on the second Tuesday at the rectory of whichever pastor drew the short straw, and this month it is {@dean}'s, and you are the new man and the only one in a habit. The agenda is the confirmation schedule, the Catholic Charities appeal, and a complaint about a parish that has begun a Sunday evening Mass that is drawing from the others, and the parish is yours, and nobody has said so yet.",
+      "choices": [
+        {
+          "id": "say",
+          "label": "Say it yourself: the evening Mass is yours, and here is why",
+          "outcome": "The room is quiet and then the dean says that at least the friars are honest, which in this deanery is praise, and the complaint is not on next month's agenda, and two of the pastors come to see what the evening Mass is, and one of them starts his own.",
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 4
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "diocesan_clergy",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "deanery:said_it_first",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "wait",
+          "label": "Wait for someone to name the parish",
+          "outcome": "Someone does, badly, and the dean handles it, and you are the friar who let the room do his talking, which is remembered either way, and the evening Mass goes on, and the complaint comes back in a year with numbers.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "diocesan_clergy",
+              "delta": -2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "offer",
+          "label": "Offer to say the evening Mass at their parishes in turn",
+          "outcome": "The room is startled and then interested. It is a rota by Lent, the friar at a different parish each Sunday evening, and the deanery has a Mass it had not had, and the dean says the order has done something for the diocese, which the diocese will remember for a decade.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "diocesan_clergy",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "local_bishop",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 2
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "deanery:evening_rota",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rd_habit_question",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "group",
+      "baseWeight": 10,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "belief_vs_safety"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "deanery:friar",
+          "value": true
+        }
+      ],
+      "title": "The Habit at the Table",
+      "body": "The deanery's lunch after the meeting, and {@deanery_priest}, who is a good pastor and a blunt one, has asked, over the soup, why you wear the habit to a meeting of priests, and whether it is meant as a comment on the rest of them, in their clerical shirts, and the table has gone quiet in the way tables do when someone has said the thing.",
+      "choices": [
+        {
+          "id": "rule",
+          "label": "Say it is the order's rule, and nothing to do with them",
+          "outcome": "He says a rule is a comment too, and is not wrong, and the lunch goes on, and he is the priest in the deanery you are most careful with for a year, and then the one you are fondest of, since he says things.",
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "observant_bloc",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "diocesan_clergy",
+              "delta": 1
+            },
+            {
+              "target": "relationship",
+              "key": "@deanery_priest",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "joke",
+          "label": "Say you would wear the shirt if the order would let you buy one",
+          "outcome": "The table laughs, and he does, and it is the right answer for a lunch, and the question is not asked again, and you are the friar with the joke, which is a thing to be in a deanery.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "diocesan_clergy",
+              "delta": 4
+            },
+            {
+              "target": "relationship",
+              "key": "@deanery_priest",
+              "delta": 4
+            }
+          ]
+        },
+        {
+          "id": "ask",
+          "label": "Ask him what he thinks it says",
+          "outcome": "He tells you, for the rest of lunch, and it is the diocesan clergy's view of religious said by a man who was willing to say it, and it is useful and it is not kind, and you thank him, and he is surprised, and the deanery is easier after that.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 2
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "diocesan_clergy",
+              "delta": 3
+            },
+            {
+              "target": "relationship",
+              "key": "@deanery_priest",
+              "delta": 6
+            },
+            {
+              "target": "flag",
+              "key": "deanery:heard_the_view",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rd_cover_asked",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "group",
+      "baseWeight": 10,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "friendship_vs_duty"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "deanery:friar",
+          "value": true
+        }
+      ],
+      "title": "Cover Asked, Without the Trade",
+      "body": "{@deanery_priest} has telephoned on a Thursday to ask whether you would take his Sunday Masses, since his mother is dying two states away, and the diocesan pastors trade cover among themselves and you are not in the trade, since a friar's Sundays are the house's, and the prior is at a meeting, and the man is on the phone.",
+      "choices": [
+        {
+          "id": "yes",
+          "label": "Say yes, and tell the prior after",
+          "outcome": "The prior is not pleased and is not surprised, and says the house will cover the house, and it does. The pastor buries his mother and is back in a month and says, at the deanery, that the friar came when nobody else could, and the deanery hears it.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "diocesan_clergy",
+              "delta": 6
+            },
+            {
+              "target": "relationship",
+              "key": "@deanery_priest",
+              "delta": 8
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -2
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "deanery:covered_without_asking",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "prior",
+          "label": "Say you will ask the prior and call him back in an hour",
+          "outcome": "The prior says yes in the hour, since it is a dying mother, and you call back, and the pastor says he had not thought the friars needed permission for that, and you say they do, and it is a thing he learns about the order, and does not hold against it, quite.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "diocesan_clergy",
+              "delta": 3
+            },
+            {
+              "target": "relationship",
+              "key": "@deanery_priest",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "no",
+          "label": "Say the house cannot spare you, and give him the dean's number",
+          "outcome": "The dean finds someone. The pastor does not forget that the friar gave him a number, and says so, once, at a lunch, and it is a long time before he asks again, and the deanery knows why.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "diocesan_clergy",
+              "delta": -5
+            },
+            {
+              "target": "relationship",
+              "key": "@deanery_priest",
+              "delta": -6
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rd_dean_lenten_mission",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "assignment",
+      "baseWeight": 10,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "deanery:friar",
+          "value": true
+        },
+        {
+          "type": "stat",
+          "key": "charisma",
+          "op": ">=",
+          "value": 45
+        }
+      ],
+      "title": "The Dean Wants a Mission",
+      "body": "{@dean} has asked, after the meeting, whether the friars would preach a Lenten mission for the whole deanery: one week, a different parish each night, the old kind, with confessions after, since the deanery has not had one in twenty years and the bishop has asked the deans for something in Lent. He has asked you and not the prior, since he does not know he should, and it would be seven nights.",
+      "choices": [
+        {
+          "id": "yes",
+          "label": "Say yes, and take it to the prior as a thing the deanery asked",
+          "outcome": "The prior says the deanery could have asked him, and says yes. Seven nights, seven churches, and a line for confessions at each, and the dean writes to the bishop, and the bishop writes to the provincial, and the province has a thing the diocese is grateful for.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 4
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "diocesan_clergy",
+              "delta": 8
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "local_bishop",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 2
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 4
+            },
+            {
+              "target": "flag",
+              "key": "deanery:preached_the_mission",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "prior",
+          "label": "Tell him to write to the prior, since that is the road",
+          "outcome": "He is puzzled and writes. The prior says yes, and it is the same seven nights, and the dean has learned how the order works, and says so at the next meeting, not unkindly, and the deanery writes to the prior after that, which is right.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "diocesan_clergy",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "local_bishop",
+              "delta": 3
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "deanery:preached_the_mission",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "no",
+          "label": "Say the house cannot lose you for seven nights in Lent",
+          "outcome": "The dean finds a diocesan priest who preaches it adequately, and the deanery has its mission, and it was not the friars', and the dean does not ask again, and the prior, told, says he would have said yes.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "diocesan_clergy",
+              "delta": -3
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": -1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rd_full_church_resentment",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "group",
+      "baseWeight": 10,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "deanery:friar",
+          "value": true
+        }
+      ],
+      "title": "The Full Church",
+      "body": "The order's parish is full and the parish next door is not, and {@deanery_priest}, whose parish it is, has said at the deanery meeting, to the room, that the friars have three men where he has one and a school the diocese does not pay for, and that a full church is not hard on those terms, and the room has looked at you, since it is true, and it is not the whole truth.",
+      "choices": [
+        {
+          "id": "agree",
+          "label": "Agree: three men, and say what the three cost the order",
+          "outcome": "He is silent and then says he had not thought of it as cost, and the room has heard both halves, and the dean says the deanery could use the friars' three men on its own terms, and it is the beginning of the rota, or of something.",
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 4
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "diocesan_clergy",
+              "delta": 4
+            },
+            {
+              "target": "relationship",
+              "key": "@deanery_priest",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "deanery:named_the_cost",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "offer",
+          "label": "Offer him one of the three, one day a week",
+          "outcome": "The prior agrees, since it is a day. The friar goes on Tuesdays and the parish next door has a priest in the confessional on Tuesdays and the pastor stops saying the thing, and says, in a year, that the friars are the reason his parish is not closed.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "diocesan_clergy",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 3
+            },
+            {
+              "target": "relationship",
+              "key": "@deanery_priest",
+              "delta": 8
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -1
+            },
+            {
+              "target": "flag",
+              "key": "deanery:lent_a_friar",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "quiet",
+          "label": "Say nothing; the room will decide what it thinks",
+          "outcome": "It decides. Half think he is right and half think he is bitter, and both halves think the friars did not answer, and the full church stays full and the deanery stays divided about it, and it is on you a little.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "diocesan_clergy",
+              "delta": -3
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rd_priest_confides",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "classmate",
+      "baseWeight": 9,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "friendship_vs_duty"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "deanery:friar",
+          "value": true
+        },
+        {
+          "type": "stat",
+          "key": "piety",
+          "op": ">=",
+          "value": 45
+        }
+      ],
+      "title": "The Priest Who Confides",
+      "body": "{@deanery_priest} has stayed after the deanery lunch, and then after the others have gone, and then has said the thing, which is that he has not prayed in two years and does not know how to tell anyone in the diocese, since the diocese is where his career is, and that he is telling a friar because a friar is not in the diocese, exactly, and cannot use it.",
+      "choices": [
+        {
+          "id": "hear",
+          "label": "Hear it, and say the Office with him before he goes",
+          "outcome": "It is Vespers in a rectory kitchen and it is the first Office he has said in two years, and he telephones on Thursdays after that to say it with you, and it is the beginning of something the diocese never knows about, which is the point.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 4
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "relationship",
+              "key": "@deanery_priest",
+              "delta": 12
+            },
+            {
+              "target": "reputation",
+              "key": "diocesan_clergy",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "deanery:the_priest_who_confided",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "director",
+          "label": "Say he should have a director, and offer to be it",
+          "outcome": "He says yes, since it is what he came for and could not ask, and it is a monthly hour for a decade, sealed, and he is a better priest for it and a pastor the deanery is glad of, and nobody in the diocese knows why.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "relationship",
+              "key": "@deanery_priest",
+              "delta": 10
+            },
+            {
+              "target": "flag",
+              "key": "deanery:directs_a_priest",
+              "value": true
+            },
+            {
+              "target": "flag",
+              "key": "directing:diocesan_priest",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "careful",
+          "label": "Say it is a thing for his confessor, and give him a name",
+          "outcome": "He takes the name and does not use it, and is the same for two years and then is worse, and is moved, and you learn that a man who says the thing to a friar in a kitchen has already chosen his confessor, and you were it.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": -1
+            },
+            {
+              "target": "relationship",
+              "key": "@deanery_priest",
+              "delta": -4
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rd_merger_vote",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 9,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "deanery:friar",
+          "value": true
+        },
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 3
+        }
+      ],
+      "title": "The Deanery and the Merger",
+      "body": "The bishop's office has asked the deanery to say which two of its parishes should merge, since the diocese cannot staff them all, and the deanery is to vote, and one of the two on the list is the parish next door and the other is yours, since the chancery reasons that a parish with three friars can absorb a parish with none, and the friars do not answer to the chancery, and the deanery knows that, and is voting anyway.",
+      "choices": [
+        {
+          "id": "take",
+          "label": "Vote to take the parish, and say the order will staff it",
+          "outcome": "The deanery votes for it, relieved. The provincial, told, says the house can staff it for now and that now is not forever, and it is the order's parish and the diocese's and the bishop's, three keys, and it is the largest parish in the deanery in five years, and the diocese owes the order something it does not name.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "diocesan_clergy",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "local_bishop",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": -2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -2
+            },
+            {
+              "target": "flag",
+              "key": "deanery:took_the_merger",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "province",
+          "label": "Say the deanery cannot vote on the order's parish, and that the provincial will answer the bishop",
+          "outcome": "The deanery is offended and the dean is not, since it is true, and the provincial answers the bishop in a page, and the merger goes elsewhere, and the deanery remembers that the friars were not in the room for that, and were right not to be.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "diocesan_clergy",
+              "delta": -4
+            },
+            {
+              "target": "reputation",
+              "key": "local_bishop",
+              "delta": -3
+            },
+            {
+              "target": "flag",
+              "key": "deanery:sent_it_to_the_province",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "abstain",
+          "label": "Abstain, and let the deanery say what it thinks",
+          "outcome": "It says it: merge them, and the friars can manage. The provincial is asked, by the bishop, after the fact, and says yes, since it was decided, and is cool to you for a season for letting the deanery decide the order's business, and the parish is merged, and it works.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "diocesan_clergy",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": -4
+            },
+            {
+              "target": "reputation",
+              "key": "local_bishop",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "deanery:abstained_on_the_merger",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rd_pastor_dies",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "MAJOR",
+      "category": "parish_death",
+      "baseWeight": 9,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "deanery:friar",
+          "value": true
+        },
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 2
+        }
+      ],
+      "title": "The Pastor Next Door Dies",
+      "body": "{@deanery_priest} has died, in his rectory, on a Tuesday, found by his secretary, and the deanery does what deaneries do, which is to bury him and to divide his Masses until the bishop finds someone, and the dean has asked the friars for the Sunday Masses, since the house has three men, and the funeral is Friday, and the dean has asked you to preach it, since you were the priest he talked to.",
+      "choices": [
+        {
+          "id": "preach",
+          "label": "Preach it, four minutes, on the thing he told you",
+          "outcome": "The deanery weeps, which deaneries do not do in public, and the bishop, who came, asks the dean afterward who the friar was, and the dean tells him, and the parish next door is the friars' Sundays for a year, and remembers the homily longer than the year.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "diocesan_clergy",
+              "delta": 7
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "local_bishop",
+              "delta": 4
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "deanery:preached_the_pastor",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "masses",
+          "label": "Take the Masses, and let the dean preach",
+          "outcome": "The dean preaches, well, and the friars take the Sundays for a year, and the parish next door knows the friars as the men who came, and the deanery does, and it is enough, and the dean says the friars did the harder half.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "diocesan_clergy",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 3
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 3
+            }
+          ]
+        },
+        {
+          "id": "house",
+          "label": "Say the house can take the Masses for a month, not a year",
+          "outcome": "The dean takes the month, and finds a retired priest for the rest, and the deanery says the friars did what they could, which is true, and is less than it had hoped, and the prior says it was the right month.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "diocesan_clergy",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rd_bishop_visitation_dean",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 9,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "deanery:friar",
+          "value": true
+        },
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 2
+        }
+      ],
+      "title": "The Bishop's Visitation, Through the Dean",
+      "body": "The bishop is visiting the deanery, parish by parish, and the dean has said, privately, that the bishop has asked about the friars' parish in a voice the dean could not read, and that the bishop will want to see the books, the school, and the Sunday count, and that the bishop's office has been told, by someone, that the order's parish does not answer to it, and would like to see whether that is so.",
+      "choices": [
+        {
+          "id": "open",
+          "label": "Open everything: the books, the school, the count, and the prior at the door",
+          "outcome": "The bishop sees it all and says nothing for an hour and then says it is the best-run parish in the deanery, which the dean repeats, and the bishop's office learns that the order's parish answers to nobody and hides nothing, which is a distinction it can live with.",
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "local_bishop",
+              "delta": 7
+            },
+            {
+              "target": "reputation",
+              "key": "diocesan_clergy",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "deanery:open_visitation",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "provincial",
+          "label": "Ask the provincial what the bishop may see",
+          "outcome": "The provincial says everything, and says it in a letter to the bishop's office that arrives before the bishop does, and the visitation is a formality and a cool one, and the bishop's office has learned who answers, which was the question.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "local_bishop",
+              "delta": -2
+            },
+            {
+              "target": "reputation",
+              "key": "diocesan_clergy",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "count",
+          "label": "Show the count, and say the books are the province's",
+          "outcome": "The bishop is courteous about it and the dean is not, afterward, and says the friars have made the bishop's office a permanent enemy over a ledger, and it is not permanent, and it is a decade, and the count was very good.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "local_bishop",
+              "delta": -5
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "diocesan_clergy",
+              "delta": -2
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rd_priest_wants_the_order",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "classmate",
+      "baseWeight": 8,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "friendship_vs_duty"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "deanery:friar",
+          "value": true
+        },
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 5
+        }
+      ],
+      "title": "The Priest Who Wants to Enter",
+      "body": "{@deanery_priest} has said, at the end of a lunch, that he has been thinking about the order for two years and would like to know how a priest of the diocese enters it, at forty-four, with a parish, and whether the friars would have him, and the deanery is at the next table and cannot hear, and the bishop would lose a pastor, and the order would gain a man who knows what a parish is.",
+      "choices": [
+        {
+          "id": "tell",
+          "label": "Tell him how, and that the order would",
+          "outcome": "He goes to the provincial in a month and the bishop in two, and the bishop is not glad and lets him go, since a bishop cannot keep a man from a vocation, and he is a novice at forty-five in a house of twenty-four-year-olds, and stays, and the deanery is one pastor short and thinks it was you.",
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "diocesan_clergy",
+              "delta": -4
+            },
+            {
+              "target": "reputation",
+              "key": "local_bishop",
+              "delta": -3
+            },
+            {
+              "target": "flag",
+              "key": "crossing:diocesan_wants_in",
+              "value": true
+            },
+            {
+              "target": "flag",
+              "key": "deanery:sent_a_pastor_in",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "wait",
+          "label": "Tell him to wait a year and come to supper once a month",
+          "outcome": "He comes to supper. The house does what it does with him. In a year he knows, and it is yes, or it is no, and either way he decided it at a table and not at a lunch, and the deanery does not know for a year, and the bishop hears it from him and not from you.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 2
+            },
+            {
+              "target": "relationship",
+              "key": "@deanery_priest",
+              "delta": 6
+            },
+            {
+              "target": "flag",
+              "key": "crossing:diocesan_at_supper",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "no",
+          "label": "Tell him the truth: the order is lonely too, differently",
+          "outcome": "He is quiet and laughs and does not enter, and is a pastor for thirty more years, and comes to supper once a month for all of them, and says at your jubilee that you saved him from the friars, and the deanery laughs, and it is the best toast.",
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 4
+            },
+            {
+              "target": "relationship",
+              "key": "@deanery_priest",
+              "delta": 10
+            },
+            {
+              "target": "reputation",
+              "key": "diocesan_clergy",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": -1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rd_clergy_day_talk",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "group",
+      "baseWeight": 9,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "deanery:friar",
+          "value": true
+        },
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 2
+        },
+        {
+          "type": "stat",
+          "key": "theology",
+          "op": ">=",
+          "value": 40
+        }
+      ],
+      "title": "The Clergy Day",
+      "body": "The deanery's clergy day, an afternoon at the retreat house that the diocese requires and the priests endure, and the dean has asked you to give the talk, since the friars are supposed to know something, and the priests have asked, through the dean, that it not be about the order, and the room is twenty men who have heard every talk.",
+      "choices": [
+        {
+          "id": "preach",
+          "label": "Talk about preaching: what a homily is for, and what it is not",
+          "outcome": "Half the room is offended and half is taking notes, and the dean says afterward that it was the first clergy day anyone remembered, and three of the pastors preach differently the next Sunday, and the deanery's people notice, and the dean tells the bishop.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "diocesan_clergy",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "local_bishop",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "deanery:talked_about_preaching",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "confess",
+          "label": "Talk about the confessional: the friars' line, and why it is a line",
+          "outcome": "The room is quiet, since every man in it has an empty box on Saturdays, and the dean says it was hard to hear and true, and two pastors ask the friar to sit in their box for a month to see what he does, and he does, and it is the same.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "diocesan_clergy",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "deanery:talked_about_confession",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "them",
+          "label": "Ask them what they would talk about, and let it be that",
+          "outcome": "It is an hour of twenty men saying what is wrong with the diocese, which nobody has asked them in years, and the dean is alarmed and then grateful, and writes it down, and sends it to the bishop, and the bishop reads it, and the deanery has a friar who listened.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 2
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "diocesan_clergy",
+              "delta": 7
+            },
+            {
+              "target": "reputation",
+              "key": "local_bishop",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "deanery:let_them_talk",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rd_dean_named",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 12,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "deanery:friar",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "deanery:dean",
+          "value": true
+        }
+      ],
+      "title": "The Bishop Names a Friar Dean",
+      "body": "The dean has retired and the bishop has done what bishops do not do, which is to name the religious pastor dean, and the deanery has taken it as the bishop's comment on the deanery, which it partly is, and {@deanery_priest} has said, at the first meeting, that he supposes the friars run the diocese now, and the room has laughed in the wrong way.",
+      "choices": [
+        {
+          "id": "serve",
+          "label": "Run the deanery as its servant: the rota, the meetings, the complaints, and nothing for the order",
+          "outcome": "It takes a year for the room to believe it, and then it does, and the deanery is the best-run in the diocese and the bishop says so, and the priests say the friar was a dean and not a friar about it, which was the point, and the provincial says the order has never had a dean before and does not know what to do with one.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 4
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "diocesan_clergy",
+              "delta": 8
+            },
+            {
+              "target": "reputation",
+              "key": "local_bishop",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 2
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "deanery:served_as_dean",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "decline",
+          "label": "Ask the bishop, through the provincial, to name someone else",
+          "outcome": "The provincial asks and the bishop is offended and names someone else, and the deanery is relieved and a little sorry, and the bishop's office is cool to the order for a reign, and the priests say the friar knew his place, which is praise and is not.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "local_bishop",
+              "delta": -6
+            },
+            {
+              "target": "reputation",
+              "key": "diocesan_clergy",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "year",
+          "label": "Take it for a year, and find the next dean",
+          "outcome": "The year is a good one and the next dean is a pastor the deanery chose, in effect, at the friars' table, and the bishop says the friar did the diocese a service twice, and the deanery says the friar left as well as he came, which is rarer.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "diocesan_clergy",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "local_bishop",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "deanery:dean_for_a_year",
+              "value": true
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

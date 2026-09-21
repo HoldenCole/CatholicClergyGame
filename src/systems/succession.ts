@@ -189,7 +189,10 @@ export function successionYear(state: GameState, rng: Rng): SuccessionResult {
 
   const preset = presetById(world.diocese.presetId);
   if (!preset) return { state, newBishop: null, lines: [] };
-  const seeded = generateBishop(rng.derive(`successor:${year}`), { ...preset, dispositionBias: state.romeTemperament * 0.6 + (world.diocese.hidden.financial === 'crisis' ? 0 : preset.dispositionBias * 0.3) }, year, `bishop_${year}`);
+  // A friar's save holds every diocese of the province: the successor's id says whose he is. E3 §3.1.
+  const successorId = state.territory ? `${world.diocese.presetId}:bishop_${year}` : `bishop_${year}`;
+  const seeded = generateBishop(rng.derive(`successor:${year}`), { ...preset, dispositionBias: state.romeTemperament * 0.6 + (world.diocese.hidden.financial === 'crisis' ? 0 : preset.dispositionBias * 0.3) }, year, successorId);
+  if (state.territory) seeded.npc = { ...seeded.npc, tags: [...seeded.npc.tags, `diocese:${world.diocese.presetId}`] };
   successor: {
     // A diocese in crisis gets a fixer; a scandal gets an outsider. DESIGN 9.3
     if (world.diocese.hidden.financial === 'crisis') seeded.npc.stats.administration = Math.min(100, seeded.npc.stats.administration + 15);

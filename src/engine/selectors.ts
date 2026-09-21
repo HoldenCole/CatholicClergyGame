@@ -29,6 +29,17 @@ export function isSelector(key: string): boolean {
   return key.startsWith('@');
 }
 
+/**
+ * A person tagged with a diocese belongs to it; with the whole province's
+ * territory in one save, a selector for the bishop or a brother priest
+ * means the ones where he is now. Untagged people belong to every world.
+ */
+export function inDiocese(state: GameState, npc: Npc): boolean {
+  const here = state.world?.diocese.presetId;
+  const tag = npc.tags.find((t) => t.startsWith('diocese:'));
+  return !tag || !here || tag === `diocese:${here}`;
+}
+
 function activeClassmates(state: GameState): Npc[] {
   return Object.values(state.npcs)
     .filter((n) => n.role === 'classmate' && n.status === 'active')
@@ -51,18 +62,18 @@ export function resolveSelector(state: GameState, key: string, rng?: Rng): Npc |
       const id = state.character?.direction?.npcId;
       const npc = id ? state.npcs[id] : undefined;
       if (npc && npc.status === 'active') return npc;
-      return Object.values(state.npcs).find((n) => n.status === 'active' && n.tags.includes('spiritual_director')) ?? null;
+      return Object.values(state.npcs).find((n) => n.status === 'active' && n.tags.includes('spiritual_director') && inDiocese(state, n)) ?? null;
     }
     case 'diverged_classmate': {
       const gone = Object.values(state.npcs).filter((n) => n.status === 'active' && n.tags.includes('diverged')).sort((a, b) => (a.id < b.id ? -1 : 1));
       return gone.length ? (rng ? rng.pick(gone) : gone[0]!) : null;
     }
     case 'religious': {
-      const all = Object.values(state.npcs).filter((n) => n.status === 'active' && n.role === 'religious' && !n.tags.includes('diverged')).sort((a, b) => (a.id < b.id ? -1 : 1));
+      const all = Object.values(state.npcs).filter((n) => n.status === 'active' && n.role === 'religious' && !n.tags.includes('diverged') && inDiocese(state, n)).sort((a, b) => (a.id < b.id ? -1 : 1));
       return all.length ? (rng ? rng.pick(all) : all[0]!) : null;
     }
     case 'principal':
-      return Object.values(state.npcs).find((n) => n.status === 'active' && n.tags.includes('religious:principal')) ?? null;
+      return Object.values(state.npcs).find((n) => n.status === 'active' && n.tags.includes('religious:principal') && inDiocese(state, n)) ?? null;
     // The religious campaign's people: the men of his house and his province. E3 §3.
     case 'prior': {
       const house = state.religious?.houseId ? state.orderHouses?.[state.religious.houseId] : undefined;
@@ -99,13 +110,13 @@ export function resolveSelector(state: GameState, key: string, rng?: Rng): Npc |
     }
     case 'bonded_parishioner': {
       const pid = state.assignment?.parishId;
-      const lay = pid ? Object.values(state.npcs).filter((n) => n.status === 'active' && n.role === 'lay' && n.tags.includes(`parish:${pid}`) && (n.bonds?.length ?? 0) > 0) : [];
+      const lay = pid ? Object.values(state.npcs).filter((n) => n.status === 'active' && n.role === 'lay' && n.tags.includes(`parish:${pid}`) && (n.bonds?.length ?? 0) > 0 && inDiocese(state, n)) : [];
       const sorted = lay.sort((a, b) => (a.id < b.id ? -1 : 1));
       return sorted.length && rng ? rng.pick(sorted) : (sorted[0] ?? null);
     }
     case 'parishioner': {
       const pid = state.assignment?.parishId;
-      const lay = pid ? Object.values(state.npcs).filter((n) => n.status === 'active' && n.role === 'lay' && n.tags.includes(`parish:${pid}`)) : [];
+      const lay = pid ? Object.values(state.npcs).filter((n) => n.status === 'active' && n.role === 'lay' && n.tags.includes(`parish:${pid}`) && inDiocese(state, n)) : [];
       return lay.length && rng ? rng.pick(lay.sort((a, b) => (a.id < b.id ? -1 : 1))) : (lay[0] ?? null);
     }
     case 'group_leader': {
@@ -118,12 +129,12 @@ export function resolveSelector(state: GameState, key: string, rng?: Rng): Npc |
       return leaders.length && rng ? rng.pick(leaders) : (leaders[0] ?? null);
     }
     case 'dean': {
-      const id = state.parish?.deanery?.deanId;
+      const id = (state.parish?.deanery ?? state.religious?.deanery)?.deanId;
       const dean = id ? state.npcs[id] : undefined;
       return dean && dean.status === 'active' ? dean : resolveSelector(state, '@brother_priest', rng);
     }
     case 'deanery_priest': {
-      const ids = state.parish?.deanery?.priestIds ?? [];
+      const ids = (state.parish?.deanery ?? state.religious?.deanery)?.priestIds ?? [];
       const priests = ids.map((id) => state.npcs[id]).filter((n): n is Npc => !!n && n.status === 'active').sort((a, b) => (a.id < b.id ? -1 : 1));
       if (!priests.length) return resolveSelector(state, '@brother_priest', rng);
       return rng ? rng.pick(priests) : priests[0]!;
@@ -131,7 +142,7 @@ export function resolveSelector(state: GameState, key: string, rng?: Rng): Npc |
     case 'brother_priest': {
       const pid = state.assignment?.parishId;
       const priests = Object.values(state.npcs)
-        .filter((n) => n.status === 'active' && n.role === 'priest' && !n.tags.includes(`pastor:${pid}`))
+        .filter((n) => n.status === 'active' && n.role === 'priest' && !n.tags.includes(`pastor:${pid}`) && inDiocese(state, n))
         .sort((a, b) => (a.id < b.id ? -1 : 1));
       return priests.length && rng ? rng.pick(priests) : (priests[0] ?? null);
     }
@@ -143,7 +154,7 @@ export function resolveSelector(state: GameState, key: string, rng?: Rng): Npc |
         const institute = `inst_${o[1]}s`;
         const role = o[2] ? `religious:${o[2]}` : undefined;
         const men = Object.values(state.npcs)
-          .filter((n) => n.status === 'active' && n.role === 'religious' && n.institute === institute && (!role || n.tags.includes(role)))
+          .filter((n) => n.status === 'active' && n.role === 'religious' && n.institute === institute && (!role || n.tags.includes(role)) && inDiocese(state, n))
           .sort((a, b) => (a.id < b.id ? -1 : 1));
         return men.length ? (rng && !role ? rng.pick(men) : men[0]!) : null;
       }
@@ -152,7 +163,7 @@ export function resolveSelector(state: GameState, key: string, rng?: Rng): Npc |
       if (pid && ['secretary', 'dre', 'music_director', 'maintenance', 'seminarian', 'deacon'].includes(name)) {
         return Object.values(state.npcs).find((n) => n.status === 'active' && n.tags.includes(name) && n.tags.includes(`parish:${pid}`)) ?? null;
       }
-      return Object.values(state.npcs).find((n) => n.status === 'active' && n.tags.includes(name)) ?? null;
+      return Object.values(state.npcs).find((n) => n.status === 'active' && n.tags.includes(name) && inDiocese(state, n)) ?? null;
     }
   }
 }

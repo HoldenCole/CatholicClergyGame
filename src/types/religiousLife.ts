@@ -103,6 +103,54 @@ export interface FriarRequest {
   outcome?: 'granted' | 'refused' | 'withdrawn';
 }
 
+/**
+ * What a bishop may ask the provincial for. E3 §3.11. The bishop never
+ * writes to the friar: he writes to the provincial, and the provincial
+ * spares the man, refuses, or lets him do both. Chancery posts and the
+ * diocese's own works; data in content/religious/bishopAsks.json.
+ */
+export interface BishopAskDef {
+  id: string;
+  label: string;
+  kind: 'chancery' | 'apostolate';
+  /** kind chancery: the diocesan office (types/world.ts ChanceryOffice, or one only a religious holds). */
+  office?: string;
+  /** kind apostolate: the order's apostolate it stands for (OrderDef.apostolates), which supplies the blocks and the weekly effects. */
+  apostolate?: string;
+  /** The diocese must hold this institution; none means every diocese. */
+  institution?: string;
+  /** Blocks a week, when kind chancery. */
+  ap: number;
+  requires?: Partial<Record<StatKey, number>>;
+  minYears?: number;
+  weekly?: { target: string; key: string; delta: number }[];
+  /** What the bishop's office says it wants him for. */
+  line: string;
+}
+
+/** The bishop's office has written to the provincial for him, and the provincial has answered. E3 §3.11. */
+export interface BishopAsk {
+  defId: string;
+  label: string;
+  dioceseId: string;
+  week: number;
+  ap: number;
+  /** The provincial's reading: spared (he may go, leaving the work he has), refused (the province cannot), both (alongside what he does). */
+  answer: 'spared' | 'refused' | 'both';
+  why: string;
+  /** The friar's answer, when the provincial left it to him. */
+  outcome?: 'accepted' | 'declined';
+}
+
+/** What a diocese remembers of him when he has left it. E3 §3.1: the bishop's file. */
+export interface DioceseFile {
+  local_bishop: number;
+  laity: number;
+  diocesan_clergy?: number;
+  bishopId: string;
+  leftWeek: number;
+}
+
 /** A credential of the order's own. E3 §6.4, §7.4. */
 export interface OrderCredentialDef {
   id: string;
@@ -249,6 +297,45 @@ export interface OrderHouse {
   alignment: number;
   works: string[];
   budget: number;
+  /** kind parish: the parish of the diocese entrusted to the order, in that diocese's world. E3 §3.12. */
+  parishId?: string;
+}
+
+/** A pastor of the diocese has written to the prior asking for the friar. E3 §3.12. Data in content/religious/pastorAsks.json. */
+export interface PastorAskDef {
+  id: string;
+  label: string;
+  blurb: string;
+  /** What saying yes takes. */
+  costs: string;
+  /** Blocks a week, for the weeks it runs. */
+  ap: number;
+  weeks: number;
+  requires?: Partial<Record<StatKey, number>>;
+  /** Only a friar the parishes know as a preacher is asked. */
+  preacher?: boolean;
+  /** What doing it does when it is done. */
+  effects: { target: string; key: string; delta: number }[];
+}
+
+export interface PastorAsk {
+  defId: string;
+  pastorId: string;
+  parishId: string;
+  week: number;
+  dueWeek: number;
+  /** The prior's answer: the friar sees the ask only when the prior said yes. */
+  priorSaidYes: boolean;
+}
+
+export interface PastorTask {
+  defId: string;
+  label: string;
+  pastorId: string;
+  parishId: string;
+  startWeek: number;
+  untilWeek: number;
+  ap: number;
 }
 
 export interface Province {
@@ -423,6 +510,18 @@ export interface ReligiousPlayerState {
   request?: FriarRequest;
   /** Letters to the provincial written in this career. */
   requestsMade?: number;
+  /** The bishop's office has asked the provincial for him, and the answer is on the table or in the drawer. E3 §3.11. */
+  bishopAsk?: BishopAsk;
+  /** What each diocese he has left remembers of him. E3 §3.1. */
+  dioceseFile?: Record<string, DioceseFile>;
+  /** The diocesan deanery around the order's parish, when he is posted to one. E3 §3.12. */
+  deanery?: { id: string; deanId: string; priestIds: string[]; parishIds: string[] };
+  /** A pastor's ask the prior said yes to, on the table for six weeks. */
+  pastorAsk?: PastorAsk;
+  /** A pastor's ask being done. */
+  pastorTask?: PastorTask;
+  /** What the prior said to a pastor's letter, for the sheet. */
+  pastorAskLine?: string;
   why?: WhyOrder;
   tie?: ProvinceTie;
   /**

@@ -31,6 +31,8 @@ import { askPermission as askPermissionSys } from '@/systems/religious/poverty';
 import { askDispensation as askDispensationSys } from '@/systems/religious/study';
 import { befriend as befriendSys } from '@/systems/religious/friendship';
 import { appointOffice } from '@/systems/religious/offices';
+import { answerBishopAsk as answerBishopAskSys } from '@/systems/religious/bishopAsks';
+import { answerPastorAsk as answerPastorAskSys } from '@/systems/religious/pastorAsks';
 import { askHouseOffice as askHouseOfficeSys, endApostolate as endApostolateSys, fileRequest as fileFriarRequestSys, resignHouseOffice as resignHouseOfficeSys, withdrawRequest as withdrawFriarRequestSys } from '@/systems/religious/requests';
 import { decideAssignment, receiveAssignment, statePreference as statePreferenceSys } from '@/systems/religious/obedience';
 import { castVote, closeChapter, holdElection, resolveElection, returnToRanks, signalWillingness, speakFor, steerBloc } from '@/systems/religious/chapter';
@@ -117,6 +119,10 @@ export interface GameStore {
   fileFriarRequest(apostolateId: string, houseId?: string): void;
   withdrawFriarRequest(): void;
   endApostolate(): void;
+  /** The bishop asked the provincial for him and the provincial left it to him. E3 §3.11. */
+  answerBishopAsk(accept: boolean): void;
+  /** A pastor of the diocese asked the prior for him, and the prior said yes. E3 §3.12. */
+  answerPastorAsk(yes: boolean): void;
   /** The consultation and the letter. E3 §3.1. */
   statePreference(houseId: string | null, objection: boolean): void;
   letProvincialDecide(): void;
@@ -708,6 +714,12 @@ export const useGameStore = create<GameStore>()((set, get) => ({
   },
   endApostolate() {
     update(set, get, (game) => endApostolateSys(game, 'resigned'));
+  },
+  answerBishopAsk(accept) {
+    update(set, get, (game) => answerBishopAskSys(game, accept));
+  },
+  answerPastorAsk(yes) {
+    update(set, get, (game) => answerPastorAskSys(game, yes));
   },
   statePreference(houseId, objection) {
     update(set, get, (game) => statePreferenceSys(game, houseId, objection));

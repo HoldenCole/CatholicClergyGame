@@ -4,6 +4,7 @@ import { mayAskDispensation, preachingOf } from '@/systems/religious/study';
 import { currentHouse, membersOf } from '@/systems/religious/house';
 import { friendSlots, friendsOf, mayBefriend } from '@/systems/religious/friendship';
 import { officeOffers } from '@/systems/religious/offices';
+import { pastorAskDefs } from '@/content/religious';
 import { religiousOrder } from '@/content/religious';
 import Panel from '../Panel';
 
@@ -14,6 +15,7 @@ export default function HouseAsksPanel() {
   const askDispensation = useGameStore((s) => s.askDispensation);
   const befriend = useGameStore((s) => s.befriend);
   const acceptOffice = useGameStore((s) => s.acceptOffice);
+  const answerPastorAsk = useGameStore((s) => s.answerPastorAsk);
   const line = useGameStore((s) => s.lastPriorLine);
   if (!game?.religious) return null;
   const house = currentHouse(game);
@@ -74,6 +76,26 @@ export default function HouseAsksPanel() {
             </div>
           )}
           {friends.length < slots && candidates.length === 0 && <p className="ink-faint mt-1 text-xs">No one here knows you well enough yet.</p>}
+        </div>
+      )}
+      {game.flags.ordained && (game.religious.pastorAsk || game.religious.pastorTask || game.religious.pastorAskLine) && (
+        <div className="mt-4 text-sm">
+          <div className="heading text-sm">Asked of you by the diocese</div>
+          <p className="ink-faint text-xs">A pastor who wants you writes to the prior, not to you. When the prior says the house can spare you, it is on the table for six weeks; silence is a no.</p>
+          {game.religious.pastorAskLine && <p className="mt-1 rounded border rule bg-white/30 p-2 text-xs italic">{game.religious.pastorAskLine}</p>}
+          {game.religious.pastorAsk && (() => {
+            const ask = game.religious!.pastorAsk!;
+            const def = pastorAskDefs.find((d) => d.id === ask.defId);
+            const pastor = game.npcs[ask.pastorId];
+            return def ? (
+              <div className="mt-1 flex flex-wrap items-center gap-2">
+                <span><span className="font-medium">{def.label}</span>, for {pastor ? `${pastor.title} ${pastor.name.last}` : 'a pastor'} · {def.costs}. {ask.dueWeek - game.clock.week} weeks to answer.</span>
+                <button className="pbtn px-2 py-0.5 text-xs" onClick={() => answerPastorAsk(true)}>Yes</button>
+                <button className="pbtn px-2 py-0.5 text-xs" onClick={() => answerPastorAsk(false)}>No</button>
+              </div>
+            ) : null;
+          })()}
+          {game.religious.pastorTask && <p className="mt-1 text-xs">{game.religious.pastorTask.label}: {game.religious.pastorTask.ap} blocks a week, {Math.max(0, game.religious.pastorTask.untilWeek - game.clock.week)} weeks to go.</p>}
         </div>
       )}
       {game.flags.ordained && (

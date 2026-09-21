@@ -64,6 +64,8 @@ export default function Desk() {
   const tabs: Sheet[] = friar ? ['week', 'jobs', 'profile', 'clubs', 'letters', 'record', 'settings'] : inParish ? ['week', 'parish', 'people', 'deanery', 'map', 'jobs', 'profile', 'clubs', 'letters', 'record', 'settings'] : away ? (game.see ? ['week', 'see', 'jobs', 'profile', 'letters', 'record', 'settings'] : game.study?.place ? ['week', 'place', 'jobs', 'profile', 'letters', 'record', 'settings'] : ['week', 'jobs', 'profile', 'letters', 'record', 'settings']) : ['week', 'formation', 'jobs', 'profile', 'clubs', 'letters', 'record', 'settings'];
   // A friar lives in a house: its sheet sits beside the week. E3 §3.2.
   if (game.religious) tabs.splice(1, 0, 'house');
+  // A friar pastor sits in the diocese's deanery. E3 §3.12.
+  if (friar && game.religious?.deanery) tabs.splice(2, 0, 'deanery');
   if (furnishing) tabs.push('furnish');
   const open = sheet ?? 'week';
   const letters = game.offers.length;
