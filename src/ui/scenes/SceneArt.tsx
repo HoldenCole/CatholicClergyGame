@@ -9,6 +9,8 @@ import { Chapel, Hall, Street } from './art/places';
 import { StudyCity, StudyRoom } from './art/away';
 import { portraitForPlayer } from '../portraits/spec';
 import { lookFor } from '../portraits/Portrait';
+import { WeatherLayer } from './art/weather';
+import type { WeatherKind } from '@/systems/weather';
 
 /** Season tints the light through every window. */
 const SEASON_SKY: Record<Season, [string, string]> = {
@@ -25,7 +27,7 @@ const SEASON_SKY: Record<Season, [string, string]> = {
  * room reads the state: the church its parish and furnishings, the office
  * its parish's means and the man's rank, every desk the man himself.
  */
-export default function SceneArt({ scene, season, state, plain = false }: { scene: SceneId; season: Season; state: GameState; plain?: boolean }) {
+export default function SceneArt({ scene, season, state, plain = false, weather }: { scene: SceneId; season: Season; state: GameState; plain?: boolean; weather?: WeatherKind }) {
   const [skyTop, skyBottom] = SEASON_SKY[season];
   const parish = state.world?.parishes.find((p) => p.id === state.assignment?.parishId);
   const ambient = (place: Parameters<typeof ambientFor>[1]) => ambientFor(state, place);
@@ -54,6 +56,7 @@ export default function SceneArt({ scene, season, state, plain = false }: { scen
       {scene === 'study_city' && state.study?.city === 'campus' && <Hall />}
       {scene === 'study_city' && (state.study?.city === 'rome' || state.study?.city === 'washington' || !state.study) && <StudyCity city={state.study?.city ?? 'rome'} />}
       {scene === 'chancery' && <Chancery ambient={ambient('chancery')} rank={chanceryRank(state) ?? 'modest'} bishopName={bishop ? `${bishop.title} ${bishop.name.first} ${bishop.name.last}` : 'The bishop'} />}
+      {!plain && weather && <WeatherLayer kind={weather} />}
       {!plain && <Finish />}
     </svg>
   );

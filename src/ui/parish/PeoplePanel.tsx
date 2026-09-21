@@ -1,5 +1,6 @@
 import { useGameStore } from '@/engine/store';
 import { bondsPhrase, parishPeople } from '@/systems/bonds';
+import { castRoleLabel, castRoleOf } from '@/systems/cast';
 import { relationshipWord } from '@/systems/classmates';
 import Sheet from '../Sheet';
 import StaffPanel from './StaffPanel';
@@ -25,11 +26,13 @@ export default function PeoplePanel() {
       <ul className="flex flex-col gap-1 text-sm">
         {people.map((n) => {
           const phrase = bondsPhrase(n);
+          const part = castRoleOf(n);
           return (
             <li key={n.id} className="flex items-center gap-2">
               <Portrait portrait={portraitForNpc(n, year)} size={22} />
               <span className="min-w-0 flex-1">
                 {n.name.first} {n.name.last}, {year - n.birthYear}
+                {part && <span className="ink-muted">, {castRoleLabel(part)}</span>}
                 {phrase && <span className="ink-muted">, {phrase}</span>}
                 {n.traitKnown && <span className="ink-faint ml-2 text-xs">{TRAIT_LABEL[n.hiddenTrait]}</span>}
               </span>

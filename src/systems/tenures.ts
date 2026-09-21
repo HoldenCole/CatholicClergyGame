@@ -2,6 +2,8 @@ import type { GameState, Tenure } from '@/types';
 import { sinceArrival } from './trajectory';
 import { studyProgram } from '@/content/study';
 import { placeVerdict } from './studyWeek';
+import { farewellLine } from './cast';
+import { createRng } from '@/engine/rng';
 
 const ROLE_LABEL: Record<string, string> = { parochial_vicar: 'Parochial vicar', administrator: 'Administrator', pastor: 'Pastor' };
 
@@ -39,7 +41,14 @@ export function openTenure(state: GameState): Tenure | null {
 export function closeTenure(state: GameState, left: string): GameState {
   const open = openTenure(state);
   if (!open) return state;
-  return { ...state, tenures: [...(state.tenures ?? []), { ...open, left }] };
+  const closed: GameState = { ...state, tenures: [...(state.tenures ?? []), { ...open, left }] };
+  // The last Sunday, with the people who came to the door. Not for a man who died in the post.
+  if (open.kind !== 'parish' || /died/.test(left)) return closed;
+  const line = farewellLine(state, createRng(`${state.seed}:farewell:${state.clock.week}`));
+  if (!line) return closed;
+  const last = closed.digest[closed.digest.length - 1];
+  const digest = last && last.week === state.clock.week ? [...closed.digest.slice(0, -1), { ...last, lines: [...last.lines, line] }] : [...closed.digest, { week: state.clock.week, lines: [line] }];
+  return { ...closed, digest };
 }
 
 /** Every post, the open one included, for the sheets and the ending. */

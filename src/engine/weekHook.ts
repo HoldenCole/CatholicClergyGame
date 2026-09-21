@@ -31,7 +31,7 @@ import { ARCS, dueArc, endArc, maybeOpenArc } from '@/systems/arcs';
 import { requestWeek } from '@/systems/religious/requests';
 import { spendsWeek } from '@/systems/religious/spends';
 import { foundingWeek } from '@/systems/religious/founding';
-import { anniversaryWeek } from '@/systems/anniversaries';
+import { anniversaryWeek, nameDayWeek } from '@/systems/anniversaries';
 import { sideWorkWeek } from '@/systems/sidework';
 import { requestedChoice } from '@/systems/choice';
 import { confessorWeek } from '@/systems/confessor';
@@ -228,6 +228,9 @@ export function friarWeekHook(deps: EventDeps): WeekHook {
     const ann = anniversaryWeek(next);
     next = ann.state;
     if (ann.line) next = addDigestLine(next, ann.line);
+    const named = nameDayWeek(next);
+    next = named.state;
+    if (named.line) next = addDigestLine(next, named.line);
     if (isCareerYear(next)) next = religiousYear(careerYear(next, rng), rng);
     if (next.mode.kind !== 'clock') return next;
     // The provincial's answer to the letter asking for a work. E3 §3.10.
@@ -294,6 +297,9 @@ export function parishWeekHook(deps: EventDeps): WeekHook {
     const ann = anniversaryWeek(next);
     next = ann.state;
     if (ann.line) next = addDigestLine(next, ann.line);
+    const named = nameDayWeek(next);
+    next = named.state;
+    if (named.line) next = addDigestLine(next, named.line);
     if (isYearStart(next.clock)) {
       const owed = retreatYearEnd(next);
       next = owed.state;

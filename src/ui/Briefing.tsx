@@ -65,8 +65,7 @@ export default function Briefing() {
   const game = useGameStore((s) => s.game);
   const prefs = useUiStore((s) => s.prefs);
   const setPrefs = useUiStore((s) => s.setPrefs);
-  if (!game || !prefs.briefings) return null;
-  const key = keyFor(game);
+  const key = game && prefs.briefings ? keyFor(game) : null;
   const open = !!key && !prefs.seen.includes(key);
   // Enter reads it: the note is in the way of the week, and a key is a button pressed sooner.
   useEffect(() => {

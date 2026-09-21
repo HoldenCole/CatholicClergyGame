@@ -2,6 +2,7 @@ import type { Beat, DigestWeek, GameState, PendingEvent, Speed } from '@/types';
 import type { Rng } from './rng';
 import { shouldInterrupt } from './interrupts';
 import { advanceClock, describeWeek, gameYearOf, isYearStart } from './time';
+import { weatherOfWeek } from '@/systems/weather';
 
 /** Why the clock stopped. */
 export type StopReason =
@@ -75,7 +76,7 @@ export function advanceWeek(
 
   const digestEntry: DigestWeek = {
     week,
-    lines: [describeWeek(clock), ...reachedBeats.map((b) => b.label)],
+    lines: [describeWeek(clock, clock.week, state.world ? weatherOfWeek(state.seed, clock, state.world.diocese.visible.region).word : undefined), ...reachedBeats.map((b) => b.label)],
   };
   const digest = [...state.digest, digestEntry].slice(-DIGEST_RETENTION);
 

@@ -13,6 +13,7 @@ import { ARC } from './parish';
 import { renderText } from './text';
 import { deliverLetter, yearInReview } from '@/systems/review';
 import { closeTenure } from '@/systems/tenures';
+import { castYearStep } from './parish';
 import { seeYear } from './see';
 import { withChoice } from '@/systems/choice';
 import { closeRequest, markRequested, requestOf, requestYear } from '@/systems/request';
@@ -91,6 +92,10 @@ export function careerYear(state: GameState, rng: Rng): GameState {
   const houses = housesYear(next, rng.derive(`houses:${state.clock.week}`));
   next = houses.state;
   if (houses.lines.length) next = addDigest(next, houses.lines);
+  // The parish's people have their year: a death, a move, a wedding, a new face in an old part.
+  const cast = castYearStep(next, rng.derive(`cast:${state.clock.week}`));
+  next = cast.state;
+  if (cast.lines.length) next = addDigest(next, cast.lines);
   // The orders come and go, and a man who left one may come as a curate. E3 §3.14, diocesan side.
   const drift = institutesYear(next, rng.derive(`institutes:${state.clock.week}`));
   next = drift.state;

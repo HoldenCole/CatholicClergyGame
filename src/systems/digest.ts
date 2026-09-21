@@ -3,6 +3,7 @@ import { allEvents } from '@/content';
 import ambient from '@/content/parish/ambient.json';
 import { groupTrend, parishGroups, vitalityBand } from './groups';
 import { strainOf, strainWord } from './week';
+import { isCastLine } from './cast';
 
 /**
  * The digest, read: every line of a week sorted into a lane so the sheet can
@@ -24,6 +25,8 @@ export function laneOf(line: string): Lane {
   const colon = line.indexOf(': ');
   if (colon > 0 && TITLES.has(line.slice(0, colon))) return 'decided';
   if (AMBIENT.has(line)) return 'around';
+  if (isCastLine(line)) return 'people';
+  if (/ this week\. /.test(line)) return 'parish';
   if (/Collections \$|assessment|\bdebt\b|\$[\d,]+|the fund|reserve|bequest|paid down|invested|withdrew/i.test(line)) return 'money';
   if (/^You (baptized|married|buried|anointed|sat with|prepared|helped|quarreled)|is fading|is thriving|is withering|steady again|has folded|coming back|A word with|has been made|has been named|has left|has died|left the priesthood|leads it|new leader|\bwedding|\bfuneral|baptism/i.test(line)) return 'people';
   if (/chancery|bishop|Rome has|the see|diocese|the board|vicar for clergy|chancellor|personnel|letter of appointment|renewed/i.test(line)) return 'diocese';
