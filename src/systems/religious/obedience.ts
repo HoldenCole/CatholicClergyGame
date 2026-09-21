@@ -29,7 +29,7 @@ export const OBEDIENCE = {
 } as const;
 
 /** How badly the house needs another man, 0..100: small for its kind, many old, formation houses always. */
-function needOf(state: GameState, house: OrderHouse, year: number): number {
+export function needOf(state: GameState, house: OrderHouse, year: number): number {
   const members = membersOf(state, house);
   const [lo, hi] = PROVINCE.members[house.kind];
   const short = Math.max(0, Math.min(1, (hi - members.length) / Math.max(1, hi - lo)));
@@ -39,7 +39,7 @@ function needOf(state: GameState, house: OrderHouse, year: number): number {
 }
 
 /** How the man suits the work, 0..100. */
-function fitOf(state: GameState, house: OrderHouse): number {
+export function fitOf(state: GameState, house: OrderHouse): number {
   const s = state.character?.stats;
   if (!s) return 50;
   const c = state.character!;

@@ -58,9 +58,12 @@ export function moveToHouse(state: GameState, houseId: string, work: string, opt
   if (r.houseId !== houseId) next = splitFriends(next, r.houseId);
   const assignments = r.assignments.map((a, i) => (i === r.assignments.length - 1 && a.endWeek === undefined ? { ...a, endWeek: week } : a));
   const posting: ReligiousAssignment = { houseId, dioceseId: house.dioceseId, work, startWeek: week, ...(opts.dual ? { dual: true } : {}), ...(opts.grace ? { grace: opts.grace } : {}) };
+  // An office of the house stays with the house; a local work stays with the diocese. E3 §3.10.
+  const { houseOffice: _office, apostolate, ...kept } = r;
+  const keepsWork = apostolate && apostolate.dioceseId === house.dioceseId;
   next = {
     ...next,
-    religious: { ...r, houseId, horarium: r.houseId === houseId ? r.horarium : defaultHorarium(), assignments: [...assignments, posting] },
+    religious: { ...kept, ...(keepsWork ? { apostolate } : {}), houseId, horarium: r.houseId === houseId ? r.horarium : defaultHorarium(), assignments: [...assignments, posting] },
     career: [...next.career, { week, kind: 'assignment', text: `Sent to ${house.name}${work === 'parish' ? ', for the parish' : work === 'school' ? ', for the school' : work === 'formation' ? ', for the formation house' : work === 'teaching' ? ', to teach' : ''}. ${houseLine(next, house)}` }],
   };
   return next;

@@ -209,6 +209,10 @@ The conviction and volume system from `DESIGN.md` §5 carries over unchanged. **
 
 ---
 
+### 3.10 Asking for a work
+
+A friar does not apply for jobs; he asks, and two men answer. **An office of the house** (procurator, sacristan, local promoter of vocations, guest master, infirmarian, librarian, and each order's own: the Dominican cantor and lay-chapter assistant, the Augustinian lay-fraternity assistant and prefect of the hall) is in the prior's gift, asked at the table and answered there by a seeded roll against fit, the prior's regard, and the house's. It costs blocks every week on top of the horarium and pays a little back; one at a time; laid down before a year, the house remembers; it stays with the house when he moves. **A work beyond the house** is asked of the provincial by letter and answered in four to ten weeks against the province's need, the man's fit, his standing with the council, and how often he has written. Local works are done from the house he lives in and are drawn from the institutions the generated diocese holds: the hospital chaplaincy, the county jail, the diocesan seminary's faculty, campus ministry at the university, the diocesan high school, and an order's own (itinerant preaching for the Dominicans, retreat direction for the Augustinians). Those the bishop appoints to on the provincial's presentation engage his regard, and the bishop's office can end them. House works are a move: the order's school, a parish of the order (held by two keys), the mission, the studium's lectern. A local work ends with a move out of the diocese. All of it is data on the order (`houseOffices`, `apostolates` in `content/religious/orders.json`); the engine is `systems/religious/requests.ts`.
+
 ## 4. Character creation changes
 
 The base creation flow is reused. Changes:

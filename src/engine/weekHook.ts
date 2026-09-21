@@ -28,6 +28,7 @@ import { appointmentStep, APPOINTMENT_FLAGS } from './appointment';
 import { clearRequestAnswer, closeRequest, requestAnswerDue } from '@/systems/request';
 import { expireAsks } from '@/systems/houses';
 import { ARCS, dueArc, endArc, maybeOpenArc } from '@/systems/arcs';
+import { requestWeek } from '@/systems/religious/requests';
 import { sideWorkWeek } from '@/systems/sidework';
 import { requestedChoice } from '@/systems/choice';
 import { confessorWeek } from '@/systems/confessor';
@@ -211,6 +212,9 @@ export function friarWeekHook(deps: EventDeps): WeekHook {
     if (!state.religious) return state;
     let next = religiousWeek(state, rng);
     if (isCareerYear(next)) next = religiousYear(careerYear(next, rng), rng);
+    if (next.mode.kind !== 'clock') return next;
+    // The provincial's answer to the letter asking for a work. E3 §3.10.
+    next = requestWeek(next, rng.derive(`request:${next.clock.week}`));
     if (next.mode.kind !== 'clock') return next;
     if (rng.derive(`friar-scene:${next.clock.week}`).chance(FRIAR_EVENT_CHANCE)) {
       const [event] = drawEvents(deps.pool.filter((e) => !e.beat), next, rng, 1);

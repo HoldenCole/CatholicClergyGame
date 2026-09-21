@@ -11,6 +11,7 @@ import { parishKindWord } from '@/systems/placement';
 import { PROBLEM_LABEL } from '@/generation/parishes';
 import { yearOf } from './portraits/spec';
 import Sheet from './Sheet';
+import FriarJobsPanel from './religious/FriarJobsPanel';
 
 const KIND_WORD: Record<Opening['kind'], string> = { pastor: 'Pastor', administrator: 'Administrator', parochial_vicar: 'Parochial vicar', chancery: 'A chancery post' };
 const AFFILIATION_WORD: Record<string, string> = {
@@ -35,6 +36,8 @@ export default function JobsPanel() {
   const file = useGameStore((s) => s.fileRequest);
   const withdraw = useGameStore((s) => s.withdrawRequest);
   if (!game?.character) return null;
+  // A friar asks the prior and the provincial, not the chancery. E3 §3.10.
+  if (game.religious) return <FriarJobsPanel />;
   const inParish = !!game.parish;
   const pref = currentPreference(game);
   const doors = offerDoors(game, allOffers);
