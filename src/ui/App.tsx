@@ -21,6 +21,7 @@ import ConsultationPanel from './religious/ConsultationPanel';
 import ObedienceLetter from './religious/ObedienceLetter';
 import ChapterPanel from './religious/ChapterPanel';
 import TermEndPanel from './religious/TermEndPanel';
+import BishopAskPanel from './religious/BishopAskPanel';
 import SceneView from './scenes/SceneView';
 import Desk from './Desk';
 import Hud from './Hud';
@@ -93,6 +94,7 @@ export default function App() {
     game.mode.kind === 'obedience_letter' ? <ObedienceLetter /> :
     game.mode.kind === 'chapter' ? <ChapterPanel /> :
     game.mode.kind === 'term_end' ? <TermEndPanel /> :
+    game.mode.kind === 'bishop_ask' ? <BishopAskPanel /> :
     // A letter that has come lies on the table until it is read: the desk is not where a man learns he has been asked for.
     game.mode.kind === 'clock' && unreadOffers(game.offers) > 0 ? <OfferLetter /> :
     null;

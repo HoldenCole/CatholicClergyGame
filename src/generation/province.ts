@@ -108,6 +108,33 @@ function friar(rng: Rng, order: OrderDef, house: Pick<OrderHouse, 'id' | 'alignm
   };
 }
 
+/**
+ * Every diocese of the territory lives in one save, so its people and parishes
+ * cannot share the base game's per-run ids (`bishop`, `pastor_1`, `parish_1`).
+ * Prefix them with the diocese, rewrite every reference, and tag each person
+ * with the diocese so a selector knows whose bishop is whose. E3 §3.1.
+ */
+export function namespaceDiocese(d: ProvinceDiocese): ProvinceDiocese {
+  const pid = d.presetId;
+  const npcIds = new Set(d.npcs.map((n) => n.id));
+  const parishIds = new Set(d.parishes.map((p) => p.id));
+  const houseIds = new Set((d.diocese.visible.houses ?? []).map((h) => h.id));
+  const known = (id: string) => npcIds.has(id) || parishIds.has(id) || houseIds.has(id);
+  const ns = (id: string) => (known(id) && !id.startsWith(`${pid}:`) ? `${pid}:${id}` : id);
+  const tag = (t: string) => {
+    const i = t.indexOf(':');
+    if (i < 0) return t;
+    const rest = t.slice(i + 1);
+    return known(rest) ? `${t.slice(0, i)}:${ns(rest)}` : t;
+  };
+  const npcs = d.npcs.map((n) => ({ ...n, id: ns(n.id), tags: [...n.tags.map(tag), `diocese:${pid}`], ...(n.institute && houseIds.has(n.institute) ? { institute: ns(n.institute) } : {}) }));
+  const parishes = d.parishes.map((p) => ({ ...p, id: ns(p.id), pastorId: ns(p.pastorId) }));
+  const hidden = { ...d.diocese.hidden, bishop: { ...d.diocese.hidden.bishop, npcId: ns(d.diocese.hidden.bishop.npcId) }, chanceryIds: d.diocese.hidden.chanceryIds.map(ns) };
+  const visible = { ...d.diocese.visible, bishop: { ...d.diocese.visible.bishop, npcId: ns(d.diocese.visible.bishop.npcId) }, houses: (d.diocese.visible.houses ?? []).map((h) => ({ ...h, id: ns(h.id) })) };
+  const institutes = d.institutes?.map((i) => ({ ...i, id: ns(i.id) }));
+  return { ...d, npcs, parishes, diocese: { ...d.diocese, hidden, visible }, ...(institutes ? { institutes } : {}) };
+}
+
 export function generateProvince(rng: Rng, order: OrderDef, seed: ProvinceSeed, year: number): GeneratedProvince {
   const trajectory = rollTrajectory(rng.derive('trajectory'), seed.trajectoryBias);
   const hostility = rng.int(30, 85);
@@ -139,7 +166,7 @@ export function generateProvince(rng: Rng, order: OrderDef, seed: ProvinceSeed, 
       generated: true,
       ...synthDiocese(rng.derive(`synth:${see.id}`), see, year, { orders: { [order.instituteId]: { presence: presenceFor(rng, housed.has(see.id)) } } }),
     })),
-  ];
+  ].map(namespaceDiocese);
 
   const provinceId = seed.id;
   const taken = new Set<string>();
@@ -217,6 +244,22 @@ export function generateProvince(rng: Rng, order: OrderDef, seed: ProvinceSeed, 
     complication: rng.pick(provinceComplications),
     line: seed.line,
   };
+  // A parish house holds a parish of its diocese: the order's pastor is the house's prior, and the diocese's man goes elsewhere. E3 §3.12.
+  for (const house of houses) {
+    if (house.kind !== 'parish') continue;
+    const d = dioceses.find((x) => x.presetId === house.dioceseId);
+    if (!d) continue;
+    const taken = new Set(houses.map((h) => h.parishId).filter(Boolean));
+    const pool = d.parishes.filter((p) => !p.cathedral && !taken.has(p.id)).sort((a, b) => a.id.localeCompare(b.id));
+    if (!pool.length) continue;
+    const parish = rng.derive(`order-parish:${house.id}`).pick(pool);
+    house.parishId = parish.id;
+    const prior = friars.find((f) => f.id === house.priorId);
+    const old = d.npcs.find((n) => n.id === parish.pastorId);
+    if (old) old.tags = old.tags.filter((t) => t !== `pastor:${parish.id}`).concat('priest');
+    if (prior) prior.tags = [...prior.tags, `pastor:${parish.id}`];
+    parish.pastorId = house.priorId;
+  }
   return { province, houses, friars, dioceses };
 }
 

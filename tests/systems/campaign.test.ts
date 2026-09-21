@@ -28,7 +28,7 @@ describe('per-campaign constituencies (E3 §3.9, §13.2)', () => {
   it('the two sets are data, every key of the union belongs to one, and the shared keys have their own labels', () => {
     expect(campaignDefs.map((c) => c.id)).toEqual(['diocesan', 'religious']);
     const religious = campaignDefs[1]!;
-    expect(religious.constituencies.map((c) => c.key)).toEqual([...RELIGIOUS_CONSTITUENCY_KEYS.slice(0, 6), 'rome', 'observant_bloc', 'progressive_bloc']);
+    expect(religious.constituencies.map((c) => c.key)).toEqual([...RELIGIOUS_CONSTITUENCY_KEYS.slice(0, 6), 'rome', 'observant_bloc', 'progressive_bloc', 'diocesan_clergy']);
     for (const key of ALL_CONSTITUENCY_KEYS) expect(campaignDefs.some((c) => c.constituencies.some((k) => k.key === key)), key).toBe(true);
     for (const def of campaignDefs) for (const c of def.constituencies) expect(ALL_CONSTITUENCY_KEYS).toContain(c.key);
     expect(constituencyLabel(friar(), 'progressive_bloc')).toBe("the province's progressive wing");

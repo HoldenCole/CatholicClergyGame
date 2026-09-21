@@ -33,7 +33,9 @@ export type ReligiousConstituencyKey =
   | 'local_bishop'
   | 'laity'
   | 'order'
-  | 'observant_bloc';
+  | 'observant_bloc'
+  /** The presbyterate of the diocese he is posted in now: the deanery, the pastors who ask for him. E3 §3.12. */
+  | 'diocesan_clergy';
 
 export type ConstituencyKey = DiocesanConstituencyKey | ReligiousConstituencyKey;
 
@@ -56,6 +58,7 @@ export const RELIGIOUS_CONSTITUENCY_KEYS: readonly ReligiousConstituencyKey[] = 
   'laity',
   'order',
   'observant_bloc',
+  'diocesan_clergy',
 ] as const;
 
 export const ALL_CONSTITUENCY_KEYS: readonly ConstituencyKey[] = [...CONSTITUENCY_KEYS, ...RELIGIOUS_CONSTITUENCY_KEYS] as const;

@@ -5,6 +5,10 @@ import { consult, dualAuthorityCheck, termEndWeek } from './obedience';
 import { chapterYear, openChapter, termOver } from './chapter';
 import { appointmentYear, conferCredentials } from './offices';
 import { currentHouse } from './house';
+import { BISHOP_ASKS, bishopAskYear } from './bishopAsks';
+import { pastorAskYear } from './pastorAsks';
+import { endApostolate } from './requests';
+import { bishopAskDefs } from '@/content/religious';
 
 /**
  * The friar's year and week, on top of the base career's. E3 §3.1, §3.6,
@@ -54,6 +58,18 @@ export function religiousYear(state: GameState, rng: Rng): GameState {
       return { ...next, mode: { kind: 'chapter' } };
     }
   }
+  // A work the bishop appointed to is his to end, and a bishop who has soured does. E3 §3.11.
+  const work = next.religious?.apostolate;
+  if (work && (work.id.startsWith('chancery:') || bishopAskDefs.some((d) => d.apostolate === work.id)) && (next.character?.reputation.local_bishop ?? 0) <= BISHOP_ASKS.bishopEndsAt && rng.derive(`bishop-ends:${next.clock.week}`).chance(BISHOP_ASKS.bishopEndsChance)) {
+    next = endApostolate(next, 'bishop');
+  }
+  // A pastor of the diocese may write to the prior for him. E3 §3.12.
+  next = pastorAskYear(next, rng.derive(`pastor-ask:${next.clock.week}`));
+  // The bishop's office may write to the provincial for him. E3 §3.11.
+  if (!r.consultation && next.mode.kind === 'clock') {
+    next = bishopAskYear(next, rng.derive(`bishop-ask:${next.clock.week}`));
+    if (next.mode.kind !== 'clock') return next;
+  }
   // The posting: the term up, or a key turned.
   if (!r.consultation && next.mode.kind === 'clock') {
     const end = termEndWeek(next);
@@ -77,5 +93,6 @@ export function religiousModeStep(state: GameState): GameState {
   if (r.consultation && !r.consultation.decided) return { ...state, mode: { kind: 'consultation' } };
   if (r.consultation?.decided) return { ...state, mode: { kind: 'obedience_letter' } };
   if (r.chapter && !r.chapter.outcome) return { ...state, mode: { kind: 'chapter' } };
+  if (r.bishopAsk && !r.bishopAsk.outcome) return { ...state, mode: { kind: 'bishop_ask' } };
   return state;
 }

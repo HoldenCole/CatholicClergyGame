@@ -4,6 +4,7 @@ import { horariumLoad } from '@/systems/religious/horarium';
 import { currentPosting } from '@/systems/religious/transfer';
 import { friendshipLoad } from '@/systems/religious/friendship';
 import { apostolateDef, houseOfficeDef, requestsLoad } from '@/systems/religious/requests';
+import { chanceryAskDef } from '@/systems/religious/bishopAsks';
 import { religiousOrder } from '@/content/religious';
 import Panel from '../Panel';
 import DigestPanel from '../DigestPanel';
@@ -28,7 +29,7 @@ export default function FriarWeekPanel() {
   const order = religiousOrder(game.religious.order);
   const load = horariumLoad(game) + friendshipLoad(game);
   const office = houseOfficeDef(game);
-  const work = apostolateDef(game);
+  const work = apostolateDef(game) ?? chanceryAskDef(game);
   const extra = requestsLoad(game);
   return (
     <>
@@ -38,7 +39,9 @@ export default function FriarWeekPanel() {
           The common life takes {load} blocks before anything else; the House sheet sets how you keep it. Your work is {WORK[posting?.work ?? ''] ?? 'the house\'s'}{game.religious.office ? `, and you are ${game.religious.office.office === 'prior' ? order.governance.priorTitle : order.governance.provincialTitle}` : game.religious.appointment ? `, and you hold the office of ${order.offices.find((o) => o.id === game.religious!.appointment!.id)?.label.toLowerCase() ?? 'an appointment'}` : ''}.
           {office ? ` In the house you are ${office.label.toLowerCase()}, ${office.ap} blocks a week.` : ''}
           {work ? ` Beyond the house: ${work.label.toLowerCase()}, ${work.ap} blocks a week.` : ''}
-          {extra ? ` The office and the work take ${extra} blocks more.` : ''}
+          {game.religious.pastorTask ? ` For ${game.npcs[game.religious.pastorTask.pastorId] ? `${game.npcs[game.religious.pastorTask.pastorId]!.title} ${game.npcs[game.religious.pastorTask.pastorId]!.name.last}` : 'a pastor'}: ${game.religious.pastorTask.label.toLowerCase()}, ${game.religious.pastorTask.ap} blocks a week.` : ''}
+          {extra ? ` The office, the work, and the asks take ${extra} blocks more.` : ''}
+          {game.religious.deanery ? ' The parish sits in a deanery of the diocese: its sheet is beside the house\'s.' : ''}
         </p>
         <p className="ink-faint mt-2 text-xs">The provincial assigns you for a term of three to six years and consults you before each letter. A parish entrusted to the order is held by two keys. Chapters elect the prior and the provincial, and you watch the ballots.</p>
       </Panel>
