@@ -227,6 +227,22 @@ A parish entrusted to the order is a parish of the diocese. Each parish house of
 
 The diocese's pastors ask for him the way the bishop does: through his superior. A pastor who has heard of the friar writes to the prior (a mission, a month of Sundays, the Saturday confessions, a retreat weekend, Forty Hours, the school's Mass, a clergy-day talk; `content/religious/pastorAsks.json`), the prior says yes when the house can spare the blocks and no when it cannot, and only a yes reaches the friar, for six weeks on the House sheet; silence is a no. What is done lands on the people, the presbyterate, the bishop a little, and the pastor who asked. Engine: `systems/religious/deanery.ts`, `systems/religious/pastorAsks.ts`; scenes in `events/religious/shared_deanery.json`.
 
+### 3.13 The diocese's men: classmates, the seminary, direction given
+
+**Diocesan classmates.** The studium or the union shares its lecture halls with the diocesan seminary of its city, and in the first theology year two or three of its men are rolled by the base game's classmate generator (independent rolls, never a premade man) and sit beside the friar for the theology years. They are ordained the June he is, with trajectories rolled from their own stats, and become priests of that diocese: a pastor takes a real parish of the diocese's world (its old pastor going elsewhere), a chancery man, a bishop elsewhere, or a man who left. Flags (`dcm:pastor`, `dcm:chancery`, `dcm:bishop`, `dcm:left`, `dcm:here`) and selectors (`@diocesan_classmate`, `@closest_diocesan_classmate`) let scenes find them for forty years, and they sit in deaneries and chanceries the friar meets.
+
+**The seminary's men.** A friar teaching at the diocesan seminary meets three or four of its seminarians, generated for that diocese, ordained four years on into its presbyterate (`@diocesan_seminarian`).
+
+**Direction given.** A friar the diocese's priests trust is asked to direct them (the deanery first, then the classmates from the lectures, then the diocese's priests); a friar who teaches is asked by the seminary's men. Three at a time, a block a week each. Every week of it runs through the internal-forum resolver (CLAUDE.md rule 7): only the friar's own interior moves, the directee's regard is his own and not a standing, and a reputation effect throws. Scenes in `events/religious/shared_directing.json` carry `internalForum: true`. Engine: `systems/religious/diocesanClassmates.ts`, `systems/religious/directing.ts`.
+
+### 3.14 Closures, foundations, and crossing over
+
+**From the province.** A shrinking province closes its smallest house under the kind's floor some year; a growing one founds a house in a diocese of its territory that has none. The provincial's own scenes decide it when the player holds the office (the `province` effect, `close_house` / `found_house`); otherwise the year rolls it and the friar reads a letter. A closure sends the men to the other houses, hands a parish the house held back to the diocese under a diocesan priest, removes the house from the diocese's own list, and sets flags for both campaigns' scenes (`house_closed:<diocese>`, `parish_handed_back:<diocese>`). A foundation sends three to five solemnly professed men from the fuller houses, takes a parish when it is a parish house, and adds the house to the diocese's list. Engine: `systems/religious/foundations.ts`.
+
+**From the diocese.** In the diocesan campaign, a collapsing institute withdraws a house some year (its arrangements end; `friars_leaving`), a growing one founds (`friars_arriving`), and a religious of a collapsing house may leave his order and come to a pastor without a curate as parochial vicar (`vicar:former_religious`, `@former_friar`). Engine: `systems/institutesDrift.ts`; scenes in `events/parish/institutes_drift.json`.
+
+**Crossing over (E4's ground).** A scene marks a man with the `crossing` effect (`enter_order` on a diocesan priest or seminarian, `leave_order` on a friar); a year on, he crosses. A diocesan priest who enters becomes a novice of the province at the novitiate, his parish going to another priest of his diocese, and the bishop who lost him remembers it; a friar who leaves becomes a priest of the diocese he lived in. Engine: `systems/religious/crossing.ts`; scenes in `events/religious/shared_crossing.json`.
+
 ## 4. Character creation changes
 
 The base creation flow is reused. Changes:

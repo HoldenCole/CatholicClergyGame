@@ -311,7 +311,12 @@ export function pastorTaskLoad(state: GameState): number {
   return t && state.clock.week < t.untilWeek ? t.ap : 0;
 }
 
-/** The week's blocks the office, the work, and a pastor's ask take, for the sheet. */
+/** Blocks the men he directs take: one each. E3 §3.13. */
+export function directingLoad(state: GameState): number {
+  return (state.religious?.directees ?? []).filter((d) => state.npcs[d.npcId]?.status === 'active').length;
+}
+
+/** The week's blocks the office, the work, a pastor's ask, and direction given take, for the sheet. */
 export function requestsLoad(state: GameState): number {
-  return houseOfficeLoad(state) + apostolateLoad(state) + pastorTaskLoad(state);
+  return houseOfficeLoad(state) + apostolateLoad(state) + pastorTaskLoad(state) + directingLoad(state);
 }

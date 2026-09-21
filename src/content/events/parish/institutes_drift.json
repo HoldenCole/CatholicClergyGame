@@ -1,0 +1,465 @@
+{
+  "_notes": "The orders come and go, seen from the diocese. E3 §3.14, diocesan campaign. friars_leaving and friars_arriving are set by systems/institutesDrift.ts; vicar:former_religious by the curate who was a religious.",
+  "events": [
+    {
+      "id": "id_friars_leaving",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "severity": "MAJOR",
+      "category": "group",
+      "baseWeight": 12,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "friars_leaving",
+          "value": true
+        }
+      ],
+      "title": "The Friars Are Leaving",
+      "body": "The letter is from the provincial to the bishop and the bishop's office has sent it to the deanery: the house is closing, the province cannot keep it, the men go in the spring. The pastors who leaned on it have a season to find another confessor, another preacher, another kitchen, and the people who went to the friars' Mass on Sundays will be at yours, or at nobody's, and the dean has asked what the deanery should do.",
+      "choices": [
+        {
+          "id": "mass",
+          "label": "Take the friars' Sunday people: a Mass at their hour, in your church",
+          "outcome": "The people come, some of them, since the hour is the hour, and are yours for a decade and never quite, since they were the friars', and your collections are up and your Sunday is longer, and the bishop's office says the parish absorbed the house, which is a sentence it uses again.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 3
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "id:took_their_people",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "bishop",
+          "label": "Write to the bishop asking him to ask the province to stay",
+          "outcome": "He asks, since he was going to, and the province says no, since it had to, and the letter is on the file as a pastor who fought for the friars, which the friars hear of, in another state, and the bishop's office reads as a pastor who writes letters.",
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": -1
+            },
+            {
+              "target": "flag",
+              "key": "id:wrote_for_the_friars",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "last",
+          "label": "Go to the last Mass at the house, and say so from your pulpit",
+          "outcome": "The last Mass is full and half of it is your parish, and the prior preaches four minutes and weeps, and your people see a house close and know what it was, and are a little more careful with the parish they have, and the deanery says you were the one who went.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "id:went_to_the_last_mass",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "id_bishop_needs_the_parish",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 10,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "friars_leaving",
+          "value": true
+        },
+        {
+          "type": "role",
+          "value": "pastor"
+        }
+      ],
+      "title": "The Parish the Friars Held",
+      "body": "The order's parish is the diocese's again as of Easter and the bishop's office has no one for it, and the vicar for clergy has telephoned, not written, to ask whether you would take it as well as yours, for a year, since it is the parish next to yours and the friars left it in good order and the diocese will find a man, he says, in a year.",
+      "choices": [
+        {
+          "id": "yes",
+          "label": "Take it for the year",
+          "outcome": "It is two parishes and one man and the friars' people, who are polite and grieving, and the year is two, and the bishop's office says at the end that you held the diocese together in that corner, and it is on the file, and your own parish knows what a year it was.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": -2
+            },
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": 2
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 5
+            },
+            {
+              "target": "flag",
+              "key": "id:held_the_friars_parish",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "terms",
+          "label": "Take it with a curate and the friars' rectory kept open",
+          "outcome": "The office finds a curate, since you asked before saying yes, and the rectory is a house of two priests for the year, and the friars' people have a door, and the vicar for clergy says you negotiate like a religious, which he did not mean kindly and you took kindly.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 1
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "id:the_friars_parish_on_terms",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "no",
+          "label": "Say your parish is one man's work and no more",
+          "outcome": "The office finds a retired priest, who is good for a year and then is not, and the parish the friars held is merged with someone else's, and the bishop's office does not blame you, in words, and does not ask again.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": -3
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "id_new_house_founded",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "severity": "NOTABLE",
+      "category": "group",
+      "baseWeight": 10,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "friars_arriving",
+          "value": true
+        }
+      ],
+      "title": "A New House in the Diocese",
+      "body": "The order has founded a house in the diocese, three streets from your church: a former convent bought, a chapel the bishop blessed on Tuesday, and five friars who were at your ten o'clock on Sunday in the second pew, in habits, looking at the sanctuary the way men look at a room they may be asked to preach in, and the prior has asked to call.",
+      "choices": [
+        {
+          "id": "welcome",
+          "label": "Welcome them, and offer the Sunday evening Mass to the prior",
+          "outcome": "He takes it, and the friars' evening Mass is a thing your parish has by Advent, and your people go to it and come back, mostly, and the deanery says you gave the friars a foothold, and you did, and the foothold is a confessor on Saturdays and a preacher in Lent for twenty years.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": -1
+            },
+            {
+              "target": "flag",
+              "key": "id:welcomed_the_house",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "careful",
+          "label": "Call on the prior, and be careful about the Sundays",
+          "outcome": "The call is warm and the Sundays are yours, and the friars find their people elsewhere, some of them yours, and the two houses are neighbours and not partners, and the prior says at the deanery that the pastor next door was correct, which was the word.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "bishop",
+          "label": "Ask the bishop's office what the house is for, since nobody told the deanery",
+          "outcome": "The office says it did not know either, since provinces do not ask, and the dean raises it at the deanery, and the friars are a question in the diocese for a year before they are a house, and the prior, hearing, is cool, and the foothold is slower.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "id:questioned_the_house",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "id_former_friar_curate",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 11,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "friendship_vs_duty"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "vicar:former_religious",
+          "value": true
+        },
+        {
+          "type": "role",
+          "value": "pastor"
+        }
+      ],
+      "title": "The Curate Who Was a Friar",
+      "body": "{@former_friar} has been your parochial vicar for a month, and he was a religious until last year, and it shows: he says the Office at the old hours, alone, in the church at five, and eats with the housekeeper's leftovers at six, and has asked, on a Tuesday, whether the two of you might say Vespers together, since he has not said it with another man since he left, and does not know how to be a priest without it.",
+      "choices": [
+        {
+          "id": "yes",
+          "label": "Say Vespers with him, every evening",
+          "outcome": "It is fifteen minutes and it is the rectory's rule by Lent, and the housekeeper sets the table after it, and the two of you are a house of two, and he is the best curate you have and the one the parish talks about, and the bishop's office notices the parish has a rule and does not know why.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "id:vespers_with_the_former_friar",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "sometimes",
+          "label": "Say Sundays, and mean it",
+          "outcome": "Sundays are enough, nearly, and he says them alone the other six and is lonely on the other six, and is a good curate and a quiet one, and moves on in three years to a rectory with three men, which the bishop's office arranges, since he asked.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "no",
+          "label": "Say a rectory is not a priory, kindly",
+          "outcome": "He nods and says it at five in the church alone for two years and then is not a priest, since the thing he left the order for was not in the rectory either, and you carry that, and the bishop's office does not know it was a Tuesday.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": -1
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": -2
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "id:refused_the_former_friar",
+              "value": true
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

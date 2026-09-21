@@ -7,7 +7,7 @@ import { currentHouse } from './house';
 import { horariumLoad } from './horarium';
 import { friendshipLoad } from './friendship';
 import { needOf } from './obedience';
-import { apostolateDef, houseOfficeLoad, pastorTaskLoad } from './requests';
+import { apostolateDef, directingLoad, houseOfficeLoad, pastorTaskLoad } from './requests';
 import { currentPosting } from './transfer';
 
 /**
@@ -49,7 +49,7 @@ function yearsOrdained(state: GameState): number {
 
 /** The blocks his week already owes: the common life, the friends, the office, the work. */
 export function friarLoad(state: GameState): number {
-  return horariumLoad(state) + friendshipLoad(state) + houseOfficeLoad(state) + (apostolateDef(state)?.ap ?? 0) + pastorTaskLoad(state);
+  return horariumLoad(state) + friendshipLoad(state) + houseOfficeLoad(state) + (apostolateDef(state)?.ap ?? 0) + pastorTaskLoad(state) + directingLoad(state);
 }
 
 /** The asks a bishop's office could make of the provincial for this man now. */

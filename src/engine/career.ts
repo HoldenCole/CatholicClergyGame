@@ -4,6 +4,7 @@ import type { Rng } from './rng';
 import { decide } from '@/systems/promotion';
 import { openingBlurb, playerCandidate, refreshOpenings, rivalsFor } from '@/systems/openings';
 import { advanceTrajectories, rollTrajectories } from '@/systems/trajectories';
+import { formerReligiousArrives, institutesYear } from '@/systems/institutesDrift';
 import { driftRome, successionYear } from '@/systems/succession';
 import { directionYear } from '@/systems/direction';
 import { religiousYear } from '@/systems/groups';
@@ -87,6 +88,13 @@ export function careerYear(state: GameState, rng: Rng): GameState {
   const houses = housesYear(next, rng.derive(`houses:${state.clock.week}`));
   next = houses.state;
   if (houses.lines.length) next = addDigest(next, houses.lines);
+  // The orders come and go, and a man who left one may come as a curate. E3 §3.14, diocesan side.
+  const drift = institutesYear(next, rng.derive(`institutes:${state.clock.week}`));
+  next = drift.state;
+  if (drift.lines.length) next = addDigest(next, drift.lines);
+  const former = formerReligiousArrives(next, rng.derive(`former-religious:${state.clock.week}`));
+  next = former.state;
+  if (former.line) next = addDigest(next, [former.line]);
 
   const succession = next.see ? { state: next, newBishop: null, lines: [] as string[], letter: undefined } : successionYear(next, rng.derive(`succession:${state.clock.week}`));
   next = succession.state;

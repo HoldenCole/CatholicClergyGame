@@ -161,6 +161,10 @@ export type Condition =
  * `relationship.key` and `npc.key` accept selectors ("@rector").
  */
 export type EffectTarget =
+  /** E3 §3.14: the province closes or founds a house (key 'close_house' | 'found_house'; value: a house id, or absent for the provincial's choice). */
+  | 'province'
+  /** E3 §3.14: a man crosses over (key: selector; value 'enter_order' for a diocesan priest, 'leave_order' for a friar). */
+  | 'crossing'
   | 'stat'
   | 'reputation'
   | 'relationship'

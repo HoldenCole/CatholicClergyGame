@@ -1,0 +1,694 @@
+{
+  "_notes": "Shared religious life: direction given, under the seal. E3 §3.13, CLAUDE.md rule 7. Every scene in the room carries internalForum: true and writes only stat, flag, and thread; the one scene outside the room (the line of priests) is the house's and may touch the house.",
+  "events": [
+    {
+      "id": "dir_priest_first_hour",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 12,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "directee:priest",
+          "value": true
+        }
+      ],
+      "title": "The First Hour",
+      "body": "{@directee} comes on the first Tuesday, a priest of the diocese, and sits in the parlour with his hands on his knees and says he does not know how to do this, since the seminary taught him to be directed and the diocese taught him not to be, and that he would like to say a thing and would like you not to write it down.",
+      "choices": [
+        {
+          "id": "hear",
+          "label": "Hear it, and say nothing for a long time",
+          "outcome": "He says it. It is the thing every priest carries and few say, and you hear it as your own director heard yours, and the hour is the first of forty, and what was said is in the room and nowhere else, and you carry it, which is the work.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "dir:heard_the_thing",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "own",
+          "label": "Say the thing you carried at his age, first",
+          "outcome": "He is silent and then says his, since yours went first, and it is the founder's method or the order's, and it costs you something, and it is the right cost, and the two things are in the room together.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "dir:said_your_own",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "office",
+          "label": "Say the Office with him before anything",
+          "outcome": "It is Vespers in a parlour, and he has not said it with another man in six years, and the thing is said after, more easily, since the Office made the room a chapel, and it is how every hour after begins.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "dir:office_first",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "internalForum": true
+    },
+    {
+      "id": "dir_seminarian_doubts",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 11,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "belief_vs_safety"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "directee:seminarian",
+          "value": true
+        }
+      ],
+      "title": "The Seminarian's Doubt",
+      "body": "{@directee}, one of the seminary's men, has said in the hour that he does not believe the thing he will be ordained to preach, or is not sure he does, and that the seminary's formation team would send him home if it knew, and that he has told you because a friar is not the formation team, and is asking whether you will tell them.",
+      "choices": [
+        {
+          "id": "never",
+          "label": "Say the room is sealed, and mean it",
+          "outcome": "He weeps, since it is the first time he has been safe in four years, and the doubt is worked through in a year of Tuesdays and is a faith by ordination, or is not and he goes, himself, well, and either way the formation team never heard it from you, and the seal held.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "dir:sealed_the_doubt",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "work",
+          "label": "Say the room is sealed, and that the doubt is the work now",
+          "outcome": "It is the work for a year: the founder's nine years, or the order's way with a question, and he is ordained with the doubt smaller and honest, and is the priest in that diocese the others come to when theirs is not.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "dir:worked_the_doubt",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "himself",
+          "label": "Say he must tell them himself, in time, and that you will not",
+          "outcome": "He does, in the fourth year, and the formation team is better than he feared, and he is ordained, and says the friar made him say it and did not say it for him, which is the whole of the difference, and the seal held.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "dir:sent_him_to_say_it",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "internalForum": true
+    },
+    {
+      "id": "dir_priest_drinks",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "MAJOR",
+      "category": "personal",
+      "baseWeight": 9,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "directee:priest",
+          "value": true
+        },
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 4
+        }
+      ],
+      "title": "What He Said About the Bottle",
+      "body": "{@directee} has said, in the hour, the thing about the bottle, which the deanery half knows and the bishop's office does not, and has said it as a man says a thing he has decided to say, and has asked what you will do, since a friar could telephone the vicar for clergy, and the diocese would thank him.",
+      "choices": [
+        {
+          "id": "nothing_outside",
+          "label": "Say nothing outside the room, and everything inside it",
+          "outcome": "Inside the room it is the hardest year of hours you give. He stops, or does not, and the diocese does not hear it from you either way, and he knows that, and it is the knowing that makes the year possible, and the seal is the mechanic and the man.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "dir:carried_the_bottle",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "himself",
+          "label": "Tell him he must go to the vicar for clergy himself, and go with him if he asks",
+          "outcome": "He asks. You go, and sit outside the door, and he says it inside, himself, and the diocese has a priest in treatment and not a priest exposed, and he says the friar sat outside the door, and that was the thing, and the room stayed sealed, since he opened his own.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "dir:sat_outside_the_door",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "end",
+          "label": "Say you cannot direct a man who is drinking, and end it",
+          "outcome": "It is allowed and it is a failure, and he does not find another director, and the deanery hears in a year, from the bottle, and you were not the one who told, and you were the one who left, and you carry that instead.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": -2
+            },
+            {
+              "target": "flag",
+              "key": "dir:ended_over_the_bottle",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "internalForum": true
+    },
+    {
+      "id": "dir_seminarian_wants_order",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 9,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "friendship_vs_duty"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "directee:seminarian",
+          "value": true
+        }
+      ],
+      "title": "The Seminarian Wants the Order",
+      "body": "{@directee}, one of the seminary's men, has said in the hour that he would like to enter the order, and that the seminary would call it poaching, and the bishop would call it worse, since the diocese has paid for three years of him, and that he is telling his director because a director is the one man who cannot use it.",
+      "choices": [
+        {
+          "id": "discern",
+          "label": "Discern it with him for a year, and say nothing to the province",
+          "outcome": "A year of Tuesdays. It is a vocation, or it is the house's Thursdays, and by the end he knows which, and goes to the vocation director himself or does not, and the province hears of it from him and never from you, and the seal held.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "dir:discerned_the_crossing",
+              "value": true
+            },
+            {
+              "target": "flag",
+              "key": "crossing:seminarian_discerning",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "truth",
+          "label": "Say the order is lonely too, differently, and let him decide",
+          "outcome": "He decides, in a year, and it is the diocese, and he is a pastor who builds a table, or it is the order, and he is a novice, and the diocese blames the friar either way, and the friar told him the truth, and it was in the room.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "dir:told_him_the_truth",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "no",
+          "label": "Say a director does not decide vocations, and send him to the vocation director",
+          "outcome": "He goes, and the province and the diocese have it out over him, and he is caught between them for a year, and says his director sent him into it, and the seal held and the man did not, quite.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": -1
+            },
+            {
+              "target": "flag",
+              "key": "dir:sent_him_to_the_office",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "internalForum": true
+    },
+    {
+      "id": "dir_bishop_asks_what_was_said",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 9,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "directee:priest",
+          "value": true
+        },
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 3
+        }
+      ],
+      "title": "The Bishop Asks",
+      "body": "The bishop's office has telephoned the prior to ask whether the friar who directs {@directee} would come and see the bishop about him, since the bishop is thinking of a post for the man and would like a view, and the prior has passed it on with the words that he knows what you will say and that you should say it to the bishop yourself.",
+      "choices": [
+        {
+          "id": "go",
+          "label": "Go, and say the room is sealed, courteously",
+          "outcome": "The bishop is not surprised and is a little pleased, since a diocese with a friar who will not talk is a diocese where a priest can be honest somewhere, and he gives the man the post on the evidence he has, and the friar has said nothing, and the bishop's office knows it would not.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "dir:refused_the_bishop",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "letter",
+          "label": "Write to the bishop's office that a director does not give views",
+          "outcome": "The letter is on the file, and the bishop reads it, and the next time the office wants a view of a priest it does not ask the friar, which is right, and is a door closed that was never open.",
+          "effects": [
+            {
+              "target": "flag",
+              "key": "dir:wrote_the_refusal",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "general",
+          "label": "Go, and speak of the man in general terms only",
+          "outcome": "The bishop asks a specific question and you answer a general one and he notices, and the room is not broken, and it is bent, and you know it on the drive home, and do not go again.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": -2
+            },
+            {
+              "target": "flag",
+              "key": "dir:bent_the_seal",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "internalForum": true
+    },
+    {
+      "id": "dir_seminarian_ordained",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "MAJOR",
+      "category": "personal",
+      "baseWeight": 10,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "directee:seminarian",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "seminary:men_ordained",
+          "value": true
+        }
+      ],
+      "title": "The Directee's Ordination",
+      "body": "{@directee}, whom you directed through the seminary's years, is to be ordained for the diocese on Saturday, and has asked, since a seminarian may ask one priest, that his director vest him, and the seminary's rector has said, through a secretary, that the diocese would prefer one of its own, and the man has said he prefers the friar.",
+      "choices": [
+        {
+          "id": "vest",
+          "label": "Vest him",
+          "outcome": "You vest him in a diocesan cathedral in a habit, and the rector looks at the floor, and the bishop does not, and the man is a priest of the diocese with a friar's hands on his chasuble, and he is one of the ones who write at Christmas, and the seal is not touched by a chasuble.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "dir:vested_the_directee",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "rector",
+          "label": "Say the rector is right, and sit in the nave",
+          "outcome": "He is vested by the rector and looks for you in the nave, and finds you, and it was enough, and the rector is warmer to the friars for a decade, and the man says he had wanted the friar and understood, and both are true.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "dir:sat_in_the_nave",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "ask",
+          "label": "Ask him, in the last hour, what he would rather",
+          "outcome": "He says the friar, and then says the rector, since the diocese is his, and it is the last thing decided in the room, and it was decided rightly, and you sit in the nave and are vested with him, in a way the rubrics do not have.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "dir:asked_him_in_the_room",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "internalForum": true
+    },
+    {
+      "id": "dir_the_last_hour",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 9,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "doubt"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "directee:priest",
+          "value": true
+        },
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 8
+        }
+      ],
+      "title": "The Last Hour",
+      "body": "{@directee} is moving, or dying, or has said that it is time, and this is the last hour, and he has asked what he should do with what was said in the room over the years, since it is in him and in you and nowhere else, and whether it is a thing to keep or to let go.",
+      "choices": [
+        {
+          "id": "keep",
+          "label": "Say to keep it, since it is who he is",
+          "outcome": "He keeps it. It is the shape of his priesthood, or the founder's rest, and he says at the door that the room was the one place, and you say it was for you too, and close the door, and it is closed.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "dir:the_last_hour_kept",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "go",
+          "label": "Say to let it go, since it was said and that was the point",
+          "outcome": "He lets it go, or tries, and is lighter, and the room is empty after he leaves it, and you sit in it for a while, and what was said is yours now, alone, which is what a director is.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "dir:the_last_hour_let_go",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "office",
+          "label": "Say the Office with him, and let that be the last hour",
+          "outcome": "It is Vespers, as it was the first time, and the psalm is the one, and nothing more is said, and he goes, and the room was a chapel for the last hour as for the first, and the seal is the silence.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 4
+            },
+            {
+              "target": "flag",
+              "key": "dir:the_last_hour_office",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "internalForum": true
+    },
+    {
+      "id": "dir_confessor_standing",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 8,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "directees:count",
+          "value": true
+        }
+      ],
+      "title": "The Priests Come",
+      "body": "It has happened without your arranging it: the diocese's priests have begun to come to the priory on Tuesdays, one and then three and then a line, since the word has gone round the deanery that a friar hears a priest and says nothing, and the prior has said that the house cannot be the diocese's confessional and has said it looking at the line.",
+      "choices": [
+        {
+          "id": "hours",
+          "label": "Take the line, and say the Office with the house anyway",
+          "outcome": "The line is the work of the next years, and the diocese has a place its priests can be honest, and the bishop's office knows and does not ask what is said, and the prior gives way, since a house that hears the diocese's priests is doing the order's thing, and the horarium is kept, grey.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 4
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "dir:the_line_of_priests",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "three",
+          "label": "Take three, and send the rest to the diocesan retreat house",
+          "outcome": "Three is what a friar can carry, and the rest find the retreat house, which has a Jesuit, and the deanery has two places its priests can go, and the prior says three is a number, and it is.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "dir:three_priests",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "house",
+          "label": "Say the house is the house, and send them to the retreat house",
+          "outcome": "The line goes elsewhere, and the diocese's priests say the friars were kind and busy, and the prior is relieved, and it was allowed, and the one who needed the priory and not the retreat house does not find it, and you do not know which he was.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": -1
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

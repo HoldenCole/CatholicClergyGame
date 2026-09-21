@@ -21,6 +21,7 @@ import { closeTenure } from '@/systems/tenures';
 import { resolveSelector } from './selectors';
 import { noteMovers } from '@/systems/movers';
 import { moveArc } from '@/systems/arcs';
+import { provinceEffect } from '@/systems/religious/foundations';
 import { ministryOf } from '@/systems/ministry';
 import type { MinistryKey } from '@/types';
 import { createRng, type Rng } from './rng';
@@ -149,6 +150,17 @@ export function applyEffect(
       const npc = resolveSelector(state, bindings[effect.key] ?? effect.key);
       if (!npc) return state;
       return { ...state, npcs: { ...state.npcs, [npc.id]: { ...npc, status: effect.value as NpcStatus } } };
+    }
+    // The province closes or founds a house on the provincial's word. E3 §3.14.
+    case 'province':
+      return provinceEffect(state, effect.key, typeof effect.value === 'string' ? effect.value : undefined, createRng(`${state.seed}:province:${effect.key}:${state.clock.week}`));
+    // A man is marked to cross over; the year moves him. E3 §3.14.
+    case 'crossing': {
+      const npc = resolveSelector(state, bindings[effect.key] ?? effect.key);
+      if (!npc) return state;
+      const tag = effect.value === 'leave_order' ? 'crossing:leaving' : 'crossing:entering';
+      if (npc.tags.includes(tag)) return state;
+      return { ...state, npcs: { ...state.npcs, [npc.id]: { ...npc, tags: [...npc.tags, tag, `crossing:week:${state.clock.week}`] } } };
     }
     case 'end':
       return {
