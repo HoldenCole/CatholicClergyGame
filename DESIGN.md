@@ -707,6 +707,10 @@ Religious NPCs make the `rome` constituency live earlier, because institutes are
 
 ---
 
+#### Choosing a director (as built)
+
+The kind of man is chosen before the man: a diocesan priest (the seminary's own director, or later an older pastor of the diocese), a friar of an active order, a monk of a contemplative house (the diocese's monastery, or a monk of the abbey two hours away when it has none, who is always among the offers), or a priest of the older observance. Each kind says what it is for; each man says what he is good to and what he is no use for, and two men of one temperament do not name the same weakness. A man who has lost his director looks for another from the You sheet, and the last one is not offered again. Nothing here writes outside the internal forum.
+
 ### 9.4a The order next door
 
 *Added in playtesting.* §9.4 gives a diocese its institutes and its religious. This is what a parish priest can actually **do** with them, and what they do to him.

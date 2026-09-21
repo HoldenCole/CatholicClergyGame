@@ -113,9 +113,15 @@ export interface Direction {
   endedWhy?: 'reassigned' | 'died' | 'changed';
 }
 
-/** One of the men offered in Y1. */
+/** The kind of man a director is: chosen first, then the man. DESIGN §9.4. */
+export type DirectorKind = 'diocesan' | 'friar' | 'monk' | 'traditional';
+
+export const DIRECTOR_KINDS: readonly DirectorKind[] = ['diocesan', 'friar', 'monk', 'traditional'] as const;
+
+/** One of the men offered in Y1, or later when a man seeks a director again. */
 export interface DirectorOption {
   npcId: string;
+  kind: DirectorKind;
   name: string;
   /** "A Dominican, forty years a preacher" */
   line: string;

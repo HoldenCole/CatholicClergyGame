@@ -97,7 +97,7 @@ describe('systems/direction', () => {
       const s = withFaculty(`dir-${i}`);
       const women = Object.values(s.npcs).filter((n) => n.role === 'religious' && instituteDef(n.institute!.replace('inst_', ''))?.women);
       const offered = offerDirectors(s, createRng(`o-${i}`));
-      expect(offered.options.length).toBeGreaterThanOrEqual(DIRECTION.offered[0]);
+      expect(offered.options.length).toBeGreaterThanOrEqual(3);
       expect(offered.options.length).toBeLessThanOrEqual(DIRECTION.offered[1]);
       const men = offered.options.map((o) => offered.state.npcs[o.npcId]!);
       for (const n of men) {
@@ -111,10 +111,10 @@ describe('systems/direction', () => {
       // The rest come one from each other house before any house repeats: three men are never three of one order.
       const others = men.filter((n) => n.institute !== 'inst_dominicans').map((n) => n.institute ?? 'diocesan');
       expect(others.length).toBeGreaterThanOrEqual(1);
-      const houses = new Set(Object.values(s.npcs).filter((n) => (n.role === 'religious' || n.role === 'formator') && n.institute !== 'inst_dominicans' && (n.title === 'Fr.' || n.title === 'Msgr.') && !n.tags.some((t) => t === 'rector' || t === 'formation_advisor' || t === 'diverged')).map((n) => n.institute ?? 'diocesan'));
+      const houses = new Set(Object.values(offered.state.npcs).filter((n) => (n.role === 'religious' || n.role === 'formator') && n.institute !== 'inst_dominicans' && (n.title === 'Fr.' || n.title === 'Msgr.') && !n.tags.some((t) => t === 'rector' || t === 'formation_advisor' || t === 'diverged')).map((n) => n.institute ?? 'diocesan'));
       expect(new Set(others).size).toBe(Math.min(others.length, houses.size));
       // A diocese without Dominicans of its own gets visiting friars, who are in the state and can be chosen.
-      const visiting = men.filter((n) => n.tags.includes('visiting_director'));
+      const visiting = men.filter((n) => n.tags.includes('visiting_director') && n.institute === 'inst_dominicans');
       const own = Object.values(s.npcs).filter((n) => n.institute === 'inst_dominicans' && n.title === 'Fr.').length;
       expect(visiting.length).toBe(Math.max(0, DIRECTION.dominicans - Math.min(own, DIRECTION.dominicans)));
       for (const v of visiting) expect(chooseDirector(offered.state, v.id).character!.direction!.npcId).toBe(v.id);
