@@ -35,6 +35,7 @@ import { turnaroundStep } from '@/systems/trajectory';
 import { visitationStep } from '@/systems/visitation';
 import { careOf, WEEK } from '@/systems/week';
 import { religiousWeek } from '@/systems/religious/week';
+import { religiousModeStep, religiousYear } from '@/systems/religious/year';
 import { renderText } from './text';
 import type { WeekHook } from './clock';
 
@@ -107,7 +108,9 @@ export function seminaryWeekHook(deps: EventDeps): WeekHook {
     let next = formationBeats(state, reachedBeats);
     if (next.mode.kind !== 'clock' || !next.seminary) return next;
     // What he did with the week, whether or not anything else happens in it.
-    const week = seminaryWeek(next, rng.derive(`seminary-week:${next.clock.week}`));
+    const resolved = seminaryWeek(next, rng.derive(`seminary-week:${next.clock.week}`));
+    // A novice's house has its own week: the horarium as kept, the house's drift. E3 §3.2.
+    const week = { ...resolved, state: religiousWeek(resolved.state, rng) };
     next = week.line ? addDigestLine(week.state, week.line) : week.state;
     next = clubsStep(next, rng);
     const pool = weekPool(deps.pool, next);
@@ -117,7 +120,7 @@ export function seminaryWeekHook(deps: EventDeps): WeekHook {
     }
     // The house's invitations and the chancery's summers come by letter, week by week, like everyone else's.
     if (next.mode.kind !== 'clock' || next.pending.length > 0) return next;
-    return openMail(offersStep(next, rng, deps));
+    return religiousModeStep(openMail(offersStep(next, rng, deps)));
   };
 }
 
@@ -179,7 +182,7 @@ export function studyWeekHook(deps: EventDeps): WeekHook {
     if (letter.moved || letter.state.pending.length > 0) return letter.state;
     const week = studyWeek(letter.state, rng.derive(`study-week:${state.clock.week}`));
     let next = week.line ? addDigestLine(week.state, week.line) : week.state;
-    if (isCareerYear(next)) next = careerYear(next, rng);
+    if (isCareerYear(next)) next = religiousYear(careerYear(next, rng), rng);
     if (next.mode.kind !== 'clock') return next;
     if (next.study && next.clock.week >= next.study.endWeek) {
       const def = deps.offerLookup?.(next.study.offerId);
@@ -190,7 +193,31 @@ export function studyWeekHook(deps: EventDeps): WeekHook {
       if (event) next = fireOrResolve(next, event, rng, deps);
     }
     if (next.mode.kind !== 'clock' || next.pending.length > 0) return next;
-    return openMail(offersStep(next, rng, deps));
+    return religiousModeStep(openMail(offersStep(next, rng, deps)));
+  };
+}
+
+/** Roughly how often a friar's week without a parish loop carries a scene. Invented. */
+const FRIAR_EVENT_CHANCE = 0.12;
+
+/**
+ * A friar's week after ordination, when his work is the house's and not a
+ * parish loop: the common life, the year's business (the base career's and
+ * the province's), a scene now and then, and the decisions the year opened
+ * handed to him. E3 §3.
+ */
+export function friarWeekHook(deps: EventDeps): WeekHook {
+  return (state: GameState, rng: Rng) => {
+    if (!state.religious) return state;
+    let next = religiousWeek(state, rng);
+    if (isCareerYear(next)) next = religiousYear(careerYear(next, rng), rng);
+    if (next.mode.kind !== 'clock') return next;
+    if (rng.derive(`friar-scene:${next.clock.week}`).chance(FRIAR_EVENT_CHANCE)) {
+      const [event] = drawEvents(deps.pool.filter((e) => !e.beat), next, rng, 1);
+      if (event) next = fireOrResolve(next, event, rng, deps);
+    }
+    if (next.mode.kind !== 'clock' || next.pending.length > 0) return next;
+    return religiousModeStep(openMail(offersStep(next, rng, deps)));
   };
 }
 
@@ -335,7 +362,7 @@ export function parishWeekHook(deps: EventDeps): WeekHook {
       next = fireOrResolve(next, visit.event, rng.derive(`visitation:${next.clock.week}`), deps);
       if (next.mode.kind !== 'clock' || next.pending.length > 0) return next;
     }
-    if (isCareerYear(next)) next = careerYear(next, rng);
+    if (isCareerYear(next)) next = religiousYear(careerYear(next, rng), rng);
     if (next.mode.kind !== 'clock') return next;
     if (next.flags.new_bishop_pending) {
       // A succession always gets its scene, played week or not. DESIGN 5.3
@@ -354,10 +381,11 @@ export function parishWeekHook(deps: EventDeps): WeekHook {
       const [event] = drawEvents(deps.pool.filter((e) => !e.beat), next, rng, 1, careRelief(next));
       if (event) next = fireOrResolve(next, event, rng, deps);
     }
-    if (reachedBeats.some((b) => b.kind === 'assignment') && next.mode.kind === 'clock') {
+    // A friar is assigned by his provincial (E3 §3.1), never by the diocese's board.
+    if (reachedBeats.some((b) => b.kind === 'assignment') && next.mode.kind === 'clock' && !next.religious) {
       next = nextAssignment(next, rng).state;
     }
     if (next.mode.kind !== 'clock' || next.pending.length > 0) return next;
-    return openMail(offersStep(next, rng, deps));
+    return religiousModeStep(openMail(offersStep(next, rng, deps)));
   };
 }

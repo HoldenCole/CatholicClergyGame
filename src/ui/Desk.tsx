@@ -25,9 +25,13 @@ import InterruptSettings from './InterruptSettings';
 import SavePanel from './SavePanel';
 import SettingsPanel from './SettingsPanel';
 import FurnishPanel from './scenes/FurnishPanel';
+import HousePanel from './religious/HousePanel';
+import HouseAsksPanel from './religious/HouseAsksPanel';
+import FriarWeekPanel from './religious/FriarWeekPanel';
 
 const LABEL: Record<Sheet, string> = {
   week: 'Week',
+  house: 'House',
   profile: 'You',
   parish: 'Parish',
   map: 'Map',
@@ -56,7 +60,10 @@ export default function Desk() {
   if (!game) return null;
   const inParish = !!game.parish;
   const away = !!game.study;
-  const tabs: Sheet[] = inParish ? ['week', 'parish', 'people', 'deanery', 'map', 'jobs', 'profile', 'clubs', 'letters', 'record', 'settings'] : away ? (game.see ? ['week', 'see', 'jobs', 'profile', 'letters', 'record', 'settings'] : game.study?.place ? ['week', 'place', 'jobs', 'profile', 'letters', 'record', 'settings'] : ['week', 'jobs', 'profile', 'letters', 'record', 'settings']) : ['week', 'formation', 'jobs', 'profile', 'clubs', 'letters', 'record', 'settings'];
+  const friar = !!game.religious && !!game.flags.ordained && !inParish && !away;
+  const tabs: Sheet[] = friar ? ['week', 'jobs', 'profile', 'clubs', 'letters', 'record', 'settings'] : inParish ? ['week', 'parish', 'people', 'deanery', 'map', 'jobs', 'profile', 'clubs', 'letters', 'record', 'settings'] : away ? (game.see ? ['week', 'see', 'jobs', 'profile', 'letters', 'record', 'settings'] : game.study?.place ? ['week', 'place', 'jobs', 'profile', 'letters', 'record', 'settings'] : ['week', 'jobs', 'profile', 'letters', 'record', 'settings']) : ['week', 'formation', 'jobs', 'profile', 'clubs', 'letters', 'record', 'settings'];
+  // A friar lives in a house: its sheet sits beside the week. E3 §3.2.
+  if (game.religious) tabs.splice(1, 0, 'house');
   if (furnishing) tabs.push('furnish');
   const open = sheet ?? 'week';
   const letters = game.offers.length;
@@ -75,7 +82,13 @@ export default function Desk() {
         ))}
       </div>
       <div className="scroll-paper paper flex-1 overflow-y-auto">
-        {open === 'week' && (inParish ? <RoutinePanel /> : away ? <StudyRoutinePanel /> : <SeminaryRoutinePanel />)}
+        {open === 'week' && (inParish ? <RoutinePanel /> : away ? <StudyRoutinePanel /> : game.religious && game.flags.ordained ? <FriarWeekPanel /> : <SeminaryRoutinePanel />)}
+        {open === 'house' && (
+          <>
+            <HousePanel />
+            <HouseAsksPanel />
+          </>
+        )}
         {open === 'parish' && <ParishPanel />}
         {open === 'map' && <MapPanel />}
         {open === 'deanery' && <DeaneryPanel />}

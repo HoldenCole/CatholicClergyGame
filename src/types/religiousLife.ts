@@ -363,3 +363,10 @@ export interface ReligiousPlayerState {
    */
   legibility?: number;
 }
+
+/** A rolled province held in the save until one is chosen: its visible half for the cards, and the whole for installing. */
+export interface ProvinceCandidateRecord {
+  id: string;
+  visible: import('@/systems/religious/newGame').ProvinceVisible;
+  gen: import('@/generation/province').GeneratedProvince;
+}

@@ -1,3 +1,4 @@
+import { pillarLabel } from '@/systems/campaign';
 import { useState } from 'react';
 import { useGameStore } from '@/engine/store';
 import { explainAlignment, explainStat, reasonsLine } from '@/systems/movers';
@@ -9,7 +10,6 @@ import Portrait from '../portraits/Portrait';
 import { portraitForCharacter, portraitForNpc, yearOf } from '../portraits/spec';
 import { TRAIT_LABEL } from '../portraits/traits';
 
-const PILLAR_LABEL: Record<Pillar, string> = { human: 'Human', spiritual: 'Spiritual', intellectual: 'Intellectual', pastoral: 'Pastoral' };
 
 export default function FormationPanel() {
   const game = useGameStore((s) => s.game);
@@ -34,7 +34,7 @@ export default function FormationPanel() {
         <dl className="grid grid-cols-2 gap-x-6 gap-y-1 text-sm">
           {PILLARS.map((p) => (
             <div key={p} className="flex justify-between">
-              <dt className="ink-muted">{PILLAR_LABEL[p]}</dt>
+              <dt className="ink-muted">{pillarLabel(game, p)}</dt>
               <dd>{sem.emphasis ? pillarWord(elapsed < 4 ? (sem.emphasis[p] ?? 0) * FORMATION.pillarPerPoint : pace(p)) : '—'}</dd>
             </div>
           ))}

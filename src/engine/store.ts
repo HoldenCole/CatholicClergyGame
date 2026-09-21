@@ -11,6 +11,7 @@ import type {
   Snapshot,
   Speed,
   SummerAssignment,
+  OrderKey, ReligiousAnswers, HorariumKey,
 } from '@/types';
 import { SAVE_VERSION } from '@/types';
 import { noDraw, noHook, runClock, type StopReason, type WeekDraw, type WeekHook } from './clock';
@@ -24,6 +25,14 @@ import { offerById, offersForPhase } from '@/content/offers';
 import { acceptOffer as doAccept, declineOffer as doDecline, deferOffer as doDefer } from './offers';
 import { generateRun } from '@/generation';
 import { generateCandidates, installWorld } from '@/generation/world';
+import { generateProvinceCandidates } from '@/systems/religious/newGame';
+import { setHorarium as setHorariumSys } from '@/systems/religious/horarium';
+import { askPermission as askPermissionSys } from '@/systems/religious/poverty';
+import { askDispensation as askDispensationSys } from '@/systems/religious/study';
+import { befriend as befriendSys } from '@/systems/religious/friendship';
+import { appointOffice } from '@/systems/religious/offices';
+import { decideAssignment, receiveAssignment, statePreference as statePreferenceSys } from '@/systems/religious/obedience';
+import { castVote, closeChapter, holdElection, resolveElection, returnToRanks, signalWillingness, speakFor, steerBloc } from '@/systems/religious/chapter';
 import { fromDayNumber } from './calendar';
 import { acceptAssignment as doAcceptAssignment } from './seminary';
 import {
@@ -33,7 +42,7 @@ import {
   leaveSeminary as leave,
   ordain as doOrdain,
 } from './seminary';
-import { parishWeekHook, resolvePending, seminaryWeekHook, studyWeekHook, type EventDeps } from './weekHook';
+import { parishWeekHook, friarWeekHook, resolvePending, seminaryWeekHook, studyWeekHook, type EventDeps } from './weekHook';
 import { setDiscretionary as doSetDiscretionary, setObligation as doSetObligation, startAssignment } from './parish';
 import { focusGroup as doFocus, replaceLeader as doReplaceLeader, startFounding as doStartFounding, suppressGroup as doSuppress } from '@/systems/groups';
 import { startWork as doStartWork, stopWork as doStopWork } from '@/systems/problems';
@@ -92,6 +101,26 @@ export interface GameStore {
   error: string | null;
 
   newGame(options: NewGameOptions): void;
+  /** The religious campaign: the order, then a province from the rolled cards, then creation's additions. E3 §4. */
+  chooseOrder(order: OrderKey): void;
+  startReligious(answers: CreationAnswers, religious: ReligiousAnswers): void;
+  /** The friar's house sheet. */
+  setHorarium(key: HorariumKey, quality: Quality): void;
+  askPermission(id: string): void;
+  askDispensation(): void;
+  befriend(npcId: string): void;
+  acceptOffice(id: string): void;
+  /** The consultation and the letter. E3 §3.1. */
+  statePreference(houseId: string | null, objection: boolean): void;
+  letProvincialDecide(): void;
+  answerLetter(grace: 'good' | 'reluctant' | 'refused'): void;
+  /** The chapter: actions before the vote, the ballots, the answer. E3 §3.6. */
+  chapterAct(action: 'vote' | 'speak' | 'steer' | 'willing' | 'unwilling', id?: string): void;
+  holdBallots(): void;
+  answerElection(accept: boolean): void;
+  endTerm(how: 'well' | 'badly'): void;
+  /** What the prior said, for the sheet. */
+  lastPriorLine: string | null;
   setSpeed(speed: Speed): void;
   /** Advance up to `weeks` weeks at the current speed (MANUAL always advances one). */
   tick(weeks?: number): StopReason | null;
@@ -283,6 +312,8 @@ function hookFor(state: GameState): WeekHook {
   if (state.phase === 'seminary') return seminaryWeekHook(depsFor(state));
   if (state.study) return studyWeekHook(depsFor(state));
   if (state.parish) return parishWeekHook(depsFor(state));
+  // An ordained friar without a parish loop: the house is his week. E3.
+  if (state.religious) return friarWeekHook(depsFor(state));
   return noHook;
 }
 
@@ -341,6 +372,7 @@ export const useGameStore = create<GameStore>()((set, get) => ({
   running: false,
   error: null,
   lastOfferOutcome: null,
+  lastPriorLine: null,
   lastTalk: null,
   lastFurnishLine: null,
   lastHouseLine: null,
@@ -617,6 +649,66 @@ export const useGameStore = create<GameStore>()((set, get) => ({
 
   startGame(answers) {
     update(set, get, (game, r) => ({ ...generateRun(game, answers, r), candidates: null }));
+  },
+  chooseOrder(order) {
+    update(set, get, (game, r) => {
+      const year = fromDayNumber(game.clock.startDay).year;
+      const candidates = generateProvinceCandidates(r.derive(`provinces:${order}`), order, year).map((c) => ({ id: c.province.id, visible: c.visible, gen: { province: c.province, houses: c.houses, friars: c.friars, dioceses: c.dioceses } }));
+      return { ...game, campaign: 'religious', provinceCandidates: candidates };
+    });
+  },
+  startReligious(answers, religious) {
+    update(set, get, (game, r) => ({ ...generateRun(game, answers, r, religious), candidates: null, provinceCandidates: null }));
+  },
+  setHorarium(key, quality) {
+    update(set, get, (game) => setHorariumSys(game, key, quality));
+  },
+  askPermission(id) {
+    update(set, get, (game, r) => {
+      const res = askPermissionSys(game, id, r.derive(`permission:${id}:${game.clock.week}`));
+      set({ lastPriorLine: res.line });
+      return res.state;
+    });
+  },
+  askDispensation() {
+    update(set, get, (game, r) => {
+      const res = askDispensationSys(game, r.derive(`dispensation:${game.clock.week}`));
+      set({ lastPriorLine: res.line });
+      return res.state;
+    });
+  },
+  befriend(npcId) {
+    update(set, get, (game) => befriendSys(game, npcId));
+  },
+  acceptOffice(id) {
+    update(set, get, (game) => appointOffice(game, id));
+  },
+  statePreference(houseId, objection) {
+    update(set, get, (game) => statePreferenceSys(game, houseId, objection));
+  },
+  letProvincialDecide() {
+    update(set, get, (game, r) => ({ ...decideAssignment(game, r.derive(`decide:${game.clock.week}`)), mode: { kind: 'obedience_letter' } }));
+  },
+  answerLetter(grace) {
+    update(set, get, (game) => ({ ...receiveAssignment(game, grace), mode: { kind: 'clock' } }));
+  },
+  chapterAct(action, id) {
+    update(set, get, (game, r) => {
+      if (action === 'vote' && id) return castVote(game, id);
+      if (action === 'speak' && id) return speakFor(game, id);
+      if (action === 'steer' && id) return steerBloc(game, id, r.derive(`steer:${game.clock.week}`));
+      if (action === 'willing' || action === 'unwilling') return signalWillingness(game, action);
+      return game;
+    });
+  },
+  holdBallots() {
+    update(set, get, (game) => holdElection(game));
+  },
+  answerElection(accept) {
+    update(set, get, (game, r) => ({ ...closeChapter(resolveElection(game, r.derive(`confirm:${game.clock.week}`), accept)), mode: { kind: 'clock' } }));
+  },
+  endTerm(how) {
+    update(set, get, (game) => ({ ...returnToRanks(game, how), mode: { kind: 'clock' } }));
   },
   chooseEmphasis(emphasis) {
     update(set, get, (game, r) => pickEmphasis(game, emphasis, r));

@@ -1,8 +1,10 @@
 # Vocation
 
 A single-player, text-driven career and life simulation of a Catholic
-diocesan priest. `DESIGN.md` is the design; `CLAUDE.md` governs how the code
-is written.
+priest: a diocesan priest, or, in the religious campaign (expansion E3), a
+Dominican or Augustinian friar. `DESIGN.md` is the design;
+`docs/EXPANSION-E3-RELIGIOUS.md` the expansion's; `CLAUDE.md` governs how
+the code is written.
 
 ## Play it
 

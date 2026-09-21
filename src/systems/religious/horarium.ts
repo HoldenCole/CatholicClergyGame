@@ -49,7 +49,7 @@ export function setHorarium(state: GameState, key: HorariumKey, quality: Quality
 }
 
 /** The lines and what they cost this week, for the sheet. */
-export function horariumRows(state: GameState): { key: HorariumKey; label: string; quality: Quality; ap: number; blurb: string; dispensed: boolean }[] {
+export function horariumRows(state: GameState): { key: HorariumKey; label: string; quality: Quality; ap: number; blurb: string; dispensed: boolean; investable: boolean }[] {
   const r = state.religious;
   if (!r) return [];
   return horariumDefs.map((def) => ({
@@ -59,6 +59,7 @@ export function horariumRows(state: GameState): { key: HorariumKey; label: strin
     ap: horariumAp(state, def.key, r.horarium[def.key]),
     blurb: def.blurb[r.horarium[def.key]],
     dispensed: !!r.dispensed?.from.includes(def.key),
+    investable: def.ap.invested !== null,
   }));
 }
 

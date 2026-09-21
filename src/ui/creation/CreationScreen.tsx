@@ -2,9 +2,13 @@ import { useMemo, useState } from 'react';
 import { creationContent as content } from '@/content/creation';
 import { useGameStore } from '@/engine/store';
 import { careerAvailability, entryAge, maxYearsWorked, tieAvailability, validateAnswers } from '@/systems/creation';
-import type { CreationAnswers, CreationOption } from '@/types';
+import type { ReligiousAnswers, CreationAnswers, CreationOption } from '@/types';
 import OptionList from './OptionList';
 import DioceseCards from './DioceseCards';
+import OrderCards from './OrderCards';
+import ProvinceCards from './ProvinceCards';
+import { religiousCreation } from '@/content/creation';
+import { religiousOrder } from '@/content/religious';
 import { revealFieldForTie, revealFor } from '@/generation/world';
 import { likelyPlacement } from '@/systems/placement';
 import { createRng } from '@/engine/rng';
@@ -12,11 +16,22 @@ import Portrait from '../portraits/Portrait';
 import { adjustSpec, facesFor, HERITAGE_LABEL, parseSpec, serializeSpec, SPEC_KEYS, SPEC_LABELS } from '../portraits/spec';
 import type { Heritage } from '@/content/names';
 
-type Step = 'name' | 'face' | 'diocese' | 'origin' | 'tie' | 'path' | 'field' | 'career' | 'motive' | 'family' | 'past' | 'summary';
+type Step = 'name' | 'face' | 'diocese' | 'origin' | 'tie' | 'path' | 'field' | 'career' | 'motive' | 'family' | 'past' | 'order' | 'province' | 'why' | 'ptie' | 'rname' | 'summary';
 /** The diocese comes after the background so its cards can say where a man like this would be sent. */
-const ORDER: Step[] = ['name', 'face', 'origin', 'path', 'field', 'career', 'motive', 'family', 'past', 'diocese', 'tie', 'summary'];
+const DIOCESAN_ORDER: Step[] = ['name', 'face', 'origin', 'path', 'field', 'career', 'motive', 'family', 'past', 'diocese', 'tie', 'summary'];
+/** The religious campaign: the order and the province replace the diocese and its tie. E3 §4. */
+const RELIGIOUS_ORDER: Step[] = ['name', 'face', 'origin', 'path', 'field', 'career', 'motive', 'family', 'past', 'order', 'province', 'why', 'ptie', 'rname', 'summary'];
+
+const RELIGIOUS_QUESTIONS: Record<'order' | 'province' | 'why' | 'ptie' | 'rname', { title: string; prompt: string }> = {
+  order: { title: 'Which order?', prompt: 'Two orders take men this year. Each is a different life, from the first morning.' },
+  province: { title: 'Which province?', prompt: 'A province spans several dioceses. Every friar in it will one day be your voter.' },
+  why: { title: 'What drew you to them?', prompt: 'The novice master will ask. So will the chapter, years from now.' },
+  ptie: { title: 'How do you stand to the province?', prompt: 'Whether anyone there knows your name yet.' },
+  rname: { title: 'A name', prompt: 'At clothing the novice receives a religious name. Choose from the order\'s saints, or write your own.' },
+};
 
 const QUESTIONS: Record<Step, { title: string; prompt: string }> = {
+  ...RELIGIOUS_QUESTIONS,
   name: { title: 'Your name', prompt: 'The vocation director writes it at the top of a file that will follow you for forty years.' },
   face: { title: 'Your face', prompt: 'The photograph clipped to the file. Start from one of these, then change what you like. It will be taken again at ordination, and again when the hair goes.' },
   diocese: { title: 'Choosing a diocese', prompt: 'You visited. You talked to the vocations director. You read what people say. Incardination is for life, and seven years will pass before you are ordained into it.' },
@@ -33,8 +48,14 @@ const QUESTIONS: Record<Step, { title: string; prompt: string }> = {
 
 export default function CreationScreen() {
   const startGame = useGameStore((s) => s.startGame);
+  const startReligious = useGameStore((s) => s.startReligious);
+  const chooseOrder = useGameStore((s) => s.chooseOrder);
   const chooseDiocese = useGameStore((s) => s.chooseDiocese);
   const game = useGameStore((s) => s.game);
+  const religious = game?.campaign === 'religious';
+  const ORDER = religious ? RELIGIOUS_ORDER : DIOCESAN_ORDER;
+  const [rel, setRel] = useState<ReligiousAnswers>({ order: 'OP', provinceId: '', why: 'charism', tie: 'outside' });
+  const orderDef = religiousOrder(rel.order);
   const [dioceseChoice, setDioceseChoice] = useState<string | null>(null);
   const [step, setStep] = useState<Step>('name');
   const [answers, setAnswers] = useState<CreationAnswers>({
@@ -64,14 +85,15 @@ export default function CreationScreen() {
 
   const idx = ORDER.indexOf(step);
   const pathOpt = content.paths.find((p) => p.id === full.path);
+  const skip = (st: Step | undefined) => (st === 'field' && !pathOpt?.hasField) || (st === 'rname' && !orderDef.mechanics.religiousName);
   const next = () => {
     let i = idx + 1;
-    while (ORDER[i] === 'field' && !pathOpt?.hasField) i++;
+    while (skip(ORDER[i])) i++;
     setStep(ORDER[i] ?? 'summary');
   };
   const back = () => {
     let i = idx - 1;
-    while (ORDER[i] === 'field' && !pathOpt?.hasField) i--;
+    while (skip(ORDER[i])) i--;
     setStep(ORDER[Math.max(0, i)] ?? 'name');
   };
   const choose = <T extends CreationOption>(key: Step, option: T, patch: Partial<CreationAnswers>) => {
@@ -83,7 +105,8 @@ export default function CreationScreen() {
   const errors = validateAnswers(full, content);
   const candidates = game?.candidates ?? [];
   const placements = step === 'diocese' && game ? Object.fromEntries(candidates.map((c) => [c.presetId, likelyPlacement(game, full, c, content, full.entryYear)])) : {};
-  const worldChosen = !!game?.world;
+  const worldChosen = religious ? !!rel.provinceId && !!game?.provinceCandidates?.some((c) => c.id === rel.provinceId) : !!game?.world;
+  const provinces = (game?.provinceCandidates ?? []).map((c) => c.visible);
   const revealField = revealFieldForTie(full.tie);
   const reveal =
     step === 'tie' && revealField && game?.world
@@ -94,7 +117,10 @@ export default function CreationScreen() {
   const blocked =
     (step === 'name' && (!answers.firstName.trim() || !answers.lastName.trim())) ||
     (step === 'face' && !parseSpec(answers.portrait)) ||
-    (step === 'diocese' && !worldChosen && !dioceseChoice);
+    (step === 'diocese' && !worldChosen && !dioceseChoice) ||
+    (step === 'order' && !provinces.length) ||
+    (step === 'province' && !rel.provinceId) ||
+    (step === 'rname' && !(rel.religiousName ?? '').trim());
   const advance = () => {
     if (blocked || step === 'summary') return;
     if (step === 'diocese' && dioceseChoice && (dioceseChoice !== game?.world?.diocese.presetId || game?.flags.surprise_me)) chooseDiocese(dioceseChoice);
@@ -106,7 +132,7 @@ export default function CreationScreen() {
       <header className="plate flex items-baseline justify-between px-6 py-2">
         <h1 className="title text-lg tracking-wide" style={{ color: '#e6c25a' }}>Vocation</h1>
         <span className="text-xs opacity-80">
-          Step {idx + 1} of {ORDER.length} · entering seminary in {startYear}
+          Step {idx + 1} of {ORDER.length} · entering {religious ? 'the novitiate' : 'seminary'} in {startYear}
         </span>
       </header>
       <main className="paper paper-tilt-l mx-auto my-6 flex max-w-4xl flex-col gap-5 px-8 py-6" onKeyDown={(e) => { if (e.key === 'Enter' && (e.target as HTMLElement).tagName === 'INPUT') { e.preventDefault(); advance(); } }}>
@@ -140,6 +166,29 @@ export default function CreationScreen() {
         {step === 'diocese' && game?.flags.surprise_me && (
           <p className="ink-muted text-sm">You asked to be surprised. Choosing a diocese by name now gives up the surprise and its small bonus.</p>
         )}
+        {step === 'order' && (
+          <OrderCards selected={provinces.length ? rel.order : null} onSelect={(key) => { setRel((r) => ({ ...r, order: key, provinceId: '' })); chooseOrder(key); }} />
+        )}
+        {step === 'province' && (
+          <ProvinceCards provinces={provinces} selected={rel.provinceId || null} onSelect={(id) => setRel((r) => ({ ...r, provinceId: id }))} />
+        )}
+        {step === 'why' && (
+          <OptionList options={religiousCreation.whys} selected={rel.why} onSelect={(o) => { setRel((r) => ({ ...r, why: o.id })); setSeen((sn) => ({ ...sn, why: o.outcome })); }} />
+        )}
+        {step === 'ptie' && (
+          <OptionList options={religiousCreation.ties} selected={rel.tie} onSelect={(o) => { setRel((r) => ({ ...r, tie: o.id })); setSeen((sn) => ({ ...sn, ptie: o.outcome })); }} />
+        )}
+        {step === 'rname' && (
+          <div className="flex max-w-lg flex-col gap-3">
+            <Input label="Religious name" value={rel.religiousName ?? ''} onChange={(v) => setRel((r) => ({ ...r, religiousName: v }))} />
+            <div className="flex flex-wrap gap-1.5">
+              {orderDef.saints.map((n) => (
+                <button key={n} type="button" className={'pbtn px-2 py-0.5 text-xs ' + (rel.religiousName === n ? 'pbtn-primary' : '')} onClick={() => setRel((r) => ({ ...r, religiousName: n }))}>{n}</button>
+              ))}
+            </div>
+            <p className="ink-faint text-xs">Cosmetic, and a real moment: the house will call you by it.</p>
+          </div>
+        )}
         {step === 'origin' && (
           <OptionList options={content.origins} selected={full.origin} onSelect={(o) => choose('origin', o, { origin: o.id, ...(tieAvailability({ origin: o.id }, content).find((t) => t.option.id === full.tie)?.available ? {} : { tie: tieAvailability({ origin: o.id }, content).find((t) => t.available)!.option.id }) })} />
         )}
@@ -172,7 +221,7 @@ export default function CreationScreen() {
             onSelect={(o) => choose('past', o, { past: o.id === 'none' ? null : (o.id as CreationAnswers['past']) })}
           />
         )}
-        {step === 'summary' && <Summary answers={full} seen={seen} />}
+        {step === 'summary' && <Summary answers={full} seen={seen} religious={religious ? { order: orderDef.short, province: provinces.find((p) => p.id === rel.provinceId)?.name ?? '', name: rel.religiousName } : null} />}
 
         {step !== 'summary' && seen[step] && (
           <p className="rounded border rule bg-white/30 p-4 leading-relaxed">{seen[step]}</p>
@@ -199,10 +248,10 @@ export default function CreationScreen() {
           ) : (
             <button
               className="pbtn pbtn-primary"
-              onClick={() => startGame(full)}
+              onClick={() => (religious ? startReligious(full, rel) : startGame(full))}
               disabled={errors.length > 0 || !worldChosen}
             >
-              Enter the seminary
+              {religious ? 'Enter the novitiate' : 'Enter the seminary'}
             </button>
           )}
           {step === 'summary' && errors.length > 0 && <span className="ink-wine text-sm">{errors.join(' ')}</span>}
@@ -259,13 +308,14 @@ function CareerStep({
   );
 }
 
-function Summary({ answers, seen }: { answers: CreationAnswers; seen: Partial<Record<Step, string>> }) {
+function Summary({ answers, seen, religious }: { answers: CreationAnswers; seen: Partial<Record<Step, string>>; religious: { order: string; province: string; name?: string | undefined } | null }) {
   const age = entryAge(answers, content);
-  const paragraphs = (['origin', 'tie', 'path', 'field', 'career', 'motive', 'family', 'past'] as Step[]).map((k) => seen[k]).filter(Boolean);
+  const paragraphs = (['origin', 'tie', 'path', 'field', 'career', 'motive', 'family', 'past', 'why', 'ptie'] as Step[]).map((k) => seen[k]).filter(Boolean);
   return (
     <div className="scroll-paper flex max-h-[480px] flex-col gap-3 overflow-y-auto pr-2 leading-relaxed">
       <p>
         <span className="font-semibold">{answers.firstName} {answers.lastName}</span>, entering at {age}, to be ordained at {age + 7} if all goes well.
+        {religious ? ` With ${religious.order}, in the ${religious.province}${religious.name ? `, to be called ${religious.name}` : ''}.` : ''}
       </p>
       {paragraphs.map((p, i) => (
         <p key={i}>{p}</p>

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useGameStore } from '@/engine/store';
 import { DEFAULT_START_YEAR } from '@/engine/game';
+import type { CampaignKind } from '@/types';
 import { slotsAvailable, SLOTS } from '@/engine/slots';
 import RepoSavePanel from './RepoSavePanel';
 
@@ -27,6 +28,7 @@ export default function NewGameScreen() {
   const error = useGameStore((s) => s.error);
   const [seed, setSeed] = useState(() => `run-${Date.now().toString(36)}`);
   const [startYear, setStartYear] = useState(DEFAULT_START_YEAR);
+  const [campaign, setCampaign] = useState<CampaignKind>('diocesan');
   const [starting, setStarting] = useState(false);
   const [confirm, setConfirm] = useState<string | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
@@ -51,7 +53,7 @@ export default function NewGameScreen() {
       <div className="paper paper-tilt-l flex w-full max-w-xl flex-col gap-5 px-6 py-7 sm:px-8 sm:py-8">
         <div>
           <h1 className="title text-3xl" style={{ color: '#7a1f1f' }}>Vocation</h1>
-          <p className="ink-muted mt-1 text-sm">A career and life simulation of a Catholic diocesan priest.</p>
+          <p className="ink-muted mt-1 text-sm">A career and life simulation of a Catholic priest: diocesan, or a friar of an order.</p>
         </div>
 
         {slots.length > 0 && (
@@ -92,12 +94,25 @@ export default function NewGameScreen() {
               </span>
               <span className="ink-faint text-xs">The same seed and the same choices give the same life; change it for a different one.</span>
             </label>
+            <div className="flex flex-col gap-1 text-sm">
+              <span className="heading">Which life</span>
+              <div className="grid grid-cols-2 gap-2">
+                <button type="button" className={'choice border rule p-3 text-left ' + (campaign === 'diocesan' ? 'choice-chosen' : '')} onClick={() => setCampaign('diocesan')}>
+                  <span className="font-medium">A diocesan priest</span>
+                  <span className="ink-faint block text-xs">One diocese, one bishop, a parish and a rectory. The base game.</span>
+                </button>
+                <button type="button" className={'choice border rule p-3 text-left ' + (campaign === 'religious' ? 'choice-chosen' : '')} onClick={() => setCampaign('religious')}>
+                  <span className="font-medium">A friar</span>
+                  <span className="ink-faint block text-xs">Dominican or Augustinian: a province, a house, vows, obedience, and chapters that elect. No money of your own.</span>
+                </button>
+              </div>
+            </div>
             <label className="flex flex-col gap-1 text-sm">
-              <span className="heading">Seminary entry year</span>
+              <span className="heading">{campaign === 'religious' ? 'Entry year' : 'Seminary entry year'}</span>
               <input type="number" className="pinput font-mono" value={startYear} min={1950} max={2040} onChange={(e) => setStartYear(Number(e.target.value))} />
               <span className="ink-faint text-xs">Ordination follows seven years later.</span>
             </label>
-            <button className="pbtn pbtn-primary self-start px-5 py-2" disabled={seed.trim().length === 0} onClick={() => newGame({ seed: seed.trim(), startYear })}>
+            <button className="pbtn pbtn-primary self-start px-5 py-2" disabled={seed.trim().length === 0} onClick={() => newGame({ seed: seed.trim(), startYear, campaign })}>
               Begin
             </button>
           </div>

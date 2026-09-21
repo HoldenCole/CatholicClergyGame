@@ -200,7 +200,8 @@ function houseOfNpc(state: GameState, n: Npc): OrderHouse | undefined {
 export function respectOf(state: GameState, c: Contender, office: ChapterOffice): number {
   const order = state.religious ? religiousOrder(state.religious.order) : undefined;
   const need = provinceState(state);
-  const weights: Partial<Record<StatKey, number>> = order?.officeWeights?.[need] ?? { charisma: 1, piety: 1, administration: 1 };
+  // A copy: the order's table is content, and a prior's election must not lean the next one.
+  const weights: Partial<Record<StatKey, number>> = { ...(order?.officeWeights?.[need] ?? { charisma: 1, piety: 1, administration: 1 }) };
   if (office === 'prior') weights.charisma = (weights.charisma ?? 0) + 0.5;
   let sum = 0;
   let total = 0;
