@@ -110,6 +110,7 @@ export default function Hud() {
           <span className="text-xs text-[#e6c25a]" title="The clock waits on what is on the table">{game.pending.length === 0 && game.mode.kind === 'clock' ? 'Read the letter first' : 'Decide first'}</span>
         ) : (
           <>
+            {speed === 'PAUSED' && <span className="ink-faint text-xs" title="The space bar or N advances a week and sets the clock by the week">Space for the next week</span>}
             {speed === 'MANUAL' && <HudButton onClick={() => tick()} title="N, or the space bar">Next week</HudButton>}
             {continuous && <HudButton onClick={() => setRunning(!running)} title="N, or the space bar">{running ? 'Hold' : 'Go'}</HudButton>}
             {continuous && !running && <HudButton onClick={() => runToStop()}>To the next stop</HudButton>}

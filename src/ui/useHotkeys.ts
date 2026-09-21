@@ -43,6 +43,11 @@ export function useHotkeys(): void {
         e.preventDefault();
         if (game.speed === 'MANUAL') st.tick();
         else if (game.speed === 'AUTO' || game.speed === 'SKIP') st.setRunning(!st.running);
+        else {
+          // Paused, which is how a game opens: the key is the next week, and the clock is by the week from here.
+          st.setSpeed('MANUAL');
+          st.tick();
+        }
         return;
       }
       if (key === 'z') {
