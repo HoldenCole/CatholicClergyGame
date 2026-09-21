@@ -1,0 +1,1871 @@
+{
+  "_notes": "Shared religious life: the horarium and poverty. E3 §3.3–3.4. The common life consumes the day before any work, and every expense is a permission.",
+  "events": [
+    {
+      "id": "shh_first_matins",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 12,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [],
+      "title": "The First Week of the Hours",
+      "body": "The house sings the whole Office, and in your first week you discover what that means: the bell at five-thirty, the psalms you half know, a stall that is yours and is next to a man who has sung every antiphon of the year for forty years and expects you to keep up. By Thursday your voice is gone and your knees have opinions. {@old_friar} says, at recreation, that the Office is the one work of the house that never closes, and that a man learns it by being there when he cannot.",
+      "choices": [
+        {
+          "id": "there",
+          "label": "Be there for every hour, hoarse or not",
+          "outcome": "By the end of the month you know the psalter's shape and by the end of the year its weather. The old man stops correcting you in Lent, which is his blessing. It is the deepest habit you will ever have, and it holds you up in years when nothing else does.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 4
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "horarium:learned_choir",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "selective",
+          "label": "Keep the great hours and let the small ones go until you have the voice",
+          "outcome": "Nobody says anything. The house counts, though, the way houses do, and it is Easter before the old man says good morning to you in the cloister, and you know why.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -2
+            }
+          ]
+        },
+        {
+          "id": "ask",
+          "label": "Ask the cantor for an hour a week of teaching",
+          "outcome": "He is startled and pleased; nobody has asked in a decade. The hour costs you and it pays: by Advent you are the second voice in the house, and the cantor's, and the old man's, which is rarer.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 3
+            },
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": 5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "shh_skipped_vespers",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 11,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "reputation",
+          "key": "community",
+          "op": "<=",
+          "value": 20
+        }
+      ],
+      "title": "The Stall Nobody Mentions",
+      "body": "You have missed Vespers three evenings this week, each for a good reason: a funeral, a meeting, a sick call. Nobody has said a word. But at supper {@prior} said grace and then said, to the table generally, that he had noticed the choir was thin at Vespers, and that he did not name names, and that he would not have to. He did not look at you. He did not have to do that either.",
+      "choices": [
+        {
+          "id": "own",
+          "label": "Say it at table: the three evenings were yours, and why",
+          "outcome": "The prior nods. The table relaxes. Somebody else says two of the evenings were his, and the prior says the Office is sung by those who are there and that he would like it to be everyone, and the matter is over, and you are glad you spoke.",
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 3
+            },
+            {
+              "target": "relationship",
+              "key": "@prior",
+              "delta": 3
+            }
+          ]
+        },
+        {
+          "id": "fix",
+          "label": "Say nothing, and be in the stall every evening for a month",
+          "outcome": "It is noticed the way the absences were noticed: silently, exactly. The prior says nothing more. The house's count of you goes up a little, week by week, which is the only way it ever goes up.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "reasons",
+          "label": "Say nothing at table, and tell the prior the reasons afterward",
+          "outcome": "He listens and says the reasons were good and the Office is still the Office, and asks whether the meeting could have been at four, and it could have, and you both know it.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@prior",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 0
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "shh_invested_choir",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 8,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [],
+      "title": "The Cantor's Successor",
+      "body": "The cantor is leaving in June, transferred, and the prior has asked you to take the choir: the antiphons, the tones, the teaching of the new men, the arguments about which setting of the Magnificat. It is two hours a week and a standing in the house that nothing else gives, and it is also the thing the house will blame for every flat note for as long as you hold it.",
+      "choices": [
+        {
+          "id": "take",
+          "label": "Take it",
+          "outcome": "You take it. The Magnificat argument is yours now and you win it twice a year and lose it twice. The house sings better and knows it, and a visiting provincial says so, and you are the friar who is the choir, which follows you to the next house and the one after.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 5
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "horarium:cantor",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "decline",
+          "label": "Say the choir needs a better voice than yours",
+          "outcome": "It goes to {@confrere}, who has the voice and not the patience, and the choir is beautiful and late, and the prior looks at you sometimes at Vespers with an expression you can read.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -1
+            },
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "shh_meal_in_room",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 10,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [],
+      "title": "The Tray",
+      "body": "You have taken your supper on a tray in your cell four nights this week, for the work: a homily, a class, a letter that would not write. It is allowed. The constitutions allow it. Tonight {@confrere} carried the tray up himself and set it down and said that the table had asked where you were and that he had said working, and that he was tired of saying it. He is not angry. He is saying the house has noticed you are not in it.",
+      "choices": [
+        {
+          "id": "down",
+          "label": "Take the tray back down, and eat at the table, tonight and after",
+          "outcome": "The table makes room without comment. The homily is finished at eleven instead of nine and is better for the supper, and the house's count of you, which had slipped, stops slipping.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 3
+            },
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": 4
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "explain",
+          "label": "Explain the work to him, and keep the tray",
+          "outcome": "He listens and says he understands, and does, and it changes nothing about what the table thinks, which is that the work is what men say when they mean the table is not worth their time.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -3
+            },
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 1
+            },
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": -1
+            }
+          ]
+        },
+        {
+          "id": "prior",
+          "label": "Ask the prior for a dispensation from the table until the work is done",
+          "outcome": "He grants it for a month, in writing, which makes it lawful and does not make it invisible, and at the end of the month you go back down, and the table has moved your chair.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -2
+            },
+            {
+              "target": "relationship",
+              "key": "@prior",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "shh_the_bell",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 8,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [],
+      "title": "The Bell",
+      "body": "The bell that calls the house to the Office has been rung by {@old_friar} for twenty-two years, at the exact minute, and he has broken his wrist. The prior has asked you to ring it until he mends, which is six weeks, and he has said, in the old man's hearing, that he hopes you will be as exact. The bell is at the top of a staircase. It must be rung seven times a day. The first time you are three minutes late and the house is in choir before you, looking up.",
+      "choices": [
+        {
+          "id": "exact",
+          "label": "Be exact: set three alarms and never be late again",
+          "outcome": "You are never late again. The old man mends and takes the bell back without a word, and gives it to you, for good, when he goes to the infirmary, and the house knows the bell is yours before you do.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 5
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "horarium:bell",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "late",
+          "label": "Be roughly on time; the Office does not depend on a minute",
+          "outcome": "The house adjusts to a bell that is roughly on time and discovers it does not like it. The old man mends early, he says, and takes it back, and never mentions the six weeks, which is how he mentions them.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -2
+            },
+            {
+              "target": "relationship",
+              "key": "@old_friar",
+              "delta": -3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "shh_permission_books",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 11,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "money"
+      ],
+      "requires": [],
+      "title": "Four Books",
+      "body": "There are four books you need for the work, and the library has none of them, and they cost what the house spends on bread in a week. The Rule is clear: you ask. {@prior} is at his desk, and his desk is a place where men have asked for things for years and been told the house cannot, and he is a kind man, and you have the list in your pocket, and it is a strange thing at your age to stand at a door for four books.",
+      "choices": [
+        {
+          "id": "ask",
+          "label": "Ask, plainly, with the list",
+          "outcome": "He reads the list. He asks what the work is, and listens to the answer, and signs for three of the four, and says the fourth is in a library across the city and you may take the car. It is exactly right and it costs you something to have needed it.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 2
+            },
+            {
+              "target": "relationship",
+              "key": "@prior",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -1
+            },
+            {
+              "target": "flag",
+              "key": "poverty:asked_books",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "borrow",
+          "label": "Borrow them, from a friend in the diocese, and do not ask",
+          "outcome": "You borrow them. The work gets done. A year later the prior asks about the book on your desk, mildly, and you tell him, and he says nothing and the nothing is exact, because the point of the vow is not the money.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 2
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": -2
+            },
+            {
+              "target": "relationship",
+              "key": "@prior",
+              "delta": -2
+            }
+          ]
+        },
+        {
+          "id": "without",
+          "label": "Do the work without them",
+          "outcome": "It takes twice as long and is a little worse, and you are aware, every day, that you are being poor on purpose, and the awareness is either the vow working or a vanity about it, and you cannot tell which.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": -1
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "shh_gift_kept",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "finance",
+      "baseWeight": 9,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "money",
+        "loyalty_vs_honesty"
+      ],
+      "requires": [],
+      "title": "The Envelope",
+      "body": "A woman whose husband you buried has pressed an envelope into your hand at the door, and in the car you look, and it is a great deal of money, more than the house sees in a month of Sundays, with a card that says for you, Father, for yourself. The vow says it is the house's. The card says otherwise. The procurator will ask no questions if it goes into the box; the prior would ask several if it did not.",
+      "choices": [
+        {
+          "id": "box",
+          "label": "Put it in the box, all of it, with the card",
+          "outcome": "The procurator reads the card and says nothing and enters it. Two weeks later there is a new coat on your bed, in your size, with no note, and you understand that the house has its own way of honouring a card.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 4
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "poverty:gave_the_envelope",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "ask",
+          "label": "Take it to the prior and ask whether some of it might be yours",
+          "outcome": "He says none of it is, kindly, and that you did right to ask, and that the asking is the whole of the vow. He gives you twenty dollars from it for the woman's Mass card and the rest goes where it goes.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@prior",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "keep",
+          "label": "Keep some of it, since she meant it",
+          "outcome": "You keep a third. Nobody knows. It buys what it buys, and every time it does you feel the card in your pocket, and it is years before you have put it in the box, in pieces, and by then the woman is dead and nobody knew but you.",
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": -5
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": -3
+            },
+            {
+              "target": "flag",
+              "key": "poverty:kept_gift",
+              "value": true
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "shh_refused_trip",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 8,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "friendship_vs_duty"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "permission:home",
+          "value": false
+        }
+      ],
+      "title": "A Trip Refused",
+      "body": "Your father is ill, not dying, ill, and you asked the prior for four days at home, and he said not this month. The house is short; the parish has a mission; the province has asked for a man. He said it with real regret, and it was still no. The Rule says obey. Your father said on the phone that he understands, and he does, and you can hear that he is disappointed and trying not to be.",
+      "choices": [
+        {
+          "id": "obey",
+          "label": "Obey; go next month",
+          "outcome": "You go next month. He is better by then and pleased, and says the house comes first and means it, and you carry the four days you did not take for a long time, and put them down at last at his funeral, years on, which you did make.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 2
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "poverty:trip_refused_obeyed",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "appeal",
+          "label": "Ask the provincial",
+          "outcome": "The provincial says four days, and the prior is told, and it is lawful and it is a wound. You go. Your father is glad. The prior is correct with you for a year, which in a house is a kind of exile.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@prior",
+              "delta": -8
+            },
+            {
+              "target": "relationship",
+              "key": "@father",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": -1
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "phone",
+          "label": "Obey, and phone him every night at nine instead",
+          "outcome": "It is the best month of the phone in his life, he says later. The house lets you have the parlour at nine and the men keep out of it, and you learn something about what the vow leaves you, which is more than you thought.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "relationship",
+              "key": "@father",
+              "delta": 8
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "shh_car_signed_out",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "ROUTINE",
+      "category": "admin",
+      "baseWeight": 9,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [],
+      "title": "The Car",
+      "body": "The house has one car for nine men and a sign-out sheet on the board, and this morning the car you signed out last night is not in the lot, and the sheet says {@confrere} has it, in a hand written over yours. You have a hospital to reach across the city and no way to reach it, and the vow of poverty, which was so beautiful in the novitiate, is at this moment a bus schedule.",
+      "choices": [
+        {
+          "id": "bus",
+          "label": "Take the bus, and say nothing",
+          "outcome": "You are late and the patient is alive and the bus is a place to pray, it turns out. At supper he apologizes without prompting and the house, which saw the sheet, decides something about both of you.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 3
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "say",
+          "label": "Say it at table, lightly, with the sheet",
+          "outcome": "The table laughs and he does not. The sheet is respected for a year afterward, and he is careful with you for longer, and you are not sure the ride was worth the man.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 1
+            },
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": -5
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "propose",
+          "label": "Propose to the prior that the house needs a second car, and find the money",
+          "outcome": "The prior says find it and you do, from a parish family, and the second car is yours in practice for years, which is not what the vow meant and is what happens.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "poverty:second_car",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "shh_conventual_mass",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 8,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "friendship_vs_duty"
+      ],
+      "requires": [],
+      "title": "Who Presides",
+      "body": "The conventual Mass is the house's Mass, said in common, and by custom the priests take it in turn. The prior has quietly stopped putting {@old_friar} on the rota: he forgets the words, or repeats them, or stops. Nobody has said so. The old man has noticed and said nothing, which is worse. This morning he came to you and asked, as a favour, whether he might concelebrate at your side on your days, since he is not, he says, on the list anymore.",
+      "choices": [
+        {
+          "id": "yes",
+          "label": "Say yes, and stand at his side every time",
+          "outcome": "He concelebrates at your elbow, and when he loses the words you say them with him, quietly, and the house hears it and understands. He dies within the year and the last Mass he said was yours, or you said it, and it does not matter which.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 4
+            },
+            {
+              "target": "relationship",
+              "key": "@old_friar",
+              "delta": 12
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 4
+            },
+            {
+              "target": "flag",
+              "key": "horarium:carried_a_mass",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "prior",
+          "label": "Take it to the prior: the rota should say what it means",
+          "outcome": "The prior is grateful and ashamed and puts the old man back on the list for the feast days, with a concelebrant, and it is a better solution than yours and it took a conversation nobody wanted.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@prior",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "no",
+          "label": "Say the prior's list is the prior's",
+          "outcome": "He nods and does not ask again. The Mass is said properly all year. The old man serves at the seven o'clock like a boy, until he cannot, and you were correct, and you know what that is worth.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": -1
+            },
+            {
+              "target": "relationship",
+              "key": "@old_friar",
+              "delta": -6
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "shh_horarium_reform",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "group",
+      "baseWeight": 9,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "belief_vs_safety"
+      ],
+      "requires": [],
+      "title": "The Hour of Lauds",
+      "body": "The prior has proposed to chapter that Lauds move from six to seven, since half the house is working late in the parishes and the other half is old. The old half is against it on principle and the young half is for it on practice, and the vote is tomorrow. {@old_friar} has said at recreation that a house that moves Lauds will move Vespers next and then stop singing, and he has watched two houses do it. {@confrere} has said that a house that cannot get up is already not singing.",
+      "choices": [
+        {
+          "id": "six",
+          "label": "Vote for six, and say why: the hour is the observance",
+          "outcome": "It stays at six by one vote and the house keeps it, and you are up at five-thirty for the rest of your years there, and so, eventually, is the man who wanted seven, and he never forgives you and never misses.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "observant_bloc",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "progressive_bloc",
+              "delta": -3
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            }
+          ],
+          "volume": "semi_public",
+          "positionTopic": "liturgy",
+          "positionValue": -20
+        },
+        {
+          "id": "seven",
+          "label": "Vote for seven, and say why: a house is its men",
+          "outcome": "It moves to seven and the choir is full for a year and then, slowly, is not, and Vespers moves in the third year, and the old man was right, and it was still the right vote, and you hold both.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "progressive_bloc",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "observant_bloc",
+              "delta": -3
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 1
+            }
+          ],
+          "volume": "semi_public",
+          "positionTopic": "liturgy",
+          "positionValue": 20
+        },
+        {
+          "id": "split",
+          "label": "Propose six on weekdays and seven on Sundays, and be hated by both sides for a week",
+          "outcome": "It passes. Nobody loves it. It holds for twenty years, and men who arrive later think it was always so, and the two men who argued about it are buried within a month of each other.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "shh_sabbatical_ask",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 7,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 8
+        },
+        {
+          "type": "flag",
+          "key": "permission:sabbatical",
+          "value": false
+        }
+      ],
+      "title": "A Semester Away",
+      "body": "You have been at the work for a decade without a break the constitutions would recognise, and there is a semester at a house of the order abroad that would take you: to read, to sleep, to be nobody. The prior has to ask the provincial, and the provincial has to find the money and the man to cover, and the house has to live without you. You have not asked yet. You have been standing in the corridor outside the prior's door for the third time this week.",
+      "choices": [
+        {
+          "id": "ask",
+          "label": "Ask",
+          "outcome": "The prior asks the provincial and the provincial says the year after next, which in the order is a yes. You go, eventually, and it is what you needed and the house is different when you come back, and so are you.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@prior",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 1
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": -1
+            },
+            {
+              "target": "flag",
+              "key": "poverty:asked_sabbatical",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "wait",
+          "label": "Do not ask; the house needs you and you know it",
+          "outcome": "You do not ask. Three years later the provincial, reading the files, sends you without being asked, and says at the time that a man who does not ask is either a saint or a fool and that he hopes for the former.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "shh_common_purse",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "finance",
+      "baseWeight": 8,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "money"
+      ],
+      "requires": [],
+      "title": "The Common Purse",
+      "body": "The house keeps a common purse from which any brother may take what he needs, without asking, for the small things: a bus fare, a haircut, a stamp. It works because nobody looks. This month it does not work: the purse is empty by the twentieth, three months running, and the procurator has said at chapter that either someone is taking more than a haircut or the house has more needs than it admits, and either way he is going to start a ledger.",
+      "choices": [
+        {
+          "id": "ledger",
+          "label": "Support the ledger; a house should know what it spends",
+          "outcome": "The ledger goes in. The purse lasts the month. Two men are quietly ashamed and one is quietly furious, and it turns out the money was going to a brother's family, which the prior had known and allowed, and now the house knows too.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -2
+            },
+            {
+              "target": "reputation",
+              "key": "observant_bloc",
+              "delta": 2
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "trust",
+          "label": "Speak against it: the purse is trust, and a ledger is the end of trust",
+          "outcome": "The house agrees, moved. The purse is empty by the eighteenth the next month. The procurator fills it from somewhere and says nothing, and the trust is kept, and it is being paid for by someone, and you do not ask who.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 4
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": -1
+            },
+            {
+              "target": "reputation",
+              "key": "progressive_bloc",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "give",
+          "label": "Say nothing, and put your Mass stipends in it for a year",
+          "outcome": "Nobody knows. The purse lasts. The procurator, who does the books, knows, and says nothing, and when you leave the house he gives you a stamp, one stamp, and you keep it.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "poverty:fed_the_purse",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "shh_dispensed_stranger",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 8,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "friendship_vs_duty"
+      ],
+      "requires": [],
+      "title": "The Dispensed Man",
+      "body": "{@confrere} has been dispensed from the choir and the table for two years, for a degree, and the degree is done and he is still not in choir. Nobody has renewed the dispensation; nobody has withdrawn it. He is in the house like a lodger with a key. The prior, who granted it, cannot bring himself to end it. The old men have stopped setting his place. You were his friend once, and are, and he asked you this morning, on the stairs, whether the house has changed, and it has not.",
+      "choices": [
+        {
+          "id": "tell",
+          "label": "Tell him: the dispensation ended when the degree did, and the house is waiting",
+          "outcome": "He is silent and then says he knows, and is in choir the next morning, in a stall that had been given to someone else, and the house makes room without a word, and the two of you are friends again by Lent.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": 8
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 4
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "horarium:called_back_a_stranger",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "prior",
+          "label": "Tell the prior it is his to end, and that the house is waiting for him too",
+          "outcome": "The prior ends it, badly, in a letter under the door, and the man is wounded and comes back to choir anyway, and the prior thanks you and the man does not, and both were owed.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@prior",
+              "delta": 3
+            },
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": -3
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "let",
+          "label": "Let it be; the vow is his to keep",
+          "outcome": "He keeps it or does not. In the third year he is transferred, to a house that does not know him, and starts again, and the house you are in is glad, and you were the man who could have said it, and did not.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -1
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": -1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "shh_sunday_supply",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "ROUTINE",
+      "category": "assignment",
+      "baseWeight": 10,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [],
+      "title": "Four Parishes on a Sunday",
+      "body": "The house earns its bread on Sundays: the friars go out to the parishes that have no priest, two Masses each, sometimes three, in towns an hour apart, and come back for Vespers if they can. This Sunday the prior has four parishes and three men, and one of the men is you, and the fourth parish is ninety minutes away and has not had Mass in three weeks. He has asked whether you could do it after your two, which would make three, and Vespers impossible.",
+      "choices": [
+        {
+          "id": "go",
+          "label": "Go: three Masses, and Vespers in the car",
+          "outcome": "You say Vespers on the highway at eighty, with the book on the wheel. The fourth parish weeps at the door. The prior says thank you at supper, before the house, which he does not do, and you sleep eleven hours.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 3
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 4
+            },
+            {
+              "target": "flag",
+              "key": "horarium:three_masses",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "two",
+          "label": "Say two is what the canons allow without a dispensation, and mean it",
+          "outcome": "The prior gives the third to himself, and says the third Mass on a Sunday is lawful for pastoral need, which it is, and the house hears you say the canons and remembers that you did.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -2
+            },
+            {
+              "target": "relationship",
+              "key": "@prior",
+              "delta": -2
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "swap",
+          "label": "Propose the fourth parish be given to the deacon for a communion service, and go to it yourself next week",
+          "outcome": "The deacon goes, and the parish is grateful and not fed, and the next Sunday you go, and the one after, and the fourth parish is yours in practice for a year, which is a kind of solution.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "shh_the_habit_in_town",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 8,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "belief_vs_safety"
+      ],
+      "requires": [],
+      "title": "The Habit on the Bus",
+      "body": "The house wears the habit in the town, by the prior's rule, and on the bus this morning a man spat at you. Not near you; at you. Nobody on the bus said anything and neither did you, and you got off two stops early and walked, and at the house you did not mention it, and at recreation {@confrere} said he had been shouted at in the market and was thinking of asking the prior about a coat.",
+      "choices": [
+        {
+          "id": "habit",
+          "label": "Say the habit stays on: it is the house on the street, and the street can see it",
+          "outcome": "The prior agrees, having said so already. You are spat at twice more that year and thanked eleven times, once by a woman who says she came back to Mass because she saw a friar on a bus. The house keeps the rule.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "observant_bloc",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "horarium:habit_in_town",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "coat",
+          "label": "Ask the prior for the coat, with him",
+          "outcome": "The prior allows a coat over the habit in the town in winter, which is a rule that means what a man wants it to mean, and half the house wears the coat by Lent and the other half has opinions.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "progressive_bloc",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 1
+            },
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": 3
+            }
+          ]
+        },
+        {
+          "id": "say",
+          "label": "Say what happened on the bus, at recreation, and let the house decide what it means",
+          "outcome": "The house is quiet and then the old men tell their stories, which are worse, from decades when it was worse, and the coat is not mentioned again, and the habit stays on because the stories did.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 4
+            },
+            {
+              "target": "relationship",
+              "key": "@old_friar",
+              "delta": 4
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "shh_retreat_house_week",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 8,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "requires": [],
+      "title": "The Annual Retreat",
+      "body": "Once a year the house goes on retreat together, a week at a house in the hills the province keeps for it, with a preacher from another province and a silence that is actually kept. It is the week the house is most itself, and the week the house's troubles are most visible, since nobody can talk over them. This year the preacher is bad, the silence is holding, and on the third day {@prior} came to your room and sat down and said he was thinking of asking to be relieved.",
+      "choices": [
+        {
+          "id": "listen",
+          "label": "Listen until he is done, and say nothing that is advice",
+          "outcome": "He talks for two hours. He does not ask to be relieved. He is a better prior for the next two years than he was, and he never mentions the evening, and you do not, and it sits between you as a kind of friendship.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "relationship",
+              "key": "@prior",
+              "delta": 12
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "horarium:priors_confidant",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "say",
+          "label": "Tell him the truth: the house would be worse without him, and he knows it",
+          "outcome": "He says the truth is he is tired, and that the house would be fine, and that men always think they are needed, and you argue, gently, for an hour, and he stays, and you are not sure which of you was right.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@prior",
+              "delta": 6
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "provincial",
+          "label": "Say he should tell the provincial, not you",
+          "outcome": "He nods and goes, and does tell the provincial, and is relieved at the next chapter, and is happier, and the house is not, and the new prior is a man you know and did not want.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@prior",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "shh_stipend_book",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "finance",
+      "baseWeight": 8,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "loyalty_vs_honesty",
+        "money"
+      ],
+      "requires": [],
+      "title": "The Mass Book",
+      "body": "The stipends for Masses come to the house, all of them, and the procurator keeps a book: intentions, dates, the priest who said them. This month the book does not match the box, by an amount that is not large and is not nothing, and the procurator has asked the prior, and the prior has asked the priests, one at a time, in his office, and today it is you, and you have said all your Masses, and you know who has not.",
+      "choices": [
+        {
+          "id": "own",
+          "label": "Say only what is yours: your Masses were said, and here are the dates",
+          "outcome": "The prior nods, and thanks you, and it is the brother who has been ill, and it is set right, and the prior is exact and kind about it, and nothing more is said, which is how it should be done.",
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "relationship",
+              "key": "@prior",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "name",
+          "label": "Name the man, since the prior needs to know and the man will not say",
+          "outcome": "The prior says he had guessed and did not want to hear it from anyone else, and it is set right, and the man never knows who said his name, and you know, and the knowing is heavier than the money was.",
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            },
+            {
+              "target": "relationship",
+              "key": "@prior",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -2
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "cover",
+          "label": "Say yours were said, and offer to say the missing ones, as the house's",
+          "outcome": "The prior looks at you for a while and accepts. You say fourteen Masses that were another man's obligation, in the early mornings, and the book matches the box, and the man is told, and is ashamed, and is better after.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 3
+            },
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": 5
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "poverty:covered_the_book",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "shh_phone_and_screen",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "ROUTINE",
+      "category": "group",
+      "baseWeight": 9,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [],
+      "title": "The Phone",
+      "body": "The province has issued a policy, since the world has: a friar may have a telephone of the kind that has a screen, for the work, with the prior's leave, and it is the house's, not his. Every man in the house has one within a month. The prior has noticed that recreation is now nine men looking down, and has said at chapter that he is minded to ask for them at Compline and return them at Lauds, and half the house has laughed and the other half has looked at their hands.",
+      "choices": [
+        {
+          "id": "basket",
+          "label": "Support the basket at Compline, and be the first to put yours in",
+          "outcome": "It goes in. The house hates it for a month and then does not. Recreation comes back, slowly, and the men who resisted longest are the ones who say, a year on, that it saved the house, and you were the first in the basket.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "observant_bloc",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "horarium:phone_basket",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "oppose",
+          "label": "Oppose it: grown men, and the work",
+          "outcome": "The prior withdraws it. Recreation stays nine men looking down and then, over a year, seven and then five, and the old men stop coming, and you notice, and the phone is very useful for the work.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "progressive_bloc",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -2
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "own",
+          "label": "Keep yours in your cell after Compline, and say nothing at chapter",
+          "outcome": "Two men copy you without being told. The basket is not voted. The house divides into the men whose phones are in their cells at night and the men whose are not, and it is, in time, the same division as every other.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "shh_poverty_and_donor",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "finance",
+      "baseWeight": 8,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "money"
+      ],
+      "requires": [],
+      "title": "The Donor Who Wanted to Give You Something",
+      "body": "A man who has given the house a great deal, and expects to be treated as a man who has, has decided you are his friar. He wants to give you a watch. He has said so twice. The watch is the kind that is a sentence about the man who wears it, and the house would see it at the first Lauds, and he does not understand why you keep saying the house, and is beginning to be hurt.",
+      "choices": [
+        {
+          "id": "refuse",
+          "label": "Refuse it, warmly, and explain the vow until he understands",
+          "outcome": "It takes three tries. On the third he says, slowly, that he has never been refused anything and that it is interesting, and gives the house a roof instead, and you a look at the door that is the beginning of respect.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "poverty:refused_the_watch",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "house",
+          "label": "Accept it for the house, and hand it to the procurator in front of him",
+          "outcome": "He is baffled and then, oddly, moved. The procurator sells it and the house eats better for a month and the donor tells the story at dinners, and it does the house no harm at all.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "take",
+          "label": "Take it, and wear it under the sleeve",
+          "outcome": "You wear it under the sleeve for a year. {@old_friar} sees it at the sink and says nothing, and looks at it, and you give it to the procurator the next morning, and it is the look you remember, not the watch.",
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": -3
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": -2
+            },
+            {
+              "target": "relationship",
+              "key": "@old_friar",
+              "delta": -4
+            },
+            {
+              "target": "flag",
+              "key": "poverty:took_the_watch",
+              "value": true
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

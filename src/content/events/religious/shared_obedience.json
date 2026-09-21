@@ -1,0 +1,2087 @@
+{
+  "_notes": "Shared religious life: obedience, the letter, transfers, dual authority, withdrawal. E3 §3.1, §3.8.",
+  "events": [
+    {
+      "id": "sho_letter_reads_wrong",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "assignment",
+      "baseWeight": 8,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 1
+        }
+      ],
+      "title": "The Letter That Was Wrong",
+      "body": "The provincial's letter has come and it has your name and the wrong house: a priory across the province you did not discuss, for a work you have never done. It is not the house from the consultation. {@prior} thinks it is a clerical error and is probably right, and has said he will telephone in the morning, and has also said, carefully, that if it is not an error, the letter is the letter.",
+      "choices": [
+        {
+          "id": "wait",
+          "label": "Say nothing; let the prior telephone",
+          "outcome": "It was an error. The corrected letter comes in a week and names the house you expected, and the provincial's secretary apologizes, and you have learned that even the order's letters are typed by someone.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "go",
+          "label": "Say you will go where the letter says, error or not",
+          "outcome": "The prior looks at you a long time. It was an error, and the provincial, told what you said, corrects it and writes a line by hand at the bottom of the new letter that you keep for forty years.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "obedience:went_to_the_error",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "call",
+          "label": "Telephone the provincial's office yourself",
+          "outcome": "The secretary is frosty and the provincial is amused, and it was an error, and the prior says afterward that a man who telephones the provincial's office over the prior's head has told the province something, and he is right.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": -3
+            },
+            {
+              "target": "relationship",
+              "key": "@prior",
+              "delta": -4
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sho_consultation_lie",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 8,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "loyalty_vs_honesty",
+        "friendship_vs_duty"
+      ],
+      "requires": [],
+      "title": "What You Did Not Say",
+      "body": "At the consultation the provincial asked whether there was anywhere you could not go, and there is: the house in the city where your sister lives, whose marriage is coming apart, and who would need you, and whom you could not help from the next room and would be destroyed trying. You said no, there was nowhere. It was obedience, or it was cowardice, and you do not know which, and the letter has not come yet.",
+      "choices": [
+        {
+          "id": "write",
+          "label": "Write to him tonight and say the thing",
+          "outcome": "He writes back that he is glad you did and that he had not been going to send you there and that now he knows why not to, and the letter comes and it is elsewhere, and your sister is your sister from a distance, which is what you can bear.",
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "obedience:told_the_provincial",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "silent",
+          "label": "Let it stand; he assigns by the province's need, not by your family",
+          "outcome": "The letter names another city. You do not know whether he knew. Your sister's marriage ends without you and she says, on the phone, that it was better that way, and neither of you believes it.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": -1
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 3
+            },
+            {
+              "target": "relationship",
+              "key": "@sibling",
+              "delta": -4
+            }
+          ]
+        },
+        {
+          "id": "sister",
+          "label": "Telephone your sister and ask what she would want",
+          "outcome": "She says go where you are sent and do not make her the reason, and it is the bravest thing she has said in her life, and you obey her, which is the same as obeying him, and it holds.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@sibling",
+              "delta": 8
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sho_reluctant_remembered",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 9,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "ambition_vs_integrity"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "obedience:reluctant",
+          "value": true
+        }
+      ],
+      "title": "The Face You Made",
+      "body": "You took the last letter badly and everyone knew it: the face at the table, the two weeks of silence, the remark about the provincial's geography. It was a year ago. Today the provincial is in the house for the visitation, and at the interview he says, pleasantly, that he heard you found the last move hard, and asks how you find this one, and waits.",
+      "choices": [
+        {
+          "id": "own",
+          "label": "Say you took it badly and are ashamed of it",
+          "outcome": "He says every friar has one letter he takes badly and that the good ones have only one, and writes something short, and the next letter, three years on, is a kinder one than you expected.",
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 5
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "obedience:owned_reluctance",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "deflect",
+          "label": "Say the move was hard and the house is good, and leave it there",
+          "outcome": "He nods. He writes something less short. The next letter is what it would have been, and the interview is remembered, on the file, as a man who does not say what he thinks to the provincial, which is a kind of man the province has many of.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 0
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": -1
+            }
+          ]
+        },
+        {
+          "id": "justify",
+          "label": "Explain why the last move was a mistake, since he asked",
+          "outcome": "He hears you out and says nothing, and the next letter comes early and is to a house with a work you do not want, and you know why, and it was not spite, it was information.",
+          "effects": [
+            {
+              "target": "outspokenness",
+              "key": "",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": -5
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sho_refused_process",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "CRITICAL",
+      "category": "chancery",
+      "baseWeight": 14,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "belief_vs_safety",
+        "ambition_vs_integrity"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "obedience:process",
+          "value": true
+        }
+      ],
+      "title": "The Formal Process",
+      "body": "You refused the letter, and the process the constitutions provide for a friar who refuses an assignment has begun: a canonical warning, in writing, with a date. A second follows if the first is not obeyed. A third is the end. The provincial has driven up himself to hand you the first, in the prior's office, and he is not angry, which is worse, and he asks whether you understand what you are doing to yourself, and to him.",
+      "choices": [
+        {
+          "id": "obey",
+          "label": "Obey now, before the second warning",
+          "outcome": "You go. The house you refused takes you without a word about it, which is the order's mercy. The province remembers, and the file remembers, and in ten years it is a story you tell novices about the year you nearly left.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "obedience:process_obeyed",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "stand",
+          "label": "Stand on your reasons and wait for the second",
+          "outcome": "The second comes. The house is very quiet around you. Two friars you respect come separately to your cell and say the same thing in different words, and the third warning is written and not yet sent, and you have a week.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": -10
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -4
+            },
+            {
+              "target": "outspokenness",
+              "key": "",
+              "delta": 4
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 5
+            },
+            {
+              "target": "flag",
+              "key": "obedience:second_warning",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "appeal",
+          "label": "Appeal to the general curia, as the law allows",
+          "outcome": "The appeal goes to Rome and takes a year and is denied, kindly, and in the year you are a man under process in a house that does not know how to speak to you, and the letter, when you finally obey it, is to a worse house than the first.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": -5
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": -8
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 2
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 4
+            },
+            {
+              "target": "flag",
+              "key": "obedience:appealed",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sho_transfer_packing",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "ROUTINE",
+      "category": "assignment",
+      "baseWeight": 10,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 3
+        }
+      ],
+      "title": "Two Suitcases",
+      "body": "The letter said the first of the month and it is the twenty-eighth and everything you own is on the bed, and it fits in two suitcases, which was the vow, and does not fit, which was the years. The books are the house's. The cassock is the house's. The photograph of your class at profession is yours, and the breviary the old man gave you, and a box of letters. {@confrere} is at the door offering to drive you and not saying that he will miss you.",
+      "choices": [
+        {
+          "id": "books",
+          "label": "Leave the books, all of them, on the library shelf with your name inside",
+          "outcome": "The library gains eighty volumes and the next man in your cell finds the shelf and reads your name in each. You arrive at the new house with two suitcases and the breviary and it is, for a week, the poorest you have ever felt, and the lightest.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "obedience:left_the_books",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "ask",
+          "label": "Ask the prior whether the books might go with you",
+          "outcome": "He says yes, since nobody here reads them, and you arrive at the new house with four boxes the new prior looks at, and it is a year before the new house stops thinking of you as the man with the boxes.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -2
+            }
+          ]
+        },
+        {
+          "id": "drive",
+          "label": "Let him drive you, and talk the whole way",
+          "outcome": "It is four hours. He says, at the exit, that he will miss you, and you say it back, and it is the last long conversation you have for eleven years, and you both remember it as one of the good ones.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": 10
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sho_new_bishop_wants_parish",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 9,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "dual:bishop",
+          "value": true
+        }
+      ],
+      "title": "The New Bishop and the Parish",
+      "body": "A new bishop, and within the year a letter to the provincial the provincial has shown you: he would like, in due course, to return the parish the order has held for seventy years to the diocese's own clergy, since he has men now and the friars have, he says, other gifts. It is courteous. It is a notice. The provincial asks what you think, since it is your parish, and whether you think the bishop could be persuaded otherwise.",
+      "choices": [
+        {
+          "id": "persuade",
+          "label": "Go to the bishop yourself, with the parish's books and its people",
+          "outcome": "He receives you for an hour. He is impressed and unmoved and says so. The parish is handed back in four years instead of two, which is what your hour bought, and the people give you a dinner nobody can quite bear.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "local_bishop",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "dual:argued_for_parish",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "accept",
+          "label": "Tell the provincial the bishop is within his rights and the province should go with grace",
+          "outcome": "The provincial agrees, relieved. The withdrawal is announced, and it is you who announces it from the pulpit, and the people's faces are the price, and the bishop writes to the provincial that the friars left like gentlemen.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "local_bishop",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": -5
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "dual:accepted_withdrawal",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "people",
+          "label": "Tell the parish first, before either superior has decided",
+          "outcome": "The parish writes to the bishop, five hundred letters, and the bishop is furious with the province and the province with you, and the parish stays the order's for a decade more, and it was the people who kept it, and it was you who let them.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 10
+            },
+            {
+              "target": "reputation",
+              "key": "local_bishop",
+              "delta": -8
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": -6
+            },
+            {
+              "target": "outspokenness",
+              "key": "",
+              "delta": 5
+            },
+            {
+              "target": "flag",
+              "key": "dual:told_the_people",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sho_withdrawal_announced",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "MAJOR",
+      "category": "assignment",
+      "baseWeight": 12,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "dual:withdrawal",
+          "value": true
+        }
+      ],
+      "title": "Closing the Parish",
+      "body": "The province has decided: the parish the order has served for eighty years will be returned to the diocese at the end of the year, since the province cannot staff it, and you are the man sent to close it. The bishop is furious. The people are worse than furious; they are bewildered. The last friar's Mass will be in December, and you have to plan it, and preach it, and be the face of an order leaving.",
+      "choices": [
+        {
+          "id": "honest",
+          "label": "Tell them the truth from the pulpit: the province has no men, and it is nobody's fault",
+          "outcome": "They do not believe it is nobody's fault, and they come anyway, and the last Mass is the fullest the church has been in a decade, and the bishop's new pastor says at the door that he does not know how to follow it.",
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "dual:closed_honestly",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "blame",
+          "label": "Let the people blame the bishop, since they will anyway",
+          "outcome": "They do. The bishop hears every word of it. The order is gone from the parish and the bishop is your enemy in the diocese for as long as he holds it, which is long, and the province is quietly displeased at how it was done.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "local_bishop",
+              "delta": -12
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": -3
+            },
+            {
+              "target": "flag",
+              "key": "dual:closed_with_blame",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "quiet",
+          "label": "Close it quietly, with the least ceremony the province will allow",
+          "outcome": "The last Mass is a Tuesday. Forty people. The people who loved the friars are hurt that it was done in the dark, and the ones who did not notice do not notice, and the bishop is grateful, and the province is grateful, and you are ashamed for a year.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "local_bishop",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": -6
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": -2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sho_province_needs_you",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "assignment",
+      "baseWeight": 9,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "dual:province",
+          "value": true
+        }
+      ],
+      "title": "Pulled",
+      "body": "The letter is not a term ending. It is the province needing you elsewhere, now, mid-term, for reasons the letter gives in one sentence: a house has lost two men. The parish you are in is turning. The people have just begun to trust you. {@prior} says the province does this and that the order is not the diocese and that a friar's parish is never his, and he says it kindly, and it does not help.",
+      "choices": [
+        {
+          "id": "go",
+          "label": "Go, and say goodbye properly in one week",
+          "outcome": "The week is a hard one. The parish gives you a Mass and a book of letters, and you read the letters in the new house for a year, and the new house does not know why the new man is sad, and then does.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "dual:pulled_mid_term",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "ask_month",
+          "label": "Ask the provincial for a month, to finish what is started",
+          "outcome": "He gives you three weeks. It is enough to finish two things and not the third, and the third, which was a family coming back to the sacraments, does not come back, and you carry it.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": -1
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "object",
+          "label": "Object, in writing: the parish is at the turn and a year would keep it",
+          "outcome": "He does not change the letter and writes back that he agrees with every word and cannot act on any of them, and it is the most honest letter you have from a superior, and you go.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": -2
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sho_first_night_new_house",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 12,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 2
+        }
+      ],
+      "title": "The First Night",
+      "body": "The new house. A cell that smells of the man who had it. Supper at a table where the jokes are ten years old and you are not in them. Compline in a chapel whose tones are a half-step from the ones you know, so that every antiphon is slightly wrong in your mouth. And then the door, and the silence, and the two suitcases still shut, and the province, somewhere, having decided this was best, and probably being right.",
+      "choices": [
+        {
+          "id": "unpack",
+          "label": "Unpack tonight, everything, and put the photograph on the desk",
+          "outcome": "The photograph is on the desk when the prior looks in at seven, and he looks at it, and asks who the men are, and you tell him, and two of them he knows, and the house has a way in.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 3
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": -1
+            }
+          ]
+        },
+        {
+          "id": "chapel",
+          "label": "Go back to the chapel and sit until the tones stop being wrong",
+          "outcome": "It is an hour. They do not stop being wrong. But at Lauds the next morning you sing them their way, badly, and {@old_friar} in the next stall says nothing and moves the book so you can see.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            },
+            {
+              "target": "relationship",
+              "key": "@old_friar",
+              "delta": 4
+            }
+          ]
+        },
+        {
+          "id": "write",
+          "label": "Write to the house you left",
+          "outcome": "You write four pages. You do not send them. You find them in the breviary years later and they are a good account of what a transfer is, and by then you have made three more.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sho_bishop_meets_friar",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 8,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 2
+        }
+      ],
+      "title": "The Bishop's Dinner",
+      "body": "The bishop of the new diocese has the religious superiors to dinner once a year, and this year the prior is ill and you are sent. There are Jesuits, Franciscans, a Benedictine abbot, two mothers general, and you, the youngest by twenty years, at a table where everyone knows everyone. The bishop, {@bishop}, asks you over the fish what your province is doing about its shortage, and the table goes quiet, since it is the question every institute at it is asked and none answers.",
+      "choices": [
+        {
+          "id": "honest",
+          "label": "Answer honestly: closing houses, and praying",
+          "outcome": "The bishop says that is the first honest answer he has had at this dinner in six years, and the abbot laughs, and after dinner two of the superiors ask you, separately, which houses.",
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "local_bishop",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": -2
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "line",
+          "label": "Give the province's line: vocations are up, the future is bright",
+          "outcome": "The bishop nods and moves to the Franciscan, and the dinner is what the dinner is, and the province's line is in the bishop's file with the other lines, and it does no harm and no good.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "local_bishop",
+              "delta": 1
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": -2
+            }
+          ]
+        },
+        {
+          "id": "listen",
+          "label": "Say the prior would answer better, and ask the bishop about the diocese instead",
+          "outcome": "He talks for twenty minutes, which he had been wanting to do, and the table is grateful, and he says at the door that the friars sent a good listener, and it is the beginning of a use he has for you.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "local_bishop",
+              "delta": 5
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "dual:bishop_listener",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sho_two_masters",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 9,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "requires": [
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 3
+        }
+      ],
+      "title": "Two Masters",
+      "body": "The parish is the order's and the bishop's both, and this year they want different things: the bishop wants a Spanish Mass added, the provincial wants the friar who could say it moved to the house of studies, and each has written to you as though the other did not exist. The Rule says obedience. The canons say presentation and appointment. Nobody says which of the two men who can remove you should be obeyed when they disagree.",
+      "choices": [
+        {
+          "id": "provincial",
+          "label": "Obey the provincial: the province is home, the diocese is a posting",
+          "outcome": "The friar goes to the studium. The bishop, told, says nothing for a month and then does not renew a faculty the parish needed, and the Spanish Mass is said by a diocesan priest on loan, and the bishop's file on the friars has a new page.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "local_bishop",
+              "delta": -5
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "bishop",
+          "label": "Obey the bishop: the parish is his, and its people are here",
+          "outcome": "The friar stays and says the Spanish Mass. The provincial writes that he understands and will remember it at the next consultation, and does, and the next letter is to a house without a parish.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "local_bishop",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": -5
+            }
+          ]
+        },
+        {
+          "id": "both",
+          "label": "Put the two letters side by side and send each man the other's",
+          "outcome": "There is a telephone call between them that you are not on. The friar stays a year and then goes, and the Spanish Mass is found a priest, and both men are a little embarrassed and a little grateful, and you have learned the one trick that works.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "local_bishop",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "dual:played_both",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sho_consultation_with_old_friar",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 9,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 2
+        }
+      ],
+      "title": "What the Old Man Says About the Houses",
+      "body": "The consultation is next month and {@old_friar}, who has lived in seven of the province's houses, has taken it upon himself to tell you about all of them, at recreation, in order, with the priors' faults and the plumbing. He says the province will send you where it needs you regardless, and that a man should know what he is walking into, and that he was never told and wishes he had been. Some of what he says is thirty years old. Some of it is not.",
+      "choices": [
+        {
+          "id": "listen",
+          "label": "Listen to all of it, and write it down",
+          "outcome": "You fill a notebook. Two-thirds of it is out of date and one-third of it saves you a year of learning at the next house, and the man is dead before you can tell him which third.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 3
+            },
+            {
+              "target": "relationship",
+              "key": "@old_friar",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "obedience:old_mans_map",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "ask",
+          "label": "Ask him only about the house you think you will be sent to",
+          "outcome": "He tells you, exactly, and then says the province never sends a man where he thinks, and you are sent elsewhere, and he was right, and he is pleased to have been.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 1
+            },
+            {
+              "target": "relationship",
+              "key": "@old_friar",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "stop",
+          "label": "Say kindly that you would rather go without a map",
+          "outcome": "He is hurt for a day and then says that is what he would have said at your age, and that he was wrong, and you go without a map anyway, and find out.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "relationship",
+              "key": "@old_friar",
+              "delta": -2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sho_letter_home_parish",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "assignment",
+      "baseWeight": 8,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "friendship_vs_duty"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "province_tie:near_house",
+          "value": true
+        }
+      ],
+      "title": "Sent Home",
+      "body": "The letter names a house you know: the priory three streets from the house you grew up in, whose seven o'clock Mass you served as a boy. Your mother is alive and in the parish. The provincial, who knows this, has written a line by hand: I thought you might like it. It is a kindness and it is a test, and the old men of the house will remember the boy, and the parish will remember the boy, and you are not sure the friar can survive the boy.",
+      "choices": [
+        {
+          "id": "go_glad",
+          "label": "Go, glad",
+          "outcome": "The parish claims you within a week. Your mother is at the seven o'clock every day and pretends not to look at you, and the old men call you by the name you had at nine. It is hard to be a friar there and it is the happiest you are for years.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 8
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            },
+            {
+              "target": "relationship",
+              "key": "@mother",
+              "delta": 10
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "obedience:sent_home",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "go_careful",
+          "label": "Go, and keep the boy out of the habit as best you can",
+          "outcome": "You are correct with the parish and they feel it and forgive it and wait, and by the second year the boy and the friar have made a treaty, and your mother says she liked the boy better, and means it as praise.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "relationship",
+              "key": "@mother",
+              "delta": 4
+            }
+          ]
+        },
+        {
+          "id": "ask_not",
+          "label": "Write to the provincial and ask not to be sent home",
+          "outcome": "He sends you elsewhere and writes that he understands, and your mother, told, says she understands too, and the provincial's kindness is refused and remembered, and you are not sure it was the right refusal for years.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": -2
+            },
+            {
+              "target": "relationship",
+              "key": "@mother",
+              "delta": -5
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sho_visitation",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 9,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "requires": [
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 2
+        }
+      ],
+      "title": "The Visitation",
+      "body": "The provincial makes the visitation of every house every few years: a week in residence, an interview with each man alone, and a report. It is the order's way of finding out what the prior does not say. Your interview is Thursday. He will ask about the house, and about the prior, and about you, and the constitutions oblige you to answer truthfully, and the house has a custom of answering carefully, and {@confrere} has asked you at breakfast what you are going to say about the prior.",
+      "choices": [
+        {
+          "id": "truth",
+          "label": "Tell him the truth about the house, all of it, and let him weigh it",
+          "outcome": "He listens for an hour and writes for ten minutes and thanks you in a voice that means it. The prior is moved at the next chapter, gently, to a smaller house, and you are the friar he thinks did it, and you did, and it was right, and it costs you the man.",
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -3
+            },
+            {
+              "target": "relationship",
+              "key": "@prior",
+              "delta": -8
+            },
+            {
+              "target": "flag",
+              "key": "obedience:visitation_truth",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "careful",
+          "label": "Answer carefully, as the house does: the truth, less the prior",
+          "outcome": "He hears what you do not say, and says so, gently, and does nothing about the prior, and the house goes on as it was, and you are a man the provincial trusts a little less and the house a little more.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": -1
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": -2
+            }
+          ]
+        },
+        {
+          "id": "self",
+          "label": "Speak only about yourself, and say the house is the prior's to describe",
+          "outcome": "He says that is a good answer and an unusual one, and asks about you for an hour, and the interview is the best hour you have had with a superior, and the house is unchanged, and so is the prior.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sho_the_move_that_splits",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "MAJOR",
+      "category": "personal",
+      "baseWeight": 10,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "friendship_vs_duty"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "friend:split",
+          "value": true
+        }
+      ],
+      "title": "The Friend Left Behind",
+      "body": "The letter is to a house four hundred miles from this one, and this one has {@confrere} in it, who has been the reason the last three years were bearable. He knows. He has not said anything. At recreation he was funny for an hour and then went up early, and his door was shut, and you stood outside it, and the Rule has a chapter on friendship, or Augustine has, or someone has, and none of it says what to do on the stairs.",
+      "choices": [
+        {
+          "id": "knock",
+          "label": "Knock, and say the thing",
+          "outcome": "He opens the door and says he had been waiting for you to, and you talk until Lauds, and it does not fix anything, and the four hundred miles are the same, and the Sunday telephone call after Vespers is the thing you keep for years.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": 12
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "obedience:said_it_on_the_stairs",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "letter",
+          "label": "Leave a letter under his door, and go in the morning",
+          "outcome": "He reads it at breakfast and does not come to the car, and writes back a month later, four pages, and it is a friendship by post from then on, which is a real thing and not the thing it was.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": 5
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "stairs",
+          "label": "Go back down; the life is the life",
+          "outcome": "You go down. He does not come to the car. Eleven years later at a chapter he says, in the corridor, that he had waited on the other side of the door, and you say you had stood on the stairs, and you both laugh, and it is not funny.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": -2
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 3
+            },
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": -6
+            },
+            {
+              "target": "flag",
+              "key": "obedience:left_on_the_stairs",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sho_asked_for_by_bishop",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 8,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "ambition_vs_integrity"
+      ],
+      "requires": [
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 4
+        },
+        {
+          "type": "stat",
+          "key": "charisma",
+          "op": ">=",
+          "value": 55
+        }
+      ],
+      "title": "Asked For by Name",
+      "body": "A bishop of another diocese, who heard you preach at a wedding, has written to the provincial asking for you by name: a campus chaplaincy, a house of two friars, a university that wants what the bishop says you have. The provincial has shown you the letter and said he is not minded to send you, since the province needs you where you are, and has asked what you think, and has made it clear that what you think will not decide it.",
+      "choices": [
+        {
+          "id": "want",
+          "label": "Say you would like to go, and why",
+          "outcome": "He says he had guessed, and that wanting it is not a reason against, and sends you two years later when the province can spare you, and the two years are long and the chaplaincy is worth them.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 1
+            },
+            {
+              "target": "outspokenness",
+              "key": "",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "obedience:asked_for_by_bishop",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "province",
+          "label": "Say the province's need is the reason and you have no other",
+          "outcome": "He looks at you and says a man who says that and means it is rare and a man who says it and does not is common, and he cannot tell which you are, and neither can you, and the bishop is written to, regretfully.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "ambition",
+          "label": "Say the university would make the province known, and you with it",
+          "outcome": "He writes it down. He does not send you. The province learns, in the way provinces do, that you said it, and at the next chapter your name is mentioned and then, quietly, not.",
+          "effects": [
+            {
+              "target": "outspokenness",
+              "key": "",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": -4
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": -3
+            },
+            {
+              "target": "flag",
+              "key": "obedience:showed_ambition",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sho_house_will_not_receive",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 9,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 1
+        }
+      ],
+      "title": "The House That Did Not Want You",
+      "body": "The letter named this house and the house did not want you. Nobody has said so. The prior, {@prior}, wanted another man, a friend of his, and the province sent you instead, and the house knows it, and the cell you have been given was the friend's. It is a small thing and it is every day: the table, the rota, the way the prior says your name as though reading it.",
+      "choices": [
+        {
+          "id": "earn",
+          "label": "Say nothing, and be useful, for as long as it takes",
+          "outcome": "It takes fourteen months. The prior says, in the second Lent, that the province had been right, and gives you the friend's work as well as his cell, and the friend is sent elsewhere and is, it turns out, a good man you would have liked.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 5
+            },
+            {
+              "target": "relationship",
+              "key": "@prior",
+              "delta": 8
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "obedience:earned_the_house",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "name",
+          "label": "Name it to the prior in the first week: the cell, the friend, the reading of your name",
+          "outcome": "He is startled, and honest, and says yes, and is ashamed, and it is better after, and it is never quite easy, and you learn that naming a thing is not the same as ending it.",
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 3
+            },
+            {
+              "target": "relationship",
+              "key": "@prior",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "provincial",
+          "label": "Write to the provincial that the house does not want you",
+          "outcome": "He writes back that no house wants any man the province sends and that it is the province's business to send men and the house's to receive them, and that you are to stay, and you stay, and the letter is on your file.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": -3
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -2
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sho_term_end_talk",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "ROUTINE",
+      "category": "assignment",
+      "baseWeight": 9,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 3
+        }
+      ],
+      "title": "Before the Consultation",
+      "body": "The term is nearly up and the consultation is next month, and tonight at recreation the house is doing what houses do before a man's consultation: telling him where he will be sent, with confidence, on no information. {@old_friar} says the studium. {@confrere} says the mission. {@prior} says nothing and then says, when the room is empty, that he has written to the provincial asking to keep you, and that it will not work, and that he wanted you to know.",
+      "choices": [
+        {
+          "id": "thank",
+          "label": "Thank him, and ask nothing",
+          "outcome": "He nods. The consultation comes. You are moved, as he said, and the house gives you a dinner, and the prior's letter is on your file forever, and the next prior reads it before you arrive.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@prior",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "ask_stay",
+          "label": "Ask him whether you might ask to stay, at the consultation",
+          "outcome": "He says you may, and that it will be weighed, and it is, and you are moved anyway, and the provincial says at the consultation that two men asked for you to stay and that it was noted, and it was.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 1
+            },
+            {
+              "target": "relationship",
+              "key": "@prior",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "ready",
+          "label": "Say you are ready to go, and mean it",
+          "outcome": "He looks at you a long time and says that is the right answer and the hard one, and that he will miss you, and the consultation sends you far, and you go with two suitcases and a light heart, mostly.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 2
+            },
+            {
+              "target": "relationship",
+              "key": "@prior",
+              "delta": 4
+            },
+            {
+              "target": "flag",
+              "key": "obedience:ready_to_go",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sho_generalate_letter",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 6,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 5
+        }
+      ],
+      "title": "A Letter From the General Curia",
+      "body": "A letter with the order's seal from the general curia, in the city where the order is governed, addressed to the provincial and copied to you: an inquiry, courteous and precise, about a matter in the parish that reached the curia through a channel nobody can identify. A parishioner wrote. Or the bishop's office did. The provincial is unhappy that the curia knows anything about a parish in his province before he does, and has asked you to draft the reply, since the matter was yours.",
+      "choices": [
+        {
+          "id": "full",
+          "label": "Draft it fully and truthfully, and let the provincial cut what he likes",
+          "outcome": "He cuts nothing. The curia writes back, satisfied, with a line of thanks for the clarity, and a year later a man from the curia visiting the province asks to meet the friar who wrote the letter.",
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "obedience:curia_noticed",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "short",
+          "label": "Draft it short: the matter was small and is closed",
+          "outcome": "The provincial adds two paragraphs and sends it. The curia is satisfied. The provincial says, later, that a man who writes a short letter to Rome either knows Rome or does not, and he could not tell which.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "who",
+          "label": "Spend a week finding out who wrote to the curia",
+          "outcome": "It was the bishop's chancellor, for reasons of his own. Knowing does you no good and costs you a friendship in the chancery, and the reply is late, and the provincial notices that too.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "local_bishop",
+              "delta": -4
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": -2
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sho_return_to_old_house",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "assignment",
+      "baseWeight": 8,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 10
+        }
+      ],
+      "title": "The House You Left",
+      "body": "The letter sends you back to a house you lived in a decade ago. Half the men are the same men, older; the other half have heard of you. The cell is not your old cell. The prior is a man who was a student when you were professed and who was, you remember, afraid of you. {@old_friar} is still at the window end of the table and says, as you sit, that you have put on weight, which is his welcome.",
+      "choices": [
+        {
+          "id": "new",
+          "label": "Come in as a new man: the house has changed, and so have you",
+          "outcome": "It has, and you have, and it takes the house a month to stop treating you as the man who left and you a month to stop looking for the old cell, and then it is a house, and yours.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 4
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "relationship",
+              "key": "@prior",
+              "delta": 4
+            }
+          ]
+        },
+        {
+          "id": "old",
+          "label": "Come in as the man who left: the friendships are still there",
+          "outcome": "Some are. Two men are glad and one is not, and the prior is uneasy for a year with a man who knew the house before he did, and the old man is delighted, and it is a mixed thing.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            },
+            {
+              "target": "relationship",
+              "key": "@old_friar",
+              "delta": 6
+            },
+            {
+              "target": "relationship",
+              "key": "@prior",
+              "delta": -3
+            }
+          ]
+        },
+        {
+          "id": "prior",
+          "label": "Go to the prior on the first night and say the house is his",
+          "outcome": "He is visibly relieved. He was afraid of you, and now he is not, and he is a better prior for it, and he says years later that it was the best first night any man gave him.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@prior",
+              "delta": 10
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "obedience:gave_the_house_back",
+              "value": true
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
