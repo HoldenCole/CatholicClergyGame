@@ -1,6 +1,7 @@
 import type { Clock, Parish } from '@/types';
 import { dayOfWeek, easterSunday, fromDayNumber, liturgicalYear, nextSundayOnOrAfter, toDayNumber } from './calendar';
 import { sundayOf } from './time';
+import feastLinesJson from '@/content/parish/feastLines.json';
 
 /** The days of the year the parish keeps, beyond the seasons. */
 export type FeastKey =
@@ -47,6 +48,54 @@ export const FEAST_LABEL: Record<FeastKey, string> = {
   holy_family: 'The Holy Family',
   patronal: 'The patronal feast',
 };
+
+/**
+ * What a feast does to the pews and the basket that week, over the season's
+ * own factor (systems/week.ts WEEK.collectionSeason). Christmas and Easter
+ * are the year's two full churches; the season factor already carries most
+ * of Christmas's money, so the feast adds the crowd. Invented, near practice.
+ */
+export const FEAST_PULL: Partial<Record<FeastKey, { attendance: number; collections: number }>> = {
+  christmas: { attendance: 1.6, collections: 1.05 },
+  easter: { attendance: 1.5, collections: 1.15 },
+  palm_sunday: { attendance: 1.2, collections: 1.05 },
+  ash_wednesday: { attendance: 1.15, collections: 1 },
+  patronal: { attendance: 1.25, collections: 1.15 },
+  guadalupe: { attendance: 1.3, collections: 1.1 },
+  simbang_gabi: { attendance: 1.15, collections: 1.05 },
+  santo_nino: { attendance: 1.15, collections: 1.05 },
+  tet: { attendance: 1.15, collections: 1.05 },
+  czestochowa: { attendance: 1.1, collections: 1.05 },
+  korean_martyrs: { attendance: 1.1, collections: 1.05 },
+  corpus_christi: { attendance: 1.1, collections: 1 },
+  pentecost: { attendance: 1.05, collections: 1 },
+  epiphany: { attendance: 1.05, collections: 1 },
+  holy_family: { attendance: 1.05, collections: 1 },
+  all_souls: { attendance: 1.05, collections: 1 },
+  divine_mercy: { attendance: 0.95, collections: 0.95 },
+  assumption: { attendance: 0.95, collections: 0.95 },
+};
+
+/** The combined pull of the week's feasts. */
+export function feastPull(keys: readonly FeastKey[]): { attendance: number; collections: number } {
+  let attendance = 1;
+  let collections = 1;
+  for (const k of keys) {
+    const p = FEAST_PULL[k];
+    if (!p) continue;
+    attendance *= p.attendance;
+    collections *= p.collections;
+  }
+  return { attendance, collections };
+}
+
+const FEAST_LINES = feastLinesJson as unknown as Record<string, string[]>;
+
+/** What happened on the feast: one of the authored lines, with cast placeholders left for the caller to fill. */
+export function feastIncident(key: FeastKey, pick: (lines: readonly string[]) => string): string | null {
+  const lines = FEAST_LINES[key];
+  return lines && lines.length ? pick(lines) : null;
+}
 
 /** Feasts a community keeps, and the share of the parish that makes them the parish's. */
 export const COMMUNITY_FEASTS: Partial<Record<FeastKey, { ethnic: string; share: number }>> = {

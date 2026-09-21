@@ -2,6 +2,7 @@ import type { GameState } from '@/types';
 import { formationStage } from '@/systems/religious/formation';
 import { religiousOrder } from '@/content/religious';
 import { useGameStore } from '@/engine/store';
+import { weatherOfWeek } from '@/systems/weather';
 import { dateOf, gameYearOf, priesthoodYear, seasonOf, weekOfYear } from '@/engine/time';
 import { formatDate, SEASON_LABELS } from '@/engine/calendar';
 import type { StopReason } from '@/engine/clock';
@@ -90,7 +91,7 @@ export default function Hud() {
           {c ? `${c.name.first} ${c.name.last}, ` : ''}{game.study ? `${game.see ? `Bishop of ${game.see.see}` : game.study.city === 'rome' || game.study.city === 'washington' ? `Studying in ${game.study.city === 'rome' ? 'Rome' : 'Washington'}` : game.study.label}, year ${Math.floor((clock.week - game.study.startWeek) / 52) + 1}` : (friarWord(game) ?? PHASE_LABELS[game.phase] ?? game.phase)}
         </span>
         <span className="truncate text-sm opacity-80">
-          Week of {formatDate(dateOf(clock))} · {SEASON_LABELS[seasonOf(clock)]} · {yearLine}
+          Week of {formatDate(dateOf(clock))} · {SEASON_LABELS[seasonOf(clock)]}{game.world ? ` · ${weatherOfWeek(game.seed, clock, game.world.diocese.visible.region).word}` : ''} · {yearLine}
         </span>
       </div>
       <div className="flex shrink-0 items-center gap-2">

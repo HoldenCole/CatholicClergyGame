@@ -3,6 +3,7 @@ import type { Rng } from '@/engine/rng';
 import { presetById } from '@/content/dioceses';
 import { CLERGY_HERITAGE, eraForBirthYear, rollFemaleName, rollHeritage, rollMaleName } from './names';
 import { addStats, finishNpc, rollAlignment, rollBaseStats } from './npc';
+import { castRoleFor, roleFits, type CastRole } from '@/systems/cast';
 
 export const STAFF_SPECS: { tag: string; title: string; ages: [number, number]; women: number; when: (p: Parish) => boolean }[] = [
   { tag: 'secretary', title: '', ages: [30, 68], women: 0.85, when: () => true },
@@ -47,6 +48,28 @@ export function generateStaffMember(rng: Rng, parish: Parish, presetId: string, 
   });
 }
 
+/** One named parishioner, rolled: at the start, or a new face in a part somebody left. */
+export function generateParishioner(rng: Rng, parish: Parish, presetId: string, year: number, opts: { id: string; age?: number; woman?: boolean; last?: string; role?: CastRole }): Npc {
+  const age = opts.age ?? rng.int(19, 88);
+  const birthYear = year - age;
+  const heritage = heritageFor(rng, parish, presetId);
+  const woman = opts.woman ?? rng.chance(0.55);
+  const rolled = woman ? rollFemaleName(rng, heritage) : rollMaleName(rng, heritage, eraForBirthYear(birthYear));
+  const name = opts.last ? { ...rolled, last: opts.last } : rolled;
+  return finishNpc(rng, {
+    id: opts.id,
+    name,
+    role: 'lay',
+    title: '',
+    birthYear,
+    origin: parish.terrain === 'latino' ? 'latino_immigrant' : parish.terrain === 'rural' ? 'rural' : parish.terrain === 'suburban' ? 'suburban' : 'urban_ethnic',
+    stats: rollBaseStats(rng, 15, 55),
+    tags: [`parish:${parish.id}`, 'parishioner', ...(woman ? ['woman'] : []), ...(opts.role ? [`cast:${opts.role}`] : []), ...(age >= 30 && age < 70 && rng.chance(0.6) ? ['married'] : [])],
+    alignment: rollAlignment(rng, parish.alignment * 0.6, 30),
+    relationship: Math.round(rng.gaussian() * 5),
+  });
+}
+
 export function generateParishPeople(rng: Rng, parish: Parish, presetId: string, year: number): Npc[] {
   const out: Npc[] = [];
   for (const spec of STAFF_SPECS) {
@@ -76,28 +99,16 @@ export function generateParishPeople(rng: Rng, parish: Parish, presetId: string,
   const count = rng.int(6, 9);
   // Two of them are family: a parish remembers by surname.
   const kin: string[] = [];
+  const taken: CastRole[] = [];
   for (let i = 0; i < count; i++) {
     const age = rng.int(19, 88);
-    const birthYear = year - age;
-    const heritage = heritageFor(rng, parish, presetId);
     const woman = rng.chance(0.55);
-    const rolled = woman ? rollFemaleName(rng, heritage) : rollMaleName(rng, heritage, eraForBirthYear(birthYear));
-    const name = i > 0 && i <= 2 && kin[0] ? { ...rolled, last: kin[0] } : rolled;
-    if (i === 0) kin.push(rolled.last);
-    out.push(
-      finishNpc(rng, {
-        id: `${parish.id}_lay_${i + 1}`,
-        name,
-        role: 'lay',
-        title: '',
-        birthYear,
-        origin: parish.terrain === 'latino' ? 'latino_immigrant' : parish.terrain === 'rural' ? 'rural' : parish.terrain === 'suburban' ? 'suburban' : 'urban_ethnic',
-        stats: rollBaseStats(rng, 15, 55),
-        tags: [`parish:${parish.id}`, 'parishioner'],
-        alignment: rollAlignment(rng, parish.alignment * 0.6, 30),
-        relationship: Math.round(rng.gaussian() * 5),
-      }),
-    );
+    // The kin pair are the family, whoever else they might have been.
+    const role = i === 1 && kin[0] && !taken.includes('family') && roleFits('family', age, woman) ? 'family' : castRoleFor(rng, age, woman, taken);
+    if (role) taken.push(role);
+    const npc = generateParishioner(rng, parish, presetId, year, { id: `${parish.id}_lay_${i + 1}`, age, woman, ...(i > 0 && i <= 2 && kin[0] ? { last: kin[0] } : {}), ...(role ? { role } : {}) });
+    if (i === 0) kin.push(npc.name.last);
+    out.push(npc);
   }
   return out;
 }

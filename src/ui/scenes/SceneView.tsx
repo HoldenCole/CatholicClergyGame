@@ -6,6 +6,7 @@ import { routineHours, routineOf, seminaryBudget } from '@/systems/seminaryWeek'
 import { studyActivity } from '@/content/study';
 import { studyActivitiesFor, studyBudget, studyHours } from '@/systems/studyWeek';
 import { seasonOf } from '@/engine/time';
+import { weatherOfWeek } from '@/systems/weather';
 import { hoursOf, planWeek } from '@/systems/week';
 import { previewState } from '@/systems/decor';
 import type { DecorPlace, Quality } from '@/types';
@@ -160,7 +161,7 @@ export default function SceneView() {
         </nav>
       </div>
       <div className="relative aspect-[100/60] w-full overflow-hidden bg-[#1a120c]">
-        <SceneArt scene={scene.id} season={seasonOf(game.clock)} state={shown} />
+        <SceneArt scene={scene.id} season={seasonOf(game.clock)} state={shown} {...(game.world ? { weather: weatherOfWeek(game.seed, game.clock, game.world.diocese.visible.region).kind } : {})} />
         {preview && <div className="pointer-events-none absolute left-3 top-3 rounded bg-[#2b2116]/80 px-2 py-1 text-xs text-[#e6c25a]">As it would look</div>}
         {scene.hotspots.map((h) => {
           const active = h.binds.kind === 'action' ? (routine.discretionary[h.binds.actionId] ?? 0) > 0 : h.binds.kind === 'seminary_action' ? (semRoutine[h.binds.activityId] ?? 0) > 0 : h.binds.kind === 'study_action' ? (studyRoutine[h.binds.activityId] ?? 0) > 0 : h.binds.kind === 'obligation' ? (routine.obligations as Record<string, Quality>)[h.binds.key] !== 'standard' : false;

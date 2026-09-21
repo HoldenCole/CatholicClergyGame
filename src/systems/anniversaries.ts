@@ -1,6 +1,9 @@
 import type { GameState, Letter } from '@/types';
 import { applyEffects } from '@/engine/effects';
 import { deliverLetter } from './review';
+import { fromDayNumber, toDayNumber } from '@/engine/calendar';
+import { sundayOf } from '@/engine/time';
+import namedaysJson from '@/content/namedays.json';
 
 /**
  * The anniversary of ordination, kept every year: a line in the record,
@@ -58,4 +61,40 @@ export function anniversaryWeek(state: GameState): { state: GameState; line: str
   };
   next = { ...next, career: [...next.career, { week: state.clock.week, kind: 'note', text: 'The silver jubilee: twenty-five years ordained.' }] };
   return { state: deliverLetter(next, letter), line };
+}
+
+const NAMEDAYS = (namedaysJson as { days: Record<string, { month: number; day: number; saint: string }> }).days;
+
+/** The saint's day for a first name, or null when the calendar has none for it. */
+export function nameDayOf(first: string): { month: number; day: number; saint: string } | null {
+  const key = first.trim();
+  return NAMEDAYS[key] ?? NAMEDAYS[key.split(/[ -]/)[0] ?? ''] ?? null;
+}
+
+/** Tunables for the name day: the small lift of being remembered. Invented. */
+export const NAMEDAY = { piety: 0.5, laity: 1 } as const;
+
+/**
+ * The name day: the week the man's saint falls in, a line and a small lift.
+ * A friar with a religious name keeps that saint's day instead.
+ */
+export function nameDayWeek(state: GameState): { state: GameState; line: string | null } {
+  const c = state.character;
+  if (!c) return { state, line: null };
+  const first = state.religious?.religiousName ?? c.name.first;
+  const day = nameDayOf(first);
+  if (!day) return { state, line: null };
+  const sunday = sundayOf(state.clock);
+  const { year } = fromDayNumber(sunday);
+  const hit = [year, year + 1].map((y) => toDayNumber({ year: y, month: day.month, day: day.day })).some((d) => d >= sunday && d <= sunday + 6);
+  if (!hit) return { state, line: null };
+  const religious = !!state.religious;
+  const line = religious
+    ? `Your name day, the feast of ${day.saint}. The house remembered at supper, and the prior said a word, and somebody had found a cake.`
+    : `Your name day, the feast of ${day.saint}. Two people remembered, and one of them brought a card to the rectory.`;
+  const next = applyEffects(state, [
+    { target: 'stat', key: 'piety', delta: NAMEDAY.piety },
+    { target: 'reputation', key: religious ? 'community' : 'parishioners', delta: NAMEDAY.laity },
+  ], {}, 'the name day');
+  return { state: next, line };
 }

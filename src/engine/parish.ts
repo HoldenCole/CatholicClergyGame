@@ -1,6 +1,7 @@
 import type { Beat, GameState, ParishState, Quality, ObligationKey } from '@/types';
 import type { Rng } from './rng';
-import { generateParishPeople } from '@/generation/parishPeople';
+import { generateParishPeople, generateParishioner } from '@/generation/parishPeople';
+import { arrivalLine, castLine, castYear, openRoles, type CastRole } from '@/systems/cast';
 import { withLiturgy } from '@/systems/liturgy';
 import { formDeanery } from '@/systems/deanery';
 import { generateGroups } from '@/systems/groups';
@@ -138,6 +139,9 @@ function maybeReschedule(state: GameState, rng: Rng): GameState {
 }
 
 function ambientLine(state: GameState, rng: Rng): string {
+  // One of the cast, some weeks; the pools the rest.
+  const cast = castLine(state, rng.derive('cast'));
+  if (cast) return cast;
   const lines = ambient as Record<string, string[]>;
   const parish = state.world?.parishes.find((p) => p.id === state.parish?.parishId);
   const pools = [lines.any ?? []];
@@ -169,6 +173,41 @@ export function parishWeek(state: GameState, rng: Rng): GameState {
     ? [...next.digest.slice(0, -1), { ...last, lines: [...last.lines, ...lines] }]
     : [...next.digest, { week: next.clock.week, lines }];
   return { ...next, digest };
+}
+
+/**
+ * The year among the parish's people: a part left open last year is filled by
+ * a new face, then the cast has its year (a death, a move, a wedding, a baby),
+ * and what it empties is flagged for next year. The generation stays here so
+ * systems/cast owes nothing to the generators.
+ */
+export function castYearStep(state: GameState, rng: Rng): { state: GameState; lines: string[] } {
+  if (!state.parish || !state.assignment || !state.world) return { state, lines: [] };
+  const parish = state.world.parishes.find((p) => p.id === state.assignment!.parishId);
+  if (!parish) return { state, lines: [] };
+  const year = calendarYearOf(state);
+  const lines: string[] = [];
+  let next = state;
+  const flags = { ...next.flags };
+  for (const role of openRoles(next)) {
+    const key = `cast:open:${parish.id}:${role}`;
+    const since = flags[key];
+    if (typeof since !== 'number' || since >= next.clock.week) continue;
+    if (!rng.derive(`refill:${role}`).chance(0.65)) continue;
+    delete flags[key];
+    const r = rng.derive(`arrive:${role}:${next.clock.week}`);
+    const id = `${parish.id}_lay_${role}_${next.clock.week}`;
+    const npc = generateParishioner(r, parish, state.world.diocese.presetId, year, { id, role });
+    const before = Object.values(next.npcs).find((n) => n.tags.includes(`cast:${role}`) && n.tags.includes(`parish:${parish.id}`) && n.status !== 'active') ?? null;
+    next = { ...next, npcs: { ...next.npcs, [id]: npc } };
+    lines.push(arrivalLine(r, npc, role, year, before));
+  }
+  const moved = castYear({ ...next, flags }, rng.derive(`cast:${next.clock.week}`));
+  next = moved.state;
+  lines.push(...moved.lines);
+  const after = { ...next.flags };
+  for (const role of moved.vacated as CastRole[]) after[`cast:open:${parish.id}:${role}`] = next.clock.week;
+  return { state: { ...next, flags: after }, lines };
 }
 
 export function setObligation(state: GameState, key: ObligationKey, quality: Quality): GameState {

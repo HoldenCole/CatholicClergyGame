@@ -11,7 +11,9 @@ import { noteMover, trimMovers } from './movers';
 import { homilyWeek } from './homily';
 import { coverRelief } from './deanery';
 import { helpRelief } from './formed';
-import { FEAST_LABEL, feastsOfWeek } from '@/engine/feasts';
+import { FEAST_LABEL, feastIncident, feastPull, feastsOfWeek } from '@/engine/feasts';
+import { weatherOfWeek } from './weather';
+import { fillCast } from './cast';
 import { noticeQuarter } from './notice';
 import { applyEffects } from '@/engine/effects';
 import { noteStatChange } from './movers';
@@ -404,7 +406,12 @@ export function resolveWeek(state: GameState, rng: Rng): { state: GameState; led
   const record = world.parishes.find((p) => p.id === parish.parishId)!;
   const season = seasonOf(next.clock);
   const seasonal = WEEK.collectionSeason[season] * (season === 'ordinary' && isSummer(next) ? WEEK.summerCollection : 1);
-  const collection = Math.round(record.weeklyCollections * (attendance / 0.45) * seasonal * (1 + bonuses.collections) * rng.float(0.92, 1.08));
+  // The week itself: the weather on the steps and the feasts in the calendar move this Sunday's crowd, not the parish's habit.
+  const weather = weatherOfWeek(next.seed, next.clock, world.diocese.visible.region);
+  const feasts = feastsOfWeek(next.clock, record);
+  const pull = feastPull(feasts);
+  const inPews = Math.min(0.98, attendance * weather.attendance * pull.attendance);
+  const collection = Math.round(record.weeklyCollections * (inPews / 0.45) * seasonal * pull.collections * (1 + bonuses.collections) * rng.float(0.92, 1.08));
   const running = Math.round(record.weeklyCollections * WEEK.runningCostShare);
   const debtService = Math.round((parish.finance.debt * WEEK.debtRateAnnual) / 52);
   let cash = parish.finance.cash + collection - running - debtService;
@@ -420,8 +427,13 @@ export function resolveWeek(state: GameState, rng: Rng): { state: GameState; led
   if (buildings.school !== null) buildings.school = Math.max(0, buildings.school - WEEK.buildingDecayPerWeek);
   const parishes = world.parishes.map((p) => (p.id === record.id ? { ...p, buildings } : p));
 
-  // The feasts of the week go into the digest.
-  for (const key of feastsOfWeek(next.clock, record)) lines.push(`${key === 'patronal' && record.patronal ? record.patronal.label : FEAST_LABEL[key]} this week.`);
+  // The feasts of the week go into the digest, each with what happened on it.
+  for (const key of feasts) {
+    const raw = key === 'patronal' && record.patronal ? record.patronal.label : FEAST_LABEL[key];
+    const label = raw.charAt(0).toUpperCase() + raw.slice(1);
+    const incident = feastIncident(key, (pool) => rng.derive(`feast:${key}:${next.clock.week}`).pick(pool));
+    lines.push(incident ? `${label} this week. ${fillCast(next, incident)}` : `${label} this week.`);
+  }
   next = trimMovers(next);
 
   // A quarterly reading, so he can tell whether the place is turning.
@@ -434,8 +446,8 @@ export function resolveWeek(state: GameState, rng: Rng): { state: GameState; led
     apDiscretionary: plan.discretionary,
     obligations: plan.obligations,
     collection,
-    attendance,
-    attendanceDelta: attendance - parish.attendance,
+    attendance: inPews,
+    attendanceDelta: inPews - parish.attendance,
     debtService,
     lines,
   };

@@ -75,7 +75,7 @@ export function advanceClock(clock: Clock, weeks = 1): Clock {
   return { ...clock, week: clock.week + weeks };
 }
 
-/** "Week of 14 March 2021 · Lent" */
-export function describeWeek(clock: Clock, week = clock.week): string {
-  return `Week of ${formatDate(dateOf(clock, week))} · ${SEASON_LABELS[seasonOf(clock, week)]}`;
+/** "Week of 14 March 2021 · Lent · snow" */
+export function describeWeek(clock: Clock, week = clock.week, weather?: string): string {
+  return `Week of ${formatDate(dateOf(clock, week))} · ${SEASON_LABELS[seasonOf(clock, week)]}${weather ? ` · ${weather}` : ''}`;
 }
