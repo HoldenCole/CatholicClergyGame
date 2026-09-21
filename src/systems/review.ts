@@ -10,6 +10,7 @@ import { studyProgram } from '@/content/study';
 import { placeWord } from './studyWeek';
 import { ministryLine } from './ministry';
 import { requestChance, requestOf, requestWord } from './request';
+import { townReviewLine } from './town';
 
 /** The reputation and stat words the sheets use. */
 function word(v: number): string {
@@ -70,6 +71,8 @@ export function yearInReview(state: GameState): { letter: Letter; baseline: NonN
     const said = care >= 0.7 ? 'that they see you, in the hospital and at the door, and that it shows on Sunday' : care >= 0.4 ? 'that you are around, mostly, and that the homilies are yours' : care >= 0.15 ? 'that you are a hard man to find outside Mass' : 'that they see you at Mass and nowhere else';
     body.push(`The parish says ${said}. ${state.parish.recycledHomilyStreak >= 3 ? 'The homily has come from the file for weeks, and people have begun to say so.' : ''}`.trim());
   }
+  const townLine = state.parish ? townReviewLine(state, week - 52) : null;
+  if (townLine) rows.push({ label: 'The town this year', value: townLine });
   const bondsThisYear = Object.values(state.npcs).flatMap((n) => (n.bonds ?? []).filter((b) => b.week > week - 52 && b.week <= week).map((b) => ({ n, b })));
   if (bondsThisYear.length) rows.push({ label: 'The people this year', value: bondsThisYear.slice(0, 4).map(({ n, b }) => `${bondWord(b)} (${n.name.last})`).join('; ') + (bondsThisYear.length > 4 ? `; and ${bondsThisYear.length - 4} more` : '') });
   // What he did with the hours: the friar's top spends, the pastor's obligations run full and at minimum.

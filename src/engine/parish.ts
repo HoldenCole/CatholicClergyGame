@@ -2,6 +2,7 @@ import type { Beat, GameState, ParishState, Quality, ObligationKey } from '@/typ
 import type { Rng } from './rng';
 import { generateParishPeople, generateParishioner } from '@/generation/parishPeople';
 import { arrivalLine, castLine, castYear, openRoles, type CastRole } from '@/systems/cast';
+import { ensureTown, townLine } from '@/systems/town';
 import { withLiturgy } from '@/systems/liturgy';
 import { formDeanery } from '@/systems/deanery';
 import { generateGroups } from '@/systems/groups';
@@ -123,7 +124,8 @@ export function startAssignment(state: GameState, rng: Rng): GameState {
   const moved = arcsOnMove(started).state;
   const arrival = takeSnapshot(moved);
   const settled = arrival ? { ...moved, parish: { ...parishState, arrival } } : moved;
-  return placeAmongPriests(settled, rng);
+  // The town around the parish, rolled once and kept. DESIGN §8.9.
+  return ensureTown(placeAmongPriests(settled, rng), rng.derive(`town:${parish.id}`));
 }
 
 export function isPlayedWeek(state: GameState): boolean {
@@ -142,6 +144,8 @@ function ambientLine(state: GameState, rng: Rng): string {
   // One of the cast, some weeks; the pools the rest.
   const cast = castLine(state, rng.derive('cast'));
   if (cast) return cast;
+  const town = townLine(state, rng.derive('town'));
+  if (town) return town;
   const lines = ambient as Record<string, string[]>;
   const parish = state.world?.parishes.find((p) => p.id === state.parish?.parishId);
   const pools = [lines.any ?? []];

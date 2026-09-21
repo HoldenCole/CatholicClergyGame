@@ -1,0 +1,290 @@
+{
+  "_notes": "The town as a place (DESIGN §8.9). Archetypes by terrain weight; each parish rolls five to seven of distinct kinds, the employer, the diner, and the funeral home first where the terrain has them. Names are templates over {surname} (from the parish's heritage), {street} (from `streets`), and {town} (the parish's place line). Lines are templated with {name}, {owner}, {town}, {parish}. `change` are yearly chances: fail (open→failing), recover (failing→open), close (failing→closing, and closing→closed the year after), thrive (open→thriving), settle (thriving→open). `households` is the share of the parish's households a closure costs and an opening brings, for the kinds that carry a town's work. Numbers invented.",
+  "count": { "min": 5, "max": 7 },
+  "streets": ["Main", "Front", "Division", "Elm", "Church", "Mill", "Washington", "Park", "Union", "Grand", "Market", "Water", "Broad", "Center", "Depot", "Third", "Ninth", "Lincoln", "Ridge", "River"],
+  "archetypes": [
+    {
+      "kind": "diner",
+      "plain": "the diner",
+      "owner": true,
+      "terrains": { "urban": 3, "suburban": 3, "rural": 4, "latino": 3 },
+      "names": ["{surname}'s", "the {street} Street Diner", "{surname}'s Grill", "the {street} Café", "La Cocina de {surname}", "the Corner Café", "{surname}'s Coffee Shop"],
+      "blurbs": ["Open at five; the same eight men at the counter, and the parish's business discussed there before it is discussed anywhere else.", "Where the parish council meets after the parish council meets.", "Eggs, the paper, and the funeral notices read aloud by whoever gets there first."],
+      "lines": {
+        "open": ["{name} had the parish's business at the counter by six, and the pastor's name in it.", "The waitress at {name} asked after the school, the way she asks after the school every week.", "{owner} at {name} would not take your money for the coffee, and made a show of it."],
+        "thriving": ["{name} has a line out the door on Sundays now, and the ten-thirty runs into it.", "{name} put on a second cook and a sign about the brunch, and the after-Mass crowd has moved there."],
+        "failing": ["{name} was half empty at seven, and {owner} was doing the books at the counter with a face.", "The lunch crowd at {name} has gone to the chain on the highway, and the regulars have noticed."],
+        "closing": ["{name} has a sign in the window about the last day, and the regulars are eating there every morning as if that would help.", "{owner} told you at the counter that {name} closes at the end of the month, and asked you not to say so from the pulpit."],
+        "closed": ["The windows at {name} are papered over, and the men who ate there stand outside the church now, for want of somewhere else.", "Somebody has left flowers at the door of {name}, which is more than the parish got when the school closed."],
+        "new": ["{name} opened on the corner where the old place was, and the regulars are trying it out with folded arms.", "The new place, {name}, has better coffee and no counter, which the old men hold against it."]
+      },
+      "change": { "fail": 0.06, "recover": 0.3, "close": 0.4, "thrive": 0.05, "settle": 0.25 }
+    },
+    {
+      "kind": "employer",
+      "plain": "the plant",
+      "owner": false,
+      "terrains": { "urban": 2, "suburban": 2, "rural": 3, "latino": 3 },
+      "names": ["the {street} Street plant", "the {surname} works", "the distribution centre on Route 9", "the mill", "the packing plant", "the hospital", "the university", "the base", "the {surname} yards", "the cannery"],
+      "blurbs": ["Half the parish's men work there, or did, or their fathers did.", "The parish's collections rise and fall with its shifts.", "What the town means when it says work."],
+      "lines": {
+        "open": ["The shift change at {name} filled the seven o'clock Mass with men in work boots.", "A man from {name} came to the rectory about a blessing for the new line, and did not know what to offer for it."],
+        "thriving": ["{name} is hiring, and there are new names on the registration cards.", "Overtime at {name} has emptied the Saturday vigil and filled the Sunday collection."],
+        "failing": ["There is talk at {name} of a buyer, and of what a buyer would do, and the parish hears it before the paper does.", "A shift was cut at {name}, and the food pantry felt it by Friday."],
+        "closing": ["{name} has announced the closing, and the parish's men are standing in the parking lot after Mass not talking about it.", "The union hall asked whether you would come and say something at {name}; nobody was sure what."],
+        "closed": ["{name} is dark, and the houses on its side of the tracks are going up for sale one at a time.", "A family that worked at {name} for three generations came to say goodbye before the moving van."],
+        "new": ["{name} opened with a ribbon and the mayor, and the parish's young men are lining up for it.", "The new work at {name} has brought families the parish does not know yet, and a Mass schedule that no longer fits."]
+      },
+      "households": { "closed": -0.05, "new": 0.03 },
+      "change": { "fail": 0.05, "recover": 0.35, "close": 0.35, "thrive": 0.05, "settle": 0.3 }
+    },
+    {
+      "kind": "school",
+      "plain": "the high school",
+      "owner": false,
+      "terrains": { "urban": 2, "suburban": 3, "rural": 3, "latino": 2 },
+      "names": ["{town} High", "Central High", "{street} Street School", "the public high school", "{surname} High School", "the regional high school"],
+      "blurbs": ["Where the parish's children go if they do not go to ours, which is most of them.", "The school board is the town's other parish council, and meets more often.", "Friday nights in the fall, and graduation in the church because the gym is too small."],
+      "lines": {
+        "open": ["The school board at {name} is arguing about a prayer at graduation, and both sides have called the rectory.", "A teacher from {name} asked whether the hall could be had for a play, on account of the gym."],
+        "thriving": ["{name} has a new wing and a new principal and a waiting list, which the parish school notices.", "Graduation at {name} filled the church, since the gym would not, and the valedictorian thanked the Sisters."],
+        "failing": ["{name} has lost a hundred students to the charter, and the levy failed.", "The band at {name} played at the parish festival for want of anywhere else to play."],
+        "closing": ["{name} is to be merged with the regional school, and the town is angrier about it than about anything the parish has done.", "A meeting at {name} about the merger ran three hours and the pastor was asked to speak and did not."],
+        "closed": ["The buses go past {name} to the regional school now, and the building has a chain on the door.", "Somebody wants {name} for a community centre, and somebody else wants it torn down, and both have asked the parish's view."],
+        "new": ["{name} opened in the fall with a new name and a new mascot, and the old people still call it by the old one.", "The new school, {name}, has asked the parish about a baccalaureate Mass, which the old one never did."]
+      },
+      "change": { "fail": 0.04, "recover": 0.3, "close": 0.25, "thrive": 0.05, "settle": 0.3 }
+    },
+    {
+      "kind": "funeral_home",
+      "plain": "the funeral home",
+      "owner": true,
+      "terrains": { "urban": 3, "suburban": 3, "rural": 4, "latino": 3 },
+      "names": ["{surname} Funeral Home", "{surname} & Sons", "the {surname} Chapel", "{surname}-{surname} Funeral Home"],
+      "blurbs": ["It sends the parish its dead and knows the parish's families better than the registry does.", "Third generation, and the son who was to take it over has not.", "The director is at more funerals than the pastor and has opinions about the homilies."],
+      "lines": {
+        "open": ["{owner} at {name} called about Thursday's funeral and about the eulogy, which the family wants and the diocese does not.", "{name} sent the parish four funerals this month, which is the usual, and a fruit basket at Christmas, which is the custom."],
+        "thriving": ["{name} has opened a second chapel across town, and the funerals have got shorter.", "{owner} at {name} has hired a second director, a young woman the old men do not know what to make of."],
+        "failing": ["The chain has opened a funeral home on the highway, and {name} is losing the families with money.", "{owner} at {name} asked, carefully, whether the parish might mention them in the bulletin."],
+        "closing": ["{name} is selling to the chain, and the families are asking whether the funerals will be the same.", "{owner} told you that {name} closes in the spring, and cried in the sacristy, which you had not expected."],
+        "closed": ["The chain runs {name} now, under the old name, and the director is a man from the regional office who calls you Reverend.", "The parish's dead go to the highway now, and the funerals start on time and mean less."],
+        "new": ["{name} has opened under a new family, and the first funeral they sent was well done.", "The new people at {name} came to Mass the first Sunday and sat at the back, taking notes."]
+      },
+      "change": { "fail": 0.04, "recover": 0.3, "close": 0.4, "thrive": 0.04, "settle": 0.3 }
+    },
+    {
+      "kind": "bar",
+      "plain": "the bar",
+      "owner": true,
+      "terrains": { "urban": 3, "suburban": 1, "rural": 3, "latino": 2 },
+      "names": ["{surname}'s", "the {street} Street Tap", "the Shamrock", "the {surname} Tavern", "the Corner Bar", "El {surname}", "the VFW bar"],
+      "blurbs": ["The deacon's cousin owns it, or the usher does, and half the Holy Name Society drinks there.", "Where the parish's men go after the funeral and before the fight.", "The parish's other confessional."],
+      "lines": {
+        "open": ["{owner} at {name} asked whether you would bless the place, and was not entirely joking.", "A parishioner was helped home from {name} on Saturday night, and was at the ten-thirty, grey."],
+        "thriving": ["{name} has a band on Fridays now, and the vigil Mass can hear it.", "{name} is the place the young people go, which the old people at {name} mind."],
+        "failing": ["{name} is quiet on a Saturday, which in this town means something is wrong with the money.", "{owner} at {name} has stopped extending credit, and two of the parish's men have stopped going."],
+        "closing": ["{name} closes at the end of the month, and the regulars are holding a wake for it, which they have asked you to attend.", "The license at {name} was not renewed, and the story of why has three versions."],
+        "closed": ["{name} is a vape shop now, and the men who drank there drink at home, which is worse.", "The sign at {name} is still up, and the door is chained, and somebody has painted a cross on it."],
+        "new": ["A new bar opened where {name} was, with a name nobody uses and a television nobody can turn off.", "{name} opened with a young owner and craft beer, and the old regulars stood outside it for a week."]
+      },
+      "change": { "fail": 0.06, "recover": 0.3, "close": 0.4, "thrive": 0.06, "settle": 0.3 }
+    },
+    {
+      "kind": "field",
+      "plain": "the ballpark",
+      "owner": false,
+      "terrains": { "urban": 1, "suburban": 3, "rural": 4, "latino": 2 },
+      "names": ["{surname} Field", "the {street} Street field", "the ballpark", "the high school field", "the soccer fields", "{surname} Park"],
+      "blurbs": ["Friday night lights in the fall, and the vigil Mass timed around them.", "Where the parish's boys are on Sunday mornings when they are not at Mass.", "The town's real cathedral, with a better sound system."],
+      "lines": {
+        "open": ["The game at {name} ran late and the vigil Mass started with eleven people and ended with sixty.", "The coach at {name} asked about a blessing for the season, and about the boys who play on Sunday morning, in that order."],
+        "thriving": ["{name} has lights now, and a scoreboard with a sponsor, and the whole town at it on Fridays.", "A boy from the parish is playing at {name} in a way that has scouts in the stands, and his mother in the church."],
+        "failing": ["{name} has weeds in the outfield and the league has folded, and the boys play in the parish lot.", "The booster club at {name} asked whether the parish festival could share a weekend, and the money."],
+        "closing": ["{name} is to be sold for houses, and the town has discovered it loved it.", "The last game at {name} drew more people than Easter, and half of them cried."],
+        "closed": ["There are houses going up where {name} was, and the boys have nowhere to play but the parish lot, which they do.", "The parish lot has become the ballpark since {name} went, and the maintenance man has opinions about the windows."],
+        "new": ["{name} opened with a ribbon and a game, and the parish's team lost it.", "The new fields at {name} have taken the boys on Sunday mornings, and the eight-thirty has noticed."]
+      },
+      "change": { "fail": 0.04, "recover": 0.35, "close": 0.25, "thrive": 0.06, "settle": 0.3 }
+    },
+    {
+      "kind": "other_church",
+      "plain": "the church down the road",
+      "owner": false,
+      "terrains": { "urban": 3, "suburban": 3, "rural": 3, "latino": 3 },
+      "names": ["First Baptist", "the megachurch on the highway", "the Pentecostal storefront", "Grace Community", "the Lutheran church", "the Methodist church", "the Iglesia on {street} Street", "New Hope"],
+      "blurbs": ["Its pastor is younger than you and has a better sound system, and some of the parish's families have found their way to it.", "The other church, whose food pantry the parish shares and whose choir it envies.", "The town's second congregation, and on some Sundays its first."],
+      "lines": {
+        "open": ["The pastor of {name} called about the joint food pantry, and about a family that has gone from you to him and back.", "{name} had a revival this week, and two of the parish's families were seen at it."],
+        "thriving": ["{name} has a new building and a parking lot with attendants, and the ten-thirty has thinned.", "The pastor of {name} was on the local news, and the parish's teenagers know his name and not the bishop's."],
+        "failing": ["{name} has lost its pastor and half its people, and some of them have come to Mass, sitting at the back.", "The sign at {name} has not changed in a month, and the parish's food pantry has taken over the whole of the sharing."],
+        "closing": ["{name} is closing, and its pastor came to see you about the people, which was decent of him.", "{name} held its last service, and the parish's choir sang at it, which some of the parish minded."],
+        "closed": ["{name} is a daycare now, and its old congregation has gone to the highway or to nothing.", "The bell from {name} was offered to the parish, and the parish took it, and it does not fit the tower."],
+        "new": ["A new congregation has opened as {name}, in the old bank, with a young pastor and a coffee bar.", "{name} opened with a sign that says all are welcome, and a few of the parish have taken it up on that."]
+      },
+      "change": { "fail": 0.05, "recover": 0.3, "close": 0.35, "thrive": 0.08, "settle": 0.25 }
+    },
+    {
+      "kind": "hall",
+      "plain": "the hall",
+      "owner": false,
+      "terrains": { "urban": 2, "suburban": 2, "rural": 4, "latino": 2 },
+      "names": ["the VFW", "the firehouse", "the Knights' hall", "the Legion hall", "the Grange", "the union hall", "the Sons of Italy", "the Polish Falcons"],
+      "blurbs": ["Where the town's men meet without their wives, and the parish's fish fry is held when the hall floods.", "The fire company runs it and the fire company runs the town.", "The town's living room, with a bar in it."],
+      "lines": {
+        "open": ["{name} asked whether you would say the invocation at the dinner, and whether it could be short.", "The fish fry moved to {name} for a week while the hall's boiler was out, and did better there."],
+        "thriving": ["{name} has a new kitchen and a bingo night that is taking the parish's crowd.", "{name} sponsored the festival this year, and its banner was larger than the parish's."],
+        "failing": ["{name} is down to a dozen members and cannot pay its heat, and has asked whether the parish might rent it.", "The bingo at {name} folded, and the ladies have come back to the parish's."],
+        "closing": ["{name} is closing, and the town's men are pretending not to mind.", "{name} sold its building, and the flag came to the parish for keeping."],
+        "closed": ["{name} is offices now, and the fish fry has nowhere to go when the hall floods.", "The men who met at {name} meet in the parish hall now, and have opinions about it."],
+        "new": ["A new company has taken over {name}, younger, with a website, and asked the parish to bless the truck.", "{name} reopened under new members who do not know the old ones, and asked whether the parish would like a night."]
+      },
+      "change": { "fail": 0.06, "recover": 0.25, "close": 0.35, "thrive": 0.04, "settle": 0.3 }
+    },
+    {
+      "kind": "store",
+      "plain": "the store",
+      "owner": true,
+      "terrains": { "urban": 3, "suburban": 1, "rural": 3, "latino": 4 },
+      "names": ["{surname}'s Hardware", "the bodega on {street}", "Panadería {surname}", "{surname}'s Market", "the {street} Street pharmacy", "the general store", "the carnicería", "{surname}'s Bakery"],
+      "blurbs": ["Where the parish's news is exchanged with the change.", "The owner extends credit and knows who is not paying, which is a kind of confessor.", "The bulletin is on the counter and the raffle tickets are sold there."],
+      "lines": {
+        "open": ["{owner} at {name} sold the festival raffle tickets from the counter, and sold more than the parish did.", "{name} had the bulletin on the counter and a correction to it, in pen."],
+        "thriving": ["{name} has expanded into the shop next door, and {owner} gave the parish a case of something for the festival.", "{name} is the place now, and the parish's collection has felt the town's money coming back."],
+        "failing": ["{name} has a sign about the chain on the highway that is not polite, and {owner} has stopped smiling.", "{owner} at {name} asked whether the parish still bought its candles locally, and you did not know."],
+        "closing": ["{name} is closing, and {owner} has asked the parish to take the statue from the window.", "The going-out-of-business sign at {name} has been up so long the town has stopped seeing it."],
+        "closed": ["{name} is empty, and the statue from its window is in the sacristy, waiting for somewhere to go.", "The town shops on the highway now, and {name}'s window has a for-lease sign and a dead plant."],
+        "new": ["{name} opened where the old store was, with a new family behind the counter and the same bulletin on it.", "The new people at {name} came to Mass and asked, afterwards, whether the parish would like an account."]
+      },
+      "change": { "fail": 0.07, "recover": 0.25, "close": 0.4, "thrive": 0.05, "settle": 0.3 }
+    },
+    {
+      "kind": "library",
+      "plain": "the library",
+      "owner": false,
+      "terrains": { "urban": 2, "suburban": 3, "rural": 2, "latino": 1 },
+      "names": ["the {town} Public Library", "the Carnegie library", "the {street} Street branch", "the public library"],
+      "blurbs": ["Where the parish's older women volunteer and the parish's teenagers are sent to be out of the house.", "The town's one warm room in winter, and the shelter's daytime.", "The librarian knows what the town reads, which is a kind of knowledge the parish does not have."],
+      "lines": {
+        "open": ["The librarian at {name} asked whether the parish had a copy of its own history, and it did not.", "{name} put on a talk about the town's churches and the pastor was invited and went."],
+        "thriving": ["{name} has a new wing and a children's room, and the parish's mothers are there on Tuesday mornings.", "{name} has become the place the town meets, which was once the church's."],
+        "failing": ["{name} has cut its hours, and the men who spent their days there are on the church steps.", "The levy for {name} failed, and its friends have asked the parish to speak for it."],
+        "closing": ["{name} is to close, and the town has discovered how many of its people were there every day.", "The last day at {name} had a cake and a speech and the librarian's retirement all at once."],
+        "closed": ["{name} is closed, and its books went to the regional branch, and the parish's hall has a shelf of what was left.", "The building that was {name} is for sale, and the parish has been asked, quietly, whether it wants it."],
+        "new": ["{name} reopened after the levy passed, smaller, and the parish's volunteers were first through the door.", "The new {name} has a room the parish can use for meetings, and the pastor was asked to open it."]
+      },
+      "change": { "fail": 0.05, "recover": 0.3, "close": 0.3, "thrive": 0.05, "settle": 0.3 }
+    },
+    {
+      "kind": "city_hall",
+      "plain": "city hall",
+      "owner": false,
+      "terrains": { "urban": 2, "suburban": 2, "rural": 3, "latino": 2 },
+      "names": ["city hall", "the township building", "the county courthouse", "the village hall", "the borough hall"],
+      "blurbs": ["The mayor is a parishioner, or was, or is running against one.", "Where the parish's parking and the parish's taxes are decided, by people the parish baptized.", "The town's other pulpit."],
+      "lines": {
+        "open": ["The mayor came to the ten-thirty and sat where he could be seen, and shook your hand at the door for the photographer.", "A zoning notice came from {name} about the parish lot, and the secretary put it on your desk with a face."],
+        "thriving": ["{name} has money this year, and has offered the parish a grant for the steps, with a plaque.", "The town is growing and {name} knows it, and has asked the parish about a second Mass in Spanish."],
+        "failing": ["{name} is broke, and the parish has been asked whether it might pay for its own snow.", "The council at {name} is fighting in the paper, and half of it is parishioners."],
+        "closing": ["{name} is to be merged into the county, and the town will not have a mayor of its own.", "The last council meeting at {name} was attended by the whole town, for the first time."],
+        "closed": ["The town's business is done at the county seat now, forty minutes away, and the parish has become the town's only address.", "{name} is a museum, open Saturdays, run by a parishioner."],
+        "new": ["{name} has a new council, younger, and one of them is a parishioner who wants the parish's view on the lot.", "The new mayor came to the rectory to introduce himself, which the old one never did."]
+      },
+      "change": { "fail": 0.04, "recover": 0.35, "close": 0.15, "thrive": 0.05, "settle": 0.3 }
+    },
+    {
+      "kind": "clinic",
+      "plain": "the clinic",
+      "owner": false,
+      "terrains": { "urban": 2, "suburban": 1, "rural": 3, "latino": 3 },
+      "names": ["the {street} Street clinic", "the county clinic", "the free clinic", "the urgent care", "the Sisters' clinic", "the community health centre"],
+      "blurbs": ["Where the parish's sick go before the hospital, and the parish's poor go instead of it.", "The nurse knows who is dying before the pastor does.", "It calls the rectory at night, which is what it is for."],
+      "lines": {
+        "open": ["The nurse at {name} called about a parishioner who would not go to the hospital, and you went to {name} instead.", "{name} asked whether the parish hall could hold a flu clinic, and it did."],
+        "thriving": ["{name} has a doctor five days now, and the parish's old people have stopped dying of things that could be caught.", "{name} has a new wing with the parish's name on a plaque, for a bequest nobody remembers giving."],
+        "failing": ["{name} has lost its doctor and its funding in the same month, and the nurse is holding it together alone.", "The sick calls have gone up since {name} cut its hours."],
+        "closing": ["{name} is closing, and the parish's sick will drive forty minutes or not go.", "The nurse at {name} came to the rectory to ask what the parish would do, and you did not know."],
+        "closed": ["{name} is closed, and the anointings have gone up, and the parish hall has a nurse on Tuesdays who used to work there.", "A man died who would not have died when {name} was open, and the town knows it."],
+        "new": ["{name} reopened under the hospital's name, with a doctor from the city who came to Mass the first Sunday.", "The new {name} has asked the parish to send the sick, and the parish has."]
+      },
+      "change": { "fail": 0.06, "recover": 0.3, "close": 0.35, "thrive": 0.05, "settle": 0.3 }
+    },
+    {
+      "kind": "shelter",
+      "plain": "the shelter",
+      "owner": false,
+      "terrains": { "urban": 4, "suburban": 1, "rural": 1, "latino": 2 },
+      "names": ["the {street} Street shelter", "the men's shelter", "the Catholic Worker house", "the mission", "the day centre", "the women's shelter"],
+      "blurbs": ["The parish's food pantry feeds it and its people sleep on the church steps when it is full.", "Run by two women who have never turned anyone away and a board that would like them to.", "The town's conscience, and its complaint."],
+      "lines": {
+        "open": ["{name} was full, and two of its men slept in the vestibule, and the ushers found them at seven.", "{name} asked for the parish's leftover festival food, and got it, and a lecture from the finance council."],
+        "thriving": ["{name} has a new building and a grant and a director with a degree, and the two women have been moved to a back office.", "{name} is the town's pride now, on the news, with volunteers from the suburbs."],
+        "failing": ["{name} has lost its grant and is turning men away, and they come to the rectory door.", "The board of {name} has quarrelled with the two women who run it, and the parish has been asked to take a side."],
+        "closing": ["{name} is closing at the end of the winter, and the men are asking where they will go, and you do not know.", "The town council voted to close {name}, and the vote was three parishioners to two."],
+        "closed": ["{name} is closed, and its men are in the park and on the church steps, and the parish is the shelter now whether it likes it or not.", "The rectory door has become {name} since it closed, and the secretary has stopped answering it after dark."],
+        "new": ["A new shelter opened as {name}, run by the county, with rules the old one did not have.", "{name} opened in the old convent, and the parish's older women have taken it as theirs."]
+      },
+      "change": { "fail": 0.07, "recover": 0.3, "close": 0.4, "thrive": 0.05, "settle": 0.3 }
+    },
+    {
+      "kind": "nursing_home",
+      "plain": "the nursing home",
+      "owner": false,
+      "terrains": { "urban": 2, "suburban": 3, "rural": 3, "latino": 1 },
+      "names": ["{surname} Manor", "the {street} Street home", "the county home", "the Sisters' home", "{surname} Care Center", "the veterans' home"],
+      "blurbs": ["Where the parish's old go, and where the pastor says the second Mass on Thursdays.", "Ninety residents, most of them Catholic, none of them able to come.", "The parish's largest congregation, on the days it is counted."],
+      "lines": {
+        "open": ["The Thursday Mass at {name} had thirty in wheelchairs and one who sang.", "{name} called about a resident who has asked for you by name and does not know yours."],
+        "thriving": ["{name} has a new wing and a chapel, and has asked whether the parish would furnish it.", "{name} has a chaplain now, a deacon, and the Thursday Mass is his, which is a relief and a loss."],
+        "failing": ["{name} has been in the paper for the wrong reasons, and the parish's families are taking their mothers out.", "The state inspected {name} and the parish's old people are frightened, and have asked what you know."],
+        "closing": ["{name} is closing, and its residents are being sent to homes forty miles away, and the parish is losing its old.", "The last Thursday Mass at {name} was attended by the staff, who will lose their jobs, and the residents, who will lose each other."],
+        "closed": ["{name} is closed, and the parish's old are scattered across the county, and the sick calls take a day.", "The building that was {name} is to be apartments, and the parish's dead of forty years were mostly its residents."],
+        "new": ["{name} opened under a chain, with a new name and a chaplain from the internet, and asked whether the parish would still come on Thursdays.", "The new {name} has a chapel with no tabernacle and has asked the parish for one."]
+      },
+      "change": { "fail": 0.05, "recover": 0.3, "close": 0.3, "thrive": 0.05, "settle": 0.3 }
+    },
+    {
+      "kind": "park",
+      "plain": "the park",
+      "owner": false,
+      "terrains": { "urban": 3, "suburban": 2, "rural": 1, "latino": 3 },
+      "names": ["{surname} Park", "the {street} Street park", "the square", "the plaza", "the green", "the riverfront"],
+      "blurbs": ["Where the Corpus Christi procession ends and the festival is held and the men from the shelter sleep.", "The town's front room, and the parish's side yard.", "The parish's feast is held there, and the town's fireworks, on the same weekend, by an old arrangement."],
+      "lines": {
+        "open": ["The festival committee met about {name} and the permit and the beer, in that order.", "The procession ended at {name} with Benediction, and the men on the benches took their caps off."],
+        "thriving": ["{name} has a new bandstand and a farmers' market, and the after-Mass crowd goes there now.", "{name} was full on Sunday afternoon with the parish's families, and the parish was empty."],
+        "failing": ["{name} has become the place the town does not go after dark, and the parish's festival has been asked to move.", "The benches at {name} were taken out to move the men along, and the men are on the church steps."],
+        "closing": ["{name} is to be sold for a development, and the parish's festival has nowhere to go.", "The town held its last fireworks at {name} and the parish's feast with them, and both were the best in years."],
+        "closed": ["There are condominiums where {name} was, and the procession ends at the parish lot now.", "The festival is in the parish lot since {name} went, and is smaller, and is the parish's again."],
+        "new": ["{name} reopened with new benches and a fountain and a sign about the rules, and the men from the shelter are back.", "The new {name} has a plaza the parish's Guadalupe procession has taken as its own."]
+      },
+      "change": { "fail": 0.05, "recover": 0.3, "close": 0.2, "thrive": 0.06, "settle": 0.3 }
+    },
+    {
+      "kind": "station",
+      "plain": "the station",
+      "owner": false,
+      "terrains": { "urban": 3, "suburban": 3, "rural": 1, "latino": 2 },
+      "names": ["the {street} Street station", "the train station", "the bus depot", "the L stop", "the commuter station", "the interchange"],
+      "blurbs": ["Half the parish leaves through it at seven and comes back at seven, and sees the church twice a day from the platform.", "The parish's men commute from it, and the parish's Mass times are set by the timetable.", "Where the town's news arrives and its young leave."],
+      "lines": {
+        "open": ["The seven-ten was cancelled and the seven o'clock Mass had twenty commuters in it who had nowhere else to be.", "A man from the platform at {name} came into the church to get warm and stayed for the Mass, and has come since."],
+        "thriving": ["{name} has a new line and the town has new families, and the parish has a housing question it has not had in years.", "The express stops at {name} now, and the parish's young couples can afford to stay."],
+        "failing": ["Service at {name} was cut to hourly, and the parish's commuters are moving closer to the city.", "{name} has a leak and a smell and a schedule nobody trusts, and the parish's men drive now."],
+        "closing": ["{name} is to close, and the town will be forty minutes from anything.", "The last train from {name} had the parish's council on it, going nowhere, for the occasion."],
+        "closed": ["{name} is closed, and the town has become the kind of town people drive through.", "The parish's young have gone with the trains, and the eight-thirty is grey."],
+        "new": ["{name} reopened with a new line, and the parish's parking lot is a commuter lot on weekdays, which the finance council likes.", "The new {name} has brought a developer, and the developer has brought a question about the parish's land."]
+      },
+      "households": { "closed": -0.03, "new": 0.03 },
+      "change": { "fail": 0.04, "recover": 0.3, "close": 0.2, "thrive": 0.06, "settle": 0.3 }
+    }
+  ],
+  "initial": { "thriving": 0.12, "failing": 0.12 },
+  "regard": { "words": [[40, "yours"], [15, "warm"], [-15, "civil"], [-40, "cool"], [-100, "against you"]] },
+  "review": {
+    "closed": "{name} closed",
+    "closing": "{name} is closing",
+    "new": "{name} opened",
+    "thriving": "{name} is thriving",
+    "failing": "{name} is failing"
+  }
+}

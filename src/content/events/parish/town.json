@@ -1,0 +1,612 @@
+{
+  "_notes": "Scenes that happen in the town rather than in the church. DESIGN §8.9. They hang on town conditions (a kind of place in a state) and name the places with {town:kind} tokens; their effects move the place's regard and write what the town remembers.",
+  "events": [
+    {
+      "id": "tn_diner_the_counter",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 12,
+      "suppressYears": 3,
+      "pressure": ["friendship_vs_duty"],
+      "requires": [{ "type": "town", "key": "diner", "value": "open" }],
+      "title": "The Counter at Six",
+      "body": "You have started stopping at {town:diner} on the way back from the seven o'clock, because the coffee at the rectory is worse and because it is the one place in {town} where you hear what people say when they are not saying it to a priest. The same eight men are at the counter. This morning they are talking about the parish, and do not stop when you sit down, which is the compliment. The seven-thirty on weekdays, one of them says, was his father's Mass, and it was cut, and nobody asked. Another says the school's tuition went up and nobody said why. They are not angry. They are saying it to the coffee, and to you, and the waitress is listening.",
+      "flavorPrompt": "The diner counter at six, the parish's business talked over by men who do not stop when the priest sits down.",
+      "choices": [
+        {
+          "id": "sit_and_listen",
+          "label": "Make it a habit: the counter twice a week, and listen",
+          "default": true,
+          "outcome": "You are at {town:diner} Tuesdays and Fridays after the seven o'clock for years. The men tell you things nobody tells the parish council, and you carry two of them back and fix one. The waitress calls you Father in a voice that means it. It costs an hour a week and the rectory coffee stays bad.",
+          "effects": [
+            { "target": "town", "key": "diner", "delta": 14, "value": "He sat at the counter at {name} twice a week and listened." },
+            { "target": "reputation", "key": "parishioners", "delta": 3 },
+            { "target": "reputation", "key": "public", "delta": 2 },
+            { "target": "strain", "key": "", "delta": 1 },
+            { "target": "flag", "key": "town:counter", "value": true }
+          ]
+        },
+        {
+          "id": "the_council",
+          "label": "Carry it to the parish council as a proposal, with their names left out",
+          "outcome": "You bring the seven-thirty and the tuition to the council as items, and the council does what councils do with items. The men at {town:diner} hear that they were mentioned and are not sure they like it. The seven-thirty does not come back.",
+          "effects": [
+            { "target": "stat", "key": "administration", "delta": 1 },
+            { "target": "town", "key": "diner", "delta": -2 }
+          ]
+        },
+        {
+          "id": "the_parish_business",
+          "label": "Say, pleasantly, that the parish's business is discussed at the parish",
+          "outcome": "You say it pleasantly and the counter goes quiet and the waitress brings the check. You are welcome at {town:diner} after that, in the way a man is welcome at a place that has decided what he is.",
+          "effects": [
+            { "target": "town", "key": "diner", "delta": -12, "value": "He told the counter at {name} the parish's business was the parish's." },
+            { "target": "reputation", "key": "public", "delta": -2 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tn_employer_the_union_hall",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 30,
+      "suppressYears": 4,
+      "pressure": ["belief_vs_safety"],
+      "requires": [{ "type": "town", "key": "employer", "value": "closing" }],
+      "title": "The Union Hall",
+      "body": "{town:employer} is closing, and the town has known it for a month and been told for a week. Half the parish's men work there. The union has called a meeting at {town:hall} on Thursday night and the steward, who was baptized in {parish} and married in it and has not been inside since, has come to the rectory to ask whether you will come and say something. Not a prayer, he says. Something. The company's man will be there. The paper will be there. The mayor has already said he will not be there. The steward stands in the hall with his cap in his hands the way men of his father's generation did, and waits.",
+      "flavorPrompt": "The plant closing, the union hall meeting, and the steward asking the priest to come and say something that is not a prayer.",
+      "choices": [
+        {
+          "id": "say_something",
+          "label": "Go, and say what the parish will do, and what it thinks of how this was done",
+          "default": true,
+          "outcome": "You go and you say it: that the parish will feed anyone who needs feeding and pay anyone's light bill for the winter, and that a company that tells a town by press release has told the town what it is. The paper prints the second half. The company's man does not look at you. The chancery telephones on Monday, mildly. The men at {town:employer} remember which priest came.",
+          "effects": [
+            { "target": "town", "key": "employer", "delta": 20, "value": "He stood up at the union hall when {name} closed and said what he thought of it." },
+            { "target": "town", "key": "hall", "delta": 8 },
+            { "target": "reputation", "key": "public", "delta": 6 },
+            { "target": "reputation", "key": "parishioners", "delta": 4 },
+            { "target": "reputation", "key": "chancery", "delta": -3 },
+            { "target": "flag", "key": "town:union_hall", "value": true }
+          ]
+        },
+        {
+          "id": "a_mass",
+          "label": "Say a Mass for the men instead, and be at the hall in the back",
+          "outcome": "You say a Mass on the Wednesday for the men of {town:employer} and forty of them come, some of them for the first time in years, and on Thursday you sit at the back of {town:hall} and say nothing, and the steward nods at you once. It is what a priest does. The paper does not mention it.",
+          "effects": [
+            { "target": "town", "key": "employer", "delta": 8, "value": "He said a Mass for the men when {name} closed." },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "reputation", "key": "parishioners", "delta": 2 }
+          ]
+        },
+        {
+          "id": "not_the_place",
+          "label": "Tell him it is not the parish's place, and offer the hall for the food",
+          "outcome": "You say the parish will not take sides in a labour matter but the hall is open for the food, and he thanks you in a way that is not thanks. The meeting goes on without a priest. The parish hall is used for the food, by people who do not look at you.",
+          "effects": [
+            { "target": "town", "key": "employer", "delta": -10, "value": "He would not come to the union hall when {name} closed." },
+            { "target": "reputation", "key": "chancery", "delta": 2 },
+            { "target": "reputation", "key": "public", "delta": -4 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tn_employer_the_moving_van",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 16,
+      "suppressYears": 3,
+      "pressure": ["doubt"],
+      "requires": [{ "type": "town", "key": "employer", "value": "closed" }],
+      "title": "The Moving Van",
+      "body": "Since {town:employer} closed the houses on its side of the tracks have been going up for sale one at a time, and this week it is a family you know: three generations in {parish}, the grandfather an usher, the father on the finance council, the children in the school. They are going to a city eleven hours away where there is work. They have come to the rectory on the last night, the van in the drive, to ask for a blessing on the road, and the father asks, at the door, in a voice the children cannot hear, whether the parish will still be here when they come back to bury the grandfather.",
+      "flavorPrompt": "A three-generation family leaving after the plant closed, and the father asking at the door whether the parish will still be there.",
+      "choices": [
+        {
+          "id": "the_truth",
+          "label": "Tell him the truth: you do not know, and you will bury the grandfather wherever the parish is",
+          "default": true,
+          "outcome": "You say you do not know, and that you will bury the grandfather yourself if you are in the diocese and find someone if you are not, and he nods, because it was the honest answer and he had had enough of the other kind. You bless the van. The grandfather dies four years later and they bring him back, and the parish is there, smaller, and you are or you are not.",
+          "effects": [
+            { "target": "town", "key": "any", "delta": 4, "value": "He told the {town:employer} families the truth about the parish when they left." },
+            { "target": "reputation", "key": "parishioners", "delta": 3 },
+            { "target": "stat", "key": "piety", "delta": 1 }
+          ]
+        },
+        {
+          "id": "of_course",
+          "label": "Tell him of course it will, and bless the van",
+          "outcome": "You say of course, and bless the van, and the children wave. He knows, and you know, and it was the kind thing. They do not come back to bury the grandfather; they bury him there.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tn_school_the_board",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 12,
+      "suppressYears": 4,
+      "pressure": ["belief_vs_safety"],
+      "requires": [{ "type": "town", "key": "school", "value": "open" }],
+      "title": "The Prayer at Graduation",
+      "body": "The school board at {town:school} has been arguing for a month about the invocation at graduation, which a family has objected to and a lawyer has written about. Both sides have called the rectory. The board's chair, a parishioner, wants you to come to the meeting and speak for the prayer; the family that objected is not in the parish, but their neighbours are, and the neighbours would like you to come and speak for leaving it alone. The meeting is Tuesday, in the cafeteria, and the paper has sent the same reporter who covers the parish festival.",
+      "flavorPrompt": "The school board and the graduation prayer, both sides asking the priest to speak, the reporter from the festival.",
+      "choices": [
+        {
+          "id": "for_the_prayer",
+          "label": "Go, and speak for the prayer, briefly",
+          "default": true,
+          "outcome": "You speak for three minutes, for the prayer and against making a war of it, and the board keeps the prayer by one vote, and the family that objected moves the next year. The chair is grateful. The neighbours are cool. The reporter quotes you accurately, which is worse.",
+          "effects": [
+            { "target": "town", "key": "school", "delta": 6, "value": "He spoke for the prayer at {name}'s graduation." },
+            { "target": "reputation", "key": "traditional_bloc", "delta": 3 },
+            { "target": "reputation", "key": "progressive_bloc", "delta": -3 },
+            { "target": "reputation", "key": "public", "delta": 1 }
+          ]
+        },
+        {
+          "id": "for_peace",
+          "label": "Go, and say the parish would rather a town at peace than a prayer it fought over",
+          "outcome": "You say that a prayer said over a fight is not much of a prayer, and that the parish will pray for the graduates at the baccalaureate Mass whatever the board does, and the board drops the invocation and half the town thinks you gave it away. The baccalaureate Mass is full that year.",
+          "effects": [
+            { "target": "town", "key": "school", "delta": 4, "value": "He told the board at {name} the parish would rather a town at peace." },
+            { "target": "reputation", "key": "progressive_bloc", "delta": 3 },
+            { "target": "reputation", "key": "traditional_bloc", "delta": -4 },
+            { "target": "reputation", "key": "parishioners", "delta": 1 }
+          ]
+        },
+        {
+          "id": "stay_home",
+          "label": "Stay out of it; it is the school's board and not the parish's",
+          "outcome": "You stay home. The board fights it out and the paper says the pastor of {parish} declined to comment, and both sides remember that.",
+          "effects": [
+            { "target": "town", "key": "school", "delta": -4 },
+            { "target": "reputation", "key": "public", "delta": -2 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tn_funeral_home_the_eulogy",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "severity": "ROUTINE",
+      "category": "parish_death",
+      "baseWeight": 14,
+      "suppressYears": 3,
+      "pressure": ["loyalty_vs_honesty"],
+      "requires": [{ "type": "town", "key": "funeral_home", "value": "open" }],
+      "title": "The Director's Call",
+      "body": "The director at {town:funeral_home} calls on Tuesday about Thursday's funeral, as he calls about all of them, and this time he has a request that is not his: the family wants a eulogy, three of them, at the Mass, before the final commendation, and the family is a large one and a generous one, and the director has done business with them for forty years. He knows the diocese's rule. He is asking whether you will bend it, and he is asking as a man who sends the parish four funerals a month.",
+      "flavorPrompt": "The funeral director asking, on a generous family's behalf, for three eulogies at the Mass the diocese does not allow.",
+      "choices": [
+        {
+          "id": "one_after",
+          "label": "One, short, after the commendation, and the rest at the lunch",
+          "default": true,
+          "outcome": "You offer one speaker, three minutes, after the commendation, and the rest at the lunch in the hall, and the director sells it to the family as your generosity, which it partly was. The one speaker goes eleven minutes. The director sends a fruit basket at Christmas with a card that says thank you for Thursday.",
+          "effects": [
+            { "target": "town", "key": "funeral_home", "delta": 8, "value": "He found a way for the {name} family's eulogy." },
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "reputation", "key": "chancery", "delta": 0 }
+          ]
+        },
+        {
+          "id": "the_rule",
+          "label": "The rule is the rule; the lunch is theirs",
+          "outcome": "You say the diocese's rule and offer the lunch, and the director says he understands, and the family holds the funeral at the chain on the highway, where the minister will do anything. The director sends the next family to you anyway, because he is a professional, and does not send the fruit basket.",
+          "effects": [
+            { "target": "town", "key": "funeral_home", "delta": -8, "value": "He would not bend the rule on eulogies for {name}." },
+            { "target": "reputation", "key": "chancery", "delta": 2 },
+            { "target": "reputation", "key": "parishioners", "delta": -2 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tn_bar_saturday_night",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 12,
+      "suppressYears": 3,
+      "pressure": ["friendship_vs_duty"],
+      "requires": [{ "type": "town", "key": "bar", "value": "open" }],
+      "title": "Saturday Night",
+      "body": "The telephone at eleven on Saturday night is {town:bar}. The owner does not usually call the rectory. A parishioner, a man you know, an usher, is at the bar and will not leave and will not let anyone drive him, and has said your name, and the owner would rather call you than the police, because the police would be in the paper and the man's wife is a friend of his wife's. The vigil Mass was three hours ago. The seven o'clock is in eight.",
+      "flavorPrompt": "The bar calling the rectory at eleven on Saturday about an usher who will not leave and has said the priest's name.",
+      "choices": [
+        {
+          "id": "go_get_him",
+          "label": "Go and get him, and drive him home, and say nothing on Sunday",
+          "default": true,
+          "outcome": "You go. He comes with you without a word, and is sick in your car, and you drive him home and his wife opens the door and looks at you and looks at him and says thank you, Father, in a voice that has said it before. He ushers the ten-thirty, grey. Neither of you mentions it. The owner of {town:bar} does not charge you for anything, ever, after that.",
+          "effects": [
+            { "target": "town", "key": "bar", "delta": 14, "value": "He came to {name} at eleven at night for one of his own and asked no questions." },
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "strain", "key": "", "delta": 2 },
+            { "target": "flag", "key": "town:saturday_night", "value": true }
+          ]
+        },
+        {
+          "id": "the_wife",
+          "label": "Call his wife, and let her decide who goes",
+          "outcome": "You call the wife, who goes herself, and the story becomes hers and not yours, which is right and not what the owner wanted. He does not call the rectory again. The man is at the ten-thirty, grey, and does not look at you.",
+          "effects": [
+            { "target": "town", "key": "bar", "delta": -4 },
+            { "target": "strain", "key": "", "delta": -1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tn_field_friday_night",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "severity": "ROUTINE",
+      "category": "admin",
+      "baseWeight": 14,
+      "suppressYears": 4,
+      "pressure": ["competence"],
+      "requires": [{ "type": "any", "inner": [{ "type": "town", "key": "field", "value": "thriving" }, { "type": "town", "key": "field", "value": "open" }] }],
+      "title": "Friday Night Lights",
+      "body": "The season at {town:field} has started and the town is there on Friday nights, all of it, and the Saturday vigil at five is emptying because the boys play Saturday afternoons now too and the families go. The coach, who is not a Catholic, has come to the rectory to ask whether you would bless the team before the first home game, on the field, with the town watching, and has added, because he is a decent man, that he knows the Mass times are your business and he would not presume. The parish council has asked, separately, whether the vigil might move to six.",
+      "flavorPrompt": "Friday night lights emptying the vigil, and the coach asking for a blessing on the field with the town watching.",
+      "choices": [
+        {
+          "id": "bless_and_move",
+          "label": "Bless the team on the field, and move the vigil to six",
+          "default": true,
+          "outcome": "You stand on the fifty-yard line in a stole with the town in the stands and bless forty boys who do not know what to do with their hands, and the town claps, which is not what one does at a blessing and is what they had. The vigil moves to six and the families come after the game, and the ushers complain about the mud.",
+          "effects": [
+            { "target": "town", "key": "field", "delta": 12, "value": "He blessed the team on the field at {name} with the town watching." },
+            { "target": "reputation", "key": "public", "delta": 4 },
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "reputation", "key": "traditional_bloc", "delta": -1 },
+            { "target": "flag", "key": "town:blessed_the_team", "value": true }
+          ]
+        },
+        {
+          "id": "bless_only",
+          "label": "Bless the team, and keep the vigil where it is",
+          "outcome": "You bless the team and the town claps and the vigil stays at five and stays thin, and by November the finance council has noticed the collection. The coach sends a signed ball at Christmas.",
+          "effects": [
+            { "target": "town", "key": "field", "delta": 8, "value": "He blessed the team at {name}." },
+            { "target": "reputation", "key": "public", "delta": 2 },
+            { "target": "reputation", "key": "parishioners", "delta": -1 }
+          ]
+        },
+        {
+          "id": "decline",
+          "label": "Decline the field; the church is where the blessings are",
+          "outcome": "You say the boys are welcome at the vigil for a blessing and the coach thanks you and does not bring them. The town notices which churches were on the field, because the Baptist pastor was.",
+          "effects": [
+            { "target": "town", "key": "field", "delta": -8 },
+            { "target": "town", "key": "other_church", "delta": -2 },
+            { "target": "reputation", "key": "public", "delta": -3 },
+            { "target": "reputation", "key": "traditional_bloc", "delta": 2 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tn_other_church_the_pantry",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "severity": "ROUTINE",
+      "category": "group",
+      "baseWeight": 12,
+      "suppressYears": 4,
+      "pressure": ["belief_vs_safety"],
+      "requires": [{ "type": "town", "key": "other_church", "value": "open" }],
+      "title": "The Pastor Down the Road",
+      "body": "The pastor of {town:other_church} is younger than you and better at the parts of the job that show. He has come to the rectory with a proposal: one food pantry for {town}, run out of his building because his building has the parking, stocked by both congregations, with a sign that names both. He is straightforward about it. He has also, you know, taken four of the parish's families in the last two years, and one of them is on his board. He does not mention it. He asks what you think.",
+      "flavorPrompt": "The other church's pastor proposing a joint food pantry in his building, having quietly taken four of the parish's families.",
+      "choices": [
+        {
+          "id": "yes",
+          "label": "Yes, one pantry, and the parish's name on the sign",
+          "default": true,
+          "outcome": "The pantry opens in his building with both names on the sign, and it feeds twice what either did. The parish's older people mutter about the Baptists. One of the four families comes back, for no reason anyone can name. The two of you have coffee once a month after that, and are not friends, and are something.",
+          "effects": [
+            { "target": "town", "key": "other_church", "delta": 14, "value": "He put the parish's name beside {name}'s on the pantry." },
+            { "target": "town", "key": "shelter", "delta": 4 },
+            { "target": "reputation", "key": "public", "delta": 4 },
+            { "target": "reputation", "key": "traditional_bloc", "delta": -3 },
+            { "target": "reputation", "key": "progressive_bloc", "delta": 2 },
+            { "target": "flag", "key": "town:joint_pantry", "value": true }
+          ]
+        },
+        {
+          "id": "ours",
+          "label": "Thank him, and keep the parish's pantry the parish's",
+          "outcome": "You thank him and keep the pantry in the hall, and both pantries go on, and the town's poor learn the hours of each. He is polite about it. The four families stay where they are.",
+          "effects": [
+            { "target": "town", "key": "other_church", "delta": -6, "value": "He kept the pantry the parish's when {name} asked." },
+            { "target": "reputation", "key": "traditional_bloc", "delta": 2 },
+            { "target": "reputation", "key": "public", "delta": -1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tn_shelter_the_steps",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "severity": "NOTABLE",
+      "category": "finance",
+      "baseWeight": 28,
+      "suppressYears": 4,
+      "pressure": ["money", "belief_vs_safety"],
+      "requires": [{ "type": "town", "key": "shelter", "value": "closed" }],
+      "title": "The Church Steps",
+      "body": "Since {town:shelter} closed its men have been on the church steps, and in the vestibule when the ushers forget to lock it, and at the rectory door after dark. It is November. The county says there is a bed forty minutes away. The finance council chair says the hall's insurance does not cover overnight and the parish cannot afford to find out. The two women who ran {town:shelter} have come to the rectory with a plan on a legal pad: the hall, cots from the Knights, volunteers from three churches, twenty men a night until March. They have done this before. They are asking for the building and the pastor's name.",
+      "flavorPrompt": "The shelter closed, its men on the church steps in November, and two women with a plan for the hall.",
+      "choices": [
+        {
+          "id": "open_the_hall",
+          "label": "Open the hall, twenty men a night until March, and tell the council afterwards",
+          "default": true,
+          "outcome": "The hall opens on a Monday with twenty cots and eleven volunteers and a man from the fire department who looks at the exits and says nothing. It runs until March. The finance council chair resigns and is replaced by one of the two women. The chancery hears and sends a letter about insurance which you answer. In the spring the town knows which building was open in the winter, and so do the men.",
+          "effects": [
+            { "target": "town", "key": "shelter", "delta": 20, "value": "He opened the hall for {name}'s men the winter it closed." },
+            { "target": "town", "key": "any", "delta": 6 },
+            { "target": "reputation", "key": "public", "delta": 6 },
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "reputation", "key": "chancery", "delta": -4 },
+            { "target": "money", "key": "cash", "delta": -6000 },
+            { "target": "strain", "key": "", "delta": 4 },
+            { "target": "flag", "key": "town:winter_shelter", "value": true }
+          ]
+        },
+        {
+          "id": "the_county",
+          "label": "Drive them to the county bed yourself, twice a week, and lobby the town for a new shelter",
+          "outcome": "You drive the men forty minutes on Tuesdays and Fridays in the parish van and write to the council and speak at the meeting, and the town votes money for a new shelter the next year, in a building that is not yours. The men remember the van. The two women do not forgive the hall.",
+          "effects": [
+            { "target": "town", "key": "shelter", "delta": 6, "value": "He drove {name}'s men to the county and spoke for a new one." },
+            { "target": "town", "key": "city_hall", "delta": 6 },
+            { "target": "reputation", "key": "public", "delta": 2 },
+            { "target": "strain", "key": "", "delta": 3 }
+          ]
+        },
+        {
+          "id": "lock_the_vestibule",
+          "label": "Lock the vestibule at night and tell the women the parish cannot",
+          "outcome": "The vestibule is locked and the men are on the steps, and in January one of them is found on the steps in the morning and the paper does not say which church. The two women take their plan to {town:other_church}, which says yes. The parish's older people are relieved and do not say so.",
+          "effects": [
+            { "target": "town", "key": "shelter", "delta": -20, "value": "He locked the vestibule the winter {name} closed." },
+            { "target": "town", "key": "other_church", "delta": -4 },
+            { "target": "reputation", "key": "public", "delta": -6 },
+            { "target": "reputation", "key": "chancery", "delta": 2 },
+            { "target": "stat", "key": "piety", "delta": -2 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tn_station_the_developer",
+      "phase": ["administrator", "pastor"],
+      "severity": "NOTABLE",
+      "category": "finance",
+      "baseWeight": 24,
+      "suppressYears": 5,
+      "pressure": ["money"],
+      "requires": [{ "type": "any", "inner": [{ "type": "town", "key": "station", "value": "new" }, { "type": "town", "key": "station", "value": "thriving" }] }],
+      "title": "The Developer",
+      "body": "Since the new line came to {town:station} the town has had money in it it did not have, and the money has found the parish's lot: the half acre behind the hall where the festival is held and the boys play and nothing else happens. A developer has written, and then come in person, with drawings of forty townhouses and a number that would clear the parish's debt and roof the church and endow the school, and would leave the parish with a parking problem and no festival. The finance council is split. The chancery, which would have to approve the sale, has let it be known that it would.",
+      "flavorPrompt": "A developer with drawings for the parish's lot after the new station brought money to town.",
+      "choices": [
+        {
+          "id": "sell",
+          "label": "Sell the lot: the debt, the roof, the school",
+          "default": true,
+          "outcome": "The sale goes through and the debt goes and the roof goes on and the school has an endowment for the first time in its history. The festival moves to {town:park} and is smaller. The townhouses fill with people who are not parishioners and might be. The boys play in the street. Some of the older people never forgive it and some of the younger ones never knew.",
+          "effects": [
+            { "target": "money", "key": "cash", "delta": 900000 },
+            { "target": "money", "key": "debt", "delta": -400000 },
+            { "target": "town", "key": "station", "delta": 6 },
+            { "target": "town", "key": "park", "delta": 4 },
+            { "target": "town", "key": "any", "delta": -3, "value": "He sold the lot behind the hall to the developer." },
+            { "target": "reputation", "key": "chancery", "delta": 6 },
+            { "target": "reputation", "key": "parishioners", "delta": -4 },
+            { "target": "flag", "key": "town:sold_the_lot", "value": true }
+          ]
+        },
+        {
+          "id": "lease",
+          "label": "Lease half of it on a long term, and keep the festival",
+          "outcome": "You lease the back half for ninety-nine years, which the chancery's lawyer says is a sale that is not a sale, and the parish keeps the front for the festival and the boys, and gets less money and keeps its lot. Nobody is happy, which the finance council chair says is how you know it was fair.",
+          "effects": [
+            { "target": "money", "key": "cash", "delta": 300000 },
+            { "target": "town", "key": "station", "delta": 2 },
+            { "target": "reputation", "key": "chancery", "delta": 2 },
+            { "target": "reputation", "key": "parishioners", "delta": 1 }
+          ]
+        },
+        {
+          "id": "keep_it",
+          "label": "Keep the lot; the festival is the parish's, and so is the debt",
+          "outcome": "You keep it. The developer builds across the street instead, and the festival goes on, and the debt goes on, and the roof leaks another five years. The older people speak of it as the year the parish was not for sale.",
+          "effects": [
+            { "target": "town", "key": "any", "delta": 5, "value": "He kept the lot when the developer came." },
+            { "target": "reputation", "key": "parishioners", "delta": 4 },
+            { "target": "reputation", "key": "chancery", "delta": -3 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tn_library_the_levy",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 12,
+      "suppressYears": 4,
+      "pressure": ["belief_vs_safety"],
+      "requires": [{ "type": "town", "key": "library", "value": "failing" }],
+      "title": "The Library Levy",
+      "body": "{town:library} has cut its hours and the levy to save it is on the ballot in November. The friends of the library, who are mostly the parish's older women, have asked whether you would say a word for it from the pulpit, or at least put it in the bulletin. The diocese's guidance on ballot questions is a page long and says nothing useful. The finance council chair, who is against every levy on principle, has said he would take it badly. The men who spend their days at {town:library} since the plant closed are on the church steps when it is shut.",
+      "flavorPrompt": "The library levy, the parish's older women asking for a word from the pulpit, the council chair against every levy.",
+      "choices": [
+        {
+          "id": "the_bulletin",
+          "label": "Put it in the bulletin as a fact, with the hours it would restore",
+          "default": true,
+          "outcome": "The bulletin carries the levy and the hours, without a recommendation, which everyone reads as one. The levy passes by two hundred votes and the friends of the library say the parish did it. The finance council chair says nothing for a month, which is how he takes things badly.",
+          "effects": [
+            { "target": "town", "key": "library", "delta": 12, "value": "He put the levy for {name} in the bulletin." },
+            { "target": "reputation", "key": "public", "delta": 3 },
+            { "target": "reputation", "key": "parishioners", "delta": 1 }
+          ]
+        },
+        {
+          "id": "from_the_pulpit",
+          "label": "Say it from the pulpit: the town needs its library and the parish says so",
+          "outcome": "You say it from the pulpit, once, on the Sunday before, and the levy passes and the chancery receives a letter from someone about the pastor of {parish} and politics, which the chancery files. The friends of the library put your name on a plaque you did not want.",
+          "effects": [
+            { "target": "town", "key": "library", "delta": 16, "value": "He spoke for {name}'s levy from the pulpit." },
+            { "target": "reputation", "key": "public", "delta": 4 },
+            { "target": "reputation", "key": "chancery", "delta": -3 },
+            { "target": "reputation", "key": "progressive_bloc", "delta": 2 }
+          ]
+        },
+        {
+          "id": "nothing",
+          "label": "Nothing; the parish does not do ballot questions",
+          "outcome": "The bulletin says nothing and the levy fails by ninety votes and {town:library} closes on Saturdays, and the men are on the steps on Saturdays. The friends of the library do not say it was the parish. They think it.",
+          "effects": [
+            { "target": "town", "key": "library", "delta": -8 },
+            { "target": "reputation", "key": "chancery", "delta": 1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tn_nursing_home_the_last_thursday",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "severity": "ROUTINE",
+      "category": "parish_death",
+      "baseWeight": 16,
+      "suppressYears": 4,
+      "pressure": ["friendship_vs_duty"],
+      "requires": [{ "type": "town", "key": "nursing_home", "value": "closing" }],
+      "title": "The Last Thursday",
+      "body": "{town:nursing_home} is closing and its ninety residents are being sent to homes across the county, forty miles some of them, and the parish's old, who are most of them, are being scattered where the parish cannot follow. The Thursday Mass there has been the parish's largest congregation for years. The administrator has asked you to say the last one, and the residents' council, which is three women in wheelchairs and a man who was a judge, has asked whether the parish will come and find them afterwards, wherever they are sent.",
+      "flavorPrompt": "The nursing home closing, the last Thursday Mass, and the residents asking whether the parish will find them afterwards.",
+      "choices": [
+        {
+          "id": "find_them",
+          "label": "Promise to find them, and keep a list, and drive it",
+          "default": true,
+          "outcome": "You keep the list. Thursdays become a circuit: three homes, forty miles, the Mass said in three dayrooms to nine people each. It costs the afternoon and the car. The judge dies in the spring and you are there. The town, which has stopped thinking about its old, hears that the parish did not.",
+          "effects": [
+            { "target": "town", "key": "nursing_home", "delta": 18, "value": "He found {name}'s residents after they were scattered, and kept going." },
+            { "target": "town", "key": "any", "delta": 4 },
+            { "target": "reputation", "key": "parishioners", "delta": 4 },
+            { "target": "stat", "key": "piety", "delta": 2 },
+            { "target": "strain", "key": "", "delta": 4 },
+            { "target": "flag", "key": "town:thursday_circuit", "value": true }
+          ]
+        },
+        {
+          "id": "the_last_mass",
+          "label": "Say the last Mass, and write to the pastors where they are sent",
+          "outcome": "You say the last Mass with the staff crying and the residents not, and you write to three pastors with the names, and two of them answer. It is what could be done. The judge dies in the spring and you hear about it a month later.",
+          "effects": [
+            { "target": "town", "key": "nursing_home", "delta": 6, "value": "He said the last Mass at {name} and wrote after the residents." },
+            { "target": "reputation", "key": "parishioners", "delta": 1 },
+            { "target": "reputation", "key": "brother_priests", "delta": 1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tn_city_hall_the_lot",
+      "phase": ["administrator", "pastor"],
+      "severity": "ROUTINE",
+      "category": "admin",
+      "baseWeight": 12,
+      "suppressYears": 4,
+      "pressure": ["money"],
+      "requires": [{ "type": "town", "key": "city_hall", "value": "open" }],
+      "title": "The Zoning Notice",
+      "body": "A notice from {town:city_hall} about the parish lot: the town wants it paved and metered on weekdays as a commuter lot, and will do the paving, and will share the meters, and has drawn up the agreement already. The mayor, a parishioner, has telephoned to say it is a good deal and that he would take it as a personal kindness. The council's newest member, also a parishioner, has telephoned to say the mayor's brother-in-law does the paving. The lot is where the festival is, and the boys play, and the funeral cars park.",
+      "flavorPrompt": "City hall wanting the parish lot as a metered commuter lot, the mayor calling it a kindness, the councilman naming the brother-in-law.",
+      "choices": [
+        {
+          "id": "the_deal",
+          "label": "Take the deal, with the festival weekends and the funerals written in",
+          "default": true,
+          "outcome": "The lot is paved by the brother-in-law, which everyone knows and nobody says, and the meters bring the parish eleven thousand a year, and the festival and the funerals are in the agreement, and the boys play somewhere else. The mayor says it at the festival, from the stage. The councilman votes against it and comes to Mass anyway.",
+          "effects": [
+            { "target": "money", "key": "cash", "delta": 11000 },
+            { "target": "town", "key": "city_hall", "delta": 10, "value": "He let {name} pave the lot, with the festival kept." },
+            { "target": "reputation", "key": "public", "delta": 2 },
+            { "target": "reputation", "key": "parishioners", "delta": -1 }
+          ]
+        },
+        {
+          "id": "the_brother_in_law",
+          "label": "Say the parish will consider it when the paving goes to bid",
+          "outcome": "You say the parish will consider a bid, plural, and the mayor understands you perfectly, and the matter is not raised again. The councilman becomes a friend. The mayor sits farther back.",
+          "effects": [
+            { "target": "town", "key": "city_hall", "delta": -6, "value": "He asked {name} to put the paving out to bid." },
+            { "target": "reputation", "key": "public", "delta": 3 },
+            { "target": "reputation", "key": "parishioners", "delta": 2 }
+          ]
+        },
+        {
+          "id": "no",
+          "label": "No; the lot is the parish's and the festival is not for sale",
+          "outcome": "You say no and the mayor takes it as a personal unkindness, and the town's snowplough does the parish's street last that winter. The festival goes on. The boys play.",
+          "effects": [
+            { "target": "town", "key": "city_hall", "delta": -10 },
+            { "target": "reputation", "key": "parishioners", "delta": 2 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tn_store_the_statue",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 12,
+      "suppressYears": 4,
+      "pressure": ["friendship_vs_duty"],
+      "requires": [{ "type": "town", "key": "store", "value": "closing" }],
+      "title": "The Statue in the Window",
+      "body": "{town:store} is closing at the end of the month, and the owner has asked you to come by. There has been a statue of the Sacred Heart in the window since the owner's grandfather opened the place, and the owner would like it to go to the parish, and would like it to go somewhere it can be seen, and would like, though it takes some time to say, for the parish to remember the family. The chain on the highway has offered to buy the fixtures. The sacristan has said the church has enough statues.",
+      "flavorPrompt": "The store closing, the Sacred Heart from the window offered to the parish, and the sacristan saying there are enough statues.",
+      "choices": [
+        {
+          "id": "the_vestibule",
+          "label": "Take it, and put it in the vestibule with the family's name",
+          "default": true,
+          "outcome": "The statue goes in the vestibule with a small brass plate, and the owner comes to see it there on the first Sunday and stands in front of it for a while and leaves. The sacristan dusts it with the others. The town, which shops on the highway now, sees the plate on its way in.",
+          "effects": [
+            { "target": "town", "key": "store", "delta": 14, "value": "He put the Sacred Heart from {name}'s window in the vestibule." },
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "flag", "key": "decor:store_statue", "value": true }
+          ]
+        },
+        {
+          "id": "the_sacristy",
+          "label": "Take it, and find it a place when there is one",
+          "outcome": "The statue goes in the sacristy, wrapped, and is there for years. The owner does not ask. When it is found and put out by a later pastor nobody knows whose it was.",
+          "effects": [
+            { "target": "town", "key": "store", "delta": 2 }
+          ]
+        }
+      ]
+    }
+  ]
+}

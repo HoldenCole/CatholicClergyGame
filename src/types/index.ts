@@ -28,3 +28,4 @@ export * from './houses';
 export * from './arcs';
 export * from './campaign';
 export * from './religiousLife';
+export * from './town';

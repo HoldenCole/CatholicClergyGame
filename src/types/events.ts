@@ -125,6 +125,10 @@ export type Condition =
   | { type: 'group'; key: 'type' | 'vitality' | 'hostile' | 'suppressed' | 'foundedByPlayer' | 'agenda' | 'religiousLed'; value: string | boolean }
   /** A feast that falls in the current week, as the parish keeps it (engine/feasts.ts). */
   | { type: 'feast'; key: string }
+  /** DESIGN §8.9: a place of the town is in that state (key: a TownPlaceKind, or 'any'). */
+  | { type: 'town'; key: string; value: string }
+  /** DESIGN §8.9: the regard of a place's people for him (key: a TownPlaceKind, or 'any' for the town's average). */
+  | { type: 'town_regard'; key: string; op: Op; value: number }
   /** The share of the parish from one community: latino, vietnamese, polish, filipino, korean, nigerian, indian... */
   | { type: 'ethnic'; key: string; op: Op; value: number }
   /** What the man has been preaching on, this month. */
@@ -169,6 +173,8 @@ export type EffectTarget =
   | 'foundation'
   /** E3 §8: what a friar is known for (key: a ReputationKey; delta), held under its cap. */
   | 'known'
+  /** DESIGN §8.9: the town (key: a TownPlaceKind or 'any'; delta moves the place's regard; value, a string, is what the town remembers). */
+  | 'town'
   | 'stat'
   | 'reputation'
   | 'relationship'

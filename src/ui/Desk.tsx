@@ -9,6 +9,7 @@ import DeaneryPanel from './parish/DeaneryPanel';
 import GroupsPanel from './parish/GroupsPanel';
 import ClassmatesPanel from './parish/ClassmatesPanel';
 import PeoplePanel from './parish/PeoplePanel';
+import TownPanel from './parish/TownPanel';
 import HousesPanel from './parish/HousesPanel';
 import WorkPanel from './parish/WorkPanel';
 import SideWorkPanel from './parish/SideWorkPanel';
@@ -36,6 +37,7 @@ const LABEL: Record<Sheet, string> = {
   house: 'House',
   profile: 'You',
   parish: 'Parish',
+  town: 'Town',
   map: 'Map',
   deanery: 'Deanery',
   see: 'The see',
@@ -64,7 +66,7 @@ export default function Desk() {
   const inParish = !!game.parish;
   const away = !!game.study;
   const friar = !!game.religious && !!game.flags.ordained && !inParish && !away;
-  const tabs: Sheet[] = friar ? ['week', 'jobs', 'profile', 'clubs', 'letters', 'record', 'settings'] : inParish ? ['week', 'parish', 'people', 'deanery', 'map', 'jobs', 'profile', 'clubs', 'letters', 'record', 'settings'] : away ? (game.see ? ['week', 'see', 'jobs', 'profile', 'letters', 'record', 'settings'] : game.study?.place ? ['week', 'place', 'jobs', 'profile', 'letters', 'record', 'settings'] : ['week', 'jobs', 'profile', 'letters', 'record', 'settings']) : ['week', 'formation', 'jobs', 'profile', 'clubs', 'letters', 'record', 'settings'];
+  const tabs: Sheet[] = friar ? ['week', 'jobs', 'profile', 'clubs', 'letters', 'record', 'settings'] : inParish ? ['week', 'parish', 'people', 'town', 'deanery', 'map', 'jobs', 'profile', 'clubs', 'letters', 'record', 'settings'] : away ? (game.see ? ['week', 'see', 'jobs', 'profile', 'letters', 'record', 'settings'] : game.study?.place ? ['week', 'place', 'jobs', 'profile', 'letters', 'record', 'settings'] : ['week', 'jobs', 'profile', 'letters', 'record', 'settings']) : ['week', 'formation', 'jobs', 'profile', 'clubs', 'letters', 'record', 'settings'];
   // A friar lives in a house: its sheet sits beside the week. E3 §3.2.
   if (game.religious) tabs.splice(1, 0, 'house');
   // A friar pastor sits in the diocese's deanery. E3 §3.12.
@@ -98,6 +100,7 @@ export default function Desk() {
           </>
         )}
         {open === 'parish' && <ParishPanel />}
+        {open === 'town' && <TownPanel />}
         {open === 'map' && <MapPanel />}
         {open === 'deanery' && <DeaneryPanel />}
         {open === 'see' && <SeePanel />}

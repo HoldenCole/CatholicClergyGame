@@ -12,7 +12,7 @@ export const STAFF_SPECS: { tag: string; title: string; ages: [number, number]; 
   { tag: 'maintenance', title: '', ages: [35, 70], women: 0.05, when: (p) => p.households >= 300 },
 ];
 
-function heritageFor(rng: Rng, parish: Parish, presetId: string): Parameters<typeof rollMaleName>[1] {
+export function heritageFor(rng: Rng, parish: Parish, presetId: string): Parameters<typeof rollMaleName>[1] {
   const preset = presetById(presetId);
   const weights: Record<string, number> = {};
   for (const [k, share] of Object.entries(parish.ethnic)) {
