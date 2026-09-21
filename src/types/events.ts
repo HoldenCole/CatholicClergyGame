@@ -125,6 +125,8 @@ export type Condition =
   | { type: 'group'; key: 'type' | 'vitality' | 'hostile' | 'suppressed' | 'foundedByPlayer' | 'agenda' | 'religiousLed'; value: string | boolean }
   /** A feast that falls in the current week, as the parish keeps it (engine/feasts.ts). */
   | { type: 'feast'; key: string }
+  /** DESIGN §8.12: what the presbyterate is saying (key: about_you_false | about_you_true | about_other | reached_bishop), heard in the last half year and not yet answered. */
+  | { type: 'rumour'; key: 'about_you_false' | 'about_you_true' | 'about_other' | 'reached_bishop' }
   /** DESIGN §8.11: someone in the man's orbit has this life open (key: a life id from content/lives.json; who narrows the class of person). */
   | { type: 'npc_life'; key: string; who?: 'staff' | 'clergy' | 'classmate' | 'family' | 'director' | 'confrere' }
   /** DESIGN §8.9: a place of the town is in that state (key: a TownPlaceKind, or 'any'). */
@@ -177,6 +179,8 @@ export type EffectTarget =
   | 'known'
   /** DESIGN §8.9: the town (key: a TownPlaceKind or 'any'; delta moves the place's regard; value, a string, is what the town remembers). */
   | 'town'
+  /** DESIGN §8.12: the latest rumour heard (key 'correct' | 'own' | 'let_lie' for one about him; 'defend' | 'join' for one about another). */
+  | 'rumour'
   | 'stat'
   | 'reputation'
   | 'relationship'

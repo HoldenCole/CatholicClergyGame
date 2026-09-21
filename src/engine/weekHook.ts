@@ -37,6 +37,7 @@ import { feastsOfWeek } from './feasts';
 import { ensureTown } from '@/systems/town';
 import { mailWeek } from '@/systems/mail';
 import { openLives } from '@/systems/lives';
+import { heardRumours, talkWeek } from '@/systems/talk';
 import { sideWorkWeek } from '@/systems/sidework';
 import { requestedChoice } from '@/systems/choice';
 import { confessorWeek } from '@/systems/confessor';
@@ -210,13 +211,13 @@ export function studyWeekHook(deps: EventDeps): WeekHook {
 const FRIAR_EVENT_CHANCE = 0.12;
 /** On a week with a feast in it, the chance the feast's own scene fires, when one is eligible. */
 const FEAST_SCENE_CHANCE = 0.6;
-/** Any week, the chance a scene about someone's open life fires, when one is eligible. DESIGN §8.11. */
+/** Any week, the chance a scene about someone's open life, or about what is being said, fires when one is eligible. DESIGN §8.11, §8.12. */
 const LIFE_SCENE_CHANCE = 0.06;
 
-/** A scene that hangs on a life someone around him is carrying, drawn ahead of the ordinary pool. Null when none fires. */
+/** A scene that hangs on a life someone around him is carrying, or on the talk he has heard, drawn ahead of the ordinary pool. Null when none fires. */
 function lifeScene(state: GameState, rng: Rng, deps: EventDeps): GameState | null {
-  if (!rng.chance(LIFE_SCENE_CHANCE) || !openLives(state).length) return null;
-  const hangs = (c: Condition): boolean => c.type === 'npc_life' || ((c.type === 'any' || c.type === 'all') && c.inner.some(hangs));
+  if (!rng.chance(LIFE_SCENE_CHANCE) || (!openLives(state).length && !heardRumours(state).length)) return null;
+  const hangs = (c: Condition): boolean => c.type === 'npc_life' || c.type === 'rumour' || ((c.type === 'any' || c.type === 'all') && c.inner.some(hangs));
   const pool = deps.pool.filter((e) => !e.beat && (e.requires ?? []).some(hangs));
   if (!pool.length) return null;
   const [event] = drawEvents(pool, state, rng, 1);
@@ -283,6 +284,10 @@ export function friarWeekHook(deps: EventDeps): WeekHook {
       if (event) next = fireOrResolve(next, event, rng, deps);
     }
     if (next.mode.kind !== 'clock' || next.pending.length > 0) return next;
+    // What the men are saying. DESIGN §8.12.
+    const said = talkWeek(next, rng.derive(`talk:${next.clock.week}`));
+    next = said.state;
+    for (const line of said.lines) next = addDigestLine(next, line);
     // The mailbag: a letter from someone, now and then. DESIGN §8.10.
     next = mailWeek(next, rng.derive(`mail:${next.clock.week}`));
     return religiousModeStep(openMail(offersStep(next, rng, deps)));
@@ -472,6 +477,10 @@ export function parishWeekHook(deps: EventDeps): WeekHook {
       next = nextAssignment(next, rng).state;
     }
     if (next.mode.kind !== 'clock' || next.pending.length > 0) return next;
+    // What the men are saying. DESIGN §8.12.
+    const said = talkWeek(next, rng.derive(`talk:${next.clock.week}`));
+    next = said.state;
+    for (const line of said.lines) next = addDigestLine(next, line);
     // The mailbag: a letter from someone, now and then. DESIGN §8.10.
     next = mailWeek(next, rng.derive(`mail:${next.clock.week}`));
     return religiousModeStep(openMail(offersStep(next, rng, deps)));

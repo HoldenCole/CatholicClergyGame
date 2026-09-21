@@ -29,6 +29,7 @@ export function laneOf(line: string): Lane {
   if (isCastLine(line)) return 'people';
   if (isTownLine(line)) return 'around';
   if (isTownYearLine(line)) return 'parish';
+  if (/^(At the deanery meeting|The dean, in the parking lot|At the priests' dinner|At the confessors' dinner|In the cathedral sacristy|A classmate, on the phone|At a funeral lunch|At table|After chapter|The provincial's secretary|A brother from another house)|what (is being|they are) saying/.test(line)) return 'diocese';
   if (/ this week\. /.test(line)) return 'parish';
   if (/Collections \$|assessment|\bdebt\b|\$[\d,]+|the fund|reserve|bequest|paid down|invested|withdrew/i.test(line)) return 'money';
   if (/^You (baptized|married|buried|anointed|sat with|prepared|helped|quarreled)|is fading|is thriving|is withering|steady again|has folded|coming back|A word with|has been made|has been named|has left|has died|left the priesthood|leads it|new leader|\bwedding|\bfuneral|baptism/i.test(line)) return 'people';

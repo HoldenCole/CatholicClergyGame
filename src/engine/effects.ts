@@ -19,6 +19,7 @@ import { statDeltaFactor } from '@/systems/religious/restless';
 import { applyStat } from '@/systems/stats';
 import { closeTenure } from '@/systems/tenures';
 import { applyTownEffect } from '@/systems/town';
+import { applyRumourEffect } from '@/systems/talk';
 import { resolveSelector } from './selectors';
 import { noteMovers } from '@/systems/movers';
 import { moveArc } from '@/systems/arcs';
@@ -61,6 +62,8 @@ export function applyEffect(
   switch (effect.target) {
     case 'town':
       return applyTownEffect(state, effect);
+    case 'rumour':
+      return applyRumourEffect(state, effect);
     case 'stat': {
       const c = requireCharacter(state, effect);
       // An order's mechanics can widen a stat's swing (the restless heart, E3 §7.2); 1 for everyone else.

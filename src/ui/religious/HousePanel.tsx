@@ -1,4 +1,5 @@
 import { lifeLabel } from '@/systems/lives';
+import { venueLabel, whatTheySay } from '@/systems/talk';
 import { useGameStore } from '@/engine/store';
 import { currentHouse, houseLine, membersOf, priorOf } from '@/systems/religious/house';
 import { horariumRows } from '@/systems/religious/horarium';
@@ -106,6 +107,21 @@ export default function HousePanel() {
           ))}
         </ul>
       </div>
+      {whatTheySay(game).length > 0 && (
+        <div className="mt-4">
+          <div className="heading text-sm">What the house is saying</div>
+          <ul className="mt-1 flex flex-col gap-1 text-sm">
+            {whatTheySay(game).map((r) => (
+              <li key={r.id} className={r.about === 'you' ? 'ink-wine' : ''}>
+                <span className="ink-faint mr-1 text-xs">{venueLabel(r.venue)}:</span>{r.text}
+                {r.answered === 'correct' && <span className="ink-faint ml-1 text-xs">(you set that straight)</span>}
+                {r.answered === 'own' && <span className="ink-faint ml-1 text-xs">(you owned it)</span>}
+                {r.reachedBishop && !r.answered && <span className="ink-faint ml-1 text-xs">(the bishop has heard)</span>}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
       <div className="mt-4">
         <div className="heading text-sm">What this order is like</div>
         <ul className="ink-muted mt-1 flex flex-col gap-0.5 text-xs">

@@ -29,3 +29,4 @@ export * from './arcs';
 export * from './campaign';
 export * from './religiousLife';
 export * from './town';
+export * from './talk';
