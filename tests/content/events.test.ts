@@ -89,7 +89,7 @@ const ROLES = ['parochial_vicar', 'administrator', 'pastor'];
 const EFFECT_TARGETS = [
   'stat', 'reputation', 'relationship', 'flag', 'group', 'money', 'ap', 'thread', 'position',
   'pillar', 'alignment', 'outspokenness', 'honesty', 'credential', 'trait', 'archetype',
-  'concern', 'risk', 'npc', 'end', 'decor', 'permission', 'trait_known', 'transfer', 'building', 'club', 'bond', 'place', 'record', 'strain', 'arc', 'ministry',
+  'concern', 'risk', 'npc', 'end', 'decor', 'permission', 'trait_known', 'transfer', 'building', 'club', 'bond', 'place', 'record', 'strain', 'arc', 'ministry', 'foundation',
   'province', 'crossing',
 ];
 const DECOR_PLACES = ['church', 'chapel', 'office', 'rectory', 'seminary_room', 'chancery'];

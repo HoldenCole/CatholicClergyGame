@@ -5,7 +5,8 @@ import bishopAsksRaw from './bishopAsks.json';
 import pastorAsksRaw from './pastorAsks.json';
 import reputationsRaw from './reputations.json';
 import spendsRaw from './spends.json';
-import type { BishopAskDef, PastorAskDef, ReputationDef, IdentityDef, FriarSpendDef, HorariumDef, HorariumKey, OrderDef, OrderKey, PermissionDef, ProvinceSeed } from '@/types';
+import foundationsRaw from './foundations.json';
+import type { BishopAskDef, PastorAskDef, ReputationDef, IdentityDef, FriarSpendDef, CharterDial, CharterOptionDef, FoundationWorkDef, HorariumDef, HorariumKey, OrderDef, OrderKey, PermissionDef, ProvinceSeed } from '@/types';
 
 /** The orders a friar can be professed into. E3 §6–7, as data. */
 const data = raw as unknown as { orders: OrderDef[]; provinceComplications: string[]; doctrinalTopics: string[] };
@@ -55,3 +56,15 @@ export const identityDefs: IdentityDef[] = reps.identities;
 
 /** The friar's discretionary week. E3 §3.3. */
 export const spendDefs: FriarSpendDef[] = (spendsRaw as unknown as { spends: FriarSpendDef[] }).spends;
+
+/** The founding charter's dials and the works a house can add. E3 §9.4–9.5. */
+const foundations = foundationsRaw as unknown as { dials: Record<CharterDial, CharterOptionDef[]>; works: FoundationWorkDef[]; needLines: Record<string, string> };
+export const charterDials: Record<CharterDial, CharterOptionDef[]> = foundations.dials;
+export const foundationWorkDefs: FoundationWorkDef[] = foundations.works;
+export const needLines: Record<string, string> = foundations.needLines;
+
+export function charterOption(dial: CharterDial, id: string): CharterOptionDef {
+  const def = charterDials[dial].find((o) => o.id === id);
+  if (!def) throw new Error(`no ${dial} option ${id}`);
+  return def;
+}

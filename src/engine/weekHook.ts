@@ -30,6 +30,7 @@ import { expireAsks } from '@/systems/houses';
 import { ARCS, dueArc, endArc, maybeOpenArc } from '@/systems/arcs';
 import { requestWeek } from '@/systems/religious/requests';
 import { spendsWeek } from '@/systems/religious/spends';
+import { foundingWeek } from '@/systems/religious/founding';
 import { sideWorkWeek } from '@/systems/sidework';
 import { requestedChoice } from '@/systems/choice';
 import { confessorWeek } from '@/systems/confessor';
@@ -220,6 +221,9 @@ export function friarWeekHook(deps: EventDeps): WeekHook {
     if (next.mode.kind !== 'clock') return next;
     // The provincial's answer to the letter asking for a work. E3 §3.10.
     next = requestWeek(next, rng.derive(`request:${next.clock.week}`));
+    if (next.mode.kind !== 'clock') return next;
+    // The two keys answer a petition for a foundation. E3 §9.3.
+    next = foundingWeek(next, rng.derive(`founding:${next.clock.week}`));
     if (next.mode.kind !== 'clock') return next;
     if (rng.derive(`friar-scene:${next.clock.week}`).chance(FRIAR_EVENT_CHANCE)) {
       const [event] = drawEvents(deps.pool.filter((e) => !e.beat), next, rng, 1);

@@ -29,6 +29,7 @@ import HousePanel from './religious/HousePanel';
 import HouseAsksPanel from './religious/HouseAsksPanel';
 import FriarWeekPanel from './religious/FriarWeekPanel';
 import DiocesanMenPanel from './religious/DiocesanMenPanel';
+import FoundationPanel from './religious/FoundationPanel';
 
 const LABEL: Record<Sheet, string> = {
   week: 'Week',
@@ -45,6 +46,7 @@ const LABEL: Record<Sheet, string> = {
   letters: 'Letters',
   record: 'Record',
   formation: 'Formation',
+  foundation: 'Foundation',
   settings: 'Saves & settings',
   furnish: 'Furnish',
 };
@@ -67,6 +69,8 @@ export default function Desk() {
   if (game.religious) tabs.splice(1, 0, 'house');
   // A friar pastor sits in the diocese's deanery. E3 §3.12.
   if (friar && game.religious?.deanery) tabs.splice(2, 0, 'deanery');
+  // A friar in solemn vows may found a house, and one who has keeps its sheet. E3 §9.
+  if (friar && game.religious?.vows.solemnWeek !== undefined) tabs.splice(tabs.indexOf('jobs') + 1, 0, 'foundation');
   if (furnishing) tabs.push('furnish');
   const open = sheet ?? 'week';
   const letters = game.offers.length;
@@ -119,6 +123,7 @@ export default function Desk() {
         {open === 'letters' && <OffersPanel />}
         {open === 'record' && <DigestPanel />}
         {open === 'formation' && <FormationPanel />}
+        {open === 'foundation' && <FoundationPanel />}
         {open === 'settings' && (
           <>
             <SavePanel />

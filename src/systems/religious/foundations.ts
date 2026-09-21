@@ -1,4 +1,4 @@
-import type { GameState, Letter, OrderHouse, ReligiousHouse } from '@/types';
+import type { GameState, HouseKind, Letter, OrderHouse, ReligiousHouse } from '@/types';
 import type { Rng } from '@/engine/rng';
 import { religiousOrder } from '@/content/religious';
 import { orderDef } from '@/content/houses';
@@ -101,7 +101,7 @@ export function closeHouse(state: GameState, houseId: string, rng: Rng): { state
 
 function houseNameFor(rng: Rng, state: GameState, kind: OrderHouse['kind']): string {
   const order = religiousOrder(state.religious!.order);
-  const pool = kind === 'school' ? order.houseNames.school : order.houseNames.priory;
+  const pool = kind === 'school' ? order.houseNames.school : kind === 'mission' && order.houseNames.mission?.length ? order.houseNames.mission : order.houseNames.priory;
   const taken = new Set(Object.values(state.orderHouses ?? {}).map((h) => h.name));
   const free = pool.filter((n) => !taken.has(n));
   return rng.pick(free.length ? free : pool);
@@ -112,7 +112,19 @@ function houseNameFor(rng: Rng, state: GameState, kind: OrderHouse['kind']): str
  * the fullest houses; a parish house takes a parish of the diocese; the
  * diocese's list gains a house; the flags say so.
  */
-export function foundHouse(state: GameState, dioceseId: string, kind: 'priory' | 'parish', rng: Rng): { state: GameState; line: string } {
+export interface FoundHouseOptions {
+  /** The founder who leads it: the player, or an heir among the men. Absent, the middle man of those sent. */
+  priorId?: string;
+  /** Where the men come from: one house, for a daughter house; absent, the fullest houses of the province. */
+  fromHouseId?: string;
+  size?: [number, number];
+  observance?: number;
+  alignment?: number;
+  works?: string[];
+  budget?: number;
+}
+
+export function foundHouse(state: GameState, dioceseId: string, kind: HouseKind, rng: Rng, opts: FoundHouseOptions = {}): { state: GameState; line: string } {
   const r = state.religious;
   const province = state.province;
   if (!r || !province || !state.orderHouses) return { state, line: '' };
@@ -120,11 +132,11 @@ export function foundHouse(state: GameState, dioceseId: string, kind: 'priory' |
   const order = religiousOrder(r.order);
   const houses = { ...state.orderHouses };
   const npcs = { ...state.npcs };
-  const n = rng.int(...FOUNDATIONS.foundSize);
-  const donors = Object.values(houses).filter((h) => h.kind !== 'novitiate' && h.kind !== 'studium').sort((a, b) => membersOf(state, b).length - membersOf(state, a).length || a.id.localeCompare(b.id));
+  const n = rng.int(...(opts.size ?? FOUNDATIONS.foundSize));
+  const donors = (opts.fromHouseId ? [houses[opts.fromHouseId]].filter((h): h is OrderHouse => !!h) : Object.values(houses).filter((h) => h.kind !== 'novitiate' && h.kind !== 'studium')).sort((a, b) => membersOf(state, b).length - membersOf(state, a).length || a.id.localeCompare(b.id));
   const sent: string[] = [];
   for (const donor of donors) {
-    for (const id of membersOf(state, donor).filter((m) => m.tags.includes('vows:solemn') && !m.tags.includes('prior') && m.id !== 'player').map((m) => m.id)) {
+    for (const id of membersOf(state, donor).filter((m) => m.tags.includes('vows:solemn') && !m.tags.includes('prior') && m.id !== 'player' && m.id !== opts.priorId).map((m) => m.id)) {
       if (sent.length >= n) break;
       sent.push(id);
       houses[donor.id] = { ...houses[donor.id]!, memberIds: houses[donor.id]!.memberIds.filter((x) => x !== id) };
@@ -133,10 +145,16 @@ export function foundHouse(state: GameState, dioceseId: string, kind: 'priory' |
   }
   if (sent.length < 3) return { state, line: '' };
   const id = `${province.id}:house${week}`;
-  const priorId = sent.sort((a, b) => (npcs[a]!.birthYear - npcs[b]!.birthYear) || a.localeCompare(b))[Math.floor(sent.length / 2)]!;
-  for (const m of sent) npcs[m] = { ...npcs[m]!, tags: npcs[m]!.tags.filter((t) => !t.startsWith('house:')).concat(`house:${id}`, ...(m === priorId ? ['prior'] : [])) };
+  // An heir leading a daughter house comes along from his house, ahead of the count.
+  if (opts.priorId && opts.priorId !== 'player' && npcs[opts.priorId]) {
+    const from = Object.values(houses).find((h) => h.memberIds.includes(opts.priorId!));
+    if (from) houses[from.id] = { ...houses[from.id]!, memberIds: houses[from.id]!.memberIds.filter((x) => x !== opts.priorId) };
+    sent.push(opts.priorId);
+  }
+  const priorId = opts.priorId ?? sent.sort((a, b) => (npcs[a]!.birthYear - npcs[b]!.birthYear) || a.localeCompare(b))[Math.floor(sent.length / 2)]!;
+  for (const m of sent) npcs[m] = { ...npcs[m]!, tags: npcs[m]!.tags.filter((t) => !t.startsWith('house:') && t !== 'prior').concat(`house:${id}`, ...(m === priorId ? ['prior'] : [])) };
   const name = houseNameFor(rng, state, kind);
-  const house: OrderHouse = { id, provinceId: province.id, dioceseId, name, kind, memberIds: sent, priorId, cohesion: 60, observance: 55, alignment: Math.max(-100, Math.min(100, Math.round(rng.gaussian() * 20))), works: kind === 'parish' ? ['parish'] : ['priory_church', 'preaching'], budget: Math.round(PROVINCE.members[kind][0] * 30_000) };
+  const house: OrderHouse = { id, provinceId: province.id, dioceseId, name, kind, memberIds: sent, priorId, cohesion: 60, observance: opts.observance ?? 55, alignment: opts.alignment ?? Math.max(-100, Math.min(100, Math.round(rng.gaussian() * 20))), works: opts.works ?? (kind === 'parish' ? ['parish'] : ['priory_church', 'preaching']), budget: opts.budget ?? Math.round(PROVINCE.members[kind][0] * 30_000) };
   let next: GameState = { ...state, npcs, orderHouses: { ...houses, [id]: house }, province: { ...province, houseIds: [...province.houseIds, id] } };
   let parishLine = '';
   if (kind === 'parish') {
@@ -148,7 +166,7 @@ export function foundHouse(state: GameState, dioceseId: string, kind: 'priory' |
       const old = Object.values(next.npcs).find((x) => x.tags.includes(`pastor:${parish.id}`));
       const npcs2 = { ...next.npcs };
       if (old) npcs2[old.id] = { ...old, tags: old.tags.filter((t) => t !== `pastor:${parish.id}`).concat('priest') };
-      npcs2[priorId] = { ...npcs2[priorId]!, tags: [...npcs2[priorId]!.tags, `pastor:${parish.id}`] };
+      if (npcs2[priorId]) npcs2[priorId] = { ...npcs2[priorId]!, tags: [...npcs2[priorId]!.tags, `pastor:${parish.id}`] };
       parish.pastorId = priorId;
       next = { ...next, npcs: npcs2, orderHouses: { ...next.orderHouses!, [id]: { ...house, parishId: parish.id } } };
       parishLine = ` The bishop has entrusted ${parish.name} to the order.`;
@@ -161,7 +179,7 @@ export function foundHouse(state: GameState, dioceseId: string, kind: 'priory' |
     next = setDioceseHouses(next, dioceseId, (hs) => [...hs, seen]);
   }
   const flags = { ...next.flags, [`house_founded:${dioceseId}`]: week, 'province:founded_a_house': week };
-  const line = `The province has founded ${name} in ${worldOf(next, dioceseId)?.diocese.visible.name ?? 'a diocese of the territory'}: ${sent.length} men sent from the fuller houses.${parishLine}`;
+  const line = `The province has founded ${name} in ${worldOf(next, dioceseId)?.diocese.visible.name ?? 'a diocese of the territory'}: ${sent.length} men sent from ${opts.fromHouseId ? houses[opts.fromHouseId]?.name ?? 'the mother house' : 'the fuller houses'}.${parishLine}`;
   return { state: { ...next, flags, career: [...next.career, { week, kind: 'note', text: line }] }, line };
 }
 

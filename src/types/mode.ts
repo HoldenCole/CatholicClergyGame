@@ -37,7 +37,9 @@ export type Mode =
   /** A term of office has run out: the return to the ranks, well or badly. E3 §3.7. */
   | { kind: 'term_end' }
   /** The bishop's office asked the provincial for him; the provincial's answer, and the friar's when it is left to him. E3 §3.11. */
-  | { kind: 'bishop_ask' };
+  | { kind: 'bishop_ask' }
+  /** A foundation approved: the founder writes its charter before the men are sent. E3 §9.4. */
+  | { kind: 'charter' };
 
 /** One assignment on offer, with its breakdown. systems/choice.ts */
 export interface AssignmentOption {
