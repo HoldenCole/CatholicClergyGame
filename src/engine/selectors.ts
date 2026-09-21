@@ -63,6 +63,31 @@ export function resolveSelector(state: GameState, key: string, rng?: Rng): Npc |
     }
     case 'principal':
       return Object.values(state.npcs).find((n) => n.status === 'active' && n.tags.includes('religious:principal')) ?? null;
+    // The religious campaign's people: the men of his house and his province. E3 §3.
+    case 'prior': {
+      const house = state.religious?.houseId ? state.orderHouses?.[state.religious.houseId] : undefined;
+      const npc = house ? state.npcs[house.priorId] : undefined;
+      return npc && npc.status === 'active' ? npc : null;
+    }
+    case 'provincial': {
+      const npc = state.province ? state.npcs[state.province.provincialId] : undefined;
+      return npc && npc.status === 'active' ? npc : null;
+    }
+    case 'novice_master':
+    case 'master_of_students': {
+      const tagged = Object.values(state.npcs).filter((n) => n.status === 'active' && n.tags.includes(name)).sort((a, b) => (a.id < b.id ? -1 : 1));
+      return tagged[0] ?? null;
+    }
+    case 'confrere': {
+      const house = state.religious?.houseId ? state.orderHouses?.[state.religious.houseId] : undefined;
+      const men = (house?.memberIds ?? []).map((id) => state.npcs[id]).filter((n): n is Npc => !!n && n.status === 'active' && n.id !== house?.priorId).sort((a, b) => (a.id < b.id ? -1 : 1));
+      return men.length ? (rng ? rng.pick(men) : men[0]!) : null;
+    }
+    case 'old_friar': {
+      const house = state.religious?.houseId ? state.orderHouses?.[state.religious.houseId] : undefined;
+      const men = (house?.memberIds ?? []).map((id) => state.npcs[id]).filter((n): n is Npc => !!n && n.status === 'active').sort((a, b) => a.birthYear - b.birthYear || (a.id < b.id ? -1 : 1));
+      return men[0] ?? null;
+    }
     case 'resident': {
       const id = state.parish?.resident?.npcId;
       const npc = id ? state.npcs[id] : undefined;

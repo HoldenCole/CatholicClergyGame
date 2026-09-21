@@ -4,7 +4,7 @@ import permissionsRaw from './permissions.json';
 import type { HorariumDef, HorariumKey, OrderDef, OrderKey, PermissionDef, ProvinceSeed } from '@/types';
 
 /** The orders a friar can be professed into. E3 §6–7, as data. */
-const data = raw as unknown as { orders: OrderDef[]; provinceComplications: string[] };
+const data = raw as unknown as { orders: OrderDef[]; provinceComplications: string[]; doctrinalTopics: string[] };
 
 export const religiousOrders: OrderDef[] = data.orders;
 
@@ -22,6 +22,9 @@ export function provinceSeed(key: OrderKey, id: string): ProvinceSeed {
   if (!seed) throw new Error(`no province ${id} in ${key}`);
   return seed;
 }
+
+/** Topics on which a public position is doctrinal, and an order's mechanics may amplify. E3 §6.2. */
+export const doctrinalTopics: string[] = data.doctrinalTopics;
 
 /** The common life's obligations, in the order the sheet shows them. E3 §3.3. */
 export const horariumDefs: HorariumDef[] = (horariumRaw as unknown as { horarium: HorariumDef[] }).horarium;

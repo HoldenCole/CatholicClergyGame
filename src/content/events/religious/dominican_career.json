@@ -1,0 +1,1190 @@
+{
+  "_notes": "Dominican career, E3 §6.6: the library and the house, preaching, the chapter, dispensations, the return to the ranks.",
+  "events": [
+    {
+      "id": "opc_first_house",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "ROUTINE",
+      "category": "formation",
+      "baseWeight": 14,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        }
+      ],
+      "title": "The First House",
+      "body": "The letter said the name of the house and the name of the work and nothing about the men, and the men are the thing. {@prior} meets you at the door, takes one bag, and shows you a cell that faces the parking lot. Supper is at six. There are nine at the table, and by the end of it you know that {@old_friar} has not spoken to the procurator since a dispute about a car in a year before you were professed, and that everyone at the table sits so as not to be between them. The prior asks you, over the dishes, which side of the table you would like, and it is not a small question.",
+      "choices": [
+        {
+          "id": "between",
+          "label": "Sit between them, on purpose",
+          "outcome": "You sit between them for a year. By spring they are passing the salt through you, and by summer, once, directly. The prior says at chapter, without naming anyone, that the house has been better this year, and does not look at you, carefully.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 6
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "house:peacemaker",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "old_friar",
+          "label": "Sit by {@old_friar} and let him talk",
+          "outcome": "He talks. He has forty years of the province in him and gives you all of it by Lent: who was provincial when, who should have been, which houses were closed and why. It is the best education you will get in the province and it costs you the procurator's regard.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@old_friar",
+              "delta": 12
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "procurator",
+          "label": "Sit by the procurator; the house runs on him",
+          "outcome": "He tells you where the money goes and how little of it there is and which rooms leak. Within a month you are helping with the books, and within a year you are the man who knows the house, which is a kind of power and a kind of trap.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "house:knows_books",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "opc_mission_invite",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "assignment",
+      "baseWeight": 10,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        }
+      ],
+      "title": "A Parish Mission",
+      "body": "A pastor two dioceses over writes to {@prior} asking for a friar to preach a week's mission in Lent, four evenings, the old kind, and the prior gives the letter to you at breakfast with the words that he does not have anyone else. You have never preached four nights running. The parish is one that, the pastor's letter says with some pride, has not had a mission since the seventies and did not want one then. The prior will need the horarium covered while you are gone and says so.",
+      "choices": [
+        {
+          "id": "go_hard",
+          "label": "Go, and preach it the old way: sin, death, judgment, mercy, in that order",
+          "outcome": "The first night forty come and the fourth night two hundred, and the pastor hears confessions until midnight on the Thursday and thanks you with tears he is embarrassed by. The province hears about it by Easter.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 4
+            },
+            {
+              "target": "flag",
+              "key": "preaching:mission",
+              "value": true
+            },
+            {
+              "target": "flag",
+              "key": "preaching:old_way",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "go_gentle",
+          "label": "Go, and preach it for this parish: the God who waits",
+          "outcome": "The numbers hold at eighty across four nights, which the pastor says is a miracle. Nobody is frightened and several people weep, and a man who had not been to Mass in twenty years comes to the Friday and stays.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 5
+            },
+            {
+              "target": "flag",
+              "key": "preaching:mission",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "decline",
+          "label": "Say the house cannot spare you in Lent, which is true",
+          "outcome": "The prior nods and writes back. The mission goes to a Redemptorist. You keep the Hours all Lent and the house notices, and the pastor two dioceses over does not write again.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": -1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "opc_choir_absence",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "formation",
+      "baseWeight": 10,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence",
+        "body_vs_vow"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        }
+      ],
+      "title": "The Empty Stall",
+      "body": "The choir is sung here, every hour, and it is heavy, and this winter the parish work has run so late so often that you have missed Vespers nine times in a month. Nobody has said a word. This morning, in the cloister, {@old_friar} stops you and says that he counted, and that in his day a man who missed nine Vespers was either sick or leaving, and asks which you are. He is not angry. He is old enough to have watched men leave and he is telling you what it looks like from the stall.",
+      "choices": [
+        {
+          "id": "both",
+          "label": "Tell him the truth: the work is too much and you do not know how to cut it",
+          "outcome": "He listens and then tells you which parts of the work were not yours to take, item by item, with the certainty of a man who has never run a parish and the wisdom of one who has watched twelve men try. You cut two things. You are in the stall.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 4
+            },
+            {
+              "target": "relationship",
+              "key": "@old_friar",
+              "delta": 8
+            },
+            {
+              "target": "flag",
+              "key": "horarium:corrected",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "defend",
+          "label": "Say the work is the order's work too, and the people cannot be sung to",
+          "outcome": "He says the people can be, and have been, for eight hundred years, and walks on. You are in the stall the next evening and out of it the one after. He does not count aloud again, which is its own count.",
+          "effects": [
+            {
+              "target": "outspokenness",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -3
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": -1
+            }
+          ]
+        },
+        {
+          "id": "prior",
+          "label": "Go to the prior and ask to be dispensed from Vespers for the winter",
+          "outcome": "The prior grants it, since it is asked; that is what dispensations are for. The stall stays empty by right now instead of by fault, and the old friar bows to you in the cloister with a precision that hurts.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -4
+            },
+            {
+              "target": "relationship",
+              "key": "@old_friar",
+              "delta": -6
+            },
+            {
+              "target": "flag",
+              "key": "horarium:winter_dispensed",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "opc_preach_unsure",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 11,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "belief_vs_safety",
+        "loyalty_vs_honesty"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        }
+      ],
+      "title": "Asked to Preach It",
+      "body": "The provincial's office has sent round the text for a preaching campaign on a question the bishops are pressing this year, with a suggested outline and the request that every friar's house preach it on the same Sunday. It is not heresy. It is, in your judgment, wrong about one thing that matters, in a way the outline treats as settled. {@prior} has asked you to take the eleven o'clock, since you preach best, and the outline is on your desk with a note from him that says only: thanks. You are a Dominican and people expect a Dominican to be right.",
+      "choices": [
+        {
+          "id": "preach_it",
+          "label": "Preach the outline, as asked",
+          "outcome": "You preach it well. Afterward a man in the vestibule says it was the clearest he has heard the thing put, and you agree with him, and feel something turn over. The provincial's office sends a note of thanks to the house.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 2
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": -4
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            }
+          ],
+          "volume": "public",
+          "positionTopic": "doctrine",
+          "positionValue": -15
+        },
+        {
+          "id": "preach_yours",
+          "label": "Preach the question, and say where you think the outline is wrong",
+          "outcome": "You say it carefully, with the distinction the outline missed, and the eleven o'clock has never been so quiet. Two letters go to the provincial by Wednesday, one grateful and one not. {@prior} says only that he heard it was well argued, and that he will be hearing more.",
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 4
+            },
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": -5
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 3
+            },
+            {
+              "target": "outspokenness",
+              "key": "",
+              "delta": 4
+            }
+          ],
+          "volume": "public",
+          "positionTopic": "doctrine",
+          "positionValue": 15
+        },
+        {
+          "id": "swap",
+          "label": "Ask the prior to give the eleven to someone else that Sunday",
+          "outcome": "He looks at you for a while and gives it to {@confrere}, who preaches the outline flatly and well. The prior does not ask why. He knows why. It goes in the account he keeps of you, on a page you cannot read.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@prior",
+              "delta": -3
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "opc_chapter_split",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "group",
+      "baseWeight": 9,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "ambition_vs_integrity"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        }
+      ],
+      "title": "The Chapter That Splits",
+      "body": "The provincial chapter is arguing, on the second day, about what the province is for in this century: whether to close two parishes to staff the campus ministries, or the reverse. It is the old fault line under a new name. The observant men want the priories full and the Office sung; the others want the friars where the young are, which is not in the priories. {@provincial} is chairing and has not said which he wants, which everyone reads as an answer. You are a delegate, or you are watching from the gallery, and either way {@confrere} has just asked whether you will speak.",
+      "choices": [
+        {
+          "id": "observant",
+          "label": "Speak for the priories: the order is the common life, or it is a staffing agency",
+          "outcome": "It is the best speech of the day, several men say afterward, and two of them are on the other side. The observant bloc has a new name to say, and the campus men have a new name to remember. The chapter votes narrowly for the priories.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "observant_bloc",
+              "delta": 10
+            },
+            {
+              "target": "reputation",
+              "key": "progressive_bloc",
+              "delta": -8
+            },
+            {
+              "target": "outspokenness",
+              "key": "",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "chapter:spoke_priories",
+              "value": true
+            }
+          ],
+          "volume": "public",
+          "positionTopic": "liturgy",
+          "positionValue": -30
+        },
+        {
+          "id": "campus",
+          "label": "Speak for the campuses: Dominic sent the brothers to the universities, not the cloisters",
+          "outcome": "You quote the founder at them, accurately, and the room laughs at the right places, and the older men do not. The chapter votes for the campuses by a handful, and someone says afterward that it was your handful.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "progressive_bloc",
+              "delta": 10
+            },
+            {
+              "target": "reputation",
+              "key": "observant_bloc",
+              "delta": -8
+            },
+            {
+              "target": "outspokenness",
+              "key": "",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "chapter:spoke_campuses",
+              "value": true
+            }
+          ],
+          "volume": "public",
+          "positionTopic": "liturgy",
+          "positionValue": 30
+        },
+        {
+          "id": "silent",
+          "label": "Say nothing; a young friar who speaks at chapter is remembered for it",
+          "outcome": "You are silent for two days. The vote goes as it goes. Nobody remembers you were there, which is what you wanted, and {@confrere} says on the drive home that it was wise and that he would not have been able to do it.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "chapter:silent",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "opc_stranger_house",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 9,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "friendship_vs_duty",
+        "ambition_vs_integrity"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        }
+      ],
+      "title": "A Stranger in His Own House",
+      "body": "You have been dispensed, or nearly, for the better part of two years: a degree, then the book, then the lectures the regent keeps finding for you. The province respects you. This morning at breakfast {@confrere}, who has lived across the hall the whole time, tells the table about his father's death last month and you did not know his father was ill. Nobody looks at you. {@prior} passes you the coffee. It is the first time you have understood what the constitutions meant about the dispensed man and the brothers.",
+      "choices": [
+        {
+          "id": "end_it",
+          "label": "Give the dispensation back; the book can be written in choir",
+          "outcome": "You go to the prior that afternoon. He tears up the paper with no ceremony. The regent is displeased and says so to the provincial. You are at Vespers that night and every night after, and the book takes three more years, and is better.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 8
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": -2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "dispensation:renounced",
+              "value": true
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": -2
+            }
+          ]
+        },
+        {
+          "id": "apologize",
+          "label": "Go to him tonight and say you are sorry, and mean it",
+          "outcome": "He says it is all right and it is not, and you sit in his cell for two hours while he tells you about his father, and you keep the dispensation and try to be a man who is at breakfast. It half works.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": 8
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 3
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "keep",
+          "label": "Keep the dispensation; the work is the order's work and the house will understand",
+          "outcome": "The house understands, in the way houses do. The book is finished by Easter and praised in Rome. At the next chapter your name is mentioned for an office and a man from your own house says, quietly and audibly, that he would not know.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -6
+            },
+            {
+              "target": "flag",
+              "key": "dispensation:kept_through",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "opc_unwanted_mission",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "assignment",
+      "baseWeight": 9,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        }
+      ],
+      "title": "The Parish That Did Not Want a Mission",
+      "body": "The bishop of the diocese has asked the province for a Lenten mission at a suburban parish whose pastor did not ask for one and says so at the door, and whose people, it becomes clear on the first night, were told it was a lecture series on the Gospel of John. There are two hundred of them, in a warm hall, and they have brought notebooks. {@prior} sent you because you preach and because the bishop asked, and the bishop, {@bishop}, is in the third row for the first night, which nobody told you.",
+      "choices": [
+        {
+          "id": "john",
+          "label": "Give them the lecture series on John, and let the mission happen inside it",
+          "outcome": "You take John a chapter a night and preach the mission through it: the woman at the well, the man born blind, Lazarus. On the third night the pastor stops standing at the back with his arms folded. The bishop stays for all four and writes to the provincial.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "local_bishop",
+              "delta": 8
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 4
+            },
+            {
+              "target": "flag",
+              "key": "preaching:mission",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "mission",
+          "label": "Give them the mission you came to give, notebooks or not",
+          "outcome": "Half of them leave at the break on the first night. The half that stay are not the same people by Thursday, and three of them are in the confessional line. The pastor is furious and the bishop, who watched, is not.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": -2
+            },
+            {
+              "target": "reputation",
+              "key": "local_bishop",
+              "delta": 4
+            },
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": 5
+            },
+            {
+              "target": "flag",
+              "key": "preaching:mission",
+              "value": true
+            },
+            {
+              "target": "outspokenness",
+              "key": "",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "pastor",
+          "label": "Ask the pastor what he wants, and do that",
+          "outcome": "He wants it over. You give four gentle talks, take no questions, and leave. The bishop leaves after the first night and does not write. The pastor thanks you sincerely and you drive home knowing you have preached nothing.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@brother_priest",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "local_bishop",
+              "delta": -3
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": -1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "opc_regent_notices",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 8,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "ambition_vs_integrity"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        }
+      ],
+      "title": "The Regent's Letter",
+      "body": "A letter from the regent of studies, handwritten, which he does not do: he has read the article, he has heard the lectures, and the province is considering sending a man to Rome for the doctorate in two years, and he would like to know, without any commitment on either side, whether you would be that man. Rome is Rome. It is also six years, and a dispensation from everything, and a return to a province that will have changed and will find you changed, and {@prior} has already told you, before the letter came, that the house cannot afford to lose its best preacher to a library.",
+      "choices": [
+        {
+          "id": "yes",
+          "label": "Write back that you would go, if sent",
+          "outcome": "He writes back the same week: good. Nothing happens for eighteen months, and then everything does. The prior hears from you and not from the letter, which is the only thing that keeps his regard.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "rome:willing",
+              "value": true
+            },
+            {
+              "target": "relationship",
+              "key": "@prior",
+              "delta": -2
+            }
+          ]
+        },
+        {
+          "id": "no",
+          "label": "Write back that you are where the order needs you, and mean the pulpit",
+          "outcome": "He writes back, more slowly: understood, and that the pulpit is also study. The prior, told, says nothing and leaves a bottle of something on your desk. You wonder about the letter for ten years.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 5
+            },
+            {
+              "target": "relationship",
+              "key": "@prior",
+              "delta": 6
+            },
+            {
+              "target": "flag",
+              "key": "rome:declined",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "ask_prior",
+          "label": "Take the letter to the prior before answering it",
+          "outcome": "He reads it twice and hands it back and says that he would send you, and that he would not forgive the regent, and that both are true. You answer the regent with the prior's blessing and it costs the prior something to give it.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@prior",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 2
+            },
+            {
+              "target": "relationship",
+              "key": "@provincial",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "rome:willing",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "opc_novice_master_ask",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 8,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "ordained",
+          "value": true
+        }
+      ],
+      "title": "Asked to Form Them",
+      "body": "The provincial calls, which he does not do, to say that the novice master is ill and will not return, and that the council has your name, and that he wants an answer by Sunday. It is the office that makes the next forty years of the province, and it is in the house you professed in, with the stalls you slept through, and it is four years of being watched by young men who will remember every failing. {@confrere} says it is the surest road to a provincialate. {@old_friar} says it is the surest road to being loved by men who will vote against you for the rest of your life, and that both are worth it.",
+      "choices": [
+        {
+          "id": "accept",
+          "label": "Say yes",
+          "outcome": "You are at the novitiate by Michaelmas. The first class is five men and one of them is better than you were. You tell him so in his second month, which the constitutions do not forbid and your own novice master would not have done.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 4
+            },
+            {
+              "target": "flag",
+              "key": "office:asked_novice_master",
+              "value": true
+            },
+            {
+              "target": "flag",
+              "key": "office:novice_master_yes",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "decline",
+          "label": "Say no, and say why: the pulpit, or the book, or the house",
+          "outcome": "The provincial hears you out and says he expected it and is sorry. It goes to a man two years your senior who is good at it. Nobody holds it against you, exactly.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": -3
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "office:novice_master_no",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "conditions",
+          "label": "Say yes, if the house may be observant and the horarium kept",
+          "outcome": "He says the novitiate is the one house where that is not a request, and that you have just told him something about yourself he will remember at chapter. You go. The Office is sung.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "observant_bloc",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "office:novice_master_yes",
+              "value": true
+            },
+            {
+              "target": "flag",
+              "key": "office:novice_master_observant",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "opc_former_provincial",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 8,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        }
+      ],
+      "title": "The Man Who Was Provincial",
+      "body": "{@old_friar} was provincial once, two terms, in the years before you were professed, and he has been in this house for a decade since, and he has not stopped. He corrects the prior at chapter with the phrase in my time. He has an opinion about the assignments before they are announced and is usually right. This week he has told the procurator, in front of the house, that the roof would have been fixed in his time, and the procurator, who was appointed by the current provincial, has stopped coming to recreation. The prior is thirty years his junior and cannot say what needs saying. Everyone has noticed you can talk to the old man.",
+      "choices": [
+        {
+          "id": "talk",
+          "label": "Say it to him, gently, on a walk: that his time was his time",
+          "outcome": "He is silent for a mile. Then he says that he knows, and that no one has said it in ten years, and that he had begun to think no one would. He is at recreation that night with the procurator, and speaks of the weather. He is kinder to you and a little colder, both for good.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@old_friar",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 6
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "house:told_former_provincial",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "prior",
+          "label": "Tell the prior it is his to say, and that the house is waiting for him to say it",
+          "outcome": "The prior says it, badly, at chapter, and the old man leaves the room, and it is three weeks before he is at the table again. But it is said. The prior thanks you in private and never mentions it again.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@prior",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            },
+            {
+              "target": "relationship",
+              "key": "@old_friar",
+              "delta": -5
+            }
+          ]
+        },
+        {
+          "id": "let_be",
+          "label": "Let him be; he earned it, and the house can bear an old man's grief",
+          "outcome": "The house bears it. The procurator asks for a transfer at the next consultation and gets one. The old man outlives two more priors and is gentler, at the end, than anyone expected, and you were not the one who made him so.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "opc_return_to_ranks",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "assignment",
+      "baseWeight": 8,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "office:prior",
+          "value": false
+        },
+        {
+          "type": "life",
+          "key": "offices",
+          "op": ">=",
+          "value": 1
+        }
+      ],
+      "title": "Sent to Serve Under Him",
+      "body": "The letter came in June and the sentence in it that mattered was short: parochial vicar, at a parish run by a friar you once governed. You were his prior. You wrote his evaluation the year the vote on his profession was close. He is pastor now and you are his curate, and the provincial, {@provincial}, did this on purpose, because it is how the order does it and because he thinks it will be good for you. The first staff meeting is Tuesday. He has given you the eight o'clock and the funerals.",
+      "choices": [
+        {
+          "id": "well",
+          "label": "Take the eight o'clock and the funerals and do them better than anyone ever has",
+          "outcome": "You do the funerals so well the town begins to ask for you by name, and you send them to him, every time, saying he is the pastor. By Christmas he has stopped watching you at meetings. By Easter he asks your advice, once, and takes it.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 8
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 6
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "relationship",
+              "key": "@brother_priest",
+              "delta": 8
+            },
+            {
+              "target": "flag",
+              "key": "returned:well",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "badly",
+          "label": "Do the work, and let the house know whose evaluation it was",
+          "outcome": "The house knows within a month. He knows within a week. It is a hard year for both of you and the province hears about it, and what the province hears is not that he was a difficult pastor.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": -8
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -6
+            },
+            {
+              "target": "relationship",
+              "key": "@brother_priest",
+              "delta": -15
+            },
+            {
+              "target": "flag",
+              "key": "returned:badly",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "ask_move",
+          "label": "Write to the provincial and ask, once, to be moved",
+          "outcome": "He writes back one line: no, and not yet, and not because of him. You stay. It is a better year than you expect and a worse one than he does, and it ends, as they all do.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": -4
+            },
+            {
+              "target": "relationship",
+              "key": "@provincial",
+              "delta": -3
+            },
+            {
+              "target": "flag",
+              "key": "returned:asked_move",
+              "value": true
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
