@@ -65,8 +65,8 @@ export interface AssignmentOption {
 }
 
 export interface Letter {
-  /** What kind of letter, for the sheet's heading and the record. */
-  sort: 'review' | 'bishop' | 'provincial' | 'confrere';
+  /** What kind of letter, for the sheet's heading and the record. `mail` is the mailbag: a letter from someone, DESIGN §8.10. */
+  sort: 'review' | 'bishop' | 'provincial' | 'confrere' | 'mail';
   title: string;
   /** Prose paragraphs. */
   body: string[];
@@ -75,4 +75,42 @@ export interface Letter {
   week: number;
   /** A thing the letter lets the man do from it: look for a director again. */
   action?: 'seek_director';
+  /** The mailbag: who wrote, and the template it came from. */
+  mailId?: string;
+  from?: MailSender;
+  /** The mailbag: how he may answer; leaving it in the drawer is always allowed and costs nothing. */
+  replies?: MailReply[];
+}
+
+/** Who a letter is from: an NPC where one exists, and how the sheet names them. */
+export interface MailSender {
+  npcId?: string;
+  /** "Mrs. Kowalski", "Fr. Tom Reilly", "a woman in Dayton". */
+  name: string;
+  /** "whose husband you buried", "your first pastor", "who read the column". */
+  who: string;
+}
+
+/** An answer to a letter: what it costs in hours and what it does. */
+export interface MailReply {
+  id: string;
+  label: string;
+  /** Hours the answer takes off next week. */
+  hours?: number;
+  effects: import('./events').Effect[];
+  /** What came of it, shown after. */
+  outcome?: string;
+}
+
+/** The mailbag's record of a letter: who wrote, and whether he answered. */
+export interface MailRecord {
+  mailId: string;
+  week: number;
+  from: MailSender;
+  title: string;
+  /** The reply's id and label, or absent when it was left in the drawer. */
+  replied?: string;
+  repliedLabel?: string;
+  /** Whether the letter asked for something. */
+  asked: boolean;
 }

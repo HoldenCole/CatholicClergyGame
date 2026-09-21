@@ -1,0 +1,1030 @@
+{
+  "_notes": "The mailbag (DESIGN §8.10): letters from someone, drawn a few times a year, answered or left in the drawer. `from` names the kind of sender systems/mail.ts finds (parishioner, former_parish, buried, classmate, classmate_left, stranger, stranger_column, seminarian_mother, mother, father, sibling, old_pastor); a template only draws when such a sender exists. Bodies are in the sender's voice and use {sender}, {sender_first}, {who}, {bond}, {former_parish}, {years}, {post}, {parish}, {town}, {diocese}, {first_name}, {name}, and the {town:kind} tokens. `asks` marks a letter that wants something. Replies cost `hours` off next week (a parish week) and carry effects; leaving a letter in the drawer is always allowed and is recorded. Numbers invented.",
+  "chancePerWeek": 0.06,
+  "letters": [
+    {
+      "id": "ml_parishioner_thanks",
+      "from": "parishioner",
+      "weight": 10,
+      "asks": false,
+      "suppressYears": 2,
+      "requires": [
+        {
+          "type": "bond",
+          "kind": "any",
+          "op": ">=",
+          "value": 1
+        }
+      ],
+      "title": "A note in a card",
+      "body": [
+        "Dear Father,",
+        "I have been meaning to write since {bond}, and I am not a writer, so this is late. I wanted you to know that we talk about it still. You will not remember what you said at the door, but I do, and I have said it to two other people since, and it helped them too.",
+        "You do not need to answer this. I know how many of these you must get. I am putting a little something in for the poor box.",
+        "{sender}"
+      ],
+      "replies": [
+        {
+          "id": "write_back",
+          "label": "Write back, a page, by hand",
+          "hours": 1,
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@sender",
+              "delta": 8
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 1
+            }
+          ],
+          "outcome": "You write a page. She keeps it in the card, and her daughter finds it after she dies and brings it to you, which is how you learn she kept it."
+        },
+        {
+          "id": "a_word",
+          "label": "Say something at the door on Sunday instead",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@sender",
+              "delta": 3
+            }
+          ],
+          "outcome": "You find her at the door and say thank you for the card, and she is flustered and pleased, and it is enough."
+        }
+      ]
+    },
+    {
+      "id": "ml_parishioner_the_son",
+      "from": "parishioner",
+      "weight": 8,
+      "asks": true,
+      "suppressYears": 3,
+      "requires": [
+        {
+          "type": "town",
+          "key": "employer",
+          "value": "open"
+        }
+      ],
+      "title": "About my son",
+      "body": [
+        "Father, forgive me for writing instead of coming in. It is easier to write.",
+        "My son is twenty-six and has not worked in a year. He is not lazy; he is stuck, and he will not hear it from me. You know people at {town:employer}, or the people who know people. I am not asking you to get him a job. I am asking whether you would talk to him, once, as a man and not as his mother's priest, and if there were a name you could give him, I would not ask where it came from.",
+        "I have not told him I am writing this.",
+        "{sender}"
+      ],
+      "replies": [
+        {
+          "id": "talk_to_him",
+          "label": "Have him to the rectory, and make a call",
+          "hours": 2,
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@sender",
+              "delta": 10
+            },
+            {
+              "target": "town",
+              "key": "employer",
+              "delta": 4,
+              "value": "He found {sender_first}'s son a start at {name}."
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 2
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 1
+            }
+          ],
+          "outcome": "He comes, sullen, and leaves less so, and the name you give him gets him an interview and the interview gets him a start. His mother does not mention it, ever, which is her thanks."
+        },
+        {
+          "id": "talk_only",
+          "label": "Talk to him, and give no names; it is his to find",
+          "hours": 1,
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@sender",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            }
+          ],
+          "outcome": "He comes, and you talk for an hour about nothing that is a job, and he goes away and finds one in the spring on his own, or says he did."
+        },
+        {
+          "id": "not_mine",
+          "label": "Write back that it is not a priest's to do",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@sender",
+              "delta": -6
+            }
+          ],
+          "outcome": "You write, kindly, that a priest who finds jobs becomes a priest who is asked for them, and she understands, and is at the eleven o'clock instead of the nine after that."
+        }
+      ]
+    },
+    {
+      "id": "ml_former_parish_after_you",
+      "from": "former_parish",
+      "weight": 10,
+      "asks": false,
+      "suppressYears": 3,
+      "title": "News from {former_parish}",
+      "body": [
+        "Dear Father {surname},",
+        "You will not have heard, so I am telling you: the new man has changed the Mass times, and the eight o'clock is gone, and the older people have gone with it to the parish on the hill. The school is still open. The roof you fixed is still fixed. The choir has a new director who does not like the old hymns, and the choir has said so.",
+        "None of this is your problem and I know that. You are remembered here, and I thought you would want to know that you are, and what for. The women at the counter still call the hall the one you built.",
+        "{sender}, {who}"
+      ],
+      "replies": [
+        {
+          "id": "write_back",
+          "label": "Write back, and say nothing about the new man",
+          "hours": 1,
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@sender",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": 1
+            }
+          ],
+          "outcome": "You write a page about the weather here and the people there, and not one word about the new man, which she notices and respects."
+        },
+        {
+          "id": "write_the_pastor",
+          "label": "Write to the new pastor, brother to brother, about the eight o'clock",
+          "hours": 1,
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": -3
+            },
+            {
+              "target": "relationship",
+              "key": "@sender",
+              "delta": 4
+            }
+          ],
+          "outcome": "You write to the pastor, carefully. He does not answer. The dean mentions it to you at the next meeting, in a tone."
+        }
+      ]
+    },
+    {
+      "id": "ml_former_parish_the_funeral",
+      "from": "former_parish",
+      "weight": 9,
+      "asks": true,
+      "suppressYears": 3,
+      "title": "Would you come",
+      "body": [
+        "Father,",
+        "My mother died on Tuesday. You will remember her; you brought her communion for two years when she could not come. The funeral is Saturday at {former_parish}. The new pastor will say the Mass, and he is a good man, but she asked for you, in the hospital, by name, and I said I would ask. It is a long drive and I know you have your own parish. If you cannot, I will understand, and so would she.",
+        "{sender}, {who}"
+      ],
+      "replies": [
+        {
+          "id": "go",
+          "label": "Go, and preach it, and drive back the same night",
+          "hours": 8,
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@sender",
+              "delta": 12
+            },
+            {
+              "target": "bond",
+              "key": "@sender",
+              "value": "buried:her mother"
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ],
+          "outcome": "You drive four hours and preach her funeral in a church you know every crack of, with the new pastor in choir, decent about it, and the old people at the back who had gone to the parish on the hill. You are home by one in the morning and say the seven o'clock."
+        },
+        {
+          "id": "a_letter_read",
+          "label": "Send a letter to be read at the Mass",
+          "hours": 1,
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@sender",
+              "delta": 4
+            }
+          ],
+          "outcome": "You write a page about her and the communion calls and the dog, and the new pastor reads it at the end of the Mass, and the daughter writes afterwards that it was the part people cried at."
+        },
+        {
+          "id": "cannot",
+          "label": "Write that you cannot, and say a Mass here",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@sender",
+              "delta": -2
+            }
+          ],
+          "outcome": "You say a Mass for her on the Saturday, alone at seven, and write to say so, and the daughter does not write again."
+        }
+      ]
+    },
+    {
+      "id": "ml_buried_ten_years_on",
+      "from": "buried",
+      "weight": 9,
+      "asks": false,
+      "suppressYears": 4,
+      "title": "{years} years",
+      "body": [
+        "Father {surname},",
+        "It is {years} years this month since you buried {bond}. I do not know if you remember the funeral; you have done a great many. I remember it. I remember you stood at the grave after everyone had gone to the cars and you stayed until they had lowered it, which nobody had told you to do.",
+        "I have moved twice since and married and have a daughter. I am not writing to ask anything. I am writing because {years} years is a long time and I still think of it, and I thought the person who did it should know that it was done right.",
+        "{sender}"
+      ],
+      "replies": [
+        {
+          "id": "write_back",
+          "label": "Write back, and say you remember, and mean it",
+          "hours": 1,
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@sender",
+              "delta": 8
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": -2
+            }
+          ],
+          "outcome": "You do remember, once you have the name, and you write it down: the day, the rain, the brother who would not get out of the car. She writes once more, years later, when her daughter is confirmed."
+        },
+        {
+          "id": "a_mass",
+          "label": "Say a Mass on the anniversary and write to say so",
+          "hours": 1,
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@sender",
+              "delta": 6
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ],
+          "outcome": "You say the Mass at seven on the day and write a line to say it was said, and she keeps the line."
+        }
+      ]
+    },
+    {
+      "id": "ml_classmate_abroad",
+      "from": "classmate",
+      "weight": 8,
+      "asks": false,
+      "suppressYears": 2,
+      "title": "From {sender_first}",
+      "body": [
+        "{first_name},",
+        "I owe you a letter from about four years ago and this is it. You will have heard I am {post}. It is what it is. The work is real and the men are decent and I am, most days, glad of it, and on the other days I think of the seminary corridor at eleven at night and the two of us arguing about Rahner with the door open, and I would give a good deal for an hour of that.",
+        "I hear things about you from the men who move between us. Good things, mostly, and one thing I did not believe. Write when you can. You always were the one who wrote.",
+        "{sender_first}"
+      ],
+      "replies": [
+        {
+          "id": "write_back",
+          "label": "Write back, a long one, the corridor included",
+          "hours": 2,
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@sender",
+              "delta": 10
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": -2
+            }
+          ],
+          "outcome": "You write four pages, and he writes four back, and for a few years you are the two men in the presbyterate who write letters, which the others find funny and a little enviable."
+        },
+        {
+          "id": "a_call",
+          "label": "Telephone instead, on Sunday night",
+          "hours": 1,
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@sender",
+              "delta": 6
+            }
+          ],
+          "outcome": "You call, and it is awkward for a minute and then it is not, and it becomes a Sunday night thing, most months."
+        }
+      ]
+    },
+    {
+      "id": "ml_classmate_left",
+      "from": "classmate_left",
+      "weight": 9,
+      "asks": false,
+      "suppressYears": 4,
+      "title": "A letter from {sender_first}",
+      "body": [
+        "{first_name},",
+        "I do not know whether you will want this. I left, as you know, and I did not write to anyone, and I have been sorry for that longer than I was sorry for leaving. I am married. There is a boy, four. I teach. I go to Mass most Sundays and sit at the back and do not receive, and it is the hardest hour of the week and I would not give it up.",
+        "I am not writing to explain. I am writing because you were the one, of the class, who I thought would not cross the street, and I wanted to find out whether I was right.",
+        "{sender_first}"
+      ],
+      "replies": [
+        {
+          "id": "write_back",
+          "label": "Write back as a friend, and ask about the boy",
+          "hours": 1,
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@sender",
+              "delta": 14
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "mail:left_friend",
+              "value": true
+            }
+          ],
+          "outcome": "You write about the boy and the teaching and nothing about the leaving, and he writes back, and you meet, once a year, at a diner halfway, for a long time."
+        },
+        {
+          "id": "write_the_church",
+          "label": "Write back, and say what the Church says, gently, about the back pew",
+          "hours": 1,
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@sender",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": 1
+            }
+          ],
+          "outcome": "You write about the tribunal and the process, gently, and he thanks you, and does not write again for some years, and then does, when the process is done."
+        },
+        {
+          "id": "drawer",
+          "label": "Leave it a while; you do not know what to say",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@sender",
+              "delta": -4
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 1
+            }
+          ],
+          "outcome": "It is in the drawer for a year, and then it is too late to answer, and you think about it at odd hours."
+        }
+      ]
+    },
+    {
+      "id": "ml_stranger_column",
+      "from": "stranger_column",
+      "weight": 10,
+      "asks": false,
+      "suppressYears": 2,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "column:written",
+          "value": true
+        }
+      ],
+      "title": "A stranger's letter",
+      "body": [
+        "Dear Father {surname},",
+        "You do not know me. I read your column in the paper, the one about the thing everyone is arguing about, and I disagreed with almost all of it, and I read it twice, which I do not do. I am not a Catholic. I have not been inside a church in thirty years, since my mother's funeral, at which the priest got her name wrong.",
+        "I am writing to say that I have not stopped thinking about your second paragraph, and that I would like to know whether you meant it, or whether it was the kind of thing priests write.",
+        "{sender}"
+      ],
+      "replies": [
+        {
+          "id": "meant_it",
+          "label": "Write back that you meant it, and say why, at length",
+          "hours": 2,
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "mail:stranger_answered",
+              "value": true
+            }
+          ],
+          "outcome": "You write three pages. He writes back six. It goes on for two years, and then he comes to a Mass and sits at the back and does not introduce himself, and you know him from the handwriting, somehow."
+        },
+        {
+          "id": "short",
+          "label": "A short note: yes, and thank you for reading it twice",
+          "hours": 1,
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": 1
+            }
+          ],
+          "outcome": "You write four lines. He does not write again. He may have been satisfied."
+        }
+      ]
+    },
+    {
+      "id": "ml_stranger_heard",
+      "from": "stranger",
+      "weight": 7,
+      "asks": true,
+      "suppressYears": 3,
+      "requires": [
+        {
+          "type": "reputation",
+          "key": "public",
+          "op": ">=",
+          "value": 15
+        }
+      ],
+      "title": "From someone who heard of you",
+      "body": [
+        "Father,",
+        "A friend of mine in your parish told me about you, and said I should write, and I have started this letter four times. My husband and I have not been married in the Church. We were married at the courthouse eleven years ago because his first marriage was not annulled and he did not want to go through it, and now he does, and does not know how to begin, and will not walk into a church to ask. Could you tell me how to begin. I do not want to be sent to an office.",
+        "{sender}"
+      ],
+      "replies": [
+        {
+          "id": "the_way_in",
+          "label": "Write back with the way in, plainly, and an evening they can come",
+          "hours": 2,
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "mail:convalidation",
+              "value": true
+            }
+          ],
+          "outcome": "You write two pages on what a tribunal actually is and an evening they may come, and they come, and the case takes a year and a half, and you witness the marriage on a Tuesday afternoon with the friend from the parish as the only guest."
+        },
+        {
+          "id": "the_office",
+          "label": "Send her the tribunal's number and a kind line",
+          "hours": 1,
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 1
+            }
+          ],
+          "outcome": "You send the number. Whether she calls it you never learn."
+        }
+      ]
+    },
+    {
+      "id": "ml_seminarian_mother",
+      "from": "seminarian_mother",
+      "weight": 10,
+      "asks": false,
+      "suppressYears": 3,
+      "title": "From {sender}",
+      "body": [
+        "Dear Father,",
+        "I am {sender_first}'s mother. He would not want me writing this, so I am writing it. He came home from his summer with you a different young man, and I do not mean that he was better or worse; I mean that he had decided something, and I think it was in your rectory that he decided it, and I think you know what.",
+        "I did not want this for him, if I am honest. I wanted grandchildren. I have made my peace, mostly, and I wanted the man who had the most to do with it to know that his mother is not against him, whatever he thinks.",
+        "{sender}"
+      ],
+      "replies": [
+        {
+          "id": "write_back",
+          "label": "Write back, mother to priest, about the son",
+          "hours": 1,
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@sender",
+              "delta": 8
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ],
+          "outcome": "You write a page about her son that she did not know, and she keeps it, and at his ordination, years on, she finds you in the crowd and does not say anything and does not need to."
+        },
+        {
+          "id": "have_her_over",
+          "label": "Invite her to the rectory for coffee",
+          "hours": 2,
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@sender",
+              "delta": 10
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 1
+            }
+          ],
+          "outcome": "She comes, and cries in the parlour, and you sit with it, and she goes home lighter, and the son hears about it and is mortified and then is not."
+        }
+      ]
+    },
+    {
+      "id": "ml_mother",
+      "from": "mother",
+      "weight": 10,
+      "asks": false,
+      "suppressYears": 2,
+      "title": "From your mother",
+      "body": [
+        "{first_name},",
+        "I know you are busy and I know you have a telephone. Your father says I should not write when I could call. I write because I can say things in a letter that I would not on the phone with him in the room.",
+        "I am well. The knee is what it is. The parish here has a new man who is younger than you and does not visit, and I have said so to him, which your father thinks I should not have. I pray for you every day at the Mass and I light the candle on Thursdays, which you know, and I want you to eat, which you also know. Come when you can. Do not come when you cannot.",
+        "Your mother"
+      ],
+      "replies": [
+        {
+          "id": "write_back",
+          "label": "Write back, properly, by hand",
+          "hours": 1,
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@sender",
+              "delta": 8
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": -2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ],
+          "outcome": "You write a page and she writes back and it becomes a monthly thing, and the letters are in a box after she dies, all of them, in order."
+        },
+        {
+          "id": "call",
+          "label": "Call on Sunday night, with your father in the room",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@sender",
+              "delta": 4
+            }
+          ],
+          "outcome": "You call. Your father answers and hands it over and stays in the room, and she says everything is fine."
+        },
+        {
+          "id": "visit",
+          "label": "Drive up for a day, this month",
+          "hours": 8,
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@sender",
+              "delta": 12
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": -3
+            }
+          ],
+          "outcome": "You drive up on a Monday and eat what she cooks and look at the knee and say nothing to the young priest, and drive back, and are the better for it for a month."
+        }
+      ]
+    },
+    {
+      "id": "ml_father",
+      "from": "father",
+      "weight": 7,
+      "asks": false,
+      "suppressYears": 3,
+      "title": "From your father",
+      "body": [
+        "{first_name},",
+        "Your mother writes; I do not. I am writing now because there is something I want to say to you once and I would rather you had it on paper.",
+        "I did not understand what you did, when you did it, and I said so at the time in a way I have regretted. I understand it better now. I have watched what you have done with it and I have heard what people say about you, from men who do not know I am your father. That is all. Do not write back about this. Write back about the football.",
+        "Dad"
+      ],
+      "replies": [
+        {
+          "id": "the_football",
+          "label": "Write back about the football, and nothing else",
+          "hours": 1,
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@sender",
+              "delta": 12
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": -3
+            },
+            {
+              "target": "flag",
+              "key": "mail:father_wrote",
+              "value": true
+            }
+          ],
+          "outcome": "You write two pages about the football and one line at the end that is not about the football, and he never mentions the letter, and keeps it in his wallet, which you find out later."
+        },
+        {
+          "id": "call",
+          "label": "Call him, which he asked you not to do",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@sender",
+              "delta": 4
+            }
+          ],
+          "outcome": "You call. He talks about the football for eleven minutes and hands you to your mother."
+        }
+      ]
+    },
+    {
+      "id": "ml_sibling",
+      "from": "sibling",
+      "weight": 8,
+      "asks": true,
+      "suppressYears": 3,
+      "title": "From {sender_first}",
+      "body": [
+        "{first_name},",
+        "I need to ask you something and I do not want Mom to know I asked. We are in trouble with the house. Not the kind that goes away. I am not asking you for money; I know what you make. I am asking whether the Church has anything, some fund, some Catholic charity that does this, and whether you would know how to ask without it being your brother asking, because I could not stand that.",
+        "Also the kids miss you. That part is true even if I am only saying it to soften you up.",
+        "{sender_first}"
+      ],
+      "replies": [
+        {
+          "id": "find_it",
+          "label": "Find the fund, and make the call yourself, and say it was for a parishioner",
+          "hours": 3,
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@sender",
+              "delta": 14
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 1
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "mail:sibling_helped",
+              "value": true
+            }
+          ],
+          "outcome": "There is a fund, and you know the woman who runs it, and you make the call as a priest with a family in his parish, which is true in its way, and the house is kept. Your sibling never mentions it and your mother never knows."
+        },
+        {
+          "id": "send_money",
+          "label": "Send what you have, and tell no one",
+          "hours": 1,
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@sender",
+              "delta": 10
+            }
+          ],
+          "outcome": "You send what you have, which is not much and is enough for a month, and the month is what they needed."
+        },
+        {
+          "id": "not_this",
+          "label": "Write that you cannot, and that Mom should know",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@sender",
+              "delta": -10
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 2
+            }
+          ],
+          "outcome": "You write that it should not be a secret from your mother, and your sibling does not write back for two years, and your mother finds out anyway."
+        }
+      ]
+    },
+    {
+      "id": "ml_old_pastor",
+      "from": "old_pastor",
+      "weight": 9,
+      "asks": false,
+      "suppressYears": 3,
+      "requires": [
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 6
+        }
+      ],
+      "title": "From {sender}",
+      "body": [
+        "Dear {first_name},",
+        "I am retired now, as you may have heard, in a room with a window and a chair, and I have taken to writing to the men who were my vicars, in order, and you are next. I was not always easy to be under. I know that. Some of it was the job and some of it was me and I have had time to sort out which.",
+        "I hear you are doing well and I am not surprised, though I did not say so at the time, which was one of the things that was me. If you are ever within an hour of this place, the chair is there and so am I.",
+        "{sender}"
+      ],
+      "replies": [
+        {
+          "id": "visit",
+          "label": "Drive over, and sit in the chair",
+          "hours": 5,
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@sender",
+              "delta": 14
+            },
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": -2
+            }
+          ],
+          "outcome": "You drive over on a Monday and sit in the chair for three hours and he tells you what the job was like from his side, which you had not known, and you drive home understanding your own vicars better."
+        },
+        {
+          "id": "write_back",
+          "label": "Write back, and forgive what needs it",
+          "hours": 1,
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@sender",
+              "delta": 8
+            },
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": 1
+            }
+          ],
+          "outcome": "You write, and he writes back, and it is the last letter before the funeral, at which you preach, because he asked in the letter and you did not notice until you read it again."
+        }
+      ]
+    },
+    {
+      "id": "ml_parishioner_the_school",
+      "from": "parishioner",
+      "weight": 7,
+      "asks": true,
+      "suppressYears": 3,
+      "requires": [
+        {
+          "type": "parish",
+          "key": "school",
+          "value": "at_risk"
+        }
+      ],
+      "title": "About the school",
+      "body": [
+        "Father,",
+        "I am writing on behalf of nobody but myself, though I know others feel the same. There is talk that the school is on the list. My children are there. My mother went there. If it closes, we will go to the public school, and we will go to the parish on the hill, and I am not saying that as a threat; I am saying it because it is what will happen.",
+        "I am asking whether you would tell the bishop, in writing, with your name on it, that the school is not to close. I know what that costs a priest. I am asking anyway.",
+        "{sender}"
+      ],
+      "replies": [
+        {
+          "id": "write_the_bishop",
+          "label": "Write to the bishop, your name on it",
+          "hours": 2,
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@sender",
+              "delta": 12
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": -4
+            },
+            {
+              "target": "flag",
+              "key": "mail:school_letter",
+              "value": true
+            }
+          ],
+          "outcome": "You write to the bishop with your name on it, and the letter is in the file, and the school is not closed that year, for reasons that may or may not include the letter. She tells everyone it did."
+        },
+        {
+          "id": "the_council",
+          "label": "Take it to the finance council, and let the numbers speak",
+          "hours": 1,
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@sender",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            }
+          ],
+          "outcome": "The council looks at the numbers and finds eleven thousand dollars nobody had seen, which buys a year."
+        },
+        {
+          "id": "cannot",
+          "label": "Write that it is the bishop's decision and you will not lobby",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@sender",
+              "delta": -8
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": -3
+            }
+          ],
+          "outcome": "You write that you will not lobby the bishop, and she takes the children to the parish on the hill in September, as she said."
+        }
+      ]
+    },
+    {
+      "id": "ml_former_parish_the_wedding",
+      "from": "former_parish",
+      "weight": 7,
+      "asks": true,
+      "suppressYears": 3,
+      "title": "An invitation",
+      "body": [
+        "Dear Father {surname},",
+        "You baptized me. I am getting married in June at {former_parish}, and my mother says the new pastor is fine, and I am sure he is, but I would like it to be you, and so would she, though she will not say so. It is a Saturday. I know it is far. There would be a room for you at my parents' and a plate at the dinner and nobody would ask you to make a speech.",
+        "{sender}, {who}"
+      ],
+      "replies": [
+        {
+          "id": "go",
+          "label": "Go, and witness it, and stay for the dinner",
+          "hours": 10,
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@sender",
+              "delta": 12
+            },
+            {
+              "target": "bond",
+              "key": "@sender",
+              "value": "married:the two of them"
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            }
+          ],
+          "outcome": "You drive down on the Friday and witness it on the Saturday in the church you know, and stay for the dinner, and make a speech after all because the father of the bride asks, and drive back Sunday for the eleven."
+        },
+        {
+          "id": "cannot",
+          "label": "Write that June is the parish's worst month, and send a gift",
+          "hours": 1,
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@sender",
+              "delta": 2
+            }
+          ],
+          "outcome": "You send a card and a gift and a line about June, which is true, and the new pastor witnesses it, and the mother sends a photograph."
+        }
+      ]
+    }
+  ]
+}

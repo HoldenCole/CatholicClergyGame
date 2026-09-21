@@ -604,6 +604,15 @@ The parish's neighbourhood with a life of its own. Every parish has a **town**: 
 
 Numbers (chances, household shares) are invented and live in the content file.
 
+### 8.10 Correspondence
+
+The mailbag: the place the past reaches him from. A few times a year a letter comes from *someone* rather than from the chancery: a parishioner whose father he buried, a family from a former parish with news of the man who came after him, a classmate abroad or one who left, a stranger who read the column, the mother of a seminarian he formed, his own mother or father or sibling, the pastor he served under, now retired. Most only tell. Some ask.
+
+- **Templates as data** (`content/mail.json`): each letter names the kind of sender it needs; `systems/mail.ts` finds one from the man's own life (bonds, tenures, classmates and their trajectories, the formed, the family, a rolled stranger) or the letter does not come. Bodies are in the sender's voice, rendered when delivered. Suppression per template in years; at least four weeks between letters; about three a year.
+- **Answered or left.** A letter with replies stops the clock like any letter. Each reply costs hours off next week (a parish week's blocks) and carries effects with the sender bound as `@sender`: a warmer friend, a bond written, a stand taken, a name given at the plant. Leaving it in the drawer is always allowed, costs nothing, and is recorded; some letters cool when left. The outcome is a line in the record and a note in the career.
+- **The mailbag** on the Letters sheet: every letter, from whom, and whether it was answered, so the drawer's contents are visible and the unanswered asks are marked.
+- Never a mechanic to be optimized: the letters are small, the effects are small, and the point is that the past keeps writing.
+
 ## 9. Generation
 
 ### 9.1 Dioceses

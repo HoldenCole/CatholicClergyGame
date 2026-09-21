@@ -58,6 +58,7 @@ import { focusGroup as doFocus, replaceLeader as doReplaceLeader, startFounding 
 import { startWork as doStartWork, stopWork as doStopWork } from '@/systems/problems';
 import { joinClub as doJoinClub, leaveClub as doLeaveClub } from '@/systems/clubs';
 import { readLetter as doReadLetter } from '@/systems/review';
+import { answerMail as doAnswerMail } from '@/systems/mail';
 import { haveAWord as doHaveAWord } from '@/systems/talks';
 import { closeFund as doCloseFund, fundGroup as doFundGroup, invest as doInvest, spend as doSpend, withdraw as doWithdraw } from '@/systems/spending';
 import { yearOf } from '@/ui/portraits/spec';
@@ -252,6 +253,8 @@ export interface GameStore {
   setSettings(partial: Partial<GameSettings>): void;
   /** The man has read the letter in his hands; the clock may move. */
   readLetter(): void;
+  /** Answer the letter on the desk, or leave it in the drawer (null). DESIGN §8.10. */
+  answerMail(replyId: string | null): void;
   /** An hour with one person of the parish or diocese. */
   haveAWord(npcId: string): void;
   lastTalk: { npcId: string; text: string; week: number } | null;
@@ -959,6 +962,9 @@ export const useGameStore = create<GameStore>()((set, get) => ({
       if (!settings.hours) delete settings.hours;
       return { ...game, settings };
     });
+  },
+  answerMail(replyId) {
+    update(set, get, (game) => doAnswerMail(game, replyId));
   },
   readLetter() {
     update(set, get, (game) => doReadLetter(game));

@@ -26,6 +26,12 @@ export function useHotkeys(): void {
       if (!game || game.mode.kind === 'creation' || game.mode.kind === 'ended') return;
       const pending = game.pending[0];
       if (/^[1-9]$/.test(e.key)) {
+        // A letter with replies takes the digits like a scene.
+        if (!pending && game.mode.kind === 'letter' && game.mode.letter.sort === 'mail' && game.mode.letter.replies) {
+          const reply = game.mode.letter.replies[Number(e.key) - 1];
+          if (reply) { e.preventDefault(); st.answerMail(reply.id); }
+          return;
+        }
         if (!pending) return;
         const event = eventById(pending.eventId);
         if (!event) return;
@@ -41,7 +47,7 @@ export function useHotkeys(): void {
       // Escape closes whatever is on the table that has no decision in it: a letter, an offer unread, the furnishing.
       if (key === 'escape') {
         const ui = useUiStore.getState();
-        if (game.mode.kind === 'letter') { e.preventDefault(); st.readLetter(); return; }
+        if (game.mode.kind === 'letter') { e.preventDefault(); if (game.mode.letter.sort === 'mail') st.answerMail(null); else st.readLetter(); return; }
         const unread = game.offers.find((o) => !o.read);
         if (game.mode.kind === 'clock' && unread) { e.preventDefault(); st.markOfferRead(unread.offerId); return; }
         if (game.mode.kind === 'director' && !(game.phase === 'seminary' && (game.seminary?.year ?? 1) < 2 && !game.flags['direction:chosen'])) { e.preventDefault(); st.declineDirectors(); return; }
