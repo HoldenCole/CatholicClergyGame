@@ -44,7 +44,9 @@ export function institutesYear(state: GameState, rng: Rng): { state: GameState; 
     if (t === 'growing' && rng.derive(`found:${house.id}`).chance(INSTITUTES_DRIFT.foundPerYear) && !housesOf(next).some((h) => h.motherId === house.id)) {
       const def = orderDef(house.order);
       if (!def) continue;
-      const name = rng.derive(`name:${house.id}`).pick(def.names.filter((n) => !housesOf(next).some((h) => h.name === n)));
+      const freeNames = def.names.filter((n) => !housesOf(next).some((h) => h.name === n));
+      if (!freeNames.length) continue;
+      const name = rng.derive(`name:${house.id}`).pick(freeNames);
       const founded: ReligiousHouse = { ...house, id: `house:${house.order}:${week}`, name, size: rng.derive(`size:${house.id}`).int(3, 6), setting: 'city', line: `${name}, a new foundation of ${def.label} from ${house.name}, made by the province and blessed by the bishop.`, foundedWeek: week, motherId: house.id };
       next = { ...next, flags: { ...next.flags, [`friars_arriving:${house.order}`]: week, 'friars_arriving': week }, world: { ...next.world!, diocese: { ...next.world!.diocese, visible: { ...next.world!.diocese.visible, houses: [...housesOf(next), founded] } } } };
       lines.push(`${def.label} have founded ${name}: a house bought, a chapel blessed, and ${founded.size} ${def.members} the diocese did not have last year.`);
