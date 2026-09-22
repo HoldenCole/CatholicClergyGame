@@ -196,6 +196,8 @@ export interface FriarSpendDef {
   maxAp: number;
   /** ordained: a priest's work; teaching_or_school: the house teaches or runs a school. */
   needs?: 'ordained' | 'teaching_or_school';
+  /** A credential he must hold: the order's own rite, learned in formation. */
+  credential?: string;
   requires?: Partial<Record<StatKey, number>>;
   stats?: Partial<Record<StatKey, number>>;
   reputations?: Partial<Record<ReputationKey, number>>;

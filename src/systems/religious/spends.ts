@@ -56,6 +56,7 @@ export function spendOffered(state: GameState, def: FriarSpendDef): { ok: boolea
   const c = state.character;
   if (!c) return { ok: false, why: '' };
   if (def.needs === 'ordained' && !state.flags.ordained) return { ok: false, why: 'After ordination' };
+  if (def.credential && !c.credentials.includes(def.credential)) return { ok: false, why: 'Not learned' };
   if (def.needs === 'teaching_or_school') {
     const house = currentHouse(state);
     const teaches = !!house && (house.works.includes('teaching') || house.works.includes('school') || house.works.includes('formation')) || state.religious?.apostolate?.id === 'seminary_faculty' || state.religious?.apostolate?.id === 'diocesan_school' || state.religious?.apostolate?.id === 'campus_ministry';
