@@ -466,5 +466,51 @@
         }
       }
     ]
+  },
+  {
+    "id": "dominican_rite",
+    "label": "The rite of the order",
+    "blurb": "The crypt chapel with the old friar who still says it: the chalice prepared at the start, the short Confiteor, the arms. An hour a week for a year and you can say it, by leave, when you are a priest.",
+    "maxAp": 2,
+    "location": "chapel",
+    "pillars": {
+      "spiritual": 0.02
+    },
+    "stats": {
+      "piety": 0.03,
+      "knowledge": 0.02,
+      "theology": 0.01
+    },
+    "relationships": [
+      {
+        "selector": "@old_friar",
+        "delta": 0.1
+      }
+    ],
+    "credentialAfter": {
+      "hours": 50,
+      "credential": "dominican_rite",
+      "flag": "can_celebrate_dominican_rite",
+      "line": "You can say the rite of the order now, slowly and without error, and the old friar has said so to the master of students. When you are a priest it will be yours to ask leave for."
+    },
+    "digest": [
+      "An hour in the crypt with the old man and the card of responses.",
+      "The chalice at the start, again, until your hands know it.",
+      "The arms, held, in the empty chapel with the lights off."
+    ],
+    "requires": [
+      {
+        "type": "flag",
+        "key": "order:OP",
+        "value": true
+      },
+      {
+        "type": "not",
+        "inner": {
+          "type": "credential",
+          "key": "dominican_rite"
+        }
+      }
+    ]
   }
 ]

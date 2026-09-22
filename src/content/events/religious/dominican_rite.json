@@ -1,0 +1,405 @@
+{
+  "_notes": "The rite of the Order of Preachers, learned in formation and celebrated after. Details kept to what is well attested: the rite unified under Humbert of Romans in the thirteenth century; the chalice prepared at the start of Mass; the shorter Confiteor that names St. Dominic; the arms extended in the form of a cross after the consecration; the order's own chant and the Salve procession after Compline; its use today by leave, not by right. Verify before leaning on any of it. The credential dominican_rite and the flag can_celebrate_dominican_rite come from the chapel activity or the students' society, never from a scene; scenes teach and test.",
+  "events": [
+    {
+      "id": "opr_rite_first_seen",
+      "phase": ["seminary"],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "formation",
+      "baseWeight": 14,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": ["belief_vs_safety"],
+      "requires": [{ "type": "flag", "key": "order:OP", "value": true }],
+      "yearGate": [1],
+      "title": "The Mass of the Order",
+      "body": "On the feast of the translation of St. Dominic {@old_friar} says Mass in the crypt chapel in the rite of the order, which you had not known the order still had. It is not the older Roman Mass and it is not the new one: the chalice is prepared at the very start, the Confiteor is short and names St. Dominic, and after the consecration the old man stands with his arms out in the form of a cross for longer than seems possible. Humbert of Romans fixed all of it in the thirteenth century, {@novice_master} says afterward, and the province keeps it the way a family keeps a grandfather's watch: wound now and then, by leave, by the men who know how.",
+      "flavorPrompt": "A novice sees the order's own rite for the first time, said by an old friar in the crypt.",
+      "choices": [
+        {
+          "id": "serve",
+          "label": "Ask to serve at it next time, and learn the responses",
+          "outcome": "He says yes, and gives you a card with the responses in a hand older than the card. You serve it in October, badly, and he does not mind. Something in the shape of the Mass has got into you and does not come out.",
+          "effects": [
+            { "target": "pillar", "key": "spiritual", "delta": 0.4 },
+            { "target": "stat", "key": "knowledge", "delta": 1 },
+            { "target": "relationship", "key": "@old_friar", "delta": 4 },
+            { "target": "flag", "key": "rite:served", "value": true }
+          ]
+        },
+        {
+          "id": "read",
+          "label": "Watch from the back, and read the missal in the library afterward",
+          "outcome": "The library has the 1933 missal and a commentary nobody has taken out since before you were born. You read the rubrics for the arms and understand, for the first time, that the rite is a way of standing as much as a way of praying.",
+          "effects": [
+            { "target": "stat", "key": "knowledge", "delta": 1 },
+            { "target": "stat", "key": "theology", "delta": 1 },
+            { "target": "flag", "key": "rite:read", "value": true }
+          ]
+        },
+        {
+          "id": "leave_it",
+          "label": "Note that it is not the Mass you were given, and leave it there",
+          "outcome": "You say the new Mass with the house every day and it is the Mass. The rite goes back into its drawer until someone opens it again, and you are not sure it will be you.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "concern", "key": "Little curiosity about the order's own tradition." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "opr_rite_salve",
+      "phase": ["seminary"],
+      "campaign": "religious",
+      "severity": "ROUTINE",
+      "category": "formation",
+      "baseWeight": 12,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": ["competence"],
+      "requires": [{ "type": "flag", "key": "order:OP", "value": true }],
+      "yearGate": [1, 2],
+      "title": "The Salve",
+      "body": "After Compline the house goes in procession to the Lady altar and sings the Salve Regina in the order's own chant, which is not quite the chant the parishes know and has been sung by Dominicans every night for seven hundred years, the cantor says, in a tone that makes clear he intends the eighth. The chant has a turn in it you cannot find, and the men on either side of you have stopped waiting for you to. {@confrere} says the cantor will teach anyone who asks and nobody asks, because the cantor is the cantor.",
+      "flavorPrompt": "The nightly Salve procession, in the order's chant, and a novice who cannot find the turn in it.",
+      "choices": [
+        {
+          "id": "ask",
+          "label": "Ask the cantor to teach you the order's chant, and go every week",
+          "outcome": "He is delighted, which nobody warned you about, and merciless, which everybody did. By Lent you can carry the Salve and the O Lumen alone, and the house has noticed who is singing.",
+          "effects": [
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "pillar", "key": "spiritual", "delta": 0.3 },
+            { "target": "reputation", "key": "community", "delta": 2 },
+            { "target": "flag", "key": "rite:chant", "value": true }
+          ]
+        },
+        {
+          "id": "record",
+          "label": "Record it on your phone and learn it alone in your cell",
+          "outcome": "It works, mostly. You find the turn by the fourth week and the cantor finds out by the fifth, and says nothing, and moves you to the other side of the choir where the strong voices are.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "stat", "key": "knowledge", "delta": 1 },
+            { "target": "flag", "key": "rite:chant", "value": true }
+          ]
+        },
+        {
+          "id": "mouth",
+          "label": "Sing quietly, near enough, and let the house carry it",
+          "outcome": "The house carries it. Houses do. Years later you will still not know where the turn is, and you will still go to the Lady altar every night, and both of those will be true.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "pillar", "key": "human", "delta": 0.2 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "opr_rite_serving",
+      "phase": ["seminary"],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "formation",
+      "baseWeight": 12,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": ["competence"],
+      "requires": [
+        { "type": "flag", "key": "order:OP", "value": true },
+        { "type": "any", "inner": [{ "type": "flag", "key": "rite:served", "value": true }, { "type": "flag", "key": "rite:read", "value": true }, { "type": "flag", "key": "club:students_rite_society", "value": true }] }
+      ],
+      "yearGate": [2, 3, 4],
+      "title": "The Chalice at the Start",
+      "body": "{@old_friar} is saying the rite for the lay Dominicans' feast and the man who was to serve it has the flu. He asks for you by name, which means someone told him you had read the book. The rite serves differently: the chalice is prepared at the beginning, wine and water before a word of the Mass is said, and the server has things to do in the first two minutes that a Roman server does at the offertory, and nothing to do at the offertory, and a way of standing at the arms that he will only show you once.",
+      "flavorPrompt": "A student brother serves the order's rite for the first time, with an old friar who will show him the gestures once.",
+      "choices": [
+        {
+          "id": "prepare",
+          "label": "Go over it with him the night before, cruet by cruet",
+          "outcome": "He walks it with you in the empty chapel with the lights off, which is how he learned it, he says, in 1964. In the morning you are where you should be at every moment, and the lay Dominicans, who know, know.",
+          "effects": [
+            { "target": "stat", "key": "knowledge", "delta": 2 },
+            { "target": "pillar", "key": "spiritual", "delta": 0.3 },
+            { "target": "pillar", "key": "pastoral", "delta": 0.2 },
+            { "target": "relationship", "key": "@old_friar", "delta": 5 },
+            { "target": "flag", "key": "rite:served_well", "value": true }
+          ]
+        },
+        {
+          "id": "wing",
+          "label": "Trust the book and your eye, and serve it cold",
+          "outcome": "You are a beat late at the chalice and early at the arms, and he covers both without a flicker, and afterward says only that the rite is kind to servers and unkind to priests, and that you will find out.",
+          "effects": [
+            { "target": "stat", "key": "knowledge", "delta": 1 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "relationship", "key": "@old_friar", "delta": 1 }
+          ]
+        },
+        {
+          "id": "decline",
+          "label": "Tell him honestly that you would rather not serve what you cannot serve well",
+          "outcome": "He finds another man. He does not hold it against you, and he does not ask again, and you are not sure which of those you wanted.",
+          "effects": [
+            { "target": "honesty", "key": "", "delta": 1 },
+            { "target": "relationship", "key": "@old_friar", "delta": -2 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "opr_rite_museum",
+      "phase": ["seminary"],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 12,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": ["belief_vs_safety", "friendship_vs_duty"],
+      "requires": [{ "type": "flag", "key": "order:OP", "value": true }],
+      "yearGate": [3, 4, 5],
+      "title": "A Museum Piece",
+      "body": "At recreation {@confrere} says, to the room, that the rite of the order is a museum piece and the men who keep it are curators, and that a preaching order should preach and not polish silver. Two of the students laugh. {@master_of_students} does not, and does not disagree either, and looks at you, since it is known in the house who has been going down to the crypt with the old man and the card of responses.",
+      "flavorPrompt": "A student brother calls the order's rite a museum piece at recreation, and the room turns to the one who has been learning it.",
+      "choices": [
+        {
+          "id": "defend",
+          "label": "Say that a family that forgets its grandfather's prayers is poorer, not freer",
+          "outcome": "It lands better than you expected and worse than you wanted: the room agrees with the sentence and remembers who said it. You are, from that evening, the student who keeps the rite, whatever else you are.",
+          "effects": [
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "outspokenness", "key": "outspokenness", "delta": 3 },
+            { "target": "alignment", "key": "alignment", "delta": -3 },
+            { "target": "reputation", "key": "community", "delta": 1 },
+            { "target": "relationship", "key": "@confrere", "delta": -3 },
+            { "target": "flag", "key": "rite:defended", "value": true }
+          ]
+        },
+        {
+          "id": "both",
+          "label": "Say that the order preaches in the vernacular and prays in its own tongue, and always has",
+          "outcome": "The master of students nods, once, which in him is a paragraph. Your confrere says that is a very Dominican answer, and means it as a compliment and an accusation.",
+          "effects": [
+            { "target": "stat", "key": "theology", "delta": 1 },
+            { "target": "pillar", "key": "intellectual", "delta": 0.3 },
+            { "target": "relationship", "key": "@master_of_students", "delta": 3 }
+          ]
+        },
+        {
+          "id": "let_it",
+          "label": "Let it go; it is recreation, and he is your friend",
+          "outcome": "You let it go, and he is your friend, and a week later he asks, privately, what the arms mean, and you tell him, and he says he still thinks it is a museum, and comes to the crypt anyway.",
+          "effects": [
+            { "target": "relationship", "key": "@confrere", "delta": 3 },
+            { "target": "pillar", "key": "human", "delta": 0.3 },
+            { "target": "stat", "key": "piety", "delta": 1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "opr_rite_hours_questioned",
+      "phase": ["seminary"],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "formation",
+      "baseWeight": 12,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": ["ambition_vs_integrity"],
+      "requires": [
+        { "type": "flag", "key": "order:OP", "value": true },
+        { "type": "any", "inner": [{ "type": "flag", "key": "club:students_rite_society", "value": true }, { "type": "flag", "key": "rite:served_well", "value": true }] }
+      ],
+      "yearGate": [3, 4, 5],
+      "title": "What the Hours Are For",
+      "body": "{@master_of_students} has you in for the term's talk and, at the end of it, mentions the crypt. He is not against it. He is a man who sends the province's best men to Rome and Fribourg and he wants to know whether the hours you are giving the rite are hours off the thesis, and whether you are learning a Mass or building a wall between yourself and the century the order lives in. He says he has seen both, and that the men who did the first are mostly still here.",
+      "flavorPrompt": "The master of students asks a student brother whether the hours on the order's rite are learning or hiding.",
+      "choices": [
+        {
+          "id": "learning",
+          "label": "Tell him it is the order's Mass and you mean to be able to say it, and that the thesis will be on time",
+          "outcome": "He says good, and writes something, and the thesis is on time. He mentions it to the provincial the way he mentions things: as a fact, without a verdict, which is a verdict.",
+          "effects": [
+            { "target": "relationship", "key": "@master_of_students", "delta": 3 },
+            { "target": "reputation", "key": "province", "delta": 2 },
+            { "target": "pillar", "key": "intellectual", "delta": 0.2 },
+            { "target": "flag", "key": "rite:owned", "value": true }
+          ]
+        },
+        {
+          "id": "less",
+          "label": "Say you will give it fewer hours, and mean it for a term",
+          "outcome": "You give it fewer hours for a term. The old man in the crypt says nothing, which is how he says things, and in the spring you are back, and the master of students does not raise it again.",
+          "effects": [
+            { "target": "relationship", "key": "@master_of_students", "delta": 1 },
+            { "target": "pillar", "key": "intellectual", "delta": 0.3 },
+            { "target": "stat", "key": "piety", "delta": -1 }
+          ]
+        },
+        {
+          "id": "wall",
+          "label": "Admit that some of it is a wall, and that you do not know yet what it keeps out",
+          "outcome": "He is quiet for a while and then says that is the most useful thing a student has said to him this year, and that he would rather have a man who knows where his walls are than one who has none. He sends you to your director.",
+          "effects": [
+            { "target": "honesty", "key": "", "delta": 2 },
+            { "target": "relationship", "key": "@master_of_students", "delta": 4 },
+            { "target": "pillar", "key": "human", "delta": 0.3 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "opr_rite_deacon_gospel",
+      "phase": ["seminary"],
+      "campaign": "religious",
+      "severity": "MAJOR",
+      "category": "formation",
+      "baseWeight": 16,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": ["competence"],
+      "requires": [
+        { "type": "flag", "key": "order:OP", "value": true },
+        { "type": "credential", "key": "dominican_rite" }
+      ],
+      "yearGate": [6, 7],
+      "title": "The Gospel in the Rite",
+      "body": "For the feast of St. Dominic the house will have a solemn Mass in the order's rite, the first in some years, and the deacon's part is yours: the Gospel chanted in the order's tone, the incense, the places to stand that are not the Roman places. The old man has taught you all of it and is too unwell to be more than a voice from the front stall. Half the province's men will be in choir. Some of them think the whole thing should have stayed in its drawer, and will be listening for the note you miss.",
+      "flavorPrompt": "A deacon chants the Gospel in the order's rite at a solemn Mass for the feast of St. Dominic, with the province in choir.",
+      "choices": [
+        {
+          "id": "sing",
+          "label": "Chant it as he taught you, all of it, and let the province hear",
+          "outcome": "You do not miss the note. Afterward the old man, from his stall, lifts one hand a little, which is the whole of what he has to say. Two friars of the province ask you, separately, where you learned it, and one of them is the man who wanted it left in the drawer.",
+          "effects": [
+            { "target": "stat", "key": "charisma", "delta": 2 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "pillar", "key": "spiritual", "delta": 0.5 },
+            { "target": "known", "key": "liturgist", "delta": 3 },
+            { "target": "reputation", "key": "province", "delta": 3 },
+            { "target": "reputation", "key": "community", "delta": 2 },
+            { "target": "flag", "key": "rite:deacon_gospel", "value": true }
+          ]
+        },
+        {
+          "id": "read_it",
+          "label": "Ask leave to read the Gospel rather than chant it, and do the rest",
+          "outcome": "Leave is given. The Mass is beautiful and slightly less than it might have been, and only you and the old man know which part, and he says it does not matter, and it does not, and it does.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "pillar", "key": "spiritual", "delta": 0.3 },
+            { "target": "known", "key": "liturgist", "delta": 1 },
+            { "target": "reputation", "key": "community", "delta": 1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "opr_rite_first_mass",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "campaign": "religious",
+      "severity": "MAJOR",
+      "category": "personal",
+      "baseWeight": 18,
+      "once": true,
+      "suppressYears": 5,
+      "pressure": ["belief_vs_safety"],
+      "requires": [
+        { "type": "flag", "key": "order:OP", "value": true },
+        { "type": "credential", "key": "dominican_rite" },
+        { "type": "years_ordained", "op": "<=", "value": 1 },
+        { "type": "flag", "key": "office:prior", "value": false }
+      ],
+      "title": "The First Mass in the Rite",
+      "body": "You have leave from {@prior}, as the order's law now requires, to say the rite of the order once, privately, at the side altar on a weekday, with one server and whoever comes. The old man who taught you is dead since the spring. You prepare the chalice before a word is said, say the short Confiteor that names Dominic, and at the arms you find that what he told you about the rite being unkind to priests is exact: there is nowhere to hide in it, and it does not want you to.",
+      "flavorPrompt": "A newly ordained friar says the order's own rite for the first time, privately, at a side altar, his teacher dead.",
+      "choices": [
+        {
+          "id": "keep_it",
+          "label": "Say it again, by leave, on the old man's month's mind, and let the house come who will",
+          "outcome": "Nine come, which in a house of twenty is a statement. The lay Dominicans hear of it and ask, and the province hears of it and files it, and you are now a man of whom a thing is known.",
+          "effects": [
+            { "target": "known", "key": "liturgist", "delta": 5 },
+            { "target": "known", "key": "man_of_prayer", "delta": 2 },
+            { "target": "stat", "key": "piety", "delta": 2 },
+            { "target": "reputation", "key": "community", "delta": 2 },
+            { "target": "reputation", "key": "observant_bloc", "delta": 4 },
+            { "target": "reputation", "key": "progressive_bloc", "delta": -2 },
+            { "target": "flag", "key": "rite:keeps_it", "value": true }
+          ]
+        },
+        {
+          "id": "once",
+          "label": "Keep it for the days that ask for it, and say the house's Mass the rest of the year",
+          "outcome": "You say it on his anniversary and on the feast of Dominic and otherwise not, and the house does not know quite what to make of that, which is, you find, where you would like to be made of.",
+          "effects": [
+            { "target": "known", "key": "liturgist", "delta": 2 },
+            { "target": "stat", "key": "piety", "delta": 2 },
+            { "target": "reputation", "key": "community", "delta": 1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "opr_rite_asked_for",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "parish_death",
+      "baseWeight": 10,
+      "suppressYears": 3,
+      "pressure": ["loyalty_vs_honesty"],
+      "requires": [
+        { "type": "flag", "key": "order:OP", "value": true },
+        { "type": "credential", "key": "dominican_rite" },
+        { "type": "years_ordained", "op": ">=", "value": 1 },
+        { "type": "flag", "key": "office:prior", "value": false },
+        { "type": "flag", "key": "office:provincial", "value": false }
+      ],
+      "title": "Asked for the Rite",
+      "body": "The lay Dominicans of the city have written to {@prior} asking for the order's rite for their patronal feast, and have named you, since you are the friar in the province who is known to say it. {@prior} passes the letter to you with the face of a man passing a lit candle: the house has men who will be glad, and men who will write to the provincial, and a bishop's liturgy office two miles away that has never heard of the rite and will ask what it is. It is yours to say yes to, and yours to say it.",
+      "flavorPrompt": "The lay Dominicans ask for the order's rite for their feast, and name the friar known to say it.",
+      "choices": [
+        {
+          "id": "yes",
+          "label": "Say yes, and say it as well as it can be said",
+          "outcome": "The chapel is full, which chapels are not on a Tuesday. The lay Dominicans weep, the liturgy office sends a monsignor who takes notes and goes away thoughtful, and two men of the house do write to the provincial, who writes back that he has read the order's law and so should they.",
+          "effects": [
+            { "target": "known", "key": "liturgist", "delta": 4 },
+            { "target": "reputation", "key": "laity", "delta": 4 },
+            { "target": "reputation", "key": "observant_bloc", "delta": 3 },
+            { "target": "reputation", "key": "community", "delta": -1 },
+            { "target": "reputation", "key": "local_bishop", "delta": -1 },
+            { "target": "stat", "key": "charisma", "delta": 1 }
+          ]
+        },
+        {
+          "id": "sung_new",
+          "label": "Offer them the new Mass sung in the order's chant instead, and keep the peace",
+          "outcome": "They take it, a little disappointed, and it is beautiful, and nobody writes to anyone. The old lay Dominican who asked first says afterward that it was very nice, in the voice of a woman who wanted the other thing.",
+          "effects": [
+            { "target": "known", "key": "liturgist", "delta": 2 },
+            { "target": "reputation", "key": "laity", "delta": 2 },
+            { "target": "reputation", "key": "community", "delta": 2 },
+            { "target": "stat", "key": "piety", "delta": 1 }
+          ]
+        },
+        {
+          "id": "no",
+          "label": "Decline: the rite is for the house, not for a feast with a monsignor in the back",
+          "outcome": "You say it privately for them the week after, three of them, with the door shut, and it is the better Mass, and nobody knows but four people and God, which is a number the rite has always been comfortable with.",
+          "effects": [
+            { "target": "stat", "key": "piety", "delta": 2 },
+            { "target": "known", "key": "man_of_prayer", "delta": 2 },
+            { "target": "reputation", "key": "laity", "delta": -1 }
+          ]
+        }
+      ]
+    }
+  ]
+}
