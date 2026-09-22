@@ -13,7 +13,8 @@ import type { Rng } from './rng';
 import { gameYearOf, yearStartDay } from './time';
 import { leaveSeminaryClubs } from '@/systems/clubs';
 import { evaluate, formationWeek, nameArchetype, setEmphasis, zeroPillars } from '@/systems/formation';
-import { summerOptions } from '@/content/seminary';
+import { religiousSummerOptions, summerOptions } from '@/content/seminary';
+import { formationStage } from '@/systems/religious/formation';
 import { renderText } from './text';
 import { assignFirstParish } from '@/systems/assignment';
 import { withChoice } from '@/systems/choice';
@@ -183,12 +184,20 @@ export function formationBeats(state: GameState, reachedBeats: Beat[]): GameStat
   return next;
 }
 
+/** The summers on offer: the diocesan seminary's, or the order's for the house the year is lived in. E3. */
+export function summerOptionsFor(state: GameState) {
+  const r = state.religious;
+  if (!r) return summerOptions;
+  const house = formationStage(state)?.house ?? 'studium';
+  return religiousSummerOptions.filter((o) => (!o.orders || o.orders.includes(r.order)) && (!o.houses || o.houses.includes(house)));
+}
+
 export function availableSummers(state: GameState) {
-  return summerOptions.map((o) => ({ option: o, available: evaluateAll(o.requires, state) }));
+  return summerOptionsFor(state).map((o) => ({ option: o, available: evaluateAll(o.requires, state) }));
 }
 
 export function chooseSummer(state: GameState, id: SummerAssignment): GameState {
-  const option = summerOptions.find((o) => o.id === id);
+  const option = summerOptionsFor(state).find((o) => o.id === id);
   if (!option || !evaluateAll(option.requires, state)) throw new Error(`summer ${id} unavailable`);
   const sem = state.seminary!;
   const next = applyEffects(state, option.effects);

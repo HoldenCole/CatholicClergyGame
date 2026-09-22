@@ -29,7 +29,8 @@ export function clubsForPhase(state: GameState): ClubDef[] {
   const phase = state.phase === 'seminary' && !friar ? 'seminary' : state.parish || friar ? 'priest' : null;
   if (!phase) return [];
   // A friar's circles are the order's; a diocesan priest's are the diocese's; a friar pastor sits at both tables where the diocese's is open to him. E3 §6.
-  return clubDefs.filter((c) => c.phase === phase && (!c.campaign || (c.campaign === 'religious' ? friar : !r || !!state.parish)) && (!c.orders || (r && c.orders.includes(r.order))));
+  // A student friar's seminary circles are the studium's; the diocesan seminary's own (the rector's table, the Latin Mass society) are not his.
+  return clubDefs.filter((c) => c.phase === phase && (!c.campaign || (c.campaign === 'religious' ? !!r : !r || !!state.parish)) && (!c.orders || (r && c.orders.includes(r.order))));
 }
 
 /** Whether a priest's circles meet this week: a parish, or a friar's house. */
