@@ -1,6 +1,7 @@
 import { eventById } from '@/content';
 import { visibleChoices } from '@/engine/events';
 import { useGameStore } from '@/engine/store';
+import { availableSummers } from '@/engine/seminary';
 import { emphasisPointsFor } from '@/systems/formation';
 import type { CreationAnswers, GameState } from '@/types';
 
@@ -112,7 +113,7 @@ export function playFriar(seed: string, order: 'OP' | 'OSA', maxWeeks: number, a
         s.getState().chooseEmphasis({ human: 3, spiritual: 3, intellectual: 2 + x, pastoral: 2 });
         break;
       }
-      case 'summer': s.getState().chooseSummer('hard_parish'); break;
+      case 'summer': s.getState().chooseSummer(availableSummers(game).find((o) => o.available)!.option.id); break;
       case 'evaluation': s.getState().acknowledgeEvaluation(); break;
       case 'ordination': s.getState().ordain(); break;
       case 'assignment': s.getState().acceptAssignment(); break;
