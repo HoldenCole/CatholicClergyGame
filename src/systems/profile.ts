@@ -6,6 +6,7 @@ import { officeDef } from '@/content/parish';
 import { officesHeld } from './offices';
 import { HARD_KINDS } from './trajectory';
 import { instituteDef } from '@/content/institutes';
+import { friarPost } from './religious/who';
 
 /**
  * The profile: a life in whole numbers and plain sentences. DESIGN.md §8.6.
@@ -75,6 +76,9 @@ export function postLine(state: GameState): string {
     const role = state.assignment.role === 'pastor' ? (parish.cathedral ? 'Rector' : 'Pastor') : state.assignment.role === 'administrator' ? 'Administrator' : 'Parochial vicar';
     return `${role} of ${parish.name}, ${parish.place}`;
   }
+  // A friar's line is the order's: the stage, the office, the house. E3.
+  const friar = friarPost(state);
+  if (friar) return friar;
   if (state.seminary) return `Seminarian, year ${state.seminary.year}`;
   return 'Between assignments';
 }

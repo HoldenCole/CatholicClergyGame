@@ -100,6 +100,8 @@ export type Condition =
   | { type: 'strain'; op: Op; value: number }
   /** Extension: the man's age in years. */
   | { type: 'age'; op: Op; value: number }
+  /** A person's age against a number, or against the man's own ('self'): who is a selector name without the @ (prior, provincial, novice_master...). */
+  | { type: 'npc_age'; who: string; op: Op; value: number | 'self'; /** Added to the value: 'self' with offset -1 is younger than the man. */ offset?: number }
   /** Extension: the pastor's Mass: a dial set to an option, or 'changes' / 'friction' (0..1 distance from what the parish wants) against a value. */
   | { type: 'liturgy'; key: string; value?: string; op?: Op; amount?: number }
   /** Extension: how many bonds of a kind ('any' for all) he has with the people of the current parish. */

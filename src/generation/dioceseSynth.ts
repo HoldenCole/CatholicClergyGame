@@ -149,6 +149,11 @@ export function synthPreset(rng: Rng, see: SynthSee, opts: SynthOptions = {}): D
 }
 
 /** The see cities of some regions, none of them a preset's, in a stable order. */
+/** One see of the pool by its city, for a province that keeps a formation house there. */
+export function synthSeeNamed(see: string): SynthSee | undefined {
+  return synthPool.sees.find((s) => s.see === see);
+}
+
 export function synthSees(regions: readonly string[], exclude: readonly string[] = []): SynthSee[] {
   const presetSees = new Set(exclude);
   return synthPool.sees.filter((s) => regions.includes(s.region) && !presetSees.has(s.id) && !presetSees.has(slug(s.see)));

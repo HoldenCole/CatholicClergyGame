@@ -5,6 +5,7 @@ import { applyEffects } from '@/engine/effects';
 import { religiousOrder } from '@/content/religious';
 import { BALLOT, runElection, type Elector } from '../ballot';
 import { contendersOf, electorsOf, PLAYER_ID, scoreFor, type Contender, type Voter } from './electorate';
+import { worldOf } from './transfer';
 
 /**
  * Chapters and elections. E3 §3.6–3.7: no one is a declared candidate;
@@ -43,11 +44,11 @@ function termYears(state: GameState, office: ChapterOffice): number {
 }
 
 /** Open a chapter: its electors and its eligible men, nothing decided. */
-export function openChapter(state: GameState, level: ChapterLevel, bodyId: string, office?: ChapterOffice): GameState {
+export function openChapter(state: GameState, level: ChapterLevel, bodyId: string, office?: ChapterOffice, opts: { exclude?: string[] } = {}): GameState {
   const r = state.religious;
   if (!r) return state;
   const electors = electorsOf(state, level, bodyId);
-  const candidates = office ? contendersOf(state, office, bodyId) : [];
+  const candidates = office ? contendersOf(state, office, bodyId).filter((c) => !opts.exclude?.includes(c.id)) : [];
   const chapter: Chapter = {
     id: `chapter:${level}:${bodyId}:${state.clock.week}`,
     level,
@@ -211,30 +212,60 @@ function seat(state: GameState, office: ChapterOffice, bodyId: string, electedId
     const consecutive = r.office?.office === office && r.office.bodyId === bodyId ? r.office.consecutive + 1 : 1;
     let next = applyEffects(state, [...CHAPTER.accept], {}, 'an election accepted');
     next = moreAmbition(next, CHAPTER.ambition.accept);
-    next = { ...next, religious: { ...next.religious!, office: { office, bodyId, startWeek: week, endWeek: week + years * 52, consecutive } }, flags: { ...next.flags, [`office:${office}`]: week } };
+    // A prior holds no office of the house under himself; the sacristy goes to someone else.
+    const { houseOffice: _ho, ...rest } = next.religious!;
+    next = { ...next, religious: { ...rest, office: { office, bodyId, startWeek: week, endWeek: week + years * 52, consecutive } }, flags: { ...next.flags, [`office:${office}`]: week } };
+    // The house, or the province, learns who governs it: the old man's tag goes, and the selectors find no one but him.
+    next = installSuperior(next, office, bodyId, PLAYER_ID);
     return { ...next, career: [...next.career, { week, kind: 'promotion', text: office === 'prior' ? `Elected prior of ${next.orderHouses?.[bodyId]?.name ?? 'the house'}.` : `Elected ${religiousOrder(r.order).governance.provincialTitle}.` }] };
   }
   const flags = { ...state.flags, [`terms:${office}:${electedId}`]: Number(state.flags[`terms:${office}:${electedId}`] ?? 0) + 1 };
+  return installSuperior({ ...state, flags }, office, bodyId, electedId);
+}
+
+/**
+ * Write the man who governs onto the body he governs: the house's prior
+ * (and the pastor of its parish, when it holds one) or the province's
+ * provincial. The player is written as 'player', which the selectors read
+ * as no one else, and every sheet as him.
+ */
+export function installSuperior(state: GameState, office: ChapterOffice, bodyId: string, id: string): GameState {
+  const week = state.clock.week;
   if (office === 'prior') {
     const house = state.orderHouses?.[bodyId];
     if (!house) return state;
     const npcs = { ...state.npcs };
     const old = npcs[house.priorId];
-    if (old && old.id !== electedId) npcs[old.id] = { ...old, tags: old.tags.filter((t) => t !== 'prior') };
-    const elected = npcs[electedId];
-    if (elected && !elected.tags.includes('prior')) npcs[electedId] = { ...elected, tags: [...elected.tags, 'prior'] };
-    return { ...state, flags, npcs, orderHouses: { ...state.orderHouses, [bodyId]: { ...house, priorId: electedId } } };
+    if (old && old.id !== id) npcs[old.id] = { ...old, tags: old.tags.filter((t) => t !== 'prior') };
+    const elected = npcs[id];
+    if (elected && !elected.tags.includes('prior')) npcs[id] = { ...elected, tags: [...elected.tags, 'prior'] };
+    let next: GameState = { ...state, npcs, orderHouses: { ...state.orderHouses, [bodyId]: { ...house, priorId: id } } };
+    // A parish house: the order's pastor is the house's prior. E3 §3.12.
+    if (house.parishId) {
+      const world = worldOf(next, house.dioceseId);
+      const parish = world?.parishes.find((p) => p.id === house.parishId);
+      if (world && parish) {
+        const npcs2 = { ...next.npcs };
+        const before = npcs2[parish.pastorId];
+        if (before && before.id !== id) npcs2[before.id] = { ...before, tags: before.tags.filter((t) => t !== `pastor:${parish.id}`) };
+        if (npcs2[id] && !npcs2[id]!.tags.includes(`pastor:${parish.id}`)) npcs2[id] = { ...npcs2[id]!, tags: [...npcs2[id]!.tags, `pastor:${parish.id}`] };
+        const parishes = world.parishes.map((p) => (p.id === parish.id ? { ...p, pastorId: id } : p));
+        next = { ...next, npcs: npcs2 };
+        next = next.world?.diocese.presetId === house.dioceseId ? { ...next, world: { ...next.world, parishes } } : { ...next, territory: { ...(next.territory ?? {}), [house.dioceseId]: { ...world, parishes } } };
+      }
+    }
+    return next;
   }
   if (office === 'provincial' && state.province) {
     const npcs = { ...state.npcs };
     const old = npcs[state.province.provincialId];
-    if (old && old.id !== electedId) npcs[old.id] = { ...old, tags: old.tags.filter((t) => t !== 'provincial') };
-    const elected = npcs[electedId];
-    if (elected && !elected.tags.includes('provincial')) npcs[electedId] = { ...elected, tags: [...elected.tags, 'provincial'] };
+    if (old && old.id !== id) npcs[old.id] = { ...old, tags: old.tags.filter((t) => t !== 'provincial') };
+    const elected = npcs[id];
+    if (elected && !elected.tags.includes('provincial')) npcs[id] = { ...elected, tags: [...elected.tags, 'provincial'] };
     const year = Math.floor(week / 52) + 2010;
-    return { ...state, flags, npcs, province: { ...state.province, provincialId: electedId, provincialSince: year } };
+    return { ...state, npcs, province: { ...state.province, provincialId: id, provincialSince: year } };
   }
-  return { ...state, flags };
+  return state;
 }
 
 /** Close the chapter's file. The record of it stays on the player's terms if he was seated. */
@@ -253,9 +284,37 @@ export function returnToRanks(state: GameState, how: 'well' | 'badly'): GameStat
   const { office: _o, ...rest } = r;
   let next: GameState = { ...state, religious: { ...rest, termsServed: [...r.termsServed, term] }, flags: { ...state.flags, [`returned:${how}`]: state.clock.week } };
   delete next.flags[`office:${term.office}`];
+  // The body he governed has no one until it elects: the chair stands empty for the chapter that follows.
+  if (term.office === 'prior' && next.orderHouses?.[r.office.bodyId]?.priorId === PLAYER_ID) next = { ...next, orderHouses: { ...next.orderHouses, [r.office.bodyId]: { ...next.orderHouses[r.office.bodyId]!, priorId: '' } } };
+  if (term.office === 'provincial' && next.province?.provincialId === PLAYER_ID) next = { ...next, province: { ...next.province, provincialId: '' } };
   next = applyEffects(next, [...CHAPTER.returned[how]], {}, how === 'well' ? 'a term ended well' : 'a term ended badly');
   if (how === 'well') next = moreAmbition(next, CHAPTER.ambition.humble);
   return { ...next, career: [...next.career, { week: state.clock.week, kind: 'note', text: `The term as ${term.office} ended, and he returned to the ranks${how === 'well' ? '.' : ', and not gracefully.'}` }] };
+}
+
+/**
+ * The chair he has left is filled at once: the house or the province elects
+ * his successor, with him in the room as an elector and not on the ballot.
+ * When he has no voice in it, the gallery resolves it and a letter tells him.
+ */
+export function successorChapter(state: GameState, office: ChapterOffice, bodyId: string, rng: Rng): { state: GameState; letter?: Letter } {
+  const r = state.religious;
+  if (!r || r.chapter) return { state };
+  if (office === 'prior' && !state.orderHouses?.[bodyId]) return { state };
+  if (office === 'provincial' && !state.province) return { state };
+  // The chair already filled, by the chapter that elected his successor before the term ran out: nothing to do.
+  const sitting = office === 'prior' ? state.orderHouses![bodyId]!.priorId : state.province!.provincialId;
+  if (sitting && sitting !== PLAYER_ID) return { state };
+  const flagKey = office === 'prior' ? `chapter:house:${bodyId}` : 'chapter:provincial';
+  const opened = openChapter({ ...state, flags: { ...state.flags, [flagKey]: state.clock.week } }, office === 'prior' ? 'house' : 'provincial', bodyId, office, { exclude: [PLAYER_ID] });
+  if (!opened.religious?.chapter?.candidateIds.length) {
+    // Nobody eligible: the provincial names a man to hold it, the eldest solemnly professed priest of the body.
+    const pool = office === 'prior' ? Object.values(opened.npcs).filter((n) => n.status === 'active' && n.tags.includes(`house:${bodyId}`)) : Object.values(opened.npcs).filter((n) => n.status === 'active' && n.tags.includes('religious') && n.tags.includes(`order:${r.order}`));
+    const man = pool.filter((n) => n.tags.includes('vows:solemn') && n.title === 'Fr.').sort((a, b) => a.birthYear - b.birthYear || a.id.localeCompare(b.id))[0];
+    const closed = closeChapter(opened);
+    return man ? { state: installSuperior(closed, office, bodyId, man.id) } : { state: closed };
+  }
+  return chapterFromTheGallery(opened, rng);
 }
 
 /** A year passes: perceived ambition fades; a term that has run out ends. */

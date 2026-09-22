@@ -42,7 +42,8 @@ import { answerConfrereAsk as answerConfrereAskSys } from '@/systems/religious/c
 import { answerFoundationAsk as answerFoundationAskSys, petitionFoundation as petitionFoundationSys } from '@/systems/religious/founding';
 import { reviseCharter as reviseCharterSys, writeCharter as writeCharterSys } from '@/systems/religious/charter';
 import { addFoundationWork as addFoundationWorkSys, myFoundation, sendDaughter as sendDaughterSys } from '@/systems/religious/foundationYear';
-import { castVote, closeChapter, holdElection, resolveElection, returnToRanks, signalWillingness, speakFor, steerBloc } from '@/systems/religious/chapter';
+import { castVote, closeChapter, holdElection, resolveElection, returnToRanks, signalWillingness, speakFor, steerBloc, successorChapter } from '@/systems/religious/chapter';
+import { nameOfficer as nameOfficerSys, setHouseRule as setHouseRuleSys, spendPurse as spendPurseSys } from '@/systems/religious/priorDesk';
 import { fromDayNumber } from './calendar';
 import { acceptAssignment as doAcceptAssignment } from './seminary';
 import {
@@ -57,7 +58,7 @@ import { setDiscretionary as doSetDiscretionary, setObligation as doSetObligatio
 import { focusGroup as doFocus, replaceLeader as doReplaceLeader, startFounding as doStartFounding, suppressGroup as doSuppress } from '@/systems/groups';
 import { startWork as doStartWork, stopWork as doStopWork } from '@/systems/problems';
 import { joinClub as doJoinClub, leaveClub as doLeaveClub } from '@/systems/clubs';
-import { readLetter as doReadLetter } from '@/systems/review';
+import { deliverLetter, readLetter as doReadLetter } from '@/systems/review';
 import { answerMail as doAnswerMail } from '@/systems/mail';
 import { setEvenings as doSetEvenings } from '@/systems/night';
 import type { EveningKind } from '@/types';
@@ -159,6 +160,10 @@ export interface GameStore {
   holdBallots(): void;
   answerElection(accept: boolean): void;
   endTerm(how: 'well' | 'badly'): void;
+  /** The prior's desk, when the office is his: the rule of the house, its offices, its purse. E3 §3.2, §3.10. */
+  setHouseRule(ruleId: string): void;
+  nameOfficer(officeId: string, npcId: string | null): void;
+  spendPurse(id: string): void;
   /** What the prior said, for the sheet. */
   lastPriorLine: string | null;
   setSpeed(speed: Speed): void;
@@ -827,7 +832,36 @@ export const useGameStore = create<GameStore>()((set, get) => ({
     update(set, get, (game, r) => ({ ...closeChapter(resolveElection(game, r.derive(`confirm:${game.clock.week}`), accept)), mode: { kind: 'clock' } }));
   },
   endTerm(how) {
-    update(set, get, (game) => ({ ...returnToRanks(game, how), mode: { kind: 'clock' } }));
+    update(set, get, (game, r) => {
+      const office = game.religious?.office;
+      const returned = { ...returnToRanks(game, how), mode: { kind: 'clock' as const } };
+      if (!office) return returned;
+      // The chair he left is filled at once: he votes for his successor, or reads of him from the gallery.
+      const chapter = successorChapter(returned, office.office, office.bodyId, r.derive(`successor:${game.clock.week}`));
+      if (chapter.letter) return deliverLetter(chapter.state, chapter.letter);
+      return chapter.state.religious?.chapter ? { ...chapter.state, mode: { kind: 'chapter' } } : chapter.state;
+    });
+  },
+  setHouseRule(ruleId) {
+    update(set, get, (game) => {
+      const res = setHouseRuleSys(game, ruleId);
+      if (res.line) set({ lastPriorLine: res.line });
+      return res.state;
+    });
+  },
+  nameOfficer(officeId, npcId) {
+    update(set, get, (game) => {
+      const res = nameOfficerSys(game, officeId, npcId);
+      if (res.line) set({ lastPriorLine: res.line });
+      return res.state;
+    });
+  },
+  spendPurse(id) {
+    update(set, get, (game) => {
+      const res = spendPurseSys(game, id);
+      if (res.line) set({ lastPriorLine: res.line });
+      return res.state;
+    });
   },
   chooseEmphasis(emphasis) {
     update(set, get, (game, r) => pickEmphasis(game, emphasis, r));

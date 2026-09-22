@@ -29,6 +29,7 @@ import SavePanel from './SavePanel';
 import SettingsPanel from './SettingsPanel';
 import FurnishPanel from './scenes/FurnishPanel';
 import HousePanel from './religious/HousePanel';
+import PriorPanel from './religious/PriorPanel';
 import HouseAsksPanel from './religious/HouseAsksPanel';
 import FriarWeekPanel from './religious/FriarWeekPanel';
 import DiocesanMenPanel from './religious/DiocesanMenPanel';
@@ -98,6 +99,7 @@ export default function Desk() {
         {open === 'house' && (
           <>
             <HousePanel />
+            <PriorPanel />
             <HouseAsksPanel />
             <DiocesanMenPanel />
           </>

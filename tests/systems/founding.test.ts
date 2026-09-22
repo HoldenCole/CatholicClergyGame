@@ -143,7 +143,8 @@ describe('foundations: where, whether, and the charter (E3 §9.1–9.4)', () => 
     expect(answeredNo.religious!.petition!.outcome).toBe('declined');
     expect(answeredNo.character!.reputation.province).toBe((no.character!.reputation.province ?? 0) - 4);
     // Asked, the province's score is higher than a petition's for the same place.
-    expect(provinceScore(year, year.religious!.petition!)).toBeGreaterThan(provinceScore(year, { ...year.religious!.petition!, kind: 'petition' }));
+    const plain = { ...year, character: { ...year.character!, reputation: { ...year.character!.reputation, province: -30 } }, religious: { ...year.religious!, perceivedAmbition: 70 } };
+    expect(provinceScore(plain, plain.religious.petition!)).toBeGreaterThan(provinceScore(plain, { ...plain.religious.petition!, kind: 'petition' }));
   });
 
   it('the charter sums its dials, refuses what the order or the diocese cannot write, and a man reads it his own way', () => {

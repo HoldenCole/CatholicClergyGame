@@ -9,7 +9,7 @@ import { gainReputation, identitiesOf, legibilityFromReputations, phraseOf, repu
 import { setSpend, spendBudget, spendOffered, spendsWeek, spendsUsed } from '@/systems/religious/spends';
 import { consult, fitOf } from '@/systems/religious/obedience';
 import { playerLegibility } from '@/systems/religious/electorate';
-import { friarLoad } from '@/systems/religious/bishopAsks';
+import { BISHOP_ASKS, friarLoad } from '@/systems/religious/bishopAsks';
 
 function friar(seed: string, order: OrderKey = 'OP', stats = { administration: 50, charisma: 55, theology: 60, knowledge: 55, piety: 60 }): GameState {
   const def = religiousOrder(order);
@@ -32,7 +32,7 @@ describe('reputations and the friar\'s week (E3 §3.3, §8)', () => {
 
   it('a reputation is built by the hours, held under its stat cap, and fades only when unused', () => {
     const s = friar('rep');
-    expect(spendBudget(s)).toBe(Math.round((12 - friarLoad(s)) * 4) / 4);
+    expect(spendBudget(s)).toBe(Math.round((BISHOP_ASKS.weekBlocks - friarLoad(s)) * 4) / 4);
     let next = setSpend(s, 'confessions', 3);
     expect(next.religious!.spends!.confessions).toBe(3);
     expect(spendsUsed(next)).toBe(3);

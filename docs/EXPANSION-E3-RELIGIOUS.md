@@ -77,6 +77,14 @@ Each house carries:
 
 The house replaces the rectory as the player's home and the presbyterate as his daily peer group. It is smaller, more intimate, and impossible to escape. **The old friar who drives everyone mad is at dinner every night.**
 
+**The house knows who governs it.** A chapter that seats the player writes him onto the house (`priorId: 'player'`, the old prior's tag gone) or the province (`provincialId`), and a parish house's parish takes him as pastor; the `@prior` and `@provincial` selectors then find no one, so a scene about "the prior" cannot fire while he is the prior, and the validator refuses any religious scene that speaks of the prior or the provincial without either the selector or an `office:` condition. When his term ends the chair stands empty and the body elects his successor at once, with him voting and not on the ballot (`successorChapter`). A scene that compares a person's age to his uses the `npc_age` condition, never a line that assumes it.
+
+**The prior's desk** (`systems/religious/priorDesk.ts`, options in `content/religious/priorDesk.json`, the Prior sheet). While the office is his, three levers: the **rule** of the house (a target its observance drifts toward a point or so a week; the men of a mind gain or lose regard for him once, and a house being moved rubs his standing and its cohesion while it moves), the **offices of the house** in his gift (a man named is grateful, a better-fitted man passed over notices, and a house whose offices are filled rests at a higher cohesion), and the **purse** (one-off spends from the budget held in common, each with a cooldown: the library, the fabric, the guest wing, the door, the house's holiday, a man sent to study). A prior holds no office of the house under himself, gives himself permissions and dispensations at a larger cost with the house than asking, and answers the diocese's pastors himself. The elected offices take blocks (`ap` on the office in `orders.json`). To anyone not prior the sheet shows what the house's prior has set, greyed.
+
+**The friar's week** is the diocesan twelve with the common life counted in: `weekBlocks` is 12 plus the horarium at standard, so a friar keeping the common life as the house does has the diocesan priest's week less his work, the minimum buys blocks back in full view of the house, and the invested level costs him.
+
+**Formation houses sit where the province keeps them.** A province seed may pin its house of studies and its novitiate to a see city (`studiumSee`, `novitiateSee`: a preset diocese or a see of the generated pool); the house itself is generated and named from the order's pools. Verify the cities before relying on them; they are flagged in the data.
+
 ### 3.3 The horarium
 
 The common life consumes mandatory AP before any assignment work begins.

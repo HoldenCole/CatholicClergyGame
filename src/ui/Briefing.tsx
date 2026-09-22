@@ -55,8 +55,8 @@ function keyFor(game: NonNullable<ReturnType<typeof useGameStore.getState>['game
   if (game.mode.kind !== 'clock' || game.pending.length > 0) return null;
   if (game.parish) return 'parish';
   if (game.study) return game.study.city === 'rome' || game.study.city === 'washington' ? 'study' : 'posting';
-  if (game.seminary) return 'seminary';
   if (game.religious && game.flags.ordained) return 'house';
+  if (game.seminary) return 'seminary';
   return null;
 }
 

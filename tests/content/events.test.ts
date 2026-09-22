@@ -197,6 +197,9 @@ function checkCondition(c: Condition, where: string, problems: Problem[]): void 
     case 'calendar_year':
       if (!hasOp(c.op) || typeof c.value !== 'number') problems.push(`${where}: bad ${c.type} condition`);
       break;
+    case 'npc_age':
+      if (typeof c.who !== 'string' || !SELECTORS.includes(`@${c.who.replace(/^@/, '')}`) || !hasOp(c.op) || !(typeof c.value === 'number' || c.value === 'self') || (c.offset !== undefined && typeof c.offset !== 'number')) problems.push(`${where}: bad npc_age condition`);
+      break;
     case 'liturgy':
       if (['changes', 'friction', 'lean', 'fresh'].includes(c.key)) { if (c.op !== undefined && !hasOp(c.op)) problems.push(`${where}: bad liturgy condition`); }
       else if (!LITURGY_DIALS.has(c.key) || typeof c.value !== 'string' || !LITURGY_OPTIONS.has(`${c.key}:${c.value}`)) problems.push(`${where}: bad liturgy condition ${JSON.stringify(c)}`);
@@ -337,6 +340,13 @@ function checkEvent(ev: GameEvent, file: string, problems: Problem[], ids: Set<s
     if (!token.startsWith('@') && !['name', 'first_name', 'surname', 'diocese', 'parish', 'seminary', 'school', 'city', 'residence', 'appointment', 'appointment_residence', 'appointment_from', 'town'].includes(token) && !(token.startsWith('town:') && TOWN_PLACE_KINDS.includes(token.slice(5) as never))) {
       problems.push(`${where}: unknown token {${token}}`);
     }
+  }
+  // A religious scene that speaks of the prior or the provincial as another man must not fire while the player is that man.
+  if (ev.campaign === 'religious' && !(Array.isArray(ev.phase) && ev.phase.length === 1 && ev.phase[0] === 'seminary')) {
+    const text = [ev.title, ev.body, ...(ev.choices ?? []).flatMap((c) => [c.label, c.outcome ?? ''])].join(' ');
+    const reqs = JSON.stringify(ev.requires ?? []);
+    if (/\b(the|your) prior\b/i.test(text) && !text.includes('@prior') && !reqs.includes('office:prior')) problems.push(`${where}: speaks of the prior without an office:prior condition or the @prior selector`);
+    if (/\bthe provincial\b/i.test(text) && !text.includes('@provincial') && !reqs.includes('office:provincial')) problems.push(`${where}: speaks of the provincial without an office:provincial condition or the @provincial selector`);
   }
   if (!Array.isArray(ev.choices) || ev.choices.length < 1 || ev.choices.length > 5) problems.push(`${where}: 1–5 choices`);
   const choiceIds = new Set<string>();

@@ -1,7 +1,7 @@
 import type { GameState, PermissionDef } from '@/types';
 import type { Rng } from '@/engine/rng';
 import { permissionDefs } from '@/content/religious';
-import { currentHouse, priorOf, setHouse } from './house';
+import { currentHouse, playerIsPrior, priorOf, setHouse } from './house';
 
 /**
  * Poverty: the player has no money, and every personal expense is a
@@ -10,6 +10,9 @@ import { currentHouse, priorOf, setHouse } from './house';
  * are invented.
  */
 export const POVERTY = {
+  /** A prior's own permissions: always his to take when the purse allows, at a larger cost with the house than asking. */
+  priorsOwn: 1,
+  priorsOwnCommunity: -1.5,
   /** The prior's regard moves the chance by this much across −100..100. */
   regardSwing: 0.35,
   /** A cost above this share of the house budget is hard to grant. */
@@ -37,8 +40,11 @@ function lastAsked(state: GameState, id: string): number | undefined {
 /** The chance the prior says yes, 0..1. Pure. */
 export function permissionChance(state: GameState, def: PermissionDef): number {
   const house = currentHouse(state);
+  if (!house) return 0;
+  // The prior gives himself permission, within the budget, and the house watches him do it.
+  if (playerIsPrior(state, house)) return def.cost > house.budget ? 0 : POVERTY.priorsOwn;
   const prior = priorOf(state, house);
-  if (!house || !prior) return 0;
+  if (!prior) return 0;
   let p = def.ease;
   p += (prior.relationship / 100) * POVERTY.regardSwing;
   if (def.cost > house.budget * POVERTY.budgetStrain) p -= 0.25;
@@ -50,6 +56,7 @@ export function permissionChance(state: GameState, def: PermissionDef): number {
 }
 
 function oddsWord(p: number): string {
+  if (p >= 0.99) return 'It is yours to take, and the house will know you took it.';
   if (p >= 0.8) return 'He will say yes.';
   if (p >= 0.55) return 'He will probably say yes.';
   if (p >= 0.3) return 'It could go either way.';
@@ -82,6 +89,8 @@ export function askPermission(state: GameState, id: string, rng: Rng): { state: 
     if (def.flag) next = { ...next, flags: { ...next.flags, [`permission:${def.flag}`]: next.clock.week } };
   }
   const c = next.character;
-  if (c) next = { ...next, character: { ...c, reputation: { ...c.reputation, community: Math.max(-100, (c.reputation.community ?? 0) + POVERTY.askCommunity) } } };
+  const mine = playerIsPrior(state, house);
+  if (c) next = { ...next, character: { ...c, reputation: { ...c.reputation, community: Math.max(-100, (c.reputation.community ?? 0) + (mine ? POVERTY.priorsOwnCommunity : POVERTY.askCommunity)) } } };
+  if (mine) return { state: next, granted, line: granted ? `You gave yourself the permission, which a prior may, and the procurator wrote it in the book where the house can read it. ${def.line.granted}` : 'The house cannot afford it, and a prior who takes what the house cannot afford is remembered for it.' };
   return { state: next, granted, line: granted ? def.line.granted : def.line.refused };
 }

@@ -43,6 +43,19 @@ export function priorOf(state: GameState, house?: OrderHouse): Npc | undefined {
   return h ? state.npcs[h.priorId] : undefined;
 }
 
+/** Whether the player is the prior of the house: the house's own record, or the office he holds for it. */
+export function playerIsPrior(state: GameState, house?: OrderHouse): boolean {
+  const h = house ?? currentHouse(state);
+  if (!h) return false;
+  const o = state.religious?.office;
+  return h.priorId === 'player' || (!!o && o.office === 'prior' && o.bodyId === h.id);
+}
+
+/** Whether the player is the provincial. */
+export function playerIsProvincial(state: GameState): boolean {
+  return state.province?.provincialId === 'player' || state.religious?.office?.office === 'provincial';
+}
+
 /** How spread the house's men are on the line, 0..1. */
 function spread(members: Npc[]): number {
   if (members.length < 2) return 0;
@@ -54,7 +67,9 @@ function spread(members: Npc[]): number {
 /** Where cohesion settles for this house, from its men and its observance. */
 export function cohesionRest(state: GameState, house: OrderHouse): number {
   const members = membersOf(state, house);
-  return Math.max(10, Math.min(95, HOUSE.cohesionRest - spread(members) * HOUSE.splitPenalty + (house.observance - 50) * HOUSE.observanceBond));
+  // A house whose offices are filled runs: the procurator pays the bills and the sacristan has the keys. E3 §3.10.
+  const officers = Math.min(4, Object.keys(house.officers ?? {}).length) * 1.5;
+  return Math.max(10, Math.min(95, HOUSE.cohesionRest - spread(members) * HOUSE.splitPenalty + (house.observance - 50) * HOUSE.observanceBond + officers));
 }
 
 export function setHouse(state: GameState, house: OrderHouse): GameState {

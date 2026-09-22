@@ -25,6 +25,8 @@ export interface ProvinceVisible {
   provincial: { name: string; age: number; yearsInOffice: number; line: string };
   works: string[];
   territory: string[];
+  /** Where the province forms its men: the novitiate and the house of studies, by name and city. */
+  formation: string[];
   complication: string;
   line: string;
 }
@@ -58,6 +60,10 @@ export function provincePreview(gen: GeneratedProvince, year: number): ProvinceV
     provincial: { name: `${provincial.title} ${provincial.name.first} ${provincial.name.last}`, age: year - provincial.birthYear, yearsInOffice: year - p.provincialSince, line: `${provincial.temperament ?? 'steady'} in the room, and ${provincial.alignment < -20 ? 'a man of the old observance' : provincial.alignment > 20 ? 'a man for this century' : 'hard to place on the line'}.` },
     works,
     territory: gen.dioceses.map((d) => d.diocese.visible.name),
+    formation: gen.houses.filter((h) => h.kind === 'novitiate' || h.kind === 'studium').map((h) => {
+      const d = gen.dioceses.find((x) => x.presetId === h.dioceseId);
+      return `${h.kind === 'novitiate' ? 'the novitiate' : 'the house of studies'}, ${h.name}${d ? ` in ${d.preset.see}` : ''}`;
+    }),
     complication: p.complication,
     line: p.line,
   };
