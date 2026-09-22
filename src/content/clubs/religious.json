@@ -456,5 +456,296 @@
     "orders": [
       "OSA"
     ]
+  },
+  {
+    "id": "novice_master_table",
+    "leaning": 0,
+    "phase": "seminary",
+    "campaign": "religious",
+    "label": "The novice master's table",
+    "blurb": "Sunday supper at the novice master's end of the table, where the talk is the Order's history and the Order's dead, and nobody is examined and everybody is.",
+    "hours": 1,
+    "inviteOnly": true,
+    "fellows": 3,
+    "builds": "the pillars of formation, the novice master's regard",
+    "requires": [
+      {
+        "type": "pillar",
+        "key": "spiritual",
+        "op": ">=",
+        "value": 40
+      }
+    ],
+    "onJoin": [
+      {
+        "target": "flag",
+        "key": "club:novice_master_table",
+        "value": true
+      }
+    ],
+    "onLeave": [
+      {
+        "target": "flag",
+        "key": "club:novice_master_table",
+        "value": false
+      }
+    ],
+    "weekly": [
+      {
+        "target": "pillar",
+        "key": "spiritual",
+        "delta": 0.03
+      },
+      {
+        "target": "pillar",
+        "key": "human",
+        "delta": 0.02
+      },
+      {
+        "target": "relationship",
+        "key": "@novice_master",
+        "delta": 0.15
+      }
+    ],
+    "hint": "Kept up over a year, the novice master's report has a sentence in it the council reads twice."
+  },
+  {
+    "id": "students_preaching_workshop",
+    "leaning": 0,
+    "phase": "seminary",
+    "campaign": "religious",
+    "orders": [
+      "OP"
+    ],
+    "label": "The students' preaching workshop",
+    "blurb": "Thursday nights in the studium's lecture hall: one student preaches for eight minutes on Sunday's Gospel and the others take it apart, kindly and completely, the way the Order has done for eight hundred years.",
+    "hours": 2,
+    "fellows": 5,
+    "builds": "presence, the pastoral pillar, a homily that lands",
+    "onJoin": [
+      {
+        "target": "flag",
+        "key": "club:students_preaching",
+        "value": true
+      }
+    ],
+    "onLeave": [
+      {
+        "target": "flag",
+        "key": "club:students_preaching",
+        "value": false
+      }
+    ],
+    "weekly": [
+      {
+        "target": "stat",
+        "key": "charisma",
+        "delta": 0.06
+      },
+      {
+        "target": "pillar",
+        "key": "pastoral",
+        "delta": 0.03
+      },
+      {
+        "target": "stat",
+        "key": "theology",
+        "delta": 0.02
+      }
+    ],
+    "credentialAfter": {
+      "weeks": 52,
+      "flag": "preached_the_workshop",
+      "line": "A year of Thursdays: you can preach eight minutes on any Gospel without a note, and the master of students has said so to the provincial."
+    }
+  },
+  {
+    "id": "studium_greek",
+    "leaning": -0.2,
+    "phase": "seminary",
+    "campaign": "religious",
+    "label": "The studium's Greek circle",
+    "blurb": "The New Testament in the original, two evenings a week, led by the old lector who reads it as if it were the newspaper. Slow, and it stays.",
+    "hours": 2,
+    "fellows": 3,
+    "builds": "learning, the intellectual pillar, the Greek that stays",
+    "requires": [
+      {
+        "type": "stat",
+        "key": "knowledge",
+        "op": ">=",
+        "value": 35
+      }
+    ],
+    "onJoin": [
+      {
+        "target": "flag",
+        "key": "club:studium_greek",
+        "value": true
+      }
+    ],
+    "onLeave": [
+      {
+        "target": "flag",
+        "key": "club:studium_greek",
+        "value": false
+      }
+    ],
+    "weekly": [
+      {
+        "target": "stat",
+        "key": "knowledge",
+        "delta": 0.06
+      },
+      {
+        "target": "pillar",
+        "key": "intellectual",
+        "delta": 0.03
+      },
+      {
+        "target": "stat",
+        "key": "theology",
+        "delta": 0.02
+      }
+    ],
+    "credentialAfter": {
+      "weeks": 78,
+      "flag": "reads_greek",
+      "line": "You read the Gospel in Greek now, slowly, and the old lector has stopped correcting you, which is the highest mark he gives."
+    }
+  },
+  {
+    "id": "students_reading_circle",
+    "leaning": 0.2,
+    "phase": "seminary",
+    "campaign": "religious",
+    "orders": [
+      "OSA"
+    ],
+    "label": "The students' Augustine circle",
+    "blurb": "The Confessions and then the City of God, a book a month, in the common room with the good chairs, and an argument about grace that has not ended since the fifth century.",
+    "hours": 2,
+    "fellows": 4,
+    "builds": "theology, the spiritual pillar, the father's voice in your own",
+    "onJoin": [
+      {
+        "target": "flag",
+        "key": "club:students_augustine",
+        "value": true
+      }
+    ],
+    "onLeave": [
+      {
+        "target": "flag",
+        "key": "club:students_augustine",
+        "value": false
+      }
+    ],
+    "weekly": [
+      {
+        "target": "stat",
+        "key": "theology",
+        "delta": 0.05
+      },
+      {
+        "target": "pillar",
+        "key": "spiritual",
+        "delta": 0.03
+      },
+      {
+        "target": "stat",
+        "key": "knowledge",
+        "delta": 0.02
+      }
+    ],
+    "credentialAfter": {
+      "weeks": 52,
+      "flag": "read_the_city_of_god",
+      "line": "The City of God, through, which the master of students says fewer than a dozen men in the province can claim."
+    }
+  },
+  {
+    "id": "friars_garden",
+    "leaning": 0,
+    "phase": "seminary",
+    "campaign": "religious",
+    "label": "The garden crew",
+    "blurb": "Saturday mornings in the house's garden with the brother who runs it, who does not talk, and the two novices who do. Tomatoes, the compost, the Office said at noon with dirt under the nails.",
+    "hours": 2,
+    "fellows": 3,
+    "builds": "the human pillar, rest, a house that eats what it grows",
+    "onJoin": [
+      {
+        "target": "flag",
+        "key": "club:friars_garden",
+        "value": true
+      }
+    ],
+    "onLeave": [
+      {
+        "target": "flag",
+        "key": "club:friars_garden",
+        "value": false
+      }
+    ],
+    "weekly": [
+      {
+        "target": "pillar",
+        "key": "human",
+        "delta": 0.03
+      },
+      {
+        "target": "strain",
+        "key": "",
+        "delta": -0.3
+      },
+      {
+        "target": "stat",
+        "key": "piety",
+        "delta": 0.02
+      }
+    ]
+  },
+  {
+    "id": "studium_schola",
+    "leaning": -0.1,
+    "phase": "seminary",
+    "campaign": "religious",
+    "label": "The students' schola",
+    "blurb": "The chant for the house's Sunday Mass and the great feasts, rehearsed Wednesday nights under a student who studied in Solesmes for a summer and will not let you forget it.",
+    "hours": 2,
+    "fellows": 4,
+    "builds": "presence, the spiritual pillar, the chant in your bones",
+    "onJoin": [
+      {
+        "target": "flag",
+        "key": "club:studium_schola",
+        "value": true
+      }
+    ],
+    "onLeave": [
+      {
+        "target": "flag",
+        "key": "club:studium_schola",
+        "value": false
+      }
+    ],
+    "weekly": [
+      {
+        "target": "stat",
+        "key": "charisma",
+        "delta": 0.03
+      },
+      {
+        "target": "pillar",
+        "key": "spiritual",
+        "delta": 0.03
+      },
+      {
+        "target": "stat",
+        "key": "piety",
+        "delta": 0.02
+      }
+    ]
   }
 ]

@@ -1,5 +1,5 @@
 import type { GameState, Parish, SeminaryState } from '@/types';
-import { summerOptions } from '@/content/seminary';
+import { summerOptionById } from '@/content/seminary';
 
 /**
  * The formation record as the bishop and the personnel board read it at
@@ -94,6 +94,6 @@ export function parishPrestige(parish: Parish): number {
 export function summersOnRecord(sem: SeminaryState | null | undefined): { year: number; label: string }[] {
   if (!sem) return [];
   return Object.entries(sem.summers)
-    .map(([y, id]) => ({ year: Number(y), label: summerOptions.find((o) => o.id === id)?.label ?? id }))
+    .map(([y, id]) => ({ year: Number(y), label: summerOptionById(id)?.label ?? id }))
     .sort((a, b) => a.year - b.year);
 }

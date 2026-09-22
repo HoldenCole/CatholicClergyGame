@@ -13,14 +13,8 @@ export interface EvaluationRecord {
   notes: string[];
 }
 
-export type SummerAssignment =
-  | 'home_parish'
-  | 'hard_parish'
-  | 'hospital'
-  | 'mission'
-  | 'chancery'
-  | 'rome'
-  | 'language_immersion';
+/** A summer's id: the diocesan seminary's in content/seminary/summers.json, an order's in content/religious/summers.json. */
+export type SummerAssignment = string;
 
 /** Where an activity happens, for the room's hotspots. */
 export type SeminaryLocation = 'chapel' | 'library' | 'common_room' | 'gym' | 'director' | 'rector' | 'parish' | 'desk' | 'language';
