@@ -1,4 +1,5 @@
 import type { GameEvent, GameState, PendingEvent } from '@/types';
+import { friarRole } from '@/systems/religious/who';
 import { resolveSelector } from '@/engine/selectors';
 import { seasonOf } from '@/engine/time';
 import { renderText } from '@/engine/text';
@@ -50,7 +51,7 @@ function base(state: GameState): Omit<SkinContext, 'kind' | 'title' | 'authored'
   const parish = state.world && state.assignment ? state.world.parishes.find((p) => p.id === state.assignment!.parishId) : undefined;
   return {
     characterName: `${c.name.first} ${c.name.last}`,
-    role: state.phase === 'seminary' ? `seminarian, year ${state.seminary?.year ?? 1}` : (state.assignment?.role ?? 'priest').replace('_', ' '),
+    role: friarRole(state) ?? (state.phase === 'seminary' ? `seminarian, year ${state.seminary?.year ?? 1}` : (state.assignment?.role ?? 'priest').replace('_', ' ')),
     year: calendarYear(state),
     season: SEASON_LABELS[seasonOf(state.clock)],
     diocese: state.world?.diocese.visible.name ?? null,

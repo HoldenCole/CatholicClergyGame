@@ -3,7 +3,7 @@ import type { Rng } from '@/engine/rng';
 import { applyEffects } from '@/engine/effects';
 import { dateOf, priesthoodYear } from '@/engine/time';
 import { bishopAskDefs, religiousOrder } from '@/content/religious';
-import { currentHouse, houseById, houseLine, priorOf } from './house';
+import { currentHouse, houseById, houseLine, playerIsPrior, priorOf } from './house';
 import { needOf, fitOf } from './obedience';
 import { currentPosting, moveToHouse } from './transfer';
 
@@ -88,6 +88,7 @@ export function houseOfficeOffers(state: GameState): HouseOfficeOffer[] {
   return order.houseOffices.map((def) => {
     if (r.houseOffice?.id === def.id) return { def, available: false, why: 'Held now' };
     if (r.houseOffice) return { def, available: false, why: 'One office of the house at a time' };
+    if (playerIsPrior(state)) return { def, available: false, why: 'The prior gives these; he does not hold them' };
     if (def.ordained && !state.flags.ordained) return { def, available: false, why: 'For a priest of the house' };
     if (def.vows === 'solemn' && r.vows.solemnWeek === undefined) return { def, available: false, why: 'After solemn profession' };
     if (def.vows === 'simple' && r.vows.simpleWeek === undefined) return { def, available: false, why: 'After first profession' };

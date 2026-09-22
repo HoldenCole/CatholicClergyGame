@@ -54,7 +54,8 @@ describe('the bishop asks the order (E3 §3.11)', () => {
     // A friar with room in his week may do both; with a full week, the province spares him or not by the house's need.
     const plain = provincialAnswers(s, def);
     expect(['both', 'spared', 'refused']).toContain(plain.answer);
-    const heavy: GameState = { ...s, religious: { ...s.religious!, apostolate: { id: 'hospital_chaplain', dioceseId: s.world!.diocese.presetId, label: 'Chaplain at the hospital', startWeek: s.clock.week } } };
+    // A full week: the common life kept in full, the hospital, and the procurator's books.
+    const heavy: GameState = { ...s, religious: { ...s.religious!, horarium: { hours: 'invested', conventual_mass: 'standard', common_table: 'invested', house_chapter: 'standard' }, houseOffice: { id: 'procurator', startWeek: 0 }, apostolate: { id: 'hospital_chaplain', dioceseId: s.world!.diocese.presetId, label: 'Chaplain at the hospital', startWeek: s.clock.week } } };
     expect(provincialAnswers(heavy, def).answer).not.toBe('both');
     // Only eligible asks: an institution the diocese lacks is never asked for.
     const institutions = s.world!.diocese.visible.institutions;

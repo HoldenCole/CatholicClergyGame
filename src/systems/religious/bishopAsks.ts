@@ -2,7 +2,7 @@ import type { BishopAsk, BishopAskDef, Effect, GameState, Letter } from '@/types
 import type { Rng } from '@/engine/rng';
 import { applyEffects } from '@/engine/effects';
 import { dateOf, priesthoodYear } from '@/engine/time';
-import { bishopAskDefs, religiousOrder } from '@/content/religious';
+import { bishopAskDefs, horariumDefs, religiousOrder } from '@/content/religious';
 import { currentHouse } from './house';
 import { horariumLoad } from './horarium';
 import { friendshipLoad } from './friendship';
@@ -11,6 +11,7 @@ import { apostolateDef, directingLoad, houseOfficeLoad, pastorTaskLoad } from '.
 import { currentPosting } from './transfer';
 import { reputationOf } from './reputations';
 import { confrereTaskLoad } from './confrereAsks';
+import { electedOfficeLoad } from './priorDesk';
 import { workLoad } from '@/systems/sidework';
 
 /**
@@ -31,7 +32,13 @@ export const BISHOP_ASKS = {
   /** Years ordained before any bishop asks. */
   minYears: 2,
   /** A week's blocks, as the base game counts them; the horarium, the office, and the work come out of it. */
-  weekBlocks: 12,
+  /**
+   * The diocesan week's 12 blocks are counted after the daily Mass, the Office, and meals (systems/week.ts);
+   * a friar's common life is charged on the sheet, so his base carries it: 12 and the horarium at standard.
+   * At standard he has the diocesan priest's week less his work; the minimum buys blocks back and the whole
+   * house sees it; invested costs him. E3 §3.3.
+   */
+  weekBlocks: 12 + horariumDefs.reduce((n, d) => n + d.ap.standard, 0),
   /** The provincial will not spare a man from a house that needs him this much, or from formation work at all. */
   spareNeed: 55,
   /** Standing. */
@@ -52,7 +59,7 @@ function yearsOrdained(state: GameState): number {
 
 /** The blocks his week already owes: the common life, the friends, the office, the work. */
 export function friarLoad(state: GameState): number {
-  return horariumLoad(state) + friendshipLoad(state) + houseOfficeLoad(state) + (apostolateDef(state)?.ap ?? 0) + pastorTaskLoad(state) + directingLoad(state) + confrereTaskLoad(state) + workLoad(state);
+  return horariumLoad(state) + friendshipLoad(state) + houseOfficeLoad(state) + electedOfficeLoad(state) + (apostolateDef(state)?.ap ?? 0) + pastorTaskLoad(state) + directingLoad(state) + confrereTaskLoad(state) + workLoad(state);
 }
 
 /** The asks a bishop's office could make of the provincial for this man now. */

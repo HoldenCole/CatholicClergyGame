@@ -4,7 +4,8 @@ import { presetById } from '@/content/dioceses';
 import { instituteDef } from '@/content/institutes';
 import { provinceComplications } from '@/content/religious';
 import { generateDiocese, type GeneratedDiocese } from './diocese';
-import { synthDiocese, synthSees, presenceFor } from './dioceseSynth';
+import { synthDiocese, synthSeeNamed, synthSees, presenceFor } from './dioceseSynth';
+import type { SynthSee } from '@/content/dioceses/synth';
 import { CLERGY_HERITAGE, eraForBirthYear, rollHeritage, rollMaleName } from './names';
 import { finishNpc, rollAlignment, rollBaseStats } from './npc';
 import { temperamentFor } from './institutes';
@@ -144,10 +145,13 @@ export function generateProvince(rng: Rng, order: OrderDef, seed: ProvinceSeed, 
   const progressive = Math.max(0.15, Math.min(0.7, 0.42 + lean / 200 + rng.float(-0.08, 0.08)));
   const alignment = Math.round((progressive - observant) * 120);
 
-  // Territory: the presets inside it, then generated sees from its regions.
+  // Territory: the presets inside it, then generated sees from its regions. A see the province keeps a formation house in is always in it.
   const presets = seed.dioceseIds.map((id) => presetById(id)).filter((p): p is DiocesePreset => !!p);
   const want = rng.int(seed.dioceses[0], seed.dioceses[1]);
-  const extra = rng.shuffle(synthSees(seed.regions, seed.dioceseIds)).slice(0, Math.max(0, want - presets.length));
+  const pinnedSees = [seed.studiumSee, seed.novitiateSee].filter((c): c is string => !!c && !presets.some((p) => p.see === c));
+  const pool = synthSees(seed.regions, seed.dioceseIds);
+  const pinned = pinnedSees.map((c) => pool.find((s) => s.see === c) ?? synthSeeNamed(c)).filter((s): s is SynthSee => !!s);
+  const extra = [...pinned, ...rng.shuffle(pool.filter((s) => !pinned.includes(s))).slice(0, Math.max(0, want - presets.length - pinned.length))];
   // Houses: how many, what kinds, and which diocese each sits in, decided before the dioceses roll so a generated diocese knows the order is there.
   const [lo, hi] = PROVINCE.houses[trajectory];
   const n = Math.max(3, Math.min(rng.int(lo, hi), (presets.length + extra.length) * 2));
@@ -156,9 +160,24 @@ export function generateProvince(rng: Rng, order: OrderDef, seed: ProvinceSeed, 
   const curiaId = territoryIds.find((id) => presets.find((p) => p.id === id)?.see === seed.curia || extra.find((s) => s.id === id)?.see === seed.curia) ?? territoryIds[0]!;
   const placement: string[] = kinds.map(() => '');
   placement[0] = curiaId;
-  // Every preset diocese gets a house; the rest of the houses scatter, generated dioceses a little less often.
-  const others = rng.shuffle(territoryIds.filter((id) => id !== curiaId));
-  for (let i = 1; i < placement.length; i++) placement[i] = i - 1 < others.length ? others[i - 1]! : rng.pick(territoryIds);
+  // The formation houses sit where the province keeps them, when the data says; the house itself is generated and named from the order's pools.
+  const seeId = (city: string | undefined) => (city ? territoryIds.find((id) => presets.find((p) => p.id === id)?.see === city || extra.find((s) => s.id === id)?.see === city) : undefined);
+  const fixed = new Map<number, string>();
+  const studiumAt = seeId(seed.studiumSee);
+  const novitiateAt = seeId(seed.novitiateSee);
+  kinds.forEach((k, i) => {
+    if (i === 0) return;
+    if (k === 'studium' && studiumAt) fixed.set(i, studiumAt);
+    if (k === 'novitiate' && novitiateAt) fixed.set(i, novitiateAt);
+  });
+  for (const [i, id] of fixed) placement[i] = id;
+  // Every other preset diocese gets a house; the rest of the houses scatter, generated dioceses a little less often.
+  const others = rng.shuffle(territoryIds.filter((id) => id !== curiaId && ![...fixed.values()].includes(id)));
+  let j = 0;
+  for (let i = 1; i < placement.length; i++) {
+    if (fixed.has(i)) continue;
+    placement[i] = j < others.length ? others[j++]! : rng.pick(territoryIds);
+  }
   const housed = new Set(placement);
 
   const dioceses: ProvinceDiocese[] = [

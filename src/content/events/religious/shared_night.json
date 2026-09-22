@@ -3,15 +3,42 @@
   "events": [
     {
       "id": "shn_the_light_under_the_door",
-      "phase": ["seminary", "parochial_vicar", "administrator", "pastor"],
+      "phase": [
+        "seminary",
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
       "campaign": "religious",
-      "yearGate": [1, 2, 3, 4, 5, 6, 7],
+      "yearGate": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
       "severity": "ROUTINE",
       "category": "personal",
       "baseWeight": 18,
       "suppressYears": 2,
-      "pressure": ["friendship_vs_duty"],
-      "requires": [{ "type": "night", "key": "rest", "op": "<=", "value": 100 }],
+      "pressure": [
+        "friendship_vs_duty"
+      ],
+      "requires": [
+        {
+          "type": "night",
+          "key": "rest",
+          "op": "<=",
+          "value": 100
+        },
+        {
+          "type": "flag",
+          "key": "office:prior",
+          "value": false
+        }
+      ],
       "title": "The Light Under the Door",
       "body": "Two in the morning in the corridor, on the way back from the bathroom, and there is a light under {@confrere}'s door, as there has been most nights this month. The house keeps the great silence from Compline until Lauds and the silence is the house's, and a light under a door is not a sound. You stand in the corridor in your socks. The rule says go to bed. The rule also says a brother is a brother.",
       "flavorPrompt": "A light under a confrere's door at two in the morning in the great silence.",
@@ -22,10 +49,26 @@
           "default": true,
           "outcome": "You knock and he opens the door and is not surprised, and you sit on the floor because there is one chair, and he tells you what the light is for, which is a thing he has not told the prior, and at three you go to bed and the silence is kept from then. He sleeps. He sits next to you at Lauds.",
           "effects": [
-            { "target": "relationship", "key": "@confrere", "delta": 12 },
-            { "target": "reputation", "key": "community", "delta": 2 },
-            { "target": "reputation", "key": "observant_bloc", "delta": -1 },
-            { "target": "strain", "key": "", "delta": 1 }
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": 12
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "observant_bloc",
+              "delta": -1
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 1
+            }
           ]
         },
         {
@@ -33,8 +76,16 @@
           "label": "Keep the silence, and find him after Lauds",
           "outcome": "You go to bed. After Lauds you find him in the cloister and say you saw the light, and he says it is nothing, and then, at breakfast, that it is not nothing, and you make a time. The silence was kept and so was he, a day later.",
           "effects": [
-            { "target": "relationship", "key": "@confrere", "delta": 6 },
-            { "target": "reputation", "key": "observant_bloc", "delta": 1 }
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "observant_bloc",
+              "delta": 1
+            }
           ]
         },
         {
@@ -42,22 +93,43 @@
           "label": "Go to bed; the light is his, and the prior's to ask about",
           "outcome": "You go to bed. The light is there the next night and the one after, and then it is not, and you never know which of the two things that meant.",
           "effects": [
-            { "target": "strain", "key": "", "delta": 1 },
-            { "target": "stat", "key": "piety", "delta": -1 }
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": -1
+            }
           ]
         }
       ]
     },
     {
       "id": "shn_the_common_room",
-      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
       "campaign": "religious",
       "severity": "ROUTINE",
       "category": "personal",
       "baseWeight": 14,
       "suppressYears": 3,
-      "pressure": ["doubt"],
-      "requires": [{ "type": "night", "key": "company", "op": "<=", "value": 45 }],
+      "pressure": [
+        "doubt"
+      ],
+      "requires": [
+        {
+          "type": "night",
+          "key": "company",
+          "op": "<=",
+          "value": 45
+        }
+      ],
       "title": "The Common Room at Nine",
       "body": "The common room at nine, and the television on, and nobody in front of it. The house has emptied into its cells the way houses do in the third year of a prior who does not mind. You have been going to your cell too. Tonight you stand in the doorway of the common room with the television talking to the chairs, and you could turn it off and go up, or sit down, alone, in a room built for twelve, and see who comes.",
       "flavorPrompt": "The common room at nine with the television on for nobody, and a friar in the doorway deciding.",
@@ -68,10 +140,26 @@
           "default": true,
           "outcome": "You put the kettle on and sit with a book in a room for twelve, and {@old_friar} comes at nine-twenty because he heard the kettle, and two more by ten, and it is not the house it was, and it is more of one than it was at nine. You do it again the next night. Some nights nobody comes. Most nights somebody does.",
           "effects": [
-            { "target": "reputation", "key": "community", "delta": 5 },
-            { "target": "relationship", "key": "@old_friar", "delta": 6 },
-            { "target": "strain", "key": "", "delta": -2 },
-            { "target": "flag", "key": "night:kettle", "value": true }
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 5
+            },
+            {
+              "target": "relationship",
+              "key": "@old_friar",
+              "delta": 6
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": -2
+            },
+            {
+              "target": "flag",
+              "key": "night:kettle",
+              "value": true
+            }
           ]
         },
         {
@@ -79,8 +167,16 @@
           "label": "Turn it off and go up; the cell is where the work is",
           "outcome": "You turn it off and go up and read until eleven, and the house is quiet, and the quiet is good for the work and for nothing else.",
           "effects": [
-            { "target": "stat", "key": "theology", "delta": 1 },
-            { "target": "reputation", "key": "community", "delta": -1 }
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -1
+            }
           ]
         }
       ]

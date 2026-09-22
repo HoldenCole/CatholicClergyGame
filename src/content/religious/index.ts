@@ -8,6 +8,7 @@ import spendsRaw from './spends.json';
 import foundationsRaw from './foundations.json';
 import projectsRaw from './projects.json';
 import confrereAsksRaw from './confrereAsks.json';
+import priorDeskRaw from './priorDesk.json';
 import type { BishopAskDef, PastorAskDef, ReputationDef, IdentityDef, FriarSpendDef, ConfrereAskDef, SideWorkDef, CharterDial, CharterOptionDef, FoundationWorkDef, HorariumDef, HorariumKey, OrderDef, OrderKey, PermissionDef, ProvinceSeed } from '@/types';
 
 /** The orders a friar can be professed into. E3 §6–7, as data. */
@@ -79,3 +80,6 @@ export const friarProjectDefs: SideWorkDef[] = (projectsRaw as unknown as { proj
 
 /** Letters from brothers of the province asking for help. E3 §6.2. */
 export const confrereAskDefs: ConfrereAskDef[] = (confrereAsksRaw as unknown as { asks: ConfrereAskDef[] }).asks;
+
+/** The prior's desk: the rules a house can be set to, and the purse. E3 §3.2, §3.10. */
+export const priorDeskDefs = priorDeskRaw as unknown as { rules: { id: string; label: string; observance: number; line: string }[]; purse: { id: string; label: string; blurb: string; cost: number; cooldown: number; effects: import('@/types').Effect[]; house?: { cohesion?: number; observance?: number }; line: string }[] };

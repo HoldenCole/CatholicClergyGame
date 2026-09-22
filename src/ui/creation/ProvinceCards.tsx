@@ -32,6 +32,7 @@ export default function ProvinceCards({ provinces, selected, onSelect }: { provi
           <p><span className="heading">The provincial.</span> {shown.provincial.name}, {shown.provincial.age}, {shown.provincial.yearsInOffice === 0 ? 'newly in office' : `${shown.provincial.yearsInOffice} year${shown.provincial.yearsInOffice === 1 ? '' : 's'} in office`}: {shown.provincial.line}</p>
           <p><span className="heading">Works.</span> {shown.works.join(', ')}.</p>
           <p><span className="heading">Territory.</span> {shown.territory.join('; ')}.</p>
+          {shown.formation?.length > 0 && <p><span className="heading">Formation.</span> {shown.formation.join('; ')}.</p>}
           <p className="ink-wine">{shown.complication}</p>
           <p className="ink-faint text-xs">Nothing here is hidden from a man who asks; what the province keeps to itself, you will learn by living in it.</p>
         </div>

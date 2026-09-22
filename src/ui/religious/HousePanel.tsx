@@ -1,7 +1,7 @@
 import { lifeLabel } from '@/systems/lives';
 import { venueLabel, whatTheySay } from '@/systems/talk';
 import { useGameStore } from '@/engine/store';
-import { currentHouse, houseLine, membersOf, priorOf } from '@/systems/religious/house';
+import { currentHouse, houseLine, membersOf, playerIsPrior, priorOf } from '@/systems/religious/house';
 import { horariumRows } from '@/systems/religious/horarium';
 import { formationStage } from '@/systems/religious/formation';
 import { pietyLabelsOf } from '@/systems/religious/feel';
@@ -51,11 +51,15 @@ export default function HousePanel() {
         {stage ? `${stage.label}, under the ${stage.guide}. ` : ''}
         {rep ? `The house: ${word(standing(rep, 'community'))}. The province: ${word(standing(rep, 'province'))}. The provincial's council: ${word(standing(rep, 'superiors'))}.` : ''}
       </p>
-      {prior && (
+      {playerIsPrior(game, house) ? (
+        <p className="mt-2 text-sm">You are the {order.governance.priorTitle} of the house{game.religious.office ? `, in the ${Math.floor((game.clock.week - game.religious.office.startWeek) / 52) + 1}${['st', 'nd', 'rd'][Math.floor((game.clock.week - game.religious.office.startWeek) / 52)] ?? 'th'} year of a term of ${Math.round((game.religious.office.endWeek - game.religious.office.startWeek) / 52)}` : ''}. The desk is below.</p>
+      ) : prior ? (
         <p className="mt-2 flex items-center gap-2 text-sm">
           <Portrait portrait={portraitForNpc(prior, year)} size={30} />
-          <span>The prior, {prior.title} {prior.name.first} {prior.name.last}, {year - prior.birthYear}: {word(prior.relationship)} to you.</span>
+          <span>The {order.governance.priorTitle}, {prior.title} {prior.name.first} {prior.name.last}, {year - prior.birthYear}: {word(prior.relationship)} to you.</span>
         </p>
+      ) : (
+        <p className="ink-muted mt-2 text-sm">The house has no {order.governance.priorTitle} at the moment; the chapter will elect one.</p>
       )}
       <div className="mt-4">
         <div className="heading text-sm">The common life</div>
@@ -99,7 +103,7 @@ export default function HousePanel() {
               <span>
                 {m.title} {m.name.first} {m.name.last}, {year - m.birthYear}
                 {lifeLabel(game, m) && <span className="ink-wine ml-2 text-xs">{lifeLabel(game, m)}</span>}
-                {m.tags.includes('prior') ? ' · prior' : m.tags.includes('novice_master') ? ' · novice master' : m.tags.includes('master_of_students') ? ' · master of students' : m.tags.includes('vows:novice') ? ' · novice' : m.tags.includes('vows:simple') ? ' · student' : ''}
+                {m.tags.includes('prior') ? ` · ${order.governance.priorTitle}` : Object.entries(house.officers ?? {}).find(([, id]) => id === m.id) ? ` · ${order.houseOffices.find((o) => o.id === Object.entries(house.officers ?? {}).find(([, id]) => id === m.id)![0])?.label.toLowerCase() ?? 'an office'}` : m.tags.includes('novice_master') ? ' · novice master' : m.tags.includes('master_of_students') ? ' · master of students' : m.tags.includes('vows:novice') ? ' · novice' : m.tags.includes('vows:simple') ? ' · student' : ''}
                 {friends.has(m.id) ? ' · a close friend' : ''}
                 <span className="ink-faint"> · {word(m.relationship)}</span>
               </span>

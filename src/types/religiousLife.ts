@@ -40,6 +40,8 @@ export interface OrderOfficeDef {
   minYears?: number;
   /** The kind of house the office is held in, if it is tied to one. */
   house?: HouseKind;
+  /** Blocks a week the office takes while held (the elected offices; an appointed one is its own work). */
+  ap?: number;
   /** Standing when appointed. */
   effects?: { target: string; key: string; delta: number }[];
   line: string;
@@ -340,6 +342,15 @@ export interface ProvinceSeed {
   dioceses: [number, number];
   /** Where the provincial sits. */
   curia: string;
+  /**
+   * The see city the house of studies sits in, and the novitiate's, when the
+   * province keeps them in one place: a preset diocese or a see from the
+   * generated pool. The house itself is generated and named from the order's
+   * own pools (CLAUDE.md rule 13); only the city is real. Flagged for
+   * verification in the data.
+   */
+  studiumSee?: string;
+  novitiateSee?: string;
   line: string;
   /** A bias on the roll, −100..100. */
   dispositionBias?: number;
@@ -371,6 +382,12 @@ export interface OrderHouse {
   budget: number;
   /** kind parish: the parish of the diocese entrusted to the order, in that diocese's world. E3 §3.12. */
   parishId?: string;
+  /** The rule the prior has set for the house (content/religious/priorDesk.json): observance drifts toward it. E3 §3.2. */
+  rule?: string;
+  /** The offices of the house as the prior has given them: office id to the friar who holds it. E3 §3.10. */
+  officers?: Record<string, string>;
+  /** The week each purse spend was last made, by id. */
+  purse?: Record<string, number>;
 }
 
 /** A pastor of the diocese has written to the prior asking for the friar. E3 §3.12. Data in content/religious/pastorAsks.json. */

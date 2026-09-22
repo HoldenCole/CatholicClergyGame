@@ -4,6 +4,7 @@ import { horariumLoad } from '@/systems/religious/horarium';
 import { currentPosting } from '@/systems/religious/transfer';
 import { friendshipLoad } from '@/systems/religious/friendship';
 import { apostolateDef, houseOfficeDef, requestsLoad } from '@/systems/religious/requests';
+import { BISHOP_ASKS } from '@/systems/religious/bishopAsks';
 import { chanceryAskDef } from '@/systems/religious/bishopAsks';
 import { spendBudget, spendBuilds, spendCost, spendOffered, spendsOf, spendsUsed } from '@/systems/religious/spends';
 import { spendDefs } from '@/content/religious';
@@ -57,7 +58,7 @@ export default function FriarWeekPanel() {
         return (
           <Sheet title="Your hours">
             <p className="ink-muted text-xs leading-relaxed">
-              After the common life, the office, the work, and the asks, {budget} block{budget === 1 ? '' : 's'} of the week are yours.
+              The week is {BISHOP_ASKS.weekBlocks} blocks with the common life counted in; after it, the office, the work, and the asks, {budget} block{budget === 1 ? '' : 's'} are yours. Keeping the common life at its least buys blocks back, and the whole house sees who is not in choir.
               {left > 0 ? ` ${left} still unspoken for; they go nowhere in particular.` : ' All of them are given.'} What they build, they build slowly, and the province comes to know you by it.
               {used > 0 && <button className="pbtn-link ml-2" onClick={() => { for (const d of spendDefs) if ((spends[d.id] ?? 0) > 0) setSpend(d.id, 0); }}>clear them</button>}
             </p>

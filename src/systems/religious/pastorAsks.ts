@@ -3,7 +3,7 @@ import type { Rng } from '@/engine/rng';
 import { applyEffects } from '@/engine/effects';
 import { dateOf } from '@/engine/time';
 import { pastorAskDefs } from '@/content/religious';
-import { currentHouse } from './house';
+import { currentHouse, playerIsPrior } from './house';
 import { needOf } from './obedience';
 import { friarLoad, BISHOP_ASKS } from './bishopAsks';
 import { preachingOf } from './study';
@@ -77,12 +77,16 @@ export function pastorAskYear(state: GameState, rng: Rng): GameState {
   const week = state.clock.week;
   const need = needOf(state, house, dateOf(state.clock).year);
   const room = friarLoad(state) + def.ap <= BISHOP_ASKS.weekBlocks + 2;
-  const yes = need < p.spareNeed && room;
+  // When he is the prior, the letter is his to answer: it lands on the table as it is.
+  const mine = playerIsPrior(state, house);
+  const yes = mine || (need < p.spareNeed && room);
   const who = `${pastor.title} ${pastor.name.last}`;
   const line = yes
-    ? `${who} wrote to the prior asking for you: ${def.blurb} The prior said the house could spare you, and left it to you.`
+    ? mine
+      ? `${who} wrote to the prior asking for you, and the prior is you: ${def.blurb} Whether the house can spare you is yours to say.`
+      : `${who} wrote to the prior asking for you: ${def.blurb} The prior said the house could spare you, and left it to you.`
     : `${who} wrote to the prior asking for you: ${def.blurb} The prior said the house could not spare you this year, and wrote to him himself.`;
-  let next: GameState = { ...state, religious: { ...r, pastorAskLine: line, ...(yes ? { pastorAsk: { defId: def.id, pastorId: pastor.id, parishId: parishOf(pastor), week, dueWeek: week + p.askWeeks, priorSaidYes: true } } : {}) }, career: [...state.career, { week, kind: 'note', text: `${who} asked the prior for you: ${def.label.toLowerCase()}. ${yes ? 'The prior said yes.' : 'The prior said no.'}` }] };
+  let next: GameState = { ...state, religious: { ...r, pastorAskLine: line, ...(yes ? { pastorAsk: { defId: def.id, pastorId: pastor.id, parishId: parishOf(pastor), week, dueWeek: week + p.askWeeks, priorSaidYes: true } } : {}) }, career: [...state.career, { week, kind: 'note', text: `${who} asked the prior for you: ${def.label.toLowerCase()}. ${mine ? 'The prior being you, it is on your table.' : yes ? 'The prior said yes.' : 'The prior said no.'}` }] };
   if (!yes) next = { ...next, npcs: { ...next.npcs, [pastor.id]: { ...pastor, relationship: Math.max(-100, pastor.relationship + p.noRegard / 2) } } };
   return next;
 }

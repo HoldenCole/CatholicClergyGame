@@ -1,7 +1,7 @@
 import type { GameState, HorariumKey, Quality } from '@/types';
 import type { Rng } from '@/engine/rng';
 import { doctrinalTopics, religiousOrder } from '@/content/religious';
-import { currentHouse, nudgeHouse, priorOf } from './house';
+import { currentHouse, nudgeHouse, playerIsPrior, priorOf } from './house';
 
 /**
  * The life of the mind as an order's data shapes it. E3 §6.2: study
@@ -51,9 +51,11 @@ export function mayAskDispensation(state: GameState): { ok: boolean; why: string
 }
 
 export function dispensationChance(state: GameState): number {
-  const prior = priorOf(state);
   const house = currentHouse(state);
-  if (!prior || !house) return 0;
+  if (!house) return 0;
+  if (playerIsPrior(state, house)) return 1;
+  const prior = priorOf(state);
+  if (!prior) return 0;
   let p: number = STUDY.ease + (prior.relationship / 100) * 0.3 + ((house.cohesion - 50) / 100) * 0.2;
   if (state.phase === 'study') p += 0.2;
   return Math.max(0.05, Math.min(0.95, p));
@@ -68,7 +70,8 @@ export function askDispensation(state: GameState, rng: Rng): { state: GameState;
   const flags = { ...state.flags, 'dispensation:asked': state.clock.week };
   if (!granted) return { state: { ...state, flags }, granted, line: 'The prior says the house needs you in choir more than the library needs you at all.' };
   const dispensed = { from: [...STUDY.dispensedFrom], untilWeek: state.clock.week + STUDY.weeks };
-  return { state: { ...state, flags: { ...flags, 'dispensation:granted': state.clock.week }, religious: { ...r, dispensed } }, granted, line: 'Dispensed from the Hours and the table for a year, for the work. The brothers will cover, and they will remember it.' };
+  const line = playerIsPrior(state) ? 'You dispensed yourself from the Hours and the table for a year, for the work, which a prior may do and which a house notices a prior doing. The brothers will cover, and they will remember it.' : 'Dispensed from the Hours and the table for a year, for the work. The brothers will cover, and they will remember it.';
+  return { state: { ...state, flags: { ...flags, 'dispensation:granted': state.clock.week }, religious: { ...r, dispensed } }, granted, line };
 }
 
 /** One week under a dispensation: the brothers cover, at a cost; it lapses when its time is up. */

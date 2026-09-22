@@ -90,6 +90,15 @@ export function evaluateCondition(
       const year = new Date((state.clock.startDay + state.clock.week * 7) * 86_400_000).getUTCFullYear();
       return compare(cond.op, year - (c.entryYear - c.background.entryAge), cond.value);
     }
+    // A person's age against a number or against the man's own, so a scene never calls the prior younger when he is not.
+    case 'npc_age': {
+      const c = state.character;
+      const npc = resolveSelector(state, cond.who.startsWith('@') ? cond.who : `@${cond.who}`);
+      if (!c || !npc) return false;
+      const year = new Date((state.clock.startDay + state.clock.week * 7) * 86_400_000).getUTCFullYear();
+      const against = (cond.value === 'self' ? year - (c.entryYear - c.background.entryAge) : cond.value) + (cond.offset ?? 0);
+      return compare(cond.op, year - npc.birthYear, against);
+    }
     case 'liturgy': {
       const parish = state.world && state.assignment ? state.world.parishes.find((p) => p.id === state.assignment!.parishId) : undefined;
       if (!parish?.liturgy) return false;

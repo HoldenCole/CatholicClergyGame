@@ -20,6 +20,22 @@ export default function SideWorkPanel() {
         <>
           <p className="text-sm">{workLine(game)}</p>
           <p className="ink-muted mt-1 text-xs">{work.def.blurb}</p>
+          {(() => {
+            const elapsed = game.clock.week - work.state.startWeek;
+            const share = Math.min(1, elapsed / Math.max(1, work.def.weeks));
+            const next = work.def.milestones.find((_m, i) => !work.state.passed.includes(i));
+            return (
+              <div className="mt-2">
+                <div className="h-1.5 w-full overflow-hidden rounded bg-black/10"><div className="h-full bg-black/40" style={{ width: `${Math.round(share * 100)}%` }} /></div>
+                <p className="ink-faint mt-1 text-xs">
+                  Week {elapsed} of {work.def.weeks}.
+                  {work.state.passed.length > 0 && ` ${work.state.passed.length === 1 ? 'One milestone' : `${work.state.passed.length} milestones`} passed: ${work.state.passed.map((i) => work.def.milestones[i]?.line ?? '').filter(Boolean).join(' ')}`}
+                  {next ? ` Next, at ${Math.round(next.at * 100)}%.` : ' Then it lands, or it does not.'}
+                  {work.def.risk ? ` It can come to nothing at the end${work.def.risk.unless ? ', unless what it needs is there by then' : ''}.` : ''}
+                </p>
+              </div>
+            );
+          })()}
           <p className="ink-faint mt-1 text-xs">
             {desk ? `${work.def.apPerWeek} block${work.def.apPerWeek === 1 ? '' : 's'}` : `${hoursOf(work.def.apPerWeek)} hours`} of every week, taken off the top before anything else.
             <button className="pbtn-link ml-2" onClick={() => drop()}>put it down</button>
