@@ -127,6 +127,7 @@ export function playFriar(seed: string, order: 'OP' | 'OSA', maxWeeks: number, a
         else s.getState().answerElection(true);
         break;
       case 'term_end': s.getState().endTerm('well'); break;
+      case 'bishop_ask': s.getState().answerBishopAsk(game.clock.week % 2 === 0); break;
       case 'clock':
         s.getState().setSpeed('SKIP');
         s.getState().runToStop();

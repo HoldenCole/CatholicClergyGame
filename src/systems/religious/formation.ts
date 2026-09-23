@@ -18,11 +18,20 @@ export const VOWS = {
   /** Fewer professed than this in the house, and the council votes too. */
   quorum: 4,
   /** What a member's regard adds to his chance of voting yes, across −100..100. */
-  regardSwing: 0.4,
-  /** Base chance a member votes yes, before regard and the year's evaluation. */
-  base: 0.62,
-  /** The evaluation's weight: concerns pull the vote down. */
-  concern: -0.08,
+  regardSwing: 0.3,
+  /** What his standing with the house as a whole adds, across −100..100. */
+  communitySwing: 0.2,
+  /** The novice master or master of students speaks first at the chapter: his regard moves every vote, across −100..100. */
+  guideSwing: 0.15,
+  /** Base chance a member votes yes, before regard and the year's evaluation: a house professes the men it has formed unless it has a reason. */
+  base: 0.78,
+  /** The evaluation's weight: this year's concerns pull the vote down, at most so many of them; the old years' concerns are the old years'. */
+  concern: -0.06,
+  concernsCounted: 3,
+  /** A man the house held back once has been watched a year longer: a little easier the next time, not harder. */
+  watchedAgain: 0.05,
+  /** Each man's own reading of him, either way: a vote is the house's regard with some noise in it, not a lottery. */
+  jitter: 0.3,
   /** Standing when professed, and when a vote is close. */
   professed: [{ target: 'reputation', key: 'community', delta: 6 }, { target: 'reputation', key: 'province', delta: 3 }, { target: 'stat', key: 'piety', delta: 2 }],
   solemn: [{ target: 'reputation', key: 'community', delta: 8 }, { target: 'reputation', key: 'province', delta: 6 }, { target: 'stat', key: 'piety', delta: 4 }],
@@ -56,11 +65,19 @@ export function communityVote(state: GameState, rng: Rng): VowVote {
     const council = state.province.councilIds.map((id) => state.npcs[id]).filter((n): n is NonNullable<typeof n> => !!n && n.status === 'active' && !voters.some((v) => v.id === n.id));
     voters = [...voters, ...council];
   }
-  const concerns = state.seminary?.concerns.length ?? 0;
+  // This year's concerns, not every concern ever written; a house votes on the year it has watched.
+  const all = state.seminary?.concerns.length ?? 0;
+  const before = Number(state.flags.concerns_at_year_start ?? 0);
+  const concerns = Math.min(VOWS.concernsCounted, Math.max(0, all - Math.min(all, before)));
+  const community = ((state.character?.reputation.community ?? 0) / 100) * VOWS.communitySwing;
+  const guideTag = formationStage(state)?.house === 'novitiate' ? 'novice_master' : 'master_of_students';
+  const guide = house ? membersOf(state, house).find((m) => m.tags.includes(guideTag)) : undefined;
+  const guideWord = guide ? (guide.relationship / 100) * VOWS.guideSwing : 0;
+  const watched = state.flags['vows:refused'] !== undefined ? VOWS.watchedAgain : 0;
   let yes = 0;
   for (const v of voters) {
-    const p = VOWS.base + (v.relationship / 100) * VOWS.regardSwing + concerns * VOWS.concern;
-    if (rng.chance(Math.max(0.05, Math.min(0.97, p)))) yes++;
+    const p = VOWS.base + (v.relationship / 100) * VOWS.regardSwing + community + guideWord + concerns * VOWS.concern + watched;
+    if (p + rng.float(-VOWS.jitter, VOWS.jitter) > 0.5) yes++;
   }
   const no = voters.length - yes;
   return { yes, no, passed: voters.length === 0 || yes / voters.length > VOWS.majority };
@@ -81,7 +98,8 @@ export function formationYearEnd(state: GameState, rng: Rng): { state: GameState
   if (stage.milestone === 'simple_profession' || stage.milestone === 'renewal' || stage.milestone === 'solemn_profession') {
     const vote = stage.communityVote ? communityVote(next, rng.derive(`vote:${week}`)) : { yes: 1, no: 0, passed: true };
     if (!vote.passed) {
-      next = { ...next, flags: { ...next.flags, 'vows:refused': week }, seminary: next.seminary ? { ...next.seminary, concerns: [...next.seminary.concerns, 'The community voted against his profession.'] } : next.seminary };
+      // Held back by the house, not by the evaluation: the year repeats and the house watches; no concern is written, since one would only feed the next vote.
+      next = { ...next, flags: { ...next.flags, 'vows:refused': week } };
       return { state: next, line: `The house voted, ${vote.yes} to ${vote.no}, and not for you. Another year, and the question again.`, heldBack: true };
     }
     if (stage.milestone === 'simple_profession') {
