@@ -1,0 +1,323 @@
+{
+  "_notes": "The order's own letters. E3: a friar is moved by the provincial, never by a bishop, so the diocese's offers (parish.json, seminary.json) do not reach him and these do not reach a priest of the diocese; engine/offers.ts reads `campaign`. Years away begin the week he says yes, since the provincial's letter is the order's own, and he comes home to a consultation, not the board. Flags: rome_track (fr_sem_rome_track), rome_alumnus / refused_rome (fr_rome_study, shared with the diocese's so the record reads the same). The faculty in Rome is the order's own and is not named (CLAUDE.md rule 13).",
+  "offers": [
+    {
+      "id": "fr_sem_rome_track",
+      "category": "academic",
+      "campaign": "religious",
+      "phase": [
+        "seminary"
+      ],
+      "yearGate": [
+        5,
+        6
+      ],
+      "title": "The Regent's Short List",
+      "body": "{@master_of_students} keeps you after the term's talk. The regent of studies sends two men a decade to the order's faculty in Rome, he says, and the province has been thinking about who the next two are. He would like to put your name on the list now, so the provincial can plan a house around your absence. He is honest about what it means: a man who goes to Rome the year after ordination does not learn a priory or a parish, comes home credentialed and a little foreign, and is used by the province for the rest of his life in classrooms and councils rather than confessionals. The province, he adds, tends to trust such men with things.",
+      "from": "@master_of_students",
+      "requires": [
+        {
+          "type": "stat",
+          "key": "theology",
+          "op": ">=",
+          "value": 55
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "rome_track",
+            "value": true
+          }
+        }
+      ],
+      "weight": 25,
+      "bias": [
+        {
+          "when": {
+            "type": "credential",
+            "key": "latin"
+          },
+          "multiplier": 1.5
+        }
+      ],
+      "windowWeeks": 4,
+      "once": true,
+      "cluster": "academic",
+      "accept": {
+        "effects": [
+          {
+            "target": "flag",
+            "key": "rome_track",
+            "value": true
+          },
+          {
+            "target": "relationship",
+            "key": "@master_of_students",
+            "delta": 6
+          },
+          {
+            "target": "reputation",
+            "key": "province",
+            "delta": 3
+          },
+          {
+            "target": "pillar",
+            "key": "intellectual",
+            "delta": 0.5
+          }
+        ],
+        "outcome": "Your name goes on the list. Nothing changes in the house except that the lector who marks your papers marks them harder, and a student a year behind you begins, very slightly, to defer to you, which you do not enjoy as much as you expected."
+      },
+      "decline": {
+        "effects": [
+          {
+            "target": "relationship",
+            "key": "@master_of_students",
+            "delta": -3
+          },
+          {
+            "target": "reputation",
+            "key": "community",
+            "delta": 2
+          },
+          {
+            "target": "flag",
+            "key": "declined_rome_track",
+            "value": true
+          }
+        ],
+        "outcome": "He says that is an answer, and that it is not the wrong one. The list gets another name. The house hears of it, as houses do, and the men who wanted a priory priest are glad."
+      }
+    },
+    {
+      "id": "fr_rome_study",
+      "category": "academic",
+      "campaign": "religious",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "title": "A Letter About Rome",
+      "body": "{@provincial} writes, which he does not often do to a friar who has not written first. The province has a place at the order's faculty in Rome this autumn for a licentiate in theology, three years, and the council has been thinking about whose name goes on it. He would like it to be yours. The province pays; you would live in the order's house in Rome with friars from forty provinces, sit examinations in Italian, and come home with a degree the province will use for the rest of your life, in the studium and on its councils. He is honest about the other side. The house will be a man short, and the men who have learned to rely on you will learn to rely on someone else. Some in the province will call it a reward. Some will use a different word.",
+      "from": "@provincial",
+      "requires": [
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 1
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "rome_alumnus",
+            "value": true
+          }
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "credential",
+            "key": "STL"
+          }
+        },
+        {
+          "type": "flag",
+          "key": "office:prior",
+          "value": false
+        },
+        {
+          "type": "flag",
+          "key": "office:provincial",
+          "value": false
+        },
+        {
+          "type": "any",
+          "inner": [
+            {
+              "type": "flag",
+              "key": "rome_track",
+              "value": true
+            },
+            {
+              "type": "all",
+              "inner": [
+                {
+                  "type": "credential",
+                  "key": "italian"
+                },
+                {
+                  "type": "stat",
+                  "key": "theology",
+                  "op": ">=",
+                  "value": 50
+                }
+              ]
+            },
+            {
+              "type": "all",
+              "inner": [
+                {
+                  "type": "stat",
+                  "key": "theology",
+                  "op": ">=",
+                  "value": 60
+                },
+                {
+                  "type": "reputation",
+                  "key": "province",
+                  "op": ">=",
+                  "value": 15
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "weight": 30,
+      "bias": [
+        {
+          "when": {
+            "type": "flag",
+            "key": "rome_track",
+            "value": true
+          },
+          "multiplier": 1.8
+        },
+        {
+          "when": {
+            "type": "credential",
+            "key": "italian"
+          },
+          "multiplier": 1.5
+        }
+      ],
+      "windowWeeks": 6,
+      "once": true,
+      "cluster": "academic",
+      "accept": {
+        "effects": [
+          {
+            "target": "reputation",
+            "key": "community",
+            "delta": -6
+          },
+          {
+            "target": "reputation",
+            "key": "superiors",
+            "delta": 4
+          },
+          {
+            "target": "stat",
+            "key": "piety",
+            "delta": -1
+          }
+        ],
+        "outcome": "The house is told at chapter. Somebody says it is about time the province sent a man who could use it, and somebody else says nothing in the way that is also a sentence. Then the plane, and a house in a city that does not know you, where the Office is sung in four accents.",
+        "commitment": {
+          "label": "Licentiate in Rome",
+          "weeks": 156,
+          "apPerWeek": 10,
+          "away": "rome_order",
+          "onComplete": [
+            {
+              "target": "credential",
+              "key": "STL"
+            },
+            {
+              "target": "flag",
+              "key": "rome_alumnus",
+              "value": true
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 15
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 8
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 6
+            },
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 6
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 2
+            },
+            {
+              "target": "credential",
+              "key": "italian"
+            },
+            {
+              "target": "archetype",
+              "key": "theological",
+              "delta": 1
+            }
+          ],
+          "completeOutcome": "The licence is defended in a room with three friars of three provinces on the panel, one of whom disagrees with your reading of the Prima Pars and says so for forty minutes and then votes for you. The provincial's letter about where you will be used is waiting when you land."
+        }
+      },
+      "decline": {
+        "effects": [
+          {
+            "target": "reputation",
+            "key": "superiors",
+            "delta": -5
+          },
+          {
+            "target": "reputation",
+            "key": "community",
+            "delta": 4
+          },
+          {
+            "target": "flag",
+            "key": "refused_rome",
+            "value": true
+          }
+        ],
+        "outcome": "He writes back that he understands, in a paragraph that suggests he does not entirely, and sends another man. The house is glad to keep you and says so at supper, and the province files the letter, as provinces do."
+      },
+      "failure": {
+        "chance": 0.25,
+        "unless": [
+          {
+            "type": "stat",
+            "key": "theology",
+            "op": ">=",
+            "value": 60
+          }
+        ],
+        "effects": [
+          {
+            "target": "flag",
+            "key": "rome_washed_out",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "province",
+            "delta": -6
+          },
+          {
+            "target": "stat",
+            "key": "theology",
+            "delta": 2
+          }
+        ],
+        "outcome": "The examinations in Italian are the wall, and the second year does not come. The provincial's letter is kind and short, and the house you come back to does not mention Rome, which is its kindness."
+      }
+    }
+  ]
+}

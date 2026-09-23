@@ -11,6 +11,8 @@ const REASON: Record<string, string> = {
   withdrawal: 'The province is withdrawing from the parish. The provincial has you in about what comes after.',
 };
 
+const WORK: Record<string, string> = { parish: 'the parish', school: 'the school', teaching: 'the lectern', formation: 'formation', mission: 'the mission', curia: 'the curia', priory_church: 'the priory church', preaching: 'preaching', chaplaincy: 'the chaplaincy' };
+
 function need(n: number): string {
   return n >= 65 ? 'they badly need a man' : n >= 40 ? 'they could use one' : 'they would take one';
 }
@@ -39,7 +41,18 @@ export default function ConsultationPanel() {
               <div className="font-medium">{house?.name ?? o.houseId} <span className="ink-faint text-xs">· {o.work.replace('_', ' ')}</span></div>
               <p className="ink-muted text-xs">{o.line}</p>
               <p className="ink-faint text-xs">As he puts it: {need(o.need)}; {fit(o.fit)}{o.formation >= 60 ? '; and a young friar should see it' : ''}.</p>
-              <button className="pbtn mt-1 px-2 py-0.5 text-xs" onClick={() => statePreference(o.houseId, objection)}>{chosen ? 'Asked for' : 'Ask for this one'}</button>
+              {o.works && o.works.length > 1 ? (
+                <div className="mt-1 flex flex-wrap items-center gap-1">
+                  <span className="ink-faint text-xs">Short of men for what it keeps; the work would be yours to choose:</span>
+                  {o.works.map((w) => (
+                    <button key={w} className={'pbtn px-2 py-0.5 text-xs ' + (chosen && c.preferenceWork === w ? 'pbtn-primary' : '')} onClick={() => statePreference(o.houseId, objection, w)}>
+                      {chosen && c.preferenceWork === w ? `Asked for, ${WORK[w] ?? w.replace('_', ' ')}` : WORK[w] ?? w.replace('_', ' ')}
+                    </button>
+                  ))}
+                </div>
+              ) : (
+                <button className="pbtn mt-1 px-2 py-0.5 text-xs" onClick={() => statePreference(o.houseId, objection)}>{chosen ? 'Asked for' : 'Ask for this one'}</button>
+              )}
             </li>
           );
         })}

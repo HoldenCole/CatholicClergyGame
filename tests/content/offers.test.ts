@@ -14,6 +14,7 @@ const SELECTORS = [
   '@bishop', '@mother', '@father', '@sibling', '@mentor_priest', '@home_pastor', '@closest_classmate', '@rival_classmate',
   '@random_classmate', '@pastor', '@secretary', '@dre', '@music_director', '@maintenance', '@parishioner', '@bonded_parishioner', '@brother_priest', '@resident',
   '@vicar_general', '@chancellor', '@vicar_for_clergy', '@group_leader',
+  '@provincial', '@prior', '@master_of_students', '@novice_master', '@old_friar', '@confrere',
 ];
 const CLUB_IDS = new Set(clubDefs.map((c) => c.id));
 const EFFECT_TARGETS = [

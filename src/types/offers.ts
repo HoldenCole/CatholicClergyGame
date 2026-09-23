@@ -24,6 +24,8 @@ export interface CommitmentDef {
 export interface OfferDef {
   id: string;
   category: OfferCategory;
+  /** Whose letter it is: the diocese's (absent) reaches only a diocesan priest; the order's reaches only a friar. E3. */
+  campaign?: 'diocesan' | 'religious';
   phase: Phase[];
   yearGate?: number[];
   title: string;
