@@ -152,7 +152,7 @@ export interface GameStore {
   sendDaughter(heirId: string, dioceseId: string): void;
   endDirectee(npcId: string): void;
   /** The consultation and the letter. E3 §3.1. */
-  statePreference(houseId: string | null, objection: boolean): void;
+  statePreference(houseId: string | null, objection: boolean, work?: string): void;
   letProvincialDecide(): void;
   answerLetter(grace: 'good' | 'reluctant' | 'refused'): void;
   /** The chapter: actions before the vote, the ballots, the answer. E3 §3.6. */
@@ -807,8 +807,8 @@ export const useGameStore = create<GameStore>()((set, get) => ({
   endDirectee(npcId) {
     update(set, get, (game) => endDirecteeSys(game, npcId));
   },
-  statePreference(houseId, objection) {
-    update(set, get, (game) => statePreferenceSys(game, houseId, objection));
+  statePreference(houseId, objection, work) {
+    update(set, get, (game) => statePreferenceSys(game, houseId, objection, work));
   },
   letProvincialDecide() {
     update(set, get, (game, r) => ({ ...decideAssignment(game, r.derive(`decide:${game.clock.week}`)), mode: { kind: 'obedience_letter' } }));

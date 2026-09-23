@@ -13,6 +13,7 @@ import { generateSee } from './see';
 import { retire } from './career';
 import { bookLine } from '@/systems/studyWeek';
 import { dropOffices } from '@/systems/offices';
+import { consult } from '@/systems/religious/obedience';
 
 /** How a place is named in prose. */
 export const CITY_WORD: Record<StudyState['city'], string> = { rome: 'Rome', washington: 'Washington', residence: "the bishop's residence", campus: 'the Newman Center', hospital: 'the hospital', seminary: 'the seminary', chancery: 'the chancery', auxiliary: 'the chancery', see: 'the see', prison: 'the penitentiary', mission: 'the missions', deployment: 'the deployment', formation: 'the seminary', schools: 'the schools office' };
@@ -58,6 +59,11 @@ export function beginStudy(state: GameState, def: OfferDef, failed: boolean, rng
   };
   const flags: GameState['flags'] = { ...next.flags, [`study:${program.city}`]: true };
   for (const k of Object.keys(flags)) if (k.startsWith('parish:') || k.startsWith('role:')) delete flags[k];
+  // A friar sent away lays down the house's office, the local work, and the asks on his table; the house keeps his place. E3.
+  if (next.religious) {
+    const { houseOffice: _ho, apostolate: _ap, pastorTask: _pt, pastorAsk: _pa, confrereTask: _ct, confrereAsk: _ca, ...rest } = next.religious;
+    next = { ...next, religious: rest };
+  }
   const beats = [...next.beats.filter((b) => b.kind !== 'assignment'), { kind: 'assignment' as const, week: study.endWeek, label: program.kind === 'post' ? (program.city === 'residence' ? 'The bishop lets you go' : `The years at ${CITY_WORD[program.city]} end`) : `Home from ${CITY_WORD[program.city]}` }].sort((a, b) => a.week - b.week);
   next = { ...next, phase: program.kind === 'see' ? 'bishop' : 'study', study, parish: null, assignment: null, founding: null, project: null, projects: [], flags, beats, mode: { kind: 'clock' } };
   if (program.kind === 'see') {
@@ -71,7 +77,7 @@ export function beginStudy(state: GameState, def: OfferDef, failed: boolean, rng
     return note(next, 'promotion', moved ? `Translated from ${moved.see} to ${see.see}, ${see.region}: ${see.name}, after ${moved.years} year${moved.years === 1 ? '' : 's'} in the first chair.` : `Named Bishop of ${see.see}, ${see.region}: ${see.name}, ${program.label.toLowerCase()} of forty priests and more parishes than that.`);
   }
   const years = Math.round(c.weeks / 52);
-  return note(next, 'offer', program.kind === 'post' ? `Moved into ${program.residence} as ${program.label.toLowerCase()}, ${years} years.` : `Left for ${CITY_WORD[program.city]}: ${program.label.toLowerCase()} at ${program.school}, ${years} years.`);
+  return note(next, 'offer', program.kind === 'post' ? `Moved into ${program.residence} as ${program.label.toLowerCase()}, ${years} years.` : `${next.religious ? 'Sent by the provincial to' : 'Left for'} ${CITY_WORD[program.city]}: ${program.label.toLowerCase()} at ${program.school}, ${years} years.`);
 }
 
 /**
@@ -101,6 +107,11 @@ export function endStudy(state: GameState, def: OfferDef, rng: Rng): GameState {
     return retire({ ...next, flags });
   }
   next = { ...next, flags, study: null, phase: 'parochial_vicar', beats: next.beats.filter((b) => b.kind !== 'assignment') };
+  // A friar comes home to the provincial, not to the board: the consultation decides where the degree is used. E3 §3.1.
+  if (next.religious) {
+    const { consultation: _c, ...rest } = next.religious;
+    return { ...consult({ ...next, religious: rest }, rng.derive(`consult:home:${next.clock.week}`), 'term'), mode: { kind: 'consultation' } };
+  }
   next = refreshOpenings(next, rng.derive(`openings:home:${next.clock.week}`)).state;
   const home = nextAssignment(next, rng).state;
   // A degree earned buys a choice among the top of the diocese, whatever the board rolled; the letter behind the

@@ -574,6 +574,8 @@ export interface ReligiousAssignment {
 export interface ConsultationOption {
   houseId: string;
   work: string;
+  /** A house short of men for the works it keeps: the works it would let him choose among. Absent when the provincial names the work. */
+  works?: string[];
   /** The provincial's inputs, 0..100 each. */
   need: number;
   fit: number;
@@ -587,6 +589,8 @@ export interface Consultation {
   options: ConsultationOption[];
   /** The house he asked for, if any. */
   preference?: string;
+  /** The work he asked for there, when the house left it to him. */
+  preferenceWork?: string;
   /** He objected on real grounds. */
   objection?: boolean;
   /** Why it opened: the term ended, the bishop wanted the parish back, the province needed him elsewhere. */

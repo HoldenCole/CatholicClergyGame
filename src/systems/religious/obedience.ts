@@ -27,7 +27,17 @@ export const OBEDIENCE = {
   /** A second refusal opens the formal process. */
   processAfterRefusals: 2,
   options: 3,
+  /** A house this short of men for the works it keeps lets the man choose which of them he takes. */
+  choiceNeed: 50,
 } as const;
+
+/** The works a short-handed house would let a man choose among: more works than it can staff, and the choice is his. */
+export function openWorks(state: GameState, house: OrderHouse, year: number): string[] | undefined {
+  const works = [...new Set(house.works)];
+  if (works.length < 2) return undefined;
+  if (needOf(state, house, year) < OBEDIENCE.choiceNeed && membersOf(state, house).length > works.length * 2) return undefined;
+  return works;
+}
 
 /** How badly the house needs another man, 0..100: small for its kind, many old, formation houses always. */
 export function needOf(state: GameState, house: OrderHouse, year: number): number {
@@ -73,15 +83,21 @@ export function consult(state: GameState, rng: Rng, reason: Consultation['reason
   const top = scored.slice(0, OBEDIENCE.options - 1);
   const rest = scored.slice(OBEDIENCE.options - 1);
   const picked = rest.length ? [...top, rng.pick(rest)] : top;
-  const options: ConsultationOption[] = picked.map(({ house, need, fit, formation }) => ({ houseId: house.id, work: house.works[0] ?? 'priory_church', need, fit, formation, line: houseLine(state, house) }));
+  const options: ConsultationOption[] = picked.map(({ house, need, fit, formation }) => {
+    const works = openWorks(state, house, year);
+    return { houseId: house.id, work: house.works[0] ?? 'priory_church', ...(works ? { works } : {}), need, fit, formation, line: houseLine(state, house) };
+  });
   return { ...state, religious: { ...r, consultation: { week: state.clock.week, options, reason } } };
 }
 
 /** The man states a preference, or objects on real grounds. Both are remembered. */
-export function statePreference(state: GameState, houseId: string | null, objection = false): GameState {
+export function statePreference(state: GameState, houseId: string | null, objection = false, work?: string): GameState {
   const r = state.religious;
   if (!r?.consultation) return state;
-  const consultation: Consultation = { ...r.consultation, ...(houseId ? { preference: houseId } : {}), ...(objection ? { objection: true } : {}) };
+  const option = houseId ? r.consultation.options.find((o) => o.houseId === houseId) : undefined;
+  const chosenWork = work && option?.works?.includes(work) ? work : undefined;
+  const { preferenceWork: _pw, ...kept } = r.consultation;
+  const consultation: Consultation = { ...kept, ...(houseId ? { preference: houseId } : {}), ...(chosenWork ? { preferenceWork: chosenWork } : houseId && houseId !== r.consultation.preference ? {} : r.consultation.preferenceWork && !work ? { preferenceWork: r.consultation.preferenceWork } : {}), ...(objection ? { objection: true } : {}) };
   return { ...state, religious: { ...r, consultation } };
 }
 
@@ -108,7 +124,11 @@ export function decideAssignment(state: GameState, rng: Rng): GameState {
     })
     .sort((a, b) => b.score - a.score);
   const top = ranked[0]!;
-  return { ...state, religious: { ...r, consultation: { ...c, decided: { houseId: top.o.houseId, work: top.o.work, reasons: top.reasons } } } };
+  // A short-handed house leaves the work to him: the one he asked for, when he asked for that house.
+  const chosen = c.preference === top.o.houseId && c.preferenceWork && top.o.works?.includes(c.preferenceWork) ? c.preferenceWork : undefined;
+  const work = chosen ?? top.o.work;
+  const reasons = chosen ? [...top.reasons, 'the house is short of men for its works, and he chose which'] : top.reasons;
+  return { ...state, religious: { ...r, consultation: { ...c, decided: { houseId: top.o.houseId, work, reasons } } } };
 }
 
 /**

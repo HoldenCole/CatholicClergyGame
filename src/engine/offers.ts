@@ -6,6 +6,7 @@ import { applyEffects } from './effects';
 import type { Rng } from './rng';
 import { resolveSelector, selectorsIn } from './selectors';
 import { askToGo } from './appointment';
+import { beginStudy } from './study';
 import { hasInterest, INTERESTS } from '@/systems/interests';
 import { REQUEST, requestOf } from '@/systems/request';
 
@@ -38,6 +39,8 @@ export function offerSelectors(def: OfferDef): string[] {
 
 export function isOfferEligible(def: OfferDef, state: GameState): boolean {
   if (!def.phase.includes(state.phase)) return false;
+  // The bishop's letters do not reach a friar, and the provincial's do not reach a priest of the diocese. E3 §3.11.
+  if (state.religious ? def.campaign !== 'religious' : def.campaign === 'religious') return false;
   if (def.yearGate && (!state.seminary || !def.yearGate.includes(state.seminary.year))) return false;
   if (state.offers.some((o) => o.offerId === def.id)) return false;
   if (state.commitments.some((c) => c.offerId === def.id)) return false;
@@ -191,6 +194,8 @@ export function acceptOffer(state: GameState, def: OfferDef, rng: Rng): AcceptRe
 
   const c = def.accept.commitment;
   if (c?.away) {
+    // A friar's years away are the provincial's own letter: it moves him the week he says yes. E3.
+    if (next.religious) return { state: beginStudy(next, def, failed, rng), failed };
     // Years away are not a background commitment, and not his to take: the bishop's letter moves him.
     return { state: askToGo(next, def, failed, rng), failed };
   }
