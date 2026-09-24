@@ -7,7 +7,7 @@ import { currentHouse } from './house';
 /**
  * The house around him: one line most weeks, from content/religious/houseLife.json,
  * as a parish's week carries a line of the place around the pastor. The pools
- * are the house's season, its kind, and his stage (formation or priest);
+ * are the house's season, its kind, his stage (formation or priest), and his order's own;
  * a line the Record still shows from the last few weeks is not said again.
  */
 export const HOUSE_LIFE = {
@@ -33,6 +33,9 @@ export function houseLifeLine(state: GameState, rng: Rng): string | null {
   if (kind) pools.push(kind);
   const stage = POOLS[state.flags.ordained ? 'priest' : 'formation'];
   if (stage) pools.push(stage);
+  // The order's own customs, keyed in the data by order: counted twice, since they are what makes the house this order's.
+  const own = POOLS[`order:${state.religious.order}`];
+  if (own) pools.push(own, own);
   const recent = new Set(state.digest.slice(-HOUSE_LIFE.memoryWeeks).flatMap((d) => d.lines));
   const pool = rng.pick(pools).filter((l) => !recent.has(l));
   const fallback = pools.flat().filter((l) => !recent.has(l));

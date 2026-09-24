@@ -2,6 +2,8 @@ import type { Effect, GameState, ReputationKey, FriarSpendDef, StatKey } from '@
 import type { Rng } from '@/engine/rng';
 import { applyEffects } from '@/engine/effects';
 import { religiousOrder, spendDefs } from '@/content/religious';
+import { seminaryActivities } from '@/content/seminary';
+import { seminaryActivityOffered, setSeminaryActivity } from '@/systems/seminaryWeek';
 import { applyStat } from '@/systems/stats';
 import { currentHouse, nudgeHouse } from './house';
 import { friarLoad, BISHOP_ASKS } from './bishopAsks';
@@ -98,6 +100,27 @@ export function defaultSpends(state: GameState): GameState {
   return next;
 }
 
+/** The flag that says the order's default free hours in formation have been given. */
+export const DEFAULT_ROUTINE_FLAG = 'friar_routine_defaulted';
+
+/**
+ * A novice is not handed empty free hours either: the order's usual ones
+ * (OrderDef.mechanics.defaultFormationRoutine), each only where it is offered
+ * and within the hours there are. Once; hours he clears stay cleared.
+ */
+export function defaultFormationRoutine(state: GameState): GameState {
+  const r = state.religious;
+  const sem = state.seminary;
+  if (!r || !sem || state.flags.ordained || state.flags[DEFAULT_ROUTINE_FLAG]) return state;
+  let next: GameState = { ...state, flags: { ...state.flags, [DEFAULT_ROUTINE_FLAG]: true } };
+  if (Object.keys(sem.routine ?? {}).length > 0) return next;
+  for (const [id, hours] of Object.entries(religiousOrder(r.order).mechanics.defaultFormationRoutine ?? {})) {
+    const def = seminaryActivities.find((a) => a.id === id);
+    if (def && seminaryActivityOffered(next, def)) next = setSeminaryActivity(next, id, hours);
+  }
+  return next;
+}
+
 /** For the sheet: what a spend builds, in words. */
 export function spendBuilds(def: FriarSpendDef): string {
   const parts: string[] = [];
@@ -130,6 +153,7 @@ export function spendsWeek(state: GameState, rng: Rng): { state: GameState; line
   let money = 0;
   let strain = 0;
   const lines: string[] = [];
+  const recent = new Set(state.digest.slice(-2).flatMap((d) => d.lines.flatMap((l) => l.split(/(?<=\.) /))));
   for (const [id, ap] of kept) {
     const def = spendDef(id)!;
     for (const [k, rate] of Object.entries(def.stats ?? {}) as [StatKey, number][]) stats = applyStat(stats, k, rate * ap * statDeltaFactor(next, k, rate * ap));
@@ -139,7 +163,10 @@ export function spendsWeek(state: GameState, rng: Rng): { state: GameState; line
     cohesion += (def.cohesion ?? 0) * ap;
     money += (def.money ?? 0) * ap;
     strain += (def.strain ?? 0) * ap;
-    if (def.digest.length) lines.push(def.digest[rng.int(0, def.digest.length - 1)]!);
+    // A line the Record still shows from the last weeks is not said again while there is another.
+    const fresh = def.digest.filter((l) => !recent.has(l));
+    const from = fresh.length ? fresh : def.digest;
+    if (from.length) lines.push(from[rng.int(0, from.length - 1)]!);
   }
   next = { ...next, character: { ...next.character!, stats } };
   if (strain) effects.push({ target: 'strain', key: '', delta: strain });
