@@ -6,6 +6,7 @@ import { deliverLetter } from '@/systems/review';
 import { membersOf } from './house';
 import { worldOf } from './transfer';
 import { reputationFit, topReputations } from './reputations';
+import { settleDraft } from './charter';
 
 /**
  * Starting a house: where, and whether the two keys turn. E3 §9.1–9.3.
@@ -215,7 +216,8 @@ export function foundingWeek(state: GameState, rng: Rng): GameState {
     return decide('bishop_refused', `The bishop of ${name} would not consent to the foundation.`, [`The province said yes. The bishop of ${name} said no, in a letter of two paragraphs that thanked the order for its history in the region and regretted that the diocese's circumstances did not allow a new house at this time. Without his consent no house can be erected, and everyone in the room knew it before the vote.`, `The ${title} suggests, drily, that the next petition name a diocese whose bishop likes friars.`], 0, { 'foundation:refused_week': week, [`foundation:refused:${pet.dioceseId}`]: week, 'foundation:bishop_refused': week });
   }
   const next = decide('approved', `The foundation in ${name} is approved: the province sends men, and the bishop has signed.`, [`Both keys turned. The chapter voted the house in ${name}, ${spareMen(state)} men can be spared, and the bishop's consent came by return of post with a line about how long he has hoped for this. The ${title} asks you to write the charter: what the house is to be, under the order's charism, and the men will be chosen against it.`, 'Write it carefully. It will be read by men who never met you.'], 4, { 'foundation:approved': week });
-  return { ...next, religious: { ...next.religious!, charterDraft: { observance: 'moderate', liturgy: 'mixed', primaryWork: pet.work, university: 'none', alignment: state.character?.alignment ?? 0, poverty: 'moderate', sizeTarget: 'small', writtenWeek: week } }, mode: { kind: 'charter' } };
+  const draft = settleDraft(next, { observance: 'moderate', liturgy: 'mixed', primaryWork: pet.work, university: 'none', alignment: state.character?.alignment ?? 0, poverty: 'moderate', sizeTarget: 'small', writtenWeek: week }, pet.dioceseId);
+  return { ...next, religious: { ...next.religious!, charterDraft: draft }, mode: { kind: 'charter' } };
 }
 
 /** The year: bishops of need write standing invitations, and the provincial may ask the man himself. E3 §9.1. */

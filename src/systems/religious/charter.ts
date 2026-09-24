@@ -6,6 +6,7 @@ import { deliverLetter } from '@/systems/review';
 import { foundHouse } from './foundations';
 import { moveToHouse, worldOf } from './transfer';
 import { foundationSites } from './founding';
+import { vacateOffice } from './vacate';
 
 /**
  * The founding charter: the design layer. E3 §9.4. The charism is the
@@ -27,6 +28,22 @@ export const CHARTER_DIALS: readonly CharterDial[] = ['primaryWork', 'secondaryW
 
 /** The weight of the second and third works against the first. */
 export const WORK_SHARES: Record<'primaryWork' | 'secondaryWork' | 'tertiaryWork', number> = { primaryWork: 1, secondaryWork: 0.5, tertiaryWork: 0.25 };
+
+/**
+ * A draft that can be written: every dial the draft holds that this diocese
+ * will not allow (a work the order already does there, a university dial with
+ * no university) moves to the first option it will, so the charter he is
+ * handed opens on something he may sign.
+ */
+export function settleDraft(state: GameState, draft: Charter, dioceseId: string): Charter {
+  let next = { ...draft };
+  for (const d of CHARTER_DIALS) {
+    if (optionAllowed(state, d, optionIdOf(next, d), dioceseId, next).ok) continue;
+    const first = charterDials[d].find((o) => optionAllowed(state, d, o.id, dioceseId, next).ok);
+    if (first) next = { ...next, [d]: first.id } as Charter;
+  }
+  return next;
+}
 
 /** The option a charter holds on a dial: the later dials read as their first option when absent. */
 export function optionIdOf(charter: Charter, dial: CharterDial): string {
@@ -168,7 +185,9 @@ export function writeCharter(state: GameState, charter: Charter, rng: Rng): Game
   }
   const houseId = Object.keys(founded.state.orderHouses ?? {}).find((id) => !(state.orderHouses ?? {})[id])!;
   const house = founded.state.orderHouses![houseId]!;
-  let next = moveToHouse({ ...founded.state, mode: { kind: 'clock' } }, houseId, kind === 'parish' ? 'parish' : kind === 'school' ? 'school' : kind === 'mission' ? 'mission' : 'priory_church');
+  // A man who governs elsewhere lays that down to be the founder's prior here.
+  const freed = r.office ? vacateOffice(founded.state, 'to found a house') : founded.state;
+  let next = moveToHouse({ ...freed, mode: { kind: 'clock' } }, houseId, kind === 'parish' ? 'parish' : kind === 'school' ? 'school' : kind === 'mission' ? 'mission' : 'priory_church');
   const order = religiousOrder(r.order);
   const years = order.governance.priorTermYears;
   const foundation: Foundation = { houseId, dioceseId: pet.dioceseId, foundedWeek: week, charter: { ...charter, writtenWeek: week }, vocationIds: [], works: [], reputations: {}, budget: house.budget, status: 'alive', revisions: [] };
