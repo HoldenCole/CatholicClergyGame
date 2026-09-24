@@ -1,7 +1,7 @@
 import type { Effect, GameState, ReputationKey, FriarSpendDef, StatKey } from '@/types';
 import type { Rng } from '@/engine/rng';
 import { applyEffects } from '@/engine/effects';
-import { spendDefs } from '@/content/religious';
+import { religiousOrder, spendDefs } from '@/content/religious';
 import { applyStat } from '@/systems/stats';
 import { currentHouse, nudgeHouse } from './house';
 import { friarLoad, BISHOP_ASKS } from './bishopAsks';
@@ -79,6 +79,23 @@ export function setSpend(state: GameState, id: string, ap: number): GameState {
   const spends = { ...spendsOf(state), [id]: next };
   if (next === 0) delete spends[id];
   return { ...state, religious: { ...r, spends } };
+}
+
+/** The flag that says the order's default week has been given, so a week he clears stays cleared. */
+export const DEFAULT_SPENDS_FLAG = 'friar_spends_defaulted';
+
+/**
+ * A newly ordained friar is not handed an empty week: the order gives him
+ * its usual one (OrderDef.mechanics.defaultSpends), clamped to what the week
+ * leaves, and he rearranges it from the Week sheet. Once, ever.
+ */
+export function defaultSpends(state: GameState): GameState {
+  const r = state.religious;
+  if (!r || !state.flags.ordained || state.flags[DEFAULT_SPENDS_FLAG]) return state;
+  let next: GameState = { ...state, flags: { ...state.flags, [DEFAULT_SPENDS_FLAG]: true } };
+  if (Object.keys(spendsOf(state)).length > 0) return next;
+  for (const [id, ap] of Object.entries(religiousOrder(r.order).mechanics.defaultSpends ?? {})) next = setSpend(next, id, ap);
+  return next;
 }
 
 /** For the sheet: what a spend builds, in words. */
