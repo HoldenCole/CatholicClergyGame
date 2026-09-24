@@ -19,8 +19,13 @@ import { temperamentFor } from './institutes';
 export const PROVINCE = {
   /** Houses by trajectory. Invented. */
   houses: { growing: [9, 12], stable: [7, 10], shrinking: [5, 8] } as Record<ProvinceTrajectory, [number, number]>,
-  /** Members by house kind. Invented; E3 §3.2 says 4 to 40. */
-  members: { priory: [6, 20], studium: [14, 32], novitiate: [6, 14], parish: [3, 8], school: [5, 12], mission: [3, 6], curia: [8, 18] } as Record<HouseKind, [number, number]>,
+  /**
+   * Members by house kind. Invented; E3 §3.2 says 4 to 40. A house is not tiny unless it has just been
+   * founded: a priory keeps ten men at least, a house of studies two dozen, a parish house five.
+   */
+  members: { priory: [10, 24], studium: [24, 48], novitiate: [8, 16], parish: [5, 10], school: [8, 16], mission: [4, 8], curia: [10, 20] } as Record<HouseKind, [number, number]>,
+  /** The fewest men a house of the kind is generated with, whatever the province's trajectory. */
+  floor: { priory: 8, studium: 18, novitiate: 6, parish: 4, school: 6, mission: 4, curia: 8 } as Record<HouseKind, number>,
   /** Share of professed friars over sixty, by trajectory: many houses skew old. */
   old: { growing: 0.3, stable: 0.45, shrinking: 0.6 } as Record<ProvinceTrajectory, number>,
   /** Dollars per member a house budgets in a year. Invented. */
@@ -198,7 +203,7 @@ export function generateProvince(rng: Rng, order: OrderDef, seed: ProvinceSeed, 
     const hrng = rng.derive(`house:${id}`);
     const houseAlignment = Math.max(-100, Math.min(100, Math.round(alignment + hrng.gaussian() * 22)));
     const [mlo, mhi] = PROVINCE.members[kind];
-    const size = Math.max(3, Math.round(hrng.int(mlo, mhi) * (trajectory === 'shrinking' ? 0.75 : trajectory === 'growing' ? 1.1 : 1)));
+    const size = Math.max(PROVINCE.floor[kind], Math.round(hrng.int(mlo, mhi) * (trajectory === 'shrinking' ? 0.85 : trajectory === 'growing' ? 1.1 : 1)));
     const house: OrderHouse = {
       id,
       provinceId,

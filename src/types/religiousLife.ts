@@ -390,6 +390,14 @@ export interface OrderHouse {
   officers?: Record<string, string>;
   /** The week each purse spend was last made, by id. */
   purse?: Record<string, number>;
+  /** What the house has built (content/religious/priorDesk.json builds), by id. */
+  buildings?: string[];
+  /** A build in progress. */
+  build?: { id: string; startWeek: number; endWeek: number };
+  /** The week the province was last asked for a grant toward a build. */
+  grantAsked?: number;
+  /** Last year's growth, for the sheet: who came, who died, who left, and the money. */
+  grew?: { year: number; entered: number; died: number; left: number; income: number; cost: number };
 }
 
 /** A pastor of the diocese has written to the prior asking for the friar. E3 §3.12. Data in content/religious/pastorAsks.json. */
