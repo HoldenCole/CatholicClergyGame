@@ -29,7 +29,7 @@ describe('a friar\'s whole career through the store (E3 round 1)', () => {
       expect(ev.campaign === 'religious' || ev.campaign === 'any', h.eventId).toBe(true);
     }
     expect(end.history.some((h) => h.eventId.startsWith('opf_') || h.eventId.startsWith('opc_'))).toBe(true);
-    expect(['clock', 'ended', 'consultation', 'obedience_letter', 'chapter', 'term_end', 'bishop_ask', 'charter']).toContain(end.mode.kind);
+    expect(['clock', 'ended', 'consultation', 'obedience_letter', 'chapter', 'term_end', 'bishop_ask', 'charter', 'letter']).toContain(end.mode.kind);
   });
 
   it('runs an Augustinian the same way, and is deterministic from the same seed and choices', () => {

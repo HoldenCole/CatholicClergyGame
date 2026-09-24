@@ -1,0 +1,1560 @@
+{
+  "_notes": "More Dominican life for the years after ordination: the venia, the Master's visitation, the Preacher General's title in use, the nuns' solemn profession, a lay Dominican's promise, the June assignations, contemplata aliis tradere, the dog with the torch, the Summa class, a congregation of sisters at its last chapter; and for the player as provincial, the assignations, a house whose choir is empty, the Master's request for men, and choosing a regent of studies; and late, the voice going and thirty years in the habit. Order customs (the venia, the assignations, the Master's canonical visitation, the regent of studies) are close to the order's practice and flagged for verification (CLAUDE.md rule 12). People and institutions are generated (rule 13).",
+  "events": [
+    {
+      "id": "opc_the_venia",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 10,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        },
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 1
+        }
+      ],
+      "title": "The Venia",
+      "body": "A student brother came into choir late at Lauds, and instead of slipping into his stall he knelt and then lay face down on the floor of the choir until the hebdomadary knocked for him to rise: the venia, the old Dominican way of asking pardon, which the house has not seen in twenty years. He learned it from a book. At breakfast half the house thinks it was beautiful and half thinks it was theatre, and {@confrere} asks you, loudly, which you think.",
+      "choices": [
+        {
+          "id": "beautiful",
+          "label": "Say it was beautiful, and that the house could do with more of it",
+          "outcome": "The student hears of it and is quietly pleased. Two weeks later an old friar does the venia after snapping at the cook, which nobody had seen him do before, and the house is different for a day.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "observant_bloc",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": -1
+            }
+          ]
+        },
+        {
+          "id": "theatre",
+          "label": "Say that humility the whole house can see is a hard kind to trust",
+          "outcome": "The table goes quiet. The student, who heard, does not do it again, and you are not sure you did him a kindness. {@confrere} says that was a very Dominican answer, and does not mean it as praise.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "observant_bloc",
+              "delta": -2
+            },
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "both",
+          "label": "Say it was both, and that most things in a choir are",
+          "outcome": "Everyone laughs, which settles it. Later the student asks you privately whether he should stop, and you tell him to keep doing what he means, and to be on time.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "opc_masters_visitation",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 10,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        },
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 3
+        },
+        {
+          "type": "flag",
+          "key": "office:provincial",
+          "value": false
+        }
+      ],
+      "title": "The Master's Visitation",
+      "body": "The Master of the Order is making the canonical visitation of the province: a month of houses, and in each house a half hour alone with every friar, who may say anything. Your half hour is on a Tuesday. He is a quiet man from another continent who listens with his whole face. He asks how the province is, and then, when you give the answer everyone gives, asks again. {@provincial} will read the Master's letter to the province when it comes.",
+      "choices": [
+        {
+          "id": "truth",
+          "label": "Tell him what you think is wrong in the province, plainly",
+          "outcome": "He writes nothing down while you talk, and then writes one line. When the Master's letter to the province comes in the autumn, one paragraph says what you said, better, and {@provincial} reads it at the chapter with a face you cannot read.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "relationship",
+              "key": "@provincial",
+              "delta": -2
+            },
+            {
+              "target": "flag",
+              "key": "op:told_the_master",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "good",
+          "label": "Tell him what is good in the province, which is also true",
+          "outcome": "He listens to that too, and says the province is fortunate in its friars. The letter, when it comes, is warm and a little vague, and you wonder whether anyone told him the rest.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@provincial",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "ask",
+          "label": "Ask him what he has seen in the other provinces",
+          "outcome": "He talks for twenty minutes about the friars in places where it costs something to be one. You come out of the room late for Vespers and with a different sense of what your province is complaining about.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "opc_preacher_general_pulpit",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 14,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "belief_vs_safety",
+        "ambition_vs_integrity"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "op:preacher_general",
+          "value": true
+        }
+      ],
+      "title": "The Title on the Poster",
+      "body": "Since the title came, pastors ask for the Preacher General by name. This one wants you for a parish mission and has printed posters with the title in larger letters than the Gospel verse. He also wants you to preach, on the Thursday, on the thing the parish is fighting about, which is its school, which he is closing. He hopes, he says on the phone, that the parish will take it better from a Dominican.",
+      "choices": [
+        {
+          "id": "preach",
+          "label": "Preach the mission, and preach the Thursday on what the Gospel says, not on the school",
+          "outcome": "You preach the Beatitudes on the Thursday and do not mention the school. The pastor is furious and the people are grateful, and a woman tells you after that it was the first time in a year anyone in the parish had talked about God.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 4
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "diocesan_clergy",
+              "delta": -2
+            }
+          ]
+        },
+        {
+          "id": "school",
+          "label": "Preach on the school, honestly, since he asked",
+          "outcome": "You preach on grief and on what a parish owes its children, honestly. Nobody is satisfied. The pastor writes to {@provincial} that the Preacher General took the parish's side, and the parish writes that you took the pastor's.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "diocesan_clergy",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": -1
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "decline",
+          "label": "Decline the mission; the title is not for hire",
+          "outcome": "You write him a courteous letter. He finds another preacher. You do not preach anywhere that Lent, and it is, you find, a relief, and also a small hunger.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "diocesan_clergy",
+              "delta": -1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "opc_nuns_profession",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 10,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "friendship_vs_duty"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        },
+        {
+          "type": "any",
+          "inner": [
+            {
+              "type": "flag",
+              "key": "op:nuns_chaplain_served",
+              "value": true
+            },
+            {
+              "type": "years_ordained",
+              "op": ">=",
+              "value": 6
+            }
+          ]
+        }
+      ],
+      "title": "The Solemn Profession Behind the Grille",
+      "body": "A nun of the order's monastery is making her solemn profession, and the prioress has asked you to preach. You have met her perhaps twice, through the grille. She was a structural engineer until she was thirty-four. Her mother, who does not understand, will be in the front pew of the public chapel, and her father, who does not come to church, has come.",
+      "choices": [
+        {
+          "id": "mother",
+          "label": "Preach to the mother, gently, about what her daughter is choosing",
+          "outcome": "You preach about a woman giving her whole life to a thing she cannot prove, which is what the mother is doing for her daughter too. The mother cries through it. At the reception in the parlor she shakes your hand hard and says she still does not understand, and that she is glad you did not pretend.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "nun",
+          "label": "Preach to the nun, about the vows, as to a sister",
+          "outcome": "You preach the vows to her, plainly, as the order understands them. The community is moved and the father is lost. At the grille afterwards she says it was the sermon she needed, and that her father will ask her about it for years.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "father",
+          "label": "Preach to the father, who came",
+          "outcome": "You say that a man does not need to believe to see a thing is beautiful, and that he came. He stops you at the door and asks, with some anger, how you knew. You did not. He is at Christmas Mass in the public chapel that year.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "op:the_engineers_father",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "opc_lay_promise",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 10,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "friendship_vs_duty"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        },
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 2
+        }
+      ],
+      "title": "The Lawyer Who Makes His Promise",
+      "body": "The lay chapter's newest member is making his promise: a trial lawyer who was a militant atheist until his forties, came to the Church through the Summa, and now argues with you about the fifth way over coffee every Thursday. He has asked you to receive the promise. He has also, you learn the night before, told his firm, which did not take it well, and his wife, who is not Catholic, will be there.",
+      "choices": [
+        {
+          "id": "receive",
+          "label": "Receive it simply, with the rite and nothing else",
+          "outcome": "The rite is short and the words are old. His voice breaks on the word obedience, which amuses him later. His wife, at the coffee afterwards, tells you she has never seen him promise anything he did not keep.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 3
+            }
+          ]
+        },
+        {
+          "id": "wife",
+          "label": "Speak with his wife beforehand, so she is not a stranger at it",
+          "outcome": "She is wary and then kind, and asks what exactly he is promising. You tell her. At the rite she is in the front row with her hand on his shoulder, and afterwards she asks for a copy of the rule.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "argue",
+          "label": "Tell him you will receive it after one last argument about the fifth way",
+          "outcome": "The argument goes until midnight and he wins, or thinks he does. He makes the promise the next morning unshaven and happy, and says it is the only contract he has ever signed without reading the fine print twice.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "opc_the_assignation",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "assignment",
+      "baseWeight": 10,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "friendship_vs_duty"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        },
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 2
+        },
+        {
+          "type": "flag",
+          "key": "office:provincial",
+          "value": false
+        }
+      ],
+      "title": "The Assignation",
+      "body": "The provincial's assignations came out in June, as they do: a single page listing which friar is assigned to which house, which the order has done this way for centuries. {@confrere}, your closest friend in the house, is on it, assigned to a house across the country to teach in a studium he does not want. He has not been asked; that is what an assignation is. He comes to your cell after Compline and asks whether he should write to {@provincial}.",
+      "choices": [
+        {
+          "id": "write",
+          "label": "Tell him to write, honestly, once, and then obey",
+          "outcome": "He writes a good letter, one page. {@provincial} answers kindly and does not change the assignation. He goes in August. His first letter from the new house is funny and sad, and by the third he is teaching well.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": 4
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "go",
+          "label": "Tell him to go without writing; the vow is for exactly this",
+          "outcome": "He goes, with less said than he wanted to say. He does well there, better than he expected, and tells you years later that you were right and that he held it against you for a year.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": -2
+            },
+            {
+              "target": "reputation",
+              "key": "observant_bloc",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "you",
+          "label": "Offer to write to the provincial yourself, as his friend",
+          "outcome": "You write. {@provincial} replies to you, not to him, that he is glad the man has a friend, and that the studium needs him. He goes. He is touched that you wrote, and annoyed, and both last.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": 3
+            },
+            {
+              "target": "relationship",
+              "key": "@provincial",
+              "delta": -1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "opc_contemplata",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 10,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "doubt"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        },
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 3
+        }
+      ],
+      "title": "Contemplata Aliis Tradere",
+      "body": "Thomas's phrase is carved over the door of the studium: to contemplate, and to hand on to others what has been contemplated. This month you have preached eleven times, given two retreats, and heard confessions until your back ached, and you realize on a Friday night in the car park of a parish two hours from home that you have not prayed, really prayed, in six weeks. You have been handing on what you contemplated some time ago.",
+      "choices": [
+        {
+          "id": "stop",
+          "label": "Cancel the next two engagements and go back to the choir and the desk",
+          "outcome": "Two pastors are annoyed. For two weeks you are in choir for every Hour and at your desk with the Scriptures in the evenings, and the next time you preach it is shorter and you mean all of it.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": -1
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": -2
+            }
+          ]
+        },
+        {
+          "id": "keep",
+          "label": "Keep going until Easter and rest then",
+          "outcome": "You keep going. The preaching is competent. At Easter you sleep for a week and find the well is lower than you thought, and it takes the summer to fill.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": -2
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "direction",
+          "label": "Tell your director, and let him decide",
+          "outcome": "Your director listens and says one thing: that the order's preaching was never meant to be a performance of prayer, but its overflow, and that you know what to do. You do it, grumbling.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": -1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "opc_the_dog_with_the_torch",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 8,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        },
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 1
+        }
+      ],
+      "title": "The Dog With the Torch",
+      "body": "At the first Communion class, a seven-year-old points at the stained-glass window of the priory church: a black and white dog with a burning torch in its mouth. She wants to know why the church has a dog. You explain that Dominic's mother dreamed before he was born of a dog carrying a torch that set the world on fire, and that the friars are, in an old joke, the Lord's dogs. She asks whether that means you bite.",
+      "choices": [
+        {
+          "id": "yes",
+          "label": "Tell her yes, but only lies",
+          "outcome": "She thinks this is the best thing she has ever heard. At her first Communion she tells the bishop's master of ceremonies that the Dominicans bite lies, and he tells the bishop, who tells it at the priests' dinner for a year.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "local_bishop",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "torch",
+          "label": "Tell her the torch is the important part: the dog carries light",
+          "outcome": "She considers this and says she would rather be the dog. You tell her that is allowed. Her mother, at the door, asks what you told her, because she has been barking at the dinner table.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "draw",
+          "label": "Give her crayons and let the class draw the dog",
+          "outcome": "Twenty-two dogs with torches, some on fire. The sacristan pins them up in the parish hall, and they are still there at Easter, and a visiting friar from another province photographs them for his house.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "opc_summa_class_hell",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 10,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "belief_vs_safety"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        },
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 2
+        }
+      ],
+      "title": "The Question About Hell",
+      "body": "The Thursday class on the Summa has reached the questions on the last things. A retired teacher whose son died of an overdose last year asks, in front of forty people, whether her son is in hell. The class goes very still. You have the article open in front of you; St. Thomas is clear about some things and silent about the one she is asking.",
+      "choices": [
+        {
+          "id": "thomas",
+          "label": "Tell her what the Church does not know, and what it hopes",
+          "outcome": "You tell her the Church has never said of any man that he is in hell, and that the mercy of God is not bound by what we saw of her son's last year. She cries, and the woman beside her holds her hand, and the class does not go on to the next article that night.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 3
+            }
+          ]
+        },
+        {
+          "id": "after",
+          "label": "Ask to speak with her after the class",
+          "outcome": "You speak with her in the parlor for two hours. The class notices that you did not answer in front of them, and a few think less of you for it, and she tells you at the door that she could not have heard it in front of them.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "pray",
+          "label": "Stop the class and pray for him, all of you, there",
+          "outcome": "Forty people pray a decade of the rosary for a young man most of them never met. She says afterward that it was the first time since the funeral anyone had prayed for him out loud.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "opc_sisters_last_chapter",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 10,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "belief_vs_safety",
+        "friendship_vs_duty"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        },
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 5
+        }
+      ],
+      "title": "The Sisters' Last Chapter",
+      "body": "A congregation of Dominican sisters that taught in the diocese for a hundred and forty years is holding its last general chapter: thirty-one sisters, the youngest sixty-eight, voting to merge with a larger congregation and sell the motherhouse. They have asked a friar to preach the Mass that opens the chapter. The prioress general, a sharp woman who ran a high school for thirty years, tells you on the phone that they do not want consolation. They want to be told the truth.",
+      "choices": [
+        {
+          "id": "truth",
+          "label": "Preach the truth: that a congregation can end and not fail",
+          "outcome": "You preach on the grain of wheat. The sisters listen as teachers listen, critically, and at the end the prioress general nods once. They vote to merge by thirty to one, and the one writes you a letter explaining why she was right, and she may have been.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "history",
+          "label": "Preach on what they built: the schools, the women they taught",
+          "outcome": "You name the schools, the years, the girls who became doctors and mothers and sisters. It is not what the prioress asked for. It is what the sisters needed, several of them tell you at lunch, and the prioress says she was wrong, which you gather she does not often say.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 3
+            }
+          ]
+        },
+        {
+          "id": "listen",
+          "label": "Ask to sit with them the evening before, and preach what you hear",
+          "outcome": "You sit in their community room for an evening and listen. The next morning you preach their own words back to them. The prioress general says it was the first sermon in thirty years that she did not want to correct.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 2
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "opc_prov_assignations",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "assignment",
+      "baseWeight": 14,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "friendship_vs_duty",
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "office:provincial",
+          "value": true
+        }
+      ],
+      "title": "The June Assignations",
+      "body": "The assignations are yours to write now: the page every friar of the province reads in June to learn where he will live. The studium needs a lector. The only man who can teach the course is {@confrere}, who has built a parish ministry among the immigrants of a poor neighbourhood that will not survive without him, and who has written to you asking not to be moved. The regent of studies has written too, less politely.",
+      "choices": [
+        {
+          "id": "studium",
+          "label": "Assign him to the studium; the students are the province's future",
+          "outcome": "You assign him. He obeys, as he promised to. The parish ministry shrinks to a Sunday Mass. The students get a lector who teaches with the neighbourhood in every example, and two of them ask to be assigned there when they are ordained.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 2
+            },
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": -4
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": -3
+            }
+          ]
+        },
+        {
+          "id": "parish",
+          "label": "Leave him where he is and find the studium another way",
+          "outcome": "You leave him. The studium hires a lay professor for two years, at a cost the syndic of the province brings up at every council. The neighbourhood keeps its friar, and he writes you a letter you keep in your breviary.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": -2
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "both",
+          "label": "Assign him to the studium and ask him to keep the Sunday Mass in the neighbourhood",
+          "outcome": "He drives across the city every Sunday for two years, and teaches all week, and is tired, and does both well. The council calls it a fudge. It is also what he would have chosen, he tells you.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 1
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "opc_prov_lapsed_house",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 12,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "loyalty_vs_honesty",
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "office:provincial",
+          "value": true
+        }
+      ],
+      "title": "A House Where the Choir Is Empty",
+      "body": "Your visitation of the province reaches a priory where the Office in common has quietly lapsed: Lauds said privately by whoever is up, Vespers when there are enough men, the Salve not sung in years. The friars are good men, overworked in a large parish, and every one of them tells you in his half hour that the others have given up on the common life. The house's prior asks you not to make it a matter for the acts of visitation.",
+      "choices": [
+        {
+          "id": "acts",
+          "label": "Write it into the acts: the Hours in common, restored by Advent",
+          "outcome": "The acts are read at the house's chapter and received in silence. By Advent there is Lauds and Vespers in common, thin at first. A year later one of the friars tells you it saved the house, and another has asked to be moved.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "observant_bloc",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -2
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "help",
+          "label": "Send them a man, and ask for the Hours in return",
+          "outcome": "You send a young friar to share the parish load and ask the house to restore Vespers. They do, gratefully. The observant friars of the province think you were soft, and the house thinks you understood.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "observant_bloc",
+              "delta": -1
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "prior",
+          "label": "Leave it to the house to mend, and say so privately",
+          "outcome": "You say it privately and leave it to them. Nothing changes that year. At the next visitation the house has fewer men and no Salve, and you wonder whether you were kind or merely tired.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "observant_bloc",
+              "delta": -3
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "opc_prov_masters_request",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 12,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "friendship_vs_duty"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "office:provincial",
+          "value": true
+        }
+      ],
+      "title": "The Master's Request",
+      "body": "The Master of the Order has written to you as provincial: the order's house in a country where the Church is poor and young needs two friars for ten years, to teach in a seminary and preach. He asks your province for them. You have the men, barely, and you know which two would go gladly. Both are among the best priests the province has, and the province is aging.",
+      "choices": [
+        {
+          "id": "send",
+          "label": "Send both",
+          "outcome": "They go in September with a farewell Mass the whole province comes to. The province is thinner and prouder. Their letters, read at table, are the most-listened-to thing in the refectory for a decade.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": -2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "op:sent_men_abroad",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "one",
+          "label": "Send one, and tell the Master why not two",
+          "outcome": "The Master writes back graciously. One friar goes, and the other stays, disappointed, and you are not sure you chose the right one to keep.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "none",
+          "label": "Tell the Master the province cannot spare them",
+          "outcome": "The Master accepts it without a word of reproach, which is worse than a reproach. Another province sends two men. At the next general chapter a friar from that country thanks the province that sent them, by name, and not yours.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": -4
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "opc_prov_regent",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 10,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence",
+        "ambition_vs_integrity"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "office:provincial",
+          "value": true
+        }
+      ],
+      "title": "Choosing a Regent of Studies",
+      "body": "The regent of studies has finished his term, and the provincial chapter has left it to you and your council to propose his successor. There are two men. One is brilliant, published, known in Rome, and an impossible colleague. The other is a steady teacher the students love and nobody outside the province has heard of. The studium's future, the council says, depends on it, and the council is split.",
+      "choices": [
+        {
+          "id": "brilliant",
+          "label": "Propose the brilliant one",
+          "outcome": "The studium's reputation rises; two good students from other provinces ask to come. The faculty meetings become unbearable, and one lector asks to be assigned elsewhere, and the students learn a great deal and are frightened of him.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -2
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "steady",
+          "label": "Propose the steady one",
+          "outcome": "Nothing much changes at the studium except that the students are happier and the lectors speak to each other. Rome does not notice. The province's next ordination class is its largest in a decade.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "council",
+          "label": "Put it to the council and abide by its vote",
+          "outcome": "The council votes four to three for the brilliant one. You abide by it, as a Dominican superior should, and the minutes say so. It is the most Dominican thing you have done all year, one councillor tells you, and he voted the other way.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "opc_preacher_voice",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 10,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "doubt",
+        "body_vs_vow"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        },
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 20
+        }
+      ],
+      "title": "The Voice Going",
+      "body": "After thirty years of pulpits, missions, and Lenten courses, your voice breaks in the middle of the Sunday homily and does not come back until the Creed. The doctor says the vocal cords are tired and so are you, and suggests a year of speaking as little as a Dominican can. The promoter of preaching has written, kindly, to ask whether you might take on the student brothers' homiletics instead of the missions.",
+      "choices": [
+        {
+          "id": "teach",
+          "label": "Take the homiletics class; teach others to do what you can no longer",
+          "outcome": "You teach eight student brothers to preach in a whisper they have to lean in to hear. They learn more than they would have from your voice. One of them, years later, preaches your funeral and uses a line you gave him.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "op:taught_homiletics",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "rest",
+          "label": "Take the year of silence, and pray it",
+          "outcome": "The silence is harder than any mission. You pray the Office and read, and write a little. When the voice comes back it is lower and slower, and pastors say your preaching has changed, and it has.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": -2
+            }
+          ]
+        },
+        {
+          "id": "push",
+          "label": "Keep preaching, more quietly, and use a microphone",
+          "outcome": "You buy a microphone and keep going. The missions are fewer and shorter. It is not what it was, and the people who come do not seem to mind.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": -1
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 1
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "opc_thirty_years_in_the_habit",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 8,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "doubt"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        },
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 23
+        }
+      ],
+      "title": "Thirty Years in the Habit",
+      "body": "It is thirty years since you were clothed. The house keeps the day at table with a better wine and a toast, and {@old_friar} reminds everyone of the novice you were, which is embarrassing and accurate. After Compline and the Salve you sit alone in choir. The habit is a new one, the third; the rosary on your belt is the first. You find yourself asking whether the man who was clothed would recognize you.",
+      "choices": [
+        {
+          "id": "grateful",
+          "label": "Give thanks, simply, for the thirty years",
+          "outcome": "You say the Te Deum alone in the dark choir, which is not in any book for this occasion and should be. The sacristan comes to lock up and waits by the door until you are done.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": -1
+            }
+          ]
+        },
+        {
+          "id": "honest",
+          "label": "Make an honest account of what the years have made of you",
+          "outcome": "You make it, on your knees: the pride that grew with the preaching, the friendships you let lapse, the vow that turned out to be the one that cost most. It is not a comfortable hour. You go to confession in the morning and feel lighter than you have in years.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "write",
+          "label": "Write to the novice master who clothed you, if he is still alive",
+          "outcome": "He is ninety-one and in the infirmary of another house. He writes back in a shaking hand that he remembers you, which may not be true, and that he prays for all his novices by name, which is.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

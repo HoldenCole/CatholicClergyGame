@@ -1,0 +1,529 @@
+{
+  "_notes": "More of the Dominican calendar as scenes: Jordan of Saxony, Fra Angelico, Pius V, Peter of Verona, Hyacinth, Rose of Lima. Keyed to OrderDef.feasts on the OP entry through the feast condition. Dates follow the order's proper calendar as best known; ranks are given as memorials and flagged for verification (CLAUDE.md rule 12).",
+  "events": [
+    {
+      "id": "opf_jordan_the_young_men",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "ROUTINE",
+      "category": "formation",
+      "baseWeight": 18,
+      "suppressYears": 2,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        },
+        {
+          "type": "feast",
+          "key": "jordan_saxony"
+        }
+      ],
+      "title": "Jordan's Letters",
+      "body": "Blessed Jordan of Saxony, who followed Dominic as Master and was said to have clothed a thousand men, most of them students he had preached to at the universities. The vocation director has arranged for three young men who are thinking about the order to come to the house for his day: Mass, lunch, an afternoon. At lunch one of them asks you, directly, what Jordan would have said to him. The other two put down their forks.",
+      "flavorPrompt": "Jordan of Saxony's day: three young men at the priory table, and one asks what Jordan would have said to him.",
+      "choices": [
+        {
+          "id": "preach",
+          "label": "Tell him what Jordan told the students: come and see, and be quick about it",
+          "default": true,
+          "outcome": "You tell him about the students of Paris who came to hear Jordan and walked out into the cloister in the habit before their friends had finished dinner. He laughs. In April he writes to the vocation director, and in August he is at the novitiate door.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "op:jordan_vocation",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "honest",
+          "label": "Tell him the truth about the life, the hard parts first",
+          "outcome": "You tell him about the bell at six and the vow that costs most on ordinary Tuesdays. He listens as if nobody had spoken to him plainly before. He does not come that year. He writes two years later, and says it was the plain talk that stayed with him.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "ask",
+          "label": "Ask him what he thinks Jordan would have said",
+          "outcome": "He thinks about it for a long time and says, finally, that Jordan would have told him to stop asking and pray. You tell him that sounds right. The vocation director, across the table, writes something down.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "opf_angelico_the_chapel",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "ROUTINE",
+      "category": "finance",
+      "baseWeight": 18,
+      "suppressYears": 2,
+      "pressure": [
+        "money"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        },
+        {
+          "type": "feast",
+          "key": "fra_angelico"
+        }
+      ],
+      "title": "The Painter's Day",
+      "body": "Blessed John of Fiesole, Fra Angelico, the friar who painted the cells of his priory so the brothers would have something to pray with. The house's chapel has bare walls and a benefactor who, on the painter's feast, has offered to pay for a painting over the altar. She has an artist in mind. The artist's portfolio is on the parlor table, and it is competent and sentimental, and the house must answer by Friday.",
+      "flavorPrompt": "Fra Angelico's day: a benefactor offers a painting for the chapel, and the portfolio is competent and sentimental.",
+      "choices": [
+        {
+          "id": "accept",
+          "label": "Accept it gratefully; a chapel is for praying, not for critics",
+          "default": true,
+          "outcome": "The painting goes up in Lent. It is exactly what the portfolio promised, and the old men like it, and a young friar who studied art history before he entered avoids looking at it for a year and then, to his surprise, begins praying in front of it.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "commission",
+          "label": "Ask whether she would consider a painter the house suggests",
+          "outcome": "She considers it, and meets a young painter who has been drawing in the priory church for a year. The painting takes two years and is strange and good. Half the house loves it. The benefactor, at the blessing, cries.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "op:angelico_commission",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "decline",
+          "label": "Thank her and keep the walls bare, as the cells in Florence were once",
+          "outcome": "She is a little hurt and gives the money to the kitchen instead, which the kitchen needed. The walls stay bare. A visitor from another province says the chapel looks Cistercian, and he means it kindly.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "observant_bloc",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": -1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "opf_pius_the_rosary_and_the_missal",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 18,
+      "suppressYears": 2,
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        },
+        {
+          "type": "feast",
+          "key": "pius_v"
+        }
+      ],
+      "title": "The Friar Who Was Pope",
+      "body": "St. Pius V, the Dominican friar who became pope, who kept wearing the white habit, which is why popes still wear white. At recreation {@old_friar} tells the story of Lepanto and the Rosary as he has told it every thirtieth of April for forty years, and a student brother, new to the house, asks whether it is really true that the whole of Christendom prayed the Rosary while the fleets met. The old man looks at you to answer.",
+      "flavorPrompt": "Pius V's day: the old friar's Lepanto story, and a student brother asks whether it is really true.",
+      "choices": [
+        {
+          "id": "history",
+          "label": "Tell the student what the historians say, kindly",
+          "default": true,
+          "outcome": "You say what is known and what was said after, and that the feast of Our Lady of Victory came from it either way. The student nods. The old man says that is a Dominican answer, which from him is praise and complaint at once.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 1
+            },
+            {
+              "target": "relationship",
+              "key": "@old_friar",
+              "delta": -1
+            }
+          ]
+        },
+        {
+          "id": "story",
+          "label": "Let the old man have it; tell the student to ask him about the ships",
+          "outcome": "The student asks about the ships. The old man tells him, for an hour, with the salt cellars as galleys. Recreation runs long and nobody minds.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@old_friar",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "white",
+          "label": "Tell the student about the white cassock instead",
+          "outcome": "The student has never heard it, and is delighted, and tells everyone he meets for a month that the pope dresses as a Dominican. The old man says the student has understood the essential thing.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "opf_peter_the_road",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 18,
+      "suppressYears": 2,
+      "pressure": [
+        "belief_vs_safety"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        },
+        {
+          "type": "feast",
+          "key": "peter_verona"
+        }
+      ],
+      "title": "Credo in the Dust",
+      "body": "St. Peter of Verona, the preacher ambushed on the road who wrote the first words of the Creed in the dirt with his own blood as he died. A parishioner stops you after the memorial Mass. She works at the county courthouse and has been told, quietly, that her faith is her own business and should stay out of the break room, after she refused to sign something she believed was wrong. She asks what Peter would have done, and then, before you answer, asks you not to make it sound easy.",
+      "flavorPrompt": "Peter of Verona's day: a woman asks what the martyr would have done, and asks you not to make it sound easy.",
+      "choices": [
+        {
+          "id": "hard",
+          "label": "Tell her it is not easy, and that she is not alone in it",
+          "default": true,
+          "outcome": "You do not make it sound easy. You tell her who else in the parish has paid for their conscience, and put her in touch with two of them. She comes to the Saturday confessions for a year, and in the spring she tells you she has found another job, and kept her name.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 3
+            }
+          ]
+        },
+        {
+          "id": "prudence",
+          "label": "Talk with her about prudence: which battles are hers",
+          "outcome": "You talk about prudence, which is a virtue and not a retreat, and about the difference between what she must refuse and what she may let pass. She says it helps. You are not sure, walking back, whether you said it for her sake or for yours.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": -1
+            }
+          ]
+        },
+        {
+          "id": "pray",
+          "label": "Offer to pray with her there, at the side altar",
+          "outcome": "You pray the Creed together at the side altar, the words Peter wrote. She leaves steadier than she came. She does not tell you what she decides, and you do not ask.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "opf_hyacinth_the_families",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "ROUTINE",
+      "category": "group",
+      "baseWeight": 18,
+      "suppressYears": 2,
+      "pressure": [
+        "friendship_vs_duty"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        },
+        {
+          "type": "feast",
+          "key": "hyacinth"
+        }
+      ],
+      "title": "Hyacinth's Pierogi",
+      "body": "St. Hyacinth, the Polish friar of the order's first generation who, the story goes, carried the Blessed Sacrament and a stone statue of Our Lady out of a burning town. The Polish families of the neighbourhood keep his day at the priory church: a Mass in Polish, a procession, and a lunch in the parish hall with a table of food that could feed the province. The only friar in the house who can say Mass in Polish has the flu.",
+      "flavorPrompt": "Hyacinth's day: the Polish families' Mass, and the only friar who speaks Polish has the flu.",
+      "choices": [
+        {
+          "id": "learn",
+          "label": "Say the Mass in Polish yourself, from the book, badly",
+          "default": true,
+          "outcome": "You practice the night before with a grandmother who corrects every vowel. The Mass is slow and your accent is terrible and the families are so pleased that you tried that the grandmother kisses your hand at the door and gives you a jar of pickles.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 3
+            },
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "english",
+          "label": "Say it in English and let the choir sing in Polish",
+          "outcome": "The choir sings the old hymns in Polish and the Mass is in English. The families are gracious. One of the older men tells you, over lunch, that his father would have walked out, and that times change.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "priest",
+          "label": "Telephone the diocese for a Polish priest",
+          "outcome": "The chancery finds a Polish priest from a parish across the river, who comes, and says the Mass beautifully, and stays for lunch until four. The families are delighted. The house, a little embarrassed, invites him back for Hyacinth's day every year.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "diocesan_clergy",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "opf_rose_the_laity",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 18,
+      "suppressYears": 2,
+      "pressure": [
+        "friendship_vs_duty"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        },
+        {
+          "type": "feast",
+          "key": "rose_lima"
+        }
+      ],
+      "title": "Rose's Day",
+      "body": "St. Rose of Lima, the first saint of the Americas, who lived her life as a laywoman of the order in her parents' garden. The Peruvian families of the parish keep her day with a Mass, a procession with her image, and the lay Dominicans in their scapulars. The president of the lay chapter, a nurse who works nights, asks you after the procession whether a woman with three children and night shifts can really live the order's life, or whether Rose was a saint because she had nothing else to do.",
+      "flavorPrompt": "Rose of Lima's day: a nurse on night shifts asks whether a woman like her can really live the order's life.",
+      "choices": [
+        {
+          "id": "yes",
+          "label": "Tell her Rose kept a hospital in her parents' house, and the order's life is lived at the bedside",
+          "default": true,
+          "outcome": "You tell her about the sick Rose nursed in her parents' house, and about the night office she already keeps, differently. She laughs, and then does not, and says she will think about that on the ward. At the next lay chapter she gives the talk.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "op:rose_the_nurse",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "rule",
+          "label": "Walk through the lay chapter's rule with her: what is asked and what is not",
+          "outcome": "You go through the rule with her at the kitchen table: the Office as she can, the study, the chapter once a month. It is less than she feared and more than she thought. She stays.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "honest",
+          "label": "Tell her it is hard, and that she should not do it alone",
+          "outcome": "You tell her it is hard, and that the order's life was never meant to be lived alone, and that the chapter is there for exactly this. She finds another nurse in the chapter who works nights, and they pray Lauds together on the ward at five.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 2
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

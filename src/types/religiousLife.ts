@@ -267,6 +267,8 @@ export interface OrderMechanics {
   democracy?: number;
   /** The week a newly ordained friar is given before he arranges it himself: spend id to blocks. Applied once. */
   defaultSpends?: Record<string, number>;
+  /** The free hours a novice or student is given before he arranges them himself: seminary activity id to hours. Applied once. */
+  defaultFormationRoutine?: Record<string, number>;
 }
 
 export interface OrderDef {
@@ -283,6 +285,8 @@ export interface OrderDef {
   instituteId: string;
   houseOrderId: string;
   motto: string;
+  /** The motto as it would hang, framed, on a cell wall: short. Falls back to the motto. */
+  mottoShort?: string;
   /** Four entries, ids fixed to the base game's pillars, in the same order. Drives the formation engine. */
   pillars: PillarDef[];
   governance: OrderGovernance;

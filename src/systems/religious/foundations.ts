@@ -5,7 +5,8 @@ import { orderDef } from '@/content/houses';
 import { dateOf } from '@/engine/time';
 import { PROVINCE } from '@/generation/province';
 import { currentHouse, membersOf } from './house';
-import { worldOf } from './transfer';
+import { moveToHouse, worldOf } from './transfer';
+import { vacateOffice } from './vacate';
 
 /**
  * Closures and foundations, seen from the province. E3 §3.14. A province
@@ -96,6 +97,12 @@ export function closeHouse(state: GameState, houseId: string, rng: Rng): { state
   if (r.houseId === houseId) flags['house_closed:mine'] = week;
   const line = `The province has closed ${house.name}.${handedBack} Its men are in the other houses by Advent.`;
   next = { ...next, flags, career: [...next.career, { week, kind: 'note', text: line }] };
+  // His own house closed: he goes with the men, to the curia if he governs the province, else where there is room; a prior of it is prior of nothing.
+  if (r.houseId === houseId) {
+    if (next.religious?.office?.office === 'prior' && next.religious.office.bodyId === houseId) next = vacateOffice(next, 'when the house was closed');
+    const target = (next.religious?.office?.office === 'provincial' ? others.find((h) => h.kind === 'curia') : undefined) ?? others.filter((h) => h.kind !== 'novitiate').reduce((best, h) => (membersOf(next, h).length < membersOf(next, best).length ? h : best), others.find((h) => h.kind !== 'novitiate') ?? others[0]!);
+    next = moveToHouse(next, target.id, target.works[0] ?? 'priory_church');
+  }
   return { state: next, line };
 }
 

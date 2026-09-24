@@ -1,5 +1,5 @@
 {
-  "_notes": "The order's own letters. E3: a friar is moved by the provincial, never by a bishop, so the diocese's offers (parish.json, seminary.json) do not reach him and these do not reach a priest of the diocese; engine/offers.ts reads `campaign`. Years away begin the week he says yes, since the provincial's letter is the order's own, and he comes home to a consultation, not the board. Flags: rome_track (fr_sem_rome_track), rome_alumnus / refused_rome (fr_rome_study, shared with the diocese's so the record reads the same). The faculty in Rome is the order's own and is not named (CLAUDE.md rule 13). QA round: formation letters (infirmary, cantor, jail, library, parish practicum) from the novice master and the master of students, and the priest's letters (mission, retreat, vocation work, novice assistant, lay chapter, review, hospital nights, novena, campus) from the provincial and the prior, so a friar's year has the order's own letters in it as a priest's has the diocese's. Flags: fr_vocation_promoter_served, fr_formation_experience.",
+  "_notes": "The order's own letters. E3: a friar is moved by the provincial, never by a bishop, so the diocese's offers (parish.json, seminary.json) do not reach him and these do not reach a priest of the diocese; engine/offers.ts reads `campaign`. Years away begin the week he says yes, since the provincial's letter is the order's own, and he comes home to a consultation, not the board. Flags: rome_track (fr_sem_rome_track), rome_alumnus / refused_rome (fr_rome_study, shared with the diocese's so the record reads the same). The faculty in Rome is the order's own and is not named (CLAUDE.md rule 13). QA round: formation letters (infirmary, cantor, jail, library, parish practicum) from the novice master and the master of students, and the priest's letters (mission, retreat, vocation work, novice assistant, lay chapter, review, hospital nights, novena, campus) from the provincial and the prior, so a friar's year has the order's own letters in it as a priest's has the diocese's. Flags: fr_vocation_promoter_served, fr_formation_experience. Round two: the Dominican letters (the Rosary preached in October and the public disputation in formation; Preacher General, promoter of the Rosary, the nuns' chaplaincy, the Lenten course, the summer institute on St. Thomas, diffinitor to the general chapter, the Holy Name Society) gate on order:OP. Titles and governance (the Preacher General proposed by the provincial chapter to the Master; general chapters every three years with elected diffinitors) are close to the order's practice and flagged for verification (CLAUDE.md rule 12). The mission, the retreat, the article, and the hospital nights are repeatable, two years apart, as such work is.",
   "offers": [
     {
       "id": "fr_sem_rome_track",
@@ -793,7 +793,6 @@
       ],
       "weight": 14,
       "windowWeeks": 4,
-      "once": true,
       "cluster": "preaching",
       "accept": {
         "effects": [
@@ -903,7 +902,6 @@
       ],
       "weight": 10,
       "windowWeeks": 4,
-      "once": true,
       "cluster": "preaching",
       "accept": {
         "effects": [
@@ -1327,7 +1325,6 @@
       ],
       "weight": 10,
       "windowWeeks": 4,
-      "once": true,
       "cluster": "academic",
       "accept": {
         "effects": [
@@ -1420,7 +1417,6 @@
       "requires": [],
       "weight": 12,
       "windowWeeks": 4,
-      "once": true,
       "cluster": "apostolate",
       "accept": {
         "effects": [
@@ -1699,6 +1695,954 @@
           }
         ],
         "outcome": "He writes to the university that the province cannot spare a man this year. The students find the diocesan priest who comes on alternate Sundays, and some of them find the chapel on the corner of campus, and some of them find nothing."
+      }
+    },
+    {
+      "id": "op_stud_rosary_preaching",
+      "category": "seminary",
+      "campaign": "religious",
+      "phase": [
+        "seminary"
+      ],
+      "yearGate": [
+        4,
+        5,
+        6,
+        7
+      ],
+      "title": "Preaching the Rosary",
+      "body": "The parishes of the city keep October as the month of the Rosary, and every year the studium sends student brothers out on Sunday afternoons to preach the mysteries: ten minutes on each, then the decade, then the next. {@master_of_students} asks whether you will take a parish this October. It is where Dominicans learned to preach for eight hundred years, he says, in front of people who would rather be at home and who pray anyway.",
+      "from": "@master_of_students",
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        }
+      ],
+      "weight": 16,
+      "windowWeeks": 4,
+      "once": true,
+      "cluster": "preaching",
+      "accept": {
+        "effects": [
+          {
+            "target": "relationship",
+            "key": "@master_of_students",
+            "delta": 3
+          },
+          {
+            "target": "pillar",
+            "key": "pastoral",
+            "delta": 0.5
+          }
+        ],
+        "outcome": "The first Sunday you preach the Annunciation to forty people and a dozing usher. By the last, you have learned to stop talking before the people stop listening, which the master of students says is most of preaching.",
+        "commitment": {
+          "label": "Preaching the Rosary in October",
+          "weeks": 5,
+          "apPerWeek": 1.5,
+          "weekly": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 0.08
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 0.1
+            }
+          ],
+          "onComplete": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 2
+            },
+            {
+              "target": "pillar",
+              "key": "pastoral",
+              "delta": 1
+            }
+          ],
+          "completeOutcome": "On the last Sunday an old man tells you at the door that his wife, who died in June, never missed the October Rosary, and that you would have pleased her. You carry it home like a coin."
+        }
+      },
+      "decline": {
+        "effects": [
+          {
+            "target": "relationship",
+            "key": "@master_of_students",
+            "delta": -2
+          }
+        ],
+        "outcome": "He gives the parish to a student a year behind you, who comes home every Sunday in October flushed and hoarse and happier than you have seen him."
+      }
+    },
+    {
+      "id": "op_stud_disputation",
+      "category": "academic",
+      "campaign": "religious",
+      "phase": [
+        "seminary"
+      ],
+      "yearGate": [
+        4,
+        5,
+        6
+      ],
+      "title": "The Public Disputation",
+      "body": "Once a year the studium holds a disputation in the old manner: a student defends a question against all comers, the lectors object, the regent determines. {@master_of_students} would like you to defend this year's, on whether the existence of God can be demonstrated, before the house and whoever from the city wants to come. It is an honour, he says, and a small public humiliation, which is the Dominican way of doing honours.",
+      "from": "@master_of_students",
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        },
+        {
+          "type": "stat",
+          "key": "theology",
+          "op": ">=",
+          "value": 50
+        }
+      ],
+      "weight": 14,
+      "windowWeeks": 4,
+      "once": true,
+      "cluster": "academic",
+      "accept": {
+        "effects": [
+          {
+            "target": "relationship",
+            "key": "@master_of_students",
+            "delta": 3
+          },
+          {
+            "target": "pillar",
+            "key": "intellectual",
+            "delta": 0.5
+          }
+        ],
+        "outcome": "You prepare for six weeks. On the night, a philosophy professor from the state university objects from the second row, and you answer him, mostly, and the regent determines the question in your favour with a qualification you will be thinking about for years.",
+        "commitment": {
+          "label": "Preparing the public disputation",
+          "weeks": 6,
+          "apPerWeek": 1.5,
+          "weekly": [
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 0.08
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 0.04
+            }
+          ],
+          "onComplete": [
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 3
+            },
+            {
+              "target": "pillar",
+              "key": "intellectual",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "op:defended_disputation",
+              "value": true
+            }
+          ],
+          "completeOutcome": "The regent's determination is printed in the province's newsletter with your name in the first line. The master of students cuts it out and pins it to the students' board, which he has not done in eleven years."
+        }
+      },
+      "decline": {
+        "effects": [
+          {
+            "target": "relationship",
+            "key": "@master_of_students",
+            "delta": -2
+          }
+        ],
+        "outcome": "He gives it to another student, who is flattened by the lector of moral theology and recovers by the reception, and is spoken of afterwards with affection."
+      }
+    },
+    {
+      "id": "op_preacher_general",
+      "category": "academic",
+      "campaign": "religious",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "title": "Preacher General",
+      "body": "The provincial chapter has voted to propose your name to the Master of the Order for the title of Preacher General, which the order gives to friars whose preaching has served it for years. {@provincial} writes to ask whether you will accept, if it is conferred. It changes nothing in the house, he says, and gives you a voice in chapters; and it tells every pastor who reads the province's directory that this man can be trusted with a pulpit.",
+      "from": "@provincial",
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        },
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 10
+        },
+        {
+          "type": "stat",
+          "key": "charisma",
+          "op": ">=",
+          "value": 60
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "credential",
+            "key": "preacher_general"
+          }
+        }
+      ],
+      "weight": 12,
+      "windowWeeks": 6,
+      "once": true,
+      "cluster": "preaching",
+      "accept": {
+        "effects": [
+          {
+            "target": "relationship",
+            "key": "@provincial",
+            "delta": 4
+          },
+          {
+            "target": "reputation",
+            "key": "order",
+            "delta": 4
+          },
+          {
+            "target": "reputation",
+            "key": "province",
+            "delta": 4
+          },
+          {
+            "target": "credential",
+            "key": "preacher_general"
+          },
+          {
+            "target": "flag",
+            "key": "op:preacher_general",
+            "value": true
+          }
+        ],
+        "outcome": "The letter from the Master comes in the spring, in Latin, and is read at table. The old men applaud with their spoons. By summer three pastors have written asking for a mission, and one of them spells your name correctly."
+      },
+      "decline": {
+        "effects": [
+          {
+            "target": "relationship",
+            "key": "@provincial",
+            "delta": -2
+          },
+          {
+            "target": "reputation",
+            "key": "province",
+            "delta": -1
+          },
+          {
+            "target": "flag",
+            "key": "op:declined_preacher_general",
+            "value": true
+          }
+        ],
+        "outcome": "You write that you would rather preach than be called a preacher. {@provincial} reads it aloud at the council, you hear later, and the council laughs, and the chapter's minutes note that the brother declined with humility."
+      }
+    },
+    {
+      "id": "op_rosary_promoter",
+      "category": "social",
+      "campaign": "religious",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "title": "Promoter of the Rosary",
+      "body": "The province needs a promoter of the Rosary: the friar who keeps the Rosary Confraternity's registers, erects it in parishes that ask, blesses beads by the thousand, and preaches the mysteries wherever he is invited. The last man held it for thirty years and has died. {@provincial} asks whether you would take it for three. The work is small and endless and, he adds, it is the oldest thing the order does for the ordinary Catholic.",
+      "from": "@provincial",
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        },
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 3
+        }
+      ],
+      "weight": 10,
+      "windowWeeks": 4,
+      "once": true,
+      "cluster": "laity",
+      "accept": {
+        "effects": [
+          {
+            "target": "relationship",
+            "key": "@provincial",
+            "delta": 3
+          },
+          {
+            "target": "reputation",
+            "key": "laity",
+            "delta": 2
+          }
+        ],
+        "outcome": "The registers arrive in two boxes: names in fountain pen from before the war, ballpoint from after, and a laptop the last promoter never opened. The first parish that asks to have the Confraternity erected has sixty people at the Mass, and a hundred and twenty sets of beads.",
+        "commitment": {
+          "label": "Promoter of the Rosary",
+          "weeks": 156,
+          "apPerWeek": 1.5,
+          "weekly": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 0.03
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 0.08
+            }
+          ],
+          "onComplete": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 3
+            },
+            {
+              "target": "pillar",
+              "key": "spiritual",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "op:rosary_promoter_served",
+              "value": true
+            }
+          ],
+          "completeOutcome": "In three years the Confraternity is erected in eleven parishes. You hand the registers on with a note on which pastors will answer letters. The new promoter reads the old names out at recreation too."
+        }
+      },
+      "decline": {
+        "effects": [
+          {
+            "target": "relationship",
+            "key": "@provincial",
+            "delta": -2
+          },
+          {
+            "target": "reputation",
+            "key": "laity",
+            "delta": -1
+          }
+        ],
+        "outcome": "He gives it to an older friar who is glad of it. The registers go to his room, and at recreation he reads out the names of parishes that joined in 1911 as if they were cricket scores."
+      }
+    },
+    {
+      "id": "op_nuns_chaplain",
+      "category": "social",
+      "campaign": "religious",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "title": "Chaplain to the Nuns",
+      "body": "The monastery of the order's nuns, enclosed, twenty women who have kept the Hours since before the province had a studium, needs a chaplain: the conventual Mass each morning, confessions, a conference a week through the grille, and the long patience of being the only man most of them speak to in a month. {@provincial} writes that Dominic founded the nuns before he founded the friars, and that the friars have owed them a good chaplain ever since.",
+      "from": "@provincial",
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        },
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 4
+        },
+        {
+          "type": "stat",
+          "key": "piety",
+          "op": ">=",
+          "value": 55
+        }
+      ],
+      "weight": 9,
+      "windowWeeks": 4,
+      "once": true,
+      "cluster": "preaching",
+      "accept": {
+        "effects": [
+          {
+            "target": "relationship",
+            "key": "@provincial",
+            "delta": 3
+          },
+          {
+            "target": "reputation",
+            "key": "order",
+            "delta": 2
+          },
+          {
+            "target": "pillar",
+            "key": "spiritual",
+            "delta": 0.5
+          }
+        ],
+        "outcome": "The first morning you say Mass behind a grille to voices you cannot see, and the chant is better than any in the province. After, the prioress tells you through the turn that they have prayed for the preachers for eight hundred years and would now like to pray for you in particular.",
+        "commitment": {
+          "label": "Chaplain to the nuns of the order",
+          "weeks": 104,
+          "apPerWeek": 2,
+          "weekly": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 0.05
+            },
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 0.02
+            }
+          ],
+          "onComplete": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 4
+            },
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 4
+            },
+            {
+              "target": "pillar",
+              "key": "spiritual",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "op:nuns_chaplain_served",
+              "value": true
+            }
+          ],
+          "completeOutcome": "When you leave, the nuns give you a stole they embroidered over two winters. The prioress says through the grille that you preached to them as if they were adults, and that not every chaplain does."
+        }
+      },
+      "decline": {
+        "effects": [
+          {
+            "target": "relationship",
+            "key": "@provincial",
+            "delta": -2
+          },
+          {
+            "target": "reputation",
+            "key": "order",
+            "delta": -1
+          }
+        ],
+        "outcome": "He sends an older friar who has done it before. The nuns send you a card at Christmas anyway, saying they pray for you, and you believe them."
+      }
+    },
+    {
+      "id": "op_lenten_course",
+      "category": "social",
+      "campaign": "religious",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "title": "The Lenten Course",
+      "body": "The cathedral of the diocese has asked the province, as it does every few years, for a Dominican to preach the Lenten course: six Friday evenings, a sermon of half an hour on one theme, before a congregation that comes for the preaching and will say so if it is not good. {@provincial} forwards the request with the note that the bishop will be in his chair for at least one of them.",
+      "from": "@provincial",
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        },
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 5
+        },
+        {
+          "type": "stat",
+          "key": "charisma",
+          "op": ">=",
+          "value": 55
+        }
+      ],
+      "weight": 10,
+      "windowWeeks": 4,
+      "cluster": "preaching",
+      "accept": {
+        "effects": [
+          {
+            "target": "relationship",
+            "key": "@provincial",
+            "delta": 3
+          },
+          {
+            "target": "reputation",
+            "key": "local_bishop",
+            "delta": 2
+          }
+        ],
+        "outcome": "You choose the seven last words and give up two weekends in February to writing. The first Friday there are two hundred people. The fourth, the bishop is in his chair and does not look at his watch.",
+        "commitment": {
+          "label": "Preaching the Lenten course at the cathedral",
+          "weeks": 6,
+          "apPerWeek": 2.5,
+          "weekly": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 0.1
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 0.15
+            }
+          ],
+          "onComplete": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "local_bishop",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "diocesan_clergy",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 2
+            }
+          ],
+          "completeOutcome": "On Good Friday the cathedral's rector asks for the texts, to print. The bishop writes a card in his own hand saying he had not heard the fourth word preached that way."
+        }
+      },
+      "decline": {
+        "effects": [
+          {
+            "target": "relationship",
+            "key": "@provincial",
+            "delta": -2
+          },
+          {
+            "target": "reputation",
+            "key": "local_bishop",
+            "delta": -1
+          }
+        ],
+        "outcome": "Another friar preaches it, on the Beatitudes, very well. The cathedral's rector tells the province that they had hoped for you, which is a kind thing to hear too late."
+      }
+    },
+    {
+      "id": "op_summer_institute",
+      "category": "academic",
+      "campaign": "religious",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "title": "The Summer Institute on St. Thomas",
+      "body": "The province runs a summer institute for lay people who want to read St. Thomas properly: two weeks, a question a morning, seminars in the afternoon, and a disputation on the last day that the students take far too seriously. {@provincial} asks whether you will teach the question on the virtues this year. The lector who usually does it is on sabbatical, and the students, he warns, include two retired judges.",
+      "from": "@provincial",
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        },
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 2
+        },
+        {
+          "type": "stat",
+          "key": "theology",
+          "op": ">=",
+          "value": 55
+        }
+      ],
+      "weight": 10,
+      "windowWeeks": 4,
+      "cluster": "academic",
+      "accept": {
+        "effects": [
+          {
+            "target": "relationship",
+            "key": "@provincial",
+            "delta": 2
+          },
+          {
+            "target": "pillar",
+            "key": "intellectual",
+            "delta": 0.5
+          }
+        ],
+        "outcome": "The judges sit in the front row and object to everything, delightfully. A nurse in the back row asks the only question you cannot answer, about whether courage can be commanded, and you tell her so, and she writes to you for a year.",
+        "commitment": {
+          "label": "Teaching at the summer institute",
+          "weeks": 2,
+          "apPerWeek": 4,
+          "weekly": [
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 0.2
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 0.2
+            }
+          ],
+          "onComplete": [
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 2
+            },
+            {
+              "target": "pillar",
+              "key": "intellectual",
+              "delta": 1
+            }
+          ],
+          "completeOutcome": "The disputation on the last day is on whether a Christian may lie to save a life. The judges lose. The evaluations say you should come back, and one says only: more Thomas, less PowerPoint."
+        }
+      },
+      "decline": {
+        "effects": [
+          {
+            "target": "relationship",
+            "key": "@provincial",
+            "delta": -2
+          },
+          {
+            "target": "reputation",
+            "key": "province",
+            "delta": -1
+          }
+        ],
+        "outcome": "A younger friar takes the virtues and is eaten alive by the judges and is invited back by acclamation."
+      }
+    },
+    {
+      "id": "op_general_chapter",
+      "category": "chancery",
+      "campaign": "religious",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "title": "Diffinitor to the General Chapter",
+      "body": "The provincial chapter has elected you its diffinitor to the order's general chapter: four weeks abroad with friars from every province of the world, debating the acts that will govern the order until the next chapter three years on. {@provincial} writes that it is a great deal of reading, a great deal of sitting, and the best education in what the order is that a friar can get without being elected to anything worse.",
+      "from": "@provincial",
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        },
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 10
+        },
+        {
+          "type": "reputation",
+          "key": "province",
+          "op": ">=",
+          "value": 30
+        }
+      ],
+      "weight": 8,
+      "windowWeeks": 6,
+      "once": true,
+      "cluster": "province",
+      "accept": {
+        "effects": [
+          {
+            "target": "relationship",
+            "key": "@provincial",
+            "delta": 3
+          },
+          {
+            "target": "reputation",
+            "key": "order",
+            "delta": 3
+          },
+          {
+            "target": "reputation",
+            "key": "province",
+            "delta": 3
+          }
+        ],
+        "outcome": "The acts arrive in a binder the size of a missal. You read them on the plane. The first morning of the chapter you sit between a friar from Vietnam and a friar from Nigeria, and between them they have founded more houses than your province has.",
+        "commitment": {
+          "label": "Diffinitor at the general chapter",
+          "weeks": 4,
+          "apPerWeek": 5,
+          "weekly": [
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 0.2
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 0.3
+            }
+          ],
+          "onComplete": [
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "op:general_chapter_served",
+              "value": true
+            }
+          ],
+          "completeOutcome": "You come home with a list of friars in thirty countries who will answer your letters, and a clearer sense than you wanted of how small the province is. At the house chapter you report for an hour, and the old men ask the right questions."
+        }
+      },
+      "decline": {
+        "effects": [
+          {
+            "target": "relationship",
+            "key": "@provincial",
+            "delta": -3
+          },
+          {
+            "target": "reputation",
+            "key": "province",
+            "delta": -3
+          }
+        ],
+        "outcome": "The chapter elects another man, who goes, and comes back thinner and wiser, and gives the province a report that everyone reads and nobody agrees with."
+      }
+    },
+    {
+      "id": "op_holy_name",
+      "category": "social",
+      "campaign": "religious",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "title": "The Holy Name Men",
+      "body": "The parish's Holy Name Society, which the Dominicans were given charge of centuries ago and which the house has kept alive in the parish long after most parishes let theirs go, has lost its spiritual director to a transfer. Twenty men, most of them over sixty, meet on the second Sunday for Mass, breakfast, and a talk. {@prior} asks whether you will take them. They are loyal, he says, and they will tell you what they think of your talk before the eggs are cold.",
+      "from": "@prior",
+      "requires": [
+        {
+          "type": "flag",
+          "key": "order:OP",
+          "value": true
+        },
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 1
+        }
+      ],
+      "weight": 12,
+      "windowWeeks": 4,
+      "once": true,
+      "cluster": "laity",
+      "accept": {
+        "effects": [
+          {
+            "target": "relationship",
+            "key": "@prior",
+            "delta": 3
+          },
+          {
+            "target": "reputation",
+            "key": "laity",
+            "delta": 2
+          }
+        ],
+        "outcome": "Your first talk is on the second commandment. A retired bus driver tells you over the eggs that you went on too long about blasphemy and not long enough about swearing, and he is right, and he becomes, in the way of these things, your friend.",
+        "commitment": {
+          "label": "Spiritual director of the Holy Name Society",
+          "weeks": 52,
+          "apPerWeek": 0.5,
+          "weekly": [
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 0.06
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 0.02
+            }
+          ],
+          "onComplete": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 1
+            }
+          ],
+          "completeOutcome": "At the year's last breakfast the men give you a Holy Name pin their fathers wore. Two of them have started coming to daily Mass, and one has started coming to confession, which he says is your fault."
+        }
+      },
+      "decline": {
+        "effects": [
+          {
+            "target": "relationship",
+            "key": "@prior",
+            "delta": -2
+          },
+          {
+            "target": "reputation",
+            "key": "laity",
+            "delta": -1
+          }
+        ],
+        "outcome": "The men meet without a friar for a season and then ask for one from the diocese, who comes, and finds them, he says, the best breakfast in the deanery."
       }
     }
   ]

@@ -6,6 +6,7 @@ import { religiousOrder } from '@/content/religious';
 import { BALLOT, runElection, type Elector } from '../ballot';
 import { contendersOf, electorsOf, PLAYER_ID, scoreFor, type Contender, type Voter } from './electorate';
 import { worldOf } from './transfer';
+import { vacateOffice } from './vacate';
 
 /**
  * Chapters and elections. E3 §3.6–3.7: no one is a declared candidate;
@@ -210,7 +211,9 @@ function seat(state: GameState, office: ChapterOffice, bodyId: string, electedId
   const years = termYears(state, office);
   if (electedId === PLAYER_ID) {
     const consecutive = r.office?.office === office && r.office.bodyId === bodyId ? r.office.consecutive + 1 : 1;
-    let next = applyEffects(state, [...CHAPTER.accept], {}, 'an election accepted');
+    // A prior elected provincial leaves the priorship: one office at a time, and the house is not left governed by an absence.
+    const freed = r.office && (r.office.office !== office || r.office.bodyId !== bodyId) ? vacateOffice(state, `for the office of ${office}`) : state;
+    let next = applyEffects(freed, [...CHAPTER.accept], {}, 'an election accepted');
     next = moreAmbition(next, CHAPTER.ambition.accept);
     // A prior holds no office of the house under himself; the sacristy goes to someone else.
     const { houseOffice: _ho, ...rest } = next.religious!;

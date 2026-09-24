@@ -71,7 +71,7 @@ export default function EmphasisPanel() {
       <div className="mt-4 flex items-center gap-3">
         <button className="pbtn pbtn-primary" disabled={!!error} onClick={() => choose(alloc)}>Begin the year</button>
         <span className="ink-muted text-sm">{error ?? `${used} of ${points} given`}</span>
-        <button className="pbtn-link ml-auto" onClick={() => confirm('Leave the seminary? This ends the run.') && leave()}>Leave the seminary</button>
+        <button className="pbtn-link ml-auto" onClick={() => confirm(`${game?.religious ? 'Leave the order' : 'Leave the seminary'}? This ends the run.`) && leave()}>{game?.religious ? 'Leave the order' : 'Leave the seminary'}</button>
       </div>
     </Panel>
   );

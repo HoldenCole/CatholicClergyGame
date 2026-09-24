@@ -29,7 +29,7 @@ import { clearRequestAnswer, closeRequest, requestAnswerDue } from '@/systems/re
 import { expireAsks } from '@/systems/houses';
 import { ARCS, dueArc, endArc, maybeOpenArc } from '@/systems/arcs';
 import { requestWeek } from '@/systems/religious/requests';
-import { defaultSpends, spendsWeek } from '@/systems/religious/spends';
+import { defaultFormationRoutine, defaultSpends, spendsWeek } from '@/systems/religious/spends';
 import { houseLifeLine } from '@/systems/religious/houseLife';
 import { foundingWeek } from '@/systems/religious/founding';
 import { anniversaryWeek, nameDayWeek } from '@/systems/anniversaries';
@@ -121,6 +121,8 @@ export function seminaryWeekHook(deps: EventDeps): WeekHook {
     let next = formationBeats(state, reachedBeats);
     if (next.mode.kind !== 'clock' || !next.seminary) return next;
     // What he did with the week, whether or not anything else happens in it.
+    // A novice's free hours begin as the order's usual ones, not empty. E3 §3.3.
+    if (next.religious) next = defaultFormationRoutine(next);
     const resolved = seminaryWeek(next, rng.derive(`seminary-week:${next.clock.week}`));
     // A novice's house has its own week: the horarium as kept, the house's drift. E3 §3.2.
     const week = { ...resolved, state: religiousWeek(resolved.state, rng) };

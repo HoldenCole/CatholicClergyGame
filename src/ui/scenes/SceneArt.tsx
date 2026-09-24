@@ -8,6 +8,7 @@ import { Rectory, SeminaryHall, SeminaryRoom, Study } from './art/home';
 import { Chapel, Hall, Street } from './art/places';
 import { StudyCity, StudyRoom } from './art/away';
 import { portraitForPlayer } from '../portraits/spec';
+import { religiousOrder } from '@/content/religious';
 import { lookFor } from '../portraits/Portrait';
 import { WeatherLayer } from './art/weather';
 import type { WeatherKind } from '@/systems/weather';
@@ -46,7 +47,7 @@ export default function SceneArt({ scene, season, state, plain = false, weather 
       {scene === 'study' && <Study ambient={ambient('office')} />}
       {scene === 'seminary_room' && <SeminaryRoom ambient={ambient('seminary_room')} seminaryName={state.seminary?.name} />}
       {scene === 'seminary_hall' && <SeminaryHall />}
-      {scene === 'friar_cell' && <SeminaryRoom ambient={ambient('seminary_room')} seminaryName={state.orderHouses?.[state.religious?.houseId ?? '']?.name ?? state.seminary?.name} />}
+      {scene === 'friar_cell' && <SeminaryRoom ambient={ambient('seminary_room')} seminaryName={state.orderHouses?.[state.religious?.houseId ?? '']?.name ?? state.seminary?.name} {...(state.religious ? { frame: religiousOrder(state.religious.order).mottoShort ?? religiousOrder(state.religious.order).motto } : {})} />}
       {scene === 'friar_cloister' && <SeminaryHall />}
       {scene === 'study_room' && <StudyRoom city={state.study?.city ?? 'rome'} school={state.study?.school ?? 'the Gregorian'} />}
       {scene === 'study_city' && (state.study?.city === 'residence' || state.study?.city === 'chancery' || state.study?.city === 'auxiliary' || state.study?.city === 'see') && <Chancery ambient={ambient('chancery')} rank="corner" bishopName={bishop ? `${bishop.title} ${bishop.name.first} ${bishop.name.last}` : 'The bishop'} />}

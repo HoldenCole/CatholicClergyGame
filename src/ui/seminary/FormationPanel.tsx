@@ -56,7 +56,7 @@ export default function FormationPanel() {
         <div className="flex items-center justify-between">
           <button className="pbtn-link" onClick={() => setInspect((v) => !v)}>{inspect ? 'Hide the numbers' : 'Inspect the numbers'}</button>
           {game.mode.kind === 'clock' && (
-            <button className="pbtn-link" onClick={() => confirm('Leave the seminary? This ends the run.') && leave()}>Leave the seminary</button>
+            <button className="pbtn-link" onClick={() => confirm(`${game?.religious ? 'Leave the order' : 'Leave the seminary'}? This ends the run.`) && leave()}>{game?.religious ? 'Leave the order' : 'Leave the seminary'}</button>
           )}
         </div>
         {inspect && (
