@@ -122,7 +122,7 @@ export function Study({ ambient }: { ambient: AmbientItem[] }) {
 }
 
 /** A room in the seminary: bed, desk, shelf, the same window as every other room in the wing. */
-export function SeminaryRoom({ ambient, seminaryName }: { ambient: AmbientItem[]; seminaryName: string | undefined }) {
+export function SeminaryRoom({ ambient, seminaryName, frame }: { ambient: AmbientItem[]; seminaryName: string | undefined; frame?: string }) {
   return (
     <g>
       <Room wall="#e8dcc0" floor="lino" ceiling="#f0ece0" />
@@ -145,7 +145,7 @@ export function SeminaryRoom({ ambient, seminaryName }: { ambient: AmbientItem[]
       {/* shelf */}
       <Bookcase x={6} y={6} w={30} h={18} rows={3} density={0.7} />
       <Frame x={40} y={12} w={6} h={4} mat="#e9e2cc">
-        <text x="43" y="14.8" fontSize="1.2" textAnchor="middle" fill="#5a4a32" fontFamily="serif">{(seminaryName ?? 'The seminary').split(' ')[0]}</text>
+        <text x="43" y="14.8" fontSize="1.2" textAnchor="middle" fill="#5a4a32" fontFamily="serif">{frame ?? (seminaryName ?? 'The seminary').split(' ')[0]}</text>
       </Frame>
       <Ambient scene="seminary_room" items={ambient} anchor={{ books: [7, 7], wall: [40, 18], desk: [56, 33] }} />
       <Door x={90} y={30} w={8} h={16} open={false} color="#8a8378" />

@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useGameStore } from '@/engine/store';
 import { useUiStore } from './uiStore';
 
-type Key = 'seminary' | 'parish' | 'study' | 'posting' | 'house' | 'novitiate';
+type Key = 'seminary' | 'parish' | 'study' | 'posting' | 'house' | 'novitiate' | 'friar_study';
 
 const TEXT: Record<Key, { title: string; from: string; paragraphs: string[] }> = {
   seminary: {
@@ -50,6 +50,14 @@ const TEXT: Record<Key, { title: string; from: string; paragraphs: string[] }> =
       'The You sheet is what you are known for, your director, and the desk. The Foundation sheet, when you are in solemn vows, is where a house of your own begins. The Record keeps the weeks. Space is the next one.',
     ],
   },
+  friar_study: {
+    title: 'A word from the prior of the house',
+    from: 'Said in the cloister, with the key to your cell',
+    paragraphs: [
+      'You are a son of this house now as well as of your own province: its choir, its table, its chapter, and the Salve at night with men from twenty countries. Lectures take the mornings. The hours that are left are yours, and the Week sheet lists what the city offers; the degree is the reason you were sent, and the province will ask about it.',
+      'Your provincial still assigns you. Letters come from him and from your brothers at home, and some will be about what you will be when you return. The Record keeps the weeks.',
+    ],
+  },
   posting: {
     title: 'A word from the man before you',
     from: 'A note in the top drawer',
@@ -63,7 +71,7 @@ const TEXT: Record<Key, { title: string; from: string; paragraphs: string[] }> =
 function keyFor(game: NonNullable<ReturnType<typeof useGameStore.getState>['game']>): Key | null {
   if (game.mode.kind !== 'clock' || game.pending.length > 0) return null;
   if (game.parish) return 'parish';
-  if (game.study) return game.study.city === 'rome' || game.study.city === 'washington' ? 'study' : 'posting';
+  if (game.study) return game.study.city === 'rome' || game.study.city === 'washington' ? (game.religious ? 'friar_study' : 'study') : 'posting';
   if (game.religious && game.flags.ordained) return 'house';
   if (game.seminary) return game.religious ? 'novitiate' : 'seminary';
   return null;
