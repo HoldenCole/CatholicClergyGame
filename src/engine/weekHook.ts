@@ -40,6 +40,7 @@ import { openLives } from '@/systems/lives';
 import { heardRumours, talkWeek } from '@/systems/talk';
 import { markNightScene, nightSceneDue, nightWeek } from '@/systems/night';
 import { sideWorkWeek } from '@/systems/sidework';
+import { buildWeek } from '@/systems/religious/growth';
 import { requestedChoice } from '@/systems/choice';
 import { confessorWeek } from '@/systems/confessor';
 import { turnaroundStep } from '@/systems/trajectory';
@@ -253,6 +254,9 @@ export function friarWeekHook(deps: EventDeps): WeekHook {
   return (state: GameState, rng: Rng) => {
     if (!state.religious) return state;
     let next = religiousWeek(state, rng);
+    // A build on the house comes in its time. E3 §3.2.
+    const built = buildWeek(next);
+    next = built.line ? addDigestLine(built.state, built.line) : built.state;
     // The blocks that are his: what they built, in the digest. E3 §3.3.
     const spent = spendsWeek(next, rng.derive(`spends:${next.clock.week}`));
     next = spent.state;
@@ -360,6 +364,10 @@ export function parishWeekHook(deps: EventDeps): WeekHook {
     // A save from before the town existed rolls it now, from the seed, so it is the same whenever it appears. DESIGN §8.9.
     state = ensureTown(state, createRng(`${state.seed}:town:${state.assignment?.parishId}`));
     let next = religiousWeek(parishWeek(state, rng), rng);
+    if (next.religious) {
+      const built = buildWeek(next);
+      next = built.line ? addDigestLine(built.state, built.line) : built.state;
+    }
     const ann = anniversaryWeek(next);
     next = ann.state;
     if (ann.line) next = addDigestLine(next, ann.line);

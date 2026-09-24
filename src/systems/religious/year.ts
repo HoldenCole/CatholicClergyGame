@@ -15,6 +15,7 @@ import { provinceYear } from './foundations';
 import { crossingYear } from './crossing';
 import { foundingYear } from './founding';
 import { foundationsYear } from './foundationYear';
+import { provinceGrowthYear } from './growth';
 import { endApostolate } from './requests';
 import { bishopAskDefs } from '@/content/religious';
 
@@ -81,6 +82,8 @@ export function religiousYear(state: GameState, rng: Rng): GameState {
   if (next.mode.kind !== 'clock') return next;
   // The houses of his line, and the invitations and asks that start one. E3 §9.
   next = foundationsYear(next, rng.derive(`foundations:${next.clock.week}`));
+  // Every house of the province lives: men enter, die, and leave; the money moves. E3 §3.2.
+  next = provinceGrowthYear(next, rng.derive(`growth:${next.clock.week}`));
   next = foundingYear(next, rng.derive(`founding:${next.clock.week}`));
   // The diocese's men: the classmates from the seminary lectures, the seminary's men when he teaches there, and the ones he directs. E3 §3.13.
   next = diocesanClassmateYear(next, rng.derive(`dcm:${next.clock.week}`));

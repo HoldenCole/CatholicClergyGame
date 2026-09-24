@@ -82,4 +82,21 @@ export const friarProjectDefs: SideWorkDef[] = (projectsRaw as unknown as { proj
 export const confrereAskDefs: ConfrereAskDef[] = (confrereAsksRaw as unknown as { asks: ConfrereAskDef[] }).asks;
 
 /** The prior's desk: the rules a house can be set to, and the purse. E3 §3.2, §3.10. */
-export const priorDeskDefs = priorDeskRaw as unknown as { rules: { id: string; label: string; observance: number; line: string }[]; purse: { id: string; label: string; blurb: string; cost: number; cooldown: number; effects: import('@/types').Effect[]; house?: { cohesion?: number; observance?: number }; line: string }[] };
+export interface HouseBuildDef {
+  id: string;
+  label: string;
+  blurb: string;
+  cost: number;
+  weeks: number;
+  requires: { kinds?: import('@/types').HouseKind[]; works?: string[]; notWorks?: string[]; men?: number };
+  adds?: { work?: string; capacity?: number };
+  effects: import('@/types').Effect[];
+  house?: { cohesion?: number; observance?: number };
+  /** What it adds to the house's draw on vocations, as a share. */
+  vocations?: number;
+  /** Dollars a year it brings the house once built. */
+  income?: number;
+  line: string;
+}
+
+export const priorDeskDefs = priorDeskRaw as unknown as { rules: { id: string; label: string; observance: number; line: string }[]; purse: { id: string; label: string; blurb: string; cost: number; cooldown: number; effects: import('@/types').Effect[]; house?: { cohesion?: number; observance?: number }; line: string }[]; builds: HouseBuildDef[] };

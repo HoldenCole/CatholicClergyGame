@@ -14,6 +14,8 @@ import Panel from '../Panel';
 import Portrait from '../portraits/Portrait';
 import { portraitForNpc, yearOf } from '../portraits/spec';
 
+const BUILT: Record<string, string> = { chapel_restoration: 'a restored chapel', library_wing: 'a library wing', guest_wing: 'a guest wing', church_expansion: 'an enlarged church', classrooms: 'classrooms', studium_wing: 'a new wing', novitiate_wing: 'an enlarged novitiate', school: 'a school of its own' };
+
 const QUALITIES: Quality[] = ['min', 'standard', 'invested'];
 const QUALITY_WORD: Record<Quality, string> = { min: 'Least', standard: 'As the house does', invested: 'Fully' };
 
@@ -45,7 +47,7 @@ export default function HousePanel() {
   const load = rows.reduce((n, r) => n + r.ap, 0);
   return (
     <Panel title={house.name}>
-      <p className="leading-relaxed">{houseLine(game, house)}</p>
+      <p className="leading-relaxed">{houseLine(game, house)}{house.buildings?.length ? ` It has ${house.buildings.map((id) => BUILT[id] ?? id).join(', ')}.` : ''}</p>
       <p className="ink-muted mt-1 text-sm">
         {order.short}, {game.province?.name ?? 'the province'}. {game.religious.religiousName ? `In the house you are ${game.religious.religiousName}. ` : ''}
         {stage ? `${stage.label}, under the ${stage.guide}. ` : ''}

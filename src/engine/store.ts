@@ -44,6 +44,7 @@ import { reviseCharter as reviseCharterSys, writeCharter as writeCharterSys } fr
 import { addFoundationWork as addFoundationWorkSys, myFoundation, sendDaughter as sendDaughterSys } from '@/systems/religious/foundationYear';
 import { castVote, closeChapter, holdElection, resolveElection, returnToRanks, signalWillingness, speakFor, steerBloc, successorChapter } from '@/systems/religious/chapter';
 import { nameOfficer as nameOfficerSys, setHouseRule as setHouseRuleSys, spendPurse as spendPurseSys } from '@/systems/religious/priorDesk';
+import { askGrant as askGrantSys, startBuild as startBuildSys } from '@/systems/religious/growth';
 import { fromDayNumber } from './calendar';
 import { acceptAssignment as doAcceptAssignment } from './seminary';
 import {
@@ -164,6 +165,9 @@ export interface GameStore {
   setHouseRule(ruleId: string): void;
   nameOfficer(officeId: string, npcId: string | null): void;
   spendPurse(id: string): void;
+  /** Build: begin a work on the house, or ask the province for a grant toward one. */
+  startBuild(id: string): void;
+  askBuildGrant(id: string): void;
   /** What the prior said, for the sheet. */
   lastPriorLine: string | null;
   setSpeed(speed: Speed): void;
@@ -859,6 +863,20 @@ export const useGameStore = create<GameStore>()((set, get) => ({
   spendPurse(id) {
     update(set, get, (game) => {
       const res = spendPurseSys(game, id);
+      if (res.line) set({ lastPriorLine: res.line });
+      return res.state;
+    });
+  },
+  startBuild(id) {
+    update(set, get, (game) => {
+      const res = startBuildSys(game, id);
+      if (res.line) set({ lastPriorLine: res.line });
+      return res.state;
+    });
+  },
+  askBuildGrant(id) {
+    update(set, get, (game, r) => {
+      const res = askGrantSys(game, id, r.derive(`grant:${id}:${game.clock.week}`));
       if (res.line) set({ lastPriorLine: res.line });
       return res.state;
     });
