@@ -5,6 +5,8 @@ import { groupTrend, parishGroups, vitalityBand } from './groups';
 import { strainOf, strainWord } from './week';
 import { isCastLine } from './cast';
 import { isTownLine, isTownYearLine } from './town';
+import { HOUSE_LIFE_LINES } from './religious/houseLife';
+import { spendDefs } from '@/content/religious';
 
 /**
  * The digest, read: every line of a week sorted into a lane so the sheet can
@@ -18,14 +20,26 @@ export const LANE_LABEL: Record<Lane, string> = {
   header: '', decided: 'Decided', money: 'The money', parish: 'The parish', people: 'The people', diocese: 'The diocese', you: 'You', around: 'Around the parish',
 };
 
-const AMBIENT = new Set<string>(Object.values(ambient as Record<string, string[]>).flat());
+/** A friar's Record reads in his own world's words: the house, the brothers, the province. E3. */
+export const FRIAR_LANE_LABEL: Record<Lane, string> = {
+  header: '', decided: 'Decided', money: 'The purse', parish: 'The house', people: 'The brothers', diocese: 'The province', you: 'You', around: 'Around the house',
+};
+
+export function laneLabelFor(lane: Lane, religious: boolean): string {
+  return (religious ? FRIAR_LANE_LABEL : LANE_LABEL)[lane];
+}
+
+const AMBIENT = new Set<string>([...Object.values(ambient as Record<string, string[]>).flat(), ...HOUSE_LIFE_LINES]);
 const TITLES = new Set(allEvents.map((e) => e.title));
+/** A friar's week of spends is one line made of the spends' own lines; it is his. */
+const SPEND_OPENINGS = spendDefs.flatMap((d) => d.digest);
 
 export function laneOf(line: string): Lane {
   if (/^Week of /.test(line)) return 'header';
   const colon = line.indexOf(': ');
   if (colon > 0 && TITLES.has(line.slice(0, colon))) return 'decided';
   if (AMBIENT.has(line)) return 'around';
+  if (SPEND_OPENINGS.some((l) => line.startsWith(l))) return 'you';
   if (isCastLine(line)) return 'people';
   if (isTownLine(line)) return 'around';
   if (isTownYearLine(line)) return 'parish';
@@ -34,6 +48,8 @@ export function laneOf(line: string): Lane {
   if (/Collections \$|assessment|\bdebt\b|\$[\d,]+|the fund|reserve|bequest|paid down|invested|withdrew/i.test(line)) return 'money';
   if (/^You (baptized|married|buried|anointed|sat with|prepared|helped|quarreled)|is fading|is thriving|is withering|steady again|has folded|coming back|A word with|has been made|has been named|has left|has died|left the priesthood|leads it|new leader|\bwedding|\bfuneral|baptism/i.test(line)) return 'people';
   if (/chancery|bishop|Rome has|the see|diocese|the board|vicar for clergy|chancellor|personnel|letter of appointment|renewed/i.test(line)) return 'diocese';
+  // News of a named priest or brother that nothing above claimed: the people, not the place.
+  if (/^(Fr|Br|Msgr)\. \p{Lu}/u.test(line)) return 'people';
   if (/^You |^Your |tired in a way|slept, and|sick for two days|not enough of you|ran over|homily was from the file|the club|the circle|at the gym|ran with|hours? at|\bstudy\b|prayer|retreat/i.test(line)) return 'you';
   return 'parish';
 }

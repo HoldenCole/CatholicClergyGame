@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useGameStore } from '@/engine/store';
 import { useUiStore } from './uiStore';
 
-type Key = 'seminary' | 'parish' | 'study' | 'posting' | 'house';
+type Key = 'seminary' | 'parish' | 'study' | 'posting' | 'house' | 'novitiate';
 
 const TEXT: Record<Key, { title: string; from: string; paragraphs: string[] }> = {
   seminary: {
@@ -12,6 +12,15 @@ const TEXT: Record<Key, { title: string; from: string; paragraphs: string[] }> =
       'You have a room, a desk, and a corridor. The room is the week: click the desk, the shelf, the crucifix, or the bed and you are choosing where your free hours go; the Week sheet on the right says the same thing in a list. The corridor is the house: the library, the director, the rector, the common room where the societies meet.',
       'Nothing here shows you a number. What you give the year to shows up in the evaluations, in what the formators say, and in the men you sit with at dinner. The Formation sheet is the rector\'s view of you; read it once a year and take it as he means it.',
       'Letters come. Some are offers, and declining one is also an answer. The Record keeps what happened each week. The Settings sheet lets you decide how long a week you work and how it wears; the honest setting is the one you will keep.',
+    ],
+  },
+  novitiate: {
+    title: 'A word from the novice master',
+    from: 'Said at the door of your cell, the first evening',
+    paragraphs: [
+      'You have a cell, a desk, and a corridor. The cell is the week: click the desk, the shelf, the crucifix, or the bed and you are choosing where your free hours go; the Week sheet on the right says the same thing in a list. The corridor is the house: the library, the chapel, the circles that meet in the common room.',
+      'The House sheet is the community you are joining: the men, the prior, the common life. The Formation sheet is my view of you, and the house\'s; it votes on your vows at the end of the year, and it votes on the year it has watched.',
+      'Nothing here shows you a number. What you give the year to shows up in what the brothers say and in the vote. Letters come, from home and from the province. The Record keeps what happened each week.',
     ],
   },
   parish: {
@@ -56,7 +65,7 @@ function keyFor(game: NonNullable<ReturnType<typeof useGameStore.getState>['game
   if (game.parish) return 'parish';
   if (game.study) return game.study.city === 'rome' || game.study.city === 'washington' ? 'study' : 'posting';
   if (game.religious && game.flags.ordained) return 'house';
-  if (game.seminary) return 'seminary';
+  if (game.seminary) return game.religious ? 'novitiate' : 'seminary';
   return null;
 }
 
