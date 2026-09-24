@@ -11,11 +11,12 @@ import { hoursOf, planWeek } from '@/systems/week';
 import { previewState } from '@/systems/decor';
 import type { DecorPlace, Quality } from '@/types';
 import SceneArt from './SceneArt';
-import { CHANCERY_SCENE, SCENES, SEMINARY_HALL, SEMINARY_SCENE, sceneById, type HotspotBinding, type SceneId } from './scenes';
+import { CHANCERY_SCENE, FRIAR_CELL, FRIAR_CLOISTER, SCENES, SEMINARY_HALL, SEMINARY_SCENE, sceneById, type HotspotBinding, type SceneId } from './scenes';
+import { spendBudget, spendCost, spendDef, spendOffered, spendsOf, spendsUsed } from '@/systems/religious/spends';
 import { useUiStore, type Sheet } from '../uiStore';
 
 const NEXT_QUALITY: Record<Quality, Quality> = { min: 'standard', standard: 'invested', invested: 'min' };
-const PANEL_SHEET: Record<string, Sheet> = { routine: 'week', groups: 'people', projects: 'people', offers: 'letters', digest: 'record', parish: 'parish', formation: 'formation', clubs: 'clubs' };
+const PANEL_SHEET: Record<string, Sheet> = { routine: 'week', groups: 'people', projects: 'people', offers: 'letters', digest: 'record', parish: 'parish', formation: 'formation', clubs: 'clubs', house: 'house', jobs: 'jobs', profile: 'profile', deanery: 'deanery' };
 const PLACE_SCENE: Record<DecorPlace, SceneId> = { church: 'church', chapel: 'chapel', office: 'office', rectory: 'rectory', seminary_room: 'seminary_room', chancery: 'chancery' };
 
 /**
@@ -29,6 +30,7 @@ export default function SceneView() {
   const setObligation = useGameStore((s) => s.setObligation);
   const setSeminaryActivity = useGameStore((s) => s.setSeminaryActivity);
   const setStudyActivity = useGameStore((s) => s.setStudyActivity);
+  const setSpend = useGameStore((s) => s.setSpend);
   const chosenScene = useUiStore((s) => s.scene);
   const setScene = useUiStore((s) => s.setScene);
   const openSheet = useUiStore((s) => s.openSheet);
@@ -40,18 +42,23 @@ export default function SceneView() {
   const hints = useUiStore((s) => s.prefs.hints);
   if (!game || (!game.parish && !game.seminary && !game.study)) return null;
   const away = !!game.study;
-  const inSeminary = !away && !!game.seminary && !game.parish;
+  // An ordained friar keeps his formation record but lives in a cell of the house, not a seminary room. E3.
+  const friar = !away && !game.parish && !!game.religious && !!game.flags.ordained;
+  const inSeminary = !away && !friar && !!game.seminary && !game.parish;
   const seminaryScenes: SceneId[] = ['seminary_room', 'seminary_hall'];
+  const friarScenes: SceneId[] = ['friar_cell', 'friar_cloister'];
   const studyScenes: SceneId[] = ['study_room', 'study_city'];
   const sceneId: SceneId = away
     ? (chosenScene && studyScenes.includes(chosenScene) ? chosenScene : 'study_room')
-    : inSeminary ? (chosenScene && seminaryScenes.includes(chosenScene) ? chosenScene : 'seminary_room') : chosenScene && !seminaryScenes.includes(chosenScene) && !studyScenes.includes(chosenScene) ? chosenScene : 'rectory';
+    : friar ? (chosenScene && friarScenes.includes(chosenScene) ? chosenScene : 'friar_cell')
+    : inSeminary ? (chosenScene && seminaryScenes.includes(chosenScene) ? chosenScene : 'seminary_room') : chosenScene && !seminaryScenes.includes(chosenScene) && !studyScenes.includes(chosenScene) && !friarScenes.includes(chosenScene) ? chosenScene : 'rectory';
   const scene = sceneById(sceneId, game.study?.city ?? 'rome');
   const studyRoutine = game.study?.routine ?? {};
   const plan = game.parish ? planWeek(game) : null;
   const routine = game.parish?.routine ?? { obligations: {} as Record<string, never>, discretionary: {} as Record<string, number> };
   const hasChancery = Object.keys(game.flags).some((k) => k.startsWith('office:') && game.flags[k]);
-  const rooms = away ? [sceneById('study_room', game.study?.city ?? 'rome'), sceneById('study_city', game.study?.city ?? 'rome')] : inSeminary ? [SEMINARY_SCENE, SEMINARY_HALL] : hasChancery ? [...SCENES, CHANCERY_SCENE] : SCENES;
+  const rooms = away ? [sceneById('study_room', game.study?.city ?? 'rome'), sceneById('study_city', game.study?.city ?? 'rome')] : friar ? [FRIAR_CELL, FRIAR_CLOISTER] : inSeminary ? [SEMINARY_SCENE, SEMINARY_HALL] : hasChancery ? [...SCENES, CHANCERY_SCENE] : SCENES;
+  const spends = friar ? spendsOf(game) : {};
   const semRoutine = game.seminary ? routineOf(game.seminary) : {};
   const shown = preview ? previewState(game, preview.place, preview.optionId) : game;
 
@@ -77,6 +84,15 @@ export default function SceneView() {
         const left = studyBudget(game) - studyHours(game.study);
         if (av && !av.available) return `${def.label}: not yet; it needs ${av.why}. ${def.blurb}`;
         return `${def.label}: ${ap} hour${ap === 1 ? '' : 's'} a week. ${def.blurb} (${ap >= def.maxAp ? 'click to clear' : left > 0 ? 'click for one more' : 'no hours left; take one from something else'})`;
+      }
+      case 'friar_spend': {
+        const def = spendDef(binds.spendId);
+        if (!def) return binds.spendId;
+        const offered = spendOffered(game, def);
+        if (!offered.ok) return `${def.label}: ${offered.why.toLowerCase()}. ${def.blurb}`;
+        const ap = spends[binds.spendId] ?? 0;
+        const left = spendBudget(game) - spendsUsed(game);
+        return `${def.label}: ${ap} block${ap === 1 ? '' : 's'} a week. ${def.blurb} (${ap >= def.maxAp ? 'click to clear' : left >= spendCost(game, binds.spendId, 1) ? 'click for one more' : 'no blocks left; take one from something else'})`;
       }
       case 'obligation': {
         const def = obligationDefs.find((o) => o.key === binds.key)!;
@@ -121,6 +137,14 @@ export default function SceneView() {
         openSheet('week');
         break;
       }
+      case 'friar_spend': {
+        const def = spendDef(binds.spendId);
+        if (!def || !spendOffered(game, def).ok) { openSheet('week'); return; }
+        const ap = spends[binds.spendId] ?? 0;
+        setSpend(binds.spendId, ap >= def.maxAp ? 0 : ap + 1);
+        openSheet('week');
+        break;
+      }
       case 'obligation': {
         const def = obligationDefs.find((o) => o.key === binds.key)!;
         let next = NEXT_QUALITY[(routine.obligations as Record<string, Quality>)[binds.key] ?? 'standard'];
@@ -134,7 +158,7 @@ export default function SceneView() {
         break;
       case 'furnish':
         furnish(binds.place);
-        if (!inSeminary) setScene(PLACE_SCENE[binds.place]);
+        if (!inSeminary && !friar) setScene(PLACE_SCENE[binds.place]);
         break;
       case 'scene':
         setScene(binds.scene);
@@ -164,7 +188,7 @@ export default function SceneView() {
         <SceneArt scene={scene.id} season={seasonOf(game.clock)} state={shown} {...(game.world ? { weather: weatherOfWeek(game.seed, game.clock, game.world.diocese.visible.region).kind } : {})} />
         {preview && <div className="pointer-events-none absolute left-3 top-3 rounded bg-[#2b2116]/80 px-2 py-1 text-xs text-[#e6c25a]">As it would look</div>}
         {scene.hotspots.map((h) => {
-          const active = h.binds.kind === 'action' ? (routine.discretionary[h.binds.actionId] ?? 0) > 0 : h.binds.kind === 'seminary_action' ? (semRoutine[h.binds.activityId] ?? 0) > 0 : h.binds.kind === 'study_action' ? (studyRoutine[h.binds.activityId] ?? 0) > 0 : h.binds.kind === 'obligation' ? (routine.obligations as Record<string, Quality>)[h.binds.key] !== 'standard' : false;
+          const active = h.binds.kind === 'friar_spend' ? (spends[h.binds.spendId] ?? 0) > 0 : h.binds.kind === 'action' ? (routine.discretionary[h.binds.actionId] ?? 0) > 0 : h.binds.kind === 'seminary_action' ? (semRoutine[h.binds.activityId] ?? 0) > 0 : h.binds.kind === 'study_action' ? (studyRoutine[h.binds.activityId] ?? 0) > 0 : h.binds.kind === 'obligation' ? (routine.obligations as Record<string, Quality>)[h.binds.key] !== 'standard' : false;
           return (
             <button
               key={h.id}
@@ -181,7 +205,7 @@ export default function SceneView() {
         })}
       </div>
       <div className="plate px-4 py-2">
-        {hovered ? describe(hovered.binds) : hints ? `Here: ${scene.hotspots.map((h) => h.label.split(':')[0]!.toLowerCase()).join(', ')}.` : away ? 'A room in a city that does not know you. The hours are yours; the years are the diocese\'s.' : inSeminary ? 'Your room. The shelf fills with what you give the year to.' : 'Everything in the room is something you could do with the week.'}
+        {hovered ? describe(hovered.binds) : hints ? `Here: ${scene.hotspots.map((h) => h.label.split(':')[0]!.toLowerCase()).join(', ')}.` : away ? 'A room in a city that does not know you. The hours are yours; the years are the diocese\'s.' : friar ? 'Your cell. The bell keeps the house; the blocks it leaves you are the desk, the shelf, the box, and the door.' : inSeminary ? 'Your room. The shelf fills with what you give the year to.' : 'Everything in the room is something you could do with the week.'}
       </div>
     </div>
   );

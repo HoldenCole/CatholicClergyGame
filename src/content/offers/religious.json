@@ -1,5 +1,5 @@
 {
-  "_notes": "The order's own letters. E3: a friar is moved by the provincial, never by a bishop, so the diocese's offers (parish.json, seminary.json) do not reach him and these do not reach a priest of the diocese; engine/offers.ts reads `campaign`. Years away begin the week he says yes, since the provincial's letter is the order's own, and he comes home to a consultation, not the board. Flags: rome_track (fr_sem_rome_track), rome_alumnus / refused_rome (fr_rome_study, shared with the diocese's so the record reads the same). The faculty in Rome is the order's own and is not named (CLAUDE.md rule 13).",
+  "_notes": "The order's own letters. E3: a friar is moved by the provincial, never by a bishop, so the diocese's offers (parish.json, seminary.json) do not reach him and these do not reach a priest of the diocese; engine/offers.ts reads `campaign`. Years away begin the week he says yes, since the provincial's letter is the order's own, and he comes home to a consultation, not the board. Flags: rome_track (fr_sem_rome_track), rome_alumnus / refused_rome (fr_rome_study, shared with the diocese's so the record reads the same). The faculty in Rome is the order's own and is not named (CLAUDE.md rule 13). QA round: formation letters (infirmary, cantor, jail, library, parish practicum) from the novice master and the master of students, and the priest's letters (mission, retreat, vocation work, novice assistant, lay chapter, review, hospital nights, novena, campus) from the provincial and the prior, so a friar's year has the order's own letters in it as a priest's has the diocese's. Flags: fr_vocation_promoter_served, fr_formation_experience.",
   "offers": [
     {
       "id": "fr_sem_rome_track",
@@ -317,6 +317,1388 @@
           }
         ],
         "outcome": "The examinations in Italian are the wall, and the second year does not come. The provincial's letter is kind and short, and the house you come back to does not mention Rome, which is its kindness."
+      }
+    },
+    {
+      "id": "fr_nov_infirmary",
+      "category": "seminary",
+      "campaign": "religious",
+      "phase": [
+        "seminary"
+      ],
+      "yearGate": [
+        1,
+        2
+      ],
+      "title": "The Infirmary Rota",
+      "body": "{@novice_master} stops you after conference. The brother who keeps the infirmary has a bad back, and the old men upstairs need someone at the door in the mornings: the pills sorted, the chairs moved to the window, the office read aloud to the two who can no longer hold a breviary. He says it is not a penance and not an honour. It is what the house needs this half of the year, and he thought of you. He adds that the old men will talk, and that most of what they say is worth hearing.",
+      "from": "@novice_master",
+      "requires": [],
+      "weight": 20,
+      "windowWeeks": 4,
+      "once": true,
+      "cluster": "house",
+      "accept": {
+        "effects": [
+          {
+            "target": "relationship",
+            "key": "@novice_master",
+            "delta": 4
+          },
+          {
+            "target": "reputation",
+            "key": "community",
+            "delta": 2
+          }
+        ],
+        "outcome": "You take the key to the infirmary. The first morning you get the pills wrong and the oldest man in the house corrects you without looking up from his rosary. By the end of the week he is telling you about the novitiate he entered, in a house the province sold before you were born.",
+        "commitment": {
+          "label": "The infirmary rota",
+          "weeks": 26,
+          "apPerWeek": 1.5,
+          "weekly": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 0.03
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 0.05
+            }
+          ],
+          "onComplete": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 4
+            },
+            {
+              "target": "relationship",
+              "key": "@old_friar",
+              "delta": 8
+            },
+            {
+              "target": "pillar",
+              "key": "human",
+              "delta": 0.5
+            }
+          ],
+          "completeOutcome": "The brother with the bad back comes back to the infirmary. The oldest man in the house tells him you were adequate, which the brother tells you is the highest word the old man has used since the council."
+        }
+      },
+      "decline": {
+        "effects": [
+          {
+            "target": "relationship",
+            "key": "@novice_master",
+            "delta": -2
+          }
+        ],
+        "outcome": "He says that is fine, and gives the rota to a novice a year behind you. You see the younger man on the stairs at seven with a tray, and you are not sure whether you are relieved."
+      }
+    },
+    {
+      "id": "fr_nov_cantor",
+      "category": "seminary",
+      "campaign": "religious",
+      "phase": [
+        "seminary"
+      ],
+      "yearGate": [
+        1,
+        2,
+        3
+      ],
+      "title": "The Cantor's Book",
+      "body": "The cantor for the Hours is leaving the house for his solemn vows, and {@novice_master} needs someone to intone the psalms, set the tones, and keep the choir from dragging in Lent. He heard you in chapel, he says, which is not a compliment on your voice so much as on your nerve. It will cost you the hour before Vespers most days, spent with the book and the ordo, and it will put you in front of the whole house seven times a day, where every mistake is heard by men who have sung these psalms for fifty years.",
+      "from": "@novice_master",
+      "requires": [],
+      "weight": 15,
+      "windowWeeks": 4,
+      "once": true,
+      "cluster": "house",
+      "accept": {
+        "effects": [
+          {
+            "target": "relationship",
+            "key": "@novice_master",
+            "delta": 3
+          },
+          {
+            "target": "pillar",
+            "key": "spiritual",
+            "delta": 0.5
+          }
+        ],
+        "outcome": "You take the book. For a month you start the Magnificat a tone too high and the old men follow you up without a word, which is worse than a word. Then one evening it is right, and nobody says anything about that either.",
+        "commitment": {
+          "label": "Cantor for the Hours",
+          "weeks": 30,
+          "apPerWeek": 1,
+          "weekly": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 0.03
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 0.04
+            }
+          ],
+          "onComplete": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "observant_bloc",
+              "delta": 3
+            }
+          ],
+          "completeOutcome": "You hand the book to the next man with a list of the psalms the house always takes too slowly. He reads it, looks at you, and says he had noticed."
+        }
+      },
+      "decline": {
+        "effects": [
+          {
+            "target": "relationship",
+            "key": "@novice_master",
+            "delta": -2
+          },
+          {
+            "target": "reputation",
+            "key": "community",
+            "delta": -1
+          }
+        ],
+        "outcome": "He nods and asks another man. The choir drags in Lent, as it always has, and you find that you notice it now in a way you did not before he asked."
+      }
+    },
+    {
+      "id": "fr_stud_prison",
+      "category": "seminary",
+      "campaign": "religious",
+      "phase": [
+        "seminary"
+      ],
+      "yearGate": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "title": "Tuesdays at the Jail",
+      "body": "{@master_of_students} has an arrangement with the county jail: an older priest of the house says Mass there on Tuesdays and hears what confessions there are, and a student goes with him to lead the Bible study and sit with the men who want to talk. The student who went last year has been sent on. The work is not glamorous, he says, and it will not appear in any evaluation. It will teach you more about sin and mercy than the tract on penance, and you will have the tract on penance next year anyway.",
+      "from": "@master_of_students",
+      "requires": [],
+      "weight": 15,
+      "windowWeeks": 4,
+      "once": true,
+      "cluster": "apostolate",
+      "accept": {
+        "effects": [
+          {
+            "target": "relationship",
+            "key": "@master_of_students",
+            "delta": 4
+          },
+          {
+            "target": "pillar",
+            "key": "pastoral",
+            "delta": 0.5
+          }
+        ],
+        "outcome": "The first Tuesday the guard makes you empty your pockets twice. The men in the study are polite and bored until one of them asks a question about Cain that you cannot answer, and the older priest, driving home, says that was the best study he has seen in a year.",
+        "commitment": {
+          "label": "Tuesdays at the county jail",
+          "weeks": 30,
+          "apPerWeek": 1,
+          "weekly": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 0.03
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 0.04
+            }
+          ],
+          "onComplete": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            },
+            {
+              "target": "pillar",
+              "key": "pastoral",
+              "delta": 1
+            }
+          ],
+          "completeOutcome": "Your last Tuesday a man you have sat with all year shakes your hand through the gap in the table and says he hopes they make you a priest. You find out later he was moved to the state prison the next week, and nobody told him where."
+        }
+      },
+      "decline": {
+        "effects": [
+          {
+            "target": "relationship",
+            "key": "@master_of_students",
+            "delta": -2
+          }
+        ],
+        "outcome": "He says there will be other students. There are, and one of them comes back from his first Tuesday very quiet and goes to chapel before supper, which you notice, and think about more than you expected to."
+      }
+    },
+    {
+      "id": "fr_stud_library",
+      "category": "seminary",
+      "campaign": "religious",
+      "phase": [
+        "seminary"
+      ],
+      "yearGate": [
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "title": "The Old Library",
+      "body": "The house library has a room nobody has catalogued since the province was founded: the books of three closed priories, boxed and stacked, some of them older than the country. {@master_of_students} needs a student with patience and enough Latin to tell a commentary on the Sentences from a book of sermons, a few hours a week for a term, to make a list. He says the list will outlive both of you. He also says, looking at the ceiling, that the room is cold.",
+      "from": "@master_of_students",
+      "requires": [],
+      "weight": 12,
+      "windowWeeks": 4,
+      "once": true,
+      "cluster": "academic",
+      "accept": {
+        "effects": [
+          {
+            "target": "relationship",
+            "key": "@master_of_students",
+            "delta": 3
+          },
+          {
+            "target": "pillar",
+            "key": "intellectual",
+            "delta": 0.5
+          }
+        ],
+        "outcome": "The room is cold. The second week you find a book of sermons for Lent with a friar's name in the margin and a note in pencil beside the sermon on patience that says only, not this year. You put it on the list with the rest.",
+        "commitment": {
+          "label": "Cataloguing the old library",
+          "weeks": 16,
+          "apPerWeek": 1,
+          "weekly": [
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 0.04
+            }
+          ],
+          "onComplete": [
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 2
+            },
+            {
+              "target": "pillar",
+              "key": "intellectual",
+              "delta": 1
+            }
+          ],
+          "completeOutcome": "The list runs to eleven hundred entries. The provincial's secretary asks for a copy, and a professor at the studium asks to borrow a book you found, and for a week you are known in the house as the man who knows where things are."
+        }
+      },
+      "decline": {
+        "effects": [
+          {
+            "target": "relationship",
+            "key": "@master_of_students",
+            "delta": -2
+          }
+        ],
+        "outcome": "He says the room has waited a century and can wait another term. It does. The boxes stay where they are, and now and then you pass the door and think about them."
+      }
+    },
+    {
+      "id": "fr_stud_parish_practicum",
+      "category": "seminary",
+      "campaign": "religious",
+      "phase": [
+        "seminary"
+      ],
+      "yearGate": [
+        4,
+        5,
+        6,
+        7
+      ],
+      "title": "Sundays in a Parish",
+      "body": "A pastor in the diocese has asked the house for a student on Sundays: to preach at the children's Mass, teach the confirmation class, and learn what a parish looks like from the sacristy. {@master_of_students} thinks you are ready, and thinks also that you have lived long enough in a house where every man has read Augustine. The pastor, he warns, is a diocesan man with strong opinions about friars, most of them earned by friars.",
+      "from": "@master_of_students",
+      "requires": [],
+      "weight": 18,
+      "windowWeeks": 4,
+      "once": true,
+      "cluster": "apostolate",
+      "accept": {
+        "effects": [
+          {
+            "target": "relationship",
+            "key": "@master_of_students",
+            "delta": 3
+          },
+          {
+            "target": "pillar",
+            "key": "pastoral",
+            "delta": 0.5
+          }
+        ],
+        "outcome": "The pastor meets you at the rectory door in a golf shirt and asks what they are teaching you over there. You tell him. He says fine, the children's Mass is at nine, keep it under eight minutes, and do not use the word Thomistic in front of the confirmation parents.",
+        "commitment": {
+          "label": "Sundays in a diocesan parish",
+          "weeks": 30,
+          "apPerWeek": 1.5,
+          "weekly": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 0.03
+            },
+            {
+              "target": "reputation",
+              "key": "diocesan_clergy",
+              "delta": 0.05
+            }
+          ],
+          "onComplete": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "diocesan_clergy",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 2
+            },
+            {
+              "target": "pillar",
+              "key": "pastoral",
+              "delta": 1
+            }
+          ],
+          "completeOutcome": "On your last Sunday the confirmation class gives you a card signed by all of them, and the pastor, handing it to you, says you will be all right, for a friar. From him it is warm."
+        }
+      },
+      "decline": {
+        "effects": [
+          {
+            "target": "relationship",
+            "key": "@master_of_students",
+            "delta": -2
+          },
+          {
+            "target": "reputation",
+            "key": "diocesan_clergy",
+            "delta": -1
+          }
+        ],
+        "outcome": "He tells the pastor the house cannot spare a man this year. The pastor, you hear later, said that is what the friars always say."
+      }
+    },
+    {
+      "id": "fr_parish_mission",
+      "category": "social",
+      "campaign": "religious",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "title": "A Parish Mission",
+      "body": "A pastor two dioceses away has written to the province for a parish mission in Lent: four nights of preaching, confessions until the line is done, a Mass for the sick on the last morning. {@provincial} forwards the letter with a note in his own hand. The man they usually send is ill. The province's name goes with whoever preaches it, he writes, and he would like it to be yours. It will cost you the better part of two weeks, a car borrowed from the house, and whatever you had planned for them.",
+      "from": "@provincial",
+      "requires": [
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 1
+        }
+      ],
+      "weight": 14,
+      "windowWeeks": 4,
+      "once": true,
+      "cluster": "preaching",
+      "accept": {
+        "effects": [
+          {
+            "target": "relationship",
+            "key": "@provincial",
+            "delta": 4
+          },
+          {
+            "target": "reputation",
+            "key": "province",
+            "delta": 2
+          }
+        ],
+        "outcome": "You write four sermons on the parable of the prodigal son, throw out the third, and write it again on the drive. The first night there are forty people. The last there are three hundred, and the line for confession runs past midnight.",
+        "commitment": {
+          "label": "Preaching a parish mission",
+          "weeks": 2,
+          "apPerWeek": 4,
+          "weekly": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 0.1
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 0.3
+            }
+          ],
+          "onComplete": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 2
+            },
+            {
+              "target": "pillar",
+              "key": "pastoral",
+              "delta": 1
+            }
+          ],
+          "completeOutcome": "The pastor writes to the provincial afterwards. The provincial sends you a copy of the letter without comment, which from him is a comment, and the house hears about the line for confession before you have unpacked."
+        }
+      },
+      "decline": {
+        "effects": [
+          {
+            "target": "relationship",
+            "key": "@provincial",
+            "delta": -3
+          },
+          {
+            "target": "reputation",
+            "key": "province",
+            "delta": -2
+          }
+        ],
+        "outcome": "He writes back that the pastor will be disappointed and the province will find someone. It does; the man comes home hoarse and pleased, and the pastor sends the house a check."
+      }
+    },
+    {
+      "id": "fr_nuns_retreat",
+      "category": "social",
+      "campaign": "religious",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "title": "The Sisters' Retreat",
+      "body": "An enclosed monastery of contemplative nuns has asked the province for a retreat master for their annual eight days: two conferences a day, confessions, the conventual Mass, and whatever the prioress asks for in the parlor. {@provincial} writes that these women have prayed for the province for longer than any of its houses have stood, and that the man who preaches to them should have something to say. He thinks you do. He adds that they will know within a day if you do not.",
+      "from": "@provincial",
+      "requires": [
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 2
+        },
+        {
+          "type": "stat",
+          "key": "piety",
+          "op": ">=",
+          "value": 50
+        }
+      ],
+      "weight": 10,
+      "windowWeeks": 4,
+      "once": true,
+      "cluster": "preaching",
+      "accept": {
+        "effects": [
+          {
+            "target": "relationship",
+            "key": "@provincial",
+            "delta": 3
+          },
+          {
+            "target": "pillar",
+            "key": "spiritual",
+            "delta": 0.5
+          }
+        ],
+        "outcome": "You go with sixteen conferences written and give eleven of them. The prioress asks in the parlor on the third day what you actually believe about grace, as distinct from what you have been saying, and you tell her, and she says that is better, give them that.",
+        "commitment": {
+          "label": "Retreat master to the sisters",
+          "weeks": 1,
+          "apPerWeek": 5,
+          "weekly": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 0.2
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 0.2
+            }
+          ],
+          "onComplete": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 2
+            },
+            {
+              "target": "pillar",
+              "key": "spiritual",
+              "delta": 1
+            }
+          ],
+          "completeOutcome": "On the last morning the prioress tells you through the grille that the community will pray for you by name every day for a year. You have been promised many things by many people. This is the one you believe."
+        }
+      },
+      "decline": {
+        "effects": [
+          {
+            "target": "relationship",
+            "key": "@provincial",
+            "delta": -2
+          },
+          {
+            "target": "reputation",
+            "key": "order",
+            "delta": -1
+          }
+        ],
+        "outcome": "He sends another man. The nuns write afterwards to thank the province and mention, in the last line, that they had hoped for you, and that they will pray for you anyway."
+      }
+    },
+    {
+      "id": "fr_vocation_promoter",
+      "category": "chancery",
+      "campaign": "religious",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "title": "The Province's Vocation Work",
+      "body": "{@provincial} is short of a man to promote vocations: the campus visits, the weekend retreats for inquirers, the letters to young men who wrote once and then went quiet, the long lunches with mothers who are not sure. It is half a job laid on top of the one you have, for two years. He chose you, he writes, because the men who come to the door should meet someone who is glad to be here. He would like an answer within the month.",
+      "from": "@provincial",
+      "requires": [
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 2
+        },
+        {
+          "type": "stat",
+          "key": "charisma",
+          "op": ">=",
+          "value": 45
+        }
+      ],
+      "weight": 10,
+      "windowWeeks": 4,
+      "once": true,
+      "cluster": "province",
+      "accept": {
+        "effects": [
+          {
+            "target": "relationship",
+            "key": "@provincial",
+            "delta": 4
+          },
+          {
+            "target": "reputation",
+            "key": "superiors",
+            "delta": 3
+          }
+        ],
+        "outcome": "The first inquiry weekend six young men come. Two of them spend the whole of Saturday asking about the food and one asks about nothing at all and watches everything. That one writes to you in March.",
+        "commitment": {
+          "label": "Vocation promoter for the province",
+          "weeks": 104,
+          "apPerWeek": 2,
+          "weekly": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 0.02
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 0.06
+            }
+          ],
+          "onComplete": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 4
+            },
+            {
+              "target": "pillar",
+              "key": "human",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "fr_vocation_promoter_served",
+              "value": true
+            }
+          ],
+          "completeOutcome": "Two of the men who came to your weekends are novices now. One of them writes to say he would not have come without the lunch with his mother, which you had forgotten, and she had not."
+        }
+      },
+      "decline": {
+        "effects": [
+          {
+            "target": "relationship",
+            "key": "@provincial",
+            "delta": -3
+          },
+          {
+            "target": "reputation",
+            "key": "superiors",
+            "delta": -2
+          }
+        ],
+        "outcome": "He writes that he understands. He gives it to a younger man, who fills a van with inquirers by autumn, and at chapter the province thanks him by name."
+      }
+    },
+    {
+      "id": "fr_novice_assistant",
+      "category": "chancery",
+      "campaign": "religious",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "title": "Assistant to the Novice Master",
+      "body": "The novice master has asked for help. There are more novices this year than the house has seen in a decade, and he cannot hear them all, teach the constitutions, and keep the house besides. {@provincial} asks whether you would be his assistant for a year: the classes on the vows, the manual work, the walks in the afternoon with the young men who are finding out who they are. It is the province's most delicate work, he writes, and he does not ask lightly.",
+      "from": "@provincial",
+      "requires": [
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 3
+        },
+        {
+          "type": "stat",
+          "key": "piety",
+          "op": ">=",
+          "value": 55
+        }
+      ],
+      "weight": 8,
+      "windowWeeks": 4,
+      "once": true,
+      "cluster": "formation",
+      "accept": {
+        "effects": [
+          {
+            "target": "relationship",
+            "key": "@provincial",
+            "delta": 4
+          },
+          {
+            "target": "reputation",
+            "key": "superiors",
+            "delta": 3
+          },
+          {
+            "target": "pillar",
+            "key": "spiritual",
+            "delta": 0.5
+          }
+        ],
+        "outcome": "The first week you teach the vow of poverty to nine men who own nothing and are worried about it, and you realize halfway through the class that you are describing yourself at their age, and that it went better than you feared.",
+        "commitment": {
+          "label": "Assistant to the novice master",
+          "weeks": 52,
+          "apPerWeek": 2.5,
+          "weekly": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 0.02
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 0.06
+            }
+          ],
+          "onComplete": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 4
+            },
+            {
+              "target": "pillar",
+              "key": "spiritual",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "fr_formation_experience",
+              "value": true
+            }
+          ],
+          "completeOutcome": "Seven of the nine make their first profession. At the reception afterwards the novice master raises a glass to you in front of the provincial, which is the kind of thing that is remembered at chapters."
+        }
+      },
+      "decline": {
+        "effects": [
+          {
+            "target": "relationship",
+            "key": "@provincial",
+            "delta": -3
+          },
+          {
+            "target": "reputation",
+            "key": "superiors",
+            "delta": -2
+          }
+        ],
+        "outcome": "He says the novice master will manage. He does, just, and at the end of the year two of the novices leave, which happens every year, and you wonder whether it would have happened with you there."
+      }
+    },
+    {
+      "id": "fr_lay_chapter",
+      "category": "social",
+      "campaign": "religious",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "title": "The Lay Chapter's Assistant",
+      "body": "The order's lay chapter meets in the house parlor on the second Saturday of every month: thirty men and women who have made promises to live by the order's spirit in the world, and who need a friar to give a conference, hear confessions, and settle, now and then, a quarrel about the minutes. {@prior} asks whether you will take them on. The man who had them has been moved, and they are, the prior says, very patient and very persistent.",
+      "from": "@prior",
+      "requires": [
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 1
+        }
+      ],
+      "weight": 14,
+      "windowWeeks": 4,
+      "once": true,
+      "cluster": "laity",
+      "accept": {
+        "effects": [
+          {
+            "target": "relationship",
+            "key": "@prior",
+            "delta": 3
+          },
+          {
+            "target": "reputation",
+            "key": "laity",
+            "delta": 2
+          }
+        ],
+        "outcome": "Your first Saturday you give a conference on the rosary and are corrected, kindly, by a retired schoolteacher who has been a lay member for forty years and knows the order's history better than you do. She brings you soup the next week.",
+        "commitment": {
+          "label": "Assistant to the lay chapter",
+          "weeks": 52,
+          "apPerWeek": 1,
+          "weekly": [
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 0.08
+            }
+          ],
+          "onComplete": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            },
+            {
+              "target": "pillar",
+              "key": "pastoral",
+              "delta": 1
+            }
+          ],
+          "completeOutcome": "Three of the chapter's members make their final promises at the end of the year, and you receive them. The schoolteacher says afterwards that you have come along nicely."
+        }
+      },
+      "decline": {
+        "effects": [
+          {
+            "target": "relationship",
+            "key": "@prior",
+            "delta": -2
+          },
+          {
+            "target": "reputation",
+            "key": "laity",
+            "delta": -2
+          }
+        ],
+        "outcome": "The prior gives them to a man who is already too busy. The chapter meets anyway, as it did through the years without anyone, and prays for a friar who will stay."
+      }
+    },
+    {
+      "id": "fr_journal_article",
+      "category": "academic",
+      "campaign": "religious",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "title": "An Article for the Province",
+      "body": "The province's review, which goes to every house and to a few libraries that have forgotten to cancel it, needs a piece for its next number. {@provincial} suggests you write on the thing you preach about most, at the length of a real argument, with the notes a real argument needs. The editor is a lector with sharp opinions. He will send it back twice, the provincial writes, and the third version will be worth reading.",
+      "from": "@provincial",
+      "requires": [
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 1
+        },
+        {
+          "type": "stat",
+          "key": "theology",
+          "op": ">=",
+          "value": 50
+        }
+      ],
+      "weight": 10,
+      "windowWeeks": 4,
+      "once": true,
+      "cluster": "academic",
+      "accept": {
+        "effects": [
+          {
+            "target": "relationship",
+            "key": "@provincial",
+            "delta": 3
+          },
+          {
+            "target": "pillar",
+            "key": "intellectual",
+            "delta": 0.5
+          }
+        ],
+        "outcome": "The editor sends it back with a note that says the second half is a different article and the better one. You write the second half. He sends it back again with the notes redone in the house style and a question you cannot answer, and you answer it.",
+        "commitment": {
+          "label": "Writing for the province's review",
+          "weeks": 8,
+          "apPerWeek": 1.5,
+          "weekly": [
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 0.05
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 0.04
+            }
+          ],
+          "onComplete": [
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 2
+            },
+            {
+              "target": "pillar",
+              "key": "intellectual",
+              "delta": 1
+            }
+          ],
+          "completeOutcome": "It runs to nineteen pages. A friar in another province writes to disagree with page eleven, at length, and you realize you have been read."
+        }
+      },
+      "decline": {
+        "effects": [
+          {
+            "target": "relationship",
+            "key": "@provincial",
+            "delta": -2
+          },
+          {
+            "target": "reputation",
+            "key": "province",
+            "delta": -1
+          }
+        ],
+        "outcome": "He says another number, then. The review goes out with a long piece on the order's missions in the last century, and the lector who edits it looks at you at chapter as if he had been promised something."
+      }
+    },
+    {
+      "id": "fr_hospital_nights",
+      "category": "social",
+      "campaign": "religious",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "title": "The Night Calls",
+      "body": "The hospital across the river has lost its chaplain, and until the diocese finds another it has asked the house to cover the night calls: the anointings at three in the morning, the families in the corridor, the sacrament for the dying when there is no one else. {@prior} is dividing the month among the men who can drive. He asks whether you will take a week of nights in each month for a season. It is not work anyone does for thanks, he says, and it is the oldest work there is.",
+      "from": "@prior",
+      "requires": [],
+      "weight": 12,
+      "windowWeeks": 4,
+      "once": true,
+      "cluster": "apostolate",
+      "accept": {
+        "effects": [
+          {
+            "target": "relationship",
+            "key": "@prior",
+            "delta": 3
+          },
+          {
+            "target": "reputation",
+            "key": "community",
+            "delta": 2
+          }
+        ],
+        "outcome": "The first call comes at twenty past two. A woman in her nineties, a family of eleven around her, a grandson who is angry that it took you forty minutes. You anoint her, and she dies before you leave the floor, and the grandson walks you to the car and does not say anything, and shakes your hand.",
+        "commitment": {
+          "label": "Night calls at the hospital",
+          "weeks": 16,
+          "apPerWeek": 1.5,
+          "weekly": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 0.03
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 0.05
+            }
+          ],
+          "onComplete": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "diocesan_clergy",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 3
+            },
+            {
+              "target": "pillar",
+              "key": "pastoral",
+              "delta": 1
+            }
+          ],
+          "completeOutcome": "The diocese finds a chaplain. The nurses on the night floor send the house a tin of cookies with a card addressed to the friars, and under it, in a different hand, your name."
+        }
+      },
+      "decline": {
+        "effects": [
+          {
+            "target": "relationship",
+            "key": "@prior",
+            "delta": -2
+          },
+          {
+            "target": "reputation",
+            "key": "community",
+            "delta": -2
+          }
+        ],
+        "outcome": "The prior divides your week among the others. The old men take it without complaint, and at breakfast one of them falls asleep over his coffee, and nobody mentions why."
+      }
+    },
+    {
+      "id": "fr_novena_preacher",
+      "category": "social",
+      "campaign": "religious",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "title": "A Novena for a Patron",
+      "body": "A parish in the city keeps a novena every year before its patron's feast, and for thirty years it has asked the house for the preacher. {@prior} passes the letter across the refectory table: nine evenings, a short sermon after the prayers, a blessing with the relic on the last night, and a dinner with the pastor that the prior says is the real test. The people come for the saint. Whether they come back for the preacher, he says, is up to you.",
+      "from": "@prior",
+      "requires": [
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 1
+        }
+      ],
+      "weight": 12,
+      "windowWeeks": 4,
+      "cluster": "preaching",
+      "accept": {
+        "effects": [
+          {
+            "target": "relationship",
+            "key": "@prior",
+            "delta": 3
+          },
+          {
+            "target": "reputation",
+            "key": "laity",
+            "delta": 2
+          }
+        ],
+        "outcome": "The first evening there are the regulars, sixty women and four men and a child who is there against her will. By the ninth the church is half full, and the pastor at dinner says it has not been that way since the old friar who used to do it went to the infirmary.",
+        "commitment": {
+          "label": "Preaching a novena",
+          "weeks": 2,
+          "apPerWeek": 2,
+          "weekly": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 0.1
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 0.2
+            }
+          ],
+          "onComplete": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "diocesan_clergy",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 1
+            }
+          ],
+          "completeOutcome": "On the last night an old woman kisses the relic, then your hand, and tells you her mother made the novena every year of the war. The pastor asks the prior for you by name next year."
+        }
+      },
+      "decline": {
+        "effects": [
+          {
+            "target": "relationship",
+            "key": "@prior",
+            "delta": -2
+          },
+          {
+            "target": "reputation",
+            "key": "laity",
+            "delta": -1
+          }
+        ],
+        "outcome": "The prior sends another man. The novena goes on, as it has for thirty years, and the pastor writes afterwards that it was fine."
+      }
+    },
+    {
+      "id": "fr_campus_weekends",
+      "category": "social",
+      "campaign": "religious",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "title": "The Newman Center",
+      "body": "The Catholic center at the state university has asked the province for a friar at the weekends: the Sunday evening Mass the students actually attend, confessions before it, and the long conversations after that run past midnight about God, sex, and graduate school. {@provincial} thinks you would be good at it, and would like you to try it for a year before anyone decides whether it is a work the province should take on for good.",
+      "from": "@provincial",
+      "requires": [
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 1
+        },
+        {
+          "type": "stat",
+          "key": "charisma",
+          "op": ">=",
+          "value": 40
+        }
+      ],
+      "weight": 10,
+      "windowWeeks": 4,
+      "once": true,
+      "cluster": "apostolate",
+      "accept": {
+        "effects": [
+          {
+            "target": "relationship",
+            "key": "@provincial",
+            "delta": 3
+          },
+          {
+            "target": "reputation",
+            "key": "laity",
+            "delta": 2
+          }
+        ],
+        "outcome": "The Sunday evening Mass is at nine and the students arrive at nine fifteen. After it a young woman in an engineering sweatshirt asks you whether the proofs for God work, and you are there until one in the morning, and she comes back the next week with a friend.",
+        "commitment": {
+          "label": "Weekends at the Newman center",
+          "weeks": 40,
+          "apPerWeek": 1.5,
+          "weekly": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 0.02
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 0.06
+            }
+          ],
+          "onComplete": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 3
+            },
+            {
+              "target": "pillar",
+              "key": "pastoral",
+              "delta": 1
+            }
+          ],
+          "completeOutcome": "Two of the students are received into the Church at the Easter Vigil, and one is thinking about the order. The university asks the provincial whether the friar can stay, and the provincial says he will consider it."
+        }
+      },
+      "decline": {
+        "effects": [
+          {
+            "target": "relationship",
+            "key": "@provincial",
+            "delta": -2
+          },
+          {
+            "target": "reputation",
+            "key": "province",
+            "delta": -1
+          }
+        ],
+        "outcome": "He writes to the university that the province cannot spare a man this year. The students find the diocesan priest who comes on alternate Sundays, and some of them find the chapel on the corner of campus, and some of them find nothing."
       }
     }
   ]

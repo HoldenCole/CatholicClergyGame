@@ -265,6 +265,8 @@ export interface OrderMechanics {
   religiousName?: boolean;
   /** How much of the province's business goes to a vote: 1 is the base. */
   democracy?: number;
+  /** The week a newly ordained friar is given before he arranges it himself: spend id to blocks. Applied once. */
+  defaultSpends?: Record<string, number>;
 }
 
 export interface OrderDef {

@@ -29,7 +29,8 @@ import { clearRequestAnswer, closeRequest, requestAnswerDue } from '@/systems/re
 import { expireAsks } from '@/systems/houses';
 import { ARCS, dueArc, endArc, maybeOpenArc } from '@/systems/arcs';
 import { requestWeek } from '@/systems/religious/requests';
-import { spendsWeek } from '@/systems/religious/spends';
+import { defaultSpends, spendsWeek } from '@/systems/religious/spends';
+import { houseLifeLine } from '@/systems/religious/houseLife';
 import { foundingWeek } from '@/systems/religious/founding';
 import { anniversaryWeek, nameDayWeek } from '@/systems/anniversaries';
 import { orderFeastLine, orderFeastsOfWeek } from '@/systems/religious/feasts';
@@ -124,6 +125,9 @@ export function seminaryWeekHook(deps: EventDeps): WeekHook {
     // A novice's house has its own week: the horarium as kept, the house's drift. E3 §3.2.
     const week = { ...resolved, state: religiousWeek(resolved.state, rng) };
     next = week.line ? addDigestLine(week.state, week.line) : week.state;
+    // A novice's and a student's house around him. E3 §3.2.
+    const around = next.religious ? houseLifeLine(next, rng.derive(`house-life:${next.clock.week}`)) : null;
+    if (around) next = addDigestLine(next, around);
     next = clubsStep(next, rng);
     const pool = weekPool(deps.pool, next);
     if (pool.length > 0) {
@@ -210,7 +214,7 @@ export function studyWeekHook(deps: EventDeps): WeekHook {
 }
 
 /** Roughly how often a friar's week without a parish loop carries a scene. Invented. */
-const FRIAR_EVENT_CHANCE = 0.12;
+const FRIAR_EVENT_CHANCE = 0.18;
 /** On a week with a feast in it, the chance the feast's own scene fires, when one is eligible. */
 const FEAST_SCENE_CHANCE = 0.6;
 /** Any week, the chance a scene about someone's open life, or about what is being said, fires when one is eligible. DESIGN §8.11, §8.12. */
@@ -253,7 +257,7 @@ function feastScene(state: GameState, keys: readonly string[], rng: Rng, deps: E
 export function friarWeekHook(deps: EventDeps): WeekHook {
   return (state: GameState, rng: Rng) => {
     if (!state.religious) return state;
-    let next = religiousWeek(state, rng);
+    let next = religiousWeek(defaultSpends(state), rng);
     // A build on the house comes in its time. E3 §3.2.
     const built = buildWeek(next);
     next = built.line ? addDigestLine(built.state, built.line) : built.state;
@@ -310,6 +314,9 @@ export function friarWeekHook(deps: EventDeps): WeekHook {
     const said = talkWeek(next, rng.derive(`talk:${next.clock.week}`));
     next = said.state;
     for (const line of said.lines) next = addDigestLine(next, line);
+    // The house around him, most weeks.
+    const around = houseLifeLine(next, rng.derive(`house-life:${next.clock.week}`));
+    if (around) next = addDigestLine(next, around);
     // The mailbag: a letter from someone, now and then. DESIGN §8.10.
     next = mailWeek(next, rng.derive(`mail:${next.clock.week}`));
     return religiousModeStep(openMail(offersStep(next, rng, deps)));
@@ -515,6 +522,9 @@ export function parishWeekHook(deps: EventDeps): WeekHook {
     const said = talkWeek(next, rng.derive(`talk:${next.clock.week}`));
     next = said.state;
     for (const line of said.lines) next = addDigestLine(next, line);
+    // The house around him, most weeks.
+    const around = houseLifeLine(next, rng.derive(`house-life:${next.clock.week}`));
+    if (around) next = addDigestLine(next, around);
     // The mailbag: a letter from someone, now and then. DESIGN §8.10.
     next = mailWeek(next, rng.derive(`mail:${next.clock.week}`));
     return religiousModeStep(openMail(offersStep(next, rng, deps)));

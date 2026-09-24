@@ -4,6 +4,7 @@ import { PILLARS, type EvaluationResult } from '@/types';
 import { FORMATION } from '@/systems/formation';
 import { hoursGainsSentence } from '@/systems/seminaryWeek';
 import { summersOnRecord } from '@/systems/standing';
+import { formationGuide } from '@/systems/religious/formation';
 import Panel from '../Panel';
 
 const RESULT_TEXT: Record<EvaluationResult, { title: string; body: string }> = {
@@ -13,6 +14,16 @@ const RESULT_TEXT: Record<EvaluationResult, { title: string; body: string }> = {
   DISMISSED: { title: 'Dismissed', body: 'The seminary will not recommend you for continued formation. The vocation director will call.' },
 };
 
+
+/** A friar's evaluation is read by his novice master or master of students, and goes to the provincial, not the bishop. E3 §5. */
+function friarResultText(guide: string): Record<EvaluationResult, { title: string; body: string }> {
+  return {
+    ADVANCED: { title: 'Advanced', body: `The ${guide} reads the report to you in his room, which he does only when it is good. The house recommends you without reservation.` },
+    ADVANCED_WITH_CONCERNS: { title: 'Advanced, with concerns', body: `You are to continue. The ${guide} writes his concerns into the report, and the report goes to the provincial.` },
+    HELD_BACK: { title: 'Held back', body: `You will repeat the year. The ${guide} is careful to say it is not a punishment. It will feel like one.` },
+    DISMISSED: { title: 'Dismissed', body: 'The house will not recommend you for profession. The provincial will write, and the vocation director will call.' },
+  };
+}
 
 export function pillarWord(score: number): string {
   if (score <= 0) return 'neglected';
@@ -28,7 +39,7 @@ export default function EvaluationPanel() {
   const ack = useGameStore((s) => s.acknowledgeEvaluation);
   if (!game || game.mode.kind !== 'evaluation') return null;
   const rec = game.mode.record;
-  const text = RESULT_TEXT[rec.result];
+  const text = game.religious ? friarResultText(formationGuide(game))[rec.result] : RESULT_TEXT[rec.result];
   const hours = game.seminary ? hoursGainsSentence(game.seminary) : null;
   const summer = summersOnRecord(game.seminary).find((s) => s.year === rec.year);
   return (

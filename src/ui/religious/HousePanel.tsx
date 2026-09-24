@@ -50,7 +50,7 @@ export default function HousePanel() {
       <p className="leading-relaxed">{houseLine(game, house)}{house.buildings?.length ? ` It has ${house.buildings.map((id) => BUILT[id] ?? id).join(', ')}.` : ''}</p>
       <p className="ink-muted mt-1 text-sm">
         {order.short}, {game.province?.name ?? 'the province'}. {game.religious.religiousName ? `In the house you are ${game.religious.religiousName}. ` : ''}
-        {stage ? `${stage.label}, under the ${stage.guide}. ` : ''}
+        {stage && !game.flags.ordained ? `${stage.label}, under the ${stage.guide}. ` : ''}
         {rep ? `The house: ${word(standing(rep, 'community'))}. The province: ${word(standing(rep, 'province'))}. The provincial's council: ${word(standing(rep, 'superiors'))}.` : ''}
       </p>
       {playerIsPrior(game, house) ? (
@@ -65,13 +65,13 @@ export default function HousePanel() {
       )}
       <div className="mt-4">
         <div className="heading text-sm">The common life</div>
-        <p className="ink-faint text-xs">Mandatory, before any work: {load} blocks a week. The minimum buys hours back and the whole house sees who is not in choir.</p>
+        <p className="ink-faint text-xs">Mandatory, before any work: {load} {load === 1 ? 'block' : 'blocks'} a week. The minimum buys hours back and the whole house sees who is not in choir.</p>
         <ul className="mt-2 flex flex-col gap-1.5 text-sm">
           {rows.map((r) => (
             <li key={r.key} className="flex flex-wrap items-center justify-between gap-2 rounded border rule bg-white/30 px-3 py-1.5">
               <span>
                 <span className="font-medium">{r.label}</span>
-                <span className="ink-faint block text-xs">{r.blurb}{r.dispensed ? ' Dispensed.' : ''} · {r.ap} blocks</span>
+                <span className="ink-faint block text-xs">{r.blurb}{r.dispensed ? ' Dispensed.' : ''} · {r.ap} {r.ap === 1 ? 'block' : 'blocks'}</span>
               </span>
               <span className="flex gap-1">
                 {QUALITIES.filter((q) => q !== 'invested' || r.investable).map((q) => (

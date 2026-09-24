@@ -34,7 +34,8 @@ export function generateRun(state: GameState, answers: CreationAnswers, rng: Rng
       generateFormators(rng.derive('formators'), answers.entryYear, { includeBishop: !created.world }),
       created.world?.institutes ?? [],
     ),
-    ...generateClass(rng.derive('classmates'), answers.entryYear),
+    // A friar's class is the novitiate's: men of his own order, rolled as any class is, clothed with him. E3.
+    ...generateClass(rng.derive('classmates'), answers.entryYear).map((n) => (created.religious && n.role === 'classmate' ? { ...n, title: 'Br.', tags: [...n.tags, 'religious', 'friar', `order:${created.religious.order}`, 'vows:novice'] } : n)),
   ];
   // Merge: the world's bishop, chancery, and pastors are already in the state.
   const map = { ...created.npcs, ...Object.fromEntries(npcs.map((n) => [n.id, n])) };

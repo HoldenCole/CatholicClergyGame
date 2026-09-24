@@ -1,0 +1,1492 @@
+{
+  "_notes": "The player as prior. E3 §3.2, §4. Scenes for a man the chapter has made prior, in any order: the house's business comes to him. They require office:prior and not office:provincial. Many shared house scenes speak of the prior as another man and are closed to him; these stand in their place. Order-neutral; people are generated.",
+  "events": [
+    {
+      "id": "pr_house_chapter_times",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "admin",
+      "baseWeight": 10,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "office:prior",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "office:provincial",
+          "value": false
+        }
+      ],
+      "title": "The Hour of Lauds",
+      "body": "At the house chapter {@confrere} raises, again, the hour of morning prayer. Half the house has apostolates that start at eight and would like Lauds at six thirty; the other half has kept it at six for thirty years and regards the question as a symptom. The constitutions leave it to the house. The house, looking at you, leaves it to the prior.",
+      "choices": [
+        {
+          "id": "vote",
+          "label": "Put it to the chapter and abide by the vote",
+          "outcome": "The house votes eight to seven for six thirty. The seven are gracious in the way that men are gracious when they intend to raise it again, and the first week three of them are in choir at six anyway, alone, which is their answer.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "observant_bloc",
+              "delta": -2
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "decide",
+          "label": "Decide it yourself: six, as it has been",
+          "outcome": "You say six, and that the house can raise it again at the visitation. The men with apostolates start coming late to breakfast, and the men who kept six say nothing, which is thanks.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "observant_bloc",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -2
+            },
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": -3
+            }
+          ]
+        },
+        {
+          "id": "try",
+          "label": "Try six thirty until Easter, then decide",
+          "outcome": "A trial pleases nobody and offends nobody. By Easter the house has forgotten it was a trial, and six thirty is the hour, and the old men have made their peace with it over coffee.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 2
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pr_permission_father",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 10,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "friendship_vs_duty",
+        "money"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "office:prior",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "office:provincial",
+          "value": false
+        }
+      ],
+      "title": "A Flight Home",
+      "body": "{@confrere} knocks after Compline. His father is dying, two thousand miles away, and the family has asked him to come. He needs the house's permission and the house's money for the flight, and the house's money is what the procurator said in September would not stretch to the boiler. He does not ask for himself. He asks as a man who has kept the vow of poverty and is now finding out what it costs.",
+      "choices": [
+        {
+          "id": "pay",
+          "label": "Give him the fare from the house and tell him to stay as long as he needs",
+          "outcome": "He is with his father for the last eleven days. The boiler waits another winter and the house wears sweaters, and nobody complains, because every man in it has a father or had one.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": 10
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 4
+            },
+            {
+              "target": "flag",
+              "key": "prior:paid_the_fare",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "family",
+          "label": "Grant the leave, and ask whether the family can help with the fare",
+          "outcome": "His sister pays for the flight. He goes, and comes back after the funeral, and thanks you correctly, and you are not sure for a long time whether he has forgiven the question.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "province",
+          "label": "Write to the province for the fare tonight",
+          "outcome": "{@provincial} wires the money in a day, with a note that the province is for exactly this. The man flies out the next morning, and the house learns that its prior knows whom to ask.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": 6
+            },
+            {
+              "target": "relationship",
+              "key": "@provincial",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pr_brother_drinking",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 8,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "friendship_vs_duty",
+        "loyalty_vs_honesty"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "office:prior",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "office:provincial",
+          "value": false
+        }
+      ],
+      "title": "The Bottles in the Recycling",
+      "body": "The house's recycling goes out on Thursdays, and the brother who takes it out has come to you, embarrassed, about what is in it. Everyone in the house knows whose room the bottles come from. {@confrere} has missed Lauds eleven times this month and preached on Sunday in a way the parish noticed. As his brothers they have covered for him. As prior, the covering stops with you.",
+      "choices": [
+        {
+          "id": "speak",
+          "label": "Speak to him yourself, tonight, as his brother and his prior",
+          "outcome": "It goes badly and then, at the end, less badly. He says he will stop, which you both know is not enough, and he agrees to see a doctor, which is. It is the first of a lot of conversations.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": 4
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "prior:faced_the_drinking",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "treatment",
+          "label": "Arrange treatment through the province and tell him the house will be here",
+          "outcome": "{@provincial} knows the program; the province has used it before. The man goes, angry, for twelve weeks. He comes back thinner and quieter and says at recreation that he is an alcoholic, and the house does not know what to do with its hands, and then it does.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@provincial",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            },
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": -2
+            },
+            {
+              "target": "flag",
+              "key": "prior:sent_to_treatment",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "wait",
+          "label": "Wait, and watch, and hope it is a bad season",
+          "outcome": "It is not a bad season. By Lent a parishioner has written to the provincial, and the provincial writes to you, asking what the house has known and for how long, and you tell him.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": -4
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -1
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pr_visitation_report",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 10,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "office:prior",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "office:provincial",
+          "value": false
+        }
+      ],
+      "title": "The Visitation Report",
+      "body": "The report of {@provincial}'s canonical visitation arrives in a brown envelope: eleven pages on the house, three recommendations, and a paragraph on the prior that is fair and that you would rather the house did not read. The custom is that the prior reads the report to the chapter. The custom does not say how much of it.",
+      "choices": [
+        {
+          "id": "all",
+          "label": "Read all eleven pages to the chapter, your paragraph included",
+          "outcome": "You read it straight through. At your paragraph there is a silence, and then the oldest man in the house says that it is right, and that it is also right that you read it, and the chapter moves on to the recommendations as if something had been settled.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 5
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "relationship",
+              "key": "@old_friar",
+              "delta": 4
+            }
+          ]
+        },
+        {
+          "id": "summary",
+          "label": "Read the recommendations and summarize the rest",
+          "outcome": "The house hears the three recommendations and a summary of the rest. Two men ask to see the full report, which is their right, and you give it to them, and they read your paragraph, and do not mention it.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "file",
+          "label": "Post it on the notice board and say nothing",
+          "outcome": "The report goes up on the board by the refectory. By supper every man in the house has read your paragraph standing up, and at recreation they are very kind to you, which is how you know.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -1
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pr_old_man_keys",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 10,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "friendship_vs_duty"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "office:prior",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "office:provincial",
+          "value": false
+        }
+      ],
+      "title": "The Car Keys",
+      "body": "{@old_friar} backed the house car into the gatepost on Tuesday and into a parked van on Friday, and on Friday he did not notice. He has driven himself to the nursing home on Wednesdays for twenty-two years to say Mass for the residents, several of whom are younger than he is. Someone has to take the keys. It is a prior's job, and it is yours.",
+      "choices": [
+        {
+          "id": "take",
+          "label": "Take the keys, and drive him to the nursing home yourself on Wednesdays",
+          "outcome": "He hands them over without a word, and on Wednesday he is waiting at the door at eight. You drive him for a year. He tells you in the car everything he never said at recreation.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@old_friar",
+              "delta": 6
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 3
+            }
+          ]
+        },
+        {
+          "id": "rota",
+          "label": "Take the keys and set a rota of drivers",
+          "outcome": "The house takes turns. It is good for the young men, you think, and some of them agree, and the nursing home gets to know six friars instead of one, which the residents like and the old man does not.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@old_friar",
+              "delta": -2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "leave",
+          "label": "Leave him the keys and have the car looked at",
+          "outcome": "The mechanic finds nothing wrong with the car. Three weeks later the old man clips a cyclist, who is bruised and very angry and a lawyer, and the province's insurer writes to you.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": -3
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": -2
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pr_budget_council",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "finance",
+      "baseWeight": 10,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "money",
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "office:prior",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "office:provincial",
+          "value": false
+        }
+      ],
+      "title": "The House Council on the Budget",
+      "body": "The procurator lays the year out on the table at house council: the house is short, again, by more than it can make up from the Sunday supply and the stipends. Something must go. The food is already plain; the car is old; the cleaning woman has been with the house for nineteen years. {@confrere} suggests asking the province, which the province will remember.",
+      "choices": [
+        {
+          "id": "car",
+          "label": "Sell the second car and share the one",
+          "outcome": "The house keeps one car and a sign-out sheet, and learns to plan. The men with hospital calls are given priority, which the men without hospital calls find they can bear.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "province",
+          "label": "Ask the province to make up the difference",
+          "outcome": "The province makes it up. {@provincial} writes that he is glad to, and that he would like to see the house's plan for next year, which is how a province says it has noticed.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": -2
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": -1
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            },
+            {
+              "target": "relationship",
+              "key": "@provincial",
+              "delta": -1
+            }
+          ]
+        },
+        {
+          "id": "appeal",
+          "label": "Write to the house's friends and ask them plainly",
+          "outcome": "You write the letter yourself, a page, no brochure. Forty people answer. The house is not short this year, and the next year you have to write it again, and you do.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pr_quarrel",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 10,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "friendship_vs_duty"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "office:prior",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "office:provincial",
+          "value": false
+        }
+      ],
+      "title": "Two Men Not Speaking",
+      "body": "{@confrere} and {@old_friar} have not spoken for a month. It began with the choice of a hymn for the patronal feast and has become, by the usual process, a question of the whole direction of the order since the council. They sit at opposite ends of the refectory. The novices have noticed. Brothers who live together for life cannot afford a feud, and the house expects its prior to end it.",
+      "choices": [
+        {
+          "id": "together",
+          "label": "Sit them down together in your office",
+          "outcome": "It is a terrible hour. At the end of it neither man has conceded anything, but they have spoken, and at supper they pass the salt, and a week later they are arguing at recreation, which is progress.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": 2
+            },
+            {
+              "target": "relationship",
+              "key": "@old_friar",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 3
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "apart",
+          "label": "See each of them alone",
+          "outcome": "Each man tells you the other is impossible, and each is right. Nothing is resolved, but they are both a little less alone with it, and the feud goes quiet by Advent.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": 3
+            },
+            {
+              "target": "relationship",
+              "key": "@old_friar",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "ignore",
+          "label": "Let the feud run its course",
+          "outcome": "It runs its course, which takes a year. The novices learn something about community life that the novice master had hoped to teach them later.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -3
+            },
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": -1
+            },
+            {
+              "target": "relationship",
+              "key": "@old_friar",
+              "delta": -1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pr_man_wants_to_leave",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 10,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "doubt",
+        "friendship_vs_duty"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "office:prior",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "office:provincial",
+          "value": false
+        }
+      ],
+      "title": "He Is Thinking of Leaving",
+      "body": "{@confrere} asks to see you after Vespers and closes the door. He has been thinking for a year, he says, about asking for a leave: time outside the house, perhaps exclaustration, perhaps more. He has told nobody else. He is not in crisis; he is tired and uncertain and honest. He is asking what the prior thinks, and also what his brother thinks, and he knows those may not be the same.",
+      "choices": [
+        {
+          "id": "support",
+          "label": "Tell him you will help him through the process, whichever way it goes",
+          "outcome": "He writes to the provincial in the spring. The leave is granted, and he goes to live with his brother's family and teach, and writes to you every month. What he decides in the end is his, and you promised him that.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": 8
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "prior:helped_a_man_discern",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "wait",
+          "label": "Ask him to give it one more year in the house, with a director",
+          "outcome": "He agrees to the year, and finds a director, and some months are better than others. At the end of it he stays, for now, and says the year was worth it whatever comes after.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 2
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "provincial",
+          "label": "Tell him this is a matter for the provincial, and send him",
+          "outcome": "He goes to {@provincial}, who is kind and thorough. The man thanks you afterwards, correctly, and you realize he had come to you as a brother and been answered as an office.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": -4
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pr_bishop_wants_a_man",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 10,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "loyalty_vs_honesty",
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "office:prior",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "office:provincial",
+          "value": false
+        }
+      ],
+      "title": "The Bishop Asks the Prior",
+      "body": "The bishop's vicar for clergy telephones the priory: a pastor has collapsed, the parish is forty minutes out, and the diocese would be grateful for a friar for six months. Your house has one man spare if nobody is sick and nobody is on retreat, which is never. The bishop, the vicar adds, remembers who helped the diocese in a bad year.",
+      "choices": [
+        {
+          "id": "give",
+          "label": "Give him a man, and cover the house yourself",
+          "outcome": "You send {@confrere}. For six months you take his confessions, his hospital calls, and his Tuesday class, and the bishop writes the house a letter that the province reads with interest.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "local_bishop",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "diocesan_clergy",
+              "delta": 3
+            },
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": 2
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "weekends",
+          "label": "Offer weekends only",
+          "outcome": "The diocese takes the weekends and finds a retired priest for the weekdays. The vicar thanks you, and says so to the bishop, in about those words.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "local_bishop",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "diocesan_clergy",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "refuse",
+          "label": "Tell him the house cannot spare anyone",
+          "outcome": "He says he understands. The bishop, at the chrism Mass, is warm to every religious superior in the diocese but one.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "local_bishop",
+              "delta": -4
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pr_benefactor_letter",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "finance",
+      "baseWeight": 10,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "loyalty_vs_honesty",
+        "money"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "office:prior",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "office:provincial",
+          "value": false
+        }
+      ],
+      "title": "The Christmas Letter",
+      "body": "Every December the prior writes the letter that goes to the house's friends: what the year was, what the house needs, and a word about the season. The roof needs forty thousand dollars. Two men died this year, one young, and the house's numbers are down. The last prior's letters were cheerful and raised a great deal of money.",
+      "choices": [
+        {
+          "id": "honest",
+          "label": "Write it plainly: the two deaths, the roof, the need",
+          "outcome": "People answer the letter as if it had been written to them, which it was. The roof is half paid for by February, and three of the letters that come back are about the young man who died, from people he had helped.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "prior:wrote_plainly",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "cheerful",
+          "label": "Write it as the last prior did: the good news and the season",
+          "outcome": "It raises about what it always raises. Nobody is misled, exactly, and the roof waits another year, and one old benefactor writes back to ask why nobody mentioned the funeral.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "short",
+          "label": "Write a short letter about Christmas only, and ask for nothing",
+          "outcome": "It is a good letter and it raises almost nothing. Two people write to ask whether the house is all right, which you find you are glad of.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pr_young_friar_parents",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 10,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "office:prior",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "office:provincial",
+          "value": false
+        }
+      ],
+      "title": "His Parents at the Door",
+      "body": "The parents of {@confrere}, who is in simple vows, have driven six hours without telling him and are in the parlor asking for the prior. They are frightened: their son has given up a career, a girlfriend, and their idea of his life, and they would like the prior to tell them honestly whether the order is good for him, or whether he is hiding here.",
+      "choices": [
+        {
+          "id": "honest",
+          "label": "Tell them honestly what you see in him",
+          "outcome": "You tell them what you see: a man who is happier than he was, and who is still finding out. His mother cries. His father asks good questions. They stay for Vespers, and afterwards their son, who had not known they were coming, walks them to the car.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": 4
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "fetch",
+          "label": "Fetch him, and let them ask him themselves",
+          "outcome": "You bring him to the parlor and leave. They are there for three hours. At supper he is quiet, and at recreation he thanks you for not answering for him.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "reassure",
+          "label": "Reassure them and send them home",
+          "outcome": "They go home reassured, more or less. Their son hears about the visit a month later from his sister, and asks you why he was not told, and you have no good answer.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": -4
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pr_parish_complaint",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "group",
+      "baseWeight": 10,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "loyalty_vs_honesty",
+        "friendship_vs_duty"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "office:prior",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "office:provincial",
+          "value": false
+        }
+      ],
+      "title": "A Complaint About a Brother",
+      "body": "The chair of the parish council from the order's church comes to see you with a folder: six letters about {@confrere}'s homilies, which are long, political, and, in two of the letters' words, about the preacher. The chair is fair-minded and tired. She is not asking you to silence him. She is asking whether the prior has heard him lately.",
+      "choices": [
+        {
+          "id": "talk",
+          "label": "Talk to him about the homilies, as his prior",
+          "outcome": "He is hurt, then defensive, then, after a week, a little shorter. The letters stop, mostly. He does not preach about the parish council again, which the council notices and is grateful for.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 3
+            },
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": -2
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "defend",
+          "label": "Defend him: the pulpit is his, and the gospel is political",
+          "outcome": "The chair accepts it, as fair-minded people do, and does not come back with the folder. Some of the six stop coming to his Mass, and some of the rest start.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": -3
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "meet",
+          "label": "Suggest the council meet with him, with you there",
+          "outcome": "It is an uncomfortable evening in the parish hall, and a useful one. He hears what they hear, and they hear what he means, and the next Sunday the homily is eleven minutes and very good.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 4
+            },
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pr_the_guest_who_stays",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 10,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "friendship_vs_duty"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "office:prior",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "office:provincial",
+          "value": false
+        }
+      ],
+      "title": "A Former Brother Asks for a Room",
+      "body": "A man who left the order eight years ago, and whom half the house still loves, telephones to ask whether he could stay in the guest room for a month. His marriage has ended; he is between jobs and between cities. He is careful to say he is not asking to come back. {@old_friar}, who taught him in the novitiate, is watching you as you listen.",
+      "choices": [
+        {
+          "id": "yes",
+          "label": "Give him the guest room for as long as he needs",
+          "outcome": "He stays five weeks and comes to Vespers most evenings and washes the dishes. When he leaves for a job in another city, the house gives him a dinner, and the old man who taught him says grace.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@old_friar",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "month",
+          "label": "Give him the month, and not a day more",
+          "outcome": "He takes the month exactly. He is a good guest and a careful one, and leaves on the thirtieth day with a thank-you note on the refectory table.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "no",
+          "label": "Tell him the house cannot take him",
+          "outcome": "He says he understands, and he does. The old man who taught him says nothing to you for a week, and then says only that he would have liked to see him.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@old_friar",
+              "delta": -5
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pr_sleepless",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 10,
+      "suppressYears": 2,
+      "pressure": [
+        "doubt"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "office:prior",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "office:provincial",
+          "value": false
+        }
+      ],
+      "title": "The Office at Three in the Morning",
+      "body": "You wake at three, as you have most nights since the chapter elected you. The house's troubles have followed you to bed: the money, the man who is drinking, the novice who will not settle, the letter to the provincial you have not written. Nobody warned you that the prior carries the house at night. Somebody should have. The house is asleep above and below you.",
+      "choices": [
+        {
+          "id": "chapel",
+          "label": "Go down to the chapel and sit with it",
+          "outcome": "The sanctuary lamp, the cold stalls, the psalms you know by heart. You do not solve anything. At five the sacristan finds you there and says nothing and makes coffee for two.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": -2
+            }
+          ]
+        },
+        {
+          "id": "write",
+          "label": "Get up and write the letter you have been putting off",
+          "outcome": "The letter is done by four and is better than it would have been at noon. You sleep badly for two hours and feel, at Lauds, like a man who has done his work.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 2
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "call",
+          "label": "In the morning, call a prior you trust in another house",
+          "outcome": "He laughs when you tell him about three in the morning, not unkindly. He has been prior for nine years and wakes at three still. It helps more than it should to know it.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": -1
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pr_novice_sent",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "formation",
+      "baseWeight": 10,
+      "once": true,
+      "suppressYears": 3,
+      "pressure": [
+        "competence",
+        "friendship_vs_duty"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "office:prior",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "office:provincial",
+          "value": false
+        }
+      ],
+      "title": "A Student Sent to the House",
+      "body": "{@provincial} writes that a student brother is being sent to your house for his pastoral year: a bright, anxious young man who had a hard novitiate and a harder second year of studies. He will need work, a mentor, and a prior who will write honestly about him at the end. The provincial adds, underlined, that the province cannot afford to lose him and cannot afford to be wrong about him.",
+      "choices": [
+        {
+          "id": "mentor",
+          "label": "Mentor him yourself",
+          "outcome": "You take him on the hospital rounds and the Saturday confessions and the long walks. By spring he is steadier, and by summer he is good, and your report says both.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 2
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "assign",
+          "label": "Give him to the best pastor in the house",
+          "outcome": "The pastor is patient and exacting and takes to him. You watch from a little distance, and your report is well-informed, and the student remembers the pastor, not the prior.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "honest",
+          "label": "Take him, and write honestly when it goes badly",
+          "outcome": "It goes badly in the autumn and better in the spring. Your report says so, both halves. The provincial thanks you for it, and the student, who reads it, says it was fair.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

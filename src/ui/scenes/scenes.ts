@@ -7,7 +7,7 @@ import type { ActionLocation, ObligationKey } from '@/types';
  */
 import type { StudyCity } from '@/types';
 
-export type SceneId = 'church' | 'rectory' | 'office' | 'hall' | 'chapel' | 'street' | 'study' | 'seminary_room' | 'seminary_hall' | 'chancery' | 'study_room' | 'study_city';
+export type SceneId = 'church' | 'rectory' | 'office' | 'hall' | 'chapel' | 'street' | 'study' | 'seminary_room' | 'seminary_hall' | 'chancery' | 'study_room' | 'study_city' | 'friar_cell' | 'friar_cloister';
 
 export type HotspotBinding =
   | { kind: 'action'; actionId: string }
@@ -15,8 +15,10 @@ export type HotspotBinding =
   | { kind: 'seminary_action'; activityId: string }
   /** A priest-student's free hour, by id in content/study/activities.json. */
   | { kind: 'study_action'; activityId: string }
+  /** An ordained friar's free block, by id in content/religious/spends.json. E3 §3.3. */
+  | { kind: 'friar_spend'; spendId: string }
   | { kind: 'obligation'; key: ObligationKey }
-  | { kind: 'panel'; panel: 'routine' | 'groups' | 'projects' | 'offers' | 'digest' | 'parish' | 'formation' | 'clubs' }
+  | { kind: 'panel'; panel: 'routine' | 'groups' | 'projects' | 'offers' | 'digest' | 'parish' | 'formation' | 'clubs' | 'house' | 'jobs' | 'profile' | 'deanery' }
   | { kind: 'furnish'; place: 'church' | 'chapel' | 'office' | 'rectory' | 'seminary_room' | 'chancery' }
   | { kind: 'scene'; scene: SceneId };
 
@@ -164,6 +166,40 @@ export const SEMINARY_HALL: SceneDef = {
   ],
 };
 
+/** An ordained friar's cell: the seminary room's art, his own week. E3 §3.3. */
+export const FRIAR_CELL: SceneDef = {
+  id: 'friar_cell',
+  label: 'Your cell',
+  locations: [],
+  hotspots: [
+    { id: 'desk', label: 'The desk: writing', x: 50, y: 50, w: 42, h: 26, binds: { kind: 'friar_spend', spendId: 'writing' } },
+    { id: 'crucifix', label: 'The crucifix: the night office and the silence', x: 44, y: 10, w: 12, h: 30, binds: { kind: 'friar_spend', spendId: 'observance' } },
+    { id: 'window', label: 'The window: the weeks', x: 60, y: 10, w: 24, h: 32, binds: { kind: 'panel', panel: 'digest' } },
+    { id: 'mail', label: 'The mail on the bed: letters', x: 6, y: 48, w: 36, h: 26, binds: { kind: 'panel', panel: 'offers' } },
+    { id: 'shelf', label: 'The shelf: study', x: 6, y: 8, w: 30, h: 32, binds: { kind: 'friar_spend', spendId: 'study' } },
+    { id: 'frame', label: 'The frame: what you are known for', x: 39, y: 18, w: 8, h: 10, binds: { kind: 'panel', panel: 'profile' } },
+    { id: 'door', label: 'The door: the cloister', x: 88, y: 48, w: 10, h: 30, binds: { kind: 'scene', scene: 'friar_cloister' } },
+  ],
+};
+
+/** The cloister of the house: the seminary corridor's art, the house's doors. */
+export const FRIAR_CLOISTER: SceneDef = {
+  id: 'friar_cloister',
+  label: 'The cloister',
+  locations: [],
+  hotspots: [
+    { id: 'choir', label: 'The choir: the common life', x: 34, y: 14, w: 32, h: 52, binds: { kind: 'panel', panel: 'house' } },
+    { id: 'library', label: 'The library: study', x: 3, y: 18, w: 11, h: 44, binds: { kind: 'friar_spend', spendId: 'study' } },
+    { id: 'confessional', label: 'The confessional: the Saturday line', x: 15, y: 20, w: 8, h: 38, binds: { kind: 'friar_spend', spendId: 'confessions' } },
+    { id: 'prior', label: "The prior's door: offices and works", x: 77, y: 20, w: 8, h: 38, binds: { kind: 'panel', panel: 'jobs' } },
+    { id: 'common', label: 'The recreation room: the circles', x: 86, y: 18, w: 11, h: 44, binds: { kind: 'panel', panel: 'clubs' } },
+    { id: 'garden', label: 'The garden: time with the brothers', x: 4, y: 66, w: 22, h: 26, binds: { kind: 'friar_spend', spendId: 'community' } },
+    { id: 'parlour', label: 'The parlour: the poor at the door', x: 74, y: 66, w: 22, h: 26, binds: { kind: 'friar_spend', spendId: 'mercy' } },
+    { id: 'out', label: 'The front door: supply and missions', x: 40, y: 70, w: 20, h: 26, binds: { kind: 'friar_spend', spendId: 'supply' } },
+    { id: 'back', label: 'Back to your cell', x: 26, y: 22, w: 7, h: 36, binds: { kind: 'scene', scene: 'friar_cell' } },
+  ],
+};
+
 export const CHANCERY_SCENE: SceneDef = {
   id: 'chancery',
   label: 'Your office at the chancery',
@@ -291,6 +327,8 @@ export function sceneById(id: SceneId, city: StudyCity = 'rome'): SceneDef {
   if (id === 'study_city') return city === 'residence' ? STUDY_HOUSE : city === 'campus' ? STUDY_CAMPUS : city === 'hospital' ? STUDY_HOSPITAL : city === 'seminary' ? STUDY_SEMINARY : city === 'chancery' ? STUDY_CHANCERY : city === 'auxiliary' ? STUDY_AUXILIARY : city === 'see' ? STUDY_SEE : city === 'prison' ? STUDY_PRISON : city === 'mission' ? STUDY_MISSION : city === 'deployment' ? STUDY_DEPLOYMENT : city === 'formation' ? STUDY_FORMATION : city === 'schools' ? STUDY_SCHOOLS : city === 'washington' ? STUDY_CITY_DC : STUDY_CITY;
   if (id === 'seminary_room') return SEMINARY_SCENE;
   if (id === 'seminary_hall') return SEMINARY_HALL;
+  if (id === 'friar_cell') return FRIAR_CELL;
+  if (id === 'friar_cloister') return FRIAR_CLOISTER;
   if (id === 'chancery') return CHANCERY_SCENE;
   return SCENES.find((s) => s.id === id)!;
 }

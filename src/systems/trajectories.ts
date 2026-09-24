@@ -32,10 +32,29 @@ export function rollTrajectories(state: GameState, rng: Rng): GameState {
   const npcs = { ...state.npcs };
   for (const n of Object.values(npcs)) {
     if (n.role !== 'classmate' || n.status !== 'active' || n.trajectory) continue;
-    npcs[n.id] = { ...n, trajectory: rollTrajectory(rng.derive(`traj:${n.id}`), n) };
+    // A brother of the order is ordained with the class, and professed solemnly before it. E3.
+    const brother = isBrother(n) ? { title: n.tags.includes('lay_brother') ? 'Br.' : 'Fr.', tags: n.tags.map((t) => (t === 'vows:novice' || t === 'vows:simple' ? 'vows:solemn' : t)) } : {};
+    npcs[n.id] = { ...n, ...brother, trajectory: rollTrajectory(rng.derive(`traj:${n.id}`), n) };
   }
   return { ...state, npcs };
 }
+
+/** A classmate who is a brother of the player's order: the novitiate class, not the diocesan seminary's. E3. */
+export function isBrother(n: Npc): boolean {
+  return n.tags.includes('friar');
+}
+
+/** The same milestones, lived in an order: a house to govern, the council, the order's infirmary. E3. */
+const FRIAR_MILESTONE_TEXT: Record<Milestone['kind'], (n: Npc) => string> = {
+  pastor: (n) => `${n.title} ${n.name.last}, of your class, has been elected prior of a house of the province.`,
+  chancery: (n) => `${n.title} ${n.name.last}, of your class, has been named to the provincial's council.`,
+  rome_study: (n) => `${n.title} ${n.name.last}, of your class, has been sent to Rome to study.`,
+  left: (n) => `${n.name.first} ${n.name.last}, of your class, has left the order.`,
+  died: (n) => `${n.title} ${n.name.last}, of your class, has died; the necrology has him now.`,
+  scandal: (n) => `${n.title} ${n.name.last}, of your class, has been withdrawn from ministry by the provincial.`,
+  bishop_elsewhere: (n) => `${n.name.first} ${n.name.last}, of your class, has been named a bishop.`,
+  retired: (n) => `${n.title} ${n.name.last}, of your class, has gone to the province's infirmary house.`,
+};
 
 const MILESTONE_TEXT: Record<Milestone['kind'], (n: Npc) => string> = {
   pastor: (n) => `${n.name.first} ${n.name.last} has been made a pastor.`,
@@ -60,10 +79,10 @@ export function advanceTrajectories(state: GameState, yearsOrdained: number): { 
       const trajectory = npc.trajectory!.map((x) => (x === m ? { ...x, done: true } : x));
       switch (m.kind) {
         case 'pastor':
-          npc = { ...npc, trajectory, tags: [...npc.tags.filter((t) => t !== 'vicar'), 'pastor'], title: npc.title || 'Fr.' };
+          npc = isBrother(npc) ? { ...npc, trajectory, tags: [...npc.tags, 'superior'] } : { ...npc, trajectory, tags: [...npc.tags.filter((t) => t !== 'vicar'), 'pastor'], title: npc.title || 'Fr.' };
           break;
         case 'chancery':
-          npc = { ...npc, trajectory, tags: [...npc.tags, 'chancery'], title: 'Msgr.' };
+          npc = isBrother(npc) ? { ...npc, trajectory, tags: [...npc.tags, 'provincial_council'] } : { ...npc, trajectory, tags: [...npc.tags, 'chancery'], title: 'Msgr.' };
           break;
         case 'rome_study':
           npc = { ...npc, trajectory, tags: [...npc.tags, 'rome_alumnus'] };
@@ -84,7 +103,7 @@ export function advanceTrajectories(state: GameState, yearsOrdained: number): { 
           npc = { ...npc, trajectory, status: 'retired' };
           break;
       }
-      lines.push(MILESTONE_TEXT[m.kind](npc));
+      lines.push((isBrother(npc) ? FRIAR_MILESTONE_TEXT : MILESTONE_TEXT)[m.kind](npc));
     }
     npcs[n.id] = npc;
   }
