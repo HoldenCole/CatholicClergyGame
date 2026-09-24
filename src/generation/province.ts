@@ -51,8 +51,9 @@ function rollTrajectory(rng: Rng, bias: ProvinceTrajectory | undefined): Provinc
 
 /** The kinds of house a province of this size keeps, the formation houses first. */
 function houseKinds(rng: Rng, order: OrderDef, n: number, trajectory: ProvinceTrajectory): HouseKind[] {
-  const kinds: HouseKind[] = ['curia', 'novitiate'];
-  if (trajectory !== 'shrinking' || rng.chance(0.5)) kinds.push('studium');
+  // Every province forms its own men: a novitiate and a house of studies, however small the province. E3 §5.
+  const kinds: HouseKind[] = ['curia', 'novitiate', 'studium'];
+  void trajectory;
   const schools = order.houseNames.school.length ? (rng.chance(0.6) ? 2 : 1) : 0;
   for (let i = 0; i < schools; i++) kinds.push('school');
   while (kinds.length < n) kinds.push(rng.chance(0.55) ? 'priory' : 'parish');

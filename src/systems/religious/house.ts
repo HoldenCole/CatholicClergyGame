@@ -135,5 +135,5 @@ function observanceWord(o: number): string {
 /** How the house feels, for the letter, the sheet, and the digest. */
 export function houseLine(state: GameState, house: OrderHouse): string {
   const n = membersOf(state, house).length;
-  return `${house.name}, ${KIND_WORD[house.kind]} of ${n} men: ${cohesionWord(house.cohesion)}, ${observanceWord(house.observance)}.`;
+  return `${house.name}, ${KIND_WORD[house.kind]}, ${n} ${n === 1 ? 'man' : 'men'}: ${cohesionWord(house.cohesion)}, ${observanceWord(house.observance)}.`;
 }
