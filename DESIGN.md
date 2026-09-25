@@ -24,6 +24,8 @@ This is a personal project. No monetization, no audience, no accessibility manda
 
 The atomic unit of time is one week. A 40+ year career is roughly 2,000 weeks, so the game must never require the player to play all of them.
 
+**Free hours are loose, and the extras are separate** *(owner's decision, recorded at build time)*. Every week leaves at least ten free hours for the weekly activities, in the unit each sheet shows: hours in seminary, at study, and in a parish, and blocks in a friar's week (`systems/hours.ts`). Obligations, the horarium, and offices still come first, but they cannot take the week below that floor. Clubs and circles, side works, parish projects, a group being founded, a parish problem in hand, and the jobs taken from letters meet in their own time and take nothing from the week. There is no limit on clubs. They keep their own effects, their stamina, and their invitations.
+
 ### 2.2 Speed control
 
 Four settings, changeable at any time:

@@ -8,7 +8,7 @@ import { applyStat } from './stats';
 import { applyReputation } from './reputation';
 import { renderText } from '@/engine/text';
 import { freeHourShift } from './workweek';
-import { clubHours } from './clubs';
+import { withFloor } from './hours';
 import { strainAfterWeek, strainOf, WEEK } from './week';
 
 /** DESIGN §6: the weekly loop at low stakes, with fewer hours than a parish. Invented. */
@@ -25,7 +25,7 @@ export function seminaryBudget(state: GameState): number {
   const year = state.seminary?.year ?? 2;
   const base = year === 1 ? SEMINARY_WEEK.propaedeuticHours : year >= 7 ? SEMINARY_WEEK.deaconHours : SEMINARY_WEEK.freeHours;
   const sick = strainOf(state) >= WEEK.strainSick ? 1 : 0;
-  return Math.max(1, base + freeHourShift(state) - sick);
+  return withFloor(withFloor(base) + freeHourShift(state) - sick);
 }
 
 export function routineOf(sem: SeminaryState): Record<string, number> {
@@ -72,7 +72,8 @@ export function setSeminaryActivity(state: GameState, id: string, ap: number): G
   const def = seminaryActivity(id);
   if (!sem || !def) throw new Error(`no such activity ${id}`);
   const routine = { ...routineOf(sem) };
-  const others = routineHours(sem) - (routine[id] ?? 0) + clubHours(state);
+  // The clubs meet in their own time; the free hours are the activities' alone.
+  const others = routineHours(sem) - (routine[id] ?? 0);
   const next = Math.max(0, Math.min(def.maxAp, Math.floor(ap), seminaryBudget(state) - others));
   if (next === 0) delete routine[id];
   else routine[id] = next;

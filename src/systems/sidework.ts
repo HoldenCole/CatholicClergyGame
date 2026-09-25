@@ -122,7 +122,7 @@ export function workLine(state: GameState): string | null {
   if (!w) return null;
   const left = Math.max(0, w.state.endWeek - state.clock.week);
   const years = Math.round((left / 52) * 10) / 10;
-  const pace = state.parish ? 'at an hour or two a week' : `at ${w.def.apPerWeek === 1 ? 'a block' : `${w.def.apPerWeek} blocks`} of the week`;
+  const pace = 'in its own time, beside the week';
   return `${w.def.label}: ${years >= 1 ? `about ${years} year${years === 1 ? '' : 's'} of it left` : `${left} weeks left`}, ${pace}.`;
 }
 

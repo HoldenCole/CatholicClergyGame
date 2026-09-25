@@ -44,17 +44,24 @@ describe('a friar\'s week is not handed to him empty', () => {
     expect(spendsOf(defaultSpends(set))).toEqual({ mercy: 2 });
   });
 
+  it('the hours that are his are never fewer than ten, however much the house and the offices take', () => {
+    const s = friar('floor');
+    expect(spendBudget(s)).toBeGreaterThanOrEqual(10);
+    const heavy = { ...s, religious: { ...s.religious!, horarium: { ...s.religious!.horarium, hours: 'invested' as const, common_table: 'invested' as const, conventual_mass: 'invested' as const, house_chapter: 'invested' as const } } };
+    expect(spendBudget(heavy)).toBeGreaterThanOrEqual(10);
+  });
+
   it('a novice is not given a priest\'s week', () => {
     const s = friar('novice');
     const novice = { ...s, flags: { ...s.flags, ordained: false } };
     expect(defaultSpends(novice)).toBe(novice);
   });
 
-  it('a commitment he accepted takes its hours from the week', () => {
+  it('a commitment he accepted runs beside the week and takes none of its hours', () => {
     const s = friar('commit');
     const before = friarLoad(s);
     const busy = { ...s, commitments: [{ offerId: 'fr_parish_mission', label: 'Preaching a parish mission', startWeek: 60, endWeek: 62, apPerWeek: 4, failed: false }] };
-    expect(friarLoad(busy)).toBeCloseTo(before + 4);
+    expect(friarLoad(busy)).toBeCloseTo(before);
   });
 });
 

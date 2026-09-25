@@ -3,7 +3,8 @@ import { OBLIGATION_KEYS } from '@/types';
 import { actionDefs, obligationDefs, sacrificeDefs, SEASONAL_LOAD } from '@/content/parish';
 import { takeSnapshot, TRAJECTORY } from './trajectory';
 import { extraBlocks, parishBlocks, wearOf } from './workweek';
-import { clubHours, staminaOf } from './clubs';
+import { staminaOf } from './clubs';
+import { HOURS } from './hours';
 import { bondsWeek } from './bonds';
 import { liturgyWeek } from './liturgy';
 import { fundBonuses } from './spending';
@@ -21,7 +22,6 @@ import { confessorPull } from './confessor';
 import { directionWeek, pietyFactor } from './direction';
 import { learnWeek } from './languages';
 import { evaluateAll } from '@/engine/conditions';
-import { commitmentAp } from '@/engine/offers';
 import { seasonOf } from '@/engine/time';
 import { decayWeek } from './stats';
 import { applyReputation, fadeReputation } from './reputation';
@@ -29,7 +29,6 @@ import { terrainOf } from './assignment';
 import { averageVitality, groupRelief, groupsWeek, finishFounding } from './groups';
 import { ministryWeek } from './ministry';
 import { houseHelp, houseRelief, houseWeek } from './houses';
-import { workLoad } from './sidework';
 import { brothersWeek } from './brothers';
 import type { Rng } from '@/engine/rng';
 import { horariumLoad } from './religious/horarium';
@@ -209,7 +208,8 @@ export function planWeek(state: GameState): Plan {
   const parish = state.parish!;
   const budget = weekBudget(state);
   // The men around him give blocks back below the floor: a neighbor's cover, a seminarian, a deacon, the vicar he formed.
-  const fixed = Math.max(0, seasonalLoad(state) + adminFloorFor(state) + commitmentAp(state) + (state.founding?.apPerWeek ?? 0) + (state.parish?.work?.apPerWeek ?? 0) + clubHours(state) + bossLoad(state) + workLoad(state) + horariumLoad(state) + friendshipLoad(state) - fundBonuses(state).relief) - coverRelief(state) - helpRelief(state) - houseHelp(state);
+  // Circles, side works, projects, a group being founded, a problem in hand, and the jobs from letters meet in their own time: none of them comes off the week.
+  const fixed = Math.max(0, seasonalLoad(state) + adminFloorFor(state) + bossLoad(state) + horariumLoad(state) + friendshipLoad(state) - fundBonuses(state).relief) - coverRelief(state) - helpRelief(state) - houseHelp(state);
   // The groups relieve what they run; a standing confessor from the priory relieves the box. DESIGN §9.4a.
   const houses = houseRelief(state);
   const groups = groupRelief(state);
@@ -237,7 +237,8 @@ export function planWeek(state: GameState): Plan {
     }
   }
   const mandatory = mandatoryOf();
-  const available = Math.max(0, budget - mandatory);
+  // Whatever the obligations take, the week leaves him at least the floor of free hours (the parish counts in blocks of four).
+  const available = Math.max(budget - mandatory, HOURS.freeFloor / HOURS_PER_AP);
   const requested = Object.entries(parish.routine.discretionary).filter(([, ap]) => ap > 0);
   const total = requested.reduce((n, [, ap]) => n + ap, 0);
   const scale = total > available ? available / total : 1;

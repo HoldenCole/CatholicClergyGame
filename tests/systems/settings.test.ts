@@ -35,7 +35,8 @@ describe('the week and the wear are the player\'s to set', () => {
     const sem = seminaryState('ww-sem');
     const base = seminaryBudget(sem);
     expect(seminaryBudget({ ...sem, settings: { workWeek: 'long', wear: 1 } })).toBe(base + WORK_WEEKS.long.free);
-    expect(seminaryBudget({ ...sem, settings: { workWeek: 'light', wear: 1 } })).toBe(base - 1);
+    // A light week cannot take the free hours below the floor of ten.
+    expect(seminaryBudget({ ...sem, settings: { workWeek: 'light', wear: 1 } })).toBe(Math.max(10, base - 1));
     // A long week wears; a light one rests; the wear dial scales it, and at zero nothing wears at all.
     const worn = weeks(long, 30, 'worn');
     expect(worn.strain).toBeGreaterThan(20);
@@ -44,9 +45,9 @@ describe('the week and the wear are the player\'s to set', () => {
     const none = weeks({ ...s, settings: { workWeek: 'punishing', wear: 0 }, parish: { ...s.parish!, routine: { ...s.parish!.routine, sacrifices: ['sleep', 'day_off'] } } }, 30, 'none');
     expect(none.strain).toBe(0);
     expect(weeks(s, 30, 'rest').strain).toBe(0);
-    // Past the sick line the body takes an hour back everywhere, seminary included.
+    // Past the sick line the body takes an hour back everywhere, but never below the seminary's floor of ten.
     const sick: GameState = { ...sem, strain: WEEK.strainSick };
-    expect(seminaryBudget(sick)).toBe(base - 1);
+    expect(seminaryBudget(sick)).toBe(Math.max(10, base - 1));
     let semLong: GameState = setSeminaryActivity({ ...sem, settings: { workWeek: 'punishing', wear: 2 } }, 'study', 3);
     for (let i = 0; i < 20; i++) semLong = seminaryWeek({ ...semLong, clock: { ...semLong.clock, week: semLong.clock.week + 1 } }, createRng(`sl:${i}`)).state;
     expect(semLong.strain).toBeGreaterThan(30);

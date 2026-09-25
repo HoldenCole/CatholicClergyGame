@@ -106,7 +106,7 @@ describe("the bishop's choice", () => {
     for (const o of choice.options.filter((x) => !x.posting)) expect(['rural', 'difficult']).not.toContain(base.world!.parishes.find((p) => p.id === o.assignment.parishId)!.kind);
     expect(choice.options.some((o) => o.id.startsWith('kind_'))).toBe(false);
     expect(choice.options[1]!.office).toBe('worship');
-    expect(choice.options[1]!.time).toMatch(/hours a week/);
+    expect(choice.options[1]!.time).toMatch(/beside it/);
     const faculty = chooseAssignment(withChoice(s, createRng('r'), 'degree', fallback), 'faculty', createRng('x'));
     expect(faculty.study!.city).toBe('seminary');
     expect(faculty.phase).toBe('study');

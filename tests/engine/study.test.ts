@@ -61,7 +61,7 @@ describe('study away', () => {
     s = setStudyActivity(s, 'italian', 2);
     s = setStudyActivity(s, 'curia', 1);
     expect(() => setStudyActivity(s, 'hospital', 2)).not.toThrow();
-    expect(Object.values(setStudyActivity(s, 'hospital', 2).study!.routine).reduce((a, b) => a + b, 0)).toBe(6);
+    expect(Object.values(setStudyActivity(s, 'hospital', 2).study!.routine).reduce((a, b) => a + b, 0)).toBe(8); // the week away leaves at least ten free hours now, so all four fit
     const before = s.character!.stats;
     for (let i = 0; i < 25; i++) s = studyWeek({ ...s, clock: { ...s.clock, week: s.clock.week + 1 } }, createRng(`sw:${i}`)).state;
     expect(s.character!.stats.theology).toBeGreaterThan(before.theology + 2);
