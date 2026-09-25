@@ -89,7 +89,7 @@ export default function GroupsPanel() {
       </ul>
       {founding ? (
         <p className="ink-muted mt-3 text-xs">
-          Founding a {groupTypeDefs.find((d) => d.type === founding.type)?.label.toLowerCase()}: {Math.max(0, founding.endWeek - game.clock.week)} weeks to go, {hoursOf(founding.apPerWeek)} hours a week.
+          Founding a {groupTypeDefs.find((d) => d.type === founding.type)?.label.toLowerCase()}: {Math.max(0, founding.endWeek - game.clock.week)} weeks to go, beside the week.
         </p>
       ) : picking ? (
         <div className="mt-3">
@@ -98,7 +98,7 @@ export default function GroupsPanel() {
             {groupTypeDefs
               .filter((d) => !existing.has(d.type))
               .map((d) => (
-                <button key={d.type} className="pbtn px-2 py-0.5 text-xs" onClick={() => { found(d.type as GroupType); setPicking(false); }} title={`${d.founding.weeks} weeks at ${hoursOf(d.founding.apPerWeek)} hours a week`}>
+                <button key={d.type} className="pbtn px-2 py-0.5 text-xs" onClick={() => { found(d.type as GroupType); setPicking(false); }} title={`${d.founding.weeks} weeks, beside the week`}>
                   {d.label}
                 </button>
               ))}

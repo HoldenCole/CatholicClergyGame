@@ -11,7 +11,6 @@ import { scoreParish } from './assignment';
 import { hasInterest, INTERESTS, parishInterest } from './interests';
 import { formationStanding, parishPrestige } from './standing';
 import { parishKindWord } from './placement';
-import { hoursOf } from './week';
 import { clearRequestAnswer, closeRequest, refuseRequestedMove, requestOf, roleForRequest } from './request';
 import { moveOut } from '@/engine/career';
 
@@ -38,7 +37,7 @@ function prestigeWord(p: number): string {
 
 function timeWord(officeId?: string): string {
   const o = officeId ? officeDef(officeId) : undefined;
-  return o ? `the parish, and ${hoursOf(o.apPerWeek)} hours a week at ${o.label.toLowerCase()}` : 'the parish, and nothing else';
+  return o ? `the parish, and ${o.label.toLowerCase()} beside it` : 'the parish, and nothing else';
 }
 
 function involvesOf(parish: Parish, role: Role): string[] {

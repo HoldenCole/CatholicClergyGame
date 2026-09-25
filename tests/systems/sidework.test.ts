@@ -27,12 +27,12 @@ describe('systems/sidework', () => {
     expect(() => startWork(started, 'radio')).toThrow();
   });
 
-  it('the hours come off the week for as long as it runs', () => {
+  it('it runs beside the week and takes nothing from its hours', () => {
     const s = able('hours');
     const before = planWeek(s).mandatory;
     const started = startWork(s, 'book');
     expect(workLoad(started)).toBe(sideWorkDef('book')!.apPerWeek);
-    expect(planWeek(started).mandatory).toBeGreaterThan(before);
+    expect(planWeek(started).mandatory).toBe(before);
     const dropped = dropWork(started);
     expect(dropped.state.sideWork).toBeNull();
     expect(workLoad(dropped.state)).toBe(0);

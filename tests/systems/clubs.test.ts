@@ -27,11 +27,11 @@ describe('clubs and circles', () => {
     expect(s.clubs!.memberships.thomists!.fellows.length).toBeGreaterThan(0);
     expect(s.clubs!.memberships.thomists!.fellows.length).toBeLessThanOrEqual(4);
     expect(clubHours(s)).toBe(2);
-    // The hours come off the top of the free hours.
-    const budget = seminaryBudget(s);
+    // The club meets in its own time: the free hours are the activities' alone.
+    expect(seminaryBudget(s)).toBe(seminaryBudget(y3));
     s = setSeminaryActivity(s, 'study', 3);
     s = setSeminaryActivity(s, 'holy_hour', 3);
-    expect(Object.values(s.seminary!.routine ?? {}).reduce((a, b) => a + b, 0)).toBe(budget - 2);
+    expect(Object.values(s.seminary!.routine ?? {}).reduce((a, b) => a + b, 0)).toBe(6);
     expect(s.career[s.career.length - 1]!.text).toMatch(/Joined The Thomists/);
   });
 
@@ -67,14 +67,14 @@ describe('clubs and circles', () => {
     expect(offerById('sem_tlm_society')!.accept.effects.some((e) => e.target === 'club')).toBe(true);
   });
 
-  it("a priest's circles take blocks from the week, and the runners ease the strain", () => {
+  it("a priest's circles take nothing from the week, and the runners ease the strain", () => {
     const s = parishState('c4');
     const av = clubAvailability(s);
     expect(av.map((a) => a.def.id)).toContain('deanery_table');
     expect(av.map((a) => a.def.id)).not.toContain('thomists');
     let joined = joinClub(s, 'priests_running', createRng('run'));
     joined = joinClub(joined, 'deanery_table', createRng('table'));
-    expect(planWeek(joined).mandatory).toBe(planWeek(s).mandatory + 2);
+    expect(planWeek(joined).mandatory).toBe(planWeek(s).mandatory);
     expect(staminaOf(joined)).toBe(1.5);
     const cut: GameState = { ...s, parish: { ...s.parish!, routine: { ...s.parish!.routine, sacrifices: ['sleep'] } } };
     const cutRunner: GameState = { ...joined, parish: { ...joined.parish!, routine: { ...joined.parish!.routine, sacrifices: ['sleep'] } } };

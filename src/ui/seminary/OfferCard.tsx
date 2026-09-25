@@ -48,7 +48,7 @@ export default function OfferCard({ o }: { o: ActiveOffer }) {
         );
       })() : def.accept.commitment && (
         <p className="ink-muted mt-1 text-xs">
-          A commitment of {Math.round(def.accept.commitment.weeks / 4)} months{def.accept.commitment.apPerWeek > 0 ? ', on top of everything else' : ''}, alongside the parish.
+          A commitment of {Math.round(def.accept.commitment.weeks / 4)} months{def.accept.commitment.apPerWeek > 0 ? ', in its own time' : ''}, alongside the parish.
         </p>
       )}
       <div className="mt-3 flex gap-2">

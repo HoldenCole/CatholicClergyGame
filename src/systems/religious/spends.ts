@@ -7,6 +7,7 @@ import { seminaryActivityOffered, setSeminaryActivity } from '@/systems/seminary
 import { applyStat } from '@/systems/stats';
 import { currentHouse, nudgeHouse } from './house';
 import { friarLoad, BISHOP_ASKS } from './bishopAsks';
+import { withFloor } from '@/systems/hours';
 import { statDeltaFactor } from './restless';
 import { studyApFactor } from './study';
 import { gainReputation, reputationsFade } from './reputations';
@@ -50,7 +51,7 @@ export function spendsUsed(state: GameState): number {
 
 /** The blocks that are his this week. */
 export function spendBudget(state: GameState): number {
-  return Math.max(0, Math.round((SPENDS.weekBlocks - friarLoad(state)) * 4) / 4);
+  return withFloor(Math.round((SPENDS.weekBlocks - friarLoad(state)) * 4) / 4);
 }
 
 /** Whether a spend is on offer: a priest's work, a house that teaches, the stats it needs. */

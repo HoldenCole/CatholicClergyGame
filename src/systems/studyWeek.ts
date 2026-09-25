@@ -12,13 +12,14 @@ import { applySeeHours } from '@/engine/see';
 import { describeUnmet } from './doors';
 import { freeHourShift } from './workweek';
 import { strainAfterWeek, strainOf, WEEK } from './week';
+import { withFloor } from './hours';
 import { ministryAwayWeek } from './ministry';
 
 /** Free hours a week away: lectures, the chapel, and the house rule take the rest. */
 export function studyBudget(state: GameState): number {
   const base = studyProgram(state.study?.program ?? '')?.hours ?? 6;
   const sick = strainOf(state) >= WEEK.strainSick ? 1 : 0;
-  return Math.max(1, base + freeHourShift(state) - sick);
+  return withFloor(withFloor(base) + freeHourShift(state) - sick);
 }
 
 export function studyHours(study: StudyState): number {

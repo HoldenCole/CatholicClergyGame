@@ -18,10 +18,11 @@ describe('systems/seminaryWeek', () => {
   it('hours are clamped to the activity and to the week', () => {
     let s = seminaryState('routine');
     const budget = seminaryBudget(s);
-    expect(budget).toBeGreaterThanOrEqual(4);
+    expect(budget).toBeGreaterThanOrEqual(10);
     s = setSeminaryActivity(s, 'holy_hour', 9);
     expect(s.seminary!.routine!.holy_hour).toBe(3);
-    s = setSeminaryActivity(s, 'study', 9);
+    // Everything asked for at once: each clamps to its own maximum, and the whole to the week.
+    for (const id of ['study', 'direction', 'common_room', 'sports', 'writing', 'sacristan', 'parish_weekend']) s = setSeminaryActivity(s, id, 9);
     expect(routineHours(s.seminary!)).toBe(budget);
     s = setSeminaryActivity(s, 'holy_hour', 0);
     expect(s.seminary!.routine!.holy_hour).toBeUndefined();
