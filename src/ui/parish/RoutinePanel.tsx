@@ -1,9 +1,9 @@
 import { useGameStore } from '@/engine/store';
 import { actionDefs, obligationDefs } from '@/content/parish';
-import { adminFloorFor, careOf, careOfPlan, efficiencyWords, hoursOf, obligationAp, planWeek, sacrificeAp, seasonalLoad, strainOf, strainWord, weekBudget, WEEK } from '@/systems/week';
-import { sacrificeDefs, problemFix } from '@/content/parish';
+import { adminFloorFor, careOf, careOfPlan, efficiencyWords, hoursOf, obligationAp, planWeek, sacrificeAp, seasonalLoad, strainOf, strainWord, weekBudget, WEEK, HOURS_PER_AP } from '@/systems/week';
+import { HOURS } from '@/systems/hours';
+import { sacrificeDefs } from '@/content/parish';
 import type { Effect } from '@/types';
-import { commitmentAp } from '@/engine/offers';
 import { evaluateAll } from '@/engine/conditions';
 import { OBLIGATION_KEYS, type Quality } from '@/types';
 import Sheet from '../Sheet';
@@ -39,10 +39,10 @@ export default function RoutinePanel() {
   if (!game?.parish) return null;
   const plan = planWeek(game);
   const budget = weekBudget(game);
-  const fixed = seasonalLoad(game) + adminFloorFor(game) + commitmentAp(game);
+  const fixed = seasonalLoad(game) + adminFloorFor(game);
   const routine = game.parish.routine;
   const requested = Object.values(routine.discretionary).reduce((a, b) => a + b, 0);
-  const available = Math.max(0, budget - plan.mandatory);
+  const available = Math.max(budget - plan.mandatory, HOURS.freeFloor / HOURS_PER_AP);
   const careNow = careOfPlan(plan);
   const care = careOf(game);
   const careWord = careNow >= 0.8 ? 'The people see a great deal of you' : careNow >= 0.45 ? 'The people see a fair amount of you' : careNow >= 0.2 ? 'The people see a little of you' : 'The people see almost nothing of you outside Mass';
@@ -50,16 +50,12 @@ export default function RoutinePanel() {
   const strain = strainOf(game);
   const extra = sacrificeAp(game);
   const sacrificed = new Set(routine.sacrifices ?? []);
-  const work = game.parish.work ? problemFix(game.parish.work.problem) : undefined;
   // The week as a bar: every hour accounted for.
   const segments: { label: string; ap: number; kind: 'season' | 'desk' | 'promise' | 'obligation' | 'action' | 'slack' }[] = [];
   const season = seasonalLoad(game);
   if (season > 0) segments.push({ label: 'The season', ap: season, kind: 'season' });
   const desk = adminFloorFor(game);
   if (desk > 0) segments.push({ label: 'The desk', ap: desk, kind: 'desk' });
-  for (const cm of game.commitments) segments.push({ label: cm.label, ap: cm.apPerWeek, kind: 'promise' });
-  if (game.founding) segments.push({ label: 'Founding a group', ap: game.founding.apPerWeek, kind: 'promise' });
-  if (game.parish.work && work) segments.push({ label: work.label, ap: game.parish.work.apPerWeek, kind: 'promise' });
   for (const key of OBLIGATION_KEYS) {
     const def = obligationDefs.find((o) => o.key === key)!;
     segments.push({ label: def.label, ap: obligationAp(key, plan.obligations[key], 0, game.character?.stats), kind: 'obligation' });
@@ -75,14 +71,14 @@ export default function RoutinePanel() {
         <p className="ink-muted text-xs leading-relaxed">
           A working week of about {hoursOf(budget)} hours, after the Office, meals, and sleep, which are not counted here
           {extra > 0 ? ` (${hoursOf(WEEK.baseAp[game.parish.role])} of them the diocese's, and ${hoursOf(extra)} you have taken from your own life)` : ''}. Obligations take {hoursOf(plan.mandatory)}
-          {fixed > 0 ? ` (${hoursOf(fixed)} of that is the season, the desk, and what you have promised elsewhere)` : ''}, leaving {hoursOf(available)} for everything else
-          {requested > available ? `; you have asked for ${hoursOf(requested)}, so it will be trimmed` : ''}. Every block below is four hours; the daily Mass is half an hour a day and is costed that way.
+          {fixed > 0 ? ` (${hoursOf(fixed)} of that is the season and the desk)` : ''}, leaving {hoursOf(available)} for everything else, and never fewer than {HOURS.freeFloor}
+          {requested > available ? `; you have asked for ${hoursOf(requested)}, so it will be trimmed` : ''}. Every block below is four hours; the daily Mass is half an hour a day and is costed that way. Your circles, a side work, the projects, a group being founded, a problem in hand, and the jobs you have taken on meet in their own time and take nothing from these hours.
         </p>
         {efficiencyWords(game.character?.stats).length > 0 && <p className="ink-faint mt-1 text-xs">What you know saves you time: {efficiencyWords(game.character?.stats).join('; ')}.</p>}
         {game.assignment?.role === 'parochial_vicar' && <p className="ink-faint mt-1 text-xs">As vicar, the people are yours and the books are the pastor's: visits, confessions, and the groups count for more in your hands, and the desk for less.</p>}
         {requested > available && (
           <p className="ink-wine mt-1 text-xs">
-            The week is full before you get to it: {hoursOf(requested - available)} hours short. Go minimum on an obligation, drop something you promised, or take hours from your own life below.
+            The week is full before you get to it: {hoursOf(requested - available)} hours short. Go minimum on an obligation, ask for less, or take hours from your own life below.
           </p>
         )}
         <div className="mt-2 flex h-5 w-full overflow-hidden rounded border rule" title="The week, hour by hour">

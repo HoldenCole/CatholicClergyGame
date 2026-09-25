@@ -82,7 +82,6 @@ import { setCover as doSetCover } from '@/systems/deanery';
 import { evaluateSeminarian as doEvaluate } from '@/systems/formed';
 import { setSeminaryActivity as doSetSeminaryActivity } from '@/systems/seminaryWeek';
 import { setStudyActivity as doSetStudyActivity } from '@/systems/studyWeek';
-import { hoursOf } from '@/systems/week';
 import { DEFAULT_SETTINGS } from '@/systems/workweek';
 import type { GameSettings } from '@/types';
 import { setPreference, type Preference } from '@/systems/assignment';
@@ -1129,7 +1128,7 @@ export const useGameStore = create<GameStore>()((set, get) => ({
       const result = doAccept(game, def, r);
       const c = def.accept.commitment;
       set({ lastOfferOutcome: c?.away ? (def.from === '@bishop' ? 'You said yes. The bishop is the one asking, and his letter of appointment follows; nothing moves until it comes.' : 'You said yes. The request goes to the bishop, who will send you or keep you; nothing moves until his letter comes.') : result.failed && def.failure ? `${def.accept.outcome} ${def.failure.outcome}` : def.accept.outcome });
-      const text = c?.away ? `Said yes to: ${def.title}. The bishop's letter will decide it.` : c ? `Accepted: ${def.title}. ${c.label}, ${hoursOf(c.apPerWeek)} hours a week for ${Math.round(c.weeks / 52) || 1} ${c.weeks >= 78 ? 'years' : 'year'}, alongside the parish.` : `Accepted: ${def.title}.`;
+      const text = c?.away ? `Said yes to: ${def.title}. The bishop's letter will decide it.` : c ? `Accepted: ${def.title}. ${c.label}, beside the week, for ${Math.round(c.weeks / 52) || 1} ${c.weeks >= 78 ? 'years' : 'year'}, alongside the parish.` : `Accepted: ${def.title}.`;
       return { ...result.state, career: [...result.state.career, { week: game.clock.week, kind: 'offer', text }] };
     });
   },

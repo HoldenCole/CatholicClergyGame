@@ -27,7 +27,7 @@ export default function ClubsPanel() {
           <p className="ink-faint text-sm">{inParish ? 'You belong to nothing yet. The presbyterate has its tables; find one.' : 'You belong to nothing yet. The house has its societies, and it notices who joins what.'}</p>
         ) : (
           <>
-            <p className="ink-muted mb-2 text-xs">{unit(hours)} a week, taken before anything else.</p>
+            <p className="ink-muted mb-2 text-xs">{unit(hours)} a week, in their own time: the circles take nothing from the hours of your week.</p>
             <ul className="flex flex-col gap-2 text-sm">
               {mine.map(({ def }) => {
                 const m = clubsOf(game).memberships[def.id]!;
