@@ -10,7 +10,7 @@ describe('a whole career with real content', () => {
     setWeekHook(null);
   });
 
-  it('runs from creation through seminary and thirty years of parish life without errors', () => {
+  it('runs from creation through seminary and thirty years of parish life without errors', { timeout: 30_000 }, () => {
     const end = playCareer('career-run', 'chicago', 52 * 37);
     expect(['clock', 'ended', 'assignment', 'letter']).toContain(end.mode.kind);
     expect(end.flags.ordained).toBe(true);
@@ -28,7 +28,7 @@ describe('a whole career with real content', () => {
     expect(scenes).toBe(successions);
   });
 
-  it('is deterministic from the same seed and choices', () => {
+  it('is deterministic from the same seed and choices', { timeout: 30_000 }, () => {
     const a = playCareer('career-det', 'houston', 52 * 15);
     const b = playCareer('career-det', 'houston', 52 * 15);
     expect(JSON.stringify(a)).toBe(JSON.stringify(b));

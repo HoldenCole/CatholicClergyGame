@@ -72,6 +72,9 @@ function autoplay(maxSteps = 5000): GameState {
       case 'director':
         s.getState().chooseDirector(game.mode.options[0]!.npcId, true);
         break;
+      case 'letter':
+        s.getState().readLetter();
+        break;
 
       case 'clock':
         s.getState().setSpeed('SKIP');
