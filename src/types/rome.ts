@@ -144,6 +144,8 @@ export interface IssuedDocument {
   implemented?: Implementation;
   implementedWeek?: number;
   parishId?: string;
+  /** R1.2: the earlier document of his lifetime this one turns back, and what he had done with it (§4.3). */
+  reverses?: { index: number; title: string; value: string; implemented: Implementation; week: number };
 }
 
 

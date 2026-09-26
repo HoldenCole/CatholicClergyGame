@@ -118,8 +118,11 @@ export function documentCondition(state: GameState, cond: Extract<Condition, { t
   if (cond.within !== undefined && state.clock.week - doc.week > cond.within) return false;
   if (cond.norm !== undefined && !oneOf(doc.norm, cond.norm)) return false;
   if (cond.implemented !== undefined) {
-    if (typeof cond.implemented === 'boolean') return !!doc.implemented === cond.implemented;
-    return oneOf(doc.implemented, cond.implemented);
+    if (typeof cond.implemented === 'boolean' ? !!doc.implemented !== cond.implemented : !oneOf(doc.implemented, cond.implemented)) return false;
+  }
+  if (cond.toward !== undefined && docLean(cond.axis, doc.from, doc.value ?? '') !== (cond.toward === 'tradition' ? -1 : 1)) return false;
+  if (cond.reverses !== undefined) {
+    if (typeof cond.reverses === 'boolean' ? !!doc.reverses !== cond.reverses : !oneOf(doc.reverses?.implemented, cond.reverses)) return false;
   }
   return true;
 }

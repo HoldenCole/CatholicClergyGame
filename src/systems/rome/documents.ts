@@ -5,6 +5,7 @@ import { fromDayNumber } from '@/engine/calendar';
 import { documentHistory, documentPools, papalHistory, policyAxes } from '@/content/rome';
 import { dateWords, recordEndDay, romeOn, walkRome } from './papacy';
 import { docLean, initialPolicies, isoDay, readingLine, rollNorm } from './policy';
+import { readBackLine, reversalOf, undoneBy } from './reversal';
 
 /**
  * E1 R1.1 — the documents (§4.1) and the cascade (§4.2). The record's
@@ -53,7 +54,7 @@ export function incipit(rng: Rng): string {
   return `${documentPools.openers[0]} ${documentPools.continuations[0]}`;
 }
 
-type Draft = Omit<IssuedDocument, 'week' | 'norm' | 'bishopId'>;
+export type Draft = Omit<IssuedDocument, 'week' | 'norm' | 'bishopId'>;
 
 /** The document a generated pope issues in one week of the line, if any: pure in the seed and the week. */
 export function generatedDocument(seed: string, period: number, pope: Papacy, policies: Record<string, PolicyStanding>): Draft | null {
@@ -166,46 +167,69 @@ export function documentsWeek(state: GameState): DocumentsWeek {
     rome = { ...rome, policies: draftsBetween(state.seed, line.popes, -1e9, day, initialPolicies()).policies, issued: rome.issued ?? [], docsThrough: day };
     return { state: { ...state, rome }, lines: [], letters: [] };
   }
-  const lines: string[] = [];
-  const letters: Letter[] = [];
-  let career = state.career;
-  const week = state.clock.week;
   const through = rome.docsThrough ?? day;
-  const { drafts, policies } = draftsBetween(state.seed, rome.popes, through, day, rome.policies);
-  let issued = rome.issued ?? [];
+  const { drafts } = draftsBetween(state.seed, rome.popes, through, day, rome.policies);
   let cascade = rome.cascade;
   // A scene that has waited too long for a man away from any parish lapses.
-  if (cascade && week > cascade.dueWeek + DOCUMENTS.cascadeLapse) cascade = undefined;
-  const bishop = state.world?.diocese.hidden.bishop;
+  if (cascade && state.clock.week > cascade.dueWeek + DOCUMENTS.cascadeLapse) cascade = undefined;
+  const { cascade: _c, ...rest } = rome;
+  let s: GameState = { ...state, rome: { ...rest, docsThrough: day, ...(cascade ? { cascade } : {}) } };
+  const lines: string[] = [];
+  const letters: Letter[] = [];
   for (const draft of drafts) {
-    const lean = draft.axis && draft.value ? docLean(draft.axis, draft.from, draft.value) : 0;
-    const read = draft.axis && bishop && !state.see ? { norm: rollNorm(state.seed, draft.id, bishop.npcId, bishop.alignment, lean), bishopId: bishop.npcId } : {};
-    const doc: IssuedDocument = { ...draft, week, ...read };
-    issued = [...issued, doc];
-    const name = popeName(state, doc.popeId);
-    const label = documentPools.kinds[doc.kind].label;
-    lines.push(`From Rome: the ${label} ${doc.title}, ${doc.gist}.`);
-    if (!doc.axis || !doc.value) continue;
-    const value = policyAxes.find((a) => a.key === doc.axis)!.values.find((v) => v.key === doc.value)!;
-    const reading = readingLine(state, doc);
-    letters.push({
-      sort: 'rome',
-      title: `From Rome: ${doc.title}`,
-      body: [
-        `${issueSentence(doc, name)} It is in force from ${dateWords(doc.day)}.`,
-        `What it changes: ${value.change}`,
-        reading ?? (state.see ? 'The reading of it in your own diocese is yours to give.' : 'It is read at table and argued over for a week, and then it is simply the law.'),
-        'By Sunday the parish will have read the newspapers, and someone will ask you after Mass what it means before you have finished the text.',
-      ],
-      week,
-    });
-    career = [...career, { week, kind: 'note', text: `${doc.title} (${label}, ${name}): ${doc.gist}.` }];
-    const rng = createRng(`${state.seed}:cascade:${doc.id}`);
-    cascade = { index: issued.length - 1, dueWeek: week + rng.int(DOCUMENTS.cascadeAfter[0], DOCUMENTS.cascadeAfter[1]) };
+    const out = issueDocument(s, draft);
+    s = out.state;
+    lines.push(out.line);
+    if (out.letter) letters.push(out.letter);
   }
-  rome = { ...rome, policies, issued, docsThrough: day, ...(cascade ? { cascade } : {}) };
-  if (!cascade) delete rome.cascade;
-  return { state: { ...state, rome, career }, lines, letters };
+  return { state: s, lines, letters };
+}
+
+/**
+ * Issue one document into the man's world: the law moves, the diocesan
+ * bishop reads it, it is kept in the record, and a document on an axis
+ * writes its letter (reading back his record, if it turns back one he
+ * answered) and sets its parish scene due.
+ */
+export function issueDocument(state: GameState, draft: Draft): { state: GameState; line: string; letter: Letter | null } {
+  const rome = state.rome!;
+  const week = state.clock.week;
+  const bishop = state.world?.diocese.hidden.bishop;
+  const lean = draft.axis && draft.value ? docLean(draft.axis, draft.from, draft.value) : 0;
+  const read = draft.axis && bishop && !state.see ? { norm: rollNorm(state.seed, draft.id, bishop.npcId, bishop.alignment, lean), bishopId: bishop.npcId } : {};
+  // A document that turns back one he answered in his parish: the record will be read back to him. E1 §4.3.
+  const reverses = reversalOf(rome.issued ?? [], draft);
+  const doc: IssuedDocument = { ...draft, week, ...read, ...(reverses ? { reverses } : {}) };
+  const issued = [...(rome.issued ?? []), doc];
+  const policies = apply(rome.policies ?? initialPolicies(), doc);
+  const name = popeName(state, doc.popeId);
+  const label = documentPools.kinds[doc.kind].label;
+  const line = `From Rome: the ${label} ${doc.title}, ${doc.gist}.`;
+  let next: GameState = { ...state, rome: { ...rome, issued, policies } };
+  if (!doc.axis || !doc.value) return { state: next, line, letter: null };
+  const value = policyAxes.find((a) => a.key === doc.axis)!.values.find((v) => v.key === doc.value)!;
+  const reading = readingLine(state, doc);
+  const readBack = reverses ? readBackLine(next, doc) : null;
+  const letter: Letter = {
+    sort: 'rome',
+    title: `From Rome: ${doc.title}`,
+    body: [
+      `${issueSentence(doc, name)} It is in force from ${dateWords(doc.day)}.`,
+      `What it changes: ${value.change}`,
+      reading ?? (state.see ? 'The reading of it in your own diocese is yours to give.' : 'It is read at table and argued over for a week, and then it is simply the law.'),
+      ...(readBack ? [readBack] : []),
+      'By Sunday the parish will have read the newspapers, and someone will ask you after Mass what it means before you have finished the text.',
+    ],
+    week,
+  };
+  const rng = createRng(`${state.seed}:cascade:${doc.id}`);
+  const cascade = { index: issued.length - 1, dueWeek: week + rng.int(DOCUMENTS.cascadeAfter[0], DOCUMENTS.cascadeAfter[1]) };
+  next = {
+    ...next,
+    rome: { ...next.rome!, cascade },
+    career: [...next.career, { week, kind: 'note', text: `${doc.title} (${label}, ${name}): ${doc.gist}.` }],
+  };
+  return { state: next, line, letter };
 }
 
 /** The document whose parish scene is due this week, if any. */
@@ -243,11 +267,14 @@ const DONE_WORD: Record<Implementation, string> = { eager: 'you went ahead of th
 
 /** The documents of his lifetime that asked something of the parishes, and what he did with each: for the Profile. */
 export function documentsOfHisLife(state: GameState): { title: string; year: number; line: string }[] {
-  return (state.rome?.issued ?? []).filter((d) => d.axis).map((d) => {
+  const issued = state.rome?.issued ?? [];
+  return issued.flatMap((d, i) => (d.axis ? [{ d, i }] : [])).map(({ d, i }) => {
     const year = fromDayNumber(d.day).year;
     const parts = [d.gist];
     if (d.norm) parts.push(NORM_WORD[d.norm]!);
     parts.push(d.implemented ? DONE_WORD[d.implemented] : 'it never came to your door');
+    const later = undoneBy(issued, i);
+    if (later) parts.push(`undone by ${later.title} in ${fromDayNumber(later.day).year}`);
     return { title: d.title, year, line: parts.join('; ') };
   });
 }

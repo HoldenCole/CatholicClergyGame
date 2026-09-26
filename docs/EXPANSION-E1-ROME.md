@@ -146,6 +146,16 @@ Tunables are invented and flagged; the conclave and the terna are deterministic 
 - **Fixed on the way**: the chancery's chance of granting a traditional liturgical ask ran the wrong way with the bishop's leaning; a traditional bishop now warms to it.
 - **Not yet**: when the man is himself a diocesan bishop, the reading is his to give and no scene asks him for it (R1.6's territory, or sooner). Reversal scenes that read his record back are R1.2.
 
+### 8.3 As built (R1.2)
+
+*Added at build time.*
+
+- **Detection** (`systems/rome/reversal.ts`): a document reverses when it moves an axis against the latest document on that axis the man answered in his parish (one he never answered is not read back to him). The new document carries the mark: which document, what he did with it, and when. It happens as often as Rome changes its mind, so a long career can meet it twice or more, each time reading back the newer answer.
+- **The record read back.** From the history, the choice he made in the parish scene: its words, the year, the parish, and what it cost and won (from the choice's authored effects: "It cost you the traditional families and some of the parish, and won you Rome, the chancery and the bishop."). It is a paragraph in the letter from Rome, so a man away from any parish still hears it, and tokens for the scenes: `{then_doc|then_year|then_parish|then_said|then_cost:<axis>}`. The validator requires a scene using them to carry a `reverses` condition on that axis.
+- **Scenes** (`content/events/rome/reversal.json`, 11): the Mass he ended, the Mass he would not end (vindicated), the Mass he gave and must take back, the refusal remembered; the Missal again; the people he brought to communion and the people he kept in the pew; the blessing given and the door kept shut; the lay ministries' register; what the parish said. They are cascade scenes with a priority, drawn ahead of any ordinary cascade scene, and their answer is the answer to the new document, so the record grows.
+- New `document` condition fields: `toward` (`tradition` | `reform`) and `reverses` (true, or the way he answered the earlier one).
+- **On screen**: the Profile's "From Rome" sheet says which later document undid each one.
+
 ## 9. Decisions (owner, 26 September 2026)
 
 - **(A) Real papal history, then rolled popes.** The real record is data (`content/rome/history.json`) up to the last pope no longer living: Pius XII through Francis. From the vacancy of 21 April 2025 the popes are generated. A living pope is never named, and no generated pope takes the regnal name Leo (the reigning pope's; CLAUDE.md rule 13). A 2010 start lives under Benedict XVI and Francis, then diverges; a 2040 start has only generated popes.

@@ -5,6 +5,7 @@ import { offerById } from '@/content/offers';
 import { studyProgram } from '@/content/study';
 import { townTokens } from '@/systems/town';
 import { romeTokens } from '@/systems/rome/policy';
+import { reversalTokens } from '@/systems/rome/reversal';
 
 /** Tokens every piece of text can use, derived from state. Later phases add {diocese} and {parish}. */
 export function textExtras(state: GameState): Record<string, string> {
@@ -31,6 +32,7 @@ export function textExtras(state: GameState): Record<string, string> {
   }
   Object.assign(out, townTokens(state));
   Object.assign(out, romeTokens(state));
+  Object.assign(out, reversalTokens(state));
   return out;
 }
 
