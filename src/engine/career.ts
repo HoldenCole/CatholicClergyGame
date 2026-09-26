@@ -6,6 +6,7 @@ import { openingBlurb, playerCandidate, refreshOpenings, rivalsFor } from '@/sys
 import { advanceTrajectories, rollTrajectories } from '@/systems/trajectories';
 import { formerReligiousArrives, institutesYear } from '@/systems/institutesDrift';
 import { driftRome, successionYear } from '@/systems/succession';
+import { reigning } from '@/systems/rome/papacy';
 import { directionOf, directionYear } from '@/systems/direction';
 import { religiousYear } from '@/systems/groups';
 import { handoffProject } from '@/systems/projects';
@@ -282,7 +283,8 @@ export function nextAssignment(state: GameState, rng: Rng): { state: GameState; 
 /** At ordination: classmates get futures and the record opens. */
 export function beginCareer(state: GameState, rng: Rng): GameState {
   let next = rollTrajectories(state, rng.derive('trajectories'));
-  next = { ...next, romeTemperament: Math.round(rng.derive('rome').gaussian() * 30) };
+  // Rome as it is the year he is ordained: the reigning pope's reading, and a little of the Curia's own.
+  next = { ...next, romeTemperament: Math.max(-100, Math.min(100, Math.round((reigning(next)?.temperament ?? 0) + rng.derive('rome').gaussian() * 10))) };
   const age = playerAge(next);
   // DESIGN §7.2: the maturity curve is read by content as well as by the board.
   next = { ...next, flags: { ...next.flags, ...(age >= 32 ? { ordained_late: true } : {}), ...(age < 30 ? { ordained_young: true } : {}) } };
@@ -327,6 +329,8 @@ export function careerSummary(state: GameState, ending: 'retired' | 'died' | 'le
     promotions === 0 ? 'You were never made a pastor.' :
     `You were appointed ${promotions === 1 ? 'once' : `${promotions} times`}${passed ? ` and passed over ${passed === 1 ? 'once' : `${passed} times`}` : ''}.`;
   const bishops = successions === 0 ? 'You served one bishop.' : `You served ${successions + 1} bishops, and each read you differently.`;
+  const popes = state.rome?.popes ?? [];
+  const romeLine = popes.length > 1 ? ` You lived under ${popes.length} popes: ${popes.map((p) => p.name).join(', ')}.` : popes.length === 1 ? ` One pope reigned all your years: ${popes[0]!.name}.` : '';
   const record = publicPositions === 0 ? 'Nothing you said is on the record.' : `${publicPositions} things you said are on the record, and will stay there.`;
   const legacy = founded === 0 ? '' : ` You founded ${founded === 1 ? 'a group' : `${founded} groups`}; some of them outlived your leaving.`;
   const cohort = classmates.length
@@ -335,7 +339,7 @@ export function careerSummary(state: GameState, ending: 'retired' | 'died' | 'le
   const lines = entries.filter((e) => e.kind !== 'note').slice(-6).map((e) => renderText(e.text, state));
   // The book: what the years actually counted, which is not a score. DESIGN §8.6.
   const book = ministryLine(state);
-  return [opening, arc, bishops, record + legacy + cohort, ...(book ? [`You said ${book}`] : []), '', ...lines].join('\n');
+  return [opening, arc, bishops + romeLine, record + legacy + cohort, ...(book ? [`You said ${book}`] : []), '', ...lines].join('\n');
 }
 
 /**
