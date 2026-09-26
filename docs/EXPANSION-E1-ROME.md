@@ -156,6 +156,18 @@ Tunables are invented and flagged; the conclave and the terna are deterministic 
 - New `document` condition fields: `toward` (`tradition` | `reform`) and `reverses` (true, or the way he answered the earlier one).
 - **On screen**: the Profile's "From Rome" sheet says which later document undid each one.
 
+### 8.4 As built (R1.3)
+
+*Added at build time.*
+
+- **The nuncio** (`systems/rome/nuncio.ts`): a generated archbishop in Washington (never a real one), from Italy most often, then Poland, the Philippines, India, Nigeria and elsewhere, reading as the pope who sent him does with a man's own variance. He serves five to eight years; a new pope recalls him within a year half the time. He is an NPC (`@nuncio`), named on the Profile, and his arrival is a line in the Record and, often, a dinner with the clergy.
+- **His reading of a man** (`nuncioView.ts`, 0..100, `{nuncio_view}` in prose): Rome's regard and the chancery's; what the man did with Rome's documents in his parish (faithful and eager count for him, defiance against him); what he has said in public against the nuncio's own reading, and whether he is loud; a canon law or Roman degree, the years as vicar general or auxiliary, a hard parish turned; his own bishop's letter; and whether he kept the nunciature's secrets. Two men with the same stats and different records read differently, and get different letters: a test holds it.
+- **The terna.** About three sees of the region in five years fall vacant (from the pool of sees, never the home diocese). The nuncio consults: a man of eight years whom he reads well enough is asked, sub secreto, about another priest (a classmate or a brother priest; `@terna_subject`): friend, rival, stranger, his fidelity, the secretary's follow-up call. A man of sixteen years he reads highly (62 and up) may be put on the list himself: `terna_named`, and a scene that tells him so sideways (the old questionnaire scene among them). Some months later Rome names someone: sometimes the man he was asked about, sometimes a stranger, sometimes him. Nothing is named in a vacancy of the Holy See.
+- **The offers are his.** A see comes only from a terna that named the man, as a guaranteed letter that names the see and reads his file back to him, and that see is the one he gets. The auxiliary and the translation need the nuncio's reading (55 and up) instead of fixed thresholds; the bishop's request for an auxiliary is a scene that puts the man's name forward, or lets him say no for good.
+- **Rome in trust:** a chancery post comes likelier to a man Rome thinks well of (up to ×1.4) and rarer to one it does not (down to ×0.6).
+- **Fixed on the way:** Rome's letters (the see, the auxiliary, the translation) now move a man at once instead of waiting on the diocesan bishop's letter, where a second post accepted in the meantime could displace a see; no post asks for his years while he is waiting on a letter of appointment; an auxiliary whose years end opens the flagship's letter instead of the board's.
+- Scenes: 14 new (`content/events/rome/nuncio.json`) and the questionnaire converted, on beat `nuncio`. Tunables in `NUNCIO` and `VIEW` are invented and flagged.
+
 ## 9. Decisions (owner, 26 September 2026)
 
 - **(A) Real papal history, then rolled popes.** The real record is data (`content/rome/history.json`) up to the last pope no longer living: Pius XII through Francis. From the vacancy of 21 April 2025 the popes are generated. A living pope is never named, and no generated pope takes the regnal name Leo (the reigning pope's; CLAUDE.md rule 13). A 2010 start lives under Benedict XVI and Francis, then diverges; a 2040 start has only generated popes.

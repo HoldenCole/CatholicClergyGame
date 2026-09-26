@@ -53,7 +53,48 @@ export interface RomeState {
   docsThrough?: number;
   /** R1.1: the document whose parish scene is waiting, and the week it is due. */
   cascade?: { index: number; dueWeek: number };
+  /** R1.3: the apostolic nuncio of the day, and those before him in the man's life. */
+  nuncio?: Nuncio;
+  nuncios?: number;
+  /** R1.3: the nuncio's processes for the sees of the region, open and closed. */
+  ternas?: Terna[];
+  /** R1.3: the nuncio's scene waiting for the man, and the week it is due. */
+  nuncioScene?: { kind: NuncioSceneKind; dueWeek: number; ternaId?: string };
 }
+
+/** E1 R1.3 — the apostolic nuncio (§5): a generated archbishop, rotating, with his own reading. */
+export interface Nuncio {
+  npcId: string;
+  /** −100 traditional .. +100 progressive: the pope who sent him, and the man. */
+  temperament: number;
+  from: string;
+  arrivedDay: number;
+  leavesDay: number;
+}
+
+export type TernaCause = 'died' | 'retired' | 'transferred';
+
+/** A see of the region falls vacant and the nuncio sends three names to Rome. */
+export interface Terna {
+  id: string;
+  seeId: string;
+  seeName: string;
+  cause: TernaCause;
+  openedWeek: number;
+  /** The week the three names go to Rome, and the week the new bishop is named. */
+  sendWeek: number;
+  nameWeek: number;
+  /** His own name is on it. */
+  player: boolean;
+  /** The priest he was asked about, if he was consulted. */
+  consultedAbout?: string;
+  /** Who was named: 'player', an npc id, or a stranger's name. */
+  winner?: string;
+  winnerName?: string;
+  done?: boolean;
+}
+
+export type NuncioSceneKind = 'consulted' | 'about_you' | 'passed' | 'subject_named' | 'arrival' | 'remembers' | 'aux_request';
 
 /**
  * E1 R1.1 — documents and the implementation cascade (§4). A document is

@@ -166,6 +166,9 @@ export type Condition =
       /** R1.2: it turns back an earlier document he answered (true), or one he answered this way. */
       reverses?: boolean | string | string[];
     }
+  /** E1 R1.3: the nuncio: his scene due for the man now, or his view of the man (0..100) against a value. */
+  | { type: 'nuncio'; key: 'scene'; value: string }
+  | { type: 'nuncio'; key: 'view'; op: Op; value: number }
   | { type: 'not'; inner: Condition }
   | { type: 'any'; inner: Condition[] }
   | { type: 'all'; inner: Condition[] };

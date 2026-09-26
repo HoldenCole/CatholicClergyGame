@@ -5386,16 +5386,10 @@
           }
         },
         {
-          "type": "reputation",
-          "key": "chancery",
+          "type": "nuncio",
+          "key": "view",
           "op": ">=",
           "value": 55
-        },
-        {
-          "type": "reputation",
-          "key": "rome",
-          "op": ">=",
-          "value": 20
         }
       ],
       "weight": 30,
@@ -5562,22 +5556,12 @@
         "study"
       ],
       "title": "A See",
-      "body": "The nuncio himself, this time, and not on the phone. He asks you to lunch in Washington and does not get to it until the coffee. A see is vacant. It may be small and far from here, more parishes than priests and a cathedral that needs a roof, or it may be one of the great sees, which the nuncio does not say until the bull is drawn. The Holy Father would like you to take it. You would leave {diocese} for good, and your mother's grave, and every priest who knows your name, and become the man that forty strangers in collars talk about at their deanery dinners. You would hold it until the letter at seventy-five, or until Rome moved you, which for a see like this it does not. The nuncio says the Holy Father is aware that it is not a reward. He says it is a diocese, and it needs a bishop, and he has read your file twice.",
+      "body": "The nuncio himself, this time, and not on the phone. He asks you to lunch in Washington and does not get to it until the coffee. The see of {see_city} is vacant, and the three names went to Rome some months ago. The Holy Father would like you to take it. You would leave {diocese} for good, and your mother's grave, and every priest who knows your name, and become the man that forty strangers in collars talk about at their deanery dinners. You would hold it until the letter at seventy-five, or until Rome moved you, which for a see like this it does not. The nuncio says the Holy Father is aware that it is not a reward. He says it is a diocese, and it needs a bishop, and he has read your file twice. {nuncio_view}",
       "requires": [
         {
           "type": "flag",
-          "key": "terna_named",
+          "key": "nuncio:named_see",
           "value": true
-        },
-        {
-          "type": "years_ordained",
-          "op": ">=",
-          "value": 20
-        },
-        {
-          "type": "age",
-          "op": "<=",
-          "value": 68
         },
         {
           "type": "not",
@@ -5594,75 +5578,10 @@
             "key": "refused_see",
             "value": true
           }
-        },
-        {
-          "type": "reputation",
-          "key": "rome",
-          "op": ">=",
-          "value": 30
-        },
-        {
-          "type": "any",
-          "inner": [
-            {
-              "type": "flag",
-              "key": "served_auxiliary",
-              "value": true
-            },
-            {
-              "type": "flag",
-              "key": "ordained_bishop",
-              "value": true
-            },
-            {
-              "type": "flag",
-              "key": "vg_served",
-              "value": true
-            },
-            {
-              "type": "reputation",
-              "key": "chancery",
-              "op": ">=",
-              "value": 70
-            }
-          ]
         }
       ],
       "weight": 25,
-      "bias": [
-        {
-          "when": {
-            "type": "flag",
-            "key": "served_auxiliary",
-            "value": true
-          },
-          "multiplier": 2.5
-        },
-        {
-          "when": {
-            "type": "flag",
-            "key": "vg_served",
-            "value": true
-          },
-          "multiplier": 1.6
-        },
-        {
-          "when": {
-            "type": "flag",
-            "key": "hard_parish_turned",
-            "value": true
-          },
-          "multiplier": 1.4
-        },
-        {
-          "when": {
-            "type": "outspokenness",
-            "op": ">=",
-            "value": 50
-          },
-          "multiplier": 0.4
-        }
-      ],
+      "bias": [],
       "windowWeeks": 1,
       "once": true,
       "cluster": "episcopal",
@@ -5736,11 +5655,26 @@
             "target": "stat",
             "key": "piety",
             "delta": 1
+          },
+          {
+            "target": "flag",
+            "key": "nuncio:named_see",
+            "value": false
           }
         ],
         "outcome": "You tell the nuncio that you are too old to learn a diocese, or that your mother is dying, or the truth, which is that you do not want to be the man in that chair. He listens without moving. He says that the Holy Father will be told, and that the Holy Father does not ask twice. The see gets a canonist from Ohio. You go home and say the noon Mass, and it is a very good Mass."
       },
-      "final": true
+      "final": true,
+      "guarantee": {
+        "when": [
+          {
+            "type": "flag",
+            "key": "nuncio:named_see",
+            "value": true
+          }
+        ],
+        "withinWeeks": 2
+      }
     },
     {
       "id": "pv_investment_committee",
@@ -6127,18 +6061,18 @@
           "value": 70
         },
         {
-          "type": "reputation",
-          "key": "rome",
-          "op": ">=",
-          "value": 35
-        },
-        {
           "type": "not",
           "inner": {
             "type": "flag",
             "key": "refused_translation",
             "value": true
           }
+        },
+        {
+          "type": "nuncio",
+          "key": "view",
+          "op": ">=",
+          "value": 55
         }
       ],
       "weight": 16,

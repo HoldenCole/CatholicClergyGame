@@ -1,0 +1,1200 @@
+{
+  "_notes": "E1 R1.3: the nuncio's scenes (docs/EXPANSION-E1-ROME.md §5). Beat 'nuncio': systems/rome/nuncio.ts sets one due (consulted about another man, a questionnaire about him, a name in the paper, a new nuncio, the nuncio who remembers, the bishop's request for an auxiliary) and the week hook plays a scene of that kind. {@terna_subject} is the priest he was asked about; {see}, {see_city}, {named}, and {nuncio_view} come from the terna and the nuncio's reading of him.",
+  "events": [
+    {
+      "id": "nu_consulted_friend",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "beat": "nuncio",
+      "pressure": [
+        "friendship_vs_duty",
+        "loyalty_vs_honesty"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 2,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "nuncio",
+          "key": "scene",
+          "value": "consulted"
+        },
+        {
+          "type": "relationship",
+          "npcId": "@terna_subject",
+          "op": ">=",
+          "value": 25
+        }
+      ],
+      "title": "Sub Secreto",
+      "body": "The envelope is from the Apostolic Nunciature in Washington, and inside it, under a covering letter that reminds you twice of the pontifical secret, are twenty-seven questions about {@terna_subject.full}. {see} is vacant, the letter does not say, but you can read a newspaper. You have known him since you were both too young to shave properly. You know that he is kind and quick and holy in the way that does not show, and you know the things about him that a friend knows and a questionnaire asks about: the temper he keeps on a short leash, the year he nearly left, the drink he gave up. Question nineteen asks about his prudence.",
+      "choices": [
+        {
+          "id": "truth",
+          "label": "Answer every question truthfully, the faults with the rest",
+          "outcome": "You answer all twenty-seven, the temper and the year he nearly left among them, and say in the last box that you would trust him with your own soul. It takes you three evenings. The nunciature, which reads a great many of these, knows a real one when it sees it.",
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "nuncio:trusted",
+              "value": true
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "generous",
+          "label": "Answer truthfully, and let the good things carry the weight",
+          "outcome": "You answer truthfully and generously, which are not the same, and put the temper in a subordinate clause. Every word is true. The nunciature reads it as what it is, a friend's letter, and weighs it with the others.",
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": -1
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "tell",
+          "label": "Call him and tell him the questionnaire has come",
+          "outcome": "You call him that night and tell him, because a friend would want to know. He is quiet for a long time and then says you should not have told him, and thanks you. The pontifical secret is not a formality, and somebody always tells the nunciature who talked.",
+          "effects": [
+            {
+              "target": "flag",
+              "key": "nuncio:broke_secret",
+              "value": true
+            },
+            {
+              "target": "relationship",
+              "key": "@terna_subject",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": -5
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": -1
+            }
+          ]
+        },
+        {
+          "id": "recuse",
+          "label": "Write back that you are too close to him to be fair",
+          "outcome": "You write back that he is your closest friend and that you cannot be fair, and return the questions unanswered. It is honest and it helps nobody, and the nuncio's secretary, who has read a thousand of these, files it under a heading of its own.",
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": -1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "nu_consulted_rival",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "beat": "nuncio",
+      "pressure": [
+        "ambition_vs_integrity",
+        "loyalty_vs_honesty"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 2,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "nuncio",
+          "key": "scene",
+          "value": "consulted"
+        },
+        {
+          "type": "relationship",
+          "npcId": "@terna_subject",
+          "op": "<=",
+          "value": -15
+        }
+      ],
+      "title": "Twenty-Seven Questions",
+      "body": "The questionnaire from the nunciature is about {@terna_subject.full}, and you read it twice before you let yourself enjoy it. {see} is vacant, and the nuncio is asking priests who know him. You know him. You know the way he talks about the men he has passed on the stairs, and the committee he chaired into the ground, and the year the chancery covered for him. You also know that he works harder than you do, and that his people love him, and that the questionnaire is sub secreto and nobody will ever read what you write but men in Washington and Rome.",
+      "choices": [
+        {
+          "id": "fair",
+          "label": "Be scrupulously fair: his gifts first, the rest as it is",
+          "outcome": "You write his gifts first, all of them, and then the rest as plainly as you can, and read it over for anything you enjoyed writing and take that out. It is the hardest thing you have written in years. The nunciature does not know what it cost you; it knows it is fair.",
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "nuncio:trusted",
+              "value": true
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "sink",
+          "label": "Tell them everything you know, and let it land where it lands",
+          "outcome": "You tell them everything, every true thing that tells against him, and nothing that tells for him that they could find elsewhere. It is all true. You say the Mass the next morning with a feeling you do not examine, and the nunciature, reading a dozen of these, notices which one is out of tune.",
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": -2
+            },
+            {
+              "target": "flag",
+              "key": "nuncio:sank_rival",
+              "value": true
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": -2
+            }
+          ]
+        },
+        {
+          "id": "recuse",
+          "label": "Write that you and he have never got on, and that you are the wrong man to ask",
+          "outcome": "You write that you and he have never got on, and that the nuncio should weigh anything you say accordingly, and then answer only the questions of fact. The secretary who reads it underlines the first sentence. It is the answer of a man who can be trusted with a secret.",
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "nuncio:trusted",
+              "value": true
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "nu_consulted_stranger",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "beat": "nuncio",
+      "pressure": [
+        "competence",
+        "loyalty_vs_honesty"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 2,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "nuncio",
+          "key": "scene",
+          "value": "consulted"
+        },
+        {
+          "type": "relationship",
+          "npcId": "@terna_subject",
+          "op": ">=",
+          "value": -14
+        },
+        {
+          "type": "relationship",
+          "npcId": "@terna_subject",
+          "op": "<=",
+          "value": 24
+        }
+      ],
+      "title": "A Man You Barely Know",
+      "body": "The nunciature has sent you twenty-seven questions about {@terna_subject.full}, whom you have met perhaps a dozen times: priests' days, a funeral, a committee on the diocesan pension that never met again. {see} is vacant, and somebody has given the nuncio your name as a man who would know. You would not know. You know that he wears his collar a little high and preaches a little long and once drove two hours to bring you a book you had mentioned. The questions ask about his orthodoxy, his prudence, his health, and his friendships.",
+      "choices": [
+        {
+          "id": "what_i_know",
+          "label": "Answer only what you know, and say plainly what you do not",
+          "outcome": "You answer the four questions you can answer and write in the other twenty-three that you do not know. It looks thin on the page. The nuncio, who has read a great many long answers from men who knew even less, reads it as the most useful thing in the file.",
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "nuncio:trusted",
+              "value": true
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 2
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "ask_around",
+          "label": "Ask a few men who know him better, carefully",
+          "outcome": "You ask two priests who know him, carefully, without saying why. One of them guesses why within a minute. By the next priests' day half the deanery knows that somebody is on a terna and the other half knows who.",
+          "effects": [
+            {
+              "target": "flag",
+              "key": "nuncio:broke_secret",
+              "value": true
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": -3
+            },
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "boilerplate",
+          "label": "Write the generous paragraph everyone writes",
+          "outcome": "You write the paragraph everyone writes: a good priest, well liked, faithful to the Church, prudent in his judgments. None of it is false. None of it tells the nuncio anything, and he has a drawer of them.",
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": -1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "nu_consulted_fidelity",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "beat": "nuncio",
+      "pressure": [
+        "loyalty_vs_honesty",
+        "friendship_vs_duty"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 2,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "nuncio",
+          "key": "scene",
+          "value": "consulted"
+        }
+      ],
+      "title": "Question Fourteen",
+      "body": "Question fourteen of the nunciature's questionnaire about {@terna_subject.full} asks whether the candidate is faithful to the Magisterium and to the norms of the Holy See, and whether he has implemented them in his parish. You know the answer, or part of it. Everyone in the deanery knows how he answered the last letter from Rome, because he said so from the pulpit and the diocesan paper printed it. {see} needs a bishop. The questionnaire is sub secreto, and it wants the truth, and the truth is a matter of record already.",
+      "choices": [
+        {
+          "id": "plain",
+          "label": "Answer it plainly: what he did, and what he said",
+          "outcome": "You write what he did and what he said, with the dates, and nothing about what you think of it. The nuncio can read. It is the kind of answer the nunciature asks for and rarely gets, and it does not tell them whether you agree with him.",
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "nuncio:trusted",
+              "value": true
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 2
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "context",
+          "label": "Answer it with the context: his people, his reasons, his obedience in everything else",
+          "outcome": "You answer it with the context: why he did it, the families he did it for, and the forty other things in which he has obeyed without a word. It is fair. It is also, the secretary notes, an argument, and the file has a place for those too.",
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 1
+            },
+            {
+              "target": "relationship",
+              "key": "@terna_subject",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "blank",
+          "label": "Leave question fourteen blank",
+          "outcome": "You leave it blank, and answer the other twenty-six. A blank is an answer. The nunciature has been reading blanks for a century and knows exactly what each one means.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": -1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "nu_consulted_call",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "beat": "nuncio",
+      "pressure": [
+        "loyalty_vs_honesty",
+        "competence"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 2,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "nuncio",
+          "key": "scene",
+          "value": "consulted"
+        }
+      ],
+      "title": "The Secretary Calls",
+      "body": "A week after you mailed back the nunciature's questions about {@terna_subject.full}, the phone rings at the rectory and a priest with a careful Roman English introduces himself as the nuncio's secretary. He thanks you for your answers, which he says were helpful, and asks one more question that was not on the form: whether {@terna_subject} is a man who can bear being disliked. {see} is a diocese, he says, where the bishop will be disliked for some years whatever he does. He waits.",
+      "choices": [
+        {
+          "id": "honest",
+          "label": "Tell him what you have actually seen",
+          "outcome": "You tell him the one time you saw it tested, and what the man did, and how long it took him. The secretary thanks you and says that was the question. You realise afterwards that the twenty-seven questions were for the file and this one was for the nuncio.",
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "nuncio:trusted",
+              "value": true
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 3
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "hedge",
+          "label": "Say you are not sure anybody can bear it",
+          "outcome": "You say you are not sure any man can bear it, which is true and is not an answer. The secretary laughs, politely, and agrees, and thanks you. He writes something down that you would give a good deal to read.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": -1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "nu_about_you_lunch",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "beat": "nuncio",
+      "pressure": [
+        "ambition_vs_integrity",
+        "loyalty_vs_honesty"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 2,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "nuncio",
+          "key": "scene",
+          "value": "about_you"
+        }
+      ],
+      "title": "The Bishop's Lunch",
+      "body": "{@bishop} asks you to lunch at the residence, which he does perhaps twice a year, and spends it asking you odd things: how your health is, really; whether your mother is still living and how she is; whether you still read anything in Latin; what you would do with a diocese that had more parishes than priests, hypothetically. He does not mention the nunciature. {see} is vacant; you have read that in the paper. At the door he shakes your hand for slightly too long and tells you to take care of yourself.",
+      "choices": [
+        {
+          "id": "nothing",
+          "label": "Thank him for lunch, and ask him nothing",
+          "outcome": "You thank him for lunch and ask him nothing, and drive home with the radio off. It is the only right answer and you know it. Whatever he wrote to Washington, he wrote it already, and he will never tell you what it was.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "ask",
+          "label": "Ask him, at the door, whether this is what you think it is",
+          "outcome": "You ask him, at the door, as lightly as you can. He looks at you for a moment and says that he cannot imagine what you mean. Then he says, more quietly, that the question you just asked is one of the questions, and closes the door.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": -3
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": -2
+            }
+          ]
+        },
+        {
+          "id": "unwell",
+          "label": "Tell him the truth about your health, all of it",
+          "outcome": "You tell him the truth about your health, which is less good than you let people think. He listens and thanks you. You do not know whether you have just taken your own name off a list, and you find that you are glad you told him.",
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": 4
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "nu_about_you_stranger",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "beat": "nuncio",
+      "pressure": [
+        "ambition_vs_integrity",
+        "friendship_vs_duty"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 2,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "nuncio",
+          "key": "scene",
+          "value": "about_you"
+        }
+      ],
+      "title": "A Priest You Barely Know",
+      "body": "At the funeral lunch for an old monsignor, a priest from the far end of the diocese you have met perhaps three times sits down beside you with a plate of ham and says, at a volume that carries, that he has had a very interesting letter from Washington lately with your name in it. {see} is vacant; everyone at the table reads the paper. He winks. The table goes quiet in the way a table of priests goes quiet, which is not at all, and then entirely.",
+      "choices": [
+        {
+          "id": "laugh",
+          "label": "Laugh it off, and ask him about his parish",
+          "outcome": "You laugh and say he must have you confused with a better man, and ask him about his parish, and keep asking until the table has lost interest. It takes eleven minutes. By the next priests' day, the story has gone round anyway, told as the funeral where a man was very gracious about something.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 1
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "rebuke",
+          "label": "Tell him quietly that he has broken a secret he promised to keep",
+          "outcome": "You tell him, quietly, that the letter was sub secreto and he has just broken it in front of eleven priests. He goes red and says it was a joke. It was not, and the table knows it, and some of them like you better for saying it and some of them do not.",
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": -2
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "ask",
+          "label": "Ask him, later and privately, what he wrote",
+          "outcome": "You find him in the parking lot and ask him what he wrote. He tells you, delighted to be asked. It was kind and inaccurate. You drive home knowing something you should not, which is all the questionnaire's secret was ever meant to prevent.",
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": -1
+            },
+            {
+              "target": "flag",
+              "key": "nuncio:broke_secret",
+              "value": true
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": -3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "nu_passed",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "beat": "nuncio",
+      "pressure": [
+        "ambition_vs_integrity",
+        "doubt"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 2,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "nuncio",
+          "key": "scene",
+          "value": "passed"
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "nuncio:passed_once",
+            "value": true
+          }
+        }
+      ],
+      "title": "The Name in the Paper",
+      "body": "The diocesan paper has it on the front page, with a photograph: Rome has named {named} bishop of {see_city}. You knew the see was vacant. You had worked out, from a lunch and a letter and a funeral, that your own name had been in the nuncio's file, and you had not let yourself think about it, and you had thought about it every day. Now it is someone else, a man you know slightly, a good man by all accounts, and the thing you did not want is not yours, and you are surprised by what you feel.",
+      "choices": [
+        {
+          "id": "write",
+          "label": "Write to the new bishop and congratulate him, and mean it",
+          "outcome": "You write him a letter, by hand, and say that {see_city} is lucky, and mean it by the time you have finished writing it. He writes back from the new residence, a real letter. You keep it in the book you keep such things in.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "nuncio:passed_once",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "day_off",
+          "label": "Take a day off and drive to the lake",
+          "outcome": "You take a day off, which you never do, and drive to the lake and walk until it is dark, and say Vespers in the car. You come back the next morning to the parish, which did not know anything had happened, and was right.",
+          "effects": [
+            {
+              "target": "strain",
+              "key": "",
+              "delta": -5
+            },
+            {
+              "target": "flag",
+              "key": "nuncio:passed_once",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "bitter",
+          "label": "Tell a classmate over dinner that the system is rigged",
+          "outcome": "You say it over dinner to a classmate, that the system rewards the men who never say anything, and he agrees, and you both feel better for a night. By the next month it is a thing you once said, repeated in a form you would not recognise.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": -2
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": -2
+            },
+            {
+              "target": "flag",
+              "key": "nuncio:passed_once",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "nu_passed_again",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "beat": "nuncio",
+      "pressure": [
+        "ambition_vs_integrity",
+        "doubt"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 2,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "nuncio",
+          "key": "scene",
+          "value": "passed"
+        },
+        {
+          "type": "flag",
+          "key": "nuncio:passed_once",
+          "value": true
+        }
+      ],
+      "title": "Again",
+      "body": "It is in the paper again: Rome has named {named} bishop of {see_city}. Again you knew the see was vacant; again, from the small signs that a man learns to read, you knew your name had been in the file; again it is someone else. The second time is different from the first. You find you are not surprised, and that you are a little relieved, and that you cannot tell whether the relief is humility or tiredness, and that the difference matters.",
+      "choices": [
+        {
+          "id": "peace",
+          "label": "Take it as an answer, and stop listening for the phone",
+          "outcome": "You take it as an answer. You stop listening for the phone on Tuesdays. You find, over the next year, that you are a better pastor for it, and that the parish, which never knew, can tell.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": -4
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "ask_why",
+          "label": "Ask your bishop, directly, what the file says",
+          "outcome": "You ask your bishop, directly, over coffee, what Rome reads in your file. He is quiet, and then he tells you, more than he should, and you are grateful and sorry to have asked. He says: {nuncio_view}",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": -1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "nu_subject_named",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "beat": "nuncio",
+      "pressure": [
+        "friendship_vs_duty",
+        "ambition_vs_integrity"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 2,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "nuncio",
+          "key": "scene",
+          "value": "subject_named"
+        }
+      ],
+      "title": "He Is Named",
+      "body": "The paper has it: Rome has named {@terna_subject.full} bishop of {see_city}, the same man the nunciature asked you about some months ago. He calls you the evening of the announcement, from the car, laughing and frightened, and says you are the third person he has called. Somewhere in a file in Washington there is what you wrote about him. He does not know what it said, and he never will, and he asks whether you will come to the ordination.",
+      "choices": [
+        {
+          "id": "go",
+          "label": "Go to the ordination, and vest with the priests",
+          "outcome": "You drive four hours and vest with the priests at the back of the procession, and watch the nuncio lay the book of the Gospels over his head. At the reception he finds you and holds on to your hand. Whatever you wrote, you find that you are glad of it.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@terna_subject",
+              "delta": 8
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "relationship",
+              "key": "@nuncio",
+              "delta": 2
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "letter",
+          "label": "Send a letter and a stole, and stay with your parish",
+          "outcome": "You send a letter and a stole you had made for him, and stay for your own Sunday. He writes back that he wore it. It is the kind of friendship that survives a mitre, which not all of them do.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@terna_subject",
+              "delta": 5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "nu_arrival",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "beat": "nuncio",
+      "pressure": [
+        "competence",
+        "loyalty_vs_honesty"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 2,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "nuncio",
+          "key": "scene",
+          "value": "arrival"
+        }
+      ],
+      "title": "The New Nuncio",
+      "body": "The new nuncio, {@nuncio.full}, comes through the diocese in his first year, and {@bishop} gives a dinner for the clergy in the seminary refectory. The nuncio goes from table to table with a glass of water, speaking a careful, amused English, and asks every priest one question and listens to the whole answer, which is not something the priests of the diocese are used to. When he comes to your table he asks you what the Church in this place most needs, and waits.",
+      "choices": [
+        {
+          "id": "plain",
+          "label": "Tell him plainly what you see from your parish",
+          "outcome": "You tell him what you see: the Masses you say to half-empty churches, the young families who come for a year and go, the priests who are tired, and the handful of things that work. He listens to the end and asks one question back, a good one. Your name is in a notebook afterwards, and not for the reasons names usually are.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@nuncio",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 3
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "pleasant",
+          "label": "Say something pleasant about the diocese and the bishop",
+          "outcome": "You say something pleasant about the diocese and the bishop, which the bishop, two tables away, hears. The nuncio smiles and moves on. He has heard that answer at every table in the country, and he will not remember it or you.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "rome",
+          "label": "Ask him about Rome, and the new pope",
+          "outcome": "You ask him about Rome, and the pope, and he tells you a story about the pope and a Roman taxi driver that you will tell for years. He is good at deflecting a question with a better one, which is, you realise later, the whole of his profession.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@nuncio",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "nu_installation",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "beat": "nuncio",
+      "pressure": [
+        "loyalty_vs_honesty",
+        "ambition_vs_integrity"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 2,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "nuncio",
+          "key": "scene",
+          "value": "remembers"
+        }
+      ],
+      "title": "The Installation",
+      "body": "You go to {see_city} for the installation of its new bishop, {named}, because he asked the priests he knew, and afterwards in the crush of the reception the nuncio, {@nuncio.full}, finds you by the coffee urn as though he had been looking. He knows your name. He knows, it turns out, a great deal. {nuncio_view} He says it without judgment, in the tone of a man reading a map, and then he asks what you think of the new bishop.",
+      "choices": [
+        {
+          "id": "honest",
+          "label": "Tell him honestly what you think of the new bishop",
+          "outcome": "You tell him honestly: a good man, a little too eager to be liked, who will learn. The nuncio nods as if you had confirmed something. He says that you would be surprised how few priests answer that question at all.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@nuncio",
+              "delta": 4
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 2
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "file",
+          "label": "Ask him what else is in your file",
+          "outcome": "You ask him, smiling, what else is in your file. He smiles back and says that files are like souls: the Holy See keeps them, and only God reads them all the way through. Then he goes to congratulate the bishop's mother.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": -1
+            }
+          ]
+        },
+        {
+          "id": "praise",
+          "label": "Praise the new bishop warmly, and the nuncio's choice",
+          "outcome": "You praise the new bishop warmly and the choice more warmly. The nuncio thanks you in a voice that tells you he has heard the second half before. It does you no harm, and it does you no good, which at a reception is a draw.",
+          "effects": []
+        }
+      ]
+    },
+    {
+      "id": "nu_remembers_record",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "beat": "nuncio",
+      "pressure": [
+        "loyalty_vs_honesty",
+        "ambition_vs_integrity"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 2,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "nuncio",
+          "key": "scene",
+          "value": "remembers"
+        }
+      ],
+      "title": "He Has Read Your File",
+      "body": "Word comes from the chancery that the nuncio, {@nuncio.full}, passing through the diocese for a bishop's funeral, has asked to see a parish that is not on the bishop's list, and has asked for {parish}. He arrives in a black car with one secretary and walks the church with his hands behind his back. In the sacristy, over bad coffee, he tells you why he came. {nuncio_view} He wanted, he says, to see the man who belongs to the file.",
+      "choices": [
+        {
+          "id": "show",
+          "label": "Show him the parish as it is, the good and the bad",
+          "outcome": "You show him the parish as it is: the school that is closing, the Hispanic Mass that is growing, the roof. He asks about each, and remembers the names of the people you mention. When he leaves he says your parish is more honest than most, and it takes you a day to decide it was a compliment.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@nuncio",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 2
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "defend",
+          "label": "Answer what he read against you, point by point",
+          "outcome": "You answer what he has read against you, point by point, over the coffee. He listens, courteous, and does not argue. At the door he says that the file will have your answers in it now as well, and you are not sure whether he meant it as a comfort.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@nuncio",
+              "delta": 1
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "nu_aux_request",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "beat": "nuncio",
+      "pressure": [
+        "ambition_vs_integrity",
+        "belief_vs_safety"
+      ],
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 2,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "nuncio",
+          "key": "scene",
+          "value": "aux_request"
+        }
+      ],
+      "title": "May I Put Your Name Forward",
+      "body": "{@bishop} asks you to the residence and gets to it before the coffee. The diocese is too large for one man, he says, and he has asked Rome for an auxiliary, and the nuncio has asked him for names, and he would like to send yours. He is not asking whether you want it; nobody should want it. He is asking whether, if the Holy Father asked, you would say yes. He says you should think about it, and then he waits, because he wants the answer now.",
+      "choices": [
+        {
+          "id": "yes",
+          "label": "Say that you would say yes, if the Holy Father asked",
+          "outcome": "You say that if the Holy Father asked, you would say yes. The bishop nods and says that is the only answer he can send, and that he will send it, and that nothing will probably come of it. You drive home under a sky that looks exactly as it did this morning.",
+          "effects": [
+            {
+              "target": "flag",
+              "key": "terna_named",
+              "value": true
+            },
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 2
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "time",
+          "label": "Ask for a week to pray about it",
+          "outcome": "You ask for a week. He gives you three days. You spend them in the chapel and at your mother's kitchen table, and on the third day you tell him yes, and he says he thought you would, and that he is glad you asked for the time.",
+          "effects": [
+            {
+              "target": "flag",
+              "key": "terna_named",
+              "value": true
+            },
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "no",
+          "label": "Tell him no: you are a pastor, and want to die one",
+          "outcome": "You tell him no, as gently as you can: you are a pastor, and want to die one. He is quiet for a while and then says he understands, and that he is sorry, and that he will not ask again. He does not.",
+          "effects": [
+            {
+              "target": "flag",
+              "key": "refused_mitre",
+              "value": true
+            },
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": -3
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

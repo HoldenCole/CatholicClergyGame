@@ -5,6 +5,7 @@ import { advanceClock, describeWeek, gameYearOf, isYearStart } from './time';
 import { weatherOfWeek } from '@/systems/weather';
 import { papacyWeek } from '@/systems/rome/papacy';
 import { documentsWeek } from '@/systems/rome/documents';
+import { nuncioWeek } from '@/systems/rome/nuncio';
 import { deliverLetter } from '@/systems/review';
 
 /** Why the clock stopped. */
@@ -88,10 +89,12 @@ export function advanceWeek(
   const rome = papacyWeek(afterDraw);
   // And what Rome sends: the documents, the law they move, and the bishop's reading of each. E1 §4.
   const docs = documentsWeek(rome.state);
-  afterDraw = docs.state;
-  const romeLines = [...rome.lines, ...docs.lines];
+  // And the nunciature: the nuncio comes and goes, sees fall vacant, and bishops are named. E1 §5.
+  const nunc = nuncioWeek(docs.state);
+  afterDraw = nunc.state;
+  const romeLines = [...rome.lines, ...docs.lines, ...nunc.lines];
   if (romeLines.length) afterDraw = { ...afterDraw, digest: [...afterDraw.digest.slice(0, -1), { ...digestEntry, lines: [...digestEntry.lines, ...romeLines] }] };
-  for (const letter of [...rome.letters, ...docs.letters]) afterDraw = deliverLetter(afterDraw, letter);
+  for (const letter of [...rome.letters, ...docs.letters, ...nunc.letters]) afterDraw = deliverLetter(afterDraw, letter);
   return {
     state: hook(afterDraw, rng, reachedBeats),
     reachedBeats,

@@ -10,6 +10,8 @@ import { rumourCondition } from '@/systems/talk';
 import { nightCondition } from '@/systems/night';
 import { resolveSelector } from './selectors';
 import { documentCondition, effectiveStance, policyCondition } from '@/systems/rome/policy';
+import { dueNuncioScene } from '@/systems/rome/nuncio';
+import { nuncioView } from '@/systems/rome/nuncioView';
 
 import type { Group } from '@/types';
 import { vitalityBand } from '@/systems/groups';
@@ -224,6 +226,9 @@ export function evaluateCondition(
     }
     case 'policy':
       return policyCondition(state, cond);
+    case 'nuncio':
+      if (cond.key === 'scene') return dueNuncioScene(state) === cond.value;
+      return compare(cond.op, nuncioView(state).value, cond.value);
     case 'document':
       return documentCondition(state, cond);
     case 'not':

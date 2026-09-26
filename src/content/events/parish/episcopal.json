@@ -1,12 +1,12 @@
 {
-  "_notes": "The road to the mitre: the nuncio's questionnaire about the man (ep_questionnaire_about_you sets terna_named, which both episcopal offers require), and the auxiliary's years (study:auxiliary). Flags: terna_named, asked_off_the_terna, aux_knows_names, aux_told_the_truth, aux_ran_the_errand, aux_refused_errand. The bishop's own scenes are in study/see.json.",
+  "_notes": "The road to the mitre: the nuncio's questionnaire about the man (ep_questionnaire_about_you, one of the nuncio's 'about_you' scenes since E1 R1.3; systems/rome/nuncio.ts sets terna_named when it puts his name on a terna), and the auxiliary's years (study:auxiliary). Flags: terna_named, asked_off_the_terna, aux_knows_names, aux_told_the_truth, aux_ran_the_errand, aux_refused_errand. The bishop's own scenes are in study/see.json.",
   "events": [
     {
       "id": "ep_questionnaire_about_you",
       "phase": [
-        "pastor",
+        "parochial_vicar",
         "administrator",
-        "study"
+        "pastor"
       ],
       "pressure": [
         "ambition_vs_integrity"
@@ -14,73 +14,12 @@
       "severity": "NOTABLE",
       "category": "chancery",
       "baseWeight": 8,
-      "suppressYears": 4,
-      "once": true,
+      "suppressYears": 1,
       "requires": [
         {
-          "type": "years_ordained",
-          "op": ">=",
-          "value": 16
-        },
-        {
-          "type": "reputation",
-          "key": "chancery",
-          "op": ">=",
-          "value": 45
-        },
-        {
-          "type": "reputation",
-          "key": "rome",
-          "op": ">=",
-          "value": 10
-        },
-        {
-          "type": "not",
-          "inner": {
-            "type": "flag",
-            "key": "terna_named",
-            "value": true
-          }
-        },
-        {
-          "type": "not",
-          "inner": {
-            "type": "flag",
-            "key": "ordained_bishop",
-            "value": true
-          }
-        }
-      ],
-      "bias": [
-        {
-          "when": {
-            "type": "flag",
-            "key": "vg_served",
-            "value": true
-          },
-          "multiplier": 2.0
-        },
-        {
-          "when": {
-            "type": "flag",
-            "key": "office:bishops_secretary",
-            "value": true
-          },
-          "multiplier": 1.5
-        },
-        {
-          "when": {
-            "type": "outspokenness",
-            "op": ">=",
-            "value": 50
-          },
-          "multiplier": 0.5
-        },
-        {
-          "when": {
-            "type": "figure"
-          },
-          "multiplier": 0.6
+          "type": "nuncio",
+          "key": "scene",
+          "value": "about_you"
         }
       ],
       "title": "The Questionnaire",
@@ -176,7 +115,8 @@
             }
           ]
         }
-      ]
+      ],
+      "beat": "nuncio"
     },
     {
       "id": "ep_aux_first_confirmation",
