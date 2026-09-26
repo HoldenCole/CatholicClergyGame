@@ -12,7 +12,7 @@ export default function LetterPanel() {
   if (!game || game.mode.kind !== 'letter') return null;
   const l = game.mode.letter;
   return (
-    <Panel title={l.sort === 'review' ? 'The year in review' : l.sort === 'provincial' ? "The provincial's desk" : l.sort === 'confrere' ? 'A brother\'s letter' : l.sort === 'mail' ? 'The mailbag' : "The bishop's desk"} tilt={l.sort === 'review' ? 'l' : 'r'}>
+    <Panel title={l.sort === 'review' ? 'The year in review' : l.sort === 'provincial' ? "The provincial's desk" : l.sort === 'confrere' ? 'A brother\'s letter' : l.sort === 'mail' ? 'The mailbag' : l.sort === 'rome' ? 'From Rome' : "The bishop's desk"} tilt={l.sort === 'review' ? 'l' : 'r'}>
       <h2 className="title text-xl">{l.title}</h2>
       {l.from && <p className="ink-muted mt-1 text-sm">From {l.from.name}, {l.from.who}.</p>}
       {l.body.map((p, i) => (

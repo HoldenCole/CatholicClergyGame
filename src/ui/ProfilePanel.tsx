@@ -1,4 +1,5 @@
 import { useGameStore } from '@/engine/store';
+import { popesOfHisLife } from '@/systems/rome/papacy';
 import { profileOf } from '@/systems/profile';
 import { requestHistory } from '@/systems/request';
 import { worksDone } from '@/systems/sidework';
@@ -18,6 +19,7 @@ export default function ProfilePanel() {
   const seek = useGameStore((s) => s.seekDirector);
   if (!game?.character) return null;
   const p = profileOf(game);
+  const popes = popesOfHisLife(game);
   const seeking = maySeekDirector(game);
   const director = directorNpc(game);
   const asked = requestHistory(game).filter((r) => r.outcome);
@@ -155,6 +157,7 @@ export default function ProfilePanel() {
         <ul className="flex flex-col gap-1 text-sm">
           {p.offices.length > 0 && <li>Offices: {p.offices.join(', ')}.</li>}
           {p.credentials.length > 0 && <li>Degrees and credentials: {p.credentials.map((c) => c.replace(/_/g, ' ')).join(', ')}.</li>}
+          {popes.length > 0 && <li>The popes of his life: {popes.join(', ')}{game?.rome?.vacancy ? '; the see is vacant now' : ''}.</li>}
           {p.groupsFounded > 0 && <li>Founded {p.groupsFounded === 1 ? 'one group' : `${p.groupsFounded} groups`} in the parishes you served.</li>}
           {works.length > 0 && <li>Besides the parish: {works.join('; ')}.</li>}
           {asked.length > 0 && (

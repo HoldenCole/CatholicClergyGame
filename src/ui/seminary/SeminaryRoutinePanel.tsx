@@ -26,7 +26,10 @@ export default function SeminaryRoutinePanel() {
       </Sheet>
       <Sheet title="Your hours">
         <ul className="flex flex-col gap-1.5">
-          {seminaryActivities.filter((a) => a.location !== 'language' || (routine[a.id] ?? 0) > 0 || (sem.hoursLogged?.[a.id] ?? 0) > 0).map((a) => {
+          {seminaryActivities
+            // An order's own formation (its rite) is not listed for a man outside it.
+            .filter((a) => !(a.requires ?? []).some((c) => c.type === 'flag' && c.key.startsWith('order:') && c.value && !game.flags[c.key]))
+            .filter((a) => a.location !== 'language' || (routine[a.id] ?? 0) > 0 || (sem.hoursLogged?.[a.id] ?? 0) > 0).map((a) => {
             const ap = routine[a.id] ?? 0;
             const offered = seminaryActivityOffered(game, a);
             const canAdd = offered && ap < a.maxAp && left > 0;
