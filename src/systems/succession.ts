@@ -8,6 +8,7 @@ import type { Rng } from '@/engine/rng';
 import { generateBishop, temperamentLine } from '@/generation/bishop';
 import { presetById } from '@/content/dioceses';
 import { clampSigned } from './reputation';
+import { reigning, sedeVacante } from './rome/papacy';
 
 /** Invented. DESIGN 5.3 and 9.3. */
 export const SUCCESSION = {
@@ -15,9 +16,10 @@ export const SUCCESSION = {
   /** Chance per year past 75 that Rome accepts the letter. */
   acceptancePerYear: 0.35,
   deathPerYearOver70: 0.025,
-  /** Rome's temperament drifts a little each year and swings with a conclave now and then. */
+  /** Rome's temperament drifts a little each year around the reigning pope's; a conclave moves it (systems/rome/papacy.ts). */
   romeDriftStep: 5,
-  conclavePerYear: 0.07,
+  /** How far each year it closes on the pope's own reading. */
+  romeTowardPope: 0.35,
   /** How much of chancery standing survives a succession before revaluation. */
   chanceryCarry: 0.5,
 } as const;
@@ -35,11 +37,13 @@ function calendarYear(state: GameState): number {
   return new Date((state.clock.startDay + state.clock.week * 7) * 86_400_000).getUTCFullYear();
 }
 
-/** Rome's temperament: a drifting number the successor rolls around. */
+/** Rome's temperament: the reigning pope's reading, with the Curia's slower drift around it. Held still in a vacancy. E1 §3.3. */
 export function driftRome(state: GameState, rng: Rng): GameState {
-  let t = state.romeTemperament + rng.int(-SUCCESSION.romeDriftStep, SUCCESSION.romeDriftStep);
-  if (rng.chance(SUCCESSION.conclavePerYear)) t = Math.round(rng.gaussian() * 40);
-  return { ...state, romeTemperament: clampSigned(t) };
+  const pope = reigning(state);
+  if (!pope) return state;
+  const toward = (pope.temperament - state.romeTemperament) * SUCCESSION.romeTowardPope;
+  const t = state.romeTemperament + toward + rng.int(-SUCCESSION.romeDriftStep, SUCCESSION.romeDriftStep);
+  return { ...state, romeTemperament: clampSigned(Math.round(t)) };
 }
 
 /**
@@ -177,6 +181,8 @@ export function bishopLetter(state: GameState, successor: Npc, verdict: string, 
 export function successionYear(state: GameState, rng: Rng): SuccessionResult {
   const world = state.world;
   if (!world) return { state, newBishop: null, lines: [] };
+  // Sede vacante: no bishop is named until there is a pope to name him (E1 §9 B).
+  if (sedeVacante(state)) return { state, newBishop: null, lines: [] };
   const year = calendarYear(state);
   const current = state.npcs[world.diocese.hidden.bishop.npcId];
   if (!current) return { state, newBishop: null, lines: [] };

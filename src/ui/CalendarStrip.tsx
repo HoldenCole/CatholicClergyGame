@@ -6,6 +6,7 @@ import { offerById } from '@/content/offers';
 import { pendingAppointment } from '@/engine/appointment';
 import { housesOf } from '@/systems/houses';
 import { upcomingOrderFeasts } from '@/systems/religious/feasts';
+import { reigning } from '@/systems/rome/papacy';
 
 const SEASON_COLOR: Record<string, string> = { advent: '#6b4fa0', christmas: '#e6dcc4', ordinary: '#3f7a3f', lent: '#6b4fa0', holy_week: '#8a1f1f', easter: '#e6dcc4' };
 
@@ -15,6 +16,7 @@ export default function CalendarStrip() {
   if (!game) return null;
   const parish = game.world?.parishes.find((p) => p.id === game.assignment?.parishId);
   const season = seasonOf(game.clock);
+  const pope = reigning(game);
   const parishAhead = upcomingFeasts(game.clock, parish, 5);
   // A friar keeps two calendars: the parish's, and the order's own days among them.
   const ahead = game.religious
@@ -30,6 +32,13 @@ export default function CalendarStrip() {
       <span className="inline-block h-2.5 w-2.5 rounded-full border border-black/30" style={{ background: SEASON_COLOR[season] ?? '#3f7a3f' }} title="The liturgical color of the week" />
       <span className="shrink-0">{SEASON_LABELS[season]}</span>
       <span className="opacity-40">·</span>
+      {/* Rome: who reigns, or the empty chair. E1 §3. */}
+      {game.rome?.vacancy ? (
+        <span className="shrink-0 text-[#e6c25a]" title="No bishops are named and nothing new comes from Rome until the conclave elects">Sede vacante</span>
+      ) : pope ? (
+        <span className="shrink-0" title={pope.line ?? ''}>{pope.name}</span>
+      ) : null}
+      {(game.rome?.vacancy || pope) && <span className="opacity-40">·</span>}
       {(letters.length > 0 || asked) && (
         <span className="shrink-0 text-[#e6c25a]">
           {letters.map((l) => `${l.title} ${l.weeks === 0 ? 'lapses this week' : l.weeks === 1 ? 'lapses next week' : `lapses in ${l.weeks} weeks`}`).join(' · ')}

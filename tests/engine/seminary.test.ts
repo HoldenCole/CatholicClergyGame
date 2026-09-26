@@ -16,6 +16,7 @@ import { resolvePending, seminaryWeekHook, type EventDeps } from '@/engine/weekH
 import { seminaryState, testEvent, testNpc } from '../helpers/fixtures';
 import { emphasisPointsFor } from '@/systems/formation';
 import { chooseDirector } from '@/systems/direction';
+import { readLetter } from '@/systems/review';
 import type { GameEvent, GameState, Pillar } from '@/types';
 import { buildSave, deserialize, rngFromSave, serialize } from '@/engine/save';
 
@@ -99,6 +100,11 @@ function playYear(state: GameState, rng: ReturnType<typeof createRng>, d: EventD
       continue;
     }
     if (s.mode.kind === 'evaluation') return s;
+    // A letter from Rome (a pope dead, a pope elected) is read and put down.
+    if (s.mode.kind === 'letter') {
+      s = readLetter(s);
+      continue;
+    }
     if (r.stop.kind === 'cap') continue;
     if (r.stop.kind === 'paused') break;
   }

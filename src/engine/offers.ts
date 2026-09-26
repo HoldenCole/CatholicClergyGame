@@ -9,6 +9,7 @@ import { askToGo } from './appointment';
 import { beginStudy } from './study';
 import { hasInterest, INTERESTS } from '@/systems/interests';
 import { REQUEST, requestOf } from '@/systems/request';
+import { sedeVacante } from '@/systems/rome/papacy';
 
 /** Tunables. Invented. */
 export const OFFERS = {
@@ -39,6 +40,8 @@ export function offerSelectors(def: OfferDef): string[] {
 
 export function isOfferEligible(def: OfferDef, state: GameState): boolean {
   if (!def.phase.includes(state.phase)) return false;
+  // Sede vacante: the nuncio names no one until Rome can (E1 §9 B).
+  if (def.cluster === 'episcopal' && sedeVacante(state)) return false;
   // The bishop's letters do not reach a friar, and the provincial's do not reach a priest of the diocese. E3 §3.11.
   if (state.religious ? def.campaign !== 'religious' : def.campaign === 'religious') return false;
   if (def.yearGate && (!state.seminary || !def.yearGate.includes(state.seminary.year))) return false;

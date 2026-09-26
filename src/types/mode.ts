@@ -66,7 +66,7 @@ export interface AssignmentOption {
 
 export interface Letter {
   /** What kind of letter, for the sheet's heading and the record. `mail` is the mailbag: a letter from someone, DESIGN §8.10. */
-  sort: 'review' | 'bishop' | 'provincial' | 'confrere' | 'mail';
+  sort: 'review' | 'bishop' | 'provincial' | 'confrere' | 'mail' | 'rome';
   title: string;
   /** Prose paragraphs. */
   body: string[];

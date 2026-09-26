@@ -113,20 +113,29 @@ A **posting in Rome after the degree**: a priest lent by his bishop to a dicaste
 | **R1.2 Reversal** | Reversal detection and scenes, a papacy that undoes its predecessor. ~10 scenes. | The man who implemented a painful norm meets its undoing and the record reads it back. |
 | **R1.3 The nuncio** | Nuncio NPC, the terna process for sees in the region, being consulted about others, episcopal offers decided by him, `rome` in trust. ~15 scenes. | Two men with the same stats and different records get different letters. |
 | **R1.4 The Curia** | The Curia posting from Rome, its week and dials, the ladder per Open (C), the diplomatic service. ~25 scenes. | A priest can work in a dicastery for five years and come home changed, or not come home. |
-| **R1.5 Cardinals and the conclave, played** | Creation at a consistory, the elector's conclave on the ballot machinery, per Open (D). ~15 scenes. | A cardinal votes in a conclave he can read, and the name that comes out follows from what the room was. |
+| **R1.5 Cardinals and the conclave, played** | Creation at a consistory, the elector's conclave on the ballot machinery, and the player electable. ~15 scenes. | A cardinal votes in a conclave he can read, and the name that comes out follows from what the room was. |
+| **R1.6 The papacy, played** | Design first (§9 D), then the pope's week, his documents and their cascade, consistories, and the end. | A pope can be played until his death or renunciation, and the next conclave reads what he made of the College. |
 
 Tunables are invented and flagged; the conclave and the terna are deterministic from the seed and table-tested.
 
 ---
 
-## 9. Open decisions
+### 8.1 As built (R1.0)
 
-**(A) Real papal history, or rolled popes?** DESIGN §16 says the Pope is a rolled NPC. The code already follows the real record for the older Mass (2007, 2021), and a game can start in any year from 1950. *Recommendation:* the real record as data up to the last pope who is no longer living, and rolled popes after that point, so a 2010 start lives under Benedict XVI and Francis with their real documents on the topics the game models, then diverges at the 2025 vacancy. A living pope is never named (Leo XIV is a living Augustinian friar; CLAUDE.md rule 13). The alternative is DESIGN's rolled-from-the-start, which would move the older-Mass dates into a rolled document.
+*Added at build time.*
 
-**(B) Freeze during the interregnum:** only papal acts (canonical), or everything (DESIGN's wording)? *Recommendation:* canonical.
+- **The record** (`content/rome/history.json`): Pius XII through Francis, with their dates, where they came from, a line each, and a reading on the game's one axis (flagged for review). **The generated line** (`content/rome/pools.json`, `systems/rome/papacy.ts`): each pope from the seed and his place in the line, so a world lives through the same popes on every replay. His regnal name takes the next ordinal (Leo left out), where he came from is weighted toward the College's electors, his age at election is about seventy, and his reading follows the College (the line's last three popes, carried, leaning away from the last). His years are rolled at election: a yearly chance of death rising past seventy, and from eighty-five a chance he lays it down.
+- **Every start year works** (`romeOn`): the game opens with the pope of its start date, or an open vacancy, walking the record and then the generated line; a 2040 start has only generated popes. Older saves are given the Rome of the week they are opened in.
+- **The week** (`papacyWeek`, run in `engine/clock.ts` for every phase from the first week of seminary): the see falls vacant on the pope's day, with a letter from Rome and a line in the Record; the white smoke rises 16–23 days later, with "Habemus papam" and the name; the career record keeps both.
+- **Sede vacante** freezes papal acts only (§9 B): the nuncio's letters (the `episcopal` cluster) are not eligible, and a diocesan see that falls vacant waits for a bishop. Parish moves go on.
+- **Rome's temperament** now follows the reigning pope, closing a third of the gap each year with the Curia's small drift; the silent random re-roll is gone. At ordination it starts from the pope's reading.
+- **On screen**: the pope's name (or "Sede vacante", in gold) on the calendar strip; the popes of his life on the Profile; the life summary names them.
+- Tunables in `PAPACY` are invented and flagged.
 
-**(C) How far up the Curia goes:** a five-year posting that comes home; the full ladder to prefect; and whether the diplomatic service (nuncio career) is in. *Recommendation:* the posting and the ladder to secretary in R1.4; the diplomatic service as its own later round.
+## 9. Decisions (owner, 26 September 2026)
 
-**(D) Can the player become pope?** *Recommendation:* he can be elected, and the game ends there as a life (the shelf page), because a pope's week is not a game this engine can play honestly.
-
-**(E) Home diocese while he is a bishop elsewhere:** keep it frozen (today), or let it change so a translation home finds it different? *Recommendation:* let it change.
+- **(A) Real papal history, then rolled popes.** The real record is data (`content/rome/history.json`) up to the last pope no longer living: Pius XII through Francis. From the vacancy of 21 April 2025 the popes are generated. A living pope is never named, and no generated pope takes the regnal name Leo (the reigning pope's; CLAUDE.md rule 13). A 2010 start lives under Benedict XVI and Francis, then diverges; a 2040 start has only generated popes.
+- **(B) The interregnum freezes papal acts only**: no bishops named and no documents. Diocesan bishops keep governing and parish moves continue (canonical; DESIGN §16's "all appointments" is read this way).
+- **(C) The Curia: a posting and the ladder** to secretary of a dicastery (R1.4). The diplomatic service is a later round.
+- **(D) The player can be elected pope and keep playing.** This is a new playable tier with its own design, **R1.6 The papacy, played**, specified before it is built: what a pope's week is (audiences, the Curia, documents he writes and the cascade he starts, travel, consistories, the College he shapes for his successor), and how the life ends (death or renunciation).
+- **(E) Home diocese while he is a bishop elsewhere**: let it change (the recommendation; not yet built).

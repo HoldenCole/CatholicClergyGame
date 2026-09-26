@@ -3,6 +3,8 @@ import type { Rng } from './rng';
 import { shouldInterrupt } from './interrupts';
 import { advanceClock, describeWeek, gameYearOf, isYearStart } from './time';
 import { weatherOfWeek } from '@/systems/weather';
+import { papacyWeek } from '@/systems/rome/papacy';
+import { deliverLetter } from '@/systems/review';
 
 /** Why the clock stopped. */
 export type StopReason =
@@ -80,7 +82,12 @@ export function advanceWeek(
   };
   const digest = [...state.digest, digestEntry].slice(-DIGEST_RETENTION);
 
-  const afterDraw: GameState = { ...drawState, pending: [...state.pending, ...fired], digest };
+  let afterDraw: GameState = { ...drawState, pending: [...state.pending, ...fired], digest };
+  // Rome: the see falls vacant, the conclave elects, and the man hears of it wherever he is. E1 §3.
+  const rome = papacyWeek(afterDraw);
+  afterDraw = rome.state;
+  if (rome.lines.length) afterDraw = { ...afterDraw, digest: [...afterDraw.digest.slice(0, -1), { ...digestEntry, lines: [...digestEntry.lines, ...rome.lines] }] };
+  for (const letter of rome.letters) afterDraw = deliverLetter(afterDraw, letter);
   return {
     state: hook(afterDraw, rng, reachedBeats),
     reachedBeats,

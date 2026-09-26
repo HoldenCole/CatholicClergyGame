@@ -1,3 +1,4 @@
+import type { RomeState } from './rome';
 import type { Character } from './character';
 import type { HistoryEntry, PendingEvent } from './events';
 import type { InterruptConfig } from './interrupts';
@@ -171,6 +172,8 @@ export interface GameState {
   career: CareerEntry[];
   /** Rome's current temperament, −100..100, for successions. DESIGN 9.3 */
   romeTemperament: number;
+  /** The papacy as he lives under it. E1 §3; absent in older saves until the first week reads it. */
+  rome?: RomeState;
   /** How places look: chosen furnishings by place key. */
   decor: DecorState;
   /** Letters to the chancery about the liturgy, by topic. Answered by the week hook. */
