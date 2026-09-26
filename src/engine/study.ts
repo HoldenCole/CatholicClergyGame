@@ -34,7 +34,10 @@ export function beginStudy(state: GameState, def: OfferDef, failed: boolean, rng
   const c = def.accept.commitment;
   const program = c?.away ? studyProgram(c.away) : undefined;
   if (!c || !program) throw new Error(`offer ${def.id} is not a course of study`);
+  // A translation closes the first see's file: its letter was answered, and the years were served.
+  const leavingSee = program.kind === 'see' && state.study && studyProgram(state.study.program)?.kind === 'see' ? state.study.offerId : null;
   let next = closeTenure(state, program.kind === 'post' ? `left for ${program.label.toLowerCase()}` : `sent to ${CITY_WORD[program.city]}`);
+  if (leavingSee) next = { ...next, offerHistory: [...next.offerHistory, { offerId: leavingSee, week: next.clock.week, decision: 'completed' }] };
   next = next.parish ? handoffProject(next, rng.derive(`handoff:${state.clock.week}`)).state : next;
   next = dropOffices(next);
   const ch = next.character!;
@@ -116,6 +119,12 @@ export function endStudy(state: GameState, def: OfferDef, rng: Rng): GameState {
   const home = nextAssignment(next, rng).state;
   // A degree earned buys a choice among the top of the diocese, whatever the board rolled; the letter behind the
   // choice is the flagship. A posting ended, or a washout, takes what the board gives.
+  // A bishop does not come home to a vicar's post: the auxiliary's years end at the head of the flagship, as the letter promised.
+  if (next.flags.ordained_bishop && home.assignment) {
+    const flagship = flagshipFor(home);
+    const seat = flagship ? assignmentTo(home, flagship, 'pastor', ['An auxiliary bishop is given a great parish']) : { ...home.assignment, role: 'pastor' as const };
+    return { ...home, assignment: seat, mode: { kind: 'clock' } };
+  }
   if (!study.failed && studyProgram(study.program)?.kind === 'study' && home.assignment) {
     const flagship = flagshipFor(home);
     const experienced = parishYears(home) >= CAREER.minYearsForPastor;

@@ -50,6 +50,8 @@ export interface OfferDef {
   once?: boolean;
   /** Accepting raises the arrival weight of every offer in the same cluster. */
   cluster?: string;
+  /** Rome does not ask twice: the letter takes yes or no, never "not now". */
+  final?: boolean;
   accept: { effects: Effect[]; outcome: string; commitment?: CommitmentDef };
   decline: { effects: Effect[]; outcome: string };
   /**
