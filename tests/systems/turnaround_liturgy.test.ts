@@ -9,7 +9,8 @@ import { evaluateAll } from '@/engine/conditions';
 import { driversOf, HARD_KINDS, sinceArrival, turnaroundOf, turnaroundStep } from '@/systems/trajectory';
 import { trust } from '@/systems/promotion';
 import { playerCandidate } from '@/systems/openings';
-import { dateOf } from '@/engine/time';
+import { dateOf, sundayOf } from '@/engine/time';
+import { policiesByDate } from '@/systems/rome/policy';
 import type { GameState, Parish } from '@/types';
 
 function pastor(seed: string): GameState {
@@ -71,7 +72,8 @@ describe('the older Mass before the 2021 norms', () => {
   function inYear(s: GameState, year: number, month: number): GameState {
     let t = s;
     for (let i = 0; i < 52 * 20 && !(dateOf(t.clock).year === year && dateOf(t.clock).month === month); i++) t = { ...t, clock: { ...t.clock, week: t.clock.week + 1 } };
-    return t;
+    // The law as Rome's documents left it on that day. E1 R1.1.
+    return { ...t, rome: { ...t.rome!, policies: policiesByDate(sundayOf(t.clock)) } };
   }
   it('needs no faculties before Traditionis Custodes, only the Latin, and what was begun before stands after', () => {
     const base = parishState('tlm');

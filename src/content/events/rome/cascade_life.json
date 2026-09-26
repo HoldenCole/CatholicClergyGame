@@ -1,0 +1,2035 @@
+{
+  "_notes": "E1 R1.1: the parish's answer to Rome's documents on communion, blessings, marriage cases, the lay ministries, synodality, and creation (docs/EXPANSION-E1-ROME.md §4.2). Beat 'cascade'. Each choice records what he did (the 'document' effect).",
+  "events": [
+    {
+      "id": "rc_rc_disc_couple",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "any",
+      "beat": "cascade",
+      "pressure": [
+        "belief_vs_safety",
+        "loyalty_vs_honesty"
+      ],
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 2,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "document",
+          "axis": "remarried_communion",
+          "value": "discernment",
+          "within": 30,
+          "implemented": false,
+          "norm": [
+            "enthusiastic",
+            "faithful"
+          ]
+        }
+      ],
+      "title": "A Path of Discernment",
+      "body": "They come to the rectory office at {parish} together, which is the first thing you notice: a couple in their fifties, married twenty years in a courthouse after his first marriage ended in something he still does not describe. They have come to Mass every Sunday for all twenty and have never once come forward. Now there is {doc:remarried_communion}, and they have read chapter eight twice. {reading:remarried_communion} She does most of the talking. He asks one question: whether there is a road for them, and whether you would walk it.",
+      "choices": [
+        {
+          "id": "walk",
+          "label": "Walk it with them, over months, to wherever the discernment leads",
+          "outcome": "You meet them monthly through a year: the first marriage, the children, the conscience, the Church. At Easter you give him communion for the first time in twenty years, and his hand shakes. Some in the parish notice who is coming forward now, and some of them write letters.",
+          "volume": "semi_public",
+          "positionTopic": "remarried_communion",
+          "positionValue": 45,
+          "effects": [
+            {
+              "target": "document",
+              "key": "remarried_communion",
+              "value": "eager"
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "progressive_bloc",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": -5
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "guidelines",
+          "label": "Begin with the diocese's guidelines, and the tribunal first",
+          "outcome": "You begin where the chancery's guidelines begin: the tribunal, and whether the first marriage was ever a marriage. It is slower, and it is a road, and they take it. The case is open by summer. Whatever it finds, you tell them, you will still be walking.",
+          "default": true,
+          "volume": "private",
+          "positionTopic": "remarried_communion",
+          "positionValue": 15,
+          "effects": [
+            {
+              "target": "document",
+              "key": "remarried_communion",
+              "value": "faithful"
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "brother_sister",
+          "label": "Tell them the discipline as it was taught you, gently",
+          "outcome": "You tell them what you were taught: the tribunal, or a life of continence as brother and sister, or a spiritual communion from the pew. You say it as kindly as it can be said. She thanks you for your honesty. They go on coming every Sunday, and still do not come forward.",
+          "volume": "private",
+          "positionTopic": "remarried_communion",
+          "positionValue": -35,
+          "effects": [
+            {
+              "target": "document",
+              "key": "remarried_communion",
+              "value": "minimal"
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "progressive_bloc",
+              "delta": -3
+            }
+          ]
+        },
+        {
+          "id": "refuse",
+          "label": "Tell them the document changes nothing, and preach it",
+          "outcome": "You tell them nothing has changed, and on Sunday you preach that nothing has changed, citing the older teaching by number. The couple stop coming to {parish}. Others in the diocese hear what you preached, and some of them agree with you loudly enough that Rome hears it too.",
+          "volume": "public",
+          "positionTopic": "remarried_communion",
+          "positionValue": -60,
+          "effects": [
+            {
+              "target": "document",
+              "key": "remarried_communion",
+              "value": "defiant"
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": -6
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": 8
+            },
+            {
+              "target": "reputation",
+              "key": "progressive_bloc",
+              "delta": -6
+            },
+            {
+              "target": "outspokenness",
+              "key": "",
+              "delta": 6
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rc_rc_disc_slow",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "any",
+      "beat": "cascade",
+      "pressure": [
+        "loyalty_vs_honesty",
+        "belief_vs_safety"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 2,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "document",
+          "axis": "remarried_communion",
+          "value": "discernment",
+          "within": 30,
+          "implemented": false,
+          "norm": [
+            "minimal",
+            "slow"
+          ]
+        }
+      ],
+      "title": "Not in This Diocese",
+      "body": "{reading:remarried_communion} So in this diocese nothing has changed, whatever {doc:remarried_communion} says, or seems to say. The woman in your office at {parish} has read both. She is divorced, remarried, raising his children and hers, and a parish catechist for twelve years; she has never received. She asks whether a Catholic in the next diocese over can receive and she cannot, and whether the sacraments are a matter of which side of a county line you live on.",
+      "choices": [
+        {
+          "id": "rome",
+          "label": "Tell her Rome has opened a road, and walk it with her quietly",
+          "outcome": "You tell her the document is the Pope's and that the bishop's letter does not close what it opens, and you begin the discernment with her, privately. Nobody asks you about it. You know that if anybody ever does, the chancery's answer and yours will not be the same.",
+          "volume": "private",
+          "positionTopic": "remarried_communion",
+          "positionValue": 45,
+          "effects": [
+            {
+              "target": "document",
+              "key": "remarried_communion",
+              "value": "eager"
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 2
+            },
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": -4
+            },
+            {
+              "target": "reputation",
+              "key": "progressive_bloc",
+              "delta": 3
+            }
+          ]
+        },
+        {
+          "id": "bishop",
+          "label": "Tell her the bishop's guidelines are the ones you are bound by",
+          "outcome": "You tell her the truth, which is that you are bound by the bishop's reading and that you will help her with the tribunal. She says she has been to the tribunal. You say you will help her with it again. She is kind about it, which is worse.",
+          "default": true,
+          "volume": "private",
+          "positionTopic": "authority",
+          "positionValue": -40,
+          "effects": [
+            {
+              "target": "document",
+              "key": "remarried_communion",
+              "value": "minimal"
+            },
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "write",
+          "label": "Write to the bishop, respectfully, asking him to reconsider for cases like hers",
+          "outcome": "You write to the bishop, a careful letter with no names in it. His secretary answers that the bishop has received your letter. You keep the answer in the file with her name on it, and you tell her you have written, and she thanks you for trying.",
+          "volume": "semi_public",
+          "positionTopic": "authority",
+          "positionValue": 30,
+          "effects": [
+            {
+              "target": "document",
+              "key": "remarried_communion",
+              "value": "faithful"
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 1
+            },
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": -1
+            },
+            {
+              "target": "reputation",
+              "key": "progressive_bloc",
+              "delta": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rc_rc_disc_council",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "any",
+      "beat": "cascade",
+      "pressure": [
+        "loyalty_vs_honesty",
+        "belief_vs_safety"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 2,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "document",
+          "axis": "remarried_communion",
+          "value": "discernment",
+          "within": 30,
+          "implemented": false
+        },
+        {
+          "type": "any",
+          "inner": [
+            {
+              "type": "role",
+              "value": "pastor"
+            },
+            {
+              "type": "role",
+              "value": "administrator"
+            }
+          ]
+        }
+      ],
+      "title": "The Footnote",
+      "body": "The parish council at {parish} does not usually discuss moral theology, but tonight it wants to. One of the members has printed a footnote from {doc:remarried_communion} in large type, and another has printed three commentaries saying it means three different things. {reading:remarried_communion} Everyone at the table has someone in mind: a son, a sister, themselves. The chair turns to you and asks what the parish's practice will be, and says it in the voice of someone taking minutes.",
+      "choices": [
+        {
+          "id": "open",
+          "label": "Say the door is open, and that anyone may come and talk",
+          "outcome": "You say that anyone in that situation may come and talk, and that you will walk with them as the document asks. The minutes record it word for word. By Sunday it has reached the people it was meant for, and some others it was not.",
+          "volume": "public",
+          "positionTopic": "remarried_communion",
+          "positionValue": 40,
+          "effects": [
+            {
+              "target": "document",
+              "key": "remarried_communion",
+              "value": "eager"
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "progressive_bloc",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": -4
+            }
+          ]
+        },
+        {
+          "id": "case",
+          "label": "Say every case is a person and none is a policy",
+          "outcome": "You say there will be no parish policy, only people, one at a time, in the office and not the minutes. It disappoints the table and is exactly what the document asks of a pastor. The chair writes down \"pastor to discern case by case\" and underlines it.",
+          "default": true,
+          "volume": "semi_public",
+          "positionTopic": "remarried_communion",
+          "positionValue": 10,
+          "effects": [
+            {
+              "target": "document",
+              "key": "remarried_communion",
+              "value": "faithful"
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "as_was",
+          "label": "Say the practice of the parish will be what it has always been",
+          "outcome": "You say the practice will be what it has always been, and that the document must be read in continuity with what came before. The member with the footnote folds it up. The ones who agree with you thank you after, in the parking lot, and the ones who do not are quiet.",
+          "volume": "public",
+          "positionTopic": "remarried_communion",
+          "positionValue": -35,
+          "effects": [
+            {
+              "target": "document",
+              "key": "remarried_communion",
+              "value": "minimal"
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "progressive_bloc",
+              "delta": -4
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rc_rc_strict",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "any",
+      "beat": "cascade",
+      "pressure": [
+        "loyalty_vs_honesty",
+        "friendship_vs_duty"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 2,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "document",
+          "axis": "remarried_communion",
+          "value": "strict",
+          "within": 30,
+          "implemented": false
+        }
+      ],
+      "title": "The Rule Restored",
+      "body": "{doc:remarried_communion} closes the road that was opened: the divorced and civilly remarried are to refrain from communion, as before, and the path of discernment is to lead to the tribunal or to continence and nowhere else. {reading:remarried_communion} At {parish} there are people who walked that road with you and came to communion by it. One of them, a man you gave communion to at an Easter Vigil, waits for you after the eight o'clock and asks whether he is to stop.",
+      "choices": [
+        {
+          "id": "stop",
+          "label": "Tell him the Church has spoken, and that he must refrain",
+          "outcome": "You tell him the law, and that you are sorry, and that he should keep coming. He says he will. He does, and he stays in the pew at communion, and you watch him stay there every Sunday, which is your part of it.",
+          "volume": "semi_public",
+          "positionTopic": "remarried_communion",
+          "positionValue": -40,
+          "effects": [
+            {
+              "target": "document",
+              "key": "remarried_communion",
+              "value": "eager"
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "progressive_bloc",
+              "delta": -6
+            }
+          ]
+        },
+        {
+          "id": "tribunal",
+          "label": "Tell him the tribunal is the road now, and take him there yourself",
+          "outcome": "You tell him the road now runs through the tribunal, and you drive him to the chancery for the first interview yourself. It will take a year. You tell him you will be in the pew with him in the meantime, and on the weeks you are not saying Mass, you are.",
+          "default": true,
+          "volume": "private",
+          "positionTopic": "remarried_communion",
+          "positionValue": -10,
+          "effects": [
+            {
+              "target": "document",
+              "key": "remarried_communion",
+              "value": "faithful"
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "conscience",
+          "label": "Tell him his conscience was formed and he should follow it",
+          "outcome": "You tell him the discernment he made was real and made in good faith, and that you will not undo it by a letter from Rome. It is the most consequential thing you have said in a confessional-sized voice. It reaches the chancery by the end of the year.",
+          "volume": "private",
+          "positionTopic": "remarried_communion",
+          "positionValue": 60,
+          "effects": [
+            {
+              "target": "document",
+              "key": "remarried_communion",
+              "value": "defiant"
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": -6
+            },
+            {
+              "target": "reputation",
+              "key": "progressive_bloc",
+              "delta": 6
+            },
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": -4
+            },
+            {
+              "target": "outspokenness",
+              "key": "",
+              "delta": 4
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rc_bl_couple",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "any",
+      "beat": "cascade",
+      "pressure": [
+        "belief_vs_safety",
+        "loyalty_vs_honesty"
+      ],
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 2,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "document",
+          "axis": "blessings",
+          "value": "spontaneous",
+          "within": 30,
+          "implemented": false
+        }
+      ],
+      "title": "A Blessing at the Door",
+      "body": "After the Saturday evening Mass at {parish} two men wait by the door until the line has gone: a couple, together fifteen years, one of them a cantor at the parish for most of them. They have read {doc:blessings}, the {doc_kind:blessings} from Rome, and they know exactly what it allows: a brief, spontaneous blessing, no rite, nothing that looks like a wedding. {reading:blessings} They ask you for that, and nothing more, and they ask it quietly, as though they are used to the answer.",
+      "choices": [
+        {
+          "id": "bless",
+          "label": "Bless them there at the door, briefly, as the declaration allows",
+          "outcome": "You bless them there, a sentence and a sign of the cross, for peace and for the grace to follow Christ, and they thank you and go home. Nobody else saw it. You find out later that a great many people knew by Monday, and that they did not all feel the same way.",
+          "default": true,
+          "volume": "semi_public",
+          "positionTopic": "blessings",
+          "positionValue": 30,
+          "effects": [
+            {
+              "target": "document",
+              "key": "blessings",
+              "value": "faithful"
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "progressive_bloc",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": -3
+            }
+          ]
+        },
+        {
+          "id": "ceremony",
+          "label": "Offer them more: a blessing in the church, with their families",
+          "outcome": "You offer them what the declaration forbids, a blessing in the church with their families there, because you think the declaration is a beginning and not an end. They accept. There are photographs. The photographs reach Rome, which had been careful about exactly this.",
+          "volume": "public",
+          "positionTopic": "blessings",
+          "positionValue": 70,
+          "effects": [
+            {
+              "target": "document",
+              "key": "blessings",
+              "value": "defiant"
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": -6
+            },
+            {
+              "target": "reputation",
+              "key": "progressive_bloc",
+              "delta": 8
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": -10
+            },
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": -5
+            },
+            {
+              "target": "outspokenness",
+              "key": "",
+              "delta": 6
+            }
+          ]
+        },
+        {
+          "id": "pray",
+          "label": "Decline the blessing, kindly, and tell them you will pray for them",
+          "outcome": "You tell them you are not able to, and that you will pray for them, and that they are welcome at {parish} as they have always been. The cantor says he understands. He sings at the ten-thirty the next morning, and does not look at the sanctuary.",
+          "volume": "private",
+          "positionTopic": "blessings",
+          "positionValue": -25,
+          "effects": [
+            {
+              "target": "document",
+              "key": "blessings",
+              "value": "minimal"
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "progressive_bloc",
+              "delta": -3
+            }
+          ]
+        },
+        {
+          "id": "preach",
+          "label": "Decline, and preach on Sunday that the declaration is a confusion",
+          "outcome": "You decline, and on Sunday you preach that the declaration has confused the faithful and that you will not give such blessings. The couple are not at Mass to hear it; the cantor has already found another parish. Rome, which wrote the declaration, reads the sermon online.",
+          "volume": "public",
+          "positionTopic": "blessings",
+          "positionValue": -65,
+          "effects": [
+            {
+              "target": "document",
+              "key": "blessings",
+              "value": "defiant"
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": -5
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": 8
+            },
+            {
+              "target": "reputation",
+              "key": "progressive_bloc",
+              "delta": -8
+            },
+            {
+              "target": "outspokenness",
+              "key": "",
+              "delta": 6
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rc_bl_uproar",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "any",
+      "beat": "cascade",
+      "pressure": [
+        "money",
+        "loyalty_vs_honesty"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 2,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "document",
+          "axis": "blessings",
+          "value": "spontaneous",
+          "within": 30,
+          "implemented": false
+        },
+        {
+          "type": "any",
+          "inner": [
+            {
+              "type": "role",
+              "value": "pastor"
+            },
+            {
+              "type": "role",
+              "value": "administrator"
+            }
+          ]
+        }
+      ],
+      "title": "Letters to the Editor",
+      "body": "The week after {doc:blessings} the diocesan paper prints eleven letters about it, and the parish office at {parish} gets forty calls. {reading:blessings} A man who has given to the parish for thirty years says he will stop until he knows where the pastor stands; a woman whose daughter married a woman says she will come back to Mass if she knows where the pastor stands. The secretary has a list of both, and wants to know what to tell the next caller.",
+      "choices": [
+        {
+          "id": "rome",
+          "label": "Tell them the pastor stands with Rome, and will give such blessings when asked",
+          "outcome": "You write a short note for the bulletin: what the declaration allows, what it does not, and that you will give such a blessing to anyone who asks for one. The man stops giving. The woman comes back, with her daughter, once, at Christmas.",
+          "volume": "public",
+          "positionTopic": "blessings",
+          "positionValue": 40,
+          "effects": [
+            {
+              "target": "document",
+              "key": "blessings",
+              "value": "eager"
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "progressive_bloc",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": -6
+            }
+          ]
+        },
+        {
+          "id": "teach",
+          "label": "Explain what the document says and what it does not, and leave it there",
+          "outcome": "You write the note about what the document actually says, and about what it does not, and you do not say what you will do. Both callers find it evasive. Most of the parish finds it helpful, which is the part nobody calls about.",
+          "default": true,
+          "volume": "semi_public",
+          "positionTopic": "blessings",
+          "positionValue": 5,
+          "effects": [
+            {
+              "target": "document",
+              "key": "blessings",
+              "value": "faithful"
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "quiet",
+          "label": "Tell the secretary to say the pastor is not commenting",
+          "outcome": "You tell the secretary to say the pastor is not commenting on documents from Rome. It is a sentence that satisfies nobody and offends nobody enough to call twice. The calls stop in a month, the way they do.",
+          "effects": [
+            {
+              "target": "document",
+              "key": "blessings",
+              "value": "minimal"
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rc_bl_none",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "any",
+      "beat": "cascade",
+      "pressure": [
+        "loyalty_vs_honesty",
+        "belief_vs_safety"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 2,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "document",
+          "axis": "blessings",
+          "value": "none",
+          "within": 30,
+          "implemented": false
+        }
+      ],
+      "title": "The Declaration Withdrawn",
+      "body": "{doc:blessings} says it plainly: the Church does not bless couples in irregular situations, as couples, in any form, and whatever was written before is to be read in that light. {reading:blessings} At {parish} there are couples who asked you for a brief blessing at the door after the earlier declaration, and received one. One of them writes to you, a short letter in a careful hand, asking whether the blessing you gave them has been taken back.",
+      "choices": [
+        {
+          "id": "law",
+          "label": "Write back that the law has changed, and that you will not give it again",
+          "outcome": "You write back that the law has changed and that you will not give such a blessing again, and that the blessing you gave was given in good faith under the law as it was. It is precise. They do not answer, and they do not come back.",
+          "volume": "semi_public",
+          "positionTopic": "blessings",
+          "positionValue": -40,
+          "effects": [
+            {
+              "target": "document",
+              "key": "blessings",
+              "value": "eager"
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "progressive_bloc",
+              "delta": -5
+            }
+          ]
+        },
+        {
+          "id": "grace",
+          "label": "Write back that no grace given is taken back by a letter",
+          "outcome": "You write that God does not take back a blessing because Rome has changed its mind, and that you will not bless them again as a couple, and that each of them is welcome to ask you for a blessing any time. It is a careful letter. You rewrite it four times.",
+          "default": true,
+          "volume": "private",
+          "positionTopic": "blessings",
+          "positionValue": 10,
+          "effects": [
+            {
+              "target": "document",
+              "key": "blessings",
+              "value": "faithful"
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "again",
+          "label": "Write back that you would bless them again, and mean it",
+          "outcome": "You write that you would bless them again tomorrow, and you sign it. They keep the letter. Years later it is quoted to a diocesan official by someone who is not their friend, and it is on your file after that.",
+          "volume": "private",
+          "positionTopic": "blessings",
+          "positionValue": 60,
+          "effects": [
+            {
+              "target": "document",
+              "key": "blessings",
+              "value": "defiant"
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": -6
+            },
+            {
+              "target": "reputation",
+              "key": "progressive_bloc",
+              "delta": 6
+            },
+            {
+              "target": "outspokenness",
+              "key": "",
+              "delta": 4
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rc_mc_brief_case",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "any",
+      "beat": "cascade",
+      "pressure": [
+        "competence",
+        "friendship_vs_duty"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 2,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "document",
+          "axis": "marriage_cases",
+          "value": "brief",
+          "within": 30,
+          "implemented": false
+        }
+      ],
+      "title": "The Briefer Process",
+      "body": "The woman in your office at {parish} was married at nineteen, for eleven weeks, to a man who told her at the reception that he had no intention of staying faithful and then did not. That was thirty years ago. She has been told for thirty years that a nullity case costs money and takes years. {doc:marriage_cases} has changed both. {reading:marriage_cases} She wants to marry the man she has lived with for a decade, in the Church, and she has brought a folder.",
+      "choices": [
+        {
+          "id": "brief",
+          "label": "Help her write the petition for the briefer process before the bishop",
+          "outcome": "You help her write it: the facts, the witnesses, the ex-husband who, astonishingly, agrees. The briefer process goes to the bishop and comes back in four months. You marry them in October, in the side chapel, and she cries through the vows.",
+          "volume": "semi_public",
+          "positionTopic": "annulments",
+          "positionValue": 35,
+          "effects": [
+            {
+              "target": "document",
+              "key": "marriage_cases",
+              "value": "eager"
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "ordinary",
+          "label": "Help her with the ordinary process: it is sure, and it is still faster now",
+          "outcome": "You walk her through the ordinary process, which is still faster than it was and still thorough. It takes nine months and no money. You marry them the following spring, and she says she did not think the Church could move that fast.",
+          "default": true,
+          "effects": [
+            {
+              "target": "document",
+              "key": "marriage_cases",
+              "value": "faithful"
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 3
+            }
+          ]
+        },
+        {
+          "id": "caution",
+          "label": "Tell her to be patient: these things should not be hurried",
+          "outcome": "You tell her the reform does not change what a marriage is, and that the tribunal must be careful. She hears a priest telling her to wait again. She files anyway, without your help, and the case goes through in six months.",
+          "volume": "private",
+          "positionTopic": "annulments",
+          "positionValue": -25,
+          "effects": [
+            {
+              "target": "document",
+              "key": "marriage_cases",
+              "value": "minimal"
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": -2
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rc_mc_auditor",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "any",
+      "beat": "cascade",
+      "pressure": [
+        "competence",
+        "ambition_vs_integrity"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 2,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "document",
+          "axis": "marriage_cases",
+          "value": "brief",
+          "within": 30,
+          "implemented": false
+        }
+      ],
+      "title": "The Tribunal Asks",
+      "body": "After {doc:marriage_cases} the tribunal has more cases than it has priests, and the judicial vicar writes to pastors: would any of them be trained as auditors, to take testimony in their own parishes, a few hours a month? {reading:marriage_cases} It is canon law and it is unglamorous and it is the kind of thing that ends up on a file in the chancery. It would also mean sitting across a table from people telling the worst year of their lives, and writing it down exactly.",
+      "choices": [
+        {
+          "id": "serve",
+          "label": "Say yes, and do the training",
+          "outcome": "You do the training on three Saturdays and take testimony for four years in the parish office: exact, patient, unrecorded by anybody but the tribunal. Rome would call it implementing the reform. The judicial vicar calls it being useful, and remembers your name.",
+          "default": true,
+          "effects": [
+            {
+              "target": "document",
+              "key": "marriage_cases",
+              "value": "eager"
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 5
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "decline",
+          "label": "Decline: the parish has first call on your hours",
+          "outcome": "You write back that the parish has first call on your hours. It is true, and the judicial vicar accepts it without comment. Two years later the tribunal is still behind, and the priests who said yes are the ones the chancery thinks of first.",
+          "effects": [
+            {
+              "target": "document",
+              "key": "marriage_cases",
+              "value": "minimal"
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": -1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rc_lm_open_lector",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "any",
+      "beat": "cascade",
+      "pressure": [
+        "loyalty_vs_honesty",
+        "friendship_vs_duty"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 2,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "document",
+          "axis": "lay_ministries",
+          "value": "open",
+          "within": 30,
+          "implemented": false
+        },
+        {
+          "type": "any",
+          "inner": [
+            {
+              "type": "role",
+              "value": "pastor"
+            },
+            {
+              "type": "role",
+              "value": "administrator"
+            }
+          ]
+        }
+      ],
+      "title": "Instituted",
+      "body": "{doc:lay_ministries} opens the instituted ministries of lector and acolyte to women, and within a week one of the lectors at {parish} asks you about it: a retired schoolteacher who has read at the ten-thirty for eighteen years and who wants, she says, to be what she has been. {reading:lay_ministries} Institution is for good, by the bishop, in a rite. Nobody in the parish has ever been instituted in anything; the men who read are not instituted either.",
+      "choices": [
+        {
+          "id": "present",
+          "label": "Present her to the bishop, and a man with her, at the next institution",
+          "outcome": "You present her and one of the men who reads with her, so that it is the ministry and not a statement. The bishop institutes them at the cathedral in the spring. She reads at the ten-thirty the next Sunday exactly as she always did, and it is not the same.",
+          "volume": "public",
+          "positionTopic": "women_roles",
+          "positionValue": 35,
+          "effects": [
+            {
+              "target": "document",
+              "key": "lay_ministries",
+              "value": "eager"
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "progressive_bloc",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 3
+            }
+          ]
+        },
+        {
+          "id": "formation",
+          "label": "Tell her yes, after the diocese's formation program",
+          "outcome": "You tell her yes, and that the diocese will want a year of formation first. She does the year, and does it better than the men in it. The institution is the following Advent, and her grandchildren come.",
+          "default": true,
+          "effects": [
+            {
+              "target": "document",
+              "key": "lay_ministries",
+              "value": "faithful"
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "wait",
+          "label": "Tell her the parish will wait to see how the diocese does it",
+          "outcome": "You tell her the parish will wait to see how the diocese handles it. She says she has waited eighteen years, and that she can wait a little longer, and that she will remind you. She does, every year, on the anniversary of the document.",
+          "effects": [
+            {
+              "target": "document",
+              "key": "lay_ministries",
+              "value": "minimal"
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "progressive_bloc",
+              "delta": -2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rc_lm_open_objection",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "any",
+      "beat": "cascade",
+      "pressure": [
+        "friendship_vs_duty",
+        "loyalty_vs_honesty"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 2,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "document",
+          "axis": "lay_ministries",
+          "value": "open",
+          "within": 30,
+          "implemented": false
+        }
+      ],
+      "title": "In My Day",
+      "body": "Since {doc:lay_ministries}, a man who has served at the altar at {parish} since he was eight, and still serves the early Mass at seventy-four, has taken to sitting in the back instead. He catches you in the sacristy to tell you why: women at the altar was one thing, by permission, but instituted is another, and he did not think he would live to see it. {reading:lay_ministries} He is not angry. He is sad, and he wants you to tell him the Church has not changed.",
+      "choices": [
+        {
+          "id": "teach",
+          "label": "Tell him the Church has changed a discipline, not the faith",
+          "outcome": "You sit with him and tell him what the Church has changed and what it has not: a discipline, a canon, not the priesthood and not the faith. He listens. He serves the early Mass the next week, next to a girl of twelve, and shows her where to stand.",
+          "default": true,
+          "effects": [
+            {
+              "target": "document",
+              "key": "lay_ministries",
+              "value": "faithful"
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 2
+            },
+            {
+              "target": "relationship",
+              "key": "@parishioner",
+              "delta": 3
+            }
+          ]
+        },
+        {
+          "id": "agree",
+          "label": "Tell him you understand, and that he is not wrong to grieve it",
+          "outcome": "You tell him that grief for the way things were is not disobedience. He says that is the first thing a priest has said to him about it that made sense. He comes back to the altar, and he tells the other old men what you said.",
+          "volume": "private",
+          "positionTopic": "women_roles",
+          "positionValue": -25,
+          "effects": [
+            {
+              "target": "document",
+              "key": "lay_ministries",
+              "value": "minimal"
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": 3
+            }
+          ]
+        },
+        {
+          "id": "firm",
+          "label": "Tell him, kindly, that the Church has decided and so must he",
+          "outcome": "You tell him that the Pope has decided and that serving at the altar is not a vote. It is true. He serves the next week because you asked him to, and he does not come to the sacristy to talk any more.",
+          "volume": "semi_public",
+          "positionTopic": "women_roles",
+          "positionValue": 30,
+          "effects": [
+            {
+              "target": "document",
+              "key": "lay_ministries",
+              "value": "eager"
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 3
+            },
+            {
+              "target": "relationship",
+              "key": "@parishioner",
+              "delta": -3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rc_lm_men_only",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "any",
+      "beat": "cascade",
+      "pressure": [
+        "loyalty_vs_honesty",
+        "friendship_vs_duty"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 2,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "document",
+          "axis": "lay_ministries",
+          "value": "men_only",
+          "within": 30,
+          "implemented": false
+        }
+      ],
+      "title": "For Men Again",
+      "body": "{doc:lay_ministries} reserves the instituted ministries of lector and acolyte to men once more, and asks the women already instituted to go on reading by the pastor's leave, as women did before. {reading:lay_ministries} At {parish} there is a woman who was instituted by the bishop at the cathedral, with her grandchildren watching, and she comes to the rectory with the certificate in an envelope. She does not ask you anything. She puts it on the desk.",
+      "choices": [
+        {
+          "id": "obey",
+          "label": "Tell her the law has changed, and that she should read on Sunday as always",
+          "outcome": "You tell her the law has changed and that she is to read on Sunday exactly as she has for twenty years, by your leave, which she has. She takes the certificate back. She reads on Sunday, and the parish, which has heard, listens more carefully than it ever has.",
+          "default": true,
+          "effects": [
+            {
+              "target": "document",
+              "key": "lay_ministries",
+              "value": "faithful"
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "honour",
+          "label": "Put the certificate in the parish register, where it will stay",
+          "outcome": "You tell her that what the bishop did at the cathedral happened, and you file the certificate in the parish register with a note in your own hand. Nobody asks for it back. It is the sort of thing a pastor after you might find, and read, and wonder at.",
+          "volume": "private",
+          "positionTopic": "women_roles",
+          "positionValue": 30,
+          "effects": [
+            {
+              "target": "document",
+              "key": "lay_ministries",
+              "value": "minimal"
+            },
+            {
+              "target": "reputation",
+              "key": "progressive_bloc",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": -1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rc_sy_listening",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "any",
+      "beat": "cascade",
+      "pressure": [
+        "loyalty_vs_honesty",
+        "competence"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 2,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "document",
+          "axis": "synodality",
+          "value": "synodal",
+          "within": 30,
+          "implemented": false
+        },
+        {
+          "type": "any",
+          "inner": [
+            {
+              "type": "role",
+              "value": "pastor"
+            },
+            {
+              "type": "role",
+              "value": "administrator"
+            }
+          ]
+        }
+      ],
+      "title": "Listening Sessions",
+      "body": "{doc:synodality} asks every parish in the world to listen, and the chancery has sent {parish} a facilitator's guide, three prompts, and a deadline. {reading:synodality} The people who come to listening sessions are the people who come to everything, and the people the Church most needs to hear from are the ones who left, and do not read the bulletin. The guide says to go to the margins. The deadline is in eight weeks.",
+      "choices": [
+        {
+          "id": "margins",
+          "label": "Hold six sessions, and one of them at the diner where the ones who left eat",
+          "outcome": "You hold six, and one of them in the back room of the diner on a Tuesday, where eleven people who have not been to Mass in years tell you why. It is the most important evening of your priesthood that year, and none of it can be fixed by a report.",
+          "volume": "public",
+          "positionTopic": "synodality",
+          "positionValue": 40,
+          "effects": [
+            {
+              "target": "document",
+              "key": "synodality",
+              "value": "eager"
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "progressive_bloc",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 3
+            }
+          ]
+        },
+        {
+          "id": "guide",
+          "label": "Hold the two sessions the guide asks for, and send the report",
+          "outcome": "You hold two in the hall, as the guide says. Forty people come, all of whom you know. What they say is honest and predictable, and you send it in on time, and the chancery thanks every pastor in the same letter.",
+          "default": true,
+          "effects": [
+            {
+              "target": "document",
+              "key": "synodality",
+              "value": "faithful"
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "one",
+          "label": "Hold one session, after the ten-thirty, with coffee",
+          "outcome": "You hold one, with coffee, and eighteen people come and talk mostly about the parking lot. You send in what they said. It is not what Rome hoped for from {parish}, and it is what {parish} said.",
+          "effects": [
+            {
+              "target": "document",
+              "key": "synodality",
+              "value": "minimal"
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": -1
+            }
+          ]
+        },
+        {
+          "id": "none",
+          "label": "Hold none: a parish is not a parliament",
+          "outcome": "You do not hold one. You write to the chancery that {parish} is not a parliament and the pastor already knows his people. The chancery notes the absence of a report. So, eventually, does somebody further away.",
+          "volume": "public",
+          "positionTopic": "synodality",
+          "positionValue": -50,
+          "effects": [
+            {
+              "target": "document",
+              "key": "synodality",
+              "value": "defiant"
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": -5
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": -4
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "progressive_bloc",
+              "delta": -5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rc_sy_synthesis",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "any",
+      "beat": "cascade",
+      "pressure": [
+        "loyalty_vs_honesty",
+        "competence"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 2,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "document",
+          "axis": "synodality",
+          "value": "synodal",
+          "within": 30,
+          "implemented": false
+        }
+      ],
+      "title": "The Synthesis",
+      "body": "The listening sessions at {parish} are done, and someone has to write the synthesis: four pages, the chancery says, faithful to what was said. {reading:synodality} What was said, among much else, is that people want women deacons, want the old Latin Mass back, want the Church to stop talking about money, and want someone to call the homebound. {doc:synodality} asks the parish to be heard. The volunteer who took the notes has given them to you, and you are the one who decides what four pages sound like.",
+      "choices": [
+        {
+          "id": "as_said",
+          "label": "Write it as it was said, including what will not please anybody",
+          "outcome": "You write it as it was said: the deacons, the Latin, the money, the homebound, all of it, in their words. The chancery's own synthesis leaves half of it out. Yours is quoted by a journalist who got hold of it, which you had not expected.",
+          "volume": "public",
+          "positionTopic": "synodality",
+          "positionValue": 30,
+          "effects": [
+            {
+              "target": "document",
+              "key": "synodality",
+              "value": "eager"
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 3
+            }
+          ]
+        },
+        {
+          "id": "careful",
+          "label": "Write it faithfully, and leave out what would only cause trouble",
+          "outcome": "You write it faithfully and leave out the two things that would have ended up in the newspaper. It is a good document. It says what the parish said, mostly, and the chancery is grateful for it, and the volunteer who took the notes reads it twice.",
+          "default": true,
+          "effects": [
+            {
+              "target": "document",
+              "key": "synodality",
+              "value": "faithful"
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "pastor",
+          "label": "Write it in the voice of a pastor who knows better",
+          "outcome": "You write it as a pastor: what the people said, and what they need, which is not always the same, and which you have been told by nobody to add. The chancery finds it thoughtful. The people who spoke at the sessions do not recognise it.",
+          "volume": "semi_public",
+          "positionTopic": "synodality",
+          "positionValue": -30,
+          "effects": [
+            {
+              "target": "document",
+              "key": "synodality",
+              "value": "minimal"
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": -3
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rc_sy_ordinary",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "any",
+      "beat": "cascade",
+      "pressure": [
+        "loyalty_vs_honesty",
+        "friendship_vs_duty"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 2,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "document",
+          "axis": "synodality",
+          "value": "ordinary",
+          "within": 30,
+          "implemented": false
+        },
+        {
+          "type": "any",
+          "inner": [
+            {
+              "type": "role",
+              "value": "pastor"
+            },
+            {
+              "type": "role",
+              "value": "administrator"
+            }
+          ]
+        }
+      ],
+      "title": "Enough Listening",
+      "body": "{doc:synodality} says, in the patient Latin of a Church that has been doing this a long time, that councils advise and pastors decide, and that the consultation of the faithful is not a form of government. {reading:synodality} At {parish} there is a listening group that has met monthly since the synod and has come to think of itself as the parish's conscience. Its chair asks you after Mass whether they are to stop meeting.",
+      "choices": [
+        {
+          "id": "end",
+          "label": "Thank them and wind it up: the council is the place now",
+          "outcome": "You thank them in the bulletin, by name, and fold the group into the parish council, which has two open seats. Some of them run for it. The chair does not, and tells people the pastor ended the listening, which is true.",
+          "volume": "semi_public",
+          "positionTopic": "synodality",
+          "positionValue": -35,
+          "effects": [
+            {
+              "target": "document",
+              "key": "synodality",
+              "value": "eager"
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "progressive_bloc",
+              "delta": -4
+            }
+          ]
+        },
+        {
+          "id": "keep",
+          "label": "Keep it, as a prayer group that talks",
+          "outcome": "You keep it, and rename it, and it goes on meeting on the second Tuesday. It prays for twenty minutes now before it talks, which it had not done before, and the talk is better for it. Nobody at the chancery is interested in a prayer group.",
+          "default": true,
+          "effects": [
+            {
+              "target": "document",
+              "key": "synodality",
+              "value": "faithful"
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 3
+            }
+          ]
+        },
+        {
+          "id": "defend",
+          "label": "Keep it as it was, and say why",
+          "outcome": "You say from the pulpit that the Church asked this parish to listen and that you do not intend to stop because Rome has changed its tone. The group cheers, privately. The chancery does not.",
+          "volume": "public",
+          "positionTopic": "synodality",
+          "positionValue": 55,
+          "effects": [
+            {
+              "target": "document",
+              "key": "synodality",
+              "value": "defiant"
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": -5
+            },
+            {
+              "target": "reputation",
+              "key": "progressive_bloc",
+              "delta": 6
+            },
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": -3
+            },
+            {
+              "target": "outspokenness",
+              "key": "",
+              "delta": 5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rc_cr_green",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "any",
+      "beat": "cascade",
+      "pressure": [
+        "money",
+        "competence"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 2,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "document",
+          "axis": "creation",
+          "value": "ecological",
+          "within": 30,
+          "implemented": false
+        },
+        {
+          "type": "any",
+          "inner": [
+            {
+              "type": "role",
+              "value": "pastor"
+            },
+            {
+              "type": "role",
+              "value": "administrator"
+            }
+          ]
+        }
+      ],
+      "title": "Our Common Home",
+      "body": "Since {doc:creation} the parish's small green team, four retired engineers and a high-school biology teacher, has been bringing you estimates: LED lights for the church, which would pay for themselves in six years; solar panels on the school roof, which would pay for themselves in fourteen; a garden where the old convent parking lot is. {reading:creation} The finance council at {parish} says the roof is the roof and money is money. The green team says the Pope has spoken. Both are, in their way, right.",
+      "choices": [
+        {
+          "id": "all",
+          "label": "Do the lights and the garden now, and start saving for the panels",
+          "outcome": "You do the lights and the garden, and put a line for the panels in the capital campaign. The garden feeds the food pantry by its second summer. The engineers put a plaque by the thermostat quoting the encyclical, and nobody takes it down.",
+          "volume": "public",
+          "positionTopic": "creation",
+          "positionValue": 35,
+          "effects": [
+            {
+              "target": "document",
+              "key": "creation",
+              "value": "eager"
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "progressive_bloc",
+              "delta": 3
+            },
+            {
+              "target": "money",
+              "key": "",
+              "delta": -6000
+            }
+          ]
+        },
+        {
+          "id": "lights",
+          "label": "Do the lights, which pay for themselves, and leave the rest",
+          "outcome": "You do the lights, because they pay for themselves and the encyclical would not object. The green team is grateful and a little disappointed, which is what a pastor mostly produces. The electric bill goes down, as promised.",
+          "default": true,
+          "effects": [
+            {
+              "target": "document",
+              "key": "creation",
+              "value": "faithful"
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 2
+            },
+            {
+              "target": "money",
+              "key": "",
+              "delta": -2500
+            }
+          ]
+        },
+        {
+          "id": "later",
+          "label": "Thank them and send it to the finance council",
+          "outcome": "You thank them and send the estimates to the finance council, where they are tabled, and then tabled again. The engineers stop bringing estimates. The biology teacher starts a garden at the school instead, on her own.",
+          "effects": [
+            {
+              "target": "document",
+              "key": "creation",
+              "value": "minimal"
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": -1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rc_cr_homily",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "any",
+      "beat": "cascade",
+      "pressure": [
+        "belief_vs_safety",
+        "money"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 2,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "document",
+          "axis": "creation",
+          "value": "ecological",
+          "within": 30,
+          "implemented": false
+        }
+      ],
+      "title": "The Plant",
+      "body": "Half the men at the ten-thirty at {parish} work at the plant, or did, or their fathers did, and the plant is the kind the encyclical has in mind. {doc:creation} is on your desk with a sticky note from the chancery: {reading:creation} You have to preach on it, or decide not to, and whatever you say will be heard by men whose mortgages the plant pays and by their children, who will read it very differently.",
+      "choices": [
+        {
+          "id": "preach",
+          "label": "Preach it: creation is a gift and work is holy, and both are true",
+          "outcome": "You preach that creation is gift and work is holy, and that the men who keep the plant running and their children who want it cleaner are not enemies. A foreman shakes your hand afterwards and says he did not agree with half of it. He says it was the first sermon in years he had listened to.",
+          "volume": "public",
+          "positionTopic": "creation",
+          "positionValue": 30,
+          "effects": [
+            {
+              "target": "document",
+              "key": "creation",
+              "value": "eager"
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "gentle",
+          "label": "Preach the gift of creation and leave the plant out of it",
+          "outcome": "You preach on the gift of creation and the goodness of the world and leave the plant out of it. Everybody knows what you left out. It is a good sermon and a safe one, and the chancery would have no complaint.",
+          "default": true,
+          "effects": [
+            {
+              "target": "document",
+              "key": "creation",
+              "value": "faithful"
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "skip",
+          "label": "Preach on the Gospel of the day instead",
+          "outcome": "You preach on the Gospel of the day, which is about something else, and let the encyclical rest on your desk. Nobody at {parish} complains. The biology teacher notices, and the chancery, which asked every pastor to preach on it, does not.",
+          "volume": "private",
+          "positionTopic": "creation",
+          "positionValue": -20,
+          "effects": [
+            {
+              "target": "document",
+              "key": "creation",
+              "value": "minimal"
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": -1
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

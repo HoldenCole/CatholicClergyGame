@@ -1,0 +1,1741 @@
+{
+  "_notes": "E1 R1.1: the parish's answer to Rome's documents on the older Mass and the English of the Missal (docs/EXPANSION-E1-ROME.md §4.2). Beat 'cascade': drawn some weeks after the document comes, only while it is fresh and unanswered. Each choice records what he did (the 'document' effect), and the public ones go on the record.",
+  "events": [
+    {
+      "id": "rc_om_fac_parish_mass",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "any",
+      "beat": "cascade",
+      "pressure": [
+        "loyalty_vs_honesty",
+        "belief_vs_safety"
+      ],
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 2,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "document",
+          "axis": "older_mass",
+          "value": "faculties",
+          "within": 30,
+          "implemented": false,
+          "norm": [
+            "enthusiastic",
+            "faithful"
+          ]
+        },
+        {
+          "type": "any",
+          "inner": [
+            {
+              "type": "role",
+              "value": "pastor"
+            },
+            {
+              "type": "role",
+              "value": "administrator"
+            }
+          ]
+        },
+        {
+          "type": "decor",
+          "place": "church",
+          "slot": "mass_form",
+          "value": "mass_tlm"
+        }
+      ],
+      "title": "The Two O'Clock Mass",
+      "body": "{doc:older_mass} reached the rectory as a PDF from a canonist friend before it reached you from anyone official, and by Sunday the families at the two o'clock Mass had read it too. {reading:older_mass} The two o'clock at {parish} is the older form: sixty people, most of them under forty, a schola that practises on Thursday nights, a sacristan who irons the altar linens himself. After Mass they wait by the door in a line that is too orderly to be an accident. They want to know what you will do.",
+      "choices": [
+        {
+          "id": "end_now",
+          "label": "End it at Pentecost, as the letter asks, and say so from the pulpit",
+          "outcome": "You announce it at every Mass so no one hears it second-hand. The last two o'clock is full, and the schola sings the Salve Regina at the end without being asked. Some of the families come to the ten-thirty; more of them drive to the chapel the bishop named. The chancery notes that the norms were received at {parish} without incident.",
+          "volume": "public",
+          "positionTopic": "tlm",
+          "positionValue": 30,
+          "effects": [
+            {
+              "target": "document",
+              "key": "older_mass",
+              "value": "eager"
+            },
+            {
+              "target": "decor",
+              "key": "church:mass_form",
+              "value": "mass_vernacular"
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 4
+            },
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": -12
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": -3
+            }
+          ]
+        },
+        {
+          "id": "petition",
+          "label": "Keep it until the chancery answers, and write for it to continue",
+          "outcome": "You write the letter the same night, for the families and in your own name, and you tell the families you have written and that you will obey the answer. It is the slowest of the roads and the only one on which nobody can say you did not ask.",
+          "default": true,
+          "volume": "semi_public",
+          "positionTopic": "tlm",
+          "positionValue": -10,
+          "effects": [
+            {
+              "target": "document",
+              "key": "older_mass",
+              "value": "faithful"
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": 3
+            }
+          ]
+        },
+        {
+          "id": "quiet",
+          "label": "Say nothing, change nothing, and let the chancery find you",
+          "outcome": "You let the two o'clock go on. The letter asked for Pentecost, and Pentecost comes and goes. Nobody at the chancery writes, yet. A brother priest tells you over lunch that the vicar for clergy has a list, and that he would not want to be on it.",
+          "effects": [
+            {
+              "target": "document",
+              "key": "older_mass",
+              "value": "minimal"
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": -4
+            },
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": -3
+            }
+          ]
+        },
+        {
+          "id": "refuse",
+          "label": "Tell the families you will not end it, and tell the chancery why",
+          "outcome": "You write to the bishop that you will not take the Mass from people who have done nothing wrong, and you read the letter to the families, which is the part that travels. The traditional blogs have it by Wednesday. Rome, when it hears, hears it as a pastor who thinks he knows better than Rome.",
+          "volume": "public",
+          "positionTopic": "tlm",
+          "positionValue": -65,
+          "effects": [
+            {
+              "target": "document",
+              "key": "older_mass",
+              "value": "defiant"
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": -7
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": -10
+            },
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": -12
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": 12
+            },
+            {
+              "target": "outspokenness",
+              "key": "",
+              "delta": 8
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rc_om_fac_parish_mass_slow",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "any",
+      "beat": "cascade",
+      "pressure": [
+        "loyalty_vs_honesty",
+        "belief_vs_safety"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 2,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "document",
+          "axis": "older_mass",
+          "value": "faculties",
+          "within": 30,
+          "implemented": false,
+          "norm": [
+            "minimal",
+            "slow"
+          ]
+        },
+        {
+          "type": "any",
+          "inner": [
+            {
+              "type": "role",
+              "value": "pastor"
+            },
+            {
+              "type": "role",
+              "value": "administrator"
+            }
+          ]
+        },
+        {
+          "type": "decor",
+          "place": "church",
+          "slot": "mass_form",
+          "value": "mass_tlm"
+        }
+      ],
+      "title": "As It Stands",
+      "body": "The document is in force, and the families at the two o'clock Mass at {parish} have been bracing for the letter from the chancery since they read it. {reading:older_mass} So the two o'clock goes on, and the schola goes on practising on Thursdays, and the sacristan goes on ironing, and all of them look at you on the way out as though you might know something the bishop does not. You do know one thing: Rome said one thing and your bishop has said another, and you are between them.",
+      "choices": [
+        {
+          "id": "as_bishop",
+          "label": "Keep it, as your bishop allows, and say that you are keeping it under him",
+          "outcome": "You tell the families the plain truth: the law is Rome's, the reading of it is the bishop's, and the bishop has read it this way. It is not the answer they wanted to hear, because it has a condition in it. It is the one that lets you sleep.",
+          "default": true,
+          "volume": "semi_public",
+          "positionTopic": "authority",
+          "positionValue": -20,
+          "effects": [
+            {
+              "target": "document",
+              "key": "older_mass",
+              "value": "minimal"
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": 4
+            },
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": -1
+            }
+          ]
+        },
+        {
+          "id": "ahead",
+          "label": "End it anyway: Rome has spoken, and a bishop's slowness is not a dispensation",
+          "outcome": "You end it at the feast of Saints Peter and Paul, which is either a coincidence or a sermon. The bishop's secretary calls to ask, carefully, whether you had received the bishop's letter. The families go to a parish in the next county where the pastor is waiting for the chancery with the patience of a man who has been told to.",
+          "volume": "public",
+          "positionTopic": "tlm",
+          "positionValue": 40,
+          "effects": [
+            {
+              "target": "document",
+              "key": "older_mass",
+              "value": "eager"
+            },
+            {
+              "target": "decor",
+              "key": "church:mass_form",
+              "value": "mass_vernacular"
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 5
+            },
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": -5
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": -12
+            },
+            {
+              "target": "reputation",
+              "key": "progressive_bloc",
+              "delta": 4
+            }
+          ]
+        },
+        {
+          "id": "regularise",
+          "label": "Keep it, and write for faculties anyway, so the Mass stands on something",
+          "outcome": "You write for faculties though the bishop has not asked for the letter, because a Mass that stands on a bishop's forbearance falls with the bishop. The chancery answers in a paragraph: the faculty is granted, and the bishop thanks you for your diligence, which may be a compliment.",
+          "volume": "private",
+          "positionTopic": "tlm",
+          "positionValue": -15,
+          "effects": [
+            {
+              "target": "document",
+              "key": "older_mass",
+              "value": "faithful"
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": 4
+            },
+            {
+              "target": "permission",
+              "key": "latin_mass",
+              "value": "granted"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rc_om_fac_weekday",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "any",
+      "beat": "cascade",
+      "pressure": [
+        "loyalty_vs_honesty",
+        "belief_vs_safety"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 2,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "document",
+          "axis": "older_mass",
+          "value": "faculties",
+          "within": 30,
+          "implemented": false
+        },
+        {
+          "type": "any",
+          "inner": [
+            {
+              "type": "flag",
+              "key": "can_celebrate_tlm",
+              "value": true
+            },
+            {
+              "type": "flag",
+              "key": "older_mass:said",
+              "value": true
+            }
+          ]
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "decor",
+            "place": "church",
+            "slot": "mass_form",
+            "value": "mass_tlm"
+          }
+        }
+      ],
+      "title": "The Tuesday Evening",
+      "body": "You have been saying the older Mass on Tuesday evenings: a side altar, a dozen people, the server a retired engineer who learned the Latin responses as a boy and is proud that they came back. Then {doc:older_mass}, and the letter from the chancery after it. {reading:older_mass} On Tuesday the twelve are there as always, and the engineer has laid out the cards, and he watches you come in from the sacristy to see whether anything has changed.",
+      "choices": [
+        {
+          "id": "write",
+          "label": "Write for faculties this week, and say it as usual until they answer",
+          "outcome": "You write the letter with your Latin and your reasons and the twelve names, and you go on saying the Tuesday Mass while the chancery takes its time. The engineer asks, every week, whether you have heard. You have not, and then you have.",
+          "default": true,
+          "volume": "private",
+          "positionTopic": "tlm",
+          "positionValue": -15,
+          "effects": [
+            {
+              "target": "document",
+              "key": "older_mass",
+              "value": "faithful"
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 2
+            },
+            {
+              "target": "permission",
+              "key": "older_form_faculty",
+              "value": "granted"
+            },
+            {
+              "target": "flag",
+              "key": "can_celebrate_tlm",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "stop",
+          "label": "Stop saying it: the Church has asked, and a private Mass is not worth a public disobedience",
+          "outcome": "You tell the twelve on the Tuesday, before Mass and not after, and say the Mass in English for them at the same altar. Most of them come for a month. The engineer comes for a year, and then one Tuesday he is not there, and you hear he is driving an hour to a chapel in the next diocese.",
+          "volume": "semi_public",
+          "positionTopic": "tlm",
+          "positionValue": 25,
+          "effects": [
+            {
+              "target": "document",
+              "key": "older_mass",
+              "value": "eager"
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": -8
+            },
+            {
+              "target": "flag",
+              "key": "can_celebrate_tlm",
+              "value": false
+            },
+            {
+              "target": "flag",
+              "key": "older_mass:said",
+              "value": false
+            }
+          ]
+        },
+        {
+          "id": "carry_on",
+          "label": "Carry on: you were saying it before the document, and nobody has told you to stop",
+          "outcome": "You carry on, on the reading that what stood before stands. It is a reading. The engineer lays out the cards every Tuesday and the twelve become fifteen, and you begin to hope that nobody at the chancery counts.",
+          "effects": [
+            {
+              "target": "document",
+              "key": "older_mass",
+              "value": "minimal"
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": -2
+            }
+          ]
+        },
+        {
+          "id": "bulletin",
+          "label": "Carry on, and write in the bulletin why you will not stop",
+          "outcome": "You write a column: that the Mass of the saints cannot be dangerous, that a law which divides the faithful is a strange kind of unity, that you will say it until obedience strictly requires otherwise. The column is reposted in four countries. The chancery reads it too.",
+          "volume": "public",
+          "positionTopic": "tlm",
+          "positionValue": -60,
+          "effects": [
+            {
+              "target": "document",
+              "key": "older_mass",
+              "value": "defiant"
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": -6
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": -8
+            },
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": -8
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": 10
+            },
+            {
+              "target": "outspokenness",
+              "key": "",
+              "delta": 8
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rc_om_fac_families",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "any",
+      "beat": "cascade",
+      "pressure": [
+        "loyalty_vs_honesty",
+        "friendship_vs_duty"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 2,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "document",
+          "axis": "older_mass",
+          "value": "faculties",
+          "within": 30,
+          "implemented": false
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "decor",
+            "place": "church",
+            "slot": "mass_form",
+            "value": "mass_tlm"
+          }
+        }
+      ],
+      "title": "What It Means",
+      "body": "Three families find you in the parking lot after the Sunday Mass at {parish}: homeschoolers, big families, the kind that sit in the front and whose children genuflect all the way to the floor. They have read {doc:older_mass}, the {doc_kind:older_mass}, in its entirety and in two translations, and they have read the commentary, and they want to hear it from a priest. {reading:older_mass} The father of the largest family asks you, quite politely, whether the Church has decided they are the problem.",
+      "choices": [
+        {
+          "id": "defend",
+          "label": "Explain it, and defend it: unity is the point, and the Pope has the right",
+          "outcome": "You explain what the document says and what it is for, and you defend it, because you think it is right. The father listens to the end and thanks you. His family is at the ten-thirty the next week, and the week after that they are not, and you hear they have found a chapel.",
+          "volume": "semi_public",
+          "positionTopic": "tlm",
+          "positionValue": 35,
+          "effects": [
+            {
+              "target": "document",
+              "key": "older_mass",
+              "value": "eager"
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": -8
+            },
+            {
+              "target": "reputation",
+              "key": "progressive_bloc",
+              "delta": 3
+            }
+          ]
+        },
+        {
+          "id": "explain",
+          "label": "Explain it plainly, and tell them where the bishop allows it said",
+          "outcome": "You tell them what the law now is and where in the diocese it may still be found, with the Mass times, which you looked up before you came out. It is the answer of a man who knows where the chapel is. They take it as kindness, which it was.",
+          "default": true,
+          "effects": [
+            {
+              "target": "document",
+              "key": "older_mass",
+              "value": "faithful"
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "pastoral",
+          "label": "Tell them you are their priest either way, and leave the law out of it",
+          "outcome": "You say that nothing Rome has written changes who they are at {parish}, and that you will hear their confessions and baptise their babies whatever Mass they go to. It is true, and it is not what they asked, and they notice both.",
+          "effects": [
+            {
+              "target": "document",
+              "key": "older_mass",
+              "value": "minimal"
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 3
+            }
+          ]
+        },
+        {
+          "id": "agree",
+          "label": "Tell them you think it is wrong, and that you will say so",
+          "outcome": "You tell them what you think, which is that the document is a wound and that obedience does not require you to pretend otherwise. The father shakes your hand. By the end of the month the families of three parishes know the name of the priest at {parish} who said so.",
+          "volume": "semi_public",
+          "positionTopic": "tlm",
+          "positionValue": -50,
+          "effects": [
+            {
+              "target": "document",
+              "key": "older_mass",
+              "value": "defiant"
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": -5
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": 8
+            },
+            {
+              "target": "outspokenness",
+              "key": "",
+              "delta": 5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rc_om_free_stable_group",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "any",
+      "beat": "cascade",
+      "pressure": [
+        "belief_vs_safety",
+        "loyalty_vs_honesty"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 2,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "document",
+          "axis": "older_mass",
+          "value": "free",
+          "within": 30,
+          "implemented": false,
+          "norm": [
+            "enthusiastic",
+            "faithful"
+          ]
+        },
+        {
+          "type": "any",
+          "inner": [
+            {
+              "type": "role",
+              "value": "pastor"
+            },
+            {
+              "type": "role",
+              "value": "administrator"
+            }
+          ]
+        }
+      ],
+      "title": "A Stable Group",
+      "body": "Twenty-two signatures, on parish letterhead they must have borrowed from the office, and a covering letter that quotes {doc:older_mass} by article and paragraph. They are a stable group of the faithful, the letter says, attached to the older liturgical tradition, and they ask the pastor of {parish} for a Sunday Mass in the 1962 Missal, as the {doc_kind:older_mass} provides. {reading:older_mass} Under the law as it now stands, the answer is yours to give, and the letter knows it.",
+      "choices": [
+        {
+          "id": "give",
+          "label": "Give them the Sunday afternoon, and learn it properly if you must",
+          "outcome": "You give them two o'clock on Sunday. The first month you say it badly and they are patient; by Advent you say it well and the schola has found a second tenor. The traditional wing of the diocese counts you, and Rome, which asked pastors to be generous, would count it too if it counted.",
+          "volume": "public",
+          "positionTopic": "tlm",
+          "positionValue": -40,
+          "effects": [
+            {
+              "target": "document",
+              "key": "older_mass",
+              "value": "eager"
+            },
+            {
+              "target": "decor",
+              "key": "church:mass_form",
+              "value": "mass_tlm"
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": 10
+            },
+            {
+              "target": "reputation",
+              "key": "progressive_bloc",
+              "delta": -4
+            }
+          ]
+        },
+        {
+          "id": "learn_first",
+          "label": "Promise it for the new year, and spend the months learning it",
+          "outcome": "You tell them the truth: you do not yet say it well enough to say it for them, and you will by the new year. You find a priest who says it and serve his Mass four times, and on the first Sunday of the year you say it for twenty-two people and a baby.",
+          "default": true,
+          "volume": "semi_public",
+          "positionTopic": "tlm",
+          "positionValue": -25,
+          "effects": [
+            {
+              "target": "document",
+              "key": "older_mass",
+              "value": "faithful"
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": 6
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "refer",
+          "label": "Send the letter to the chancery and let the bishop decide",
+          "outcome": "You forward the letter with a note, which is not what the law asks of you and is what the diocese is used to. The chancery answers in two months that the matter is for the pastor. By then the twenty-two have gone to another parish, and took their signatures with them.",
+          "effects": [
+            {
+              "target": "document",
+              "key": "older_mass",
+              "value": "minimal"
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": -3
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "refuse",
+          "label": "Refuse: one Mass, one parish, one rite",
+          "outcome": "You write back that {parish} is one parish and will pray one way. The group writes to the bishop and then to Rome, as the document tells them they may. Rome writes to the bishop, the bishop writes to you, and you learn that the law on this is not a suggestion.",
+          "volume": "public",
+          "positionTopic": "tlm",
+          "positionValue": 45,
+          "effects": [
+            {
+              "target": "document",
+              "key": "older_mass",
+              "value": "defiant"
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": -6
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": -10
+            },
+            {
+              "target": "reputation",
+              "key": "progressive_bloc",
+              "delta": 4
+            },
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": -3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rc_om_free_obstructed",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "any",
+      "beat": "cascade",
+      "pressure": [
+        "loyalty_vs_honesty",
+        "ambition_vs_integrity"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 2,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "document",
+          "axis": "older_mass",
+          "value": "free",
+          "within": 30,
+          "implemented": false,
+          "norm": [
+            "minimal",
+            "slow"
+          ]
+        },
+        {
+          "type": "any",
+          "inner": [
+            {
+              "type": "role",
+              "value": "pastor"
+            },
+            {
+              "type": "role",
+              "value": "administrator"
+            }
+          ]
+        }
+      ],
+      "title": "The Forms",
+      "body": "The families who asked you for the older Mass at {parish} came back with the forms: the chancery's, eleven pages, requiring the names and addresses of every member of the group, a statement of their reasons, and the pastor's assessment of the risk to parish unity. {reading:older_mass} The document from Rome says the pastor should receive the request willingly. The forms say something else. The leader of the group, a lawyer, has marked the relevant articles of {doc:older_mass} in yellow.",
+      "choices": [
+        {
+          "id": "law",
+          "label": "Give them the Mass: the law says it is yours to give, not the chancery's",
+          "outcome": "You give them Sunday at two and send the chancery a letter saying so, citing the same articles in the same order. It is correct, and the chancery knows it is correct, and nobody in the chancery forgets who wrote it.",
+          "volume": "public",
+          "positionTopic": "authority",
+          "positionValue": 60,
+          "effects": [
+            {
+              "target": "document",
+              "key": "older_mass",
+              "value": "eager"
+            },
+            {
+              "target": "decor",
+              "key": "church:mass_form",
+              "value": "mass_tlm"
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": 10
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": -6
+            },
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": -6
+            }
+          ]
+        },
+        {
+          "id": "forms",
+          "label": "Fill in the forms with them, honestly, and wait",
+          "outcome": "You sit with the lawyer and fill in eleven pages, and you write an assessment that says the risk to unity is a group of twenty people who want to pray. The chancery takes four months. The answer is yes, grudgingly, with a list of conditions.",
+          "default": true,
+          "volume": "semi_public",
+          "positionTopic": "tlm",
+          "positionValue": -15,
+          "effects": [
+            {
+              "target": "document",
+              "key": "older_mass",
+              "value": "faithful"
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 1
+            },
+            {
+              "target": "permission",
+              "key": "latin_mass",
+              "value": "granted"
+            }
+          ]
+        },
+        {
+          "id": "bishop",
+          "label": "Tell them the bishop's view is your view",
+          "outcome": "You tell the group that the bishop has asked pastors to go slowly and that you will go slowly. The lawyer asks whether that is the bishop's view or yours. You say it is both, and she writes that down too.",
+          "volume": "semi_public",
+          "positionTopic": "authority",
+          "positionValue": -40,
+          "effects": [
+            {
+              "target": "document",
+              "key": "older_mass",
+              "value": "minimal"
+            },
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": -6
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rc_om_free_vicar",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "any",
+      "beat": "cascade",
+      "pressure": [
+        "friendship_vs_duty",
+        "ambition_vs_integrity"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 2,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "document",
+          "axis": "older_mass",
+          "value": "free",
+          "within": 30,
+          "implemented": false
+        },
+        {
+          "type": "role",
+          "value": "parochial_vicar"
+        }
+      ],
+      "title": "Would You Learn It",
+      "body": "Since {doc:older_mass} the young adults' group at {parish} has been talking about nothing else, and on Thursday after the holy hour two of them ask you, the young priest, whether you would learn the older Mass. {reading:older_mass} {@pastor} is the pastor and has opinions, which he gives at dinner, about priests who want to wear lace. The young adults do not care about lace. They care that their grandparents' Mass is suddenly theirs to ask for.",
+      "choices": [
+        {
+          "id": "learn",
+          "label": "Learn it, with the pastor's leave, and say it on a weekday",
+          "outcome": "You ask {@pastor} at dinner, which takes courage, and he says it is your Tuesday to waste. You learn it over a summer from a priest two parishes over. By September you say it on Tuesdays for the young adults, who bring their friends.",
+          "volume": "semi_public",
+          "positionTopic": "tlm",
+          "positionValue": -30,
+          "effects": [
+            {
+              "target": "document",
+              "key": "older_mass",
+              "value": "eager"
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 2
+            },
+            {
+              "target": "relationship",
+              "key": "@pastor",
+              "delta": -2
+            },
+            {
+              "target": "credential",
+              "key": "latin"
+            }
+          ]
+        },
+        {
+          "id": "pastor_decides",
+          "label": "Tell them it is the pastor's decision, and ask him on their behalf",
+          "outcome": "You bring it to {@pastor} as their request and not yours. He says no, as you knew he would, and says it kindly to them, which you had not expected. The young adults take it better from him than they would have from you.",
+          "default": true,
+          "effects": [
+            {
+              "target": "document",
+              "key": "older_mass",
+              "value": "faithful"
+            },
+            {
+              "target": "relationship",
+              "key": "@pastor",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "not_for_me",
+          "label": "Tell them honestly it is not your spirituality",
+          "outcome": "You tell them it is a beautiful Mass and not your way of praying, and that you would say it badly and they deserve better. One of them says that is the most honest thing a priest has ever said to him, and goes to a parish that has it.",
+          "volume": "private",
+          "positionTopic": "tlm",
+          "positionValue": 15,
+          "effects": [
+            {
+              "target": "document",
+              "key": "older_mass",
+              "value": "minimal"
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": -2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rc_om_restricted",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "any",
+      "beat": "cascade",
+      "pressure": [
+        "loyalty_vs_honesty",
+        "friendship_vs_duty"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 2,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "document",
+          "axis": "older_mass",
+          "value": [
+            "indult",
+            "closed"
+          ],
+          "within": 30,
+          "implemented": false
+        }
+      ],
+      "title": "The Old Missals",
+      "body": "{doc:older_mass} came down, and the parish's small circle who had been keeping the older Mass alive learned that the ground under them had moved. {reading:older_mass} At {parish} it is only a handful: an old priest's missals in the sacristy cupboard, a widow who still wears a mantilla, a couple who drive in for the Latin Mass once a month elsewhere. The widow asks you after the eight o'clock whether she is doing something wrong by keeping her missal.",
+      "choices": [
+        {
+          "id": "receive",
+          "label": "Tell her the Church has spoken, and give her the new Missal to read",
+          "outcome": "You tell her the Church has changed the rite and asked everyone to come with it, and you give her a hand missal of the new one with her name written in it. She thanks you. She keeps both, which you find you do not mind at all.",
+          "volume": "semi_public",
+          "positionTopic": "tlm",
+          "positionValue": 30,
+          "effects": [
+            {
+              "target": "document",
+              "key": "older_mass",
+              "value": "eager"
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": -4
+            }
+          ]
+        },
+        {
+          "id": "keep",
+          "label": "Tell her the missal is a prayer book and no law forbids praying",
+          "outcome": "You tell her that nobody forbids a woman to pray with the book she loves, and that the Mass she hears is the Mass of the Church either way. It is the kind of answer that is true and also not the question. She is content with it.",
+          "default": true,
+          "effects": [
+            {
+              "target": "document",
+              "key": "older_mass",
+              "value": "faithful"
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "sympathy",
+          "label": "Tell her you miss it too",
+          "outcome": "You tell her, before you can stop yourself, that you miss it too. She pats your hand as if you were the one who needed comfort, and perhaps you were. It gets around, the way such things do, in the very small circle that cares.",
+          "volume": "private",
+          "positionTopic": "tlm",
+          "positionValue": -25,
+          "effects": [
+            {
+              "target": "document",
+              "key": "older_mass",
+              "value": "minimal"
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": -1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rc_mi_literal_teaching",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "any",
+      "beat": "cascade",
+      "pressure": [
+        "loyalty_vs_honesty",
+        "competence"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 2,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "document",
+          "axis": "missal",
+          "value": "literal",
+          "within": 30,
+          "implemented": false
+        },
+        {
+          "type": "any",
+          "inner": [
+            {
+              "type": "role",
+              "value": "pastor"
+            },
+            {
+              "type": "role",
+              "value": "administrator"
+            }
+          ]
+        }
+      ],
+      "title": "And With Your Spirit",
+      "body": "{doc:missal} is on the shelf in the sacristy: new books, red ribbons, the weight of them, and pew cards on order for Advent. {reading:missal} The people of {parish} have answered \"And also with you\" for forty years and will say it on the first Sunday out of habit, loudly, and then look around. The collects are longer and the syntax is Latin's, and \"consubstantial\" is going to be in the Creed. You have a month to decide how much of it you will teach.",
+      "choices": [
+        {
+          "id": "series",
+          "label": "Teach it: a series of homilies, and a night in the hall with the new texts",
+          "outcome": "You preach four Sundays on the Mass, line by line, and hold a night in the hall where people practise the responses and laugh at themselves. By Christmas {parish} answers \"And with your spirit\" without looking at the cards, and people tell you they understand the Mass better than they did.",
+          "volume": "public",
+          "positionTopic": "translation",
+          "positionValue": -25,
+          "effects": [
+            {
+              "target": "document",
+              "key": "missal",
+              "value": "eager"
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "cards",
+          "label": "Put the cards in the pews and let the words settle",
+          "outcome": "You put the cards in the pews and a note in the bulletin and let the first Sunday be what it will be. It is a ragged Advent. By Lent the words have settled, and by Easter only the eight o'clock still says \"And also with you\", on purpose.",
+          "default": true,
+          "effects": [
+            {
+              "target": "document",
+              "key": "missal",
+              "value": "faithful"
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "grudging",
+          "label": "Use it as required and say from the altar that it was not your choice",
+          "outcome": "You use it, and the first Sunday you say from the altar, with a smile, that it was not your idea. People laugh. It is a good line and it tells them how to feel about it, which is the part the chancery hears about.",
+          "volume": "semi_public",
+          "positionTopic": "translation",
+          "positionValue": 35,
+          "effects": [
+            {
+              "target": "document",
+              "key": "missal",
+              "value": "minimal"
+            },
+            {
+              "target": "reputation",
+              "key": "progressive_bloc",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": -2
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "old_words",
+          "label": "Keep the old words where you can get away with it",
+          "outcome": "You say the new Eucharistic Prayers because you must, and the old greeting because you can, and \"for all\" where the book says \"for many.\" A parishioner who reads the blogs writes to the chancery with the Sunday and the time.",
+          "volume": "public",
+          "positionTopic": "translation",
+          "positionValue": 55,
+          "effects": [
+            {
+              "target": "document",
+              "key": "missal",
+              "value": "defiant"
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": -5
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": -4
+            },
+            {
+              "target": "reputation",
+              "key": "progressive_bloc",
+              "delta": 5
+            },
+            {
+              "target": "outspokenness",
+              "key": "",
+              "delta": 4
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rc_mi_literal_music",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "any",
+      "beat": "cascade",
+      "pressure": [
+        "competence",
+        "friendship_vs_duty"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 2,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "document",
+          "axis": "missal",
+          "value": "literal",
+          "within": 30,
+          "implemented": false
+        }
+      ],
+      "title": "The Settings",
+      "body": "{@music_director} has the new Gloria settings spread across the piano at {parish}, and she is not happy. {doc:missal} changes the words, and the words change the music, and the Mass settings the parish has sung for thirty years are now, in the chancery's word, unauthorised. {reading:missal} The choir has learned the old settings by heart and does not read music as well as it thinks. She wants to know whether she must retire them all by Advent, and whether you will tell the choir or she will.",
+      "choices": [
+        {
+          "id": "chant",
+          "label": "Start with the chant setting in the Missal, and retire the old ones by Advent",
+          "outcome": "You tell the choir yourself, that they are retiring an old friend, and you ask them to learn the chant in the Missal first, since it belongs to everyone. They grumble through October and sing it well at Christmas. The old settings go into a box marked with the year.",
+          "volume": "semi_public",
+          "positionTopic": "translation",
+          "positionValue": -20,
+          "effects": [
+            {
+              "target": "document",
+              "key": "missal",
+              "value": "eager"
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": 3
+            },
+            {
+              "target": "relationship",
+              "key": "@music_director",
+              "delta": -2
+            }
+          ]
+        },
+        {
+          "id": "revised",
+          "label": "Buy the revised settings of the old ones, and keep the tunes",
+          "outcome": "You spend four hundred dollars on the revised editions of the settings the parish already knows, new words to old tunes. It is the sensible thing. {@music_director} is grateful and the choir barely notices, which is the idea.",
+          "default": true,
+          "effects": [
+            {
+              "target": "document",
+              "key": "missal",
+              "value": "faithful"
+            },
+            {
+              "target": "relationship",
+              "key": "@music_director",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "keep",
+          "label": "Keep the old settings a year longer and let the chancery ask",
+          "outcome": "You tell her to keep what the choir knows until someone asks. Nobody asks for a year, and then the new bishop's master of ceremonies does, at a confirmation, in front of the choir.",
+          "effects": [
+            {
+              "target": "document",
+              "key": "missal",
+              "value": "minimal"
+            },
+            {
+              "target": "relationship",
+              "key": "@music_director",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": -3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rc_mi_literal_old_pastor",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "any",
+      "beat": "cascade",
+      "pressure": [
+        "friendship_vs_duty",
+        "loyalty_vs_honesty"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 2,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "document",
+          "axis": "missal",
+          "value": "literal",
+          "within": 30,
+          "implemented": false
+        },
+        {
+          "type": "role",
+          "value": "parochial_vicar"
+        }
+      ],
+      "title": "Sixty Years of the Old Words",
+      "body": "{@pastor} has said Mass in English for longer than you have been alive, and he is not going to learn a new Missal at seventy-one, he says, over the soup. {doc:missal} is in the sacristy in its box. {reading:missal} He has read the new collects aloud to you in a voice you have not heard him use before, and asked whether anybody in the Vatican has ever tried to say one of them in one breath. The first Sunday of Advent is three weeks away, and he is not joking.",
+      "choices": [
+        {
+          "id": "help",
+          "label": "Offer to mark up his book and practise with him in the evenings",
+          "outcome": "You sit with him in the evenings with a pencil and mark the breaths into the collects, and he complains and practises. On the first Sunday he stumbles once, on \"consubstantial,\" and glares at the congregation, and then says it perfectly. He never thanks you, and he tells everyone you helped.",
+          "default": true,
+          "effects": [
+            {
+              "target": "document",
+              "key": "missal",
+              "value": "faithful"
+            },
+            {
+              "target": "relationship",
+              "key": "@pastor",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "report",
+          "label": "Tell him gently that he has no choice, and that the dean will ask",
+          "outcome": "You tell him the dean will ask, and that the bishop has asked every parish to begin on the same Sunday. He looks at you a long time and says he had forgotten the young ones were like this now. He uses the new book, and dinner is quieter for a while.",
+          "volume": "private",
+          "positionTopic": "authority",
+          "positionValue": -30,
+          "effects": [
+            {
+              "target": "document",
+              "key": "missal",
+              "value": "eager"
+            },
+            {
+              "target": "relationship",
+              "key": "@pastor",
+              "delta": -5
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "cover",
+          "label": "Say nothing, and let him say what he says",
+          "outcome": "You say nothing. On the first Sunday of Advent he says the Mass he has always said, and the congregation, who have been practising from the cards, answer him in the new words, and he pretends not to notice. It becomes the parish's joke and then its affection.",
+          "effects": [
+            {
+              "target": "document",
+              "key": "missal",
+              "value": "minimal"
+            },
+            {
+              "target": "relationship",
+              "key": "@pastor",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rc_mi_dynamic",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "any",
+      "beat": "cascade",
+      "pressure": [
+        "loyalty_vs_honesty",
+        "belief_vs_safety"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 2,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "document",
+          "axis": "missal",
+          "value": "dynamic",
+          "within": 30,
+          "implemented": false
+        }
+      ],
+      "title": "The Plain English",
+      "body": "Years ago you learned to say \"consubstantial\" without a stumble and to find the breaths in collects built like Roman aqueducts, and now {doc:missal} undoes it: the Missal back in plain English, the old greeting restored, new cards on order for the pews at {parish}. {reading:missal} Half the parish is relieved. The other half learned the other words with some effort and has come to love them, and the young families never knew anything else. At the door they ask you which you prefer.",
+      "choices": [
+        {
+          "id": "welcome",
+          "label": "Welcome it from the pulpit: the Mass should be said in the people's own speech",
+          "outcome": "You preach on it: that the Word became flesh in a language people spoke at the market, and that the Mass should too. The relieved half nods. The other half hears a priest who has changed his mind with Rome, and wonders what else you would change.",
+          "volume": "public",
+          "positionTopic": "translation",
+          "positionValue": 35,
+          "effects": [
+            {
+              "target": "document",
+              "key": "missal",
+              "value": "eager"
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "progressive_bloc",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": -4
+            }
+          ]
+        },
+        {
+          "id": "obey",
+          "label": "Say the new words well and keep your preference to yourself",
+          "outcome": "You say the new texts as carefully as you once said the old ones, and when asked you say that the Mass is the Mass. It is an answer that disappoints everyone slightly and offends nobody, and it is the one you can say every Sunday.",
+          "default": true,
+          "effects": [
+            {
+              "target": "document",
+              "key": "missal",
+              "value": "faithful"
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "miss",
+          "label": "Say that you will miss the words you learned",
+          "outcome": "You tell the people at the door that you will miss them, the long collects and the breast-beating triple fault, and that you learned to pray in them. It is honest. The ones who loved them feel less alone, and the ones who did not remember it.",
+          "volume": "semi_public",
+          "positionTopic": "translation",
+          "positionValue": -30,
+          "effects": [
+            {
+              "target": "document",
+              "key": "missal",
+              "value": "minimal"
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": -1
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

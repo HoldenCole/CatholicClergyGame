@@ -19,6 +19,12 @@ export const TOPIC: Record<string, { label: string; neg: string; pos: string }> 
   women_roles: { label: "women's roles", neg: 'the tradition', pos: 'widening them' },
   latin_mass: { label: 'the Latin Mass', neg: 'for it', pos: 'against it' },
   altar_rail: { label: 'the altar rail', neg: 'for it', pos: 'against it' },
+  // E1 R1.1: the questions Rome answers (content/rome/axes.json).
+  remarried_communion: { label: 'communion for the divorced and remarried', neg: 'the discipline as it stood', pos: 'the path of discernment' },
+  blessings: { label: 'blessing couples in irregular situations', neg: 'against it', pos: 'for it' },
+  translation: { label: 'the English of the Missal', neg: 'close to the Latin', pos: 'plain speech' },
+  annulments: { label: 'marriage cases', neg: 'caution', pos: 'speed and mercy' },
+  creation: { label: 'the care of creation', neg: 'leaving it be', pos: 'preaching it' },
 };
 
 const REP: Record<string, string> = {

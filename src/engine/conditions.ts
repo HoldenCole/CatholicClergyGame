@@ -9,6 +9,7 @@ import { lifeCondition } from '@/systems/lives';
 import { rumourCondition } from '@/systems/talk';
 import { nightCondition } from '@/systems/night';
 import { resolveSelector } from './selectors';
+import { documentCondition, effectiveStance, policyCondition } from '@/systems/rome/policy';
 
 import type { Group } from '@/types';
 import { vitalityBand } from '@/systems/groups';
@@ -174,7 +175,8 @@ export function evaluateCondition(
         case 'priority': return b.priorities.includes(cond.value as (typeof b.priorities)[number]);
         case 'rewards': return b.rewards === cond.value;
         case 'cannotTolerate': return b.cannotTolerate === cond.value;
-        case 'stance': return b.liturgy[cond.topic] === cond.value;
+        // His stance as the law from Rome now stands and as he has read it. E1 §4.2.
+        case 'stance': return effectiveStance(state, cond.topic, b.liturgy[cond.topic]) === cond.value;
       }
       return false;
     }
@@ -220,6 +222,10 @@ export function evaluateCondition(
       const houses = state.world?.diocese.visible.houses ?? [];
       return houses.some((h) => (!cond.charism || h.charism === cond.charism) && (!cond.order || h.order === cond.order)) === cond.value;
     }
+    case 'policy':
+      return policyCondition(state, cond);
+    case 'document':
+      return documentCondition(state, cond);
     case 'not':
       return !evaluateCondition(cond.inner, state, bindings);
     case 'any':

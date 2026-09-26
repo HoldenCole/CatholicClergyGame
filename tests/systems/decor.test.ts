@@ -10,6 +10,12 @@ import { applyEffects } from '@/engine/effects';
 import { parishState } from './week.test';
 import type { GameState } from '@/types';
 
+/** The law on the older Mass pinned, with no bishop's reading of it: the gate's own mechanics. E1 R1.1 moved the law into the state. */
+function underLaw(s: GameState, value: string): GameState {
+  return { ...s, rome: { ...s.rome!, policies: { ...s.rome!.policies, older_mass: { value, by: value === 'free' ? 'Summorum Pontificum' : 'Traditionis Custodes', day: 0 } } } };
+}
+
+
 describe('systems/decor', () => {
   it('content covers every church slot with a free default and priced alternatives', () => {
     for (const slot of slotsFor('church')) {
@@ -156,7 +162,7 @@ describe('systems/decor liturgical policy', () => {
   });
 
   it('the Mass form is a slot with a free default and a gated older form', () => {
-    const s = pastor('mass', { latin_mass: 'by_permission' });
+    const s = underLaw(pastor('mass', { latin_mass: 'by_permission' }), 'faculties');
     expect(currentDecor(s, 'church').mass_form).toBe('mass_vernacular');
     const tlm = decorOptions.find((o) => o.id === 'mass_tlm')!;
     expect(tlm.policy).toBe('latin_mass');
@@ -186,7 +192,7 @@ describe('events can read the church and the bishop, and set what the bishop ask
     expect(withdrawn.permissions.latin_mass?.status).toBe('denied');
     expect(withdrawn.flags['permission:latin_mass']).toBe(false);
     const tlm = decorOptions.find((o) => o.id === 'mass_tlm')!;
-    expect(gateFor({ ...withdrawn, assignment: { ...withdrawn.assignment!, role: 'pastor' } }, tlm).ok).toBe(false);
+    expect(gateFor(underLaw({ ...withdrawn, assignment: { ...withdrawn.assignment!, role: 'pastor' } }, 'faculties'), tlm).ok).toBe(false);
   });
 });
 

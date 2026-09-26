@@ -152,6 +152,14 @@ export type Condition =
   | { type: 'month'; op: Op; value: number }
   /** The man's name as a confessor, 0..100 (systems/confessor.ts). */
   | { type: 'confessor'; op: Op; value: number }
+  /** E1 R1.1: where a policy axis of the universal Church stands now (content/rome/axes.json): one value or several. */
+  | { type: 'policy'; axis: string; value: string | string[] }
+  /**
+   * E1 R1.1: the latest document issued in his lifetime on an axis: the value
+   * it set, issued within so many weeks, how his bishop received it, and
+   * whether he has answered it in his parish yet.
+   */
+  | { type: 'document'; axis: string; value?: string | string[]; within?: number; norm?: string | string[]; implemented?: boolean | string | string[] }
   | { type: 'not'; inner: Condition }
   | { type: 'any'; inner: Condition[] }
   | { type: 'all'; inner: Condition[] };
@@ -229,7 +237,9 @@ export type EffectTarget =
   /** Move an arc (DESIGN §12.5): key is the arc id, value "end", "hold:<weeks>" or a stage id to jump to. */
   | 'arc'
   /** Write into the book of a ministry (DESIGN §8.6): key is what was counted, delta how many. */
-  | 'ministry';
+  | 'ministry'
+  /** E1 R1.1: what he did in his parish with the latest document on an axis (key: the axis; value: eager | faithful | minimal | defiant). The record keeps it. */
+  | 'document';
 
 export interface Effect {
   target: EffectTarget;

@@ -1,9 +1,9 @@
-import { dateOf } from '@/engine/time';
 import type { Achievement, AmbientItem, Archetype, DecorOption, DecorPlace, DecorSlot, GameState, LiturgicalStance, LiturgicalTopic, Permission } from '@/types';
 import type { Rng } from '@/engine/rng';
 import { evaluateAll } from '@/engine/conditions';
 import { applyEffects } from '@/engine/effects';
 import { clampSigned } from './reputation';
+import { effectiveStance, policyOf, standingOf } from './rome/policy';
 
 import { currentDecor, decorOptions, placeKey } from './decorState';
 
@@ -63,7 +63,9 @@ function bishopName(state: GameState): string {
 
 /** The bishop's standing on a topic, or null when there is no bishop yet. */
 export function stanceFor(state: GameState, topic: LiturgicalTopic): LiturgicalStance | null {
-  return state.world?.diocese.hidden.bishop.liturgy[topic] ?? null;
+  const rolled = state.world?.diocese.hidden.bishop.liturgy[topic];
+  // His own stance, as the law from Rome now stands and as he has read it. E1 §4.2.
+  return rolled ? effectiveStance(state, topic, rolled) : null;
 }
 
 /**
@@ -95,29 +97,41 @@ export function gateForTopic(state: GameState, topic: LiturgicalTopic): Gate {
   return { ok: false, why: `Needs the bishop's leave. Write to the chancery about ${TOPIC_LABEL[topic]}.`, stance, permission, canAsk: true };
 }
 
-/**
- * Whether the man may write for faculties to celebrate the older form of the
- * Mass. Under the 2021 norms the diocesan bishop grants them to the priest,
- * not the parish, so a vicar asks as readily as a pastor.
- */
-/** Before Traditionis Custodes (16 July 2021) any priest who could say the older Mass might; the faculties came after. */
-export function preTraditionisCustodes(state: GameState): boolean {
-  const d = dateOf(state.clock);
-  return d.year < 2021 || (d.year === 2021 && (d.month < 7 || (d.month === 7 && d.day < 16)));
+/** Whether Rome leaves the older Mass free: any priest who can say it may, and no faculties are asked. E1 §4. */
+export function olderMassFree(state: GameState): boolean {
+  return policyOf(state, 'older_mass') === 'free';
 }
 
+/** Kept for the callers that asked it by its old name: the law before the 2021 norms, now read from the policy axis. */
+export const preTraditionisCustodes = olderMassFree;
+
+/** The document that set the law on the older Mass, by name, or "the law as it stands". */
+export function olderMassLaw(state: GameState): string {
+  return standingOf(state, 'older_mass')?.by ?? 'the law as it stands';
+}
+
+/**
+ * Whether the man may say the older form of the Mass, and if not, what to do
+ * about it. The law is Rome's (the older_mass axis); the leave, under an
+ * indult or faculties, is the diocesan bishop's, and goes to the priest, not
+ * the parish, so a vicar asks as readily as a pastor.
+ */
 export function facultyGate(state: GameState): Gate {
   const topic: LiturgicalTopic = 'older_form_faculty';
-  if (state.flags.can_celebrate_tlm) return { ok: true, why: null, stance: stanceFor(state, topic), permission: state.permissions[topic] ?? null, canAsk: false };
-  if (state.flags['older_mass:said']) return { ok: true, why: 'You began before the 2021 norms, and what stood then stands: no faculties are asked of you.', stance: stanceFor(state, topic), permission: state.permissions[topic] ?? null, canAsk: false };
-  if (preTraditionisCustodes(state)) {
+  const law = policyOf(state, 'older_mass');
+  const by = olderMassLaw(state);
+  if (state.flags.can_celebrate_tlm && law !== 'closed') return { ok: true, why: null, stance: stanceFor(state, topic), permission: state.permissions[topic] ?? null, canAsk: false };
+  if (law === 'closed') return { ok: false, why: `Under ${by} the 1962 Missal is not said in the parishes. The question is closed in the whole Church, not only here.`, stance: stanceFor(state, topic), permission: null, canAsk: false };
+  if (law === 'free') {
     const can = !!state.character?.credentials.includes('latin');
-    return { ok: can, why: can ? 'Under Summorum Pontificum no faculties are needed: any priest who can say it may. Put hours to it in the routine.' : 'Under Summorum Pontificum no faculties are needed, only the Latin and the rubrics: the crypt chapel in seminary, or the priests who say it.', stance: stanceFor(state, topic), permission: null, canAsk: false };
+    return { ok: can, why: can ? `Under ${by} no faculties are needed: any priest who can say it may. Put hours to it in the routine.` : `Under ${by} no faculties are needed, only the Latin and the rubrics: the crypt chapel in seminary, or the priests who say it.`, stance: stanceFor(state, topic), permission: null, canAsk: false };
   }
+  if (state.flags['older_mass:said']) return { ok: true, why: `You were saying it before ${by}, and what stood then stands: no leave is asked of you.`, stance: stanceFor(state, topic), permission: state.permissions[topic] ?? null, canAsk: false };
   if (!state.assignment) return { ok: false, why: 'Ask when you have a parish.', stance: null, permission: null, canAsk: false };
   const gate = gateForTopic(state, topic);
-  if (gate.stance === 'forbidden') return { ...gate, why: `${bishopName(state)} grants no faculties for the older form. The question is closed under him.` };
-  if (gate.canAsk) return { ...gate, why: 'Write to the chancery for faculties. The bishop will want to know your Latin and your reasons.' };
+  const leave = law === 'indult' ? 'the indult' : 'faculties';
+  if (gate.stance === 'forbidden') return { ...gate, why: `${bishopName(state)} grants no ${leave} for the older form. The question is closed under him.` };
+  if (gate.canAsk) return { ...gate, why: `Write to the chancery for ${leave}. Under ${by} the bishop decides, and he will want to know your Latin and your reasons.` };
   return gate;
 }
 
@@ -152,7 +166,7 @@ export function grantChance(state: GameState, topic: LiturgicalTopic): number {
   const profile = state.world!.diocese.hidden.bishop;
   const rel = state.npcs[profile.npcId]?.relationship ?? 0;
   const chancery = state.character?.reputation.chancery ?? 0;
-  const lean = TOPIC_TILT[topic] * -profile.alignment / 300; // a traditional bishop warms to a traditional ask
+  const lean = TOPIC_TILT[topic] * profile.alignment / 300; // a traditional bishop (alignment below zero) warms to a traditional ask (tilt below zero)
   let fit = 0;
   if (topic === 'older_form_faculty') {
     // Faculties go to a man who can read the missal and has somewhere to use it; a newly ordained man's request goes to Rome, and slower.

@@ -4,6 +4,7 @@ import { pendingAppointment, APPOINTMENT_FLAGS } from './appointment';
 import { offerById } from '@/content/offers';
 import { studyProgram } from '@/content/study';
 import { townTokens } from '@/systems/town';
+import { romeTokens } from '@/systems/rome/policy';
 
 /** Tokens every piece of text can use, derived from state. Later phases add {diocese} and {parish}. */
 export function textExtras(state: GameState): Record<string, string> {
@@ -29,6 +30,7 @@ export function textExtras(state: GameState): Record<string, string> {
     if (parish) out.parish = parish.name;
   }
   Object.assign(out, townTokens(state));
+  Object.assign(out, romeTokens(state));
   return out;
 }
 

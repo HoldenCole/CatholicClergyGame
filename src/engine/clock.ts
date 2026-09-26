@@ -4,6 +4,7 @@ import { shouldInterrupt } from './interrupts';
 import { advanceClock, describeWeek, gameYearOf, isYearStart } from './time';
 import { weatherOfWeek } from '@/systems/weather';
 import { papacyWeek } from '@/systems/rome/papacy';
+import { documentsWeek } from '@/systems/rome/documents';
 import { deliverLetter } from '@/systems/review';
 
 /** Why the clock stopped. */
@@ -85,9 +86,12 @@ export function advanceWeek(
   let afterDraw: GameState = { ...drawState, pending: [...state.pending, ...fired], digest };
   // Rome: the see falls vacant, the conclave elects, and the man hears of it wherever he is. E1 §3.
   const rome = papacyWeek(afterDraw);
-  afterDraw = rome.state;
-  if (rome.lines.length) afterDraw = { ...afterDraw, digest: [...afterDraw.digest.slice(0, -1), { ...digestEntry, lines: [...digestEntry.lines, ...rome.lines] }] };
-  for (const letter of rome.letters) afterDraw = deliverLetter(afterDraw, letter);
+  // And what Rome sends: the documents, the law they move, and the bishop's reading of each. E1 §4.
+  const docs = documentsWeek(rome.state);
+  afterDraw = docs.state;
+  const romeLines = [...rome.lines, ...docs.lines];
+  if (romeLines.length) afterDraw = { ...afterDraw, digest: [...afterDraw.digest.slice(0, -1), { ...digestEntry, lines: [...digestEntry.lines, ...romeLines] }] };
+  for (const letter of [...rome.letters, ...docs.letters]) afterDraw = deliverLetter(afterDraw, letter);
   return {
     state: hook(afterDraw, rng, reachedBeats),
     reachedBeats,
