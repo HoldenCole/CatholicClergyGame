@@ -153,7 +153,7 @@ export function onFileFlag(def: OfferDef): string {
 
 /** Whether an offer takes "not now": someone other than the bishop asking for a man's years. */
 export function canDefer(def: OfferDef): boolean {
-  return !!def.accept.commitment?.away && def.from !== '@bishop';
+  return !!def.accept.commitment?.away && def.from !== '@bishop' && !def.final;
 }
 
 /** Not now, but keep my name: a smaller cost than a no, and the letter comes again, sooner and likelier. */
