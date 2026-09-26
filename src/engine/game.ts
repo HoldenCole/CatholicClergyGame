@@ -1,7 +1,7 @@
 import type { CalendarDate, CampaignKind, GameState } from '@/types';
 import { defaultInterruptConfig } from './interrupts';
 import { createRng, type Rng } from './rng';
-import { romeOn } from '@/systems/rome/papacy';
+import { romeAtStart } from '@/systems/rome/documents';
 import { createClock } from './time';
 
 export interface NewGameOptions {
@@ -60,7 +60,7 @@ export function newGame(options: NewGameOptions): { state: GameState; rng: Rng }
     career: [],
     romeTemperament: 0,
     // The pope of the start date: the record's, or a generated one after it. E1 §3.
-    rome: romeOn(options.seed, createClock(start).startDay),
+    rome: romeAtStart(options.seed, createClock(start).startDay),
     decor: {},
     permissions: {},
     ...(options.campaign && options.campaign !== 'diocesan' ? { campaign: options.campaign } : {}),

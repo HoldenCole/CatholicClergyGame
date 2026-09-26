@@ -16,8 +16,14 @@ import type { GameState } from '@/types';
 function afterTheNorms(s: GameState): GameState {
   let t = s;
   for (let i = 0; i < 52 * 20 && !(dateOf(t.clock).year >= 2022); i++) t = { ...t, clock: { ...t.clock, week: t.clock.week + 1 } };
-  return t;
+  return underLaw(t, 'faculties');
 }
+
+/** The law on the older Mass pinned, with no bishop's reading of it: the gate's own mechanics. E1 R1.1 moved the law into the state. */
+function underLaw(s: GameState, value: string): GameState {
+  return { ...s, rome: { ...s.rome!, policies: { ...s.rome!.policies, older_mass: { value, by: value === 'free' ? 'Summorum Pontificum' : 'Traditionis Custodes', day: 0 } } } };
+}
+
 
 describe('generation/houses', () => {
   it('rolls one to four distinct houses, and neither the order nor the alignment collapses', () => {
@@ -156,7 +162,7 @@ describe('faculties for the older form', () => {
 
   it('a pastor cannot put the older Mass on the parish without the faculties', () => {
     const s = vicar('pastor', 'by_permission');
-    const pastor: GameState = { ...s, assignment: { ...s.assignment!, role: 'pastor' }, clock: createClock({ year: 2024, month: 1, day: 7 }) };
+    const pastor: GameState = underLaw({ ...s, assignment: { ...s.assignment!, role: 'pastor' }, clock: createClock({ year: 2024, month: 1, day: 7 }) }, 'faculties');
     const tlm = decorOptions.find((o) => o.id === 'mass_tlm')!;
     expect(evaluateAll(tlm.requires ?? [], pastor)).toBe(false);
     expect(evaluateAll(tlm.requires ?? [], { ...pastor, flags: { ...pastor.flags, can_celebrate_tlm: true } })).toBe(true);
@@ -189,10 +195,10 @@ describe('the chapel and the parish Latin Mass', () => {
     const pastor: GameState = { ...base, assignment: { ...base.assignment!, role: 'pastor' } };
     const tlm = decorOptions.find((o) => o.id === 'mass_tlm')!;
     const yearOf = (s: GameState) => dateOf(s.clock).year;
-    const now: GameState = { ...pastor, clock: createClock({ year: 2024, month: 1, day: 7 }) };
+    const now: GameState = underLaw({ ...pastor, clock: createClock({ year: 2024, month: 1, day: 7 }) }, 'faculties');
     expect(yearOf(now)).toBe(2024);
     expect(evaluateAll(tlm.requires!, now)).toBe(false);
-    const before: GameState = { ...pastor, clock: createClock({ year: 2018, month: 1, day: 7 }) };
+    const before: GameState = underLaw({ ...pastor, clock: createClock({ year: 2018, month: 1, day: 7 }) }, 'free');
     expect(evaluateAll(tlm.requires!, before)).toBe(true);
     const withFaculties: GameState = { ...now, flags: { ...now.flags, can_celebrate_tlm: true } };
     expect(evaluateAll(tlm.requires!, withFaculties)).toBe(true);

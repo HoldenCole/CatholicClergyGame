@@ -27,7 +27,8 @@ import { provinceEffect } from '@/systems/religious/foundations';
 import { foundationEffect } from '@/systems/religious/foundationEffect';
 import { gainReputation } from '@/systems/religious/reputations';
 import { ministryOf } from '@/systems/ministry';
-import type { MinistryKey } from '@/types';
+import type { Implementation, MinistryKey } from '@/types';
+import { recordImplementation } from '@/systems/rome/documents';
 import { createRng, type Rng } from './rng';
 
 /**
@@ -261,6 +262,9 @@ export function applyEffect(
       const k = effect.key as MinistryKey;
       return { ...state, ministry: { ...book, [k]: (book[k] ?? 0) + delta } };
     }
+    // What he did in his parish with Rome's latest document on an axis. E1 §4.2.
+    case 'document':
+      return recordImplementation(state, effect.key, String(effect.value) as Implementation);
     // A choice that moves an arc of a life: end it, hold it, or jump it to a stage. DESIGN §12.5.
     case 'arc':
       return moveArc(state, effect.key, String(effect.value ?? 'end'), rngFor(state, effect.key));

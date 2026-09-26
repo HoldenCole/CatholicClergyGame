@@ -50,6 +50,7 @@ import { careOf, WEEK } from '@/systems/week';
 import { religiousWeek } from '@/systems/religious/week';
 import { religiousModeStep, religiousYear } from '@/systems/religious/year';
 import { renderText } from './text';
+import { closeCascade, dueCascade } from '@/systems/rome/documents';
 import type { WeekHook } from './clock';
 
 export interface EventDeps {
@@ -239,6 +240,23 @@ function lifeScene(state: GameState, rng: Rng, deps: EventDeps): GameState | nul
   if (!pool.length) return null;
   const [event] = drawEvents(pool, state, rng, 1);
   return event ? fireOrResolve(state, event, rng, deps) : null;
+}
+
+/**
+ * Rome's latest document, asked of him in his parish some weeks after it
+ * came: a cascade scene whose conditions hold, drawn ahead of everything but
+ * a succession. The cascade closes whether or not one fits. E1 §4.2.
+ */
+function cascadeScene(state: GameState, rng: Rng, deps: EventDeps): GameState {
+  const closed = closeCascade(state);
+  const scenes = deps.pool.filter((e) => e.beat === 'cascade');
+  let [event] = drawEvents(scenes, closed, rng, 1);
+  if (!event) {
+    // Suppression must not swallow a document: any cascade scene whose conditions hold will do.
+    const any = scenes.filter((e) => evaluateAll(e.requires ?? [], closed));
+    if (any.length) event = rng.pick(any);
+  }
+  return event ? fireOrResolve(closed, event, rng, deps) : closed;
 }
 
 /** A scene that hangs on one of this week's feasts, drawn ahead of the ordinary pool. Null when none fires. */
@@ -490,6 +508,11 @@ export function parishWeekHook(deps: EventDeps): WeekHook {
       }
       next = { ...next, flags: { ...next.flags, new_bishop_pending: false } };
       if (event) next = fireOrResolve(next, event, rng, deps);
+      if (next.mode.kind !== 'clock' || next.pending.length > 0) return next;
+    }
+    // What Rome sent, some weeks on: the parish asks him what he will do with it. E1 §4.2.
+    if (dueCascade(next)) {
+      next = cascadeScene(next, rng.derive(`cascade:${next.clock.week}`), deps);
       if (next.mode.kind !== 'clock' || next.pending.length > 0) return next;
     }
     // The feasts of the parish's year draw their own scenes on their own week, played or not.

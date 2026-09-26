@@ -1,5 +1,6 @@
 import { useGameStore } from '@/engine/store';
 import { popesOfHisLife } from '@/systems/rome/papacy';
+import { documentsOfHisLife } from '@/systems/rome/documents';
 import { profileOf } from '@/systems/profile';
 import { requestHistory } from '@/systems/request';
 import { worksDone } from '@/systems/sidework';
@@ -20,6 +21,7 @@ export default function ProfilePanel() {
   if (!game?.character) return null;
   const p = profileOf(game);
   const popes = popesOfHisLife(game);
+  const documents = documentsOfHisLife(game);
   const seeking = maySeekDirector(game);
   const director = directorNpc(game);
   const asked = requestHistory(game).filter((r) => r.outcome);
@@ -168,6 +170,18 @@ export default function ProfilePanel() {
           {p.offices.length === 0 && p.credentials.length === 0 && p.groupsFounded === 0 && asked.length === 0 && works.length === 0 && <li className="ink-faint">Nothing the chancery would file.</li>}
         </ul>
       </Sheet>
+
+      {documents.length > 0 && (
+        <Sheet title="From Rome">
+          <ul className="flex flex-col gap-1 text-sm">
+            {documents.map((d) => (
+              <li key={`${d.title}:${d.year}`}>
+                <span className="italic">{d.title}</span> ({d.year}): {d.line}.
+              </li>
+            ))}
+          </ul>
+        </Sheet>
+      )}
     </>
   );
 }

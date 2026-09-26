@@ -118,11 +118,10 @@ function successor(seed: string, rome: RomeState, prior: Papacy, electedDay: num
 }
 
 /**
- * Rome as it stands on `day`: the pope who reigns (or the vacancy), found by
- * walking the record and then the generated line forward from 1939. Only the
- * pope of that day is kept: the man's life begins there.
+ * Rome from 1939 to `day`: every pope of the line, found by walking the
+ * record and then the generated line forward, and the vacancy if one is open.
  */
-export function romeOn(seed: string, day: number): RomeState {
+export function walkRome(seed: string, day: number): RomeState {
   let rome: RomeState = { popes: [historical(0)] };
   for (let guard = 0; guard < 60; guard++) {
     const current = rome.popes[rome.popes.length - 1]!;
@@ -134,6 +133,12 @@ export function romeOn(seed: string, day: number): RomeState {
     }
     rome = successor(seed, rome, current, next).rome;
   }
+  return rome;
+}
+
+/** Rome as it stands on `day`: only the pope of that day is kept, for the man's life begins there. */
+export function romeOn(seed: string, day: number): RomeState {
+  const rome = walkRome(seed, day);
   // The life begins now: keep the reigning pope (or the one whose see is vacant), and the generated line's counters.
   const last = rome.popes[rome.popes.length - 1]!;
   return { ...rome, popes: [last] };
@@ -163,7 +168,7 @@ function yearOf(day: number): number {
   return fromDayNumber(day).year;
 }
 
-function dateWords(day: number): string {
+export function dateWords(day: number): string {
   const d = fromDayNumber(day);
   return `${d.day} ${['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'][d.month - 1]} ${d.year}`;
 }

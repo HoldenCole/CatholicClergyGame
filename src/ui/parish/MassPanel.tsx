@@ -1,6 +1,6 @@
 import { useGameStore } from '@/engine/store';
 import { currentParish, dialAvailability, frictionOf, frictionWord, mayChangeMass, weeklyCost } from '@/systems/liturgy';
-import { facultyGate, preTraditionisCustodes } from '@/systems/decor';
+import { facultyGate, olderMassFree, olderMassLaw } from '@/systems/decor';
 import Sheet from '../Sheet';
 
 /** The Mass: seven dials the pastor sets, what the people want of each, and how it sits. */
@@ -57,7 +57,7 @@ export default function MassPanel() {
           <div className="mt-3 border-t rule pt-2 text-sm">
             <div className="flex items-baseline justify-between gap-2">
               <span>The older form</span>
-              <span className="ink-faint text-xs">{preTraditionisCustodes(game) ? 'the 1962 Missal, under Summorum Pontificum' : "the 1962 Missal, by the bishop's faculties"}</span>
+              <span className="ink-faint text-xs">{olderMassFree(game) ? `the 1962 Missal, under ${olderMassLaw(game)}` : `the 1962 Missal, by the bishop's leave under ${olderMassLaw(game)}`}</span>
             </div>
             <p className={'mt-0.5 text-xs ' + (gate.ok ? '' : 'ink-muted')}>
               {gate.ok

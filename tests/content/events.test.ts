@@ -10,6 +10,11 @@ import { studyPrograms } from '@/content/study';
 import { SEALED_TARGETS } from '@/engine/internalForum';
 import { arcDefs } from '@/content/arcs';
 import { orderDefs } from '@/content/houses';
+import { policyAxes } from '@/content/rome';
+const AXES = new Map(policyAxes.map((a) => [a.key, new Set(a.values.map((v) => v.key))]));
+const NORMS = ['enthusiastic', 'faithful', 'minimal', 'slow'];
+const IMPLEMENTATIONS = ['eager', 'faithful', 'minimal', 'defiant'];
+const asList = (v: unknown): unknown[] => (Array.isArray(v) ? v : [v]);
 const ARC_IDS = new Set(arcDefs.map((a) => a.id));
 const ARC_STAGES = new Set(arcDefs.flatMap((a) => a.stages.map((s) => s.id)));
 const PLACE_DIALS = new Set(studyPrograms.flatMap((p) => p.place?.dials.map((d) => d.id) ?? []));
@@ -95,7 +100,7 @@ const EFFECT_TARGETS = [
   'stat', 'reputation', 'relationship', 'flag', 'group', 'money', 'ap', 'thread', 'position',
   'pillar', 'alignment', 'outspokenness', 'honesty', 'credential', 'trait', 'archetype',
   'concern', 'risk', 'npc', 'end', 'decor', 'permission', 'trait_known', 'transfer', 'building', 'club', 'bond', 'place', 'record', 'strain', 'arc', 'ministry', 'foundation', 'known',
-  'province', 'crossing', 'town', 'rumour',
+  'province', 'crossing', 'town', 'rumour', 'document',
 ];
 const DECOR_PLACES = ['church', 'chapel', 'office', 'rectory', 'seminary_room', 'chancery'];
 const DECOR_SLOTS = ['sanctuary', 'altar_rail', 'orientation', 'confessionals', 'choir', 'statues', 'tabernacle', 'mass_form', 'music', 'style', 'devotion', 'seating', 'wall', 'desk', 'floor', 'corner'];
@@ -244,6 +249,16 @@ function checkCondition(c: Condition, where: string, problems: Problem[]): void 
       if (!BISHOP_KEYS.includes(c.key)) problems.push(`${where}: bad bishop key ${String(c.key)}`);
       else if (c.key === 'stance' && (!LITURGICAL_TOPICS.includes(c.topic) || !['free', 'by_permission', 'forbidden'].includes(c.value))) problems.push(`${where}: bad bishop stance condition`);
       break;
+    case 'policy':
+      if (!AXES.has(c.axis) || !asList(c.value).every((v) => AXES.get(c.axis)!.has(v as string))) problems.push(`${where}: bad policy condition ${c.axis}`);
+      break;
+    case 'document':
+      if (!AXES.has(c.axis)) problems.push(`${where}: unknown policy axis ${c.axis}`);
+      else if (c.value !== undefined && !asList(c.value).every((v) => AXES.get(c.axis)!.has(v as string))) problems.push(`${where}: bad document value`);
+      if (c.norm !== undefined && !asList(c.norm).every((v) => NORMS.includes(v as string))) problems.push(`${where}: bad document norm`);
+      if (c.implemented !== undefined && typeof c.implemented !== 'boolean' && !asList(c.implemented).every((v) => IMPLEMENTATIONS.includes(v as string))) problems.push(`${where}: bad document implemented`);
+      if (c.within !== undefined && (typeof c.within !== 'number' || c.within <= 0)) problems.push(`${where}: bad document within`);
+      break;
     case 'not':
       checkCondition(c.inner, where, problems);
       break;
@@ -300,8 +315,16 @@ function checkEffect(e: Effect, where: string, problems: Problem[]): void {
   if (e.target === 'place' && (!PLACE_DIALS.has(e.key) || typeof e.delta !== 'number')) problems.push(`${where}: place effect needs a known dial and a delta: ${e.key}`);
   if (e.target === 'record' && (!BOOK_KEYS.has(e.key) || typeof e.delta !== 'number')) problems.push(`${where}: record effect needs a known book entry and a delta: ${e.key}`);
   if (e.target === 'transfer' && !['flagship_suburban', 'struggling_urban', 'immigrant_growing', 'rural', 'difficult'].includes(e.key)) problems.push(`${where}: transfer key must be a parish kind`);
+  if (e.target === 'document' && (!AXES.has(e.key) || !IMPLEMENTATIONS.includes(String(e.value)))) problems.push(`${where}: document effect needs an axis and an implementation`);
   if (e.target === 'building' && (!['church', 'rectory', 'hall', 'school'].includes(e.key) || typeof e.delta !== 'number')) problems.push(`${where}: bad building effect`);
   if (e.target === 'permission' && (!LITURGICAL_TOPICS.includes(e.key) || !['granted', 'denied'].includes(String(e.value)))) problems.push(`${where}: bad permission effect`);
+}
+
+/** E1 R1.1: {pope}, {doc:<axis>}, {doc_kind:<axis>}, {reading:<axis>}. */
+function isRomeToken(token: string): boolean {
+  if (token === 'pope') return true;
+  const m = /^(doc|doc_kind|reading):([a-z_]+)$/.exec(token);
+  return !!m && AXES.has(m[2]!);
 }
 
 function tokensIn(text: string): string[] {
@@ -337,7 +360,7 @@ function checkEvent(ev: GameEvent, file: string, problems: Problem[], ids: Set<s
   });
   for (const token of tokensIn(ev.title + ' ' + ev.body)) {
     if (token.startsWith('@') && !SELECTORS.includes(token) && !LIVE_SELECTORS.includes(token)) problems.push(`${where}: unknown selector ${token}`);
-    if (!token.startsWith('@') && !['name', 'first_name', 'surname', 'diocese', 'parish', 'seminary', 'school', 'city', 'residence', 'appointment', 'appointment_residence', 'appointment_from', 'town'].includes(token) && !(token.startsWith('town:') && TOWN_PLACE_KINDS.includes(token.slice(5) as never))) {
+    if (!token.startsWith('@') && !['name', 'first_name', 'surname', 'diocese', 'parish', 'seminary', 'school', 'city', 'residence', 'appointment', 'appointment_residence', 'appointment_from', 'town'].includes(token) && !(token.startsWith('town:') && TOWN_PLACE_KINDS.includes(token.slice(5) as never)) && !isRomeToken(token)) {
       problems.push(`${where}: unknown token {${token}}`);
     }
   }
