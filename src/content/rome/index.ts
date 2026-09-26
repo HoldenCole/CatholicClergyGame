@@ -3,6 +3,7 @@ import poolsRaw from './pools.json';
 import documentsRaw from './documents.json';
 import axesRaw from './axes.json';
 import documentPoolsRaw from './documentPools.json';
+import dicasteriesRaw from './dicasteries.json';
 import type { DiocesanNorm, DocumentKind, HistoricalDocumentDef, HistoricalPapacyDef, PolicyAxisDef } from '@/types';
 
 /** The papal record, in order. E1 §9 A. */
@@ -40,3 +41,19 @@ export interface DocumentPools {
 }
 
 export const documentPools: DocumentPools = documentPoolsRaw as unknown as DocumentPools;
+
+/** E1 R1.4: the offices of the Roman Curia a diocesan priest may be lent to. */
+export interface DicasteryDef {
+  key: string;
+  /** Its name, by the day it held it: the last has no end. */
+  names: { until?: string; name: string }[];
+  short: string;
+  /** What comes across an official's desk there. */
+  work: string;
+  /** What in a man's record makes the Holy See put him there. */
+  fit: { credentials: Record<string, number>; flags: Record<string, number> };
+  /** Where the office calls its rungs by other names: the Secretariat of State's assessor and substitute. */
+  ranks?: Partial<Record<'head' | 'undersecretary' | 'secretary', string>>;
+}
+
+export const dicasteries: DicasteryDef[] = (dicasteriesRaw as unknown as { dicasteries: DicasteryDef[] }).dicasteries;

@@ -167,6 +167,8 @@ export type Condition =
       reverses?: boolean | string | string[];
     }
   /** E1 R1.3: the nuncio: his scene due for the man now, or his view of the man (0..100) against a value. */
+  /** E1 R1.4: whether the see of Rome is vacant this week. */
+  | { type: 'papacy'; key: 'vacant'; value: boolean }
   | { type: 'nuncio'; key: 'scene'; value: string }
   | { type: 'nuncio'; key: 'view'; op: Op; value: number }
   | { type: 'not'; inner: Condition }

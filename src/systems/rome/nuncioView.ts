@@ -19,7 +19,7 @@ export const VIEW = {
   gapCap: 20,
   loud: 50,
   loudCost: 6,
-  credit: { JCL: 6, STL: 3, STD: 3, rome_alumnus: 5, vg_served: 8, bishops_secretary: 4, hard_parish_turned: 3, auxiliary: 10 },
+  credit: { JCL: 6, STL: 3, STD: 3, rome_alumnus: 5, vg_served: 8, bishops_secretary: 4, hard_parish_turned: 3, auxiliary: 10, curia: 8 },
   bishopPer: 10,
   trusted: 6,
   brokeSecret: -12,
@@ -79,6 +79,7 @@ export function nuncioView(state: GameState): NuncioView {
   if (f.vg_served) { v += VIEW.credit.vg_served; good.push('the years as vicar general'); }
   if (f['office:bishops_secretary']) { v += VIEW.credit.bishops_secretary; good.push("the bishop's secretary's desk"); }
   if (f['office:auxiliary_bishop'] || f.served_auxiliary) { v += VIEW.credit.auxiliary; good.push('the years as an auxiliary'); }
+  if (f.curia_served || f['curia:rank']) { v += VIEW.credit.curia; good.push('the years in the Curia'); }
   if (f.hard_parish_turned) { v += VIEW.credit.hard_parish_turned; good.push('the parish everyone had written off'); }
   // The letter his own bishop writes to the nunciature.
   const bishopId = state.world?.diocese.hidden.bishop.npcId;

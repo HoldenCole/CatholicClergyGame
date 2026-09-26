@@ -7,7 +7,7 @@ import { createRng, type Rng } from './rng';
 import { formationBeats, markBeatFired, weekPool } from './seminary';
 import { isPlayedWeek, parishWeek } from './parish';
 import { careerYear, directedTransfer, isCareerYear, nextAssignment } from './career';
-import { openMail } from '@/systems/review';
+import { deliverLetter, openMail } from '@/systems/review';
 import { projectWeek } from '@/systems/projects';
 import { workWeek } from '@/systems/problems';
 import { clubsWeek, joinClub, leaveClub } from '@/systems/clubs';
@@ -52,6 +52,7 @@ import { religiousModeStep, religiousYear } from '@/systems/religious/year';
 import { renderText } from './text';
 import { closeCascade, dueCascade } from '@/systems/rome/documents';
 import { closeNuncioScene, dueNuncioScene } from '@/systems/rome/nuncio';
+import { curiaWeek } from '@/systems/rome/curia';
 import type { WeekHook } from './clock';
 
 export interface EventDeps {
@@ -202,6 +203,11 @@ export function studyWeekHook(deps: EventDeps): WeekHook {
     if (letter.moved || letter.state.pending.length > 0) return letter.state;
     const week = studyWeek(letter.state, rng.derive(`study-week:${state.clock.week}`));
     let next = week.line ? addDigestLine(week.state, week.line) : week.state;
+    // The Curia's year: the ladder, and the ask to stay. E1 §6.
+    const curia = curiaWeek(next);
+    next = curia.state;
+    for (const line of curia.lines) next = addDigestLine(next, line);
+    for (const l of curia.letters) next = deliverLetter(next, l);
     if (isCareerYear(next)) next = religiousYear(careerYear(next, rng), rng);
     if (next.mode.kind !== 'clock') return next;
     if (next.study && next.clock.week >= next.study.endWeek) {

@@ -226,6 +226,8 @@ export function evaluateCondition(
     }
     case 'policy':
       return policyCondition(state, cond);
+    case 'papacy':
+      return !!state.rome?.vacancy === cond.value;
     case 'nuncio':
       if (cond.key === 'scene') return dueNuncioScene(state) === cond.value;
       return compare(cond.op, nuncioView(state).value, cond.value);

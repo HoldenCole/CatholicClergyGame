@@ -1,0 +1,2337 @@
+{
+  "_notes": "E1 R1.4: the Roman Curia (docs/EXPANSION-E1-ROME.md §6). Phase study, flag study:curia. The office is curia:in:<key> (systems/rome/curia.ts); the ladder writes curia:head, curia:undersecretary, curia:secretary; the ask to stay is curia:asked_stay, answered by curia:stays or not. Tokens {dicastery}, {dicastery_short}, {dicastery_work}, {curia_rank}; selectors @curia_prefect, @curia_secretary, @curia_colleague.",
+  "events": [
+    {
+      "id": "cu_first_day",
+      "phase": "study",
+      "pressure": [
+        "competence",
+        "ambition_vs_integrity"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 10,
+      "suppressYears": 3,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:curia",
+          "value": true
+        },
+        {
+          "type": "record",
+          "key": "files",
+          "op": "<=",
+          "value": 12
+        }
+      ],
+      "title": "The Badge",
+      "body": "The badge has your photograph, your name spelled as the Italians spell it, and the words {dicastery} in a font nobody has changed since the Council. The office is on the third floor, up a staircase built for cardinals in carriages, and your desk faces a window onto a courtyard with one orange tree. The official who had it before you left a pencil, a dictionary, and eleven files marked urgent. The oldest is nine years old. Your work, the secretary told you this morning, is {dicastery_work}.",
+      "choices": [
+        {
+          "id": "oldest",
+          "label": "Start with the oldest file",
+          "outcome": "You start with the nine-year-old file, because somebody has been waiting nine years. It takes you three weeks to understand it and one afternoon to answer it. A bishop in a country you have never visited gets a letter he had stopped expecting.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "desk",
+              "delta": 8
+            },
+            {
+              "target": "record",
+              "key": "files",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "ask",
+          "label": "Ask the colleague down the corridor how things are really done",
+          "outcome": "You ask {@curia_colleague}, who has been here eight years, how things are really done. He tells you, over coffee, for an hour and a half, and about a third of it is true. The third that is true is worth the rest.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "superiors",
+              "delta": 4
+            },
+            {
+              "target": "place",
+              "key": "city",
+              "delta": 4
+            },
+            {
+              "target": "relationship",
+              "key": "@curia_colleague",
+              "delta": 5
+            }
+          ]
+        },
+        {
+          "id": "pray",
+          "label": "Go to the chapel first, and let the files wait an hour",
+          "outcome": "You go down to the chapel first and sit for an hour in front of the tabernacle. The files are there when you come back. They will always be there, and that, you think, is the thing to learn first.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "priesthood",
+              "delta": 8
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ]
+        }
+      ],
+      "once": true
+    },
+    {
+      "id": "cu_protocol",
+      "phase": "study",
+      "pressure": [
+        "competence",
+        "loyalty_vs_honesty"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 4,
+      "suppressYears": 3,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:curia",
+          "value": true
+        }
+      ],
+      "title": "Protocol Number",
+      "body": "A file comes across your desk with a protocol number that tells its whole history in digits: the year it was opened, the office, the fourteen hands it has passed through. At {dicastery} nothing is lost, and nothing is quick. This one is a question from a bishop about a priest who asked him something difficult, and the bishop has asked Rome instead of answering. The answer is in the canons. It is also, you can see, going to make someone very unhappy, and that is why it has waited.",
+      "choices": [
+        {
+          "id": "answer",
+          "label": "Answer it plainly, and send it up",
+          "outcome": "You write the answer the canons give, plainly, and send it up for signature. It comes back with one sentence softened. The bishop gets his answer, the priest gets his, and somebody is unhappy, as somebody was always going to be.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "desk",
+              "delta": 6
+            },
+            {
+              "target": "place",
+              "key": "superiors",
+              "delta": 3
+            },
+            {
+              "target": "record",
+              "key": "files",
+              "delta": 1
+            },
+            {
+              "target": "record",
+              "key": "drafts",
+              "delta": 1
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "soften",
+          "label": "Answer it, and find the most merciful reading the law allows",
+          "outcome": "You find the most merciful reading the canons allow and write it carefully, with the reasoning set out so no one can say you invented it. The secretary reads it twice and signs it. He says, not unkindly, that you will not last long if you do that with every file.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "desk",
+              "delta": 4
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "record",
+              "key": "files",
+              "delta": 1
+            },
+            {
+              "target": "record",
+              "key": "drafts",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "wait",
+          "label": "Put it at the bottom of the pile, where the others did",
+          "outcome": "You put it at the bottom of the pile, where the others put it. It is the Roman solution. The file will outlast you, and the bishop, and perhaps the priest.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "desk",
+              "delta": -4
+            },
+            {
+              "target": "place",
+              "key": "city",
+              "delta": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cu_draft",
+      "phase": "study",
+      "pressure": [
+        "loyalty_vs_honesty",
+        "ambition_vs_integrity"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 4,
+      "suppressYears": 3,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:curia",
+          "value": true
+        }
+      ],
+      "title": "Over Another Man's Name",
+      "body": "{@curia_secretary} wants a letter drafted for his signature to a bishops' conference that has done something he disapproves of. He tells you what it should say in three sentences and leaves you to write the three pages. You think he is wrong: not about the principle, but about the tone, which will be read in that country as Rome scolding its children, and will make everything harder for the bishops who agree with him.",
+      "choices": [
+        {
+          "id": "as_asked",
+          "label": "Draft it as asked, well",
+          "outcome": "You draft it as asked, as well as it can be written. He signs it without changing a word, which in this building is the highest praise there is. The letter lands in that country like a stone in a pond, as you knew it would.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "superiors",
+              "delta": 8
+            },
+            {
+              "target": "record",
+              "key": "drafts",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 2
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "note",
+          "label": "Draft it as asked, and clip a note with your worry",
+          "outcome": "You draft it as asked and clip a note to it: two sentences on how it will be read. He returns the draft with the note unclipped and the tone changed, by a little. He says nothing about the note. The next file he gives you is a harder one, which is a kind of answer.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "superiors",
+              "delta": 4
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            },
+            {
+              "target": "record",
+              "key": "drafts",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "soften",
+          "label": "Soften it yourself and hope he does not notice",
+          "outcome": "You soften it yourself and hope he does not notice. He notices. He hands it back with the old sentences restored in red ink and a question in the margin: whose letter is this? You do not have a good answer.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "superiors",
+              "delta": -8
+            },
+            {
+              "target": "record",
+              "key": "drafts",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cu_cordata",
+      "phase": "study",
+      "pressure": [
+        "ambition_vs_integrity",
+        "friendship_vs_duty"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 4,
+      "suppressYears": 3,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:curia",
+          "value": true
+        }
+      ],
+      "title": "Down the Corridor",
+      "body": "{@curia_colleague} invites you to dinner with some friends: two officials from other dicasteries, a monsignor from the Secretariat of State, and, arriving late, a cardinal who is nobody's patron and everybody's. The talk is warm and funny and entirely about who will be what. By the end of the evening you understand that you are being looked over, and that saying yes to the next dinner means belonging to something, and that belonging to something is how men here rise.",
+      "choices": [
+        {
+          "id": "join",
+          "label": "Go to the next dinner, and the one after",
+          "outcome": "You go to the next dinner, and the one after. You are fond of them; they are clever and kind to you. Your name begins to come up in rooms you are not in, and it comes up with theirs.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "superiors",
+              "delta": 8
+            },
+            {
+              "target": "place",
+              "key": "city",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "curia:cordata",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "friendly",
+          "label": "Stay friendly, and belong to no one",
+          "outcome": "You stay friendly with all of them and go to no second dinner. It is noticed. Men who belong to no one rise more slowly here, and are trusted with the files the others cannot be given.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "desk",
+              "delta": 4
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "decline",
+          "label": "Tell your colleague, gently, that it is not for you",
+          "outcome": "You tell {@curia_colleague}, gently, that it is not for you. He laughs and says you will learn. He is kind to you afterward, and careful, and you are no longer told things at coffee.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@curia_colleague",
+              "delta": -5
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cu_journalist",
+      "phase": "study",
+      "pressure": [
+        "loyalty_vs_honesty",
+        "belief_vs_safety"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 4,
+      "suppressYears": 3,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:curia",
+          "value": true
+        }
+      ],
+      "title": "The Journalist",
+      "body": "A journalist you met at a lunch, charming and well informed, calls to ask about a file at {dicastery} that has been in the Italian papers for a week. What the papers have printed is half true and half malicious, and the malicious half is about a man you respect. He says he would like to be fair. He says that he will print something tomorrow either way, and that it would be better if it were right.",
+      "choices": [
+        {
+          "id": "nothing",
+          "label": "Say nothing, and hang up politely",
+          "outcome": "You tell him you cannot discuss the dicastery's work, and hang up politely. The story runs the next day, half true and half malicious, and the man you respect reads it over breakfast.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "superiors",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 2
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "correct",
+          "label": "Correct the false half, off the record, and nothing else",
+          "outcome": "You tell him, off the record, which half is false, and nothing about the true half. The story runs corrected. The man you respect never knows why, and the office, which knows everything, suspects exactly who.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "superiors",
+              "delta": -6
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "curia:talked_to_press",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "everything",
+          "label": "Tell him the whole of it, so the story is right",
+          "outcome": "You tell him the whole of it, so that for once a story about the Curia will be right. It is right. It is also, by lunchtime, the subject of a meeting on the floor above yours, and the secretary looks at you at the congresso the way a man looks at a crack in a wall.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "superiors",
+              "delta": -15
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": -6
+            },
+            {
+              "target": "flag",
+              "key": "curia:talked_to_press",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cu_roman_parish",
+      "phase": "study",
+      "pressure": [
+        "friendship_vs_duty",
+        "competence"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 4,
+      "suppressYears": 3,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:curia",
+          "value": true
+        }
+      ],
+      "title": "Don Something",
+      "body": "The pastor of the parish where you say Mass on Sundays, a Roman of seventy with one lung and no patience, asks you to take the funerals for a month while he has the other lung looked at. Funerals in a Roman parish are at nine in the morning. The office opens at half past eight. The secretary does not like officials who arrive late, and does not care why.",
+      "choices": [
+        {
+          "id": "yes",
+          "label": "Take the funerals, and arrive late",
+          "outcome": "You take the funerals and arrive at the office at eleven for a month, smelling of incense. The secretary says nothing, which is worse than saying something. The pastor comes back with his lung and gives you a bottle of wine older than you are.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "priesthood",
+              "delta": 12
+            },
+            {
+              "target": "place",
+              "key": "superiors",
+              "delta": -5
+            },
+            {
+              "target": "record",
+              "key": "masses",
+              "delta": 6
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "some",
+          "label": "Take the ones you can, and find another priest for the rest",
+          "outcome": "You take the Saturday ones and find a Nigerian student at the Urbaniana for the weekdays. The pastor is grateful and slightly insulted. The student is glad of the stipends.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "priesthood",
+              "delta": 5
+            },
+            {
+              "target": "place",
+              "key": "city",
+              "delta": 4
+            },
+            {
+              "target": "record",
+              "key": "masses",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "no",
+          "label": "Tell him, sadly, that the office will not allow it",
+          "outcome": "You tell him the office will not allow it, which is true. He shrugs in the Roman way that means he expected nothing else from a man with a badge. You are on time every morning and feel it every time you pass the church.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "superiors",
+              "delta": 3
+            },
+            {
+              "target": "place",
+              "key": "priesthood",
+              "delta": -6
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cu_ad_limina",
+      "phase": "study",
+      "pressure": [
+        "loyalty_vs_honesty",
+        "friendship_vs_duty"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 4,
+      "suppressYears": 3,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:curia",
+          "value": true
+        }
+      ],
+      "title": "From the Other Side",
+      "body": "The bishops of your region come to Rome for their visit ad limina, and one morning the bishops of the province come to {dicastery} and sit around the long table while the prefect speaks and you take the minutes. {@bishop} is among them. He looks older than he did, and nervous, as bishops are here, and he catches your eye across the table and nearly smiles. Afterward, in the corridor, he asks you quietly what the prefect really thinks of the diocese.",
+      "choices": [
+        {
+          "id": "tell",
+          "label": "Tell him what you honestly can",
+          "outcome": "You tell him what you honestly can, which is not much and is enough. He listens as he never listened at home, and thanks you, and at dinner that night he tells the other bishops that he sent you to Rome, which is not quite true.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": 8
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            },
+            {
+              "target": "place",
+              "key": "superiors",
+              "delta": -2
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "discreet",
+          "label": "Tell him you cannot, and that he did well",
+          "outcome": "You tell him you cannot say, and that he did well in there, which he did. He understands. It is the first time you have been, to him, a man of Rome rather than a priest of his, and you both feel it.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "superiors",
+              "delta": 4
+            },
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "dinner",
+          "label": "Take him to dinner in Trastevere and let him talk",
+          "outcome": "You take him to dinner in Trastevere and let him talk about the diocese for three hours: the priests, the money, the seminary, the man who is dying. By the end he is not asking what the prefect thinks. He is asking what you think.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": 10
+            },
+            {
+              "target": "place",
+              "key": "city",
+              "delta": 4
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cu_call_home",
+      "phase": "study",
+      "pressure": [
+        "friendship_vs_duty",
+        "body_vs_vow"
+      ],
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 4,
+      "suppressYears": 3,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:curia",
+          "value": true
+        }
+      ],
+      "title": "A Call from Home",
+      "body": "Your sister calls at two in the morning, Roman time, from a hospital corridor you can hear: your mother has had a stroke, and it is not the kind people recover from quickly. The office is in the middle of a plenary; the files for it are yours. The secretary, when you tell him at seven, says that of course you must go, and then asks, in the same breath, whether the files can be finished first.",
+      "choices": [
+        {
+          "id": "go",
+          "label": "Go home on the first flight",
+          "outcome": "You fly home that afternoon and sit by her bed for three weeks, saying the rosary with her when she can and alone when she cannot. The plenary happens without you. When you come back, the files have been done by somebody else, and done worse, and nobody says anything about it.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "priesthood",
+              "delta": 10
+            },
+            {
+              "target": "place",
+              "key": "superiors",
+              "delta": -6
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "finish",
+          "label": "Finish the files in two days, and then go",
+          "outcome": "You work two nights and finish the files and fly home on the third day. She knows you, for an afternoon. The secretary writes a note to your file about your dedication, and you find you cannot read it without anger.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "superiors",
+              "delta": 6
+            },
+            {
+              "target": "place",
+              "key": "desk",
+              "delta": 6
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 8
+            }
+          ]
+        }
+      ],
+      "once": true
+    },
+    {
+      "id": "cu_pope_passes",
+      "phase": "study",
+      "pressure": [
+        "ambition_vs_integrity"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 2,
+      "suppressYears": 3,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:curia",
+          "value": true
+        }
+      ],
+      "title": "The Corridor",
+      "body": "{pope} comes to {dicastery} one morning without much warning, the way popes sometimes do now, and walks the corridors shaking hands. He stops at your desk. He asks where you are from, and when you tell him he says a word about your country that is either a joke or a blessing, and then he asks you what you are working on. The secretary, behind him, is very still.",
+      "choices": [
+        {
+          "id": "truth",
+          "label": "Tell him what is on the desk, plainly",
+          "outcome": "You tell him plainly: {dicastery_work}, and the file in front of you. He listens as though it were the only file in Rome and says something about it you will think about for years. The secretary breathes out.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "superiors",
+              "delta": 6
+            },
+            {
+              "target": "record",
+              "key": "audiences",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 3
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "pray",
+          "label": "Ask him to pray for the people in the file",
+          "outcome": "You ask him to pray for the people in the file, because there are people in it. He says he will, and takes your hand in both of his, and moves on. You do not know if he did. You find that you believe he did.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "priesthood",
+              "delta": 6
+            },
+            {
+              "target": "record",
+              "key": "audiences",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            }
+          ]
+        }
+      ],
+      "once": true
+    },
+    {
+      "id": "cu_ferragosto",
+      "phase": "study",
+      "pressure": [
+        "body_vs_vow",
+        "competence"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 4,
+      "suppressYears": 3,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:curia",
+          "value": true
+        }
+      ],
+      "title": "Ferragosto",
+      "body": "In August Rome empties. The offices close, the cardinals go to the hills, the trattoria where the waiter knows your order has a sign in the window, and the residence is five priests eating in silence. It is thirty-eight degrees in the shade and there is no shade. At home they are having the parish picnic. You have three weeks and nowhere to be.",
+      "choices": [
+        {
+          "id": "walk",
+          "label": "Walk the city and see every church you have missed",
+          "outcome": "You walk the city in the early mornings and the late evenings and see every church you have missed: forty-one, by your count, and a Caravaggio in every other one. By September you are something between a pilgrim and a Roman.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "city",
+              "delta": 12
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 1
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "home",
+          "label": "Fly home and help at the parish you left",
+          "outcome": "You fly home and help at the parish you left for two weeks, which surprises everybody, most of all the pastor who replaced you. The people are glad. You fly back with a suitcase of peanut butter and a sore heart.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "priesthood",
+              "delta": 8
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 3
+            }
+          ]
+        },
+        {
+          "id": "work",
+          "label": "Work through it: the files do not take August off",
+          "outcome": "You work through it. The files do not take August off, whatever the Italians think. In September the secretary finds a stack of closed dossiers on his desk and looks at you as though you were a little mad.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "desk",
+              "delta": 12
+            },
+            {
+              "target": "place",
+              "key": "superiors",
+              "delta": 4
+            },
+            {
+              "target": "record",
+              "key": "files",
+              "delta": 6
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 6
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cu_prefect_lunch",
+      "phase": "study",
+      "pressure": [
+        "loyalty_vs_honesty",
+        "ambition_vs_integrity"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 4,
+      "suppressYears": 3,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:curia",
+          "value": true
+        }
+      ],
+      "title": "Lunch with the Cardinal",
+      "body": "{@curia_prefect} asks you to lunch at his apartment, which has frescoes and a housekeeper from his home village and a view of the dome he no longer notices. He talks for an hour about the Church in your country, which he visited once, forty years ago, and has opinions about. Over the coffee he asks you, as though it were nothing, what you think of the new bishop of a see near your home, and you realise the lunch has been about this question.",
+      "choices": [
+        {
+          "id": "honest",
+          "label": "Tell him honestly what you know",
+          "outcome": "You tell him honestly what you know, which is a little good and a little not. He nods, and pours more coffee, and talks about his village. Some weeks later you read in the Bollettino that a certain appointment has been made elsewhere.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "superiors",
+              "delta": 6
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 2
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "generous",
+          "label": "Say only good things: the man is a brother bishop",
+          "outcome": "You say only good things; he is a brother, and not yours to judge. The cardinal smiles in a way that tells you he has heard that answer from every official he has ever fed. You are not asked to lunch again.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "superiors",
+              "delta": -3
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "ask",
+          "label": "Ask him, politely, why he is asking",
+          "outcome": "You ask him, politely, why he is asking. He laughs, a real laugh, and says that you will go far or nowhere, and that he has not decided which. He does not answer the question.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "superiors",
+              "delta": 3
+            },
+            {
+              "target": "relationship",
+              "key": "@curia_prefect",
+              "delta": 4
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cu_secretary_temper",
+      "phase": "study",
+      "pressure": [
+        "loyalty_vs_honesty",
+        "belief_vs_safety"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 4,
+      "suppressYears": 3,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:curia",
+          "value": true
+        }
+      ],
+      "title": "The Secretary's Door",
+      "body": "Through the door of the secretary's office, left open, the whole corridor hears {@curia_secretary} take apart an official from Poland for a mistake in a letter that was not the Pole's mistake but the secretary's own. The Pole says nothing. The corridor says nothing. The Pole comes out grey and sits at his desk and does not move. It was your draft, in fact, that the secretary changed and then blamed on him.",
+      "choices": [
+        {
+          "id": "own",
+          "label": "Go in and tell the secretary the mistake was in your draft",
+          "outcome": "You go in and tell the secretary the mistake was in your draft, which is almost true. He looks at you for a long moment and says that he will remember that. You are not sure which way he means it. The Pole buys you a coffee every morning for a year.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "superiors",
+              "delta": -4
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "relationship",
+              "key": "@curia_secretary",
+              "delta": -4
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "pole",
+          "label": "Go and sit with the Pole instead",
+          "outcome": "You go and sit with the Pole, and say nothing about the letter, and take him to lunch. He tells you about his village and his mother and the seminary in Kraków. It is not justice. It is what you can do.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "city",
+              "delta": 4
+            },
+            {
+              "target": "place",
+              "key": "priesthood",
+              "delta": 4
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "nothing",
+          "label": "Say nothing: it is the building, and it will not change",
+          "outcome": "You say nothing. It is the building, and it will not change because an American says so. That evening you say Vespers badly and know why.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "superiors",
+              "delta": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cu_file_home",
+      "phase": "study",
+      "pressure": [
+        "loyalty_vs_honesty",
+        "friendship_vs_duty"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 4,
+      "suppressYears": 3,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:curia",
+          "value": true
+        }
+      ],
+      "title": "A File from Home",
+      "body": "The file on your desk this morning concerns your own diocese: a complaint, from a group of priests you know by name, against a decision of {@bishop}. The protocol says it should not have come to you. It came to you because you are the one who knows the diocese, and the secretary, handing it over, said that he trusted you to be fair. You know every name in it, and which of them is right.",
+      "choices": [
+        {
+          "id": "recuse",
+          "label": "Give it back and ask that another official take it",
+          "outcome": "You give it back and ask that another man take it. The secretary is surprised and a little annoyed and does as you ask. The file is decided by a man who has never heard of your diocese, and decided, as far as you can tell, rightly.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "superiors",
+              "delta": 2
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "curia:recused_home",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "fair",
+          "label": "Keep it, and be scrupulously fair",
+          "outcome": "You keep it and are scrupulously fair, and the answer goes against the men you agree with, because the law is on the bishop's side. They never know it was you. You know.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "desk",
+              "delta": 6
+            },
+            {
+              "target": "record",
+              "key": "files",
+              "delta": 1
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "help",
+          "label": "Keep it, and find a way for the priests to be heard",
+          "outcome": "You keep it and find a way, entirely proper, for the priests to be heard before the answer goes out. The bishop is told to meet with them. He never knows who arranged it, and you are fairly sure he would not thank you.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "desk",
+              "delta": 3
+            },
+            {
+              "target": "record",
+              "key": "files",
+              "delta": 1
+            },
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": -2
+            },
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": 3
+            }
+          ]
+        }
+      ],
+      "once": true
+    },
+    {
+      "id": "cu_vacancy",
+      "phase": "study",
+      "pressure": [
+        "doubt",
+        "ambition_vs_integrity"
+      ],
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 20,
+      "suppressYears": 2,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:curia",
+          "value": true
+        },
+        {
+          "type": "papacy",
+          "key": "vacant",
+          "value": true
+        }
+      ],
+      "title": "The Palace Holds Its Breath",
+      "body": "The see of Rome is vacant, and the Curia with it. By the law, the prefects have ceased; the dicasteries do only the ordinary business, and the ordinary business is nothing anyone wants to decide. The files on your desk are frozen where they lay. In the corridors the officials who owe their posts to the last pope are very quiet, and the ones who do not are very cheerful, and everyone reads the Italian papers' lists of cardinals as if they were stock prices.",
+      "choices": [
+        {
+          "id": "pray",
+          "label": "Spend the weeks in the chapel and the files you can close",
+          "outcome": "You spend the mornings on the files the law lets you close and the afternoons in the chapel, praying for the cardinals by name, which almost nobody does. When the white smoke rises you are in the square with forty thousand people, and you weep, which surprises you.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "priesthood",
+              "delta": 8
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "gossip",
+          "label": "Read the lists, and go to the lunches",
+          "outcome": "You read the lists and go to the lunches. Everybody knows something and nobody knows anything. By the time the smoke rises you can name the thirty men who might be elected and have been wrong about all of them.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "city",
+              "delta": 6
+            },
+            {
+              "target": "place",
+              "key": "superiors",
+              "delta": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cu_ddf_book",
+      "phase": "study",
+      "pressure": [
+        "loyalty_vs_honesty",
+        "belief_vs_safety"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 4,
+      "suppressYears": 3,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:curia",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "curia:in:ddf",
+          "value": true
+        }
+      ],
+      "title": "A Theologian's Book",
+      "body": "The file is a book: four hundred pages by a theologian in your own country, marked up by three bishops who want it condemned, and by a fourth who wants it praised. It is your job at {dicastery} to read it and write the first report. You read it twice. It is clever, careless in places, and wrong about one thing that matters; it is also the book that brought two of your former parishioners back to the Church.",
+      "choices": [
+        {
+          "id": "fair",
+          "label": "Write a fair report: the error named precisely, and the rest acquitted",
+          "outcome": "You write a fair report: the one error named precisely, with the pages, and the rest acquitted. The theologian is asked to clarify a paragraph, and does, gracefully. Nobody is condemned. Nobody is happy. It is, the secretary says, a good report.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "desk",
+              "delta": 8
+            },
+            {
+              "target": "place",
+              "key": "superiors",
+              "delta": 4
+            },
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 1
+            },
+            {
+              "target": "record",
+              "key": "files",
+              "delta": 1
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "hard",
+          "label": "Write the report the three bishops want",
+          "outcome": "You write the report the three bishops want. It is not false. It leaves out the pages that would have made it fair. The book is withdrawn by its publisher before Rome says anything, and the theologian stops writing.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "superiors",
+              "delta": 6
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": -1
+            },
+            {
+              "target": "record",
+              "key": "files",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "soft",
+          "label": "Write it so gently the error disappears",
+          "outcome": "You write it so gently that the error disappears into the praise. The secretary sends it back with a note: read it again. You do, and he is right, and you rewrite it, and the rewrite is better.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "superiors",
+              "delta": -4
+            },
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cu_bishops_terna",
+      "phase": "study",
+      "pressure": [
+        "friendship_vs_duty",
+        "loyalty_vs_honesty"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 4,
+      "suppressYears": 3,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:curia",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "curia:in:bishops",
+          "value": true
+        }
+      ],
+      "title": "The Other Side of the Terna",
+      "body": "At {dicastery} the files are ternas, and one morning the terna on your desk comes from a nunciature you know, for a see you know, and the second name on it is {@closest_classmate.full}. The file has the questionnaires: twenty-seven questions answered by priests who know him. One of them is scathing, and signed by a man you know hates him. You are to write the summary that goes to the congresso.",
+      "choices": [
+        {
+          "id": "fair",
+          "label": "Write the summary straight, and flag the scathing one for what it is",
+          "outcome": "You write it straight and note, in one careful sentence, that one respondent's view should be read in the light of a long quarrel. It is true and it is the kind of sentence the congresso trusts. Whatever happens next is not in your hands.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "desk",
+              "delta": 6
+            },
+            {
+              "target": "place",
+              "key": "superiors",
+              "delta": 4
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "record",
+              "key": "files",
+              "delta": 1
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "recuse",
+          "label": "Tell the secretary you know the man, and ask to be taken off it",
+          "outcome": "You tell the secretary that the man is your closest friend, and ask to be taken off it. He does, and says that most officials do not. The file goes to a Brazilian who has never heard of either of you.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "superiors",
+              "delta": 3
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "tell",
+          "label": "Tell your friend, by a careful phone call, that his name is in Rome",
+          "outcome": "You call him, carefully, and tell him nothing except to keep his head down this year. He understands at once. It is the worst thing you have done in Rome, and he is grateful, and you are both a little changed by it.",
+          "effects": [
+            {
+              "target": "flag",
+              "key": "nuncio:broke_secret",
+              "value": true
+            },
+            {
+              "target": "relationship",
+              "key": "@closest_classmate",
+              "delta": 8
+            },
+            {
+              "target": "place",
+              "key": "superiors",
+              "delta": -6
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": -2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cu_clergy_petition",
+      "phase": "study",
+      "pressure": [
+        "belief_vs_safety",
+        "loyalty_vs_honesty"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 4,
+      "suppressYears": 3,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:curia",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "curia:in:clergy",
+          "value": true
+        }
+      ],
+      "title": "A Petition to Leave",
+      "body": "The file at {dicastery} is a priest's petition to be dispensed from the obligations of the priesthood: eleven pages in his own hand, a letter from his bishop, and the dry forms that go with it. He is fifty, ordained twenty years, and he writes about the loneliness and the woman and the faith he still has without self-pity and without excuses. The petition has waited fourteen months. The rules allow you to move it or to let it wait.",
+      "choices": [
+        {
+          "id": "move",
+          "label": "Move it: fourteen months is long enough",
+          "outcome": "You move it to the top and write the summary that week. It goes up with the others and is granted in the spring. You never learn what became of him, and you pray for him by name for a year, and then less, and then on his feast day.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "desk",
+              "delta": 6
+            },
+            {
+              "target": "record",
+              "key": "files",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "letter",
+          "label": "Move it, and add a note asking that he be written to kindly",
+          "outcome": "You move it and add a note asking that the letter granting it be written kindly, as the rules allow and do not require. The secretary initials the note. You are told later that the man wrote back to thank whoever it was.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "desk",
+              "delta": 4
+            },
+            {
+              "target": "place",
+              "key": "priesthood",
+              "delta": 4
+            },
+            {
+              "target": "record",
+              "key": "files",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "wait",
+          "label": "Let it wait with the others: the order is the order",
+          "outcome": "You leave it where it lies in the order of arrival. The order is the order, and there are older ones. It waits another eleven months. The rules were followed exactly.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "desk",
+              "delta": -2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cu_worship_word",
+      "phase": "study",
+      "pressure": [
+        "competence",
+        "belief_vs_safety"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 4,
+      "suppressYears": 3,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:curia",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "curia:in:worship",
+          "value": true
+        }
+      ],
+      "title": "One Word",
+      "body": "A bishops' conference has sent {dicastery} its translation of a new rite, and the question has come down to one word: whether the Latin should become the plainer word the people would use or the older word that carries the tradition. There are forty pages of argument from each side. You have to recommend. Whatever you recommend will be said aloud at every celebration of this rite in that language for a generation.",
+      "choices": [
+        {
+          "id": "faithful",
+          "label": "Recommend the older word, faithful to the Latin",
+          "outcome": "You recommend the older word and write out why, from the Latin and the Fathers. The conference is unhappy and complies. In ten years, the word will sound as though it had always been there, which is how these things go.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "desk",
+              "delta": 6
+            },
+            {
+              "target": "place",
+              "key": "superiors",
+              "delta": 3
+            },
+            {
+              "target": "record",
+              "key": "files",
+              "delta": 1
+            },
+            {
+              "target": "alignment",
+              "key": "",
+              "delta": -1
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "plain",
+          "label": "Recommend the plainer word the people will pray",
+          "outcome": "You recommend the plainer word and write out why, from the people who will have to pray it. The secretary, who disagrees, sends it up anyway with your name on it. The decision, when it comes, is the other one, and your name is on the file that lost.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "desk",
+              "delta": 4
+            },
+            {
+              "target": "place",
+              "key": "superiors",
+              "delta": -2
+            },
+            {
+              "target": "record",
+              "key": "files",
+              "delta": 1
+            },
+            {
+              "target": "alignment",
+              "key": "",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "both",
+          "label": "Propose the older word, with the plainer in a note for catechesis",
+          "outcome": "You propose the older word in the text and the plainer one in the notes for catechesis. It is a Roman answer. It is accepted by everyone, and satisfies no one, and is still in use when you die.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "desk",
+              "delta": 5
+            },
+            {
+              "target": "place",
+              "key": "superiors",
+              "delta": 5
+            },
+            {
+              "target": "record",
+              "key": "files",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cu_evang_bishop",
+      "phase": "study",
+      "pressure": [
+        "money",
+        "friendship_vs_duty"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 4,
+      "suppressYears": 3,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:curia",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "curia:in:evangelization",
+          "value": true
+        }
+      ],
+      "title": "A Bishop Asks for Money",
+      "body": "A missionary bishop is in your office at {dicastery}: a tall man with a cheap suit and a diocese the size of your home state, three hundred priests' worth of people and forty priests. He has come to Rome to ask for money for a seminary, and he has an hour, and the file already says no. He knows it says no. He has come anyway, and he is telling you, very calmly, what no will mean.",
+      "choices": [
+        {
+          "id": "fight",
+          "label": "Take his case to the secretary yourself",
+          "outcome": "You take his case to the secretary yourself, that afternoon, with the numbers. The secretary says the budget is the budget. Then he finds a third of the money in a fund you did not know existed. The bishop writes you a letter in a hand you can barely read that you keep in your breviary.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "superiors",
+              "delta": -2
+            },
+            {
+              "target": "place",
+              "key": "priesthood",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "channels",
+          "label": "Tell him the truth, and how to ask again next year",
+          "outcome": "You tell him the truth, and exactly how to write the request next year so that it says yes. He listens, takes notes, and thanks you. Next year it says yes. You were right, and it cost him a year of seminarians.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "desk",
+              "delta": 6
+            },
+            {
+              "target": "record",
+              "key": "files",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "personal",
+          "label": "Give him what you have, from your own account",
+          "outcome": "You give him a check from your own account, which is most of what you have saved. It is nothing to the seminary and everything to you. He takes it without embarrassment, as a man takes what God sends.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "place",
+              "key": "priesthood",
+              "delta": 8
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cu_laity_founder",
+      "phase": "study",
+      "pressure": [
+        "belief_vs_safety",
+        "loyalty_vs_honesty"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 4,
+      "suppressYears": 3,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:curia",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "curia:in:laity",
+          "value": true
+        }
+      ],
+      "title": "The Statutes",
+      "body": "A lay movement founded in your lifetime has sent {dicastery} its statutes for final approval: two hundred thousand members, a hundred houses, and a founder who is charming, holy, and in every photograph. Reading the file, you notice what the enthusiastic letters do not: that every power in the statutes runs to the founder, that no one can remove him, and that three former members wrote letters that were answered by the movement's lawyers.",
+      "choices": [
+        {
+          "id": "flag",
+          "label": "Write it up: approval, with the powers checked and the three letters answered",
+          "outcome": "You recommend approval with conditions: the founder's powers limited, an external visitor named, and the three letters answered by the dicastery itself. The movement is furious and complies. Years later, when the trouble comes, the conditions are the only thing that holds.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "desk",
+              "delta": 8
+            },
+            {
+              "target": "place",
+              "key": "superiors",
+              "delta": 2
+            },
+            {
+              "target": "record",
+              "key": "files",
+              "delta": 1
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 2
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "approve",
+          "label": "Recommend approval: two hundred thousand people cannot be wrong",
+          "outcome": "You recommend approval as it stands. Two hundred thousand people, you think, cannot all be wrong. The founder sends the office a statue of the Virgin for its chapel. You look at it every morning.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "superiors",
+              "delta": 6
+            },
+            {
+              "target": "record",
+              "key": "files",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cu_texts_canon",
+      "phase": "study",
+      "pressure": [
+        "loyalty_vs_honesty",
+        "competence"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 4,
+      "suppressYears": 3,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:curia",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "curia:in:texts",
+          "value": true
+        }
+      ],
+      "title": "What the Canon Means",
+      "body": "A bishop has read a canon in a way that lets him do what he wanted to do anyway, and a priest of his diocese has asked {dicastery} whether the canon means what the bishop says. It does not, quite. The authentic interpretation you draft will bind every bishop in the world, and the bishop in question has friends in this building, and has already written to two of them.",
+      "choices": [
+        {
+          "id": "law",
+          "label": "Draft what the canon means, whoever it embarrasses",
+          "outcome": "You draft what the canon means. The bishop's friends read it and say nothing, which is the most a friend can do here. The interpretation is published in the Acta. It embarrasses one bishop and protects a great many priests.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "desk",
+              "delta": 8
+            },
+            {
+              "target": "place",
+              "key": "superiors",
+              "delta": 2
+            },
+            {
+              "target": "record",
+              "key": "files",
+              "delta": 1
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "narrow",
+          "label": "Draft it narrowly, so that it answers the question and nothing more",
+          "outcome": "You draft it narrowly, so that it answers this priest's question and leaves the larger one open. It is careful, correct, and useful to everybody for about three years, after which somebody will have to ask again.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "desk",
+              "delta": 5
+            },
+            {
+              "target": "place",
+              "key": "superiors",
+              "delta": 5
+            },
+            {
+              "target": "record",
+              "key": "files",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cu_signatura_appeal",
+      "phase": "study",
+      "pressure": [
+        "loyalty_vs_honesty",
+        "belief_vs_safety"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 4,
+      "suppressYears": 3,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:curia",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "curia:in:signatura",
+          "value": true
+        }
+      ],
+      "title": "An Appeal",
+      "body": "The Signatura has before it a pastor's appeal against his bishop's decree suppressing his parish: a church his grandparents built, three hundred families, and a bishop who says the diocese cannot afford it. The law is about procedure, not money: whether the bishop consulted as he was bound to. You are drafting for the judges. You can see that he did not, quite, and that if the appeal succeeds the bishop will simply do it again properly next year.",
+      "choices": [
+        {
+          "id": "law",
+          "label": "Draft that he did not consult as the law requires",
+          "outcome": "You draft that he did not consult as the law requires, with the dates. The appeal succeeds. The parish has two more years. The bishop does it again, properly, and the three hundred families have had two more Easters in the church their grandparents built.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "desk",
+              "delta": 8
+            },
+            {
+              "target": "record",
+              "key": "files",
+              "delta": 1
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "mercy",
+          "label": "Draft that the defect was not serious enough to annul the decree",
+          "outcome": "You draft that the defect was real but not grave enough to annul the decree. It is a defensible reading. The judges adopt it. The parish closes at Pentecost.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "superiors",
+              "delta": 4
+            },
+            {
+              "target": "record",
+              "key": "files",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cu_secretariat_message",
+      "phase": "study",
+      "pressure": [
+        "belief_vs_safety",
+        "loyalty_vs_honesty"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 4,
+      "suppressYears": 3,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:curia",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "curia:in:secretariat",
+          "value": true
+        }
+      ],
+      "title": "The Pope's Desk",
+      "body": "At {dicastery} the drafts go higher than anywhere else, and this morning yours is a message in the pope's name to a country where Christians were killed last week in a church during Mass. It must be read by the families, by the government, and by the men who did it. The first draft from the section is careful to the point of saying nothing. You have an hour to make it better, and every word will be weighed in three capitals.",
+      "choices": [
+        {
+          "id": "name",
+          "label": "Name the dead, and the church, and the Mass",
+          "outcome": "You write the names of the dead into it, and the name of the church, and the fact that they were at Mass. The monsignor above you takes out two names for reasons of state and leaves the rest. The families read it aloud at the funeral.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "superiors",
+              "delta": 4
+            },
+            {
+              "target": "record",
+              "key": "drafts",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 2
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "careful",
+          "label": "Keep it careful: a message that can be read in three capitals",
+          "outcome": "You keep it careful, as the section wants, and make the careful sentences beautiful. It is read in three capitals and offends none of them, and in the parish where they died it is read as what it is.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "superiors",
+              "delta": 6
+            },
+            {
+              "target": "record",
+              "key": "drafts",
+              "delta": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cu_head",
+      "phase": "study",
+      "pressure": [
+        "competence",
+        "friendship_vs_duty"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 8,
+      "suppressYears": 3,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:curia",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "curia:head",
+          "value": true
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "curia:undersecretary",
+            "value": true
+          }
+        }
+      ],
+      "title": "Three Officials",
+      "body": "You are head of office now, with three officials under you, and one of them, a Maltese monsignor who has been at {dicastery} eleven years, expected the post himself. He is courteous to you in a way that is a form of warfare. He is also the best official in the building, and the one who knows where every file is buried, and this week he has quietly stopped sharing what he knows.",
+      "choices": [
+        {
+          "id": "ask",
+          "label": "Ask him, alone, to teach you what you do not know",
+          "outcome": "You ask him to lunch and tell him plainly that he should have had the post, and that you need him. He looks at you for a long time over the wine, and then begins, slowly, to tell you where the files are buried. By Christmas you are friends, or something Roman that resembles it.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "superiors",
+              "delta": 4
+            },
+            {
+              "target": "place",
+              "key": "desk",
+              "delta": 6
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "rank",
+          "label": "Use the rank: give him the worst files and let him learn",
+          "outcome": "You give him the worst files and let him learn who is head of office. He learns. He also writes, beautifully and anonymously, to the secretary about the new man's methods. You find out two years later.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "superiors",
+              "delta": -4
+            },
+            {
+              "target": "place",
+              "key": "desk",
+              "delta": 4
+            }
+          ]
+        }
+      ],
+      "once": true
+    },
+    {
+      "id": "cu_bollettino",
+      "phase": "study",
+      "pressure": [
+        "ambition_vs_integrity"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 20,
+      "suppressYears": 3,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:curia",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "curia:undersecretary",
+          "value": true
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "curia:bollettino_seen",
+            "value": true
+          }
+        }
+      ],
+      "title": "Named in the Bollettino",
+      "body": "Your name is in the Bollettino of the Holy See Press Office at noon: {curia_rank} of {dicastery}. By one o'clock {@bishop} has called, and your sister, and a classmate from the seminary who says he always knew and did not. The officials who were your equals yesterday call you Monsignore today, some of them with a smile. The secretary shakes your hand and says, in English, welcome to the part of the building where it is lonely.",
+      "choices": [
+        {
+          "id": "home",
+          "label": "Write to the parish you left, before anyone else",
+          "outcome": "Before anything else you write to the parish you left: a letter to be read at the Sunday Masses, saying that you pray for them and that you have not forgotten how to say Mass in English. The pastor reads it. Some of them cry, and some of them say you have forgotten them already.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "priesthood",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "curia:bollettino_seen",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "party",
+          "label": "Let the residence throw you a dinner, and enjoy it",
+          "outcome": "You let the residence throw you a dinner and enjoy every minute of it, the toasts and the bad jokes and the cake with your name spelled wrong. It is allowed, a man told you once, to be glad.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "city",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "curia:bollettino_seen",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "chapel",
+          "label": "Spend the evening in the chapel instead",
+          "outcome": "You spend the evening in the chapel instead, and pray to be the kind of man who can be trusted with this, and to be told if you are not. Nobody tells you. You go on praying it.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "priesthood",
+              "delta": 8
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "curia:bollettino_seen",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "once": true
+    },
+    {
+      "id": "cu_ordination",
+      "phase": "study",
+      "pressure": [
+        "ambition_vs_integrity",
+        "friendship_vs_duty"
+      ],
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 30,
+      "suppressYears": 3,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:curia",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "curia:secretary",
+          "value": true
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "curia:ordination_seen",
+            "value": true
+          }
+        }
+      ],
+      "title": "St. Peter's",
+      "body": "You are to be ordained a bishop in St. Peter's, at the Altar of the Chair, by the Cardinal Secretary of State, as secretary of {dicastery} and titular archbishop of a see in North Africa that has not had a Christian in thirteen hundred years. You may choose your co-consecrators, and you may invite whom you like. The invitations are due at the protocol office on Friday, and the list will be read, in its way, in every chancery in your country.",
+      "choices": [
+        {
+          "id": "home",
+          "label": "Ask your own bishop to be co-consecrator, and invite the parish",
+          "outcome": "You ask {@bishop} to be a co-consecrator, and invite the parish you left. Forty of them come on a pilgrimage bus. When you walk past them in the procession an old woman you anointed years ago reaches out and touches your cope, and you nearly stop.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": 8
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 4
+            },
+            {
+              "target": "place",
+              "key": "priesthood",
+              "delta": 8
+            },
+            {
+              "target": "flag",
+              "key": "curia:ordination_seen",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "rome",
+          "label": "Ask the prefect and a cardinal of the congresso, as is usual",
+          "outcome": "You ask the prefect and a cardinal of the congresso, as is usual. The list is read in every chancery at home as a list of a man who belongs to Rome now. It is not wrong.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "superiors",
+              "delta": 8
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 4
+            },
+            {
+              "target": "flag",
+              "key": "curia:ordination_seen",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "classmate",
+          "label": "Ask your closest classmate to preach at the Mass",
+          "outcome": "You ask {@closest_classmate} to preach, which is unusual, and he does, about the seminary and a night you had both forgotten. The cardinals laugh in the right places. Afterward your mother tells you it was the best sermon she has heard in her life.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@closest_classmate",
+              "delta": 10
+            },
+            {
+              "target": "place",
+              "key": "priesthood",
+              "delta": 6
+            },
+            {
+              "target": "flag",
+              "key": "curia:ordination_seen",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "once": true
+    },
+    {
+      "id": "cu_stay",
+      "phase": "study",
+      "pressure": [
+        "ambition_vs_integrity",
+        "friendship_vs_duty"
+      ],
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 40,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:curia",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "curia:asked_stay",
+          "value": true
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "curia:answered_stay",
+            "value": true
+          }
+        }
+      ],
+      "title": "The Secretary Asks You to Stay",
+      "body": "Your years at {dicastery} are nearly up, and {@curia_secretary} calls you in and closes the door. He would like you to stay: three more years, perhaps more, and he will write to your bishop himself. He does not promise anything, which is how you know he means something. Your bishop at home has a parish waiting for you, and a diocese that is short of priests, and has written twice to ask when you are coming back.",
+      "choices": [
+        {
+          "id": "stay",
+          "label": "Stay",
+          "outcome": "You say yes. The secretary writes to your bishop that afternoon, and your bishop writes back a letter that is gracious and short. You will not be going home this year, and you are not sure, when you think about it at night, that you will ever quite go home again.",
+          "effects": [
+            {
+              "target": "flag",
+              "key": "curia:stays",
+              "value": true
+            },
+            {
+              "target": "flag",
+              "key": "curia:answered_stay",
+              "value": true
+            },
+            {
+              "target": "place",
+              "key": "superiors",
+              "delta": 6
+            }
+          ]
+        },
+        {
+          "id": "home",
+          "label": "Go home: you were lent, not given",
+          "outcome": "You tell him you were lent, not given, and the diocese needs its priests back. He is disappointed, and says so, and says that he respects it. He also says that men who go home do not usually come back to Rome, and he is right.",
+          "effects": [
+            {
+              "target": "flag",
+              "key": "curia:answered_stay",
+              "value": true
+            },
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": 6
+            },
+            {
+              "target": "place",
+              "key": "priesthood",
+              "delta": 6
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "bishop",
+          "label": "Ask your bishop what he wants, and do that",
+          "outcome": "You write to {@bishop} and ask him what he wants. He writes back that he wants you home, and that he will not stand in your way. You go home, because he asked, and because you asked him.",
+          "effects": [
+            {
+              "target": "flag",
+              "key": "curia:answered_stay",
+              "value": true
+            },
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": 10
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

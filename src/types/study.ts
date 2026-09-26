@@ -5,7 +5,7 @@ import type { StatKey, ConstituencyKey } from './stats';
 
 /** Where he lives while away: a city for a degree, or the bishop's residence for a post. */
 /** Where a man lives while he is away: the two schools, and every posting's own place. The five after `see` are the special assignments of DESIGN §7.7. */
-export type StudyCity = 'rome' | 'washington' | 'residence' | 'campus' | 'hospital' | 'seminary' | 'chancery' | 'auxiliary' | 'see' | 'prison' | 'mission' | 'deployment' | 'formation' | 'schools';
+export type StudyCity = 'rome' | 'washington' | 'residence' | 'campus' | 'hospital' | 'seminary' | 'chancery' | 'auxiliary' | 'see' | 'prison' | 'mission' | 'deployment' | 'formation' | 'schools' | 'curia';
 
 /** A course of study away from the diocese. content/study/programs.json */
 export interface StudyProgramDef {

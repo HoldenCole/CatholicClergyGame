@@ -1,0 +1,193 @@
+{
+  "_notes": "E1 R1.4: Rome's letters that move a priest of the diocese (docs/EXPANSION-E1-ROME.md §6). The Curia asks through the bishop; the dicastery is where the man's record fits (systems/rome/curia.ts, {curia_offer}).",
+  "offers": [
+    {
+      "id": "rome_curia_official",
+      "category": "chancery",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "title": "A Letter from the Secretariat of State",
+      "body": "The letter comes to {@bishop} first, on the letterhead of the Secretariat of State, and {@bishop} sends it on to you with a note of his own clipped to the corner. {curia_offer} would like a priest of the diocese as an official for five years: a desk, a residence near the Borgo, the files. {@bishop} writes that he can spare you, which is not quite true, and that nobody says no to this letter, which is. Men lent to Rome come home different, and some of them do not come home. The note ends: think about it, and then say yes.",
+      "from": "@bishop",
+      "requires": [
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 3
+        },
+        {
+          "type": "age",
+          "op": "<=",
+          "value": 55
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "ordained_bishop",
+            "value": true
+          }
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "curia_served",
+            "value": true
+          }
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "refused_curia",
+            "value": true
+          }
+        },
+        {
+          "type": "reputation",
+          "key": "rome",
+          "op": ">=",
+          "value": 15
+        },
+        {
+          "type": "nuncio",
+          "key": "view",
+          "op": ">=",
+          "value": 45
+        },
+        {
+          "type": "any",
+          "inner": [
+            {
+              "type": "flag",
+              "key": "rome_alumnus",
+              "value": true
+            },
+            {
+              "type": "credential",
+              "key": "italian"
+            },
+            {
+              "type": "flag",
+              "key": "worked_at_the_holy_see",
+              "value": true
+            },
+            {
+              "type": "credential",
+              "key": "JCL"
+            }
+          ]
+        }
+      ],
+      "weight": 14,
+      "bias": [
+        {
+          "when": {
+            "type": "flag",
+            "key": "worked_at_the_holy_see",
+            "value": true
+          },
+          "multiplier": 3.0
+        },
+        {
+          "when": {
+            "type": "flag",
+            "key": "rome_alumnus",
+            "value": true
+          },
+          "multiplier": 1.6
+        },
+        {
+          "when": {
+            "type": "credential",
+            "key": "JCL"
+          },
+          "multiplier": 1.4
+        },
+        {
+          "when": {
+            "type": "outspokenness",
+            "op": ">=",
+            "value": 60
+          },
+          "multiplier": 0.5
+        }
+      ],
+      "windowWeeks": 4,
+      "final": true,
+      "cluster": "curia",
+      "accept": {
+        "effects": [
+          {
+            "target": "reputation",
+            "key": "rome",
+            "delta": 6
+          },
+          {
+            "target": "reputation",
+            "key": "chancery",
+            "delta": 3
+          },
+          {
+            "target": "reputation",
+            "key": "parishioners",
+            "delta": -4
+          }
+        ],
+        "outcome": "You fly to Rome in September with two suitcases and a letter of introduction you will never be asked for. The residence is quiet, the room is small, and on your first morning a porter who has seen forty officials come and go looks at your badge and says, in English, good luck with the files.",
+        "commitment": {
+          "label": "The Roman Curia",
+          "weeks": 260,
+          "apPerWeek": 0,
+          "onComplete": [
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 10
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 6
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 4
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 2
+            },
+            {
+              "target": "trait",
+              "key": "sat at a desk in the Roman Curia"
+            }
+          ],
+          "completeOutcome": "Five years, a room near the Borgo, and a file of letters that went out under other men's names. The diocese gets back a man it lent, and has to find out who he is now.",
+          "away": "curia_official"
+        }
+      },
+      "decline": {
+        "effects": [
+          {
+            "target": "flag",
+            "key": "refused_curia",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "rome",
+            "delta": -6
+          }
+        ],
+        "outcome": "You write to the Secretariat of State that the diocese needs you more than Rome does, which your bishop does not quite believe and Rome does not believe at all. The letter is filed. The next American they ask says yes."
+      }
+    }
+  ]
+}
