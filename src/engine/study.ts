@@ -14,9 +14,10 @@ import { retire } from './career';
 import { bookLine } from '@/systems/studyWeek';
 import { dropOffices } from '@/systems/offices';
 import { consult } from '@/systems/religious/obedience';
+import { beginCuria, homeFromCuria, leaveCuriaForSee } from '@/systems/rome/curia';
 
 /** How a place is named in prose. */
-export const CITY_WORD: Record<StudyState['city'], string> = { rome: 'Rome', washington: 'Washington', residence: "the bishop's residence", campus: 'the Newman Center', hospital: 'the hospital', seminary: 'the seminary', chancery: 'the chancery', auxiliary: 'the chancery', see: 'the see', prison: 'the penitentiary', mission: 'the missions', deployment: 'the deployment', formation: 'the seminary', schools: 'the schools office' };
+export const CITY_WORD: Record<StudyState['city'], string> = { rome: 'Rome', washington: 'Washington', residence: "the bishop's residence", campus: 'the Newman Center', hospital: 'the hospital', seminary: 'the seminary', chancery: 'the chancery', auxiliary: 'the chancery', see: 'the see', prison: 'the penitentiary', mission: 'the missions', deployment: 'the deployment', formation: 'the seminary', schools: 'the schools office', curia: 'the Curia' };
 
 /** Invented: what leaving costs the man's standing with the people he leaves. DESIGN §7.5 rule 3. */
 export const STUDY = { leaveParishioners: -8 } as const;
@@ -36,7 +37,9 @@ export function beginStudy(state: GameState, def: OfferDef, failed: boolean, rng
   if (!c || !program) throw new Error(`offer ${def.id} is not a course of study`);
   // A translation closes the first see's file: its letter was answered, and the years were served.
   const leavingSee = program.kind === 'see' && state.study && studyProgram(state.study.program)?.kind === 'see' ? state.study.offerId : null;
-  let next = closeTenure(state, program.kind === 'post' ? `left for ${program.label.toLowerCase()}` : `sent to ${CITY_WORD[program.city]}`);
+  // Rome sends a man from its own offices to a see: the Curia's years are served. E1 §6.
+  const fromCuria = program.kind === 'see' ? leaveCuriaForSee(state) : state;
+  let next = closeTenure(fromCuria, program.kind === 'post' ? `left for ${program.label.toLowerCase()}` : `sent to ${CITY_WORD[program.city]}`);
   if (leavingSee) next = { ...next, offerHistory: [...next.offerHistory, { offerId: leavingSee, week: next.clock.week, decision: 'completed' }] };
   next = next.parish ? handoffProject(next, rng.derive(`handoff:${state.clock.week}`)).state : next;
   next = dropOffices(next);
@@ -69,6 +72,8 @@ export function beginStudy(state: GameState, def: OfferDef, failed: boolean, rng
   }
   const beats = [...next.beats.filter((b) => b.kind !== 'assignment'), { kind: 'assignment' as const, week: study.endWeek, label: program.kind === 'post' ? (program.city === 'residence' ? 'The bishop lets you go' : `The years at ${CITY_WORD[program.city]} end`) : `Home from ${CITY_WORD[program.city]}` }].sort((a, b) => a.week - b.week);
   next = { ...next, phase: program.kind === 'see' ? 'bishop' : 'study', study, parish: null, assignment: null, founding: null, project: null, projects: [], flags, beats, mode: { kind: 'clock' } };
+  // Lent to the Holy See: an office, its superiors, and the rank of an official. E1 §6.
+  if (program.city === 'curia') next = beginCuria(next, rng.derive(`curia:${next.clock.week}`));
   if (program.kind === 'see') {
     // The last act: a see of his own, held until the letter at seventy-five.
     const see = generateSee(next, rng.derive(`see:${next.clock.week}`));
@@ -109,6 +114,13 @@ export function endStudy(state: GameState, def: OfferDef, rng: Rng): GameState {
     // The letter at seventy-five: a bishop does not come home to a parish.
     return retire({ ...next, flags });
   }
+  // Home from the Curia, changed or not; a secretary's years end in a see. E1 §6.
+  if (study.city === 'curia') {
+    const home = homeFromCuria(next);
+    next = { ...home.state, letters: [...(home.state.letters ?? []), home.letter], letterQueue: [...(home.state.letterQueue ?? []), home.letter] };
+    Object.assign(flags, home.state.flags);
+    delete flags[`study:${study.city}`];
+  }
   next = { ...next, flags, study: null, phase: 'parochial_vicar', beats: next.beats.filter((b) => b.kind !== 'assignment') };
   // A friar comes home to the provincial, not to the board: the consultation decides where the degree is used. E3 §3.1.
   if (next.religious) {
@@ -126,10 +138,10 @@ export function endStudy(state: GameState, def: OfferDef, rng: Rng): GameState {
     // The board's own letter never reaches him: its lines are not his record, and the flagship's letter is the one he opens.
     return { ...home, career: next.career, assignment: seat, mode: { kind: 'assignment', assignment: seat } };
   }
-  if (!study.failed && studyProgram(study.program)?.kind === 'study' && home.assignment) {
+  if (!study.failed && (studyProgram(study.program)?.kind === 'study' || study.city === 'curia') && home.assignment) {
     const flagship = flagshipFor(home);
     const experienced = parishYears(home) >= CAREER.minYearsForPastor;
-    const fallback = flagship ? assignmentTo(home, flagship, experienced ? 'pastor' : 'parochial_vicar', ['A Roman degree is meant to be seen']) : home.assignment;
+    const fallback = flagship ? assignmentTo(home, flagship, experienced ? 'pastor' : 'parochial_vicar', [study.city === 'curia' ? 'Years in the Curia are meant to be seen' : 'A Roman degree is meant to be seen']) : home.assignment;
     return withChoice({ ...home, assignment: fallback, mode: { kind: 'clock' } }, rng.derive('choice'), 'degree', fallback);
   }
   return home;

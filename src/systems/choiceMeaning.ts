@@ -35,7 +35,7 @@ const SELECTOR: Record<string, string> = {
   '@bishop': 'the bishop', '@rector': 'the rector', '@pastor': 'the pastor', '@spiritual_director': 'your director', '@formation_advisor': 'your advisor',
   '@vocation_director': 'the vocation director', '@closest_classmate': 'your closest friend', '@random_classmate': 'a classmate', '@rival_classmate': 'your rival',
   '@mother': 'your mother', '@father': 'your father', '@sibling': 'your sibling', '@group_leader': 'the group\'s leader', '@vicar_general': 'the vicar general',
-  '@chancellor': 'the chancellor', '@nuncio': 'the nuncio', '@terna_subject': 'the man you were asked about', '@vicar_for_clergy': 'the vicar for clergy', '@brother_priest': 'a brother priest', '@mentor_priest': 'your mentor',
+  '@chancellor': 'the chancellor', '@nuncio': 'the nuncio', '@terna_subject': 'the man you were asked about', '@curia_prefect': 'the prefect', '@curia_secretary': 'the secretary', '@curia_colleague': 'your colleague', '@vicar_for_clergy': 'the vicar for clergy', '@brother_priest': 'a brother priest', '@mentor_priest': 'your mentor',
   '@home_pastor': 'your home pastor', '@secretary': 'the secretary', '@dre': 'the DRE', '@music_director': 'the music director', '@parishioner': 'a parishioner', '@bonded_parishioner': 'someone you know',
 };
 const STAT: Record<string, string> = { piety: 'piety', theology: 'theology', knowledge: 'learning', charisma: 'presence', administration: 'order' };
