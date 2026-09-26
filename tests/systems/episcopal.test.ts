@@ -23,9 +23,10 @@ function candidate(seed: string, extra: Partial<GameState> = {}): GameState {
     ...base,
     phase: 'pastor',
     assignment: { ...base.assignment!, role: 'pastor' },
-    character: { ...c, entryYear: 1990, background: { ...c.background, entryAge: 22 }, stats: { ...c.stats, administration: 60 }, reputation: { ...c.reputation, chancery: 72, rome: 40 } },
+    character: { ...c, entryYear: 1990, background: { ...c.background, entryAge: 22 }, stats: { ...c.stats, administration: 60 }, credentials: [...c.credentials, 'JCL'], reputation: { ...c.reputation, chancery: 72, rome: 40 } },
     npcs: { ...base.npcs, [bishopId]: { ...base.npcs[bishopId]!, relationship: 30 } },
-    flags: { ...base.flags, ordination_week: base.clock.week - 52 * 22, terna_named: true },
+    // E1 R1.3: the nuncio reads him well (a canon lawyer, a vicar general) and a terna has named him to a see.
+    flags: { ...base.flags, ordination_week: base.clock.week - 52 * 22, terna_named: true, vg_served: true, 'nuncio:named_see': 'gaylord' },
     ...extra,
   };
 }
@@ -42,10 +43,10 @@ describe('the episcopal tier', () => {
     const e = eventById('ep_questionnaire_about_you')!;
     expect(e).toBeDefined();
     expect(e.choices.every((c) => c.effects.some((x) => x.target === 'flag' && x.key === 'terna_named'))).toBe(true);
-    for (const id of ['ep_auxiliary_bishop', 'ep_diocesan_bishop']) {
-      const def = offerById(id)!;
-      expect(JSON.stringify(def.requires)).toContain('terna_named');
-    }
+    // The auxiliary needs a name sent and the nuncio's reading; a see comes only from a terna that named him (E1 §5).
+    expect(JSON.stringify(offerById('ep_auxiliary_bishop')!.requires)).toContain('terna_named');
+    expect(JSON.stringify(offerById('ep_auxiliary_bishop')!.requires)).toContain('"nuncio"');
+    expect(JSON.stringify(offerById('ep_diocesan_bishop')!.requires)).toContain('nuncio:named_see');
   });
 
   it('the auxiliary is a six-year posting with its own week', () => {
@@ -146,7 +147,10 @@ describe('a bishop of a different diocese', () => {
     expect(presetSees.length).toBe(10);
     expect(presetSees.every((s) => s.great)).toBe(true);
     expect(seeDefs.length).toBe(smallSees.length + 10);
-    const s = candidate('pool');
+    // The see a terna named him to is the see he gets (E1 §5); without one, Rome's pool.
+    expect(generateSee(candidate('pool'), createRng('named')).id).toBe('gaylord');
+    const named = candidate('pool');
+    const s: GameState = { ...named, flags: { ...named.flags, 'nuncio:named_see': false } };
     const home = s.world!.diocese.presetId;
     for (let i = 0; i < 60; i++) expect(generateSee(s, createRng(`p${i}`)).id).not.toBe(home);
     const great = Array.from({ length: 80 }, (_, i) => generateSee(s, createRng(`g${i}`))).filter((x) => presetSees.some((p) => p.id === x.id)).length;

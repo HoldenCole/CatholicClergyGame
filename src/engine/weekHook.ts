@@ -51,6 +51,7 @@ import { religiousWeek } from '@/systems/religious/week';
 import { religiousModeStep, religiousYear } from '@/systems/religious/year';
 import { renderText } from './text';
 import { closeCascade, dueCascade } from '@/systems/rome/documents';
+import { closeNuncioScene, dueNuncioScene } from '@/systems/rome/nuncio';
 import type { WeekHook } from './clock';
 
 export interface EventDeps {
@@ -260,6 +261,14 @@ function cascadeScene(state: GameState, rng: Rng, deps: EventDeps): GameState {
     if (any.length) event = rng.pick(any);
   }
   return event ? fireOrResolve(closed, event, rng, deps) : closed;
+}
+
+/** The nuncio's scene that is due: one whose conditions hold (they name the kind), or none; the scene is closed either way. E1 §5. */
+function nuncioScene(state: GameState, rng: Rng, deps: EventDeps): GameState {
+  const scenes = deps.pool.filter((e) => e.beat === 'nuncio' && isEligible(e, state) && evaluateAll(e.requires ?? [], state));
+  const closed = closeNuncioScene(state);
+  if (!scenes.length) return closed;
+  return fireOrResolve(closed, rng.pick(scenes), rng, deps);
 }
 
 /** A scene that hangs on one of this week's feasts, drawn ahead of the ordinary pool. Null when none fires. */
@@ -511,6 +520,11 @@ export function parishWeekHook(deps: EventDeps): WeekHook {
       }
       next = { ...next, flags: { ...next.flags, new_bishop_pending: false } };
       if (event) next = fireOrResolve(next, event, rng, deps);
+      if (next.mode.kind !== 'clock' || next.pending.length > 0) return next;
+    }
+    // The nunciature, when it reaches him: a questionnaire, a lunch, a name read in the paper. E1 §5.
+    if (dueNuncioScene(next)) {
+      next = nuncioScene(next, rng.derive(`nuncio:${next.clock.week}`), deps);
       if (next.mode.kind !== 'clock' || next.pending.length > 0) return next;
     }
     // What Rome sent, some weeks on: the parish asks him what he will do with it. E1 §4.2.

@@ -123,7 +123,8 @@ export function endStudy(state: GameState, def: OfferDef, rng: Rng): GameState {
   if (next.flags.ordained_bishop && home.assignment) {
     const flagship = flagshipFor(home);
     const seat = flagship ? assignmentTo(home, flagship, 'pastor', ['An auxiliary bishop is given a great parish']) : { ...home.assignment, role: 'pastor' as const };
-    return { ...home, assignment: seat, mode: { kind: 'clock' } };
+    // The board's own letter never reaches him: its lines are not his record, and the flagship's letter is the one he opens.
+    return { ...home, career: next.career, assignment: seat, mode: { kind: 'assignment', assignment: seat } };
   }
   if (!study.failed && studyProgram(study.program)?.kind === 'study' && home.assignment) {
     const flagship = flagshipFor(home);

@@ -5,11 +5,17 @@ import { officeFlagOf, releaseOfficeFlag } from '@/systems/offices';
 import { applyEffects } from './effects';
 import type { Rng } from './rng';
 import { resolveSelector, selectorsIn } from './selectors';
-import { askToGo } from './appointment';
+import { askToGo, pendingAppointment } from './appointment';
 import { beginStudy } from './study';
 import { hasInterest, INTERESTS } from '@/systems/interests';
 import { REQUEST, requestOf } from '@/systems/request';
 import { sedeVacante } from '@/systems/rome/papacy';
+
+/** How far Rome's regard moves the chancery's letters: 0.6 at −100, 1.4 at +100. Invented. */
+export function romeTrust(state: GameState): number {
+  const rome = Math.max(-100, Math.min(100, state.character?.reputation.rome ?? 0));
+  return 1 + rome / 250;
+}
 
 /** Tunables. Invented. */
 export const OFFERS = {
@@ -46,6 +52,8 @@ export function isOfferEligible(def: OfferDef, state: GameState): boolean {
   if (state.religious ? def.campaign !== 'religious' : def.campaign === 'religious') return false;
   if (def.yearGate && (!state.seminary || !def.yearGate.includes(state.seminary.year))) return false;
   if (state.offers.some((o) => o.offerId === def.id)) return false;
+  // A man who has said yes to one post waits for that letter before another asks for his years.
+  if (def.accept.commitment?.away && pendingAppointment(state)) return false;
   if (state.commitments.some((c) => c.offerId === def.id)) return false;
   if (def.once && state.offerHistory.some((h) => h.offerId === def.id && h.decision !== 'deferred')) return false;
   const last = [...state.offerHistory].reverse().find((h) => h.offerId === def.id);
@@ -61,6 +69,8 @@ export function offerWeight(def: OfferDef, state: GameState): number {
   if (def.cluster) w *= Math.pow(OFFERS.clusterMultiplier, state.clusters[def.cluster] ?? 0);
   if (state.flags[onFileFlag(def)]) w *= OFFERS.deferredWeight;
   if (def.interest && hasInterest(state, def.interest)) w *= INTERESTS.offerWeight;
+  // Rome in trust (E1 §4.4): a chancery post comes likelier to a man Rome thinks well of, and rarer to one it does not.
+  if (def.category === 'chancery' && def.cluster !== 'episcopal') w *= romeTrust(state);
   // A letter naming this posting is louder than an interest on file. DESIGN §7.6.
   const asked = requestOf(state)?.target;
   if (asked?.kind === 'post' && asked.offerId === def.id) w *= REQUEST.offerWeight;
@@ -199,6 +209,8 @@ export function acceptOffer(state: GameState, def: OfferDef, rng: Rng): AcceptRe
   if (c?.away) {
     // A friar's years away are the provincial's own letter: it moves him the week he says yes. E3.
     if (next.religious) return { state: beginStudy(next, def, failed, rng), failed };
+    // Rome's appointment is Rome's: the nuncio's letter moves him at once, and no diocesan letter can be put in front of it. E1 §5.
+    if (def.cluster === 'episcopal') return { state: beginStudy(next, def, failed, rng), failed };
     // Years away are not a background commitment, and not his to take: the bishop's letter moves him.
     return { state: askToGo(next, def, failed, rng), failed };
   }

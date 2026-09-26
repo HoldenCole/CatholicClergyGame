@@ -44,7 +44,9 @@ export function generateSee(state: GameState, rng: Rng): SeeState {
   const translation = !!current;
   const watched = (state.character?.reputation.rome ?? 0) >= SEE_POOL.watchedRome;
   const pool = seeDefs.filter((d) => d.id !== home && d.id !== current?.id);
-  const def = rng.weighted(pool, (d) => (d.great ? (translation ? SEE_POOL.greatTranslation : watched ? SEE_POOL.greatFirstWatched : SEE_POOL.greatFirst) : translation ? SEE_POOL.smallTranslation : SEE_POOL.small));
+  // The see the nuncio's terna named him to, when it was one (E1 §5); otherwise Rome's choice.
+  const named = !translation ? pool.find((d) => d.id === state.flags['nuncio:named_see']) : undefined;
+  const def = named ?? rng.weighted(pool, (d) => (d.great ? (translation ? SEE_POOL.greatTranslation : watched ? SEE_POOL.greatFirstWatched : SEE_POOL.greatFirst) : translation ? SEE_POOL.smallTranslation : SEE_POOL.small));
   const lean = def.leans ?? {};
   const roll = (k: keyof NonNullable<typeof def.leans>, spread: number) => Math.round((lean[k] ?? 0) * 25 + rng.gaussian() * spread);
   return {

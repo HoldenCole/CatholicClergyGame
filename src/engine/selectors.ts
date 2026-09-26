@@ -23,6 +23,7 @@ import type { Rng } from './rng';
  *   @diverged_classmate                           the man who left formation for an order
  *   @religious                                    a random religious of the diocese
  *   @principal                                    the sister who runs the parish school
+ *   @nuncio @terna_subject                       the nuncio of the day; the priest he has asked about (E1 R1.3)
  *   @dominican @franciscan @augustinian           a random man of that institute in the diocese (DESIGN §9.4b)
  *   @dominican_lector, @franciscan_kitchen, ...   the man of that institute with that role (religious:<role>)
  */
@@ -73,6 +74,13 @@ export function resolveSelector(state: GameState, key: string, rng?: Rng): Npc |
     case 'religious': {
       const all = Object.values(state.npcs).filter((n) => n.status === 'active' && n.role === 'religious' && !n.tags.includes('diverged') && inDiocese(state, n)).sort((a, b) => (a.id < b.id ? -1 : 1));
       return all.length ? (rng ? rng.pick(all) : all[0]!) : null;
+    }
+    // E1 R1.3: the priest the nuncio has asked him about.
+    case 'terna_subject': {
+      const ternas = state.rome?.ternas ?? [];
+      const id = state.rome?.nuncioScene?.ternaId;
+      const t = (id ? ternas.find((x) => x.id === id) : undefined) ?? [...ternas].reverse().find((x) => x.consultedAbout);
+      return t?.consultedAbout ? state.npcs[t.consultedAbout] ?? null : null;
     }
     case 'principal':
       return Object.values(state.npcs).find((n) => n.status === 'active' && n.tags.includes('religious:principal') && inDiocese(state, n)) ?? null;
