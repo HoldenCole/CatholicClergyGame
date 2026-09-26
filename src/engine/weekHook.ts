@@ -1,5 +1,5 @@
 import type { Beat, Condition, GameEvent, GameState, OfferDef, PendingEvent, Role } from '@/types';
-import { applyChoice, defaultChoice, drawEvents, fireEvent } from './events';
+import { applyChoice, defaultChoice, drawEvents, fireEvent, isEligible } from './events';
 import { evaluateAll } from './conditions';
 import { shouldInterrupt } from './interrupts';
 import { offersWeek } from './offers';
@@ -250,7 +250,10 @@ function lifeScene(state: GameState, rng: Rng, deps: EventDeps): GameState | nul
 function cascadeScene(state: GameState, rng: Rng, deps: EventDeps): GameState {
   const closed = closeCascade(state);
   const scenes = deps.pool.filter((e) => e.beat === 'cascade');
-  let [event] = drawEvents(scenes, closed, rng, 1);
+  // The thing that must be said this time first: a reversal reads his record back before any ordinary scene. E1 §4.3.
+  const eligible = scenes.filter((e) => (e.priority ?? 0) > 0 && isEligible(e, closed));
+  const top = Math.max(0, ...eligible.map((e) => e.priority ?? 0));
+  let [event] = top > 0 ? [rng.pick(eligible.filter((e) => e.priority === top))] : drawEvents(scenes.filter((e) => !e.priority), closed, rng, 1);
   if (!event) {
     // Suppression must not swallow a document: any cascade scene whose conditions hold will do.
     const any = scenes.filter((e) => evaluateAll(e.requires ?? [], closed));

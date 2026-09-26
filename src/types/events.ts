@@ -159,7 +159,13 @@ export type Condition =
    * it set, issued within so many weeks, how his bishop received it, and
    * whether he has answered it in his parish yet.
    */
-  | { type: 'document'; axis: string; value?: string | string[]; within?: number; norm?: string | string[]; implemented?: boolean | string | string[] }
+  | {
+      type: 'document'; axis: string; value?: string | string[]; within?: number; norm?: string | string[]; implemented?: boolean | string | string[];
+      /** R1.2: which way it moved the axis. */
+      toward?: 'tradition' | 'reform';
+      /** R1.2: it turns back an earlier document he answered (true), or one he answered this way. */
+      reverses?: boolean | string | string[];
+    }
   | { type: 'not'; inner: Condition }
   | { type: 'any'; inner: Condition[] }
   | { type: 'all'; inner: Condition[] };

@@ -1,0 +1,1288 @@
+{
+  "_notes": "E1 R1.2: reversal (docs/EXPANSION-E1-ROME.md §4.3). When Rome turns back a document he answered in his parish, these scenes read his record back to him ({then_doc}, {then_year}, {then_parish}, {then_said}, {then_cost}) and ask what he will do with the new one. Beat 'cascade' with priority: they come before any ordinary cascade scene.",
+  "events": [
+    {
+      "id": "rv_om_mass_returns",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "any",
+      "beat": "cascade",
+      "pressure": [
+        "loyalty_vs_honesty",
+        "friendship_vs_duty"
+      ],
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 2,
+      "suppressYears": 2,
+      "requires": [
+        {
+          "type": "document",
+          "axis": "older_mass",
+          "within": 30,
+          "implemented": false,
+          "reverses": [
+            "eager",
+            "faithful"
+          ],
+          "toward": "tradition"
+        }
+      ],
+      "title": "The Mass You Ended",
+      "body": "{doc:older_mass} undoes {then_doc:older_mass}, and the first person to tell you is the old sacristan, who cuts the article out of the diocesan paper and leaves it on your desk without a word. You do not need to look it up. In {then_year:older_mass}, at {then_parish:older_mass}, when the other document came, you answered it: \"{then_said:older_mass}.\" {then_cost:older_mass} Now Rome has gone the other way. {reading:older_mass} Somewhere in the diocese the families you sent away are reading the same article.",
+      "choices": [
+        {
+          "id": "find_them",
+          "label": "Find the families you sent away, and offer them the Mass back yourself",
+          "outcome": "You find the names in an old bulletin and write eleven letters by hand. Four families answer. One father comes to the rectory and says he never thought a priest would write, and that he forgave you years ago, and that he wanted you to know it before you asked.",
+          "volume": "semi_public",
+          "positionTopic": "tlm",
+          "positionValue": -35,
+          "effects": [
+            {
+              "target": "document",
+              "key": "older_mass",
+              "value": "eager"
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": 10
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "outspokenness",
+              "key": "",
+              "delta": -2
+            }
+          ]
+        },
+        {
+          "id": "law_then_law_now",
+          "label": "Say from the pulpit that you obeyed then and obey now, and mean both",
+          "outcome": "You preach on obedience: that you did what the Church asked then, and will do what it asks now, and that the priest who obeys only the laws he likes has not obeyed anything. Some hear it as integrity and some as a man who will say anything. You find you can live with both.",
+          "default": true,
+          "volume": "public",
+          "positionTopic": "authority",
+          "positionValue": -40,
+          "effects": [
+            {
+              "target": "document",
+              "key": "older_mass",
+              "value": "faithful"
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "quiet",
+          "label": "Put the new law into effect and say nothing about the old one",
+          "outcome": "You put the new law into effect by notice in the bulletin and do not mention the old one. The families who were sent away do not come back to {parish}, and nobody at {parish} now remembers why they left. You remember.",
+          "effects": [
+            {
+              "target": "document",
+              "key": "older_mass",
+              "value": "minimal"
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": 1
+            }
+          ]
+        }
+      ],
+      "priority": 5
+    },
+    {
+      "id": "rv_om_vindicated",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "any",
+      "beat": "cascade",
+      "pressure": [
+        "ambition_vs_integrity",
+        "friendship_vs_duty"
+      ],
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 2,
+      "suppressYears": 2,
+      "requires": [
+        {
+          "type": "document",
+          "axis": "older_mass",
+          "within": 30,
+          "implemented": false,
+          "reverses": [
+            "minimal",
+            "defiant"
+          ],
+          "toward": "tradition"
+        }
+      ],
+      "title": "Vindicated",
+      "body": "{doc:older_mass} undoes {then_doc:older_mass}, and your phone rings all afternoon. In {then_year:older_mass}, at {then_parish:older_mass}, when the other document came, you would not do what it asked: \"{then_said:older_mass}.\" {then_cost:older_mass} Now the priests who did as they were told are the ones who look foolish, and the traditional blogs are printing your name next to the word foresight. {reading:older_mass} A brother priest who ended his parish's Latin Mass on the day calls last of all, and does not say why.",
+      "choices": [
+        {
+          "id": "humble",
+          "label": "Thank God quietly, and call the priest who called you back",
+          "outcome": "You call him back and talk about nothing for an hour, the weather and the seminary and a classmate who died, and at the end he says he did what he thought obedience required. You tell him that you know. It is the best thing you do that year, and nobody sees it.",
+          "default": true,
+          "effects": [
+            {
+              "target": "document",
+              "key": "older_mass",
+              "value": "faithful"
+            },
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "said_so",
+          "label": "Say publicly that you were right",
+          "outcome": "You give an interview to a Catholic paper and say, in so many words, that you were right. It is true. It is also the sentence that is quoted back to you by every priest who obeyed, and by the chancery, for the rest of your life.",
+          "volume": "public",
+          "positionTopic": "tlm",
+          "positionValue": -60,
+          "effects": [
+            {
+              "target": "document",
+              "key": "older_mass",
+              "value": "eager"
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": 8
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": -3
+            },
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": -6
+            },
+            {
+              "target": "outspokenness",
+              "key": "",
+              "delta": 8
+            }
+          ]
+        },
+        {
+          "id": "get_on",
+          "label": "Put the new law into effect, and get on with the parish",
+          "outcome": "You put the new law into effect and do not mention the old one, which is a kind of courtesy. The parish's older Mass grows by a third in a year. People assume you planned it, and you let them.",
+          "effects": [
+            {
+              "target": "document",
+              "key": "older_mass",
+              "value": "minimal"
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": 3
+            }
+          ]
+        }
+      ],
+      "priority": 5
+    },
+    {
+      "id": "rv_om_taken_again",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "any",
+      "beat": "cascade",
+      "pressure": [
+        "loyalty_vs_honesty",
+        "friendship_vs_duty"
+      ],
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 2,
+      "suppressYears": 2,
+      "requires": [
+        {
+          "type": "document",
+          "axis": "older_mass",
+          "within": 30,
+          "implemented": false,
+          "reverses": [
+            "eager",
+            "faithful"
+          ],
+          "toward": "reform"
+        }
+      ],
+      "title": "Twice",
+      "body": "{doc:older_mass} undoes {then_doc:older_mass}. In {then_year:older_mass}, at {then_parish:older_mass}, when that document came, you answered it: \"{then_said:older_mass}.\" {then_cost:older_mass} The people you gave the older Mass to built their Sundays around it: the schola, the servers, the coffee afterwards, the babies baptised in it. {reading:older_mass} Now the Church asks you, the same priest, to take back what you gave, and they know it is you who will have to say it.",
+      "choices": [
+        {
+          "id": "yourself",
+          "label": "Tell them yourself, before the chancery does, and end it well",
+          "outcome": "You tell them at the Mass itself, after the last Gospel, that the Church has changed the law and that you will obey it, and that you are sorry, and that you meant it when you gave it and you mean this. Nobody walks out. The last Mass is sung in full. You do not trust your voice at the end.",
+          "volume": "public",
+          "positionTopic": "tlm",
+          "positionValue": 25,
+          "effects": [
+            {
+              "target": "document",
+              "key": "older_mass",
+              "value": "eager"
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": -8
+            },
+            {
+              "target": "decor",
+              "key": "church:mass_form",
+              "value": "mass_vernacular"
+            }
+          ]
+        },
+        {
+          "id": "faculties",
+          "label": "Write for faculties at once, and keep it while you can",
+          "outcome": "You write for faculties the same day, with the names of the people and the years of the Mass, and keep it while the chancery decides. It is the road the law leaves open. The families watch the mail as closely as you do.",
+          "default": true,
+          "volume": "semi_public",
+          "positionTopic": "tlm",
+          "positionValue": -20,
+          "effects": [
+            {
+              "target": "document",
+              "key": "older_mass",
+              "value": "faithful"
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "refuse",
+          "label": "Refuse to take it back: you gave your word",
+          "outcome": "You tell the chancery that you gave these people your word and a priest's word is not revocable by a change of pope. It is a sentence that will be in your file longer than you will be at {parish}.",
+          "volume": "public",
+          "positionTopic": "tlm",
+          "positionValue": -65,
+          "effects": [
+            {
+              "target": "document",
+              "key": "older_mass",
+              "value": "defiant"
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": -7
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": -8
+            },
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": -8
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": 12
+            },
+            {
+              "target": "outspokenness",
+              "key": "",
+              "delta": 8
+            }
+          ]
+        }
+      ],
+      "priority": 5
+    },
+    {
+      "id": "rv_om_refusal_remembered",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "any",
+      "beat": "cascade",
+      "pressure": [
+        "loyalty_vs_honesty",
+        "friendship_vs_duty"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 2,
+      "suppressYears": 2,
+      "requires": [
+        {
+          "type": "document",
+          "axis": "older_mass",
+          "within": 30,
+          "implemented": false,
+          "reverses": [
+            "minimal",
+            "defiant"
+          ],
+          "toward": "reform"
+        }
+      ],
+      "title": "You Saw It Coming",
+      "body": "{doc:older_mass} undoes {then_doc:older_mass}. In {then_year:older_mass}, at {then_parish:older_mass}, when the families asked you for the older Mass under the old law, you answered: \"{then_said:older_mass}.\" {then_cost:older_mass} {reading:older_mass} Now the priests who gave it are taking it back, and some of the families who were angry with you then are writing to say that at least you never made them a promise you could not keep. It is not the kind of thanks you ever wanted.",
+      "choices": [
+        {
+          "id": "gracious",
+          "label": "Write back to each of them, and say you are sorry for what they are losing",
+          "outcome": "You write back to each of them. You do not say you were right. You say you are sorry for what they are losing, and that the door of the rectory is open. Two of the families come to {parish}. One of the fathers becomes a friend.",
+          "default": true,
+          "effects": [
+            {
+              "target": "document",
+              "key": "older_mass",
+              "value": "faithful"
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "enforce",
+          "label": "Put the new law into effect firmly, as you would have then",
+          "outcome": "You put the law into effect without fuss, as you would have anyway. It is consistent. The people who noticed your consistency then notice it now, and they are not all the same people.",
+          "volume": "semi_public",
+          "positionTopic": "tlm",
+          "positionValue": 35,
+          "effects": [
+            {
+              "target": "document",
+              "key": "older_mass",
+              "value": "eager"
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "progressive_bloc",
+              "delta": 3
+            }
+          ]
+        }
+      ],
+      "priority": 5
+    },
+    {
+      "id": "rv_mi_again",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "any",
+      "beat": "cascade",
+      "pressure": [
+        "competence",
+        "loyalty_vs_honesty"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 2,
+      "suppressYears": 2,
+      "requires": [
+        {
+          "type": "document",
+          "axis": "missal",
+          "within": 30,
+          "implemented": false,
+          "reverses": [
+            "eager",
+            "faithful",
+            "minimal"
+          ]
+        }
+      ],
+      "title": "The Cards in the Pews, Again",
+      "body": "{doc:missal} undoes {then_doc:missal}, and somewhere in the sacristy there is a box of pew cards with the old responses that you were told to throw away and did not. In {then_year:missal}, at {then_parish:missal}, when the other Missal came, you answered: \"{then_said:missal}.\" {then_cost:missal} {reading:missal} The people who learned the words with you are older now. One of them asks you, with a straight face, whether they should keep both sets of cards.",
+      "choices": [
+        {
+          "id": "teach_again",
+          "label": "Teach it again, as carefully as the first time",
+          "outcome": "You do it all again: the homilies on the Mass, the night in the hall, the practice. It is easier the second time, because the people know how to learn and you know how to teach. Some of them tell you they understand the Mass better for having said it two ways.",
+          "volume": "public",
+          "positionTopic": "translation",
+          "positionValue": -10,
+          "effects": [
+            {
+              "target": "document",
+              "key": "missal",
+              "value": "eager"
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "cards",
+          "label": "Put the new cards in the pews, and let the old words go",
+          "outcome": "You put the new cards out and let the words settle as they settled before. The eight o'clock goes on saying what it always said, whichever that is. It is a parish that has survived three translations and will survive a fourth.",
+          "default": true,
+          "effects": [
+            {
+              "target": "document",
+              "key": "missal",
+              "value": "faithful"
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "laugh",
+          "label": "Make a joke of it from the altar, and let them laugh",
+          "outcome": "You say from the altar that the Church has changed its mind about the Mass again and that you hope God kept up. Everybody laughs. It is the kind of thing that endears a priest to a parish and ends up, in paraphrase, in a letter to the chancery.",
+          "volume": "semi_public",
+          "positionTopic": "authority",
+          "positionValue": 30,
+          "effects": [
+            {
+              "target": "document",
+              "key": "missal",
+              "value": "minimal"
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": -2
+            }
+          ]
+        }
+      ],
+      "priority": 5
+    },
+    {
+      "id": "rv_rc_closed",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "any",
+      "beat": "cascade",
+      "pressure": [
+        "loyalty_vs_honesty",
+        "friendship_vs_duty"
+      ],
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 2,
+      "suppressYears": 2,
+      "requires": [
+        {
+          "type": "document",
+          "axis": "remarried_communion",
+          "within": 30,
+          "implemented": false,
+          "reverses": [
+            "eager",
+            "faithful"
+          ],
+          "toward": "tradition"
+        }
+      ],
+      "title": "The Ones You Brought Forward",
+      "body": "{doc:remarried_communion} undoes {then_doc:remarried_communion}. In {then_year:remarried_communion}, at {then_parish:remarried_communion}, when the other document came, you answered it: \"{then_said:remarried_communion}.\" {then_cost:remarried_communion} There are people who came to communion by that road with you, after years in the pew, and who have been receiving since. {reading:remarried_communion} They have read the news. One of them waits by the sacristy door after the Saturday Mass, holding his hat, and asks you what he is supposed to do on Sunday.",
+      "choices": [
+        {
+          "id": "each",
+          "label": "Go to each of them yourself, and tell them the law, and stay with them",
+          "outcome": "You go to each of them, in their kitchens, and tell them the law has changed and what it now asks, and that you walked the road with them and are not leaving it. Most of them stay in the pew on Sunday. You say Mass looking at them, which is the hardest thing you have done at the altar.",
+          "default": true,
+          "volume": "private",
+          "positionTopic": "remarried_communion",
+          "positionValue": -10,
+          "effects": [
+            {
+              "target": "document",
+              "key": "remarried_communion",
+              "value": "faithful"
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "conscience",
+          "label": "Tell them a conscience formed in good faith is not undone by a letter",
+          "outcome": "You tell them what you told them then, that their discernment was real, and that you will not be the one to undo it. It is a promise you cannot keep for anyone but yourself, and the chancery, when it hears, tells you so.",
+          "volume": "private",
+          "positionTopic": "remarried_communion",
+          "positionValue": 60,
+          "effects": [
+            {
+              "target": "document",
+              "key": "remarried_communion",
+              "value": "defiant"
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": -6
+            },
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": -5
+            },
+            {
+              "target": "reputation",
+              "key": "progressive_bloc",
+              "delta": 5
+            },
+            {
+              "target": "outspokenness",
+              "key": "",
+              "delta": 4
+            }
+          ]
+        },
+        {
+          "id": "preach",
+          "label": "Preach the restored discipline plainly, for the whole parish",
+          "outcome": "You preach it plainly on Sunday, because a law that is whispered is a law that is resented. The man with the hat is in the front pew. He does not come forward, and afterwards he shakes your hand, and does not say anything at all.",
+          "volume": "public",
+          "positionTopic": "remarried_communion",
+          "positionValue": -40,
+          "effects": [
+            {
+              "target": "document",
+              "key": "remarried_communion",
+              "value": "eager"
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "progressive_bloc",
+              "delta": -5
+            }
+          ]
+        }
+      ],
+      "priority": 5
+    },
+    {
+      "id": "rv_rc_opened",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "any",
+      "beat": "cascade",
+      "pressure": [
+        "loyalty_vs_honesty",
+        "belief_vs_safety"
+      ],
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 2,
+      "suppressYears": 2,
+      "requires": [
+        {
+          "type": "document",
+          "axis": "remarried_communion",
+          "within": 30,
+          "implemented": false,
+          "reverses": [
+            "eager",
+            "faithful"
+          ],
+          "toward": "reform"
+        }
+      ],
+      "title": "The Ones You Kept in the Pew",
+      "body": "{doc:remarried_communion} undoes {then_doc:remarried_communion}. In {then_year:remarried_communion}, at {then_parish:remarried_communion}, you answered the other document: \"{then_said:remarried_communion}.\" {then_cost:remarried_communion} There were people who asked you for a road and were told there was none, or that it ran only through the tribunal. {reading:remarried_communion} Some of them are still in the pew on Sundays, not coming forward. You know exactly where they sit.",
+      "choices": [
+        {
+          "id": "go",
+          "label": "Go to them first, before they have to come to you",
+          "outcome": "You go to them first, one by one, and say that the Church has opened a road you told them was closed, and that you would walk it with them if they will let you. Some of them will. One of them says she waited eleven years for a priest to say that, and that she is glad it was you.",
+          "volume": "semi_public",
+          "positionTopic": "remarried_communion",
+          "positionValue": 40,
+          "effects": [
+            {
+              "target": "document",
+              "key": "remarried_communion",
+              "value": "eager"
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "progressive_bloc",
+              "delta": 4
+            }
+          ]
+        },
+        {
+          "id": "wait",
+          "label": "Announce the new norm, and wait for them to come",
+          "outcome": "You put the new norm in the bulletin and let it be known that you are available. Two of them come. The rest stay where they are, which may be because they did not read the bulletin, and may be because they remember what you said.",
+          "default": true,
+          "effects": [
+            {
+              "target": "document",
+              "key": "remarried_communion",
+              "value": "faithful"
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "slow",
+          "label": "Tell anyone who asks that you will go slowly, as you did before",
+          "outcome": "You tell those who ask that the Church has spoken but that you will go carefully, case by case, as you did before. It is consistent. It is also the same answer they were given the first time, and they hear it that way.",
+          "volume": "private",
+          "positionTopic": "remarried_communion",
+          "positionValue": -20,
+          "effects": [
+            {
+              "target": "document",
+              "key": "remarried_communion",
+              "value": "minimal"
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "progressive_bloc",
+              "delta": -3
+            }
+          ]
+        }
+      ],
+      "priority": 5
+    },
+    {
+      "id": "rv_bl_withdrawn",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "any",
+      "beat": "cascade",
+      "pressure": [
+        "loyalty_vs_honesty",
+        "friendship_vs_duty"
+      ],
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 2,
+      "suppressYears": 2,
+      "requires": [
+        {
+          "type": "document",
+          "axis": "blessings",
+          "within": 30,
+          "implemented": false,
+          "reverses": [
+            "faithful",
+            "eager",
+            "defiant"
+          ],
+          "toward": "tradition"
+        }
+      ],
+      "title": "What Was Blessed",
+      "body": "{doc:blessings} undoes {then_doc:blessings}. In {then_year:blessings}, at {then_parish:blessings}, when the other declaration came, you answered: \"{then_said:blessings}.\" {then_cost:blessings} {reading:blessings} The couple you blessed at the door still come to the Saturday evening Mass. They sit where they always sat. They have read the news, and when you come down the aisle at the end they look at you as though they are waiting to find out whether they are still welcome.",
+      "choices": [
+        {
+          "id": "welcome",
+          "label": "Stop at their pew on the way out and shake their hands, as you always do",
+          "outcome": "You stop at their pew, as you always do, and shake their hands, and ask after the one who was ill. It is not a blessing and it is not nothing. The next week they are in the same pew.",
+          "default": true,
+          "volume": "private",
+          "positionTopic": "blessings",
+          "positionValue": 10,
+          "effects": [
+            {
+              "target": "document",
+              "key": "blessings",
+              "value": "faithful"
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "explain",
+          "label": "Write to them and explain what has changed, and what has not",
+          "outcome": "You write them a letter: what the Church now asks of you, and that you will not bless them as a couple again, and that the blessing you gave was given in good faith and is not yours to take back. They write back one line: they understand. You are not sure that they do, or that you do.",
+          "volume": "semi_public",
+          "positionTopic": "blessings",
+          "positionValue": -20,
+          "effects": [
+            {
+              "target": "document",
+              "key": "blessings",
+              "value": "eager"
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "again",
+          "label": "Bless them again, at the door, as though nothing had changed",
+          "outcome": "You bless them again, at the door, a sentence and a cross, as though nothing had changed. For them nothing has. For the parishioner behind them in the line, who writes to the chancery that week, a great deal has.",
+          "volume": "semi_public",
+          "positionTopic": "blessings",
+          "positionValue": 60,
+          "effects": [
+            {
+              "target": "document",
+              "key": "blessings",
+              "value": "defiant"
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": -6
+            },
+            {
+              "target": "reputation",
+              "key": "progressive_bloc",
+              "delta": 6
+            },
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": -4
+            },
+            {
+              "target": "outspokenness",
+              "key": "",
+              "delta": 4
+            }
+          ]
+        }
+      ],
+      "priority": 5
+    },
+    {
+      "id": "rv_bl_opened",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "any",
+      "beat": "cascade",
+      "pressure": [
+        "loyalty_vs_honesty",
+        "belief_vs_safety"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 2,
+      "suppressYears": 2,
+      "requires": [
+        {
+          "type": "document",
+          "axis": "blessings",
+          "within": 30,
+          "implemented": false,
+          "reverses": [
+            "eager",
+            "faithful",
+            "minimal",
+            "defiant"
+          ],
+          "toward": "reform"
+        }
+      ],
+      "title": "The Door You Kept Shut",
+      "body": "{doc:blessings} undoes {then_doc:blessings}. In {then_year:blessings}, at {then_parish:blessings}, you answered the other one: \"{then_said:blessings}.\" {then_cost:blessings} {reading:blessings} There was a couple who asked, once, and did not ask again. You heard later that they found a parish across town with a priest who would, and that one of them had sung in your choir. The news this week is that the priest across town has been made a monsignor.",
+      "choices": [
+        {
+          "id": "write",
+          "label": "Write to the couple you turned away, and offer what you would not then",
+          "outcome": "You find the address and write: the Church has changed its guidance, you would give them the blessing now if they wanted it, and you are sorry it took Rome to tell you. They do not come. They write back, kindly, that they have a parish now. You keep the letter.",
+          "volume": "private",
+          "positionTopic": "blessings",
+          "positionValue": 35,
+          "effects": [
+            {
+              "target": "document",
+              "key": "blessings",
+              "value": "eager"
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "progressive_bloc",
+              "delta": 4
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "give",
+          "label": "Give such blessings from now on, when asked, and say nothing about before",
+          "outcome": "You give the blessing, from now on, when you are asked, briefly and at the door, as the document allows. Two couples ask in the first year. You say nothing about before, and nobody asks you to.",
+          "default": true,
+          "effects": [
+            {
+              "target": "document",
+              "key": "blessings",
+              "value": "faithful"
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "progressive_bloc",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "decline",
+          "label": "Keep declining: a priest is allowed, not obliged",
+          "outcome": "You keep declining, because the document allows you to and does not oblige you, and say so when asked. It is within the law. It is also, the parish notices, the same answer as before.",
+          "volume": "private",
+          "positionTopic": "blessings",
+          "positionValue": -30,
+          "effects": [
+            {
+              "target": "document",
+              "key": "blessings",
+              "value": "minimal"
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "progressive_bloc",
+              "delta": -3
+            }
+          ]
+        }
+      ],
+      "priority": 5
+    },
+    {
+      "id": "rv_lm_turned",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "any",
+      "beat": "cascade",
+      "pressure": [
+        "loyalty_vs_honesty",
+        "friendship_vs_duty"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 2,
+      "suppressYears": 2,
+      "requires": [
+        {
+          "type": "document",
+          "axis": "lay_ministries",
+          "within": 30,
+          "implemented": false,
+          "reverses": [
+            "eager",
+            "faithful"
+          ]
+        }
+      ],
+      "title": "The Register",
+      "body": "{doc:lay_ministries} undoes {then_doc:lay_ministries}. In {then_year:lay_ministries}, at {then_parish:lay_ministries}, when the other one came, you answered: \"{then_said:lay_ministries}.\" {then_cost:lay_ministries} {reading:lay_ministries} The parish register has the entries in your own hand, with the dates. The people whose names are in it are still reading on Sundays and serving at the altar, and they have all heard, and not one of them has said anything to you, which is how you know they are waiting for you to say something first.",
+      "choices": [
+        {
+          "id": "say_first",
+          "label": "Say something first: gather them after Mass and tell them where they stand",
+          "outcome": "You gather them in the sacristy after the ten-thirty and tell them what the law now is, and what it means for each of them, and that what was done in the register was done rightly under the law of its day. Nobody is happy. Everybody is told, which is what they wanted.",
+          "default": true,
+          "effects": [
+            {
+              "target": "document",
+              "key": "lay_ministries",
+              "value": "faithful"
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 3
+            }
+          ]
+        },
+        {
+          "id": "apply",
+          "label": "Apply the new law exactly, and change the rota",
+          "outcome": "You apply the new law exactly: the rota changes, the register gets a note, and the bulletin prints the new norm. It is correct and takes one evening. It takes some of the people on the rota a good deal longer.",
+          "volume": "semi_public",
+          "positionTopic": "women_roles",
+          "positionValue": -20,
+          "effects": [
+            {
+              "target": "document",
+              "key": "lay_ministries",
+              "value": "eager"
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": -2
+            }
+          ]
+        },
+        {
+          "id": "leave",
+          "label": "Leave the rota as it is, and let the chancery ask",
+          "outcome": "You leave the rota as it is and let the new law settle over it like dust. Nobody asks for two years. When someone does, you say you had not got round to it, which is true in the way such things are.",
+          "effects": [
+            {
+              "target": "document",
+              "key": "lay_ministries",
+              "value": "minimal"
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": -2
+            }
+          ]
+        }
+      ],
+      "priority": 5
+    },
+    {
+      "id": "rv_sy_turned",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "any",
+      "beat": "cascade",
+      "pressure": [
+        "loyalty_vs_honesty",
+        "friendship_vs_duty"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 2,
+      "suppressYears": 2,
+      "requires": [
+        {
+          "type": "document",
+          "axis": "synodality",
+          "within": 30,
+          "implemented": false,
+          "reverses": [
+            "eager",
+            "faithful"
+          ]
+        }
+      ],
+      "title": "What the Parish Said",
+      "body": "{doc:synodality} undoes {then_doc:synodality}. In {then_year:synodality}, at {then_parish:synodality}, when the other one came, you answered: \"{then_said:synodality}.\" {then_cost:synodality} {reading:synodality} The people who came to the sessions then, or who were told there would be none, are the same people who fill the hall for the fish fry. One of them, a retired union steward, asks you over the tartar sauce whether anybody in Rome ever read what the parish said.",
+      "choices": [
+        {
+          "id": "honest",
+          "label": "Tell him the truth: some of it, somewhere, maybe",
+          "outcome": "You tell him the truth, that somebody read some of it somewhere, and that you read all of it, and that you still have the notes. He laughs, and says that is more than the union ever managed. He is at the next parish council meeting, which he has never attended before.",
+          "default": true,
+          "effects": [
+            {
+              "target": "document",
+              "key": "synodality",
+              "value": "faithful"
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "new_law",
+          "label": "Tell him the Church has decided how it will listen now, and explain it",
+          "outcome": "You explain the new law, carefully, over the fish: what Rome now asks, what the council is for, what a pastor decides. He listens, and says it sounds like the old way with new words, and you say that is often what the Church is.",
+          "volume": "semi_public",
+          "positionTopic": "synodality",
+          "positionValue": -20,
+          "effects": [
+            {
+              "target": "document",
+              "key": "synodality",
+              "value": "eager"
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "keep",
+          "label": "Tell him the parish will keep listening whatever Rome says",
+          "outcome": "You tell him {parish} will keep listening, whatever Rome says this year. He likes that very much. So does the bulletin, when you put it there, and so, less, does the chancery.",
+          "volume": "public",
+          "positionTopic": "synodality",
+          "positionValue": 40,
+          "effects": [
+            {
+              "target": "document",
+              "key": "synodality",
+              "value": "defiant"
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": -4
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "progressive_bloc",
+              "delta": 3
+            },
+            {
+              "target": "outspokenness",
+              "key": "",
+              "delta": 3
+            }
+          ]
+        }
+      ],
+      "priority": 5
+    }
+  ]
+}

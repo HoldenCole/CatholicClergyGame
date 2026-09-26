@@ -258,6 +258,8 @@ function checkCondition(c: Condition, where: string, problems: Problem[]): void 
       if (c.norm !== undefined && !asList(c.norm).every((v) => NORMS.includes(v as string))) problems.push(`${where}: bad document norm`);
       if (c.implemented !== undefined && typeof c.implemented !== 'boolean' && !asList(c.implemented).every((v) => IMPLEMENTATIONS.includes(v as string))) problems.push(`${where}: bad document implemented`);
       if (c.within !== undefined && (typeof c.within !== 'number' || c.within <= 0)) problems.push(`${where}: bad document within`);
+      if (c.toward !== undefined && !['tradition', 'reform'].includes(c.toward)) problems.push(`${where}: bad document toward`);
+      if (c.reverses !== undefined && typeof c.reverses !== 'boolean' && !asList(c.reverses).every((v) => IMPLEMENTATIONS.includes(v as string))) problems.push(`${where}: bad document reverses`);
       break;
     case 'not':
       checkCondition(c.inner, where, problems);
@@ -320,10 +322,10 @@ function checkEffect(e: Effect, where: string, problems: Problem[]): void {
   if (e.target === 'permission' && (!LITURGICAL_TOPICS.includes(e.key) || !['granted', 'denied'].includes(String(e.value)))) problems.push(`${where}: bad permission effect`);
 }
 
-/** E1 R1.1: {pope}, {doc:<axis>}, {doc_kind:<axis>}, {reading:<axis>}. */
+/** E1 R1.1: {pope}, {doc:<axis>}, {doc_kind:<axis>}, {reading:<axis>}; R1.2: {then_doc|then_year|then_parish|then_said|then_cost:<axis>}. */
 function isRomeToken(token: string): boolean {
   if (token === 'pope') return true;
-  const m = /^(doc|doc_kind|reading):([a-z_]+)$/.exec(token);
+  const m = /^(doc|doc_kind|reading|then_doc|then_year|then_parish|then_said|then_cost):([a-z_]+)$/.exec(token);
   return !!m && AXES.has(m[2]!);
 }
 
@@ -363,6 +365,11 @@ function checkEvent(ev: GameEvent, file: string, problems: Problem[], ids: Set<s
     if (!token.startsWith('@') && !['name', 'first_name', 'surname', 'diocese', 'parish', 'seminary', 'school', 'city', 'residence', 'appointment', 'appointment_residence', 'appointment_from', 'town'].includes(token) && !(token.startsWith('town:') && TOWN_PLACE_KINDS.includes(token.slice(5) as never)) && !isRomeToken(token)) {
       problems.push(`${where}: unknown token {${token}}`);
     }
+  }
+  // R1.2: a scene that reads the record back must be one that only fires on a reversal of that axis.
+  for (const token of tokensIn(ev.title + ' ' + ev.body + ' ' + (ev.choices ?? []).map((c) => `${c.label} ${c.outcome ?? ''}`).join(' '))) {
+    const m = /^then_[a-z]+:([a-z_]+)$/.exec(token);
+    if (m && !(ev.requires ?? []).some((c) => c.type === 'document' && c.axis === m[1] && c.reverses !== undefined && c.reverses !== false)) problems.push(`${where}: {${token}} needs a document condition with reverses on ${m[1]}`);
   }
   // A religious scene that speaks of the prior or the provincial as another man must not fire while the player is that man.
   if (ev.campaign === 'religious' && !(Array.isArray(ev.phase) && ev.phase.length === 1 && ev.phase[0] === 'seminary')) {
