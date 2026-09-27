@@ -2,6 +2,8 @@ import type { GameState, OfferDef } from '@/types';
 import type { Rng } from './rng';
 import { studyProgram } from '@/content/study';
 import { beginStudy } from './study';
+import { dateOf, termWeek } from './time';
+import { formatDate } from './calendar';
 
 /**
  * A post that moves a man is the bishop's to give. Saying yes to the one who
@@ -43,12 +45,23 @@ function clearPending(state: GameState): GameState {
 export function askToGo(state: GameState, def: OfferDef, failed: boolean, rng: Rng): GameState {
   const program = studyProgram(def.accept.commitment?.away ?? '');
   if (!program) throw new Error(`offer ${def.id} does not name a post`);
-  const week = state.clock.week + rng.int(APPOINTMENT.waitWeeks[0], APPOINTMENT.waitWeeks[1]);
+  const asked = state.clock.week + rng.int(APPOINTMENT.waitWeeks[0], APPOINTMENT.waitWeeks[1]);
+  // A school with a year of its own (the Academy's opens in October) takes a man at its start, not the week he says yes.
+  const week = program.term ? termWeek(state.clock, program.term, asked) : asked;
+  const text = program.term
+    ? `Said yes to ${program.label.toLowerCase()}. Its year opens on ${formatDate(dateOf(state.clock, week))}; the letter will move you then.`
+    : `Said yes to ${program.label.toLowerCase()}. The bishop's letter will decide it.`;
+  const next = scheduleAppointment(state, def, week, failed);
+  return { ...next, career: [...next.career, { week: state.clock.week, kind: 'offer', text }] };
+}
+
+/** Put the letter that moves him on the calendar: nothing moves until its week. */
+export function scheduleAppointment(state: GameState, def: OfferDef, week: number, failed = false): GameState {
   const parish = state.world?.parishes.find((p) => p.id === state.assignment?.parishId);
   const flags: GameState['flags'] = { ...state.flags, [APPOINTMENT_FLAGS.offer]: def.id, [APPOINTMENT_FLAGS.week]: week, [APPOINTMENT_FLAGS.failed]: failed };
   if (parish) flags[APPOINTMENT_FLAGS.from] = parish.name;
   const beats = [...state.beats.filter((b) => !(b.kind === 'assignment' && b.label === APPOINTMENT_BEAT)), { kind: 'assignment' as const, week, label: APPOINTMENT_BEAT }].sort((a, b) => a.week - b.week);
-  return { ...state, flags, beats, career: [...state.career, { week: state.clock.week, kind: 'offer', text: `Said yes to ${program.label.toLowerCase()}. The bishop's letter will decide it.` }] };
+  return { ...state, flags, beats };
 }
 
 /** One when the bishop himself asked, or Rome did; otherwise what the diocese can spare and how he thinks of you. */

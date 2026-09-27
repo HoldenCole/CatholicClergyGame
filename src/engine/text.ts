@@ -31,6 +31,11 @@ export function textExtras(state: GameState): Record<string, string> {
   }
   const from = state.flags[APPOINTMENT_FLAGS.from];
   if (typeof from === 'string') out.appointment_from = from;
+  else if (pending && state.assignment) {
+    // A letter scheduled before he had a parish (home from Rome to wait for the Academy's October): the one he has now.
+    const parish = state.world?.parishes.find((p) => p.id === state.assignment!.parishId);
+    if (parish) out.appointment_from = parish.name;
+  }
   if (state.world && state.assignment) {
     const parish = state.world.parishes.find((p) => p.id === state.assignment!.parishId);
     if (parish) out.parish = parish.name;

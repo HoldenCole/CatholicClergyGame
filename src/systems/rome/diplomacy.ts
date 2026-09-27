@@ -19,6 +19,8 @@ import { reigning, sedeVacante } from './papacy';
 export const DIPLOMACY = {
   /** The Academy's missionary year begins after two years of study (since 2020; flagged). */
   missionAfter: 104,
+  /** A man recruited at the Gregorian whose degree ends this near the Academy's October goes straight across; earlier, he goes home to wait. Invented. */
+  termEarly: 4,
   /** Weeks in a country before the Secretariat moves him; a nuncio stays longer. */
   rotate: [150, 190] as [number, number],
   rotateNuncio: [200, 300] as [number, number],

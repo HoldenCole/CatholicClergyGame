@@ -28,6 +28,15 @@ export function seasonOf(clock: Clock, week = clock.week): Season {
   return seasonOfWeek(sundayOf(clock, week));
 }
 
+/** The first week on or after `fromWeek` whose Sunday opens a year that begins on `term` (the Sunday on or after that date). */
+export function termWeek(clock: Clock, term: { month: number; day: number }, fromWeek: number): number {
+  const from = sundayOf(clock, fromWeek);
+  for (let year = fromDayNumber(from).year; ; year++) {
+    const day = nextSundayOnOrAfter(toDayNumber({ year, month: term.month, day: term.day }));
+    if (day >= from) return (day - clock.startDay) / 7;
+  }
+}
+
 /** Day number of the Sunday that opens game year `k` (1-based). */
 export function yearStartDay(clock: Clock, k: number): number {
   if (k <= 1) return clock.startDay;

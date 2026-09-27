@@ -18,6 +18,8 @@ export interface StudyProgramDef {
   residence: string;
   /** A degree, a post held away from any parish, or a see of his own: the last act. */
   kind: 'study' | 'post' | 'see' | 'pope';
+  /** An academic year that opens on this date (the Sunday on or after it): a man enters on that week, and the letter waits for it. */
+  term?: { month: number; day: number };
   /** Free hours a week after lectures, the chapel, and the house rule. */
   hours: number;
   /** The class line for the digest. */

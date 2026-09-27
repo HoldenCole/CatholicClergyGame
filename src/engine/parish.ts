@@ -11,6 +11,7 @@ import { takeSnapshot } from '@/systems/trajectory';
 import { arcsOnMove } from '@/systems/arcs';
 import { seasonOf } from './time';
 import { fromDayNumber } from './calendar';
+import { APPOINTMENT_BEAT } from './appointment';
 import ambient from '@/content/parish/ambient.json';
 
 /** Tunables. DESIGN 2.4: an arc is 20–30 played weeks over 2–8 years. */
@@ -100,7 +101,8 @@ export function startAssignment(state: GameState, rng: Rng): GameState {
     snapshots: [],
   };
   const beats: Beat[] = [
-    ...state.beats.filter((b) => b.kind !== 'assignment'),
+    // A letter already on the calendar (the Academy's, waiting for its October) stays there.
+    ...state.beats.filter((b) => b.kind !== 'assignment' || b.label === APPOINTMENT_BEAT),
     { kind: 'assignment' as const, week: arcEndWeek, label: 'The bishop is thinking about your next assignment' },
   ].sort((a, b) => a.week - b.week);
   const flags = { ...state.flags };
