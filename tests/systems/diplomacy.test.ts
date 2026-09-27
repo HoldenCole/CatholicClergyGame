@@ -4,7 +4,8 @@ import { nunciatures } from '@/content/rome';
 import { createRng } from '@/engine/rng';
 import { isOfferEligible } from '@/engine/offers';
 import { beginStudy, endStudy } from '@/engine/study';
-import { evaluateCondition } from '@/engine/conditions';
+import { evaluateAll, evaluateCondition } from '@/engine/conditions';
+import { eventById } from '@/content';
 import { renderText } from '@/engine/text';
 import { resolveSelector } from '@/engine/selectors';
 import { sundayOf } from '@/engine/time';
@@ -180,6 +181,20 @@ describe('the Academy from Rome (E1 §11)', () => {
     const home = endStudy({ ...s, study: { ...s.study!, failed: true }, clock: { ...s.clock, week: s.study!.endWeek } }, offerById('pv_rome_study')!, createRng('fail'));
     expect(home.study).toBeNull();
     expect(home.rome?.diplomacy).toBeUndefined();
+    expect(home.career.some((e) => /kind letter/.test(e.text))).toBe(true);
+  });
+
+  it('seats the first dinner in his first weeks, whenever in the year he comes, and the French wall months later', () => {
+    const s = atAcademy('dip-weeks');
+    const at = (n: number): GameState => ({ ...s, clock: { ...s.clock, week: s.study!.startWeek + n } });
+    const dinner = eventById('dp_first_dinner')!;
+    const french = eventById('dp_language_wall')!;
+    expect(evaluateCondition({ type: 'weeks_away', op: '<=', value: 8 }, at(3))).toBe(true);
+    expect(evaluateCondition({ type: 'weeks_away', op: '<=', value: 8 }, young('dip-home'))).toBe(false);
+    expect(evaluateAll(dinner.requires ?? [], at(2))).toBe(true);
+    expect(evaluateAll(dinner.requires ?? [], at(20))).toBe(false);
+    expect(evaluateAll(french.requires ?? [], at(4))).toBe(false);
+    expect(evaluateAll(french.requires ?? [], at(20))).toBe(true);
   });
 });
 

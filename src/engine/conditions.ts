@@ -90,6 +90,8 @@ export function evaluateCondition(
     }
     case 'weeks_served':
       return !!state.parish && compare(cond.op, state.parish.weeksServed, cond.value);
+    case 'weeks_away':
+      return !!state.study && compare(cond.op, state.clock.week - state.study.startWeek, cond.value);
     case 'age': {
       const c = state.character;
       if (!c) return false;
