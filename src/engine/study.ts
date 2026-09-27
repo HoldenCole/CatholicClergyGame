@@ -163,7 +163,9 @@ export function endStudy(state: GameState, def: OfferDef, rng: Rng): GameState {
     const flagship = flagshipFor(home);
     const experienced = parishYears(home) >= CAREER.minYearsForPastor;
     const fallback = flagship ? assignmentTo(home, flagship, experienced ? 'pastor' : 'parochial_vicar', [study.city === 'curia' ? 'Years in the Curia are meant to be seen' : service ? 'Years in the Holy See\'s service are meant to be seen' : 'A Roman degree is meant to be seen']) : home.assignment;
-    return withChoice({ ...home, assignment: fallback, mode: { kind: 'clock' } }, rng.derive('choice'), 'degree', fallback);
+    // The choice's words say where he is coming home from: a degree, the Curia, or the service.
+    const from = study.city === 'curia' ? 'curia' : service ? 'service' : 'degree';
+    return withChoice({ ...home, assignment: fallback, flags: { ...home.flags, home_from: from }, mode: { kind: 'clock' } }, rng.derive('choice'), 'degree', fallback);
   }
   return home;
 }

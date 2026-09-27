@@ -23,7 +23,8 @@ export function pontificateLine(state: GameState): string | null {
   if (!p) return null;
   const r = state.study?.record ?? {};
   const place = state.study?.place ?? {};
-  const years = Math.max(1, Math.round((state.clock.week - p.electedWeek) / 52));
+  const weeks = state.clock.week - p.electedWeek;
+  const years = Math.round(weeks / 52);
   const parts = [
     `${p.written.length} document${p.written.length === 1 ? '' : 's'}`,
     `${p.journeys.length} journey${p.journeys.length === 1 ? '' : 's'}`,
@@ -31,7 +32,7 @@ export function pontificateLine(state: GameState): string | null {
     `${r.bishops ?? 0} bishops named`,
     ...(r.saints ? [`${r.saints} saint${r.saints === 1 ? '' : 's'} canonized`] : []),
   ];
-  return `As ${p.name} you reigned ${years} year${years === 1 ? '' : 's'}: ${parts.join(', ')}. At the end the Church was ${dialWord('church', place.church ?? 0)}, the Curia ${dialWord('curia', place.curia ?? 0)}, the world ${dialWord('world', place.world ?? 0)}, and the priest in you ${dialWord('soul', place.soul ?? 0)}.`;
+  return `As ${p.name} you reigned ${weeks < 52 ? 'less than a year' : `${years} year${years === 1 ? '' : 's'}`}: ${parts.join(', ')}. At the end the Church was ${dialWord('church', place.church ?? 0)}, the Curia ${dialWord('curia', place.curia ?? 0)}, the world ${dialWord('world', place.world ?? 0)}, and the priest in you ${dialWord('soul', place.soul ?? 0)}.`;
 }
 
 /** The conclave after him, read against the College he made. */

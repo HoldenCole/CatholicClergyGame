@@ -38,6 +38,8 @@ export function studyActivitiesFor(state: GameState): StudyActivityAvailability[
   const city = state.study?.city;
   return studyActivities
     .filter((a) => !a.city || (Array.isArray(a.city) ? a.city.includes(city!) : a.city === city))
+    // A lesson in something he already has is not an option at all: hide it rather than grey it.
+    .filter((a) => !(a.requires ?? []).some((c) => c.type === 'not' && c.inner.type === 'credential' && (state.character?.credentials ?? []).includes(c.inner.key)))
     .map((def) => {
       if (!def.requires || evaluateAll(def.requires, state)) return { def, available: true, why: null };
       const why = def.requires.map((c) => describeUnmet(c, state)).find((w): w is string => !!w) ?? 'not yet';

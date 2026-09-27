@@ -64,7 +64,7 @@ export default function EndedScreen() {
                 <li key={i} className="flex flex-col gap-0.5 sm:flex-row sm:items-baseline sm:gap-3">
                   <span className="ink-faint w-20 shrink-0 text-xs">{t.years}</span>
                   <span className="min-w-0 flex-1">
-                    {t.label} of {t.place}{t.verdict ? `, ${t.verdict.toLowerCase()} when you left` : ''}{t.left && t.left !== 'still there' ? `; ${t.left}` : ''}.
+                    {t.label}{/ (of|in|at) /.test(t.label) ? ', ' : ' of '}{t.place}{t.verdict ? `, ${t.verdict.toLowerCase()} when you left` : ''}{t.left && t.left !== 'still there' ? `; ${t.left}` : ''}.
                     {t.rows && t.rows.some((r) => r.sign !== 0) && <span className="ink-faint ml-1 text-xs">{t.rows.filter((r) => r.sign !== 0).map((r) => `${r.label.toLowerCase()} ${r.then} to ${r.now}`).join('; ')}.</span>}
                   </span>
                 </li>
