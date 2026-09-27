@@ -177,8 +177,12 @@ export function bishopLetter(state: GameState, successor: Npc, verdict: string, 
   return { sort: 'bishop', title: `A new bishop: ${name}`, body, rows, week: state.clock.week };
 }
 
-/** Roll whether the see changes hands this year, and if so install the successor and revalue. */
-export function successionYear(state: GameState, rng: Rng): SuccessionResult {
+/**
+ * Roll whether the see changes hands this year, and if so install the successor and revalue.
+ * `afar`: the man is a bishop elsewhere, or pope (E1 §9 E): the see changes hands all the same,
+ * but the new bishop is not his, so nothing of his is reread and no letter is his turn.
+ */
+export function successionYear(state: GameState, rng: Rng, opts: { afar?: boolean } = {}): SuccessionResult {
   const world = state.world;
   if (!world) return { state, newBishop: null, lines: [] };
   // Sede vacante: no bishop is named until there is a pope to name him (E1 §9 B).
@@ -227,11 +231,10 @@ export function successionYear(state: GameState, rng: Rng): SuccessionResult {
     },
   };
   const withNew: GameState = { ...state, npcs, world: { ...world, diocese, bishopHistory: [...world.bishopHistory, seeded.npc.id] } };
+  const news = `${current.title} ${current.name.last} has ${why === 'promoted' ? 'been named to a larger see' : why}. Rome has named ${seeded.npc.title} ${seeded.npc.name.first} ${seeded.npc.name.last} to ${world.diocese.visible.see}.`;
+  if (opts.afar) return { state: { ...withNew, flags: { ...withNew.flags, [`succession:${year}`]: true } }, newBishop: seeded.npc, lines: [news] };
   const { state: revalued, verdict, reread } = revalue(withNew, seeded.npc, { before: world.diocese.hidden.bishop.liturgy, after: seeded.profile.liturgy });
   const letter = bishopLetter(revalued, seeded.npc, verdict, reread);
-  const lines = [
-    `${current.title} ${current.name.last} has ${why === 'promoted' ? 'been named to a larger see' : why}. Rome has named ${seeded.npc.title} ${seeded.npc.name.first} ${seeded.npc.name.last} to ${world.diocese.visible.see}.`,
-    verdict,
-  ];
+  const lines = [news, verdict];
   return { state: { ...revalued, flags: { ...revalued.flags, successions: Number(revalued.flags.successions ?? 0) + 1, [`succession:${year}`]: true } }, newBishop: seeded.npc, lines, letter };
 }
