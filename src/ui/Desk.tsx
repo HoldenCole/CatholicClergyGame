@@ -17,6 +17,7 @@ import WorkPanel from './parish/WorkPanel';
 import SideWorkPanel from './parish/SideWorkPanel';
 import SeePanel from './study/SeePanel';
 import PlacePanel from './study/PlacePanel';
+import PopePanel from './study/PopePanel';
 import ProjectsPanel from './parish/ProjectsPanel';
 import OffersPanel from './seminary/OffersPanel';
 import FormationPanel from './seminary/FormationPanel';
@@ -44,6 +45,7 @@ const LABEL: Record<Sheet, string> = {
   map: 'Map',
   deanery: 'Deanery',
   see: 'The see',
+  holy_see: 'The Holy See',
   place: 'The work',
   people: 'People',
   jobs: 'Jobs',
@@ -69,7 +71,7 @@ export default function Desk() {
   const inParish = !!game.parish;
   const away = !!game.study;
   const friar = !!game.religious && !!game.flags.ordained && !inParish && !away;
-  const tabs: Sheet[] = friar ? ['week', 'jobs', 'profile', 'clubs', 'letters', 'record', 'settings'] : inParish ? ['week', 'parish', 'people', 'town', 'deanery', 'map', 'jobs', 'profile', 'clubs', 'letters', 'record', 'settings'] : away ? (game.see ? ['week', 'see', 'jobs', 'profile', 'letters', 'record', 'settings'] : game.study?.place ? ['week', 'place', 'jobs', 'profile', 'letters', 'record', 'settings'] : ['week', 'jobs', 'profile', 'letters', 'record', 'settings']) : ['week', 'formation', 'jobs', 'profile', 'clubs', 'letters', 'record', 'settings'];
+  const tabs: Sheet[] = friar ? ['week', 'jobs', 'profile', 'clubs', 'letters', 'record', 'settings'] : inParish ? ['week', 'parish', 'people', 'town', 'deanery', 'map', 'jobs', 'profile', 'clubs', 'letters', 'record', 'settings'] : away ? (game.rome?.pontificate ? ['week', 'holy_see', 'place', 'profile', 'letters', 'record', 'settings'] : game.see ? ['week', 'see', 'jobs', 'profile', 'letters', 'record', 'settings'] : game.study?.place ? ['week', 'place', 'jobs', 'profile', 'letters', 'record', 'settings'] : ['week', 'jobs', 'profile', 'letters', 'record', 'settings']) : ['week', 'formation', 'jobs', 'profile', 'clubs', 'letters', 'record', 'settings'];
   // A friar lives in a house: its sheet sits beside the week. E3 §3.2.
   if (game.religious) tabs.splice(1, 0, 'house');
   // A friar pastor sits in the diocese's deanery. E3 §3.12.
@@ -114,6 +116,7 @@ export default function Desk() {
           </>
         )}
         {open === 'see' && <SeePanel />}
+        {open === 'holy_see' && <PopePanel />}
         {open === 'place' && <PlacePanel />}
         {open === 'people' && (
           <>

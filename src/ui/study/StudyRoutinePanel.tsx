@@ -18,7 +18,8 @@ export default function StudyRoutinePanel() {
   const work = all.filter((a) => a.def.kind === 'work');
   const post = !['rome', 'washington'].includes(study.city);
   const where = study.city === 'rome' ? 'Rome' : study.city === 'washington' ? 'Washington' : 'the diocese';
-  const POST_DAY: Record<string, string> = { residence: "The bishop's day", campus: "The Center's week", hospital: "The hospital's week", seminary: "The seminary's week", chancery: "The vicar general's week", auxiliary: "The auxiliary's week", see: "The bishop's week", prison: "The penitentiary's week", mission: "The missions' week", deployment: "The deployment's week", formation: "The house's week", schools: "The superintendent's week", curia: "The Curia's week" };
+  const POST_DAY: Record<string, string> = { residence: "The bishop's day", campus: "The Center's week", hospital: "The hospital's week", seminary: "The seminary's week", chancery: "The vicar general's week", auxiliary: "The auxiliary's week", see: "The bishop's week", prison: "The penitentiary's week", mission: "The missions' week", deployment: "The deployment's week", formation: "The house's week", schools: "The superintendent's week", curia: "The Curia's week", holy_see: "The pope's week" };
+  const pope = study.city === 'holy_see';
 
   const row = ({ def, available, why }: (typeof all)[number]) => {
     const ap = study.routine[def.id] ?? 0;
@@ -43,18 +44,18 @@ export default function StudyRoutinePanel() {
     <>
       <Sheet title={post ? study.label : `${study.label} in ${where}`}>
         <p className="ink-muted text-xs leading-relaxed">
-          {post ? (study.city === 'residence' ? 'Living at the residence, in the room with the view of the parking lot.' : `Living at ${study.residence}.`) : `${study.school.charAt(0).toUpperCase() + study.school.slice(1)}, living at ${study.residence}.`} {Math.floor(weeksLeft / 52) > 0 ? `${Math.floor(weeksLeft / 52)} years and ` : ''}{weeksLeft % 52} weeks {post ? (study.city === 'residence' ? 'until he lets you go' : 'until the appointment ends') : `until the degree${study.failed ? ', if it comes' : ''}`}. {post ? `${POST_DAY[study.city] ?? 'The work'} takes the week; the shape of it is yours:` : 'Lectures, the chapel, and the house rule take the week;'} {budget} {post ? 'blocks of it' : 'hours are yours'}.
+          {post ? (study.city === 'residence' ? 'Living at the residence, in the room with the view of the parking lot.' : `Living at ${study.residence}.`) : `${study.school.charAt(0).toUpperCase() + study.school.slice(1)}, living at ${study.residence}.`} {pope ? 'There is no term: it ends when you die or lay it down.' : <>{Math.floor(weeksLeft / 52) > 0 ? `${Math.floor(weeksLeft / 52)} years and ` : ''}{weeksLeft % 52} weeks {post ? (study.city === 'residence' ? 'until he lets you go' : 'until the appointment ends') : `until the degree${study.failed ? ', if it comes' : ''}`}.</>} {post ? `${POST_DAY[study.city] ?? 'The work'} takes the week; the shape of it is yours:` : 'Lectures, the chapel, and the house rule take the week;'} {budget} {post ? 'blocks of it' : 'hours are yours'}.
           {left > 0 ? ` ${left} still unspoken for; ${post ? 'the day takes them' : 'they go to the city'}.` : ' All of them are given.'}
         </p>
         {last && <p className="mt-2 rounded border rule bg-white/30 px-3 py-2 text-sm leading-relaxed">{last.lines.join(' ')}</p>}
       </Sheet>
       <Sheet title={post ? (POST_DAY[study.city] ?? 'The work') : 'Your studies'}>
         <ul className="flex flex-col gap-1.5">{studies.map(row)}</ul>
-        <p className="ink-faint mt-2 text-xs">{post ? (study.city === 'residence' ? 'Every priest of the diocese will remember how you did this.' : 'The diocese hears how the appointment goes; so does the board.') : 'The thesis is the degree. Everything else is what kind of priest comes home.'}</p>
+        <p className="ink-faint mt-2 text-xs">{pope ? 'The Church, the Curia, and the world each hear a different pontificate; the Holy See sheet has the desk, the College, and the journeys.' : post ? (study.city === 'residence' ? 'Every priest of the diocese will remember how you did this.' : 'The diocese hears how the appointment goes; so does the board.') : 'The thesis is the degree. Everything else is what kind of priest comes home.'}</p>
       </Sheet>
       <Sheet title="Work on the side">
         <ul className="flex flex-col gap-1.5">{work.map(row)}</ul>
-        <p className="ink-faint mt-2 text-xs">A priest is a priest in {where} too. The work pays in standing, not money, and the diocese hears about it.</p>
+        <p className="ink-faint mt-2 text-xs">{pope ? 'A pope is still a priest, and the Bishop of Rome still has a diocese.' : <>A priest is a priest in {where} too. The work pays in standing, not money, and the diocese hears about it.</>}</p>
       </Sheet>
     </>
   );

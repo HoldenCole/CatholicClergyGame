@@ -1,6 +1,9 @@
 import { create } from 'zustand';
+import { beginDraft, abandonDraft } from '@/systems/rome/papalDesk';
+import { callConsistory as callConsistorySys, holdPapalConsistory, planJourney as planJourneySys } from '@/systems/rome/papalActs';
+import { endPontificate } from '@/systems/rome/pontificate';
 import { answerConclave as answerConclaveSys, conclaveAct as conclaveActSys, holdTheConclave } from '@/systems/rome/conclaveFlow';
-import type { HouseWorkId } from '@/types';
+import type { DocumentKind, HouseWorkId } from '@/types';
 import type {
   CreationAnswers,
   EventCategory,
@@ -60,7 +63,7 @@ import { setDiscretionary as doSetDiscretionary, setObligation as doSetObligatio
 import { focusGroup as doFocus, replaceLeader as doReplaceLeader, startFounding as doStartFounding, suppressGroup as doSuppress } from '@/systems/groups';
 import { startWork as doStartWork, stopWork as doStopWork } from '@/systems/problems';
 import { joinClub as doJoinClub, leaveClub as doLeaveClub } from '@/systems/clubs';
-import { deliverLetter, readLetter as doReadLetter } from '@/systems/review';
+import { deliverLetter, openMail, readLetter as doReadLetter } from '@/systems/review';
 import { answerMail as doAnswerMail } from '@/systems/mail';
 import { setEvenings as doSetEvenings } from '@/systems/night';
 import type { EveningKind } from '@/types';
@@ -163,6 +166,13 @@ export interface GameStore {
   conclaveAct(action: 'vote' | 'speech' | 'signal', value: string): void;
   holdConclave(): void;
   answerConclave(accept: boolean, name?: string): void;
+  /** E1 R1.6: the pope's desk, his consistories, his journeys, and laying it down. */
+  beginPapalDraft(kind: DocumentKind, subjectId: string): void;
+  abandonPapalDraft(): void;
+  callConsistory(): void;
+  createCardinals(ids: string[]): void;
+  planJourney(where: string): void;
+  renouncePapacy(): void;
   answerElection(accept: boolean): void;
   endTerm(how: 'well' | 'badly'): void;
   /** The prior's desk, when the office is his: the rule of the house, its offices, its purse. E3 §3.2, §3.10. */
@@ -844,6 +854,27 @@ export const useGameStore = create<GameStore>()((set, get) => ({
   },
   answerConclave(accept, name) {
     update(set, get, (game) => answerConclaveSys(game, accept, name));
+  },
+  beginPapalDraft(kind, subjectId) {
+    update(set, get, (game) => beginDraft(game, kind, subjectId));
+  },
+  abandonPapalDraft() {
+    update(set, get, (game) => abandonDraft(game));
+  },
+  callConsistory() {
+    update(set, get, (game) => callConsistorySys(game));
+  },
+  createCardinals(ids) {
+    update(set, get, (game) => {
+      const out = holdPapalConsistory(game, ids);
+      return out.letter ? openMail(deliverLetter(out.state, out.letter)) : out.state;
+    });
+  },
+  planJourney(where) {
+    update(set, get, (game) => planJourneySys(game, where));
+  },
+  renouncePapacy() {
+    update(set, get, (game) => (game.rome?.pontificate ? endPontificate(game, 'resigned') : game));
   },
   answerElection(accept) {
     update(set, get, (game, r) => ({ ...closeChapter(resolveElection(game, r.derive(`confirm:${game.clock.week}`), accept)), mode: { kind: 'clock' } }));

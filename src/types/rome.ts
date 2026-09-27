@@ -69,6 +69,43 @@ export interface RomeState {
   conclave?: Conclave;
   /** R1.5: the College's scene waiting for the man. */
   collegeScene?: { kind: CollegeSceneKind; dueWeek: number };
+  /** R1.6: the man's own pontificate, while he reigns. */
+  pontificate?: Pontificate;
+}
+
+/** E1 R1.6 — the pontificate played (§10). */
+export type PopeSceneKind = 'first' | 'journey' | 'anniversary' | 'laying_down';
+
+/** A document on the pope's desk: the kind, the subject, and the writing done. */
+export interface PapalDraft {
+  kind: DocumentKind;
+  title: string;
+  gist: string;
+  axis?: string;
+  value?: string;
+  from?: string;
+  need: number;
+  done: number;
+  startedWeek: number;
+}
+
+export interface Pontificate {
+  name: string;
+  electedWeek: number;
+  electedDay: number;
+  /** The see or office he left for the chair, for the record. */
+  from: string;
+  draft?: PapalDraft;
+  /** Ids of the documents he promulgated, in rome.issued. */
+  written: string[];
+  journey?: { where: string; region: string; dueWeek: number };
+  journeys: { week: number; where: string }[];
+  consistories: { week: number; created: string[] }[];
+  /** The men put before him at a consistory he has called, until he creates them. */
+  candidates?: Cardinal[];
+  /** The College's electors on his election day, and how many of them his predecessors made. */
+  electorsAtElection: number;
+  scene?: { kind: PopeSceneKind; dueWeek: number };
 }
 
 /** E1 R1.5 — a cardinal of the College (§7): generated, created by a pope of the line, reading much as he did. */

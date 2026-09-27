@@ -54,7 +54,8 @@ export function roman(n: number): string {
 }
 
 function clamp(n: number): number {
-  return Math.max(-100, Math.min(100, Math.round(n)));
+  // `|| 0`: a -0 would not survive a save (JSON has no negative zero).
+  return Math.max(-100, Math.min(100, Math.round(n) || 0));
 }
 
 /** Where the College stands: the last popes' reading, carried, and leaning a little away from the last one. */

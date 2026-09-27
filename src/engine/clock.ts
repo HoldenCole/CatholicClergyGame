@@ -1,4 +1,4 @@
-import type { Beat, DigestWeek, GameState, PendingEvent, Speed } from '@/types';
+import type { Beat, DigestWeek, GameState, Letter, PendingEvent, Speed } from '@/types';
 import type { Rng } from './rng';
 import { shouldInterrupt } from './interrupts';
 import { advanceClock, describeWeek, gameYearOf, isYearStart } from './time';
@@ -92,7 +92,8 @@ export function advanceWeek(
   // And what Rome sends: the documents, the law they move, and the bishop's reading of each. E1 §4.
   const docs = documentsWeek(rome.state);
   // And the nunciature: the nuncio comes and goes, sees fall vacant, and bishops are named. E1 §5.
-  const nunc = nuncioWeek(docs.state);
+  // Not while the man himself reigns: the nuncios are his to send now (R1.6).
+  const nunc = docs.state.rome?.pontificate ? { state: docs.state, lines: [] as string[], letters: [] as Letter[] } : nuncioWeek(docs.state);
   // And the College: the dead, the consistories, the red hat. E1 §7.
   const coll = collegeWeek(nunc.state);
   afterDraw = coll.state;

@@ -8,8 +8,11 @@ export type Ending =
   | 'left_priesthood'
   | 'died'
   | 'retired'
-  /** E1 R1.5: elected pope in a conclave and accepted; R1.6 makes the papacy itself playable. */
-  | 'elected_pope';
+  /** E1 R1.5: elected pope in a conclave and accepted (older saves; R1.6 plays the pontificate on). */
+  | 'elected_pope'
+  /** E1 R1.6: the pontificate ended in death, or he laid it down. */
+  | 'pope_died'
+  | 'pope_renounced';
 
 /**
  * What the player is looking at. The clock only runs in `clock` mode with an

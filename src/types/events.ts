@@ -171,6 +171,9 @@ export type Condition =
   | { type: 'college'; key: 'scene'; value: string }
   /** E1 R1.4: whether the see of Rome is vacant this week. */
   | { type: 'papacy'; key: 'vacant'; value: boolean }
+  /** E1 R1.6: the man himself reigns; or his pontificate's scene is due (journey, anniversary, laying_down). */
+  | { type: 'papacy'; key: 'reigning'; value: boolean }
+  | { type: 'papacy'; key: 'scene'; value: string }
   | { type: 'nuncio'; key: 'scene'; value: string }
   | { type: 'nuncio'; key: 'view'; op: Op; value: number }
   | { type: 'not'; inner: Condition }

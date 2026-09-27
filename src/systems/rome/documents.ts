@@ -110,7 +110,8 @@ export function draftsBetween(seed: string, popes: Papacy[], fromDay: number, to
       const day = periodDay(k);
       if (day <= fromDay || day > toDay) continue;
       const pope = popeOnDay(popes, day);
-      if (!pope || pope.historical) continue;
+      // The man's own pontificate writes its documents at his desk (R1.6), not from the seed.
+      if (!pope || pope.historical || pope.id === 'player') continue;
       const d = generatedDocument(seed, k, pope, now);
       if (!d) continue;
       drafts.push(d);

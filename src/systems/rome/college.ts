@@ -35,7 +35,8 @@ export const COLLEGE = {
 } as const;
 
 function clamp(n: number): number {
-  return Math.max(-100, Math.min(100, Math.round(n)));
+  // `|| 0`: a -0 would not survive a save (JSON has no negative zero).
+  return Math.max(-100, Math.min(100, Math.round(n) || 0));
 }
 
 /** The n-th cardinal of this world, created on a day by a pope: where he comes from, his name, his reading, and when he will die. */
@@ -148,7 +149,8 @@ export function collegeWeek(state: GameState): CollegeWeek {
     s = { ...s, rome: { ...s.rome!, collegeScene: { kind: 'eve', dueWeek: week } } };
   }
   const pope = reigning(s);
-  if (pope && day >= (s.rome!.nextConsistoryDay ?? Infinity)) s = consistory(s, pope, day, lines, letters);
+  // The man's own pontificate calls its consistories itself (R1.6).
+  if (pope && !s.rome!.pontificate && day >= (s.rome!.nextConsistoryDay ?? Infinity)) s = consistory(s, pope, day, lines, letters);
   return { state: s, lines, letters };
 }
 
