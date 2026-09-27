@@ -3,7 +3,7 @@ import { offerById } from '@/content/offers';
 import { nunciatures } from '@/content/rome';
 import { createRng } from '@/engine/rng';
 import { isOfferEligible } from '@/engine/offers';
-import { endStudy } from '@/engine/study';
+import { beginStudy, endStudy } from '@/engine/study';
 import { evaluateCondition } from '@/engine/conditions';
 import { renderText } from '@/engine/text';
 import { resolveSelector } from '@/engine/selectors';
@@ -11,9 +11,10 @@ import { sundayOf } from '@/engine/time';
 import { studyActivitiesFor } from '@/systems/studyWeek';
 import { nuncioView } from '@/systems/rome/nuncioView';
 import { mayBeCreated } from '@/systems/rome/college';
-import { afar } from '@/systems/homeFromAfar';
+import { afar, homeSuccession } from '@/systems/homeFromAfar';
 import { closeDiplomacyScene, DIPLOMACY, diplomacyWeek, dueDiplomacyScene } from '@/systems/rome/diplomacy';
 import { atAcademy, young } from '../helpers/diplomat';
+import { acceptAndGo } from '../helpers/appointment';
 import type { GameState } from '@/types';
 
 function inService(seed: string): GameState {
@@ -95,6 +96,9 @@ describe('the service', () => {
 
   it('climbs the ladder for a trusted man, and gives him a nunciature of his own in time', () => {
     let s = inService('dip-ladder');
+    // In the service he is away for good: the home see's changes come as news, not as his turn.
+    expect(afar(s)).toBe('service');
+    expect(afar(atAcademy('dip-ladder'))).toBeNull();
     s = serve(s, 52 * 3);
     expect(s.rome!.diplomacy!.rank).toBe('secretary1');
     s = serve(s, 52 * 4);
@@ -131,5 +135,68 @@ describe('the service', () => {
     expect(dueDiplomacyScene(s)).toBe('seventy_five');
     const end = endStudy({ ...s, clock: { ...s.clock, week: s.study!.endWeek } }, offerById('rome_diplomatic_academy')!, createRng('dip-75:end'));
     expect(end.mode).toMatchObject({ kind: 'ended', ending: 'retired' });
+  });
+});
+
+describe('the Academy from Rome (E1 §11)', () => {
+  /** A young priest two years into a licentiate at the Gregorian. */
+  function student(seed: string): GameState {
+    const y = young(seed);
+    const s: GameState = { ...y, character: { ...y.character!, credentials: y.character!.credentials.filter((c) => c !== 'STL') } };
+    const away = beginStudy(s, offerById('pv_rome_study')!, false, createRng(`${seed}:rome`));
+    return { ...away, clock: { ...away.clock, week: away.clock.week + 60 }, character: { ...away.character!, reputation: { ...away.character!.reputation, rome: 30 } } };
+  }
+
+  it('asks a priest at the Gregorian, and not one at home or one who has said no', () => {
+    const def = offerById('rome_academy_from_rome')!;
+    const s = student('dip-rome-ask');
+    expect(s.study!.city).toBe('rome');
+    expect(isOfferEligible(def, s)).toBe(true);
+    expect(isOfferEligible(def, young('dip-rome-home'))).toBe(false);
+    expect(isOfferEligible(def, { ...s, flags: { ...s.flags, refused_academy: true } })).toBe(false);
+  });
+
+  it('takes him from the degree straight to the Academy, degree in hand, instead of home', () => {
+    const def = offerById('rome_academy_from_rome')!;
+    let s = student('dip-rome-yes');
+    s = acceptAndGo({ ...s, offers: [{ offerId: def.id, arrivedWeek: s.clock.week, expiresWeek: s.clock.week + 4, bindings: {} }] }, def, createRng('yes')).state;
+    expect(s.flags['academy:recruited']).toBe(true);
+    expect(s.study!.city).toBe('rome');
+    // The home letter does not come to a man already promised to the Academy.
+    expect(isOfferEligible(offerById('rome_diplomatic_academy')!, s)).toBe(false);
+    const done = endStudy({ ...s, clock: { ...s.clock, week: s.study!.endWeek } }, offerById('pv_rome_study')!, createRng('done'));
+    expect(done.study!.city).toBe('academy');
+    expect(done.rome!.diplomacy!.rank).toBe('student');
+    expect(done.character!.credentials).toContain('STL');
+    expect(done.assignment).toBeNull();
+    expect(done.flags['academy:recruited']).toBeUndefined();
+    expect(done.career.some((e) => /stayed in Rome for the Academy/.test(e.text))).toBe(true);
+  });
+
+  it('lets the offer lapse if the degree is not finished', () => {
+    const def = offerById('rome_academy_from_rome')!;
+    let s = student('dip-rome-fail');
+    s = acceptAndGo({ ...s, offers: [{ offerId: def.id, arrivedWeek: s.clock.week, expiresWeek: s.clock.week + 4, bindings: {} }] }, def, createRng('yes')).state;
+    const home = endStudy({ ...s, study: { ...s.study!, failed: true }, clock: { ...s.clock, week: s.study!.endWeek } }, offerById('pv_rome_study')!, createRng('fail'));
+    expect(home.study).toBeNull();
+    expect(home.rome?.diplomacy).toBeUndefined();
+  });
+});
+
+describe('home, from the nunciature (E1 §9 E, §11)', () => {
+  it('tells a diplomat of a new bishop at home as news, not as his turn, and not as one bishop to another', () => {
+    const d = inService('dip-home-news');
+    const bishop = d.world!.diocese.hidden.bishop.npcId;
+    // The home bishop made very old, so that his see changes hands.
+    const s: GameState = { ...d, npcs: { ...d.npcs, [bishop]: { ...d.npcs[bishop]!, birthYear: 1900 } } };
+    const before = s.world!.diocese.hidden.bishop.npcId;
+    let out: ReturnType<typeof homeSuccession> | null = null;
+    for (let i = 0; i < 400 && !out?.letter; i++) out = homeSuccession(s, createRng(`dip-home-news:${i}`));
+    expect(out!.letter).not.toBeNull();
+    expect(out!.state.world!.diocese.hidden.bishop.npcId).not.toBe(before);
+    expect(out!.letter!.body.join(' ')).toMatch(/Secretariat of State moves you/);
+    expect(out!.letter!.body.join(' ')).not.toMatch(/brother bishop/);
+    expect(out!.state.career.at(-1)!.kind).toBe('note');
+    expect(out!.state.flags.new_bishop_pending).toBeFalsy();
   });
 });

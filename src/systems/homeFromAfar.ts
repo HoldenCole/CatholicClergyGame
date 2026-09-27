@@ -13,13 +13,15 @@ import { advanceTrajectories } from './trajectories';
  * it comes as news from home, and the new man writes to him as a brother
  * bishop (or, if he is pope, is a man he named). Invented and flagged.
  */
-export type Afar = 'see' | 'pope';
+export type Afar = 'see' | 'service' | 'pope';
 
 /** Whether the man is away from his home diocese for good: a see of his own, or the chair of Peter. */
 export function afar(state: GameState): Afar | null {
   if (state.rome?.pontificate) return 'pope';
   // A see of his own, or a nunciature: a bishop elsewhere either way (E1 §11).
   if (state.see || state.rome?.diplomacy?.rank === 'nuncio') return 'see';
+  // A priest of the Holy See's diplomatic service: still incardinated at home, but the Secretariat moves him now (E1 §11).
+  if (state.rome?.diplomacy && state.study?.city === 'nunciature') return 'service';
   return null;
 }
 
@@ -52,7 +54,9 @@ export function homeSuccession(state: GameState, rng: Rng): HomeYear {
     gap < 20 ? 'He reads the Church much as you do. Some of the men at home will say Rome sent them one of yours.' : gap < 45 ? 'He reads the Church a little otherwise than you do, which the diocese will notice before he does.' : 'He reads the Church otherwise than you do, and the men at home who took their lead from you will feel it first.',
     where === 'pope'
       ? `The Dicastery for Bishops brought the terna for ${see} with the Saturday files, the diocese that ordained you, and you signed the name they had put first. It is the only nomination of the year you read twice.`
-      : 'He is not your bishop and you are not his priest: he writes to you as a brother bishop, and asks you to come home one year for the chrism Mass.',
+      : where === 'service'
+        ? 'On paper you are still a priest of his diocese; in fact the Secretariat of State moves you, and he knows it. He writes once, kindly, and says the door is open if you are ever home in the summer.'
+        : 'He is not your bishop and you are not his priest: he writes to you as a brother bishop, and asks you to come home one year for the chrism Mass.',
   ];
   const next: GameState = {
     ...r.state,
