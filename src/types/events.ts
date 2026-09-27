@@ -81,6 +81,8 @@ export type Condition =
   | { type: 'years_ordained'; op: Op; value: number }
   /** Weeks into the current assignment. */
   | { type: 'weeks_served'; op: Op; value: number }
+  /** Weeks into the current posting away (a degree, the Academy, a nunciature): false when he is not away. */
+  | { type: 'weeks_away'; op: Op; value: number }
   /** Weeks until the current arc ends (the bishop's next look). */
   | { type: 'arc_weeks_left'; op: Op; value: number }
   /** Extension: the current bishop's alignment, −100 traditional .. +100 progressive. */

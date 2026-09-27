@@ -198,6 +198,7 @@ function checkCondition(c: Condition, where: string, problems: Problem[]): void 
       break;
     case 'years_ordained':
     case 'weeks_served':
+    case 'weeks_away':
     case 'arc_weeks_left':
     case 'age':
     case 'calendar_year':

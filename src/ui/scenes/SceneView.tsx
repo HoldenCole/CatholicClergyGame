@@ -205,7 +205,7 @@ export default function SceneView() {
         })}
       </div>
       <div className="plate px-4 py-2">
-        {hovered ? describe(hovered.binds) : hints ? `Here: ${scene.hotspots.map((h) => h.label.split(':')[0]!.toLowerCase()).join(', ')}.` : away ? 'A room in a city that does not know you. The hours are yours; the years are the diocese\'s.' : friar ? 'Your cell. The bell keeps the house; the blocks it leaves you are the desk, the shelf, the box, and the door.' : inSeminary ? 'Your room. The shelf fills with what you give the year to.' : 'Everything in the room is something you could do with the week.'}
+        {hovered ? describe(hovered.binds) : hints ? `Here: ${[...new Set(scene.hotspots.map((h) => h.label.split(':')[0]!.toLowerCase()))].join(', ')}.` : away ? 'A room in a city that does not know you. The hours are yours; the years are the diocese\'s.' : friar ? 'Your cell. The bell keeps the house; the blocks it leaves you are the desk, the shelf, the box, and the door.' : inSeminary ? 'Your room. The shelf fills with what you give the year to.' : 'Everything in the room is something you could do with the week.'}
       </div>
     </div>
   );
