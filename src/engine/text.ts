@@ -10,6 +10,7 @@ import { nuncioTokens } from '@/systems/rome/nuncioText';
 import { curiaTokens } from '@/systems/rome/curia';
 import { collegeTokens } from '@/systems/rome/college';
 import { popeTokens } from '@/systems/rome/pontificateText';
+import { diplomacyTokens } from '@/systems/rome/diplomacy';
 
 /** Tokens every piece of text can use, derived from state. Later phases add {diocese} and {parish}. */
 export function textExtras(state: GameState): Record<string, string> {
@@ -41,6 +42,7 @@ export function textExtras(state: GameState): Record<string, string> {
   Object.assign(out, curiaTokens(state));
   Object.assign(out, collegeTokens(state));
   Object.assign(out, popeTokens(state));
+  Object.assign(out, diplomacyTokens(state));
   return out;
 }
 

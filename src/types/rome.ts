@@ -71,6 +71,39 @@ export interface RomeState {
   collegeScene?: { kind: CollegeSceneKind; dueWeek: number };
   /** R1.6: the man's own pontificate, while he reigns. */
   pontificate?: Pontificate;
+  /** R1.7: the man in the Holy See's diplomatic service. */
+  diplomacy?: Diplomacy;
+}
+
+/** E1 R1.7 — the diplomatic service (§11). */
+export type DiplomatRank = 'student' | 'secretary2' | 'secretary1' | 'counsellor' | 'nuncio';
+export type DiplomacySceneKind = 'mission' | 'rotation' | 'terna' | 'seventy_five';
+
+/** A country of the service, as data (content/rome/nunciatures.json). */
+export interface NunciatureDef {
+  country: string;
+  region: string;
+  /** The credential that is its language, if the game has one. */
+  language?: string;
+  /** 1 a quiet post .. 3 a hard one: a war, a hostile government, a Church under pressure. */
+  hardship: number;
+  /** One line about the Church there. */
+  church: string;
+}
+
+export interface Diplomacy {
+  rank: DiplomatRank;
+  /** The week the service began (after the Academy), and the week he was named nuncio. */
+  since?: number;
+  nuncioSince?: number;
+  /** The country he serves in now, the week he came, and the week the Secretariat moves him. */
+  country?: string;
+  arrivedWeek?: number;
+  rotateWeek?: number;
+  /** The next country, chosen when the rotation scene is put to him. */
+  next?: string;
+  countries: string[];
+  scene?: { kind: DiplomacySceneKind; dueWeek: number };
 }
 
 /** E1 R1.6 — the pontificate played (§10). */

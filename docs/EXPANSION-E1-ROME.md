@@ -275,3 +275,43 @@ Done when: a pope can be played until his death or renunciation, and the next co
 - **Scenes**: 28 (`content/events/rome/pope.json`, beat `pope`), about one week in eight plus the scheduled ones (the Loggia and the apartment in the first week, three for journeys, two for anniversaries, the question of laying it down). New conditions `papacy` `reigning` and `scene`; selectors `@secretary_of_state`, `@pope_secretary`; tokens `{pope_name}`, `{pope_journey}`, `{pope_draft}`, `{pope_years}`, `{pope_from}`, `{pope_age}`. The bishop's report is authored and category `scandal` (never sent to the LLM layer); the pope's confession is sealed (rule 7).
 - **Fixed on the way**: rolled readings in the College, the nuncio, and the papacy could be a negative zero, which JSON does not keep; they are now normalized.
 
+
+---
+
+## 11. R1.7 The diplomatic service (design)
+
+*Decision (C) left the diplomatic service for a later round; this is it, written before the build. It rides on the posting machinery like the Curia (§8.5). Canonical and institutional details are close to current practice and flagged for verification (CLAUDE.md rule 12): the Pontifical Ecclesiastical Academy takes young priests, usually under thirty-five, for two years of study (with a canon law degree for those who lack one) and, since 2020, a year of missionary service in a local church; its graduates serve in nunciatures as secretaries and counsellors, move every three years or so, and after about two decades may be named apostolic nuncio, a titular archbishop, until seventy-five. The Academy is named, as the Gregorian is; every person in it and every nunciature's staff is generated.*
+
+### 11.1 The letter
+
+The Secretariat of State asks the bishop for a young priest for the Academy: ordained two years or more, under thirty-eight (the Academy's own limit is lower; flagged), whom Rome regards (15+) and the nuncio reads well (50+), with a Roman degree, Italian, canon law, or a desk at the Holy See as a student. Rome's asks are always released. Declining is remembered (`refused_academy`), and the letter does not come twice.
+
+### 11.2 The Academy (two years) and the missionary year
+
+A posting in Rome (`diplomatic_academy`): the Academy's residence on a Roman square, a week of blocks (diplomatic history and international law, languages, drafting, protocol, canon law where he lacks it, the Academy's chapel, a Roman parish on Sunday), dials (the Academy's regard, languages, the priest in him), and a book. The third year is the missionary year, served in a mission diocese abroad; a scene marks it. When it ends he does not go home: the service begins.
+
+### 11.3 The service
+
+A posting that does not end on its own (`nunciature`): a nunciature in a country from data (`content/rome/nunciatures.json`: country, region, language, hardship, the Church there), his chief (a generated nuncio, `@nuncio_chief`), and a week of blocks: the reports to Rome, the local bishops, the government's offices, the embassies' circuit, the nunciature's chapel and a parish, languages, rest. Dials: *the reports* (unread … read on the Third Loggia), *the local Church* (a stranger … trusted), *the government* (a door that stays shut … a door that opens), *the priest in you*. A book: dispatches sent, countries served, ternas prepared, bishops ordained there.
+
+- **Rotation**: about every three years (rolled 150–190 weeks) the Secretariat moves him: a scene in which he takes the next country, or asks to go home to his diocese. A new country resets the local dials; the reports and the priest carry on.
+- **The ladder**: secretary second class on arrival; first class after three years; counsellor after seven; and from fourteen years, once a year, the Secretariat may put his name to the pope for a nunciature of his own (the reports, the chief's regard, Rome, a year's luck). The pope's acts wait out a vacancy.
+- **Nuncio**: ordained titular archbishop in Rome; a country of his own (weighted to the harder ones first); the chief is now himself, so the week gains the nuncio's work: the ternas (the other side of the terna: three names for a vacant see, chosen and sent), credentials presented, the bishops' conference, the crisis. A yearly terna scene.
+- **The way home**: at any rotation he may ask to go home. The Secretariat lets him go; he comes home to the flagship like a Curia man, his reading drawn a little toward Rome's, and the priest in him decides whether he comes home a priest or a clerk. A nuncio does not go home to a parish; his letter at seventy-five ends it (retirement).
+- **The red hat**: a nuncio of eight years whom Rome regards may be created a cardinal at a consistory, as an archbishop of a great see or a curial secretary may (§7), and so reach the conclave.
+
+### 11.4 Scenes
+
+About twenty-five, beat `diplomacy`: the Academy (the first dinner, the language that will not come, the professor who was a nuncio, the Secretariat's visitor, the missionary year), the nunciature (the chief's temper, a coup, a hostage, a bishop who writes to Rome behind the nuncio's back, a journalist, the national day, an ambassador's dinner, a report softened or not, a local priest who needs protecting, a letter from home), rotation (the new country, or home), and the nuncio's (credentials, the terna, a papal visit prepared, a government that expels him, the letter at seventy-five). Rotation and the terna are scheduled scenes; the rest are drawn now and then.
+
+### 11.5 As built (R1.7)
+
+*Added at build time.*
+
+- **The letter** (`content/offers/rome.json`, `rome_diplomatic_academy`): as §11.1, with the nuncio's floor at 50 (a strong young priest's reading tops out near 54, so 55 would almost never be met). Cluster `curia`, so the two Roman letters raise each other.
+- **The Academy** (`diplomatic_academy`, city `academy`, 156 weeks): seven activities (history and law, languages with French to be had, drafting, canon law at the Gregorian toward the JCL for a man without one, the chapel, a Roman parish, the receptions), three dials, a book. The missionary year is a scheduled scene at the end of the second year (the villages or the bishop's chancery). When the Academy ends, the offer is completed once and the service begins (`systems/rome/diplomacy.ts`, `beginService`).
+- **The service** (`nunciature`, city `nunciature`): a secretary of nunciature, second class, in a country from `content/rome/nunciatures.json` (30 countries, hardship 1–3, a line about the Church there; real countries, generated people), under a generated nuncio (`@nuncio_chief`). Seven activities, the nuncio's ternas among them once the nunciature is his. A new country starts the local Church and the government colder the harder it is (−10 a step), and gets a new chief; the young and new nuncios draw the harder posts; a language he has makes a country likelier.
+- **Rotation**: every 150–190 weeks (200–300 for a nuncio); the scene is put to him six weeks ahead with the next country named, and it is CRITICAL so that it reaches him even when the clock is skipping: this is the moment he may ask to go home.
+- **The ladder**: first secretary at three years, counsellor at seven, and from fourteen the pope's nunciature, each on the Secretariat's yearly score (the reports, the local Church, the chief's regard, Rome, a year's luck; invented). The nuncio is ordained titular archbishop and counts as a bishop elsewhere for the home diocese (§9 E). A nuncio of eight years whom Rome regards (30+) may be created a cardinal.
+- **The end**: going home at a rotation (the board and a flagship choice, like the Curia; his reading drawn 30% toward Rome's; the priest or the clerk by the priesthood dial); a nuncio's service, or any man's at seventy-five, ends in retirement, with the letter's scene.
+- **Scenes**: 23 (`content/events/study/diplomacy.json`): the Academy's five and the missionary year; the nunciature's ten (the chief's temper, a coup, a letter behind the nuncio's back, a report softened, a journalist, the pope's day, a priest who needs protecting, a letter from home, chargé d'affaires, and more); rotation for a secretary and for a nuncio; the nuncio's credentials, a papal visit, the conference, expulsion; the terna; the letter at seventy-five. New condition `diplomacy` (scene, rank, hardship); tokens `{country}`, `{country_next}`, `{country_church}`, `{diplomat_rank}`, `{nunciature}`.

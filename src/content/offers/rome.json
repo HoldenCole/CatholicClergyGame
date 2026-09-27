@@ -188,6 +188,171 @@
         ],
         "outcome": "You write to the Secretariat of State that the diocese needs you more than Rome does, which your bishop does not quite believe and Rome does not believe at all. The letter is filed. The next American they ask says yes."
       }
+    },
+    {
+      "id": "rome_diplomatic_academy",
+      "category": "chancery",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "title": "The Academy",
+      "body": "The letter comes to {@bishop} first, on the letterhead of the Secretariat of State: the Pontifical Ecclesiastical Academy would like to receive a young priest of the diocese for its course, two years in Rome and a year of mission, and then the service of the Holy See abroad. {@bishop} writes in his note that he did not know Rome knew your name, and that he does now, and that men who go to the Academy do not, as a rule, come back to be pastors. It is the kind of letter that is not quite an order.",
+      "from": "@bishop",
+      "requires": [
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 2
+        },
+        {
+          "type": "age",
+          "op": "<=",
+          "value": 38
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "ordained_bishop",
+            "value": true
+          }
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "refused_academy",
+            "value": true
+          }
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "diplomat_served",
+            "value": true
+          }
+        },
+        {
+          "type": "reputation",
+          "key": "rome",
+          "op": ">=",
+          "value": 15
+        },
+        {
+          "type": "nuncio",
+          "key": "view",
+          "op": ">=",
+          "value": 50
+        },
+        {
+          "type": "any",
+          "inner": [
+            {
+              "type": "flag",
+              "key": "rome_alumnus",
+              "value": true
+            },
+            {
+              "type": "credential",
+              "key": "italian"
+            },
+            {
+              "type": "flag",
+              "key": "worked_at_the_holy_see",
+              "value": true
+            },
+            {
+              "type": "credential",
+              "key": "JCL"
+            }
+          ]
+        }
+      ],
+      "weight": 10,
+      "bias": [
+        {
+          "when": {
+            "type": "flag",
+            "key": "worked_at_the_holy_see",
+            "value": true
+          },
+          "multiplier": 2.5
+        },
+        {
+          "when": {
+            "type": "credential",
+            "key": "french"
+          },
+          "multiplier": 1.5
+        },
+        {
+          "when": {
+            "type": "outspokenness",
+            "op": ">=",
+            "value": 60
+          },
+          "multiplier": 0.4
+        }
+      ],
+      "windowWeeks": 4,
+      "final": true,
+      "cluster": "curia",
+      "accept": {
+        "effects": [
+          {
+            "target": "reputation",
+            "key": "rome",
+            "delta": 6
+          },
+          {
+            "target": "reputation",
+            "key": "parishioners",
+            "delta": -4
+          }
+        ],
+        "outcome": "You go to Rome in the autumn with one suitcase and a list of the languages you do not speak. The Academy's porter shows you your room and the chapel and the dining room, and says that the man who had your room is nuncio in Africa now, which is meant kindly.",
+        "commitment": {
+          "label": "The Pontifical Ecclesiastical Academy",
+          "weeks": 156,
+          "apPerWeek": 0,
+          "onComplete": [
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 8
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 3
+            },
+            {
+              "target": "trait",
+              "key": "trained at the Pontifical Ecclesiastical Academy"
+            }
+          ],
+          "completeOutcome": "Two years in Rome and a year of mission, and a letter from the Secretariat of State with the name of a country on it.",
+          "away": "diplomatic_academy"
+        }
+      },
+      "decline": {
+        "effects": [
+          {
+            "target": "flag",
+            "key": "refused_academy",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "rome",
+            "delta": -5
+          }
+        ],
+        "outcome": "You write that your vocation is to a diocese and its parishes, not to a flag and a car with plates. It is a good answer, and the Secretariat files it with the others like it. The Academy does not write twice."
+      }
     }
   ]
 }

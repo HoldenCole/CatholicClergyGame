@@ -55,6 +55,7 @@ import { closeNuncioScene, dueNuncioScene } from '@/systems/rome/nuncio';
 import { curiaWeek } from '@/systems/rome/curia';
 import { closeCollegeScene, dueCollegeScene } from '@/systems/rome/college';
 import { popeHomeYear } from '@/systems/homeFromAfar';
+import { closeDiplomacyScene, diplomacyWeek, dueDiplomacyScene } from '@/systems/rome/diplomacy';
 import { closePopeScene, duePopeScene, pontificateWeek, pontificateYear, PONTIFICATE } from '@/systems/rome/pontificate';
 import type { WeekHook } from './clock';
 
@@ -213,6 +214,15 @@ export function studyWeekHook(deps: EventDeps): WeekHook {
     next = curia.state;
     for (const line of curia.lines) next = addDigestLine(next, line);
     for (const l of curia.letters) next = deliverLetter(next, l);
+    // The Holy See's diplomatic service: rotation, the ladder, the nuncio's ternas, and its scenes. E1 §11.
+    const service = diplomacyWeek(next);
+    next = service.state;
+    for (const line of service.lines) next = addDigestLine(next, line);
+    for (const l of service.letters) next = deliverLetter(next, l);
+    if (dueDiplomacyScene(next)) {
+      next = dueBeatScene(next, 'diplomacy', closeDiplomacyScene, rng.derive(`diplomacy:${next.clock.week}`), deps);
+      if (next.mode.kind !== 'clock' || next.pending.length > 0) return next;
+    }
     // A cardinal in a see or at a desk in Rome: the College's scenes come to him here. E1 §7.
     if (dueCollegeScene(next)) {
       next = collegeScene(next, rng.derive(`college:${next.clock.week}`), deps);
@@ -222,7 +232,7 @@ export function studyWeekHook(deps: EventDeps): WeekHook {
     if (next.mode.kind !== 'clock') return next;
     if (next.study && next.clock.week >= next.study.endWeek) {
       const def = deps.offerLookup?.(next.study.offerId);
-      if (def) return addDigestLine(endStudy(next, def, rng.derive(`study-end:${next.clock.week}`)), next.study.city === 'see' ? 'The letter went to Rome on your seventy-fifth birthday, as the canon requires, and Rome, for once, answered quickly.' : next.study.city === 'residence' ? 'The bishop thanks you at dinner, in front of the sisters, and names your successor before dessert. The board has a parish for you.' : next.study.city === 'rome' || next.study.city === 'washington' ? 'The degree is defended, the room is packed, and the plane home is full of people going somewhere else.' : 'The appointment ends the way they do: a dinner, a card signed by everyone, and a letter from the personnel board that was in the mail before the dinner.');
+      if (def) return addDigestLine(endStudy(next, def, rng.derive(`study-end:${next.clock.week}`)), next.study.city === 'see' ? 'The letter went to Rome on your seventy-fifth birthday, as the canon requires, and Rome, for once, answered quickly.' : next.study.city === 'academy' ? 'The Academy gives its students a dinner and a blessing, and the Secretariat gives each of them a country.' : next.study.city === 'nunciature' ? (next.rome?.diplomacy?.rank === 'nuncio' || next.flags['diplomat:seventy_five'] ? 'The Secretariat accepts the letter with thanks, and a date, and a medal.' : 'The Secretariat lets you go with a letter of thanks. The diocese has a parish for you.') : next.study.city === 'residence' ? 'The bishop thanks you at dinner, in front of the sisters, and names your successor before dessert. The board has a parish for you.' : next.study.city === 'rome' || next.study.city === 'washington' ? 'The degree is defended, the room is packed, and the plane home is full of people going somewhere else.' : 'The appointment ends the way they do: a dinner, a card signed by everyone, and a letter from the personnel board that was in the mail before the dinner.');
     }
     if (rng.derive(`study-scene:${next.clock.week}`).chance(STUDY_EVENT_CHANCE)) {
       const [event] = drawEvents(deps.pool.filter((e) => !e.beat), next, rng, 1);

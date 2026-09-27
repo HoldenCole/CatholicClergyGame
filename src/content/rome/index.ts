@@ -5,7 +5,8 @@ import axesRaw from './axes.json';
 import documentPoolsRaw from './documentPools.json';
 import dicasteriesRaw from './dicasteries.json';
 import collegeRaw from './college.json';
-import type { DiocesanNorm, DocumentKind, HistoricalDocumentDef, HistoricalPapacyDef, PolicyAxisDef } from '@/types';
+import nunciaturesRaw from './nunciatures.json';
+import type { DiocesanNorm, DocumentKind, HistoricalDocumentDef, HistoricalPapacyDef, NunciatureDef, PolicyAxisDef } from '@/types';
 
 /** The papal record, in order. E1 §9 A. */
 export const papalHistory: HistoricalPapacyDef[] = (historyRaw as unknown as { popes: HistoricalPapacyDef[] }).popes;
@@ -66,3 +67,6 @@ export interface CollegePools {
 }
 
 export const collegePools: CollegePools = collegeRaw as unknown as CollegePools;
+
+/** The countries of the diplomatic service. E1 R1.7, §11. */
+export const nunciatures: NunciatureDef[] = (nunciaturesRaw as unknown as { nunciatures: NunciatureDef[] }).nunciatures;
