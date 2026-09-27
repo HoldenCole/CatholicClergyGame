@@ -8,8 +8,10 @@ import type { GameState, Implementation } from '@/types';
  * stats and different records read differently. Weights are invented and flagged.
  */
 export const VIEW = {
-  base: 30,
+  base: 24,
   rome: 20,
+  /** The man himself: a bishop governs, speaks, and teaches. Up to fifteen points between them. */
+  stats: { administration: 6, charisma: 5, theology: 4 } as const,
   chancery: 8,
   fidelity: { eager: 3, faithful: 4, minimal: -1, defiant: -7 } as Record<Implementation, number>,
   fidelityCap: 15,
@@ -44,6 +46,8 @@ export function nuncioView(state: GameState): NuncioView {
   if (!c) return { value: 0, good, bad };
   const temper = state.rome?.nuncio?.temperament ?? 0;
   let v = VIEW.base;
+  for (const [k, w] of Object.entries(VIEW.stats)) v += (Math.max(0, c.stats[k as keyof typeof VIEW.stats]) / 100) * w;
+  if (c.stats.administration >= 70 && c.stats.charisma >= 60) good.push('a man who can run a diocese and be liked doing it');
   const rome = c.reputation.rome ?? 0;
   v += (rome / 100) * VIEW.rome;
   if (rome >= 30) good.push('Rome thinks well of you');

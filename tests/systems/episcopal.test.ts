@@ -25,8 +25,8 @@ function candidate(seed: string, extra: Partial<GameState> = {}): GameState {
     assignment: { ...base.assignment!, role: 'pastor' },
     character: { ...c, entryYear: 1990, background: { ...c.background, entryAge: 22 }, stats: { ...c.stats, administration: 60 }, credentials: [...c.credentials, 'JCL'], reputation: { ...c.reputation, chancery: 72, rome: 40 } },
     npcs: { ...base.npcs, [bishopId]: { ...base.npcs[bishopId]!, relationship: 30 } },
-    // E1 R1.3: the nuncio reads him well (a canon lawyer, a vicar general) and a terna has named him to a see.
-    flags: { ...base.flags, ordination_week: base.clock.week - 52 * 22, terna_named: true, vg_served: true, 'nuncio:named_see': 'gaylord' },
+    // E1 R1.3: the nuncio reads him well (a canon lawyer, a vicar general), his bishop has asked for him as an auxiliary, and a terna has named him to a see.
+    flags: { ...base.flags, ordination_week: base.clock.week - 52 * 22, terna_named: true, aux_named: true, vg_served: true, 'nuncio:named_see': 'gaylord' },
     ...extra,
   };
 }
@@ -43,8 +43,9 @@ describe('the episcopal tier', () => {
     const e = eventById('ep_questionnaire_about_you')!;
     expect(e).toBeDefined();
     expect(e.choices.every((c) => c.effects.some((x) => x.target === 'flag' && x.key === 'terna_named'))).toBe(true);
-    // The auxiliary needs a name sent and the nuncio's reading; a see comes only from a terna that named him (E1 §5).
-    expect(JSON.stringify(offerById('ep_auxiliary_bishop')!.requires)).toContain('terna_named');
+    // The auxiliary needs the bishop's own ask (the aux_request scene) and the nuncio's reading; a see comes only from a terna that named him (E1 §5, §12).
+    expect(JSON.stringify(offerById('ep_auxiliary_bishop')!.requires)).toContain('aux_named');
+    expect(JSON.stringify(offerById('ep_auxiliary_bishop')!.requires)).not.toContain('terna_named');
     expect(JSON.stringify(offerById('ep_auxiliary_bishop')!.requires)).toContain('"nuncio"');
     expect(JSON.stringify(offerById('ep_diocesan_bishop')!.requires)).toContain('nuncio:named_see');
   });

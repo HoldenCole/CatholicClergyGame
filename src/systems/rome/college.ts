@@ -8,6 +8,7 @@ import { rollMaleName } from '@/generation/names';
 import type { Heritage } from '@/content/names';
 import { reigning, walkRome } from './papacy';
 import { ELECTOR, electorsOn } from './conclave';
+import { PLAYER_REGION } from './conclave';
 import { nuncioOfLongService } from './diplomacy';
 
 /**
@@ -30,7 +31,13 @@ export const COLLEGE = {
   follow: 0.7,
   temperamentSd: 25,
   death: { base: 0.015, perYearPast70: 0.012 },
-  player: { rome: 30, seeYears: 2, curiaWeeks: 104, nuncioYears: 8, gap: 90, chance: 0.5 },
+  /**
+   * The man himself: the age below which no pope creates him; the years a great see, a secretary's desk, or a nunciature must be held; the chance at each
+   * consistory from Rome's regard (`chance` at `rome`, a point per `perRome` beyond, between the floor and the cap),
+   * scaled down by how far his reading is from the pope's (nothing at `gap`); and the College's room for another
+   * elector from his part of the world, by the pools' shares plus a small margin.
+   */
+  player: { rome: 40, minAge: 52, seeYears: 3, curiaWeeks: 312, nuncioYears: 8, gap: 100, chance: 0.32, perRome: 200, chanceFloor: 0.05, chanceCap: 0.5, roomMargin: 2 },
   sceneAfter: [2, 6] as [number, number],
   sceneLapse: 26,
 } as const;
@@ -95,10 +102,28 @@ function playerAge(state: GameState, day: number): number {
   return fromDayNumber(day).year - (c.entryYear - c.background.entryAge);
 }
 
+/** The chance the pope creates him at this consistory: Rome's regard, scaled by how far his reading is from the pope's. Invented. */
+export function redHatChance(state: GameState, pope: Pick<Papacy, 'temperament'>): number {
+  const c = state.character!;
+  const P = COLLEGE.player;
+  const p = Math.max(P.chanceFloor, Math.min(P.chanceCap, P.chance + ((c.reputation.rome ?? 0) - P.rome) / P.perRome));
+  return p * Math.max(0, 1 - Math.abs(pope.temperament - c.alignment) / P.gap);
+}
+
+/** Whether the College has room for another elector from his part of the world: its share of the electors, by the pools' weights. */
+export function redHatRoom(state: GameState, day: number): boolean {
+  const total = collegePools.origins.reduce((n, o) => n + o.weight, 0);
+  const share = collegePools.origins.filter((o) => o.region === PLAYER_REGION).reduce((n, o) => n + o.weight, 0) / total;
+  // A pope who wants a man finds a little room past his country's share.
+  const cap = Math.max(1, Math.round(COLLEGE.electors * share)) + COLLEGE.player.roomMargin;
+  return electorsOn(state.rome!.college ?? [], day).filter((c) => c.region === PLAYER_REGION).length < cap;
+}
+
 /** Whether the man is a man the pope might create: the archbishop of a great see, a secretary of a dicastery, or a nuncio of long service, whom Rome regards. */
 export function mayBeCreated(state: GameState, day: number): boolean {
   const c = state.character;
-  if (!c || state.flags.cardinal || state.religious || playerAge(state, day) >= ELECTOR.age) return false;
+  const age = playerAge(state, day);
+  if (!c || state.flags.cardinal || state.religious || age >= ELECTOR.age || age < COLLEGE.player.minAge) return false;
   if ((c.reputation.rome ?? 0) < COLLEGE.player.rome) return false;
   const great = !!state.see && !!seeDefs.find((d) => d.id === state.see!.id)?.great && state.see.years.length >= COLLEGE.player.seeYears;
   const since = state.flags['curia:since'];
@@ -166,7 +191,7 @@ function consistory(state: GameState, pope: Papacy, day: number, lines: string[]
   let s: GameState = { ...state, rome: { ...state.rome!, college: [...college, ...fresh], cardinalsMade: made, nextConsistoryDay: day + rng.int(COLLEGE.consistoryDays[0], COLLEGE.consistoryDays[1]) } };
   lines.push(`${pope.name} holds a consistory and creates ${need} new cardinals.`);
   const c = s.character;
-  if (c && mayBeCreated(s, day) && Math.abs(pope.temperament - c.alignment) < COLLEGE.player.gap && rng.chance(COLLEGE.player.chance + ((c.reputation.rome ?? 0) - COLLEGE.player.rome) / 100)) {
+  if (c && mayBeCreated(s, day) && redHatRoom(s, day) && rng.chance(redHatChance(s, pope))) {
     const district = rng.pick(collegePools.districts);
     s = { ...s, flags: { ...s.flags, cardinal: true, 'cardinal:week': s.clock.week, 'cardinal:district': district }, career: [...s.career, { week: s.clock.week, kind: 'promotion', text: `${pope.name} created you a cardinal, with a titular church in ${district}.` }] };
     letters.push({

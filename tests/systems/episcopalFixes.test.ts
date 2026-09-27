@@ -16,7 +16,7 @@ function candidate(seed: string, extra: Partial<GameState> = {}): GameState {
     assignment: { ...base.assignment!, role: 'pastor' },
     character: { ...c, entryYear: 1990, background: { ...c.background, entryAge: 22 }, stats: { ...c.stats, administration: 60 }, credentials: [...c.credentials, 'JCL'], reputation: { ...c.reputation, chancery: 72, rome: 40 } },
     // E1 R1.3: a man the nuncio reads well, and a terna that named him.
-    flags: { ...base.flags, ordination_week: base.clock.week - 52 * 22, terna_named: true, vg_served: true, 'nuncio:named_see': 'gaylord' },
+    flags: { ...base.flags, ordination_week: base.clock.week - 52 * 22, terna_named: true, aux_named: true, vg_served: true, 'nuncio:named_see': 'gaylord' },
     ...extra,
   };
 }

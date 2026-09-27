@@ -93,9 +93,13 @@ describe('a posting in the Curia', () => {
 
   it('climbs the ladder a rung at a time for a man the superiors trust: head of office, undersecretary, secretary and archbishop', () => {
     let s = lent('ladder');
-    s = { ...s, character: { ...s.character!, reputation: { ...s.character!.reputation, rome: 70 } } };
+    // A man of forty-four when lent: the pope names no undersecretary under forty-four, no secretary under fifty.
+    s = { ...s, character: { ...s.character!, entryYear: 1995, reputation: { ...s.character!.reputation, rome: 70 } } };
     const start = s.study!.endWeek;
-    s = weeks(s, 52 * 7, trusted);
+    s = weeks(s, 52 * 6, trusted);
+    expect(rankOf(s)).toBe('head');
+    // The secretary's desk is a chance each year for a man of fifty and the score: it comes in his time.
+    for (let y = 0; y < 20 && rankOf(s) !== 'secretary'; y++) s = weeks(s, 52, trusted);
     expect(rankOf(s)).toBe('secretary');
     expect(s.flags['curia:head'] && s.flags['curia:undersecretary']).toBe(true);
     expect(s.flags.ordained_bishop).toBe(true);

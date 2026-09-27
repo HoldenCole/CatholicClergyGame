@@ -38,6 +38,8 @@ export const ELECTOR = {
   agePer: 1.5,
   /** The man himself: how high the College must rate him to be among those it could turn to. */
   playerFloor: 0.3,
+  /** How the College rates him: the nuncio's reading, Rome's regard, the chair he holds, and the years in the College. Invented. */
+  player: { view: 0.42, rome: 0.32, greatSee: 0.14, secretary: 0.06, perYear: 0.025, yearsCap: 0.18, speech: 0.1 },
   /** Letting it be known you would serve costs you in every elector's eyes; letting it be known you would not, a little. */
   willing: -8,
   unwilling: -2,
@@ -45,6 +47,8 @@ export const ELECTOR = {
 } as const;
 
 export const PLAYER = 'player';
+/** Where the man's red hat is counted from, and the electors who are his countrymen. */
+export const PLAYER_REGION = 'North America';
 
 function ageOn(born: number, day: number): number {
   return fromDayNumber(day).year - born;
@@ -79,12 +83,16 @@ export function playerIsElector(state: GameState): boolean {
 /** How the College rates the man as a possible pope, 0..1: his standing in Rome, the chair he holds, and what he said in the congregations. */
 export function playerPapabile(state: GameState, view: number): number {
   const c = state.character!;
-  let p = (view / 100) * 0.35 + ((c.reputation.rome ?? 0) / 100) * 0.25;
-  if (state.see && seeDefs.find((d) => d.id === state.see!.id)?.great) p += 0.1;
-  if (state.flags['curia:secretary']) p += 0.08;
+  const P = ELECTOR.player;
+  let p = (view / 100) * P.view + ((c.reputation.rome ?? 0) / 100) * P.rome;
+  if (state.see && seeDefs.find((d) => d.id === state.see!.id)?.great) p += P.greatSee;
+  if (state.flags['curia:secretary']) p += P.secretary;
+  // The years in the College: the men who will vote have had time to know him.
+  const since = state.flags['cardinal:week'];
+  if (typeof since === 'number') p += Math.min(P.yearsCap, Math.max(0, (state.clock.week - since) / 52) * P.perYear);
   const speech = state.rome?.conclave?.actions.speech;
-  if (speech === 'pastor' && c.stats.charisma >= 60) p += 0.1;
-  if (speech === 'governance' && c.stats.administration >= 60) p += 0.1;
+  if (speech === 'pastor' && c.stats.charisma >= 60) p += P.speech;
+  if (speech === 'governance' && c.stats.administration >= 60) p += P.speech;
   return Math.max(0, Math.min(1, p));
 }
 
@@ -138,7 +146,7 @@ export function buildRoom(state: GameState, college: Cardinal[], day: number, co
 
 /** The man as the room sees him. */
 export function playerMan(state: GameState, view: number): Man {
-  const region = 'North America';
+  const region = PLAYER_REGION;
   return { id: PLAYER, temperament: state.character!.alignment, region, born: playerBorn(state), papabile: playerPapabile(state, view) };
 }
 
