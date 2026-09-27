@@ -20,6 +20,7 @@ import OfferLetter, { unreadOffers } from './OfferLetter';
 import ConsultationPanel from './religious/ConsultationPanel';
 import ObedienceLetter from './religious/ObedienceLetter';
 import ChapterPanel from './religious/ChapterPanel';
+import ConclavePanel from './ConclavePanel';
 import TermEndPanel from './religious/TermEndPanel';
 import BishopAskPanel from './religious/BishopAskPanel';
 import CharterPanel from './religious/CharterPanel';
@@ -94,6 +95,7 @@ export default function App() {
     game.mode.kind === 'consultation' ? <ConsultationPanel /> :
     game.mode.kind === 'obedience_letter' ? <ObedienceLetter /> :
     game.mode.kind === 'chapter' ? <ChapterPanel /> :
+    game.mode.kind === 'conclave' ? <ConclavePanel /> :
     game.mode.kind === 'term_end' ? <TermEndPanel /> :
     game.mode.kind === 'bishop_ask' ? <BishopAskPanel /> :
     game.mode.kind === 'charter' ? <CharterPanel /> :

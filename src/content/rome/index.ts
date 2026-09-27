@@ -4,6 +4,7 @@ import documentsRaw from './documents.json';
 import axesRaw from './axes.json';
 import documentPoolsRaw from './documentPools.json';
 import dicasteriesRaw from './dicasteries.json';
+import collegeRaw from './college.json';
 import type { DiocesanNorm, DocumentKind, HistoricalDocumentDef, HistoricalPapacyDef, PolicyAxisDef } from '@/types';
 
 /** The papal record, in order. E1 §9 A. */
@@ -57,3 +58,11 @@ export interface DicasteryDef {
 }
 
 export const dicasteries: DicasteryDef[] = (dicasteriesRaw as unknown as { dicasteries: DicasteryDef[] }).dicasteries;
+
+/** E1 R1.5: where the College's cardinals come from, and the districts of their titular churches. */
+export interface CollegePools {
+  origins: { from: string; region: string; heritage: string; weight: number }[];
+  districts: string[];
+}
+
+export const collegePools: CollegePools = collegeRaw as unknown as CollegePools;

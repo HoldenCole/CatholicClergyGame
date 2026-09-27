@@ -53,6 +53,7 @@ import { renderText } from './text';
 import { closeCascade, dueCascade } from '@/systems/rome/documents';
 import { closeNuncioScene, dueNuncioScene } from '@/systems/rome/nuncio';
 import { curiaWeek } from '@/systems/rome/curia';
+import { closeCollegeScene, dueCollegeScene } from '@/systems/rome/college';
 import type { WeekHook } from './clock';
 
 export interface EventDeps {
@@ -208,6 +209,11 @@ export function studyWeekHook(deps: EventDeps): WeekHook {
     next = curia.state;
     for (const line of curia.lines) next = addDigestLine(next, line);
     for (const l of curia.letters) next = deliverLetter(next, l);
+    // A cardinal in a see or at a desk in Rome: the College's scenes come to him here. E1 §7.
+    if (dueCollegeScene(next)) {
+      next = collegeScene(next, rng.derive(`college:${next.clock.week}`), deps);
+      if (next.mode.kind !== 'clock' || next.pending.length > 0) return next;
+    }
     if (isCareerYear(next)) next = religiousYear(careerYear(next, rng), rng);
     if (next.mode.kind !== 'clock') return next;
     if (next.study && next.clock.week >= next.study.endWeek) {
@@ -269,12 +275,23 @@ function cascadeScene(state: GameState, rng: Rng, deps: EventDeps): GameState {
   return event ? fireOrResolve(closed, event, rng, deps) : closed;
 }
 
-/** The nuncio's scene that is due: one whose conditions hold (they name the kind), or none; the scene is closed either way. E1 §5. */
-function nuncioScene(state: GameState, rng: Rng, deps: EventDeps): GameState {
-  const scenes = deps.pool.filter((e) => e.beat === 'nuncio' && isEligible(e, state) && evaluateAll(e.requires ?? [], state));
-  const closed = closeNuncioScene(state);
+/** A scene of a beat that is due: one whose conditions hold (they name the kind), or none; the due scene is closed either way. */
+function dueBeatScene(state: GameState, beat: string, close: (s: GameState) => GameState, rng: Rng, deps: EventDeps): GameState {
+  const scenes = deps.pool.filter((e) => e.beat === beat && isEligible(e, state) && evaluateAll(e.requires ?? [], state));
+  const closed = close(state);
   if (!scenes.length) return closed;
-  return fireOrResolve(closed, rng.pick(scenes), rng, deps);
+  const top = Math.max(...scenes.map((e) => e.priority ?? 0));
+  return fireOrResolve(closed, rng.pick(scenes.filter((e) => (e.priority ?? 0) === top)), rng, deps);
+}
+
+/** The nuncio's scene that is due. E1 §5. */
+function nuncioScene(state: GameState, rng: Rng, deps: EventDeps): GameState {
+  return dueBeatScene(state, 'nuncio', closeNuncioScene, rng, deps);
+}
+
+/** The College's scene that is due: the biglietto, the congregations, the name read out, the eightieth birthday. E1 §7. */
+function collegeScene(state: GameState, rng: Rng, deps: EventDeps): GameState {
+  return dueBeatScene(state, 'college', closeCollegeScene, rng, deps);
 }
 
 /** A scene that hangs on one of this week's feasts, drawn ahead of the ordinary pool. Null when none fires. */
@@ -526,6 +543,11 @@ export function parishWeekHook(deps: EventDeps): WeekHook {
       }
       next = { ...next, flags: { ...next.flags, new_bishop_pending: false } };
       if (event) next = fireOrResolve(next, event, rng, deps);
+      if (next.mode.kind !== 'clock' || next.pending.length > 0) return next;
+    }
+    // The College, when he is of it. E1 §7.
+    if (dueCollegeScene(next)) {
+      next = collegeScene(next, rng.derive(`college:${next.clock.week}`), deps);
       if (next.mode.kind !== 'clock' || next.pending.length > 0) return next;
     }
     // The nunciature, when it reaches him: a questionnaire, a lunch, a name read in the paper. E1 §5.

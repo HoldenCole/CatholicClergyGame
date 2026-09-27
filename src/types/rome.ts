@@ -35,6 +35,8 @@ export interface Vacancy {
   cause: PapacyEnd;
   /** The pope whose see it was. */
   priorId: string;
+  /** R1.5: the cardinal the conclave elected, when it has voted: he is proclaimed on the election day. */
+  winnerId?: string;
 }
 
 export interface RomeState {
@@ -60,6 +62,45 @@ export interface RomeState {
   ternas?: Terna[];
   /** R1.3: the nuncio's scene waiting for the man, and the week it is due. */
   nuncioScene?: { kind: NuncioSceneKind; dueWeek: number; ternaId?: string };
+  /** R1.5: the College of Cardinals, living; the next consistory; and the conclave in session. */
+  college?: Cardinal[];
+  cardinalsMade?: number;
+  nextConsistoryDay?: number;
+  conclave?: Conclave;
+  /** R1.5: the College's scene waiting for the man. */
+  collegeScene?: { kind: CollegeSceneKind; dueWeek: number };
+}
+
+/** E1 R1.5 — a cardinal of the College (§7): generated, created by a pope of the line, reading much as he did. */
+export interface Cardinal {
+  id: string;
+  name: string;
+  born: number;
+  from: string;
+  region: string;
+  temperament: number;
+  createdDay: number;
+  /** The pope who created him. */
+  createdBy: string;
+  curial: boolean;
+  /** How the College rates him as a possible pope, 0..1. */
+  papabile: number;
+  /** The day he dies, rolled when he is made. */
+  diesDay: number;
+}
+
+export type CollegeSceneKind = 'created' | 'titular' | 'eve' | 'after' | 'eighty' | 'consistory';
+
+/** A conclave in session with the man inside it. */
+export interface Conclave {
+  /** The men who can be elected: the papabili, and the man himself if he is one. 'player' is the man. */
+  candidateIds: string[];
+  electorIds: string[];
+  actions: { vote?: string; speech?: 'continuity' | 'reform' | 'pastor' | 'governance'; signal?: 'willing' | 'unwilling' };
+  ballots?: { round: number; tallies: Record<string, number>; field: string[] }[];
+  electedId?: string;
+  /** He was elected and said no: the College votes again without him. */
+  declined?: boolean;
 }
 
 /** E1 R1.3 — the apostolic nuncio (§5): a generated archbishop, rotating, with his own reading. */

@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { answerConclave as answerConclaveSys, conclaveAct as conclaveActSys, holdTheConclave } from '@/systems/rome/conclaveFlow';
 import type { HouseWorkId } from '@/types';
 import type {
   CreationAnswers,
@@ -158,6 +159,10 @@ export interface GameStore {
   /** The chapter: actions before the vote, the ballots, the answer. E3 §3.6. */
   chapterAct(action: 'vote' | 'speak' | 'steer' | 'willing' | 'unwilling', id?: string): void;
   holdBallots(): void;
+  /** E1 R1.5: the conclave, with the man inside. */
+  conclaveAct(action: 'vote' | 'speech' | 'signal', value: string): void;
+  holdConclave(): void;
+  answerConclave(accept: boolean, name?: string): void;
   answerElection(accept: boolean): void;
   endTerm(how: 'well' | 'badly'): void;
   /** The prior's desk, when the office is his: the rule of the house, its offices, its purse. E3 §3.2, §3.10. */
@@ -830,6 +835,15 @@ export const useGameStore = create<GameStore>()((set, get) => ({
   },
   holdBallots() {
     update(set, get, (game) => holdElection(game));
+  },
+  conclaveAct(action, value) {
+    update(set, get, (game) => conclaveActSys(game, action, value));
+  },
+  holdConclave() {
+    update(set, get, (game) => holdTheConclave(game));
+  },
+  answerConclave(accept, name) {
+    update(set, get, (game) => answerConclaveSys(game, accept, name));
   },
   answerElection(accept) {
     update(set, get, (game, r) => ({ ...closeChapter(resolveElection(game, r.derive(`confirm:${game.clock.week}`), accept)), mode: { kind: 'clock' } }));
