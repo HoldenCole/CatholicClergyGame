@@ -8,6 +8,7 @@ import { dicasteries, type DicasteryDef } from '@/content/rome';
 import { seeDefs } from '@/content/sees';
 import { isoDay } from './policy';
 import { reigning, sedeVacante } from './papacy';
+import { ageOf, climbChance } from './ladder';
 import { nuncioView } from './nuncioView';
 
 /**
@@ -24,10 +25,11 @@ import { nuncioView } from './nuncioView';
 export type CuriaRank = 'official' | 'head' | 'undersecretary' | 'secretary';
 
 export const CURIA = {
+  /** Years in the Curia and the score each rung asks, and the age below which the pope does not name a man to it (close to practice; flagged). */
   rungs: [
-    { key: 'head' as const, label: 'head of office', years: 2, score: 55, stay: 3 },
-    { key: 'undersecretary' as const, label: 'undersecretary', years: 4, score: 68, stay: 5 },
-    { key: 'secretary' as const, label: 'secretary', years: 6, score: 80, stay: 5 },
+    { key: 'head' as const, label: 'head of office', years: 3, score: 55, stay: 3, minAge: 0, cap: 1 },
+    { key: 'undersecretary' as const, label: 'undersecretary', years: 7, score: 68, stay: 5, minAge: 44, cap: 1 },
+    { key: 'secretary' as const, label: 'secretary', years: 12, score: 80, stay: 5, minAge: 50, cap: 0.12 },
   ],
   /** Weeks before the end when the superiors may ask him to stay, and how long a yes keeps him. */
   askBefore: 26,
@@ -153,7 +155,8 @@ export function curiaWeek(state: GameState): CuriaWeek {
     const next = CURIA.rungs[i + 1];
     const rng = createRng(`${s.seed}:curia-year:${week}`);
     const papal = next && next.key !== 'head';
-    if (next && served / 52 >= next.years && !(papal && sedeVacante(s)) && curiaScore(s, rng) >= next.score) s = promote(s, next.key, next.stay, lines, letters);
+    // The rung is a chance each year, not a bar: the score against the rung's, and the years the pope wants to see on a man.
+    if (next && served / 52 >= next.years && ageOf(s) >= next.minAge && !(papal && sedeVacante(s)) && rng.derive('climb').chance(next.cap * climbChance(curiaScore(s, rng), next.score))) s = promote(s, next.key, next.stay, lines, letters);
   }
   // Near the end, the superiors may ask him to stay.
   const rank = rankOf(s);

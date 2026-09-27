@@ -4,7 +4,7 @@ import { sundayOf } from '@/engine/time';
 import { fromDayNumber } from '@/engine/calendar';
 import { runElection } from '@/systems/ballot';
 import { CONCLAVE, PLAYER, collegeElects, electorsOn, papabiliOf } from '@/systems/rome/conclave';
-import { COLLEGE, collegeWeek, makeCardinal, mayBeCreated, seedCollege } from '@/systems/rome/college';
+import { COLLEGE, collegeWeek, makeCardinal, mayBeCreated, redHatChance, redHatRoom, seedCollege } from '@/systems/rome/college';
 import { answerConclave, conclaveAct, holdTheConclave, maybeOpenConclave } from '@/systems/rome/conclaveFlow';
 import { papacyWeek } from '@/systems/rome/papacy';
 import { parishState } from './week.test';
@@ -74,11 +74,22 @@ describe('the College', () => {
     while (sundayOf(s.clock) < first) s = collegeWeek({ ...s, clock: { ...s.clock, week: s.clock.week + 1 } }).state;
     expect(s.rome!.cardinalsMade!).toBeGreaterThan(before);
     expect(s.rome!.nextConsistoryDay!).toBeGreaterThan(first);
-    // An archbishop of a great see, Rome's regard high: the kind of man the pope creates.
+    // An archbishop of a great see held four years, past fifty, Rome's regard high: the kind of man the pope creates.
     const c = s.character!;
-    const archbishop: GameState = { ...s, character: { ...c, entryYear: 1990, background: { ...c.background, entryAge: 22 }, reputation: { ...c.reputation, rome: 60 } }, see: { id: 'chicago', name: 'the Archdiocese of Chicago', see: 'Chicago', region: 'Illinois', installedWeek: 0, presbyterate: 0, people: 0, rome: 0, money: 0, shortage: 3, ordinations: 0, closings: 0, years: [{}, {}] as never } };
+    const archbishop: GameState = { ...s, character: { ...c, entryYear: 1980, background: { ...c.background, entryAge: 22 }, reputation: { ...c.reputation, rome: 60 } }, see: { id: 'chicago', name: 'the Archdiocese of Chicago', see: 'Chicago', region: 'Illinois', installedWeek: 0, presbyterate: 0, people: 0, rome: 0, money: 0, shortage: 3, ordinations: 0, closings: 0, years: [{}, {}, {}, {}] as never } };
     expect(mayBeCreated(archbishop, sundayOf(archbishop.clock))).toBe(true);
     expect(mayBeCreated({ ...archbishop, see: null }, sundayOf(archbishop.clock))).toBe(false);
+    // Nor a man of forty-nine, whatever his see.
+    expect(mayBeCreated({ ...archbishop, character: { ...archbishop.character!, entryYear: 1990 } }, sundayOf(archbishop.clock))).toBe(false);
+    // Two years of the see are not enough, and a College already full of his countrymen has no room for him.
+    expect(mayBeCreated({ ...archbishop, see: { ...archbishop.see!, years: [{}, {}] as never } }, sundayOf(archbishop.clock))).toBe(false);
+    const day = sundayOf(archbishop.clock);
+    expect(redHatRoom(archbishop, day)).toBe(true);
+    const packed = { ...archbishop, rome: { ...archbishop.rome!, college: archbishop.rome!.college!.map((x) => ({ ...x, region: 'North America' })) } };
+    expect(redHatRoom(packed, day)).toBe(false);
+    // The chance at a consistory: Rome's regard, and nothing for a man whose reading is the pope's opposite.
+    expect(redHatChance(archbishop, { temperament: archbishop.character!.alignment })).toBeCloseTo(COLLEGE.player.chance + (60 - COLLEGE.player.rome) / COLLEGE.player.perRome, 5);
+    expect(redHatChance({ ...archbishop, character: { ...archbishop.character!, alignment: -100 } }, { temperament: 100 })).toBe(0);
   });
 });
 

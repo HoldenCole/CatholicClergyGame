@@ -6,6 +6,7 @@ import { finishNpc, rollBaseStats, addStats } from '@/generation/npc';
 import { rollMaleName } from '@/generation/names';
 import { nunciatures } from '@/content/rome';
 import { studyProgram } from '@/content/study';
+import { climbChance } from './ladder';
 import { reigning, sedeVacante } from './papacy';
 
 /**
@@ -27,10 +28,11 @@ export const DIPLOMACY = {
   /** The rotation is put to him this many weeks before it happens. */
   askBefore: 6,
   /** Years of service for each rung, and the Secretariat's score for the pope's own act. */
+  /** Years of service, the score, the age the pope wants to see, and (for the nunciature) the most a year can offer even the best man. */
   rungs: [
-    { key: 'secretary1' as const, years: 3, score: 40 },
-    { key: 'counsellor' as const, years: 7, score: 55 },
-    { key: 'nuncio' as const, years: 14, score: 72 },
+    { key: 'secretary1' as const, years: 3, score: 40, minAge: 0, cap: 1 },
+    { key: 'counsellor' as const, years: 7, score: 55, minAge: 0, cap: 1 },
+    { key: 'nuncio' as const, years: 14, score: 72, minAge: 48, cap: 0.04 },
   ],
   /** The local dials a new country starts from: harder posts start colder. */
   coldPerHardship: 10,
@@ -238,7 +240,9 @@ export function diplomacyWeek(state: GameState): DiplomacyWeek {
     const r = diplomacyOf(s)!;
     const rung = DIPLOMACY.rungs.find((x) => x.key === LADDER[LADDER.indexOf(r.rank) + 1]);
     const papal = rung?.key === 'nuncio';
-    if (rung && served / 52 >= rung.years && !(papal && sedeVacante(s)) && serviceScore(s, createRng(`${s.seed}:service-year:${week}`)) >= rung.score) {
+    // A chance each year, the score against the rung's; the pope's nunciature waits for a man of the years.
+    const yearRng = createRng(`${s.seed}:service-year:${week}`);
+    if (rung && served / 52 >= rung.years && ageOn(s) >= rung.minAge && !(papal && sedeVacante(s)) && yearRng.derive('climb').chance(rung.cap * climbChance(serviceScore(s, yearRng), rung.score))) {
       const out = promote(s, rung.key);
       s = out.state;
       lines.push(out.line);

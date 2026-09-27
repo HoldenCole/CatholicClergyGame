@@ -99,7 +99,9 @@ describe('the service', () => {
   });
 
   it('climbs the ladder for a trusted man, and gives him a nunciature of his own in time', () => {
-    let s = inService('dip-ladder');
+    let s = inService('dip-ladder-3');
+    // Eight years older than the Academy's youngest: the pope gives no nunciature to a man under forty-eight.
+    s = { ...s, character: { ...s.character!, entryYear: s.character!.entryYear - 8 } };
     // In the service he is away for good: the home see's changes come as news, not as his turn.
     expect(afar(s)).toBe('service');
     expect(afar(atAcademy('dip-ladder'))).toBeNull();
@@ -107,14 +109,16 @@ describe('the service', () => {
     expect(s.rome!.diplomacy!.rank).toBe('secretary1');
     s = serve(s, 52 * 4);
     expect(s.rome!.diplomacy!.rank).toBe('counsellor');
-    s = serve(s, 52 * 7);
+    // The nunciature is a chance each year for a man of the score and the age: it comes within his working life.
+    for (let y = 0; y < 27 && s.rome!.diplomacy!.rank !== 'nuncio'; y++) s = serve(s, 52);
     expect(s.rome!.diplomacy!.rank).toBe('nuncio');
     expect(s.flags.ordained_bishop).toBe(true);
     expect(resolveSelector(s, '@nuncio_chief')).toBeNull();
     expect(afar(s)).toBe('see');
     expect(studyActivitiesFor(s).find((a) => a.def.id === 'nun_ternas')!.available).toBe(true);
-    // A nuncio of long service whom Rome regards is a man the pope may create a cardinal.
-    const long = serve(s, 52 * 8);
+    // A nuncio of eight years whom Rome regards is a man the pope may create a cardinal (Rome's regard, which fades, held for the check).
+    const served = serve(s, 52 * 8);
+    const long: GameState = { ...served, character: { ...served.character!, reputation: { ...served.character!.reputation, rome: 60 } } };
     expect(mayBeCreated(long, sundayOf(long.clock))).toBe(true);
   });
 

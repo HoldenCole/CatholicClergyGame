@@ -30,7 +30,8 @@ function veteran(seed: string): GameState {
     ...base,
     phase: 'pastor',
     assignment: { ...base.assignment!, role: 'pastor' },
-    flags: { ...base.flags, ordination_week: base.clock.week - 17 * 52, vg_served: true },
+    // A Roman alumnus and a vicar general: the credits that keep a pastor's reading at the terna's threshold once Rome's regard has rested.
+    flags: { ...base.flags, ordination_week: base.clock.week - 17 * 52, vg_served: true, rome_alumnus: true },
     character: { ...c, entryYear: 2000, background: { ...c.background, entryAge: 22 }, credentials: [...c.credentials, 'JCL'], reputation: { ...c.reputation, rome: 50, chancery: 60 }, outspokenness: 20, positions: [] },
   };
 }
@@ -98,7 +99,7 @@ describe("the nuncio's reading of a man", () => {
     // The same world, the same weeks: sees fall vacant for both, and the nuncio reads them differently.
     let named: GameState | null = null;
     let other: GameState | null = null;
-    for (const seed of ['letters', 'letters:2', 'letters:3', 'letters:4']) {
+    for (const seed of ['letters', 'letters:2', 'letters:3', 'letters:4', 'letters:5', 'letters:6', 'letters:7', 'letters:8']) {
       const faithful = withRecord(veteran(seed), true);
       const run1 = run(faithful, 52 * 25, (x) => typeof x.flags['nuncio:named_see'] === 'string');
       const defiant = withRecord(veteran(seed), false);

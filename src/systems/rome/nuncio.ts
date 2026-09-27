@@ -31,16 +31,19 @@ export const NUNCIO = {
   nameAfter: [16, 36] as [number, number],
   sceneAfter: [2, 8] as [number, number],
   sceneLapse: 26,
-  candidate: { view: 62, years: 16, maxAge: 65 },
-  /** At the threshold, the chance his name goes on the terna, and the chance Rome takes it; both rise with the reading. */
-  onList: 0.35,
-  chosen: 0.25,
+  candidate: { view: 68, years: 16, maxAge: 62 },
+  /** At the threshold, the chance his name goes on the terna, and the chance Rome takes it; both rise with the reading (a point per `perView`), to their caps. */
+  onList: 0.12,
+  chosen: 0.12,
+  perView: 40,
+  listCap: 0.45,
+  chosenCap: 0.45,
   consult: { view: 30, years: 8, chance: 0.55 },
   remembersChance: 0.25,
   /** The chance a new nuncio's first dinner with the clergy is his scene. */
   arrivalChance: 0.6,
   subjectNamedChance: 0.2,
-  aux: { view: 55, years: 18, perYear: 0.15 },
+  aux: { view: 60, years: 18, perYear: 0.06 },
 } as const;
 
 const ORIGINS: { heritage: Heritage; from: string; weight: number }[] = [
@@ -204,7 +207,7 @@ function openTerna(state: GameState, lines: string[]): GameState {
   lines.push(`${see.see}: ${CAUSE_LINE[cause]}, and the see is vacant. The nuncio begins his consultations.`);
   const view = nuncioView(s).value;
   const years = weeksOrdained(s);
-  if (mayBeCandidate(s) && view >= NUNCIO.candidate.view && rng.chance(Math.min(0.8, NUNCIO.onList + (view - NUNCIO.candidate.view) / 30))) {
+  if (mayBeCandidate(s) && view >= NUNCIO.candidate.view && rng.chance(Math.min(NUNCIO.listCap, NUNCIO.onList + (view - NUNCIO.candidate.view) / NUNCIO.perView))) {
     terna.player = true;
     s = { ...s, flags: { ...s.flags, terna_named: true } };
     s = { ...s, rome: { ...s.rome!, ternas: [...ternas, terna] } };
@@ -231,7 +234,7 @@ function nameBishops(state: GameState, lines: string[]): GameState {
     let winner: string;
     let winnerName: string;
     const subject = t.consultedAbout ? s.npcs[t.consultedAbout] : undefined;
-    if (t.player && rng.chance(Math.max(0.2, Math.min(0.75, NUNCIO.chosen + (view - NUNCIO.candidate.view) / 30)))) {
+    if (t.player && rng.chance(Math.max(0.1, Math.min(NUNCIO.chosenCap, NUNCIO.chosen + (view - NUNCIO.candidate.view) / NUNCIO.perView)))) {
       winner = 'player';
       winnerName = s.character ? `${s.character.name.first} ${s.character.name.last}` : 'you';
       s = { ...s, flags: { ...s.flags, 'nuncio:named_see': t.seeId } };
