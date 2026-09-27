@@ -18,7 +18,8 @@ export type Afar = 'see' | 'pope';
 /** Whether the man is away from his home diocese for good: a see of his own, or the chair of Peter. */
 export function afar(state: GameState): Afar | null {
   if (state.rome?.pontificate) return 'pope';
-  if (state.see) return 'see';
+  // A see of his own, or a nunciature: a bishop elsewhere either way (E1 §11).
+  if (state.see || state.rome?.diplomacy?.rank === 'nuncio') return 'see';
   return null;
 }
 

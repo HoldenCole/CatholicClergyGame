@@ -23,7 +23,7 @@ import { closeRequest, markRequested, requestOf, requestYear } from '@/systems/r
 import { ministryLine } from '@/systems/ministry';
 import { housesYear } from '@/systems/houses';
 import { pontificateLine } from '@/systems/rome/pontificateText';
-import { homeSuccession } from '@/systems/homeFromAfar';
+import { afar, homeSuccession } from '@/systems/homeFromAfar';
 
 /** What a letter naming a parish is worth when the board has nothing else in mind. Invented. */
 const REQUEST_WEIGHT = 45;
@@ -118,7 +118,7 @@ export function careerYear(state: GameState, rng: Rng): GameState {
   if (former.line) next = addDigest(next, [former.line]);
 
   // A bishop elsewhere: the home see changes hands all the same, as news from home and not his turn. E1 §9 E.
-  const home = next.see ? homeSuccession(next, rng.derive(`succession:${state.clock.week}`)) : null;
+  const home = afar(next) ? homeSuccession(next, rng.derive(`succession:${state.clock.week}`)) : null;
   if (home) {
     next = addDigest(home.state, home.lines);
     if (home.letter) next = deliverLetter(next, home.letter);

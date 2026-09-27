@@ -13,6 +13,7 @@ import { documentCondition, effectiveStance, policyCondition } from '@/systems/r
 import { dueNuncioScene } from '@/systems/rome/nuncio';
 import { dueCollegeScene } from '@/systems/rome/college';
 import { duePopeScene } from '@/systems/rome/pontificate';
+import { dueDiplomacyScene, nunciatureDef } from '@/systems/rome/diplomacy';
 import { nuncioView } from '@/systems/rome/nuncioView';
 
 import type { Group } from '@/types';
@@ -230,6 +231,13 @@ export function evaluateCondition(
       return policyCondition(state, cond);
     case 'college':
       return dueCollegeScene(state) === cond.value;
+    case 'diplomacy': {
+      const d = state.rome?.diplomacy;
+      if (!d) return false;
+      if (cond.key === 'hardship') return compare(cond.op, nunciatureDef(d.country)?.hardship ?? 0, cond.value);
+      if (cond.key === 'scene') return dueDiplomacyScene(state) === cond.value;
+      return d.rank === cond.value;
+    }
     case 'papacy':
       if (cond.key === 'reigning') return !!state.rome?.pontificate === cond.value;
       if (cond.key === 'scene') return duePopeScene(state) === cond.value;

@@ -1,3 +1,4 @@
+import { RANK_WORD } from '@/systems/rome/diplomacy';
 import { useGameStore } from '@/engine/store';
 import { popesOfHisLife } from '@/systems/rome/papacy';
 import { documentsOfHisLife } from '@/systems/rome/documents';
@@ -162,6 +163,7 @@ export default function ProfilePanel() {
           {p.offices.length > 0 && <li>Offices: {p.offices.join(', ')}.</li>}
           {p.credentials.length > 0 && <li>Degrees and credentials: {p.credentials.map((c) => c.replace(/_/g, ' ')).join(', ')}.</li>}
           {popes.length > 0 && <li>The popes of his life: {popes.join(', ')}{game?.rome?.vacancy ? '; the see is vacant now' : ''}.</li>}
+          {game.rome?.diplomacy && game.rome.diplomacy.rank !== 'student' && <li>In the Holy See's diplomatic service: {RANK_WORD[game.rome.diplomacy.rank]}{game.rome.diplomacy.country ? ` in ${game.rome.diplomacy.country}` : ''}; {game.rome.diplomacy.countries.length} countr{game.rome.diplomacy.countries.length === 1 ? 'y' : 'ies'} served.</li>}
           {game.rome?.pontificate && <li>Bishop of Rome as {game.rome.pontificate.name}, elected {Math.max(0, Math.floor((game.clock.week - game.rome.pontificate.electedWeek) / 52))} years ago; before the conclave, {game.rome.pontificate.from}.</li>}
           {game.flags.cardinal && <li>A cardinal of the Holy Roman Church, with a titular church in {String(game.flags['cardinal:district'] ?? 'Rome')}{game.flags['cardinal:emeritus'] ? '; past eighty, no longer an elector' : '; an elector of the next pope'}.</li>}
           {nuncio && <li>The nuncio in Washington: {nuncio.title} {nuncio.name.first} {nuncio.name.last}, from {game.rome?.nuncio?.from}.</li>}

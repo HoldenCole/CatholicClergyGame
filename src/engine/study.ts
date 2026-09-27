@@ -15,9 +15,12 @@ import { bookLine } from '@/systems/studyWeek';
 import { dropOffices } from '@/systems/offices';
 import { consult } from '@/systems/religious/obedience';
 import { beginCuria, homeFromCuria, leaveCuriaForSee } from '@/systems/rome/curia';
+import { beginAcademy, beginService, DIPLOMACY, diplomacyOf, homeFromService } from '@/systems/rome/diplomacy';
+import { fromDayNumber } from './calendar';
+import { sundayOf } from './time';
 
 /** How a place is named in prose. */
-export const CITY_WORD: Record<StudyState['city'], string> = { rome: 'Rome', washington: 'Washington', residence: "the bishop's residence", campus: 'the Newman Center', hospital: 'the hospital', seminary: 'the seminary', chancery: 'the chancery', auxiliary: 'the chancery', see: 'the see', prison: 'the penitentiary', mission: 'the missions', deployment: 'the deployment', formation: 'the seminary', schools: 'the schools office', curia: 'the Curia', holy_see: 'the Apostolic Palace' };
+export const CITY_WORD: Record<StudyState['city'], string> = { rome: 'Rome', washington: 'Washington', residence: "the bishop's residence", campus: 'the Newman Center', hospital: 'the hospital', seminary: 'the seminary', chancery: 'the chancery', auxiliary: 'the chancery', see: 'the see', prison: 'the penitentiary', mission: 'the missions', deployment: 'the deployment', formation: 'the seminary', schools: 'the schools office', curia: 'the Curia', holy_see: 'the Apostolic Palace', academy: 'the Academy', nunciature: 'the nunciature' };
 
 /** Invented: what leaving costs the man's standing with the people he leaves. DESIGN §7.5 rule 3. */
 export const STUDY = { leaveParishioners: -8 } as const;
@@ -74,6 +77,8 @@ export function beginStudy(state: GameState, def: OfferDef, failed: boolean, rng
   next = { ...next, phase: program.kind === 'see' ? 'bishop' : 'study', study, parish: null, assignment: null, founding: null, project: null, projects: [], flags, beats, mode: { kind: 'clock' } };
   // Lent to the Holy See: an office, its superiors, and the rank of an official. E1 §6.
   if (program.city === 'curia') next = beginCuria(next, rng.derive(`curia:${next.clock.week}`));
+  // The Academy: a student of the Holy See's diplomatic service, the missionary year ahead. E1 §11.
+  if (program.city === 'academy') next = beginAcademy(next);
   if (program.kind === 'see') {
     // The last act: a see of his own, held until the letter at seventy-five.
     const see = generateSee(next, rng.derive(`see:${next.clock.week}`));
@@ -97,7 +102,18 @@ export function endStudy(state: GameState, def: OfferDef, rng: Rng): GameState {
   if (!study) return state;
   let next: GameState = state;
   const c = def.accept.commitment!;
-  if (study.failed && def.failure) {
+  // The service does not complete an offer: the Academy's was completed when the service began. E1 §11.
+  const service = study.city === 'nunciature';
+  if (service) {
+    const d = diplomacyOf(next);
+    const ch = next.character!;
+    const age = fromDayNumber(sundayOf(next.clock)).year - (ch.entryYear - ch.background.entryAge);
+    const flags0: GameState['flags'] = { ...next.flags };
+    delete flags0['study:nunciature'];
+    // A nuncio does not come home to a parish, and the letter at seventy-five ends any man's service.
+    if (d?.rank === 'nuncio' || age >= DIPLOMACY.retirementAge) return retire({ ...next, flags: flags0 });
+    next = note(next, 'offer', `Left the diplomatic service after ${Math.max(1, Math.round((next.clock.week - study.startWeek) / 52))} years, at his own asking.`);
+  } else if (study.failed && def.failure) {
     next = applyEffects(next, def.failure.effects);
     next = { ...next, offerHistory: [...next.offerHistory, { offerId: def.id, week: next.clock.week, decision: 'failed' }] };
     next = note(next, 'offer', `Came home from ${CITY_WORD[study.city]} without the degree.`);
@@ -114,9 +130,14 @@ export function endStudy(state: GameState, def: OfferDef, rng: Rng): GameState {
     // The letter at seventy-five: a bishop does not come home to a parish.
     return retire({ ...next, flags });
   }
+  // The Academy's years are done: the service begins, and he does not go home. E1 §11.
+  if (study.city === 'academy') {
+    const out = beginService({ ...next, flags }, rng.derive(`service:${next.clock.week}`));
+    return { ...out.state, letters: [...(out.state.letters ?? []), out.letter], letterQueue: [...(out.state.letterQueue ?? []), out.letter] };
+  }
   // Home from the Curia, changed or not; a secretary's years end in a see. E1 §6.
-  if (study.city === 'curia') {
-    const home = homeFromCuria(next);
+  if (study.city === 'curia' || service) {
+    const home = service ? homeFromService(next) : homeFromCuria(next);
     next = { ...home.state, letters: [...(home.state.letters ?? []), home.letter], letterQueue: [...(home.state.letterQueue ?? []), home.letter] };
     Object.assign(flags, home.state.flags);
     delete flags[`study:${study.city}`];
@@ -138,10 +159,10 @@ export function endStudy(state: GameState, def: OfferDef, rng: Rng): GameState {
     // The board's own letter never reaches him: its lines are not his record, and the flagship's letter is the one he opens.
     return { ...home, career: next.career, assignment: seat, mode: { kind: 'assignment', assignment: seat } };
   }
-  if (!study.failed && (studyProgram(study.program)?.kind === 'study' || study.city === 'curia') && home.assignment) {
+  if (!study.failed && (studyProgram(study.program)?.kind === 'study' || study.city === 'curia' || service) && home.assignment) {
     const flagship = flagshipFor(home);
     const experienced = parishYears(home) >= CAREER.minYearsForPastor;
-    const fallback = flagship ? assignmentTo(home, flagship, experienced ? 'pastor' : 'parochial_vicar', [study.city === 'curia' ? 'Years in the Curia are meant to be seen' : 'A Roman degree is meant to be seen']) : home.assignment;
+    const fallback = flagship ? assignmentTo(home, flagship, experienced ? 'pastor' : 'parochial_vicar', [study.city === 'curia' ? 'Years in the Curia are meant to be seen' : service ? 'Years in the Holy See\'s service are meant to be seen' : 'A Roman degree is meant to be seen']) : home.assignment;
     return withChoice({ ...home, assignment: fallback, mode: { kind: 'clock' } }, rng.derive('choice'), 'degree', fallback);
   }
   return home;

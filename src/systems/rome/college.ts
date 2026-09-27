@@ -8,6 +8,7 @@ import { rollMaleName } from '@/generation/names';
 import type { Heritage } from '@/content/names';
 import { reigning, walkRome } from './papacy';
 import { ELECTOR, electorsOn } from './conclave';
+import { nuncioOfLongService } from './diplomacy';
 
 /**
  * E1 R1.5 — the College of Cardinals (§7): about a hundred and twenty
@@ -29,7 +30,7 @@ export const COLLEGE = {
   follow: 0.7,
   temperamentSd: 25,
   death: { base: 0.015, perYearPast70: 0.012 },
-  player: { rome: 30, seeYears: 2, curiaWeeks: 104, gap: 90, chance: 0.5 },
+  player: { rome: 30, seeYears: 2, curiaWeeks: 104, nuncioYears: 8, gap: 90, chance: 0.5 },
   sceneAfter: [2, 6] as [number, number],
   sceneLapse: 26,
 } as const;
@@ -94,7 +95,7 @@ function playerAge(state: GameState, day: number): number {
   return fromDayNumber(day).year - (c.entryYear - c.background.entryAge);
 }
 
-/** Whether the man is a man the pope might create: the archbishop of a great see, or a secretary of a dicastery, whom Rome regards. */
+/** Whether the man is a man the pope might create: the archbishop of a great see, a secretary of a dicastery, or a nuncio of long service, whom Rome regards. */
 export function mayBeCreated(state: GameState, day: number): boolean {
   const c = state.character;
   if (!c || state.flags.cardinal || state.religious || playerAge(state, day) >= ELECTOR.age) return false;
@@ -102,7 +103,8 @@ export function mayBeCreated(state: GameState, day: number): boolean {
   const great = !!state.see && !!seeDefs.find((d) => d.id === state.see!.id)?.great && state.see.years.length >= COLLEGE.player.seeYears;
   const since = state.flags['curia:since'];
   const secretary = !!state.flags['curia:secretary'] && typeof since === 'number' && state.clock.week - since >= COLLEGE.player.curiaWeeks;
-  return great || secretary;
+  // A nuncio of long service may be created too (E1 §11.3).
+  return great || secretary || nuncioOfLongService(state, COLLEGE.player.nuncioYears);
 }
 
 function schedule(state: GameState, kind: CollegeSceneKind, rng: Rng): GameState {

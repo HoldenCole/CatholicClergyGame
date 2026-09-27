@@ -64,6 +64,7 @@ export function describeUnmet(cond: Condition, state: GameState): string | null 
     case 'reputation': return cond.op === '>=' ? `better standing with ${REP_WORD[cond.key] ?? cond.key}` : `less notice from ${REP_WORD[cond.key] ?? cond.key}`;
     case 'relationship': return cond.op === '>=' ? `a better footing with ${personWord(state, cond.npcId)}` : `a cooler footing with ${personWord(state, cond.npcId)}`;
     case 'credential': return CRED_WORD[cond.key] ?? cond.key.replace(/_/g, ' ');
+    case 'diplomacy': return cond.key === 'rank' && cond.value === 'nuncio' ? 'a nunciature of your own' : 'another post';
     case 'flag': return cond.value ? (FLAG_WORD[cond.key] ?? flagWord(cond.key)) : (FLAG_WORD[cond.key] ? `not ${FLAG_WORD[cond.key]}` : null);
     case 'alignment': return cond.op === '>=' ? 'a more progressive record' : 'a more traditional record';
     case 'outspokenness': return cond.op === '>=' ? 'a louder public record' : 'a quieter public record';

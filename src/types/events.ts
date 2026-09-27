@@ -174,6 +174,9 @@ export type Condition =
   /** E1 R1.6: the man himself reigns; or his pontificate's scene is due (journey, anniversary, laying_down). */
   | { type: 'papacy'; key: 'reigning'; value: boolean }
   | { type: 'papacy'; key: 'scene'; value: string }
+  /** E1 R1.7: the diplomatic service: its scene due now (mission, rotation, terna, seventy_five), his rank, or his post's hardship (1..3) against a value. */
+  | { type: 'diplomacy'; key: 'scene' | 'rank'; value: string }
+  | { type: 'diplomacy'; key: 'hardship'; op: Op; value: number }
   | { type: 'nuncio'; key: 'scene'; value: string }
   | { type: 'nuncio'; key: 'view'; op: Op; value: number }
   | { type: 'not'; inner: Condition }
