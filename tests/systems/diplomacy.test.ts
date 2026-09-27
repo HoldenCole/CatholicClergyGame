@@ -2,13 +2,14 @@ import { describe, it, expect } from 'vitest';
 import { offerById } from '@/content/offers';
 import { nunciatures } from '@/content/rome';
 import { createRng } from '@/engine/rng';
-import { isOfferEligible } from '@/engine/offers';
+import { acceptOffer, isOfferEligible } from '@/engine/offers';
 import { beginStudy, endStudy } from '@/engine/study';
 import { evaluateAll, evaluateCondition } from '@/engine/conditions';
 import { eventById } from '@/content';
 import { renderText } from '@/engine/text';
 import { resolveSelector } from '@/engine/selectors';
-import { sundayOf } from '@/engine/time';
+import { dateOf, sundayOf, termWeek } from '@/engine/time';
+import { appointmentStep, pendingAppointment } from '@/engine/appointment';
 import { studyActivitiesFor } from '@/systems/studyWeek';
 import { nuncioView } from '@/systems/rome/nuncioView';
 import { mayBeCreated } from '@/systems/rome/college';
@@ -17,6 +18,8 @@ import { closeDiplomacyScene, DIPLOMACY, diplomacyWeek, dueDiplomacyScene } from
 import { atAcademy, young } from '../helpers/diplomat';
 import { acceptAndGo } from '../helpers/appointment';
 import type { GameState } from '@/types';
+
+const ACADEMY_TERM = { month: 10, day: 1 };
 
 function inService(seed: string): GameState {
   const s = atAcademy(seed);
@@ -157,7 +160,7 @@ describe('the Academy from Rome (E1 §11)', () => {
     expect(isOfferEligible(def, { ...s, flags: { ...s.flags, refused_academy: true } })).toBe(false);
   });
 
-  it('takes him from the degree straight to the Academy, degree in hand, instead of home', () => {
+  it('takes him from the degree straight to the Academy, degree in hand, when it ends near the October the Academy opens', () => {
     const def = offerById('rome_academy_from_rome')!;
     let s = student('dip-rome-yes');
     s = acceptAndGo({ ...s, offers: [{ offerId: def.id, arrivedWeek: s.clock.week, expiresWeek: s.clock.week + 4, bindings: {} }] }, def, createRng('yes')).state;
@@ -165,13 +168,65 @@ describe('the Academy from Rome (E1 §11)', () => {
     expect(s.study!.city).toBe('rome');
     // The home letter does not come to a man already promised to the Academy.
     expect(isOfferEligible(offerById('rome_diplomatic_academy')!, s)).toBe(false);
-    const done = endStudy({ ...s, clock: { ...s.clock, week: s.study!.endWeek } }, offerById('pv_rome_study')!, createRng('done'));
+    // The degree ends two weeks before the Academy's year opens.
+    const opens = termWeek(s.clock, ACADEMY_TERM, s.study!.endWeek);
+    const done = endStudy({ ...s, clock: { ...s.clock, week: opens - 2 }, study: { ...s.study!, endWeek: opens - 2 } }, offerById('pv_rome_study')!, createRng('done'));
     expect(done.study!.city).toBe('academy');
+    // Its three years run from the October it opens, not the week he carried his books across.
+    expect(done.study!.endWeek).toBe(opens + 156);
+    expect(dateOf(done.clock, opens).month).toBe(10);
     expect(done.rome!.diplomacy!.rank).toBe('student');
     expect(done.character!.credentials).toContain('STL');
     expect(done.assignment).toBeNull();
     expect(done.flags['academy:recruited']).toBeUndefined();
     expect(done.career.some((e) => /stayed in Rome for the Academy/.test(e.text))).toBe(true);
+  });
+
+  it('sends him home to wait when the degree ends months before October, and moves him the week the Academy opens', () => {
+    const def = offerById('rome_academy_from_rome')!;
+    let s = student('dip-rome-wait');
+    s = acceptAndGo({ ...s, offers: [{ offerId: def.id, arrivedWeek: s.clock.week, expiresWeek: s.clock.week + 4, bindings: {} }] }, def, createRng('yes')).state;
+    // The degree ends in the spring: twenty weeks before the Academy's year.
+    const opens = termWeek(s.clock, ACADEMY_TERM, s.study!.endWeek + 20);
+    const end = opens - 20;
+    const home = endStudy({ ...s, clock: { ...s.clock, week: end }, study: { ...s.study!, endWeek: end } }, offerById('pv_rome_study')!, createRng('home'));
+    expect(home.study).toBeNull();
+    expect(home.character!.credentials).toContain('STL');
+    // A plain post from the board, not the flagship's choice: he is going back to Rome.
+    expect(home.mode.kind).toBe('assignment');
+    expect(pendingAppointment(home)).toMatchObject({ offerId: 'rome_diplomatic_academy', week: opens });
+    expect(home.beats.some((b) => b.week === opens)).toBe(true);
+    expect(home.career.some((e) => /Academy's year opens on \d+ October/.test(e.text))).toBe(true);
+    expect(home.career.some((e) => /stayed in Rome/.test(e.text))).toBe(false);
+    // The letter that moves him in October names the post he was given to wait in.
+    const parish = home.world!.parishes.find((x) => x.id === home.assignment!.parishId)!;
+    expect(renderText('{appointment_from}', home)).toBe(parish.name);
+    // No other letter can move him in the meantime.
+    expect(isOfferEligible(offerById('pv_canon_law_licentiate')!, home)).toBe(false);
+    // The week it opens, the letter moves him.
+    const oct = appointmentStep({ ...home, clock: { ...home.clock, week: opens } }, createRng('oct'), offerById);
+    expect(oct.letter).toBe('go');
+    expect(oct.state.study!.city).toBe('academy');
+    expect(oct.state.study!.startWeek).toBe(opens);
+    expect(oct.state.rome!.diplomacy!.rank).toBe('student');
+  });
+
+  it('holds the letter home until the Academy\'s October, whenever in the year he says yes', () => {
+    const def = offerById('rome_diplomatic_academy')!;
+    for (const shift of [0, 10, 20, 30, 40, 50]) {
+      const base = young(`dip-term-${shift}`);
+      const s: GameState = { ...base, clock: { ...base.clock, week: base.clock.week + shift }, offers: [{ offerId: def.id, arrivedWeek: base.clock.week + shift, expiresWeek: base.clock.week + shift + 4, bindings: {} }] };
+      const r = acceptOffer(s, def, createRng(`term:${shift}`)).state;
+      const p = pendingAppointment(r)!;
+      expect(p.offerId).toBe(def.id);
+      const d = dateOf(r.clock, p.week);
+      expect(d.month === 10 && d.day <= 7, `shift ${shift}`).toBe(true);
+      expect(p.week - s.clock.week).toBeGreaterThanOrEqual(2);
+      expect(p.week - s.clock.week).toBeLessThan(56);
+      // Until then he is where he was.
+      expect(r.study).toBeFalsy();
+      expect(r.parish).not.toBeNull();
+    }
   });
 
   it('lets the offer lapse if the degree is not finished', () => {

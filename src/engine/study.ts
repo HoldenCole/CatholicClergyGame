@@ -17,8 +17,9 @@ import { dropOffices } from '@/systems/offices';
 import { consult } from '@/systems/religious/obedience';
 import { beginCuria, homeFromCuria, leaveCuriaForSee } from '@/systems/rome/curia';
 import { beginAcademy, beginService, DIPLOMACY, diplomacyOf, homeFromService } from '@/systems/rome/diplomacy';
-import { fromDayNumber } from './calendar';
-import { sundayOf } from './time';
+import { formatDate, fromDayNumber } from './calendar';
+import { dateOf, sundayOf, termWeek } from './time';
+import { scheduleAppointment } from './appointment';
 
 /** How a place is named in prose. */
 export const CITY_WORD: Record<StudyState['city'], string> = { rome: 'Rome', washington: 'Washington', residence: "the bishop's residence", campus: 'the Newman Center', hospital: 'the hospital', seminary: 'the seminary', chancery: 'the chancery', auxiliary: 'the chancery', see: 'the see', prison: 'the penitentiary', mission: 'the missions', deployment: 'the deployment', formation: 'the seminary', schools: 'the schools office', curia: 'the Curia', holy_see: 'the Apostolic Palace', academy: 'the Academy', nunciature: 'the nunciature' };
@@ -59,7 +60,8 @@ export function beginStudy(state: GameState, def: OfferDef, failed: boolean, rng
     school: program.school,
     residence: program.residence,
     startWeek: next.clock.week,
-    endWeek: next.clock.week + c.weeks,
+    // A school with a year of its own runs its weeks from the week it opens, if he comes a little early.
+    endWeek: (program.term ? termWeek(next.clock, program.term, next.clock.week) : next.clock.week) + c.weeks,
     failed,
     routine: {},
     hoursLogged: {},
@@ -93,6 +95,18 @@ export function beginStudy(state: GameState, def: OfferDef, failed: boolean, rng
   }
   const years = Math.round(c.weeks / 52);
   return note(next, 'offer', program.kind === 'post' ? `Moved into ${program.residence} as ${program.label.toLowerCase()}, ${years} years.` : `${next.religious ? 'Sent by the provincial to' : 'Left for'} ${CITY_WORD[program.city]}: ${program.label.toLowerCase()} at ${program.school}, ${years} years.`);
+}
+
+/** The week the Academy's year next opens. */
+function academyOpens(state: GameState, academy: OfferDef): number {
+  const term = studyProgram(academy.accept.commitment?.away ?? '')?.term;
+  return term ? termWeek(state.clock, term, state.clock.week) : state.clock.week;
+}
+
+/** Whether a man recruited at the Gregorian goes straight across the city: the Academy's year opens within a few weeks. */
+function academyWithin(state: GameState): boolean {
+  const academy = offerById('rome_diplomatic_academy');
+  return !!academy && academyOpens(state, academy) - state.clock.week <= DIPLOMACY.termEarly;
 }
 
 /**
@@ -146,7 +160,7 @@ export function endStudy(state: GameState, def: OfferDef, rng: Rng): GameState {
     next = { ...next, offerHistory: [...next.offerHistory, { offerId: def.id, week: next.clock.week, decision: 'completed' }] };
     const post = studyProgram(study.program)?.kind === 'post';
     const book = bookLine(next);
-    next = note(next, 'offer', (study.city === 'residence' ? `Three years as ${study.label.toLowerCase()}, and the bishop let you go with his blessing.` : post ? `${Math.round((study.endWeek - study.startWeek) / 52)} years as ${study.label.toLowerCase()}; the board has a parish for you again.` : next.flags['academy:recruited'] && study.city === 'rome' ? `Finished ${study.label.toLowerCase()} at ${study.school}, and stayed in Rome for the Academy.` : `Came home from ${CITY_WORD[study.city]} with ${study.label.toLowerCase()}.`) + (book ? ` ${book}` : ''));
+    next = note(next, 'offer', (study.city === 'residence' ? `Three years as ${study.label.toLowerCase()}, and the bishop let you go with his blessing.` : post ? `${Math.round((study.endWeek - study.startWeek) / 52)} years as ${study.label.toLowerCase()}; the board has a parish for you again.` : next.flags['academy:recruited'] && study.city === 'rome' && academyWithin(next) ? `Finished ${study.label.toLowerCase()} at ${study.school}, and stayed in Rome for the Academy.` : `Came home from ${CITY_WORD[study.city]} with ${study.label.toLowerCase()}.`) + (book ? ` ${book}` : ''));
   }
   const flags: GameState['flags'] = { ...next.flags };
   delete flags[`study:${study.city}`];
@@ -155,13 +169,18 @@ export function endStudy(state: GameState, def: OfferDef, rng: Rng): GameState {
     return retire({ ...next, flags });
   }
   // Recruited at the Gregorian: the degree done, he goes across the city to the Academy instead of home. E1 §11.
+  // Its year opens in October: a degree that ends near it goes straight across; one that ends earlier goes home to wait.
+  let later: { def: OfferDef; week: number } | null = null;
   if (flags['academy:recruited'] && study.city === 'rome' && !next.religious) {
     delete flags['academy:recruited'];
     const academy = offerById('rome_diplomatic_academy');
     if (study.failed || !academy) next = note(next, 'offer', 'Without the degree the Academy does not take you; its president writes a kind letter.');
     else {
       const recruited: GameState = { ...next, flags, offerHistory: [...next.offerHistory, { offerId: academy.id, week: next.clock.week, decision: 'accepted' }] };
-      return beginStudy(recruited, academy, false, rng.derive(`academy:${next.clock.week}`));
+      const opens = academyOpens(next, academy);
+      if (academyWithin(next)) return beginStudy(recruited, academy, false, rng.derive(`academy:${next.clock.week}`));
+      later = { def: academy, week: opens };
+      next = note(recruited, 'offer', `The Academy's year opens on ${formatDate(dateOf(next.clock, opens))}: home to the diocese until then.`);
     }
   }
   // The Academy's years are done: the service begins, and he does not go home. E1 §11.
@@ -177,6 +196,7 @@ export function endStudy(state: GameState, def: OfferDef, rng: Rng): GameState {
     delete flags[`study:${study.city}`];
   }
   next = { ...next, flags, study: null, phase: 'parochial_vicar', beats: next.beats.filter((b) => b.kind !== 'assignment') };
+  if (later) next = scheduleAppointment(next, later.def, later.week);
   // A friar comes home to the provincial, not to the board: the consultation decides where the degree is used. E3 §3.1.
   if (next.religious) {
     const { consultation: _c, ...rest } = next.religious;
@@ -194,7 +214,8 @@ export function endStudy(state: GameState, def: OfferDef, rng: Rng): GameState {
     // The board's own letter never reaches him: its lines are not his record, and the flagship's letter is the one he opens.
     return { ...home, career: next.career, assignment: seat, mode: { kind: 'assignment', assignment: seat } };
   }
-  if (!study.failed && (studyProgram(study.program)?.kind === 'study' || study.city === 'curia' || service) && home.assignment) {
+  // A man going back to Rome in October is not given the diocese's great parish for a summer.
+  if (!study.failed && !later && (studyProgram(study.program)?.kind === 'study' || study.city === 'curia' || service) && home.assignment) {
     const flagship = flagshipFor(home);
     const experienced = parishYears(home) >= CAREER.minYearsForPastor;
     const fallback = flagship ? assignmentTo(home, flagship, experienced ? 'pastor' : 'parochial_vicar', [study.city === 'curia' ? 'Years in the Curia are meant to be seen' : service ? 'Years in the Holy See\'s service are meant to be seen' : 'A Roman degree is meant to be seen']) : home.assignment;
