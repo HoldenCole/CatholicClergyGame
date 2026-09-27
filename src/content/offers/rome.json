@@ -269,6 +269,14 @@
               "key": "JCL"
             }
           ]
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "academy:recruited",
+            "value": true
+          }
         }
       ],
       "weight": 10,
@@ -352,6 +360,137 @@
           }
         ],
         "outcome": "You write that your vocation is to a diocese and its parishes, not to a flag and a car with plates. It is a good answer, and the Secretariat files it with the others like it. The Academy does not write twice."
+      }
+    },
+    {
+      "id": "rome_academy_from_rome",
+      "category": "chancery",
+      "campaign": "diocesan",
+      "phase": [
+        "study"
+      ],
+      "title": "Coffee with the President of the Academy",
+      "body": "The rector of the college asks you to his rooms after supper, where a monsignor you have never met is drinking his coffee: the president of the Pontifical Ecclesiastical Academy. He has read your professors' reports, he says, and heard you at a reception speak to an ambassador's wife in her own language. When your degree is done, would you come across the city to the Academy instead of going home? Your bishop has been written to, and has said he will not stand in the way, which is not the same as saying yes.",
+      "from": "@bishop",
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:rome",
+          "value": true
+        },
+        {
+          "type": "age",
+          "op": "<=",
+          "value": 38
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "refused_academy",
+            "value": true
+          }
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "academy:recruited",
+            "value": true
+          }
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "diplomat_served",
+            "value": true
+          }
+        },
+        {
+          "type": "reputation",
+          "key": "rome",
+          "op": ">=",
+          "value": 10
+        },
+        {
+          "type": "any",
+          "inner": [
+            {
+              "type": "credential",
+              "key": "italian"
+            },
+            {
+              "type": "credential",
+              "key": "french"
+            },
+            {
+              "type": "stat",
+              "key": "knowledge",
+              "op": ">=",
+              "value": 55
+            }
+          ]
+        }
+      ],
+      "weight": 6,
+      "bias": [
+        {
+          "when": {
+            "type": "flag",
+            "key": "worked_at_the_holy_see",
+            "value": true
+          },
+          "multiplier": 2.0
+        },
+        {
+          "when": {
+            "type": "credential",
+            "key": "french"
+          },
+          "multiplier": 1.5
+        },
+        {
+          "when": {
+            "type": "outspokenness",
+            "op": ">=",
+            "value": 60
+          },
+          "multiplier": 0.4
+        }
+      ],
+      "windowWeeks": 4,
+      "final": true,
+      "cluster": "curia",
+      "accept": {
+        "effects": [
+          {
+            "target": "flag",
+            "key": "academy:recruited",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "rome",
+            "delta": 4
+          }
+        ],
+        "outcome": "You say yes over the second cup. The president writes the date on the back of his card: the Monday after your defense. You finish the degree, and the car that would have taken you to Fiumicino takes you across the city instead."
+      },
+      "decline": {
+        "effects": [
+          {
+            "target": "flag",
+            "key": "refused_academy",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "rome",
+            "delta": -3
+          }
+        ],
+        "outcome": "You tell him you were ordained for a diocese and you mean to go home to it. He says that is a good answer, and that he hears it often from the best of them, and finishes his coffee. The Academy does not ask twice."
       }
     }
   ]

@@ -1,6 +1,7 @@
 import type { GameState, OfferDef, StudyState } from '@/types';
 import type { Rng } from './rng';
 import { studyProgram } from '@/content/study';
+import { offerById } from '@/content/offers';
 import { applyEffects } from './effects';
 import { handoffProject } from '@/systems/projects';
 import { refreshOpenings } from '@/systems/openings';
@@ -122,13 +123,23 @@ export function endStudy(state: GameState, def: OfferDef, rng: Rng): GameState {
     next = { ...next, offerHistory: [...next.offerHistory, { offerId: def.id, week: next.clock.week, decision: 'completed' }] };
     const post = studyProgram(study.program)?.kind === 'post';
     const book = bookLine(next);
-    next = note(next, 'offer', (study.city === 'residence' ? `Three years as ${study.label.toLowerCase()}, and the bishop let you go with his blessing.` : post ? `${Math.round((study.endWeek - study.startWeek) / 52)} years as ${study.label.toLowerCase()}; the board has a parish for you again.` : `Came home from ${CITY_WORD[study.city]} with ${study.label.toLowerCase()}.`) + (book ? ` ${book}` : ''));
+    next = note(next, 'offer', (study.city === 'residence' ? `Three years as ${study.label.toLowerCase()}, and the bishop let you go with his blessing.` : post ? `${Math.round((study.endWeek - study.startWeek) / 52)} years as ${study.label.toLowerCase()}; the board has a parish for you again.` : next.flags['academy:recruited'] && study.city === 'rome' ? `Finished ${study.label.toLowerCase()} at ${study.school}, and stayed in Rome for the Academy.` : `Came home from ${CITY_WORD[study.city]} with ${study.label.toLowerCase()}.`) + (book ? ` ${book}` : ''));
   }
   const flags: GameState['flags'] = { ...next.flags };
   delete flags[`study:${study.city}`];
   if (studyProgram(study.program)?.kind === 'see') {
     // The letter at seventy-five: a bishop does not come home to a parish.
     return retire({ ...next, flags });
+  }
+  // Recruited at the Gregorian: the degree done, he goes across the city to the Academy instead of home. E1 §11.
+  if (flags['academy:recruited'] && study.city === 'rome' && !next.religious) {
+    delete flags['academy:recruited'];
+    const academy = offerById('rome_diplomatic_academy');
+    if (study.failed || !academy) next = note(next, 'offer', 'Without the degree the Academy does not take you; its president writes a kind letter.');
+    else {
+      const recruited: GameState = { ...next, flags, offerHistory: [...next.offerHistory, { offerId: academy.id, week: next.clock.week, decision: 'accepted' }] };
+      return beginStudy(recruited, academy, false, rng.derive(`academy:${next.clock.week}`));
+    }
   }
   // The Academy's years are done: the service begins, and he does not go home. E1 §11.
   if (study.city === 'academy') {
