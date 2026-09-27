@@ -1,4 +1,4 @@
-import type { BishopPriority } from './world';
+import type { BishopPriority, Role } from './world';
 import type { Condition, Effect } from './events';
 import type { Pillar } from './character';
 import type { StatKey, ConstituencyKey } from './stats';
@@ -75,6 +75,8 @@ export interface StudyState {
   taken: string[];
   /** The parish he left, for the record. */
   fromParishId: string | null;
+  /** The rank he left with, so a washout comes home at it: a vicar is not made pastor, a pastor is not made vicar. Absent on older saves. */
+  leftAs?: Role | null;
   /** A posting's dials, −100..100, moved by the week. */
   place?: Record<string, number>;
   /** A posting's book: what the years there counted (anointings, deaths attended, baptisms at the bedside, receptions). */

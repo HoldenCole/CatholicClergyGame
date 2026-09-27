@@ -5,6 +5,7 @@ import { acceptOffer, offersWeek } from '@/engine/offers';
 import { offerById, offersForPhase } from '@/content/offers';
 import { eventById, eventsForPhase } from '@/content';
 import { studyWeekHook } from '@/engine/weekHook';
+import { endStudy } from '@/engine/study';
 import { setStudyActivity, studyActivitiesFor, studyWeek } from '@/systems/studyWeek';
 import { startAssignment } from '@/engine/parish';
 import { acceptAssignment } from '@/engine/seminary';
@@ -105,6 +106,35 @@ describe('study away', () => {
     expect(home.offerHistory.some((h) => h.offerId === 'pv_rome_study' && h.decision === 'failed')).toBe(true);
     expect(home.career.some((e) => /without the degree/.test(e.text))).toBe(true);
     expect(home.mode.kind).toBe('assignment');
+  });
+
+  it('a vicar who washes out comes home a vicar, however the board would have rated him', () => {
+    const def = offerById('pv_rome_study')!;
+    const roles = new Set<string>();
+    for (let i = 0; i < 30; i++) {
+      const away = acceptAndGo(withRomeOffer(`wash-vicar-${i}`), def, createRng(`go:${i}`)).state;
+      expect(away.study!.leftAs).toBe('parochial_vicar');
+      // A man the board would otherwise make pastor: long ordained, and the chancery thinks well of him.
+      const c = away.character!;
+      const strong: GameState = { ...away, flags: { ...away.flags, ordination_week: away.clock.week - 52 * 9 }, character: { ...c, reputation: { ...c.reputation, chancery: 95 } }, study: { ...away.study!, failed: true }, clock: { ...away.clock, week: away.study!.endWeek } };
+      const home = endStudy(strong, def, createRng(`home:${i}`));
+      roles.add(home.assignment!.role);
+      expect(home.mode.kind).toBe('assignment');
+      expect(home.assignment!.reasons.join(' ')).toMatch(/without the degree/);
+      // The diocese's openings are the diocese's: he was not considered for them, and they are still there.
+      expect(home.openings.some((o) => o.kind !== 'parochial_vicar') || home.openings.length === 0).toBe(true);
+    }
+    expect([...roles]).toEqual(['parochial_vicar']);
+  });
+
+  it('a pastor who washes out comes home a pastor', () => {
+    const def = offerById('pv_rome_study')!;
+    for (let i = 0; i < 20; i++) {
+      const away = acceptAndGo(withRomeOffer(`wash-pastor-${i}`), def, createRng(`go:${i}`)).state;
+      const home = endStudy({ ...away, study: { ...away.study!, failed: true, leftAs: 'pastor' }, clock: { ...away.clock, week: away.study!.endWeek } }, def, createRng(`home:${i}`));
+      expect(home.assignment!.role, `seed ${i}`).toBe('pastor');
+      expect(home.career.some((e) => e.week === home.clock.week && /^Sent as parochial vicar/.test(e.text))).toBe(false);
+    }
   });
 
   it('the study state survives a save, and a v3 save loads with none', () => {

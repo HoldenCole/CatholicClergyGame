@@ -65,6 +65,7 @@ export function beginStudy(state: GameState, def: OfferDef, failed: boolean, rng
     hoursLogged: {},
     taken: [],
     fromParishId: next.parish?.parishId ?? null,
+    leftAs: state.assignment?.role ?? null,
     ...(program.place ? { place: Object.fromEntries(program.place.dials.map((d) => [d.id, 0])) } : {}),
   };
   const flags: GameState['flags'] = { ...next.flags, [`study:${program.city}`]: true };
@@ -92,6 +93,28 @@ export function beginStudy(state: GameState, def: OfferDef, failed: boolean, rng
   }
   const years = Math.round(c.weeks / 52);
   return note(next, 'offer', program.kind === 'post' ? `Moved into ${program.residence} as ${program.label.toLowerCase()}, ${years} years.` : `${next.religious ? 'Sent by the provincial to' : 'Left for'} ${CITY_WORD[program.city]}: ${program.label.toLowerCase()} at ${program.school}, ${years} years.`);
+}
+
+/**
+ * Home without the degree: he comes back at the rank he left with. A vicar is
+ * not made pastor on a degree he did not finish, so the board's pastorates and
+ * chancery posts are not open to him this year; a pastor is not sent back as a
+ * vicar (DESIGN §8.1), so if the board has only a vicar's post, he is pastor there.
+ */
+function washoutHome(state: GameState, study: StudyState, rng: Rng): GameState {
+  const wasPastor = study.leftAs === 'pastor' || study.leftAs === 'administrator';
+  if (!wasPastor) {
+    const home = nextAssignment({ ...state, openings: state.openings.filter((o) => o.kind === 'parochial_vicar') }, rng).state;
+    if (!home.assignment) return { ...home, openings: state.openings };
+    const assignment = { ...home.assignment, reasons: ['Home without the degree: the board gives you a vicar\'s post and will look at you again in a few years'] };
+    return { ...home, openings: state.openings, assignment, mode: { kind: 'assignment', assignment } };
+  }
+  const home = nextAssignment(state, rng).state;
+  if (!home.assignment || home.assignment.role !== 'parochial_vicar') return home;
+  const parish = home.world!.parishes.find((p) => p.id === home.assignment!.parishId)!;
+  const assignment = assignmentTo(home, parish, study.leftAs!, ['A pastor is not sent back as a vicar, degree or no degree']);
+  const career = home.career.filter((e) => !(e.week === home.clock.week && e.kind === 'assignment' && e.text.startsWith('Sent as parochial vicar')));
+  return note({ ...home, career, assignment, mode: { kind: 'assignment', assignment } }, 'assignment', `Moved as ${study.leftAs} to ${parish.name}, ${parish.place}.`);
 }
 
 /**
@@ -160,6 +183,7 @@ export function endStudy(state: GameState, def: OfferDef, rng: Rng): GameState {
     return { ...consult({ ...next, religious: rest }, rng.derive(`consult:home:${next.clock.week}`), 'term'), mode: { kind: 'consultation' } };
   }
   next = refreshOpenings(next, rng.derive(`openings:home:${next.clock.week}`)).state;
+  if (study.failed) return washoutHome(next, study, rng);
   const home = nextAssignment(next, rng).state;
   // A degree earned buys a choice among the top of the diocese, whatever the board rolled; the letter behind the
   // choice is the flagship. A posting ended, or a washout, takes what the board gives.
