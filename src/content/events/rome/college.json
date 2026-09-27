@@ -1,0 +1,913 @@
+{
+  "_notes": "E1 R1.5: the College of Cardinals (docs/EXPANSION-E1-ROME.md §7). Beat 'college': systems/rome/college.ts sets one due (created at a consistory, a later consistory, the see vacant, after the conclave, the eightieth birthday); ca_titular follows the biglietto. Flags read: cardinal:emeritus, curia:secretary, conclave:voted_winner, conclave:voted_in, conclave:had_votes. Tokens {titular}, {college_electors}, {pope}.",
+  "events": [
+    {
+      "id": "ca_biglietto_see",
+      "phase": [
+        "bishop",
+        "study",
+        "pastor",
+        "administrator",
+        "parochial_vicar"
+      ],
+      "beat": "college",
+      "pressure": [
+        "ambition_vs_integrity"
+      ],
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 3,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "college",
+          "key": "scene",
+          "value": "created"
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "curia:secretary",
+            "value": true
+          }
+        }
+      ],
+      "title": "The Biglietto",
+      "body": "The biglietto comes by hand from the nunciature, in an envelope with the arms of the Secretariat of State: {pope} will create you a cardinal at the consistory, with a titular church in {titular}. By noon the news is on the radio in your see. Your secretary has had forty calls. Your mother, who is very old now, has asked your sister whether she will have to call you Eminence, and your sister has said yes, and your mother has said she will not.",
+      "choices": [
+        {
+          "id": "accept",
+          "label": "Accept it as it is given, and go to Rome",
+          "outcome": "You accept it as it is given. At the consistory the pope puts the red biretta on your head and says, as he says to all of them, that red is the colour of blood, and that you must be ready to shed yours. Your mother, in the front row of the pilgrims, says Eminence exactly once, to make you laugh, and you do.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 8
+            },
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": 5
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "cardinal:accepted",
+              "value": true
+            }
+          ],
+          "default": true,
+          "followUpId": "ca_titular"
+        },
+        {
+          "id": "excuse",
+          "label": "Write to ask to be excused, as a few men have",
+          "outcome": "You write to ask to be excused: you are a pastor of a diocese, not a prince. The answer comes in a week, courteous and final: the Holy Father has read your letter with great esteem and asks you to accept. You accept. The letter is in your file now, which is a kind of honour, and a kind of mark.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "cardinal:asked_excused",
+              "value": true
+            },
+            {
+              "target": "flag",
+              "key": "cardinal:accepted",
+              "value": true
+            }
+          ],
+          "followUpId": "ca_titular"
+        }
+      ]
+    },
+    {
+      "id": "ca_biglietto_curia",
+      "phase": [
+        "bishop",
+        "study",
+        "pastor",
+        "administrator",
+        "parochial_vicar"
+      ],
+      "beat": "college",
+      "pressure": [
+        "ambition_vs_integrity",
+        "friendship_vs_duty"
+      ],
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 3,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "college",
+          "key": "scene",
+          "value": "created"
+        },
+        {
+          "type": "flag",
+          "key": "curia:secretary",
+          "value": true
+        }
+      ],
+      "title": "Red, at the Office",
+      "body": "The biglietto is delivered to your office at {dicastery}, which is to say across a corridor from where it was written: {pope} will create you a cardinal at the consistory, with a titular church in {titular}. The officials who were your equals ten years ago stand up when you come in now. The one who expected the post you have, the one who has never forgiven you, comes in last and kisses your ring with an expression you will remember on your deathbed.",
+      "choices": [
+        {
+          "id": "accept",
+          "label": "Accept it, and go back to work at two",
+          "outcome": "You accept it and go back to work at two, because the files have not changed. At the consistory, in the new scarlet, you find that the robe is heavier than it looks, and the man who kissed your ring is standing behind you when you turn round.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 8
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "cardinal:accepted",
+              "value": true
+            }
+          ],
+          "default": true,
+          "followUpId": "ca_titular"
+        },
+        {
+          "id": "him",
+          "label": "Go and find the man who never forgave you",
+          "outcome": "You find him in his office after the others have gone and sit down without being asked, and say what should have been said years ago. He does not forgive you. He does, at the consistory, stand in the right place, which in this building is a great deal.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 4
+            },
+            {
+              "target": "flag",
+              "key": "cardinal:accepted",
+              "value": true
+            }
+          ],
+          "followUpId": "ca_titular"
+        }
+      ]
+    },
+    {
+      "id": "ca_titular",
+      "phase": [
+        "bishop",
+        "study",
+        "pastor",
+        "administrator",
+        "parochial_vicar"
+      ],
+      "beat": "college",
+      "pressure": [
+        "friendship_vs_duty"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 3,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "college",
+          "key": "scene",
+          "value": "titular"
+        }
+      ],
+      "title": "Taking Possession",
+      "body": "A cardinal is given a church in Rome as a sign that he belongs to its clergy, and yours is in {titular}: a baroque front, a leaking apse, a congregation of old women, Filipino nurses, and a Nigerian student who serves every Mass. You take possession on a Sunday, reading the bull in Latin to a church that is half empty and wholly curious. The parish priest, who has seen three cardinals come and go, shows you the roof and says nothing at all.",
+      "choices": [
+        {
+          "id": "roof",
+          "label": "Promise the roof, and raise the money for it",
+          "outcome": "You promise the roof and raise the money for it from people at home who have never heard of {titular}. It takes four years. When it is done the parish priest writes you a letter in which he says, for the first time, that it is your church too.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "cardinal:titular_roof",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "mass",
+          "label": "Come back and say the Sunday Mass whenever you are in Rome",
+          "outcome": "You come back and say the Sunday Mass whenever you are in Rome, which is more often than cardinals usually do. The old women start keeping your seat. The Nigerian student is ordained three years later and asks you to preach.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ca_consistory",
+      "phase": [
+        "bishop",
+        "study",
+        "pastor",
+        "administrator",
+        "parochial_vicar"
+      ],
+      "beat": "college",
+      "pressure": [
+        "ambition_vs_integrity",
+        "competence"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 3,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "college",
+          "key": "scene",
+          "value": "consistory"
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "cardinal:emeritus",
+            "value": true
+          }
+        }
+      ],
+      "title": "A Consistory",
+      "body": "{pope} calls the College to Rome for a consistory: new cardinals to be created, and a day on which the old ones are asked their view of something the pope has not decided. The College meets in the synod hall, a hundred and more men in red who mostly know each other by reputation. There are {college_electors} electors now. The new cardinals include men you have read about and men nobody has, from sees that have never had one.",
+      "choices": [
+        {
+          "id": "speak",
+          "label": "Speak, when the pope asks the College its view",
+          "outcome": "When the pope asks the College its view, you are one of the eleven who speak. You say what you think, plainly, in bad Italian, and sit down. Afterwards two cardinals you have never met come and find you at the coffee. The College, it turns out, is also a room where men look each other over.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "cardinal:spoke_in_consistory",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "listen",
+          "label": "Listen, and find the new men from far away",
+          "outcome": "You listen, and at the reception you find the new men from far away, the ones from sees that never had a cardinal, and ask them about their dioceses. They tell you. Some of them will vote in the next conclave, and so will you, and now you know what they want.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ca_eve_lunch",
+      "phase": [
+        "bishop",
+        "study",
+        "pastor",
+        "administrator",
+        "parochial_vicar"
+      ],
+      "beat": "college",
+      "pressure": [
+        "loyalty_vs_honesty",
+        "ambition_vs_integrity"
+      ],
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 3,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "college",
+          "key": "scene",
+          "value": "eve"
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "cardinal:emeritus",
+            "value": true
+          }
+        }
+      ],
+      "title": "The Lunches Before",
+      "body": "The see of Rome is vacant, and the cardinals are gathering. Before the conclave there are the general congregations in the morning and the lunches in the afternoon, and at one of them, in an apartment near the Vatican with a view of the dome, a cardinal you respect takes you onto the terrace and talks for twenty minutes about the Church and never once says the name he wants you to write. He does not need to. You both know whose name it is.",
+      "choices": [
+        {
+          "id": "listen",
+          "label": "Listen to him, and promise nothing",
+          "outcome": "You listen to him and promise nothing, which is what the constitution requires and what he expected. He shakes your hand at the door and says he trusts you will vote with your conscience, which is how the Curia says it hopes you will vote with him.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "conclave:heard_lobby",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "argue",
+          "label": "Tell him plainly what you think the Church needs, and that it is not his man",
+          "outcome": "You tell him plainly what you think the Church needs, and that it is not his man. He smiles, and says that the Holy Spirit has surprised him before. It is a gracious answer. You find, in the chapel that evening, that you are not sure you were right.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": -1
+            },
+            {
+              "target": "flag",
+              "key": "conclave:heard_lobby",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "leave",
+          "label": "Excuse yourself: this is not what the lunches are for",
+          "outcome": "You excuse yourself before the coffee, saying that you want to walk before Vespers. He is not offended. There are, he knows, men who treat the conclave as a retreat, and he has counted them too.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ca_eve_lists",
+      "phase": [
+        "bishop",
+        "study",
+        "pastor",
+        "administrator",
+        "parochial_vicar"
+      ],
+      "beat": "college",
+      "pressure": [
+        "ambition_vs_integrity"
+      ],
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 3,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "college",
+          "key": "scene",
+          "value": "eve"
+        },
+        {
+          "type": "reputation",
+          "key": "rome",
+          "op": ">=",
+          "value": 45
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "cardinal:emeritus",
+            "value": true
+          }
+        }
+      ],
+      "title": "The Lists",
+      "body": "The Italian papers print their lists of papabili every morning of the vacancy, and on the third morning your own name is on one of them: a short paragraph, half flattering and half wrong, with a photograph from your ordination in which you look nineteen. Your secretary brings it to you with the coffee as though it were a live animal. By lunch every cardinal in Rome has read it, and so has your mother.",
+      "choices": [
+        {
+          "id": "laugh",
+          "label": "Laugh at it, in the congregations, where everyone can hear",
+          "outcome": "You laugh at it in the congregations, at the coffee, loudly enough for the men who matter to hear. It is the right thing to do. It is also, you realise later, exactly what a man who wanted it would do, and the men who matter know that too.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "conclave:on_the_lists",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "silence",
+          "label": "Say nothing about it to anyone",
+          "outcome": "You say nothing about it to anyone. The silence is noticed. In a room where every man is watching every other for signs of wanting it, a man who shows nothing is either very holy or very careful, and nobody can tell which.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "conclave:on_the_lists",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "priority": 2
+    },
+    {
+      "id": "ca_eve_prayer",
+      "phase": [
+        "bishop",
+        "study",
+        "pastor",
+        "administrator",
+        "parochial_vicar"
+      ],
+      "beat": "college",
+      "pressure": [
+        "belief_vs_safety",
+        "ambition_vs_integrity"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 3,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "college",
+          "key": "scene",
+          "value": "eve"
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "cardinal:emeritus",
+            "value": true
+          }
+        }
+      ],
+      "title": "Novemdiales",
+      "body": "The nine days of Masses for the dead pope are said in St. Peter's, one each day, by the cardinals in turn, and on the sixth day it is yours. You stand at the altar of the Chair in front of the body's absence and a basilica full of people who have come to pray for a man most of them never met, and you have to preach. Somewhere in the nave are cardinals who will be listening for what you say about the next pope, without your saying anything about him.",
+      "choices": [
+        {
+          "id": "him",
+          "label": "Preach about the dead pope, and nothing else",
+          "outcome": "You preach about the dead pope, his last year, the thing he said to you once in a corridor, and nothing else. It is a good homily. The cardinals who were listening for something else find nothing, and some of them are impressed by that.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 2
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "church",
+          "label": "Preach about the Church he leaves, and what it needs",
+          "outcome": "You preach about the Church he leaves and what it needs, carefully, without a name. Every cardinal in the basilica hears the name you did not say. Some of them write it down in their heads next to yours.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "conclave:preached_the_church",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ca_eve_emeritus",
+      "phase": [
+        "bishop",
+        "study",
+        "pastor",
+        "administrator",
+        "parochial_vicar"
+      ],
+      "beat": "college",
+      "pressure": [
+        "belief_vs_safety"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 3,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "college",
+          "key": "scene",
+          "value": "eve"
+        },
+        {
+          "type": "flag",
+          "key": "cardinal:emeritus",
+          "value": true
+        }
+      ],
+      "title": "Outside the Door",
+      "body": "The see of Rome is vacant and you are in Rome for the general congregations, where a cardinal over eighty may still speak. When the doors of the Sistine Chapel close on the others, you will not be inside. You have your five minutes in the synod hall tomorrow morning, and the men who will vote are listening harder to the old ones than they let on: you have nothing left to want.",
+      "choices": [
+        {
+          "id": "plain",
+          "label": "Tell them plainly what you have seen in fifty years",
+          "outcome": "You tell them plainly what you have seen in fifty years: what the Church lost and what it kept, and which kind of man kept it. It takes four minutes. At the coffee a young cardinal from Africa asks you to say it again, slowly, so he can write it down.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "pray",
+          "label": "Say that you will pray for them, and sit down",
+          "outcome": "You say that the old men's work now is to pray, and that you will pray for every one of them by name, and you sit down. It is the shortest intervention of the week. The Dean mentions it in his homily at the Mass before the conclave.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ca_after_his",
+      "phase": [
+        "bishop",
+        "study",
+        "pastor",
+        "administrator",
+        "parochial_vicar"
+      ],
+      "beat": "college",
+      "pressure": [
+        "ambition_vs_integrity",
+        "loyalty_vs_honesty"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 3,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "college",
+          "key": "scene",
+          "value": "after"
+        },
+        {
+          "type": "flag",
+          "key": "conclave:voted_winner",
+          "value": true
+        }
+      ],
+      "title": "He Remembers Your Ballot",
+      "body": "The new pope, {pope}, receives the cardinals in audience the week after, one by one, for the length of a handshake. When you reach him he holds on a moment longer than the protocol allows and says, in a voice only you can hear, that he knows how you voted, and thanks you. You do not know how he could know. You suspect, from his face, that he is guessing, and that he has guessed right.",
+      "choices": [
+        {
+          "id": "serve",
+          "label": "Tell him he has your obedience and your help",
+          "outcome": "You tell him he has your obedience, which he has from every man in the room, and your help, which he does not. He nods as though he had counted on it. A month later a letter arrives asking you to sit on a commission nobody else wanted.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 5
+            },
+            {
+              "target": "flag",
+              "key": "pope:ally",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "pray",
+          "label": "Tell him you will pray for him, and step back",
+          "outcome": "You tell him you will pray for him, and step back, which is also a kind of answer. He looks after you for a moment. The protocol officer moves the next cardinal forward.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 2
+            }
+          ]
+        }
+      ],
+      "priority": 1
+    },
+    {
+      "id": "ca_after_not_his",
+      "phase": [
+        "bishop",
+        "study",
+        "pastor",
+        "administrator",
+        "parochial_vicar"
+      ],
+      "beat": "college",
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 3,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "college",
+          "key": "scene",
+          "value": "after"
+        },
+        {
+          "type": "flag",
+          "key": "conclave:voted_in",
+          "value": true
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "conclave:voted_winner",
+            "value": true
+          }
+        }
+      ],
+      "title": "The Man You Did Not Choose",
+      "body": "The new pope, {pope}, receives the cardinals in audience the week after, one by one. You did not vote for him on any ballot, and the College knows it, the way the College knows everything that is supposed to be secret. When you reach him he takes your hand in both of his and asks you to help him, and says that he will need the men who did not want him more than the men who did.",
+      "choices": [
+        {
+          "id": "help",
+          "label": "Promise to help him, and mean it",
+          "outcome": "You promise to help him, and find by the time you have walked back across the Borgo that you mean it. Obedience is not agreement. It is, you think, the thing that makes the disagreement bearable, and he seemed to know that before you did.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 4
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "pope:won_over",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "honest",
+          "label": "Tell him honestly that you voted otherwise, and that he has your obedience",
+          "outcome": "You tell him honestly that you voted otherwise and that he has your obedience. He laughs, a real laugh, and says that at least one man in the College tells him the truth. You are not sure, afterwards, whether that was a compliment or a job description.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 2
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ca_after_named",
+      "phase": [
+        "bishop",
+        "study",
+        "pastor",
+        "administrator",
+        "parochial_vicar"
+      ],
+      "beat": "college",
+      "pressure": [
+        "ambition_vs_integrity",
+        "doubt"
+      ],
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 3,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "college",
+          "key": "scene",
+          "value": "after"
+        },
+        {
+          "type": "flag",
+          "key": "conclave:had_votes",
+          "value": true
+        }
+      ],
+      "title": "Your Name, Read Aloud",
+      "body": "In the Sistine Chapel the scrutineers read every ballot aloud, name by name, and for a few ballots your own name was among them: not many votes, but some, from men you could guess at and men you cannot. Now it is over, and {pope} is pope, and the cardinals who wrote your name look at you across the synod hall with an expression you have seen before only on men who have lost an election they did not know they were in.",
+      "choices": [
+        {
+          "id": "thank",
+          "label": "Find them, as far as you can guess them, and thank them",
+          "outcome": "You find the ones you can guess at and thank them, without saying for what. Some of them pretend not to understand. One of them, an old man from Asia, says that he would do it again, and that you should be careful now, because Rome has noticed you.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "forget",
+          "label": "Put it out of your mind, and go home",
+          "outcome": "You put it out of your mind and go home to your see, where nobody knows except your secretary, who read it in the papers. It will never come to anything. It is in you now anyway, a name read aloud in a chapel, and you pray about it more than you expected to.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            }
+          ]
+        }
+      ],
+      "priority": 2
+    },
+    {
+      "id": "ca_eighty",
+      "phase": [
+        "bishop",
+        "study",
+        "pastor",
+        "administrator",
+        "parochial_vicar"
+      ],
+      "beat": "college",
+      "pressure": [
+        "doubt",
+        "body_vs_vow"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 3,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "college",
+          "key": "scene",
+          "value": "eighty"
+        }
+      ],
+      "title": "Eighty",
+      "body": "On your eightieth birthday you cease to be an elector of the Roman Pontiff. It is a line in the Annuario Pontificio, moved from one list to another, and a letter from the Dean of the College that manages to be both a congratulation and a condolence. You will still be called to the general congregations when the see falls vacant. When the doors of the Sistine Chapel close, you will be on the other side of them.",
+      "choices": [
+        {
+          "id": "gladly",
+          "label": "Take it gladly: the vote was always a weight",
+          "outcome": "You take it gladly. The vote was always a weight, and you find, the first night after, that you sleep as you have not slept in years. The Dean's letter goes in the drawer with the biglietto.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": -5
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "rue",
+          "label": "Admit to yourself that it stings",
+          "outcome": "You admit to yourself that it stings: that for a few years you were one of the men who chose the successor of Peter, and now you are not. You take the sting to confession, which is what it is for, and the priest, who is young, is very kind about it.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -308,7 +308,7 @@ function leaveCollapse(state: GameState): GameState {
 }
 
 /** DESIGN 15: a career summary that reads like a life rather than a score. */
-export function careerSummary(state: GameState, ending: 'retired' | 'died' | 'left_priesthood'): string {
+export function careerSummary(state: GameState, ending: 'retired' | 'died' | 'left_priesthood' | 'elected_pope'): string {
   const c = state.character!;
   const age = playerAge(state);
   const years = Math.floor(yearsOrdained(state));
@@ -322,6 +322,7 @@ export function careerSummary(state: GameState, ending: 'retired' | 'died' | 'le
   const opening =
     ending === 'retired' ? `You retired at ${age}, ${years} years a priest.` :
     ending === 'died' ? `You died at ${age}, ${years} years a priest, ${state.assignment?.role === 'pastor' ? 'still pastor' : 'still in harness'}.` :
+    ending === 'elected_pope' ? `The College of Cardinals elected you pope at ${age}, ${years} years a priest, and you took the name ${String(state.flags['pope:name'] ?? 'the College will remember')}.` :
     `You left the priesthood at ${age}, after ${years} years.`;
   const see = state.see;
   const arc =

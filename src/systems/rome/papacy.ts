@@ -1,4 +1,5 @@
-import type { GameState, Letter, Papacy, PapacyEnd, RomeState, Vacancy } from '@/types';
+import type { Cardinal, GameState, Letter, Papacy, PapacyEnd, RomeState, Vacancy } from '@/types';
+import { collegeElects, playerIsElector } from './conclave';
 import { createRng } from '@/engine/rng';
 import { fromDayNumber, toDayNumber } from '@/engine/calendar';
 import { sundayOf } from '@/engine/time';
@@ -65,17 +66,21 @@ function collegeTemper(line: Papacy[]): number {
 }
 
 /** A generated pope: his name, his age, where he came from, how he reads, and when his see will fall vacant. */
-export function generatePope(seed: string, index: number, electedDay: number, line: Papacy[], ordinals: Record<string, number>): { pope: Papacy; ordinals: Record<string, number> } {
+export function generatePope(seed: string, index: number, electedDay: number, line: Papacy[], ordinals: Record<string, number>, given?: { born: number; from: string; temperament: number }): { pope: Papacy; ordinals: Record<string, number> } {
   const rng = createRng(`${seed}:pope:${index}`);
   const names = Object.keys(papalPools.regnal);
   const base = rng.pick(names);
   const n = (ordinals[base] ?? papalPools.regnal[base] ?? 0) + 1;
   const name = n === 1 ? base : `${base} ${roman(n)}`;
-  const from = rng.weighted(papalPools.origins, (o) => o.weight).from;
+  const rolledFrom = rng.weighted(papalPools.origins, (o) => o.weight).from;
   const year = fromDayNumber(electedDay).year;
   const a = PAPACY.electionAge;
-  const age = Math.max(a.min, Math.min(a.max, Math.round(a.mean + rng.gaussian() * a.sd)));
-  const temperament = clamp(collegeTemper(line) + rng.gaussian() * PAPACY.temperamentSd);
+  const rolledAge = Math.max(a.min, Math.min(a.max, Math.round(a.mean + rng.gaussian() * a.sd)));
+  const rolledTemper = clamp(collegeTemper(line) + rng.gaussian() * PAPACY.temperamentSd);
+  // A pope the College elected (E1 R1.5) is that cardinal: his age, his country, his reading.
+  const from = given?.from ?? rolledFrom;
+  const age = given ? year - given.born : rolledAge;
+  const temperament = given?.temperament ?? rolledTemper;
   const before = rng.pick(papalPools.before).replace('{from}', from);
   // His years, rolled now: each year a chance of death that rises with age, and from eighty-five a chance he lays it down.
   let endDay = electedDay + 365 * 40;
@@ -102,7 +107,7 @@ function electionAfter(seed: string, sinceDay: number): number {
 }
 
 /** The next pope after the one who reigned: the record's while there is one, a generated one after. */
-function successor(seed: string, rome: RomeState, prior: Papacy, electedDay: number): { rome: RomeState; pope: Papacy } {
+function successor(seed: string, rome: RomeState, prior: Papacy, electedDay: number, elected?: Cardinal | null): { rome: RomeState; pope: Papacy } {
   if (prior.historical) {
     const i = papalHistory.findIndex((h) => `hist:${h.key}` === prior.id);
     if (i >= 0 && i + 1 < papalHistory.length) {
@@ -113,8 +118,10 @@ function successor(seed: string, rome: RomeState, prior: Papacy, electedDay: num
   const index = (rome.generated ?? 0) + 1;
   // The College reads the whole line, the record and the generated popes since, whatever year the man's life began.
   const line = [...papalHistory.map((_, i) => historical(i)), ...rome.popes.filter((p) => !p.historical && p.id !== `gen:${index}`)];
-  const made = generatePope(seed, index, electedDay, line, rome.ordinals ?? {});
-  return { rome: { ...rome, popes: [...rome.popes, made.pope], ordinals: made.ordinals, generated: index }, pope: made.pope };
+  const made = generatePope(seed, index, electedDay, line, rome.ordinals ?? {}, elected ? { born: elected.born, from: elected.from, temperament: elected.temperament } : undefined);
+  // The cardinal elected leaves the College for the chair.
+  const college = elected && rome.college ? rome.college.filter((c) => c.id !== elected.id) : rome.college;
+  return { rome: { ...rome, popes: [...rome.popes, made.pope], ordinals: made.ordinals, generated: index, ...(college ? { college } : {}) }, pope: made.pope };
 }
 
 /**
@@ -142,6 +149,13 @@ export function romeOn(seed: string, day: number): RomeState {
   // The life begins now: keep the reigning pope (or the one whose see is vacant), and the generated line's counters.
   const last = rome.popes[rome.popes.length - 1]!;
   return { ...rome, popes: [last] };
+}
+
+/** Whether the record names the pope after this one. */
+function recordSuccessor(prior: Papacy): boolean {
+  if (!prior.historical) return false;
+  const i = papalHistory.findIndex((h) => `hist:${h.key}` === prior.id);
+  return i >= 0 && i + 1 < papalHistory.length;
 }
 
 /** When the next pope is elected after `prior`: the record's date, or the generated conclave's. */
@@ -196,9 +210,14 @@ export function papacyWeek(state: GameState): PapacyWeek {
     if (rome.vacancy) {
       if (rome.vacancy.electionDay > day) break;
       const prior = rome.popes.find((p) => p.id === rome.vacancy!.priorId) ?? rome.popes[rome.popes.length - 1]!;
+      const fromRecord = recordSuccessor(prior);
+      // A man of the College in this conclave casts his own ballots: Rome waits for them. E1 R1.5.
+      if (!fromRecord && !rome.vacancy.winnerId && playerIsElector({ ...state, rome })) break;
       const electionDay = rome.vacancy.electionDay;
+      // After the record, the College elects: the cardinal the conclave chose, or the one it would choose.
+      const elected = fromRecord || !rome.college ? null : rome.vacancy.winnerId ? rome.college.find((c) => c.id === rome.vacancy!.winnerId) ?? null : collegeElects({ ...state, rome }, rome.college, rome.vacancy.sinceDay);
       const { vacancy: _v, ...open } = rome;
-      const made = successor(state.seed, open, prior, electionDay);
+      const made = successor(state.seed, open, prior, electionDay, elected);
       rome = made.rome;
       const p = made.pope;
       const age = yearOf(p.electedDay) - p.born;

@@ -8,6 +8,7 @@ import { romeTokens } from '@/systems/rome/policy';
 import { reversalTokens } from '@/systems/rome/reversal';
 import { nuncioTokens } from '@/systems/rome/nuncioText';
 import { curiaTokens } from '@/systems/rome/curia';
+import { collegeTokens } from '@/systems/rome/college';
 
 /** Tokens every piece of text can use, derived from state. Later phases add {diocese} and {parish}. */
 export function textExtras(state: GameState): Record<string, string> {
@@ -37,6 +38,7 @@ export function textExtras(state: GameState): Record<string, string> {
   Object.assign(out, reversalTokens(state));
   Object.assign(out, nuncioTokens(state));
   Object.assign(out, curiaTokens(state));
+  Object.assign(out, collegeTokens(state));
   return out;
 }
 

@@ -7,7 +7,9 @@ export type Ending =
   | 'left_seminary'
   | 'left_priesthood'
   | 'died'
-  | 'retired';
+  | 'retired'
+  /** E1 R1.5: elected pope in a conclave and accepted; R1.6 makes the papacy itself playable. */
+  | 'elected_pope';
 
 /**
  * What the player is looking at. The clock only runs in `clock` mode with an
@@ -34,6 +36,8 @@ export type Mode =
   | { kind: 'obedience_letter' }
   /** A chapter in session: the ballots, watched round by round. E3 §3.6. */
   | { kind: 'chapter' }
+  /** E1 R1.5: a conclave in session with the man as an elector. */
+  | { kind: 'conclave' }
   /** A term of office has run out: the return to the ranks, well or badly. E3 §3.7. */
   | { kind: 'term_end' }
   /** The bishop's office asked the provincial for him; the provincial's answer, and the friar's when it is left to him. E3 §3.11. */

@@ -59,6 +59,14 @@ export function playCareer(seed: string, diocese: string, maxWeeks: number, a: C
       case 'director':
         s.getState().chooseDirector(game.mode.options[0]!.npcId, true);
         break;
+      case 'conclave': {
+        const c = game.rome!.conclave!;
+        if (!c.ballots) {
+          s.getState().conclaveAct('vote', c.candidateIds.find((id) => id !== 'player')!);
+          s.getState().holdConclave();
+        } else s.getState().answerConclave(c.electedId !== 'player');
+        break;
+      }
 
       case 'clock':
         if (game.parish && (game.parish.routine.discretionary.groups ?? 0) === 0) s.getState().setDiscretionary('groups', 1);

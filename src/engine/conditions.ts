@@ -11,6 +11,7 @@ import { nightCondition } from '@/systems/night';
 import { resolveSelector } from './selectors';
 import { documentCondition, effectiveStance, policyCondition } from '@/systems/rome/policy';
 import { dueNuncioScene } from '@/systems/rome/nuncio';
+import { dueCollegeScene } from '@/systems/rome/college';
 import { nuncioView } from '@/systems/rome/nuncioView';
 
 import type { Group } from '@/types';
@@ -226,6 +227,8 @@ export function evaluateCondition(
     }
     case 'policy':
       return policyCondition(state, cond);
+    case 'college':
+      return dueCollegeScene(state) === cond.value;
     case 'papacy':
       return !!state.rome?.vacancy === cond.value;
     case 'nuncio':

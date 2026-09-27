@@ -36,6 +36,12 @@ export interface BallotRules {
   fadingBelow: number;
   /** Noise added once to every elector's scores, so equal men do not tie forever. */
   noise: number;
+  /** The share a man needs to be elected; an absolute majority when absent. A conclave needs two thirds (E1 §7). */
+  threshold?: number;
+  /** Whether the narrowed rounds still need the threshold, as a conclave's runoff does; the plurality at the last round is the game's own fallback. */
+  narrowNeedsThreshold?: boolean;
+  /** Whether the men in a narrowed field lose their own votes, as the two in a conclave's runoff do. */
+  narrowedAbstain?: boolean;
 }
 
 /** Defaults; a chapter's constitutions (OrderDef.governance) may override them. Invented. */
@@ -103,7 +109,7 @@ export function runElection(rng: Rng, electors: readonly Elector[], candidates: 
   const rounds: BallotRound[] = [];
   let votes: Record<string, string> = {};
   for (const v of views) votes[v.id] = best(v.scores, field);
-  const majority = Math.floor(electors.length / 2) + 1;
+  const majority = rules.threshold === undefined ? Math.floor(electors.length / 2) + 1 : Math.ceil(electors.length * rules.threshold - 1e-9);
   for (let round = 1; round <= rules.maxRounds; round++) {
     const absolute = round <= rules.majorityRounds;
     const tallies = tally(votes, field);
@@ -113,9 +119,10 @@ export function runElection(rng: Rng, electors: readonly Elector[], candidates: 
     if (absolute) {
       if ((tallies[top] ?? 0) >= majority) return { rounds, electedId: top, ended: 'majority', electors: electors.length };
     } else if (field.length <= rules.narrowTo) {
-      // A narrowed field: the more votes wins; an exact tie goes on to the next round unless the rounds are out.
+      // A narrowed field: the more votes wins (or, in a conclave, two thirds still); an exact tie goes on to the next round unless the rounds are out.
       const second = ranked[1];
-      if (!second || (tallies[top] ?? 0) > (tallies[second] ?? 0)) return { rounds, electedId: top, ended: 'narrowed', electors: electors.length };
+      const enough = rules.narrowNeedsThreshold ? (tallies[top] ?? 0) >= majority : !second || (tallies[top] ?? 0) > (tallies[second] ?? 0);
+      if (enough) return { rounds, electedId: top, ended: 'narrowed', electors: electors.length };
     }
     if (round === rules.maxRounds) return { rounds, electedId: top, ended: 'plurality', electors: electors.length };
     // Narrow after the majority rounds; then every elector picks his best of who is left.
@@ -124,7 +131,11 @@ export function runElection(rng: Rng, electors: readonly Elector[], candidates: 
       field = ranked.filter((id) => (tallies[id] ?? 0) >= cut && (tallies[id] ?? 0) > 0);
       if (field.length < 2) field = ranked.slice(0, 2);
       const next: Record<string, string> = {};
-      for (const v of views) next[v.id] = best(v.scores, field);
+      for (const v of views) {
+        // In a conclave's runoff the two men do not vote.
+        if (rules.narrowedAbstain && field.includes(v.id)) continue;
+        next[v.id] = best(v.scores, field);
+      }
       votes = next;
       continue;
     }
@@ -137,8 +148,9 @@ export function runElection(rng: Rng, electors: readonly Elector[], candidates: 
     const aloneInLead = ranked.length < 2 || leaderVotes > (tallies[ranked[1]!] ?? 0);
     const next: Record<string, string> = { ...votes };
     for (const v of views) {
-      const mine = votes[v.id]!;
-      if (mine === v.id) continue;
+      const mine = votes[v.id];
+      // A man who does not vote this round (a conclave's runoff) is not moved.
+      if (mine === undefined || mine === v.id) continue;
       const fading = !viable.includes(mine);
       const deadlocked = stalled && !(mine === top && aloneInLead);
       if (!fading && !deadlocked) continue;

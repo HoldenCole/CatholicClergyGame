@@ -250,6 +250,9 @@ function checkCondition(c: Condition, where: string, problems: Problem[]): void 
       if (!BISHOP_KEYS.includes(c.key)) problems.push(`${where}: bad bishop key ${String(c.key)}`);
       else if (c.key === 'stance' && (!LITURGICAL_TOPICS.includes(c.topic) || !['free', 'by_permission', 'forbidden'].includes(c.value))) problems.push(`${where}: bad bishop stance condition`);
       break;
+    case 'college':
+      if (c.key !== 'scene' || !['created', 'titular', 'eve', 'after', 'eighty', 'consistory'].includes(c.value)) problems.push(`${where}: bad college condition`);
+      break;
     case 'papacy':
       if (c.key !== 'vacant' || typeof c.value !== 'boolean') problems.push(`${where}: bad papacy condition`);
       break;
@@ -369,7 +372,7 @@ function checkEvent(ev: GameEvent, file: string, problems: Problem[], ids: Set<s
   });
   for (const token of tokensIn(ev.title + ' ' + ev.body)) {
     if (token.startsWith('@') && !SELECTORS.includes(token) && !LIVE_SELECTORS.includes(token)) problems.push(`${where}: unknown selector ${token}`);
-    if (!token.startsWith('@') && !['name', 'first_name', 'surname', 'diocese', 'parish', 'seminary', 'school', 'city', 'residence', 'appointment', 'appointment_residence', 'appointment_from', 'town'].includes(token) && !(token.startsWith('town:') && TOWN_PLACE_KINDS.includes(token.slice(5) as never)) && !isRomeToken(token) && !['nuncio_view', 'see', 'see_city', 'named', 'dicastery', 'dicastery_short', 'dicastery_work', 'curia_rank', 'curia_offer'].includes(token)) {
+    if (!token.startsWith('@') && !['name', 'first_name', 'surname', 'diocese', 'parish', 'seminary', 'school', 'city', 'residence', 'appointment', 'appointment_residence', 'appointment_from', 'town'].includes(token) && !(token.startsWith('town:') && TOWN_PLACE_KINDS.includes(token.slice(5) as never)) && !isRomeToken(token) && !['nuncio_view', 'see', 'see_city', 'named', 'dicastery', 'dicastery_short', 'dicastery_work', 'curia_rank', 'curia_offer', 'titular', 'college_electors'].includes(token)) {
       problems.push(`${where}: unknown token {${token}}`);
     }
   }
