@@ -40,7 +40,7 @@ describe('the Academy (E1 §11)', () => {
     expect(nuncioView(s).value).toBeGreaterThanOrEqual(50);
     const def = offerById('rome_diplomatic_academy')!;
     expect(isOfferEligible(def, s)).toBe(true);
-    const old = { ...s, character: { ...s.character!, entryYear: 1985 } };
+    const old = { ...s, character: { ...s.character!, entryYear: 1980 } };
     expect(isOfferEligible(def, old)).toBe(false);
     expect(isOfferEligible(def, { ...s, flags: { ...s.flags, refused_academy: true } })).toBe(false);
   });

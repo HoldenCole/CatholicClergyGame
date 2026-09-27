@@ -62,7 +62,11 @@ function calendarYear(state: GameState, week: number): number {
 
 /** How he is addressed now: a dean and a vicar general are Very Reverend while they hold it, and not after. */
 function titleOf(state: GameState): string {
-  if (state.see) return 'Bishop';
+  if (state.flags.cardinal) return 'Cardinal';
+  if (state.flags['curia:secretary'] || state.rome?.diplomacy?.rank === 'nuncio') return 'Archbishop';
+  if (state.see || state.flags.ordained_bishop) return 'Bishop';
+  // Before ordination: a seminarian is Mr., a friar in formation Br.
+  if (!state.flags.ordained) return state.religious ? 'Br.' : 'Mr.';
   if (state.study?.program === 'vicar_general' || officesHeld(state).includes('dean')) return 'Very Rev.';
   return 'Fr.';
 }
@@ -141,7 +145,7 @@ export function profileOf(state: GameState): Profile {
     years === 0 ? 'Ordained this year; the book has just been opened, and a priest counts what he does in it for the rest of his life.' :
     `${years} year${years === 1 ? '' : 's'} a priest${turnarounds ? `, and ${turnarounds} parish${turnarounds === 1 ? '' : 'es'} handed on better than you found ${turnarounds === 1 ? 'it' : 'them'}` : ''}${formed.length ? `, ${formed.length === 1 ? 'one man' : `${formed.length} men`} formed` : ''}.`;
   return {
-    name: c ? `${titleOf(state)} ${c.name.first} ${c.name.last}` : 'No one yet',
+    name: c ? (state.rome?.pontificate ? `${state.rome.pontificate.name} (${c.name.first} ${c.name.last})` : `${titleOf(state)} ${c.name.first} ${c.name.last}`) : 'No one yet',
     age: c ? playerAge(state) : 0,
     born: c ? c.entryYear - c.background.entryAge : 0,
     ordainedYear: ordinationWeek === null ? null : calendarYear(state, ordinationWeek),

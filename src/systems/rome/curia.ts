@@ -105,7 +105,7 @@ export function beginCuria(state: GameState, rng: Rng): GameState {
     ...state,
     npcs: { ...npcs, [prefect.id]: prefect, [secretary.id]: secretary, [colleague.id]: colleague },
     flags: { ...flags, 'curia:dicastery': def.key, [`curia:in:${def.key}`]: true, 'curia:rank': 'official', 'curia:since': state.clock.week },
-    study: state.study ? { ...state.study, school: dicasteryName(def, day) } : state.study,
+    study: state.study ? { ...state.study, school: dicasteryName(def, day), label: `Official of ${dicasteryName(def, day)}` } : state.study,
     career: [...state.career, { week: state.clock.week, kind: 'promotion', text: `Lent by the diocese to the Holy See: an official of ${dicasteryName(def, day)}.` }],
   };
 }
@@ -169,7 +169,8 @@ function promote(state: GameState, key: CuriaRank, stayYears: number, lines: str
   const def = dicasteryDef(String(state.flags['curia:dicastery']));
   const office = def ? dicasteryName(def, sundayOf(state.clock)) : 'the dicastery';
   const pope = reigning(state)?.name ?? 'The Holy Father';
-  let s: GameState = { ...state, flags: { ...state.flags, 'curia:rank': key, [`curia:${key}`]: true } };
+  const rankTitle = key === 'head' || key === 'official' ? `Head of office at ${office}` : `${(def?.ranks?.[key] ?? key).replace(/^./, (ch: string) => ch.toUpperCase())} of ${office}`;
+  let s: GameState = { ...state, flags: { ...state.flags, 'curia:rank': key, [`curia:${key}`]: true }, study: state.study ? { ...state.study, label: rankTitle } : state.study };
   s = extend(s, week + stayYears * 52);
   const title = (k: 'undersecretary' | 'secretary') => def?.ranks?.[k] ?? k;
   const text = key === 'head' ? `Made head of office at ${office}.` : key === 'undersecretary' ? `${pope} named you ${title('undersecretary')} of ${office}.` : `${pope} named you ${title('secretary')} of ${office}, with the dignity of archbishop.`;

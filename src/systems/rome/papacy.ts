@@ -67,7 +67,7 @@ function collegeTemper(line: Papacy[]): number {
 }
 
 /** A generated pope: his name, his age, where he came from, how he reads, and when his see will fall vacant. */
-export function generatePope(seed: string, index: number, electedDay: number, line: Papacy[], ordinals: Record<string, number>, given?: { born: number; from: string; temperament: number }): { pope: Papacy; ordinals: Record<string, number> } {
+export function generatePope(seed: string, index: number, electedDay: number, line: Papacy[], ordinals: Record<string, number>, given?: { born: number; from: string; temperament: number; curial?: boolean }): { pope: Papacy; ordinals: Record<string, number> } {
   const rng = createRng(`${seed}:pope:${index}`);
   const names = Object.keys(papalPools.regnal);
   const base = rng.pick(names);
@@ -82,7 +82,9 @@ export function generatePope(seed: string, index: number, electedDay: number, li
   const from = given?.from ?? rolledFrom;
   const age = given ? year - given.born : rolledAge;
   const temperament = given?.temperament ?? rolledTemper;
-  const before = rng.pick(papalPools.before).replace('{from}', from);
+  // What he was before, as fits the man: a curial cardinal was not an archbishop at home, and Italy's capital is Rome's own see.
+  const pool = papalPools.before.filter((b) => (from === 'Italy' ? !b.includes('capital') : true) && (given?.curial === undefined ? true : given.curial ? /curial|dicastery/.test(b) : !/curial|dicastery/.test(b)));
+  const before = rng.pick(pool.length ? pool : papalPools.before).replace('{from}', from);
   // His years, rolled now: each year a chance of death that rises with age, and from eighty-five a chance he lays it down.
   let endDay = electedDay + 365 * 40;
   let end: PapacyEnd = 'died';
@@ -119,7 +121,7 @@ function successor(seed: string, rome: RomeState, prior: Papacy, electedDay: num
   const index = (rome.generated ?? 0) + 1;
   // The College reads the whole line, the record and the generated popes since, whatever year the man's life began.
   const line = [...papalHistory.map((_, i) => historical(i)), ...rome.popes.filter((p) => !p.historical && p.id !== `gen:${index}`)];
-  const made = generatePope(seed, index, electedDay, line, rome.ordinals ?? {}, elected ? { born: elected.born, from: elected.from, temperament: elected.temperament } : undefined);
+  const made = generatePope(seed, index, electedDay, line, rome.ordinals ?? {}, elected ? { born: elected.born, from: elected.from, temperament: elected.temperament, curial: elected.curial } : undefined);
   // The cardinal elected leaves the College for the chair.
   const college = elected && rome.college ? rome.college.filter((c) => c.id !== elected.id) : rome.college;
   return { rome: { ...rome, popes: [...rome.popes, made.pope], ordinals: made.ordinals, generated: index, ...(college ? { college } : {}) }, pope: made.pope };
@@ -215,6 +217,8 @@ export function papacyWeek(state: GameState): PapacyWeek {
       // A man of the College in this conclave casts his own ballots: Rome waits for them. E1 R1.5.
       if (!fromRecord && !rome.vacancy.winnerId && playerIsElector({ ...state, rome })) break;
       const electionDay = rome.vacancy.electionDay;
+      // A man who voted in the conclave was in the chapel when it happened; everyone else hears the bells.
+      const inside = !!rome.vacancy.winnerId;
       // After the record, the College elects: the cardinal the conclave chose, or the one it would choose.
       const elected = fromRecord || !rome.college ? null : rome.vacancy.winnerId ? rome.college.find((c) => c.id === rome.vacancy!.winnerId) ?? null : collegeElects({ ...state, rome }, rome.college, rome.vacancy.sinceDay);
       const { vacancy: _v, ...open } = rome;
@@ -223,7 +227,7 @@ export function papacyWeek(state: GameState): PapacyWeek {
       const p = made.pope;
       const age = yearOf(p.electedDay) - p.born;
       lines.push(`Habemus papam: ${p.name}, elected ${dateWords(p.electedDay)}, from ${p.from}, at ${age}.`);
-      letters.push({ sort: 'rome', title: `Habemus papam: ${p.name}`, body: [`The white smoke rose on ${dateWords(p.electedDay)}, and the bells of Rome after it. The cardinal deacon came out onto the balcony, and the name was ${p.name}: ${p.historical ? '' : 'a cardinal '}from ${p.from}, ${age} years old.`, p.line ?? '', 'On Sunday the Canon names him for the first time. People ask you after Mass what he will be like, and you say what every priest in the world is saying: that nobody knows, and that everyone will find out.'].filter(Boolean), week });
+      letters.push({ sort: 'rome', title: `Habemus papam: ${p.name}`, body: inside ? [`${dateWords(p.electedDay)}: in the Sistine Chapel the count passed two thirds, the College applauded, and the Cardinal Dean went down the chapel to ask the question. The man said accepto and took the name ${p.name}. You went up with the others, one by one, to promise him obedience, and he knew your name.`, p.line ?? '', 'From the loggia the protodeacon said the name to the square. You watched from a window of the Palace, behind the curtain, with the other cardinals, and nobody said anything for a while.'].filter(Boolean) : [`The white smoke rose on ${dateWords(p.electedDay)}, and the bells of Rome after it. The cardinal deacon came out onto the balcony, and the name was ${p.name}: ${p.historical ? '' : 'a cardinal '}from ${p.from}, ${age} years old.`, p.line ?? '', 'On Sunday the Canon names him for the first time. People ask you after Mass what he will be like, and you say what every priest in the world is saying: that nobody knows, and that everyone will find out.'].filter(Boolean), week });
       career = [...career, { week, kind: 'note', text: `${p.name} was elected pope.` }];
       continue;
     }

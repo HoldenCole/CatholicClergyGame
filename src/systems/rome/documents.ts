@@ -205,7 +205,7 @@ export function issueDocument(state: GameState, draft: Draft): { state: GameStat
   const policies = apply(rome.policies ?? initialPolicies(), doc);
   const name = popeName(state, doc.popeId);
   const label = documentPools.kinds[doc.kind].label;
-  const line = `From Rome: the ${label} ${doc.title}, ${doc.gist}.`;
+  const line = /^The /.test(doc.title) ? `From Rome: ${doc.title}, ${doc.gist}.` : `From Rome: the ${label} ${doc.title}, ${doc.gist}.`;
   let next: GameState = { ...state, rome: { ...rome, issued, policies } };
   if (!doc.axis || !doc.value) return { state: next, line, letter: null };
   const value = policyAxes.find((a) => a.key === doc.axis)!.values.find((v) => v.key === doc.value)!;
@@ -219,7 +219,7 @@ export function issueDocument(state: GameState, draft: Draft): { state: GameStat
       `What it changes: ${value.change}`,
       reading ?? (state.see ? 'The reading of it in your own diocese is yours to give.' : 'It is read at table and argued over for a week, and then it is simply the law.'),
       ...(readBack ? [readBack] : []),
-      'By Sunday the parish will have read the newspapers, and someone will ask you after Mass what it means before you have finished the text.',
+      state.parish ? 'By Sunday the parish will have read the newspapers, and someone will ask you after Mass what it means before you have finished the text.' : state.seminary ? 'At the seminary it is argued over at dinner for a week, and the liturgy professor has opinions he keeps for the classroom.' : 'Wherever you are, it is read at table and argued over for a week, and then, in the parishes at home, it is simply the law.',
     ],
     week,
   };

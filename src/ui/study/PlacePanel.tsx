@@ -26,7 +26,7 @@ export default function PlacePanel() {
               <div key={b.id} className="flex justify-between gap-3"><dt className="ink-muted">{b.label}</dt><dd className="text-right font-mono text-xs">{game.study!.record?.[b.id] ?? 0}</dd></div>
             ))}
           </dl>
-          <p className="ink-faint mt-1 text-xs">{bookPhrase(game.study!.record ?? {}, program.place.book) ? 'What the years here have counted. It goes into the file when they end.' : (game.rome?.pontificate ? 'Nothing counted yet. The audiences, the bishops\' files, and the parishes of Rome fill it.' : 'Nothing counted yet. The wards, the pager, the chapel, and the confessions fill it.')}</p>
+          <p className="ink-faint mt-1 text-xs">{bookPhrase(game.study!.record ?? {}, program.place.book) ? 'What the years here have counted. It goes into the file when they end.' : (game.rome?.pontificate ? 'Nothing counted yet. The audiences, the bishops\' files, and the parishes of Rome fill it.' : game.study!.city === 'hospital' ? 'Nothing counted yet. The wards, the pager, the chapel, and the confessions fill it.' : 'Nothing counted yet. The week\'s work fills it.')}</p>
         </div>
       )}
       <p className="ink-faint mt-2 text-xs">{game.rome?.pontificate ? 'The hours on the Week sheet move these, and so do the desk, the consistories, and the journeys. When your strength fails, the question of laying it down will be put to you.' : game.rome?.diplomacy ? 'The hours on the Week sheet move these. A new country starts the local Church and the government cold again; the reports and the priest go with you.' : 'The hours on the Week sheet move these. The diocese hears how the appointment goes, and the board reads it when the years end.'}</p>
