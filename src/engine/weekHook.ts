@@ -54,6 +54,7 @@ import { closeCascade, dueCascade } from '@/systems/rome/documents';
 import { closeNuncioScene, dueNuncioScene } from '@/systems/rome/nuncio';
 import { curiaWeek } from '@/systems/rome/curia';
 import { closeCollegeScene, dueCollegeScene } from '@/systems/rome/college';
+import { popeHomeYear } from '@/systems/homeFromAfar';
 import { closePopeScene, duePopeScene, pontificateWeek, pontificateYear, PONTIFICATE } from '@/systems/rome/pontificate';
 import type { WeekHook } from './clock';
 
@@ -243,7 +244,14 @@ function pontificateStep(state: GameState, rng: Rng, deps: EventDeps): GameState
     next = dueBeatScene(next, 'pope', closePopeScene, rng.derive(`pope-scene:${next.clock.week}`), deps);
     if (next.mode.kind !== 'clock' || next.pending.length > 0) return next;
   }
-  if (isCareerYear(next)) next = pontificateYear(next, rng.derive(`pope-year:${next.clock.week}`));
+  if (isCareerYear(next)) {
+    // The home diocese goes on without him: Rome's temper, his classmates' years, and its see. E1 §9 E.
+    const home = popeHomeYear(next, rng.derive(`pope-home:${next.clock.week}`));
+    next = home.state;
+    for (const line of home.lines) next = addDigestLine(next, line);
+    if (home.letter) next = deliverLetter(next, home.letter);
+    next = pontificateYear(next, rng.derive(`pope-year:${next.clock.week}`));
+  }
   if (next.mode.kind !== 'clock') return next;
   if (rng.derive(`pope-draw:${next.clock.week}`).chance(PONTIFICATE.sceneChance)) {
     const pool = deps.pool.filter((e) => e.beat === 'pope' && !(e.requires ?? []).some((c) => c.type === 'papacy' && c.key === 'scene'));

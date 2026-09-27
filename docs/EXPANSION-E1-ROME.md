@@ -25,7 +25,7 @@ Above the diocese sit three things a man can meet and, if he is very good or ver
 | The papacy | Absent. `succession.ts` keeps a `romeTemperament` number that drifts and silently re-rolls (7% a year); it biases the next diocesan bishop. No pope, no documents, no conclave, no interregnum, no nuncio as an actor, no cardinals. |
 | Real history | The older Mass follows the real dates (Summorum Pontificum 2007, Traditionis Custodes 16 July 2021) in `systems/decor.ts`. The game starts in any year from 1950 to 2040 (default 2010). |
 
-**Fixed with this draft:** an auxiliary whose years end came home to the board and could be made a vicar (now the flagship's pastor); the see and translation letters offered "not now" (now yes or no, `OfferDef.final`); a translation left the first see's letter open; the translation's cluster did not match. **Still open:** the home diocese stops changing while the man holds a see elsewhere.
+**Fixed with this draft:** an auxiliary whose years end came home to the board and could be made a vicar (now the flagship's pastor); the see and translation letters offered "not now" (now yes or no, `OfferDef.final`); a translation left the first see's letter open; the translation's cluster did not match. **Built later (§9 E):** the home diocese goes on changing while the man holds a see elsewhere, or reigns.
 
 ---
 
@@ -197,7 +197,7 @@ Tunables are invented and flagged; the conclave and the terna are deterministic 
 - **(B) The interregnum freezes papal acts only**: no bishops named and no documents. Diocesan bishops keep governing and parish moves continue (canonical; DESIGN §16's "all appointments" is read this way).
 - **(C) The Curia: a posting and the ladder** to secretary of a dicastery (R1.4). The diplomatic service is a later round.
 - **(D) The player can be elected pope and keep playing.** This is a new playable tier with its own design, **R1.6 The papacy, played**, specified before it is built: what a pope's week is (audiences, the Curia, documents he writes and the cascade he starts, travel, consistories, the College he shapes for his successor), and how the life ends (death or renunciation).
-- **(E) Home diocese while he is a bishop elsewhere**: let it change (the recommendation; not yet built).
+- **(E) Home diocese while he is a bishop elsewhere**: let it change. *Built (`systems/homeFromAfar.ts`):* while he holds a see elsewhere or reigns as pope, the home see changes hands on its own schedule (the same retirement, death, and promotion rolls, the successor's reading drawn toward Rome's), but the new bishop is not his: nothing of his is reread (chancery standing, leave, circles), no succession scene is owed, and it is not counted among the bishops he served. It comes as a letter from home: who the man is, what he says his priorities are, how near his reading is to the man's, and either a brother bishop's invitation to the chrism Mass or, for a pope, the terna for the diocese that ordained him signed with the Saturday files. The new bishop's regard for him follows the gap between their readings (invented, flagged). A pope, who has no diocesan year, now also has Rome's temper follow him yearly and his classmates' years go on. A man lent to the Curia is still his diocese's priest and meets a new bishop as before.
 
 ---
 
@@ -210,7 +210,7 @@ Tunables are invented and flagged; the conclave and the terna are deterministic 
 The man says *accepto* in the Sistine Chapel and does not come out as a priest of his diocese again. The pontificate is **the last posting**: the Apostolic Palace as a place, with a week of blocks he gives to the work, five dials that say how the reign is going, and a book of what it counted. It ends only by death or renunciation (can. 332 §2: freely made and duly manifested; flagged). There is no endWeek and no board.
 
 - **The election**: the see or office he held is written to the record as served; he stops being a cardinal; he is the reigning pope in `rome.popes` (id `player`, his regnal name, his reading as his temperament). Two men are generated for him: a **Secretary of State** (a cardinal of the College, taken from it) and a **private secretary** (a monsignor he brings or is given).
-- **What stops while he reigns**: the generated line of documents (he writes them), the automatic consistory (he calls them), the nuncio's scenes (he names nuncios now), the letter at seventy-five (a pope does not submit one), offers, and the diocesan year (the home diocese is held as he left it, as it is for a bishop elsewhere until §9 E is built). What goes on: the College's deaths and eightieth birthdays, the record's own documents on their dates, the world's calendar; and his old diocese's bishop reads what he writes.
+- **What stops while he reigns**: the generated line of documents (he writes them), the automatic consistory (he calls them), the nuncio's scenes (he names nuncios now), the letter at seventy-five (a pope does not submit one), and offers. What goes on: the College's deaths and eightieth birthdays, the record's own documents on their dates, the world's calendar, and the home diocese (§9 E: its see changes hands and his classmates have their years); his old diocese's bishop reads what he writes.
 
 ### 10.2 The week (the posting machinery)
 

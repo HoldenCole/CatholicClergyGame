@@ -96,12 +96,14 @@ describe('the episcopal tier', () => {
     const w = studyWeek({ ...b, clock: { ...b.clock, week: b.clock.week + 1 } }, createRng('w')).state;
     expect(w.see!.money).toBeGreaterThan(before.money);
     expect(w.see!.presbyterate).toBeGreaterThan(before.presbyterate);
-    // A year in the chair: a letter, a line, ordinations counted; no succession at home.
+    // A year in the chair: a letter, a line, ordinations counted. The home see may change hands (E1 §9 E), but never as his turn.
     const year = careerYear({ ...w, clock: { ...w.clock, week: w.clock.week + 52 } }, createRng('cy'));
     expect(year.letterQueue!.some((l) => /year 1/.test(l.title))).toBe(true);
     expect(year.see!.years).toHaveLength(1);
     expect(year.see!.years[0]).toMatch(/^Year 1:/);
-    expect(year.world!.diocese.hidden.bishop.npcId).toBe(s.world!.diocese.hidden.bishop.npcId);
+    expect(year.flags.new_bishop_pending).toBeFalsy();
+    expect(year.beats.some((x) => x.kind === 'succession')).toBe(false);
+    if (year.world!.diocese.hidden.bishop.npcId !== s.world!.diocese.hidden.bishop.npcId) expect(year.letterQueue!.some((l) => l.title.startsWith('From home'))).toBe(true);
     // The letter at seventy-five retires him rather than sending him home to a parish.
     const deps: EventDeps = { pool: [], lookup: () => undefined, offerLookup: (id) => offerById(id) };
     const end = studyWeekHook(deps)({ ...year, mode: { kind: 'clock' }, letterQueue: [], clock: { ...year.clock, week: year.study!.endWeek } }, createRng('end'), []);
