@@ -1,12 +1,12 @@
 import type { Conclave, GameState, Letter } from '@/types';
 import { sundayOf } from '@/engine/time';
-import { careerSummary } from '@/engine/career';
 import { papalHistory, papalPools } from '@/content/rome';
 import { createRng } from '@/engine/rng';
 import { roman } from './papacy';
 import { conclaveMarks, conclaveOpens, holdConclave, openConclave, PLAYER, playerIsElector } from './conclave';
 import { nuncioView } from './nuncioView';
 import { scheduleCollegeScene } from './college';
+import { beginPontificate } from './pontificate';
 
 /**
  * E1 R1.5 — the conclave as the man lives it: it opens fifteen days after the
@@ -65,7 +65,7 @@ export function regnalChoices(state: GameState): string[] {
 
 /**
  * The name, answered. His own name, accepted, ends the life as a priest's and
- * begins another (R1.6 makes it playable); refused, the College votes again
+ * begins the pontificate (R1.6); refused, the College votes again
  * without him. Another man's name closes the conclave: he is proclaimed on
  * the election day, and the man's ballots are remembered.
  */
@@ -74,11 +74,8 @@ export function answerConclave(state: GameState, accept: boolean, name?: string)
   if (!c?.electedId) return state;
   const week = state.clock.week;
   if (c.electedId === PLAYER) {
-    if (accept) {
-      const chosen = name ?? regnalChoices(state)[0]!;
-      const next: GameState = { ...state, flags: { ...state.flags, 'pope:name': chosen, 'pope:elected_week': week }, career: [...state.career, { week, kind: 'promotion', text: `Elected Bishop of Rome by the College of Cardinals; took the name ${chosen}.` }] };
-      return { ...next, speed: 'PAUSED', mode: { kind: 'ended', ending: 'elected_pope', summary: careerSummary(next, 'elected_pope') } };
-    }
+    // Accepto: the pontificate begins, and is played until it ends (R1.6, §10).
+    if (accept) return { ...beginPontificate(state, name ?? regnalChoices(state)[0]!), speed: 'PAUSED' };
     const declined: GameState = { ...state, flags: { ...state.flags, 'conclave:refused': true }, rome: { ...state.rome!, conclave: { ...stripElected(c), declined: true } } };
     return holdTheConclave(declined);
   }

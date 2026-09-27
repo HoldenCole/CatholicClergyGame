@@ -11,6 +11,8 @@ const ENDING_TITLE: Record<string, string> = {
   died: 'Requiescat',
   retired: 'Retired',
   elected_pope: 'Habemus papam',
+  pope_died: 'Requiescat',
+  pope_renounced: 'Pope emeritus',
 };
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
@@ -30,9 +32,9 @@ export default function EndedScreen() {
   if (!game || game.mode.kind !== 'ended') return null;
   const c = game.character;
   const ending = game.mode.ending;
-  const priest = !!game.flags.ordained && (ending === 'left_priesthood' || ending === 'retired' || ending === 'died' || ending === 'elected_pope');
+  const priest = !!game.flags.ordained && (ending === 'left_priesthood' || ending === 'retired' || ending === 'died' || ending === 'elected_pope' || ending === 'pope_died' || ending === 'pope_renounced');
   const life = c && priest ? lifeOf(game) : null;
-  const summary = c && priest && !/years a priest/.test(game.mode.summary) ? careerSummary(game, ending as 'left_priesthood' | 'retired' | 'died' | 'elected_pope') : null;
+  const summary = c && priest && !/years a priest/.test(game.mode.summary) ? careerSummary(game, ending as 'left_priesthood' | 'retired' | 'died' | 'elected_pope' | 'pope_died' | 'pope_renounced') : null;
   const year = yearOf(game.clock.startDay, game.clock.week);
   const download = () => {
     const blob = new Blob([exportSave()], { type: 'application/json' });

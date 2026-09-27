@@ -56,7 +56,8 @@ const ORIGINS: { heritage: Heritage; from: string; weight: number }[] = [
 ];
 
 function clamp(n: number): number {
-  return Math.max(-100, Math.min(100, Math.round(n)));
+  // `|| 0`: a -0 would not survive a save (JSON has no negative zero).
+  return Math.max(-100, Math.min(100, Math.round(n) || 0));
 }
 
 function yearOf(state: GameState): number {

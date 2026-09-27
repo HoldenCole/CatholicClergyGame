@@ -1,0 +1,2157 @@
+{
+  "_notes": "E1 R1.6 — the pontificate, played (docs/EXPANSION-E1-ROME.md §10.6). Beat `pope`: drawn about one week in eight in place of the ordinary pool, and the scheduled ones (the first week, a journey, an anniversary, the question of laying it down) when their scene is due. Effects move the pontificate's dials through `place` and its book through `record`; the renunciation writes `pope:renounce`, and the engine ends the reign the next week. The bishop's report is authored serious content (CLAUDE.md, sensitive material), never a mechanic to optimize; the confessor is sealed (rule 7).",
+  "events": [
+    {
+      "id": "pp_balcony",
+      "phase": [
+        "bishop"
+      ],
+      "beat": "pope",
+      "pressure": [
+        "competence"
+      ],
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 5,
+      "suppressYears": 99,
+      "requires": [
+        {
+          "type": "papacy",
+          "key": "reigning",
+          "value": true
+        },
+        {
+          "type": "papacy",
+          "key": "scene",
+          "value": "first"
+        }
+      ],
+      "title": "The Loggia",
+      "body": "The Room of Tears is behind you, and the white cassock that almost fit. The cardinal protodeacon has said the name to the square, and now the curtains part and it is you on the loggia of St. Peter's, above a hundred thousand people and every camera in the world, with a card in your hand that the Master of Ceremonies gave you and a silence that is waiting for {pope_name} to fill it.",
+      "choices": [
+        {
+          "id": "speak",
+          "label": "Put the card away and speak to them as their bishop",
+          "outcome": "You put the card in your sleeve and say good evening, and that the cardinals seem to have gone to the ends of the earth to find the Bishop of Rome. The square laughs, and then it is quiet enough to hear the fountains. The Master of Ceremonies looks at the floor.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "world",
+              "delta": 6
+            },
+            {
+              "target": "place",
+              "key": "church",
+              "delta": 3
+            },
+            {
+              "target": "place",
+              "key": "curia",
+              "delta": -2
+            }
+          ],
+          "followUpId": "pp_apartment"
+        },
+        {
+          "id": "card",
+          "label": "Read what the card says, the blessing in Latin, the plenary indulgence",
+          "outcome": "You read the card: the greeting, the Urbi et Orbi in Latin, the indulgence. It is what popes say, and the square receives it as what popes say. The Curia notes, with relief, a man who reads what he is given.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "curia",
+              "delta": 4
+            },
+            {
+              "target": "place",
+              "key": "church",
+              "delta": 1
+            }
+          ],
+          "default": true,
+          "followUpId": "pp_apartment"
+        },
+        {
+          "id": "pray",
+          "label": "Before you bless them, ask them to pray for you, and bow",
+          "outcome": "Before the blessing you ask them to pray for you, and you bow your head, and a hundred thousand people go silent at once. It is the thing the newspapers print. It is also, as it happens, what you needed.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "church",
+              "delta": 5
+            },
+            {
+              "target": "place",
+              "key": "soul",
+              "delta": 4
+            },
+            {
+              "target": "place",
+              "key": "world",
+              "delta": 3
+            }
+          ],
+          "followUpId": "pp_apartment"
+        }
+      ],
+      "once": true,
+      "priority": 2
+    },
+    {
+      "id": "pp_apartment",
+      "phase": [
+        "bishop"
+      ],
+      "beat": "pope",
+      "pressure": [
+        "competence"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 1,
+      "suppressYears": 99,
+      "requires": [
+        {
+          "type": "papacy",
+          "key": "reigning",
+          "value": true
+        },
+        {
+          "type": "papacy",
+          "key": "scene",
+          "value": "first"
+        }
+      ],
+      "title": "The Apartment",
+      "body": "The papal apartment on the third floor of the Apostolic Palace was sealed with red ribbon when your predecessor's see fell vacant. The Camerlengo breaks the seals for you: ten rooms, a library, a chapel, the window from which the Angelus is said, and a silence that has been waiting since 1903. {@pope_secretary} stands behind you with your suitcase, the one you brought for two weeks of conclave.",
+      "choices": [
+        {
+          "id": "palace",
+          "label": "Live in the apartment, as popes have",
+          "outcome": "You live where popes live. The rooms are too big and the corridors are too long, and within a month you know which floorboard in the library creaks. The household is relieved; the Curia is relieved; the world does not notice.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "curia",
+              "delta": 4
+            },
+            {
+              "target": "place",
+              "key": "strength",
+              "delta": 2
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "guesthouse",
+          "label": "Stay in the guesthouse where the cardinals slept, and eat in the common room",
+          "outcome": "You stay in the guesthouse, in the room they gave you for the conclave, and take your meals in the common dining room with visiting bishops and the Swiss Guards on their break. It is a statement, and it is read as one: by the world gratefully, by the Curia as a question.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "world",
+              "delta": 4
+            },
+            {
+              "target": "place",
+              "key": "curia",
+              "delta": -4
+            },
+            {
+              "target": "place",
+              "key": "soul",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "pope:guesthouse",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "both",
+          "label": "Work in the apartment and sleep in the guesthouse",
+          "outcome": "You work in the Palace and sleep elsewhere, which nobody quite understands and everyone has an opinion about. The household is split, and says so in the way households do.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "curia",
+              "delta": -1
+            },
+            {
+              "target": "place",
+              "key": "world",
+              "delta": 2
+            }
+          ]
+        }
+      ],
+      "once": true,
+      "priority": 1
+    },
+    {
+      "id": "pp_sos",
+      "phase": [
+        "bishop"
+      ],
+      "beat": "pope",
+      "pressure": [
+        "competence"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 8,
+      "suppressYears": 99,
+      "requires": [
+        {
+          "type": "papacy",
+          "key": "reigning",
+          "value": true
+        }
+      ],
+      "title": "The Secretary of State",
+      "body": "{@secretary_of_state} has run the Secretariat of State since before you were elected, and has asked, as custom requires, whether the Holy Father wishes to confirm him. He is able, loyal in the way the Curia is loyal, and the one man in the building who knows where everything is. Your private secretary has a list of three other names, and has put yours at the top of it as a joke you are not sure is one.",
+      "choices": [
+        {
+          "id": "confirm",
+          "label": "Confirm him, and learn the building from him",
+          "outcome": "You confirm him. He thanks you in three languages, and on the first morning brings you a folder with the Curia's real map in it: who owes whom, who is waiting for whom to die. You are grateful and a little afraid of him.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "curia",
+              "delta": 8
+            },
+            {
+              "target": "relationship",
+              "key": "@secretary_of_state",
+              "delta": 15
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "own",
+          "label": "Name your own man, from outside the Curia",
+          "outcome": "You name a man from outside, a diplomat who served in the missions and has no friends in the building. The Curia closes ranks for a year, politely. He is yours, though, and when it matters he tells you the truth.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "curia",
+              "delta": -6
+            },
+            {
+              "target": "place",
+              "key": "church",
+              "delta": 3
+            },
+            {
+              "target": "place",
+              "key": "world",
+              "delta": 2
+            },
+            {
+              "target": "relationship",
+              "key": "@secretary_of_state",
+              "delta": -15
+            },
+            {
+              "target": "flag",
+              "key": "pope:own_sos",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "wait",
+          "label": "Keep him ad interim, and decide in a year",
+          "outcome": "You keep him ad interim. Everyone in the building knows what ad interim means, and he works harder than any man in Rome for a year to deserve the word taken away.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "curia",
+              "delta": 2
+            }
+          ]
+        }
+      ],
+      "once": true
+    },
+    {
+      "id": "pp_audience_child",
+      "phase": [
+        "bishop"
+      ],
+      "beat": "pope",
+      "pressure": [
+        "friendship_vs_duty"
+      ],
+      "severity": "ROUTINE",
+      "category": "chancery",
+      "baseWeight": 4,
+      "suppressYears": 5,
+      "requires": [
+        {
+          "type": "papacy",
+          "key": "reigning",
+          "value": true
+        },
+        {
+          "type": "record",
+          "key": "pilgrims",
+          "op": ">=",
+          "value": 20
+        }
+      ],
+      "title": "The Front Row",
+      "body": "The Wednesday audience, and in the front row the sick in their wheelchairs, as always. A girl of seven or eight with a shaved head and a Barcelona scarf will not let go of your hand. Her mother says the doctors in Milan have said what doctors say. The Prefect of the Household is at your elbow: forty more to greet, and the car is waiting.",
+      "choices": [
+        {
+          "id": "stay",
+          "label": "Stay with her until she lets go",
+          "outcome": "You stay. It is eleven minutes, the Prefect times it, and at the end she lets go on her own and tells you that you have cold hands. The photograph goes around the world by evening, and you wish it had not, and you do not regret one minute of it.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "world",
+              "delta": 4
+            },
+            {
+              "target": "place",
+              "key": "soul",
+              "delta": 5
+            },
+            {
+              "target": "place",
+              "key": "church",
+              "delta": 2
+            },
+            {
+              "target": "place",
+              "key": "curia",
+              "delta": -1
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "bless",
+          "label": "Bless her, promise to pray for her by name, and go on",
+          "outcome": "You bless her and promise to pray for her by name, and you do, every morning in the chapel, for longer than anyone knows. The forty others are greeted. The car is only a little late.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "soul",
+              "delta": 3
+            },
+            {
+              "target": "place",
+              "key": "curia",
+              "delta": 1
+            }
+          ]
+        }
+      ],
+      "once": true
+    },
+    {
+      "id": "pp_letter_home",
+      "phase": [
+        "bishop"
+      ],
+      "beat": "pope",
+      "pressure": [
+        "friendship_vs_duty"
+      ],
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 4,
+      "suppressYears": 6,
+      "requires": [
+        {
+          "type": "papacy",
+          "key": "reigning",
+          "value": true
+        }
+      ],
+      "title": "A Letter from the Parish",
+      "body": "In the morning's post, which your secretary sorts into what the Secretariat answers and what you should see, a letter in blue ink on lined paper: a woman from the first parish you ever served, now in her eighties, who writes that she has watched you on television and that you look tired, and asks whether you still remember her husband's funeral, and whether you are eating.",
+      "choices": [
+        {
+          "id": "hand",
+          "label": "Answer it yourself, by hand, and ask about her grandchildren",
+          "outcome": "You answer it by hand at the desk after the rosary: yes, you remember the funeral, and the rain, and what her husband's brother said at the grave. You ask about the grandchildren by name. It takes an hour of the night. Her parish priest writes a month later that she had the letter framed.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "soul",
+              "delta": 6
+            },
+            {
+              "target": "place",
+              "key": "strength",
+              "delta": -1
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "secretariat",
+          "label": "Send it down to the Secretariat for the usual reply, with a blessing",
+          "outcome": "The Secretariat sends the usual reply, signed by a monsignor, with a printed blessing and a holy card. It is a kind reply. It is the reply a million letters get, and you know it, and you let it go.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "curia",
+              "delta": 1
+            },
+            {
+              "target": "place",
+              "key": "soul",
+              "delta": -2
+            }
+          ]
+        }
+      ],
+      "once": true
+    },
+    {
+      "id": "pp_classmates",
+      "phase": [
+        "bishop"
+      ],
+      "beat": "pope",
+      "pressure": [
+        "friendship_vs_duty"
+      ],
+      "severity": "ROUTINE",
+      "category": "classmate",
+      "baseWeight": 3,
+      "suppressYears": 99,
+      "requires": [
+        {
+          "type": "papacy",
+          "key": "reigning",
+          "value": true
+        }
+      ],
+      "title": "The Men You Were Ordained With",
+      "body": "The men you were ordained with have come to Rome for the anniversary of your ordination, those of them who are still living and still priests: seven old men from home, one in a wheelchair, one who left and came back. They have been told they will have a private audience of twenty minutes in the Clementine Hall.",
+      "choices": [
+        {
+          "id": "dinner",
+          "label": "Cancel the afternoon and have them to dinner in the guesthouse",
+          "outcome": "You cancel the afternoon and have them to dinner. It goes on until midnight. Someone tells the story about the rector and the goat, and you laugh until you cannot breathe, and for four hours nobody calls you Holiness. The Prefect of the Household is displeased; the physician, oddly, is not.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "soul",
+              "delta": 7
+            },
+            {
+              "target": "place",
+              "key": "strength",
+              "delta": -2
+            },
+            {
+              "target": "place",
+              "key": "curia",
+              "delta": -1
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "audience",
+          "label": "Receive them in the Clementine Hall, as arranged",
+          "outcome": "You receive them in the hall, as arranged, and they kneel, which they have never done to you, and you raise them, and it is twenty minutes. Afterwards one of them writes to you that it was like visiting a friend in a hospital.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "curia",
+              "delta": 1
+            },
+            {
+              "target": "place",
+              "key": "soul",
+              "delta": -2
+            }
+          ]
+        }
+      ],
+      "once": true
+    },
+    {
+      "id": "pp_head_of_state",
+      "phase": [
+        "bishop"
+      ],
+      "beat": "pope",
+      "pressure": [
+        "belief_vs_safety"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 3,
+      "suppressYears": 4,
+      "requires": [
+        {
+          "type": "papacy",
+          "key": "reigning",
+          "value": true
+        }
+      ],
+      "title": "The Photograph",
+      "body": "A head of state is coming for the private audience, twenty-five minutes and a photograph, from a government that has lately made the Church's life difficult in ways the nunciature has cabled about for a year. The Secretariat's note says: cordial, general, the photograph. Your own note, in the margin, says the name of a priest who has been in prison there for fourteen months.",
+      "choices": [
+        {
+          "id": "plain",
+          "label": "Receive him, and say the priest's name to his face",
+          "outcome": "You receive him and, at the twenty-second minute, say the priest's name and ask for him. He smiles and says it is a judicial matter. The photograph that goes out is of two men not smiling. Three months later the priest is released on medical grounds, which is what a government says when it means yes.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "world",
+              "delta": 5
+            },
+            {
+              "target": "place",
+              "key": "curia",
+              "delta": -2
+            },
+            {
+              "target": "place",
+              "key": "church",
+              "delta": 3
+            }
+          ]
+        },
+        {
+          "id": "cordial",
+          "label": "Receive him cordially, and leave the priest to the diplomats",
+          "outcome": "You receive him cordially and leave the priest to the Secretariat, which works on it for two more years in the way it works. The photograph is warm. Some Catholics in that country cut it out of the paper; others burn it.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "curia",
+              "delta": 3
+            },
+            {
+              "target": "place",
+              "key": "world",
+              "delta": 1
+            },
+            {
+              "target": "place",
+              "key": "church",
+              "delta": -2
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "decline",
+          "label": "Let it be known that the Holy Father's calendar is full",
+          "outcome": "Your calendar is full. The government understands exactly what that means, and so does everyone else. The priest stays in prison; the Church in that country has one bad year and then another; the world notes that a pope still has one weapon.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "world",
+              "delta": 3
+            },
+            {
+              "target": "place",
+              "key": "curia",
+              "delta": -4
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pp_dubia",
+      "phase": [
+        "bishop"
+      ],
+      "beat": "pope",
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 5,
+      "suppressYears": 3,
+      "requires": [
+        {
+          "type": "papacy",
+          "key": "reigning",
+          "value": true
+        },
+        {
+          "type": "record",
+          "key": "documents",
+          "op": ">=",
+          "value": 1
+        }
+      ],
+      "title": "The Dubia",
+      "body": "Four cardinals have sent you dubia on {pope_draft}: five questions, each framed so that it can be answered yes or no, each answer a trap one way or the other. They have waited the courteous interval. Now the questions are in a newspaper, with a note that the Holy Father has not replied.",
+      "choices": [
+        {
+          "id": "answer",
+          "label": "Answer them in writing, carefully, and publish the answers",
+          "outcome": "You answer them: not yes or no, but in the paragraphs the questions were built to prevent. The four are not satisfied, and say so. A good many bishops who had been uneasy are, and say nothing, which is what you wanted.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "church",
+              "delta": 4
+            },
+            {
+              "target": "place",
+              "key": "curia",
+              "delta": -2
+            },
+            {
+              "target": "place",
+              "key": "strength",
+              "delta": -2
+            }
+          ]
+        },
+        {
+          "id": "silent",
+          "label": "Do not answer: the document says what it says",
+          "outcome": "You do not answer. The silence is a year of commentary, and it is read, as silence is, by each side as proof of what it already believed. The world finds it dignified. The Church finds it a wound.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "church",
+              "delta": -5
+            },
+            {
+              "target": "place",
+              "key": "world",
+              "delta": 2
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "receive",
+          "label": "Receive the four of them privately, without the press",
+          "outcome": "You receive them in the library, the four of them, for two hours, without secretaries. What was said is not reported. One of them tells a journalist afterwards that the pope listened, which in his mouth is a great deal.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "church",
+              "delta": 2
+            },
+            {
+              "target": "place",
+              "key": "soul",
+              "delta": 2
+            },
+            {
+              "target": "place",
+              "key": "curia",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pp_leak",
+      "phase": [
+        "bishop"
+      ],
+      "beat": "pope",
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "severity": "MAJOR",
+      "category": "scandal",
+      "baseWeight": 3,
+      "suppressYears": 99,
+      "requires": [
+        {
+          "type": "papacy",
+          "key": "reigning",
+          "value": true
+        }
+      ],
+      "title": "The Leak",
+      "body": "Letters from your own desk, photocopied, are in a book published this morning in Milan: notes to the Secretary of State, a memorandum on the bank, a letter from a bishop in tears. The Gendarmerie has found the copies in the rooms of a man of your own household who served your breakfast every morning and says he did it to save you from the people around you.",
+      "choices": [
+        {
+          "id": "forgive",
+          "label": "Let the tribunal try him, then pardon him and visit him in his cell",
+          "outcome": "The Vatican tribunal tries and convicts him. You pardon him and go to see him before he is released, and he weeps, and you do too. The Curia thinks it weakness. The world is not sure what to think, which is the best the world ever does with mercy.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "church",
+              "delta": 3
+            },
+            {
+              "target": "place",
+              "key": "soul",
+              "delta": 4
+            },
+            {
+              "target": "place",
+              "key": "curia",
+              "delta": -3
+            },
+            {
+              "target": "place",
+              "key": "world",
+              "delta": 2
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "punish",
+          "label": "Let justice take its course and say nothing",
+          "outcome": "Justice takes its course; he serves his sentence in a room in the Gendarmerie barracks and is released to a job found for him far from Rome. The Curia is satisfied. The household is quieter, and watches you differently.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "curia",
+              "delta": 4
+            },
+            {
+              "target": "place",
+              "key": "world",
+              "delta": -2
+            }
+          ]
+        },
+        {
+          "id": "reform",
+          "label": "Take the lesson: replace the household with men you know",
+          "outcome": "You replace the household. It takes a year, and some of the men sent away had served three popes. The leaks stop. So does a certain warmth in the corridors.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "curia",
+              "delta": -2
+            },
+            {
+              "target": "place",
+              "key": "strength",
+              "delta": -2
+            },
+            {
+              "target": "flag",
+              "key": "pope:household_replaced",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "once": true
+    },
+    {
+      "id": "pp_money",
+      "phase": [
+        "bishop"
+      ],
+      "beat": "pope",
+      "pressure": [
+        "money"
+      ],
+      "severity": "MAJOR",
+      "category": "finance",
+      "baseWeight": 3,
+      "suppressYears": 99,
+      "requires": [
+        {
+          "type": "papacy",
+          "key": "reigning",
+          "value": true
+        }
+      ],
+      "title": "The Accounts",
+      "body": "The Council for the Economy has sent up a report it asked you to read personally: the Holy See's deficit, a pension fund that will not meet its obligations in fifteen years, and an investment in a building in a foreign city that lost a hundred million euros through men who were not what they said. The Secretariat would like to handle it in house.",
+      "choices": [
+        {
+          "id": "audit",
+          "label": "Open the books to outside auditors, and publish what they find",
+          "outcome": "You open the books. The auditors are Dutch and do not care who anyone is. What they find is published, and some of it is worse than the report, and a cardinal is asked to give up the rights of his rank. The world approves. The Curia will not forgive the Dutch, or you.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "world",
+              "delta": 5
+            },
+            {
+              "target": "place",
+              "key": "curia",
+              "delta": -7
+            },
+            {
+              "target": "place",
+              "key": "church",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "house",
+          "label": "Let the Secretariat handle it quietly",
+          "outcome": "The Secretariat handles it. The building is sold at a loss nobody announces. The pension fund is still short. It will be your successor's problem, and he will know whose it was first.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "curia",
+              "delta": 4
+            },
+            {
+              "target": "place",
+              "key": "church",
+              "delta": -3
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "motu",
+          "label": "Write a motu proprio taking the money away from the Secretariat",
+          "outcome": "You write a short motu proprio moving the funds from the Secretariat to the Economy. It is two pages long and it is a revolution, and the Secretariat takes it as one.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "curia",
+              "delta": -4
+            },
+            {
+              "target": "place",
+              "key": "church",
+              "delta": 2
+            },
+            {
+              "target": "place",
+              "key": "world",
+              "delta": 2
+            },
+            {
+              "target": "record",
+              "key": "documents",
+              "delta": 1
+            }
+          ]
+        }
+      ],
+      "once": true
+    },
+    {
+      "id": "pp_bishop_report",
+      "phase": [
+        "bishop"
+      ],
+      "beat": "pope",
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "severity": "CRITICAL",
+      "category": "scandal",
+      "baseWeight": 3,
+      "suppressYears": 99,
+      "requires": [
+        {
+          "type": "papacy",
+          "key": "reigning",
+          "value": true
+        }
+      ],
+      "title": "A Report That Cannot Stay in a Drawer",
+      "body": "The Dicastery for Bishops has sent up, under the highest seal, the report of an investigation into a bishop who, years ago, moved priests he had been told were a danger to children, and told no one. The survivors' letters are attached. The bishop has offered his resignation, as the law now allows. The prefect's note asks only how the Holy Father wishes it to be accepted.",
+      "choices": [
+        {
+          "id": "publish",
+          "label": "Accept the resignation, publish the report, and meet the survivors",
+          "outcome": "You accept the resignation and order the report published, and you meet, without cameras, with the men and women who wrote the letters. You listen for three hours. There is nothing to say that is enough, and you do not pretend there is. Some of them are angry that you came so late; they are right.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "church",
+              "delta": 2
+            },
+            {
+              "target": "place",
+              "key": "world",
+              "delta": 5
+            },
+            {
+              "target": "place",
+              "key": "soul",
+              "delta": 3
+            },
+            {
+              "target": "place",
+              "key": "curia",
+              "delta": -3
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "quiet",
+          "label": "Accept it quietly, for reasons of health",
+          "outcome": "You accept it for reasons of health, as the formula has it. The report stays under seal. In two years a journalist finds it anyway, and the formula is quoted back at you in every language the Church speaks.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "church",
+              "delta": -6
+            },
+            {
+              "target": "place",
+              "key": "world",
+              "delta": -5
+            },
+            {
+              "target": "place",
+              "key": "curia",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "pope:quiet_resignation",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "refuse",
+          "label": "Refuse the resignation and order him removed, with the reasons given",
+          "outcome": "You refuse his resignation and remove him from office, with the reasons given in the Bollettino. It is the harder way, and the law barely has words for it; you write them. Some bishops are afraid for the first time in years, which is the point.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "church",
+              "delta": 3
+            },
+            {
+              "target": "place",
+              "key": "world",
+              "delta": 4
+            },
+            {
+              "target": "place",
+              "key": "curia",
+              "delta": -4
+            }
+          ]
+        }
+      ],
+      "once": true
+    },
+    {
+      "id": "pp_holy_thursday",
+      "phase": [
+        "bishop"
+      ],
+      "beat": "pope",
+      "pressure": [
+        "belief_vs_safety"
+      ],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 3,
+      "suppressYears": 2,
+      "requires": [
+        {
+          "type": "papacy",
+          "key": "reigning",
+          "value": true
+        }
+      ],
+      "title": "Holy Thursday",
+      "body": "Holy Thursday: the Mass of the Lord's Supper, and the washing of feet. The Master of Ceremonies has prepared it in the Lateran, twelve priests of Rome in albs, as the rubrics have it. The chaplain of the city's largest prison has written to ask whether the Holy Father might come to them instead.",
+      "choices": [
+        {
+          "id": "prison",
+          "label": "Go to the prison, and wash the feet of twelve prisoners",
+          "outcome": "You go to the prison. Twelve inmates, men and women, one of them a Muslim, one of them a boy of nineteen who cannot stop shaking. You kneel on a bad knee and wash and dry and kiss twelve feet. The rubricists write articles. The boy writes to you for years.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "world",
+              "delta": 5
+            },
+            {
+              "target": "place",
+              "key": "soul",
+              "delta": 6
+            },
+            {
+              "target": "place",
+              "key": "church",
+              "delta": 2
+            },
+            {
+              "target": "place",
+              "key": "curia",
+              "delta": -2
+            },
+            {
+              "target": "place",
+              "key": "strength",
+              "delta": -2
+            }
+          ]
+        },
+        {
+          "id": "lateran",
+          "label": "Keep it in the Lateran, as the rubrics have it",
+          "outcome": "You keep it in the Lateran, twelve priests in albs, the ancient way. It is beautiful and it is exact, and the rubricists are grateful, and the chaplain of the prison says the Mass for his people himself, as he always has.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "curia",
+              "delta": 2
+            },
+            {
+              "target": "place",
+              "key": "church",
+              "delta": 1
+            }
+          ],
+          "default": true
+        }
+      ]
+    },
+    {
+      "id": "pp_canonization",
+      "phase": [
+        "bishop"
+      ],
+      "beat": "pope",
+      "pressure": [
+        "competence"
+      ],
+      "severity": "ROUTINE",
+      "category": "chancery",
+      "baseWeight": 3,
+      "suppressYears": 2,
+      "requires": [
+        {
+          "type": "papacy",
+          "key": "reigning",
+          "value": true
+        },
+        {
+          "type": "record",
+          "key": "saints",
+          "op": ">=",
+          "value": 1
+        }
+      ],
+      "title": "The Canonization",
+      "body": "In the square, under the tapestry of the new saint: a religious sister who ran a leprosarium for forty years, whose cause was opened by a bishop who knew her and pushed along by her village for sixty more. The Prefect for the Causes of Saints has given you a homily that is correct in every line. Her niece, ninety-one, is in the front row.",
+      "choices": [
+        {
+          "id": "own",
+          "label": "Throw out the prefect's text and preach her from her letters",
+          "outcome": "You preach her from her letters, which you read three times in the night: the one about the smell of the wards, the one about the dark years when she could not pray. The square is very quiet. The prefect forgives you by dinner.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "church",
+              "delta": 5
+            },
+            {
+              "target": "place",
+              "key": "soul",
+              "delta": 3
+            },
+            {
+              "target": "record",
+              "key": "saints",
+              "delta": 1
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "text",
+          "label": "Preach the prefect's text: it is correct, and it is hers",
+          "outcome": "You preach the text as given. It is correct in every line. The niece does not mind; she came for her aunt, not for you. The saint is a saint either way.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "church",
+              "delta": 2
+            },
+            {
+              "target": "place",
+              "key": "curia",
+              "delta": 2
+            },
+            {
+              "target": "record",
+              "key": "saints",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pp_war",
+      "phase": [
+        "bishop"
+      ],
+      "beat": "pope",
+      "pressure": [
+        "belief_vs_safety"
+      ],
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 2,
+      "suppressYears": 8,
+      "requires": [
+        {
+          "type": "papacy",
+          "key": "reigning",
+          "value": true
+        }
+      ],
+      "title": "A War",
+      "body": "A war has begun on the edge of Europe that everyone said would not begin. The Secretariat has a channel to both governments and would like to keep it. The square is full for the Angelus, and the world is waiting to hear what the pope will say, and whether he will name the country that crossed the border.",
+      "choices": [
+        {
+          "id": "name",
+          "label": "Name the aggressor from the window, and weep",
+          "outcome": "You say it from the window: which army crossed which border, and that it is a sin that cries to heaven. The channel to one government closes that night. The other people's churches ring their bells at the Angelus for a month.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "world",
+              "delta": 7
+            },
+            {
+              "target": "place",
+              "key": "curia",
+              "delta": -3
+            },
+            {
+              "target": "place",
+              "key": "church",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "channel",
+          "label": "Pray for peace without naming anyone, and use the channel",
+          "outcome": "You pray for peace and name no one. The channel stays open, and through it, in the next year, the Secretariat trades prisoners and brings children home, quietly, a few hundred of them. Nobody writes that down; plenty write that the pope was silent.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "curia",
+              "delta": 3
+            },
+            {
+              "target": "place",
+              "key": "world",
+              "delta": -2
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "go",
+          "label": "Announce that you will go there yourself",
+          "outcome": "You announce that you will go. The Secretariat is appalled, the security services of four countries more so. You go in the end only to the border, to a refugee camp in the rain, which is what the old man's body can manage. The photograph does more than the channel.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "world",
+              "delta": 8
+            },
+            {
+              "target": "place",
+              "key": "strength",
+              "delta": -8
+            },
+            {
+              "target": "place",
+              "key": "curia",
+              "delta": -2
+            },
+            {
+              "target": "record",
+              "key": "journeys",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pp_physician",
+      "phase": [
+        "bishop"
+      ],
+      "beat": "pope",
+      "pressure": [
+        "body_vs_vow"
+      ],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 5,
+      "suppressYears": 2,
+      "requires": [
+        {
+          "type": "papacy",
+          "key": "reigning",
+          "value": true
+        },
+        {
+          "type": "place",
+          "key": "strength",
+          "op": "<=",
+          "value": 20
+        }
+      ],
+      "title": "The Physician",
+      "body": "Your physician, a quiet Roman who treated your predecessor too, asks for ten minutes after the Wednesday audience. Your heart is not what it was, he says, nor your knees, and the schedule is the schedule of a man of fifty. He would like a month in the hills and half the audiences.",
+      "choices": [
+        {
+          "id": "rest",
+          "label": "Take the month at Castel Gandolfo, and cut the audiences",
+          "outcome": "You take the month and cut the audiences by half. The world notices; the newspapers speculate about your health in the way they have done about every pope since Peter. You come back stronger, and the Curia has run itself for a month, which it enjoyed.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "strength",
+              "delta": 12
+            },
+            {
+              "target": "place",
+              "key": "curia",
+              "delta": -2
+            },
+            {
+              "target": "place",
+              "key": "world",
+              "delta": -2
+            }
+          ]
+        },
+        {
+          "id": "keep",
+          "label": "Keep the schedule: there is too much to do",
+          "outcome": "You keep the schedule. There is too much to do, and you have not much time, and both of those are true. The physician writes it in his notes and says nothing more, which is his way of saying a great deal.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "strength",
+              "delta": -5
+            },
+            {
+              "target": "place",
+              "key": "church",
+              "delta": 2
+            }
+          ],
+          "default": true
+        }
+      ]
+    },
+    {
+      "id": "pp_old_friend",
+      "phase": [
+        "bishop"
+      ],
+      "beat": "pope",
+      "pressure": [
+        "friendship_vs_duty"
+      ],
+      "severity": "NOTABLE",
+      "category": "classmate",
+      "baseWeight": 3,
+      "suppressYears": 99,
+      "requires": [
+        {
+          "type": "papacy",
+          "key": "reigning",
+          "value": true
+        }
+      ],
+      "title": "An Old Friend's Favour",
+      "body": "An old friend, a priest you were in the seminary with, is in Rome and asks to see you, and after an hour of the old stories asks it: his diocese has a vacant auxiliary see, and he has been told the terna has his name third; one word from you would put it first. He is a good priest. He is not the best of the three.",
+      "choices": [
+        {
+          "id": "no",
+          "label": "Tell him no, and tell him why, and stay his friend if he will let you",
+          "outcome": "You tell him no, and why, and that you would rather lose the argument than the friend. He is quiet a long time, and then says that is exactly what the seminary rector said about you. He writes at Christmas. It is a shorter letter than it used to be.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "soul",
+              "delta": 5
+            },
+            {
+              "target": "flag",
+              "key": "pope:refused_friend",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "yes",
+          "label": "Say the word",
+          "outcome": "You say the word, and the Dicastery puts his name first, and he is a perfectly adequate auxiliary bishop. The better man of the three is not named anywhere for six years. Nobody knows but you and the prefect, who knows everything.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "soul",
+              "delta": -6
+            },
+            {
+              "target": "place",
+              "key": "curia",
+              "delta": -2
+            }
+          ]
+        }
+      ],
+      "once": true
+    },
+    {
+      "id": "pp_confession",
+      "phase": [
+        "bishop"
+      ],
+      "beat": "pope",
+      "pressure": [
+        "doubt"
+      ],
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 3,
+      "suppressYears": 2,
+      "requires": [
+        {
+          "type": "papacy",
+          "key": "reigning",
+          "value": true
+        }
+      ],
+      "title": "The Pope's Confessor",
+      "body": "Every other Friday an old Capuchin comes up from the friary on the Via Veneto to hear the pope's confession, as a Capuchin has for a long time. He is deaf in one ear and has no interest in the Curia. Today, when you have finished, he says nothing for a while, and then asks whether you are still praying, or only presiding.",
+      "choices": [
+        {
+          "id": "true",
+          "label": "Tell him the truth: mostly presiding",
+          "outcome": "You tell him the truth. He nods, and gives you for a penance a quarter of an hour a day with nothing in your hands, not the breviary, not the rosary, nothing. It is the hardest penance you have ever been given.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "pope:confessor_penance",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "defend",
+          "label": "Tell him your work is your prayer",
+          "outcome": "You tell him your work is your prayer. He says that is what every busy priest says, and gives you absolution and three Hail Marys. He will ask again in two weeks. He always does.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ]
+        }
+      ],
+      "internalForum": true
+    },
+    {
+      "id": "pp_angelus_rain",
+      "phase": [
+        "bishop"
+      ],
+      "beat": "pope",
+      "pressure": [
+        "competence"
+      ],
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 4,
+      "suppressYears": 2,
+      "requires": [
+        {
+          "type": "papacy",
+          "key": "reigning",
+          "value": true
+        }
+      ],
+      "title": "The Angelus in the Rain",
+      "body": "Sunday noon, and it has rained on Rome since dawn. The square should be empty. From the window you can see it is not: several thousand people under umbrellas, a scout troop from Poland in ponchos, a man with no umbrella at all standing by the obelisk.",
+      "choices": [
+        {
+          "id": "long",
+          "label": "Speak to them a little longer than usual, and thank them for staying",
+          "outcome": "You speak to them longer than usual, and thank them for the rain, and they laugh, and the umbrellas bob. You wave at the man by the obelisk. He waves back. It is the best Angelus of the year.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "soul",
+              "delta": 3
+            },
+            {
+              "target": "place",
+              "key": "world",
+              "delta": 2
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "short",
+          "label": "Say the Angelus and the blessing, and let them get out of the rain",
+          "outcome": "You say the Angelus and the blessing and wish them a good lunch, and let them go. The scouts are grateful. The man by the obelisk stays until the window closes.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "soul",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pp_borgata",
+      "phase": [
+        "bishop"
+      ],
+      "beat": "pope",
+      "pressure": [
+        "friendship_vs_duty"
+      ],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 3,
+      "suppressYears": 4,
+      "requires": [
+        {
+          "type": "papacy",
+          "key": "reigning",
+          "value": true
+        },
+        {
+          "type": "record",
+          "key": "parishes",
+          "op": ">=",
+          "value": 1
+        }
+      ],
+      "title": "A Pastor on the Edge of Rome",
+      "body": "A Sunday visit to a parish on the ring road, cement and laundry and a church built in 1974. The pastor, a Nigerian priest who has served there eleven years, shows you the youth centre and the soup kitchen and, when the others have gone ahead, says in a low voice that he has not slept properly in a year and does not know how to tell his bishop, who is you.",
+      "choices": [
+        {
+          "id": "stay",
+          "label": "Send the entourage on and sit with him in the sacristy",
+          "outcome": "You send the entourage to the car and sit with him in the sacristy for an hour, two priests. At the end you tell him to take a month, and that the Vicar of Rome will find a man to cover, and that he is to come to lunch at the guesthouse when he is back. He does, twice a year, for the rest of your life.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "soul",
+              "delta": 5
+            },
+            {
+              "target": "place",
+              "key": "church",
+              "delta": 2
+            },
+            {
+              "target": "place",
+              "key": "strength",
+              "delta": -2
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "vicar",
+          "label": "Tell him you will have the Vicar of Rome see to it",
+          "outcome": "You tell him the Vicar of Rome will see to it, and he does: a month off, a replacement, a follow-up in writing. It is done well. The pastor thanks you by letter, correctly, and you do not hear from him again.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "curia",
+              "delta": 1
+            },
+            {
+              "target": "place",
+              "key": "church",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pp_ad_limina",
+      "phase": [
+        "bishop"
+      ],
+      "beat": "pope",
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 3,
+      "suppressYears": 5,
+      "requires": [
+        {
+          "type": "papacy",
+          "key": "reigning",
+          "value": true
+        }
+      ],
+      "title": "The Bishops from Home",
+      "body": "The bishops of your own country's region are in Rome for their ad limina visit, forty of them in the Consistory Hall, among them men you ordained and men who voted against you at the conference. They have prepared a report on the shortage of priests that is more honest than any you signed when you sat among them.",
+      "choices": [
+        {
+          "id": "frank",
+          "label": "Tell them the truth as you knew it from their side of the table",
+          "outcome": "You put the text away and tell them what you knew from their side of the table: the parishes closed, the old priests saying four Masses on a Sunday, the reports to Rome that said everything was fine. They are silent, and then some of them are very relieved.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "church",
+              "delta": 4
+            },
+            {
+              "target": "place",
+              "key": "curia",
+              "delta": -1
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "listen",
+          "label": "Listen, ask questions, and promise nothing",
+          "outcome": "You listen and ask questions for two hours and promise nothing, which is what popes do at ad limina visits. They go home saying you were attentive. It is not nothing, and it is not what they came for.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "church",
+              "delta": 1
+            },
+            {
+              "target": "place",
+              "key": "curia",
+              "delta": 1
+            }
+          ]
+        }
+      ],
+      "once": true
+    },
+    {
+      "id": "pp_curia_reform",
+      "phase": [
+        "bishop"
+      ],
+      "beat": "pope",
+      "pressure": [
+        "competence"
+      ],
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 3,
+      "suppressYears": 99,
+      "requires": [
+        {
+          "type": "papacy",
+          "key": "reigning",
+          "value": true
+        },
+        {
+          "type": "record",
+          "key": "documents",
+          "op": ">=",
+          "value": 1
+        }
+      ],
+      "title": "The Reform of the Curia",
+      "body": "The council of cardinals you named to advise you has finished its draft of a new constitution for the Curia: offices merged, prefects with terms, laymen and laywomen at the head of dicasteries where the law permits. The prefects have read it. Eleven of them have asked for an audience on the same morning.",
+      "choices": [
+        {
+          "id": "promulgate",
+          "label": "Promulgate it, whole, and let the prefects adjust",
+          "outcome": "You promulgate it whole. The prefects adjust, some of them by retiring, one of them by giving an interview. The Curia is smaller and meaner and quicker, and for five years it runs against you in every way a bureaucracy can.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "curia",
+              "delta": -8
+            },
+            {
+              "target": "place",
+              "key": "church",
+              "delta": 3
+            },
+            {
+              "target": "place",
+              "key": "world",
+              "delta": 3
+            },
+            {
+              "target": "record",
+              "key": "documents",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "pope:curia_reformed",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "phase",
+          "label": "Phase it in over five years, office by office",
+          "outcome": "You phase it in office by office. By the fifth year half of it is law and the other half has been negotiated into something the prefects can live with. It is the Roman way, and it works, slowly.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "curia",
+              "delta": 2
+            },
+            {
+              "target": "place",
+              "key": "church",
+              "delta": 1
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "shelve",
+          "label": "Shelve it: the Curia is not the Church's problem",
+          "outcome": "You shelve it. The council of cardinals is thanked. The Curia is exactly what it was, which is to say effective at some things and impossible at others, and the next pope will get the draft in a drawer.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "curia",
+              "delta": 4
+            },
+            {
+              "target": "place",
+              "key": "church",
+              "delta": -2
+            },
+            {
+              "target": "place",
+              "key": "world",
+              "delta": -2
+            }
+          ]
+        }
+      ],
+      "once": true
+    },
+    {
+      "id": "pp_loggia_night",
+      "phase": [
+        "bishop"
+      ],
+      "beat": "pope",
+      "pressure": [
+        "body_vs_vow"
+      ],
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 3,
+      "suppressYears": 3,
+      "requires": [
+        {
+          "type": "papacy",
+          "key": "reigning",
+          "value": true
+        }
+      ],
+      "title": "The Loggia at Night",
+      "body": "Past midnight, and you cannot sleep. You walk the loggia of the Palace in a cardigan over the white cassock, past Raphael's frescoes that nobody sees at night, and look down at the square with its lamps and two policemen and a couple sitting on the colonnade steps. {pope_years} years. You are {pope_age}.",
+      "choices": [
+        {
+          "id": "pray",
+          "label": "Stay and pray the rosary for the couple on the steps",
+          "outcome": "You pray a rosary for the couple on the steps, whoever they are, and whatever they are talking about so late. At the third mystery they get up and go. You go to bed and sleep.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "soul",
+              "delta": 4
+            },
+            {
+              "target": "place",
+              "key": "strength",
+              "delta": 1
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "work",
+          "label": "Go back to the desk: the draft will not write itself",
+          "outcome": "You go back to the desk and write two pages of the document in the silence, which are the best two pages in it. In the morning you are very tired and the physician can tell.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "strength",
+              "delta": -3
+            },
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pp_journey_mass",
+      "phase": [
+        "bishop"
+      ],
+      "beat": "pope",
+      "pressure": [
+        "competence"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 3,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "papacy",
+          "key": "reigning",
+          "value": true
+        },
+        {
+          "type": "papacy",
+          "key": "scene",
+          "value": "journey"
+        }
+      ],
+      "title": "The Mass for a Million",
+      "body": "In {pope_journey}, the Mass on the last day of the journey: a field outside the capital, a stage like a ship's prow, and more people than anyone can count, who have walked through the night to be there. The wind is taking the pages of your homily one by one.",
+      "choices": [
+        {
+          "id": "letgo",
+          "label": "Let the pages go and speak to them",
+          "outcome": "You let the pages go. You speak about what you have seen in four days, and about their grandmothers who kept the faith when it cost something, and the translator is weeping by the end, and so, it is said, is the president.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "world",
+              "delta": 4
+            },
+            {
+              "target": "place",
+              "key": "church",
+              "delta": 4
+            },
+            {
+              "target": "place",
+              "key": "soul",
+              "delta": 3
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "hold",
+          "label": "Hold the pages down and read them",
+          "outcome": "You hold the pages down with both hands and read them, and the homily is a good one, written by men who know the country. The million do not mind. They came to see the pope, and they have.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "church",
+              "delta": 2
+            },
+            {
+              "target": "place",
+              "key": "curia",
+              "delta": 1
+            }
+          ]
+        }
+      ],
+      "priority": 1
+    },
+    {
+      "id": "pp_journey_plane",
+      "phase": [
+        "bishop"
+      ],
+      "beat": "pope",
+      "pressure": [
+        "competence"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 3,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "papacy",
+          "key": "reigning",
+          "value": true
+        },
+        {
+          "type": "papacy",
+          "key": "scene",
+          "value": "journey"
+        }
+      ],
+      "title": "The Press Conference on the Plane",
+      "body": "The flight home from {pope_journey}, and the journalists come down the aisle one by one with a microphone. The seventh question is the one the press office asked them not to ask: whether the Holy Father, given his age and his health, has considered renouncing, as his predecessors have.",
+      "choices": [
+        {
+          "id": "answer",
+          "label": "Answer it honestly, and at length",
+          "outcome": "You answer it honestly: that the door is open, that you have thought about it, that it is not yet. The headline in every paper is POPE CONSIDERS RESIGNING. The press office does not speak to you for a day.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "world",
+              "delta": 4
+            },
+            {
+              "target": "place",
+              "key": "curia",
+              "delta": -2
+            }
+          ]
+        },
+        {
+          "id": "joke",
+          "label": "Make them laugh, and say you have too much to do",
+          "outcome": "You make them laugh: you say that you have too much to do, and that in any case you are only the Bishop of Rome, and the bishops of Rome resign at seventy-five in theory only. It is quoted everywhere, and nobody is sure what you meant, which is what you meant.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "world",
+              "delta": 2
+            }
+          ],
+          "default": true
+        }
+      ],
+      "priority": 1
+    },
+    {
+      "id": "pp_journey_camp",
+      "phase": [
+        "bishop"
+      ],
+      "beat": "pope",
+      "pressure": [
+        "belief_vs_safety"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 3,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "papacy",
+          "key": "reigning",
+          "value": true
+        },
+        {
+          "type": "papacy",
+          "key": "scene",
+          "value": "journey"
+        }
+      ],
+      "title": "Off the Protocol",
+      "body": "In {pope_journey} the programme has the cathedral, the president, the clergy in a stadium, the youth. It does not have the camp on the edge of the city where eleven thousand people displaced by the fighting in the north live in tents. The nuncio says it cannot be done safely. {@pope_secretary} has already found a car.",
+      "choices": [
+        {
+          "id": "go",
+          "label": "Go to the camp, without the cameras",
+          "outcome": "You go at dawn, before the programme, without the press, in a car with a driver and a nun who knows the way. You spend two hours in the tents. Nobody reports it for a week, and then everybody does.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "world",
+              "delta": 5
+            },
+            {
+              "target": "place",
+              "key": "soul",
+              "delta": 5
+            },
+            {
+              "target": "place",
+              "key": "strength",
+              "delta": -3
+            },
+            {
+              "target": "place",
+              "key": "curia",
+              "delta": -2
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "protocol",
+          "label": "Keep to the programme, and send a gift",
+          "outcome": "You keep to the programme and send a gift through the nunciature and a message read aloud in the camp. It is received gratefully. The nun who knew the way writes to you that the people would rather have had you.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "curia",
+              "delta": 2
+            },
+            {
+              "target": "place",
+              "key": "church",
+              "delta": 1
+            }
+          ]
+        }
+      ],
+      "priority": 1
+    },
+    {
+      "id": "pp_anniversary",
+      "phase": [
+        "bishop"
+      ],
+      "beat": "pope",
+      "pressure": [
+        "competence"
+      ],
+      "severity": "ROUTINE",
+      "category": "chancery",
+      "baseWeight": 3,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "papacy",
+          "key": "reigning",
+          "value": true
+        },
+        {
+          "type": "papacy",
+          "key": "scene",
+          "value": "anniversary"
+        }
+      ],
+      "title": "The Anniversary",
+      "body": "The anniversary of your election: a Mass with the cardinals in the Sistine Chapel, where it happened, and then a lunch they have arranged. {pope_years} years. The Cardinal Dean, who asked you whether you accepted, is now very old, and makes a toast that is also, if you listen, a question about what you have made of it.",
+      "choices": [
+        {
+          "id": "honest",
+          "label": "Answer the toast with what you have not done yet",
+          "outcome": "You answer his toast with the list of what you have not done: the Curia, the money, the priests who are tired, the young who have gone. The cardinals are silent, then some of them applaud. The Dean smiles. That was the question.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "church",
+              "delta": 3
+            },
+            {
+              "target": "place",
+              "key": "soul",
+              "delta": 2
+            },
+            {
+              "target": "place",
+              "key": "curia",
+              "delta": -1
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "thanks",
+          "label": "Thank them and let it be a lunch",
+          "outcome": "You thank them, and it is a lunch, and a good one, with the Dean telling stories about three conclaves. It is the pleasantest afternoon of the year.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "curia",
+              "delta": 2
+            },
+            {
+              "target": "place",
+              "key": "strength",
+              "delta": 1
+            }
+          ]
+        }
+      ],
+      "priority": 1
+    },
+    {
+      "id": "pp_anniversary_letter",
+      "phase": [
+        "bishop"
+      ],
+      "beat": "pope",
+      "pressure": [
+        "friendship_vs_duty"
+      ],
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 3,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "papacy",
+          "key": "reigning",
+          "value": true
+        },
+        {
+          "type": "papacy",
+          "key": "scene",
+          "value": "anniversary"
+        }
+      ],
+      "title": "A Letter on the Anniversary",
+      "body": "On the anniversary of your election a letter comes from your sister, who has never written to the Holy Father and does not now: she writes to her brother. The house you grew up in has been sold. She has kept the crucifix from your mother's room, and asks whether you want it, and whether you are happy.",
+      "choices": [
+        {
+          "id": "want",
+          "label": "Ask her to send it, and tell her the truth",
+          "outcome": "You ask her to send the crucifix, and it hangs over your bed for the rest of your life. You tell her the truth: that you are not happy, exactly, but that you are where you are meant to be, which your mother would have said is better.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "soul",
+              "delta": 5
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "keep",
+          "label": "Tell her to keep it, and that you are well",
+          "outcome": "You tell her to keep it, that it belongs in a family, and that you are well. She knows you are not, and writes back only that she will pray for you. She does.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "soul",
+              "delta": 1
+            }
+          ]
+        }
+      ],
+      "priority": 1
+    },
+    {
+      "id": "pp_laying_down",
+      "phase": [
+        "bishop"
+      ],
+      "beat": "pope",
+      "pressure": [
+        "body_vs_vow"
+      ],
+      "severity": "CRITICAL",
+      "category": "personal",
+      "baseWeight": 3,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "papacy",
+          "key": "reigning",
+          "value": true
+        },
+        {
+          "type": "papacy",
+          "key": "scene",
+          "value": "laying_down"
+        }
+      ],
+      "title": "Laying It Down",
+      "body": "Your strength is failing, and everyone around you knows it before you say it. {@pope_secretary} has stopped asking whether you would like to see the Wednesday file. The physician has used the word once. In the chapel before dawn you find yourself asking whether the Church needs a pope who can do the work, or a pope who stays to the end as a sign that the work is not his.",
+      "choices": [
+        {
+          "id": "renounce",
+          "label": "Write the declaratio: you will lay down the see of Peter",
+          "outcome": "You write it in Latin, yourself, at the desk: that your strength is no longer adequate to the office, and that you renounce the ministry of Bishop of Rome, freely. You read it to the cardinals at a consistory called for something else, and it is the most quiet you have ever heard a room.",
+          "effects": [
+            {
+              "target": "flag",
+              "key": "pope:renounce",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "stay",
+          "label": "Stay, to the end: a pope does not come down from the cross",
+          "outcome": "You stay. You will do less, and be seen to do less, and the Church will watch an old man carry it to the end. Some will call it pride and some will call it witness, and you will not know which it was until afterwards.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "soul",
+              "delta": 4
+            },
+            {
+              "target": "place",
+              "key": "church",
+              "delta": 2
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "less",
+          "label": "Stay, but give the work to others: the Secretary of State will govern",
+          "outcome": "You stay, and give the Secretary of State the governing. It is a papacy in two parts, which the Church has had before and not always happily. You pray, and receive, and bless, and let the rest go.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "strength",
+              "delta": 10
+            },
+            {
+              "target": "place",
+              "key": "curia",
+              "delta": -4
+            },
+            {
+              "target": "relationship",
+              "key": "@secretary_of_state",
+              "delta": 10
+            }
+          ]
+        }
+      ],
+      "priority": 1
+    }
+  ]
+}

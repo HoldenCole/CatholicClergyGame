@@ -54,6 +54,7 @@ import { closeCascade, dueCascade } from '@/systems/rome/documents';
 import { closeNuncioScene, dueNuncioScene } from '@/systems/rome/nuncio';
 import { curiaWeek } from '@/systems/rome/curia';
 import { closeCollegeScene, dueCollegeScene } from '@/systems/rome/college';
+import { closePopeScene, duePopeScene, pontificateWeek, pontificateYear, PONTIFICATE } from '@/systems/rome/pontificate';
 import type { WeekHook } from './clock';
 
 export interface EventDeps {
@@ -204,6 +205,8 @@ export function studyWeekHook(deps: EventDeps): WeekHook {
     if (letter.moved || letter.state.pending.length > 0) return letter.state;
     const week = studyWeek(letter.state, rng.derive(`study-week:${state.clock.week}`));
     let next = week.line ? addDigestLine(week.state, week.line) : week.state;
+    // The pontificate: its own week, year, and scenes, and no board, offers, or letter at seventy-five. E1 R1.6.
+    if (next.rome?.pontificate) return pontificateStep(next, rng, deps);
     // The Curia's year: the ladder, and the ask to stay. E1 §6.
     const curia = curiaWeek(next);
     next = curia.state;
@@ -227,6 +230,28 @@ export function studyWeekHook(deps: EventDeps): WeekHook {
     if (next.mode.kind !== 'clock' || next.pending.length > 0) return next;
     return religiousModeStep(openMail(offersStep(next, rng, deps)));
   };
+}
+
+/** The pope's week beyond its hours: the desk, the journey, the scene due, the year, and now and then one of the pontificate's own scenes. E1 §10. */
+function pontificateStep(state: GameState, rng: Rng, deps: EventDeps): GameState {
+  const week = pontificateWeek(state);
+  let next = week.state;
+  if (next.mode.kind === 'ended') return next;
+  for (const line of week.lines) next = addDigestLine(next, line);
+  for (const l of week.letters) next = deliverLetter(next, l);
+  if (duePopeScene(next)) {
+    next = dueBeatScene(next, 'pope', closePopeScene, rng.derive(`pope-scene:${next.clock.week}`), deps);
+    if (next.mode.kind !== 'clock' || next.pending.length > 0) return next;
+  }
+  if (isCareerYear(next)) next = pontificateYear(next, rng.derive(`pope-year:${next.clock.week}`));
+  if (next.mode.kind !== 'clock') return next;
+  if (rng.derive(`pope-draw:${next.clock.week}`).chance(PONTIFICATE.sceneChance)) {
+    const pool = deps.pool.filter((e) => e.beat === 'pope' && !(e.requires ?? []).some((c) => c.type === 'papacy' && c.key === 'scene'));
+    const [event] = drawEvents(pool, next, rng, 1);
+    if (event) next = fireOrResolve(next, event, rng, deps);
+  }
+  if (next.mode.kind !== 'clock' || next.pending.length > 0) return next;
+  return openMail(next);
 }
 
 /** Roughly how often a friar's week without a parish loop carries a scene. Invented. */

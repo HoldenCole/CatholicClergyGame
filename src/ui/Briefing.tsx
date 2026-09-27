@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useGameStore } from '@/engine/store';
 import { useUiStore } from './uiStore';
 
-type Key = 'seminary' | 'parish' | 'study' | 'posting' | 'house' | 'novitiate' | 'friar_study';
+type Key = 'seminary' | 'parish' | 'study' | 'posting' | 'house' | 'novitiate' | 'friar_study' | 'pope';
 
 const TEXT: Record<Key, { title: string; from: string; paragraphs: string[] }> = {
   seminary: {
@@ -58,6 +58,14 @@ const TEXT: Record<Key, { title: string; from: string; paragraphs: string[] }> =
       'Your provincial still assigns you. Letters come from him and from your brothers at home, and some will be about what you will be when you return. The Record keeps the weeks.',
     ],
   },
+  pope: {
+    title: 'A word from the man before you',
+    from: 'An envelope in the desk of the apartment, sealed until now',
+    paragraphs: [
+      'The week is sixteen blocks and the shape of it is yours: the audiences, the prefects, the bishops\' files, the desk, the chapel, a parish of Rome on Sunday, and rest, which you will not take enough of. The Holy See sheet has the document you are writing, the College you will leave to elect your successor, and the journeys. The Work sheet says how the Church, the Curia, the world, and the priest in you are hearing it, and how much strength you have left.',
+      'Nobody gives you a term. It ends when you die or when you lay it down, and the door to the second is always on the desk. The Record keeps the weeks.',
+    ],
+  },
   posting: {
     title: 'A word from the man before you',
     from: 'A note in the top drawer',
@@ -71,6 +79,7 @@ const TEXT: Record<Key, { title: string; from: string; paragraphs: string[] }> =
 function keyFor(game: NonNullable<ReturnType<typeof useGameStore.getState>['game']>): Key | null {
   if (game.mode.kind !== 'clock' || game.pending.length > 0) return null;
   if (game.parish) return 'parish';
+  if (game.study?.city === 'holy_see') return 'pope';
   if (game.study) return game.study.city === 'rome' || game.study.city === 'washington' ? (game.religious ? 'friar_study' : 'study') : 'posting';
   if (game.religious && game.flags.ordained) return 'house';
   if (game.seminary) return game.religious ? 'novitiate' : 'seminary';

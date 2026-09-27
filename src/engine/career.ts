@@ -22,6 +22,7 @@ import { withChoice } from '@/systems/choice';
 import { closeRequest, markRequested, requestOf, requestYear } from '@/systems/request';
 import { ministryLine } from '@/systems/ministry';
 import { housesYear } from '@/systems/houses';
+import { pontificateLine } from '@/systems/rome/pontificateText';
 
 /** What a letter naming a parish is worth when the board has nothing else in mind. Invented. */
 const REQUEST_WEIGHT = 45;
@@ -308,7 +309,7 @@ function leaveCollapse(state: GameState): GameState {
 }
 
 /** DESIGN 15: a career summary that reads like a life rather than a score. */
-export function careerSummary(state: GameState, ending: 'retired' | 'died' | 'left_priesthood' | 'elected_pope'): string {
+export function careerSummary(state: GameState, ending: 'retired' | 'died' | 'left_priesthood' | 'elected_pope' | 'pope_died' | 'pope_renounced'): string {
   const c = state.character!;
   const age = playerAge(state);
   const years = Math.floor(yearsOrdained(state));
@@ -323,9 +324,13 @@ export function careerSummary(state: GameState, ending: 'retired' | 'died' | 'le
     ending === 'retired' ? `You retired at ${age}, ${years} years a priest.` :
     ending === 'died' ? `You died at ${age}, ${years} years a priest, ${state.assignment?.role === 'pastor' ? 'still pastor' : 'still in harness'}.` :
     ending === 'elected_pope' ? `The College of Cardinals elected you pope at ${age}, ${years} years a priest, and you took the name ${String(state.flags['pope:name'] ?? 'the College will remember')}.` :
+    ending === 'pope_died' ? `You died Bishop of Rome at ${age}, ${years} years a priest, as ${String(state.flags['pope:name'] ?? 'pope')}.` :
+    ending === 'pope_renounced' ? `You laid down the see of Peter at ${age}, ${years} years a priest, and were ${String(state.flags['pope:name'] ?? 'pope')} no longer; the Church calls you pope emeritus.` :
     `You left the priesthood at ${age}, after ${years} years.`;
   const see = state.see;
+  const reign = pontificateLine(state);
   const arc =
+    reign ? `${reign}${state.flags['pope:former_see'] ? ` Before the conclave you had been Bishop of ${String(state.flags['pope:former_see'])}.` : ''}` :
     see ? `You were named Bishop of ${see.see} and held ${see.name} for ${Math.max(1, Math.round((state.clock.week - see.installedWeek) / 52))} years: ${see.ordinations} ordained, ${see.closings} parish${see.closings === 1 ? '' : 'es'} closed, the priests ${see.presbyterate >= 20 ? 'with you' : see.presbyterate <= -20 ? 'against you' : 'watching'} at the end.` :
     promotions === 0 ? 'You were never made a pastor.' :
     `You were appointed ${promotions === 1 ? 'once' : `${promotions} times`}${passed ? ` and passed over ${passed === 1 ? 'once' : `${passed} times`}` : ''}.`;

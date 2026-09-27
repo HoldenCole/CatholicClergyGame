@@ -150,8 +150,11 @@ describe('a cardinal in the conclave', () => {
     s = holdTheConclave(s);
     expect(s.rome!.conclave!.electedId).toBe(PLAYER);
     const accepted = answerConclave(s, true, 'Clement XV');
-    expect(accepted.mode).toMatchObject({ kind: 'ended', ending: 'elected_pope' });
-    expect(accepted.mode.kind === 'ended' && accepted.mode.summary).toMatch(/took the name Clement XV/);
+    // Accepto begins the pontificate, which is played (R1.6): he reigns, and the conclave is over.
+    expect(accepted.mode).toEqual({ kind: 'clock' });
+    expect(accepted.rome!.pontificate!.name).toBe('Clement XV');
+    expect(accepted.rome!.conclave).toBeUndefined();
+    expect(accepted.career.at(-1)!.text).toMatch(/took the name Clement XV/);
     const refused = answerConclave(s, false);
     expect(refused.rome!.conclave!.declined).toBe(true);
     expect(refused.rome!.conclave!.electedId).not.toBe(PLAYER);

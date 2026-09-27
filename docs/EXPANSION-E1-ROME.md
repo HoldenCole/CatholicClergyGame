@@ -198,3 +198,80 @@ Tunables are invented and flagged; the conclave and the terna are deterministic 
 - **(C) The Curia: a posting and the ladder** to secretary of a dicastery (R1.4). The diplomatic service is a later round.
 - **(D) The player can be elected pope and keep playing.** This is a new playable tier with its own design, **R1.6 The papacy, played**, specified before it is built: what a pope's week is (audiences, the Curia, documents he writes and the cascade he starts, travel, consistories, the College he shapes for his successor), and how the life ends (death or renunciation).
 - **(E) Home diocese while he is a bishop elsewhere**: let it change (the recommendation; not yet built).
+
+---
+
+## 10. R1.6 The papacy, played (design)
+
+*Written before the build, as decision (D) asks. Everything here rides on machinery already built: the posting (a week of activities, dials, a book), the documents and their reading by bishops, the College and its consistories, the conclave engine. Tunables are invented and flagged; the canonical points are flagged for verification (CLAUDE.md rule 12).*
+
+### 10.1 What a pontificate is, in the game
+
+The man says *accepto* in the Sistine Chapel and does not come out as a priest of his diocese again. The pontificate is **the last posting**: the Apostolic Palace as a place, with a week of blocks he gives to the work, five dials that say how the reign is going, and a book of what it counted. It ends only by death or renunciation (can. 332 §2: freely made and duly manifested; flagged). There is no endWeek and no board.
+
+- **The election**: the see or office he held is written to the record as served; he stops being a cardinal; he is the reigning pope in `rome.popes` (id `player`, his regnal name, his reading as his temperament). Two men are generated for him: a **Secretary of State** (a cardinal of the College, taken from it) and a **private secretary** (a monsignor he brings or is given).
+- **What stops while he reigns**: the generated line of documents (he writes them), the automatic consistory (he calls them), the nuncio's scenes (he names nuncios now), the letter at seventy-five (a pope does not submit one), offers, and the diocesan year (the home diocese is held as he left it, as it is for a bishop elsewhere until §9 E is built). What goes on: the College's deaths and eightieth birthdays, the record's own documents on their dates, the world's calendar; and his old diocese's bishop reads what he writes.
+
+### 10.2 The week (the posting machinery)
+
+Sixteen blocks. Activities, each moving dials and adding to the book:
+
+| Activity | Moves | The book |
+|---|---|---|
+| The Wednesday audience | the world, the Church | pilgrims (thousands) |
+| The prefects' audiences (the *tabella*) | the Curia | |
+| The bishops' files | the Curia, the Church | bishops named |
+| Writing | (the document on the desk) | |
+| The diocese of Rome: a parish on Sunday | the Church, the priest in him | Roman parishes visited |
+| The chapel before dawn | the priest in him | |
+| Confessions in St. Peter's | the priest in him, the Church | |
+| The Secretariat's world files | the world | |
+| The causes of the saints | the Church | saints canonized |
+| Castel Gandolfo: rest | his strength, the priest in him | |
+
+**Dials** (−100..100): *the Church* (divided … with you), *the Curia* (against you … your instrument), *the world* (not listening … listening), *the priest in you* (emptied out … a priest still), *your strength* (failing … strong). Strength falls a little every year with age and with every journey; rest restores it.
+
+### 10.3 The desk: documents he writes
+
+One document on the desk at a time. He chooses:
+
+- **The kind**, which sets the writing it takes: an encyclical (90 blocks of writing), an apostolic exhortation (60), an apostolic letter (30), a motu proprio (15). Invented.
+- **The subject**: one step along a policy axis in either direction (the same axes the generated popes move, from where the law stands now), or a teaching topic from the pools that moves no law.
+
+The Latin incipit is generated (never a real document's). When the writing is done it is **promulgated** through the same `issueDocument` the whole Church already lives under: the law moves, and if it turns back a document he implemented as a priest, the reversal machinery reads his own record back to him (§4.3), now from the other side of the desk.
+
+**Reception**: the College's electors read it as the bishops of the world would, each with the norm the cascade already rolls (welcomed, received, the minimum, slow-walked); his old diocese's bishop reads it too, by name. The Church dial moves by the share welcoming or receiving against the share resisting; the Curia dial by how the curial cardinals read it; an encyclical is heard by the world. Turning back a predecessor's document costs more of the Church than moving new ground. Invented weights.
+
+### 10.4 Consistories he holds
+
+Once a year at most, from his first anniversary, he may call a consistory. He is shown **sixteen men**, generated independently of his own reading (so the choice, not the roll, shapes the College): name, country, age, reading, residential or curial. He creates as many as bring the electors to 120, and may go past it by up to five, as popes have, at a cost with the Curia. Curial men please the Curia; the rest please the Church. Each man is a `Cardinal` created by him, and **the next conclave is his College's**.
+
+### 10.5 Journeys
+
+He plans an apostolic journey to a country (the College's origins), eight to fourteen weeks out; one planned at a time, three a year at most. The journey moves the world and the Church, costs strength (more with age), adds to the book, and brings its own scene (the tarmac, the Mass for a million, the press conference on the plane).
+
+### 10.6 Scenes
+
+About two dozen, beat `pope`, drawn about one week in eight in place of the ordinary pool, plus the journey's: the balcony and the first blessing, the apartment (the Palace or the guesthouse), the Secretary of State, the first audience, a letter from his old parish, his classmates, a head of state, cardinals who send *dubia*, a leak from the Curia, the Vatican's money, a bishop's report that cannot be left in a drawer (authored, serious; never a mechanic to optimize, CLAUDE.md), Holy Thursday in a prison, a canonization, a war and an appeal for peace, the physician, the old friend who asks a favour, the anniversary of the election, the question of laying it down. They move the dials through the existing `place` and `record` effects.
+
+### 10.7 The end
+
+- **Death**: each year a chance by age (the generated popes' own table), lowered by strength and raised by its lack. Ending `pope_died`.
+- **Renunciation**: always on the desk, with a confirmation; he becomes pope emeritus. Ending `pope_renounced`.
+- **The conclave after him** is run from the gallery on the College as he left it (`collegeElects`), and the shelf page says whom it elected, whether that man was one of his creations, how many of the electors he created, and whether the successor reads near him.
+
+Done when: a pope can be played until his death or renunciation, and the next conclave reads what he made of the College.
+
+### 10.8 As built (R1.6)
+
+*Added at build time.*
+
+- **Accepto** (`systems/rome/pontificate.ts`): the conclave's acceptance now begins the pontificate instead of ending the run (`elected_pope` stays for older saves). The see or office he held is closed on the record; the Secretary of State is the curial elector nearest his reading whom the College rates; a private secretary is generated. The posting is `papacy` (`content/study/programs.json`, city `holy_see`, kind `pope`), with ten activities (`content/study/activities.json`, `pope_*`), five dials, and a book of seven counts.
+- **The week**: each week the Church, the Curia, and the world forget 4% of what they heard; strength drains a little every week (more past seventy) and can never exceed what his age allows (100 less 3 a year past sixty); rest restores it. Once a year the dials drift, a letter reads the year, and death is rolled (the generated popes' table, halved at full strength and raised half again at none). All invented, flagged.
+- **The desk** (`systems/rome/papalDesk.ts`): four kinds (encyclical 90 blocks, apostolic exhortation 60, apostolic letter 30, motu proprio 15), a step either way on any axis a pope may move or one of three teaching topics, a generated incipit; promulgated through `issueDocument` with the cascade closed (no parish scene for a pope). Reception from the College's electors and its curial men by the cascade's own norms; a law moved again within a year costs the Church 4 per earlier move; turning back a predecessor's document costs 6. His old diocese's bishop's reading is named in the letter. The seed's generated documents skip his pontificate.
+- **Consistories and journeys** (`systems/rome/papalActs.ts`): a consistory a year from the first anniversary, sixteen men offered whose readings are rolled independently of his, up to five over the cap at a cost with the Curia; created cardinals carry `createdBy: 'player'`. Journeys to any of the College's countries, prepared eight to fourteen weeks, three a year, each with a scene.
+- **The end**: death, or renunciation from the desk (with a confirmation) or from the scene put to him when his strength fails (`pope:renounce`, taking effect the next week). Endings `pope_died` and `pope_renounced`; the shelf page carries the reign's line and the epilogue (`systems/rome/pontificateText.ts`): how many electors he made, whom the College elected, and how near that man reads to him.
+- **UI**: the Holy See sheet (`ui/study/PopePanel.tsx`: the desk, the College, journeys, laying it down), the pontificate on The work sheet, a pope's briefing, the Profile line.
+- **Scenes**: 28 (`content/events/rome/pope.json`, beat `pope`), about one week in eight plus the scheduled ones (the Loggia and the apartment in the first week, three for journeys, two for anniversaries, the question of laying it down). New conditions `papacy` `reigning` and `scene`; selectors `@secretary_of_state`, `@pope_secretary`; tokens `{pope_name}`, `{pope_journey}`, `{pope_draft}`, `{pope_years}`, `{pope_from}`, `{pope_age}`. The bishop's report is authored and category `scandal` (never sent to the LLM layer); the pope's confession is sealed (rule 7).
+- **Fixed on the way**: rolled readings in the College, the nuncio, and the papacy could be a negative zero, which JSON does not keep; they are now normalized.
+
