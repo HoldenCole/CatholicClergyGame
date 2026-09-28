@@ -17,7 +17,7 @@ export default function PresbyteratePanel() {
   const priests = priestsOfSee(game).filter((n) => !council.some((c) => c.id === n.id));
   const losses = [...(game.see.losses ?? [])].reverse().slice(0, 6);
   return (
-    <Sheet title="The council of priests">
+    <Sheet title="The council of priests" fold="closed">
       <p className="ink-muted text-xs">The council is {word}. The presbyterate reads as {Math.round(f.traditional * 100)} of a hundred of the old school, {Math.round(f.progressive * 100)} of the new, the rest hard to place.</p>
       <ul className="mt-2 flex flex-col gap-0.5 text-xs">
         {council.map((n) => (

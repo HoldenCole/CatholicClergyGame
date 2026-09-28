@@ -34,6 +34,10 @@ export default function SettingsPanel() {
         <span>A line under each room saying what can be clicked</span>
       </label>
       <label className="mt-1 flex items-center gap-2 text-sm">
+        <input type="checkbox" checked={prefs.labels ?? true} onChange={(e) => setPrefs({ labels: e.target.checked })} />
+        <span>A label on everything in the room that can be clicked</span>
+      </label>
+      <label className="mt-1 flex items-center gap-2 text-sm">
         <input type="checkbox" checked={prefs.briefings} onChange={(e) => setPrefs({ briefings: e.target.checked, ...(e.target.checked ? { seen: [] } : {}) })} />
         <span>A note explaining the first week of each phase</span>
       </label>
@@ -71,7 +75,7 @@ export default function SettingsPanel() {
         <p className="ink-faint mt-2 text-xs">Both change the seminary's free hours, the hours away, and the parish week alike, and are kept in the save.</p>
       </Sheet>
     )}
-    <Sheet title="Prose">
+    <Sheet title="Prose" fold="closed">
       <label className="flex items-center gap-2 text-sm">
         <input type="checkbox" checked={llm.enabled} onChange={(e) => setLlm({ enabled: e.target.checked })} />
         <span>Let a model rewrite scenes in richer prose</span>

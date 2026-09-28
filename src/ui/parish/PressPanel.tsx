@@ -15,7 +15,7 @@ export default function PressPanel() {
   const chosen = topics.find((t) => t.topic.id === topic);
   const last = typeof game.flags['column:topic'] === 'string' ? topics.find((t) => t.topic.id === game.flags['column:topic']) : undefined;
   return (
-    <Sheet title="The diocesan paper">
+    <Sheet title="The diocesan paper" fold="closed">
       <p className="text-sm leading-relaxed">
         The editor takes a column from a priest of the diocese every quarter, on the record, under your name.{' '}
         {last ? <span className="ink-muted">Your last was on {last.topic.label.toLowerCase()}. </span> : null}

@@ -52,7 +52,7 @@ export default function SeePanel() {
         );
       })()}
       {see.former && see.former.length > 0 && (
-        <Sheet title="The chairs before this one">
+        <Sheet title="The chairs before this one" fold="closed">
           <ul className="flex flex-col gap-1 text-sm">
             {see.former.map((f) => (
               <li key={f.id} className="ink-muted">{f.name}, {f.region}: {f.years} year{f.years === 1 ? '' : 's'}, {f.ordinations} ordained, {f.closings === 0 ? 'no parishes closed' : `${f.closings} parish${f.closings === 1 ? '' : 'es'} closed`}.</li>
@@ -61,7 +61,7 @@ export default function SeePanel() {
         </Sheet>
       )}
       {see.years.length > 0 && (
-        <Sheet title="The years">
+        <Sheet title="The years" fold="closed" summary={see.years.at(-1)}>
           <ol className="flex flex-col gap-1 text-sm">
             {[...see.years].reverse().map((l, i) => <li key={i} className="ink-muted">{l}</li>)}
           </ol>

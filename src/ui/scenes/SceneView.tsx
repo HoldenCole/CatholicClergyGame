@@ -40,6 +40,8 @@ export default function SceneView() {
   const preview = selected ?? hoverPreview;
   const [hover, setHover] = useState<string | null>(null);
   const hints = useUiStore((s) => s.prefs.hints);
+  const labels = useUiStore((s) => s.prefs.labels ?? true);
+  const setPrefs = useUiStore((s) => s.setPrefs);
   if (!game || (!game.parish && !game.seminary && !game.study)) return null;
   const away = !!game.study;
   // An ordained friar keeps his formation record but lives in a cell of the house, not a seminary room. E3.
@@ -172,7 +174,7 @@ export default function SceneView() {
     <div className="overflow-hidden rounded-sm border border-[#3a2a18] shadow-[0_18px_40px_rgba(0,0,0,0.6)]">
       <div className="plate flex items-center justify-between px-4 py-1.5">
         <span className="heading" style={{ color: '#e6c25a' }}>{scene.label}</span>
-        <nav className="flex gap-0.5">
+        <nav className="flex items-center gap-0.5">
           {rooms.map((s) => (
             <button
               key={s.id}
@@ -182,6 +184,14 @@ export default function SceneView() {
               {s.label.replace('The ', '').replace('Your ', '')}
             </button>
           ))}
+          <span className="mx-1 h-3 w-px bg-[#c9a24a]/30" aria-hidden />
+          <button
+            onClick={() => setPrefs({ labels: !labels })}
+            title={labels ? 'Hide the labels on the room' : 'Name everything in the room that can be clicked'}
+            className={'rounded px-2 py-0.5 text-xs ' + (labels ? 'text-[#e6c25a]' : 'text-[#cbbfa4] hover:text-[#f1e8d3]')}
+          >
+            {labels ? 'labels on' : 'labels'}
+          </button>
         </nav>
       </div>
       <div className="relative aspect-[100/60] w-full overflow-hidden bg-[#1a120c]">
@@ -201,6 +211,24 @@ export default function SceneView() {
               style={{ left: `${h.x}%`, top: `${h.y}%`, width: `${h.w}%`, height: `${h.h}%` }}
               className={'hotspot ' + (active ? 'hotspot-active' : '')}
             />
+          );
+        })}
+        {/* The labels: every clickable thing named where it stands, the hovered one lit; without them, only the hovered one. */}
+        {!preview && scene.hotspots.map((h, i) => {
+          const hot = h.id === hover;
+          if (!labels && !hot) return null;
+          const short = h.label.split(':')[0]!;
+          // A narrow spot beside another narrow one takes its label at the top, so the two do not print over each other.
+          const prev = scene.hotspots[i - 1];
+          const high = !hot && h.w < 9 && !!prev && prev.w < 9 && Math.abs(prev.x - h.x) < 12 && Math.abs(prev.y - h.y) < 20 && i % 2 === 1;
+          return (
+            <span
+              key={`label:${h.id}`}
+              className={'hotspot-label ' + (hot ? 'hotspot-label-hot' : '')}
+              style={{ left: `${h.x + h.w / 2}%`, top: high ? `calc(${h.y}% + 4px)` : `calc(${h.y + h.h}% - 18px)` }}
+            >
+              {hot ? h.label : short}
+            </span>
           );
         })}
       </div>

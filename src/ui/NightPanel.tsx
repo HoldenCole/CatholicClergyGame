@@ -16,7 +16,7 @@ export default function NightPanel() {
   const bottle = !!game.flags['night:bottle'];
   const sober = game.flags['night:sober'];
   return (
-    <Sheet title={friar ? 'The house at night' : 'The rectory at night'}>
+    <Sheet title={friar ? 'The house at night' : 'The rectory at night'} fold="closed">
       <p className="text-sm leading-relaxed">
         {w.company.charAt(0).toUpperCase() + w.company.slice(1)}; {w.rest}; {w.prayer}.
         {n.aloneWeeks >= 8 && <span className="ink-wine"> The nights have been alone and the days too much, for {n.aloneWeeks} weeks.</span>}

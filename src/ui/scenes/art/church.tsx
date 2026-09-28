@@ -100,6 +100,7 @@ export function Church({ decor, parish, priest }: { decor: PlaceDecor; parish: P
       <AltarRail variant={rail} massForm={massForm} />
       <MassForm variant={massForm} rail={rail} />
       <Confessionals variant={art(decor, 'confessionals', 'booths')} />
+      <SacristyDoor />
       <Pews color={parish?.kind === 'difficult' ? '#8a6a4a' : parish?.kind === 'flagship_suburban' ? '#a87a4a' : PALETTE.oak} />
       <Font rich={rich} />
       <Choir variant={art(decor, 'choir', 'loft')} />
@@ -451,6 +452,11 @@ function Confessionals({ variant }: { variant: string }) {
           <circle cx={wallPoint('left', 12.9, 0.61)[0]} cy={wallPoint('left', 12.9, 0.61)[1]} r="0.45" fill="#e04a2a" opacity="0.9" />
         </g>
       )}
+      {/* the posted hours: a card on the wall above the booths */}
+      {box(10.5, 15.5, 0.36, 0.48, '#f3eee0', 'hourscard')}
+      {box(10.5, 15.5, 0.36, 0.375, '#7a1f1f', 'hourshead')}
+      {box(11.2, 14.8, 0.405, 0.415, '#8a7a5a', 'hoursline1')}
+      {box(11.2, 14.2, 0.435, 0.445, '#8a7a5a', 'hoursline2')}
       {room && (
         <g>
           {box(room && booths ? 2 : 9, room && booths ? 8 : 17.5, 0.56, 1, '#d8cfb8', 'roombody')}
@@ -459,6 +465,23 @@ function Confessionals({ variant }: { variant: string }) {
         </g>
       )}
     </Layer>
+  );
+}
+
+/** The sacristy door on the right side wall, toward the back: through it, the chapel. */
+function SacristyDoor() {
+  const box = (x0: number, x1: number, f0: number, f1: number, fill: string, key: string) => (
+    <polygon key={key} points={pts([wallPoint('right', x0, f0), wallPoint('right', x1, f0), wallPoint('right', x1, f1), wallPoint('right', x0, f1)])} fill={fill} />
+  );
+  return (
+    <g>
+      {box(83, 90, 0.5, 1, PALETTE.cream, 'frame')}
+      {box(83.6, 89.4, 0.53, 1, 'url(#wood)', 'door')}
+      {box(84.6, 88.4, 0.58, 0.72, PALETTE.oakDark, 'panel1')}
+      {box(84.6, 88.4, 0.76, 0.95, PALETTE.oakDark, 'panel2')}
+      <circle cx={wallPoint('right', 84.4, 0.76)[0]} cy={wallPoint('right', 84.4, 0.76)[1]} r="0.4" fill="url(#brass)" />
+      {box(83, 90, 0.46, 0.5, PALETTE.oakDark, 'lintel')}
+    </g>
   );
 }
 

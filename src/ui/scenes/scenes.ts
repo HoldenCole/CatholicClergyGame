@@ -6,6 +6,7 @@ import type { ActionLocation, ObligationKey } from '@/types';
  * dial, a panel, or another scene. Coordinates are percentages of the scene.
  */
 import type { StudyCity } from '@/types';
+import { studyActivity } from '@/content/study';
 
 export type SceneId = 'church' | 'rectory' | 'office' | 'hall' | 'chapel' | 'street' | 'study' | 'seminary_room' | 'seminary_hall' | 'chancery' | 'study_room' | 'study_city' | 'friar_cell' | 'friar_cloister';
 
@@ -48,10 +49,10 @@ export const SCENES: SceneDef[] = [
     hotspots: [
       { id: 'altar', label: 'The altar: Sunday Masses and the homily', x: 40, y: 50, w: 20, h: 18, binds: { kind: 'obligation', key: 'sunday_masses' } },
       { id: 'side_altar', label: 'The side altar: weekday Masses', x: 22, y: 18, w: 12, h: 30, binds: { kind: 'obligation', key: 'weekday_masses' } },
-      { id: 'confessional', label: 'The confessional', x: 79, y: 34, w: 14, h: 34, binds: { kind: 'action', actionId: 'extra_confessions' } },
-      { id: 'confessions_hours', label: 'The posted confession hours', x: 79, y: 26, w: 14, h: 8, binds: { kind: 'obligation', key: 'confessions' } },
+      { id: 'confessional', label: 'The confessional', x: 8, y: 36, w: 11, h: 26, binds: { kind: 'action', actionId: 'extra_confessions' } },
+      { id: 'confessions_hours', label: 'The posted confession hours', x: 9, y: 26, w: 9, h: 9, binds: { kind: 'obligation', key: 'confessions' } },
       { id: 'baptistery', label: 'The baptistery: sacramental preparation', x: 6, y: 62, w: 14, h: 22, binds: { kind: 'obligation', key: 'sacramental_prep' } },
-      { id: 'sacristy', label: 'The sacristy door', x: 62, y: 20, w: 14, h: 28, binds: { kind: 'scene', scene: 'chapel' } },
+      { id: 'sacristy', label: 'The sacristy door: to the chapel', x: 81, y: 34, w: 10, h: 30, binds: { kind: 'scene', scene: 'chapel' } },
       { id: 'sanctuary', label: 'The sanctuary: how the church looks', x: 34, y: 12, w: 32, h: 36, binds: { kind: 'furnish', place: 'church' } },
       { id: 'doors', label: 'The doors: out to the street', x: 44, y: 86, w: 12, h: 14, binds: { kind: 'scene', scene: 'street' } },
     ],
@@ -91,10 +92,10 @@ export const SCENES: SceneDef[] = [
     label: 'The parish hall',
     locations: ['hall', 'school'],
     hotspots: [
-      { id: 'tables', label: 'The tables: the groups', x: 8, y: 68, w: 84, h: 30, binds: { kind: 'action', actionId: 'groups' } },
+      { id: 'tables', label: 'The tables: the groups', x: 8, y: 70, w: 84, h: 28, binds: { kind: 'action', actionId: 'groups' } },
       { id: 'board', label: 'The bulletin board: the groups and their leaders', x: 3, y: 14, w: 22, h: 26, binds: { kind: 'panel', panel: 'groups' } },
       { id: 'kitchen', label: 'The kitchen: correspondence and the bulletin column', x: 74, y: 14, w: 22, h: 26, binds: { kind: 'action', actionId: 'writing' } },
-      { id: 'exit', label: 'Out to the street', x: 44, y: 82, w: 12, h: 18, binds: { kind: 'scene', scene: 'street' } },
+      { id: 'exit', label: 'The door: out to the street', x: 24, y: 34, w: 10, h: 34, binds: { kind: 'scene', scene: 'street' } },
     ],
   },
   {
@@ -293,18 +294,25 @@ export const STUDY_HOUSE: SceneDef = {
   ],
 };
 
-/** A posting's place: the same six spots, bound to that post's work. */
+/** The six spots of a posting's room, in the order the ids are given: the desk, the window, the files, the door, the case by the wall. */
+const POST_SPOTS = ['The desk', 'The window', 'The files', 'The door', 'The case'] as const;
+
+/** A posting's place: the same six spots, bound to that post's work and named for it. */
 function postScene(label: string, room: string, ids: [string, string, string, string, string, string]): SceneDef {
+  const name = (i: number) => {
+    const def = studyActivity(ids[i]!);
+    return `${POST_SPOTS[i]}: ${(def?.label ?? ids[i]!.replace(/_/g, ' ')).toLowerCase()}`;
+  };
   return {
     id: 'study_city',
     label,
     locations: [],
     hotspots: [
-      { id: 'a', label: ids[0], x: 26, y: 56, w: 48, h: 26, binds: { kind: 'study_action', activityId: ids[0] } },
-      { id: 'b', label: ids[1], x: 30, y: 10, w: 46, h: 34, binds: { kind: 'study_action', activityId: ids[1] } },
-      { id: 'c', label: ids[2], x: 84, y: 26, w: 12, h: 40, binds: { kind: 'study_action', activityId: ids[2] } },
-      { id: 'd', label: ids[3], x: 2, y: 22, w: 10, h: 56, binds: { kind: 'study_action', activityId: ids[3] } },
-      { id: 'e', label: ids[4], x: 76, y: 66, w: 22, h: 20, binds: { kind: 'study_action', activityId: ids[4] } },
+      { id: 'a', label: name(0), x: 26, y: 56, w: 48, h: 26, binds: { kind: 'study_action', activityId: ids[0] } },
+      { id: 'b', label: name(1), x: 30, y: 10, w: 46, h: 34, binds: { kind: 'study_action', activityId: ids[1] } },
+      { id: 'c', label: name(2), x: 84, y: 26, w: 12, h: 40, binds: { kind: 'study_action', activityId: ids[2] } },
+      { id: 'd', label: name(3), x: 2, y: 22, w: 10, h: 56, binds: { kind: 'study_action', activityId: ids[3] } },
+      { id: 'e', label: name(4), x: 76, y: 66, w: 22, h: 20, binds: { kind: 'study_action', activityId: ids[4] } },
       { id: 'back', label: room, x: 30, y: 86, w: 40, h: 12, binds: { kind: 'scene', scene: 'study_room' } },
     ],
   };
@@ -322,8 +330,16 @@ export const STUDY_DEPLOYMENT = postScene('The deployment', 'Back to the cot', [
 export const STUDY_FORMATION = postScene('The seminary', 'Back to your suite', ['direction_hours', 'house_chapel', 'the_corridor', 'rector_counsel', 'director_retreats', 'the_one_who_knocks']);
 export const STUDY_SCHOOLS = postScene('The schools office', 'Back to the apartment', ['principals', 'school_board', 'enrolment', 'the_school_to_close', 'teachers_pay', 'school_visits']);
 
+/** The Roman postings all live in the same room over the same city: the student's, the Curia's, the Academy's, the nunciature's. */
+export function romanCity(city: StudyCity): boolean {
+  return city === 'rome' || city === 'washington' || city === 'curia' || city === 'holy_see' || city === 'academy' || city === 'nunciature' || city === 'generalate' || city === 'faculty';
+}
+
+/** The room at a post, where the desk, the crucifix, and the shelf all open the week. */
+const ROOM_LABEL: Record<string, string> = { desk: 'The desk: the week', crucifix: 'The crucifix: the house chapel', shelf: 'The shelf: the books' };
+
 export function sceneById(id: SceneId, city: StudyCity = 'rome'): SceneDef {
-  if (id === 'study_room') return city === 'rome' || city === 'washington' ? STUDY_ROOM : { ...STUDY_ROOM_RESIDENCE, label: city === 'residence' ? STUDY_ROOM_RESIDENCE.label : city === 'see' ? "The bishop's house" : 'Your rooms', hotspots: STUDY_ROOM_RESIDENCE.hotspots.map((h) => (h.binds.kind === 'study_action' ? { ...h, binds: { kind: 'panel', panel: 'routine' } as const, label: 'The desk: the week' } : h)) };
+  if (id === 'study_room') return romanCity(city) ? STUDY_ROOM : { ...STUDY_ROOM_RESIDENCE, label: city === 'residence' ? STUDY_ROOM_RESIDENCE.label : city === 'see' ? "The bishop's house" : 'Your rooms', hotspots: STUDY_ROOM_RESIDENCE.hotspots.map((h) => (h.binds.kind === 'study_action' ? { ...h, binds: { kind: 'panel', panel: 'routine' } as const, label: ROOM_LABEL[h.id] ?? h.label } : h)) };
   if (id === 'study_city') return city === 'residence' ? STUDY_HOUSE : city === 'campus' ? STUDY_CAMPUS : city === 'hospital' ? STUDY_HOSPITAL : city === 'seminary' ? STUDY_SEMINARY : city === 'chancery' ? STUDY_CHANCERY : city === 'auxiliary' ? STUDY_AUXILIARY : city === 'see' ? STUDY_SEE : city === 'prison' ? STUDY_PRISON : city === 'mission' ? STUDY_MISSION : city === 'deployment' ? STUDY_DEPLOYMENT : city === 'formation' ? STUDY_FORMATION : city === 'schools' ? STUDY_SCHOOLS : city === 'washington' ? STUDY_CITY_DC : STUDY_CITY;
   if (id === 'seminary_room') return SEMINARY_SCENE;
   if (id === 'seminary_hall') return SEMINARY_HALL;

@@ -122,7 +122,7 @@ export default function ProfilePanel() {
         )}
       </Sheet>
 
-      <Sheet title="Where you have been">
+      <Sheet title="Where you have been" fold="closed" summary={p.tenures.length ? `${p.tenures.length} posting${p.tenures.length === 1 ? '' : 's'}` : 'nowhere yet'}>
         {p.tenures.length === 0 ? (
           <p className="ink-faint text-sm">Nowhere yet.</p>
         ) : (
@@ -153,7 +153,7 @@ export default function ProfilePanel() {
         </Sheet>
       )}
 
-      <Sheet title="The men">
+      <Sheet title="The men" fold="closed" summary={`${p.formed.length} formed, ${p.vocations} entered`}>
         <ul className="flex flex-col gap-1 text-sm">
           {p.formed.length === 0 && p.vocations === 0 && <li className="ink-faint">No one yet. Take a summer seminarian, and spend the hours on the young men of the parish.</li>}
           {p.formed.map((f) => (
@@ -169,7 +169,7 @@ export default function ProfilePanel() {
         </ul>
       </Sheet>
 
-      <Sheet title="On the record">
+      <Sheet title="On the record" fold="closed">
         <ul className="flex flex-col gap-1 text-sm">
           {p.offices.length > 0 && <li>Offices: {p.offices.join(', ')}.</li>}
           {p.credentials.length > 0 && <li>Degrees and credentials: {p.credentials.map((c) => c.replace(/_/g, ' ')).join(', ')}.</li>}
@@ -190,7 +190,7 @@ export default function ProfilePanel() {
       </Sheet>
 
       {(file.seen.length > 0 || file.hidden > 0) && (
-        <Sheet title="The file">
+        <Sheet title="The file" fold="closed" summary={`${file.seen.length} seen${file.hidden ? `, ${file.hidden} unseen` : ''}`}>
           <p className="ink-muted mb-2 text-xs">What the chancery keeps on you, across bishops: the board's decisions, the rector's evaluations, what you said aloud, and notes you were never shown. A new bishop reads this before he reads you.</p>
           <ul className="flex flex-col gap-1 text-sm">
             {file.seen.slice(-12).reverse().map((e) => (
@@ -204,7 +204,7 @@ export default function ProfilePanel() {
         </Sheet>
       )}
       {documents.length > 0 && (
-        <Sheet title="From Rome">
+        <Sheet title="From Rome" fold="closed" summary={`${documents.length} document${documents.length === 1 ? '' : 's'}`}>
           <ul className="flex flex-col gap-1 text-sm">
             {documents.map((d) => (
               <li key={`${d.title}:${d.year}`}>

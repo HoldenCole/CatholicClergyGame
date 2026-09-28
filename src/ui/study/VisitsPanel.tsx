@@ -13,7 +13,7 @@ export default function VisitsPanel() {
   const { visited, total } = cycleProgress(game);
   const ago = (w: number | null) => (w === null ? 'never' : game.clock.week - w < 52 ? 'this year' : `${Math.floor((game.clock.week - w) / 52)} year${Math.floor((game.clock.week - w) / 52) === 1 ? '' : 's'} ago`);
   return (
-    <Sheet title="The visitation">
+    <Sheet title="The visitation" fold="closed">
       <p className="ink-muted text-xs">{visited} of {total} parishes seen within five years. A visit is a weekend: the pastor, the books, the school, the people, and what the file did not say.</p>
       <ul className="mt-2 flex max-h-64 flex-col gap-0.5 overflow-y-auto text-xs">
         {list.map(({ parish, lastWeek, due }) => {

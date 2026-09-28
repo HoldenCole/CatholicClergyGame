@@ -2,6 +2,7 @@ import { useGameStore } from '@/engine/store';
 import { careerSummary } from '@/engine/career';
 import { lifeOf } from '@/systems/life';
 import Portrait from './portraits/Portrait';
+import { useFold } from './Sheet';
 import { portraitForNpc, portraitForPlayer, yearOf } from './portraits/spec';
 
 const ENDING_TITLE: Record<string, string> = {
@@ -15,11 +16,19 @@ const ENDING_TITLE: Record<string, string> = {
   pope_renounced: 'Pope emeritus',
 };
 
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
+function Section({ title, children, fold }: { title: string; children: React.ReactNode; fold?: 'closed' }) {
+  const [open, toggle] = useFold(`shelf:${title}`, fold !== 'closed');
   return (
     <section className="border-t rule pt-3">
-      <h2 className="ink-faint mb-1.5 text-[11px] uppercase tracking-[0.18em]">{title}</h2>
-      {children}
+      {fold ? (
+        <button type="button" className="fold-head flex items-baseline gap-2 text-left" onClick={toggle} aria-expanded={open}>
+          <span className="fold-chevron ink-faint" aria-hidden>{open ? '\u25BE' : '\u25B8'}</span>
+          <h2 className="ink-faint text-[11px] uppercase tracking-[0.18em]">{title}</h2>
+        </button>
+      ) : (
+        <h2 className="ink-faint mb-1.5 text-[11px] uppercase tracking-[0.18em]">{title}</h2>
+      )}
+      {open && <div className={fold ? 'mt-1.5' : ''}>{children}</div>}
     </section>
   );
 }
@@ -139,7 +148,7 @@ export default function EndedScreen() {
         )}
 
         {life && life.classmates.length > 0 && (
-          <Section title="The class">
+          <Section title="The class" fold="closed">
             <ul className="flex flex-col gap-0.5 text-sm">
               {life.classmates.map((l) => (
                 <li key={l.npc.id} className={l.npc.status !== 'active' ? 'ink-faint' : ''}>
@@ -151,7 +160,7 @@ export default function EndedScreen() {
         )}
 
         {life && life.file.length > 0 && (
-          <Section title="The file">
+          <Section title="The file" fold="closed">
             <ul className="flex flex-col gap-0.5 text-sm">
               {life.file.map((t, i) => <li key={i} className="ink-muted">{t}</li>)}
             </ul>
@@ -159,7 +168,7 @@ export default function EndedScreen() {
         )}
 
         {life && life.letters.length > 0 && (
-          <Section title="The drawer">
+          <Section title="The drawer" fold="closed">
             <ul className="flex flex-col gap-0.5 text-sm">
               {life.letters.slice(-6).map((l, i) => <li key={i} className="ink-muted"><span className="ink-faint mr-2 text-xs">{l.week}</span>{l.title}. {l.line}</li>)}
             </ul>

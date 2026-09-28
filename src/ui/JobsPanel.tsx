@@ -216,7 +216,7 @@ export default function JobsPanel() {
         )}
       </Sheet>
 
-      <Sheet title="Doors not yet open">
+      <Sheet title="Doors not yet open" fold="closed">
         {closed.length === 0 ? (
           <p className="ink-faint text-sm">Nothing in reach is shut to you.</p>
         ) : (
@@ -230,7 +230,7 @@ export default function JobsPanel() {
         )}
       </Sheet>
 
-      <Sheet title="Groups and affiliations">
+      <Sheet title="Groups and affiliations" fold="closed">
         {affiliations.length > 0 && <p className="mb-2 text-sm">You belong to {affiliations.join(' and ')}. People will judge you by it for the rest of your life.</p>}
         {groupsReady.length === 0 && groupsClosed.length === 0 && affiliations.length === 0 && <p className="ink-faint text-sm">No group would have you yet, and none has asked.</p>}
         <ul className="flex flex-col gap-1 text-sm">
@@ -244,7 +244,7 @@ export default function JobsPanel() {
       </Sheet>
 
       {game.world && (inParish || away) && (
-        <Sheet title={`The parishes of ${game.world.diocese.visible.name}`}>
+        <Sheet title={`The parishes of ${game.world.diocese.visible.name}`} fold="closed" summary={`${game.world.parishes.length} parishes, ${game.openings.filter((o) => o.parishId).length} open`}>
           <ul className="flex flex-col gap-2 text-sm">
             {[...game.world.parishes].sort((a, b) => (b.cathedral ? 1 : 0) - (a.cathedral ? 1 : 0) || a.name.localeCompare(b.name)).map((p: Parish) => {
               const pastor = game.npcs[p.pastorId];
@@ -271,7 +271,7 @@ export default function JobsPanel() {
         </Sheet>
       )}
       {(summers.length > 0 || game.character.credentials.length > 0) && (
-        <Sheet title="On your record">
+        <Sheet title="On your record" fold="closed">
           <ul className="flex flex-col gap-1 text-sm">
             {summers.map((s) => (
               <li key={s.year}>Summer of year {s.year}: {s.label.toLowerCase()}.</li>

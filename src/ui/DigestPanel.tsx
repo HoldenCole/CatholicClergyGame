@@ -9,7 +9,7 @@ import Sheet from './Sheet';
 import { useUiStore } from './uiStore';
 import { circleOf } from '@/systems/circle';
 
-const SHOWN = 26;
+const SHOWN = 13;
 const LANES: Lane[] = ['decided', 'money', 'parish', 'people', 'diocese', 'you', 'around'];
 const FILTERS: { key: Lane | 'all'; label: string }[] = [{ key: 'all', label: 'Everything' }, { key: 'decided', label: 'Decided' }, { key: 'money', label: 'Money' }, { key: 'parish', label: 'Parish' }, { key: 'people', label: 'People' }, { key: 'diocese', label: 'Diocese' }, { key: 'you', label: 'You' }];
 /** A friar has no parish money to read, and his lanes are the house, the brothers, and the province. */
@@ -107,7 +107,7 @@ function WeeksSheet({ digest, going, seed, religious }: { digest: DigestWeek[]; 
         </ol>
       )}
       {digest.length > SHOWN + more && (
-        <button className="pbtn-link mt-2 text-xs" onClick={() => setMore(more + 52)}>Another year of weeks</button>
+        <button className="pbtn-link mt-2 text-xs" onClick={() => setMore(more + (more ? 52 : 13))}>{more ? 'Another year of weeks' : 'Another quarter of weeks'}</button>
       )}
     </Sheet>
   );
@@ -149,7 +149,7 @@ export default function DigestPanel() {
           })()}
         </Sheet>
 
-        <Sheet title="The public record">
+        <Sheet title="The public record" fold="closed" summary={`${record.standing}; ${record.rows.length} stand${record.rows.length === 1 ? '' : 's'}`}>
           <p className="text-sm">You are {record.standing}. {record.bishopLine}</p>
           {record.rows.length === 0 ? (
             <p className="ink-faint mt-2 text-xs">You have taken no stand anyone could quote.</p>
@@ -170,7 +170,7 @@ export default function DigestPanel() {
         </>
       )}
       {notes.length > 0 && (
-        <Sheet title="The file">
+        <Sheet title="The file" fold="closed">
           <ol className="flex flex-col gap-1 text-sm">
             {notes.map((n, i) => (
               <li key={i} className="ink-muted">{n.text}</li>
@@ -179,7 +179,7 @@ export default function DigestPanel() {
         </Sheet>
       )}
       {letters.length > 0 && (
-        <Sheet title="The drawer">
+        <Sheet title="The drawer" fold="closed">
           <ol className="flex flex-col gap-1 text-sm">
             {letters.map((l, i) => (
               <li key={i} className="ink-muted">
@@ -201,7 +201,7 @@ export function PastReviewsSheet() {
   const reviews = (game.letters ?? []).filter((l) => l.sort === 'review').slice(-5).reverse();
   if (!reviews.length) return null;
   return (
-    <Sheet title="The years in review">
+    <Sheet title="The years in review" fold="closed" summary={reviews[0]?.title}>
       <ul className="flex flex-col gap-1 text-sm">
         {reviews.map((l, i) => (
           <li key={`${l.title}:${l.week}`}>
