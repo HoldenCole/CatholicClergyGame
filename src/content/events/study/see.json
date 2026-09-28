@@ -1,5 +1,5 @@
 {
- "_notes": "The see: the last act, a bishop of a small diocese far from home, phase bishop, gated on the engine's flag study:see. Every scene reads the SeeState through see conditions (presbyterate, people, rome, money, shortage, years) and the bishop's age. Selectors: @brother_priest (one of his own priests), @closest_classmate, @vicar_general, @chancellor, @vicar_for_clergy; the nuncio, the metropolitan, the rector, the insurer and the press are named by role, not bound. There is no token for the see; {diocese} is the home diocese. The removal (bp_priest_removed) and the lawsuit (bp_lawsuit_insurer) are authored only, with no flavorPrompt, per DESIGN §11. Flags written, all bp_*: bp_dinner_open_book / bp_dinner_listened / bp_dinner_owned_record / bp_dinner_deferred (the first priests' dinner); bp_removal_protocol / bp_removal_treatment_first / bp_removal_in_person (the priest removed); bp_closed_the_town / bp_town_a_mission / bp_town_clustered (the only parish in a town); bp_vg_the_friend / bp_vg_the_presbyterate_man / bp_vg_romes_man (the vicar general); bp_ad_limina_plain / bp_ad_limina_polished / bp_ad_limina_asked / bp_ad_limina_spoke_for_priests (the ad limina); bp_settled_on_terms / bp_met_the_plaintiff / bp_settled_in_the_open (the lawsuit); bp_seminarian_delayed / bp_seminarian_ordained / bp_seminarian_dismissed / bp_seminarian_examined (the seminarian); bp_questionnaire_in_full / bp_questionnaire_kept_him / bp_questionnaire_told_him (the nuncio's questionnaire); bp_metropolitan_gave / bp_metropolitan_refused / bp_metropolitan_traded (the archbishop's call); bp_record_stood / bp_record_grown / bp_record_silent / bp_record_reprinted (the clipping); bp_asked_for_coadjutor / bp_carried_the_tremor / bp_told_the_presbyterate (his health); bp_chose_the_roof / bp_chose_the_pension / bp_campaign_for_both (the money); bp_raid_stood_in_the_door / bp_raid_statement / bp_raid_opened_the_door / bp_raid_negotiated (the raid); bp_took_the_classmate / bp_refused_the_classmate / bp_classmate_on_loan (the classmate's letter); bp_letter_four_lines / bp_letter_asked_to_stay / bp_letter_going_home / bp_letter_asked_the_priests (the letter at seventy-five); bp_stayed_for_the_rosary / bp_left_for_the_council / bp_knelt_in_the_back (the consolation). E4 R1.1: the bishop's reading of Rome (bp_read_<axis>, beat cascade): the cascade reaches a man who holds a see through the study week, the norm effect records his reading as the diocese's, and the see's dials move by whether the diocese wanted what Rome sent (systems/bishop/reading.ts). E4 R1.2: the directions' scenes (bp_dir_*) hang on direction:<kind> and direction:<answer>, set by systems/bishop/directions.ts; {direction_priest} is the man the last direction went to.",
+ "_notes": "The see: the last act, a bishop of a small diocese far from home, phase bishop, gated on the engine's flag study:see. Every scene reads the SeeState through see conditions (presbyterate, people, rome, money, shortage, years) and the bishop's age. Selectors: @brother_priest (one of his own priests), @closest_classmate, @vicar_general, @chancellor, @vicar_for_clergy; the nuncio, the metropolitan, the rector, the insurer and the press are named by role, not bound. There is no token for the see; {diocese} is the home diocese. The removal (bp_priest_removed) and the lawsuit (bp_lawsuit_insurer) are authored only, with no flavorPrompt, per DESIGN §11. Flags written, all bp_*: bp_dinner_open_book / bp_dinner_listened / bp_dinner_owned_record / bp_dinner_deferred (the first priests' dinner); bp_removal_protocol / bp_removal_treatment_first / bp_removal_in_person (the priest removed); bp_closed_the_town / bp_town_a_mission / bp_town_clustered (the only parish in a town); bp_vg_the_friend / bp_vg_the_presbyterate_man / bp_vg_romes_man (the vicar general); bp_ad_limina_plain / bp_ad_limina_polished / bp_ad_limina_asked / bp_ad_limina_spoke_for_priests (the ad limina); bp_settled_on_terms / bp_met_the_plaintiff / bp_settled_in_the_open (the lawsuit); bp_seminarian_delayed / bp_seminarian_ordained / bp_seminarian_dismissed / bp_seminarian_examined (the seminarian); bp_questionnaire_in_full / bp_questionnaire_kept_him / bp_questionnaire_told_him (the nuncio's questionnaire); bp_metropolitan_gave / bp_metropolitan_refused / bp_metropolitan_traded (the archbishop's call); bp_record_stood / bp_record_grown / bp_record_silent / bp_record_reprinted (the clipping); bp_asked_for_coadjutor / bp_carried_the_tremor / bp_told_the_presbyterate (his health); bp_chose_the_roof / bp_chose_the_pension / bp_campaign_for_both (the money); bp_raid_stood_in_the_door / bp_raid_statement / bp_raid_opened_the_door / bp_raid_negotiated (the raid); bp_took_the_classmate / bp_refused_the_classmate / bp_classmate_on_loan (the classmate's letter); bp_letter_four_lines / bp_letter_asked_to_stay / bp_letter_going_home / bp_letter_asked_the_priests (the letter at seventy-five); bp_stayed_for_the_rosary / bp_left_for_the_council / bp_knelt_in_the_back (the consolation). E4 R1.1: the bishop's reading of Rome (bp_read_<axis>, beat cascade): the cascade reaches a man who holds a see through the study week, the norm effect records his reading as the diocese's, and the see's dials move by whether the diocese wanted what Rome sent (systems/bishop/reading.ts). E4 R1.2: the directions' scenes (bp_dir_*) hang on direction:<kind> and direction:<answer>, set by systems/bishop/directions.ts; {direction_priest} is the man the last direction went to. E4 R1.3: the visitation's scenes (bp_visit_*) hang on visit:found_struggle, visit:school, visit:mission, visit:debt, set by systems/bishop/visits.ts for the last visit; {visit_parish} and {visit_pastor} name it.",
  "events": [
   {
    "id": "bp_first_dinner",
@@ -3644,6 +3644,355 @@
        "target": "stat",
        "key": "piety",
        "delta": 1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "bp_visit_found",
+   "phase": "bishop",
+   "severity": "MAJOR",
+   "category": "chancery",
+   "baseWeight": 12,
+   "suppressYears": 3,
+   "pressure": [
+    "friendship_vs_duty",
+    "loyalty_vs_honesty"
+   ],
+   "requires": [
+    {
+     "type": "flag",
+     "key": "study:see",
+     "value": true
+    },
+    {
+     "type": "flag",
+     "key": "visit:found_struggle",
+     "value": true
+    }
+   ],
+   "title": "What the File Did Not Say",
+   "body": "You drove home from {visit_parish} knowing something about {visit_pastor} that the file did not, and that he knows you know. On Monday the vicar for clergy asks how the visit went, in the voice of a man who has heard from the housekeeper. There are three things a bishop does with what a visit finds, and the presbyterate is watching to learn which kind of bishop you are.",
+   "choices": [
+    {
+     "id": "call",
+     "label": "Call him in within the month, alone, and say what you saw",
+     "outcome": "He does not deny it. He asks what happens now, and you tell him, and it is the beginning of something rather than the end.",
+     "effects": [
+      {
+       "target": "see",
+       "key": "presbyterate",
+       "delta": 2
+      },
+      {
+       "target": "stat",
+       "key": "piety",
+       "delta": 1
+      },
+      {
+       "target": "relationship",
+       "key": "@brother_priest",
+       "delta": 3
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "file",
+     "label": "Write it in the file, and wait",
+     "outcome": "The file grows a page. He waits too. Nothing happens for a year, which he takes for mercy and the vicar for clergy takes for weakness.",
+     "effects": [
+      {
+       "target": "see",
+       "key": "presbyterate",
+       "delta": -1
+      },
+      {
+       "target": "stat",
+       "key": "administration",
+       "delta": 1
+      }
+     ]
+    },
+    {
+     "id": "nothing",
+     "label": "Say nothing to anyone; a visit is not an investigation",
+     "outcome": "The housekeeper says something to someone, as housekeepers do, and the deanery decides that the bishop saw and did not act, which is worse than not seeing.",
+     "effects": [
+      {
+       "target": "see",
+       "key": "presbyterate",
+       "delta": -3
+      },
+      {
+       "target": "see",
+       "key": "people",
+       "delta": -1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "bp_visit_school",
+   "phase": "bishop",
+   "severity": "NOTABLE",
+   "category": "chancery",
+   "baseWeight": 8,
+   "suppressYears": 3,
+   "pressure": [
+    "money",
+    "competence"
+   ],
+   "requires": [
+    {
+     "type": "flag",
+     "key": "study:see",
+     "value": true
+    },
+    {
+     "type": "flag",
+     "key": "visit:school",
+     "value": true
+    }
+   ],
+   "title": "The Principal's Question",
+   "body": "The principal of the school at {visit_parish} asked you in front of the parents what the diocese means to do, and you gave the answer bishops give, and she thanked you for it in a way that meant she had heard it before. The number she gave you is the number: the school lives at two hundred children and has a hundred and forty. The parish cannot make up the difference and the diocese has three schools like it.",
+   "choices": [
+    {
+     "id": "subsidy",
+     "label": "Find the money for two years, from the appeal, and say so",
+     "outcome": "The school lives two years longer than it would have. Whether that is a gift or a delay depends on what the parish does with the years, and on things you cannot see from the chancery.",
+     "effects": [
+      {
+       "target": "see",
+       "key": "money",
+       "delta": -6
+      },
+      {
+       "target": "see",
+       "key": "people",
+       "delta": 4
+      }
+     ]
+    },
+    {
+     "id": "merge",
+     "label": "Propose that the three schools become one, at the parish with the buses",
+     "outcome": "Two parishes lose a school and one gains a hundred children, and every parent in all three knows which bishop did it. The one school is good. That is the argument, and it is a good argument, and it does not help at the door.",
+     "effects": [
+      {
+       "target": "see",
+       "key": "money",
+       "delta": 3
+      },
+      {
+       "target": "see",
+       "key": "people",
+       "delta": -4
+      },
+      {
+       "target": "stat",
+       "key": "administration",
+       "delta": 2
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "honest",
+     "label": "Tell her the truth: the diocese will not save it, and the parish must",
+     "outcome": "She thanks you, for once, for the truth. The parish raises a hundred and ten thousand dollars in a year, which is not enough, and the school closes with its head up.",
+     "effects": [
+      {
+       "target": "see",
+       "key": "people",
+       "delta": 1
+      },
+      {
+       "target": "stat",
+       "key": "charisma",
+       "delta": 1
+      },
+      {
+       "target": "stat",
+       "key": "piety",
+       "delta": 1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "bp_visit_mission",
+   "phase": "bishop",
+   "severity": "NOTABLE",
+   "category": "chancery",
+   "baseWeight": 8,
+   "suppressYears": 3,
+   "pressure": [
+    "money",
+    "belief_vs_safety"
+   ],
+   "requires": [
+    {
+     "type": "flag",
+     "key": "study:see",
+     "value": true
+    },
+    {
+     "type": "flag",
+     "key": "visit:mission",
+     "value": true
+    }
+   ],
+   "title": "Eleven People and a Stove",
+   "body": "{visit_parish} is a mission church with a stove, an hour past the last paved road, and on the Sunday of your visit it had eleven people in it, every one of whom stood at the door afterwards to shake your hand and tell you how long their family had been there. The nearest parish is forty minutes. {visit_pastor} says Mass here every Sunday and would not say so if you asked him to stop.",
+   "choices": [
+    {
+     "id": "keep",
+     "label": "Keep it open as long as he will drive there, and say so at the door",
+     "outcome": "They know what you mean by as long as, and they thank you for the honesty of it. Eleven people have their church for some years yet.",
+     "effects": [
+      {
+       "target": "see",
+       "key": "people",
+       "delta": 3
+      },
+      {
+       "target": "stat",
+       "key": "piety",
+       "delta": 1
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "close",
+     "label": "Begin the closing now, kindly, with a year's notice",
+     "outcome": "The year is a long funeral, and the town comes to the last Mass in numbers it never came to any other. You are remembered there as the bishop who closed it, which is what you were.",
+     "effects": [
+      {
+       "target": "see",
+       "key": "money",
+       "delta": 2
+      },
+      {
+       "target": "see",
+       "key": "people",
+       "delta": -4
+      },
+      {
+       "target": "see",
+       "key": "shortage",
+       "delta": -0.05
+      },
+      {
+       "target": "flag",
+       "key": "bp_began_closings",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": "deacon",
+     "label": "Ask the deacon to hold a Communion service on the Sundays the pastor cannot come",
+     "outcome": "The eleven keep their Sunday and lose their Mass on half of them, and understand the difference better than the chancery does.",
+     "effects": [
+      {
+       "target": "see",
+       "key": "people",
+       "delta": 1
+      },
+      {
+       "target": "see",
+       "key": "presbyterate",
+       "delta": 1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "bp_visit_debt",
+   "phase": "bishop",
+   "severity": "NOTABLE",
+   "category": "chancery",
+   "baseWeight": 8,
+   "suppressYears": 3,
+   "pressure": [
+    "money"
+   ],
+   "requires": [
+    {
+     "type": "flag",
+     "key": "study:see",
+     "value": true
+    },
+    {
+     "type": "flag",
+     "key": "visit:debt",
+     "value": true
+    }
+   ],
+   "title": "The Number Nobody Says",
+   "body": "The finance council of {visit_parish} showed you the books on Saturday, and the number is the number: a debt the plate will never pay, a boiler that will not see another winter, and a church that is the finest in the diocese. Nobody said merger. On the drive home you said it to yourself, and then you said the name of the parish it would merge with, and then you stopped, because you were not ready to.",
+   "choices": [
+    {
+     "id": "plan",
+     "label": "Put it in the pastoral plan for two years out, and tell the pastor now",
+     "outcome": "{visit_pastor} takes it better than the council will. Two years is time to do it well, and the parish spends the first of them angry and the second of them packing.",
+     "effects": [
+      {
+       "target": "see",
+       "key": "money",
+       "delta": 4
+      },
+      {
+       "target": "see",
+       "key": "people",
+       "delta": -2
+      },
+      {
+       "target": "stat",
+       "key": "administration",
+       "delta": 1
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "appeal",
+     "label": "Take the debt into the diocese's appeal, and keep the church",
+     "outcome": "The diocese carries it, and the other parishes know they are carrying it, and the finest church in the diocese stays open for a congregation of three hundred, which is a decision about beauty and not about money.",
+     "effects": [
+      {
+       "target": "see",
+       "key": "money",
+       "delta": -8
+      },
+      {
+       "target": "see",
+       "key": "people",
+       "delta": 3
+      },
+      {
+       "target": "see",
+       "key": "presbyterate",
+       "delta": -1
+      }
+     ]
+    },
+    {
+     "id": "wait",
+     "label": "Say nothing yet; the boiler will decide",
+     "outcome": "The boiler decides in January. The parish spends a winter at the school gym and understands, without a decree, what the diocese was not saying.",
+     "effects": [
+      {
+       "target": "see",
+       "key": "people",
+       "delta": -2
       }
      ]
     }

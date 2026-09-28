@@ -69,6 +69,23 @@ export interface SeeState {
   /** E4 R1.2: the directions given to his priests, and the week of the last. */
   directions?: GivenDirection[];
   lastDirectionWeek?: number;
+  /** E4 R1.3: the week each parish was last visited, and the week of the last visit anywhere. */
+  visits?: Record<string, number>;
+  lastVisitWeek?: number;
+  /** E4 R1.3: cycles of the whole diocese completed. */
+  cyclesDone?: number;
+}
+
+/** E4 R1.3: what a visit says, by what the visit finds (content/see/visits.json): pools of lines with {parish}, {pastor}, {town}. */
+export interface VisitPools {
+  kind: Record<string, string[]>;
+  school: Record<string, string[]>;
+  debt: { none: string[]; some: string[]; heavy: string[] };
+  generational: Record<string, string[]>;
+  struggle: Record<string, string[]>;
+  trait: Record<string, string[]>;
+  vacant: string[];
+  again: string[];
 }
 
 /** E4 R1.2: what a direction needs of the man it is given to. Declared in data, checked by the engine. */
@@ -82,6 +99,8 @@ export interface DirectionRequires {
   stat?: { key: StatKey; min: number };
   /** A pastor of a parish (or, false, not one). */
   pastor?: boolean;
+  /** The file must know it: the struggle seen on a visit (E4 R1.3), never guessed at. */
+  known?: boolean;
 }
 
 export type DirectionKind = 'move' | 'dean' | 'monsignor' | 'study' | 'sabbatical' | 'treatment' | 'rebuke' | 'retire' | 'chancery';
