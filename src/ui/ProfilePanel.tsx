@@ -17,6 +17,13 @@ import { directionLine, directionOf, directorNpc, DIRECTOR_KIND_WORD, kindOf, ma
  * years". DESIGN §8.6 — whole numbers and plain sentences, and the only
  * screen in the game where the numbers are the point.
  */
+/** 21st, 22nd, 23rd, 24th: the anniversary's ordinal. */
+function nth(n: number): string {
+  const r = n % 100;
+  if (r >= 11 && r <= 13) return `${n}th`;
+  return `${n}${n % 10 === 1 ? 'st' : n % 10 === 2 ? 'nd' : n % 10 === 3 ? 'rd' : 'th'}`;
+}
+
 export default function ProfilePanel() {
   const game = useGameStore((s) => s.game);
   const seek = useGameStore((s) => s.seekDirector);
@@ -46,7 +53,7 @@ export default function ProfilePanel() {
               const toRetire = 75 - p.age;
               const weeksTo = typeof ow === 'number' ? (52 - ((game.clock.week - ow) % 52)) % 52 : null;
               const years = typeof ow === 'number' ? Math.floor((game.clock.week - ow) / 52) : null;
-              return <div className="ink-faint text-xs">{toRetire > 0 ? `Retirement at seventy-five is ${toRetire} year${toRetire === 1 ? '' : 's'} off` : 'Past seventy-five; the letter to Rome is written or due'}{years !== null && years >= 0 ? `; ${years === 0 ? 'the first anniversary of ordination' : `the ${years + 1 === 25 ? 'silver' : years + 1 === 40 ? 'ruby' : years + 1 === 50 ? 'golden' : `${years + 1}th`} anniversary of ordination`} is ${weeksTo === 0 ? 'this week' : `in ${weeksTo} week${weeksTo === 1 ? '' : 's'}`}` : ''}.</div>;
+              return <div className="ink-faint text-xs">{toRetire > 0 ? `Retirement at seventy-five is ${toRetire} year${toRetire === 1 ? '' : 's'} off` : 'Past seventy-five; the letter to Rome is written or due'}{years !== null && years >= 0 ? `; ${years === 0 ? 'the first anniversary of ordination' : `the ${years + 1 === 25 ? 'silver' : years + 1 === 40 ? 'ruby' : years + 1 === 50 ? 'golden' : nth(years + 1)} anniversary of ordination`} is ${weeksTo === 0 ? 'this week' : `in ${weeksTo} week${weeksTo === 1 ? '' : 's'}`}` : ''}.</div>;
             })()}
             <div className="ink-faint mt-1 text-xs">{p.line}</div>
           </div>

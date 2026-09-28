@@ -160,15 +160,16 @@ export function beginGeneralate(state: GameState): GameState {
   const r = state.religious;
   const office = r?.office;
   if (!r || !office || office.office !== 'general') return state;
-  const def = offerById('fr_general_elected');
-  if (!def) return state;
+  const base = offerById('fr_general_elected');
+  if (!base?.accept.commitment) return state;
+  // The term's length is the order's, not the letter's: the posting is as long as the office.
+  const def = { ...base, accept: { ...base.accept, commitment: { ...base.accept.commitment, weeks: office.endWeek - state.clock.week } } };
   if (state.study?.city === 'generalate') {
     // A second term: the posting runs on with the office.
     const beats = state.beats.map((b) => (b.kind === 'assignment' && b.week === state.study!.endWeek ? { ...b, week: office.endWeek } : b)).sort((a, b) => a.week - b.week);
     return { ...state, study: { ...state.study, endWeek: office.endWeek }, beats };
   }
   const away = beginStudy({ ...state, offerHistory: [...state.offerHistory, { offerId: def.id, week: state.clock.week, decision: 'accepted' }] }, def, false, createRng(`${state.seed}:generalate:${state.clock.week}`));
-  // The term's length is the order's, not the letter's: the posting ends when the office does.
   const beats = away.beats.map((b) => (b.kind === 'assignment' && b.week === away.study!.endWeek ? { ...b, week: office.endWeek, label: 'The term as head of the order ends' } : b)).sort((a, b) => a.week - b.week);
   return { ...away, study: { ...away.study!, endWeek: office.endWeek }, beats };
 }
