@@ -27,6 +27,10 @@ export const VIEW = {
   bishopPer: 10,
   trusted: 6,
   brokeSecret: -12,
+  /** A bishop emeritus who knew him, for or against; a classmate bishop who spoke for him, within five years. */
+  emeritus: 5,
+  classmateBishop: 6,
+  classmateYears: 5,
 } as const;
 
 export interface NuncioView {
@@ -52,6 +56,14 @@ export function nuncioView(state: GameState): NuncioView {
   if (c.stats.administration >= 70 && c.stats.charisma >= 60) good.push('a man who can run a diocese and be liked doing it');
   const rome = c.reputation.rome ?? 0;
   v += (rome / 100) * VIEW.rome;
+  // Bishops who remember (D3): an emeritus is consulted, and has a long memory either way.
+  for (const e of Object.values(state.npcs).filter((n) => n.tags.includes('bishop_emeritus') && n.status !== 'dead')) {
+    if (e.relationship >= 40) { v += VIEW.emeritus; good.push(`${e.title} ${e.name.last}, who knew you as his priest, speaks for you`); }
+    else if (e.relationship <= -30) { v -= VIEW.emeritus; bad.push(`${e.title} ${e.name.last}, who knew you as his priest, has not forgotten`); }
+  }
+  // A classmate bishop who spoke for him, while it is still remembered (D4).
+  const spoke = state.flags['brother:bishop_spoke'];
+  if (typeof spoke === 'number' && state.clock.week - spoke <= VIEW.classmateYears * 52) { v += VIEW.classmateBishop; good.push('a bishop of your own class has spoken for you'); }
   if (rome >= 30) good.push('Rome thinks well of you');
   else if (rome <= -20) bad.push('Rome knows your name for the wrong reasons');
   // The chancery's regard, or, for a friar, the province's: the nuncio reads the order's file. E3 §16B.

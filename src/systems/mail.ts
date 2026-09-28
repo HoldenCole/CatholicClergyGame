@@ -17,9 +17,9 @@ import { classmatePost } from './classmates';
  * the past reaches him from. Templates in content/mail.json name the kind
  * of sender; this file finds one, or the letter does not come.
  */
-export type MailFrom = 'parishioner' | 'former_parish' | 'buried' | 'classmate' | 'classmate_left' | 'stranger' | 'stranger_column' | 'seminarian_mother' | 'mother' | 'father' | 'sibling' | 'old_pastor';
+export type MailFrom = 'parishioner' | 'former_parish' | 'buried' | 'classmate' | 'classmate_left' | 'stranger' | 'stranger_column' | 'seminarian_mother' | 'mother' | 'father' | 'sibling' | 'old_pastor' | 'bishop_emeritus' | 'emeritus_funeral';
 
-export const MAIL_FROM: readonly MailFrom[] = ['parishioner', 'former_parish', 'buried', 'classmate', 'classmate_left', 'stranger', 'stranger_column', 'seminarian_mother', 'mother', 'father', 'sibling', 'old_pastor'] as const;
+export const MAIL_FROM: readonly MailFrom[] = ['parishioner', 'former_parish', 'buried', 'classmate', 'classmate_left', 'stranger', 'stranger_column', 'seminarian_mother', 'mother', 'father', 'sibling', 'old_pastor', 'bishop_emeritus', 'emeritus_funeral'] as const;
 
 export interface MailDef {
   id: string;
@@ -141,6 +141,20 @@ export function findSender(state: GameState, from: MailFrom, rng: Rng): FoundSen
       found.extra.sender = found.sender.name;
       return found;
     }
+    case 'bishop_emeritus': {
+      const pool = npcs.filter((n) => n.status !== 'dead' && n.tags.includes('bishop_emeritus'));
+      if (!pool.length) return null;
+      const npc = rng.weighted(pool, (n) => Math.max(1, 20 + n.relationship));
+      const found = person(state, npc, 'bishop emeritus');
+      return found;
+    }
+    case 'emeritus_funeral': {
+      const id = state.flags['emeritus:died'];
+      const npc = typeof id === 'string' ? npcs.find((n) => n.id === id) : undefined;
+      if (!npc) return null;
+      const name = `${npc.title} ${npc.name.first} ${npc.name.last}`;
+      return { sender: { npcId: npc.id, name: 'the chancellor', who: `about the funeral of ${name}` }, bindings: { '@sender': npc.id }, extra: { sender: 'the chancellor', sender_first: 'the chancellor', who: `about the funeral of ${name}`, bishop: name, bishop_last: `${npc.title} ${npc.name.last}` } };
+    }
     case 'old_pastor': {
       const current = state.assignment?.parishId;
       const pool = npcs.filter((n) => n.status !== 'dead' && n.tags.some((t) => t.startsWith('temperament:')) && n.tags.some((t) => t.startsWith('pastor:') && t !== `pastor:${current}`));
@@ -163,6 +177,8 @@ function suppressed(state: GameState, def: MailDef): boolean {
 export function eligibleMail(state: GameState, rng: Rng): { def: MailDef; found: FoundSender }[] {
   const out: { def: MailDef; found: FoundSender }[] = [];
   for (const def of mailDefs) {
+    // A letter of no weight is delivered by the system that wrote it (a funeral), never drawn.
+    if (def.weight <= 0) continue;
     if (suppressed(state, def)) continue;
     if (def.requires && !evaluateAll(def.requires, state)) continue;
     const found = findSender(state, def.from, rng.derive(`sender:${def.id}`));

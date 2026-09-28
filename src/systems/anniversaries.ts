@@ -1,6 +1,8 @@
 import type { GameState, Letter } from '@/types';
 import { applyEffects } from '@/engine/effects';
 import { deliverLetter } from './review';
+import { jubileeWithOrdainer } from './emeriti';
+import { classReunion } from './classmates';
 import { fromDayNumber, toDayNumber } from '@/engine/calendar';
 import { sundayOf } from '@/engine/time';
 import namedaysJson from '@/content/namedays.json';
@@ -40,6 +42,10 @@ export function anniversaryWeek(state: GameState): { state: GameState; line: str
   if (years === null || !state.character) return { state, line: null };
   const line = LINES[years] ?? `${years} years ordained today.`;
   let next: GameState = { ...state, flags: { ...state.flags, [`anniversary:${years}`]: state.clock.week, ...(years === 25 ? { 'jubilee:25': state.clock.week } : years === 40 ? { 'jubilee:40': state.clock.week } : years === 50 ? { 'jubilee:50': state.clock.week } : {}) } };
+  // The class meets every five years (D4).
+  const reunion = classReunion(next, years);
+  next = reunion.state;
+  if (reunion.letter) next = deliverLetter(next, reunion.letter);
   if (years !== 25) return { state: next, line };
   const religious = !!next.religious;
   const j = ANNIVERSARIES.silver;
@@ -60,6 +66,11 @@ export function anniversaryWeek(state: GameState): { state: GameState; line: str
     week: state.clock.week,
   };
   next = { ...next, career: [...next.career, { week: state.clock.week, kind: 'note', text: 'The silver jubilee: twenty-five years ordained.' }] };
+  if (!religious) {
+    const came = jubileeWithOrdainer(next);
+    next = came.state;
+    if (came.line) letter.body.push(came.line);
+  }
   return { state: deliverLetter(next, letter), line };
 }
 

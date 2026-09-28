@@ -1,8 +1,8 @@
 import type { GameState, Npc } from '@/types';
 import type { Rng } from '@/engine/rng';
+import { CLERGY_HERITAGE, eraForBirthYear, rollHeritage, rollMaleName } from '@/generation/names';
 import { dateOf } from '@/engine/time';
 import { finishNpc, rollBaseStats, addStats, rollAlignment } from '@/generation/npc';
-import { CLERGY_HERITAGE, eraForBirthYear, rollHeritage, rollMaleName } from '@/generation/names';
 import { applyEffects } from '@/engine/effects';
 import { residentRelief } from './resident';
 
@@ -170,3 +170,70 @@ export function returnOfTheFormed(state: GameState, rng: Rng): { state: GameStat
   };
   return { state: next, line: `A letter of appointment: Fr. ${f.name}, the seminarian you had in ${f.year}, comes as your parochial vicar. ${f.verdict === 'strong' ? 'He asked for the parish.' : f.verdict === 'concerned' ? 'He has read what you wrote.' : 'He remembers the summer better than you do.'}` };
 }
+
+/**
+ * The men he formed, grown (D5). A parish of the diocese whose pastor has
+ * died, retired, or been moved gets a new one each year: a man he had as a
+ * seminarian, when one is old enough, carrying the verdict he wrote; else a
+ * priest of the diocese nobody knew. The deanery's seats follow.
+ */
+export const GROWN = {
+  /** Chance a vacant parish goes to a man he formed, when one is due. */
+  formedChance: 0.5,
+  /** Regard a man formed carries into the parish, by the verdict written on him. */
+  regard: { strong: 30, reserved: 5, concerned: -25 } as Record<Verdict, number>,
+} as const;
+
+export function fillVacantParishes(state: GameState, rng: Rng): { state: GameState; lines: string[] } {
+  const world = state.world;
+  if (!world || !state.character) return { state, lines: [] };
+  const year = calendarYear(state);
+  const lines: string[] = [];
+  let next = state;
+  const mine = state.assignment?.parishId;
+  for (const p of world.parishes) {
+    if (p.cathedral || p.id === mine) continue;
+    const pastor = next.npcs[p.pastorId];
+    if (pastor && pastor.status === 'active' && pastor.tags.includes(`pastor:${p.id}`)) continue;
+    const r = rng.derive(`fill:${p.id}:${year}`);
+    const due = (next.formed ?? []).filter((f) => !f.returned && year - f.year >= FORMED.returnYears);
+    const formed = due.length && r.chance(GROWN.formedChance) ? r.pick(due) : null;
+    const did = next.world!.diocese.presetId;
+    let npc: Npc;
+    if (formed) {
+      const old = next.npcs[formed.npcId];
+      const first = formed.name.split(' ')[0]!;
+      const last = formed.name.split(' ').slice(1).join(' ');
+      npc = {
+        ...(old ?? finishNpc(r, { id: formed.npcId, name: { first, last }, role: 'priest', title: 'Fr.', birthYear: year - 34, origin: 'suburban', stats: rollBaseStats(r, 30, 60) })),
+        id: `${formed.npcId}_pastor`,
+        role: 'priest',
+        title: 'Fr.',
+        status: 'active',
+        relationship: GROWN.regard[formed.verdict],
+        tags: ['priest', 'pastor', `pastor:${p.id}`, 'formed_by_you', `diocese:${did}`],
+        marks: [{ week: next.clock.week, delta: GROWN.regard[formed.verdict], why: `the ${formed.verdict} evaluation you wrote in ${formed.year}` }],
+      };
+      next = { ...next, formed: (next.formed ?? []).map((x) => (x === formed ? { ...x, returned: true } : x)) };
+      lines.push(`Fr. ${formed.name}, whom you had as a seminarian in ${formed.year}, is pastor of ${p.name} now. ${formed.verdict === 'strong' ? 'He wrote to say so, and to thank you.' : formed.verdict === 'concerned' ? 'He has read what you wrote about him; the deanery will be interesting.' : 'He remembers the summer.'}`);
+    } else {
+      const heritage = rollHeritage(r, CLERGY_HERITAGE);
+      const birthYear = year - r.int(36, 62);
+      const name = rollMaleName(r, heritage, eraForBirthYear(birthYear));
+      npc = finishNpc(r, { id: `pastor_${p.id}_${year}`, name, role: 'priest', title: 'Fr.', birthYear, origin: 'suburban', stats: rollBaseStats(r, 30, 60), tags: ['priest', 'pastor', `pastor:${p.id}`, `diocese:${did}`], relationship: r.int(-5, 10) });
+    }
+    next = { ...next, npcs: { ...next.npcs, [npc.id]: npc }, world: { ...next.world!, parishes: next.world!.parishes.map((x) => (x.id === p.id ? { ...x, pastorId: npc.id } : x)) } };
+  }
+  return { state: next, lines };
+}
+
+/** At a succession: one of the men he formed, strong and twenty years on, may be the one Rome names. */
+export function formedAsBishop(state: GameState, rng: Rng): { npcId: string; name: string; year: number } | null {
+  const year = calendarYear(state);
+  const due = (state.formed ?? []).filter((f) => f.verdict === 'strong' && year - f.year >= GROWN_BISHOP.years);
+  if (!due.length || !rng.chance(GROWN_BISHOP.chance)) return null;
+  const f = rng.pick(due);
+  return { npcId: f.npcId, name: f.name, year: f.year };
+}
+
+export const GROWN_BISHOP = { years: 20, chance: 0.15 } as const;

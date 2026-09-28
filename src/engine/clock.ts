@@ -1,6 +1,7 @@
 import type { Beat, DigestWeek, GameState, Letter, PendingEvent, Speed } from '@/types';
 import type { Rng } from './rng';
 import { shouldInterrupt } from './interrupts';
+import { peopleStop } from '@/systems/peopleStop';
 import { advanceClock, describeWeek, gameYearOf, isYearStart } from './time';
 import { weatherOfWeek } from '@/systems/weather';
 import { papacyWeek } from '@/systems/rome/papacy';
@@ -18,6 +19,8 @@ export type StopReason =
   | { kind: 'beat'; beat: Beat }
   | { kind: 'mode'; mode: GameState['mode']['kind'] }
   | { kind: 'offer'; offerId: string; lapsing?: boolean }
+  /** Someone who matters to him died, left, was moved, or was named: the clock stops to say so. */
+  | { kind: 'person'; line: string }
   | { kind: 'cap' };
 
 /**
@@ -136,6 +139,9 @@ export function stopAfterWeek(speed: Speed, state: GameState, reachedBeats: Beat
   // The week before a letter lapses, the clock stops to ask, at every speed but SKIP.
   const lapsing = speed !== 'SKIP' ? state.offers.find((o) => o.expiresWeek === state.clock.week + 1 && o.expiresWeek > o.arrivedWeek) : undefined;
   if (lapsing) return { kind: 'offer', offerId: lapsing.offerId, lapsing: true };
+  // Someone who matters: a death, a leaving, a move, a naming in this week's lines.
+  const person = peopleStop(state);
+  if (person) return { kind: 'person', line: person };
   return null;
 }
 

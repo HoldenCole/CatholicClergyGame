@@ -207,6 +207,8 @@ export interface GameSettings {
   wear: number;
   /** Working hours a week, 32..80 in steps of four, when set by the slider; overrides the preset. */
   hours?: number;
+  /** Stop the clock when someone who matters to him dies, leaves, moves, or is named to something. Default on. */
+  stopForPeople?: boolean;
 }
 
 export const SAVE_VERSION = 6;

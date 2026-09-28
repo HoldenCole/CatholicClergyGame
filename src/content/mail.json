@@ -1025,6 +1025,256 @@
           "outcome": "You send a card and a gift and a line about June, which is true, and the new pastor witnesses it, and the mother sends a photograph."
         }
       ]
+    },
+    {
+      "id": "ml_emeritus_looks_in",
+      "from": "bishop_emeritus",
+      "weight": 6,
+      "asks": false,
+      "suppressYears": 3,
+      "requires": [],
+      "title": "From the bishop emeritus",
+      "body": [
+        "Dear Father,",
+        "They have put me in a house with a view of the lake and a chaplain who is afraid of me, and I find I have time to write to the men I never wrote to when I had the chair. You were one of the ones I noticed, for good or ill, and now that noticing is no longer my job I can say so.",
+        "I am not asking anything. Old bishops ask for lunch, and I am asking for lunch, but a man may say no to lunch.",
+        "{sender}"
+      ],
+      "replies": [
+        {
+          "id": "lunch",
+          "label": "Go to lunch, and let him talk",
+          "hours": 2,
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@sender",
+              "delta": 10
+            }
+          ],
+          "outcome": "He talks for two hours about the diocese as he found it and the diocese as he left it, and somewhere in the second hour he says what he thought of you, which is not what you expected."
+        },
+        {
+          "id": "card",
+          "label": "Write back, warmly, and not go",
+          "hours": 1,
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@sender",
+              "delta": 4
+            }
+          ],
+          "outcome": "He writes again at Christmas. The chaplain, you hear, is still afraid of him."
+        }
+      ]
+    },
+    {
+      "id": "ml_emeritus_word",
+      "from": "bishop_emeritus",
+      "weight": 4,
+      "asks": true,
+      "suppressYears": 4,
+      "requires": [],
+      "title": "A word from the man who had the chair",
+      "body": [
+        "Father,",
+        "I hear things still; the men telephone an old bishop because he cannot do anything to them. What I hear about you I will not put on paper. Come and see me, or do not, but if you come I will tell you what is being said and who is saying it, which nobody in the chancery will.",
+        "{sender}"
+      ],
+      "replies": [
+        {
+          "id": "go",
+          "label": "Go, and hear it",
+          "hours": 2,
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@sender",
+              "delta": 8
+            },
+            {
+              "target": "flag",
+              "key": "brother:warned",
+              "value": true
+            }
+          ],
+          "outcome": "He tells you. It is worse and better than you thought, and he names the man, which he did not need to do."
+        },
+        {
+          "id": "no",
+          "label": "Thank him, and stay away",
+          "hours": 0,
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@sender",
+              "delta": -6
+            }
+          ],
+          "outcome": "He does not write again for a long time."
+        }
+      ]
+    },
+    {
+      "id": "ml_emeritus_funeral",
+      "from": "emeritus_funeral",
+      "weight": 0,
+      "asks": true,
+      "suppressYears": 1,
+      "requires": [],
+      "title": "The funeral of {bishop_last}",
+      "body": [
+        "Father,",
+        "{bishop} died on Tuesday. The funeral is at the cathedral on Saturday at eleven; the priests of the diocese are asked to concelebrate, and the family have asked that a few of the men who knew him say the things a family cannot say from the pulpit.",
+        "The chancellor"
+      ],
+      "replies": [
+        {
+          "id": "preach",
+          "label": "Preach, if the family asked for you",
+          "hours": 4,
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 2
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 4
+            }
+          ],
+          "outcome": "You say the true thing about him, which is not the kind thing, and the cathedral goes quiet in the way that means it landed. Three men tell you afterward that they would not have dared."
+        },
+        {
+          "id": "concelebrate",
+          "label": "Concelebrate, and stand with the presbyterate",
+          "hours": 3,
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": 2
+            }
+          ],
+          "outcome": "Eighty priests in white in the cathedral, and the man in the box the only one who ever had authority over all of them at once. You find you are sorry, which surprises you."
+        },
+        {
+          "id": "card",
+          "label": "Send a Mass card and stay home",
+          "hours": 0,
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": -3
+            }
+          ],
+          "outcome": "Somebody notices who was not there; somebody always does."
+        }
+      ]
+    },
+    {
+      "id": "ml_classmate_left_wedding",
+      "from": "classmate_left",
+      "weight": 5,
+      "asks": true,
+      "suppressYears": 6,
+      "requires": [],
+      "title": "My daughter is getting married",
+      "body": [
+        "Dear {first_name},",
+        "You will not have heard from me since the card the year I left, and I am sorry for that; it is hard to write to the men who stayed. My daughter is getting married in June. She has asked, without knowing what she is asking, whether the priest could be someone who knew her father when he was one.",
+        "I would understand a no. I would understand it better than you think.",
+        "{sender}"
+      ],
+      "replies": [
+        {
+          "id": "yes",
+          "label": "Do the wedding",
+          "hours": 6,
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@sender",
+              "delta": 25
+            },
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": 1
+            }
+          ],
+          "outcome": "He stands at the back the way he stood at the ordination, and at the reception he tells you it was the right decision, both of them, his and yours."
+        },
+        {
+          "id": "no",
+          "label": "Write that you cannot, and mean it kindly",
+          "hours": 1,
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@sender",
+              "delta": -10
+            }
+          ],
+          "outcome": "He writes back that he understands, and he does, which is worse."
+        }
+      ]
+    },
+    {
+      "id": "ml_classmate_left_reference",
+      "from": "classmate_left",
+      "weight": 4,
+      "asks": true,
+      "suppressYears": 6,
+      "requires": [],
+      "title": "A reference, if you can",
+      "body": [
+        "{first_name},",
+        "I am applying for a job at the diocesan high school, of all places, teaching what I taught the seminarians for a summer, and they want a reference from a priest who knew me. You knew me. I will not hold it against you if you say no.",
+        "{sender}"
+      ],
+      "replies": [
+        {
+          "id": "write",
+          "label": "Write the reference, honestly",
+          "hours": 2,
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@sender",
+              "delta": 15
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": -1
+            }
+          ],
+          "outcome": "He gets the job. The principal telephones you to ask, carefully, whether there is anything she should know, and you tell her there is not."
+        },
+        {
+          "id": "decline",
+          "label": "Say you are not the man to ask",
+          "hours": 0,
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@sender",
+              "delta": -8
+            }
+          ],
+          "outcome": "He finds someone else, and you hear about it from a third man, which is how you learn what it cost."
+        }
+      ]
     }
   ]
 }

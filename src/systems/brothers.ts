@@ -30,7 +30,7 @@ export interface FavourDef {
   /** What he would do. */
   blurb: string;
   /** What kind of man can do it. */
-  needs?: 'pastor' | 'chancery' | 'any';
+  needs?: 'pastor' | 'chancery' | 'bishop' | 'any';
   /** The relationship it takes. */
   bar: number;
 }
@@ -41,6 +41,7 @@ export const BROTHER_FAVOURS: FavourDef[] = [
   { id: 'warning', label: 'Ask him what he is hearing', blurb: 'What the board is actually thinking, three months before the letter comes.', needs: 'chancery', bar: 30 },
   { id: 'name', label: 'Ask him for a name', blurb: 'A bookkeeper, a roofer, a music director, a lawyer who will not charge a parish: he knows one.', bar: 20 },
   { id: 'ear', label: 'Ask him to listen', blurb: 'A telephone call at eleven at night from a man who has had the same week for thirty years.', bar: 15 },
+  { id: 'speak', label: 'Ask him to speak for you', blurb: 'A bishop of your own class says your name to the nuncio, once, which is what a classmate bishop is for.', needs: 'bishop', bar: 40 },
 ];
 
 /** Every priest of this run he actually knows: classmates, the men of the deanery, the ones he formed. */
@@ -107,6 +108,7 @@ export function favoursFrom(state: GameState, npc: Npc): BrotherFavour[] {
       npc.relationship < def.bar ? `He would have to be ${relationshipWord(def.bar)} first` :
       def.needs === 'chancery' && !isChancery(npc) ? 'He is not where the decisions are' :
       def.needs === 'pastor' && !isPastor(npc) ? 'He has no parish of his own' :
+      def.needs === 'bishop' && !npc.tags.includes('bishop_elsewhere') ? 'He is not a bishop' :
       state.flags[`favour:${def.id}:${npc.id}`] ? 'Asked already' :
       !state.parish ? 'Not from where you are' :
       '';
@@ -150,6 +152,11 @@ export function askBrother(state: GameState, npcId: string, favourId: string): F
       const read = revealFile(next, FILE.revealPerFavour);
       next = read.state;
       line = `${name} tells you what the board is actually thinking, three months before anything is in writing, and asks you not to repeat where it came from.${read.revealed.length ? ` He has seen your file, too: ${read.revealed.map((e) => `"${e.text}" (${e.byLabel})`).join('; ')}.` : ''}`;
+      break;
+    }
+    case 'speak': {
+      next = { ...next, flags: { ...next.flags, 'brother:bishop_spoke': state.clock.week } };
+      line = `${name} says he will, and does, at the next meeting of the bishops, to the nuncio's secretary over the coffee, which is where these things are said. It will be remembered for a few years, and it cost him something to say it.`;
       break;
     }
     case 'name': {

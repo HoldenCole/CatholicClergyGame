@@ -1,4 +1,6 @@
 import type { GameState, Npc } from '@/types';
+import type { Letter } from '@/types';
+import { touch } from './regard';
 
 /**
  * Classmates as living careers: what each man is now, in words, from the
@@ -13,6 +15,9 @@ export interface ClassmateLine {
   /** He has gone further than you, or not. */
   ahead: boolean;
 }
+
+/** What a reunion does to the men who came. Invented. */
+export const REUNION = { warmth: 3 } as const;
 
 export function relationshipWord(r: number): string {
   if (r >= 40) return 'a friend';
@@ -57,6 +62,22 @@ function rank(npc: Npc): number {
   if (t.has('chancery') || t.has('provincial_council')) return 3;
   if (t.has('pastor') || t.has('superior')) return 2;
   return 1;
+}
+
+/** Every five years from ordination, the class meets: a letter that reads the whole class aloud, and a word with every man still in it. */
+export function classReunion(state: GameState, years: number): { state: GameState; letter: Letter | null } {
+  if (years < 5 || years % 5 !== 0 || state.religious) return { state, letter: null };
+  const lines = classmateLines(state);
+  if (!lines.length) return { state, letter: null };
+  const alive = lines.filter((l) => l.npc.status === 'active');
+  const npcs = { ...state.npcs };
+  for (const l of alive) npcs[l.npc.id] = touch({ ...l.npc, relationship: Math.min(100, l.npc.relationship + REUNION.warmth) }, state.clock.week);
+  const body = [
+    `${years} years since the ordination. The class met at the seminary, as it does, ${alive.length === lines.length ? 'every man of it' : `${alive.length} of the ${lines.length}`} at the long table, and the men said what they had become and mostly did not say what it had cost.`,
+    ...lines.map((l) => `${l.npc.title ? `${l.npc.title} ` : ''}${l.npc.name.first} ${l.npc.name.last}: ${l.post}${l.npc.status === 'active' ? `, ${l.regard}` : ''}.`),
+    'Somebody proposed the next one and somebody else said it would be at his funeral, and it was funnier than it should have been.',
+  ];
+  return { state: { ...state, npcs }, letter: { sort: 'class', title: `The class, ${years} years on`, body, week: state.clock.week } };
 }
 
 export function classmateLines(state: GameState): ClassmateLine[] {
