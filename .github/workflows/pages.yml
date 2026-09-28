@@ -35,9 +35,16 @@ jobs:
         with:
           enablement: true
       - run: npm run build -- --base=/${{ github.event.repository.name }}/
+      # The single-file page beside the site, at a stable address: /playtest/vocation.html.
+      - run: npm run playtest
+      - run: mkdir -p dist/playtest && cp dist-playtest/vocation.html dist/playtest/vocation.html
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
+      - uses: actions/upload-artifact@v4
+        with:
+          name: playtest-page
+          path: dist-playtest/vocation.html
   deploy:
     needs: build
     runs-on: ubuntu-latest
@@ -47,3 +54,31 @@ jobs:
     steps:
       - id: deployment
         uses: actions/deploy-pages@v4
+  # Every build kept: the single-file page goes onto the rolling "playtest"
+  # release as a dated asset, and replaces its "vocation.html" so the latest
+  # is always at .../releases/download/playtest/vocation.html. Release assets
+  # do not grow the repository and have no limit that matters here.
+  archive:
+    needs: build
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: playtest-page
+          path: page
+      - env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -e
+          stamp="$(date -u +%Y%m%d)-${GITHUB_SHA::7}"
+          cp page/vocation.html "vocation-$stamp.html"
+          cp page/vocation.html vocation.html
+          if ! gh release view playtest >/dev/null 2>&1; then
+            gh release create playtest --prerelease --title "Playtest builds" --notes "Every build of the single-file playtest page, newest last. vocation.html is always the latest." vocation.html "vocation-$stamp.html"
+          else
+            gh release upload playtest --clobber vocation.html "vocation-$stamp.html"
+          fi
