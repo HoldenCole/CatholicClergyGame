@@ -5,6 +5,7 @@ import type { FormerSee } from '@/types';
 import { clampSigned } from '@/systems/reputation';
 import { visitationYear } from '@/systems/bishop/visits';
 import { seminaryYear } from '@/systems/bishop/seminary';
+import { presbyterateYear } from '@/systems/bishop/presbyterate';
 
 /** Invented. The last act: a small see, held until the letter at seventy-five. */
 export const SEE = {
@@ -97,6 +98,9 @@ export function seeYear(state: GameState, rng: Rng): { state: GameState; letter:
   // The seminary's year first: its ordinations are the see's (E4 R1.4); a see without one keeps the old arithmetic.
   const sem = state.see!.seminary ? seminaryYear(state, rng.derive(`seminary:${state.clock.week}`)) : null;
   if (sem) state = { ...sem.state, see: { ...sem.state.see!, ordinations: state.see!.ordinations } };
+  // The presbyterate's year: the men age, die, and retire; the council; the dial follows the men. E4 R1.5.
+  const men = presbyterateYear(state, rng.derive(`presbyterate:${state.clock.week}`));
+  state = men.state;
   const see = state.see!;
   const world0 = state.world;
   const years = Math.round((state.clock.week - see.installedWeek) / 52);
@@ -140,6 +144,7 @@ export function seeYear(state: GameState, rng: Rng): { state: GameState; letter:
       ordained > 0 ? `${ordained === 1 ? 'One man' : `${ordained} men`} ordained this year, which in a see like this is the whole future.` : 'No ordinations this year. Every priest of the diocese is a year older.',
       forced ? `${forcedName ? `${forcedName} closed` : 'A parish closed'} this year because there was no one to send, and you had not begun the closings yourself; the town blames the bishop, which is the job.` : '',
       visited.line ?? '',
+      ...men.lines,
     ].filter(Boolean),
     rows: [{ label: 'The see', value: `${next.name}, ${next.region}` }],
     week: state.clock.week,
