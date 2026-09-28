@@ -25,7 +25,8 @@ export interface OfferDef {
   id: string;
   category: OfferCategory;
   /** Whose letter it is: the diocese's (absent) reaches only a diocesan priest; the order's reaches only a friar. E3. */
-  campaign?: 'diocesan' | 'religious';
+  /** Whose letter it is: the bishop's (the default), the provincial's, or one that reaches either man ('any': the nuncio's again, for a bishop of a see). */
+  campaign?: 'diocesan' | 'religious' | 'any';
   phase: Phase[];
   yearGate?: number[];
   title: string;

@@ -10,6 +10,7 @@ import { reigning, walkRome } from './papacy';
 import { ELECTOR, electorsOn } from './conclave';
 import { PLAYER_REGION } from './conclave';
 import { nuncioOfLongService } from './diplomacy';
+import { CAPITULAR_TAG } from '@/systems/religious/electorate';
 
 /**
  * E1 R1.5 — the College of Cardinals (§7): about a hundred and twenty
@@ -26,6 +27,8 @@ export const COLLEGE = {
   electors: 120,
   maxPerConsistory: 25,
   consistoryDays: [540, 900] as [number, number],
+  /** When a consistory creates a cardinal of the player's order: the chance he is a friar of the player's own province. E3 §7.5. Invented. */
+  confrereChance: 0.25,
   createdAge: [58, 76] as [number, number],
   /** How far a new cardinal's reading follows his creator's, and his own variance. */
   follow: 0.7,
@@ -75,6 +78,8 @@ export function makeCardinal(seed: string, n: number, day: number, creator: Pick
     curial: rng.chance(0.3),
     papabile,
     diesDay,
+    // A religious cardinal, at the College's share. E3 §16B.
+    ...(rng.chance(collegePools.religiousShare) ? { order: rng.weighted(collegePools.orders, (o) => o.weight).key } : {}),
   };
 }
 
@@ -124,7 +129,8 @@ export function mayBeCreated(state: GameState, day: number): boolean {
   const c = state.character;
   const age = playerAge(state, day);
   // A friar only as a former head of his order (E3 §16A); a diocesan priest by a see, a desk, or a nunciature.
-  if (!c || state.flags.cardinal || (state.religious && !state.flags['general:served']) || age >= ELECTOR.age || age < COLLEGE.player.minAge) return false;
+  // A friar only as a former head of his order (E3 §16A) or as a bishop (§16B); a diocesan priest by a see, a desk, or a nunciature.
+  if (!c || state.flags.cardinal || (state.religious && !state.flags['general:served'] && !state.flags.ordained_bishop) || age >= ELECTOR.age || age < COLLEGE.player.minAge) return false;
   if ((c.reputation.rome ?? 0) < COLLEGE.player.rome) return false;
   const great = !!state.see && !!seeDefs.find((d) => d.id === state.see!.id)?.great && state.see.years.length >= COLLEGE.player.seeYears;
   const since = state.flags['curia:since'];
@@ -132,6 +138,20 @@ export function mayBeCreated(state: GameState, day: number): boolean {
   // A nuncio of long service may be created too (E1 §11.3).
   const formerGeneral = !!state.religious && !!state.flags['general:served'];
   return great || secretary || formerGeneral || nuncioOfLongService(state, COLLEGE.player.nuncioYears);
+}
+
+/** Of the cardinals just created, one of the player's order may be a solemnly professed priest of his own province: the man's name and face, a red hat. Chance invented. */
+function confrereForTheHat(state: GameState, fresh: Cardinal[], rng: Rng): Cardinal | null {
+  const r = state.religious;
+  if (!r) return null;
+  const mine = fresh.find((f) => f.order === r.order);
+  if (!mine || !rng.chance(COLLEGE.confrereChance)) return null;
+  const men = Object.values(state.npcs).filter((n) => n.status === 'active' && n.role === 'religious' && n.tags.includes(`order:${r.order}`) && n.tags.includes('vows:solemn') && n.title === 'Fr.' && !n.tags.includes(CAPITULAR_TAG)).sort((a, b) => a.id.localeCompare(b.id));
+  if (!men.length) return null;
+  const year = fromDayNumber(mine.createdDay).year;
+  const old = men.filter((n) => year - n.birthYear >= COLLEGE.createdAge[0]);
+  const npc = rng.pick(old.length ? old : men);
+  return { ...mine, name: `${npc.name.first} ${npc.name.last}`, born: npc.birthYear, from: 'the United States', region: PLAYER_REGION, curial: false, npcId: npc.id };
 }
 
 function schedule(state: GameState, kind: CollegeSceneKind, rng: Rng): GameState {
@@ -190,6 +210,9 @@ function consistory(state: GameState, pope: Papacy, day: number, lines: string[]
   let made = state.rome!.cardinalsMade ?? college.length;
   const fresh: Cardinal[] = [];
   for (let i = 0; i < need; i++) fresh.push(makeCardinal(state.seed, ++made, day, pope));
+  // The rarest event's first step (E3 §7.5): a cardinal of the player's own order may be a friar of his own province, one he has lived with.
+  const confrere = confrereForTheHat(state, fresh, rng);
+  if (confrere) fresh[fresh.findIndex((f) => f.id === confrere.id)] = confrere;
   let s: GameState = { ...state, rome: { ...state.rome!, college: [...college, ...fresh], cardinalsMade: made, nextConsistoryDay: day + rng.int(COLLEGE.consistoryDays[0], COLLEGE.consistoryDays[1]) } };
   lines.push(`${pope.name} holds a consistory and creates ${need} new cardinals.`);
   const c = s.character;

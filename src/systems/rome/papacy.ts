@@ -3,7 +3,7 @@ import { collegeElects, playerIsElector } from './conclave';
 import { createRng } from '@/engine/rng';
 import { fromDayNumber, toDayNumber } from '@/engine/calendar';
 import { sundayOf } from '@/engine/time';
-import { papalHistory, papalPools } from '@/content/rome';
+import { collegePools, papalHistory, papalPools } from '@/content/rome';
 
 /**
  * E1 R1.0 — the papacy as the man lives under it (docs/EXPANSION-E1-ROME.md
@@ -37,7 +37,7 @@ function iso(s: string): number {
 
 function historical(i: number): Papacy {
   const h = papalHistory[i]!;
-  return { id: `hist:${h.key}`, name: h.name, born: h.born, electedDay: iso(h.elected), endDay: iso(h.ended), end: h.end, from: h.from, temperament: h.temperament, historical: true, line: h.line };
+  return { id: `hist:${h.key}`, name: h.name, born: h.born, electedDay: iso(h.elected), endDay: iso(h.ended), end: h.end, from: h.from, temperament: h.temperament, historical: true, line: h.line, ...(h.order ? { order: h.order } : {}) };
 }
 
 /** The day the record's last see fell vacant: after it, every pope is generated. */
@@ -67,7 +67,7 @@ function collegeTemper(line: Papacy[]): number {
 }
 
 /** A generated pope: his name, his age, where he came from, how he reads, and when his see will fall vacant. */
-export function generatePope(seed: string, index: number, electedDay: number, line: Papacy[], ordinals: Record<string, number>, given?: { born: number; from: string; temperament: number; curial?: boolean }): { pope: Papacy; ordinals: Record<string, number> } {
+export function generatePope(seed: string, index: number, electedDay: number, line: Papacy[], ordinals: Record<string, number>, given?: { born: number; from: string; temperament: number; curial?: boolean; order?: string; confrereId?: string }): { pope: Papacy; ordinals: Record<string, number> } {
   const rng = createRng(`${seed}:pope:${index}`);
   const names = Object.keys(papalPools.regnal);
   const base = rng.pick(names);
@@ -85,6 +85,9 @@ export function generatePope(seed: string, index: number, electedDay: number, li
   // What he was before, as fits the man: a curial cardinal was not an archbishop at home, and Italy's capital is Rome's own see.
   const pool = papalPools.before.filter((b) => (from === 'Italy' ? !b.includes('capital') : true) && (given?.curial === undefined ? true : given.curial ? /curial|dicastery/.test(b) : !/curial|dicastery/.test(b)));
   const before = rng.pick(pool.length ? pool : papalPools.before).replace('{from}', from);
+  // A religious pope: the cardinal's order, or one rolled at the College's share. E3 §16B.
+  const order = given ? given.order : rng.chance(collegePools.religiousShare) ? rng.weighted(collegePools.orders, (o) => o.weight).key : undefined;
+  const orderLabel = order ? collegePools.orders.find((o) => o.key === order)?.label : undefined;
   // His years, rolled now: each year a chance of death that rises with age, and from eighty-five a chance he lays it down.
   let endDay = electedDay + 365 * 40;
   let end: PapacyEnd = 'died';
@@ -99,7 +102,7 @@ export function generatePope(seed: string, index: number, electedDay: number, li
       break;
     }
   }
-  const pope: Papacy = { id: `gen:${index}`, name, born: year - age, electedDay, endDay, end, from, temperament, historical: false, line: `Elected at ${age}: ${before}.` };
+  const pope: Papacy = { id: `gen:${index}`, name, born: year - age, electedDay, endDay, end, from, temperament, historical: false, line: `Elected at ${age}: ${before}${orderLabel ? `, ${orderLabel}` : ''}.`, ...(order ? { order } : {}), ...(given?.confrereId ? { confrereId: given.confrereId } : {}) };
   return { pope, ordinals: { ...ordinals, [base]: n } };
 }
 
@@ -121,7 +124,7 @@ function successor(seed: string, rome: RomeState, prior: Papacy, electedDay: num
   const index = (rome.generated ?? 0) + 1;
   // The College reads the whole line, the record and the generated popes since, whatever year the man's life began.
   const line = [...papalHistory.map((_, i) => historical(i)), ...rome.popes.filter((p) => !p.historical && p.id !== `gen:${index}`)];
-  const made = generatePope(seed, index, electedDay, line, rome.ordinals ?? {}, elected ? { born: elected.born, from: elected.from, temperament: elected.temperament, curial: elected.curial } : undefined);
+  const made = generatePope(seed, index, electedDay, line, rome.ordinals ?? {}, elected ? { born: elected.born, from: elected.from, temperament: elected.temperament, curial: elected.curial, ...(elected.order ? { order: elected.order } : {}), ...(elected.npcId ? { confrereId: elected.npcId } : {}) } : undefined);
   // The cardinal elected leaves the College for the chair.
   const college = elected && rome.college ? rome.college.filter((c) => c.id !== elected.id) : rome.college;
   return { rome: { ...rome, popes: [...rome.popes, made.pope], ordinals: made.ordinals, generated: index, ...(college ? { college } : {}) }, pope: made.pope };

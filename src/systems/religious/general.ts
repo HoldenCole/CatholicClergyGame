@@ -137,7 +137,7 @@ export function openGeneralChapter(state: GameState, rng: Rng, opts: { exclude?:
   const provincial = r.office?.office === 'provincial';
   // Not the man who has just laid the office down: the chapter that replaces him sits without him.
   const excluded = !!opts.exclude?.includes(PLAYER_ID);
-  if (!provincial && !excluded && province >= GENERAL.delegate.province && playerLegibility(s) >= GENERAL.delegate.legibility && rng.derive(`delegate:${week}`).chance(GENERAL.delegate.chance)) flags['general:delegate'] = true;
+  if (!provincial && !excluded && !s.flags.ordained_bishop && province >= GENERAL.delegate.province && playerLegibility(s) >= GENERAL.delegate.legibility && rng.derive(`delegate:${week}`).chance(GENERAL.delegate.chance)) flags['general:delegate'] = true;
   s = { ...s, npcs, flags };
   return openChapter(s, 'general', r.order, 'general', opts);
 }

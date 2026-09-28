@@ -130,6 +130,7 @@ export function nameableByTheOrder(state: GameState): boolean {
   const r = state.religious;
   const c = state.character;
   if (!r || !c) return false;
+  if (state.flags.ordained_bishop) return false;
   if ((c.reputation.order ?? 0) < GENERAL_ELECTORATE.eligibleOrder) return false;
   const def = religiousOrder(r.order);
   const top = def.credentials[def.credentials.length - 1]?.id;
@@ -179,9 +180,9 @@ export function electorsOf(state: GameState, level: ChapterLevel, bodyId: string
   return out;
 }
 
-/** The head of the order lives in Rome for his term: his house and province elect without him. E3 §16A. */
+/** The head of the order lives in Rome for his term, and a bishop has left the order's governance for good: his house and province elect without him, and may not elect him. E3 §16A, §16B. */
 export function awayAsGeneral(state: GameState): boolean {
-  return state.religious?.office?.office === 'general';
+  return state.religious?.office?.office === 'general' || !!state.flags.ordained_bishop;
 }
 
 function playerVoter(state: GameState): Voter {

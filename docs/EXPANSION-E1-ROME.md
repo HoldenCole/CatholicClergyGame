@@ -322,6 +322,9 @@ About twenty-five, beat `diplomacy`: the Academy (the first dinner, the language
 
 ## 12. The odds of the mitre (as built, owner's decision: generous)
 
+*R1.9 (E3 §16B): a friar is read by the same nuncio at the same odds, with the province's regard in place of the chancery's and the provincial's letter in place of the bishop's; the terna, the auxiliary, the see, the translation and the red hat of a great see are his on these terms.*
+
+
 *Added after a harvest of 64 driven careers to age 80 found every Rome-eager career a cardinal (29 of 32 by 67, 32 of 32 by 80) and no cardinal ever elected pope. The owner chose the generous target: a strong, Rome-facing career should get any mitre about 65% of the time, an archbishop's about 35%, the red hat about 15%, and the chair of Peter about 4%; an ordinary career about a fifth of that. Every number below is a tunable, invented and flagged.*
 
 **What was wrong.** Rome's regard saturated at 100 within a few years of any posting (the hours paid 0.1–0.15 a week each); everything above read Rome. The Curia's rungs were thresholds met on schedule (secretary and archbishop at six years, in the mid-forties). The red hat came at 0.5 + (Rome − 30)/100 a consistory, past 1 at Rome 100. The terna named a man at view 72 with 99% certainty over his window. And the College's own papabili are the top five of a hundred and twenty rolls, at 0.95 and up, so a player cardinal rated 0.7 never won.

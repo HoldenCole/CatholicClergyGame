@@ -1,0 +1,1651 @@
+{
+  "_notes": "E3 §16B: the friar and the mitre, and a pope of his order. The nuncio's scenes for a friar hang on the nuncio scene kinds (beat nuncio) and reach him through the friar's week; the bishop's own on the auxiliary and see postings (phase study, weeks_away); the letter at seventy-five is the friar's own, the diocesan one being his brother's; the pope's on pope:own_order and pope:confrere, set by systems/religious/mitre.ts. Canonical details close to practice and flagged (a religious bishop is released from obedience to his superiors and holds no office in the institute: can. 705, to verify).",
+  "events": [
+    {
+      "id": "fr_nu_about_you",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor",
+        "study"
+      ],
+      "beat": "nuncio",
+      "campaign": "religious",
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 40,
+      "once": true,
+      "suppressYears": 99,
+      "pressure": [
+        "ambition_vs_integrity"
+      ],
+      "requires": [
+        {
+          "type": "nuncio",
+          "key": "scene",
+          "value": "about_you"
+        }
+      ],
+      "title": "The Nunciature Asks About You",
+      "body": "{@provincial} asks you to walk with him after Vespers, which he does when he does not want a door between him and a corridor. The nunciature has written to him about you: the twenty-seven questions, the ones every provincial knows by their numbers. Prudence, doctrine, the common life, whether you have ever been the subject of a complaint, whether you would accept. He is not supposed to tell you and has decided that the constitutions say nothing about walks. He says he has answered honestly, which from him is a compliment with a cost in it. He says the order does not ask for its men back once Rome has them, and that he would rather have you than lose you, and that he has written that too.",
+      "choices": [
+        {
+          "id": "silence",
+          "label": "Say nothing to anyone, and go back to Compline",
+          "meaning": "The order's way; Rome's too.",
+          "outcome": "You say nothing. The house notices nothing, which is the house's way of noticing. For a month every telephone in the corridor is for someone else, and then it is not, or it is, and either way you sang Compline.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "nuncio:told_by_provincial",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "ask",
+          "label": "Ask him what he wrote about the common life",
+          "meaning": "The one question that matters to a friar; the one answer he may not give.",
+          "outcome": "He looks at the cloister for a while. He says he wrote that you keep it, and that a man who keeps it can be spared from it, and that this was the hardest sentence of the twenty-seven. He does not say whether he hopes Rome reads it.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@provincial",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "nuncio:told_by_provincial",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "brother",
+          "label": "Tell one brother, the one you tell things",
+          "meaning": "Honest with a friend, and the corridor has ears.",
+          "outcome": "You tell him after Lauds, in the sacristy, and he says only that he had wondered. By Sunday the house has wondered too, in the way a house does, without anyone having said a word. Rome's letter, when it comes or does not, will find a house that already knows.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": -2
+            },
+            {
+              "target": "flag",
+              "key": "nuncio:told_by_provincial",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fr_nu_aux_request",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor",
+        "study"
+      ],
+      "beat": "nuncio",
+      "campaign": "religious",
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 40,
+      "once": true,
+      "suppressYears": 99,
+      "pressure": [
+        "ambition_vs_integrity",
+        "belief_vs_safety"
+      ],
+      "requires": [
+        {
+          "type": "nuncio",
+          "key": "scene",
+          "value": "aux_request"
+        }
+      ],
+      "title": "The Bishop Asks the Order",
+      "body": "{@provincial} has you in, and gets to it before the coffee. {@bishop} has asked Rome for an auxiliary, and has asked the order, through him, whether it would let the nuncio have your name. The bishop of {diocese} knows what he is asking: an auxiliary from the friars is a man the order loses to its own city, in the habit, at every confirmation, for the rest of his life. The provincial says the constitutions leave it to the man and to the order, and that he will not send a name the man does not want sent. He says he does not know what he hopes you will say, and you believe him.",
+      "choices": [
+        {
+          "id": "yes",
+          "label": "Let him send it: if the Church asks, a friar goes",
+          "meaning": "Obedience the long way round; the province loses a man it can name.",
+          "outcome": "He nods, and writes the letter that evening, and does not show it to you. The nunciature's envelope comes in a month. The house does not know; the province's older men guess, and are careful with you, which is how you learn what a mitre costs before you have one.",
+          "effects": [
+            {
+              "target": "flag",
+              "key": "terna_named",
+              "value": true
+            },
+            {
+              "target": "flag",
+              "key": "aux_named",
+              "value": true
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": -2
+            }
+          ]
+        },
+        {
+          "id": "time",
+          "label": "Ask for a month, and a retreat",
+          "meaning": "The nuncio waits a little; the house waits with you.",
+          "outcome": "He gives you the month and the retreat house, and the retreat master, who knows nothing, preaches on the rich young man. At the end of it you tell the provincial to send the name, and he says he had already drafted the letter both ways.",
+          "effects": [
+            {
+              "target": "flag",
+              "key": "terna_named",
+              "value": true
+            },
+            {
+              "target": "flag",
+              "key": "aux_named",
+              "value": true
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": -1
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "no",
+          "label": "Ask him not to: you took a vow to be sent, not to be raised",
+          "meaning": "The order keeps its man; Rome writes it down.",
+          "outcome": "He says nothing for a while and then says that the order will be glad and that Rome will not, and that both will remember. He writes the bishop a letter that names no one. The house never knows what it kept.",
+          "effects": [
+            {
+              "target": "flag",
+              "key": "refused_mitre",
+              "value": true
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": -4
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 4
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fr_nu_passed",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor",
+        "study"
+      ],
+      "beat": "nuncio",
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 30,
+      "once": true,
+      "suppressYears": 99,
+      "pressure": [
+        "ambition_vs_integrity",
+        "doubt"
+      ],
+      "requires": [
+        {
+          "type": "nuncio",
+          "key": "scene",
+          "value": "passed"
+        }
+      ],
+      "title": "Another Man's Name",
+      "body": "The diocesan paper has it on the front page, with a photograph: Rome has named {named} bishop of {see_city}. The brothers read it at breakfast, and one of them, who was in the studium with you and has never in his life kept a thought to himself, says that he had heard your name was on that list. Three heads come up. The house's prior says grace was already said and the eggs are getting cold, which is the kindest thing anyone does for you that week.",
+      "choices": [
+        {
+          "id": "write",
+          "label": "Write to the new bishop, as one religious to another or not",
+          "meaning": "The order's manners; Rome reads them too.",
+          "outcome": "You write two paragraphs and mean both. He answers by hand, from a diocese he had never seen, and says he would be grateful for the friars' prayers, which is either a formula or the truest thing anyone has written to you in a year.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "nuncio:passed_once",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "chapel",
+          "label": "Say nothing, and take the extra hour in the chapel",
+          "meaning": "The vow was to be nobody; today it is kept.",
+          "outcome": "You say the Office alone and then with the house, and by Compline the brother who talks has found something else to talk about. The mitre that went elsewhere sits in the chapel with you for a week and then it does not.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "nuncio:passed_once",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "bitter",
+          "label": "Say at recreation that Rome takes the safe man, every time",
+          "meaning": "True, perhaps; the house hears the other thing.",
+          "outcome": "The house laughs, because you meant it to, and then the house is quiet, because it heard what was under the laugh. The brother who talks tells the province, and the province tells the nuncio's dinner table, in the way provinces do.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -4
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": -4
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": -2
+            },
+            {
+              "target": "flag",
+              "key": "nuncio:passed_once",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fr_nu_consulted",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor",
+        "study"
+      ],
+      "beat": "nuncio",
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 30,
+      "once": true,
+      "suppressYears": 99,
+      "pressure": [
+        "friendship_vs_duty",
+        "loyalty_vs_honesty"
+      ],
+      "requires": [
+        {
+          "type": "nuncio",
+          "key": "scene",
+          "value": "consulted"
+        }
+      ],
+      "title": "Twenty-Seven Questions About a Brother",
+      "body": "The envelope is from the Apostolic Nunciature in Washington, and it is about {@terna_subject.full}, a friar of your own order, whom you have lived with. Twenty-seven questions under the pontifical secret: doctrine, prudence, the common life, his health, his friendships, whether there has ever been a complaint. Question fourteen asks whether he keeps the vows in a manner that edifies. Question twenty-two asks whether you would be surprised to see him a bishop. The cover letter says the answers are for the Holy Father alone. The house, which does not know the envelope came, is at recreation downstairs, and his laugh is the loudest.",
+      "choices": [
+        {
+          "id": "truth",
+          "label": "Answer every question truly, and burn the draft",
+          "meaning": "The nuncio remembers an honest answer; the order asks nothing less.",
+          "outcome": "You write it in two evenings and post it yourself. Nothing comes back, which is what the secret means. Years later the nuncio, at some dinner, mentions a questionnaire he had once found useful, and does not say whose, and looks at you.",
+          "effects": [
+            {
+              "target": "flag",
+              "key": "nuncio:trusted",
+              "value": true
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 2
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "generous",
+          "label": "Answer generously: the order needs its men seen well",
+          "meaning": "A brother's name burnished; the truth bent, not broken.",
+          "outcome": "You write nothing false and leave out nothing that matters, and still the man on the page is a little better than the man downstairs. Rome may or may not read the difference. You do.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": -1
+            }
+          ]
+        },
+        {
+          "id": "tell",
+          "label": "Tell him: a brother should not be judged in the dark",
+          "meaning": "The secret broken for love; Rome finds these things out.",
+          "outcome": "You tell him after Compline, in the corridor, and his face does something you will not forget. He thanks you. Someone, somewhere, later, notes that the questionnaire's subject knew, and the nuncio's office notes who was asked.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@terna_subject",
+              "delta": 15
+            },
+            {
+              "target": "flag",
+              "key": "nuncio:broke_secret",
+              "value": true
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "recuse",
+          "label": "Write back that you cannot answer about a man you live with",
+          "meaning": "Neither lie nor secret; a friar's answer.",
+          "outcome": "The nunciature's reply is one line, courteous, and asks nothing further. Whether it read your recusal as honesty or as evasion you never learn.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fr_nu_subject_named",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor",
+        "study"
+      ],
+      "beat": "nuncio",
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 30,
+      "once": true,
+      "suppressYears": 99,
+      "pressure": [
+        "friendship_vs_duty"
+      ],
+      "requires": [
+        {
+          "type": "nuncio",
+          "key": "scene",
+          "value": "subject_named"
+        }
+      ],
+      "title": "One of Ours, to a See",
+      "body": "The paper has it: Rome has named {@terna_subject.full} bishop of {see_city}, the same man the nunciature asked you twenty-seven questions about. The house takes it the way an order takes these things: the refectory is loud, the older men are quiet, and {@provincial} says the words the constitutions give him, that the order rejoices and that it has lost a brother to the Church. His cell will be empty by the feast. He will be ordained in a cathedral, with the habit under the vestments, and he will never vote in a chapter again.",
+      "choices": [
+        {
+          "id": "serve",
+          "label": "Ask to serve at his ordination, as his brother",
+          "meaning": "The order's part in it, seen; a friend kept.",
+          "outcome": "You hold the book, and when he lies on the cathedral floor in the habit you gave him a hand into that morning, it is the friars in the fourth row who cannot sing. He writes from the see every Christmas, and means it.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@terna_subject",
+              "delta": 12
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "letter",
+          "label": "Write him the letter the questionnaire would not let you",
+          "meaning": "What you would have said; what he will keep.",
+          "outcome": "You write what you thought of him and what you feared for him, and he reads it in the bishop's house of a diocese he had never seen, and answers in three lines that you keep.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@terna_subject",
+              "delta": 8
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "loss",
+          "label": "Say at chapter that the province cannot afford to lose men this way",
+          "meaning": "True, and heard by the wrong people.",
+          "outcome": "The chapter agrees with you, which changes nothing, and the provincial writes it into the minutes, which changes less. The new bishop hears of it, as bishops do, and is a little cooler at Christmas.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@terna_subject",
+              "delta": -6
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": -2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fr_bp_habit_under_mitre",
+      "phase": [
+        "study",
+        "bishop"
+      ],
+      "campaign": "religious",
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 40,
+      "once": true,
+      "suppressYears": 99,
+      "pressure": [
+        "belief_vs_safety"
+      ],
+      "requires": [
+        {
+          "type": "any",
+          "inner": [
+            {
+              "type": "flag",
+              "key": "study:auxiliary",
+              "value": true
+            },
+            {
+              "type": "flag",
+              "key": "study:see",
+              "value": true
+            }
+          ]
+        },
+        {
+          "type": "weeks_away",
+          "op": "<=",
+          "value": 8
+        }
+      ],
+      "title": "The Habit Under the Mitre",
+      "body": "The master of ceremonies, a diocesan monsignor of great patience, would like to know what you will wear under the vestments at your ordination as bishop. The diocese's bishops have worn the cassock with the purple. A friar wears the habit. He does not say which he prefers; his face does. The friars who will sit in the fourth row have already decided what you will wear and have told each other so.",
+      "choices": [
+        {
+          "id": "habit",
+          "label": "The habit, as the order's bishops always have",
+          "meaning": "The order's man first; the diocese notices.",
+          "outcome": "The photograph in the paper is of a friar in a mitre, which is what you are. The older diocesan priests are polite about it for a year and then stop noticing. The house frames the photograph.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "diocesan_clergy",
+              "delta": -2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "cassock",
+          "label": "The cassock and purple: the diocese's bishop, in the diocese's dress",
+          "meaning": "The diocese's man; the fourth row goes quiet.",
+          "outcome": "The monsignor is relieved. The fourth row sings anyway. The habit hangs in the wardrobe of the bishop's house and comes out for the order's feasts, which is a compromise the constitutions do not mention and do not forbid.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "diocesan_clergy",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -4
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": -2
+            }
+          ]
+        },
+        {
+          "id": "ask",
+          "label": "Ask {@provincial}, and do what he says",
+          "meaning": "A last obedience, freely given.",
+          "outcome": "He says the habit, as if it were a question, and then says that from Sunday you will not have to ask him anything again, and that he will miss being asked. You wear the habit. He sits in the fourth row.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@provincial",
+              "delta": 8
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fr_bp_provincial_visits",
+      "phase": [
+        "study",
+        "bishop"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 24,
+      "once": true,
+      "suppressYears": 99,
+      "pressure": [
+        "friendship_vs_duty"
+      ],
+      "requires": [
+        {
+          "type": "any",
+          "inner": [
+            {
+              "type": "flag",
+              "key": "study:auxiliary",
+              "value": true
+            },
+            {
+              "type": "flag",
+              "key": "study:see",
+              "value": true
+            }
+          ]
+        },
+        {
+          "type": "weeks_away",
+          "op": ">=",
+          "value": 8
+        },
+        {
+          "type": "weeks_away",
+          "op": "<=",
+          "value": 70
+        }
+      ],
+      "title": "The Provincial's Visit",
+      "body": "{@provincial} comes to the bishop's house, which he has never been in, and sits in the study, which has a window on the parking lot, and is uncomfortable for exactly four minutes before he is not. He has brought the province's letter of congratulation, signed by every house, and the constitutions, open at the paragraph: released from obedience, no vote, no office, a brother for life. He reads it aloud because someone should. Then he asks how the diocese is, as one man asks another, and it is the first time anyone has asked.",
+      "choices": [
+        {
+          "id": "brother",
+          "label": "Tell him the truth: it is lonely, and the habit helps",
+          "meaning": "A friar's honesty; the province keeps its man.",
+          "outcome": "He nods, and says the province will always have a room, and that the constitutions say nothing against a bishop coming to Vespers. He comes twice a year after that, and never brings the constitutions again.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@provincial",
+              "delta": 10
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 4
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "bishop",
+          "label": "Tell him the diocese is well, and ask after the province",
+          "meaning": "The office speaks; the friar waits.",
+          "outcome": "He gives you the province's news like a report, because you asked for it like one, and leaves early. The letter of congratulation stays on the desk under the insurer's. Something has been set down that will be hard to pick up.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": -2
+            },
+            {
+              "target": "reputation",
+              "key": "diocesan_clergy",
+              "delta": 2
+            },
+            {
+              "target": "relationship",
+              "key": "@provincial",
+              "delta": -3
+            }
+          ]
+        },
+        {
+          "id": "ask",
+          "label": "Ask him to keep the order's parish in your diocese, whatever the chancery says",
+          "meaning": "A bishop asking a favour of a provincial: the order notices which way the letter went.",
+          "outcome": "He says the parish stays as long as the order has men for it, and that a bishop who asks the order for something is a bishop the order will remember. The chancery hears of it and is not sure what it heard.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "diocesan_clergy",
+              "delta": -2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fr_bp_confreres_dinner",
+      "phase": [
+        "study",
+        "bishop"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 20,
+      "once": true,
+      "suppressYears": 99,
+      "pressure": [
+        "friendship_vs_duty"
+      ],
+      "requires": [
+        {
+          "type": "any",
+          "inner": [
+            {
+              "type": "flag",
+              "key": "study:auxiliary",
+              "value": true
+            },
+            {
+              "type": "flag",
+              "key": "study:see",
+              "value": true
+            }
+          ]
+        },
+        {
+          "type": "weeks_away",
+          "op": ">=",
+          "value": 12
+        }
+      ],
+      "title": "The House Gives a Dinner",
+      "body": "The house you left gives the dinner {@provincial} said to let them give. The refectory is laid as for a feast, the wine is the good wine, and the brother who cooks has done the thing with the lamb. You are seated at the right of the house's prior, where guests sit. Grace is said by the youngest, as always. The toast is by the oldest, who says that the house has lost a friar and the diocese has gained one, and that he has known bishops who forgot the first half of that sentence, and that you will not, and sits down. Nobody calls you Excellency. Nobody has decided not to.",
+      "choices": [
+        {
+          "id": "table",
+          "label": "Sit at the table until the last brother goes up, and wash the dishes",
+          "meaning": "The friar under the mitre; the house keeps him.",
+          "outcome": "You dry while the cook washes, as you did for eleven years, and he tells you about the lamb and does not tell you about anything else. The house tells the province the bishop washed up. The province tells everyone.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 8
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 4
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "speak",
+          "label": "Answer the toast: say what the order gave you",
+          "meaning": "A bishop's speech to friars; they judge speeches.",
+          "outcome": "You say it well, because you were formed to, and the house listens the way it listens to visiting preachers: fairly. The oldest man says afterwards that it was a good speech, which is not what he says of homilies he liked.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "early",
+          "label": "Leave after the toast; the chancery has a car waiting",
+          "meaning": "The diocese's hours; the house's memory.",
+          "outcome": "The car is real and the meeting is real and the house understands, and puts the understanding in the drawer where houses keep such things. The lamb is finished without you.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -6
+            },
+            {
+              "target": "reputation",
+              "key": "diocesan_clergy",
+              "delta": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fr_bp_chapter_without_you",
+      "phase": [
+        "study",
+        "bishop"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 16,
+      "once": true,
+      "suppressYears": 99,
+      "pressure": [
+        "ambition_vs_integrity"
+      ],
+      "requires": [
+        {
+          "type": "any",
+          "inner": [
+            {
+              "type": "flag",
+              "key": "study:auxiliary",
+              "value": true
+            },
+            {
+              "type": "flag",
+              "key": "study:see",
+              "value": true
+            }
+          ]
+        },
+        {
+          "type": "weeks_away",
+          "op": ">=",
+          "value": 26
+        },
+        {
+          "type": "flag",
+          "key": "chapter:provincial",
+          "value": true
+        }
+      ],
+      "title": "A Chapter You Cannot Attend",
+      "body": "The province is in chapter, and for the first time since your profession you are not in the room. The constitutions are plain: a bishop has no vote and no voice there. A brother telephones the bishop's house each evening with the tallies, because someone always does, and reads them out like scores. The men you voted with are choosing a provincial. The man they choose will govern the houses you cannot be sent to, and will have, for the length of his term, exactly as much authority over you as the housekeeper.",
+      "choices": [
+        {
+          "id": "pray",
+          "label": "Say Vespers for the chapter, and take no calls until it is done",
+          "meaning": "The gallery, honourably kept.",
+          "outcome": "The brother's calls go to the machine. When it is done you telephone the new provincial, whoever he is, and congratulate him, and he is surprised and pleased, because bishops do not usually.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 3
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "calls",
+          "label": "Take the calls; hear the tallies",
+          "meaning": "Interest is not a vote; the province counts it anyway.",
+          "outcome": "You know each night what the room knows, and the room knows you know, and nobody minds much, and one man does. The result reaches you before the letter.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "word",
+          "label": "Send word through the brother of which man you would have voted for",
+          "meaning": "The vote you no longer have, cast anyway.",
+          "outcome": "The word arrives in the room the way such words do, wrapped in another. It changes three votes and costs you something the constitutions have no name for. The man, when he is chosen, knows how he was helped, and is not sure he wanted it.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": -4
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": -3
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": -1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fr_bp_friar_in_trouble",
+      "phase": [
+        "study",
+        "bishop"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 18,
+      "once": true,
+      "suppressYears": 99,
+      "pressure": [
+        "loyalty_vs_honesty",
+        "friendship_vs_duty"
+      ],
+      "requires": [
+        {
+          "type": "any",
+          "inner": [
+            {
+              "type": "flag",
+              "key": "study:auxiliary",
+              "value": true
+            },
+            {
+              "type": "flag",
+              "key": "study:see",
+              "value": true
+            }
+          ]
+        },
+        {
+          "type": "weeks_away",
+          "op": ">=",
+          "value": 40
+        }
+      ],
+      "title": "A Friar in Your Diocese",
+      "body": "A friar of your own order, at the order's house in your diocese, has been complained of: a matter of money and manners, not the worst kind, and not nothing. The complaint came to the chancery, which brought it to you with the care people use around a bishop whose brothers are involved. The constitutions and the canons are clear and do not agree: the friar answers to his provincial, and the parish answers to you. {@provincial} has written the same day, asking you to let the order handle its own.",
+      "choices": [
+        {
+          "id": "order",
+          "label": "Send it to the provincial, and say so to the chancery",
+          "meaning": "The order's own; the chancery learns the bishop is a friar first.",
+          "outcome": "The provincial handles it, quietly and well, and the chancery says nothing for a month and then says something. The order remembers a bishop who trusted it. The diocese remembers a bishop who did not trust it.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "diocesan_clergy",
+              "delta": -4
+            }
+          ]
+        },
+        {
+          "id": "both",
+          "label": "See the friar yourself, with the provincial in the room",
+          "meaning": "Two keys, both turned; slow and right.",
+          "outcome": "The three of you sit in the bishop's study, which none of you likes, and it takes an afternoon and is done. The friar is moved, and the parish is told the truth in a paragraph. Nobody is pleased, which in these matters is the sign of it having gone well.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "diocesan_clergy",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "bishop",
+          "label": "Handle it as bishop: the parish is yours",
+          "meaning": "The mitre first; the habit hears of it.",
+          "outcome": "You do what a bishop does, correctly, and the provincial is informed after. The order takes it as the order takes such things: without a word, for years. The chancery is impressed, and says so, which is not the same as help.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "diocesan_clergy",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": -6
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": -4
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fr_bp_orders_parish",
+      "phase": [
+        "study",
+        "bishop"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 16,
+      "once": true,
+      "suppressYears": 99,
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "requires": [
+        {
+          "type": "any",
+          "inner": [
+            {
+              "type": "flag",
+              "key": "study:auxiliary",
+              "value": true
+            },
+            {
+              "type": "flag",
+              "key": "study:see",
+              "value": true
+            }
+          ]
+        },
+        {
+          "type": "weeks_away",
+          "op": ">=",
+          "value": 52
+        }
+      ],
+      "title": "The Order's Parish, and Its Bishop",
+      "body": "The order's parish in your diocese is short a man, and its prior has written to the provincial, and {@provincial} has written to you, and the chancery has written a memo. Under any other bishop the memo would win: a parish the friars cannot staff goes back to the diocese, and the diocese has priests who want it. Under you the question is what it always was, and now it has a face. The order's parish, or the diocese's; the brother's letter, or the memo.",
+      "choices": [
+        {
+          "id": "keep",
+          "label": "Keep it the order's: give them a year, and a diocesan priest on loan",
+          "meaning": "A bishop who is a friar decides like one; the chancery sees it.",
+          "outcome": "The year is given and the friars find the man. The chancery understands what it has learned, and files it. {@provincial}'s letter of thanks is two lines and the house's is two pages.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "diocesan_clergy",
+              "delta": -3
+            }
+          ]
+        },
+        {
+          "id": "fair",
+          "label": "Let the memo stand: the diocese takes it back, with a friar as resident",
+          "meaning": "The rule applied to your own; the order's ears burn.",
+          "outcome": "The parish goes to a diocesan pastor and keeps a friar in the rectory, which is the sort of arrangement nobody loves and everybody lives with. The province says the bishop is fair. It does not say it warmly.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "diocesan_clergy",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": -3
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "ask",
+          "label": "Ask {@provincial} to come and decide it with you, in front of the chancery",
+          "meaning": "Two keys in the open; slow, and remembered.",
+          "outcome": "He comes, and the chancery watches two friars decide a diocesan question in a diocesan office, and learns something about the order and something about the bishop. The parish stays, for now, with conditions.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "diocesan_clergy",
+              "delta": -1
+            },
+            {
+              "target": "relationship",
+              "key": "@provincial",
+              "delta": 5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fr_bp_general_chapter_from_desk",
+      "phase": [
+        "study",
+        "bishop"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 18,
+      "once": false,
+      "suppressYears": 6,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "any",
+          "inner": [
+            {
+              "type": "flag",
+              "key": "study:auxiliary",
+              "value": true
+            },
+            {
+              "type": "flag",
+              "key": "study:see",
+              "value": true
+            }
+          ]
+        },
+        {
+          "type": "flag",
+          "key": "chapter:general",
+          "value": true
+        },
+        {
+          "type": "weeks_away",
+          "op": ">=",
+          "value": 4
+        }
+      ],
+      "title": "The General Chapter, From a Bishop's Desk",
+      "body": "The order is in general chapter, on another continent, and the news of it comes to the bishop's house the way it comes to the laity: from the order's website, a day late, and from a brother who telephones with the tallies. The room you might once have sat in is electing the head of the order. You have no vote, and no voice, and a diocese to run, and the afternoon goes badly because you keep checking.",
+      "choices": [
+        {
+          "id": "telegram",
+          "label": "Send the new head of the order the bishop's congratulations, in the order's own words",
+          "meaning": "A bishop who remembers what he is; Rome and the order both notice.",
+          "outcome": "The reply is in his own hand and mentions your province by name. The chancery, which typed the letter, learns a little Latin.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "desk",
+          "label": "Run the diocese; read the result on Sunday",
+          "meaning": "The mitre first, this once.",
+          "outcome": "The result is on the website on Sunday and it is the man the brother said. You feel nothing much, and then, at Vespers, you do.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "diocesan_clergy",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "mass",
+          "label": "Say Mass for the chapter in the cathedral, and tell the people why",
+          "meaning": "The diocese learns what its bishop belongs to.",
+          "outcome": "The cathedral hears about general chapters for the first time and is mildly interested. A woman in the third row is a friar's sister and cries. The order hears that a bishop said Mass for it, and does not forget.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "diocesan_clergy",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fr_bp_letter_at_seventy_five",
+      "phase": [
+        "study",
+        "bishop"
+      ],
+      "campaign": "religious",
+      "severity": "MAJOR",
+      "category": "personal",
+      "baseWeight": 60,
+      "once": true,
+      "suppressYears": 99,
+      "pressure": [
+        "doubt"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:see",
+          "value": true
+        },
+        {
+          "type": "age",
+          "op": ">=",
+          "value": 74
+        }
+      ],
+      "title": "The Letter at Seventy-Five, and a Cell",
+      "body": "The canon requires the letter on your seventy-fifth birthday, and you write it on the morning, in the habit. Rome will accept it when it does. The question the diocese cannot answer for you is where a bishop emeritus who is a friar goes: the residence, where the diocese keeps its old bishops and would keep you, with a driver; or a cell in a house of the order, with a place at the table below the house's prior and the Office at dawn, and nothing else. {@provincial}, who was a novice when you were ordained, has written to say there is a cell, and that he has told the house you will not want to be called Excellency, and that they will call you it anyway for a year.",
+      "choices": [
+        {
+          "id": "cell",
+          "label": "Ask for the cell: a friar goes home",
+          "meaning": "The end as the beginning; the diocese gives you up.",
+          "outcome": "The acceptance comes with the pope's thanks, and the province's car comes the week after. The house calls you Excellency for a year and then does not. The Office at dawn is harder than it was and better. You die a friar, which is what you were.",
+          "effects": [
+            {
+              "target": "flag",
+              "key": "bp_letter_going_home",
+              "value": true
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 6
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "residence",
+          "label": "Stay at the residence: the diocese's old bishop, at hand for confirmations",
+          "meaning": "The diocese keeps you; the habit in a wardrobe.",
+          "outcome": "The successor is grateful and uses you, gently, for years. The habit comes out for the order's feasts. The house sends a card each Christmas, signed by everyone, and one year by a name you do not know.",
+          "effects": [
+            {
+              "target": "flag",
+              "key": "bp_letter_to_stay",
+              "value": true
+            },
+            {
+              "target": "reputation",
+              "key": "diocesan_clergy",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -2
+            }
+          ]
+        },
+        {
+          "id": "mission",
+          "label": "Ask the order for a mission: a house that needs an old priest who can confirm",
+          "meaning": "A last obedience, offered.",
+          "outcome": "The provincial finds it, in a place with a hard winter and a bishop who is glad of the help. You confirm children whose language you learn slowly. You are, for the last years, exactly as useful as you were at thirty, which is the most a man can ask.",
+          "effects": [
+            {
+              "target": "flag",
+              "key": "bp_letter_going_home",
+              "value": true
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 8
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fr_pope_of_order",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor",
+        "study"
+      ],
+      "campaign": "religious",
+      "severity": "MAJOR",
+      "category": "personal",
+      "baseWeight": 100,
+      "once": true,
+      "suppressYears": 99,
+      "pressure": [
+        "doubt"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "pope:own_order",
+          "value": true
+        }
+      ],
+      "title": "One of Ours",
+      "body": "The white smoke was on the television in the common room, where the house does not usually watch television, and when the name was read the brother who talks said nothing for the first time in his life. The new pope is one of the order's men: professed in a province you have visited, or have not; formed by the same constitutions, the same Office, the same argument at supper. The house's prior lets the refectory be louder than the Rule allows. The older men are quieter than the younger, because they have seen what happens to an order the world is looking at.",
+      "choices": [
+        {
+          "id": "prayer",
+          "label": "Say the Te Deum with the house, and go to bed",
+          "meaning": "The order's way: a hymn, and the Office in the morning.",
+          "outcome": "The Te Deum is sung badly and with the whole house, and Lauds is at the usual hour, and the day after is a day. The world's attention arrives over the following months, and the house is ready for it, having done nothing to prepare.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 2
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "letters",
+          "label": "Write to every friar you know in Rome: what does it mean for us?",
+          "meaning": "The order's news, gathered; the order's nerves, shown.",
+          "outcome": "The letters back say the same thing in nine languages: nobody knows. The head of the order has been received before the ambassadors. The dicastery reads the order's letters first. Everyone is looking, and looking is not always liking.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "caution",
+          "label": "Say at recreation that the order should be careful now, and that pride is a sin",
+          "meaning": "The old men's thought, said aloud by a younger one.",
+          "outcome": "The old men nod. The young men think you are a wet blanket, which you are, and which the pope, if he heard, would agree with; he was formed the same way. The house is a little more careful for a year, and it does the house good.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -2
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fr_confrere_pope",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor",
+        "study"
+      ],
+      "campaign": "religious",
+      "severity": "MAJOR",
+      "category": "personal",
+      "baseWeight": 120,
+      "once": true,
+      "suppressYears": 99,
+      "pressure": [
+        "doubt"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "pope:confrere",
+          "value": true
+        }
+      ],
+      "title": "A Confrere on the Balcony",
+      "body": "The white smoke, and then the name, and then the face: a man of your own province. A man you have eaten beside, sung beside, voted for or against in a chapter room with the windows open. The common room does not believe it for a full minute. {@provincial}'s letter comes that evening by hand and is short because he could not make it longer. The telephone in the corridor rings for a week with reporters who want to know what he was like, and the house does not know how to say it: he was one of us, and the Rule was the same for him.",
+      "choices": [
+        {
+          "id": "truth",
+          "label": "Tell the reporters the truth: he was ordinary, and kept the Rule",
+          "meaning": "The order's answer; the world's disappointment.",
+          "outcome": "They print it as humility, which it was not; it was a description. The house is left alone after a month. The pope, when he writes, which he does, writes the way he wrote from missions: badly, and with love.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": 2
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "silence",
+          "label": "Say nothing to anyone outside the house; let the province speak",
+          "meaning": "A friar under the Rule of silence, when the world wants words.",
+          "outcome": "The reporters find other friars, who say more and know less. The province's statement is three sentences and one of them is a prayer. The pope's first letter to the house, which comes in Advent, thanks it for exactly this.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 3
+            }
+          ]
+        },
+        {
+          "id": "rome",
+          "label": "Go to Rome for the inauguration, in the habit, with the house",
+          "meaning": "One of the province's own, seen; the order's pride in the square.",
+          "outcome": "You stand in the square with forty friars in a block of white, or black, and he sees you, or seems to, from the loggia. The reception afterwards is for a thousand people and he finds the province in the crowd and says each name. It is the last time he is free to.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

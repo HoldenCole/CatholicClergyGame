@@ -236,7 +236,8 @@ export function foundingYear(state: GameState, rng: Rng): GameState {
   // The provincial asks: a need his reputations fit, and a man the province trusts.
   const asked = !r.petition || r.petition.outcome;
   const scene = state.flags['foundation:asked'];
-  if (asked && !r.charterDraft && canPetition(next).ok && r.office?.office !== 'provincial') {
+  // Not a man away on a posting, nor a bishop: the province does not send those to found. E3 §16A, §16B.
+  if (asked && !r.charterDraft && !next.study && !next.flags.ordained_bishop && canPetition(next).ok && r.office?.office !== 'provincial') {
     const best = sites.filter((s) => s.need >= 3 && s.bishop >= FOUNDING.bishopConsentAt).sort((a, b) => b.need - a.need || a.dioceseId.localeCompare(b.dioceseId))[0];
     const top = topReputations(state)[0];
     const work = top ? bestWorkFor(top.key) : 'preaching';
