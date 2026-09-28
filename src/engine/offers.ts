@@ -3,6 +3,7 @@ import { evaluateAll, evaluateCondition } from './conditions';
 import { officeDef } from '@/content/parish';
 import { officeFlagOf, releaseOfficeFlag } from '@/systems/offices';
 import { applyEffects } from './effects';
+import { writeFile } from '@/systems/file';
 import type { Rng } from './rng';
 import { resolveSelector, selectorsIn } from './selectors';
 import { askToGo, pendingAppointment } from './appointment';
@@ -182,7 +183,7 @@ export function closeOffer(state: GameState, def: OfferDef): GameState {
   const open = state.offers.find((o) => o.offerId === def.id);
   if (!open) throw new Error(`offer ${def.id} is not open`);
   const next = settleDecline(state, def, open, 'declined');
-  return { ...next, flags: { ...next.flags, [closedFlag(def)]: true } };
+  return writeFile({ ...next, flags: { ...next.flags, [closedFlag(def)]: true } }, { by: 'chancellor', byLabel: 'the chancellor', kind: 'letter', text: `Declined for good: ${def.title}.`, weight: -1, lean: 0, seen: true });
 }
 
 /** The flag that says a man asked to be kept on file for this. */

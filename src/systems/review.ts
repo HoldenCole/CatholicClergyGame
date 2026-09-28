@@ -3,6 +3,8 @@ import { spendDefs } from '@/content/religious';
 import type { GameState, Letter } from '@/types';
 import { sinceArrival } from './trajectory';
 import { careOf, strainOf, strainWord } from './week';
+import { mailReviewLine } from './mail';
+import { boardLeavesHim } from '@/engine/career';
 import reviewSaid from '@/content/parish/review_said.json';
 import { chancesFor } from './openings';
 import { isFigure } from './reputation';
@@ -82,6 +84,8 @@ export function yearInReview(state: GameState): { letter: Letter; baseline: NonN
   if (said) rows.push({ label: 'What was said', value: said });
   const around = livesReviewLine(state);
   if (around) rows.push({ label: 'Around you', value: around });
+  const unanswered = mailReviewLine(state, week - 52);
+  if (unanswered) rows.push({ label: 'Letters unanswered', value: unanswered });
   const townLine = state.parish ? townReviewLine(state, week - 52) : null;
   if (townLine) rows.push({ label: 'The town this year', value: townLine });
   const bondsThisYear = Object.values(state.npcs).flatMap((n) => (n.bonds ?? []).filter((b) => b.week > week - 52 && b.week <= week).map((b) => ({ n, b })));
@@ -104,7 +108,8 @@ export function yearInReview(state: GameState): { letter: Letter; baseline: NonN
 
   // Where he is headed.
   const top = state.openings.map((o) => ({ o, ch: chancesFor(state, o) })).filter((x) => !/Too soon|Not this one/.test(x.ch.verdict)).sort((a, b) => b.o.urgency - a.o.urgency)[0];
-  if (state.parish && top) body.push(`Ahead: ${top.o.label.toLowerCase()} is open, and you read as ${top.ch.verdict.toLowerCase()}. ${state.parish.arcEndWeek - week <= 52 ? 'The board looks at you within the year.' : `The board looks at you in ${Math.ceil((state.parish.arcEndWeek - week) / 52)} years unless something moves it.`}`);
+  if (state.parish && boardLeavesHim(state)) body.push('Ahead: the board has stopped moving men your age. It would take a letter from you to move you now, and the file says you have not written one.');
+  else if (state.parish && top) body.push(`Ahead: ${top.o.label.toLowerCase()} is open, and you read as ${top.ch.verdict.toLowerCase()}. ${state.parish.arcEndWeek - week <= 52 ? 'The board looks at you within the year.' : `The board looks at you in ${Math.ceil((state.parish.arcEndWeek - week) / 52)} years unless something moves it.`}`);
   else if (state.parish) body.push(`Ahead: nothing is open in the diocese that the board would consider you for. ${state.parish.arcEndWeek - week <= 52 ? 'The board looks at you within the year regardless.' : 'Another year here, then.'}`);
 
   const letter: Letter = { sort: 'review', title: `The year in review: ${years} years ordained`, body, rows, week };

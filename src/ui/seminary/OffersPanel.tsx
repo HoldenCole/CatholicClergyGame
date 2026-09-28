@@ -12,6 +12,7 @@ import { formatDate } from '@/engine/calendar';
 export default function OffersPanel() {
   const game = useGameStore((s) => s.game);
   const outcome = useGameStore((s) => s.lastOfferOutcome);
+  const answerTray = useGameStore((s) => s.answerTrayMail);
   if (!game) return null;
   const open = game.offers;
   const commitments = game.commitments;
@@ -19,13 +20,28 @@ export default function OffersPanel() {
   const asked = pendingAppointment(game);
   const askedDef = asked ? offerById(asked.offerId) : undefined;
   const bag = mailbag(game).slice(0, 12);
+  const tray = game.mailTray ?? [];
 
   return (
     <>
       <Sheet title="Letters">
         {outcome && <p className="mb-3 rounded border rule bg-white/30 px-3 py-2 text-sm leading-relaxed">{outcome}</p>}
-        {open.length === 0 && !outcome && <p className="ink-faint text-sm">Nothing in the mail today.</p>}
+        {open.length === 0 && tray.length === 0 && !outcome && <p className="ink-faint text-sm">Nothing in the mail today.</p>}
         {open.map((o) => <OfferCard key={o.offerId} o={o} />)}
+        {tray.map((t, i) => (
+          <div key={`${t.letter.mailId}:${t.letter.week}`} className="mb-4 border-b rule pb-4 last:border-b-0 last:pb-0">
+            <div className="flex items-baseline justify-between">
+              <h3 className="title text-lg">{t.letter.title}</h3>
+              <span className="ink-faint text-xs">{t.dueWeek - game.clock.week <= 0 ? 'the drawer takes it this week' : `${t.dueWeek - game.clock.week} week${t.dueWeek - game.clock.week === 1 ? '' : 's'} before the drawer takes it`}</span>
+            </div>
+            {t.letter.from && <p className="ink-muted mt-1 text-sm">From {t.letter.from.name}, {t.letter.from.who}.</p>}
+            {t.letter.body.map((p, k) => <p key={k} className="mt-2 leading-relaxed">{p}</p>)}
+            <div className="mt-3 flex flex-wrap gap-2">
+              {(t.letter.replies ?? []).map((r) => <button key={r.id} className="pbtn text-xs" onClick={() => answerTray(i, r.id)}>{r.label}{r.hours ? ` · ${r.hours}h` : ''}</button>)}
+              <button className="pbtn text-xs" onClick={() => answerTray(i, null)}>Leave it in the drawer</button>
+            </div>
+          </div>
+        ))}
       </Sheet>
       {bag.length > 0 && (
         <Sheet title="The mailbag">

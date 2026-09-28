@@ -1,5 +1,6 @@
 import { useGameStore } from '@/engine/store';
 import Panel from './Panel';
+import { useUiStore } from './uiStore';
 import { choiceMeaning } from '@/systems/choiceMeaning';
 import type { Choice } from '@/types';
 
@@ -9,6 +10,8 @@ export default function LetterPanel() {
   const read = useGameStore((s) => s.readLetter);
   const seek = useGameStore((s) => s.seekDirector);
   const answer = useGameStore((s) => s.answerMail);
+  const defer = useGameStore((s) => s.deferMail);
+  const fold = useUiStore((s) => s.foldLetter);
   if (!game || game.mode.kind !== 'letter') return null;
   const l = game.mode.letter;
   return (
@@ -46,6 +49,8 @@ export default function LetterPanel() {
       <div className="mt-4 flex gap-2">
         <button className="pbtn pbtn-primary" onClick={l.sort === 'mail' ? () => answer(null) : read}>{l.sort === 'review' ? 'Another year' : l.sort === 'mail' ? 'Leave it in the drawer' : 'Put it in the drawer'}</button>
         {l.action === 'seek_director' && <button className="pbtn" onClick={() => { read(); seek(); }}>Look for another</button>}
+        {l.sort === 'mail' && l.replies && l.replies.length > 0 && <button className="pbtn" title="It goes to the Letters sheet, to answer from there; after a month unanswered the drawer takes it" onClick={defer}>Answer later</button>}
+        <button className="pbtn-link ml-auto text-xs" title="Fold it away and read the desk; it waits in the tray until you open it again" onClick={() => fold(true)}>Fold it away for now</button>
       </div>
     </Panel>
   );

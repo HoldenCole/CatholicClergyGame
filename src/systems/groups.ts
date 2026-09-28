@@ -1,6 +1,7 @@
 import type { Effect, GameState, Group, GroupType, Institute, LeaderAgenda, Npc, Parish, Vitality } from '@/types';
 import { TEMPERAMENTS } from '@/types';
 import type { Rng } from '@/engine/rng';
+import { writeFile } from './file';
 import { CLERGY_HERITAGE, rollFemaleName, rollHeritage } from '@/generation/names';
 import { groupTypeDef, groupTypeDefs } from '@/content/parish';
 import { applyEffects } from '@/engine/effects';
@@ -208,6 +209,8 @@ export function groupsWeek(state: GameState, sustainAp: number, rng: Rng): { sta
           { target: 'reputation', key: 'parishioners', delta: -1 },
         ]);
         lines.push(`${g.name}: its leader has written to the chancery about you.`);
+        const leader = next.npcs[g.leaderId];
+        next = writeFile(next, { by: g.leaderId, byLabel: leader ? `${leader.name.first} ${leader.name.last}, of ${g.name}` : g.name, kind: 'complaint', text: `A letter about the pastor and ${g.name}, kept.`, weight: -1, lean: 0, seen: false });
       }
     } else if (!g.hostile && (shares[g.id] ?? 0) > 0) {
       const gap = Math.abs(g.alignment - playerAlignment);

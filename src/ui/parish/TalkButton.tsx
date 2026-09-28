@@ -1,5 +1,6 @@
 import { useGameStore } from '@/engine/store';
 import { mayTalk } from '@/systems/talks';
+import { TALKS, talksOf } from '@/systems/talks';
 
 /** "Have a word": an hour with one person, when the week and the last conversation allow it. */
 export default function TalkButton({ npcId }: { npcId: string }) {
@@ -8,9 +9,11 @@ export default function TalkButton({ npcId }: { npcId: string }) {
   if (!game) return null;
   const may = mayTalk(game, npcId);
   if (!may.who) return null;
+  const last = talksOf(game).last[npcId];
+  const wait = last !== undefined ? TALKS.cooldownWeeks - (game.clock.week - last) : 0;
   return (
     <button className="pbtn-link text-xs" disabled={!may.ok} title={may.ok ? 'An hour of the coming week, and whatever comes of it.' : may.why ?? ''} onClick={() => talk(npcId)}>
-      have a word
+      have a word{!may.ok && wait > 0 ? ` · ${wait} wk` : ''}
     </button>
   );
 }

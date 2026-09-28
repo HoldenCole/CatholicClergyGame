@@ -249,6 +249,8 @@ export type EffectTarget =
   | 'trait_known'
   /** Extension: write a bond on a parishioner (key: selector or binding; value: the bond kind). */
   | 'bond'
+  /** A note in the chancery's file: key is who writes it (a selector, or 'board' | 'bishop' | 'chancellor'), value the text, delta how it weighs (−3..+3). systems/file.ts */
+  | 'file'
   /** Move the man now: key is a parish kind (or 'difficult'), value the role. The letter arrives the next week. */
   | 'transfer'
   /** Building condition of the current parish: key church | rectory | hall | school, delta. */

@@ -281,7 +281,7 @@ export interface ParishState {
   retreatYear?: number;
   vacation?: { year: number; weeks: number };
   /** The deanery the parish sits in: the dean and the priests of it, from the map. */
-  deanery?: { id: string; deanId: string; priestIds: string[]; parishIds: string[]; coverId?: string };
+  deanery?: { id: string; deanId: string; priestIds: string[]; parishIds: string[]; coverId?: string; /** The week each man took his seat. */ seats?: Record<string, number>; /** The deans in order, with the week each began. */ deans?: { npcId: string; week: number }[] };
   /** The summer seminarian, while he is here and until his evaluation is written. */
   seminarian?: { npcId: string; startWeek: number; endWeek: number };
   /** The man you formed, come back as your vicar. */

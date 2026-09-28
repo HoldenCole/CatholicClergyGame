@@ -9,6 +9,7 @@ import DeaneryPanel from './parish/DeaneryPanel';
 import GroupsPanel from './parish/GroupsPanel';
 import ClassmatesPanel from './parish/ClassmatesPanel';
 import CirclePanel from './CirclePanel';
+import { PastReviewsSheet } from './DigestPanel';
 import PeoplePanel from './parish/PeoplePanel';
 import TownPanel from './parish/TownPanel';
 import TalkPanel from './parish/TalkPanel';
@@ -87,7 +88,7 @@ export default function Desk() {
   if (friar && game.religious?.vows.solemnWeek !== undefined) tabs.splice(tabs.indexOf('jobs') + 1, 0, 'foundation');
   if (furnishing) tabs.push('furnish');
   const open = sheet ?? 'week';
-  const letters = game.offers.length;
+  const letters = game.offers.length + (game.mailTray?.length ?? 0);
   // A house of the diocese has asked the parish for something, and silence answers it in six weeks.
   const asks = Object.values(game.houses ?? {}).filter((s) => s.ask).length;
 
@@ -154,7 +155,12 @@ export default function Desk() {
         {open === 'circle' && <CirclePanel />}
         {open === 'clubs' && <ClubsPanel />}
         {open === 'letters' && <OffersPanel />}
-        {open === 'record' && <DigestPanel />}
+        {open === 'record' && (
+          <>
+            <DigestPanel />
+            <PastReviewsSheet />
+          </>
+        )}
         {open === 'formation' && <FormationPanel />}
         {open === 'foundation' && <FoundationPanel />}
         {open === 'settings' && (

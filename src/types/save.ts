@@ -1,5 +1,6 @@
 import type { RomeState } from './rome';
 import type { Character } from './character';
+import type { FileEntry } from './career';
 import type { HistoryEntry, PendingEvent } from './events';
 import type { InterruptConfig } from './interrupts';
 import type { MailRecord, Mode } from './mode';
@@ -104,6 +105,10 @@ export interface GameState {
   night?: NightState;
   /** Letters read, most recent last: the year in review, the new bishop's reading. */
   letters?: Letter[];
+  /** The chancery's file on him, kept across bishops. systems/file.ts */
+  file?: FileEntry[];
+  /** Letters from people he said he would answer later, with the week they go to the drawer on their own. */
+  mailTray?: { letter: Letter; dueWeek: number }[];
   /** The mailbag: every letter from someone, and whether it was answered. DESIGN §8.10. */
   mail?: MailRecord[];
   /** Letters waiting behind the one in hand. */

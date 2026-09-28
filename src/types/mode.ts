@@ -120,4 +120,6 @@ export interface MailRecord {
   repliedLabel?: string;
   /** Whether the letter asked for something. */
   asked: boolean;
+  /** Put aside to answer later; the drawer takes it after a month. */
+  tray?: boolean;
 }

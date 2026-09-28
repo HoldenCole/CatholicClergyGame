@@ -1,5 +1,6 @@
 import type { Condition, GameState, Letter, MailRecord, MailReply, MailSender, Npc } from '@/types';
 import type { Rng } from '@/engine/rng';
+import { mark } from './regard';
 import mailJson from '@/content/mail.json';
 import { evaluateAll } from '@/engine/conditions';
 import { renderText } from '@/engine/text';
@@ -36,6 +37,10 @@ const content = mailJson as unknown as { chancePerWeek: number; letters: MailDef
 export const mailDefs: MailDef[] = content.letters;
 
 export const MAIL = {
+  /** Weeks a letter waits in the tray before the drawer takes it. */
+  trayWeeks: 4,
+  /** What the family makes of a letter left in the drawer. */
+  familyUnanswered: -6,
   chancePerWeek: content.chancePerWeek,
   /** Weeks between letters, at least. */
   gapWeeks: 4,
@@ -209,6 +214,42 @@ function addLine(state: GameState, line: string): GameState {
 export function answerMail(state: GameState, replyId: string | null): GameState {
   if (state.mode.kind !== 'letter' || state.mode.letter.sort !== 'mail') return state;
   const letter = state.mode.letter;
+  return readLetter(settleMail(state, letter, replyId));
+}
+
+/** Put the letter aside to answer from the Letters sheet; the drawer takes it after a month. */
+export function deferMail(state: GameState): GameState {
+  if (state.mode.kind !== 'letter' || state.mode.letter.sort !== 'mail') return state;
+  const letter = state.mode.letter;
+  const mail = (state.mail ?? []).map((m) => (m.mailId === letter.mailId && m.week === letter.week ? { ...m, tray: true } : m));
+  return readLetter({ ...state, mail, mailTray: [...(state.mailTray ?? []), { letter, dueWeek: state.clock.week + MAIL.trayWeeks }] });
+}
+
+/** Answer a letter from the tray, or leave it. */
+export function answerTray(state: GameState, index: number, replyId: string | null): GameState {
+  const item = (state.mailTray ?? [])[index];
+  if (!item) return state;
+  const next = settleMail(state, item.letter, replyId);
+  return { ...next, mailTray: (next.mailTray ?? []).filter((_, i) => i !== index) };
+}
+
+/** The week: letters in the tray past their month go to the drawer on their own. */
+export function mailTrayWeek(state: GameState): GameState {
+  const tray = state.mailTray ?? [];
+  if (!tray.some((t) => t.dueWeek <= state.clock.week)) return state;
+  let next = state;
+  for (const t of tray) if (t.dueWeek <= state.clock.week) next = settleMail(next, t.letter, null);
+  return { ...next, mailTray: tray.filter((t) => t.dueWeek > state.clock.week) };
+}
+
+/** Whether a letter came from his own family. */
+function fromFamily(state: GameState, letter: Letter): Npc | null {
+  const npc = letter.from?.npcId ? state.npcs[letter.from.npcId] : undefined;
+  return npc && npc.role === 'family' ? npc : null;
+}
+
+/** The letter answered or left, wherever it was: the reply's effects, the hours, the record; a family letter left in the drawer is remembered by the family. */
+export function settleMail(state: GameState, letter: Letter, replyId: string | null): GameState {
   const reply = replyId ? letter.replies?.find((r) => r.id === replyId) : undefined;
   let next = state;
   const bindings = letter.from?.npcId ? { '@sender': letter.from.npcId } : {};
@@ -220,9 +261,19 @@ export function answerMail(state: GameState, replyId: string | null): GameState 
     next = { ...next, career: [...next.career, { week: state.clock.week, kind: 'note', text: `Answered ${letter.from?.name ?? 'a letter'}: ${reply.label.toLowerCase()}.` }] };
   } else {
     next = addLine(next, `${letter.title}, from ${letter.from?.name ?? 'someone'}: left in the drawer.`);
+    const kin = fromFamily(next, letter);
+    if (kin) next = { ...next, npcs: { ...next.npcs, [kin.id]: mark({ ...kin, relationship: Math.max(-100, kin.relationship + MAIL.familyUnanswered) }, { week: next.clock.week, delta: MAIL.familyUnanswered, why: 'a letter left unanswered' }) } };
   }
-  const mail = (next.mail ?? []).map((m) => (m.mailId === letter.mailId && m.week === letter.week ? { ...m, ...(reply ? { replied: reply.id, repliedLabel: reply.label } : {}) } : m));
-  return readLetter({ ...next, mail });
+  const mail = (next.mail ?? []).map((m) => (m.mailId === letter.mailId && m.week === letter.week ? { ...m, ...(reply ? { replied: reply.id, repliedLabel: reply.label } : {}), tray: false } : m));
+  return { ...next, mail };
+}
+
+/** The review's row: the letters this year that asked and were not answered, the family's by name. */
+export function mailReviewLine(state: GameState, since: number): string | null {
+  const unanswered = (state.mail ?? []).filter((m) => m.week > since && !m.replied && !m.tray && m.asked);
+  if (!unanswered.length) return null;
+  const kin = unanswered.filter((m) => m.from.npcId && state.npcs[m.from.npcId]?.role === 'family').map((m) => m.from.name);
+  return `${unanswered.length === 1 ? 'One letter' : `${unanswered.length} letters`} that asked something went unanswered${kin.length ? `, ${kin.join(' and ')}'s among them` : ''}.`;
 }
 
 /** The mailbag, newest first. */

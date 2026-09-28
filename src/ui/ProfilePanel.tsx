@@ -6,6 +6,9 @@ import { nuncioNpc } from '@/systems/rome/nuncio';
 import { profileOf } from '@/systems/profile';
 import { requestHistory } from '@/systems/request';
 import { worksDone } from '@/systems/sidework';
+import { fileLines } from '@/systems/file';
+import { dateOf } from '@/engine/time';
+import { formatDate } from '@/engine/calendar';
 import Sheet from './Sheet';
 import Portrait from './portraits/Portrait';
 import { portraitForPlayer } from './portraits/spec';
@@ -31,6 +34,7 @@ export default function ProfilePanel() {
   const p = profileOf(game);
   const popes = popesOfHisLife(game);
   const documents = documentsOfHisLife(game);
+  const file = fileLines(game);
   const nuncio = nuncioNpc(game);
   const seeking = maySeekDirector(game);
   const director = directorNpc(game);
@@ -185,6 +189,20 @@ export default function ProfilePanel() {
         </ul>
       </Sheet>
 
+      {(file.seen.length > 0 || file.hidden > 0) && (
+        <Sheet title="The file">
+          <p className="ink-muted mb-2 text-xs">What the chancery keeps on you, across bishops: the board's decisions, the rector's evaluations, what you said aloud, and notes you were never shown. A new bishop reads this before he reads you.</p>
+          <ul className="flex flex-col gap-1 text-sm">
+            {file.seen.slice(-12).reverse().map((e) => (
+              <li key={`${e.week}:${e.by}:${e.text}`} className="flex items-baseline gap-2">
+                <span className="ink-faint w-28 shrink-0 text-xs">{formatDate(dateOf(game.clock, e.week))}</span>
+                <span className="min-w-0 flex-1">{e.text} <span className="ink-faint text-xs">({e.byLabel})</span></span>
+              </li>
+            ))}
+          </ul>
+          {file.hidden > 0 && <p className="ink-wine mt-2 text-xs">And {file.hidden === 1 ? 'one note' : `${file.hidden} notes`} you have not seen. A friend at the chancery could tell you what they say.</p>}
+        </Sheet>
+      )}
       {documents.length > 0 && (
         <Sheet title="From Rome">
           <ul className="flex flex-col gap-1 text-sm">

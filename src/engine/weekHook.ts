@@ -37,7 +37,7 @@ import { anniversaryWeek, nameDayWeek } from '@/systems/anniversaries';
 import { orderFeastLine, orderFeastsOfWeek } from '@/systems/religious/feasts';
 import { feastsOfWeek } from './feasts';
 import { ensureTown } from '@/systems/town';
-import { mailWeek } from '@/systems/mail';
+import { mailTrayWeek, mailWeek } from '@/systems/mail';
 import { openLives } from '@/systems/lives';
 import { heardRumours, talkWeek } from '@/systems/talk';
 import { markNightScene, nightSceneDue, nightWeek } from '@/systems/night';
@@ -480,7 +480,7 @@ export function friarWeekHook(deps: EventDeps): WeekHook {
     const around = houseLifeLine(next, rng.derive(`house-life:${next.clock.week}`));
     if (around) next = addDigestLine(next, around);
     // The mailbag: a letter from someone, now and then. DESIGN §8.10.
-    next = mailWeek(next, rng.derive(`mail:${next.clock.week}`));
+    next = mailWeek(mailTrayWeek(next), rng.derive(`mail:${next.clock.week}`));
     return religiousModeStep(openMail(offersStep(next, rng, deps)));
   };
 }
@@ -706,7 +706,7 @@ export function parishWeekHook(deps: EventDeps): WeekHook {
     const around = houseLifeLine(next, rng.derive(`house-life:${next.clock.week}`));
     if (around) next = addDigestLine(next, around);
     // The mailbag: a letter from someone, now and then. DESIGN §8.10.
-    next = mailWeek(next, rng.derive(`mail:${next.clock.week}`));
+    next = mailWeek(mailTrayWeek(next), rng.derive(`mail:${next.clock.week}`));
     return religiousModeStep(openMail(offersStep(next, rng, deps)));
   };
 }

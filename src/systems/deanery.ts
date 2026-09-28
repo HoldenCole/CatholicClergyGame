@@ -37,7 +37,8 @@ export function formDeanery(state: GameState, rng: Rng): GameState {
   const playerDean = state.assignment?.role === 'pastor' && years >= DEANERY.deanYears && rng.chance(DEANERY.deanChance);
   const candidates = [...priests, ...(own && state.assignment?.role !== 'pastor' ? [own] : [])].sort((a, b) => a.birthYear - b.birthYear || (a.id < b.id ? -1 : 1));
   const dean = playerDean ? null : (candidates[0] ?? null);
-  const deanery = { id: `deanery:${parish.id}`, deanId: dean?.id ?? '', priestIds: priests.map((n) => n.id), parishIds: members.map((p) => p.id) };
+  const seats = Object.fromEntries(priests.map((n) => [n.id, state.clock.week]));
+  const deanery = { id: `deanery:${parish.id}`, deanId: dean?.id ?? '', priestIds: priests.map((n) => n.id), parishIds: members.map((p) => p.id), seats, deans: dean ? [{ npcId: dean.id, week: state.clock.week }] : [] };
   const flags = { ...state.flags, 'deanery:member': true, 'deanery:dean': playerDean };
   const career = playerDean ? [...state.career, { week: state.clock.week, kind: 'note' as const, text: 'The bishop named you dean.' }] : state.career;
   return { ...state, flags, career, parish: { ...state.parish, deanery } };
@@ -95,7 +96,10 @@ export function refillDeanery(state: GameState): GameState {
   const deanId = deanStays ? d.deanId : (senior?.id ?? '');
   if (deanId === d.deanId && priestIds.length === d.priestIds.length && priestIds.every((id, i) => id === d.priestIds[i])) return state;
   const career = deanId !== d.deanId && deanId && deanId !== 'player' ? [...state.career, { week: state.clock.week, kind: 'note' as const, text: `${state.npcs[deanId]!.title} ${state.npcs[deanId]!.name.last} is dean now.` }] : state.career;
-  return { ...state, career, parish: { ...state.parish!, deanery: { ...d, priestIds, deanId } } };
+  const seats = { ...(d.seats ?? {}) };
+  for (const id of priestIds) if (seats[id] === undefined) seats[id] = state.clock.week;
+  const deans = deanId !== d.deanId && deanId ? [...(d.deans ?? []), { npcId: deanId, week: state.clock.week }] : d.deans ?? [];
+  return { ...state, career, parish: { ...state.parish!, deanery: { ...d, priestIds, deanId, seats, deans } } };
 }
 
 export function coverAvailability(state: GameState, npcId: string): { ok: boolean; why: string | null } {

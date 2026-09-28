@@ -55,6 +55,9 @@ interface UiState {
   /** The lane the record is filtered to; kept while the desk is open, never saved. */
   digestLane: Lane | 'all';
   setDigestLane(lane: UiState['digestLane']): void;
+  /** A letter folded away so the desk can be read; it waits in a tray until it is opened again. */
+  letterFolded: boolean;
+  foldLetter(folded: boolean): void;
   openSheet(sheet: Sheet | null): void;
   setScene(scene: SceneId): void;
   furnish(place: DecorPlace | null): void;
@@ -75,6 +78,8 @@ export const useUiStore = create<UiState>((set) => ({
   scene: null,
   digestLane: 'all',
   setDigestLane: (digestLane) => set({ digestLane }),
+  letterFolded: false,
+  foldLetter: (letterFolded) => set({ letterFolded }),
   furnishing: null,
   preview: null,
   selected: null,

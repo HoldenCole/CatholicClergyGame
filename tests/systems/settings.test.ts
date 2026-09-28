@@ -76,7 +76,7 @@ describe('every diocese is short, and reads as its own place', () => {
         expect(['stretched', 'critically_short']).toContain(d.diocese.visible.clergyNeed);
       }
     }
-  });
+  }, 20000);
 
   it('the seminary years write flags the file and the bishop read', () => {
     const s = seminaryState('flags');

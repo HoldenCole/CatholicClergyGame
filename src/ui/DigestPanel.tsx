@@ -174,3 +174,29 @@ export default function DigestPanel() {
     </>
   );
 }
+
+/** The last few years in review, kept readable after the letter has gone in the drawer. */
+export function PastReviewsSheet() {
+  const game = useGameStore((s) => s.game);
+  const [openIdx, setOpenIdx] = useState<number | null>(null);
+  if (!game) return null;
+  const reviews = (game.letters ?? []).filter((l) => l.sort === 'review').slice(-5).reverse();
+  if (!reviews.length) return null;
+  return (
+    <Sheet title="The years in review">
+      <ul className="flex flex-col gap-1 text-sm">
+        {reviews.map((l, i) => (
+          <li key={`${l.title}:${l.week}`}>
+            <button className="pbtn-link text-left" onClick={() => setOpenIdx(openIdx === i ? null : i)}>{l.title}</button>
+            {openIdx === i && (
+              <div className="ink-muted mt-1 border-l rule pl-3 text-xs leading-relaxed">
+                {l.body.map((p, k) => <p key={k} className="mt-1">{p}</p>)}
+                {l.rows?.map((r) => <p key={r.label} className="mt-1"><span className="ink-faint">{r.label}: </span>{r.value}</p>)}
+              </div>
+            )}
+          </li>
+        ))}
+      </ul>
+    </Sheet>
+  );
+}

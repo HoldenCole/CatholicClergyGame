@@ -39,7 +39,7 @@ export default function DeaneryPanel() {
               <span className="min-w-0 flex-1">
                 {npc.title} {npc.name.first} {npc.name.last}, {year - npc.birthYear}{isDean ? ', dean' : ''}
                 {lifeLabel(game, npc) && <span className="ink-wine ml-2 text-xs">{lifeLabel(game, npc)}</span>}
-                <span className="ink-faint block text-xs">{parish.name}, {parish.place}, {milesWord(miles)}</span>
+                <span className="ink-faint block text-xs">{parish.name}, {parish.place}, {milesWord(miles)}{(() => { const since = game.parish?.deanery?.seats?.[npc.id]; return since !== undefined ? ` · in the deanery since ${yearOf(game.clock.startDay, since)}` : ''; })()}</span>
               </span>
               <span className="ink-muted">{relationshipWord(npc.relationship)}</span>
               <TalkButton npcId={npc.id} />
@@ -52,6 +52,9 @@ export default function DeaneryPanel() {
           );
         })}
       </ul>
+      {(game.parish?.deanery?.deans?.length ?? 0) > 1 && (
+        <p className="ink-faint mt-2 text-xs">The deans, in order: {game.parish!.deanery!.deans!.map((d) => `${d.npcId === 'player' ? 'you' : `${game.npcs[d.npcId]?.title ?? ''} ${game.npcs[d.npcId]?.name.last ?? '?'}`.trim()} (${yearOf(game.clock.startDay, d.week)})`).join('; ')}.</p>
+      )}
       <p className="ink-faint mt-2 text-xs">{friar ? 'The deanery meets monthly. Its priests write to the prior when they want you, and the prior answers them; what they think of you is the diocese\'s priests, on the You sheet.' : 'The deanery meets monthly; its priests cover for each other, compete for the same parishes, and are the ones who will speak for you or not when a terna is drawn.'}</p>
     </Sheet>
   );

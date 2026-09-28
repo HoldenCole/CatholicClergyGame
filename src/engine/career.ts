@@ -20,6 +20,7 @@ import { livesYear } from '@/systems/lives';
 import { seeYear } from './see';
 import { withChoice } from '@/systems/choice';
 import { closeRequest, markRequested, requestOf, requestYear } from '@/systems/request';
+import { officialsWrite, writeFile } from '@/systems/file';
 import { ministryLine } from '@/systems/ministry';
 import { housesYear } from '@/systems/houses';
 import { pontificateLine } from '@/systems/rome/pontificateText';
@@ -39,6 +40,8 @@ export const CAREER = {
   /** When the board has nothing better, a pastor is renewed where he is this often; otherwise moved as pastor. Invented. */
   pastorStaysChance: 0.6,
   pastorTermYears: 6,
+  /** Past this age the board leaves a pastor where he is unless he writes. Invented. */
+  boardLeavesAt: 65,
 } as const;
 
 function calendarYear(state: GameState): number {
@@ -63,7 +66,10 @@ function addDigest(state: GameState, lines: string[]): GameState {
 }
 
 function note(state: GameState, kind: GameState['career'][number]['kind'], text: string): GameState {
-  return { ...state, career: [...state.career, { week: state.clock.week, kind, text }] };
+  const next: GameState = { ...state, career: [...state.career, { week: state.clock.week, kind, text }] };
+  // The board's decisions go in the file, where the next bishop will read them.
+  if (kind === 'promotion' || kind === 'passed_over') return writeFile(next, { by: 'board', byLabel: 'the personnel board', kind: 'decision', text, weight: kind === 'promotion' ? 1 : -1, lean: 0, seen: true });
+  return next;
 }
 
 /** Whether this week is an anniversary of ordination. */
@@ -141,6 +147,8 @@ export function careerYear(state: GameState, rng: Rng): GameState {
     const openings = refreshOpenings(next, rng.derive(`openings:${state.clock.week}`));
     next = addDigest(openings.state, openings.lines);
   }
+  // The officials write what they think of him, once a year, whoever the bishop is.
+  next = officialsWrite(next);
   // The letter in the vicar for clergy's file: acted on, left to stand, or closed. DESIGN §7.6.
   next = markRequested(next);
   const asked = requestYear(next, rng.derive(`request:${state.clock.week}`));
@@ -237,7 +245,11 @@ export function letterFor(state: GameState, opening: Opening, role: Assignment['
  * given another vicar posting, and either way can trace the decision.
  */
 export function nextAssignment(state: GameState, rng: Rng): { state: GameState; decisions: Decision[] } {
-  const { decisions, won } = boardDecision(state, rng);
+  const decided = boardDecision(state, rng);
+  // The board has stopped moving men his age: a pastor stays where he is unless he wrote for something.
+  const settled = boardLeavesHim(state);
+  const decisions = settled ? [] : decided.decisions;
+  const won = settled ? null : decided.won;
   let next = moveOut(state, rng, state.study ? 'the years ended' : won ? (won.opening.kind === 'pastor' ? 'appointed pastor elsewhere' : 'moved by the board') : 'moved by the board');
   // The parish he asked for by name, when the board has no opening of its own to send him to. DESIGN §7.6.
   const askedFor = requestOf(next)?.target;
@@ -263,12 +275,12 @@ export function nextAssignment(state: GameState, rng: Rng): { state: GameState; 
     // A pastor is never sent back as a vicar: he is renewed where he is, or moved as pastor.
     const role = state.assignment.role;
     const here = next.world!.parishes.find((p) => p.id === next.parish!.parishId)!;
-    const stay = rng.derive(`renew:${next.clock.week}`).chance(CAREER.pastorStaysChance);
+    const stay = settled || rng.derive(`renew:${next.clock.week}`).chance(CAREER.pastorStaysChance);
     const others = next.world!.parishes.filter((p) => p.id !== here.id);
     const parish = stay || others.length === 0 ? here : rng.derive(`lateral:${next.clock.week}`).weighted(others, (p) => 10 + (p.needsSpanish && next.flags.speaks_spanish ? 20 : 0) + (p.kind === 'difficult' ? 8 : 0) + (p.id === askedParishId ? REQUEST_WEIGHT : 0));
     const opening: Opening = { id: `${role}_${next.clock.week}`, kind: role === 'pastor' ? 'pastor' : 'administrator', parishId: parish.id, urgency: 50, needsSpanish: parish.needsSpanish, needsAdmin: false, alignment: parish.alignment, week: next.clock.week, label: `${role === 'pastor' ? 'Pastor' : 'Administrator'} of ${parish.name}` };
     const lost = decisions.find((d) => d.opening.parishId) ?? decisions[0];
-    const reasons = parish.id === here.id ? ['Renewed where you are; the board saw no reason to move a pastor who is holding a parish'] : (lost ? lost.reasons : ['A pastor is moved as a pastor, and this parish needed one']);
+    const reasons = parish.id === here.id ? [settled ? 'Renewed where you are; the board does not move men your age unless they write' : 'Renewed where you are; the board saw no reason to move a pastor who is holding a parish'] : (lost ? lost.reasons : ['A pastor is moved as a pastor, and this parish needed one']);
     assignment = { parishId: parish.id, role, startWeek: next.clock.week, letter: letterFor(next, opening, role), reasons };
     if (lost && parish.id !== here.id) {
       next = note(next, 'passed_over', `Passed over for ${openingBlurb(next, lost.opening).split(':')[0]}: ${lost.reasons.slice(0, 2).join('; ')}.`);
@@ -299,6 +311,12 @@ export function nextAssignment(state: GameState, rng: Rng): { state: GameState; 
   }
   // A man the chancery rates is asked which he would rather.
   return { state: won ? withChoice(moved, rng.derive('choice'), 'board', assignment) : moved, decisions };
+}
+
+/** Whether the board has stopped moving him: a pastor past the age, with no letter on file asking for anything. */
+export function boardLeavesHim(state: GameState): boolean {
+  const role = state.assignment?.role;
+  return (role === 'pastor' || role === 'administrator') && !!state.parish && playerAge(state) >= CAREER.boardLeavesAt && !requestOf(state);
 }
 
 /** At ordination: classmates get futures and the record opens. */

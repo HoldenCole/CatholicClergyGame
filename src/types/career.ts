@@ -65,3 +65,24 @@ export interface CareerEntry {
   kind: 'assignment' | 'promotion' | 'passed_over' | 'succession' | 'project' | 'group_founded' | 'offer' | 'position' | 'note';
   text: string;
 }
+
+/**
+ * One entry in the chancery's file on the man: who wrote it, what it says,
+ * how much it weighs with a bishop reading it, and which way it leans.
+ * Kept across successions; the man sees only what was said to his face.
+ */
+export interface FileEntry {
+  week: number;
+  /** An npc id, or 'board', 'rector', 'bishop', 'chancellor'. */
+  by: string;
+  /** "the personnel board", "Msgr. Farina, vicar for clergy" */
+  byLabel: string;
+  kind: 'note' | 'evaluation' | 'decision' | 'complaint' | 'position' | 'request' | 'rumour' | 'letter';
+  text: string;
+  /** −3..+3: how it reads to a bishop with no side in it. */
+  weight: number;
+  /** Which side the note reads as, when it has one: a bishop of that side counts it for him, the other side against. */
+  lean?: -1 | 0 | 1;
+  /** Whether the man knows it is there. */
+  seen?: boolean;
+}

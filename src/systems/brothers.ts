@@ -2,6 +2,7 @@ import type { GameState, Npc } from '@/types';
 import type { Rng } from '@/engine/rng';
 import { relationshipWord } from './classmates';
 import { mark, touch } from './regard';
+import { FILE, revealFile } from './file';
 
 /**
  * The men you were ordained with. DESIGN.md §9.5.
@@ -146,7 +147,9 @@ export function askBrother(state: GameState, npcId: string, favourId: string): F
     }
     case 'warning': {
       next = { ...next, flags: { ...next.flags, 'brother:warned': true } };
-      line = `${name} tells you what the board is actually thinking, three months before anything is in writing, and asks you not to repeat where it came from.`;
+      const read = revealFile(next, FILE.revealPerFavour);
+      next = read.state;
+      line = `${name} tells you what the board is actually thinking, three months before anything is in writing, and asks you not to repeat where it came from.${read.revealed.length ? ` He has seen your file, too: ${read.revealed.map((e) => `"${e.text}" (${e.byLabel})`).join('; ')}.` : ''}`;
       break;
     }
     case 'name': {
