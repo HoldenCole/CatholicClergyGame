@@ -71,6 +71,7 @@ import { joinClub as doJoinClub, leaveClub as doLeaveClub } from '@/systems/club
 import { deliverLetter, openMail, readLetter as doReadLetter } from '@/systems/review';
 import { answerMail as doAnswerMail } from '@/systems/mail';
 import { answerTray, deferMail as doDeferMail } from '@/systems/mail';
+import { mendWith as doMend } from '@/systems/enemies';
 import { setEvenings as doSetEvenings } from '@/systems/night';
 import type { EveningKind } from '@/types';
 import { haveAWord as doHaveAWord } from '@/systems/talks';
@@ -297,6 +298,7 @@ export interface GameStore {
   readLetter(): void;
   /** Answer the letter on the desk, or leave it in the drawer (null). DESIGN §8.10. */
   answerMail(replyId: string | null): void;
+  mendWith(npcId: string): void;
   deferMail(): void;
   answerTrayMail(index: number, replyId: string | null): void;
   /** What he does with an evening, as a habit. DESIGN §8.13. */
@@ -1120,6 +1122,13 @@ export const useGameStore = create<GameStore>()((set, get) => ({
   },
   setEvenings(kind) {
     update(set, get, (game) => doSetEvenings(game, kind));
+  },
+  mendWith(npcId) {
+    update(set, get, (game) => {
+      const r = doMend(game, npcId);
+      set({ lastTalk: { week: game.clock.week, npcId, text: r.line } });
+      return r.state;
+    });
   },
   deferMail() {
     update(set, get, (game) => doDeferMail(game));

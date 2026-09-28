@@ -109,6 +109,8 @@ export interface GameState {
   file?: FileEntry[];
   /** Letters from people he said he would answer later, with the week they go to the drawer on their own. */
   mailTray?: { letter: Letter; dueWeek: number }[];
+  /** The parishes he has left, and how each still holds him. systems/formerParishes.ts */
+  formerParishes?: Record<string, FormerParish>;
   /** The mailbag: every letter from someone, and whether it was answered. DESIGN §8.10. */
   mail?: MailRecord[];
   /** Letters waiting behind the one in hand. */
@@ -187,6 +189,19 @@ export interface GameState {
   decor: DecorState;
   /** Letters to the chancery about the liturgy, by topic. Answered by the week hook. */
   permissions: Record<string, Permission>;
+}
+
+/** A parish he left: the standing he left with, and the numbers, so the years after can be read against them. */
+export interface FormerParish {
+  name: string;
+  leftWeek: number;
+  /** −100..100: how the parish holds him now. */
+  standing: number;
+  /** Collections and households the week he left. */
+  collections: number;
+  households: number;
+  /** Already said: the parish went under, or thrived, after him. */
+  said?: 'decline' | 'thrives';
 }
 
 export interface DigestWeek {

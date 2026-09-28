@@ -17,9 +17,9 @@ import { classmatePost } from './classmates';
  * the past reaches him from. Templates in content/mail.json name the kind
  * of sender; this file finds one, or the letter does not come.
  */
-export type MailFrom = 'parishioner' | 'former_parish' | 'buried' | 'classmate' | 'classmate_left' | 'stranger' | 'stranger_column' | 'seminarian_mother' | 'mother' | 'father' | 'sibling' | 'old_pastor' | 'bishop_emeritus' | 'emeritus_funeral';
+export type MailFrom = 'parishioner' | 'former_parish' | 'buried' | 'classmate' | 'classmate_left' | 'stranger' | 'stranger_column' | 'seminarian_mother' | 'mother' | 'father' | 'sibling' | 'old_pastor' | 'bishop_emeritus' | 'emeritus_funeral' | 'old_bloc' | 'kin';
 
-export const MAIL_FROM: readonly MailFrom[] = ['parishioner', 'former_parish', 'buried', 'classmate', 'classmate_left', 'stranger', 'stranger_column', 'seminarian_mother', 'mother', 'father', 'sibling', 'old_pastor', 'bishop_emeritus', 'emeritus_funeral'] as const;
+export const MAIL_FROM: readonly MailFrom[] = ['parishioner', 'former_parish', 'buried', 'classmate', 'classmate_left', 'stranger', 'stranger_column', 'seminarian_mother', 'mother', 'father', 'sibling', 'old_pastor', 'bishop_emeritus', 'emeritus_funeral', 'old_bloc', 'kin'] as const;
 
 export interface MailDef {
   id: string;
@@ -154,6 +154,25 @@ export function findSender(state: GameState, from: MailFrom, rng: Rng): FoundSen
       if (!npc) return null;
       const name = `${npc.title} ${npc.name.first} ${npc.name.last}`;
       return { sender: { npcId: npc.id, name: 'the chancellor', who: `about the funeral of ${name}` }, bindings: { '@sender': npc.id }, extra: { sender: 'the chancellor', sender_first: 'the chancellor', who: `about the funeral of ${name}`, bishop: name, bishop_last: `${npc.title} ${npc.name.last}` } };
+    }
+    case 'old_bloc': {
+      // A man of the side the record has left: a priest or a lay leader who leans that way and knew him.
+      const lost = state.flags['sides:lost'];
+      const sign = lost === 'traditional' ? -1 : lost === 'progressive' ? 1 : 0;
+      if (!sign) return null;
+      const pool = npcs.filter((n) => n.status === 'active' && n.id !== 'player' && (n.role === 'priest' || n.role === 'classmate' || n.role === 'lay') && Math.sign(n.alignment) === sign && Math.abs(n.alignment) >= 25 && n.relationship >= 10);
+      if (!pool.length) return null;
+      const npc = rng.weighted(pool, (n) => 1 + Math.abs(n.alignment) / 20 + n.relationship / 20);
+      const found = person(state, npc, lost === 'traditional' ? 'of the traditional men' : 'of the progressive men');
+      return found;
+    }
+    case 'kin': {
+      const id = state.flags['kin:asking'];
+      const npc = typeof id === 'string' ? npcs.find((n) => n.id === id) : npcs.find((n) => n.tags.includes('kin') && n.status === 'active');
+      if (!npc) return null;
+      const sib = npcs.find((n) => npc.tags.includes(`child_of:${n.id}`));
+      const who = `your ${npc.tags.includes('niece') ? 'niece' : 'nephew'}${sib ? `, ${sib.name.first}'s` : ''}`;
+      return { sender: { npcId: npc.id, name: npc.name.first, who }, bindings: { '@sender': npc.id }, extra: { sender: npc.name.first, sender_first: npc.name.first, who, kin: npc.name.first, sibling: sib?.name.first ?? 'your sister' } };
     }
     case 'old_pastor': {
       const current = state.assignment?.parishId;
