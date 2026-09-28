@@ -8,6 +8,7 @@ import type { Rng } from '@/engine/rng';
 import { generateBishop, temperamentLine } from '@/generation/bishop';
 import { presetById } from '@/content/dioceses';
 import { clampSigned } from './reputation';
+import { readFile } from './file';
 import { reigning, sedeVacante } from './rome/papacy';
 
 /** Invented. DESIGN 5.3 and 9.3. */
@@ -65,6 +66,8 @@ export interface Reread {
   /** Topics that were free and now need a letter, or the reverse. */
   tightened: LiturgicalTopic[];
   loosened: LiturgicalTopic[];
+  /** The chancery's file, read: notes for him and against him, and what it moved. */
+  file?: { swing: number; forHim: number; againstHim: number; count: number };
 }
 
 /** What the new bishop makes of the man's circles: clubs with a leaning, and the affiliations the offers set. */
@@ -108,7 +111,9 @@ export function revalue(state: GameState, successor: Npc, policy?: { before: Lit
   }
   const circles = circlesOf(state, successor);
   for (const circle of circles) reread += circle.agrees ? 1.5 : -1.5;
-  const swing = (affinity + reread) * (1 + c.outspokenness / 100);
+  // The file: what the officials, the board, the rector, and the talk have put there over the years.
+  const file = readFile(state, successor);
+  const swing = (affinity + reread) * (1 + c.outspokenness / 100) + file.swing;
   const chancery = clampSigned(c.reputation.chancery * SUCCESSION.chanceryCarry + swing);
   const relationship = Math.round(clampSigned(swing));
   const verdict =
@@ -148,7 +153,7 @@ export function revalue(state: GameState, successor: Npc, policy?: { before: Lit
       npcs: { ...state.npcs, [successor.id]: { ...successor, relationship } },
     },
     verdict,
-    reread: { circles, withHim, againstHim, revoked, tightened, loosened },
+    reread: { circles, withHim, againstHim, revoked, tightened, loosened, file },
   };
 }
 
@@ -172,6 +177,7 @@ export function bishopLetter(state: GameState, successor: Npc, verdict: string, 
   const aloud = reread.withHim + reread.againstHim;
   if (aloud) rows.push({ label: 'Your file, reread', value: reread.againstHim === 0 ? `${aloud} stand${aloud === 1 ? '' : 's'} taken aloud, all of them ones he could have said himself` : reread.withHim === 0 ? `${aloud} stand${aloud === 1 ? '' : 's'} taken aloud, every one of them against him` : `${reread.withHim} stand${reread.withHim === 1 ? '' : 's'} he agrees with; ${reread.againstHim} he does not` });
   if (reread.circles.length) rows.push({ label: 'Your circles', value: reread.circles.map((c) => `${c.label} (${c.agrees ? 'his kind of company' : 'not his kind of company'})`).join('; ') });
+  if (reread.file && reread.file.count) rows.push({ label: 'The file', value: `${reread.file.count} note${reread.file.count === 1 ? '' : 's'} over the years, ${reread.file.forHim} for you and ${reread.file.againstHim} against; on balance ${reread.file.swing > 3 ? 'it helps you with him' : reread.file.swing < -3 ? 'it does you harm with him' : 'it neither helps nor hurts'}` });
   const jobs = Object.keys(state.flags).filter((k) => k.startsWith('office:') && state.flags[k]).map((k) => k.replace('office:', '').replace(/_/g, ' '));
   if (jobs.length) rows.push({ label: 'Your posts', value: `${jobs.join(', ')}: held at his pleasure now, not his predecessor's` });
   return { sort: 'bishop', title: `A new bishop: ${name}`, body, rows, week: state.clock.week };

@@ -1,4 +1,5 @@
 import { useGameStore } from '@/engine/store';
+import { boardLeavesHim } from '@/engine/career';
 import { allOffers } from '@/content/offers';
 import { currentPreference, PREFERENCES, PREFERENCE_LABEL } from '@/systems/assignment';
 import { INTEREST_DEFS, INTERESTS, interestsOf, parishInterest } from '@/systems/interests';
@@ -56,6 +57,7 @@ export default function JobsPanel() {
   return (
     <>
       <Sheet title="What you have asked the chancery for">
+        {boardLeavesHim(game) && <p className="ink-wine mb-2 text-xs leading-relaxed">The board has stopped moving men your age. A pastor past sixty-five stays where he is unless he writes; the letter below is what would move you.</p>}
         {canAsk ? (
           <>
             <p className="ink-muted text-xs leading-relaxed">

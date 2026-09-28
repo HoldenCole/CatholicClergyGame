@@ -70,6 +70,7 @@ import { startWork as doStartWork, stopWork as doStopWork } from '@/systems/prob
 import { joinClub as doJoinClub, leaveClub as doLeaveClub } from '@/systems/clubs';
 import { deliverLetter, openMail, readLetter as doReadLetter } from '@/systems/review';
 import { answerMail as doAnswerMail } from '@/systems/mail';
+import { answerTray, deferMail as doDeferMail } from '@/systems/mail';
 import { setEvenings as doSetEvenings } from '@/systems/night';
 import type { EveningKind } from '@/types';
 import { haveAWord as doHaveAWord } from '@/systems/talks';
@@ -296,6 +297,8 @@ export interface GameStore {
   readLetter(): void;
   /** Answer the letter on the desk, or leave it in the drawer (null). DESIGN §8.10. */
   answerMail(replyId: string | null): void;
+  deferMail(): void;
+  answerTrayMail(index: number, replyId: string | null): void;
   /** What he does with an evening, as a habit. DESIGN §8.13. */
   setEvenings(kind: EveningKind): void;
   /** An hour with one person of the parish or diocese. */
@@ -1117,6 +1120,12 @@ export const useGameStore = create<GameStore>()((set, get) => ({
   },
   setEvenings(kind) {
     update(set, get, (game) => doSetEvenings(game, kind));
+  },
+  deferMail() {
+    update(set, get, (game) => doDeferMail(game));
+  },
+  answerTrayMail(index, replyId) {
+    update(set, get, (game) => answerTray(game, index, replyId));
   },
   answerMail(replyId) {
     update(set, get, (game) => doAnswerMail(game, replyId));

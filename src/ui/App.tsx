@@ -36,6 +36,8 @@ export default function App() {
   const error = useGameStore((s) => s.error);
   const lastStop = useGameStore((s) => s.lastStop);
   const openSheet = useUiStore((s) => s.openSheet);
+  const letterFolded = useUiStore((s) => s.letterFolded);
+  const foldLetter = useUiStore((s) => s.foldLetter);
   const prefs = useUiStore((s) => s.prefs);
   useClockRunner();
   useHotkeys();
@@ -72,6 +74,10 @@ export default function App() {
     document.title = game && c && game.mode.kind !== 'creation' ? `Vocation · ${game.flags.ordained ? 'Fr. ' : ''}${c.name.last} · ${formatDate(dateOf(game.clock))}` : 'Vocation';
   }, [game]);
 
+  // A folded letter unfolds itself when the next one comes, or when it is read.
+  useEffect(() => {
+    if (game?.mode.kind !== 'letter') foldLetter(false);
+  }, [game?.mode.kind, foldLetter]);
   // A letter arriving opens the letters sheet; nothing else moves the desk on its own.
   useEffect(() => {
     if (lastStop?.kind === 'offer') openSheet('letters');
@@ -82,6 +88,7 @@ export default function App() {
   if (game.mode.kind === 'ended') return <EndedScreen />;
 
   const pending = game.pending.length > 0;
+  const tray = game.mode.kind === 'letter' && letterFolded ? game.mode.letter : null;
   const decision =
     pending ? <EventPanel /> :
     game.mode.kind === 'year_start' ? <EmphasisPanel /> :
@@ -91,7 +98,7 @@ export default function App() {
     game.mode.kind === 'director' ? <DirectorPanel /> :
     game.mode.kind === 'assignment' ? <AssignmentPanel /> :
     game.mode.kind === 'assignment_choice' ? <AssignmentChoicePanel /> :
-    game.mode.kind === 'letter' ? <LetterPanel /> :
+    game.mode.kind === 'letter' ? (letterFolded ? null : <LetterPanel />) :
     game.mode.kind === 'consultation' ? <ConsultationPanel /> :
     game.mode.kind === 'obedience_letter' ? <ObedienceLetter /> :
     game.mode.kind === 'chapter' ? <ChapterPanel /> :
@@ -107,6 +114,12 @@ export default function App() {
     <div className="felt min-h-screen text-stone-100">
       <Hud />
       <CalendarStrip />
+      {tray && (
+        <div className="mx-auto flex max-w-[1400px] items-center gap-3 px-5 pt-2 text-sm">
+          <span className="rounded border rule bg-white/20 px-3 py-1 text-stone-100">A letter waits: <span className="italic">{tray.title}</span></span>
+          <button className="pbtn text-xs" onClick={() => foldLetter(false)}>Open it</button>
+        </div>
+      )}
       <main className="layout mx-auto flex max-w-[1400px] gap-5 px-5 pb-6 pt-2">
         <section className="relative min-w-0 flex-[3]">
           <SceneView />

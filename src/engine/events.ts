@@ -6,6 +6,7 @@ import { advanceArc, arcOf, dueArc } from '@/systems/arcs';
 import { createRng, type Rng } from './rng';
 import { resolveSelector, selectorsIn } from './selectors';
 import { noteMarks } from '@/systems/regard';
+import { writeFile } from '@/systems/file';
 import { recordPosition } from '@/systems/reputation';
 import { campaignOf } from '@/systems/campaign';
 import { positionWeight } from '@/systems/religious/study';
@@ -226,6 +227,8 @@ export function applyChoice(
         week: state.clock.week,
       }, positionWeight(next, choice.positionTopic)),
     };
+    // Said aloud, it is in the file; the chancellor keeps the clippings.
+    if (choice.volume !== 'private') next = writeFile(next, { by: 'chancellor', byLabel: 'the chancellor', kind: 'position', text: `${choice.volume === 'public' ? 'On the record' : 'Said aloud'}, on ${choice.positionTopic.replace(/_/g, ' ')}: ${choice.label}`, weight: choice.volume === 'public' ? 2 : 1, lean: choice.positionValue > 0 ? 1 : choice.positionValue < 0 ? -1 : 0, seen: true });
   }
   // The stage has been played: unless the choice itself moved the arc, it moves on.
   if (arcBefore && arcDue) {

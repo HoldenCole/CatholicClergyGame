@@ -1,4 +1,5 @@
 import { formationYearEnd, formationYearStart } from '@/systems/religious/formation';
+import { writeFile } from '@/systems/file';
 import { consult } from '@/systems/religious/obedience';
 import { diocesanClassmatesOrdain, diocesanClassmatesStart } from '@/systems/religious/diocesanClassmates';
 import { createRng } from './rng';
@@ -241,6 +242,8 @@ export function acknowledgeEvaluation(state: GameState): GameState {
     seminary: { ...sem, evaluations: [...sem.evaluations, record], zeroStreak },
     flags: { ...state.flags, concerns_at_year_start: sem.concerns.length },
   };
+  // The rector's evaluation is the first thing in the file, and the last thing a bishop forgets.
+  next = writeFile(next, { by: 'rector', byLabel: 'the rector', kind: 'evaluation', text: `Year ${record.year}: ${record.result === 'ADVANCED' ? 'advanced' : record.result === 'ADVANCED_WITH_CONCERNS' ? 'advanced, with concerns' : record.result === 'HELD_BACK' ? 'held back' : 'dismissed'}${record.notes.length ? `; ${record.notes[0]}` : ''}.`, weight: record.result === 'ADVANCED' ? 1 : record.result === 'ADVANCED_WITH_CONCERNS' ? 0 : -2, lean: 0, seen: true });
 
   switch (record.result) {
     case 'DISMISSED':

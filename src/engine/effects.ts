@@ -23,6 +23,7 @@ import { closeTenure } from '@/systems/tenures';
 import { applyTownEffect } from '@/systems/town';
 import { applyRumourEffect } from '@/systems/talk';
 import { resolveSelector } from './selectors';
+import { officialLabel, writeFile } from '@/systems/file';
 import { noteMovers } from '@/systems/movers';
 import { moveArc } from '@/systems/arcs';
 import { provinceEffect } from '@/systems/religious/foundations';
@@ -243,6 +244,13 @@ export function applyEffect(
       const [kind, who] = (effect.value.includes(':') ? effect.value.split(':') : effect.value.split('_')) as [Bond['kind'], string | undefined];
       const bond: Bond = { kind, week: state.clock.week, who: who ?? 'them' };
       return { ...state, npcs: { ...state.npcs, [npc.id]: { ...npc, bonds: [...(npc.bonds ?? []), bond], relationship: Math.max(-100, Math.min(100, npc.relationship + (kind === 'quarreled' ? -6 : 4))) } } };
+    }
+    case 'file': {
+      // A note in the chancery's file, from a person in the scene or from an office.
+      const who = bindings[effect.key] ?? effect.key;
+      const npc = state.npcs[who] ?? (who.startsWith('@') ? resolveSelector(state, who) : null);
+      const byLabel = npc ? (npc.role === 'official' ? officialLabel(npc) : `${npc.title ? `${npc.title} ` : ''}${npc.name.last}`) : who === 'board' ? 'the personnel board' : who === 'bishop' ? 'the bishop' : who === 'chancellor' ? 'the chancellor' : who;
+      return writeFile(state, { by: npc?.id ?? who, byLabel, kind: 'note', text: String(effect.value ?? ''), weight: Math.max(-3, Math.min(3, delta)), lean: 0, seen: false });
     }
     case 'trait_known': {
       const npc = resolveSelector(state, bindings[effect.key] ?? effect.key);

@@ -1,5 +1,6 @@
 import type { CareerRequest, GameState, Opening, Parish, RequestTarget, Role } from '@/types';
 import type { Rng } from '@/engine/rng';
+import { writeFile } from './file';
 import { offerById } from '@/content/offers';
 import { studyProgram } from '@/content/study';
 import { CAREER, yearsOrdained } from '@/engine/career';
@@ -160,7 +161,8 @@ export function closeRequest(state: GameState, outcome: CareerRequest['outcome']
   const flags: GameState['flags'] = { ...state.flags };
   for (const k of [REQUEST_FLAGS.standing, REQUEST_FLAGS.forParish, REQUEST_FLAGS.forPost]) delete flags[k];
   if (outcome) flags[`request:${outcome}`] = true;
-  return { ...state, flags, request: closed, requests: (state.requests ?? []).map((x) => (x === r ? closed : x)) };
+  const next: GameState = { ...state, flags, request: closed, requests: (state.requests ?? []).map((x) => (x === r ? closed : x)) };
+  return writeFile(next, { by: 'vicar_for_clergy', byLabel: 'the vicar for clergy', kind: 'request', text: `Asked to be moved: ${r.label}; ${outcome ?? 'closed'}.`, weight: outcome === 'granted' ? 0 : outcome === 'refused' ? -1 : 0, lean: 0, seen: true });
 }
 
 /** The opening that is the post he asked for, if the board has one. */

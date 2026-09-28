@@ -1,5 +1,6 @@
 import type { Condition, Effect, GameState, Npc, Rumour, TalkState } from '@/types';
 import type { Rng } from '@/engine/rng';
+import { writeFile } from './file';
 import rumoursJson from '@/content/rumours.json';
 import { applyEffects } from '@/engine/effects';
 import { seasonOf } from '@/engine/time';
@@ -206,6 +207,7 @@ export function talkWeek(state: GameState, rng: Rng): { state: GameState; lines:
     const delta = Math.round(r.standing * TALK.bishopShare);
     if (delta) next = applyEffects(next, [{ target: 'reputation', key: reputationKey(next, 'bishop'), delta }], {}, 'what reached the bishop');
     next = { ...next, career: [...next.career, { week, kind: 'note', text: `The bishop has heard what is being said: ${r.text}` }] };
+    next = writeFile(next, { by: 'bishop', byLabel: 'the bishop, from what he heard', kind: 'rumour', text: r.text, weight: r.standing < 0 ? -1 : r.standing > 0 ? 1 : 0, lean: 0, seen: false });
   }
   rumours = rumours.slice(-TALK.keep);
   return { state: { ...next, talk: { rumours, snapshot } }, lines };
