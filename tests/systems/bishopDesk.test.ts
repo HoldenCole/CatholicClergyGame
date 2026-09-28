@@ -103,8 +103,8 @@ describe("the bishop's desk (E4 R1.1)", () => {
     expect(out.state.npcs[doomed.pastorId]?.tags).not.toContain(`pastor:${doomed.id}`);
     expect(out.letter.body[0]).toContain(doomed.name);
     expect(out.state.see!.acts?.[0]?.parishName).toBe(doomed.name);
-    // The arithmetic: a critical shortage and nobody has begun.
-    const forced = seeYear({ ...s, see: { ...s.see!, shortage: 5 } }, createRng('fy'));
+    // The arithmetic: a critical shortage, nobody has begun, and no man ordained this year to relieve it (the seminary empty).
+    const forced = seeYear({ ...s, see: { ...s.see!, shortage: 5, seminary: { ...s.see!.seminary!, men: [] } } }, createRng('fy'));
     expect(forced.state.world!.parishes.length).toBe(s.world!.parishes.length - 1);
     expect(forced.state.see!.closings).toBe(1);
     expect(forced.letter.body.join(' ')).toMatch(/closed this year/);

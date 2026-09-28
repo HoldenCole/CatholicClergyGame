@@ -4,6 +4,7 @@ import { seeDefs } from '@/content/sees';
 import type { FormerSee } from '@/types';
 import { clampSigned } from '@/systems/reputation';
 import { visitationYear } from '@/systems/bishop/visits';
+import { seminaryYear } from '@/systems/bishop/seminary';
 
 /** Invented. The last act: a small see, held until the letter at seventy-five. */
 export const SEE = {
@@ -92,12 +93,15 @@ export function closeSeeParish(state: GameState, parishId: string): { state: Gam
 }
 
 /** Once a year: ordinations, closings the arithmetic forces, drift, and the line for the record. */
-export function seeYear(state: GameState, rng: Rng): { state: GameState; letter: Letter } {
+export function seeYear(state: GameState, rng: Rng): { state: GameState; letter: Letter; seminaryLetter?: Letter } {
+  // The seminary's year first: its ordinations are the see's (E4 R1.4); a see without one keeps the old arithmetic.
+  const sem = state.see!.seminary ? seminaryYear(state, rng.derive(`seminary:${state.clock.week}`)) : null;
+  if (sem) state = { ...sem.state, see: { ...sem.state.see!, ordinations: state.see!.ordinations } };
   const see = state.see!;
   const world0 = state.world;
   const years = Math.round((state.clock.week - see.installedWeek) / 52);
   const vocationsHours = state.study?.hoursLogged.see_seminary ?? 0;
-  const ordained = Math.round(SEE.ordinationsBase[Math.max(0, Math.min(4, see.shortage - 1))]! + vocationsHours / 104 + (rng.chance(0.5) ? 0 : -0.5) + (rng.chance(0.3) ? 1 : 0));
+  const ordained = sem ? sem.ordained : Math.round(SEE.ordinationsBase[Math.max(0, Math.min(4, see.shortage - 1))]! + vocationsHours / 104 + (rng.chance(0.5) ? 0 : -0.5) + (rng.chance(0.3) ? 1 : 0));
   const began = !!state.flags.bp_began_closings;
   const forced = see.shortage >= 5 && !began ? SEE.closingsForced : 0;
   // A closing the arithmetic forces takes a real parish off the map, the smallest (E4 R1.1).
@@ -117,7 +121,7 @@ export function seeYear(state: GameState, rng: Rng): { state: GameState; letter:
     people: drift(see.people) - forced * 5,
     rome: drift(see.rome),
     money: clampSigned(drift(see.money) + (see.shortage >= 4 ? -3 : 0)),
-    shortage: Math.max(1, Math.min(5, see.shortage - (ordained >= 2 ? 0.3 : 0) + (rng.chance(0.4) ? 0.2 : 0))),
+    shortage: Math.max(1, Math.min(5, see.shortage - (!sem && ordained >= 2 ? 0.3 : 0) + (rng.chance(0.4) ? 0.2 : 0))),
     ordinations: see.ordinations + Math.max(0, ordained),
     closings: see.closings + forced,
   };
@@ -140,5 +144,5 @@ export function seeYear(state: GameState, rng: Rng): { state: GameState; letter:
     rows: [{ label: 'The see', value: `${next.name}, ${next.region}` }],
     week: state.clock.week,
   };
-  return { state: { ...state, ...(state.world !== world0 ? { world: state.world } : {}), see: { ...next, years: [...next.years, line] } }, letter };
+  return { state: { ...state, ...(state.world !== world0 ? { world: state.world } : {}), see: { ...next, years: [...next.years, line] } }, letter, ...(sem?.letter ? { seminaryLetter: sem.letter } : {}) };
 }

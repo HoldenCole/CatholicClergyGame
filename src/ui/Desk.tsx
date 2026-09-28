@@ -19,6 +19,7 @@ import SeePanel from './study/SeePanel';
 import BishopDeskPanel from './study/BishopDeskPanel';
 import DirectionsPanel from './study/DirectionsPanel';
 import VisitsPanel from './study/VisitsPanel';
+import SeminaryPanel from './study/SeminaryPanel';
 import PlacePanel from './study/PlacePanel';
 import PopePanel from './study/PopePanel';
 import ProjectsPanel from './parish/ProjectsPanel';
@@ -123,6 +124,7 @@ export default function Desk() {
             <BishopDeskPanel />
             <DirectionsPanel />
             <VisitsPanel />
+            <SeminaryPanel />
             <SeePanel />
           </>
         )}
