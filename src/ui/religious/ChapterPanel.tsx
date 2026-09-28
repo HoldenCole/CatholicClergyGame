@@ -89,7 +89,7 @@ export default function ChapterPanel() {
         </div>
       ) : elected === PLAYER_ID ? (
         <div className="mt-3 text-sm">
-          <p className="leading-relaxed">The room turns to you. Elected {office} of {body}, {ch.ended === 'majority' ? 'by an absolute majority' : ch.ended === 'narrowed' ? 'on the narrowed ballot' : 'on a plurality when the rounds ran out'}. The higher superior must confirm; he almost always does.</p>
+          <p className="leading-relaxed">The room turns to you. Elected {office}{ch.level === 'general' ? '' : ` of ${body}`}, {ch.ended === 'majority' ? 'by an absolute majority' : ch.ended === 'narrowed' ? 'on the narrowed ballot' : 'on a plurality when the rounds ran out'}. The higher superior must confirm; he almost always does.</p>
           <div className="mt-2 flex gap-2">
             <button className="pbtn pbtn-primary" onClick={() => answer(true)}>Accept</button>
             <button className="pbtn" onClick={() => answer(false)}>Decline</button>
@@ -98,7 +98,7 @@ export default function ChapterPanel() {
         </div>
       ) : (
         <div className="mt-3 text-sm">
-          <p>{name(elected)} is elected {office} of {body}, {ch.ended === 'majority' ? 'by an absolute majority' : ch.ended === 'narrowed' ? 'on the narrowed ballot' : 'on a plurality'}. He accepts{ch.level === 'general' ? ', and the Holy See is informed' : ', and the higher superior confirms'}.</p>
+          <p>{name(elected)} is elected {office}{ch.level === 'general' ? '' : ` of ${body}`}, {ch.ended === 'majority' ? 'by an absolute majority' : ch.ended === 'narrowed' ? 'on the narrowed ballot' : 'on a plurality'}. He accepts{ch.level === 'general' ? ', and the Holy See is informed' : ', and the higher superior confirms'}.</p>
           <button className="pbtn pbtn-primary mt-2" onClick={() => answer(true)}>Close the chapter</button>
         </div>
       )}

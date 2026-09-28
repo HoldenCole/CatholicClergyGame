@@ -107,8 +107,8 @@ export function religiousYear(state: GameState, rng: Rng): GameState {
     next = bishopAskYear(next, rng.derive(`bishop-ask:${next.clock.week}`));
     if (next.mode.kind !== 'clock') return next;
   }
-  // The posting: the term up, or a key turned.
-  if (!r.consultation && next.mode.kind === 'clock') {
+  // The posting: the term up, or a key turned. Not while he is away on a posting of the order's or the Holy See's: the consultation waits for his return (engine/study.ts).
+  if (!r.consultation && !next.study && next.mode.kind === 'clock') {
     const end = termEndWeek(next);
     const turned = dualAuthorityCheck(next, rng.derive(`dual:${next.clock.week}`));
     if (turned) {
