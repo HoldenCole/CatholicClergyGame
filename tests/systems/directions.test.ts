@@ -58,7 +58,8 @@ describe('directions to people (E4 R1.2)', () => {
     expect(at({ ...p, birthYear: 1940 }, 'study').why).toBe('Too old for it.');
     // The struggle in the file, the title he has, the stat, and whether he is a pastor.
     expect(at({ ...p, struggle: 'none' }, 'treatment').why).toBe('Nothing in the file asks it.');
-    expect(at({ ...p, struggle: 'drink' }, 'treatment').ok).toBe(true);
+    expect(at({ ...p, struggle: 'drink' }, 'treatment').why).toMatch(/does not know/);
+    expect(directionAvailable({ ...b, flags: { ...b.flags, [`known:${p.id}`]: true } }, def('treatment'), { ...p, struggle: 'drink' }).ok).toBe(true);
     expect(at({ ...p, title: 'Msgr.', birthYear: 1965 }, 'monsignor').why).toBe('He has it.');
     expect(at({ ...p, stats: { ...p.stats, administration: 10 } }, 'chancery').why).toBe('Not the man for it.');
     expect(at({ ...p, tags: p.tags.filter((t) => !t.startsWith('pastor:')) }, 'move').why).toBe('Not a pastor.');

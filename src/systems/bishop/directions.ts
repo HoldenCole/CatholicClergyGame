@@ -88,6 +88,7 @@ export function directionAvailable(state: GameState, def: DirectionDef, npc: Npc
   if (r.minAge !== undefined && age < r.minAge) return { ok: false, why: 'Too young for it.' };
   if (r.maxAge !== undefined && age > r.maxAge) return { ok: false, why: 'Too old for it.' };
   if (r.struggle && !r.struggle.includes(npc.struggle)) return { ok: false, why: 'Nothing in the file asks it.' };
+  if (r.struggle && r.known && !state.flags[`known:${npc.id}`]) return { ok: false, why: 'The file does not know it; a visit might.' };
   if (r.titleNot && npc.title === r.titleNot) return { ok: false, why: 'He has it.' };
   if (r.stat && npc.stats[r.stat.key] < r.stat.min) return { ok: false, why: 'Not the man for it.' };
   if (r.pastor === true && !parishOf(state, npc)) return { ok: false, why: 'Not a pastor.' };

@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { beginDraft, abandonDraft } from '@/systems/rome/papalDesk';
 import { beginAct as beginSeeActSys, dropAct as dropSeeActSys } from '@/systems/bishop/desk';
 import { giveDirection as giveDirectionSys } from '@/systems/bishop/directions';
+import { visitParish as visitParishSys } from '@/systems/bishop/visits';
 import { callConsistory as callConsistorySys, holdPapalConsistory, planJourney as planJourneySys } from '@/systems/rome/papalActs';
 import { endPontificate } from '@/systems/rome/pontificate';
 import { answerConclave as answerConclaveSys, conclaveAct as conclaveActSys, holdTheConclave } from '@/systems/rome/conclaveFlow';
@@ -175,6 +176,8 @@ export interface GameStore {
   dropSeeAct(): void;
   /** E4 R1.2: a direction to a priest of the see. */
   giveDirection(npcId: string, id: string, target?: { parishId?: string; office?: ChanceryOffice }): void;
+  /** E4 R1.3: the visitation of a parish of the see. */
+  visitParish(parishId: string): void;
   abandonPapalDraft(): void;
   callConsistory(): void;
   createCardinals(ids: string[]): void;
@@ -874,6 +877,12 @@ export const useGameStore = create<GameStore>()((set, get) => ({
   giveDirection(npcId, id, target) {
     update(set, get, (game) => {
       const out = giveDirectionSys(game, npcId, id, target);
+      return out ? openMail(deliverLetter(out.state, out.letter)) : game;
+    });
+  },
+  visitParish(parishId) {
+    update(set, get, (game) => {
+      const out = visitParishSys(game, parishId);
       return out ? openMail(deliverLetter(out.state, out.letter)) : game;
     });
   },

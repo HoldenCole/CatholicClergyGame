@@ -1,6 +1,7 @@
 import actsRaw from './acts.json';
 import directionsRaw from './directions.json';
-import type { DirectionDef, SeeActDef } from '@/types';
+import visitsRaw from './visits.json';
+import type { DirectionDef, SeeActDef, VisitPools } from '@/types';
 
 /** E4 R1.1: the acts of the bishop's desk, as data. */
 export const seeActs: SeeActDef[] = (actsRaw as unknown as { acts: SeeActDef[] }).acts;
@@ -15,3 +16,6 @@ export const directionDefs: DirectionDef[] = (directionsRaw as unknown as { dire
 export function directionDef(id: string): DirectionDef | undefined {
   return directionDefs.find((d) => d.id === id);
 }
+
+/** E4 R1.3: what a visit finds, as pools of lines. */
+export const visitPools: VisitPools = visitsRaw as unknown as VisitPools;

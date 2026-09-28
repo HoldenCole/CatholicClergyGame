@@ -3,6 +3,7 @@ import type { Rng } from './rng';
 import { seeDefs } from '@/content/sees';
 import type { FormerSee } from '@/types';
 import { clampSigned } from '@/systems/reputation';
+import { visitationYear } from '@/systems/bishop/visits';
 
 /** Invented. The last act: a small see, held until the letter at seventy-five. */
 export const SEE = {
@@ -121,6 +122,10 @@ export function seeYear(state: GameState, rng: Rng): { state: GameState; letter:
     closings: see.closings + forced,
   };
   void forcedName;
+  // The visitation's year: the cycle kept or neglected. E4 R1.3.
+  const visited = visitationYear({ ...state, see: next });
+  Object.assign(next, visited.state.see);
+  state = { ...state, flags: visited.state.flags };
   const line = `Year ${years}: ${ordained > 0 ? `${ordained} ordained` : 'no one ordained'}; ${forced ? 'a parish closed because there was no one to send' : 'no parish closed'}; the priests ${word(next.presbyterate)}, the people ${word(next.people)}, Rome ${word(next.rome)}, the money ${moneyWord(next.money)}.`;
   const letter: Letter = {
     sort: 'review',
@@ -130,6 +135,7 @@ export function seeYear(state: GameState, rng: Rng): { state: GameState; letter:
       `The priests are ${word(next.presbyterate)}. The people are ${word(next.people)}. Rome is ${word(next.rome)}. The money is ${moneyWord(next.money)}.`,
       ordained > 0 ? `${ordained === 1 ? 'One man' : `${ordained} men`} ordained this year, which in a see like this is the whole future.` : 'No ordinations this year. Every priest of the diocese is a year older.',
       forced ? `${forcedName ? `${forcedName} closed` : 'A parish closed'} this year because there was no one to send, and you had not begun the closings yourself; the town blames the bishop, which is the job.` : '',
+      visited.line ?? '',
     ].filter(Boolean),
     rows: [{ label: 'The see', value: `${next.name}, ${next.region}` }],
     week: state.clock.week,
