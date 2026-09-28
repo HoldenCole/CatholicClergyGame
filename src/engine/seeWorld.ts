@@ -85,10 +85,10 @@ export function generateSeeWorld(state: GameState, see: SeeState, rng: Rng): { w
 function tagHome(npcs: Record<string, Npc>, homeId: string): Record<string, Npc> {
   const out = { ...npcs };
   for (const n of Object.values(out)) {
-    if (!['priest', 'lay', 'official', 'bishop'].includes(n.role)) continue;
+    if (!['priest', 'lay', 'official', 'bishop', 'religious'].includes(n.role)) continue;
     if (n.tags.some((t) => t.startsWith('diocese:'))) continue;
-    // The people of a diocese, not the Church's: the nuncio, the Curia, and the College carry no diocese and keep none.
-    if (n.tags.some((t) => ['nuncio', 'curia', 'cardinal', 'pope_secretary', 'visitor'].includes(t) || t.startsWith('curia'))) continue;
+    // The people of a diocese, not the Church's: the nuncio, the Curia, the College, and an order's own government carry no diocese and keep none.
+    if (n.tags.some((t) => ['nuncio', 'curia', 'cardinal', 'pope_secretary', 'visitor', 'general', 'provincial', 'commissary'].includes(t) || t.startsWith('curia') || t.startsWith('from:'))) continue;
     out[n.id] = { ...n, tags: [...n.tags, `diocese:${homeId}`] };
   }
   return out;

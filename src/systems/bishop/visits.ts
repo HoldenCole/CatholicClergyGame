@@ -137,7 +137,7 @@ export function visitParish(state: GameState, parishId: string): { state: GameSt
     see: nextSee,
     career: [...state.career, { week, kind: 'note', text: `Visited ${parish.name}, ${parish.place}${flags['visit:found_struggle'] && pastor && !state.flags[`known:${pastor.id}`] ? `; learned what the file did not say about ${shortName(pastor)}` : ''}.` }],
   };
-  return { state: next, letter: { sort: 'review', title: `The visitation of ${parish.name}`, body, week } };
+  return { state: next, letter: { sort: 'bishop', title: `The visitation of ${parish.name}`, body, week } };
 }
 
 /** The year: the cycle read back; neglect costs the people; a cycle completed is noticed. */

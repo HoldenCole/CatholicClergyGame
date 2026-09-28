@@ -127,7 +127,7 @@ export function signAct(state: GameState): { state: GameState; letter: Letter; l
   const { desk: _d, ...see } = next.see!;
   const note = fill(def.note, tokens);
   next = { ...next, see: { ...see, acts: [...(see.acts ?? []), signed] }, career: [...next.career, { week: state.clock.week, kind: 'note', text: note }] };
-  return { state: next, letter: { sort: 'review', title: def.label, body: def.letter.map((l) => fill(l, tokens)), week: state.clock.week }, line: `Signed: ${def.label.toLowerCase()}.` };
+  return { state: next, letter: { sort: 'bishop', title: def.label, body: def.letter.map((l) => fill(l, tokens)), week: state.clock.week }, line: `Signed: ${def.label.toLowerCase()}.` };
 }
 
 /** The desk's week: an act whose blocks are written is signed. */

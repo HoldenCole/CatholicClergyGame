@@ -308,7 +308,7 @@ export function seminaryYear(state: GameState, rng: Rng): SeminaryYear {
   const dials = { shortage: Math.max(1, Math.min(5, next.see!.shortage + ordained * SEMINARY.ordained.shortage)), presbyterate: clamp(next.see!.presbyterate + ordained * SEMINARY.ordained.presbyterate), people: clamp(next.see!.people + ordained * SEMINARY.ordained.people), money: clamp(next.see!.money + money) };
   const semNext: SeeSeminary = { ...sem, men: [...sem.men.filter((m) => m.status !== 'forming'), ...men].slice(-40), applicants, seq, ordainedIds: [...sem.ordainedIds, ...newlyOrdained] };
   next = { ...next, see: { ...next.see!, ...dials, ordinations: next.see!.ordinations + ordained, seminary: semNext }, flags };
-  const letter: Letter | null = body.length ? { sort: 'review', title: `The rector's report: ${sem.name}`, body, week } : null;
+  const letter: Letter | null = body.length ? { sort: 'bishop', title: `The rector's report: ${sem.name}`, body, week } : null;
   return { state: next, letter, ordained, lines };
 }
 
