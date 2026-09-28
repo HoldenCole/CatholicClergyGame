@@ -231,7 +231,7 @@ export function giveDirection(state: GameState, npcId: string, id: string, targe
     flags,
     career: [...next.career, { week, kind: 'note', text: `${fill(def.note, tokens)}${answer === 'refused' ? ' He refused.' : answer === 'reluctant' ? ' He went badly.' : ''}` }],
   };
-  return { state: next, letter: { sort: 'review', title: `${shortName(npc)}: ${def.label.toLowerCase()}`, body: def.letter[answer].map((l) => fill(l, tokens)), week } };
+  return { state: next, letter: { sort: 'bishop', title: `${shortName(npc)}: ${def.label.toLowerCase()}`, body: def.letter[answer].map((l) => fill(l, tokens)), week } };
 }
 
 /** The week: men sent away come home on their week, carrying the tag the direction gives. */

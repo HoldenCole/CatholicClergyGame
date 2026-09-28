@@ -136,8 +136,11 @@ export function careerYear(state: GameState, rng: Rng): GameState {
   next = addDigest(traj.state, traj.lines);
   for (const line of traj.lines) next = note(next, 'note', line);
 
-  const openings = refreshOpenings(next, rng.derive(`openings:${state.clock.week}`));
-  next = addDigest(openings.state, openings.lines);
+  // A bishop in his own see moves, retires, and buries his priests himself (E4 R1.2, R1.5); the board's churn is the home diocese's.
+  if (!(next.see && next.world?.diocese.presetId === next.see.dioceseId)) {
+    const openings = refreshOpenings(next, rng.derive(`openings:${state.clock.week}`));
+    next = addDigest(openings.state, openings.lines);
+  }
   // The letter in the vicar for clergy's file: acted on, left to stand, or closed. DESIGN §7.6.
   next = markRequested(next);
   const asked = requestYear(next, rng.derive(`request:${state.clock.week}`));
