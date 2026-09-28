@@ -1,5 +1,6 @@
 import type { GameState, Npc, TalkBand, TalkDef, TalkWho, TalksState } from '@/types';
 import type { Rng } from '@/engine/rng';
+import { touch } from './regard';
 import { talkDefs } from '@/content/parish';
 import { applyEffects } from '@/engine/effects';
 import { renderText, textExtras } from '@/engine/text';
@@ -88,6 +89,7 @@ export function haveAWord(state: GameState, npcId: string, rng: Rng): { state: G
   const text = renderText(variant, state, bindings, textExtras(state));
   let next = applyEffects(state, [...def.effects, ...(def.variantEffects?.[index] ?? [])], bindings, `talking with ${npc.name.first} ${npc.name.last}`);
   const talks = talksOf(next);
+  next = { ...next, npcs: { ...next.npcs, [npcId]: touch(next.npcs[npcId]!, state.clock.week) } };
   next = {
     ...next,
     parish: next.parish ? { ...next.parish, apNextWeek: next.parish.apNextWeek - TALKS.blocks } : next.parish,

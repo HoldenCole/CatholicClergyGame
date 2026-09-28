@@ -5,6 +5,7 @@ import { applyEffects } from './effects';
 import { advanceArc, arcOf, dueArc } from '@/systems/arcs';
 import { createRng, type Rng } from './rng';
 import { resolveSelector, selectorsIn } from './selectors';
+import { noteMarks } from '@/systems/regard';
 import { recordPosition } from '@/systems/reputation';
 import { campaignOf } from '@/systems/campaign';
 import { positionWeight } from '@/systems/religious/study';
@@ -212,6 +213,8 @@ export function applyChoice(
   let next = event.internalForum
     ? applyInternalForum(state, choice.effects, pending.bindings, event.title)
     : applyEffects(state, choice.effects, pending.bindings, event.title);
+  // The people in the scene were seen, and anyone it moved remembers why: regard that settles.
+  next = noteMarks(state, next, Object.values(pending.bindings), event.title);
 
   if (choice.volume && choice.positionTopic !== undefined && choice.positionValue !== undefined && next.character) {
     next = {

@@ -67,3 +67,15 @@ Found by the playthrough, fixed before this document was written:
 - **"Whose father in the car park you undefined."** The scenes write bonds of kinds the table had no verb for (taught, heard, told, formed) and one in a short form (`buried_him`). The verbs are there now and the short form is read.
 - **The wrong bishop named as the one who ordained him.** The shelf called the bishop of his seminary years the one who ordained him even when that bishop had retired before the ordination. It now names the bishop in office at ordination.
 - **The file on the shelf full of declined offers.** The ending's file and summary skipped nothing, so the last ten lines of a life were "Declined: A Room for an Old Priest." Declined offers stay in the record and leave the shelf.
+
+## 5. As built
+
+The owner asked for all twenty, five at a time.
+
+**Batch 1** (D1, Q1, Q3, Q4, Q5).
+
+- **D1 Regard that settles** (`systems/regard.ts`). Every person carries `marks` (a scene, a favour, a direction that moved the regard past a threshold, with the week and the why), a `contactWeek`, and a `friendSince`. The resting point is computed from who they are (`REGARD.base` by role: family 35, a classmate 8, a formator 5, the rest 0), the marks (half of each, capped at ±40), the bonds (4 each, up to 24) and the quarrels (−6 each), and stays within ±70. Each week without contact (eight weeks after the last hours, word, or scene), regard drifts toward the resting point at 0.06; above 70 it falls at 0.14, so the top of the scale costs keeping. Scenes write marks and contact through `noteMarks` in `applyChoice` (the sealed forum included, since regard is not reputation); the brothers' hours, a favour asked, and a word on a sheet count as contact. The brothers' own drift is gone into this. Numbers invented.
+- **Q1 The Circle** (`systems/circle.ts`, `ui/CirclePanel.tsx`). A sheet on every desk: everyone with regard past ±15, a bond, a mark, a bishop, or family, grouped as the shelf groups them, with the word for the regard and what is happening to it ("a friend, since 2019, drifting"), when he was last in touch, and the last mark or the bonds as a line of history. A view; nothing stored.
+- **Q3 Offers that stop.** Refused twice, a letter does not come again (`OFFERS.declinesBeforeClosed`); a second letter carries "Not again", which closes it at the first no and writes "the chancery has stopped asking" in the file.
+- **Q4 What the parish says** (`content/parish/review_said.json`). The review's line comes from the year's routine: the homily from the file, no visits, the box at minimum, the homily at minimum, the preparation, the meetings, the groups left alone, then the care band; a pool per cause, chosen by the year and never the same line two years running (`review:said`).
+- **Q5 Captions.** A figure in a scene is captioned with title and surname, the role on hover.

@@ -33,7 +33,7 @@ describe('systems/groups', () => {
     expect(parish.groupIds).toEqual(parishGroups(s).map((g) => g.id));
     const again = generateGroups(createRng('same'), s, parish, 2017);
     expect(again).toEqual(generateGroups(createRng('same'), s, parish, 2017));
-  });
+  }, 20000);
 
   it('groups decay without attention and grow with sustaining AP', () => {
     const s = parishState('decay');

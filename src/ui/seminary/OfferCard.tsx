@@ -14,6 +14,7 @@ export default function OfferCard({ o }: { o: ActiveOffer }) {
   const accept = useGameStore((s) => s.acceptOffer);
   const decline = useGameStore((s) => s.declineOffer);
   const defer = useGameStore((s) => s.deferOffer);
+  const close = useGameStore((s) => s.closeOffer);
   if (!game) return null;
   const asked = pendingAppointment(game);
   const here = game.world?.parishes.find((p) => p.id === game.assignment?.parishId);
@@ -21,6 +22,7 @@ export default function OfferCard({ o }: { o: ActiveOffer }) {
   if (!def) return null;
   const weeksLeft = o.expiresWeek - game.clock.week;
   const stillQualified = evaluateAll(def.requires, game, o.bindings);
+  const declinedBefore = game.offerHistory.filter((h) => h.offerId === o.offerId && h.decision === 'declined').length;
   const r = (t: string) => renderText(t, game, o.bindings);
   return (
     <div key={o.offerId} className="mb-4 border-b rule pb-4 last:border-b-0 last:pb-0">
@@ -55,6 +57,7 @@ export default function OfferCard({ o }: { o: ActiveOffer }) {
         <button className="pbtn pbtn-primary" disabled={!stillQualified || (!!asked && !!def.accept.commitment?.away)} title={asked && def.accept.commitment?.away ? "The bishop's answer to your last yes has not come" : undefined} onClick={() => accept(o.offerId)}>{def.accept.commitment?.away ? 'Say yes' : 'Accept'}</button>
         {canDefer(def) && <button className="pbtn" title="A smaller cost than a no: they keep your name, and the letter comes again in a year or two, likelier for the asking" onClick={() => defer(o.offerId)}>Not now, keep my name</button>}
         <button className="pbtn" onClick={() => decline(o.offerId)}>Decline</button>
+        {declinedBefore > 0 && <button className="pbtn" title="A no that closes the letter for good: it will not come a third time, and the file says you said so" onClick={() => close(o.offerId)}>Not again</button>}
       </div>
     </div>
   );

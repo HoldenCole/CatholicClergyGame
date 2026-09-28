@@ -3,6 +3,7 @@ import { spendDefs } from '@/content/religious';
 import type { GameState, Letter } from '@/types';
 import { sinceArrival } from './trajectory';
 import { careOf, strainOf, strainWord } from './week';
+import reviewSaid from '@/content/parish/review_said.json';
 import { chancesFor } from './openings';
 import { isFigure } from './reputation';
 import { bondWord } from './bonds';
@@ -31,7 +32,7 @@ const REP_RELIGIOUS: Record<string, string> = { community: 'The house', province
  * what moved, what the chancery noticed, what the parish says, and where he
  * is headed. Reads the snapshots and the file the game already keeps.
  */
-export function yearInReview(state: GameState): { letter: Letter; baseline: NonNullable<GameState['reviewBaseline']> } {
+export function yearInReview(state: GameState): { letter: Letter; baseline: NonNullable<GameState['reviewBaseline']>; said?: string } {
   const c = state.character!;
   const week = state.clock.week;
   const base = state.reviewBaseline;
@@ -68,11 +69,12 @@ export function yearInReview(state: GameState): { letter: Letter; baseline: NonN
   const positions = c.positions.filter((p) => p.week > week - 52 && p.volume !== 'private').length;
   if (positions) rows.push({ label: 'Stands taken aloud', value: `${positions}${isFigure(c) ? '; you are a figure now, and generate your own weather' : ''}` });
 
-  // What the parish says.
+  // What the parish says: from where the hours went this year, never the same line two years running.
+  let saidFlag: Record<string, string | number | boolean> = {};
   if (state.parish) {
-    const care = careOf(state);
-    const said = care >= 0.7 ? 'that they see you, in the hospital and at the door, and that it shows on Sunday' : care >= 0.4 ? 'that you are around, mostly, and that the homilies are yours' : care >= 0.15 ? 'that you are a hard man to find outside Mass' : 'that they see you at Mass and nowhere else';
-    body.push(`The parish says ${said}. ${state.parish.recycledHomilyStreak >= 3 ? 'The homily has come from the file for weeks, and people have begun to say so.' : ''}`.trim());
+    const { line, key } = parishSays(state);
+    body.push(`The parish says ${line}.`);
+    saidFlag = { 'review:said': key };
   }
   const nights = nightReviewLine(state);
   if (nights) rows.push({ label: 'The nights', value: nights });
@@ -107,7 +109,7 @@ export function yearInReview(state: GameState): { letter: Letter; baseline: NonN
 
   const letter: Letter = { sort: 'review', title: `The year in review: ${years} years ordained`, body, rows, week };
   const baseline = { week, reputation: { ...c.reputation }, stats: { ...c.stats }, strain: strainOf(state) };
-  return { letter, baseline };
+  return { letter, baseline, ...(typeof saidFlag['review:said'] === 'string' ? { said: saidFlag['review:said'] } : {}) };
 }
 
 /** Post a letter: it goes in the drawer now and into his hands the next quiet week. */
@@ -126,4 +128,37 @@ export function openMail(state: GameState): GameState {
 export function readLetter(state: GameState): GameState {
   if (state.mode.kind !== 'letter') return state;
   return openMail({ ...state, mode: { kind: 'clock' } });
+}
+
+const SAID = (reviewSaid as { causes: Record<string, string[]> }).causes;
+
+/**
+ * What the parish says, from where the hours went: the obligation left at
+ * minimum, the visits not made, the homily from the file; the care band when
+ * nothing in particular stands out. Never the same line as last year.
+ */
+export function parishSays(state: GameState): { line: string; key: string } {
+  const p = state.parish!;
+  const r = p.routine;
+  const care = careOf(state);
+  const causes: string[] = [];
+  if (p.recycledHomilyStreak >= 3) causes.push('recycled');
+  if ((r.discretionary.visits ?? 0) === 0 && care < 0.7) causes.push('no_visits');
+  if (r.obligations.confessions === 'min') causes.push('confessions_min');
+  if (r.obligations.sunday_masses === 'min') causes.push('homily_min');
+  if (r.obligations.sacramental_prep === 'min') causes.push('prep_min');
+  if (r.obligations.meetings === 'min') causes.push('meetings_min');
+  if ((r.discretionary.groups ?? 0) === 0 && Object.values(state.groups).some((g) => g.parishId === p.parishId)) causes.push('no_groups');
+  causes.push(care >= 0.7 ? 'full' : care >= 0.4 ? 'around' : care >= 0.15 ? 'no_visits' : 'absent');
+  const last = typeof state.flags['review:said'] === 'string' ? state.flags['review:said'] : '';
+  const year = Math.floor(state.clock.week / 52);
+  for (const cause of causes) {
+    const pool = SAID[cause] ?? [];
+    for (let k = 0; k < pool.length; k++) {
+      const i = (year + k) % pool.length;
+      const key = `${cause}:${i}`;
+      if (key !== last) return { line: pool[i]!, key };
+    }
+  }
+  return { line: 'nothing in particular, which is its own report', key: 'none' };
 }

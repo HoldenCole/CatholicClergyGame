@@ -52,7 +52,7 @@ function yearsWord(weeks: number): string {
   return `${r} year${r === 1 ? '' : 's'}`;
 }
 
-function whoWord(state: GameState, npc: Npc): string {
+export function whoWord(state: GameState, npc: Npc): string {
   if (npc.role === 'classmate') return 'classmate';
   if (npc.role === 'family') return npc.tags.find((t) => ['mother', 'father', 'sibling'].includes(t)) ?? 'family';
   if (npc.role === 'bishop') return 'bishop';

@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { createRng } from '@/engine/rng';
+import { regardWeek } from '@/systems/regard';
 import { parishState } from './week.test';
 import { dropWork, sideWorkWeek, startWork, workLine, workLoad, workOf, workOffers, worksDone } from '@/systems/sidework';
 import { BROTHERS, askBrother, brotherLines, brothersOf, brothersWeek, favoursFrom, keptWord } from '@/systems/brothers';
@@ -95,7 +96,8 @@ describe('systems/brothers', () => {
     const s = able('drift');
     const man = brothersOf(s)[0]!;
     let warm: GameState = { ...s, npcs: { ...s.npcs, [man.id]: { ...man, relationship: 60 } } };
-    for (let i = 0; i < 400; i++) warm = brothersWeek({ ...warm, clock: { ...warm.clock, week: warm.clock.week + 1 } }, 0, createRng(`d:${i}`));
+    // The drift is regard's now (systems/regard.ts); the brothers' week only spends the hours.
+    for (let i = 0; i < 400; i++) warm = regardWeek(brothersWeek({ ...warm, clock: { ...warm.clock, week: warm.clock.week + 1 } }, 0, createRng(`d:${i}`)));
     const now = warm.npcs[man.id]!.relationship;
     expect(now).toBeLessThan(60);
     expect(now).toBeGreaterThanOrEqual(BROTHERS.floor);

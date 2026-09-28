@@ -1,6 +1,7 @@
 import type { GameState, Npc } from '@/types';
 import type { Rng } from '@/engine/rng';
 import { relationshipWord } from './classmates';
+import { mark, touch } from './regard';
 
 /**
  * The men you were ordained with. DESIGN.md §9.5.
@@ -14,9 +15,7 @@ import { relationshipWord } from './classmates';
 export const BROTHERS = {
   /** What an hour a week with brother priests is worth to the man it is spent on. */
   perHour: 1.4,
-  /** How a friendship nobody tends drifts back toward civil, per week. */
-  driftPerWeek: 0.035,
-  /** Where the drift stops: nobody forgets the seminary entirely. */
+  /** Where a classmate's regard settles with no history: nobody forgets the seminary entirely (REGARD.base.classmate). */
   floor: 8,
   /** Weeks without contact before the sheet says so. */
   coldWeeks: 156,
@@ -71,17 +70,8 @@ export function keptWord(state: GameState, npc: Npc): string {
 export function brothersWeek(state: GameState, hours: number, rng: Rng): GameState {
   const pool = brothersOf(state);
   if (!pool.length) return state;
-  let next = state;
-  // Everything drifts back toward civil when nobody telephones.
-  const npcs = { ...next.npcs };
-  for (const n of pool) {
-    if (n.relationship <= BROTHERS.floor) continue;
-    const kept = lastSeen(next, n.id);
-    const cold = kept === null || next.clock.week - kept > 52;
-    if (!cold) continue;
-    npcs[n.id] = { ...n, relationship: Math.max(BROTHERS.floor, n.relationship - BROTHERS.driftPerWeek) };
-  }
-  next = { ...next, npcs };
+  // The drift back toward civil when nobody telephones is regard's now (systems/regard.ts): every relationship settles.
+  const next = state;
   if (hours <= 0) return next;
   // The hour goes to the man he has left longest among those he is not cold on.
   const ranked = [...pool].sort((a, b) => (lastSeen(next, a.id) ?? -1) - (lastSeen(next, b.id) ?? -1) || b.relationship - a.relationship);
@@ -89,7 +79,7 @@ export function brothersWeek(state: GameState, hours: number, rng: Rng): GameSta
   const npc = next.npcs[pick.id]!;
   return {
     ...next,
-    npcs: { ...next.npcs, [pick.id]: { ...npc, relationship: Math.min(100, npc.relationship + BROTHERS.perHour * hours * 4) } },
+    npcs: { ...next.npcs, [pick.id]: touch({ ...npc, relationship: Math.min(100, npc.relationship + BROTHERS.perHour * hours * 4) }, next.clock.week) },
     flags: { ...next.flags, [`kept:${pick.id}`]: next.clock.week },
   };
 }
@@ -138,7 +128,7 @@ export function askBrother(state: GameState, npcId: string, favourId: string): F
   const name = `${npc.title || 'Fr.'} ${npc.name.last}`;
   let next: GameState = {
     ...state,
-    npcs: { ...state.npcs, [npcId]: { ...npc, relationship: Math.max(-100, npc.relationship - BROTHERS.favourCost) } },
+    npcs: { ...state.npcs, [npcId]: mark({ ...npc, relationship: Math.max(-100, npc.relationship - BROTHERS.favourCost) }, { week: state.clock.week, delta: -BROTHERS.favourCost, why: `asked him: ${def.label.toLowerCase()}` }) },
     flags: { ...state.flags, [`favour:${def.id}:${npcId}`]: true, [`kept:${npcId}`]: state.clock.week },
   };
   let line: string;
