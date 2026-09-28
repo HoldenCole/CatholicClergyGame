@@ -109,16 +109,15 @@ export function decideAssignment(state: GameState, rng: Rng): GameState {
   const w = OBEDIENCE.weights;
   const ranked = c.options
     .map((o) => {
+      // The reasons are the provincial's, written to the man: the letter says them to his face.
       const reasons: string[] = [];
       let score = o.need * w.need + o.fit * w.fit + o.formation * w.formation + rng.float(-w.noise, w.noise);
       if (o.need >= 60) reasons.push('the province needs a man there');
-      if (o.fit >= 65) reasons.push('the work suits him');
-      if (reputationFit(state, o.work) >= 40 && phraseOf(state)) reasons.push(`the province knows him as ${phraseOf(state)}`);
+      if (o.fit >= 65) reasons.push('the work suits you');
+      if (reputationFit(state, o.work) >= 40 && phraseOf(state)) reasons.push(`the province knows you as ${phraseOf(state)}`);
       if (o.formation >= 60) reasons.push('a young friar should see it');
-      if (c.preference === o.houseId) {
-        score += 100 * w.preference;
-        reasons.push('he asked for it');
-      }
+      // The house he asked for: the letter says so in its own words, not among the reasons.
+      if (c.preference === o.houseId) score += 100 * w.preference;
       if (c.objection && c.preference && c.preference !== o.houseId) score -= 100 * w.objection * 0.5;
       return { o, score, reasons };
     })
