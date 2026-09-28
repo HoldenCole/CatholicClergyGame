@@ -67,12 +67,35 @@ export function rollNorm(seed: string, docId: string, bishopId: string, alignmen
   return 'slow';
 }
 
-/** How the diocese's bishop now reads the document that set an axis, or null with no bishop or no document. */
-export function normFor(state: GameState, axis: string): DiocesanNorm | null {
+/**
+ * Who reads a document on an axis in the man's world: the diocesan bishop,
+ * or the provincial for religious life (E3 §16D). Null when the man is that
+ * reader himself (the see is his; the province is his), or there is none.
+ */
+export function readerOf(state: GameState, axis: string): { id: string; alignment: number } | null {
+  if (axisDef(axis)?.reader === 'provincial') {
+    const id = state.province?.provincialId;
+    const n = id ? state.npcs[id] : undefined;
+    return n && id && id !== 'player' ? { id, alignment: n.alignment } : null;
+  }
   const b = state.world?.diocese.hidden.bishop;
+  return b && !state.see ? { id: b.npcId, alignment: b.alignment } : null;
+}
+
+/** The reader's name for the sentence: the bishop's, or the provincial's on an axis he reads. */
+export function readerName(state: GameState, axis: string): string {
+  if (axisDef(axis)?.reader !== 'provincial') return bishopName(state);
+  const id = state.province?.provincialId;
+  const n = id ? state.npcs[id] : undefined;
+  return n ? `${n.title} ${n.name.last}` : 'The provincial';
+}
+
+/** How the axis's reader now reads the document that set it, or null with no reader or no document. */
+export function normFor(state: GameState, axis: string): DiocesanNorm | null {
+  const r = readerOf(state, axis);
   const s = standingOf(state, axis);
-  if (!b || !s?.docId) return null;
-  return rollNorm(state.seed, s.docId, b.npcId, b.alignment, docLean(axis, s.from, s.value));
+  if (!r || !s?.docId) return null;
+  return rollNorm(state.seed, s.docId, r.id, r.alignment, docLean(axis, s.from, s.value));
 }
 
 const RESTRICT: Record<LiturgicalStance, number> = { free: 0, by_permission: 1, forbidden: 2 };
@@ -138,7 +161,8 @@ export function readingLine(state: GameState, doc: Pick<IssuedDocument, 'axis' |
   if (!doc.axis || !doc.value || !doc.norm) return null;
   const axis = axisDef(doc.axis);
   const text = axis?.readings?.[doc.value]?.[doc.norm] ?? documentPools.readings[doc.norm];
-  return text.replace(/\{bishop\}/g, bishopName(state)).replace(/\{doc\}/g, doc.title);
+  const who = readerName(state, doc.axis);
+  return text.replace(/\{(bishop|provincial)\}/g, who).replace(/\{doc\}/g, doc.title);
 }
 
 /** {doc:<axis>}, {doc_kind:<axis>}, {reading:<axis>}, {pope}: the words a cascade scene needs. */
@@ -155,7 +179,7 @@ export function romeTokens(state: GameState): Record<string, string> {
     out[`doc:${axis.key}`] = title;
     out[`doc_kind:${axis.key}`] = doc ? documentPools.kinds[doc.kind].label : 'document';
     const reading = doc ? readingLine(state, doc) : null;
-    out[`reading:${axis.key}`] = reading ?? `${bishopName(state)} has said nothing about ${title} in particular.`;
+    out[`reading:${axis.key}`] = reading ?? `${readerName(state, axis.key)} has said nothing about ${title} in particular.`;
   }
   return out;
 }

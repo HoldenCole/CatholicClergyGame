@@ -11,6 +11,7 @@ import { nightCondition } from '@/systems/night';
 import { resolveSelector } from './selectors';
 import { documentCondition, effectiveStance, policyCondition } from '@/systems/rome/policy';
 import { dueNuncioScene } from '@/systems/rome/nuncio';
+import { visitationCondition } from '@/systems/religious/visitation';
 import { dueCollegeScene } from '@/systems/rome/college';
 import { duePopeScene } from '@/systems/rome/pontificate';
 import { dueDiplomacyScene, nunciatureDef } from '@/systems/rome/diplomacy';
@@ -249,6 +250,8 @@ export function evaluateCondition(
       return compare(cond.op, nuncioView(state).value, cond.value);
     case 'document':
       return documentCondition(state, cond);
+    case 'visitation':
+      return visitationCondition(state, cond);
     case 'not':
       return !evaluateCondition(cond.inner, state, bindings);
     case 'any':

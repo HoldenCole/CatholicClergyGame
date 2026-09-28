@@ -4,7 +4,8 @@ import { sundayOf } from '@/engine/time';
 import { fromDayNumber } from '@/engine/calendar';
 import { documentHistory, documentPools, papalHistory, policyAxes } from '@/content/rome';
 import { dateWords, recordEndDay, romeOn, walkRome } from './papacy';
-import { docLean, initialPolicies, isoDay, readingLine, rollNorm } from './policy';
+import { docLean, initialPolicies, isoDay, readerOf, readingLine, rollNorm } from './policy';
+import { axisDef } from '@/content/rome';
 import { readBackLine, reversalOf, undoneBy } from './reversal';
 
 /**
@@ -195,9 +196,10 @@ export function documentsWeek(state: GameState): DocumentsWeek {
 export function issueDocument(state: GameState, draft: Draft): { state: GameState; line: string; letter: Letter | null } {
   const rome = state.rome!;
   const week = state.clock.week;
-  const bishop = state.world?.diocese.hidden.bishop;
+  // The reader: the diocesan bishop, or the provincial on an axis of religious life (E3 §16D); none when the man is the reader himself.
+  const reader = draft.axis ? readerOf(state, draft.axis) : null;
   const lean = draft.axis && draft.value ? docLean(draft.axis, draft.from, draft.value) : 0;
-  const read = draft.axis && bishop && !state.see ? { norm: rollNorm(state.seed, draft.id, bishop.npcId, bishop.alignment, lean), bishopId: bishop.npcId } : {};
+  const read = draft.axis && reader ? { norm: rollNorm(state.seed, draft.id, reader.id, reader.alignment, lean), bishopId: reader.id } : {};
   // A document that turns back one he answered in his parish: the record will be read back to him. E1 §4.3.
   const reverses = reversalOf(rome.issued ?? [], draft);
   const doc: IssuedDocument = { ...draft, week, ...read, ...(reverses ? { reverses } : {}) };
@@ -217,9 +219,9 @@ export function issueDocument(state: GameState, draft: Draft): { state: GameStat
     body: [
       `${issueSentence(doc, name)} It is in force from ${dateWords(doc.day)}.`,
       `What it changes: ${value.change}`,
-      reading ?? (state.see ? 'The reading of it in your own diocese is yours to give.' : 'It is read at table and argued over for a week, and then it is simply the law.'),
+      reading ?? (state.see ? 'The reading of it in your own diocese is yours to give.' : state.religious && state.province?.provincialId === 'player' && axisDef(doc.axis)?.reader === 'provincial' ? 'The reading of it in your own province is yours to give: the houses will wait for your letter.' : 'It is read at table and argued over for a week, and then it is simply the law.'),
       ...(readBack ? [readBack] : []),
-      state.parish ? 'By Sunday the parish will have read the newspapers, and someone will ask you after Mass what it means before you have finished the text.' : state.seminary ? 'At the seminary it is argued over at dinner for a week, and the liturgy professor has opinions he keeps for the classroom.' : 'Wherever you are, it is read at table and argued over for a week, and then, in the parishes at home, it is simply the law.',
+      state.parish ? 'By Sunday the parish will have read the newspapers, and someone will ask you after Mass what it means before you have finished the text.' : state.religious ? 'It is read aloud at table in the house that week, and the older men have the opinions of it they had before it was written.' : state.seminary ? 'At the seminary it is argued over at dinner for a week, and the liturgy professor has opinions he keeps for the classroom.' : 'Wherever you are, it is read at table and argued over for a week, and then, in the parishes at home, it is simply the law.',
     ],
     week,
   };
@@ -255,7 +257,7 @@ export function recordImplementation(state: GameState, axis: string, how: Implem
   while (i >= 0 && issued[i]!.axis !== axis) i--;
   if (i < 0) return state;
   const doc: IssuedDocument = { ...issued[i]!, implemented: how, implementedWeek: state.clock.week, ...(state.assignment ? { parishId: state.assignment.parishId } : {}) };
-  const words: Record<Implementation, string> = { eager: 'ahead of the diocese', faithful: 'as it was given', minimal: 'to the letter and no further', defiant: 'not at all' };
+  const words: Record<Implementation, string> = { eager: state.religious ? 'ahead of the province' : 'ahead of the diocese', faithful: 'as it was given', minimal: 'to the letter and no further', defiant: 'not at all' };
   return {
     ...state,
     rome: { ...state.rome!, issued: issued.map((d, j) => (j === i ? doc : d)) },
@@ -263,7 +265,7 @@ export function recordImplementation(state: GameState, axis: string, how: Implem
   };
 }
 
-const NORM_WORD: Record<string, string> = { enthusiastic: 'the bishop welcomed it', faithful: 'the bishop received it', minimal: 'the bishop gave it the minimum', slow: 'the bishop slow-walked it' };
+const NORM_WORD: Record<string, string> = { enthusiastic: 'welcomed it', faithful: 'received it', minimal: 'gave it the minimum', slow: 'slow-walked it' };
 const DONE_WORD: Record<Implementation, string> = { eager: 'you went ahead of the diocese', faithful: 'you put it into effect as given', minimal: 'you did the least it asked', defiant: 'you would not' };
 
 /** The documents of his lifetime that asked something of the parishes, and what he did with each: for the Profile. */
@@ -272,7 +274,7 @@ export function documentsOfHisLife(state: GameState): { title: string; year: num
   return issued.flatMap((d, i) => (d.axis ? [{ d, i }] : [])).map(({ d, i }) => {
     const year = fromDayNumber(d.day).year;
     const parts = [d.gist];
-    if (d.norm) parts.push(NORM_WORD[d.norm]!);
+    if (d.norm) parts.push(`the ${axisDef(d.axis!)?.reader === 'provincial' ? 'provincial' : 'bishop'} ${NORM_WORD[d.norm]!}`);
     parts.push(d.implemented ? DONE_WORD[d.implemented] : 'it never came to your door');
     const later = undoneBy(issued, i);
     if (later) parts.push(`undone by ${later.title} in ${fromDayNumber(later.day).year}`);

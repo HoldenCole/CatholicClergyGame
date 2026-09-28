@@ -30,7 +30,7 @@ export const GENERAL = {
 } as const;
 
 /** Where the order's men come from, for the capitulars' names and regions. Weights invented. */
-const ORIGINS: { heritage: Parameters<typeof rollMaleName>[1]; from: string; region: string; weight: number }[] = [
+export const ORIGINS: { heritage: Parameters<typeof rollMaleName>[1]; from: string; region: string; weight: number }[] = [
   { heritage: 'italian', from: 'Italy', region: 'Europe', weight: 3 },
   { heritage: 'polish', from: 'Poland', region: 'Europe', weight: 2 },
   { heritage: 'german', from: 'Germany', region: 'Europe', weight: 1.5 },

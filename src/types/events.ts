@@ -181,6 +181,8 @@ export type Condition =
   | { type: 'diplomacy'; key: 'hardship'; op: Op; value: number }
   | { type: 'nuncio'; key: 'scene'; value: string }
   | { type: 'nuncio'; key: 'view'; op: Op; value: number }
+  /** E3 §16D: Rome's visitation of the province: its scene due now, its stage, its cause, or (after the decree) its outcome. */
+  | { type: 'visitation'; key: 'scene' | 'stage' | 'cause' | 'outcome'; value: string }
   | { type: 'not'; inner: Condition }
   | { type: 'any'; inner: Condition[] }
   | { type: 'all'; inner: Condition[] };

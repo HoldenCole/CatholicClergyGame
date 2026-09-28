@@ -267,6 +267,8 @@ export interface PolicyAxisDef {
   topics?: LiturgicalTopic[];
   /** The bishop's reading, by norm, with {bishop} and {doc}; the generic lines are used where absent. */
   readings?: Partial<Record<string, Partial<Record<DiocesanNorm, string>>>>;
+  /** E3 §16D: who reads a document on this axis in the man's world: the diocesan bishop (the default), or, for religious life, the provincial. */
+  reader?: 'bishop' | 'provincial';
 }
 
 /** A document of the record, as data. */
@@ -297,7 +299,7 @@ export interface IssuedDocument {
   value?: string;
   /** Where the axis stood before it. */
   from?: string;
-  /** How the diocesan bishop received it, and who he was. */
+  /** How the diocesan bishop received it, and who he was; on an axis read by the provincial (E3 §16D), the provincial. */
   norm?: DiocesanNorm;
   bishopId?: string;
   /** What the man did with it, when a scene asked him. */

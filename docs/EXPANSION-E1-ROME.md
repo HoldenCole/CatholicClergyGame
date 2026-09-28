@@ -65,6 +65,8 @@ A document is data: kind (encyclical, apostolic exhortation, apostolic constitut
 3. **The priest implements.** A scene in his parish, from the document's topic and the bishop's norm: what he says from the pulpit, what he changes, whom he consults. Choices write positions at a volume (§5.2), move the constituencies, and are kept on the public record.
 4. **The world answers.** Families leave or come; the traditional and progressive blocs move; the bishop and the nuncio notice; `rome` moves for fidelity and against defiance.
 
+*E3 §16D: an axis may name its reader (`PolicyAxisDef.reader`). The religious-life axis is read by the provincial rather than the bishop, its cascade is set in the friar's house, and a province that answers Rome badly may be visited (`systems/religious/visitation.ts`).*
+
 ### 4.3 Reversal
 
 A later document can reverse a policy axis. When it does, every man who implemented the earlier norm gets a **reversal scene** that reads his record back to him: what he said, what it cost, who left. It should be able to fire twice in a long career (§5.3's logic, one level up).
