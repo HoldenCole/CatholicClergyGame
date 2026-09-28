@@ -32,6 +32,13 @@ function rollBond(rng: Rng, npc: Npc, year: number): Bond | null {
 }
 
 const VERB: Record<BondKind, string> = { baptized: 'baptized', married: 'married', buried: 'buried', anointed: 'anointed', confirmed: 'prepared', counseled: 'sat with', helped: 'helped', quarreled: 'quarreled with' };
+/** The verb for a bond, the scenes' own kinds included (taught, heard, told, formed): the kind itself when the table has no word for it. */
+export function bondVerb(kind: string): string {
+  return (VERB as Record<string, string>)[kind] ?? kind.replace(/_/g, ' ');
+}
+/** Bonds whose "who" is the person: anointed, sat with, heard, told, formed, taught. */
+const OF_THE_PERSON = new Set(['anointed', 'counseled', 'heard', 'told', 'formed', 'taught']);
+const isPerson = (who: string) => ['them', 'him', 'her'].includes(who);
 
 /** One bond in words: "buried her husband", "married the two of them". */
 export function bondWord(b: Bond): string {
@@ -42,7 +49,7 @@ export function bondWord(b: Bond): string {
 export function bondsPhrase(npc: Npc): string {
   const bonds = npc.bonds ?? [];
   if (!bonds.length) return '';
-  return bonds.slice(-3).map((b) => (b.kind === 'married' && b.who === 'the two of them' ? 'whom you married' : b.kind === 'anointed' || b.kind === 'counseled' ? `whom you ${VERB[b.kind]}` : `whose ${b.who.replace(/^(his|her|their) /, '')} you ${VERB[b.kind]}`)).join(' and ');
+  return bonds.slice(-3).map((b) => (b.kind === 'married' && b.who === 'the two of them' ? 'whom you married' : (OF_THE_PERSON.has(b.kind) && isPerson(b.who)) || isPerson(b.who) ? `whom you ${bondVerb(b.kind)}` : /^the /.test(b.who) && OF_THE_PERSON.has(b.kind) ? `${b.who}, whom you ${bondVerb(b.kind)}` : `whose ${b.who.replace(/^(his|her|their|the) /, '')} you ${bondVerb(b.kind)}`)).join(' and ');
 }
 
 /** The named people of the current parish, the ones with a history first. */
@@ -57,7 +64,7 @@ export function parishPeople(state: GameState): Npc[] {
 /** Every bond he has with the people of every parish, counted by kind. */
 export function bondCounts(state: GameState): Record<BondKind, number> {
   const out: Record<BondKind, number> = { baptized: 0, married: 0, buried: 0, anointed: 0, confirmed: 0, counseled: 0, helped: 0, quarreled: 0 };
-  for (const n of Object.values(state.npcs)) for (const b of n.bonds ?? []) out[b.kind] += 1;
+  for (const n of Object.values(state.npcs)) for (const b of n.bonds ?? []) if (b.kind in out) out[b.kind] += 1;
   return out;
 }
 
@@ -78,6 +85,6 @@ export function bondsWeek(state: GameState, sacramentalQuality: string, rng: Rng
   const bond: Bond = { ...rolled, week: state.clock.week };
   const next: GameState = { ...state, npcs: { ...state.npcs, [npc.id]: { ...npc, bonds: [...(npc.bonds ?? []), bond], relationship: Math.min(100, npc.relationship + BONDS.warmth) } } };
   const name = `${npc.name.first} ${npc.name.last}`;
-  const line = bond.kind === 'married' && bond.who === 'the two of them' ? `You married ${name}.` : bond.kind === 'anointed' || bond.kind === 'counseled' ? `You ${VERB[bond.kind]} ${name}.` : `You ${VERB[bond.kind]} ${name}'s ${bond.who.replace(/^(his|her|their) /, '')}.`;
+  const line = bond.kind === 'married' && bond.who === 'the two of them' ? `You married ${name}.` : bond.kind === 'anointed' || bond.kind === 'counseled' ? `You ${bondVerb(bond.kind)} ${name}.` : `You ${bondVerb(bond.kind)} ${name}'s ${bond.who.replace(/^(his|her|their) /, '')}.`;
   return { state: next, line };
 }
