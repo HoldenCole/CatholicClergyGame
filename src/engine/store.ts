@@ -32,7 +32,7 @@ import { deleteSlot as removeSlot, describeSave, listSlots, loadSlot as readSlot
 import { deleteRemote, listRemote, loadGithub, readRemote, saveGithub, writeRemote, type GithubConfig, type RemoteSave } from './github';
 import { eventById, eventsForPhase } from '@/content';
 import { offerById, offersForPhase } from '@/content/offers';
-import { acceptOffer as doAccept, declineOffer as doDecline, deferOffer as doDefer } from './offers';
+import { acceptOffer as doAccept, closeOffer as doClose, declineOffer as doDecline, deferOffer as doDefer } from './offers';
 import { generateRun } from '@/generation';
 import { generateCandidates, installWorld } from '@/generation/world';
 import { generateProvinceCandidates } from '@/systems/religious/newGame';
@@ -355,6 +355,7 @@ export interface GameStore {
   ordain(): void;
   acceptOffer(offerId: string): void;
   declineOffer(offerId: string): void;
+  closeOffer(offerId: string): void;
   deferOffer(offerId: string): void;
   /** Prose from the last offer decision, for the UI. */
   lastOfferOutcome: string | null;
@@ -1226,6 +1227,15 @@ export const useGameStore = create<GameStore>()((set, get) => ({
       set({ lastOfferOutcome: c?.away ? (def.from === '@bishop' ? 'You said yes. The bishop is the one asking, and his letter of appointment follows; nothing moves until it comes.' : 'You said yes. The request goes to the bishop, who will send you or keep you; nothing moves until his letter comes.') : result.failed && def.failure ? `${def.accept.outcome} ${def.failure.outcome}` : def.accept.outcome });
       const text = c?.away ? `Said yes to: ${def.title}. The bishop's letter will decide it.` : c ? `Accepted: ${def.title}. ${c.label}, beside the week, for ${Math.round(c.weeks / 52) || 1} ${c.weeks >= 78 ? 'years' : 'year'}, alongside the parish.` : `Accepted: ${def.title}.`;
       return { ...result.state, career: [...result.state.career, { week: game.clock.week, kind: 'offer', text }] };
+    });
+  },
+  closeOffer(offerId) {
+    const def = offerById(offerId);
+    if (!def) return;
+    update(set, get, (game) => {
+      set({ lastOfferOutcome: `${def.decline.outcome} You say not again, and they hear it: the letter will not come a third time.` });
+      const next = doClose(game, def);
+      return { ...next, career: [...next.career, { week: game.clock.week, kind: 'offer', text: `Declined for good: ${def.title}. The chancery has stopped asking.` }] };
     });
   },
   deferOffer(offerId) {

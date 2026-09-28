@@ -97,6 +97,20 @@ export interface Npc {
   trajectory?: Milestone[];
   /** Parishioners: what the priest has done for this person and their family, in order. */
   bonds?: Bond[];
+  /** The moments that settled how this person holds him: a scene, a favour, a direction. Regard drifts back toward what these add up to. */
+  marks?: RegardMark[];
+  /** The last week he did anything about this person: hours, a word, a scene they were in. */
+  contactWeek?: number;
+  /** The week the regard first read as a friend and has not fallen since. */
+  friendSince?: number;
+}
+
+/** One thing that moved the regard enough to be remembered. */
+export interface RegardMark {
+  week: number;
+  delta: number;
+  /** "The Phone at Eleven", "asked him to cover a weekend" */
+  why: string;
 }
 
 /** One thing a priest did for a parishioner that the parish remembers. */

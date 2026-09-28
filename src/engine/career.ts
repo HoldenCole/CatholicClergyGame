@@ -160,7 +160,7 @@ export function careerYear(state: GameState, rng: Rng): GameState {
     next = addDigest(next, [year.state.see!.years[year.state.see!.years.length - 1]!]);
   } else if (next.mode.kind === 'clock' || next.mode.kind === 'letter') {
     const review = yearInReview(next);
-    next = deliverLetter({ ...next, reviewBaseline: review.baseline }, review.letter);
+    next = deliverLetter({ ...next, reviewBaseline: review.baseline, ...(review.said ? { flags: { ...next.flags, 'review:said': review.said } } : {}) }, review.letter);
   }
   const age = playerAge(next);
   if (age >= CAREER.retirementAge) {

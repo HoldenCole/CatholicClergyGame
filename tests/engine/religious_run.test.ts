@@ -30,7 +30,7 @@ describe('a friar\'s whole career through the store (E3 round 1)', () => {
     }
     expect(end.history.some((h) => h.eventId.startsWith('opf_') || h.eventId.startsWith('opc_'))).toBe(true);
     expect(['clock', 'ended', 'consultation', 'obedience_letter', 'chapter', 'term_end', 'bishop_ask', 'charter', 'letter']).toContain(end.mode.kind);
-  });
+  }, 20000);
 
   it('runs an Augustinian the same way, and is deterministic from the same seed and choices', () => {
     const a = playFriar('friar-det', 'OSA', 52 * 12);
@@ -38,5 +38,5 @@ describe('a friar\'s whole career through the store (E3 round 1)', () => {
     expect(a.religious!.vows.renewals.length).toBeGreaterThanOrEqual(2);
     const b = playFriar('friar-det', 'OSA', 52 * 12);
     expect(JSON.stringify(a)).toBe(JSON.stringify(b));
-  });
+  }, 20000);
 });

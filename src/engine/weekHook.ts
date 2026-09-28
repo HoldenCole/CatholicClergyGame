@@ -19,6 +19,7 @@ import { vocationsWeek } from '@/systems/vocations';
 import { presetById } from '@/content/dioceses';
 import { staffWeek } from '@/systems/staff';
 import { deaneryWeek } from '@/systems/deanery';
+import { regardWeek } from '@/systems/regard';
 import { returnOfTheFormed, seminarianWeek, summerSeminarian } from '@/systems/formed';
 import { isYearStart } from './time';
 import { seminaryWeek } from '@/systems/seminaryWeek';
@@ -143,6 +144,7 @@ export function seminaryWeekHook(deps: EventDeps): WeekHook {
     // A novice's and a student's house around him. E3 §3.2.
     const around = next.religious ? houseLifeLine(next, rng.derive(`house-life:${next.clock.week}`)) : null;
     if (around) next = addDigestLine(next, around);
+    next = regardWeek(next);
     next = clubsStep(next, rng);
     const pool = weekPool(deps.pool, next);
     if (pool.length > 0) {
@@ -460,6 +462,8 @@ export function friarWeekHook(deps: EventDeps): WeekHook {
       if (event) next = fireOrResolve(next, event, rng, deps);
     }
     if (next.mode.kind !== 'clock' || next.pending.length > 0) return next;
+    // Regard settles toward what the history says, unless he is in touch.
+    next = regardWeek(next);
     // The house at night. DESIGN §8.13.
     const nights = nightWeek(next, rng.derive(`night:${next.clock.week}`));
     next = nights.state;
@@ -548,6 +552,7 @@ export function parishWeekHook(deps: EventDeps): WeekHook {
     next = staffed.state;
     for (const line of staffed.lines) next = addDigestLine(next, line);
     next = deaneryWeek(next);
+    next = regardWeek(next);
     const summer = summerSeminarian(next, rng.derive(`seminarian:${next.clock.week}`));
     next = summer.state;
     if (summer.line) next = addDigestLine(next, summer.line);
@@ -683,6 +688,8 @@ export function parishWeekHook(deps: EventDeps): WeekHook {
       next = nextAssignment(next, rng).state;
     }
     if (next.mode.kind !== 'clock' || next.pending.length > 0) return next;
+    // Regard settles toward what the history says, unless he is in touch.
+    next = regardWeek(next);
     // The house at night. DESIGN §8.13.
     const nights = nightWeek(next, rng.derive(`night:${next.clock.week}`));
     next = nights.state;

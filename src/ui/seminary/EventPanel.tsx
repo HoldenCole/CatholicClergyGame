@@ -8,6 +8,7 @@ import { choiceMeaning } from '@/systems/choiceMeaning';
 import { describeUnmet } from '@/systems/doors';
 import Portrait from '../portraits/Portrait';
 import { portraitForNpc, yearOf } from '../portraits/spec';
+import { whoWord } from '@/systems/life';
 
 /** A scene, written on a sheet laid over the room. */
 export default function EventPanel() {
@@ -32,7 +33,7 @@ export default function EventPanel() {
             {people.map((n) => (
               <figure key={n.id} className="flex w-14 flex-col items-center">
                 <Portrait portrait={portraitForNpc(n, year, !!game.seminary && !game.parish)} size={48} title={`${n.title ? n.title + ' ' : ''}${n.name.first} ${n.name.last}`} />
-                <figcaption className="ink-faint mt-0.5 w-full truncate text-center text-[10px]">{n.name.first}</figcaption>
+                <figcaption className="ink-faint mt-0.5 w-full truncate text-center text-[10px]" title={whoWord(game, n)}>{n.title ? `${n.title} ${n.name.last}` : `${n.name.first} ${n.name.last}`}</figcaption>
               </figure>
             ))}
           </div>

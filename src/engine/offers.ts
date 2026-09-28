@@ -28,6 +28,8 @@ export const OFFERS = {
   weightScale: 1 / 1000,
   /** A declined or lapsed offer is not made again for this long. Invented. */
   reofferAfterWeeks: 104,
+  /** Refused this many times, the letter stops coming. */
+  declinesBeforeClosed: 2,
   /** "Not now, but keep my name": sooner, and likelier when it comes. Invented. */
   reofferAfterDeferWeeks: 78,
   deferredWeight: 1.5,
@@ -57,6 +59,8 @@ export function isOfferEligible(def: OfferDef, state: GameState): boolean {
   if (def.accept.commitment?.away && pendingAppointment(state)) return false;
   if (state.commitments.some((c) => c.offerId === def.id)) return false;
   if (def.once && state.offerHistory.some((h) => h.offerId === def.id && h.decision !== 'deferred')) return false;
+  // Refused twice, or closed for good: the chancery has stopped asking.
+  if (offerClosed(state, def)) return false;
   const last = [...state.offerHistory].reverse().find((h) => h.offerId === def.id);
   if (last && state.clock.week - last.week < (last.decision === 'deferred' ? OFFERS.reofferAfterDeferWeeks : OFFERS.reofferAfterWeeks)) return false;
   if (!evaluateAll(def.requires, state)) return false;
@@ -160,6 +164,25 @@ function settleDecline(state: GameState, def: OfferDef, open: ActiveOffer, decis
   }
   next = { ...next, offers: next.offers.filter((o) => o !== open) };
   return record(next, def.id, decision);
+}
+
+/** The flag that says a man has told them never again. */
+export function closedFlag(def: OfferDef): string {
+  return `offer_closed:${def.id}`;
+}
+
+/** Whether the letter has stopped coming: declined twice, or closed for good by the man himself. */
+export function offerClosed(state: GameState, def: OfferDef): boolean {
+  if (state.flags[closedFlag(def)]) return true;
+  return state.offerHistory.filter((h) => h.offerId === def.id && h.decision === 'declined').length >= OFFERS.declinesBeforeClosed;
+}
+
+/** Not again: a no that closes the letter for good, at the cost of a no. */
+export function closeOffer(state: GameState, def: OfferDef): GameState {
+  const open = state.offers.find((o) => o.offerId === def.id);
+  if (!open) throw new Error(`offer ${def.id} is not open`);
+  const next = settleDecline(state, def, open, 'declined');
+  return { ...next, flags: { ...next.flags, [closedFlag(def)]: true } };
 }
 
 /** The flag that says a man asked to be kept on file for this. */
