@@ -22,7 +22,7 @@ import { dateOf, sundayOf, termWeek } from './time';
 import { scheduleAppointment } from './appointment';
 
 /** How a place is named in prose. */
-export const CITY_WORD: Record<StudyState['city'], string> = { rome: 'Rome', washington: 'Washington', residence: "the bishop's residence", campus: 'the Newman Center', hospital: 'the hospital', seminary: 'the seminary', chancery: 'the chancery', auxiliary: 'the chancery', see: 'the see', prison: 'the penitentiary', mission: 'the missions', deployment: 'the deployment', formation: 'the seminary', schools: 'the schools office', curia: 'the Curia', holy_see: 'the Apostolic Palace', academy: 'the Academy', nunciature: 'the nunciature' };
+export const CITY_WORD: Record<StudyState['city'], string> = { rome: 'Rome', washington: 'Washington', residence: "the bishop's residence", campus: 'the Newman Center', hospital: 'the hospital', seminary: 'the seminary', chancery: 'the chancery', auxiliary: 'the chancery', see: 'the see', prison: 'the penitentiary', mission: 'the missions', deployment: 'the deployment', formation: 'the seminary', schools: 'the schools office', curia: 'the Curia', holy_see: 'the Apostolic Palace', academy: 'the Academy', nunciature: 'the nunciature', generalate: "the order's house in Rome" };
 
 /** Invented: what leaving costs the man's standing with the people he leaves. DESIGN §7.5 rule 3. */
 export const STUDY = { leaveParishioners: -8 } as const;
@@ -160,7 +160,7 @@ export function endStudy(state: GameState, def: OfferDef, rng: Rng): GameState {
     next = { ...next, offerHistory: [...next.offerHistory, { offerId: def.id, week: next.clock.week, decision: 'completed' }] };
     const post = studyProgram(study.program)?.kind === 'post';
     const book = bookLine(next);
-    next = note(next, 'offer', (study.city === 'residence' ? `Three years as ${study.label.toLowerCase()}, and the bishop let you go with his blessing.` : post ? `${Math.round((study.endWeek - study.startWeek) / 52)} years as ${study.label.toLowerCase()}; the board has a parish for you again.` : next.flags['academy:recruited'] && study.city === 'rome' && academyWithin(next) ? `Finished ${study.label.toLowerCase()} at ${study.school}, and stayed in Rome for the Academy.` : `Came home from ${CITY_WORD[study.city]} with ${study.label.toLowerCase()}.`) + (book ? ` ${book}` : ''));
+    next = note(next, 'offer', (study.city === 'generalate' ? `${Math.round((study.endWeek - study.startWeek) / 52)} years at the head of the order; the province gives you a cell.` : study.city === 'residence' ? `Three years as ${study.label.toLowerCase()}, and the bishop let you go with his blessing.` : post ? `${Math.round((study.endWeek - study.startWeek) / 52)} years as ${study.label.toLowerCase()}; the board has a parish for you again.` : next.flags['academy:recruited'] && study.city === 'rome' && academyWithin(next) ? `Finished ${study.label.toLowerCase()} at ${study.school}, and stayed in Rome for the Academy.` : `Came home from ${CITY_WORD[study.city]} with ${study.label.toLowerCase()}.`) + (book ? ` ${book}` : ''));
   }
   const flags: GameState['flags'] = { ...next.flags };
   delete flags[`study:${study.city}`];

@@ -29,6 +29,10 @@ export const ELECTORATE = {
 
 /** The player's id in an electorate. */
 export const PLAYER_ID = 'player';
+/** A general chapter's capitulars, generated for it and let go after it. E3 §16A. */
+export const CAPITULAR_TAG = 'capitular';
+/** The general chapter's regard for a man of one province: what the order has heard of him. Invented. */
+export const GENERAL_ELECTORATE = { eligibleOrder: 50, legibility: { base: 0.15, perOrder: 1 / 250 } } as const;
 
 export type ProvinceState = 'debt' | 'decline' | 'growth' | 'division';
 
@@ -121,16 +125,39 @@ export function playerLegibility(state: GameState): number {
   return Math.max(0, Math.min(100, Math.max(byOffice, legibilityFromReputations(state) + r.termsServed.length * 5)));
 }
 
-/** The body a chapter sits for: the house's solemnly professed, or the province's delegates. */
+/** Whether the order can name him by something: a provincial's term, or its own highest credential; and its regard. E3 §16A. */
+export function nameableByTheOrder(state: GameState): boolean {
+  const r = state.religious;
+  const c = state.character;
+  if (!r || !c) return false;
+  if ((c.reputation.order ?? 0) < GENERAL_ELECTORATE.eligibleOrder) return false;
+  const def = religiousOrder(r.order);
+  const top = def.credentials[def.credentials.length - 1]?.id;
+  return r.termsServed.some((t) => t.office === 'provincial') || r.office?.office === 'provincial' || r.office?.office === 'general' || (!!top && c.credentials.includes(top));
+}
+
+/** His legibility to the whole order: his own, scaled by what the order has heard of him. */
+export function orderLegibility(state: GameState): number {
+  const order = state.character?.reputation.order ?? 0;
+  return Math.max(0, Math.min(100, playerLegibility(state) * (GENERAL_ELECTORATE.legibility.base + Math.max(0, order) * GENERAL_ELECTORATE.legibility.perOrder)));
+}
+
+/** The body a chapter sits for: the house's solemnly professed, the province's delegates, or the order's capitulars. */
 export function electorsOf(state: GameState, level: ChapterLevel, bodyId: string): Voter[] {
   const houses = Object.values(state.orderHouses ?? {}).filter((h) => h.provinceId === state.religious?.provinceId);
   const out: Voter[] = [];
   const add = (n: Npc, houseId: string) => out.push({ id: n.id, npc: n, isPlayer: false, alignment: n.alignment, relationshipWithPlayer: n.relationship, houseId });
+  if (level === 'general') {
+    // The general chapter: the capitulars of the provinces present; the player as provincial, or as his province's delegate.
+    for (const n of Object.values(state.npcs)) if (n.status === 'active' && n.tags.includes(CAPITULAR_TAG)) out.push({ id: n.id, npc: n, isPlayer: false, alignment: n.alignment, relationshipWithPlayer: n.relationship });
+    if (playerSolemn(state) && (state.religious?.office?.office === 'provincial' || state.flags['general:delegate'])) out.push({ id: PLAYER_ID, isPlayer: true, alignment: state.character?.alignment ?? 0, relationshipWithPlayer: 100 });
+    return out.sort((a, b) => a.id.localeCompare(b.id));
+  }
   if (level === 'house') {
     const house = state.orderHouses?.[bodyId];
     if (!house) return out;
     for (const n of membersOf(state, house)) if (solemn(n)) add(n, house.id);
-    if (playerSolemn(state) && state.religious?.houseId === house.id) out.push(playerVoter(state));
+    if (playerSolemn(state) && state.religious?.houseId === house.id && !awayAsGeneral(state)) out.push(playerVoter(state));
     return out;
   }
   // Provincial chapter: the provincial and council ex officio, every prior, and one delegate elected by each house (the man the house would send).
@@ -148,8 +175,13 @@ export function electorsOf(state: GameState, level: ChapterLevel, bodyId: string
       add(m, h.id);
     }
   }
-  if (playerSolemn(state) && (state.religious?.office || state.flags['chapter:delegate'])) out.push(playerVoter(state));
+  if (playerSolemn(state) && (state.religious?.office || state.flags['chapter:delegate']) && !awayAsGeneral(state)) out.push(playerVoter(state));
   return out;
+}
+
+/** The head of the order lives in Rome for his term: his house and province elect without him. E3 §16A. */
+export function awayAsGeneral(state: GameState): boolean {
+  return state.religious?.office?.office === 'general';
 }
 
 function playerVoter(state: GameState): Voter {
@@ -164,15 +196,18 @@ export function contendersOf(state: GameState, office: ChapterOffice, bodyId: st
   const order = r ? religiousOrder(r.order) : undefined;
   const pool: Npc[] = office === 'prior'
     ? (state.orderHouses?.[bodyId] ? membersOf(state, state.orderHouses[bodyId]!) : [])
-    : Object.values(state.orderHouses ?? {}).filter((h) => h.provinceId === r?.provinceId).flatMap((h) => membersOf(state, h));
-  const max = office === 'prior' ? order?.governance.priorMaxConsecutive ?? 2 : order?.governance.provincialMaxConsecutive ?? 2;
+    : office === 'general'
+      // The men the general chapter could turn to: the provincials present.
+      ? Object.values(state.npcs).filter((n) => n.status === 'active' && n.tags.includes(CAPITULAR_TAG) && n.tags.includes('provincial'))
+      : Object.values(state.orderHouses ?? {}).filter((h) => h.provinceId === r?.provinceId).flatMap((h) => membersOf(state, h));
+  const max = office === 'prior' ? order?.governance.priorMaxConsecutive ?? 2 : office === 'general' ? order?.governance.generalMaxTerms ?? 1 : order?.governance.provincialMaxConsecutive ?? 2;
   const out: Contender[] = [];
   for (const n of pool) {
     if (!solemn(n) || n.title !== 'Fr.') continue;
     const age = ageOf(state, n);
     if (age < ELECTORATE.eligibleAge[office]) continue;
     // The incumbent, if he has served the most consecutive terms the constitutions allow, sits this one out.
-    const incumbent = office === 'prior' ? state.orderHouses?.[bodyId]?.priorId === n.id : state.province?.provincialId === n.id;
+    const incumbent = office === 'prior' ? state.orderHouses?.[bodyId]?.priorId === n.id : office === 'general' ? state.generalCuria?.generalId === n.id : state.province?.provincialId === n.id;
     const served = Number(state.flags[`terms:${office}:${n.id}`] ?? (incumbent ? 1 : 0));
     if (incumbent && served >= max) continue;
     const c: Contender = { id: n.id, name: `${n.title} ${n.name.first} ${n.name.last}`, isPlayer: false, stats: n.stats, age, alignment: n.alignment, ambition: n.ambition * ELECTORATE.ambitionSeen, record: npcRecord(state, n), legibility: npcLegibility(state, n) };
@@ -181,12 +216,15 @@ export function contendersOf(state: GameState, office: ChapterOffice, bodyId: st
     out.push(c);
   }
   if (r && state.character && playerSolemn(state) && state.flags.ordained) {
-    const inBody = office === 'prior' ? r.houseId === bodyId : true;
+    const inBody = office === 'general' ? nameableByTheOrder(state) : awayAsGeneral(state) ? false : office === 'prior' ? r.houseId === bodyId : true;
     const age = playerAge(state);
     const declined = r.declined?.[office] ?? 0;
-    const consecutive = r.office?.office === office ? r.office.consecutive : 0;
+    // The head of the order's terms count for life, not in a row: a master serves once, a prior general twice.
+    // The head of the order serves a lifetime's worth of terms, not consecutive ones: those he has served, and those of the term he is in.
+    const generalTerms = r.termsServed.filter((t) => t.office === 'general').length + (r.office?.office === 'general' ? Math.max(1, state.generalCuria?.generalId === PLAYER_ID ? state.generalCuria.terms : 1) : 0);
+    const consecutive = office === 'general' ? generalTerms : r.office?.office === office ? r.office.consecutive : 0;
     if (inBody && age >= ELECTORATE.eligibleAge[office] && declined < ELECTORATE.declinedOut && consecutive < max) {
-      const c: Contender = { id: PLAYER_ID, name: `Fr. ${state.character.name.first} ${state.character.name.last}`, isPlayer: true, stats: state.character.stats, age, alignment: state.character.alignment, ambition: r.perceivedAmbition, record: playerRecord(state), legibility: playerLegibility(state), houseId: r.houseId };
+      const c: Contender = { id: PLAYER_ID, name: `Fr. ${state.character.name.first} ${state.character.name.last}`, isPlayer: true, stats: state.character.stats, age, alignment: state.character.alignment, ambition: r.perceivedAmbition, record: playerRecord(state), legibility: office === 'general' ? orderLegibility(state) : playerLegibility(state), houseId: r.houseId };
       if (r.chapter?.actions.signal === 'unwilling') c.unwilling = true;
       out.push(c);
     }

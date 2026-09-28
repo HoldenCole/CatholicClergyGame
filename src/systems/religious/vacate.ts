@@ -25,5 +25,9 @@ export function vacateOffice(state: GameState, why: string): GameState {
     }
   }
   if (held.office === 'provincial' && next.province?.provincialId === PLAYER_ID) next = { ...next, province: { ...next.province, provincialId: '' } };
+  if (held.office === 'general') {
+    next = { ...next, flags: { ...next.flags, 'general:served': true } };
+    if (next.generalCuria?.generalId === PLAYER_ID) next = { ...next, generalCuria: { ...next.generalCuria, generalId: '' } };
+  }
   return { ...next, career: [...next.career, { week, kind: 'note', text: `He left the office of ${held.office} before its term, ${why}.` }] };
 }

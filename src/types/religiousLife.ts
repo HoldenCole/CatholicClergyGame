@@ -235,6 +235,10 @@ export interface OrderGovernance {
   provincialMaxConsecutive: number;
   generalTermYears: number;
   generalRenewable: boolean;
+  /** Terms the head may serve in all: one where the office is not renewable. */
+  generalMaxTerms: number;
+  /** Provinces and vice-provinces of the order the world over, from which a general chapter's capitulars are drawn (approximate; flagged). */
+  provincesWorldwide: number;
   /** "Master of the Order", "Prior General" */
   generalTitle: string;
   /** "provincial", "prior provincial" */
@@ -500,6 +504,18 @@ export interface Province {
 }
 
 export type ChapterLevel = 'house' | 'provincial' | 'general';
+
+/** The head of the order and his term, and the general chapters held: the order beyond the province. E3 §16A. */
+export interface GeneralCuria {
+  /** An NPC of the seed, or 'player'. */
+  generalId: string;
+  /** The week his current term began: his election, or his re-election. */
+  since: number;
+  /** Terms served in this office, the current one counted. */
+  terms: number;
+  chaptersHeld: number;
+  lastChapterWeek?: number;
+}
 
 export type ChapterOffice = 'prior' | 'provincial' | 'general';
 

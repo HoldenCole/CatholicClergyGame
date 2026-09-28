@@ -3,6 +3,7 @@ import type { Rng } from '@/engine/rng';
 import { religiousOrder } from '@/content/religious';
 import { consult, dualAuthorityCheck, termEndWeek } from './obedience';
 import { chapterFromTheGallery, chapterYear, openChapter, termOver } from './chapter';
+import { ensureGeneralCuria, generalChapterDue, openGeneralChapter } from './general';
 import { deliverLetter } from '@/systems/review';
 import { appointmentYear, conferCredentials } from './offices';
 import { currentHouse } from './house';
@@ -43,6 +44,14 @@ export function religiousYear(state: GameState, rng: Rng): GameState {
   next = appointmentYear(next);
   const conferred = conferCredentials(next);
   next = conferred.state;
+  // The order's head: seeded on first sight, and the elective general chapter when his term has run. E3 §16A.
+  next = ensureGeneralCuria(next);
+  if (!next.religious?.chapter && next.mode.kind === 'clock' && r.vows.solemnWeek !== undefined && generalChapterDue(next)) {
+    next = openGeneralChapter(next, rng.derive(`general:${next.clock.week}`));
+    const gallery = chapterFromTheGallery(next, rng.derive(`gallery:general:${next.clock.week}`));
+    if (gallery.letter) next = deliverLetter(gallery.state, gallery.letter);
+    else return { ...next, mode: { kind: 'chapter' } };
+  }
   // The term of office is up: he returns to the ranks, and the player says how.
   if (termOver(next) && next.mode.kind === 'clock') return { ...next, mode: { kind: 'term_end' } };
   // The house elects a prior when the prior's term has run; the province a provincial when the provincial's has.

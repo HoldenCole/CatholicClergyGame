@@ -123,13 +123,15 @@ export function redHatRoom(state: GameState, day: number): boolean {
 export function mayBeCreated(state: GameState, day: number): boolean {
   const c = state.character;
   const age = playerAge(state, day);
-  if (!c || state.flags.cardinal || state.religious || age >= ELECTOR.age || age < COLLEGE.player.minAge) return false;
+  // A friar only as a former head of his order (E3 §16A); a diocesan priest by a see, a desk, or a nunciature.
+  if (!c || state.flags.cardinal || (state.religious && !state.flags['general:served']) || age >= ELECTOR.age || age < COLLEGE.player.minAge) return false;
   if ((c.reputation.rome ?? 0) < COLLEGE.player.rome) return false;
   const great = !!state.see && !!seeDefs.find((d) => d.id === state.see!.id)?.great && state.see.years.length >= COLLEGE.player.seeYears;
   const since = state.flags['curia:since'];
   const secretary = !!state.flags['curia:secretary'] && typeof since === 'number' && state.clock.week - since >= COLLEGE.player.curiaWeeks;
   // A nuncio of long service may be created too (E1 §11.3).
-  return great || secretary || nuncioOfLongService(state, COLLEGE.player.nuncioYears);
+  const formerGeneral = !!state.religious && !!state.flags['general:served'];
+  return great || secretary || formerGeneral || nuncioOfLongService(state, COLLEGE.player.nuncioYears);
 }
 
 function schedule(state: GameState, kind: CollegeSceneKind, rng: Rng): GameState {

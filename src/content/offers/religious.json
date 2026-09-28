@@ -2644,6 +2644,64 @@
         ],
         "outcome": "The men meet without a friar for a season and then ask for one from the diocese, who comes, and finds them, he says, the best breakfast in the deanery."
       }
+    },
+    {
+      "id": "fr_general_elected",
+      "category": "chancery",
+      "campaign": "religious",
+      "phase": [],
+      "title": "The general chapter has elected you",
+      "body": "Never drawn in play: this is the letter the general chapter's election writes for itself, so that the head of the order's years in Rome ride on the posting machinery like the Curia's and the nunciature's (E3 §16A). Its phases are empty and it is once; the election records it as accepted the week the chapter elects him.",
+      "from": "@provincial",
+      "requires": [
+        {
+          "type": "flag",
+          "key": "office:general",
+          "value": true
+        }
+      ],
+      "weight": 1,
+      "windowWeeks": 1,
+      "once": true,
+      "final": true,
+      "cluster": "province",
+      "accept": {
+        "effects": [
+          {
+            "target": "reputation",
+            "key": "order",
+            "delta": 10
+          },
+          {
+            "target": "reputation",
+            "key": "rome",
+            "delta": 6
+          }
+        ],
+        "outcome": "The chapter stands and sings the Te Deum, badly, in forty accents, and a friar from a province you could not place on a map embraces you and says that the order is in your hands now, and it is.",
+        "commitment": {
+          "label": "Head of the order",
+          "weeks": 468,
+          "apPerWeek": 0,
+          "onComplete": [
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 8
+            },
+            {
+              "target": "trait",
+              "key": "led the whole order from Rome"
+            }
+          ],
+          "completeOutcome": "The term is over. The chapter that elected your successor thanks you in a paragraph of the acts, and the province gives you a cell.",
+          "away": "generalate"
+        }
+      },
+      "decline": {
+        "effects": [],
+        "outcome": "You would rather not, and the chapter, which cannot hear this letter, elects another man in your place."
+      }
     }
   ]
 }

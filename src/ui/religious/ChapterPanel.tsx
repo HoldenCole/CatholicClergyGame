@@ -15,8 +15,8 @@ export default function ChapterPanel() {
   if (!game?.religious?.chapter || game.mode.kind !== 'chapter') return null;
   const ch = game.religious.chapter;
   const order = religiousOrder(game.religious.order);
-  const office = ch.office === 'prior' ? order.governance.priorTitle : ch.office === 'provincial' ? order.governance.provincialTitle : ch.office ?? 'office';
-  const body = ch.level === 'house' ? houseById(game, ch.bodyId)?.name ?? 'the house' : game.province?.name ?? 'the province';
+  const office = ch.office === 'prior' ? order.governance.priorTitle : ch.office === 'provincial' ? order.governance.provincialTitle : ch.office === 'general' ? order.governance.generalTitle : ch.office ?? 'office';
+  const body = ch.level === 'house' ? houseById(game, ch.bodyId)?.name ?? 'the house' : ch.level === 'general' ? `The ${order.name}` : game.province?.name ?? 'the province';
   const name = (id: string) => (id === PLAYER_ID ? 'you' : `${game.npcs[id]?.title ?? ''} ${game.npcs[id]?.name.last ?? id}`.trim());
   const elector = ch.electorIds.includes(PLAYER_ID);
   const candidate = ch.candidateIds.includes(PLAYER_ID);
@@ -25,8 +25,8 @@ export default function ChapterPanel() {
 
   if (!ch.outcome) {
     return (
-      <Panel title={`${ch.level === 'house' ? 'House chapter' : 'Provincial chapter'}: the election of a ${office}`} tilt="r">
-        <p className="leading-relaxed">{body} is in chapter. No one is a declared candidate; every eligible man can receive votes, and the talk before the vote is where the province decides what it thinks.{elector ? ' You have a vote.' : ' You are not of the body this time, and watch from the gallery.'}{candidate ? ' Your own name is among those the room could turn to.' : ''}</p>
+      <Panel title={`${ch.level === 'house' ? 'House chapter' : ch.level === 'general' ? 'General chapter' : 'Provincial chapter'}: the election of ${ch.level === 'general' ? 'the' : 'a'} ${office}`} tilt="r">
+        <p className="leading-relaxed">{ch.level === 'general' ? `${body} is in general chapter: the provincials and delegates of its provinces the world over, in one hall with headphones at every place. No one is a declared candidate; the room turns to the men it can name.` : `${body} is in chapter. No one is a declared candidate; every eligible man can receive votes, and the talk before the vote is where the province decides what it thinks.`}{elector ? (ch.level === 'general' ? (game.religious.office?.office === 'provincial' ? ' You sit as provincial, and have a vote.' : ' Your province sent you as its delegate, and you have a vote.') : ' You have a vote.') : ' You are not of the body this time, and watch from the gallery.'}{candidate ? ' Your own name is among those the room could turn to.' : ''}</p>
         {elector && (
           <div className="mt-3 text-sm">
             <div className="heading text-sm">Your ballot</div>
@@ -98,7 +98,7 @@ export default function ChapterPanel() {
         </div>
       ) : (
         <div className="mt-3 text-sm">
-          <p>{name(elected)} is elected {office} of {body}, {ch.ended === 'majority' ? 'by an absolute majority' : ch.ended === 'narrowed' ? 'on the narrowed ballot' : 'on a plurality'}. He accepts, and the higher superior confirms.</p>
+          <p>{name(elected)} is elected {office} of {body}, {ch.ended === 'majority' ? 'by an absolute majority' : ch.ended === 'narrowed' ? 'on the narrowed ballot' : 'on a plurality'}. He accepts{ch.level === 'general' ? ', and the Holy See is informed' : ', and the higher superior confirms'}.</p>
           <button className="pbtn pbtn-primary mt-2" onClick={() => answer(true)}>Close the chapter</button>
         </div>
       )}
