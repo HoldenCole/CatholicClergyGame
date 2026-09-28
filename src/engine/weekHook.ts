@@ -54,6 +54,7 @@ import { popeOfTheOrderWeek } from '@/systems/religious/mitre';
 import { closeVisitationScene, dueVisitationScene, visitationWeek } from '@/systems/religious/visitation';
 import { installSeeWorld } from './seeWorld';
 import { deskWeek } from '@/systems/bishop/desk';
+import { directionsWeek } from '@/systems/bishop/directions';
 import { renderText } from './text';
 import { closeCascade, dueCascade } from '@/systems/rome/documents';
 import { closeNuncioScene, dueNuncioScene } from '@/systems/rome/nuncio';
@@ -241,6 +242,10 @@ export function studyWeekHook(deps: EventDeps): WeekHook {
       next = desk.state;
       if (desk.line) next = addDigestLine(next, desk.line);
       if (desk.letter) next = deliverLetter(next, desk.letter);
+      // The men he sent away come home on their week. E4 R1.2.
+      const home = directionsWeek(next);
+      next = home.state;
+      for (const line of home.lines) next = addDigestLine(next, line);
       // Rome's document, some weeks on: the diocese waits for his reading of it. E4 R1.1, E1 §4.2.
       if (dueCascade(next)) {
         next = cascadeScene(next, rng.derive(`cascade:${next.clock.week}`), deps);

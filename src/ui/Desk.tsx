@@ -17,6 +17,7 @@ import WorkPanel from './parish/WorkPanel';
 import SideWorkPanel from './parish/SideWorkPanel';
 import SeePanel from './study/SeePanel';
 import BishopDeskPanel from './study/BishopDeskPanel';
+import DirectionsPanel from './study/DirectionsPanel';
 import PlacePanel from './study/PlacePanel';
 import PopePanel from './study/PopePanel';
 import ProjectsPanel from './parish/ProjectsPanel';
@@ -119,6 +120,7 @@ export default function Desk() {
         {open === 'see' && (
           <>
             <BishopDeskPanel />
+            <DirectionsPanel />
             <SeePanel />
           </>
         )}

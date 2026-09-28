@@ -1,0 +1,295 @@
+{
+ "_notes": "E4 R1.2: the directions a bishop gives his priests (systems/bishop/directions.ts): the inverse of the letters the man received as a priest. Each is data: what it needs of the man, how a priest usually takes it, whether he can refuse, what it does to the see, and his reply by answer. The answer is rolled from his regard for the bishop and the direction's welcome (invented and flagged); the presbyterate hears it through the dials.",
+ "directions": [
+  {
+   "id": "move",
+   "kind": "move",
+   "label": "A move to another parish",
+   "blurb": "The letter every priest dreads and half of them want: a new parish by the first of the month. A vacant one first; a swap with its pastor otherwise. He may not refuse it, and he may make it cost you.",
+   "target": "parish",
+   "requires": {
+    "pastor": true
+   },
+   "welcome": -0.3,
+   "refusable": false,
+   "see": {
+    "presbyterate": -1,
+    "shortage": -0.05
+   },
+   "letter": {
+    "accepted": [
+     "{priest} writes back within the week: he will be at {to} by the first, and asks only that the parish be told by you and not by the paper.",
+     "He packs in a fortnight. {parish} gives him a dinner and a cheque, and {to} gives him a rectory with a leak, which he mentions once."
+    ],
+    "reluctant": [
+     "{priest}'s reply takes three weeks and two pages. He will go to {to}, since he has been sent, and he wishes the bishop to know what {parish} was to him and what it will lose.",
+     "The deanery hears the letter's substance before you do. He goes, and is correct with you for a year."
+    ],
+    "refused": [
+     "{priest} does not go. He writes that his health, his mother, and the parish's building campaign make it impossible, and that he has spoken to a canonist.",
+     "The letter goes into his file, and the vacancy stays a vacancy, and the presbyterate watches what you do next."
+    ]
+   },
+   "note": "Moved {priest} from {parish} to {to}."
+  },
+  {
+   "id": "dean",
+   "kind": "dean",
+   "label": "Name him dean",
+   "blurb": "The dean of his part of the diocese: your eyes and his brothers' voice, the man who chairs the deanery and calls you when a pastor has stopped answering the phone. An honour that is also work; the older pastors decide together whether it was deserved.",
+   "requires": {
+    "minAge": 42,
+    "pastor": true
+   },
+   "welcome": 0.6,
+   "refusable": true,
+   "see": {
+    "presbyterate": 2
+   },
+   "letter": {
+    "accepted": [
+     "{priest} writes that he is honoured, and asks what a dean does now, which is the right question. You tell him: everything the constitutions say and whatever the deanery needs.",
+     "He calls the first deanery meeting within the month. Nine pastors come, which is all of them."
+    ],
+    "reluctant": [
+     "{priest} accepts, and says he would rather not have, and that he will do it because he was asked. He does it well and without warmth.",
+     "The deanery takes his tone from him."
+    ],
+    "refused": [
+     "{priest} declines, kindly: he is a pastor and wants to be nothing else, and there are men who want it more. He names two.",
+     "The refusal is remembered as a compliment to him and not to you."
+    ]
+   },
+   "note": "Named {priest} dean."
+  },
+  {
+   "id": "monsignor",
+   "kind": "monsignor",
+   "label": "Petition Rome for the purple",
+   "blurb": "A letter to the nunciature asking that he be named a chaplain of His Holiness: the purple, the title, a photograph in the paper. Rome grants it for a bishop it regards and delays it for one it does not; the presbyterate counts who gets it. Not twice in two years.",
+   "requires": {
+    "titleNot": "Msgr.",
+    "minAge": 45
+   },
+   "welcome": 0.8,
+   "refusable": true,
+   "see": {
+    "presbyterate": 1,
+    "rome": -1
+   },
+   "restWeeks": 104,
+   "letter": {
+    "accepted": [
+     "The rescript comes in four months and {priest} is Monsignor at the Chrism Mass, in the purple his sister bought, photographed for the paper.",
+     "The presbyterate says he deserved it, mostly. Two men say what they always say."
+    ],
+    "reluctant": [
+     "{priest} accepts, and asks that it not be announced, and it is announced anyway, because the nunciature announces things.",
+     "He wears the purple once a year."
+    ],
+    "refused": [
+     "{priest} writes to ask you not to: he does not want it, has never wanted it, and would rather the letter not go. It does not go.",
+     "The story gets out, as stories do, and does him nothing but good."
+    ]
+   },
+   "note": "Petitioned Rome for the purple for {priest}."
+  },
+  {
+   "id": "study",
+   "kind": "study",
+   "label": "Send him to Rome to study",
+   "blurb": "Two years at a Roman university for a licentiate in canon law or theology, the diocese paying, his parish under an administrator. The see gets a canonist, or a professor, or a man who has seen Rome and comes back different. Not everyone wants to be sent.",
+   "requires": {
+    "maxAge": 48,
+    "stat": {
+     "key": "theology",
+     "min": 45
+    }
+   },
+   "welcome": 0.3,
+   "refusable": true,
+   "awayWeeks": 104,
+   "returnTag": "studied_rome",
+   "see": {
+    "presbyterate": 1,
+    "rome": 1,
+    "shortage": 0.1
+   },
+   "letter": {
+    "accepted": [
+     "{priest} writes that he had hoped for this and had not said so. He is in Rome by October and writes twice a year, once at Christmas and once about the food.",
+     "He comes back in two years with the degree and a haircut, and the tribunal takes him the same month."
+    ],
+    "reluctant": [
+     "{priest} goes, because you asked. His letters from Rome are about the parish he left.",
+     "He passes. He comes home and does not speak Italian to anyone."
+    ],
+    "refused": [
+     "{priest} writes that he is forty-seven, that his Latin is what it was at ordination, and that the parish has a building campaign; he would be honoured to be thought of, and would rather not go. You do not send him.",
+     "The vicar for clergy says you should have asked him first."
+    ]
+   },
+   "note": "Sent {priest} to Rome to study."
+  },
+  {
+   "id": "sabbatical",
+   "kind": "sabbatical",
+   "label": "A sabbatical",
+   "blurb": "Six months away: a program at a house of renewal, a pilgrimage, a room with a door that shuts. For the tired, the stale, and the man who has not had a summer off in twenty years. The parish is covered by a neighbour, who will remind you.",
+   "requires": {
+    "pastor": true
+   },
+   "welcome": 0.4,
+   "refusable": true,
+   "awayWeeks": 26,
+   "returnTag": "rested",
+   "see": {
+    "presbyterate": 2,
+    "shortage": 0.05
+   },
+   "letter": {
+    "accepted": [
+     "{priest} writes that he did not know he needed it until you wrote. He goes in the autumn. The neighbour who covers {parish} sends you a monthly letter of the hours it costs him.",
+     "He comes back in the spring saying less and meaning more."
+    ],
+    "reluctant": [
+     "{priest} goes, in the end, and calls the parish office every Tuesday from wherever he is.",
+     "He comes back a week early."
+    ],
+    "refused": [
+     "{priest} writes that the parish cannot spare him and that he does not need it, which is what men who need it say. You leave it.",
+     "The vicar for clergy notes the refusal in the file, in pencil."
+    ]
+   },
+   "note": "Sent {priest} on sabbatical."
+  },
+  {
+   "id": "treatment",
+   "kind": "treatment",
+   "label": "Treatment",
+   "blurb": "A bed at the treatment center by Monday, for the drink or the rest of it: the diocese's oldest intervention and its most private. He may accept it as mercy or refuse it as an insult, and the presbyterate will hear either way; what it never hears is the bishop who did not act.",
+   "requires": {
+    "struggle": [
+     "drink",
+     "anger",
+     "health"
+    ]
+   },
+   "welcome": -0.6,
+   "refusable": true,
+   "awayWeeks": 26,
+   "returnTag": "treated",
+   "see": {
+    "presbyterate": 2,
+    "people": 1
+   },
+   "letter": {
+    "accepted": [
+     "{priest} is in your study for an hour and says almost nothing, and at the end of it says yes. He is at the center by Monday and writes at the end of the first month, a letter you keep.",
+     "He comes home in six months to a smaller parish, which he asked for."
+    ],
+    "reluctant": [
+     "{priest} goes, after two weeks and a second conversation with the vicar for clergy in which he says things about you he will later regret.",
+     "He stays the course. He does not write."
+    ],
+    "refused": [
+     "{priest} refuses: there is nothing wrong with him that a better bishop would notice, and he has a lawyer's name. You withdraw his faculties pending a review, which is what the protocol says and what he expected.",
+     "The deanery divides over it, along the line it always divides along."
+    ]
+   },
+   "note": "Sent {priest} for treatment."
+  },
+  {
+   "id": "rebuke",
+   "kind": "rebuke",
+   "label": "A formal correction",
+   "blurb": "A letter from the bishop, copied to the file: what he did, what the diocese requires, what will follow if it happens again. Neither a penalty nor a warning but the thing between. The presbyterate reads it by its wings: a correction of one of the majority costs you; of the other, less.",
+   "welcome": -1,
+   "refusable": false,
+   "see": {
+    "presbyterate": -2,
+    "rome": 1
+   },
+   "letter": {
+    "accepted": [
+     "{priest} answers within the week, in two lines: the letter is received, and it will not happen again. It does not, for a year.",
+     "The file has one more page in it and the deanery has one more story."
+    ],
+    "reluctant": [
+     "{priest}'s answer is four pages and a canonist's letterhead. The correction stands; so does his account of it, which the presbyterate has read before you have.",
+     "He is correct with you for a year, at every meeting, in front of everyone."
+    ],
+    "refused": [
+     "{priest} does not answer.",
+     "The presbyterate takes that for an answer, and takes sides."
+    ]
+   },
+   "note": "Corrected {priest} formally, to the file."
+  },
+  {
+   "id": "retire",
+   "kind": "retire",
+   "label": "Ask for his resignation",
+   "blurb": "At seventy-five the canon requires his letter and he expects to write it; before that, you are asking a man to stop. A vacancy in a see this short is a vacancy for years. Some men are grateful. Most are not.",
+   "requires": {
+    "minAge": 68,
+    "pastor": true
+   },
+   "welcome": -0.5,
+   "refusable": true,
+   "see": {
+    "shortage": 0.15,
+    "presbyterate": -1
+   },
+   "letter": {
+    "accepted": [
+     "{priest} writes that he had been waiting to be asked and would not have asked himself. He is out of {parish} by Advent, in an apartment near his sister, and says Mass at the hospital on Thursdays.",
+     "The parish gives him a dinner that runs past midnight."
+    ],
+    "reluctant": [
+     "{priest} resigns, since he is asked, and says at the dinner what he thinks of being asked. The parish applauds him and not you.",
+     "He keeps the key to the sacristy for a year."
+    ],
+    "refused": [
+     "{priest} does not resign. He is seventy-one, he writes, and the canon says seventy-five, and the parish has nobody else. He is right about the last part.",
+     "The presbyterate takes note that a man can say no to you."
+    ]
+   },
+   "note": "Asked {priest} to resign {parish}."
+  },
+  {
+   "id": "chancery",
+   "kind": "chancery",
+   "label": "Name him to the chancery",
+   "blurb": "Vicar general, chancellor, or vicar for clergy: the man who runs the diocese when you are on the road, the one who keeps the files, or the one who knows where every priest is and why. The man he replaces goes back to a parish and is not always sorry.",
+   "target": "office",
+   "requires": {
+    "stat": {
+     "key": "administration",
+     "min": 40
+    }
+   },
+   "welcome": 0.5,
+   "refusable": true,
+   "see": {
+    "presbyterate": 1,
+    "money": 1
+   },
+   "letter": {
+    "accepted": [
+     "{priest} accepts the office of {office} and is in the chancery on Monday with a box of his own pens. The man he replaces shows him the files and the coffee machine, in that order.",
+     "The presbyterate reads the appointment as a reading of you."
+    ],
+    "reluctant": [
+     "{priest} accepts, and asks for a year's limit, and does not get one. He is good at it, and says so to no one.",
+     "The chancery's coffee gets better."
+    ],
+    "refused": [
+     "{priest} declines: he is a pastor and would be a bad official and knows it. You believe him, which is rarer than it should be.",
+     "The man who holds the office keeps it, and hears that he nearly did not."
+    ]
+   },
+   "note": "Named {priest} {office}."
+  }
+ ]
+}
