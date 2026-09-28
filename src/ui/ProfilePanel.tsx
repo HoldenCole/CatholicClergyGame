@@ -38,7 +38,7 @@ export default function ProfilePanel() {
           <div className="min-w-0">
             <div className="text-lg font-semibold">{p.name}</div>
             <div className="ink-muted text-sm">
-              {p.age}, born {p.born}{p.ordainedYear ? `, ordained ${p.ordainedYear}` : ''}{p.diocese ? ` for ${p.diocese}` : ''}.
+              {p.age}, born {p.born}{p.ordainedYear ? `, ordained ${p.ordainedYear}` : ''}{p.ordainedFor ? ` ${p.ordainedFor}` : ''}.
             </div>
             <div className="ink-muted text-sm">{p.post}.</div>
             {(() => {

@@ -7,6 +7,7 @@ import { officesHeld } from './offices';
 import { HARD_KINDS } from './trajectory';
 import { instituteDef } from '@/content/institutes';
 import { friarPost } from './religious/who';
+import { religiousOrder } from '@/content/religious';
 
 /**
  * The profile: a life in whole numbers and plain sentences. DESIGN.md §8.6.
@@ -42,6 +43,8 @@ export interface Profile {
   yearsOrdained: number;
   post: string;
   diocese: string;
+  /** Whom he was ordained for: the diocese, or the order. */
+  ordainedFor: string;
   ministry: { key: MinistryKey; label: string; value: number }[];
   masses: number;
   tenures: Tenure[];
@@ -152,6 +155,7 @@ export function profileOf(state: GameState): Profile {
     yearsOrdained: years,
     post: postLine(state),
     diocese: state.world?.diocese.visible.name ?? '',
+    ordainedFor: state.religious ? `in the ${religiousOrder(state.religious.order).name}` : state.world ? `for ${state.world.diocese.visible.name}` : '',
     ministry: rows,
     masses: Math.round(book.masses),
     tenures: allTenures(state),

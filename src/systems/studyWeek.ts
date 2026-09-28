@@ -183,10 +183,10 @@ export function placeVerdict(state: GameState): string | null {
 
 /** What an activity builds, in words. */
 const STAT_WORD: Record<StatKey, string> = { piety: 'piety', theology: 'theology', knowledge: 'learning', charisma: 'presence', administration: 'order' };
-const REP_WORD: Record<string, string> = { parishioners: 'the people', chancery: 'the chancery', brother_priests: 'brother priests', public: 'the town', rome: 'Rome' };
+const REP_WORD: Record<string, string> = { parishioners: 'the people', chancery: 'the chancery', brother_priests: 'brother priests', public: 'the town', rome: 'Rome', order: 'the order', province: 'the province', community: 'the house' };
 export function studyActivityBuilds(def: StudyActivityDef): string {
   const words = (Object.keys(def.stats) as StatKey[]).sort((a, b) => (def.stats[b] ?? 0) - (def.stats[a] ?? 0)).map((k) => STAT_WORD[k]);
   for (const r of def.reputation ?? []) words.push(REP_WORD[r.key] ?? r.key);
-  return words.join(', ');
+  return [...new Set(words)].join(', ');
 }
 
