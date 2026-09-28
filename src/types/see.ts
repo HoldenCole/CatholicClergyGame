@@ -2,6 +2,7 @@ import type { Condition, Effect } from './events';
 import type { ChanceryOffice, LiturgicalStance, LiturgicalTopic } from './world';
 import type { Struggle } from './npc';
 import type { StatKey } from './stats';
+import type { Pillar } from './character';
 
 /** A small see from the pool. content/sees.json */
 export interface SeeDef {
@@ -74,6 +75,71 @@ export interface SeeState {
   lastVisitWeek?: number;
   /** E4 R1.3: cycles of the whole diocese completed. */
   cyclesDone?: number;
+  /** E4 R1.4: the seminary: where his men are formed, and the men. */
+  seminary?: SeeSeminary;
+}
+
+/** E4 R1.4: where a see's men are formed. */
+export type SeminaryWhere = 'own' | 'province' | 'rome';
+export type SeminarianStatus = 'forming' | 'ordained' | 'left' | 'dismissed';
+
+export interface Seminarian {
+  id: string;
+  name: string;
+  /** His age when he entered. */
+  entryAge: number;
+  enteredWeek: number;
+  /** Year of formation, 1..6; the sixth ends in orders. */
+  year: number;
+  /** The four pillars, 0..100, as the rector reads them. */
+  pillars: Record<Pillar, number>;
+  /** The concern in his file, if the rector has one (content/see/seminary.json issues), and the year it surfaced. */
+  issue?: string;
+  issueSeen?: number;
+  /** Sent to Rome to finish: the week, and the degree he brings home. */
+  rome?: number;
+  delayed?: number;
+  status: SeminarianStatus;
+  /** The line of his file, for the sheet. */
+  line: string;
+}
+
+export interface Applicant {
+  id: string;
+  name: string;
+  age: number;
+  background: string;
+  strength: string;
+  /** Hidden until formation surfaces it. */
+  issue: string;
+  line: string;
+  year: number;
+}
+
+export interface SeeSeminary {
+  where: SeminaryWhere;
+  emphasis: Pillar;
+  /** The seminary's name where the see has one of its own, else the one its men go to. */
+  name: string;
+  rectorId?: string;
+  vocationsDirectorId?: string;
+  men: Seminarian[];
+  applicants: Applicant[];
+  /** Men ordained from it in this chair, by NPC id. */
+  ordainedIds: string[];
+  seq: number;
+}
+
+/** E4 R1.4: the seminary's data (content/see/seminary.json). */
+export interface SeeSeminaryPools {
+  where: Record<SeminaryWhere, { label: string; blurb: string; /** What a year of a man costs the see's money. */ money: number; /** How a year grows each pillar, before the emphasis and the rector. */ growth: Record<Pillar, number>; rome: number }>;
+  emphasis: Record<Pillar, { label: string; blurb: string }>;
+  backgrounds: string[];
+  strengths: { text: string; pillar: Pillar }[];
+  issues: Record<string, { label: string; /** The pillar that surfaces it. */ pillar: Pillar; /** The rector's line when it surfaces. */ seen: string; /** What he carries into the priesthood if ordained with it. */ struggle: string }>;
+  report: Record<Pillar, { low: string; middling: string; high: string }>;
+  ordination: string[];
+  left: string[];
 }
 
 /** E4 R1.3: what a visit says, by what the visit finds (content/see/visits.json): pools of lines with {parish}, {pastor}, {town}. */

@@ -61,4 +61,16 @@ The see (V1.5, `engine/see.ts`, `content/sees.json`) is a small diocese from a p
 
 **Tests** (`tests/systems/visits.test.ts`): the list and the empty cycle; a visit's marks, dials, regard, letter, record, and fortnight; a struggle found and then known, the treatment gate opening, the trait seen, and the scene naming the man; the vacant parish and the flags for a mission, a school at risk, and a heavy debt; the year's cycle noticed once and neglect costed, through the year's letter; a save.
 
-**Not yet.** The ad limina and the seminary visit stay scenes; the seminary as a visit comes with R1.4.
+**Not yet.** The ad limina stays a scene.
+
+### 3.5 R1.4 The seminary
+
+`systems/bishop/seminary.ts`, `content/see/seminary.json`, the seminary panel on the see sheet. The see's seminary (`SeeSeminary`) is seeded when the chair is taken: three to five men across the six years, at the diocese's own seminary if the see has one (`major_seminary` among its institutions) or the province's. **Where** (own, the province's, Rome) is data: what a year costs the see's money and what it grows in each pillar. **The emphasis** is one of the four pillars the bishop asks the rector to stress: it adds to that pillar's growth and surfaces the concerns that pillar surfaces. **The rector** (a priest of the see, for a seminary of its own; his theology, piety, and charisma feed the pillars) and **the vocations director** (any priest of the see; his charisma brings applicants) are named from the priests' list.
+
+**The year** (`seminaryYear`, inside `seeYear`): applicants come by the vocations activity's hours, the director, and a floor, and wait on the sheet to be admitted or declined man by man (undecided, they are gone by the next year); every man grows by where, the emphasis, the rector, and noise; a concern in his file (rigid, immature, a doubt, isolated, a health, a taste for it, an eye on the ladder) surfaces more often in a year that stresses its pillar, and the rector's report says so; a man leaves now and then, more often with a concern; a held man keeps his year; a man from the third year may be sent to Rome to finish, at a cost, with the degree coming home; the sixth year ends in orders. The rector's report is a letter each year. **The ordained** become priests of the see with stats from their pillars, a struggle from a concern formation never surfaced, a Roman degree where he was sent, placed as administrator of a vacant parish or vicar at the cathedral; the see's ordinations, shortage, presbyterate, and people move; a see with a seminary ordains its own men and no longer the old arithmetic's.
+
+Flags for the year's news (`seminary:left`, `seminary:ordained`, `seminary:rome`, `seminary:concern`, `seminary:dismissed`) and `{seminary_man}` feed three scenes in `study/see.json`: the man who did not come back, the first blessing, a letter from the Roman college.
+
+**Tests** (`tests/systems/seminary.test.ts`): the seeding; where and the emphasis as data; the rector and the director named; applicants decided man by man; the year growing men, surfacing a concern, and writing the report; a held man; a man sent to Rome; a man dismissed; an ordination making a priest of the see with stats from his pillars and placed where the diocese is short; the see's ordinations counted from the seminary; a save.
+
+**Canonical details, flagged.** Six years and the four pillars follow the Program of Priestly Formation in outline (the propaedeutic year is folded in; to verify); the growth, the surfacing, and the costs are invented.

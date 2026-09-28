@@ -1,5 +1,5 @@
 {
- "_notes": "The see: the last act, a bishop of a small diocese far from home, phase bishop, gated on the engine's flag study:see. Every scene reads the SeeState through see conditions (presbyterate, people, rome, money, shortage, years) and the bishop's age. Selectors: @brother_priest (one of his own priests), @closest_classmate, @vicar_general, @chancellor, @vicar_for_clergy; the nuncio, the metropolitan, the rector, the insurer and the press are named by role, not bound. There is no token for the see; {diocese} is the home diocese. The removal (bp_priest_removed) and the lawsuit (bp_lawsuit_insurer) are authored only, with no flavorPrompt, per DESIGN §11. Flags written, all bp_*: bp_dinner_open_book / bp_dinner_listened / bp_dinner_owned_record / bp_dinner_deferred (the first priests' dinner); bp_removal_protocol / bp_removal_treatment_first / bp_removal_in_person (the priest removed); bp_closed_the_town / bp_town_a_mission / bp_town_clustered (the only parish in a town); bp_vg_the_friend / bp_vg_the_presbyterate_man / bp_vg_romes_man (the vicar general); bp_ad_limina_plain / bp_ad_limina_polished / bp_ad_limina_asked / bp_ad_limina_spoke_for_priests (the ad limina); bp_settled_on_terms / bp_met_the_plaintiff / bp_settled_in_the_open (the lawsuit); bp_seminarian_delayed / bp_seminarian_ordained / bp_seminarian_dismissed / bp_seminarian_examined (the seminarian); bp_questionnaire_in_full / bp_questionnaire_kept_him / bp_questionnaire_told_him (the nuncio's questionnaire); bp_metropolitan_gave / bp_metropolitan_refused / bp_metropolitan_traded (the archbishop's call); bp_record_stood / bp_record_grown / bp_record_silent / bp_record_reprinted (the clipping); bp_asked_for_coadjutor / bp_carried_the_tremor / bp_told_the_presbyterate (his health); bp_chose_the_roof / bp_chose_the_pension / bp_campaign_for_both (the money); bp_raid_stood_in_the_door / bp_raid_statement / bp_raid_opened_the_door / bp_raid_negotiated (the raid); bp_took_the_classmate / bp_refused_the_classmate / bp_classmate_on_loan (the classmate's letter); bp_letter_four_lines / bp_letter_asked_to_stay / bp_letter_going_home / bp_letter_asked_the_priests (the letter at seventy-five); bp_stayed_for_the_rosary / bp_left_for_the_council / bp_knelt_in_the_back (the consolation). E4 R1.1: the bishop's reading of Rome (bp_read_<axis>, beat cascade): the cascade reaches a man who holds a see through the study week, the norm effect records his reading as the diocese's, and the see's dials move by whether the diocese wanted what Rome sent (systems/bishop/reading.ts). E4 R1.2: the directions' scenes (bp_dir_*) hang on direction:<kind> and direction:<answer>, set by systems/bishop/directions.ts; {direction_priest} is the man the last direction went to. E4 R1.3: the visitation's scenes (bp_visit_*) hang on visit:found_struggle, visit:school, visit:mission, visit:debt, set by systems/bishop/visits.ts for the last visit; {visit_parish} and {visit_pastor} name it.",
+ "_notes": "The see: the last act, a bishop of a small diocese far from home, phase bishop, gated on the engine's flag study:see. Every scene reads the SeeState through see conditions (presbyterate, people, rome, money, shortage, years) and the bishop's age. Selectors: @brother_priest (one of his own priests), @closest_classmate, @vicar_general, @chancellor, @vicar_for_clergy; the nuncio, the metropolitan, the rector, the insurer and the press are named by role, not bound. There is no token for the see; {diocese} is the home diocese. The removal (bp_priest_removed) and the lawsuit (bp_lawsuit_insurer) are authored only, with no flavorPrompt, per DESIGN §11. Flags written, all bp_*: bp_dinner_open_book / bp_dinner_listened / bp_dinner_owned_record / bp_dinner_deferred (the first priests' dinner); bp_removal_protocol / bp_removal_treatment_first / bp_removal_in_person (the priest removed); bp_closed_the_town / bp_town_a_mission / bp_town_clustered (the only parish in a town); bp_vg_the_friend / bp_vg_the_presbyterate_man / bp_vg_romes_man (the vicar general); bp_ad_limina_plain / bp_ad_limina_polished / bp_ad_limina_asked / bp_ad_limina_spoke_for_priests (the ad limina); bp_settled_on_terms / bp_met_the_plaintiff / bp_settled_in_the_open (the lawsuit); bp_seminarian_delayed / bp_seminarian_ordained / bp_seminarian_dismissed / bp_seminarian_examined (the seminarian); bp_questionnaire_in_full / bp_questionnaire_kept_him / bp_questionnaire_told_him (the nuncio's questionnaire); bp_metropolitan_gave / bp_metropolitan_refused / bp_metropolitan_traded (the archbishop's call); bp_record_stood / bp_record_grown / bp_record_silent / bp_record_reprinted (the clipping); bp_asked_for_coadjutor / bp_carried_the_tremor / bp_told_the_presbyterate (his health); bp_chose_the_roof / bp_chose_the_pension / bp_campaign_for_both (the money); bp_raid_stood_in_the_door / bp_raid_statement / bp_raid_opened_the_door / bp_raid_negotiated (the raid); bp_took_the_classmate / bp_refused_the_classmate / bp_classmate_on_loan (the classmate's letter); bp_letter_four_lines / bp_letter_asked_to_stay / bp_letter_going_home / bp_letter_asked_the_priests (the letter at seventy-five); bp_stayed_for_the_rosary / bp_left_for_the_council / bp_knelt_in_the_back (the consolation). E4 R1.1: the bishop's reading of Rome (bp_read_<axis>, beat cascade): the cascade reaches a man who holds a see through the study week, the norm effect records his reading as the diocese's, and the see's dials move by whether the diocese wanted what Rome sent (systems/bishop/reading.ts). E4 R1.2: the directions' scenes (bp_dir_*) hang on direction:<kind> and direction:<answer>, set by systems/bishop/directions.ts; {direction_priest} is the man the last direction went to. E4 R1.3: the visitation's scenes (bp_visit_*) hang on visit:found_struggle, visit:school, visit:mission, visit:debt, set by systems/bishop/visits.ts for the last visit; {visit_parish} and {visit_pastor} name it. E4 R1.4: the seminary's scenes (bp_sem_*) hang on seminary:left, seminary:ordained, seminary:rome (and seminary:concern, seminary:dismissed for later), set by systems/bishop/seminary.ts; {seminary_man} names the man.",
  "events": [
   {
    "id": "bp_first_dinner",
@@ -3993,6 +3993,259 @@
        "target": "see",
        "key": "people",
        "delta": -2
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "bp_sem_left",
+   "phase": "bishop",
+   "severity": "NOTABLE",
+   "category": "formation",
+   "baseWeight": 8,
+   "suppressYears": 3,
+   "pressure": [
+    "friendship_vs_duty"
+   ],
+   "requires": [
+    {
+     "type": "flag",
+     "key": "study:see",
+     "value": true
+    },
+    {
+     "type": "flag",
+     "key": "seminary:left",
+     "value": true
+    }
+   ],
+   "title": "The Man Who Did Not Come Back",
+   "body": "{seminary_man} has left the seminary, and the parish that sent him has taken it as a verdict on the parish. The pastor calls you on the Monday: the young man's mother has stopped coming to Mass, the Knights want to know whether the diocese did something, and he himself would like to know whether the rector was hard on the boy, or the boy was hard on the rector, or neither, because he has to say something on Sunday.",
+   "choices": [
+    {
+     "id": "visit",
+     "label": "Drive out and say Mass there on Sunday, and say nothing about it from the pulpit",
+     "outcome": "You preach on the sower. The mother is in the fourth pew. Afterwards she says nothing, and the pastor says that is more than she has said to anyone in a month.",
+     "effects": [
+      {
+       "target": "see",
+       "key": "people",
+       "delta": 2
+      },
+      {
+       "target": "stat",
+       "key": "piety",
+       "delta": 1
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "letter",
+     "label": "Write to the young man yourself",
+     "outcome": "Two pages, no argument. He answers a year later from a city, married, and says the letter was the only thing anyone sent him that did not ask him to come back.",
+     "effects": [
+      {
+       "target": "stat",
+       "key": "charisma",
+       "delta": 1
+      },
+      {
+       "target": "see",
+       "key": "people",
+       "delta": 1
+      }
+     ]
+    },
+    {
+     "id": "rector",
+     "label": "Ask the rector, in writing, what happened",
+     "outcome": "The rector's answer is three pages and honest, and does not help the pastor say anything on Sunday. You learn something about the seminary that the reports do not say.",
+     "effects": [
+      {
+       "target": "stat",
+       "key": "administration",
+       "delta": 1
+      },
+      {
+       "target": "see",
+       "key": "presbyterate",
+       "delta": -1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "bp_sem_ordination_dinner",
+   "phase": "bishop",
+   "severity": "NOTABLE",
+   "category": "formation",
+   "baseWeight": 8,
+   "suppressYears": 3,
+   "pressure": [
+    "competence"
+   ],
+   "requires": [
+    {
+     "type": "flag",
+     "key": "study:see",
+     "value": true
+    },
+    {
+     "type": "flag",
+     "key": "seminary:ordained",
+     "value": true
+    }
+   ],
+   "title": "The First Blessing",
+   "body": "The dinner after the ordination runs late. {seminary_man}, a priest of the diocese for six hours, has given his first blessing to his mother and his second to you, and is now at the far end of the hall being told by the older pastors what the diocese was like when they were ordained, which is the sacrament they administer to the newly ordained. The vicar for clergy asks, at your elbow, where you mean to send him, because the men at the far end are already telling him.",
+   "choices": [
+    {
+     "id": "small",
+     "label": "The mission parishes in the north, under the oldest pastor you trust",
+     "outcome": "He learns the diocese where it is hardest and the pastor learns he can still teach. In three years the north asks to keep him.",
+     "effects": [
+      {
+       "target": "see",
+       "key": "presbyterate",
+       "delta": 2
+      },
+      {
+       "target": "see",
+       "key": "shortage",
+       "delta": -0.05
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "cathedral",
+     "label": "The cathedral, under your own eye",
+     "outcome": "He learns the diocese from its center and you learn him. The older pastors call it favouritism and are half right.",
+     "effects": [
+      {
+       "target": "see",
+       "key": "presbyterate",
+       "delta": -1
+      },
+      {
+       "target": "see",
+       "key": "people",
+       "delta": 1
+      },
+      {
+       "target": "stat",
+       "key": "administration",
+       "delta": 1
+      }
+     ]
+    },
+    {
+     "id": "ask",
+     "label": "Ask him, at the far end of the hall, where he would go",
+     "outcome": "He says the north, because the pastor there was kind to him in a summer. You send him there and it is the right answer for the wrong reason, which is how most assignments are right.",
+     "effects": [
+      {
+       "target": "see",
+       "key": "presbyterate",
+       "delta": 1
+      },
+      {
+       "target": "stat",
+       "key": "charisma",
+       "delta": 1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "bp_sem_rome_letter",
+   "phase": "bishop",
+   "severity": "NOTABLE",
+   "category": "formation",
+   "baseWeight": 8,
+   "suppressYears": 3,
+   "pressure": [
+    "ambition_vs_integrity",
+    "competence"
+   ],
+   "requires": [
+    {
+     "type": "flag",
+     "key": "study:see",
+     "value": true
+    },
+    {
+     "type": "flag",
+     "key": "seminary:rome",
+     "value": true
+    }
+   ],
+   "title": "A Letter From the Roman College",
+   "body": "{seminary_man} writes from Rome, where you sent him to finish: the licentiate is going well, the rector of the college has suggested the doctorate, and a dicastery has asked whether he might be lent for a year after ordination. He asks, in the last paragraph, in the tone of a man who has already been told the answer by somebody else, whether the diocese could spare him.",
+   "choices": [
+    {
+     "id": "home",
+     "label": "Home after ordination; the diocese is short and he knows it",
+     "outcome": "He comes home. He is a canonist in a see with one canonist, and is grateful and restless in equal parts for a decade.",
+     "effects": [
+      {
+       "target": "see",
+       "key": "presbyterate",
+       "delta": 1
+      },
+      {
+       "target": "see",
+       "key": "shortage",
+       "delta": -0.05
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "year",
+     "label": "One year for the dicastery, and then home",
+     "outcome": "He is in the dicastery a year and comes home with a Roman telephone number the chancery uses for twenty years. Rome remembers the see that lent him.",
+     "effects": [
+      {
+       "target": "see",
+       "key": "rome",
+       "delta": 4
+      },
+      {
+       "target": "see",
+       "key": "shortage",
+       "delta": 0.05
+      },
+      {
+       "target": "see",
+       "key": "money",
+       "delta": -1
+      }
+     ]
+    },
+    {
+     "id": "doctorate",
+     "label": "The doctorate, and let Rome have him a while",
+     "outcome": "He is in Rome six years in all. When he comes home he is the best-educated priest in the province, and the pastors who covered his parishes for six years remind him of it at every dinner.",
+     "effects": [
+      {
+       "target": "see",
+       "key": "rome",
+       "delta": 3
+      },
+      {
+       "target": "see",
+       "key": "presbyterate",
+       "delta": -2
+      },
+      {
+       "target": "see",
+       "key": "money",
+       "delta": -3
       }
      ]
     }

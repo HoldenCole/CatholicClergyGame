@@ -153,6 +153,7 @@ export function careerYear(state: GameState, rng: Rng): GameState {
   if (next.see) {
     const year = seeYear(next, rng.derive(`see-year:${state.clock.week}`));
     next = deliverLetter(year.state, year.letter);
+    if (year.seminaryLetter) next = deliverLetter(next, year.seminaryLetter);
     next = addDigest(next, [year.state.see!.years[year.state.see!.years.length - 1]!]);
   } else if (next.mode.kind === 'clock' || next.mode.kind === 'letter') {
     const review = yearInReview(next);
