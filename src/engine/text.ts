@@ -11,6 +11,7 @@ import { curiaTokens } from '@/systems/rome/curia';
 import { collegeTokens } from '@/systems/rome/college';
 import { romanTokens } from '@/systems/religious/mitre';
 import { visitationTokens } from '@/systems/religious/visitation';
+import { directionTokens } from '@/systems/bishop/directions';
 import { popeTokens } from '@/systems/rome/pontificateText';
 import { diplomacyTokens } from '@/systems/rome/diplomacy';
 
@@ -50,6 +51,7 @@ export function textExtras(state: GameState): Record<string, string> {
   Object.assign(out, collegeTokens(state));
   Object.assign(out, romanTokens(state));
   Object.assign(out, visitationTokens(state));
+  Object.assign(out, directionTokens(state));
   Object.assign(out, popeTokens(state));
   Object.assign(out, diplomacyTokens(state));
   return out;

@@ -1,5 +1,5 @@
 {
- "_notes": "The see: the last act, a bishop of a small diocese far from home, phase bishop, gated on the engine's flag study:see. Every scene reads the SeeState through see conditions (presbyterate, people, rome, money, shortage, years) and the bishop's age. Selectors: @brother_priest (one of his own priests), @closest_classmate, @vicar_general, @chancellor, @vicar_for_clergy; the nuncio, the metropolitan, the rector, the insurer and the press are named by role, not bound. There is no token for the see; {diocese} is the home diocese. The removal (bp_priest_removed) and the lawsuit (bp_lawsuit_insurer) are authored only, with no flavorPrompt, per DESIGN §11. Flags written, all bp_*: bp_dinner_open_book / bp_dinner_listened / bp_dinner_owned_record / bp_dinner_deferred (the first priests' dinner); bp_removal_protocol / bp_removal_treatment_first / bp_removal_in_person (the priest removed); bp_closed_the_town / bp_town_a_mission / bp_town_clustered (the only parish in a town); bp_vg_the_friend / bp_vg_the_presbyterate_man / bp_vg_romes_man (the vicar general); bp_ad_limina_plain / bp_ad_limina_polished / bp_ad_limina_asked / bp_ad_limina_spoke_for_priests (the ad limina); bp_settled_on_terms / bp_met_the_plaintiff / bp_settled_in_the_open (the lawsuit); bp_seminarian_delayed / bp_seminarian_ordained / bp_seminarian_dismissed / bp_seminarian_examined (the seminarian); bp_questionnaire_in_full / bp_questionnaire_kept_him / bp_questionnaire_told_him (the nuncio's questionnaire); bp_metropolitan_gave / bp_metropolitan_refused / bp_metropolitan_traded (the archbishop's call); bp_record_stood / bp_record_grown / bp_record_silent / bp_record_reprinted (the clipping); bp_asked_for_coadjutor / bp_carried_the_tremor / bp_told_the_presbyterate (his health); bp_chose_the_roof / bp_chose_the_pension / bp_campaign_for_both (the money); bp_raid_stood_in_the_door / bp_raid_statement / bp_raid_opened_the_door / bp_raid_negotiated (the raid); bp_took_the_classmate / bp_refused_the_classmate / bp_classmate_on_loan (the classmate's letter); bp_letter_four_lines / bp_letter_asked_to_stay / bp_letter_going_home / bp_letter_asked_the_priests (the letter at seventy-five); bp_stayed_for_the_rosary / bp_left_for_the_council / bp_knelt_in_the_back (the consolation). E4 R1.1: the bishop's reading of Rome (bp_read_<axis>, beat cascade): the cascade reaches a man who holds a see through the study week, the norm effect records his reading as the diocese's, and the see's dials move by whether the diocese wanted what Rome sent (systems/bishop/reading.ts).",
+ "_notes": "The see: the last act, a bishop of a small diocese far from home, phase bishop, gated on the engine's flag study:see. Every scene reads the SeeState through see conditions (presbyterate, people, rome, money, shortage, years) and the bishop's age. Selectors: @brother_priest (one of his own priests), @closest_classmate, @vicar_general, @chancellor, @vicar_for_clergy; the nuncio, the metropolitan, the rector, the insurer and the press are named by role, not bound. There is no token for the see; {diocese} is the home diocese. The removal (bp_priest_removed) and the lawsuit (bp_lawsuit_insurer) are authored only, with no flavorPrompt, per DESIGN §11. Flags written, all bp_*: bp_dinner_open_book / bp_dinner_listened / bp_dinner_owned_record / bp_dinner_deferred (the first priests' dinner); bp_removal_protocol / bp_removal_treatment_first / bp_removal_in_person (the priest removed); bp_closed_the_town / bp_town_a_mission / bp_town_clustered (the only parish in a town); bp_vg_the_friend / bp_vg_the_presbyterate_man / bp_vg_romes_man (the vicar general); bp_ad_limina_plain / bp_ad_limina_polished / bp_ad_limina_asked / bp_ad_limina_spoke_for_priests (the ad limina); bp_settled_on_terms / bp_met_the_plaintiff / bp_settled_in_the_open (the lawsuit); bp_seminarian_delayed / bp_seminarian_ordained / bp_seminarian_dismissed / bp_seminarian_examined (the seminarian); bp_questionnaire_in_full / bp_questionnaire_kept_him / bp_questionnaire_told_him (the nuncio's questionnaire); bp_metropolitan_gave / bp_metropolitan_refused / bp_metropolitan_traded (the archbishop's call); bp_record_stood / bp_record_grown / bp_record_silent / bp_record_reprinted (the clipping); bp_asked_for_coadjutor / bp_carried_the_tremor / bp_told_the_presbyterate (his health); bp_chose_the_roof / bp_chose_the_pension / bp_campaign_for_both (the money); bp_raid_stood_in_the_door / bp_raid_statement / bp_raid_opened_the_door / bp_raid_negotiated (the raid); bp_took_the_classmate / bp_refused_the_classmate / bp_classmate_on_loan (the classmate's letter); bp_letter_four_lines / bp_letter_asked_to_stay / bp_letter_going_home / bp_letter_asked_the_priests (the letter at seventy-five); bp_stayed_for_the_rosary / bp_left_for_the_council / bp_knelt_in_the_back (the consolation). E4 R1.1: the bishop's reading of Rome (bp_read_<axis>, beat cascade): the cascade reaches a man who holds a see through the study week, the norm effect records his reading as the diocese's, and the see's dials move by whether the diocese wanted what Rome sent (systems/bishop/reading.ts). E4 R1.2: the directions' scenes (bp_dir_*) hang on direction:<kind> and direction:<answer>, set by systems/bishop/directions.ts; {direction_priest} is the man the last direction went to.",
  "events": [
   {
    "id": "bp_first_dinner",
@@ -3227,6 +3227,423 @@
        "target": "norm",
        "key": "creation",
        "value": "slow"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "bp_dir_refused",
+   "phase": "bishop",
+   "severity": "MAJOR",
+   "category": "chancery",
+   "baseWeight": 8,
+   "suppressYears": 3,
+   "pressure": [
+    "loyalty_vs_honesty",
+    "competence"
+   ],
+   "requires": [
+    {
+     "type": "flag",
+     "key": "study:see",
+     "value": true
+    },
+    {
+     "type": "flag",
+     "key": "direction:refused",
+     "value": true
+    }
+   ],
+   "title": "The Man Who Said No",
+   "body": "{direction_priest} said no to you, and the presbyterate knows it before the vicar for clergy has filed the letter. At the deanery dinner on Thursday nobody mentions it, which is how you know. {@vicar_general} says there are two things a bishop can do with a refusal and that both of them are wrong, and asks which you would like to be wrong about.",
+   "choices": [
+    {
+     "id": "let",
+     "label": "Let it stand, and let the presbyterate see that a man can say no and be left alone",
+     "outcome": "Nothing happens to him, which is what you decided. Half the priests read it as weakness and half as mercy, and the half that reads it as mercy are the half you need.",
+     "effects": [
+      {
+       "target": "see",
+       "key": "presbyterate",
+       "delta": 3
+      },
+      {
+       "target": "see",
+       "key": "rome",
+       "delta": -1
+      },
+      {
+       "target": "stat",
+       "key": "piety",
+       "delta": 1
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "press",
+     "label": "Write again, with the canon cited and a date",
+     "outcome": "He answers the second letter as he answered the first, with a canonist's letterhead. The file grows. The deanery takes sides, and the side that takes his is louder.",
+     "effects": [
+      {
+       "target": "see",
+       "key": "presbyterate",
+       "delta": -4
+      },
+      {
+       "target": "see",
+       "key": "rome",
+       "delta": 2
+      },
+      {
+       "target": "stat",
+       "key": "administration",
+       "delta": 1
+      }
+     ]
+    },
+    {
+     "id": "visit",
+     "label": "Drive out and sit in his kitchen for an hour",
+     "outcome": "You do not mention the letter for fifty minutes. In the last ten he says what the letter did not, and you leave with an understanding that is not an agreement and is worth more.",
+     "effects": [
+      {
+       "target": "see",
+       "key": "presbyterate",
+       "delta": 2
+      },
+      {
+       "target": "stat",
+       "key": "charisma",
+       "delta": 1
+      },
+      {
+       "target": "relationship",
+       "key": "@brother_priest",
+       "delta": 4
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "bp_dir_treatment_letter",
+   "phase": "bishop",
+   "severity": "NOTABLE",
+   "category": "chancery",
+   "baseWeight": 8,
+   "suppressYears": 3,
+   "pressure": [
+    "friendship_vs_duty"
+   ],
+   "requires": [
+    {
+     "type": "flag",
+     "key": "study:see",
+     "value": true
+    },
+    {
+     "type": "flag",
+     "key": "direction:treatment",
+     "value": true
+    }
+   ],
+   "title": "A Letter From the Center",
+   "body": "A letter from the treatment center, three pages in a hand you know, from the man you sent there. It does not thank you. It says what the first month was, and what he understood in the second, and that he would like, when he comes home, a parish where nobody knows why he was away, if there is such a parish in a diocese this size. {@vicar_for_clergy} says there is not.",
+   "choices": [
+    {
+     "id": "answer",
+     "label": "Answer it yourself, the same day, in your own hand",
+     "outcome": "You write four pages. He keeps the letter, you learn years later, in his breviary.",
+     "effects": [
+      {
+       "target": "stat",
+       "key": "piety",
+       "delta": 2
+      },
+      {
+       "target": "see",
+       "key": "presbyterate",
+       "delta": 1
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "small",
+     "label": "Find him the smallest parish you have, and say nothing about why",
+     "outcome": "There is a mission church with a rectory and eleven families, and it is his when he comes home. The eleven families do not ask.",
+     "effects": [
+      {
+       "target": "see",
+       "key": "presbyterate",
+       "delta": 2
+      },
+      {
+       "target": "see",
+       "key": "shortage",
+       "delta": 0.05
+      }
+     ]
+    },
+    {
+     "id": "file",
+     "label": "File it, and let the vicar for clergy answer",
+     "outcome": "The vicar for clergy answers kindly and correctly, and the man comes home to what there is.",
+     "effects": [
+      {
+       "target": "stat",
+       "key": "administration",
+       "delta": 1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "bp_dir_purple",
+   "phase": "bishop",
+   "severity": "NOTABLE",
+   "category": "chancery",
+   "baseWeight": 8,
+   "suppressYears": 3,
+   "pressure": [
+    "loyalty_vs_honesty"
+   ],
+   "requires": [
+    {
+     "type": "flag",
+     "key": "study:see",
+     "value": true
+    },
+    {
+     "type": "flag",
+     "key": "direction:monsignor",
+     "value": true
+    }
+   ],
+   "title": "The Purple",
+   "body": "The rescript came from Rome for {direction_priest} and the presbyterate has done its arithmetic: who has it, who was passed over, and what the bishop rewards. At the Chrism Mass three of the older pastors who do not have it stand together at the back, in black, and are photographed there by the diocesan paper, which has to be asked not to run it.",
+   "choices": [
+    {
+     "id": "laugh",
+     "label": "Say at the dinner that the purple is for the parish and not the man, and mean it",
+     "outcome": "It is the right line and it is believed by the men who wanted to believe it, which is most of them.",
+     "effects": [
+      {
+       "target": "see",
+       "key": "presbyterate",
+       "delta": 2
+      },
+      {
+       "target": "stat",
+       "key": "charisma",
+       "delta": 1
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "more",
+     "label": "Ask Rome for two more names by Advent, to balance the book",
+     "outcome": "The nunciature answers that the Holy Father is not in the habit of naming chaplains in pairs to keep a presbyterate quiet, and grants one of the two.",
+     "effects": [
+      {
+       "target": "see",
+       "key": "rome",
+       "delta": -3
+      },
+      {
+       "target": "see",
+       "key": "presbyterate",
+       "delta": 3
+      }
+     ]
+    },
+    {
+     "id": "nothing",
+     "label": "Let the arithmetic stand; the man deserved it",
+     "outcome": "He did. The men at the back of the cathedral know it too, and it does not help.",
+     "effects": [
+      {
+       "target": "see",
+       "key": "presbyterate",
+       "delta": -1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "bp_dir_rome_postcard",
+   "phase": "bishop",
+   "severity": "NOTABLE",
+   "category": "chancery",
+   "baseWeight": 8,
+   "suppressYears": 3,
+   "pressure": [
+    "friendship_vs_duty",
+    "competence"
+   ],
+   "requires": [
+    {
+     "type": "flag",
+     "key": "study:see",
+     "value": true
+    },
+    {
+     "type": "flag",
+     "key": "direction:study",
+     "value": true
+    }
+   ],
+   "title": "A Postcard From Rome",
+   "body": "A postcard from {direction_priest}, from the Roman university where you sent him: the dome on the front, three lines on the back in a hand that has already changed. He has found the canon law harder than he expected and the city easier, and he asks whether the diocese would mind if he stayed a third year for the doctorate, which the faculty has suggested. The diocese is short one priest already, which is him.",
+   "choices": [
+    {
+     "id": "yes",
+     "label": "A third year; the diocese will have a doctor of canon law for thirty years",
+     "outcome": "The tribunal waits a year longer and gets a man the metropolitan's tribunal tries to borrow. He comes home in three years and is the diocese's for good.",
+     "effects": [
+      {
+       "target": "see",
+       "key": "shortage",
+       "delta": 0.05
+      },
+      {
+       "target": "see",
+       "key": "rome",
+       "delta": 2
+      },
+      {
+       "target": "see",
+       "key": "presbyterate",
+       "delta": 1
+      }
+     ]
+    },
+    {
+     "id": "no",
+     "label": "Two years, as agreed; the parish needs him more than the faculty does",
+     "outcome": "He comes home with the licentiate and a look, and the tribunal takes him the same month. The doctorate is never mentioned again by either of you.",
+     "effects": [
+      {
+       "target": "see",
+       "key": "presbyterate",
+       "delta": 1
+      },
+      {
+       "target": "stat",
+       "key": "administration",
+       "delta": 1
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "ask",
+     "label": "Ask him what he wants, and do that",
+     "outcome": "He wants the third year and is afraid to want it. You give it to him, and he writes twice a year for the rest of your life.",
+     "effects": [
+      {
+       "target": "see",
+       "key": "rome",
+       "delta": 1
+      },
+      {
+       "target": "relationship",
+       "key": "@brother_priest",
+       "delta": 6
+      },
+      {
+       "target": "stat",
+       "key": "piety",
+       "delta": 1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "bp_dir_moved",
+   "phase": "bishop",
+   "severity": "NOTABLE",
+   "category": "chancery",
+   "baseWeight": 8,
+   "suppressYears": 3,
+   "pressure": [
+    "competence"
+   ],
+   "requires": [
+    {
+     "type": "flag",
+     "key": "study:see",
+     "value": true
+    },
+    {
+     "type": "flag",
+     "key": "direction:move",
+     "value": true
+    }
+   ],
+   "title": "The Parish He Left",
+   "body": "The parish {direction_priest} left has written to you, or forty of its people have: a petition, two pages of signatures, and a covering letter from the parish council chair who says the town has never been consulted about its priests and would like to begin. {@vicar_general} says every move produces one of these, and that the ones that do not are the moves to worry about.",
+   "choices": [
+    {
+     "id": "answer",
+     "label": "Answer the letter yourself, and drive out to say Mass there on Sunday",
+     "outcome": "You preach on obedience without using the word. The council chair shakes your hand at the door and does not let go for a moment longer than is polite, which is her way of saying she heard.",
+     "effects": [
+      {
+       "target": "see",
+       "key": "people",
+       "delta": 3
+      },
+      {
+       "target": "stat",
+       "key": "charisma",
+       "delta": 1
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "chancery",
+     "label": "Let the chancery answer, in the form it has for this",
+     "outcome": "The letter goes out on Tuesday. It is polite and it is filed, and so is the petition.",
+     "effects": [
+      {
+       "target": "see",
+       "key": "people",
+       "delta": -2
+      },
+      {
+       "target": "stat",
+       "key": "administration",
+       "delta": 1
+      }
+     ]
+    },
+    {
+     "id": "council",
+     "label": "Invite the council chair to the chancery, and hear her out for an hour",
+     "outcome": "She has more to say than the letter did and most of it is about the school. You learn something about the parish that its pastor never told you, and she learns that the bishop has a face.",
+     "effects": [
+      {
+       "target": "see",
+       "key": "people",
+       "delta": 2
+      },
+      {
+       "target": "see",
+       "key": "presbyterate",
+       "delta": -1
+      },
+      {
+       "target": "stat",
+       "key": "piety",
+       "delta": 1
       }
      ]
     }

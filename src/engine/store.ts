@@ -1,10 +1,11 @@
 import { create } from 'zustand';
 import { beginDraft, abandonDraft } from '@/systems/rome/papalDesk';
 import { beginAct as beginSeeActSys, dropAct as dropSeeActSys } from '@/systems/bishop/desk';
+import { giveDirection as giveDirectionSys } from '@/systems/bishop/directions';
 import { callConsistory as callConsistorySys, holdPapalConsistory, planJourney as planJourneySys } from '@/systems/rome/papalActs';
 import { endPontificate } from '@/systems/rome/pontificate';
 import { answerConclave as answerConclaveSys, conclaveAct as conclaveActSys, holdTheConclave } from '@/systems/rome/conclaveFlow';
-import type { DocumentKind, HouseWorkId, LiturgicalStance } from '@/types';
+import type { ChanceryOffice, DocumentKind, HouseWorkId, LiturgicalStance } from '@/types';
 import type {
   CreationAnswers,
   EventCategory,
@@ -172,6 +173,8 @@ export interface GameStore {
   /** E4 R1.1: the bishop's desk. */
   beginSeeAct(actId: string, target?: { parishId?: string; topic?: LiturgicalTopic; stance?: LiturgicalStance }): void;
   dropSeeAct(): void;
+  /** E4 R1.2: a direction to a priest of the see. */
+  giveDirection(npcId: string, id: string, target?: { parishId?: string; office?: ChanceryOffice }): void;
   abandonPapalDraft(): void;
   callConsistory(): void;
   createCardinals(ids: string[]): void;
@@ -867,6 +870,12 @@ export const useGameStore = create<GameStore>()((set, get) => ({
   },
   dropSeeAct() {
     update(set, get, (game) => dropSeeActSys(game));
+  },
+  giveDirection(npcId, id, target) {
+    update(set, get, (game) => {
+      const out = giveDirectionSys(game, npcId, id, target);
+      return out ? openMail(deliverLetter(out.state, out.letter)) : game;
+    });
   },
   abandonPapalDraft() {
     update(set, get, (game) => abandonDraft(game));

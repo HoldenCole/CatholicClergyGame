@@ -1,5 +1,7 @@
 import type { Condition, Effect } from './events';
-import type { LiturgicalStance, LiturgicalTopic } from './world';
+import type { ChanceryOffice, LiturgicalStance, LiturgicalTopic } from './world';
+import type { Struggle } from './npc';
+import type { StatKey } from './stats';
 
 /** A small see from the pool. content/sees.json */
 export interface SeeDef {
@@ -64,6 +66,62 @@ export interface SeeState {
   /** E4 R1.1: the act on the desk, being written in the desk's hours; and the acts signed in this chair. */
   desk?: SeeAct;
   acts?: SignedAct[];
+  /** E4 R1.2: the directions given to his priests, and the week of the last. */
+  directions?: GivenDirection[];
+  lastDirectionWeek?: number;
+}
+
+/** E4 R1.2: what a direction needs of the man it is given to. Declared in data, checked by the engine. */
+export interface DirectionRequires {
+  minAge?: number;
+  maxAge?: number;
+  /** One of these private struggles. */
+  struggle?: Struggle[];
+  /** Not already carrying this title. */
+  titleNot?: string;
+  stat?: { key: StatKey; min: number };
+  /** A pastor of a parish (or, false, not one). */
+  pastor?: boolean;
+}
+
+export type DirectionKind = 'move' | 'dean' | 'monsignor' | 'study' | 'sabbatical' | 'treatment' | 'rebuke' | 'retire' | 'chancery';
+export type DirectionAnswer = 'accepted' | 'reluctant' | 'refused';
+
+/** E4 R1.2: a direction a bishop may give a priest of his diocese, as data (content/see/directions.json). */
+export interface DirectionDef {
+  id: string;
+  kind: DirectionKind;
+  label: string;
+  blurb: string;
+  /** A parish to move him to, or a chancery office to name him to. */
+  target?: 'parish' | 'office';
+  requires?: DirectionRequires;
+  /** How a priest usually takes it, −1 (a blow) .. 1 (an honour). */
+  welcome: number;
+  /** Whether he can say no and make it stick. */
+  refusable: boolean;
+  /** Weeks away, for a direction that sends him somewhere. */
+  awayWeeks?: number;
+  /** The tag he carries home from it. */
+  returnTag?: string;
+  /** What it does to the see's dials when accepted; halved when reluctant, turned when refused. */
+  see?: Partial<Record<'presbyterate' | 'people' | 'rome' | 'money' | 'shortage', number>>;
+  /** Not this direction again, to anyone, within these weeks. */
+  restWeeks?: number;
+  /** His reply, by answer, with {priest}, {parish}, {to}, {office}, {see}. */
+  letter: Record<DirectionAnswer, string[]>;
+  note: string;
+}
+
+export interface GivenDirection {
+  id: string;
+  npcId: string;
+  week: number;
+  answer: DirectionAnswer;
+  /** The week he is due back, when it sent him away. */
+  returnWeek?: number;
+  parishId?: string;
+  office?: ChanceryOffice;
 }
 
 /** E4 R1.1: an act of the bishop's desk, as data (content/see/acts.json): a decree, a letter, a synod, an appeal, a review. */
