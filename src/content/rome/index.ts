@@ -64,6 +64,9 @@ export const dicasteries: DicasteryDef[] = (dicasteriesRaw as unknown as { dicas
 export interface CollegePools {
   origins: { from: string; region: string; heritage: string; weight: number }[];
   districts: string[];
+  /** The share of cardinals who are religious, and which orders; the same pool serves a rolled pope. Invented, flagged. E3 §16B. */
+  religiousShare: number;
+  orders: { key: string; label: string; weight: number }[];
 }
 
 export const collegePools: CollegePools = collegeRaw as unknown as CollegePools;

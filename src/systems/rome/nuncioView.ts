@@ -22,6 +22,8 @@ export const VIEW = {
   loud: 50,
   loudCost: 6,
   credit: { JCL: 6, STL: 3, STD: 3, rome_alumnus: 5, vg_served: 8, bishops_secretary: 4, hard_parish_turned: 3, auxiliary: 10, curia: 8 },
+  /** A friar's own credits (E3 §16B): a provincial's term, a prior's, the head of the order's. */
+  friar: { provincial: 8, prior: 3, general: 10 },
   bishopPer: 10,
   trusted: 6,
   brokeSecret: -12,
@@ -52,7 +54,9 @@ export function nuncioView(state: GameState): NuncioView {
   v += (rome / 100) * VIEW.rome;
   if (rome >= 30) good.push('Rome thinks well of you');
   else if (rome <= -20) bad.push('Rome knows your name for the wrong reasons');
-  v += ((c.reputation.chancery ?? 0) / 100) * VIEW.chancery;
+  // The chancery's regard, or, for a friar, the province's: the nuncio reads the order's file. E3 §16B.
+  const r = state.religious;
+  v += (((r ? c.reputation.province : c.reputation.chancery) ?? 0) / 100) * VIEW.chancery;
   // What he did with Rome's documents in his parish.
   let fidelity = 0;
   for (const d of state.rome?.issued ?? []) {
@@ -85,12 +89,19 @@ export function nuncioView(state: GameState): NuncioView {
   if (f['office:auxiliary_bishop'] || f.served_auxiliary) { v += VIEW.credit.auxiliary; good.push('the years as an auxiliary'); }
   if (f.curia_served || f['curia:rank']) { v += VIEW.credit.curia; good.push('the years in the Curia'); }
   if (f.hard_parish_turned) { v += VIEW.credit.hard_parish_turned; good.push('the parish everyone had written off'); }
-  // The letter his own bishop writes to the nunciature.
-  const bishopId = state.world?.diocese.hidden.bishop.npcId;
-  const rel = bishopId ? state.npcs[bishopId]?.relationship ?? 0 : 0;
+  if (r) {
+    // What the order can say of him: the offices he held.
+    const held = (office: string) => r.office?.office === office || r.termsServed.some((t) => t.office === office);
+    if (f['general:served'] || r.office?.office === 'general') { v += VIEW.friar.general; good.push('the years at the head of the order'); }
+    else if (held('provincial')) { v += VIEW.friar.provincial; good.push('the years as provincial'); }
+    else if (held('prior')) { v += VIEW.friar.prior; good.push("a prior's term"); }
+  }
+  // The letter his own bishop writes to the nunciature; for a friar, the provincial's, or the order's file when he is the provincial.
+  const bishopId = r ? (state.province?.provincialId === 'player' ? undefined : state.province?.provincialId) : state.world?.diocese.hidden.bishop.npcId;
+  const rel = bishopId ? state.npcs[bishopId]?.relationship ?? 0 : r ? Math.max(-100, Math.min(100, c.reputation.order ?? 0)) : 0;
   v += rel / VIEW.bishopPer;
-  if (rel >= 30) good.push("your bishop's letter");
-  else if (rel <= -20) bad.push("your bishop's letter, which was cool");
+  if (rel >= 30) good.push(r ? "your provincial's letter" : "your bishop's letter");
+  else if (rel <= -20) bad.push(r ? "your provincial's letter, which was cool" : "your bishop's letter, which was cool");
   if (f['nuncio:trusted']) { v += VIEW.trusted; good.push('an honest answer you once gave him about another man'); }
   if (f['nuncio:broke_secret']) { v += VIEW.brokeSecret; bad.push('a secret you did not keep'); }
   return { value: Math.round(clamp(v, 0, 100)), good, bad };

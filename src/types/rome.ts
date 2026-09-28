@@ -25,6 +25,10 @@ export interface Papacy {
   historical: boolean;
   /** One line about him, for the record and the profile. */
   line?: string;
+  /** A religious pope: the key of his order ('SJ', 'OP', 'OSA', …), as the record and the College have it. E3 §16B. */
+  order?: string;
+  /** A pope who was a friar of the player's own province: the NPC he was. E3 §7.5, the rarest event. */
+  confrereId?: string;
 }
 
 export interface Vacancy {
@@ -157,6 +161,10 @@ export interface Cardinal {
   papabile: number;
   /** The day he dies, rolled when he is made. */
   diesDay: number;
+  /** A religious cardinal: the key of his order ('SJ', 'OP', 'OSA', …). E3 §16B. */
+  order?: string;
+  /** A cardinal who is a friar of the player's own province: the NPC he was. E3 §7.5. */
+  npcId?: string;
 }
 
 export type CollegeSceneKind = 'created' | 'titular' | 'eve' | 'after' | 'eighty' | 'consistory';
@@ -313,4 +321,6 @@ export interface HistoricalPapacyDef {
   from: string;
   temperament: number;
   line: string;
+  /** A religious pope of the record: his order's key. */
+  order?: string;
 }

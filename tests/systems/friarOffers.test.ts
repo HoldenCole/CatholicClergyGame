@@ -41,7 +41,7 @@ describe('the order moves its own men: letters by campaign, Rome from the provin
     expect(allOffers.some((o) => !o.campaign && o.phase.includes('parochial_vicar') && isOfferEligible(o, d))).toBe(true);
     // Every letter of the diocese is silent for a friar, whatever else it asks.
     for (const o of allOffers.filter((o) => o.campaign !== 'religious' && o.phase.includes('parochial_vicar'))) expect(isOfferEligible(o, f), o.id).toBe(false);
-    for (const o of allOffers.filter((o) => o.campaign === 'religious')) expect(o.from?.startsWith('@') && ['@provincial', '@master_of_students', '@prior', '@novice_master', '@old_friar', '@confrere'].includes(o.from), o.id).toBe(true);
+    for (const o of allOffers.filter((o) => o.campaign === 'religious')) expect(o.from?.startsWith('@') && ['@provincial', '@master_of_students', '@prior', '@novice_master', '@old_friar', '@confrere', '@nuncio'].includes(o.from), o.id).toBe(true);
   });
 
   it('the provincial\'s letter about Rome moves him the week he says yes, and he comes home to a consultation, not the board', () => {

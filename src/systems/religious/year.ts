@@ -99,11 +99,11 @@ export function religiousYear(state: GameState, rng: Rng): GameState {
   next = seminaryMenYear(seminaryMenStart(next, rng.derive(`dsem:${next.clock.week}`)), rng.derive(`dsem-year:${next.clock.week}`));
   next = directingYear(next, rng.derive(`directing:${next.clock.week}`));
   // A pastor of the diocese may write to the prior for him. E3 §3.12.
-  next = pastorAskYear(next, rng.derive(`pastor-ask:${next.clock.week}`));
+  if (!next.study) next = pastorAskYear(next, rng.derive(`pastor-ask:${next.clock.week}`));
   // A brother of the province may write for help. E3 §6.2.
-  next = confrereAskYear(next, rng.derive(`confrere-ask:${next.clock.week}`));
+  if (!next.study) next = confrereAskYear(next, rng.derive(`confrere-ask:${next.clock.week}`));
   // The bishop's office may write to the provincial for him. E3 §3.11.
-  if (!r.consultation && next.mode.kind === 'clock') {
+  if (!r.consultation && !next.study && next.mode.kind === 'clock') {
     next = bishopAskYear(next, rng.derive(`bishop-ask:${next.clock.week}`));
     if (next.mode.kind !== 'clock') return next;
   }

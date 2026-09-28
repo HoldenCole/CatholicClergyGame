@@ -10,6 +10,7 @@ import { beginStudy } from './study';
 import { hasInterest, INTERESTS } from '@/systems/interests';
 import { REQUEST, requestOf } from '@/systems/request';
 import { sedeVacante } from '@/systems/rome/papacy';
+import { POPE_OF_ORDER, popeOfHisOrder } from '@/systems/religious/mitre';
 
 /** How far Rome's regard moves the chancery's letters: 0.6 at −100, 1.4 at +100. Invented. */
 export function romeTrust(state: GameState): number {
@@ -49,7 +50,7 @@ export function isOfferEligible(def: OfferDef, state: GameState): boolean {
   // Sede vacante: the nuncio names no one until Rome can (E1 §9 B).
   if (def.cluster === 'episcopal' && sedeVacante(state)) return false;
   // The bishop's letters do not reach a friar, and the provincial's do not reach a priest of the diocese. E3 §3.11.
-  if (state.religious ? def.campaign !== 'religious' : def.campaign === 'religious') return false;
+  if (def.campaign !== 'any' && (state.religious ? def.campaign !== 'religious' : def.campaign === 'religious')) return false;
   if (def.yearGate && (!state.seminary || !def.yearGate.includes(state.seminary.year))) return false;
   if (state.offers.some((o) => o.offerId === def.id)) return false;
   // A man who has said yes to one post waits for that letter before another asks for his years.
@@ -74,6 +75,8 @@ export function offerWeight(def: OfferDef, state: GameState): number {
   // A letter naming this posting is louder than an interest on file. DESIGN §7.6.
   const asked = requestOf(state)?.target;
   if (asked?.kind === 'post' && asked.offerId === def.id) w *= REQUEST.offerWeight;
+  // A pope of the order: the provincial's letters come likelier while he reigns. E3 §7.5.
+  if (state.religious && def.campaign === 'religious' && popeOfHisOrder(state)) w *= POPE_OF_ORDER.offerBoost;
   return Math.max(0, w);
 }
 

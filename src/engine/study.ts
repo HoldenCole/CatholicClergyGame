@@ -2,6 +2,7 @@ import type { GameState, OfferDef, StudyState } from '@/types';
 import type { Rng } from './rng';
 import { studyProgram } from '@/content/study';
 import { offerById } from '@/content/offers';
+import { friarNamedBishop } from '@/systems/religious/mitre';
 import { applyEffects } from './effects';
 import { handoffProject } from '@/systems/projects';
 import { refreshOpenings } from '@/systems/openings';
@@ -83,6 +84,8 @@ export function beginStudy(state: GameState, def: OfferDef, failed: boolean, rng
   if (program.city === 'curia') next = beginCuria(next, rng.derive(`curia:${next.clock.week}`));
   // The Academy: a student of the Holy See's diplomatic service, the missionary year ahead. E1 §11.
   if (program.city === 'academy') next = beginAcademy(next);
+  // A friar named bishop leaves the order's governance as the posting begins. E3 §16B.
+  if (next.religious && (program.city === 'auxiliary' || program.city === 'see')) next = friarNamedBishop(next);
   if (program.kind === 'see') {
     // The last act: a see of his own, held until the letter at seventy-five.
     const see = generateSee(next, rng.derive(`see:${next.clock.week}`));

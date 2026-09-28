@@ -111,13 +111,16 @@ function age(state: GameState): number {
 export function mayBeCandidate(state: GameState): boolean {
   const years = weeksOrdained(state);
   const f = state.flags;
-  return !state.religious && years !== null && years >= NUNCIO.candidate.years && age(state) <= NUNCIO.candidate.maxAge && !f.bishop_of_a_see && !f.refused_see && !f.refused_mitre && !state.see;
+  // A friar too (E3 §16B): solemnly professed, at home in the province, not its head in Rome; about one bishop in ten is a religious.
+  const friar = !state.religious || (state.religious.vows.solemnWeek !== undefined && !state.study && state.religious.office?.office !== 'general');
+  return friar && years !== null && years >= NUNCIO.candidate.years && age(state) <= NUNCIO.candidate.maxAge && !f.bishop_of_a_see && !f.refused_see && !f.refused_mitre && !state.see;
 }
 
-/** A priest he might be asked about: a classmate, or a brother priest of the diocese. */
+/** A priest he might be asked about: a classmate, or a brother priest of the diocese; for a friar, a solemnly professed priest of his own order. */
 function subjectFor(state: GameState, rng: Rng): Npc | null {
+  const r = state.religious;
   const priests = Object.values(state.npcs)
-    .filter((n) => n.status === 'active' && (n.role === 'classmate' || n.role === 'priest') && !n.tags.includes('bishop_elsewhere') && !n.tags.includes('diocesan_seminarian'))
+    .filter((n) => n.status === 'active' && !n.tags.includes('bishop_elsewhere') && !n.tags.includes('diocesan_seminarian') && (r ? n.role === 'religious' && n.tags.includes(`order:${r.order}`) && n.tags.includes('vows:solemn') && n.title === 'Fr.' : n.role === 'classmate' || n.role === 'priest'))
     .sort((a, b) => (a.id < b.id ? -1 : 1));
   if (!priests.length) return null;
   const classmates = priests.filter((n) => n.role === 'classmate');
@@ -213,7 +216,7 @@ function openTerna(state: GameState, lines: string[]): GameState {
     s = { ...s, rome: { ...s.rome!, ternas: [...ternas, terna] } };
     return schedule(s, 'about_you', rng, terna.id);
   }
-  if (!s.religious && years !== null && years >= NUNCIO.consult.years && view >= NUNCIO.consult.view && rng.chance(NUNCIO.consult.chance)) {
+  if (years !== null && years >= NUNCIO.consult.years && view >= NUNCIO.consult.view && rng.chance(NUNCIO.consult.chance)) {
     const subject = subjectFor(s, rng);
     if (subject) {
       terna.consultedAbout = subject.id;

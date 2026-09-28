@@ -2702,6 +2702,284 @@
         "effects": [],
         "outcome": "You would rather not, and the chapter, which cannot hear this letter, elects another man in your place."
       }
+    },
+    {
+      "id": "fr_auxiliary_bishop",
+      "category": "chancery",
+      "campaign": "religious",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor",
+        "study"
+      ],
+      "title": "The Nuncio's Call, at the Priory",
+      "body": "The call comes to the house on a Tuesday from a Washington number, and the brother on the door has to find you in the garden. The voice is Italian and courteous and asks whether you are alone. The Holy Father, it says, wishes to name you auxiliary bishop of {diocese}. It asks whether you accept, and it asks for an answer in the same conversation, and it asks you to tell no one until the announcement: not your mother, not the house, not {@provincial}, who already knows and has been told to say nothing. From the day of your ordination as bishop you are released from the obedience you promised the order and from every office in it. You will not vote in its chapters again. You keep the habit, the brothers, and the name; you lose the vote, the cell you could be sent to, and the right to be nobody. The men who have said no to this call are remembered in Rome for exactly one thing.",
+      "from": "@provincial",
+      "requires": [
+        {
+          "type": "flag",
+          "key": "aux_named",
+          "value": true
+        },
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 18
+        },
+        {
+          "type": "age",
+          "op": "<=",
+          "value": 65
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "ordained_bishop",
+            "value": true
+          }
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "refused_mitre",
+            "value": true
+          }
+        },
+        {
+          "type": "nuncio",
+          "key": "view",
+          "op": ">=",
+          "value": 55
+        }
+      ],
+      "weight": 30,
+      "bias": [
+        {
+          "when": {
+            "type": "flag",
+            "key": "office:provincial",
+            "value": true
+          },
+          "multiplier": 1.6
+        },
+        {
+          "when": {
+            "type": "flag",
+            "key": "rome_alumnus",
+            "value": true
+          },
+          "multiplier": 1.4
+        },
+        {
+          "when": {
+            "type": "outspokenness",
+            "op": ">=",
+            "value": 50
+          },
+          "multiplier": 0.4
+        }
+      ],
+      "windowWeeks": 0,
+      "once": true,
+      "cluster": "episcopal",
+      "accept": {
+        "effects": [
+          {
+            "target": "flag",
+            "key": "ordained_bishop",
+            "value": true
+          },
+          {
+            "target": "flag",
+            "key": "office:auxiliary_bishop",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "rome",
+            "delta": 6
+          },
+          {
+            "target": "reputation",
+            "key": "local_bishop",
+            "delta": 10
+          },
+          {
+            "target": "reputation",
+            "key": "community",
+            "delta": -4
+          },
+          {
+            "target": "stat",
+            "key": "piety",
+            "delta": -1
+          }
+        ],
+        "outcome": "The announcement is at noon Roman time, which is five in the morning in the cloister, and by Lauds the house knows and by breakfast the province does. The ordination is in the cathedral; the habit is under the vestments, and the friars sit together in the fourth row and sing louder than the choir. The crozier is borrowed. Your first confirmation is in a gym. You have a coat of arms now, with the order's shield in one quarter, which is the quarter people ask about.",
+        "commitment": {
+          "label": "Auxiliary bishop",
+          "weeks": 312,
+          "apPerWeek": 0,
+          "onComplete": [
+            {
+              "target": "flag",
+              "key": "served_auxiliary",
+              "value": true
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 4
+            }
+          ],
+          "completeOutcome": "Six years an auxiliary: the confirmations, the vicariate, and the mail the bishop did not want. Rome will move you or leave you; the province, which cannot assign a bishop, asks where you would like a cell.",
+          "away": "auxiliary_bishop"
+        }
+      },
+      "decline": {
+        "effects": [
+          {
+            "target": "flag",
+            "key": "refused_mitre",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "rome",
+            "delta": -10
+          },
+          {
+            "target": "reputation",
+            "key": "community",
+            "delta": 6
+          },
+          {
+            "target": "reputation",
+            "key": "order",
+            "delta": 4
+          },
+          {
+            "target": "stat",
+            "key": "piety",
+            "delta": 2
+          }
+        ],
+        "outcome": "You tell the voice that you took a vow, and that the order needs you where it can send you, and that you are grateful. The voice is courteous about it and says the Holy Father will be told. The house never learns; the province does, years later, and the older men nod, and the younger ones are not sure."
+      }
+    },
+    {
+      "id": "fr_diocesan_bishop",
+      "category": "chancery",
+      "campaign": "religious",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor",
+        "study"
+      ],
+      "title": "A See",
+      "body": "The nuncio himself, this time, and not on the phone. He asks you to lunch in Washington and does not get to it until the coffee. The see of {see_city} is vacant, and the three names went to Rome some months ago. The Holy Father would like you to take it. You would leave the province for good, and the house, and every brother who knows what you are like at Compline, and become the man that forty strangers in collars talk about at their deanery dinners: a friar in a bishop's house, which the diocese will find either charming or alarming and will not tell you which. You would hold it until the letter at seventy-five. The nuncio says the Holy Father is aware that it is not a reward. He says it is a diocese, and it needs a bishop, and he has read your file twice, and the order's letter once, which was enough. {nuncio_view}",
+      "requires": [
+        {
+          "type": "flag",
+          "key": "nuncio:named_see",
+          "value": true
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "bishop_of_a_see",
+            "value": true
+          }
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "refused_see",
+            "value": true
+          }
+        }
+      ],
+      "weight": 25,
+      "bias": [],
+      "windowWeeks": 1,
+      "once": true,
+      "cluster": "episcopal",
+      "accept": {
+        "effects": [
+          {
+            "target": "flag",
+            "key": "ordained_bishop",
+            "value": true
+          },
+          {
+            "target": "flag",
+            "key": "bishop_of_a_see",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "rome",
+            "delta": 8
+          },
+          {
+            "target": "reputation",
+            "key": "community",
+            "delta": -6
+          }
+        ],
+        "outcome": "The installation is in a cathedral you had never seen, before priests you had never met, with the nuncio reading the bull in a Latin the town does not follow. The habit is under the chasuble and the older priests notice. The house has a study with a window on the parking lot and a housekeeper who worked for three bishops and will outlast you. The first letter on the desk is from the insurer. The second is from a pastor who wants to know when you will visit. The third is from the house, signed by everyone, and you keep it.",
+        "commitment": {
+          "label": "Bishop of a see",
+          "weeks": 520,
+          "apPerWeek": 0,
+          "onComplete": [
+            {
+              "target": "flag",
+              "key": "held_a_see",
+              "value": true
+            }
+          ],
+          "completeOutcome": "The letter at seventy-five, as canon law requires, and Rome accepts it the way it accepts them. The see has a bishop emeritus now, which is a friar with a title, and the order has a cell for him.",
+          "away": "diocesan_bishop"
+        }
+      },
+      "decline": {
+        "effects": [
+          {
+            "target": "flag",
+            "key": "refused_see",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "rome",
+            "delta": -12
+          },
+          {
+            "target": "reputation",
+            "key": "community",
+            "delta": 6
+          },
+          {
+            "target": "reputation",
+            "key": "order",
+            "delta": 4
+          },
+          {
+            "target": "stat",
+            "key": "piety",
+            "delta": 2
+          }
+        ],
+        "outcome": "You tell the nuncio that you are a friar, and that the order has uses for you it has not finished with. He does not argue; he has heard it before, from better men and worse. Rome remembers a refusal the way it remembers everything, without heat and without end. The house, which is not supposed to know, gives you a look at supper that lasts a week."
+      },
+      "from": "@nuncio"
     }
   ]
 }
