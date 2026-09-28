@@ -141,8 +141,10 @@ export interface GameState {
   orderHouses?: Record<string, OrderHouse>;
   /** The order beyond the province: its head, his term, and its general chapters. E3 §16A. */
   generalCuria?: GeneralCuria;
-  /** The province's other dioceses, each as it was when he left it, by preset id; `world` is the one he is in. */
+  /** The province's other dioceses, each as it was when he left it, by preset id; `world` is the one he is in. A bishop's home diocese waits here too (E4 R1.0). */
   territory?: Record<string, World>;
+  /** E4 R1.0: the diocese that ordained him, by preset id, once he holds a see elsewhere; absent while `world` is home. */
+  homeDioceseId?: string;
   world: World | null;
   assignment: Assignment | null;
   /** The live parish loop, once assigned. */

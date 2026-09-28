@@ -3,10 +3,10 @@ import type { Rng } from '@/engine/rng';
 import { CLERGY_HERITAGE, eraForBirthYear, rollHeritage, rollMaleName } from './names';
 import { addStats, finishNpc, rollAlignment, rollBaseStats } from './npc';
 
-const PRIORITIES: BishopPriority[] = ['finances', 'vocations', 'education', 'social_outreach', 'liturgy', 'evangelization'];
-const MANAGEMENT: ManagementStyle[] = ['delegator', 'micromanager', 'absentee', 'reformer'];
-const TRAITS: BishopTrait[] = ['loyalty', 'competence', 'visibility', 'discretion', 'orthodoxy', 'pastoral_warmth', 'initiative', 'deference'];
-const FAULTS: BishopFault[] = ['disloyalty', 'sloppiness', 'showboating', 'secretiveness', 'heterodoxy', 'coldness', 'freelancing', 'timidity'];
+export const PRIORITIES: BishopPriority[] = ['finances', 'vocations', 'education', 'social_outreach', 'liturgy', 'evangelization'];
+export const MANAGEMENT: ManagementStyle[] = ['delegator', 'micromanager', 'absentee', 'reformer'];
+export const TRAITS: BishopTrait[] = ['loyalty', 'competence', 'visibility', 'discretion', 'orthodoxy', 'pastoral_warmth', 'initiative', 'deference'];
+export const FAULTS: BishopFault[] = ['disloyalty', 'sloppiness', 'showboating', 'secretiveness', 'heterodoxy', 'coldness', 'freelancing', 'timidity'];
 
 /**
  * Faults a given reward may not pair with: its own shadow (redundant) and

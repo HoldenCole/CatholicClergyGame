@@ -1,6 +1,8 @@
 import { useGameStore } from '@/engine/store';
 import { moneyWord, regardWord, shortageWord } from '@/engine/see';
 import { seeDef } from '@/content/sees';
+import { OFFICE_LABEL } from '@/generation/chancery';
+import type { ChanceryOffice } from '@/types';
 import Sheet from '../Sheet';
 
 /** The see: what a bishop holds, in words, and the years so far. */
@@ -30,6 +32,25 @@ export default function SeePanel() {
           ))}
         </dl>
       </Sheet>
+      {game.world && game.world.diocese.presetId === see.dioceseId && (() => {
+        const w = game.world;
+        const here = (t: string[]) => t.includes(`diocese:${w.diocese.presetId}`);
+        const priests = Object.values(game.npcs).filter((n) => n.status === 'active' && n.role === 'priest' && here(n.tags));
+        const chancery = w.diocese.hidden.chanceryIds.map((id) => game.npcs[id]).filter((n) => n && n.status === 'active');
+        const emeritus = Object.values(game.npcs).find((n) => n.tags.includes('bishop_emeritus') && here(n.tags));
+        const office = (n: { tags: string[] }) => OFFICE_LABEL[(n.tags.find((t) => t in OFFICE_LABEL) ?? 'chancellor') as ChanceryOffice];
+        return (
+          <Sheet title="The diocese">
+            <p className="ink-muted text-xs">{w.parishes.length} parishes on the map, and {priests.length} priests of the diocese, every one of whom you must know.</p>
+            <dl className="mt-2 grid grid-cols-2 gap-x-6 gap-y-1 text-sm">
+              {chancery.map((n) => (
+                <div key={n!.id} className="flex justify-between gap-2"><dt className="ink-muted">{office(n!)}</dt><dd>{n!.title} {n!.name.last}</dd></div>
+              ))}
+              {emeritus && <div className="flex justify-between gap-2"><dt className="ink-muted">Bishop emeritus</dt><dd>{emeritus.title} {emeritus.name.last}</dd></div>}
+            </dl>
+          </Sheet>
+        );
+      })()}
       {see.former && see.former.length > 0 && (
         <Sheet title="The chairs before this one">
           <ul className="flex flex-col gap-1 text-sm">

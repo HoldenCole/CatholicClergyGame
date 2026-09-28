@@ -52,6 +52,7 @@ import { religiousModeStep, religiousYear } from '@/systems/religious/year';
 import { termOver } from '@/systems/religious/chapter';
 import { popeOfTheOrderWeek } from '@/systems/religious/mitre';
 import { closeVisitationScene, dueVisitationScene, visitationWeek } from '@/systems/religious/visitation';
+import { installSeeWorld } from './seeWorld';
 import { renderText } from './text';
 import { closeCascade, dueCascade } from '@/systems/rome/documents';
 import { closeNuncioScene, dueNuncioScene } from '@/systems/rome/nuncio';
@@ -205,6 +206,8 @@ const STUDY_EVENT_CHANCE = 0.1;
 export function studyWeekHook(deps: EventDeps): WeekHook {
   return (state: GameState, rng: Rng) => {
     if (!state.study) return state;
+    // A see from before it had a world of its own (E4 R1.0): it gets one now, from the seed.
+    if (state.see && state.world && state.world.diocese.presetId !== state.see.dioceseId) state = installSeeWorld(state, rng.derive('see-world'));
     // A post he said yes to from this one: the letter comes, or does not.
     const letter = letterStep(state, rng, deps);
     if (letter.moved || letter.state.pending.length > 0) return letter.state;

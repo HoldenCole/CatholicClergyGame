@@ -15,6 +15,8 @@ export interface SeeDef {
   leans?: Partial<Record<'presbyterate' | 'people' | 'rome' | 'money' | 'shortage', number>>;
   /** One of the great sees: the game's own dioceses, where Rome sends a bishop it has watched. */
   great?: boolean;
+  /** E4 R1.0: what the diocese synthesizer needs to roll the see as a world of parishes and priests (a small see; the great ones are presets). */
+  synth?: { state: string; region: string; lat: number; lon: number; size: 'small' | 'medium' | 'large' | 'huge'; latinoShare: number; growth: 'shrinking' | 'stable' | 'growing' | 'fast'; climate: 'cold' | 'temperate' | 'hot' | 'desert' | 'mild' };
 }
 
 /** A see he held before this one, for the sheet and the ending. */
@@ -54,4 +56,6 @@ export interface SeeState {
   years: string[];
   /** The sees he held before, oldest first, when Rome has moved him. */
   former?: FormerSee[];
+  /** E4 R1.0: the preset id of the see's own world (`state.world` while he holds it): the see as a place with people. */
+  dioceseId?: string;
 }
