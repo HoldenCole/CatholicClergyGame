@@ -21,6 +21,8 @@ import { seeYear } from './see';
 import { withChoice } from '@/systems/choice';
 import { closeRequest, markRequested, requestOf, requestYear } from '@/systems/request';
 import { officialsWrite, writeFile } from '@/systems/file';
+import { emeritiYear } from '@/systems/emeriti';
+import { fillVacantParishes } from '@/systems/formed';
 import { ministryLine } from '@/systems/ministry';
 import { housesYear } from '@/systems/houses';
 import { pontificateLine } from '@/systems/rome/pontificateText';
@@ -149,6 +151,14 @@ export function careerYear(state: GameState, rng: Rng): GameState {
   }
   // The officials write what they think of him, once a year, whoever the bishop is.
   next = officialsWrite(next);
+  if (!afar(next) && !next.religious) {
+    // The bishops emeriti of his life: one may die, and the chancellor writes about the funeral (D3).
+    const em = emeritiYear(next, rng.derive(`emeriti:${state.clock.week}`));
+    next = addDigest(em.state, em.lines);
+    // The parishes around him whose pastors have gone get new ones: the men he formed, grown, when they are due (D5).
+    const filled = fillVacantParishes(next, rng.derive(`fill:${state.clock.week}`));
+    next = addDigest(filled.state, filled.lines);
+  }
   // The letter in the vicar for clergy's file: acted on, left to stand, or closed. DESIGN §7.6.
   next = markRequested(next);
   const asked = requestYear(next, rng.derive(`request:${state.clock.week}`));

@@ -9,6 +9,7 @@ import { generateBishop, temperamentLine } from '@/generation/bishop';
 import { presetById } from '@/content/dioceses';
 import { clampSigned } from './reputation';
 import { readFile } from './file';
+import { formedAsBishop } from './formed';
 import { reigning, sedeVacante } from './rome/papacy';
 
 /** Invented. DESIGN 5.3 and 9.3. */
@@ -209,6 +210,13 @@ export function successionYear(state: GameState, rng: Rng, opts: { afar?: boolea
   const successorId = state.territory ? `${world.diocese.presetId}:bishop_${year}` : `bishop_${year}`;
   const seeded = generateBishop(rng.derive(`successor:${year}`), { ...preset, dispositionBias: state.romeTemperament * 0.6 + (world.diocese.hidden.financial === 'crisis' ? 0 : preset.dispositionBias * 0.3) }, year, successorId);
   if (state.territory) seeded.npc = { ...seeded.npc, tags: [...seeded.npc.tags, `diocese:${world.diocese.presetId}`] };
+  // One of the men he formed, grown (D5): Rome names him, and he remembers the summer and the evaluation.
+  const grown = opts.afar ? null : formedAsBishop(state, rng.derive(`grown:${year}`));
+  if (grown) {
+    const first = grown.name.split(' ')[0]!;
+    const last = grown.name.split(' ').slice(1).join(' ');
+    seeded.npc = { ...seeded.npc, name: { first, last }, birthYear: Math.min(seeded.npc.birthYear, year - 50), relationship: 35, tags: [...seeded.npc.tags, 'formed_by_you'], marks: [{ week: state.clock.week, delta: 35, why: `the summer of ${grown.year}, and the strong evaluation you wrote` }] };
+  }
   successor: {
     // A diocese in crisis gets a fixer; a scandal gets an outsider. DESIGN 9.3
     if (world.diocese.hidden.financial === 'crisis') seeded.npc.stats.administration = Math.min(100, seeded.npc.stats.administration + 15);
@@ -236,8 +244,8 @@ export function successionYear(state: GameState, rng: Rng, opts: { afar?: boolea
       },
     },
   };
-  const withNew: GameState = { ...state, npcs, world: { ...world, diocese, bishopHistory: [...world.bishopHistory, seeded.npc.id] } };
-  const news = `${current.title} ${current.name.last} has ${why === 'promoted' ? 'been named to a larger see' : why}. Rome has named ${seeded.npc.title} ${seeded.npc.name.first} ${seeded.npc.name.last} to ${world.diocese.visible.see}.`;
+  const withNew: GameState = { ...state, npcs, world: { ...world, diocese, bishopHistory: [...world.bishopHistory, seeded.npc.id] }, ...(grown ? { formed: (state.formed ?? []).map((f) => (f.npcId === grown.npcId ? { ...f, returned: true } : f)) } : {}) };
+  const news = `${current.title} ${current.name.last} has ${why === 'promoted' ? 'been named to a larger see' : why}. Rome has named ${seeded.npc.title} ${seeded.npc.name.first} ${seeded.npc.name.last} to ${world.diocese.visible.see}.${grown ? ` You had him as a seminarian in ${grown.year}.` : ''}`;
   if (opts.afar) return { state: { ...withNew, flags: { ...withNew.flags, [`succession:${year}`]: true } }, newBishop: seeded.npc, lines: [news] };
   const { state: revalued, verdict, reread } = revalue(withNew, seeded.npc, { before: world.diocese.hidden.bishop.liturgy, after: seeded.profile.liturgy });
   const letter = bishopLetter(revalued, seeded.npc, verdict, reread);

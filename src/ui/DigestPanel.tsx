@@ -7,6 +7,7 @@ import { whatIsGoingOn } from '@/systems/digest';
 import type { DigestWeek } from '@/types';
 import Sheet from './Sheet';
 import { useUiStore } from './uiStore';
+import { circleOf } from '@/systems/circle';
 
 const SHOWN = 26;
 const LANES: Lane[] = ['decided', 'money', 'parish', 'people', 'diocese', 'you', 'around'];
@@ -33,10 +34,27 @@ function WeeksSheet({ digest, going, seed, religious }: { digest: DigestWeek[]; 
   }, [top, seed, prefs.readWeeks, setPrefs]);
   const [flavor, setFlavor] = useState(false);
   const [more, setMore] = useState(0);
-  const weeks = readDigest(digest, SHOWN + more);
-  const shown = weeks.filter((w) => filter === 'all' ? true : (w.lanes[filter]?.length ?? 0) > 0);
+  // The record through one relationship: every week that names the person.
+  const [person, setPerson] = useState('');
+  const game = useGameStore((s) => s.game);
+  const people = game ? circleOf(game).map((r) => ({ id: r.npc.id, label: `${r.npc.title ? `${r.npc.title} ` : ''}${r.npc.name.first} ${r.npc.name.last}`, last: r.npc.name.last, first: r.npc.name.first })) : [];
+  const chosen = people.find((p) => p.id === person);
+  const names = chosen ? (game?.npcs[chosen.id]?.role === 'lay' ? [chosen.last, chosen.first] : [chosen.last]) : [];
+  const mentions = (lines: string[]) => lines.some((l) => names.some((n) => new RegExp(`\\b${n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`).test(l)));
+  const weeks = readDigest(digest, chosen ? digest.length : SHOWN + more);
+  const shown = weeks.filter((w) => (chosen ? mentions(Object.values(w.lanes).flat()) : filter === 'all' ? true : (w.lanes[filter]?.length ?? 0) > 0));
   return (
     <Sheet title="The weeks">
+      {people.length > 0 && (
+        <div className="mb-2 flex items-center gap-2 text-xs">
+          <span className="ink-muted">Through one person:</span>
+          <select className="pinput text-xs" value={person} onChange={(e) => setPerson(e.target.value)}>
+            <option value="">everyone</option>
+            {people.map((p) => <option key={p.id} value={p.id}>{p.label}</option>)}
+          </select>
+          {chosen && <span className="ink-faint">{shown.length} week{shown.length === 1 ? '' : 's'} name {chosen.last}.</span>}
+        </div>
+      )}
       {going.length > 0 && (
         <div className="mb-3 rounded border rule bg-white/30 px-3 py-2 text-sm leading-relaxed">
           <span className="ink-faint mr-2 text-[11px] uppercase tracking-[0.18em]">This quarter</span>

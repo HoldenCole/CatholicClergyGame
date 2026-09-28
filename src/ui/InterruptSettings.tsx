@@ -14,6 +14,8 @@ const LEVEL_LABELS: Record<InterruptLevel, string> = {
 export default function InterruptSettings() {
   const interrupts = useGameStore((s) => s.game?.interrupts);
   const setInterrupt = useGameStore((s) => s.setInterrupt);
+  const stopForPeople = useGameStore((s) => s.game?.settings?.stopForPeople ?? true);
+  const setSettings = useGameStore((s) => s.setSettings);
   if (!interrupts) return null;
 
   return (
@@ -30,6 +32,10 @@ export default function InterruptSettings() {
           </li>
         ))}
       </ul>
+      <label className="mt-3 flex items-center gap-2 text-sm">
+        <input type="checkbox" checked={stopForPeople} onChange={(e) => setSettings({ stopForPeople: e.target.checked })} />
+        <span>People: stop when someone who matters to you dies, leaves, is moved, or is named to something.</span>
+      </label>
       <p className="ink-faint mt-3 text-xs">What cannot wait always stops the clock.</p>
     </Sheet>
   );
