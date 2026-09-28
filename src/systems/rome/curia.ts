@@ -24,6 +24,8 @@ import { nuncioView } from './nuncioView';
  */
 export type CuriaRank = 'official' | 'head' | 'undersecretary' | 'secretary';
 
+import { friarNamedBishop } from '@/systems/religious/mitre';
+
 export const CURIA = {
   /** Years in the Curia and the score each rung asks, and the age below which the pope does not name a man to it (close to practice; flagged). */
   rungs: [
@@ -108,7 +110,7 @@ export function beginCuria(state: GameState, rng: Rng): GameState {
     npcs: { ...npcs, [prefect.id]: prefect, [secretary.id]: secretary, [colleague.id]: colleague },
     flags: { ...flags, 'curia:dicastery': def.key, [`curia:in:${def.key}`]: true, 'curia:rank': 'official', 'curia:since': state.clock.week },
     study: state.study ? { ...state.study, school: dicasteryName(def, day), label: `Official of ${dicasteryName(def, day)}` } : state.study,
-    career: [...state.career, { week: state.clock.week, kind: 'promotion', text: `Lent by the diocese to the Holy See: an official of ${dicasteryName(def, day)}.` }],
+    career: [...state.career, { week: state.clock.week, kind: 'promotion', text: `Lent by the ${state.religious ? 'order' : 'diocese'} to the Holy See: an official of ${dicasteryName(def, day)}.` }],
   };
 }
 
@@ -146,7 +148,7 @@ export function curiaWeek(state: GameState): CuriaWeek {
   if (s.flags['curia:stays'] === true) {
     s = extend(s, s.study!.endWeek + CURIA.stayWeeks);
     s = { ...s, flags: { ...s.flags, 'curia:stays': false, 'curia:asked_stay': false, 'curia:answered_stay': false, 'curia:stayed': (Number(s.flags['curia:stayed']) || 0) + 1 } };
-    lines.push('The secretary signs the letter asking the diocese for you for three more years, and your bishop signs it too.');
+    lines.push(s.religious ? 'The secretary signs the letter asking the order for you for three more years, and your provincial signs it too.' : 'The secretary signs the letter asking the diocese for you for three more years, and your bishop signs it too.');
   }
   // Once a year the superiors look at him; the rungs above an official are the pope's to give, and wait out a vacancy.
   if (served > 0 && served % 52 === 0) {
@@ -180,14 +182,15 @@ function promote(state: GameState, key: CuriaRank, stayYears: number, lines: str
   s = { ...s, career: [...s.career, { week, kind: 'promotion', text }] };
   lines.push(text);
   if (key === 'secretary') {
-    // The secretary of a dicastery is ordained an archbishop, titular of a see that no longer exists.
+    // The secretary of a dicastery is ordained an archbishop, titular of a see that no longer exists; a friar leaves the order's governance with it. E3 §16B.
     s = { ...s, flags: { ...s.flags, ordained_bishop: true, 'office:curia_secretary': true } };
+    if (s.religious) s = friarNamedBishop(s);
   }
   const body =
     key === 'head'
       ? [`The secretary calls you in after the congresso and tells you, without sitting down, that you are to be head of office at ${office} from the first of the month. It is not a papal appointment, and it is how papal appointments begin.`, 'You will have three officials under you, one of whom has been here eleven years and expected it. The years in Rome are longer now: three more at least.']
       : key === 'undersecretary'
-        ? [`A letter on the letterhead of the Secretariat of State: ${pope} has named you ${title('undersecretary')} of ${office}. It is published in the Bollettino at noon, and by one o'clock your bishop has called, and your mother, and a journalist you have never spoken to.`, 'The undersecretary sits at the congresso at the prefect\'s left hand and signs what the officials draft. You will not be going home for five years at the least.']
+        ? [`A letter on the letterhead of the Secretariat of State: ${pope} has named you ${title('undersecretary')} of ${office}. It is published in the Bollettino at noon, and by one o'clock your ${state.religious ? 'provincial' : 'bishop'} has called, and your mother, and a journalist you have never spoken to.`, 'The undersecretary sits at the congresso at the prefect\'s left hand and signs what the officials draft. You will not be going home for five years at the least.']
         : [`${pope} has named you ${title('secretary')} of ${office}, and titular archbishop of a see in North Africa that has had no Christians for thirteen centuries. You will be ordained in St. Peter's.`, 'A secretary runs a dicastery in all but name. He also, in the ordinary way of things, does not go home: when his years here are done, he is given a see.'];
   letters.push({ sort: 'rome', title: key === 'head' ? 'Head of office' : key === 'undersecretary' ? title('undersecretary').replace(/^./, (c) => c.toUpperCase()) : `${title('secretary').replace(/^./, (c) => c.toUpperCase())}, and archbishop`, body, week });
   return s;

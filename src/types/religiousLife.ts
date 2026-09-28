@@ -312,6 +312,8 @@ export interface OrderDef {
   houseOffices: HouseOfficeDef[];
   /** The works a friar may ask the provincial for. E3 §3.10. */
   apostolates: ApostolateDef[];
+  /** The order's own house of studies in Rome, a generated analog never named for the real one (CLAUDE.md rule 13): what it is called in the game, where its men live, and the chairs a friar may hold there. E3 §16C. */
+  roman: { faculty: string; residence: string; chairs: string[] };
 }
 
 /** A day the order keeps. `kind` says what the day is to the order; scenes hang on `key`. */

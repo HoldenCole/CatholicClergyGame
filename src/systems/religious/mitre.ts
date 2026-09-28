@@ -1,5 +1,6 @@
 import type { GameState, Letter } from '@/types';
 import { religiousOrder } from '@/content/religious';
+import { createRng } from '@/engine/rng';
 import { collegePools } from '@/content/rome';
 import { reigning } from '@/systems/rome/papacy';
 import { deliverLetter } from '@/systems/review';
@@ -54,6 +55,31 @@ export function friarNamedBishop(state: GameState): GameState {
     week,
   };
   return deliverLetter(next, letter);
+}
+
+/**
+ * Lent to the Holy See, or sent to teach at the order's faculty in Rome: the
+ * office he holds is laid down (a man in Rome governs nothing at home), the
+ * house and the faculty are the order's own, and the record says who sent him.
+ * E3 §16C.
+ */
+export function friarLentToRome(state: GameState, city: 'curia' | 'faculty'): GameState {
+  const r = state.religious;
+  if (!r) return state;
+  const order = religiousOrder(r.order);
+  let next = r.office ? vacateOffice(state, city === 'curia' ? 'lent by the order to the Holy See' : "sent to teach at the order's faculty in Rome") : state;
+  if (next.study) next = { ...next, study: { ...next.study, residence: order.roman.residence, ...(city === 'faculty' ? { school: order.roman.faculty, label: `Professor at ${order.roman.faculty}` } : {}) } };
+  if (city === 'faculty') next = { ...next, career: [...next.career, { week: state.clock.week, kind: 'promotion', text: `Sent by the province to teach at ${order.roman.faculty}.` }] };
+  return next;
+}
+
+/** {roman_faculty}, {roman_chair}: the order's house of studies in Rome and the chair it asks him to hold, the same for the whole of one life. E3 §16C. */
+export function romanTokens(state: GameState): Record<string, string> {
+  const r = state.religious;
+  if (!r) return {};
+  const order = religiousOrder(r.order);
+  const chair = createRng(`${state.seed}:roman-chair`).pick(order.roman.chairs);
+  return { roman_faculty: order.roman.faculty, roman_chair: chair };
 }
 
 /** Whether the reigning pope is a man of the player's order. */
