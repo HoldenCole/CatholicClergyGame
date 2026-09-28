@@ -1,5 +1,5 @@
 {
-  "_notes": "E3 §16B: the friar and the mitre, and a pope of his order. The nuncio's scenes for a friar hang on the nuncio scene kinds (beat nuncio) and reach him through the friar's week; the bishop's own on the auxiliary and see postings (phase study, weeks_away); the letter at seventy-five is the friar's own, the diocesan one being his brother's; the pope's on pope:own_order and pope:confrere, set by systems/religious/mitre.ts. Canonical details close to practice and flagged (a religious bishop is released from obedience to his superiors and holds no office in the institute: can. 705, to verify).",
+  "_notes": "E3 §16B: the friar and the mitre, and a pope of his order. The nuncio's scenes for a friar hang on the nuncio scene kinds (beat nuncio) and reach him through the friar's week; the bishop's own on the auxiliary and see postings (phase study, weeks_away); the letter at seventy-five is the friar's own, the diocesan one being his brother's; the pope's on pope:own_order and pope:confrere, set by systems/religious/mitre.ts. Canonical details close to practice and flagged (a religious bishop is released from obedience to his superiors and holds no office in the institute: can. 705, to verify). Also the friar's Roman offices (E3 §16 C): the Curia's scenes for a friar hang on study:curia beside the Curia's own, opened to any campaign; the faculty's on study:faculty with weeks_away; the faculty is the order's own house of studies in Rome, a generated analog never named for the real one.",
   "events": [
     {
       "id": "fr_nu_about_you",
@@ -1641,6 +1641,1452 @@
             {
               "target": "stat",
               "key": "charisma",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fr_cu_first_day",
+      "phase": [
+        "study"
+      ],
+      "campaign": "religious",
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 40,
+      "once": true,
+      "suppressYears": 99,
+      "pressure": [
+        "belief_vs_safety"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:curia",
+          "value": true
+        },
+        {
+          "type": "weeks_away",
+          "op": "<=",
+          "value": 6
+        }
+      ],
+      "title": "The Habit and the Badge",
+      "body": "The first morning at {dicastery}: the badge, the desk, the protocol numbers, and the question nobody asks aloud until the head of office asks it, kindly, at eleven. The dicastery's officials wear the black. The order's men in Rome wear the habit in the house and the street and, some of them, in the office, and the head of office has seen it go both ways and does not care which, so long as he knows. A friar in a Roman office is a small daily decision about what he is.",
+      "choices": [
+        {
+          "id": "habit",
+          "label": "The habit, at the desk and in the corridor",
+          "meaning": "The order's man in the Curia; the office notices, then stops.",
+          "outcome": "The corridor looks for a week and then does not. The files do not care. A monsignor from the Signatura calls you Padre in the lift, which is what you are, and asks about the order's constitutions, which he has read.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "priesthood",
+              "delta": 6
+            },
+            {
+              "target": "place",
+              "key": "city",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "black",
+          "label": "The black in the office, the habit in the house",
+          "meaning": "The office's custom; the house's.",
+          "outcome": "You change at the door like a man with two jobs, which you are. The office forgets what you are, which is comfortable, and the house reminds you at supper, which is the point of the house.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "superiors",
+              "delta": 4
+            },
+            {
+              "target": "place",
+              "key": "city",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -1
+            }
+          ]
+        },
+        {
+          "id": "ask",
+          "label": "Ask the head of the order, at supper, what the house's men do",
+          "meaning": "The order decides; the house hears the question.",
+          "outcome": "He says the habit, as if it were obvious, and then says that the last friar who worked at a dicastery wore the black and became a bishop, and that he does not know what to make of that either.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 3
+            },
+            {
+              "target": "place",
+              "key": "priesthood",
+              "delta": 3
+            },
+            {
+              "target": "relationship",
+              "key": "@provincial",
+              "delta": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fr_cu_file_home",
+      "phase": [
+        "study"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 20,
+      "once": true,
+      "suppressYears": 99,
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:curia",
+          "value": true
+        },
+        {
+          "type": "weeks_away",
+          "op": ">=",
+          "value": 26
+        }
+      ],
+      "title": "A Dossier About the Order",
+      "body": "The dossier that comes to your desk on a Tuesday should not have come to you: a bishop's letter to {dicastery} about a province of your own order, not yours, asking that a house be closed, and a provincial who will not close it. The rule of the office is that a man does not handle his own institute's business. It came to you because the secretary wanted it read by someone who knows what a provincial chapter is, and he said so, handing it over, with the door open.",
+      "choices": [
+        {
+          "id": "return",
+          "label": "Give it back: a friar does not judge his brothers' province",
+          "meaning": "The rule kept; the secretary notes it, both ways.",
+          "outcome": "The secretary takes it back with a face that has seen both kinds of official. The matter is decided by a monsignor who has never seen a chapter room and decides it, as far as you can tell, rightly, and a little late.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "superiors",
+              "delta": 3
+            },
+            {
+              "target": "place",
+              "key": "priesthood",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 2
+            },
+            {
+              "target": "record",
+              "key": "files",
+              "delta": 0
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "read",
+          "label": "Read it, and write what the constitutions would say",
+          "meaning": "The order explained to Rome; the order will hear it was you.",
+          "outcome": "Your pages are six and the secretary reads all of them, which he does not usually. The house is not closed. The province in question hears, as provinces do, whose desk the dossier crossed, and the order's head thanks you at supper without saying for what.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "superiors",
+              "delta": 6
+            },
+            {
+              "target": "place",
+              "key": "desk",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 2
+            },
+            {
+              "target": "record",
+              "key": "files",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "bishop",
+          "label": "Read it, and write for the bishop: the house is too small to keep",
+          "meaning": "Rome's answer, from a friar's hand; the order remembers.",
+          "outcome": "The house is closed within the year. The bishop is grateful and does not know to whom. The order knows exactly, and the head of the order is courteous to you for the rest of your posting in a way that is not warmth.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "superiors",
+              "delta": 6
+            },
+            {
+              "target": "place",
+              "key": "desk",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": -8
+            },
+            {
+              "target": "record",
+              "key": "files",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fr_cu_house_in_rome",
+      "phase": [
+        "study"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 22,
+      "once": true,
+      "suppressYears": 99,
+      "pressure": [
+        "loyalty_vs_honesty",
+        "friendship_vs_duty"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:curia",
+          "value": true
+        },
+        {
+          "type": "weeks_away",
+          "op": ">=",
+          "value": 10
+        }
+      ],
+      "title": "The Head of the Order at Table",
+      "body": "The order's house in Rome seats the head of the order at the end of the long table, and tonight he has looked down it and found you. He asks, in the way superiors ask, what the dicastery is like from inside. The friars from forty provinces stop talking. He is not asking for gossip; he wants to know what the order should expect from that office in the next five years, and you are the only man at the table who has read its files.",
+      "choices": [
+        {
+          "id": "honest",
+          "label": "Tell him what the files say, in general terms, and nothing that is a file",
+          "meaning": "The order's head informed; the pontifical secret kept.",
+          "outcome": "He listens the way a man listens who will act on it, and thanks you, and the table breathes. The dicastery never knows. The order's provincials, some months later, are better prepared for a letter they had not expected, and do not know why.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 6
+            },
+            {
+              "target": "place",
+              "key": "priesthood",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "nothing",
+          "label": "Say that the office is an office, and pass the bread",
+          "meaning": "The secret kept whole; the table disappointed.",
+          "outcome": "He nods and passes the bread. The table talks about football. He does not ask again, which in a superior is a kind of respect and a kind of note.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "superiors",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": -2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "more",
+          "label": "Tell him more than you should: a name, a case, a date",
+          "meaning": "The order served; the badge betrayed.",
+          "outcome": "He is grateful and troubled and says so. The case reaches the order's provincial concerned before it reaches him from the dicastery, and the dicastery, which is not stupid, wonders how. Nothing is said to you. Something is written.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 8
+            },
+            {
+              "target": "place",
+              "key": "superiors",
+              "delta": -8
+            },
+            {
+              "target": "place",
+              "key": "priesthood",
+              "delta": -3
+            },
+            {
+              "target": "flag",
+              "key": "curia:leaked",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fr_cu_stay",
+      "phase": [
+        "study"
+      ],
+      "campaign": "religious",
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 40,
+      "once": false,
+      "suppressYears": 1,
+      "pressure": [
+        "ambition_vs_integrity",
+        "friendship_vs_duty"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:curia",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "curia:asked_stay",
+          "value": true
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "curia:answered_stay",
+            "value": true
+          }
+        }
+      ],
+      "title": "The Secretary Asks You to Stay",
+      "body": "Your years at {dicastery} are nearly up, and {@curia_secretary} calls you in and closes the door. He would like you to stay: three more years, perhaps more, and he will write to your provincial himself. He does not promise anything, which is how you know he means something. The province at home has a house short a man and a studium short a teacher, and {@provincial} has written twice to ask, in the order's way, whether Rome has finished with you.",
+      "choices": [
+        {
+          "id": "stay",
+          "label": "Stay; let him write to the provincial",
+          "meaning": "Rome keeps its friar; the province lends him again, less gladly.",
+          "outcome": "You say yes. The secretary writes to the provincial that afternoon, and the provincial answers in a letter that is obedient and short. You will not be going home this year, and the house at home, when you visit, calls you the Roman.",
+          "effects": [
+            {
+              "target": "flag",
+              "key": "curia:stays",
+              "value": true
+            },
+            {
+              "target": "flag",
+              "key": "curia:answered_stay",
+              "value": true
+            },
+            {
+              "target": "place",
+              "key": "superiors",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": -3
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 3
+            }
+          ]
+        },
+        {
+          "id": "home",
+          "label": "Go home: you were lent, and the order needs its men back",
+          "meaning": "The friar under the official; Rome respects it, and files it.",
+          "outcome": "You tell him you were lent, not given. He is disappointed, and says so, and says that he respects it, and that the dicastery will remember you, which is true in both senses. The province is glad in the way provinces are: at chapter, briefly.",
+          "effects": [
+            {
+              "target": "flag",
+              "key": "curia:answered_stay",
+              "value": true
+            },
+            {
+              "target": "place",
+              "key": "priesthood",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 3
+            },
+            {
+              "target": "relationship",
+              "key": "@provincial",
+              "delta": 6
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "ask",
+          "label": "Ask the provincial what the province wants, and do that",
+          "meaning": "An obedience the constitutions do not require, offered.",
+          "outcome": "You write to {@provincial} and ask. He writes back that the province wants you home and that the order wants you in Rome, and that he is the province, and that you should come home. You do. The secretary understands, and the order's head, at the last supper, says the province was right.",
+          "effects": [
+            {
+              "target": "flag",
+              "key": "curia:answered_stay",
+              "value": true
+            },
+            {
+              "target": "place",
+              "key": "priesthood",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 4
+            },
+            {
+              "target": "relationship",
+              "key": "@provincial",
+              "delta": 10
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fr_cu_bollettino",
+      "phase": [
+        "study"
+      ],
+      "campaign": "religious",
+      "severity": "MAJOR",
+      "category": "personal",
+      "baseWeight": 60,
+      "once": true,
+      "suppressYears": 99,
+      "pressure": [
+        "ambition_vs_integrity"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:curia",
+          "value": true
+        },
+        {
+          "type": "any",
+          "inner": [
+            {
+              "type": "flag",
+              "key": "curia:head",
+              "value": true
+            },
+            {
+              "type": "flag",
+              "key": "curia:undersecretary",
+              "value": true
+            }
+          ]
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "curia:bollettino_seen",
+            "value": true
+          }
+        }
+      ],
+      "title": "In the Bollettino, in the Habit",
+      "body": "It is in the Bollettino of the Holy See Press Office at noon: {curia_rank} of {dicastery}. By one o'clock {@provincial} has called, and your mother, and a brother from the novitiate who says he always knew and did not. The house in Rome gives you the head of the order's own chair at supper for one night, which is a joke, and sings the Te Deum, which is not. The photograph on the order's website is of a friar in the habit at a Roman desk, and the provinces look at it and think what provinces think.",
+      "choices": [
+        {
+          "id": "house",
+          "label": "Let the house have its night, and go to the office at half past eight",
+          "meaning": "The order's man, promoted; the office's, too.",
+          "outcome": "The house has its night. The office, in the morning, treats you exactly as it did, which is the Curia's way of congratulating a man. Your provincial's letter, when it comes, says the province is proud and asks when you are coming home.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "priesthood",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 3
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "province",
+          "label": "Write to the province the same day: what the post means for the order",
+          "meaning": "The news made the order's; the office hears you did.",
+          "outcome": "The letter is read at chapter in every house of the province and in a few of other provinces. The order knows what it has in Rome. The dicastery hears that the friar wrote home, and notes that he said nothing he should not have.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 7
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 4
+            },
+            {
+              "target": "place",
+              "key": "superiors",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "quiet",
+          "label": "Ask the house to say nothing, and the website to take the photograph down",
+          "meaning": "The Curia's man, private; the order a little hurt.",
+          "outcome": "The photograph comes down. The house says nothing, loudly. The provinces, which had been pleased, are less sure what to be. The office approves of you more, which is not the approval you were formed for.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "superiors",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": -3
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fr_fac_first_lecture",
+      "phase": [
+        "study"
+      ],
+      "campaign": "religious",
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 40,
+      "once": true,
+      "suppressYears": 99,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:faculty",
+          "value": true
+        },
+        {
+          "type": "weeks_away",
+          "op": "<=",
+          "value": 10
+        }
+      ],
+      "title": "The First Lecture",
+      "body": "Sixty friars from forty provinces in a hall built for two hundred, and your Italian, which was good enough in the refectory. The front row corrects you with its faces. A Vietnamese student asks a question in Latin because it is the language he shares with you, and it is a better question than the lecture deserved. At the end nobody claps, because nobody does here, and a Polish friar with a doctorate already asks whether he may have the notes.",
+      "choices": [
+        {
+          "id": "latin",
+          "label": "Answer in Latin, and lecture in it when the Italian fails",
+          "meaning": "The old tongue of the order's schools; the hall respects it, slowly.",
+          "outcome": "By the third week the hall has stopped correcting your Italian because you have stopped needing it. The lectures are half Latin by Advent and the students, who came from everywhere, find it fairer than any of their languages.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "students",
+              "delta": 8
+            },
+            {
+              "target": "place",
+              "key": "colleagues",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 1
+            },
+            {
+              "target": "record",
+              "key": "lectures",
+              "delta": 1
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "notes",
+          "label": "Give the Polish friar the notes, and every student after him",
+          "meaning": "The lecturer's craft, shared; the professor's mystique, spent.",
+          "outcome": "The notes go round the house by Sunday and are in a province in Africa by Christmas. The students learn more and come to the lectures less. The faculty's older men disapprove and borrow a copy.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "students",
+              "delta": 5
+            },
+            {
+              "target": "place",
+              "key": "order",
+              "delta": 4
+            },
+            {
+              "target": "place",
+              "key": "scholarship",
+              "delta": -2
+            },
+            {
+              "target": "record",
+              "key": "lectures",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "italian",
+          "label": "Work the Italian until it is a Roman's, and lecture in nothing else",
+          "meaning": "The faculty's language, earned; the year lost to it.",
+          "outcome": "The Italian comes, by Lent, and the hall notices the week it does. The lectures of the first term were not good, and the students who sat through them forgive you in the way students do: by telling the next year's.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "colleagues",
+              "delta": 6
+            },
+            {
+              "target": "place",
+              "key": "city",
+              "delta": 0
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "record",
+              "key": "lectures",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fr_fac_thesis_from_a_poor_province",
+      "phase": [
+        "study"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 22,
+      "once": true,
+      "suppressYears": 99,
+      "pressure": [
+        "friendship_vs_duty"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:faculty",
+          "value": true
+        },
+        {
+          "type": "weeks_away",
+          "op": ">=",
+          "value": 16
+        }
+      ],
+      "title": "A Thesis From a Poor Province",
+      "body": "The thesis is on your desk on Friday and is not good: a licentiate from a province with two priests and no library, written by a friar who will be his province's only theologian for thirty years, in an Italian learned in eighteen months, on a question the field settled in 1960. He does not know that. Nobody in his province does. The faculty's rule is the faculty's rule, and the man is in the corridor.",
+      "choices": [
+        {
+          "id": "teach",
+          "label": "Fail the draft, and give him the year to write the thesis he can",
+          "meaning": "The professor's work, done the slow way; a province's theologian made.",
+          "outcome": "It takes the year and most of your Saturdays. The thesis, when it passes, is honest and small and his. He writes from his province for twenty years, in an Italian that stays learned, about what his priests ask him.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "students",
+              "delta": 8
+            },
+            {
+              "target": "place",
+              "key": "order",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 4
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "record",
+              "key": "theses",
+              "delta": 1
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "pass",
+          "label": "Pass it: the faculty is not the only good in the world",
+          "meaning": "Mercy on the rule; the faculty notices the grade.",
+          "outcome": "He passes and goes home with a degree the faculty's older men would not have given. Two of them say so at lunch. His province gets its theologian, such as he is, and is grateful to a name it does not know.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "students",
+              "delta": 3
+            },
+            {
+              "target": "place",
+              "key": "colleagues",
+              "delta": -4
+            },
+            {
+              "target": "place",
+              "key": "order",
+              "delta": 3
+            },
+            {
+              "target": "record",
+              "key": "theses",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "rule",
+          "label": "Fail it, and let the rule do what rules do",
+          "meaning": "The faculty's standard; a province's only theologian, sent home without",
+          "outcome": "He goes home without the degree and teaches anyway, which nobody can stop, and does it a little worse than he would have with the year. The faculty approves of you. The order, in its slow way, files the province's disappointment under your name.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "colleagues",
+              "delta": 5
+            },
+            {
+              "target": "place",
+              "key": "scholarship",
+              "delta": 2
+            },
+            {
+              "target": "place",
+              "key": "order",
+              "delta": -5
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": -2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fr_fac_dicastery_opinion",
+      "phase": [
+        "study"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 20,
+      "once": true,
+      "suppressYears": 99,
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:faculty",
+          "value": true
+        },
+        {
+          "type": "weeks_away",
+          "op": ">=",
+          "value": 30
+        }
+      ],
+      "title": "An Opinion for the Dicastery",
+      "body": "A dicastery across the river sends for an opinion: a book by a bishop in another country, sixty pages of it flagged in a hand that is not the prefect's, and a fortnight. The consultor's work is unpaid and unsigned, and it is how Rome comes to know a professor's name. The book is not heretical. It is careless, in three places, in a way that will be quoted against it by people who have not read it.",
+      "choices": [
+        {
+          "id": "fair",
+          "label": "Write the fair opinion: careless in three places, sound in the rest",
+          "meaning": "The scholar's answer; the dicastery reads it twice.",
+          "outcome": "The opinion is eleven pages and the dicastery reads it twice, which you learn from the undersecretary at a lunch. The bishop is asked to revise three passages and does. Your name, unsigned, is in a file where names are kept.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "scholarship",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 6
+            },
+            {
+              "target": "record",
+              "key": "opinions",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 1
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "severe",
+          "label": "Write what the flagged hand wants: the three places are the book",
+          "meaning": "The dicastery's mood served; the field will know who wrote it.",
+          "outcome": "The book is withdrawn. The bishop, who is not a fool, learns whose opinion it was, as bishops do, and the field learns it a year later. The dicastery is grateful and sends more.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "scholarship",
+              "delta": -3
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 8
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": -3
+            },
+            {
+              "target": "record",
+              "key": "opinions",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "decline",
+          "label": "Decline: a friar of a teaching order does not judge bishops' books for Rome",
+          "meaning": "The order's independence, said aloud; Rome's door, closed a little.",
+          "outcome": "The dicastery says nothing, sends nothing more, and remembers. The faculty's older men, who have all done it, think you a purist. The head of the order, told at supper, says only that the order has been on both sides of that desk.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "order",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": -4
+            },
+            {
+              "target": "place",
+              "key": "scholarship",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fr_fac_head_of_the_order",
+      "phase": [
+        "study"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 20,
+      "once": true,
+      "suppressYears": 99,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:faculty",
+          "value": true
+        },
+        {
+          "type": "weeks_away",
+          "op": ">=",
+          "value": 40
+        }
+      ],
+      "title": "What the Order Wants From Its Faculty",
+      "body": "The head of the order asks you to his room, which is a cell with a second chair, and asks what the faculty is for. He has provinces that send him no students and provinces that send him only their weakest, and a faculty that publishes for the field and not for the friars in the missions who will never read it. He wants an answer from someone who has stood in the hall. He does not want the faculty's answer, which he has.",
+      "choices": [
+        {
+          "id": "friars",
+          "label": "For the friars: teach what the provinces' priests will ask, and publish for them",
+          "meaning": "The order's faculty, the order's; the field shrugs.",
+          "outcome": "He nods, and the next year's curriculum has a course the field will not cite and every mission province will use. The faculty's older men grumble in Latin. Twenty years on, the order's theologians are better than its books.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "order",
+              "delta": 8
+            },
+            {
+              "target": "place",
+              "key": "scholarship",
+              "delta": -3
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 6
+            },
+            {
+              "target": "record",
+              "key": "students_home",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "field",
+          "label": "For the field: the order's mind is its gift, and a faculty that does not publish is a school",
+          "meaning": "The faculty's answer, said by a friar; the head hears it from a friar.",
+          "outcome": "He says the faculty says that too, and that he had hoped a friar from a province would say something else, and that he is not sure you are wrong. The book you are writing gets a better room.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "scholarship",
+              "delta": 6
+            },
+            {
+              "target": "place",
+              "key": "colleagues",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "both",
+          "label": "Both, and tell him which students each province should send",
+          "meaning": "The order's faculty, run from a second chair; the provincials hear from him.",
+          "outcome": "You give him a list, by province, which he was not expecting and which he uses. Three provincials write to you within the year, two of them pleased. The faculty finds out where the list came from and is, for a term, cool.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "order",
+              "delta": 6
+            },
+            {
+              "target": "place",
+              "key": "colleagues",
+              "delta": -3
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 5
+            },
+            {
+              "target": "record",
+              "key": "students_home",
+              "delta": 1
+            }
+          ],
+          "default": true
+        }
+      ]
+    },
+    {
+      "id": "fr_fac_student_from_home",
+      "phase": [
+        "study"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 20,
+      "once": true,
+      "suppressYears": 99,
+      "pressure": [
+        "friendship_vs_duty"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:faculty",
+          "value": true
+        },
+        {
+          "type": "weeks_away",
+          "op": ">=",
+          "value": 52
+        }
+      ],
+      "title": "A Student From Your Own Province",
+      "body": "The province has sent a student: a friar you knew as a novice, now in your lecture hall in the second row, taking notes in your language and looking, when you say something he has heard you say at home, as if the house had followed him to Rome. The faculty's rule on directing one's own province's men is a rule the faculty breaks. He has asked for you.",
+      "choices": [
+        {
+          "id": "direct",
+          "label": "Direct him, and hold him to the faculty's standard harder than the rest",
+          "meaning": "The province's man, made well; the hall notices whose he is.",
+          "outcome": "He works harder than anyone in the hall because he has to, and the thesis is the best of its year, and everyone knows whose student he was and that it did not help him. The province gets a theologian. The house gets a story.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "students",
+              "delta": 5
+            },
+            {
+              "target": "place",
+              "key": "order",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 6
+            },
+            {
+              "target": "record",
+              "key": "students_home",
+              "delta": 1
+            },
+            {
+              "target": "record",
+              "key": "theses",
+              "delta": 1
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "refer",
+          "label": "Send him to a colleague: better for him, and for the province, that it not be you",
+          "meaning": "The rule kept; the boy a little hurt.",
+          "outcome": "He goes to the Polish professor and does well, and is a little hurt, and says so years later at a chapter, laughing. The faculty approves. The province does not notice.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "colleagues",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 1
+            },
+            {
+              "target": "place",
+              "key": "students",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "easy",
+          "label": "Direct him, and be the professor he hoped for",
+          "meaning": "The province's man, favoured; the hall counts it.",
+          "outcome": "The thesis passes and is not good, and the hall knows why, and so does he, in the end. He teaches at home for thirty years and is kind to his students in the way you were to him, which is not entirely a kindness.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "students",
+              "delta": -3
+            },
+            {
+              "target": "place",
+              "key": "order",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 4
+            },
+            {
+              "target": "place",
+              "key": "colleagues",
+              "delta": -3
+            },
+            {
+              "target": "record",
+              "key": "students_home",
+              "delta": 1
+            },
+            {
+              "target": "record",
+              "key": "theses",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fr_fac_the_book",
+      "phase": [
+        "study"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 24,
+      "once": true,
+      "suppressYears": 99,
+      "pressure": [
+        "ambition_vs_integrity"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:faculty",
+          "value": true
+        },
+        {
+          "type": "weeks_away",
+          "op": ">=",
+          "value": 150
+        }
+      ],
+      "title": "The Book",
+      "body": "The book is done, or is as done as books get: four years of the library after Vespers, a manuscript nobody had opened since the war, and an argument the field will have to answer or ignore. The faculty's press will take it. So will a house in Paris that pays and is read. The order's own house wants it in its series, which nobody outside the order reads and every friar's library holds.",
+      "choices": [
+        {
+          "id": "order",
+          "label": "The order's series: the friars' library, forever",
+          "meaning": "The order's book; the field finds it late or never.",
+          "outcome": "It comes out in a plain cover and is on every studium's shelf by the next year, and cited in three provinces' courses and nowhere in the journals. Twenty years on a young scholar finds it and asks why nobody knew.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "order",
+              "delta": 8
+            },
+            {
+              "target": "place",
+              "key": "scholarship",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 6
+            },
+            {
+              "target": "record",
+              "key": "articles",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "paris",
+          "label": "The house in Paris: the field, and a cheque the province will use",
+          "meaning": "The scholar's book; the order reads it in French.",
+          "outcome": "It is reviewed in the journals by men who were not in the hall, and one of them is kind. The province gets a cheque and spends it on the studium's roof. The order's press is a little hurt and says nothing.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "scholarship",
+              "delta": 8
+            },
+            {
+              "target": "place",
+              "key": "colleagues",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 3
+            },
+            {
+              "target": "record",
+              "key": "articles",
+              "delta": 1
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "both",
+          "label": "Both, in two languages, a year apart",
+          "meaning": "The long way; the book twice read.",
+          "outcome": "It takes a year you do not entirely have and is worth it. The field has the argument; the friars have the book. You are, for a season, tired in a way that Vespers does not fix.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "scholarship",
+              "delta": 7
+            },
+            {
+              "target": "place",
+              "key": "order",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 4
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": -1
+            },
+            {
+              "target": "record",
+              "key": "articles",
+              "delta": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fr_fac_last_lecture",
+      "phase": [
+        "study"
+      ],
+      "campaign": "religious",
+      "severity": "MAJOR",
+      "category": "personal",
+      "baseWeight": 60,
+      "once": true,
+      "suppressYears": 99,
+      "pressure": [
+        "ambition_vs_integrity",
+        "doubt"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:faculty",
+          "value": true
+        },
+        {
+          "type": "weeks_away",
+          "op": ">=",
+          "value": 240
+        }
+      ],
+      "title": "The Last Lecture",
+      "body": "The last lecture of the last year, and the hall knows it: two hundred where sixty sat the first week, friars from forty provinces and some who are not friars, and the dean at the back, who does not attend lectures. The faculty has written to the province asking to keep you. The province has written to you asking to come home. Both letters are in the cell. The hall waits for the lecture, not the answer, and the lecture is what you have.",
+      "choices": [
+        {
+          "id": "home",
+          "label": "Lecture on what the province taught you, and go home",
+          "meaning": "The friar's answer: the years given back to the province.",
+          "outcome": "The lecture is about a parish, and a house, and the men who form a theologian without meaning to, and the hall is quiet at the end in the way halls are when they have been told something true. The province gets its teacher back. The faculty writes that it will ask again.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "order",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 4
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "record",
+              "key": "lectures",
+              "delta": 1
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "stay",
+          "label": "Lecture on the work, and ask the province to leave you here",
+          "meaning": "The scholar's answer; the province lends him again, or does not.",
+          "outcome": "The lecture is the book's last chapter, and the hall applauds, which it never does. The province, asked, says three more years and no more. The house at home calls you the Roman, and means it two ways.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "scholarship",
+              "delta": 6
+            },
+            {
+              "target": "place",
+              "key": "colleagues",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": -4
+            },
+            {
+              "target": "flag",
+              "key": "faculty:asked_to_stay",
+              "value": true
+            },
+            {
+              "target": "record",
+              "key": "lectures",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "students",
+          "label": "Lecture to the students, and let the letters answer each other",
+          "meaning": "The teacher's answer; the decision made elsewhere.",
+          "outcome": "The lecture is a question and answer with two hundred friars, and it is the best hour of the five years. The province and the faculty settle it between them the way superiors do, and you go where you are sent, which was the vow.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "students",
+              "delta": 8
+            },
+            {
+              "target": "place",
+              "key": "order",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "record",
+              "key": "lectures",
               "delta": 1
             }
           ]
