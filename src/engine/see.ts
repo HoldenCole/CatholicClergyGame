@@ -1,4 +1,4 @@
-import type { GameState, Letter, SeeState } from '@/types';
+import type { GameState, Letter, Parish, SeeState } from '@/types';
 import type { Rng } from './rng';
 import { seeDefs } from '@/content/sees';
 import type { FormerSee } from '@/types';
@@ -77,14 +77,38 @@ export function applySeeHours(see: SeeState, deltas: Partial<Record<'presbyterat
   return next;
 }
 
+/** A parish of the see suppressed: off the map, its pastor free for another, the count kept. */
+export function closeSeeParish(state: GameState, parishId: string): { state: GameState; parish: Parish | null } {
+  const world = state.world;
+  const see = state.see;
+  const parish = world?.parishes.find((p) => p.id === parishId);
+  if (!world || !see || !parish) return { state, parish: null };
+  const npcs = { ...state.npcs };
+  for (const n of Object.values(npcs)) {
+    if (n.tags.includes(`pastor:${parishId}`) || n.tags.includes(`parish:${parishId}`)) npcs[n.id] = { ...n, tags: n.tags.filter((t) => t !== `pastor:${parishId}` && t !== `parish:${parishId}`).concat(`closed:${parishId}`) };
+  }
+  return { state: { ...state, npcs, world: { ...world, parishes: world.parishes.filter((p) => p.id !== parishId) }, see: { ...see, closings: see.closings + 1 } }, parish };
+}
+
 /** Once a year: ordinations, closings the arithmetic forces, drift, and the line for the record. */
 export function seeYear(state: GameState, rng: Rng): { state: GameState; letter: Letter } {
   const see = state.see!;
+  const world0 = state.world;
   const years = Math.round((state.clock.week - see.installedWeek) / 52);
   const vocationsHours = state.study?.hoursLogged.see_seminary ?? 0;
   const ordained = Math.round(SEE.ordinationsBase[Math.max(0, Math.min(4, see.shortage - 1))]! + vocationsHours / 104 + (rng.chance(0.5) ? 0 : -0.5) + (rng.chance(0.3) ? 1 : 0));
   const began = !!state.flags.bp_began_closings;
   const forced = see.shortage >= 5 && !began ? SEE.closingsForced : 0;
+  // A closing the arithmetic forces takes a real parish off the map, the smallest (E4 R1.1).
+  let forcedName = '';
+  if (forced && state.world && state.world.diocese.presetId === see.dioceseId) {
+    const smallest = state.world.parishes.filter((p) => !p.cathedral).sort((a, b) => a.households - b.households || a.id.localeCompare(b.id))[0];
+    if (smallest) {
+      const closed = closeSeeParish(state, smallest.id);
+      state = { ...closed.state, see: { ...closed.state.see!, closings: see.closings } };
+      forcedName = smallest.name;
+    }
+  }
   const drift = (v: number) => (Math.abs(v) <= SEE.driftPerYear ? 0 : v > 0 ? v - SEE.driftPerYear : v + SEE.driftPerYear);
   const next: SeeState = {
     ...see,
@@ -96,6 +120,7 @@ export function seeYear(state: GameState, rng: Rng): { state: GameState; letter:
     ordinations: see.ordinations + Math.max(0, ordained),
     closings: see.closings + forced,
   };
+  void forcedName;
   const line = `Year ${years}: ${ordained > 0 ? `${ordained} ordained` : 'no one ordained'}; ${forced ? 'a parish closed because there was no one to send' : 'no parish closed'}; the priests ${word(next.presbyterate)}, the people ${word(next.people)}, Rome ${word(next.rome)}, the money ${moneyWord(next.money)}.`;
   const letter: Letter = {
     sort: 'review',
@@ -104,10 +129,10 @@ export function seeYear(state: GameState, rng: Rng): { state: GameState; letter:
       `${years === 1 ? 'A year' : `${years} years`} in the chair. The diocese is ${shortageWord(next.shortage)} of priests${next.ordinations ? `; you have ordained ${next.ordinations}` : ''}${next.closings ? ` and closed ${next.closings} parish${next.closings === 1 ? '' : 'es'}` : ''}.`,
       `The priests are ${word(next.presbyterate)}. The people are ${word(next.people)}. Rome is ${word(next.rome)}. The money is ${moneyWord(next.money)}.`,
       ordained > 0 ? `${ordained === 1 ? 'One man' : `${ordained} men`} ordained this year, which in a see like this is the whole future.` : 'No ordinations this year. Every priest of the diocese is a year older.',
-      forced ? 'A parish closed this year because there was no one to send, and you had not begun the closings yourself; the town blames the bishop, which is the job.' : '',
+      forced ? `${forcedName ? `${forcedName} closed` : 'A parish closed'} this year because there was no one to send, and you had not begun the closings yourself; the town blames the bishop, which is the job.` : '',
     ].filter(Boolean),
     rows: [{ label: 'The see', value: `${next.name}, ${next.region}` }],
     week: state.clock.week,
   };
-  return { state: { ...state, see: { ...next, years: [...next.years, line] } }, letter };
+  return { state: { ...state, ...(state.world !== world0 ? { world: state.world } : {}), see: { ...next, years: [...next.years, line] } }, letter };
 }

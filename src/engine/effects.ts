@@ -1,3 +1,5 @@
+import { applySeeHours } from './see';
+import { recordNorm } from '@/systems/bishop/reading';
 import type { ReputationKey, Bond } from '@/types';
 import type {
   Archetype,
@@ -27,7 +29,7 @@ import { provinceEffect } from '@/systems/religious/foundations';
 import { foundationEffect } from '@/systems/religious/foundationEffect';
 import { gainReputation } from '@/systems/religious/reputations';
 import { ministryOf } from '@/systems/ministry';
-import type { Implementation, MinistryKey } from '@/types';
+import type { DiocesanNorm, Implementation, MinistryKey } from '@/types';
 import { recordImplementation } from '@/systems/rome/documents';
 import { createRng, type Rng } from './rng';
 
@@ -265,6 +267,12 @@ export function applyEffect(
     // What he did in his parish with Rome's latest document on an axis. E1 §4.2.
     case 'document':
       return recordImplementation(state, effect.key, String(effect.value) as Implementation);
+    // A dial of the see he holds. E4 R1.1.
+    case 'see':
+      return state.see && effect.delta !== undefined ? { ...state, see: applySeeHours(state.see, { [effect.key]: effect.delta }, 1) } : state;
+    // The bishop's own reading of Rome's latest document on an axis. E4 R1.1.
+    case 'norm':
+      return recordNorm(state, effect.key, String(effect.value) as DiocesanNorm);
     // A choice that moves an arc of a life: end it, hold it, or jump it to a stage. DESIGN §12.5.
     case 'arc':
       return moveArc(state, effect.key, String(effect.value ?? 'end'), rngFor(state, effect.key));

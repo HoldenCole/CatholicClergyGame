@@ -1,3 +1,6 @@
+import type { Condition, Effect } from './events';
+import type { LiturgicalStance, LiturgicalTopic } from './world';
+
 /** A small see from the pool. content/sees.json */
 export interface SeeDef {
   id: string;
@@ -58,4 +61,47 @@ export interface SeeState {
   former?: FormerSee[];
   /** E4 R1.0: the preset id of the see's own world (`state.world` while he holds it): the see as a place with people. */
   dioceseId?: string;
+  /** E4 R1.1: the act on the desk, being written in the desk's hours; and the acts signed in this chair. */
+  desk?: SeeAct;
+  acts?: SignedAct[];
+}
+
+/** E4 R1.1: an act of the bishop's desk, as data (content/see/acts.json): a decree, a letter, a synod, an appeal, a review. */
+export interface SeeActDef {
+  id: string;
+  label: string;
+  blurb: string;
+  /** Blocks of the desk's hours it takes to write and sign. */
+  hours: number;
+  /** What must be chosen before it is begun: a parish of the diocese, or a liturgical topic and the stance to set. */
+  target?: 'parish' | 'stance';
+  requires?: Condition[];
+  /** Once in a chair; or not again within these years. */
+  once?: boolean;
+  everyYears?: number;
+  /** Written when it is signed (data); what the target does is the engine's (systems/bishop/desk.ts). */
+  effects: Effect[];
+  /** The letter to the diocese, with {see}, {parish}, {topic}, {stance}. */
+  letter: string[];
+  /** The line the record keeps, same tokens. */
+  note: string;
+}
+
+export interface SeeAct {
+  actId: string;
+  startedWeek: number;
+  /** The desk's logged hours when it was begun; progress is what has been logged since. */
+  startedHours: number;
+  parishId?: string;
+  topic?: LiturgicalTopic;
+  stance?: LiturgicalStance;
+}
+
+export interface SignedAct {
+  actId: string;
+  week: number;
+  parishId?: string;
+  parishName?: string;
+  topic?: LiturgicalTopic;
+  stance?: LiturgicalStance;
 }

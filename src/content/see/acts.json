@@ -1,0 +1,252 @@
+{
+ "_notes": "E4 R1.1: the acts of the bishop's desk (systems/bishop/desk.ts). Each is begun from the see sheet, written in the desk's hours (the see_desk activity), and signed when its blocks are done: the data effects apply, the target's own consequences are the engine's (a stance set on the diocese's policy; a parish closed), the letter goes to the diocese, and the record keeps the note. Hours, rests, and effects are invented and flagged; the canonical forms (a decree on the liturgy, the suppression or merger of a parish after the council of priests is heard, can. 515 §2; a diocesan synod, cc. 460-468) are close to practice and to verify.",
+ "acts": [
+  {
+   "id": "decree_liturgy",
+   "label": "A decree on the liturgy",
+   "blurb": "What a pastor may do without asking, in this diocese, under this bishop: the older Mass, faculties for it, ad orientem, the rail, the tabernacle, a renovation. One topic, one stance, one decree; the presbyterate reads it by its wings.",
+   "hours": 4,
+   "target": "stance",
+   "everyYears": 1,
+   "effects": [
+    {
+     "target": "stat",
+     "key": "administration",
+     "delta": 1
+    }
+   ],
+   "letter": [
+    "A decree of the Bishop of {see}, to be read to the priests and posted in the chancery: on {topic}, the practice of the diocese is henceforth {stance}.",
+    "The decree is two paragraphs and the priests read it four times. The vicar general fields the calls."
+   ],
+   "note": "Decreed that in the diocese {topic} is {stance}."
+  },
+  {
+   "id": "close_parish",
+   "label": "Close or merge a parish",
+   "blurb": "The arithmetic every bishop of this see has faced: a parish with no priest to send and no money to keep, suppressed or merged into its neighbour by decree, after the council of priests is heard. The town remembers which ones you closed.",
+   "hours": 6,
+   "target": "parish",
+   "effects": [
+    {
+     "target": "see",
+     "key": "money",
+     "delta": 8
+    },
+    {
+     "target": "see",
+     "key": "people",
+     "delta": -6
+    },
+    {
+     "target": "see",
+     "key": "shortage",
+     "delta": -0.15
+    },
+    {
+     "target": "flag",
+     "key": "bp_began_closings",
+     "value": true
+    },
+    {
+     "target": "reputation",
+     "key": "public",
+     "delta": -3
+    }
+   ],
+   "letter": [
+    "A decree of the Bishop of {see}: the parish of {parish} is suppressed, its territory and its people joined to the neighbouring parish, its registers to the chancery, and its church closed for regular worship from the first Sunday of the coming month.",
+    "The council of priests was heard and divided. The town hall ran three hours. The last Mass was full, as last Masses are."
+   ],
+   "note": "Closed {parish} by decree."
+  },
+  {
+   "id": "synod",
+   "label": "A diocesan synod",
+   "blurb": "A year of listening sessions, a working document, and a week in the cathedral with the priests, the religious, and the laity, ending in decrees you sign. A see this size has not had one in a generation. Once in a chair.",
+   "hours": 16,
+   "once": true,
+   "requires": [
+    {
+     "type": "see",
+     "key": "years",
+     "op": ">=",
+     "value": 1
+    }
+   ],
+   "effects": [
+    {
+     "target": "see",
+     "key": "people",
+     "delta": 8
+    },
+    {
+     "target": "see",
+     "key": "presbyterate",
+     "delta": 4
+    },
+    {
+     "target": "see",
+     "key": "rome",
+     "delta": 2
+    },
+    {
+     "target": "flag",
+     "key": "bp_synod",
+     "value": true
+    },
+    {
+     "target": "stat",
+     "key": "charisma",
+     "delta": 1
+    }
+   ],
+   "letter": [
+    "The synod of {see} closes with a Mass in the cathedral and forty-one decrees, which you sign at the altar. Half of them will be forgotten by Easter and the other half will shape the diocese for twenty years, and nobody can yet say which half.",
+    "The priests were in one room for a week, and the laity were listened to, which most of them had not expected."
+   ],
+   "note": "Held a diocesan synod."
+  },
+  {
+   "id": "appeal",
+   "label": "A capital appeal",
+   "blurb": "The cathedral roof, the pension fund, the seminarians' tuition: a three-year appeal with a case statement, a chairman from the Knights, and your signature on forty thousand letters. Not twice in five years.",
+   "hours": 8,
+   "everyYears": 5,
+   "effects": [
+    {
+     "target": "see",
+     "key": "money",
+     "delta": 15
+    },
+    {
+     "target": "see",
+     "key": "people",
+     "delta": -3
+    },
+    {
+     "target": "stat",
+     "key": "administration",
+     "delta": 1
+    }
+   ],
+   "letter": [
+    "The appeal for {see} opens with a letter over your signature in every pew: the roof, the pensions, the men in formation. The chairman says the goal is ambitious. The goal is the roof.",
+    "The parishes that give are the ones that always give. The ones that do not, say so."
+   ],
+   "note": "Opened a capital appeal for the diocese."
+  },
+  {
+   "id": "safeguarding_review",
+   "label": "A safeguarding review",
+   "blurb": "An outside review of every file in the chancery, the protocol rewritten, the review board reconstituted with a majority of laypeople, and the findings published. Rome and the newspapers approve; the older priests do not. Not twice in six years.",
+   "hours": 8,
+   "everyYears": 6,
+   "effects": [
+    {
+     "target": "see",
+     "key": "rome",
+     "delta": 6
+    },
+    {
+     "target": "see",
+     "key": "presbyterate",
+     "delta": -4
+    },
+    {
+     "target": "see",
+     "key": "people",
+     "delta": 2
+    },
+    {
+     "target": "reputation",
+     "key": "public",
+     "delta": 4
+    },
+    {
+     "target": "flag",
+     "key": "bp_safeguarding",
+     "value": true
+    }
+   ],
+   "letter": [
+    "The review of the files of {see} is published on a Friday, as reviews are: every file read by outsiders, the protocol rewritten, the board remade with laypeople in the majority, and three names the diocese had not published before.",
+    "The paper runs it on the front page. The presbyterate reads it at the deanery dinners, and some of the older men do not speak to you for a season."
+   ],
+   "note": "Commissioned and published a safeguarding review."
+  },
+  {
+   "id": "pastoral_plan",
+   "label": "A pastoral plan",
+   "blurb": "Five years of priorities on paper: which parishes will share a pastor, which schools will merge, what the diocese will be when you leave it. A plan is the one thing a small see can do that a great one cannot. Once in a chair.",
+   "hours": 10,
+   "once": true,
+   "effects": [
+    {
+     "target": "see",
+     "key": "presbyterate",
+     "delta": 5
+    },
+    {
+     "target": "see",
+     "key": "people",
+     "delta": 4
+    },
+    {
+     "target": "see",
+     "key": "rome",
+     "delta": 2
+    },
+    {
+     "target": "stat",
+     "key": "administration",
+     "delta": 2
+    },
+    {
+     "target": "flag",
+     "key": "bp_pastoral_plan",
+     "value": true
+    }
+   ],
+   "letter": [
+    "The pastoral plan for {see} goes to every parish in a folder with your letter on top: the clusters, the schools, the timeline, and the sentence about what the diocese is for, which took you a month.",
+    "The priests read the clusters first, to see who they will share a rectory with."
+   ],
+   "note": "Published a five-year pastoral plan."
+  },
+  {
+   "id": "pastoral_letter",
+   "label": "A pastoral letter",
+   "blurb": "A letter to the whole diocese on one thing: read from every pulpit on a Sunday, printed in the paper, argued over at the deanery. The one voice a small see's bishop has that carries. Not twice in two years.",
+   "hours": 6,
+   "everyYears": 2,
+   "effects": [
+    {
+     "target": "see",
+     "key": "people",
+     "delta": 5
+    },
+    {
+     "target": "see",
+     "key": "presbyterate",
+     "delta": 2
+    },
+    {
+     "target": "see",
+     "key": "rome",
+     "delta": 1
+    },
+    {
+     "target": "stat",
+     "key": "charisma",
+     "delta": 1
+    }
+   ],
+   "letter": [
+    "Your pastoral letter to {see} is read from every pulpit on the same Sunday, in your own words and, in three parishes, in Spanish. It is four pages, which the priests say is two too many and the people read anyway.",
+    "Somebody frames it. Somebody else writes to the paper."
+   ],
+   "note": "Wrote a pastoral letter to the diocese."
+  }
+ ]
+}

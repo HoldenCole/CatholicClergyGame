@@ -1,9 +1,10 @@
 import { create } from 'zustand';
 import { beginDraft, abandonDraft } from '@/systems/rome/papalDesk';
+import { beginAct as beginSeeActSys, dropAct as dropSeeActSys } from '@/systems/bishop/desk';
 import { callConsistory as callConsistorySys, holdPapalConsistory, planJourney as planJourneySys } from '@/systems/rome/papalActs';
 import { endPontificate } from '@/systems/rome/pontificate';
 import { answerConclave as answerConclaveSys, conclaveAct as conclaveActSys, holdTheConclave } from '@/systems/rome/conclaveFlow';
-import type { DocumentKind, HouseWorkId } from '@/types';
+import type { DocumentKind, HouseWorkId, LiturgicalStance } from '@/types';
 import type {
   CreationAnswers,
   EventCategory,
@@ -168,6 +169,9 @@ export interface GameStore {
   answerConclave(accept: boolean, name?: string): void;
   /** E1 R1.6: the pope's desk, his consistories, his journeys, and laying it down. */
   beginPapalDraft(kind: DocumentKind, subjectId: string): void;
+  /** E4 R1.1: the bishop's desk. */
+  beginSeeAct(actId: string, target?: { parishId?: string; topic?: LiturgicalTopic; stance?: LiturgicalStance }): void;
+  dropSeeAct(): void;
   abandonPapalDraft(): void;
   callConsistory(): void;
   createCardinals(ids: string[]): void;
@@ -857,6 +861,12 @@ export const useGameStore = create<GameStore>()((set, get) => ({
   },
   beginPapalDraft(kind, subjectId) {
     update(set, get, (game) => beginDraft(game, kind, subjectId));
+  },
+  beginSeeAct(actId, target) {
+    update(set, get, (game) => beginSeeActSys(game, actId, target));
+  },
+  dropSeeAct() {
+    update(set, get, (game) => dropSeeActSys(game));
   },
   abandonPapalDraft() {
     update(set, get, (game) => abandonDraft(game));

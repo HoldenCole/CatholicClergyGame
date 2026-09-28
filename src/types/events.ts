@@ -213,6 +213,10 @@ export type EffectTarget =
   | 'foundation'
   /** E3 §8: what a friar is known for (key: a ReputationKey; delta), held under its cap. */
   | 'known'
+  /** E4 R1.1: a dial of the see he holds (key: presbyterate | people | rome | money | shortage; delta). */
+  | 'see'
+  /** E4 R1.1: the bishop's own reading of Rome's latest document on an axis (key: the axis; value: a DiocesanNorm). */
+  | 'norm'
   /** DESIGN §8.9: the town (key: a TownPlaceKind or 'any'; delta moves the place's regard; value, a string, is what the town remembers). */
   | 'town'
   /** DESIGN §8.12: the latest rumour heard (key 'correct' | 'own' | 'let_lie' for one about him; 'defend' | 'join' for one about another). */
