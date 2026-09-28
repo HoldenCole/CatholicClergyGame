@@ -4,6 +4,7 @@ import { prioritiesLine } from '@/generation/diocese';
 import { clampSigned } from './reputation';
 import { driftRome, successionYear } from './succession';
 import { advanceTrajectories } from './trajectories';
+import { homeDioceseId, homeWorld } from '@/engine/seeWorld';
 
 /**
  * E1 §9 E — the home diocese while he is a bishop elsewhere, or pope. It goes
@@ -37,9 +38,13 @@ export interface HomeYear {
 /** The home see changes hands, if its year says so: installed without rereading him, and told to him as news from home. */
 export function homeSuccession(state: GameState, rng: Rng): HomeYear {
   const where = afar(state);
-  const world = state.world;
+  const world = homeWorld(state);
   if (!where || !world) return { state, lines: [], letter: null };
-  const r = successionYear(state, rng, { afar: true });
+  // A bishop's home waits in the territory while his see is the world (E4 R1.0): its year runs there, and goes back.
+  const homeId = homeDioceseId(state);
+  const stashed = homeId !== undefined && state.world?.diocese.presetId !== homeId;
+  const r0 = successionYear(stashed ? { ...state, world } : state, rng, { afar: true });
+  const r = stashed ? { ...r0, state: { ...r0.state, world: state.world, territory: { ...(r0.state.territory ?? {}), [homeId!]: r0.state.world! } } } : r0;
   const bishop = r.newBishop;
   if (!bishop) return { state, lines: [], letter: null };
   const c = state.character!;
@@ -47,7 +52,7 @@ export function homeSuccession(state: GameState, rng: Rng): HomeYear {
   const regard = Math.round(clampSigned(REGARD.base + (40 - gap) * REGARD.perGap));
   const see = world.diocese.visible.see;
   const name = `${bishop.title} ${bishop.name.first} ${bishop.name.last}`;
-  const v = r.state.world!.diocese.visible.bishop;
+  const v = homeWorld(r.state)!.diocese.visible.bishop;
   const body: string[] = [
     r.lines[0]!,
     `${v.temperamentLine} He says his priorities are ${prioritiesLine(v.priorities)}. The priests you were ordained with will find out what he meant; you will hear it from them.`,

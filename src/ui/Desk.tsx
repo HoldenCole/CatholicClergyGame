@@ -71,7 +71,7 @@ export default function Desk() {
   const inParish = !!game.parish;
   const away = !!game.study;
   const friar = !!game.religious && !!game.flags.ordained && !inParish && !away;
-  const tabs: Sheet[] = friar ? ['week', 'jobs', 'profile', 'clubs', 'letters', 'record', 'settings'] : inParish ? ['week', 'parish', 'people', 'town', 'deanery', 'map', 'jobs', 'profile', 'clubs', 'letters', 'record', 'settings'] : away ? (game.rome?.pontificate ? ['week', 'holy_see', 'place', 'profile', 'letters', 'record', 'settings'] : game.see ? ['week', 'see', 'jobs', 'profile', 'letters', 'record', 'settings'] : game.study?.place ? ['week', 'place', 'jobs', 'profile', 'letters', 'record', 'settings'] : ['week', 'jobs', 'profile', 'letters', 'record', 'settings']) : ['week', 'formation', 'jobs', 'profile', 'clubs', 'letters', 'record', 'settings'];
+  const tabs: Sheet[] = friar ? ['week', 'jobs', 'profile', 'clubs', 'letters', 'record', 'settings'] : inParish ? ['week', 'parish', 'people', 'town', 'deanery', 'map', 'jobs', 'profile', 'clubs', 'letters', 'record', 'settings'] : away ? (game.rome?.pontificate ? ['week', 'holy_see', 'place', 'profile', 'letters', 'record', 'settings'] : game.see ? ['week', 'see', 'map', 'jobs', 'profile', 'letters', 'record', 'settings'] : game.study?.place ? ['week', 'place', 'jobs', 'profile', 'letters', 'record', 'settings'] : ['week', 'jobs', 'profile', 'letters', 'record', 'settings']) : ['week', 'formation', 'jobs', 'profile', 'clubs', 'letters', 'record', 'settings'];
   // A friar lives in a house: its sheet sits beside the week. E3 §3.2.
   if (game.religious) tabs.splice(1, 0, 'house');
   // A friar pastor sits in the diocese's deanery. E3 §3.12.
