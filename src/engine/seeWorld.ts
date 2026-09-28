@@ -9,6 +9,7 @@ import { namespaceDiocese } from '@/generation/province';
 import { FAULTS, MANAGEMENT, PRIORITIES, TRAITS, rollLiturgicalPolicy, temperamentLine } from '@/generation/bishop';
 import { dateOf } from './time';
 import { seedSeminary } from '@/systems/bishop/seminary';
+import { seedCouncil } from '@/systems/bishop/presbyterate';
 
 /**
  * E4 R1.0 — the see as a place with people. A bishop's see is a world of its
@@ -140,5 +141,7 @@ export function installSeeWorld(state: GameState, rng: Rng): GameState {
   flags[`diocese:${presetId}`] = true;
   const installed: GameState = { ...state, npcs, world: seeWorldNow, territory, flags, homeDioceseId: homeId, see: { ...see, dioceseId: presetId } };
   // The seminary as the chair finds it: men across the years. E4 R1.4.
-  return { ...installed, see: { ...installed.see!, seminary: installed.see!.seminary ?? seedSeminary(installed, rng.derive(`seminary:${see.id}`)) } };
+  const withSeminary: GameState = { ...installed, see: { ...installed.see!, seminary: installed.see!.seminary ?? seedSeminary(installed, rng.derive(`seminary:${see.id}`)) } };
+  // The council of priests as the chair finds it. E4 R1.5.
+  return seedCouncil(withSeminary, rng.derive(`council:${see.id}`));
 }

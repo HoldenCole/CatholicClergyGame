@@ -3,6 +3,7 @@ import { beginDraft, abandonDraft } from '@/systems/rome/papalDesk';
 import { beginAct as beginSeeActSys, dropAct as dropSeeActSys } from '@/systems/bishop/desk';
 import { giveDirection as giveDirectionSys } from '@/systems/bishop/directions';
 import { visitParish as visitParishSys } from '@/systems/bishop/visits';
+import { nameToCouncil as nameToCouncilSys } from '@/systems/bishop/presbyterate';
 import { admit as admitSys, delayMan, dismissMan, nameRector as nameRectorSys, nameVocationsDirector as nameVocationsDirectorSys, sendToRome as sendToRomeSys, setEmphasis as setEmphasisSys, setWhere as setWhereSys } from '@/systems/bishop/seminary';
 import { callConsistory as callConsistorySys, holdPapalConsistory, planJourney as planJourneySys } from '@/systems/rome/papalActs';
 import { endPontificate } from '@/systems/rome/pontificate';
@@ -179,6 +180,8 @@ export interface GameStore {
   giveDirection(npcId: string, id: string, target?: { parishId?: string; office?: ChanceryOffice }): void;
   /** E4 R1.3: the visitation of a parish of the see. */
   visitParish(parishId: string): void;
+  /** E4 R1.5: a man named to the council of priests. */
+  nameToCouncil(npcId: string): void;
   /** E4 R1.4: the seminary. */
   seminaryAct(act: { kind: 'where'; where: SeminaryWhere } | { kind: 'emphasis'; pillar: Pillar } | { kind: 'rector' | 'director'; npcId: string } | { kind: 'admit'; applicantId: string; yes: boolean } | { kind: 'delay' | 'dismiss' | 'rome'; manId: string }): void;
   abandonPapalDraft(): void;
@@ -888,6 +891,9 @@ export const useGameStore = create<GameStore>()((set, get) => ({
       const out = visitParishSys(game, parishId);
       return out ? openMail(deliverLetter(out.state, out.letter)) : game;
     });
+  },
+  nameToCouncil(npcId) {
+    update(set, get, (game) => nameToCouncilSys(game, npcId));
   },
   seminaryAct(act) {
     update(set, get, (game) => {

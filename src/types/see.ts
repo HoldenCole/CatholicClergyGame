@@ -77,6 +77,9 @@ export interface SeeState {
   cyclesDone?: number;
   /** E4 R1.4: the seminary: where his men are formed, and the men. */
   seminary?: SeeSeminary;
+  /** E4 R1.5: the council of priests (the men elected by the presbyterate, and the men the bishop named), and the year's losses. */
+  council?: { electedIds: string[]; namedIds: string[]; electedWeek: number };
+  losses?: { week: number; npcId: string; name: string; why: 'died' | 'retired' }[];
 }
 
 /** E4 R1.4: where a see's men are formed. */

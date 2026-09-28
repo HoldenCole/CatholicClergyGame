@@ -4,6 +4,7 @@ import { evaluateAll } from '@/engine/conditions';
 import { applyEffects } from '@/engine/effects';
 import { LITURGICAL_TOPICS } from '@/types';
 import { closeSeeParish } from '@/engine/see';
+import { councilCold, PRESBYTERATE } from './presbyterate';
 
 export { closeSeeParish };
 
@@ -116,6 +117,11 @@ export function signAct(state: GameState): { state: GameState; letter: Letter; l
   }
   if (def.target === 'stance' && act.topic && act.stance) next = decreeStance(next, act.topic, act.stance);
   next = applyEffects(next, def.effects, {}, def.label);
+  // The council of priests, heard and against it: a decree costs the presbyterate more, a closing more still. E4 R1.5.
+  if ((def.target === 'stance' || def.target === 'parish') && councilCold(next) && next.see) {
+    const cost = def.target === 'parish' ? PRESBYTERATE.coldCost.closing : PRESBYTERATE.coldCost.decree;
+    next = { ...next, see: { ...next.see, presbyterate: Math.max(-100, next.see.presbyterate - cost) } };
+  }
   const tokens: Record<string, string> = { see: next.see!.see, ...(parishName ? { parish: parishName } : {}), ...(act.topic ? { topic: topicWord(act.topic) } : {}), ...(act.stance ? { stance: stanceWord(act.stance) } : {}) };
   const signed: SignedAct = { actId: def.id, week: state.clock.week, ...(act.parishId ? { parishId: act.parishId } : {}), ...(parishName ? { parishName } : {}), ...(act.topic ? { topic: act.topic } : {}), ...(act.stance ? { stance: act.stance } : {}) };
   const { desk: _d, ...see } = next.see!;
