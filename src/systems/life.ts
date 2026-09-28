@@ -78,9 +78,12 @@ export function lifeOf(state: GameState): Life {
 
   const successions = state.career.filter((e) => e.kind === 'succession');
   const ids = state.world?.bishopHistory ?? [];
+  // The bishop who ordained him: the one in office at ordination, whoever came before or after.
+  const ordainedBy = ordained === null ? -1 : ids.findIndex((_id, i) => { const next = successions.find((e) => ids[i + 1] && e.text.includes(`named ${state.npcs[ids[i + 1]!]?.title} ${state.npcs[ids[i + 1]!]?.name.first} ${state.npcs[ids[i + 1]!]?.name.last}`)); return !next || next.week > ordained; });
   const bishops: LifeBishop[] = ids.map((id) => state.npcs[id]).filter((n): n is Npc => !!n).map((npc, i) => {
     const entry = successions.find((e) => e.text.includes(`named ${npc.title} ${npc.name.first} ${npc.name.last}`));
-    const reading = entry ? (entry.text.split('. ').slice(1).join('. ') || entry.text) : i === 0 ? 'The bishop who ordained you.' : 'He came; the record does not say what he made of you.';
+    const read = entry ? (entry.text.split('. ').slice(1).join('. ') || entry.text) : i === 0 ? 'The bishop of your seminary years.' : 'He came; the record does not say what he made of you.';
+    const reading = i === ordainedBy ? `The bishop who ordained you.${entry ? ` ${read}` : ''}` : read;
     return { npc, ordinal: ['the first', 'the second', 'the third', 'the fourth', 'the fifth', 'the sixth', 'the seventh', 'the eighth'][i] ?? `the ${i + 1}th`, reading, regard: relationshipWord(npc.relationship) };
   });
 
@@ -90,7 +93,8 @@ export function lifeOf(state: GameState): Life {
 
   const letters = (state.letters ?? []).map((l) => ({ week: l.week, title: l.title, line: l.body[l.body.length - 1] ?? '' }));
   const founded = Object.values(state.groups).filter((g) => g.foundedByPlayer).map((g) => g.type.replace(/_/g, ' '));
-  const file = state.career.filter((e) => e.kind !== 'note').map((e) => e.text).slice(-10);
+  // The file, without the letters he declined: those are the drawer's, not the life's.
+  const file = state.career.filter((e) => e.kind !== 'note' && !(e.kind === 'offer' && /^Declined: /.test(e.text))).map((e) => e.text).slice(-10);
 
   const counts = bondCounts(state);
   const remembered = Object.values(state.npcs).filter((n) => (n.bonds?.length ?? 0) >= 2).sort((a, b) => (b.bonds!.length - a.bonds!.length) || b.relationship - a.relationship).slice(0, 6).map((npc) => ({ npc, phrase: bondsPhrase(npc) }));

@@ -1,5 +1,5 @@
 import { INTERESTS, parishInterest } from '@/systems/interests';
-import type { Assignment, Decision, GameState, Opening } from '@/types';
+import type { Assignment, Decision, GameState, Opening, Parish } from '@/types';
 import type { Rng } from './rng';
 import { decide } from '@/systems/promotion';
 import { openingBlurb, playerCandidate, refreshOpenings, rivalsFor } from '@/systems/openings';
@@ -246,10 +246,19 @@ export function nextAssignment(state: GameState, rng: Rng): { state: GameState; 
   let assignment: Assignment;
   if (won) {
     const role = won.opening.kind === 'chancery' ? 'administrator' : won.opening.kind;
-    const parishId = won.opening.parishId ?? next.parish?.parishId ?? next.world!.parishes[0]!.id;
-    assignment = { parishId, role, startWeek: next.clock.week, letter: letterFor(next, won.opening, role), reasons: won.reasons };
+    // An opening "across the diocese" is a real parish once the board names him to it: never the one he is leaving, never the cathedral, a vacant one first.
+    let opening = won.opening;
+    if (!opening.parishId) {
+      const others = next.world!.parishes.filter((p) => p.id !== next.parish?.parishId && !p.cathedral);
+      const vacant = (p: Parish) => !next.npcs[p.pastorId] || next.npcs[p.pastorId]!.status !== 'active';
+      const pool = others.length ? others : next.world!.parishes;
+      const parish = rng.derive(`elsewhere:${next.clock.week}`).weighted(pool, (p) => 10 + (vacant(p) ? 25 : 0) + (opening.needsSpanish === p.needsSpanish ? 5 : 0) + (opening.needsAdmin && p.debt >= 1_000_000 ? 10 : 0) + (p.id === askedParishId ? REQUEST_WEIGHT : 0));
+      opening = { ...opening, parishId: parish.id, label: `${role === 'pastor' ? 'Pastor' : 'Administrator'} of ${parish.name}, ${parish.place}` };
+    }
+    const parishId = opening.parishId!;
+    assignment = { parishId, role, startWeek: next.clock.week, letter: letterFor(next, opening, role), reasons: won.reasons };
     next = { ...next, openings: next.openings.filter((o) => o.id !== won.opening.id) };
-    next = note(next, 'promotion', `Appointed ${role.replace('_', ' ')} of ${openingBlurb(next, won.opening).split(':')[0]}. ${won.reasons.slice(0, 2).join('; ')}.`);
+    next = note(next, 'promotion', `Appointed ${role.replace('_', ' ')} of ${openingBlurb(next, opening).split(':')[0]}. ${won.reasons.slice(0, 2).join('; ')}.`);
   } else if ((state.assignment?.role === 'pastor' || state.assignment?.role === 'administrator') && next.parish) {
     // A pastor is never sent back as a vicar: he is renewed where he is, or moved as pastor.
     const role = state.assignment.role;
@@ -353,7 +362,7 @@ export function careerSummary(state: GameState, ending: 'retired' | 'died' | 'le
   const cohort = classmates.length
     ? ` Of the ${classmates.length} men you entered with, ${classmates.filter((n) => n.status === 'left').length} left, ${classmates.filter((n) => n.status === 'dead').length} died, and ${classmates.filter((n) => n.tags.includes('chancery')).length} ended in the chancery.`
     : '';
-  const lines = entries.filter((e) => e.kind !== 'note').slice(-6).map((e) => renderText(e.text, state));
+  const lines = entries.filter((e) => e.kind !== 'note' && !(e.kind === 'offer' && /^Declined: /.test(e.text))).slice(-6).map((e) => renderText(e.text, state));
   // The book: what the years actually counted, which is not a score. DESIGN §8.6.
   const book = ministryLine(state);
   return [opening, arc, bishops + romeLine, record + legacy + cohort, ...(book ? [`You said ${book}`] : []), '', ...lines].join('\n');

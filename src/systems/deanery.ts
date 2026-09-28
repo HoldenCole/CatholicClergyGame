@@ -67,12 +67,35 @@ export function deaneryPriests(state: GameState): DeaneryPriest[] {
   return d.priestIds
     .map((id) => state.npcs[id])
     .filter((n): n is Npc => !!n && n.status === 'active')
-    .map((npc) => {
-      const parish = world.parishes.find((p) => npc.tags.includes(`pastor:${p.id}`))!;
-      return { npc, parish, miles: milesBetween(here, parish, milesAcross(world)), dean: npc.id === d.deanId };
+    .flatMap((npc) => {
+      const parish = world.parishes.find((p) => npc.tags.includes(`pastor:${p.id}`));
+      // A man moved off his parish since the deanery was formed is not on the sheet until the week refills his seat.
+      return parish ? [{ npc, parish, miles: milesBetween(here, parish, milesAcross(world)), dean: npc.id === d.deanId }] : [];
     })
-    .filter((x) => !!x.parish)
     .sort((a, b) => a.miles - b.miles);
+}
+
+/**
+ * The deanery's seats follow its parishes: when a pastor is moved, retires,
+ * or dies, the parish's current pastor sits in his place, and a dean gone is
+ * succeeded by the senior pastor left. The player's own parish is never a seat.
+ */
+export function refillDeanery(state: GameState): GameState {
+  const d = state.parish?.deanery;
+  const world = state.world;
+  if (!d || !world) return state;
+  const priestIds = d.parishIds.flatMap((pid) => {
+    const sitting = d.priestIds.find((id) => state.npcs[id]?.status === 'active' && state.npcs[id]!.tags.includes(`pastor:${pid}`));
+    if (sitting) return [sitting];
+    const now = Object.values(state.npcs).find((n) => n.status === 'active' && n.role === 'priest' && n.id !== 'player' && n.tags.includes(`pastor:${pid}`));
+    return now ? [now.id] : [];
+  });
+  const deanStays = d.deanId === 'player' || (priestIds.includes(d.deanId) && state.npcs[d.deanId]?.status === 'active');
+  const senior = [...priestIds].map((id) => state.npcs[id]!).sort((a, b) => a.birthYear - b.birthYear || a.id.localeCompare(b.id))[0];
+  const deanId = deanStays ? d.deanId : (senior?.id ?? '');
+  if (deanId === d.deanId && priestIds.length === d.priestIds.length && priestIds.every((id, i) => id === d.priestIds[i])) return state;
+  const career = deanId !== d.deanId && deanId && deanId !== 'player' ? [...state.career, { week: state.clock.week, kind: 'note' as const, text: `${state.npcs[deanId]!.title} ${state.npcs[deanId]!.name.last} is dean now.` }] : state.career;
+  return { ...state, career, parish: { ...state.parish!, deanery: { ...d, priestIds, deanId } } };
 }
 
 export function coverAvailability(state: GameState, npcId: string): { ok: boolean; why: string | null } {
@@ -100,6 +123,7 @@ export function setCover(state: GameState, npcId: string | null): GameState {
 
 /** The week: a standing trade warms the partner, slowly. */
 export function deaneryWeek(state: GameState): GameState {
+  state = refillDeanery(state);
   const rival = deaneryRivalStands(state);
   if (!!state.flags['deanery:rival'] !== rival) state = { ...state, flags: { ...state.flags, 'deanery:rival': rival } };
   const id = state.parish?.deanery?.coverId;
