@@ -92,8 +92,11 @@ export function readerName(state: GameState, axis: string): string {
 
 /** How the axis's reader now reads the document that set it, or null with no reader or no document. */
 export function normFor(state: GameState, axis: string): DiocesanNorm | null {
-  const r = readerOf(state, axis);
   const s = standingOf(state, axis);
+  // A bishop's own reading, once he has given it (E4 R1.1): his norm is the diocese's.
+  const own = latestOn(state, axis);
+  if (own && own.id === s?.docId && own.bishopId === 'player' && own.norm) return own.norm;
+  const r = readerOf(state, axis);
   if (!r || !s?.docId) return null;
   return rollNorm(state.seed, s.docId, r.id, r.alignment, docLean(axis, s.from, s.value));
 }

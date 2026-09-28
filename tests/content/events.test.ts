@@ -101,7 +101,7 @@ const EFFECT_TARGETS = [
   'stat', 'reputation', 'relationship', 'flag', 'group', 'money', 'ap', 'thread', 'position',
   'pillar', 'alignment', 'outspokenness', 'honesty', 'credential', 'trait', 'archetype',
   'concern', 'risk', 'npc', 'end', 'decor', 'permission', 'trait_known', 'transfer', 'building', 'club', 'bond', 'place', 'record', 'strain', 'arc', 'ministry', 'foundation', 'known',
-  'province', 'crossing', 'town', 'rumour', 'document',
+  'province', 'crossing', 'town', 'rumour', 'document', 'see', 'norm',
 ];
 const DECOR_PLACES = ['church', 'chapel', 'office', 'rectory', 'seminary_room', 'chancery'];
 const DECOR_SLOTS = ['sanctuary', 'altar_rail', 'orientation', 'confessionals', 'choir', 'statues', 'tabernacle', 'mass_form', 'music', 'style', 'devotion', 'seating', 'wall', 'desk', 'floor', 'corner'];
@@ -300,6 +300,8 @@ function checkEffect(e: Effect, where: string, problems: Problem[]): void {
   const needsDelta = ['stat', 'reputation', 'relationship', 'pillar', 'alignment', 'outspokenness', 'honesty', 'archetype'];
   if (needsDelta.includes(e.target) && typeof e.delta !== 'number') problems.push(`${where}: ${e.target} effect needs delta`);
   if (e.target === 'stat' && !STAT_KEYS.includes(e.key as never)) problems.push(`${where}: bad stat key ${e.key}`);
+  if (e.target === 'see' && (!['presbyterate', 'people', 'rome', 'money', 'shortage'].includes(e.key) || typeof e.delta !== 'number')) problems.push(`${where}: bad see effect`);
+  if (e.target === 'norm' && (!AXES.has(e.key) || !['enthusiastic', 'faithful', 'minimal', 'slow'].includes(String(e.value)))) problems.push(`${where}: bad norm effect`);
   if (e.target === 'pillar' && !PILLARS.includes(e.key as never)) problems.push(`${where}: bad pillar key ${e.key}`);
   if (e.target === 'ministry' && !MINISTRY_COND_KEYS.includes(e.key)) problems.push(`${where}: unknown ministry key ${e.key}`);
   if (e.target === 'arc') {

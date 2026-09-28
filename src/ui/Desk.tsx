@@ -16,6 +16,7 @@ import HousesPanel from './parish/HousesPanel';
 import WorkPanel from './parish/WorkPanel';
 import SideWorkPanel from './parish/SideWorkPanel';
 import SeePanel from './study/SeePanel';
+import BishopDeskPanel from './study/BishopDeskPanel';
 import PlacePanel from './study/PlacePanel';
 import PopePanel from './study/PopePanel';
 import ProjectsPanel from './parish/ProjectsPanel';
@@ -115,7 +116,12 @@ export default function Desk() {
             <TalkPanel />
           </>
         )}
-        {open === 'see' && <SeePanel />}
+        {open === 'see' && (
+          <>
+            <BishopDeskPanel />
+            <SeePanel />
+          </>
+        )}
         {open === 'holy_see' && <PopePanel />}
         {open === 'place' && <PlacePanel />}
         {open === 'people' && (
