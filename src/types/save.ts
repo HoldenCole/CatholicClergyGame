@@ -17,7 +17,7 @@ import type { Ministry } from './ministry';
 import type { HouseStanding } from './houses';
 import type { ActiveArc } from './arcs';
 import type { CampaignKind } from './campaign';
-import type { OrderHouse, Province, ReligiousPlayerState } from './religiousLife';
+import type { OrderHouse, Province, ReligiousPlayerState, GeneralCuria } from './religiousLife';
 import type { ProvinceCandidateRecord } from './religiousLife';
 
 /** A rolled diocese the player may choose, held only during creation. */
@@ -139,6 +139,8 @@ export interface GameState {
   /** The home institution of the religious campaign, and its houses by id. */
   province?: Province;
   orderHouses?: Record<string, OrderHouse>;
+  /** The order beyond the province: its head, his term, and its general chapters. E3 §16A. */
+  generalCuria?: GeneralCuria;
   /** The province's other dioceses, each as it was when he left it, by preset id; `world` is the one he is in. */
   territory?: Record<string, World>;
   world: World | null;

@@ -49,6 +49,7 @@ import { visitationStep } from '@/systems/visitation';
 import { careOf, WEEK } from '@/systems/week';
 import { religiousWeek } from '@/systems/religious/week';
 import { religiousModeStep, religiousYear } from '@/systems/religious/year';
+import { termOver } from '@/systems/religious/chapter';
 import { renderText } from './text';
 import { closeCascade, dueCascade } from '@/systems/rome/documents';
 import { closeNuncioScene, dueNuncioScene } from '@/systems/rome/nuncio';
@@ -230,6 +231,8 @@ export function studyWeekHook(deps: EventDeps): WeekHook {
     }
     if (isCareerYear(next)) next = religiousYear(careerYear(next, rng), rng);
     if (next.mode.kind !== 'clock') return next;
+    // The head of the order's term runs out with his posting: the order elects first, and he goes home a week after. E3 §16A.
+    if (next.study?.city === 'generalate' && termOver(next)) return { ...next, mode: { kind: 'term_end' } };
     if (next.study && next.clock.week >= next.study.endWeek) {
       const def = deps.offerLookup?.(next.study.offerId);
       const done = def ? endStudy(next, def, rng.derive(`study-end:${next.clock.week}`)) : null;
@@ -382,6 +385,11 @@ export function friarWeekHook(deps: EventDeps): WeekHook {
     for (const f of kept) next = addDigestLine(next, orderFeastLine(f, rng.derive(`order-feast:${f.key}:${next.clock.week}`)));
     if (isCareerYear(next)) next = religiousYear(careerYear(next, rng), rng);
     if (next.mode.kind !== 'clock') return next;
+    // The College, when a former head of the order is of it: the biglietto, the consistory, the conclave. E3 §16A, E1 §7.
+    if (dueCollegeScene(next)) {
+      next = collegeScene(next, rng.derive(`college:${next.clock.week}`), deps);
+      if (next.mode.kind !== 'clock' || next.pending.length > 0) return next;
+    }
     // A feast is more than a line when there is a scene for it: the day itself draws first.
     if (kept.length) {
       const fired = feastScene(next, kept.map((f) => f.key), rng.derive(`feast-scene:${next.clock.week}`), deps, FEAST_SCENE_CHANCE);

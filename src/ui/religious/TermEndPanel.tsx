@@ -9,7 +9,7 @@ export default function TermEndPanel() {
   if (!game?.religious?.office || game.mode.kind !== 'term_end') return null;
   const o = game.religious.office;
   const order = religiousOrder(game.religious.order);
-  const title = o.office === 'prior' ? order.governance.priorTitle : order.governance.provincialTitle;
+  const title = o.office === 'prior' ? order.governance.priorTitle : o.office === 'general' ? order.governance.generalTitle : order.governance.provincialTitle;
   return (
     <Panel title="The term ends" tilt="r">
       <p className="leading-relaxed">Your term as {title} has run. The chapter has elected your successor, or will, and you return to ordinary life in the house: assigned like anyone else, at the table like anyone else, under a man who may have run against you. Returning well is a virtue the province remembers. Returning badly is a real and tempting failure.</p>
