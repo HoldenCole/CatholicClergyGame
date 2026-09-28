@@ -6,9 +6,14 @@ import { Bookcase, Chair, Crucifix, Desk, Door, Frame, Lamp, LightPool, Room, Sh
  * A room at the college: ochre plaster in Rome, painted brick in Washington;
  * a narrow bed, a desk under a shuttered window, and the city in it.
  */
+/** The Roman postings share the student's room and city; the rest are rooms at home. */
+function inRome(city: StudyCity): boolean {
+  return city === 'rome' || city === 'curia' || city === 'holy_see' || city === 'academy' || city === 'nunciature' || city === 'generalate' || city === 'faculty';
+}
+
 export function StudyRoom({ city, school }: { city: StudyCity; school: string }) {
-  const rome = city === 'rome';
-  const home = city !== 'rome' && city !== 'washington';
+  const rome = inRome(city);
+  const home = !rome && city !== 'washington';
   return (
     <g>
       {rome ? <Room wall="#d9b26a" dado="#8a5a2e" dadoAt={0.78} floor="tiles" ceiling="#efe4c8" /> : home ? <Room wall="#e6e0cf" dado="#8a7a5a" dadoAt={0.74} floor="carpet" ceiling="#efece3" /> : <Room wall="#c9c2b0" dado="#6b4a3a" dadoAt={0.72} floor="boards" ceiling="#efece3" />}
@@ -23,7 +28,7 @@ export function StudyRoom({ city, school }: { city: StudyCity; school: string })
       ))}
       <Window x={62} y={7} w={22} h={18} view={rome ? 'piazza' : home ? 'yard' : 'city'} frame={rome ? '#efe4c8' : '#efe9dc'} />
       {rome && <Dome x={73} y={7} w={22} h={18} />}
-      <LightPool x={60} y={40} w={24} h={14} />
+      <g opacity={home ? 0.45 : 1}><LightPool x={60} y={40} w={24} h={14} /></g>
       <Crucifix x={50} y={9} s={0.75} />
       {/* bed */}
       <Shadow x={4} y={46} w={36} h={2} />
@@ -77,8 +82,8 @@ function Dome({ x, y, w, h }: { x: number; y: number; w: number; h: number }) {
  * fountain, café tables, and the pitch behind the wall.
  */
 export function StudyCity({ city }: { city: StudyCity }) {
-  const rome = city === 'rome';
-  if (city !== 'rome' && city !== 'washington') return null;
+  const rome = inRome(city);
+  if (!rome && city !== 'washington') return null;
   const facade = rome ? '#d9a860' : '#9a5a44';
   const facade2 = rome ? '#c98f52' : '#b4735a';
   const roof = rome ? '#8a4a2a' : '#4a4a52';

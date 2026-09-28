@@ -17,9 +17,13 @@ export interface Prefs {
   seen: string[];
   /** The last week of the record read, by seed, so the next visit shows where the new entries begin. */
   readWeeks?: Record<string, number>;
+  /** A small label on every clickable thing in the room, so a man can tell the confessional from a cupboard. */
+  labels?: boolean;
+  /** Sections of the desk folded or unfolded by hand, by their key; the rest open as the sheet decides. */
+  folds?: Record<string, boolean>;
 }
 
-const DEFAULT_PREFS: Prefs = { fontScale: 'normal', reducedMotion: false, hints: true, briefings: true, seen: [] };
+const DEFAULT_PREFS: Prefs = { fontScale: 'normal', reducedMotion: false, hints: true, briefings: true, seen: [], labels: true, folds: {} };
 const PREFS_KEY = 'vocation:prefs';
 
 function loadPrefs(): Prefs {
@@ -58,6 +62,8 @@ interface UiState {
   /** A letter folded away so the desk can be read; it waits in a tray until it is opened again. */
   letterFolded: boolean;
   foldLetter(folded: boolean): void;
+  /** Fold or unfold a section of the desk; remembered in the browser. */
+  setFold(key: string, open: boolean): void;
   openSheet(sheet: Sheet | null): void;
   setScene(scene: SceneId): void;
   furnish(place: DecorPlace | null): void;
@@ -71,6 +77,12 @@ export const useUiStore = create<UiState>((set) => ({
   setPrefs: (partial) =>
     set((s) => {
       const prefs = { ...s.prefs, ...partial };
+      savePrefs(prefs);
+      return { prefs };
+    }),
+  setFold: (key, open) =>
+    set((s) => {
+      const prefs = { ...s.prefs, folds: { ...(s.prefs.folds ?? {}), [key]: open } };
       savePrefs(prefs);
       return { prefs };
     }),

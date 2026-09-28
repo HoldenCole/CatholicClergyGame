@@ -18,7 +18,7 @@ export default function MassPanel() {
   const cost = weeklyCost(parish);
   const fresh = dials.filter((d) => d.changedWeeksAgo !== null && d.changedWeeksAgo < 26).length;
   return (
-    <Sheet title="The Mass">
+    <Sheet title="The Mass" fold="closed" summary={`${frictionWord(friction)}${cost ? `, $${cost} a week` : ''}${fresh ? `, ${fresh} fresh` : ''}`}>
       <p className="text-sm leading-relaxed">
         {may.ok ? 'Yours to set, all of it. ' : `${may.why} `}As it stands it is {frictionWord(friction)}{cost ? `, and it costs $${cost} a week in wax, smoke, and musicians` : ''}.
         {fresh > 0 ? ` ${fresh === 1 ? 'One change is' : `${fresh} changes are`} still fresh; the people have not decided what they think.` : ''}

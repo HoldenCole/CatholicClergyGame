@@ -164,7 +164,7 @@ export default function RoutinePanel() {
         })()}
         <p className="ink-muted mt-3 text-xs">{careWord}{careTrend}. Hours with the people fill the pews, and full pews fill the basket; a parish that is looked after has fewer fires.</p>
       </Sheet>
-      <Sheet title="The rest of your life">
+      <Sheet title="The rest of your life" fold="closed" summary={`you are ${strainWord(strain)}; ${sacrificed.size ? `${sacrificed.size} given up` : 'nothing given up'}`}>
         <p className="ink-muted text-xs leading-relaxed">
           More hours for the parish come from somewhere. You are {strainWord(strain)}{strain >= WEEK.strainSick ? ', and the body has started taking an hour back' : strain >= WEEK.strainWorn ? ', and it is beginning to cost you' : ''}.
         </p>

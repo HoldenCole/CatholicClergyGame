@@ -11,12 +11,30 @@ export function Hall() {
         <rect x="30" y="1.5" width="40" height="1.4" fill="#f4f1e6" />
         <rect x="30" y="1.5" width="40" height="1.4" fill="#fff" opacity="0.7" filter="url(#soft)" />
       </Room>
-      {/* stage */}
+      {/* the stage: a low platform with a skirt, the curtain drawn and falling in folds under a valance, a lectern at the front */}
       <rect x="34" y="26" width="32" height="14" fill="url(#wood)" />
       <rect x="34" y="26" width="32" height="0.8" fill="#fff" opacity="0.3" />
+      <rect x="34" y="34" width="32" height="6" fill="#000" opacity="0.18" />
       <rect x="34" y="12" width="32" height="14" fill="#5a1414" />
-      <path d="M34 12 q4 8 0 14 M66 12 q-4 8 0 14" stroke="#3a0a0a" strokeWidth="0.8" fill="none" />
+      {[36.5, 39, 41.5, 44, 46.5, 49, 51.5, 54, 56.5, 59, 61.5, 64].map((x) => (
+        <path key={x} d={`M${x} 13.5 q0.6 6 0 12.5`} stroke="#3a0a0a" strokeWidth="0.7" fill="none" opacity="0.7" />
+      ))}
+      {[37.7, 42.7, 47.7, 52.7, 57.7, 62.7].map((x) => (
+        <path key={x} d={`M${x} 13.5 q0.5 6 0 12.5`} stroke="#8a2a2a" strokeWidth="0.5" fill="none" opacity="0.6" />
+      ))}
+      <path d="M34 12 h32 v2.2 q-2 2 -4 0 t-4 0 t-4 0 t-4 0 t-4 0 t-4 0 t-4 0 t-4 0 Z" fill="#7a1f1f" />
       <rect x="34" y="11" width="32" height="1.6" fill={PALETTE.oakDark} />
+      <rect x="33.4" y="26" width="1.2" height="14" fill="#3a2a18" />
+      <rect x="65.4" y="26" width="1.2" height="14" fill="#3a2a18" />
+      <polygon points={pts([[47, 21], [53, 21], [53.6, 23.5], [46.4, 23.5]])} fill={PALETTE.oakDark} />
+      <rect x="48.8" y="23.5" width="2.4" height="4.5" fill={PALETTE.oakDark} />
+      <rect x="47.6" y="27.6" width="4.8" height="0.8" fill="#2a1a10" />
+      {/* the flag and the banner either side of the stage */}
+      <rect x="30.4" y="14" width="0.6" height="14" fill="#7a6a4a" />
+      <path d="M31 14.5 l4 1.2 v5 l-4 1.2 Z" fill="#c9c4bb" />
+      <rect x="31" y="14.5" width="1.6" height="7.4" fill="#2e5aac" opacity="0.8" />
+      <rect x="67.5" y="14" width="4.5" height="9" fill="#e9d9a0" stroke="#7a6a4a" strokeWidth="0.3" />
+      <path d="M67.5 23 l2.25 1.5 l2.25 -1.5" fill="#e9d9a0" stroke="#7a6a4a" strokeWidth="0.3" />
       {/* bulletin board */}
       <rect x="4" y="10" width="20" height="14" fill="#8a6a3a" stroke="#5a3a12" strokeWidth="0.4" />
       <rect x="4.8" y="10.8" width="18.4" height="12.4" fill="#b8925a" />
@@ -48,7 +66,7 @@ export function Hall() {
       <Chair x={8} y={49} s={0.7} kind="folding" facing="away" />
       <Chair x={46} y={49} s={0.7} kind="folding" facing="away" />
       <Chair x={76} y={49} s={0.7} kind="folding" facing="away" />
-      <Door x={45} y={50} w={10} h={10} color="#8a8378" />
+      <Door x={25.5} y={22} w={7} h={18} color="#8a8378" />
     </g>
   );
 }

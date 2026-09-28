@@ -109,7 +109,7 @@ export default function ParishPanel() {
         {portrait && <p className="mt-3 whitespace-pre-line text-sm leading-relaxed">{portrait}</p>}
       </Sheet>
       <MassPanel />
-      <Sheet title={game.world.diocese.visible.name}>
+      <Sheet title={game.world.diocese.visible.name} fold="closed">
         {(() => {
           const v = game.world!.diocese.visible;
           const preset = diocesePresets.find((p) => p.id === game.world!.diocese.presetId);
@@ -244,7 +244,7 @@ export default function ParishPanel() {
           What the parish sings, how the altar stands, where the choir is: <button className="pbtn-link" onClick={() => furnish('church')}>the church</button> is yours to change, within what the bishop allows.
         </p>
       </Sheet>
-      <Sheet title="What is wrong with this parish in particular">
+      <Sheet title="What is wrong with this parish in particular" fold="closed">
         {(() => {
           const issues = (parish.issues ?? []).map((id) => parishIssueDef(id)).filter((d): d is NonNullable<typeof d> => !!d);
           if (!issues.length) return <p className="ink-faint text-sm">Nothing this parish is known for. Rare, and it will not last.</p>;
@@ -262,7 +262,7 @@ export default function ParishPanel() {
         })()}
         <p className="ink-faint mt-2 text-xs">The diocese writes down one problem. These are the things the pastor finds in the first year, and no two parishes have the same set.</p>
       </Sheet>
-      <Sheet title="The rectory and the office">
+      <Sheet title="The rectory and the office" fold="closed">
         <ul className="flex flex-col gap-1.5 text-sm">
           {[...(pastor && pastor.id !== 'player' ? [pastor] : []), ...staff].map((n) => (
             <li key={n.id} className="flex items-center gap-2">

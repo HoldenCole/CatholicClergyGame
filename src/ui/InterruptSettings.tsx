@@ -19,7 +19,7 @@ export default function InterruptSettings() {
   if (!interrupts) return null;
 
   return (
-    <Sheet title="Stop the clock for">
+    <Sheet title="Stop the clock for" fold="closed">
       <ul className="flex flex-col gap-1.5">
         {EVENT_CATEGORIES.map((category) => (
           <li key={category} className="flex items-center justify-between gap-3 text-sm">

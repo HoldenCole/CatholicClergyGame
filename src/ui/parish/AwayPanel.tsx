@@ -14,7 +14,7 @@ export default function AwayPanel() {
   const left = vacationLeft(game);
   const away = game.away ? awayPlace(game.away.placeId) : null;
   return (
-    <Sheet title="Away">
+    <Sheet title="Away" fold="closed">
       {away ? (
         <p className="text-sm leading-relaxed">{away.label}: {game.away!.weeksLeft} week{game.away!.weeksLeft === 1 ? '' : 's'} to go. The supply priest has the Masses; the parish will keep.</p>
       ) : (

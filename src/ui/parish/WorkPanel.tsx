@@ -12,7 +12,7 @@ export default function WorkPanel() {
 
   return (
     <>
-      <Sheet title="The men you were ordained with">
+      <Sheet title="The men you were ordained with" fold="closed" summary={`${men.length} men`}>
         <p className="ink-muted text-xs leading-relaxed">
           A diocesan priest has no community and no rule. What he has is the men who were in the same building at twenty-four, and whichever of them he has bothered to keep up with. The hours in the routine go to whoever he has left longest.
         </p>

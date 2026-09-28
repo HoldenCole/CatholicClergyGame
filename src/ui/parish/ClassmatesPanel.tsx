@@ -16,7 +16,7 @@ export default function ClassmatesPanel() {
   const year = yearOf(game.clock.startDay, game.clock.week);
   const ahead = lines.filter((l) => l.ahead).length;
   return (
-    <Sheet title="The class">
+    <Sheet title="The class" fold="closed" summary={`${lines.length} men, ${ahead} ahead of you`}>
       <p className="ink-muted mb-2 text-xs">
         {ahead === 0 ? 'No one ordained with you has gone further than you, yet.' : ahead === 1 ? 'One man from your class has gone further than you.' : `${ahead} men from your class have gone further than you.`}
       </p>

@@ -14,7 +14,7 @@ export default function SideWorkPanel() {
   const done = worksDone(game);
 
   return (
-    <Sheet title={desk ? 'The desk' : 'Besides the parish'}>
+    <Sheet title={desk ? 'The desk' : 'Besides the parish'} fold="closed">
       {work ? (
         <>
           <p className="text-sm">{workLine(game)}</p>

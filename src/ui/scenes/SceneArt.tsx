@@ -1,5 +1,5 @@
 import type { GameState, Season } from '@/types';
-import type { SceneId } from './scenes';
+import { romanCity, type SceneId } from './scenes';
 import { ambientFor, currentDecor } from '@/systems/decor';
 import { Defs, Finish } from './art/defs';
 import { Church } from './art/church';
@@ -57,7 +57,7 @@ export default function SceneArt({ scene, season, state, plain = false, weather 
       {scene === 'study_city' && (state.study?.city === 'mission' || state.study?.city === 'deployment') && <Street terrain={state.study?.city === 'mission' ? 'rural' : 'urban'} />}
       {scene === 'study_city' && state.study?.city === 'formation' && <SeminaryHall />}
       {scene === 'study_city' && state.study?.city === 'campus' && <Hall />}
-      {scene === 'study_city' && (state.study?.city === 'rome' || state.study?.city === 'washington' || !state.study) && <StudyCity city={state.study?.city ?? 'rome'} />}
+      {scene === 'study_city' && (!state.study || romanCity(state.study.city)) && <StudyCity city={state.study?.city ?? 'rome'} />}
       {scene === 'chancery' && <Chancery ambient={ambient('chancery')} rank={chanceryRank(state) ?? 'modest'} bishopName={bishop ? `${bishop.title} ${bishop.name.first} ${bishop.name.last}` : 'The bishop'} />}
       {!plain && weather && <WeatherLayer kind={weather} />}
       {!plain && <Finish />}

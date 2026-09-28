@@ -1,6 +1,21 @@
 import { useGameStore } from '@/engine/store';
 import { askDef, castOf, connectedTo, favourOffers, houseKindLine, houseLine, housesOf, houseWorkOffers, regardWord, standingOf } from '@/systems/houses';
-import Sheet from '../Sheet';
+import Sheet, { useFold } from '../Sheet';
+
+/** One house, folded to its name and its standing until it is wanted. */
+function HouseRow({ id, name, standing, children }: { id: string; name: string; standing: string; children: React.ReactNode }) {
+  const [open, toggle] = useFold(`house:${id}`, false);
+  return (
+    <li>
+      <button type="button" className="fold-head flex w-full items-baseline gap-2 text-left" onClick={toggle} aria-expanded={open}>
+        <span className="fold-chevron ink-faint" aria-hidden>{open ? '\u25BE' : '\u25B8'}</span>
+        <span className="font-semibold">{name}</span>
+        <span className="ink-faint text-xs">{standing}</span>
+      </button>
+      {open && <div className="mt-1 pl-3">{children}</div>}
+    </li>
+  );
+}
 
 /**
  * The houses of the diocese: what each one is, what it thinks of you, what it
@@ -20,7 +35,7 @@ export default function HousesPanel() {
   const works = houseWorkOffers(game);
 
   return (
-    <Sheet title="The houses of the diocese">
+    <Sheet title="The houses of the diocese" fold="closed" summary={`${houses.length} house${houses.length === 1 ? '' : 's'}; standing ${regardWord(Math.max(...houses.map((h) => standingOf(game, h.id).regard)))}${houses.some((h) => standingOf(game, h.id).ask) ? '; one has asked' : ''}`}>
       <p className="ink-muted text-xs leading-relaxed">
         They were here before you and they answer to a provincial in another state. Nothing they do for the parish is owed, an hour a week in the routine is the only thing that builds it, and what they give the provincial can end without notice.
       </p>
@@ -31,8 +46,7 @@ export default function HousesPanel() {
           const asked = s.ask ? askDef(s.ask.id) : undefined;
           const mine = offers.filter((o) => o.house.id === h.id && (!o.def.order || o.def.order === h.order));
           return (
-            <li key={h.id}>
-              <div className="font-semibold">{h.name}</div>
+            <HouseRow key={h.id} id={h.id} name={h.name} standing={`${regardWord(s.regard)}${s.ask ? ' · they have asked' : ''}`}>
               <div className="ink-muted text-xs leading-relaxed">{h.line}</div>
               {houseKindLine(h) && <div className="ink-faint mt-1 text-xs leading-relaxed">{houseKindLine(h)}</div>}
               {castOf(game, h).length > 0 && (
@@ -89,7 +103,7 @@ export default function HousesPanel() {
                   </ul>
                 </div>
               )}
-            </li>
+            </HouseRow>
           );
         })}
       </ul>

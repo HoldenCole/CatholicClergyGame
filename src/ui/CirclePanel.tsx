@@ -1,11 +1,28 @@
 import { useGameStore } from '@/engine/store';
 import { CIRCLE_LABEL, CIRCLE_ORDER, circleOf, type CircleGroup } from '@/systems/circle';
-import Sheet from './Sheet';
+import Sheet, { FoldHeading, useFold } from './Sheet';
+import { useState } from 'react';
 import Portrait from './portraits/Portrait';
 import { portraitForNpc, yearOf } from './portraits/spec';
 import TalkButton from './parish/TalkButton';
 import { LastTalk } from './parish/TalkButton';
 import { ENEMIES, mayMend } from '@/systems/enemies';
+
+const SHOWN = 8;
+
+/** A group of the circle: folded by its heading, the far groups closed to start, and eight rows before the rest are asked for. */
+function CircleGroupRows({ group, count, summary, children }: { group: CircleGroup; count: number; summary: string; children: (shown: number) => React.ReactNode }) {
+  const [open, toggle] = useFold(`circle:${group}`, group !== 'former' && group !== 'others');
+  const [all, setAll] = useState(false);
+  const shown = all ? count : SHOWN;
+  return (
+    <div className="mb-3">
+      <FoldHeading open={open} onToggle={toggle} title={CIRCLE_LABEL[group]} summary={summary} className="mb-1" />
+      {open && children(shown)}
+      {open && count > shown && <button className="pbtn-link mt-1 text-xs" onClick={() => setAll(true)}>and {count - shown} more</button>}
+    </div>
+  );
+}
 
 /** The circle: everyone who matters to the man, across the whole life, and how each of them holds him now. */
 export default function CirclePanel() {
@@ -23,10 +40,10 @@ export default function CirclePanel() {
         {rows.length === 0 ? 'Nobody yet. The people come with the years.' : `${rows.length} people who matter, ${friends} of them friends${drifting ? `, ${drifting} drifting for want of a word` : ''}. Regard settles toward what has passed between you; the top of it costs keeping.`}
       </p>
       {groups.map(([g, rs]) => (
-        <div key={g} className="mb-3">
-          <h4 className="heading mb-1 text-xs">{CIRCLE_LABEL[g]}</h4>
+        <CircleGroupRows key={g} group={g} count={rs.length} summary={`${rs.length}; ${rs.filter((r) => r.npc.status === 'active' && r.npc.relationship >= 40).length} friends`}>
+          {(shown) => (
           <ul className="flex flex-col gap-1 text-sm">
-            {rs.map((r) => (
+            {rs.slice(0, shown).map((r) => (
               <li key={r.npc.id} className={'flex items-start gap-2 ' + (r.status ? 'ink-faint' : '')}>
                 <Portrait portrait={portraitForNpc(r.npc, year)} size={22} />
                 <span className="min-w-0 flex-1">
@@ -39,7 +56,8 @@ export default function CirclePanel() {
               </li>
             ))}
           </ul>
-        </div>
+          )}
+        </CircleGroupRows>
       ))}
       <LastTalk npcIds={rows.map((r) => r.npc.id)} />
     </Sheet>
