@@ -70,7 +70,8 @@ describe('the dicasteries', () => {
 describe('a posting in the Curia', () => {
   it("comes by the Secretariat of State's letter to a man Rome and the nuncio read well", () => {
     const def = offerById('rome_curia_official')!;
-    expect(allOffers.filter((o) => o.accept.commitment?.away === 'curia_official')).toHaveLength(1);
+    // One letter for the diocese's man and one for the order's (E3 §16C), on the same posting.
+    expect(allOffers.filter((o) => o.accept.commitment?.away === 'curia_official').map((o) => o.campaign ?? 'diocesan').sort()).toEqual(['diocesan', 'religious']);
     expect(isOfferEligible(def, candidate('eligible'))).toBe(true);
     const cold = candidate('cold');
     expect(isOfferEligible(def, { ...cold, character: { ...cold.character!, reputation: { ...cold.character!.reputation, rome: -10 } } })).toBe(false);

@@ -93,6 +93,7 @@ A **posting in Rome after the degree**: a priest lent by his bishop to a dicaste
 - **The ladder**, if it goes past a posting: official, head of office, undersecretary, secretary (normally made an archbishop), prefect (normally a cardinal).
 - **The diplomatic service**: the Holy See's school for diplomats, a nunciature abroad as secretary, and eventually a nunciature of one's own. The man who sat on the other side of the terna.
 - Titles as the Holy See gives them: chaplain of His Holiness ("Monsignor"; for diocesan priests limited since 2014 to those over 65, with exceptions for the diplomatic and curial service; flag for verification).
+- *R1.10 (E3 §16C): a friar is lent by his order on the same terms, lives in the order's house, and climbs the same ladder; the order's own faculty in Rome is a posting of its own.*
 
 ---
 

@@ -2980,6 +2980,443 @@
         "outcome": "You tell the nuncio that you are a friar, and that the order has uses for you it has not finished with. He does not argue; he has heard it before, from better men and worse. Rome remembers a refusal the way it remembers everything, without heat and without end. The house, which is not supposed to know, gives you a look at supper that lasts a week."
       },
       "from": "@nuncio"
+    },
+    {
+      "id": "fr_curia_official",
+      "category": "chancery",
+      "campaign": "religious",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "title": "A Letter from the Secretariat of State",
+      "body": "The letter comes to {@provincial} first, on the letterhead of the Secretariat of State, and he brings it to the house himself rather than send it. {curia_offer} would like a priest of the order as an official for five years: a desk, a cell in the order's house in Rome, the files. The dicasteries have always borrowed friars, he says; the order has always let them go and always minded. He does not say what he hopes, and then he does: that a man of the province in a Roman office is worth more to the province than a man in a Roman office knows. The council has agreed to release you if you say yes. He asks you to think about it for a week and to tell him before he tells Rome.",
+      "from": "@provincial",
+      "requires": [
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 3
+        },
+        {
+          "type": "age",
+          "op": "<=",
+          "value": 55
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "ordained_bishop",
+            "value": true
+          }
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "curia_served",
+            "value": true
+          }
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "refused_curia",
+            "value": true
+          }
+        },
+        {
+          "type": "flag",
+          "key": "office:general",
+          "value": false
+        },
+        {
+          "type": "reputation",
+          "key": "rome",
+          "op": ">=",
+          "value": 15
+        },
+        {
+          "type": "reputation",
+          "key": "order",
+          "op": ">=",
+          "value": 20
+        },
+        {
+          "type": "nuncio",
+          "key": "view",
+          "op": ">=",
+          "value": 45
+        },
+        {
+          "type": "any",
+          "inner": [
+            {
+              "type": "flag",
+              "key": "rome_alumnus",
+              "value": true
+            },
+            {
+              "type": "credential",
+              "key": "italian"
+            },
+            {
+              "type": "flag",
+              "key": "worked_at_the_holy_see",
+              "value": true
+            },
+            {
+              "type": "credential",
+              "key": "JCL"
+            },
+            {
+              "type": "credential",
+              "key": "STD"
+            }
+          ]
+        }
+      ],
+      "weight": 14,
+      "bias": [
+        {
+          "when": {
+            "type": "flag",
+            "key": "worked_at_the_holy_see",
+            "value": true
+          },
+          "multiplier": 3.0
+        },
+        {
+          "when": {
+            "type": "flag",
+            "key": "rome_alumnus",
+            "value": true
+          },
+          "multiplier": 1.6
+        },
+        {
+          "when": {
+            "type": "credential",
+            "key": "JCL"
+          },
+          "multiplier": 1.4
+        },
+        {
+          "when": {
+            "type": "flag",
+            "key": "general:served",
+            "value": true
+          },
+          "multiplier": 1.5
+        },
+        {
+          "when": {
+            "type": "outspokenness",
+            "op": ">=",
+            "value": 60
+          },
+          "multiplier": 0.5
+        }
+      ],
+      "windowWeeks": 4,
+      "final": true,
+      "cluster": "curia",
+      "accept": {
+        "effects": [
+          {
+            "target": "reputation",
+            "key": "rome",
+            "delta": 6
+          },
+          {
+            "target": "reputation",
+            "key": "order",
+            "delta": 4
+          },
+          {
+            "target": "reputation",
+            "key": "community",
+            "delta": -5
+          }
+        ],
+        "outcome": "You fly to Rome in September with one suitcase and the habit folded on top, and a letter of introduction you will never be asked for. The order's house has a cell for you above the street, and at supper a friar from Vietnam and one from Poland ask which dicastery, and nod as if it explained you. On your first morning a porter who has seen forty officials come and go looks at your badge and the habit and says, in English, they will make you wear the black.",
+        "commitment": {
+          "label": "The Roman Curia",
+          "weeks": 260,
+          "apPerWeek": 0,
+          "onComplete": [
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 10
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 6
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 4
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 2
+            },
+            {
+              "target": "trait",
+              "key": "sat at a desk in the Roman Curia"
+            }
+          ],
+          "completeOutcome": "Five years, a cell in the order's house, and a file of letters that went out under other men's names. The order gets back a man it lent, and the province has to find out who he is now.",
+          "away": "curia_official"
+        }
+      },
+      "decline": {
+        "effects": [
+          {
+            "target": "flag",
+            "key": "refused_curia",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "rome",
+            "delta": -6
+          },
+          {
+            "target": "reputation",
+            "key": "community",
+            "delta": 3
+          }
+        ],
+        "outcome": "You tell the provincial that the province needs you more than Rome does, and he writes it to the Secretariat in better Italian than it deserves. Rome does not believe it at all. The next friar they ask says yes. The house, which was not supposed to know, is glad in the way a house is glad of a man who stayed."
+      }
+    },
+    {
+      "id": "fr_roman_faculty",
+      "category": "academic",
+      "campaign": "religious",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "title": "A Chair in Rome",
+      "body": "{@provincial} writes, and for once the letter is longer than the request. {roman_faculty} has asked the province for a professor: five years, a chair in {roman_chair}, the lectures in Italian to friars from forty provinces, the theses, the house in Rome with the head of the order at the end of the table. The faculty asked for you by name, which he wants you to know and does not want you to make too much of. The province would lose a teacher it has few of. It would gain, he writes, the thing provinces want and cannot buy: a man the whole order knows. He asks whether you will go, and says that the council will follow your answer, which is not what councils usually do.",
+      "from": "@provincial",
+      "requires": [
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 8
+        },
+        {
+          "type": "age",
+          "op": "<=",
+          "value": 60
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "ordained_bishop",
+            "value": true
+          }
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "faculty_served",
+            "value": true
+          }
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "refused_faculty",
+            "value": true
+          }
+        },
+        {
+          "type": "flag",
+          "key": "office:general",
+          "value": false
+        },
+        {
+          "type": "reputation",
+          "key": "order",
+          "op": ">=",
+          "value": 30
+        },
+        {
+          "type": "stat",
+          "key": "theology",
+          "op": ">=",
+          "value": 60
+        },
+        {
+          "type": "any",
+          "inner": [
+            {
+              "type": "credential",
+              "key": "STD"
+            },
+            {
+              "type": "credential",
+              "key": "lector_theology"
+            },
+            {
+              "type": "credential",
+              "key": "patristics"
+            },
+            {
+              "type": "credential",
+              "key": "master_theology"
+            },
+            {
+              "type": "all",
+              "inner": [
+                {
+                  "type": "credential",
+                  "key": "STL"
+                },
+                {
+                  "type": "stat",
+                  "key": "theology",
+                  "op": ">=",
+                  "value": 75
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "weight": 14,
+      "bias": [
+        {
+          "when": {
+            "type": "credential",
+            "key": "STD"
+          },
+          "multiplier": 1.6
+        },
+        {
+          "when": {
+            "type": "credential",
+            "key": "master_theology"
+          },
+          "multiplier": 1.8
+        },
+        {
+          "when": {
+            "type": "flag",
+            "key": "rome_alumnus",
+            "value": true
+          },
+          "multiplier": 1.4
+        },
+        {
+          "when": {
+            "type": "credential",
+            "key": "italian"
+          },
+          "multiplier": 1.3
+        }
+      ],
+      "windowWeeks": 6,
+      "once": true,
+      "cluster": "academic",
+      "accept": {
+        "effects": [
+          {
+            "target": "reputation",
+            "key": "community",
+            "delta": -6
+          },
+          {
+            "target": "reputation",
+            "key": "order",
+            "delta": 5
+          },
+          {
+            "target": "reputation",
+            "key": "province",
+            "delta": -2
+          }
+        ],
+        "outcome": "The house is told at chapter, and the oldest man says that the province has sent professors to Rome before and got back men who could not say Mass in English. He is joking, mostly. Then the plane, and the cell above the lecture halls, and a first lecture to sixty friars in an Italian that the front row corrects with its faces.",
+        "commitment": {
+          "label": "A chair in Rome",
+          "weeks": 260,
+          "apPerWeek": 0,
+          "onComplete": [
+            {
+              "target": "flag",
+              "key": "faculty_served",
+              "value": true
+            },
+            {
+              "target": "flag",
+              "key": "faculty:years",
+              "value": 5
+            },
+            {
+              "target": "reputation",
+              "key": "order",
+              "delta": 8
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 6
+            },
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 4
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 3
+            },
+            {
+              "target": "trait",
+              "key": "held a chair at the order's faculty in Rome"
+            }
+          ],
+          "completeOutcome": "Five years of lectures, a book, and forty provinces' students who know your name. The province wants its teacher back, and the faculty writes that it will ask again.",
+          "away": "roman_faculty"
+        }
+      },
+      "decline": {
+        "effects": [
+          {
+            "target": "flag",
+            "key": "refused_faculty",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "order",
+            "delta": -3
+          },
+          {
+            "target": "reputation",
+            "key": "community",
+            "delta": 4
+          }
+        ],
+        "outcome": "You write the provincial that the studium at home needs its teacher more than Rome needs another, and that you would rather form the province's men than the order's. He reads it to the council, which agrees, and to the faculty, which does not. The faculty does not ask again for some years."
+      }
     }
   ]
 }

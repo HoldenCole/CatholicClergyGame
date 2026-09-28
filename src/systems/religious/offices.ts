@@ -63,7 +63,8 @@ export function dueCredentials(state: GameState): OrderCredentialDef[] {
   const r = state.religious;
   const c = state.character;
   if (!r || !c) return [];
-  const yearsAt = (work: string) => r.assignments.filter((a) => a.work === work).reduce((n, a) => n + ((a.endWeek ?? state.clock.week) - a.startWeek) / 52, 0) + r.termsServed.filter((t) => t.office === work).reduce((n, t) => n + (t.endWeek - t.startWeek) / 52, 0);
+  // Years at the order's faculty in Rome count as teaching (E3 §16C): the posting writes them to a flag when it ends.
+  const yearsAt = (work: string) => r.assignments.filter((a) => a.work === work).reduce((n, a) => n + ((a.endWeek ?? state.clock.week) - a.startWeek) / 52, 0) + r.termsServed.filter((t) => t.office === work).reduce((n, t) => n + (t.endWeek - t.startWeek) / 52, 0) + (work === 'teaching' ? Number(state.flags['faculty:years'] ?? 0) : 0);
   return religiousOrder(r.order).credentials.filter((d) => !c.credentials.includes(d.id) && yearsAt(d.work) >= d.afterYears);
 }
 

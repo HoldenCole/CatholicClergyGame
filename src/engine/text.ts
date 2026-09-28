@@ -9,6 +9,7 @@ import { reversalTokens } from '@/systems/rome/reversal';
 import { nuncioTokens } from '@/systems/rome/nuncioText';
 import { curiaTokens } from '@/systems/rome/curia';
 import { collegeTokens } from '@/systems/rome/college';
+import { romanTokens } from '@/systems/religious/mitre';
 import { popeTokens } from '@/systems/rome/pontificateText';
 import { diplomacyTokens } from '@/systems/rome/diplomacy';
 
@@ -46,6 +47,7 @@ export function textExtras(state: GameState): Record<string, string> {
   Object.assign(out, nuncioTokens(state));
   Object.assign(out, curiaTokens(state));
   Object.assign(out, collegeTokens(state));
+  Object.assign(out, romanTokens(state));
   Object.assign(out, popeTokens(state));
   Object.assign(out, diplomacyTokens(state));
   return out;
