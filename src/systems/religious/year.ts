@@ -72,9 +72,13 @@ export function religiousYear(state: GameState, rng: Rng): GameState {
   if (p && !r.chapter && next.mode.kind === 'clock') {
     const sinceProv = Number(next.flags['chapter:provincial'] ?? 0);
     const provYear = 2010 + Math.floor(next.clock.week / 52);
-    const due = sinceProv === 0 ? provYear - p.provincialSince >= order.governance.provincialTermYears : next.clock.week - sinceProv >= order.governance.provincialTermYears * 52;
+    // A chapter Rome called early: the commissary's year runs out and the province elects (E3 §16D).
+    const called = Number(next.flags['chapter:provincial:called'] ?? 0);
+    const due = (called > 0 && next.clock.week >= called) || (sinceProv === 0 ? provYear - p.provincialSince >= order.governance.provincialTermYears : next.clock.week - sinceProv >= order.governance.provincialTermYears * 52);
     if (due) {
-      next = openChapter({ ...next, flags: { ...next.flags, 'chapter:provincial': next.clock.week } }, 'provincial', p.id, 'provincial');
+      const flags: GameState['flags'] = { ...next.flags, 'chapter:provincial': next.clock.week };
+      delete flags['chapter:provincial:called'];
+      next = openChapter({ ...next, flags }, 'provincial', p.id, 'provincial');
       const gallery = chapterFromTheGallery(next, rng.derive(`gallery:${next.clock.week}`));
       if (gallery.letter) next = deliverLetter(gallery.state, gallery.letter);
       else return { ...next, mode: { kind: 'chapter' } };

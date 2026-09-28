@@ -260,6 +260,9 @@ function checkCondition(c: Condition, where: string, problems: Problem[]): void 
     case 'papacy':
       if (c.key === 'scene' ? !['first', 'journey', 'anniversary', 'laying_down'].includes(String(c.value)) : !['vacant', 'reigning'].includes(c.key) || typeof c.value !== 'boolean') problems.push(`${where}: bad papacy condition`);
       break;
+    case 'visitation':
+      if (!({ scene: ['announced', 'house', 'interview', 'report', 'decree'], stage: ['announced', 'visiting', 'report', 'decree'], cause: ['document', 'division', 'decline', 'complaint'], outcome: ['clean', 'norms', 'closure', 'commissary'] } as Record<string, string[]>)[c.key]?.includes(String(c.value))) problems.push(`${where}: bad visitation condition`);
+      break;
     case 'nuncio':
       if (c.key === 'scene' ? !['consulted', 'about_you', 'passed', 'subject_named', 'arrival', 'remembers', 'aux_request'].includes(c.value) : !hasOp(c.op) || typeof c.value !== 'number') problems.push(`${where}: bad nuncio condition`);
       break;
@@ -376,7 +379,7 @@ function checkEvent(ev: GameEvent, file: string, problems: Problem[], ids: Set<s
   });
   for (const token of tokensIn(ev.title + ' ' + ev.body)) {
     if (token.startsWith('@') && !SELECTORS.includes(token) && !LIVE_SELECTORS.includes(token)) problems.push(`${where}: unknown selector ${token}`);
-    if (!token.startsWith('@') && !['name', 'first_name', 'surname', 'diocese', 'parish', 'seminary', 'school', 'city', 'residence', 'appointment', 'appointment_residence', 'appointment_from', 'town'].includes(token) && !(token.startsWith('town:') && TOWN_PLACE_KINDS.includes(token.slice(5) as never)) && !isRomeToken(token) && !['nuncio_view', 'see', 'see_city', 'named', 'dicastery', 'dicastery_short', 'dicastery_work', 'curia_rank', 'curia_offer', 'titular', 'college_electors', 'pope_name', 'pope_journey', 'pope_draft', 'pope_years', 'pope_from', 'pope_age', 'country', 'country_next', 'country_church', 'diplomat_rank', 'nunciature'].includes(token)) {
+    if (!token.startsWith('@') && !['name', 'first_name', 'surname', 'diocese', 'parish', 'seminary', 'school', 'city', 'residence', 'appointment', 'appointment_residence', 'appointment_from', 'town'].includes(token) && !(token.startsWith('town:') && TOWN_PLACE_KINDS.includes(token.slice(5) as never)) && !isRomeToken(token) && !['nuncio_view', 'see', 'see_city', 'named', 'dicastery', 'dicastery_short', 'dicastery_work', 'curia_rank', 'curia_offer', 'titular', 'college_electors', 'pope_name', 'pope_journey', 'pope_draft', 'pope_years', 'pope_from', 'pope_age', 'country', 'country_next', 'country_church', 'diplomat_rank', 'nunciature', 'visitor', 'visitor_first', 'visitation_cause', 'closed_house', 'removed_provincial'].includes(token)) {
       problems.push(`${where}: unknown token {${token}}`);
     }
   }

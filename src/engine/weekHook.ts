@@ -51,6 +51,7 @@ import { religiousWeek } from '@/systems/religious/week';
 import { religiousModeStep, religiousYear } from '@/systems/religious/year';
 import { termOver } from '@/systems/religious/chapter';
 import { popeOfTheOrderWeek } from '@/systems/religious/mitre';
+import { closeVisitationScene, dueVisitationScene, visitationWeek } from '@/systems/religious/visitation';
 import { renderText } from './text';
 import { closeCascade, dueCascade } from '@/systems/rome/documents';
 import { closeNuncioScene, dueNuncioScene } from '@/systems/rome/nuncio';
@@ -232,7 +233,13 @@ export function studyWeekHook(deps: EventDeps): WeekHook {
     }
     if (isCareerYear(next)) next = religiousYear(careerYear(next, rng), rng);
     if (next.mode.kind !== 'clock') return next;
-    if (next.religious) next = popeOfTheOrderWeek(next);
+    if (next.religious) {
+      next = popeOfTheOrderWeek(next);
+      const visited = visitationWeek(next, rng.derive(`visitation:${next.clock.week}`));
+      next = visited.state;
+      if (visited.line) next = addDigestLine(next, visited.line);
+      if (visited.letter) next = deliverLetter(next, visited.letter);
+    }
     // The head of the order's term runs out with his posting: the order elects first, and he goes home a week after. E3 §16A.
     if (next.study?.city === 'generalate' && termOver(next)) return { ...next, mode: { kind: 'term_end' } };
     if (next.study && next.clock.week >= next.study.endWeek) {
@@ -399,6 +406,20 @@ export function friarWeekHook(deps: EventDeps): WeekHook {
     }
     // A pope of his order. E3 §7.5.
     next = popeOfTheOrderWeek(next);
+    // What Rome sent to religious, some weeks on: the house asks him what it will do with it. E3 §16D, E1 §4.2.
+    if (dueCascade(next)) {
+      next = cascadeScene(next, rng.derive(`cascade:${next.clock.week}`), deps);
+      if (next.mode.kind !== 'clock' || next.pending.length > 0) return next;
+    }
+    // Rome's visitation of the province: announced, the visitor in the house, his hour with the man, the report, the decree. E3 §16D.
+    const visited = visitationWeek(next, rng.derive(`visitation:${next.clock.week}`));
+    next = visited.state;
+    if (visited.line) next = addDigestLine(next, visited.line);
+    if (visited.letter) next = deliverLetter(next, visited.letter);
+    if (dueVisitationScene(next)) {
+      next = dueBeatScene(next, 'apostolic_visitation', closeVisitationScene, rng.derive(`visitation-scene:${next.clock.week}`), deps);
+      if (next.mode.kind !== 'clock' || next.pending.length > 0) return next;
+    }
     // A feast is more than a line when there is a scene for it: the day itself draws first.
     if (kept.length) {
       const fired = feastScene(next, kept.map((f) => f.key), rng.derive(`feast-scene:${next.clock.week}`), deps, FEAST_SCENE_CHANCE);

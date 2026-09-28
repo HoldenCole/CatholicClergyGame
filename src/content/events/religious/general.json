@@ -1,1443 +1,3752 @@
 {
-  "_notes": "E3 §16A: the general chapter and the head of the order's years in Rome. The chapter's scenes gate on chapter:general (the week of the last general chapter he saw), the generalate's on office:general with phase study (the posting), and the homecoming on general:served. Dials move by the place effect on the generalate program's four (provinces, holy_see, observance, friar); the book by record. The generalate is not named (CLAUDE.md rule 13). Invented and flagged.",
-  "events": [
+ "_notes": "E3 §16A: the general chapter and the head of the order's years in Rome. The chapter's scenes gate on chapter:general (the week of the last general chapter he saw), the generalate's on office:general with phase study (the posting), and the homecoming on general:served. Dials move by the place effect on the generalate program's four (provinces, holy_see, observance, friar); the book by record. The generalate is not named (CLAUDE.md rule 13). Invented and flagged. E3 §16D, Rome speaks to religious life: the house's cascade scenes (beat cascade, on the religious_life axis, the provincial's own letter on office:provincial) and the apostolic visitation's (beat apostolic_visitation, on the visitation condition: scene, stage, cause, outcome), set by systems/religious/visitation.ts.",
+ "events": [
+  {
+   "id": "gc_room_of_nations",
+   "phase": [
+    "parochial_vicar",
+    "administrator",
+    "pastor",
+    "study"
+   ],
+   "campaign": "religious",
+   "severity": "NOTABLE",
+   "category": "formation",
+   "baseWeight": 6,
+   "once": true,
+   "suppressYears": 3,
+   "pressure": [
+    "competence"
+   ],
+   "requires": [
     {
-      "id": "gc_room_of_nations",
-      "phase": [
-        "parochial_vicar",
-        "administrator",
-        "pastor",
-        "study"
-      ],
-      "campaign": "religious",
-      "severity": "NOTABLE",
-      "category": "formation",
-      "baseWeight": 6,
-      "once": true,
-      "suppressYears": 3,
-      "pressure": [
-        "competence"
-      ],
-      "requires": [
-        {
-          "type": "flag",
-          "key": "chapter:general",
-          "value": true
-        },
-        {
-          "type": "flag",
-          "key": "office:general",
-          "value": false
-        }
-      ],
-      "title": "The Room of Nations",
-      "body": "The general chapter's first morning: a hall with headphones at every place and four languages coming through them a beat behind the speaker, friars from provinces that are one house and provinces that are forty, the same habit on all of them and nothing else the same. The man beside you has founded a province in a country that did not have one when you were ordained. He asks what your province is known for, and you find you have to think.",
-      "choices": [
-        {
-          "id": "say",
-          "label": "Say what it is known for, and be honest about what it is not",
-          "outcome": "He nods, and says his is known for something else, and that neither of you should say so on the floor. You sit together for the rest of the chapter.",
-          "effects": [
-            {
-              "target": "reputation",
-              "key": "order",
-              "delta": 4
-            },
-            {
-              "target": "stat",
-              "key": "charisma",
-              "delta": 1
-            }
-          ]
-        },
-        {
-          "id": "listen",
-          "label": "Ask about his instead, and listen",
-          "outcome": "By the coffee you know how a province is founded in a country with no priests and no money, and he knows nothing about yours, which is how he prefers it. The order is larger than you had let yourself think.",
-          "effects": [
-            {
-              "target": "reputation",
-              "key": "order",
-              "delta": 3
-            },
-            {
-              "target": "stat",
-              "key": "knowledge",
-              "delta": 2
-            },
-            {
-              "target": "place",
-              "key": "friar",
-              "delta": 0
-            }
-          ]
-        }
-      ]
+     "type": "flag",
+     "key": "chapter:general",
+     "value": true
     },
     {
-      "id": "gc_night_before_general",
-      "phase": [
-        "parochial_vicar",
-        "administrator",
-        "pastor",
-        "study"
-      ],
-      "campaign": "religious",
-      "severity": "NOTABLE",
-      "category": "personal",
-      "baseWeight": 8,
-      "once": true,
-      "suppressYears": 3,
-      "pressure": [
-        "competence"
-      ],
-      "requires": [
-        {
-          "type": "flag",
-          "key": "chapter:general",
-          "value": true
-        },
-        {
-          "type": "flag",
-          "key": "office:general",
-          "value": false
-        }
-      ],
-      "title": "The Night Before the Ballot",
-      "body": "The evening before the elective session, in a corridor of the chapter's house, a provincial from another continent says without preamble that his region will vote for you on the first ballot, and asks whether you would accept. He does not say how many they are. He does not say what they would want.",
-      "choices": [
-        {
-          "id": "yes",
-          "label": "Say that if the chapter asked, you would serve",
-          "outcome": "He says that is what he hoped, and that you should say nothing else to anyone tonight, and you do not, and you do not sleep either.",
-          "effects": [
-            {
-              "target": "flag",
-              "key": "general:signalled",
-              "value": true
-            },
-            {
-              "target": "reputation",
-              "key": "order",
-              "delta": 2
-            }
-          ]
-        },
-        {
-          "id": "no",
-          "label": "Say that you are a friar of your province, and would rather be one",
-          "outcome": "He says that is what most men say the night before, and that the chapter does not always listen to them. You sleep, which surprises you.",
-          "effects": [
-            {
-              "target": "stat",
-              "key": "piety",
-              "delta": 2
-            },
-            {
-              "target": "reputation",
-              "key": "order",
-              "delta": 1
-            }
-          ]
-        },
-        {
-          "id": "ask",
-          "label": "Ask what his region would want of you",
-          "outcome": "He tells you, plainly: a house in his country's capital, a novitiate his province cannot afford, a man of theirs on the council. You say you have heard him. He says that was not a yes, and he is right.",
-          "effects": [
-            {
-              "target": "stat",
-              "key": "administration",
-              "delta": 1
-            },
-            {
-              "target": "reputation",
-              "key": "order",
-              "delta": 1
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "gc_elected_general",
-      "phase": [
-        "parochial_vicar",
-        "administrator",
-        "pastor",
-        "study"
-      ],
-      "campaign": "religious",
-      "severity": "CRITICAL",
-      "category": "chancery",
-      "baseWeight": 40,
-      "once": true,
-      "suppressYears": 99,
-      "pressure": [
-        "competence"
-      ],
-      "requires": [
-        {
-          "type": "flag",
-          "key": "office:general",
-          "value": true
-        },
-        {
-          "type": "weeks_away",
-          "op": "<=",
-          "value": 8
-        }
-      ],
-      "title": "Accepto",
-      "body": "The chapter's president reads the tally in Latin and then in the three other languages, and there is a silence in which every man in the hall looks at you and you look at the floor, and then he asks the question the constitutions require, and you have to answer it in a full sentence. Afterward the friar from the country you could not place on a map embraces you, and a provincial you have never liked kisses your hand, and the office is yours until it is not.",
-      "choices": [
-        {
-          "id": "bow",
-          "label": "Say the words, and ask the chapter for its prayers",
-          "outcome": "The hall says it will, and means it for a week. The Te Deum is sung badly in forty accents, and you find your own voice has gone.",
-          "effects": [
-            {
-              "target": "place",
-              "key": "provinces",
-              "delta": 6
-            },
-            {
-              "target": "place",
-              "key": "friar",
-              "delta": 4
-            },
-            {
-              "target": "stat",
-              "key": "piety",
-              "delta": 2
-            }
-          ]
-        },
-        {
-          "id": "plain",
-          "label": "Say the words, and then say what you will ask of them",
-          "outcome": "You tell the chapter, standing, what the order will need to give you: men for the missions, honesty in the accounts, the common life kept. Half the hall stands with you. The other half will remember that you began with a demand.",
-          "effects": [
-            {
-              "target": "place",
-              "key": "provinces",
-              "delta": -3
-            },
-            {
-              "target": "place",
-              "key": "observance",
-              "delta": 8
-            },
-            {
-              "target": "reputation",
-              "key": "order",
-              "delta": 3
-            },
-            {
-              "target": "stat",
-              "key": "charisma",
-              "delta": 2
-            }
-          ],
-          "volume": "public",
-          "positionTopic": "doctrine",
-          "positionValue": -10
-        }
-      ]
-    },
-    {
-      "id": "gc_first_visitation",
-      "phase": [
-        "study"
-      ],
-      "campaign": "religious",
-      "severity": "NOTABLE",
-      "category": "chancery",
-      "baseWeight": 14,
-      "once": true,
-      "suppressYears": 3,
-      "pressure": [
-        "competence"
-      ],
-      "requires": [
-        {
-          "type": "flag",
-          "key": "office:general",
-          "value": true
-        },
-        {
-          "type": "weeks_away",
-          "op": "<=",
-          "value": 78
-        }
-      ],
-      "title": "The First Visitation",
-      "body": "Your first visitation as head of the order: a province of eleven houses on another continent, its provincial at the airport in a car older than his priesthood, a week in each house, and every friar seen alone for twenty minutes with the door shut. On the fourth day a brother of sixty, in a house of four, tells you that no one from Rome has asked him a question in thirty-one years.",
-      "choices": [
-        {
-          "id": "hear",
-          "label": "Hear him for the whole hour, and the next man late",
-          "outcome": "Its provincial's schedule slips an hour and stays slipped for the rest of the visitation. You come home knowing that province, and it knowing you, which is the point of the thing and rarely the practice.",
-          "effects": [
-            {
-              "target": "place",
-              "key": "provinces",
-              "delta": 7
-            },
-            {
-              "target": "place",
-              "key": "friar",
-              "delta": 5
-            },
-            {
-              "target": "record",
-              "key": "visitations",
-              "delta": 1
-            }
-          ]
-        },
-        {
-          "id": "keep",
-          "label": "Hear him for his twenty minutes, and keep the schedule",
-          "outcome": "You see every friar, as the constitutions require, and the report is complete. The brother of sixty writes to you a month later, three pages, and you answer him yourself.",
-          "effects": [
-            {
-              "target": "place",
-              "key": "provinces",
-              "delta": 4
-            },
-            {
-              "target": "place",
-              "key": "observance",
-              "delta": 3
-            },
-            {
-              "target": "stat",
-              "key": "administration",
-              "delta": 1
-            },
-            {
-              "target": "record",
-              "key": "visitations",
-              "delta": 1
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "gc_province_against",
-      "phase": [
-        "study"
-      ],
-      "campaign": "religious",
-      "severity": "NOTABLE",
-      "category": "chancery",
-      "baseWeight": 8,
-      "once": true,
-      "suppressYears": 3,
-      "pressure": [
-        "competence"
-      ],
-      "requires": [
-        {
-          "type": "flag",
-          "key": "office:general",
-          "value": true
-        },
-        {
-          "type": "weeks_away",
-          "op": ">=",
-          "value": 26
-        }
-      ],
-      "title": "A Province Writes Against You",
-      "body": "A provincial you did not confirm gladly has written to the dicastery, not to you: the head of the order is interfering in the internal affairs of his province, moving men without consultation, and the constitutions say. The undersecretary across the river sends you a copy with a note that says only that he thought you should see it.",
-      "choices": [
-        {
-          "id": "visit",
-          "label": "Go and see him, unannounced, and hear the province out",
-          "outcome": "Three days in a province that expected a letter and got a man. Its provincial is not wrong about the consultation. You say so in the chapter room, in front of his council, and the letter to the dicastery is withdrawn the week after.",
-          "effects": [
-            {
-              "target": "place",
-              "key": "provinces",
-              "delta": 6
-            },
-            {
-              "target": "place",
-              "key": "holy_see",
-              "delta": 3
-            },
-            {
-              "target": "stat",
-              "key": "charisma",
-              "delta": 2
-            },
-            {
-              "target": "stat",
-              "key": "piety",
-              "delta": 1
-            }
-          ]
-        },
-        {
-          "id": "answer",
-          "label": "Answer the dicastery, point by point, with the constitutions",
-          "outcome": "The undersecretary reads your answer and agrees with it, which settles the question and nothing else. The province does not write again. It does not write at all.",
-          "effects": [
-            {
-              "target": "place",
-              "key": "holy_see",
-              "delta": 6
-            },
-            {
-              "target": "place",
-              "key": "provinces",
-              "delta": -6
-            },
-            {
-              "target": "stat",
-              "key": "administration",
-              "delta": 2
-            }
-          ]
-        },
-        {
-          "id": "let",
-          "label": "Let the letter lie, and move the men anyway",
-          "outcome": "The men are moved. The dicastery's file on you has a first page now, and its provincial has a story he tells at every meeting of provincials for the rest of your term.",
-          "effects": [
-            {
-              "target": "place",
-              "key": "provinces",
-              "delta": -10
-            },
-            {
-              "target": "place",
-              "key": "holy_see",
-              "delta": -4
-            },
-            {
-              "target": "place",
-              "key": "observance",
-              "delta": 3
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "gc_dicastery_case",
-      "phase": [
-        "study"
-      ],
-      "campaign": "religious",
-      "severity": "NOTABLE",
-      "category": "chancery",
-      "baseWeight": 8,
-      "once": true,
-      "suppressYears": 3,
-      "pressure": [
-        "competence"
-      ],
-      "requires": [
-        {
-          "type": "flag",
-          "key": "office:general",
-          "value": true
-        }
-      ],
-      "title": "The Dicastery's Letter About a Friar",
-      "body": "The dicastery for religious writes about a friar of the order in a country you have visited once: a bishop's complaint, a newspaper, a matter that is not what the newspaper says and is not nothing either. They would like the order to act before they must. The friar's provincial says the man is innocent and the bishop is the problem, and has said it to the bishop.",
-      "choices": [
-        {
-          "id": "go",
-          "label": "Send your own visitator, a canonist, and wait for his report",
-          "outcome": "Six weeks. The report is careful and long and finds a man who did a foolish thing and not a wicked one, and a bishop who wanted a parish back. You send the friar to another province and the bishop his parish, and the dicastery its copy.",
-          "effects": [
-            {
-              "target": "place",
-              "key": "holy_see",
-              "delta": 5
-            },
-            {
-              "target": "place",
-              "key": "provinces",
-              "delta": 2
-            },
-            {
-              "target": "stat",
-              "key": "administration",
-              "delta": 2
-            },
-            {
-              "target": "reputation",
-              "key": "rome",
-              "delta": 3
-            }
-          ]
-        },
-        {
-          "id": "stand",
-          "label": "Stand by its provincial, and say so to the dicastery",
-          "outcome": "The undersecretary says, on the telephone, that he hopes you are right. You are, this time. The order notices that its head does not hand its men over on a bishop's word, and the dicastery notices the same thing.",
-          "effects": [
-            {
-              "target": "place",
-              "key": "provinces",
-              "delta": 7
-            },
-            {
-              "target": "place",
-              "key": "holy_see",
-              "delta": -5
-            },
-            {
-              "target": "place",
-              "key": "observance",
-              "delta": 2
-            },
-            {
-              "target": "reputation",
-              "key": "order",
-              "delta": 4
-            }
-          ]
-        },
-        {
-          "id": "remove",
-          "label": "Remove the friar from the country at once, and ask questions after",
-          "outcome": "The newspaper stops. The friar, who was foolish and not wicked, spends a year in a house that does not know why he is there, and its provincial does not forgive you, and the dicastery does not remember to thank you.",
-          "effects": [
-            {
-              "target": "place",
-              "key": "holy_see",
-              "delta": 6
-            },
-            {
-              "target": "place",
-              "key": "provinces",
-              "delta": -8
-            },
-            {
-              "target": "place",
-              "key": "friar",
-              "delta": -4
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "gc_letter_to_order",
-      "phase": [
-        "study"
-      ],
-      "campaign": "religious",
-      "severity": "NOTABLE",
-      "category": "formation",
-      "baseWeight": 12,
-      "once": true,
-      "suppressYears": 3,
-      "pressure": [
-        "competence"
-      ],
-      "requires": [
-        {
-          "type": "flag",
-          "key": "office:general",
-          "value": true
-        },
-        {
-          "type": "weeks_away",
-          "op": "<=",
-          "value": 104
-        }
-      ],
-      "title": "The Letter to the Whole Order",
-      "body": "The letter every head of the order writes once, early, and is read by for the rest of his term: to all the friars, on the one thing. The assistants have drafted eleven pages on the common life, which is what heads of the order write about. The cell is quiet and the pages are on the desk and you could write something else.",
-      "choices": [
-        {
-          "id": "common",
-          "label": "The common life, and write it yourself",
-          "outcome": "Four pages instead of eleven, in your own sentences, about the table and the choir and the door left open. It is read at table in sixty countries on the same week, and in some of them argued about, which is what a letter is for.",
-          "effects": [
-            {
-              "target": "place",
-              "key": "observance",
-              "delta": 10
-            },
-            {
-              "target": "place",
-              "key": "friar",
-              "delta": 3
-            },
-            {
-              "target": "reputation",
-              "key": "order",
-              "delta": 4
-            },
-            {
-              "target": "record",
-              "key": "letters",
-              "delta": 1
-            }
-          ],
-          "volume": "public",
-          "positionTopic": "doctrine",
-          "positionValue": -15
-        },
-        {
-          "id": "poor",
-          "label": "The poor, and the houses that have forgotten them",
-          "outcome": "The observant houses underline one line and the others another, and a provincial in a rich country writes to say the letter was aimed at him, and it was. Two houses move within the year, to streets where the order had not lived in a century.",
-          "effects": [
-            {
-              "target": "place",
-              "key": "provinces",
-              "delta": 4
-            },
-            {
-              "target": "place",
-              "key": "observance",
-              "delta": 4
-            },
-            {
-              "target": "reputation",
-              "key": "order",
-              "delta": 5
-            },
-            {
-              "target": "record",
-              "key": "letters",
-              "delta": 1
-            }
-          ],
-          "volume": "public",
-          "positionTopic": "doctrine",
-          "positionValue": 15
-        },
-        {
-          "id": "study",
-          "label": "Study, and the order's own tradition of it",
-          "outcome": "The students write to thank you and the older men to say it was about time. A professor at the order's faculty in Rome quotes it in a lecture you attend, without knowing you are there, and gets it slightly wrong.",
-          "effects": [
-            {
-              "target": "place",
-              "key": "observance",
-              "delta": 5
-            },
-            {
-              "target": "stat",
-              "key": "theology",
-              "delta": 2
-            },
-            {
-              "target": "reputation",
-              "key": "order",
-              "delta": 3
-            },
-            {
-              "target": "record",
-              "key": "letters",
-              "delta": 1
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "gc_provincial_refuses",
-      "phase": [
-        "study"
-      ],
-      "campaign": "religious",
-      "severity": "NOTABLE",
-      "category": "chancery",
-      "baseWeight": 8,
-      "once": true,
-      "suppressYears": 3,
-      "pressure": [
-        "competence"
-      ],
-      "requires": [
-        {
-          "type": "flag",
-          "key": "office:general",
-          "value": true
-        }
-      ],
-      "title": "A Provincial Who Will Not",
-      "body": "You have asked a province for three men for a mission that has none, and its provincial has answered that his chapter will not give them, in a letter that quotes the constitutions on the rights of provinces and is, on the constitutions, correct. The mission's bishop has written to the dicastery. The dicastery has written to you.",
-      "choices": [
-        {
-          "id": "command",
-          "label": "Command it, under obedience, which the constitutions also allow",
-          "outcome": "The three men go, and go well, as it happens. Its provincial resigns his office in a letter of one sentence and is elected again by his chapter the following spring, which is the province's answer.",
-          "effects": [
-            {
-              "target": "place",
-              "key": "provinces",
-              "delta": -9
-            },
-            {
-              "target": "place",
-              "key": "holy_see",
-              "delta": 4
-            },
-            {
-              "target": "place",
-              "key": "observance",
-              "delta": 4
-            },
-            {
-              "target": "reputation",
-              "key": "rome",
-              "delta": 2
-            }
-          ]
-        },
-        {
-          "id": "trade",
-          "label": "Go to the province and trade: the three men for a novitiate it cannot afford",
-          "outcome": "The chapter room, a long afternoon, and a bargain neither side likes and both keep. The mission gets its men and the province its novitiate, and you have taught forty provincials that the head of the order can be bargained with.",
-          "effects": [
-            {
-              "target": "place",
-              "key": "provinces",
-              "delta": 5
-            },
-            {
-              "target": "place",
-              "key": "holy_see",
-              "delta": 1
-            },
-            {
-              "target": "stat",
-              "key": "administration",
-              "delta": 2
-            }
-          ]
-        },
-        {
-          "id": "yield",
-          "label": "Yield, and tell the dicastery the mission must wait",
-          "outcome": "The mission waits. The bishop writes again, to the pope this time, and the dicastery's undersecretary tells you, kindly, that the order's head is expected to be able to move its men.",
-          "effects": [
-            {
-              "target": "place",
-              "key": "provinces",
-              "delta": 3
-            },
-            {
-              "target": "place",
-              "key": "holy_see",
-              "delta": -8
-            },
-            {
-              "target": "place",
-              "key": "friar",
-              "delta": 2
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "gc_close_house_abroad",
-      "phase": [
-        "study"
-      ],
-      "campaign": "religious",
-      "severity": "NOTABLE",
-      "category": "chancery",
-      "baseWeight": 8,
-      "once": true,
-      "suppressYears": 3,
-      "pressure": [
-        "competence"
-      ],
-      "requires": [
-        {
-          "type": "flag",
-          "key": "office:general",
-          "value": true
-        }
-      ],
-      "title": "A House on Another Continent",
-      "body": "A house of the order in a city you have seen from the air: four men, the youngest sixty-two, a church the diocese would like, and a provincial who cannot say the word. The council has the papers ready. The house's prior has written to you, not to his provincial, to say that the house has been there since 1888 and the poor of the quarter still come.",
-      "choices": [
-        {
-          "id": "close",
-          "label": "Close it, and go there to say so yourself",
-          "outcome": "The four men hear it from you at their own table, which is the least that can be done and more than most heads of the order do. The church goes to the diocese. The poor of the quarter come to the diocese's Mass, some of them.",
-          "effects": [
-            {
-              "target": "place",
-              "key": "provinces",
-              "delta": 2
-            },
-            {
-              "target": "place",
-              "key": "observance",
-              "delta": 3
-            },
-            {
-              "target": "place",
-              "key": "friar",
-              "delta": -3
-            },
-            {
-              "target": "record",
-              "key": "closed",
-              "delta": 1
-            },
-            {
-              "target": "stat",
-              "key": "administration",
-              "delta": 1
-            }
-          ]
-        },
-        {
-          "id": "send",
-          "label": "Send it two young men from a province that has them, and give it five years",
-          "outcome": "A province on another continent gives up two of its own, under protest, and the house has six men and a future it did not have. Five years is a long time in an order. It is not long in a house founded in 1888.",
-          "effects": [
-            {
-              "target": "place",
-              "key": "provinces",
-              "delta": -3
-            },
-            {
-              "target": "place",
-              "key": "observance",
-              "delta": 4
-            },
-            {
-              "target": "place",
-              "key": "friar",
-              "delta": 4
-            },
-            {
-              "target": "reputation",
-              "key": "order",
-              "delta": 3
-            }
-          ]
-        },
-        {
-          "id": "leave",
-          "label": "Leave it to its provincial, whose house it is",
-          "outcome": "He does not close it either. It closes itself four years later when the house's prior dies, without a decree, and the church is sold by a man who was not there, and the poor of the quarter are not consulted.",
-          "effects": [
-            {
-              "target": "place",
-              "key": "provinces",
-              "delta": 2
-            },
-            {
-              "target": "place",
-              "key": "observance",
-              "delta": -5
-            },
-            {
-              "target": "place",
-              "key": "friar",
-              "delta": -2
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "gc_pope_receives",
-      "phase": [
-        "study"
-      ],
-      "campaign": "religious",
-      "severity": "NOTABLE",
-      "category": "chancery",
-      "baseWeight": 8,
-      "once": true,
-      "suppressYears": 3,
-      "pressure": [
-        "competence"
-      ],
-      "requires": [
-        {
-          "type": "flag",
-          "key": "office:general",
-          "value": true
-        }
-      ],
-      "title": "The Superiors General",
-      "body": "The pope receives the heads of the orders in the hall with the tapestries, forty of you in forty habits, and speaks for twenty minutes about religious life without notes and then, unscheduled, comes down the rows. He stops at you, asks where the order is growing, and waits.",
-      "choices": [
-        {
-          "id": "true",
-          "label": "Tell him where, and where it is not, in a sentence",
-          "outcome": "He nods and says that is the first honest answer he has had this morning, loudly enough to be heard, and moves on. The dicastery's undersecretary, in the second row, has heard it too.",
-          "effects": [
-            {
-              "target": "place",
-              "key": "holy_see",
-              "delta": 8
-            },
-            {
-              "target": "reputation",
-              "key": "rome",
-              "delta": 5
-            },
-            {
-              "target": "stat",
-              "key": "charisma",
-              "delta": 1
-            }
-          ]
-        },
-        {
-          "id": "ask",
-          "label": "Ask him, instead, for something the order needs",
-          "outcome": "A house in a country that does not want it, and his word to its bishops. He says he will think about it, which from a pope is a great deal. The other superiors general look at you afterward with an expression you will come to know.",
-          "effects": [
-            {
-              "target": "place",
-              "key": "holy_see",
-              "delta": 4
-            },
-            {
-              "target": "place",
-              "key": "provinces",
-              "delta": 5
-            },
-            {
-              "target": "reputation",
-              "key": "rome",
-              "delta": 3
-            },
-            {
-              "target": "reputation",
-              "key": "order",
-              "delta": 2
-            }
-          ]
-        },
-        {
-          "id": "kiss",
-          "label": "Kiss the ring, and let him move on",
-          "outcome": "He moves on. The man beside you, in brown, gets the question next and answers it at length, and the pope stops listening halfway through, which you notice and file.",
-          "effects": [
-            {
-              "target": "place",
-              "key": "holy_see",
-              "delta": 2
-            },
-            {
-              "target": "stat",
-              "key": "piety",
-              "delta": 1
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "gc_cell_in_rome",
-      "phase": [
-        "study"
-      ],
-      "campaign": "religious",
-      "severity": "NOTABLE",
-      "category": "personal",
-      "baseWeight": 8,
-      "once": true,
-      "suppressYears": 3,
-      "pressure": [
-        "competence"
-      ],
-      "requires": [
-        {
-          "type": "flag",
-          "key": "office:general",
-          "value": true
-        }
-      ],
-      "title": "The Cell on the Top Floor",
-      "body": "Rome in August, the house empty of students, the assistants on their provinces' beaches, and the cell on the top floor with its window over the roofs. No letters for a week that cannot wait a week. You have not said the Office alone in a year, or read anything you did not have to, or been a friar, exactly, since the chapter.",
-      "choices": [
-        {
-          "id": "office",
-          "label": "Say the Office alone at the window, the whole of it, for the week",
-          "outcome": "The psalms come back the way they came at twenty-five, one line at a time. On the Sunday you say Mass for the porter and two sisters and it is the best week of the term.",
-          "effects": [
-            {
-              "target": "place",
-              "key": "friar",
-              "delta": 12
-            },
-            {
-              "target": "stat",
-              "key": "piety",
-              "delta": 4
-            }
-          ]
-        },
-        {
-          "id": "read",
-          "label": "Read the thing you have carried in your bag for two years",
-          "outcome": "The order's own theologian, dead six hundred years, on the thing you have been deciding about all term without his help. You underline a page and take it to the council in September, and they look at you.",
-          "effects": [
-            {
-              "target": "place",
-              "key": "friar",
-              "delta": 6
-            },
-            {
-              "target": "stat",
-              "key": "theology",
-              "delta": 3
-            },
-            {
-              "target": "place",
-              "key": "observance",
-              "delta": 2
-            }
-          ]
-        },
-        {
-          "id": "files",
-          "label": "Open the files anyway; August is when they can be read",
-          "outcome": "The provincials' letters of the spring, read at last with the attention they deserved. Three decisions of the summer are reversed in September, quietly, and the friar in you is not consulted.",
-          "effects": [
-            {
-              "target": "place",
-              "key": "provinces",
-              "delta": 5
-            },
-            {
-              "target": "place",
-              "key": "friar",
-              "delta": -6
-            },
-            {
-              "target": "stat",
-              "key": "administration",
-              "delta": 2
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "gc_home_province_writes",
-      "phase": [
-        "study"
-      ],
-      "campaign": "religious",
-      "severity": "NOTABLE",
-      "category": "personal",
-      "baseWeight": 8,
-      "once": true,
-      "suppressYears": 3,
-      "pressure": [
-        "competence"
-      ],
-      "requires": [
-        {
-          "type": "flag",
-          "key": "office:general",
-          "value": true
-        },
-        {
-          "type": "weeks_away",
-          "op": ">=",
-          "value": 52
-        }
-      ],
-      "title": "From Home",
-      "body": "A letter from your own province, from a man you were novices with: the province you left is not the one you will come back to. Two houses closed, one founded, a provincial you did not confirm gladly, and your name used in chapter, on both sides, by men who have not written to you in years.",
-      "choices": [
-        {
-          "id": "write",
-          "label": "Write back, as a friar of the province and nothing else",
-          "outcome": "Three pages about the men you knew and none about the order. He reads it to the house at recreation, or so you hear. The province decides you have not forgotten it, which is worth more than a decree.",
-          "effects": [
-            {
-              "target": "place",
-              "key": "friar",
-              "delta": 4
-            },
-            {
-              "target": "reputation",
-              "key": "province",
-              "delta": 8
-            },
-            {
-              "target": "reputation",
-              "key": "community",
-              "delta": 4
-            }
-          ]
-        },
-        {
-          "id": "visit",
-          "label": "Put the province on the visitation list, out of turn",
-          "outcome": "Its provincial understands what it means and does not like it. The houses do. You see the men you were novices with in their own chapter rooms, and one of them says you have got old, and you have.",
-          "effects": [
-            {
-              "target": "place",
-              "key": "provinces",
-              "delta": 2
-            },
-            {
-              "target": "reputation",
-              "key": "province",
-              "delta": 5
-            },
-            {
-              "target": "place",
-              "key": "friar",
-              "delta": 2
-            },
-            {
-              "target": "record",
-              "key": "visitations",
-              "delta": 1
-            }
-          ]
-        },
-        {
-          "id": "quiet",
-          "label": "Do not answer; the head of the order has no home province",
-          "outcome": "He does not write again. The province decides what it decides. Years later a man at your funeral will say you forgot where you came from, and he will not be entirely wrong.",
-          "effects": [
-            {
-              "target": "place",
-              "key": "provinces",
-              "delta": 3
-            },
-            {
-              "target": "reputation",
-              "key": "province",
-              "delta": -8
-            },
-            {
-              "target": "place",
-              "key": "friar",
-              "delta": -3
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "gc_last_chapter",
-      "phase": [
-        "study"
-      ],
-      "campaign": "religious",
-      "severity": "NOTABLE",
-      "category": "chancery",
-      "baseWeight": 10,
-      "once": true,
-      "suppressYears": 99,
-      "pressure": [
-        "competence"
-      ],
-      "requires": [
-        {
-          "type": "flag",
-          "key": "office:general",
-          "value": true
-        },
-        {
-          "type": "weeks_away",
-          "op": ">=",
-          "value": 260
-        }
-      ],
-      "title": "The Last Chapter",
-      "body": "The chapter that will elect your successor is sitting, and the constitutions give you the chair until it does. The provincials who wrote against you and the ones who did not are in the same hall, and there is a report of your term to be given, standing, to men who will vote when it is over.",
-      "choices": [
-        {
-          "id": "honest",
-          "label": "Give the report honestly: what was done, and what was not",
-          "outcome": "Forty minutes, no notes, and the failures named before the successes. The hall is quiet in the way that means it believed you. The man they elect keeps three of your council, which is the chapter's verdict, and a kind one.",
-          "effects": [
-            {
-              "target": "reputation",
-              "key": "order",
-              "delta": 8
-            },
-            {
-              "target": "place",
-              "key": "friar",
-              "delta": 4
-            },
-            {
-              "target": "stat",
-              "key": "charisma",
-              "delta": 2
-            }
-          ]
-        },
-        {
-          "id": "defend",
-          "label": "Defend the term, and name the provinces that made it hard",
-          "outcome": "The hall divides along a line you drew. Your successor is elected on the fourth ballot from the other side of it, and undoes two things you did in his first year, and the order goes on, as it does.",
-          "effects": [
-            {
-              "target": "reputation",
-              "key": "order",
-              "delta": -4
-            },
-            {
-              "target": "place",
-              "key": "provinces",
-              "delta": -6
-            },
-            {
-              "target": "stat",
-              "key": "administration",
-              "delta": 1
-            }
-          ]
-        },
-        {
-          "id": "short",
-          "label": "Give it in ten minutes, and sit down",
-          "outcome": "The chapter thanks you in a paragraph of the acts. Nobody remembers the report. Several men remember that you did not make them listen to one, and vote for a man who will not either.",
-          "effects": [
-            {
-              "target": "reputation",
-              "key": "order",
-              "delta": 2
-            },
-            {
-              "target": "place",
-              "key": "friar",
-              "delta": 2
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "gc_former_general_home",
-      "phase": [
-        "parochial_vicar",
-        "administrator",
-        "pastor"
-      ],
-      "campaign": "religious",
-      "severity": "NOTABLE",
-      "category": "personal",
-      "baseWeight": 20,
-      "once": true,
-      "suppressYears": 99,
-      "pressure": [
-        "competence"
-      ],
-      "requires": [
-        {
-          "type": "flag",
-          "key": "general:served",
-          "value": true
-        },
-        {
-          "type": "flag",
-          "key": "office:general",
-          "value": false
-        }
-      ],
-      "title": "A Cell in the Province",
-      "body": "Home. A cell in a house of your own province, a place at the table below the house's prior, and a provincial half your age who was a student when you were elected and does not know what to do with you. The house's youngest men call you Father and the oldest call you by your name, and the telephone does not ring.",
-      "choices": [
-        {
-          "id": "table",
-          "label": "Take the place at the table, and the Tuesday confessions, and nothing else",
-          "outcome": "Within the year the house has forgotten what you were, mostly, which is what the constitutions intend and what you asked for. The confessions on Tuesday are the best work you have done in nine years.",
-          "effects": [
-            {
-              "target": "place",
-              "key": "friar",
-              "delta": 0
-            },
-            {
-              "target": "stat",
-              "key": "piety",
-              "delta": 4
-            },
-            {
-              "target": "reputation",
-              "key": "community",
-              "delta": 8
-            },
-            {
-              "target": "reputation",
-              "key": "province",
-              "delta": 4
-            }
-          ]
-        },
-        {
-          "id": "write",
-          "label": "Write the book the term did not leave time for",
-          "outcome": "The order's history of the thing you decided, with the documents. It is reviewed in the journals by men who were in the hall, and one of them is kind. The house leaves you alone in the mornings, which is a gift.",
-          "effects": [
-            {
-              "target": "stat",
-              "key": "theology",
-              "delta": 3
-            },
-            {
-              "target": "stat",
-              "key": "knowledge",
-              "delta": 3
-            },
-            {
-              "target": "reputation",
-              "key": "order",
-              "delta": 4
-            },
-            {
-              "target": "reputation",
-              "key": "community",
-              "delta": 2
-            }
-          ]
-        },
-        {
-          "id": "advise",
-          "label": "Let its provincial use you: the visitations he cannot make, the letters he cannot write",
-          "outcome": "He uses you, gratefully and then a little freely. The province gets a former head of the order for the price of a cell, and the men of the house get a brother who is away a good deal, which they had before.",
-          "effects": [
-            {
-              "target": "reputation",
-              "key": "province",
-              "delta": 8
-            },
-            {
-              "target": "reputation",
-              "key": "superiors",
-              "delta": 5
-            },
-            {
-              "target": "reputation",
-              "key": "community",
-              "delta": -3
-            },
-            {
-              "target": "stat",
-              "key": "administration",
-              "delta": 1
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "gc_biglietto_friar",
-      "phase": [
-        "parochial_vicar",
-        "administrator",
-        "pastor"
-      ],
-      "beat": "college",
-      "campaign": "religious",
-      "severity": "MAJOR",
-      "category": "personal",
-      "baseWeight": 100,
-      "once": true,
-      "suppressYears": 99,
-      "pressure": [
-        "competence"
-      ],
-      "requires": [
-        {
-          "type": "college",
-          "key": "scene",
-          "value": "created"
-        },
-        {
-          "type": "flag",
-          "key": "general:served",
-          "value": true
-        }
-      ],
-      "title": "The Biglietto, in a Cell",
-      "body": "The Secretariat of State's letter finds you in a cell in your own province, where a former head of the order is supposed to be left alone. The pope will create you a cardinal at the consistory in six weeks. The house's prior, who brought the envelope up himself, stands in the door and does not know whether to congratulate you or to apologise. A friar takes a vow of poverty and is then given a titular church in Rome, a ring, and a place in the room where the next pope is chosen. The constitutions have a paragraph about it, written by men who never expected it to be needed.",
-      "choices": [
-        {
-          "id": "accept",
-          "label": "Accept, and ask the house to say nothing until Rome does",
-          "meaning": "Rome's regard, and the order's for a week or two; the vow bends without breaking.",
-          "outcome": "The house says nothing, which in a religious house is a heroic act, and Rome announces it on a Sunday at noon. Your provincial telephones, then the order's head in Rome, then a brother you were novices with who says only that he knew. The scarlet is bought by the order and fits badly. You wear the habit under it where you can.",
-          "effects": [
-            {
-              "target": "reputation",
-              "key": "rome",
-              "delta": 6
-            },
-            {
-              "target": "reputation",
-              "key": "order",
-              "delta": 6
-            },
-            {
-              "target": "reputation",
-              "key": "community",
-              "delta": 3
-            },
-            {
-              "target": "flag",
-              "key": "cardinal:friar",
-              "value": true
-            }
-          ],
-          "default": true
-        },
-        {
-          "id": "excuse",
-          "label": "Ask to be excused, as a religious may, and as a few men have",
-          "meaning": "Rome remembers the letter; the order knows what its brother tried to keep.",
-          "outcome": "You write to the Secretariat that you have taken a vow and would like to keep it, and that the order has better uses for a man of your years than a titular church. The answer comes in a week, courteous and final: the Holy Father has read your letter with great esteem, and asks you to accept. You accept. The order buys the scarlet, and the house, which read the letter before you sent it, treats you for a season with something like awe, and then like a brother again.",
-          "effects": [
-            {
-              "target": "reputation",
-              "key": "rome",
-              "delta": -4
-            },
-            {
-              "target": "reputation",
-              "key": "order",
-              "delta": 8
-            },
-            {
-              "target": "reputation",
-              "key": "community",
-              "delta": 6
-            },
-            {
-              "target": "stat",
-              "key": "piety",
-              "delta": 2
-            },
-            {
-              "target": "flag",
-              "key": "cardinal:friar",
-              "value": true
-            },
-            {
-              "target": "flag",
-              "key": "cardinal:asked_excused",
-              "value": true
-            }
-          ]
-        }
-      ]
+     "type": "flag",
+     "key": "office:general",
+     "value": false
     }
-  ]
+   ],
+   "title": "The Room of Nations",
+   "body": "The general chapter's first morning: a hall with headphones at every place and four languages coming through them a beat behind the speaker, friars from provinces that are one house and provinces that are forty, the same habit on all of them and nothing else the same. The man beside you has founded a province in a country that did not have one when you were ordained. He asks what your province is known for, and you find you have to think.",
+   "choices": [
+    {
+     "id": "say",
+     "label": "Say what it is known for, and be honest about what it is not",
+     "outcome": "He nods, and says his is known for something else, and that neither of you should say so on the floor. You sit together for the rest of the chapter.",
+     "effects": [
+      {
+       "target": "reputation",
+       "key": "order",
+       "delta": 4
+      },
+      {
+       "target": "stat",
+       "key": "charisma",
+       "delta": 1
+      }
+     ]
+    },
+    {
+     "id": "listen",
+     "label": "Ask about his instead, and listen",
+     "outcome": "By the coffee you know how a province is founded in a country with no priests and no money, and he knows nothing about yours, which is how he prefers it. The order is larger than you had let yourself think.",
+     "effects": [
+      {
+       "target": "reputation",
+       "key": "order",
+       "delta": 3
+      },
+      {
+       "target": "stat",
+       "key": "knowledge",
+       "delta": 2
+      },
+      {
+       "target": "place",
+       "key": "friar",
+       "delta": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gc_night_before_general",
+   "phase": [
+    "parochial_vicar",
+    "administrator",
+    "pastor",
+    "study"
+   ],
+   "campaign": "religious",
+   "severity": "NOTABLE",
+   "category": "personal",
+   "baseWeight": 8,
+   "once": true,
+   "suppressYears": 3,
+   "pressure": [
+    "competence"
+   ],
+   "requires": [
+    {
+     "type": "flag",
+     "key": "chapter:general",
+     "value": true
+    },
+    {
+     "type": "flag",
+     "key": "office:general",
+     "value": false
+    }
+   ],
+   "title": "The Night Before the Ballot",
+   "body": "The evening before the elective session, in a corridor of the chapter's house, a provincial from another continent says without preamble that his region will vote for you on the first ballot, and asks whether you would accept. He does not say how many they are. He does not say what they would want.",
+   "choices": [
+    {
+     "id": "yes",
+     "label": "Say that if the chapter asked, you would serve",
+     "outcome": "He says that is what he hoped, and that you should say nothing else to anyone tonight, and you do not, and you do not sleep either.",
+     "effects": [
+      {
+       "target": "flag",
+       "key": "general:signalled",
+       "value": true
+      },
+      {
+       "target": "reputation",
+       "key": "order",
+       "delta": 2
+      }
+     ]
+    },
+    {
+     "id": "no",
+     "label": "Say that you are a friar of your province, and would rather be one",
+     "outcome": "He says that is what most men say the night before, and that the chapter does not always listen to them. You sleep, which surprises you.",
+     "effects": [
+      {
+       "target": "stat",
+       "key": "piety",
+       "delta": 2
+      },
+      {
+       "target": "reputation",
+       "key": "order",
+       "delta": 1
+      }
+     ]
+    },
+    {
+     "id": "ask",
+     "label": "Ask what his region would want of you",
+     "outcome": "He tells you, plainly: a house in his country's capital, a novitiate his province cannot afford, a man of theirs on the council. You say you have heard him. He says that was not a yes, and he is right.",
+     "effects": [
+      {
+       "target": "stat",
+       "key": "administration",
+       "delta": 1
+      },
+      {
+       "target": "reputation",
+       "key": "order",
+       "delta": 1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gc_elected_general",
+   "phase": [
+    "parochial_vicar",
+    "administrator",
+    "pastor",
+    "study"
+   ],
+   "campaign": "religious",
+   "severity": "CRITICAL",
+   "category": "chancery",
+   "baseWeight": 40,
+   "once": true,
+   "suppressYears": 99,
+   "pressure": [
+    "competence"
+   ],
+   "requires": [
+    {
+     "type": "flag",
+     "key": "office:general",
+     "value": true
+    },
+    {
+     "type": "weeks_away",
+     "op": "<=",
+     "value": 8
+    }
+   ],
+   "title": "Accepto",
+   "body": "The chapter's president reads the tally in Latin and then in the three other languages, and there is a silence in which every man in the hall looks at you and you look at the floor, and then he asks the question the constitutions require, and you have to answer it in a full sentence. Afterward the friar from the country you could not place on a map embraces you, and a provincial you have never liked kisses your hand, and the office is yours until it is not.",
+   "choices": [
+    {
+     "id": "bow",
+     "label": "Say the words, and ask the chapter for its prayers",
+     "outcome": "The hall says it will, and means it for a week. The Te Deum is sung badly in forty accents, and you find your own voice has gone.",
+     "effects": [
+      {
+       "target": "place",
+       "key": "provinces",
+       "delta": 6
+      },
+      {
+       "target": "place",
+       "key": "friar",
+       "delta": 4
+      },
+      {
+       "target": "stat",
+       "key": "piety",
+       "delta": 2
+      }
+     ]
+    },
+    {
+     "id": "plain",
+     "label": "Say the words, and then say what you will ask of them",
+     "outcome": "You tell the chapter, standing, what the order will need to give you: men for the missions, honesty in the accounts, the common life kept. Half the hall stands with you. The other half will remember that you began with a demand.",
+     "effects": [
+      {
+       "target": "place",
+       "key": "provinces",
+       "delta": -3
+      },
+      {
+       "target": "place",
+       "key": "observance",
+       "delta": 8
+      },
+      {
+       "target": "reputation",
+       "key": "order",
+       "delta": 3
+      },
+      {
+       "target": "stat",
+       "key": "charisma",
+       "delta": 2
+      }
+     ],
+     "volume": "public",
+     "positionTopic": "doctrine",
+     "positionValue": -10
+    }
+   ]
+  },
+  {
+   "id": "gc_first_visitation",
+   "phase": [
+    "study"
+   ],
+   "campaign": "religious",
+   "severity": "NOTABLE",
+   "category": "chancery",
+   "baseWeight": 14,
+   "once": true,
+   "suppressYears": 3,
+   "pressure": [
+    "competence"
+   ],
+   "requires": [
+    {
+     "type": "flag",
+     "key": "office:general",
+     "value": true
+    },
+    {
+     "type": "weeks_away",
+     "op": "<=",
+     "value": 78
+    }
+   ],
+   "title": "The First Visitation",
+   "body": "Your first visitation as head of the order: a province of eleven houses on another continent, its provincial at the airport in a car older than his priesthood, a week in each house, and every friar seen alone for twenty minutes with the door shut. On the fourth day a brother of sixty, in a house of four, tells you that no one from Rome has asked him a question in thirty-one years.",
+   "choices": [
+    {
+     "id": "hear",
+     "label": "Hear him for the whole hour, and the next man late",
+     "outcome": "Its provincial's schedule slips an hour and stays slipped for the rest of the visitation. You come home knowing that province, and it knowing you, which is the point of the thing and rarely the practice.",
+     "effects": [
+      {
+       "target": "place",
+       "key": "provinces",
+       "delta": 7
+      },
+      {
+       "target": "place",
+       "key": "friar",
+       "delta": 5
+      },
+      {
+       "target": "record",
+       "key": "visitations",
+       "delta": 1
+      }
+     ]
+    },
+    {
+     "id": "keep",
+     "label": "Hear him for his twenty minutes, and keep the schedule",
+     "outcome": "You see every friar, as the constitutions require, and the report is complete. The brother of sixty writes to you a month later, three pages, and you answer him yourself.",
+     "effects": [
+      {
+       "target": "place",
+       "key": "provinces",
+       "delta": 4
+      },
+      {
+       "target": "place",
+       "key": "observance",
+       "delta": 3
+      },
+      {
+       "target": "stat",
+       "key": "administration",
+       "delta": 1
+      },
+      {
+       "target": "record",
+       "key": "visitations",
+       "delta": 1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gc_province_against",
+   "phase": [
+    "study"
+   ],
+   "campaign": "religious",
+   "severity": "NOTABLE",
+   "category": "chancery",
+   "baseWeight": 8,
+   "once": true,
+   "suppressYears": 3,
+   "pressure": [
+    "competence"
+   ],
+   "requires": [
+    {
+     "type": "flag",
+     "key": "office:general",
+     "value": true
+    },
+    {
+     "type": "weeks_away",
+     "op": ">=",
+     "value": 26
+    }
+   ],
+   "title": "A Province Writes Against You",
+   "body": "A provincial you did not confirm gladly has written to the dicastery, not to you: the head of the order is interfering in the internal affairs of his province, moving men without consultation, and the constitutions say. The undersecretary across the river sends you a copy with a note that says only that he thought you should see it.",
+   "choices": [
+    {
+     "id": "visit",
+     "label": "Go and see him, unannounced, and hear the province out",
+     "outcome": "Three days in a province that expected a letter and got a man. Its provincial is not wrong about the consultation. You say so in the chapter room, in front of his council, and the letter to the dicastery is withdrawn the week after.",
+     "effects": [
+      {
+       "target": "place",
+       "key": "provinces",
+       "delta": 6
+      },
+      {
+       "target": "place",
+       "key": "holy_see",
+       "delta": 3
+      },
+      {
+       "target": "stat",
+       "key": "charisma",
+       "delta": 2
+      },
+      {
+       "target": "stat",
+       "key": "piety",
+       "delta": 1
+      }
+     ]
+    },
+    {
+     "id": "answer",
+     "label": "Answer the dicastery, point by point, with the constitutions",
+     "outcome": "The undersecretary reads your answer and agrees with it, which settles the question and nothing else. The province does not write again. It does not write at all.",
+     "effects": [
+      {
+       "target": "place",
+       "key": "holy_see",
+       "delta": 6
+      },
+      {
+       "target": "place",
+       "key": "provinces",
+       "delta": -6
+      },
+      {
+       "target": "stat",
+       "key": "administration",
+       "delta": 2
+      }
+     ]
+    },
+    {
+     "id": "let",
+     "label": "Let the letter lie, and move the men anyway",
+     "outcome": "The men are moved. The dicastery's file on you has a first page now, and its provincial has a story he tells at every meeting of provincials for the rest of your term.",
+     "effects": [
+      {
+       "target": "place",
+       "key": "provinces",
+       "delta": -10
+      },
+      {
+       "target": "place",
+       "key": "holy_see",
+       "delta": -4
+      },
+      {
+       "target": "place",
+       "key": "observance",
+       "delta": 3
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gc_dicastery_case",
+   "phase": [
+    "study"
+   ],
+   "campaign": "religious",
+   "severity": "NOTABLE",
+   "category": "chancery",
+   "baseWeight": 8,
+   "once": true,
+   "suppressYears": 3,
+   "pressure": [
+    "competence"
+   ],
+   "requires": [
+    {
+     "type": "flag",
+     "key": "office:general",
+     "value": true
+    }
+   ],
+   "title": "The Dicastery's Letter About a Friar",
+   "body": "The dicastery for religious writes about a friar of the order in a country you have visited once: a bishop's complaint, a newspaper, a matter that is not what the newspaper says and is not nothing either. They would like the order to act before they must. The friar's provincial says the man is innocent and the bishop is the problem, and has said it to the bishop.",
+   "choices": [
+    {
+     "id": "go",
+     "label": "Send your own visitator, a canonist, and wait for his report",
+     "outcome": "Six weeks. The report is careful and long and finds a man who did a foolish thing and not a wicked one, and a bishop who wanted a parish back. You send the friar to another province and the bishop his parish, and the dicastery its copy.",
+     "effects": [
+      {
+       "target": "place",
+       "key": "holy_see",
+       "delta": 5
+      },
+      {
+       "target": "place",
+       "key": "provinces",
+       "delta": 2
+      },
+      {
+       "target": "stat",
+       "key": "administration",
+       "delta": 2
+      },
+      {
+       "target": "reputation",
+       "key": "rome",
+       "delta": 3
+      }
+     ]
+    },
+    {
+     "id": "stand",
+     "label": "Stand by its provincial, and say so to the dicastery",
+     "outcome": "The undersecretary says, on the telephone, that he hopes you are right. You are, this time. The order notices that its head does not hand its men over on a bishop's word, and the dicastery notices the same thing.",
+     "effects": [
+      {
+       "target": "place",
+       "key": "provinces",
+       "delta": 7
+      },
+      {
+       "target": "place",
+       "key": "holy_see",
+       "delta": -5
+      },
+      {
+       "target": "place",
+       "key": "observance",
+       "delta": 2
+      },
+      {
+       "target": "reputation",
+       "key": "order",
+       "delta": 4
+      }
+     ]
+    },
+    {
+     "id": "remove",
+     "label": "Remove the friar from the country at once, and ask questions after",
+     "outcome": "The newspaper stops. The friar, who was foolish and not wicked, spends a year in a house that does not know why he is there, and its provincial does not forgive you, and the dicastery does not remember to thank you.",
+     "effects": [
+      {
+       "target": "place",
+       "key": "holy_see",
+       "delta": 6
+      },
+      {
+       "target": "place",
+       "key": "provinces",
+       "delta": -8
+      },
+      {
+       "target": "place",
+       "key": "friar",
+       "delta": -4
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gc_letter_to_order",
+   "phase": [
+    "study"
+   ],
+   "campaign": "religious",
+   "severity": "NOTABLE",
+   "category": "formation",
+   "baseWeight": 12,
+   "once": true,
+   "suppressYears": 3,
+   "pressure": [
+    "competence"
+   ],
+   "requires": [
+    {
+     "type": "flag",
+     "key": "office:general",
+     "value": true
+    },
+    {
+     "type": "weeks_away",
+     "op": "<=",
+     "value": 104
+    }
+   ],
+   "title": "The Letter to the Whole Order",
+   "body": "The letter every head of the order writes once, early, and is read by for the rest of his term: to all the friars, on the one thing. The assistants have drafted eleven pages on the common life, which is what heads of the order write about. The cell is quiet and the pages are on the desk and you could write something else.",
+   "choices": [
+    {
+     "id": "common",
+     "label": "The common life, and write it yourself",
+     "outcome": "Four pages instead of eleven, in your own sentences, about the table and the choir and the door left open. It is read at table in sixty countries on the same week, and in some of them argued about, which is what a letter is for.",
+     "effects": [
+      {
+       "target": "place",
+       "key": "observance",
+       "delta": 10
+      },
+      {
+       "target": "place",
+       "key": "friar",
+       "delta": 3
+      },
+      {
+       "target": "reputation",
+       "key": "order",
+       "delta": 4
+      },
+      {
+       "target": "record",
+       "key": "letters",
+       "delta": 1
+      }
+     ],
+     "volume": "public",
+     "positionTopic": "doctrine",
+     "positionValue": -15
+    },
+    {
+     "id": "poor",
+     "label": "The poor, and the houses that have forgotten them",
+     "outcome": "The observant houses underline one line and the others another, and a provincial in a rich country writes to say the letter was aimed at him, and it was. Two houses move within the year, to streets where the order had not lived in a century.",
+     "effects": [
+      {
+       "target": "place",
+       "key": "provinces",
+       "delta": 4
+      },
+      {
+       "target": "place",
+       "key": "observance",
+       "delta": 4
+      },
+      {
+       "target": "reputation",
+       "key": "order",
+       "delta": 5
+      },
+      {
+       "target": "record",
+       "key": "letters",
+       "delta": 1
+      }
+     ],
+     "volume": "public",
+     "positionTopic": "doctrine",
+     "positionValue": 15
+    },
+    {
+     "id": "study",
+     "label": "Study, and the order's own tradition of it",
+     "outcome": "The students write to thank you and the older men to say it was about time. A professor at the order's faculty in Rome quotes it in a lecture you attend, without knowing you are there, and gets it slightly wrong.",
+     "effects": [
+      {
+       "target": "place",
+       "key": "observance",
+       "delta": 5
+      },
+      {
+       "target": "stat",
+       "key": "theology",
+       "delta": 2
+      },
+      {
+       "target": "reputation",
+       "key": "order",
+       "delta": 3
+      },
+      {
+       "target": "record",
+       "key": "letters",
+       "delta": 1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gc_provincial_refuses",
+   "phase": [
+    "study"
+   ],
+   "campaign": "religious",
+   "severity": "NOTABLE",
+   "category": "chancery",
+   "baseWeight": 8,
+   "once": true,
+   "suppressYears": 3,
+   "pressure": [
+    "competence"
+   ],
+   "requires": [
+    {
+     "type": "flag",
+     "key": "office:general",
+     "value": true
+    }
+   ],
+   "title": "A Provincial Who Will Not",
+   "body": "You have asked a province for three men for a mission that has none, and its provincial has answered that his chapter will not give them, in a letter that quotes the constitutions on the rights of provinces and is, on the constitutions, correct. The mission's bishop has written to the dicastery. The dicastery has written to you.",
+   "choices": [
+    {
+     "id": "command",
+     "label": "Command it, under obedience, which the constitutions also allow",
+     "outcome": "The three men go, and go well, as it happens. Its provincial resigns his office in a letter of one sentence and is elected again by his chapter the following spring, which is the province's answer.",
+     "effects": [
+      {
+       "target": "place",
+       "key": "provinces",
+       "delta": -9
+      },
+      {
+       "target": "place",
+       "key": "holy_see",
+       "delta": 4
+      },
+      {
+       "target": "place",
+       "key": "observance",
+       "delta": 4
+      },
+      {
+       "target": "reputation",
+       "key": "rome",
+       "delta": 2
+      }
+     ]
+    },
+    {
+     "id": "trade",
+     "label": "Go to the province and trade: the three men for a novitiate it cannot afford",
+     "outcome": "The chapter room, a long afternoon, and a bargain neither side likes and both keep. The mission gets its men and the province its novitiate, and you have taught forty provincials that the head of the order can be bargained with.",
+     "effects": [
+      {
+       "target": "place",
+       "key": "provinces",
+       "delta": 5
+      },
+      {
+       "target": "place",
+       "key": "holy_see",
+       "delta": 1
+      },
+      {
+       "target": "stat",
+       "key": "administration",
+       "delta": 2
+      }
+     ]
+    },
+    {
+     "id": "yield",
+     "label": "Yield, and tell the dicastery the mission must wait",
+     "outcome": "The mission waits. The bishop writes again, to the pope this time, and the dicastery's undersecretary tells you, kindly, that the order's head is expected to be able to move its men.",
+     "effects": [
+      {
+       "target": "place",
+       "key": "provinces",
+       "delta": 3
+      },
+      {
+       "target": "place",
+       "key": "holy_see",
+       "delta": -8
+      },
+      {
+       "target": "place",
+       "key": "friar",
+       "delta": 2
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gc_close_house_abroad",
+   "phase": [
+    "study"
+   ],
+   "campaign": "religious",
+   "severity": "NOTABLE",
+   "category": "chancery",
+   "baseWeight": 8,
+   "once": true,
+   "suppressYears": 3,
+   "pressure": [
+    "competence"
+   ],
+   "requires": [
+    {
+     "type": "flag",
+     "key": "office:general",
+     "value": true
+    }
+   ],
+   "title": "A House on Another Continent",
+   "body": "A house of the order in a city you have seen from the air: four men, the youngest sixty-two, a church the diocese would like, and a provincial who cannot say the word. The council has the papers ready. The house's prior has written to you, not to his provincial, to say that the house has been there since 1888 and the poor of the quarter still come.",
+   "choices": [
+    {
+     "id": "close",
+     "label": "Close it, and go there to say so yourself",
+     "outcome": "The four men hear it from you at their own table, which is the least that can be done and more than most heads of the order do. The church goes to the diocese. The poor of the quarter come to the diocese's Mass, some of them.",
+     "effects": [
+      {
+       "target": "place",
+       "key": "provinces",
+       "delta": 2
+      },
+      {
+       "target": "place",
+       "key": "observance",
+       "delta": 3
+      },
+      {
+       "target": "place",
+       "key": "friar",
+       "delta": -3
+      },
+      {
+       "target": "record",
+       "key": "closed",
+       "delta": 1
+      },
+      {
+       "target": "stat",
+       "key": "administration",
+       "delta": 1
+      }
+     ]
+    },
+    {
+     "id": "send",
+     "label": "Send it two young men from a province that has them, and give it five years",
+     "outcome": "A province on another continent gives up two of its own, under protest, and the house has six men and a future it did not have. Five years is a long time in an order. It is not long in a house founded in 1888.",
+     "effects": [
+      {
+       "target": "place",
+       "key": "provinces",
+       "delta": -3
+      },
+      {
+       "target": "place",
+       "key": "observance",
+       "delta": 4
+      },
+      {
+       "target": "place",
+       "key": "friar",
+       "delta": 4
+      },
+      {
+       "target": "reputation",
+       "key": "order",
+       "delta": 3
+      }
+     ]
+    },
+    {
+     "id": "leave",
+     "label": "Leave it to its provincial, whose house it is",
+     "outcome": "He does not close it either. It closes itself four years later when the house's prior dies, without a decree, and the church is sold by a man who was not there, and the poor of the quarter are not consulted.",
+     "effects": [
+      {
+       "target": "place",
+       "key": "provinces",
+       "delta": 2
+      },
+      {
+       "target": "place",
+       "key": "observance",
+       "delta": -5
+      },
+      {
+       "target": "place",
+       "key": "friar",
+       "delta": -2
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gc_pope_receives",
+   "phase": [
+    "study"
+   ],
+   "campaign": "religious",
+   "severity": "NOTABLE",
+   "category": "chancery",
+   "baseWeight": 8,
+   "once": true,
+   "suppressYears": 3,
+   "pressure": [
+    "competence"
+   ],
+   "requires": [
+    {
+     "type": "flag",
+     "key": "office:general",
+     "value": true
+    }
+   ],
+   "title": "The Superiors General",
+   "body": "The pope receives the heads of the orders in the hall with the tapestries, forty of you in forty habits, and speaks for twenty minutes about religious life without notes and then, unscheduled, comes down the rows. He stops at you, asks where the order is growing, and waits.",
+   "choices": [
+    {
+     "id": "true",
+     "label": "Tell him where, and where it is not, in a sentence",
+     "outcome": "He nods and says that is the first honest answer he has had this morning, loudly enough to be heard, and moves on. The dicastery's undersecretary, in the second row, has heard it too.",
+     "effects": [
+      {
+       "target": "place",
+       "key": "holy_see",
+       "delta": 8
+      },
+      {
+       "target": "reputation",
+       "key": "rome",
+       "delta": 5
+      },
+      {
+       "target": "stat",
+       "key": "charisma",
+       "delta": 1
+      }
+     ]
+    },
+    {
+     "id": "ask",
+     "label": "Ask him, instead, for something the order needs",
+     "outcome": "A house in a country that does not want it, and his word to its bishops. He says he will think about it, which from a pope is a great deal. The other superiors general look at you afterward with an expression you will come to know.",
+     "effects": [
+      {
+       "target": "place",
+       "key": "holy_see",
+       "delta": 4
+      },
+      {
+       "target": "place",
+       "key": "provinces",
+       "delta": 5
+      },
+      {
+       "target": "reputation",
+       "key": "rome",
+       "delta": 3
+      },
+      {
+       "target": "reputation",
+       "key": "order",
+       "delta": 2
+      }
+     ]
+    },
+    {
+     "id": "kiss",
+     "label": "Kiss the ring, and let him move on",
+     "outcome": "He moves on. The man beside you, in brown, gets the question next and answers it at length, and the pope stops listening halfway through, which you notice and file.",
+     "effects": [
+      {
+       "target": "place",
+       "key": "holy_see",
+       "delta": 2
+      },
+      {
+       "target": "stat",
+       "key": "piety",
+       "delta": 1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gc_cell_in_rome",
+   "phase": [
+    "study"
+   ],
+   "campaign": "religious",
+   "severity": "NOTABLE",
+   "category": "personal",
+   "baseWeight": 8,
+   "once": true,
+   "suppressYears": 3,
+   "pressure": [
+    "competence"
+   ],
+   "requires": [
+    {
+     "type": "flag",
+     "key": "office:general",
+     "value": true
+    }
+   ],
+   "title": "The Cell on the Top Floor",
+   "body": "Rome in August, the house empty of students, the assistants on their provinces' beaches, and the cell on the top floor with its window over the roofs. No letters for a week that cannot wait a week. You have not said the Office alone in a year, or read anything you did not have to, or been a friar, exactly, since the chapter.",
+   "choices": [
+    {
+     "id": "office",
+     "label": "Say the Office alone at the window, the whole of it, for the week",
+     "outcome": "The psalms come back the way they came at twenty-five, one line at a time. On the Sunday you say Mass for the porter and two sisters and it is the best week of the term.",
+     "effects": [
+      {
+       "target": "place",
+       "key": "friar",
+       "delta": 12
+      },
+      {
+       "target": "stat",
+       "key": "piety",
+       "delta": 4
+      }
+     ]
+    },
+    {
+     "id": "read",
+     "label": "Read the thing you have carried in your bag for two years",
+     "outcome": "The order's own theologian, dead six hundred years, on the thing you have been deciding about all term without his help. You underline a page and take it to the council in September, and they look at you.",
+     "effects": [
+      {
+       "target": "place",
+       "key": "friar",
+       "delta": 6
+      },
+      {
+       "target": "stat",
+       "key": "theology",
+       "delta": 3
+      },
+      {
+       "target": "place",
+       "key": "observance",
+       "delta": 2
+      }
+     ]
+    },
+    {
+     "id": "files",
+     "label": "Open the files anyway; August is when they can be read",
+     "outcome": "The provincials' letters of the spring, read at last with the attention they deserved. Three decisions of the summer are reversed in September, quietly, and the friar in you is not consulted.",
+     "effects": [
+      {
+       "target": "place",
+       "key": "provinces",
+       "delta": 5
+      },
+      {
+       "target": "place",
+       "key": "friar",
+       "delta": -6
+      },
+      {
+       "target": "stat",
+       "key": "administration",
+       "delta": 2
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gc_home_province_writes",
+   "phase": [
+    "study"
+   ],
+   "campaign": "religious",
+   "severity": "NOTABLE",
+   "category": "personal",
+   "baseWeight": 8,
+   "once": true,
+   "suppressYears": 3,
+   "pressure": [
+    "competence"
+   ],
+   "requires": [
+    {
+     "type": "flag",
+     "key": "office:general",
+     "value": true
+    },
+    {
+     "type": "weeks_away",
+     "op": ">=",
+     "value": 52
+    }
+   ],
+   "title": "From Home",
+   "body": "A letter from your own province, from a man you were novices with: the province you left is not the one you will come back to. Two houses closed, one founded, a provincial you did not confirm gladly, and your name used in chapter, on both sides, by men who have not written to you in years.",
+   "choices": [
+    {
+     "id": "write",
+     "label": "Write back, as a friar of the province and nothing else",
+     "outcome": "Three pages about the men you knew and none about the order. He reads it to the house at recreation, or so you hear. The province decides you have not forgotten it, which is worth more than a decree.",
+     "effects": [
+      {
+       "target": "place",
+       "key": "friar",
+       "delta": 4
+      },
+      {
+       "target": "reputation",
+       "key": "province",
+       "delta": 8
+      },
+      {
+       "target": "reputation",
+       "key": "community",
+       "delta": 4
+      }
+     ]
+    },
+    {
+     "id": "visit",
+     "label": "Put the province on the visitation list, out of turn",
+     "outcome": "Its provincial understands what it means and does not like it. The houses do. You see the men you were novices with in their own chapter rooms, and one of them says you have got old, and you have.",
+     "effects": [
+      {
+       "target": "place",
+       "key": "provinces",
+       "delta": 2
+      },
+      {
+       "target": "reputation",
+       "key": "province",
+       "delta": 5
+      },
+      {
+       "target": "place",
+       "key": "friar",
+       "delta": 2
+      },
+      {
+       "target": "record",
+       "key": "visitations",
+       "delta": 1
+      }
+     ]
+    },
+    {
+     "id": "quiet",
+     "label": "Do not answer; the head of the order has no home province",
+     "outcome": "He does not write again. The province decides what it decides. Years later a man at your funeral will say you forgot where you came from, and he will not be entirely wrong.",
+     "effects": [
+      {
+       "target": "place",
+       "key": "provinces",
+       "delta": 3
+      },
+      {
+       "target": "reputation",
+       "key": "province",
+       "delta": -8
+      },
+      {
+       "target": "place",
+       "key": "friar",
+       "delta": -3
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gc_last_chapter",
+   "phase": [
+    "study"
+   ],
+   "campaign": "religious",
+   "severity": "NOTABLE",
+   "category": "chancery",
+   "baseWeight": 10,
+   "once": true,
+   "suppressYears": 99,
+   "pressure": [
+    "competence"
+   ],
+   "requires": [
+    {
+     "type": "flag",
+     "key": "office:general",
+     "value": true
+    },
+    {
+     "type": "weeks_away",
+     "op": ">=",
+     "value": 260
+    }
+   ],
+   "title": "The Last Chapter",
+   "body": "The chapter that will elect your successor is sitting, and the constitutions give you the chair until it does. The provincials who wrote against you and the ones who did not are in the same hall, and there is a report of your term to be given, standing, to men who will vote when it is over.",
+   "choices": [
+    {
+     "id": "honest",
+     "label": "Give the report honestly: what was done, and what was not",
+     "outcome": "Forty minutes, no notes, and the failures named before the successes. The hall is quiet in the way that means it believed you. The man they elect keeps three of your council, which is the chapter's verdict, and a kind one.",
+     "effects": [
+      {
+       "target": "reputation",
+       "key": "order",
+       "delta": 8
+      },
+      {
+       "target": "place",
+       "key": "friar",
+       "delta": 4
+      },
+      {
+       "target": "stat",
+       "key": "charisma",
+       "delta": 2
+      }
+     ]
+    },
+    {
+     "id": "defend",
+     "label": "Defend the term, and name the provinces that made it hard",
+     "outcome": "The hall divides along a line you drew. Your successor is elected on the fourth ballot from the other side of it, and undoes two things you did in his first year, and the order goes on, as it does.",
+     "effects": [
+      {
+       "target": "reputation",
+       "key": "order",
+       "delta": -4
+      },
+      {
+       "target": "place",
+       "key": "provinces",
+       "delta": -6
+      },
+      {
+       "target": "stat",
+       "key": "administration",
+       "delta": 1
+      }
+     ]
+    },
+    {
+     "id": "short",
+     "label": "Give it in ten minutes, and sit down",
+     "outcome": "The chapter thanks you in a paragraph of the acts. Nobody remembers the report. Several men remember that you did not make them listen to one, and vote for a man who will not either.",
+     "effects": [
+      {
+       "target": "reputation",
+       "key": "order",
+       "delta": 2
+      },
+      {
+       "target": "place",
+       "key": "friar",
+       "delta": 2
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gc_former_general_home",
+   "phase": [
+    "parochial_vicar",
+    "administrator",
+    "pastor"
+   ],
+   "campaign": "religious",
+   "severity": "NOTABLE",
+   "category": "personal",
+   "baseWeight": 20,
+   "once": true,
+   "suppressYears": 99,
+   "pressure": [
+    "competence"
+   ],
+   "requires": [
+    {
+     "type": "flag",
+     "key": "general:served",
+     "value": true
+    },
+    {
+     "type": "flag",
+     "key": "office:general",
+     "value": false
+    }
+   ],
+   "title": "A Cell in the Province",
+   "body": "Home. A cell in a house of your own province, a place at the table below the house's prior, and a provincial half your age who was a student when you were elected and does not know what to do with you. The house's youngest men call you Father and the oldest call you by your name, and the telephone does not ring.",
+   "choices": [
+    {
+     "id": "table",
+     "label": "Take the place at the table, and the Tuesday confessions, and nothing else",
+     "outcome": "Within the year the house has forgotten what you were, mostly, which is what the constitutions intend and what you asked for. The confessions on Tuesday are the best work you have done in nine years.",
+     "effects": [
+      {
+       "target": "place",
+       "key": "friar",
+       "delta": 0
+      },
+      {
+       "target": "stat",
+       "key": "piety",
+       "delta": 4
+      },
+      {
+       "target": "reputation",
+       "key": "community",
+       "delta": 8
+      },
+      {
+       "target": "reputation",
+       "key": "province",
+       "delta": 4
+      }
+     ]
+    },
+    {
+     "id": "write",
+     "label": "Write the book the term did not leave time for",
+     "outcome": "The order's history of the thing you decided, with the documents. It is reviewed in the journals by men who were in the hall, and one of them is kind. The house leaves you alone in the mornings, which is a gift.",
+     "effects": [
+      {
+       "target": "stat",
+       "key": "theology",
+       "delta": 3
+      },
+      {
+       "target": "stat",
+       "key": "knowledge",
+       "delta": 3
+      },
+      {
+       "target": "reputation",
+       "key": "order",
+       "delta": 4
+      },
+      {
+       "target": "reputation",
+       "key": "community",
+       "delta": 2
+      }
+     ]
+    },
+    {
+     "id": "advise",
+     "label": "Let its provincial use you: the visitations he cannot make, the letters he cannot write",
+     "outcome": "He uses you, gratefully and then a little freely. The province gets a former head of the order for the price of a cell, and the men of the house get a brother who is away a good deal, which they had before.",
+     "effects": [
+      {
+       "target": "reputation",
+       "key": "province",
+       "delta": 8
+      },
+      {
+       "target": "reputation",
+       "key": "superiors",
+       "delta": 5
+      },
+      {
+       "target": "reputation",
+       "key": "community",
+       "delta": -3
+      },
+      {
+       "target": "stat",
+       "key": "administration",
+       "delta": 1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gc_biglietto_friar",
+   "phase": [
+    "parochial_vicar",
+    "administrator",
+    "pastor"
+   ],
+   "beat": "college",
+   "campaign": "religious",
+   "severity": "MAJOR",
+   "category": "personal",
+   "baseWeight": 100,
+   "once": true,
+   "suppressYears": 99,
+   "pressure": [
+    "competence"
+   ],
+   "requires": [
+    {
+     "type": "college",
+     "key": "scene",
+     "value": "created"
+    },
+    {
+     "type": "flag",
+     "key": "general:served",
+     "value": true
+    }
+   ],
+   "title": "The Biglietto, in a Cell",
+   "body": "The Secretariat of State's letter finds you in a cell in your own province, where a former head of the order is supposed to be left alone. The pope will create you a cardinal at the consistory in six weeks. The house's prior, who brought the envelope up himself, stands in the door and does not know whether to congratulate you or to apologise. A friar takes a vow of poverty and is then given a titular church in Rome, a ring, and a place in the room where the next pope is chosen. The constitutions have a paragraph about it, written by men who never expected it to be needed.",
+   "choices": [
+    {
+     "id": "accept",
+     "label": "Accept, and ask the house to say nothing until Rome does",
+     "meaning": "Rome's regard, and the order's for a week or two; the vow bends without breaking.",
+     "outcome": "The house says nothing, which in a religious house is a heroic act, and Rome announces it on a Sunday at noon. Your provincial telephones, then the order's head in Rome, then a brother you were novices with who says only that he knew. The scarlet is bought by the order and fits badly. You wear the habit under it where you can.",
+     "effects": [
+      {
+       "target": "reputation",
+       "key": "rome",
+       "delta": 6
+      },
+      {
+       "target": "reputation",
+       "key": "order",
+       "delta": 6
+      },
+      {
+       "target": "reputation",
+       "key": "community",
+       "delta": 3
+      },
+      {
+       "target": "flag",
+       "key": "cardinal:friar",
+       "value": true
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "excuse",
+     "label": "Ask to be excused, as a religious may, and as a few men have",
+     "meaning": "Rome remembers the letter; the order knows what its brother tried to keep.",
+     "outcome": "You write to the Secretariat that you have taken a vow and would like to keep it, and that the order has better uses for a man of your years than a titular church. The answer comes in a week, courteous and final: the Holy Father has read your letter with great esteem, and asks you to accept. You accept. The order buys the scarlet, and the house, which read the letter before you sent it, treats you for a season with something like awe, and then like a brother again.",
+     "effects": [
+      {
+       "target": "reputation",
+       "key": "rome",
+       "delta": -4
+      },
+      {
+       "target": "reputation",
+       "key": "order",
+       "delta": 8
+      },
+      {
+       "target": "reputation",
+       "key": "community",
+       "delta": 6
+      },
+      {
+       "target": "stat",
+       "key": "piety",
+       "delta": 2
+      },
+      {
+       "target": "flag",
+       "key": "cardinal:friar",
+       "value": true
+      },
+      {
+       "target": "flag",
+       "key": "cardinal:asked_excused",
+       "value": true
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "hc_habit_again",
+   "phase": [
+    "parochial_vicar",
+    "administrator",
+    "pastor"
+   ],
+   "campaign": "religious",
+   "beat": "cascade",
+   "severity": "MAJOR",
+   "category": "chancery",
+   "baseWeight": 10,
+   "suppressYears": 2,
+   "pressure": [
+    "loyalty_vs_honesty",
+    "belief_vs_safety"
+   ],
+   "requires": [
+    {
+     "type": "document",
+     "axis": "religious_life",
+     "value": "observant",
+     "within": 30,
+     "implemented": false
+    },
+    {
+     "type": "flag",
+     "key": "office:provincial",
+     "value": false
+    }
+   ],
+   "title": "The Habit Again",
+   "body": "{doc:religious_life} is read aloud at table, and the house is quiet for it in a way it is not for most things from Rome. {reading:religious_life} In this house the habit has been a choir garment for years. {@confrere} teaches at the university in a jacket and a collar and has not worn the habit outside the chapel since his studies; {@old_friar} has worn it to the supermarket since 1970 and says so, twice. At chapter the house's prior asks each man, in order of profession, what he means to do.",
+   "choices": [
+    {
+     "id": "eager",
+     "label": "Wear it everywhere, from tomorrow, and say at chapter that the house should",
+     "outcome": "You wear it to the hospital, the bus, the university library. Two of the younger men do the same by Advent; {@confrere} does not, and stops sitting next to you at table. The province hears of your house before it hears of any other.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "religious_life",
+       "value": "eager"
+      },
+      {
+       "target": "reputation",
+       "key": "order",
+       "delta": 4
+      },
+      {
+       "target": "reputation",
+       "key": "rome",
+       "delta": 3
+      },
+      {
+       "target": "reputation",
+       "key": "superiors",
+       "delta": 2
+      },
+      {
+       "target": "reputation",
+       "key": "community",
+       "delta": -3
+      },
+      {
+       "target": "stat",
+       "key": "piety",
+       "delta": 1
+      }
+     ]
+    },
+    {
+     "id": "faithful",
+     "label": "The habit at the work as well as in choir, as the letter asks, and no sermon about it",
+     "outcome": "You wear it where the letter says and say nothing about anyone else. Within a month most of the house does the same, without anyone having decided anything, which is how a house changes when it changes.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "religious_life",
+       "value": "faithful"
+      },
+      {
+       "target": "reputation",
+       "key": "order",
+       "delta": 2
+      },
+      {
+       "target": "reputation",
+       "key": "rome",
+       "delta": 2
+      },
+      {
+       "target": "reputation",
+       "key": "community",
+       "delta": 2
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "minimal",
+     "label": "The habit in choir and at table, as before; the letter said nothing about the university",
+     "outcome": "You do what you did. {@old_friar} says at recreation that Rome has spoken and the house has not listened, and is not contradicted.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "religious_life",
+       "value": "minimal"
+      },
+      {
+       "target": "reputation",
+       "key": "rome",
+       "delta": -2
+      },
+      {
+       "target": "reputation",
+       "key": "order",
+       "delta": -1
+      },
+      {
+       "target": "reputation",
+       "key": "community",
+       "delta": 1
+      }
+     ]
+    },
+    {
+     "id": "defiant",
+     "label": "The constitutions already say what the house wears, and the house will go on as it does",
+     "outcome": "You say so at chapter, in the constitutions' own words, and half the room nods. The letter from the provincial's desk a month later does not name anyone. It does not need to.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "religious_life",
+       "value": "defiant"
+      },
+      {
+       "target": "reputation",
+       "key": "rome",
+       "delta": -5
+      },
+      {
+       "target": "reputation",
+       "key": "superiors",
+       "delta": -4
+      },
+      {
+       "target": "reputation",
+       "key": "order",
+       "delta": -2
+      },
+      {
+       "target": "reputation",
+       "key": "community",
+       "delta": 2
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "hc_choir_again",
+   "phase": [
+    "parochial_vicar",
+    "administrator",
+    "pastor"
+   ],
+   "campaign": "religious",
+   "beat": "cascade",
+   "severity": "NOTABLE",
+   "category": "chancery",
+   "baseWeight": 10,
+   "suppressYears": 2,
+   "pressure": [
+    "competence",
+    "belief_vs_safety"
+   ],
+   "requires": [
+    {
+     "type": "document",
+     "axis": "religious_life",
+     "value": "observant",
+     "within": 30,
+     "implemented": false
+    },
+    {
+     "type": "flag",
+     "key": "office:provincial",
+     "value": false
+    }
+   ],
+   "title": "The Hours in Common",
+   "body": "{doc:religious_life} asks for the hours said in choir, together, in every house. {reading:religious_life} You have said Lauds on the train and Vespers in a hospital corridor for years, and the house has let you; the work asked it, and the constitutions allowed it. Now the house's prior has put the horarium back on the wall by the refectory door, with the hours underlined, and has not yet said whether the work will bend to it or it to the work.",
+   "choices": [
+    {
+     "id": "eager",
+     "label": "In choir for every hour, and the work bent to it",
+     "outcome": "You move the hospital rounds an hour later and the university office hours to the afternoon. It costs you something at both. The choir, which had been five old men, is nine by Lent, and one of them is you.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "religious_life",
+       "value": "eager"
+      },
+      {
+       "target": "stat",
+       "key": "piety",
+       "delta": 2
+      },
+      {
+       "target": "reputation",
+       "key": "community",
+       "delta": 3
+      },
+      {
+       "target": "reputation",
+       "key": "rome",
+       "delta": 2
+      },
+      {
+       "target": "reputation",
+       "key": "local_bishop",
+       "delta": -1
+      }
+     ]
+    },
+    {
+     "id": "faithful",
+     "label": "Choir when the house is in choir, and the office alone when the work has you",
+     "outcome": "You are in your stall for Lauds and Vespers most days and not for the rest, and you tell the house's prior so, plainly. He says that is what the constitutions have always meant.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "religious_life",
+       "value": "faithful"
+      },
+      {
+       "target": "stat",
+       "key": "piety",
+       "delta": 1
+      },
+      {
+       "target": "reputation",
+       "key": "community",
+       "delta": 2
+      },
+      {
+       "target": "reputation",
+       "key": "rome",
+       "delta": 1
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "minimal",
+     "label": "Choir on Sundays and feasts, as before; the work is the work",
+     "outcome": "Nothing changes in your week. The horarium stays on the wall. {@old_friar} reads it aloud at recreation once, slowly, looking at nobody.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "religious_life",
+       "value": "minimal"
+      },
+      {
+       "target": "reputation",
+       "key": "rome",
+       "delta": -2
+      },
+      {
+       "target": "reputation",
+       "key": "community",
+       "delta": -1
+      }
+     ]
+    },
+    {
+     "id": "defiant",
+     "label": "The office alone, as the work asks, and say at chapter that a friar's choir is the hospital",
+     "outcome": "You say it well, and it is remembered, and not only by the men who agreed with you. The province's newsletter prints a paragraph on the hours in common the next month that reads as if it were written about your house.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "religious_life",
+       "value": "defiant"
+      },
+      {
+       "target": "reputation",
+       "key": "rome",
+       "delta": -4
+      },
+      {
+       "target": "reputation",
+       "key": "superiors",
+       "delta": -3
+      },
+      {
+       "target": "reputation",
+       "key": "public",
+       "delta": 2
+      },
+      {
+       "target": "stat",
+       "key": "charisma",
+       "delta": 1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "hc_provincial_observant",
+   "phase": [
+    "parochial_vicar",
+    "administrator",
+    "pastor"
+   ],
+   "campaign": "religious",
+   "beat": "cascade",
+   "severity": "MAJOR",
+   "category": "chancery",
+   "baseWeight": 14,
+   "suppressYears": 2,
+   "pressure": [
+    "ambition_vs_integrity",
+    "loyalty_vs_honesty"
+   ],
+   "requires": [
+    {
+     "type": "document",
+     "axis": "religious_life",
+     "value": "observant",
+     "within": 30,
+     "implemented": false
+    },
+    {
+     "type": "flag",
+     "key": "office:provincial",
+     "value": true
+    }
+   ],
+   "title": "The Letter to the Province",
+   "body": "{doc:religious_life} has come to your desk, and to every house's table, and the houses are waiting for your letter before they do anything, which is the one thing they always agree on. It asks for the habit at the work, the hours and the table in common, and a report from you on the observance of every house. Your council is split the way the province is split. The letter is yours to write.",
+   "choices": [
+    {
+     "id": "eager",
+     "label": "Every house visited by Advent, the habit at the work, and a report to Rome that is true",
+     "outcome": "You write the letter in the document's own words and then get in the car. Eleven houses in eight weeks. Two priors are angry and one is grateful, and Rome answers your report with a line of thanks nobody in the province has seen before.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "religious_life",
+       "value": "eager"
+      },
+      {
+       "target": "reputation",
+       "key": "rome",
+       "delta": 6
+      },
+      {
+       "target": "reputation",
+       "key": "superiors",
+       "delta": 4
+      },
+      {
+       "target": "reputation",
+       "key": "order",
+       "delta": 3
+      },
+      {
+       "target": "reputation",
+       "key": "province",
+       "delta": -3
+      },
+      {
+       "target": "stat",
+       "key": "administration",
+       "delta": 2
+      },
+      {
+       "target": "strain",
+       "key": "strain",
+       "delta": 8
+      }
+     ]
+    },
+    {
+     "id": "faithful",
+     "label": "Send it to every house as given, the priors to read it in chapter and write you what has changed",
+     "outcome": "The letters come back over a season, a page each, and they are honest about half the time. You send Rome a report made of them. It is received.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "religious_life",
+       "value": "faithful"
+      },
+      {
+       "target": "reputation",
+       "key": "rome",
+       "delta": 3
+      },
+      {
+       "target": "reputation",
+       "key": "order",
+       "delta": 2
+      },
+      {
+       "target": "reputation",
+       "key": "province",
+       "delta": 2
+      },
+      {
+       "target": "stat",
+       "key": "administration",
+       "delta": 1
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "minimal",
+     "label": "A page: the constitutions already provide for all of it, and the priors will know what to do",
+     "outcome": "The priors do know what to do, which is nothing, and the province is grateful to you for a year. The report to Rome, when it goes, is short. Rome notices short reports.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "religious_life",
+       "value": "minimal"
+      },
+      {
+       "target": "reputation",
+       "key": "province",
+       "delta": 4
+      },
+      {
+       "target": "reputation",
+       "key": "rome",
+       "delta": -4
+      },
+      {
+       "target": "reputation",
+       "key": "superiors",
+       "delta": -2
+      }
+     ]
+    },
+    {
+     "id": "defiant",
+     "label": "Write to Rome that the province's constitutions provide, and change nothing",
+     "outcome": "The council signs it with you, which was the point. The dicastery's answer takes four months and is polite in the way that means the file has been kept.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "religious_life",
+       "value": "defiant"
+      },
+      {
+       "target": "reputation",
+       "key": "province",
+       "delta": 5
+      },
+      {
+       "target": "reputation",
+       "key": "rome",
+       "delta": -8
+      },
+      {
+       "target": "reputation",
+       "key": "superiors",
+       "delta": -5
+      },
+      {
+       "target": "reputation",
+       "key": "order",
+       "delta": -2
+      },
+      {
+       "target": "flag",
+       "key": "visitation:complaint",
+       "value": true
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "hc_habit_set_aside",
+   "phase": [
+    "parochial_vicar",
+    "administrator",
+    "pastor"
+   ],
+   "campaign": "religious",
+   "beat": "cascade",
+   "severity": "NOTABLE",
+   "category": "chancery",
+   "baseWeight": 10,
+   "suppressYears": 2,
+   "pressure": [
+    "friendship_vs_duty",
+    "belief_vs_safety"
+   ],
+   "requires": [
+    {
+     "type": "document",
+     "axis": "religious_life",
+     "value": "adapted",
+     "within": 30,
+     "implemented": false
+    },
+    {
+     "type": "flag",
+     "key": "office:provincial",
+     "value": false
+    }
+   ],
+   "title": "A Shirt and a Badge",
+   "body": "{doc:religious_life} has said what the younger men have been saying for years: the habit may be set aside where the work asks it. {reading:religious_life} {@confrere}, who has the county hospital, comes to your cell with the text and a hospital badge. He wants to go on the wards in a shirt and the badge, as the chaplains of every other faith do, and he wants to know whether you will back him when he asks at chapter, because {@old_friar} will not.",
+   "choices": [
+    {
+     "id": "eager",
+     "label": "Back him at chapter, and set your own habit aside at your work the same week",
+     "outcome": "The house argues for a month and then divides along the line it was always going to divide along. You are on the younger side of it now, at fifty, and are treated accordingly.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "religious_life",
+       "value": "eager"
+      },
+      {
+       "target": "relationship",
+       "key": "@confrere",
+       "delta": 10
+      },
+      {
+       "target": "reputation",
+       "key": "community",
+       "delta": -3
+      },
+      {
+       "target": "reputation",
+       "key": "public",
+       "delta": 2
+      },
+      {
+       "target": "reputation",
+       "key": "rome",
+       "delta": 2
+      },
+      {
+       "target": "reputation",
+       "key": "order",
+       "delta": -1
+      }
+     ]
+    },
+    {
+     "id": "faithful",
+     "label": "Back him: the document allows it and the work asks it. Keep your own",
+     "outcome": "You say at chapter that the hospital is exactly the case the document means, and that the habit is not the vow. He gets his badge. {@old_friar} does not speak to him for a season, and does speak to you, which is worse.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "religious_life",
+       "value": "faithful"
+      },
+      {
+       "target": "relationship",
+       "key": "@confrere",
+       "delta": 6
+      },
+      {
+       "target": "relationship",
+       "key": "@old_friar",
+       "delta": -4
+      },
+      {
+       "target": "reputation",
+       "key": "community",
+       "delta": 1
+      },
+      {
+       "target": "reputation",
+       "key": "rome",
+       "delta": 1
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "minimal",
+     "label": "The constitutions still say the habit; tell him to ask the house's prior and not you",
+     "outcome": "He asks, and is told to wait for the province's word, and waits. He does not bring you the text again.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "religious_life",
+       "value": "minimal"
+      },
+      {
+       "target": "relationship",
+       "key": "@confrere",
+       "delta": -4
+      },
+      {
+       "target": "reputation",
+       "key": "community",
+       "delta": 1
+      },
+      {
+       "target": "reputation",
+       "key": "rome",
+       "delta": -1
+      }
+     ]
+    },
+    {
+     "id": "defiant",
+     "label": "Tell him the habit is what a friar is, and say so at chapter",
+     "outcome": "You say it well, and it is the thing the house remembers of that year. {@confrere} goes to the wards in the habit, angry, and is stopped in the corridor twice a week by people who want to talk about God, which he tells you about a year later, not entirely pleased.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "religious_life",
+       "value": "defiant"
+      },
+      {
+       "target": "relationship",
+       "key": "@confrere",
+       "delta": -6
+      },
+      {
+       "target": "relationship",
+       "key": "@old_friar",
+       "delta": 6
+      },
+      {
+       "target": "reputation",
+       "key": "rome",
+       "delta": -3
+      },
+      {
+       "target": "reputation",
+       "key": "superiors",
+       "delta": -2
+      },
+      {
+       "target": "reputation",
+       "key": "community",
+       "delta": 2
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "hc_formation_opened",
+   "phase": [
+    "parochial_vicar",
+    "administrator",
+    "pastor"
+   ],
+   "campaign": "religious",
+   "beat": "cascade",
+   "severity": "NOTABLE",
+   "category": "formation",
+   "baseWeight": 10,
+   "suppressYears": 2,
+   "pressure": [
+    "competence",
+    "friendship_vs_duty"
+   ],
+   "requires": [
+    {
+     "type": "document",
+     "axis": "religious_life",
+     "value": "adapted",
+     "within": 30,
+     "implemented": false
+    },
+    {
+     "type": "flag",
+     "key": "office:provincial",
+     "value": false
+    }
+   ],
+   "title": "A Longer Road In",
+   "body": "{doc:religious_life} asks for a formation lengthened and opened to the professions: a man to come with a trade or a degree, and to be seven years in formation where he was five. {reading:religious_life} {@master_of_students} sits down next to you at table with the province's draft, which he wrote, and asks you, who came through the old formation and have opinions about it, what you would tell the council if you were asked. He will make sure you are asked.",
+   "choices": [
+    {
+     "id": "eager",
+     "label": "Tell the council the old formation made men who could not live outside a priory, and the draft is right",
+     "outcome": "The council hears it from you, and it lands, because you are known not to say such things. The draft goes through with a year added. {@old_friar} calls it the end of the novitiate and stops eating at your end of the table.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "religious_life",
+       "value": "eager"
+      },
+      {
+       "target": "relationship",
+       "key": "@master_of_students",
+       "delta": 8
+      },
+      {
+       "target": "reputation",
+       "key": "order",
+       "delta": 3
+      },
+      {
+       "target": "reputation",
+       "key": "rome",
+       "delta": 2
+      },
+      {
+       "target": "reputation",
+       "key": "community",
+       "delta": -2
+      },
+      {
+       "target": "stat",
+       "key": "theology",
+       "delta": 1
+      }
+     ]
+    },
+    {
+     "id": "faithful",
+     "label": "Tell the council the draft is sound and the novitiate must stay what it is",
+     "outcome": "You back the longer road and hold the line on the year that matters. The draft goes through amended, and both sides think you were on theirs.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "religious_life",
+       "value": "faithful"
+      },
+      {
+       "target": "relationship",
+       "key": "@master_of_students",
+       "delta": 4
+      },
+      {
+       "target": "reputation",
+       "key": "order",
+       "delta": 2
+      },
+      {
+       "target": "reputation",
+       "key": "rome",
+       "delta": 1
+      },
+      {
+       "target": "reputation",
+       "key": "community",
+       "delta": 1
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "minimal",
+     "label": "Tell the council the constitutions' formation was good enough for you, and leave it there",
+     "outcome": "The draft goes through anyway, thinner, and {@master_of_students} does not ask your opinion again for some years.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "religious_life",
+       "value": "minimal"
+      },
+      {
+       "target": "relationship",
+       "key": "@master_of_students",
+       "delta": -5
+      },
+      {
+       "target": "reputation",
+       "key": "rome",
+       "delta": -1
+      },
+      {
+       "target": "reputation",
+       "key": "community",
+       "delta": 1
+      }
+     ]
+    },
+    {
+     "id": "defiant",
+     "label": "Tell the council the draft will fill the studium with men who have never lived a common life, and vote it down",
+     "outcome": "It is voted down, this year. The provincial council of the year after passes it without asking you, and the studium's men know whose fault the delay was.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "religious_life",
+       "value": "defiant"
+      },
+      {
+       "target": "relationship",
+       "key": "@master_of_students",
+       "delta": -8
+      },
+      {
+       "target": "reputation",
+       "key": "rome",
+       "delta": -3
+      },
+      {
+       "target": "reputation",
+       "key": "order",
+       "delta": -2
+      },
+      {
+       "target": "reputation",
+       "key": "community",
+       "delta": 2
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "hc_provincial_adapted",
+   "phase": [
+    "parochial_vicar",
+    "administrator",
+    "pastor"
+   ],
+   "campaign": "religious",
+   "beat": "cascade",
+   "severity": "MAJOR",
+   "category": "chancery",
+   "baseWeight": 14,
+   "suppressYears": 2,
+   "pressure": [
+    "ambition_vs_integrity",
+    "loyalty_vs_honesty"
+   ],
+   "requires": [
+    {
+     "type": "document",
+     "axis": "religious_life",
+     "value": "adapted",
+     "within": 30,
+     "implemented": false
+    },
+    {
+     "type": "flag",
+     "key": "office:provincial",
+     "value": true
+    }
+   ],
+   "title": "The Letter to the Province",
+   "body": "{doc:religious_life} has come to your desk and to every house's table: the habit may be set aside where the work asks it, the horarium is to bend to the apostolate, formation is to be lengthened and opened. The houses are waiting for your letter, and your council is split the way the province is. Two priors have already written to ask what it means, which means they have already decided.",
+   "choices": [
+    {
+     "id": "eager",
+     "label": "Every house to review its horarium against its work by summer, and the studium to draw up the longer formation",
+     "outcome": "You get letters. The observant houses answer in the constitutions' words and the others in the document's, and you visit the three that answered in neither. Rome's thanks come by return.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "religious_life",
+       "value": "eager"
+      },
+      {
+       "target": "reputation",
+       "key": "rome",
+       "delta": 5
+      },
+      {
+       "target": "reputation",
+       "key": "superiors",
+       "delta": 3
+      },
+      {
+       "target": "reputation",
+       "key": "order",
+       "delta": 2
+      },
+      {
+       "target": "reputation",
+       "key": "province",
+       "delta": -3
+      },
+      {
+       "target": "stat",
+       "key": "administration",
+       "delta": 2
+      },
+      {
+       "target": "strain",
+       "key": "strain",
+       "delta": 6
+      }
+     ]
+    },
+    {
+     "id": "faithful",
+     "label": "Send it to every house as given, the priors to read it in chapter and to ask what serves the mission",
+     "outcome": "The chapters happen. Some of them are the best conversations those houses have had in years, and two are the worst. You hear about all of them.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "religious_life",
+       "value": "faithful"
+      },
+      {
+       "target": "reputation",
+       "key": "rome",
+       "delta": 3
+      },
+      {
+       "target": "reputation",
+       "key": "order",
+       "delta": 2
+      },
+      {
+       "target": "reputation",
+       "key": "province",
+       "delta": 2
+      },
+      {
+       "target": "stat",
+       "key": "administration",
+       "delta": 1
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "minimal",
+     "label": "A page: the constitutions already allow what it asks, and no house need change in haste",
+     "outcome": "The province takes the page as permission to go on as it was, which was what most of it wanted. The report to Rome is a page too.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "religious_life",
+       "value": "minimal"
+      },
+      {
+       "target": "reputation",
+       "key": "province",
+       "delta": 4
+      },
+      {
+       "target": "reputation",
+       "key": "rome",
+       "delta": -4
+      },
+      {
+       "target": "reputation",
+       "key": "superiors",
+       "delta": -2
+      }
+     ]
+    },
+    {
+     "id": "defiant",
+     "label": "Write to Rome that the province's constitutions are its formation and its habit, and change nothing",
+     "outcome": "The council signs it with you. The observant houses frame it. The dicastery's answer is polite and is kept.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "religious_life",
+       "value": "defiant"
+      },
+      {
+       "target": "reputation",
+       "key": "province",
+       "delta": 5
+      },
+      {
+       "target": "reputation",
+       "key": "rome",
+       "delta": -8
+      },
+      {
+       "target": "reputation",
+       "key": "superiors",
+       "delta": -5
+      },
+      {
+       "target": "reputation",
+       "key": "order",
+       "delta": -2
+      },
+      {
+       "target": "flag",
+       "key": "visitation:complaint",
+       "value": true
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "hc_constitutions",
+   "phase": [
+    "parochial_vicar",
+    "administrator",
+    "pastor"
+   ],
+   "campaign": "religious",
+   "beat": "cascade",
+   "severity": "NOTABLE",
+   "category": "chancery",
+   "baseWeight": 10,
+   "suppressYears": 2,
+   "pressure": [
+    "loyalty_vs_honesty"
+   ],
+   "requires": [
+    {
+     "type": "document",
+     "axis": "religious_life",
+     "value": "constitutions",
+     "within": 30,
+     "implemented": false
+    }
+   ],
+   "title": "As the Constitutions Have It",
+   "body": "{doc:religious_life} hands religious life back to its own law: each institute's constitutions govern its habit, its common life, and its formation, and Rome asks only for a report. {reading:religious_life} In the house the question is not what Rome wants but what stays of what the last years changed, and every man has a different list. {@old_friar} has the constitutions open at table. {@confrere} has the last document open beside it.",
+   "choices": [
+    {
+     "id": "eager",
+     "label": "Back to the constitutions in everything the last years bent, and say so at chapter",
+     "outcome": "The house goes back, mostly, and argues about the rest for a year. You are known in the province as the man who read the constitutions aloud at chapter, which is not the worst thing to be known for.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "religious_life",
+       "value": "eager"
+      },
+      {
+       "target": "reputation",
+       "key": "order",
+       "delta": 3
+      },
+      {
+       "target": "reputation",
+       "key": "community",
+       "delta": -2
+      },
+      {
+       "target": "reputation",
+       "key": "rome",
+       "delta": 2
+      },
+      {
+       "target": "stat",
+       "key": "theology",
+       "delta": 1
+      }
+     ]
+    },
+    {
+     "id": "faithful",
+     "label": "What the constitutions say, kept; what they allow, left to the house",
+     "outcome": "The house keeps what it must and keeps what it liked, and nobody reads the constitutions aloud. It is the quietest year the house has had.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "religious_life",
+       "value": "faithful"
+      },
+      {
+       "target": "reputation",
+       "key": "community",
+       "delta": 3
+      },
+      {
+       "target": "reputation",
+       "key": "order",
+       "delta": 1
+      },
+      {
+       "target": "reputation",
+       "key": "rome",
+       "delta": 1
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "minimal",
+     "label": "Nothing changes; the house liked what it had",
+     "outcome": "Nothing changes. The report to Rome, when the province writes it, says the house lives by its constitutions, and in the sense that matters it does.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "religious_life",
+       "value": "minimal"
+      },
+      {
+       "target": "reputation",
+       "key": "community",
+       "delta": 1
+      },
+      {
+       "target": "reputation",
+       "key": "rome",
+       "delta": -1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "av_announced",
+   "phase": [
+    "parochial_vicar",
+    "administrator",
+    "pastor"
+   ],
+   "campaign": "religious",
+   "beat": "apostolic_visitation",
+   "severity": "MAJOR",
+   "category": "chancery",
+   "baseWeight": 20,
+   "suppressYears": 2,
+   "pressure": [
+    "loyalty_vs_honesty"
+   ],
+   "requires": [
+    {
+     "type": "visitation",
+     "key": "scene",
+     "value": "announced"
+    },
+    {
+     "type": "flag",
+     "key": "office:provincial",
+     "value": false
+    }
+   ],
+   "title": "A Visitor Named",
+   "body": "The circular is read at chapter and then read again by every man alone: the Holy See has decided on an apostolic visitation of the province, and {visitor}, of another province of the order, will come within the season and see every friar who asks. The circular does not give the reason. The refectory does: {visitation_cause}. {@old_friar} says he has lived through one before, in 1974, and that the visitor was a good man and the decree was not.",
+   "choices": [
+    {
+     "id": "counsel",
+     "label": "Keep your own counsel until he comes",
+     "outcome": "You say nothing at table and less at recreation. The house watches who is writing letters. You are not.",
+     "effects": [
+      {
+       "target": "stat",
+       "key": "piety",
+       "delta": 1
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "write",
+     "label": "Write to him before he comes, so that he has your account first",
+     "outcome": "You write four pages and post them to another country. He answers in two lines, courteous, that he will hear you when he comes. The house's prior hears of the letter, as priors do.",
+     "effects": [
+      {
+       "target": "flag",
+       "key": "visitation:wrote",
+       "value": true
+      },
+      {
+       "target": "reputation",
+       "key": "rome",
+       "delta": 1
+      },
+      {
+       "target": "reputation",
+       "key": "community",
+       "delta": -2
+      },
+      {
+       "target": "reputation",
+       "key": "superiors",
+       "delta": -2
+      }
+     ]
+    },
+    {
+     "id": "tidy",
+     "label": "Help the house's prior put the house in the order the constitutions describe, before the visitor sees it",
+     "outcome": "The horarium goes back on the wall. Vespers is sung for the first time in a year, badly, and then better. Whatever the visitor finds, he will find a house that tried.",
+     "effects": [
+      {
+       "target": "reputation",
+       "key": "community",
+       "delta": 3
+      },
+      {
+       "target": "stat",
+       "key": "administration",
+       "delta": 1
+      },
+      {
+       "target": "reputation",
+       "key": "order",
+       "delta": 1
+      }
+     ]
+    }
+   ],
+   "once": true
+  },
+  {
+   "id": "av_announced_provincial",
+   "phase": [
+    "parochial_vicar",
+    "administrator",
+    "pastor"
+   ],
+   "campaign": "religious",
+   "beat": "apostolic_visitation",
+   "severity": "MAJOR",
+   "category": "chancery",
+   "baseWeight": 20,
+   "suppressYears": 2,
+   "pressure": [
+    "ambition_vs_integrity"
+   ],
+   "requires": [
+    {
+     "type": "visitation",
+     "key": "scene",
+     "value": "announced"
+    },
+    {
+     "type": "flag",
+     "key": "office:provincial",
+     "value": true
+    }
+   ],
+   "title": "The Decree on Your Desk",
+   "body": "The dicastery's letter is two paragraphs over the prefect's signature, and it has decided your next two years: the Holy See has decided on an apostolic visitation of the province, and {visitor}, of another province of the order, is named visitor. The books, the files, and every house are to be at his disposal. Everyone will know the reason before you have told the council: {visitation_cause}.",
+   "choices": [
+    {
+     "id": "cooperate",
+     "label": "Circulate it the same day, open every file, and tell the houses each man may see him alone",
+     "outcome": "The province reads your circular before it reads the rumour, which is the only advantage a provincial ever has. The visitor, when he comes, finds the files already on the table.",
+     "effects": [
+      {
+       "target": "reputation",
+       "key": "rome",
+       "delta": 3
+      },
+      {
+       "target": "reputation",
+       "key": "province",
+       "delta": 2
+      },
+      {
+       "target": "reputation",
+       "key": "superiors",
+       "delta": 2
+      },
+      {
+       "target": "stat",
+       "key": "administration",
+       "delta": 1
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "account",
+     "label": "Write the province's own account of itself first, and send it to Rome before he arrives",
+     "outcome": "Forty pages in three weeks, and true, mostly. Rome reads it, or files it. The council thinks it was wise; the visitor, when he comes, has read it and says nothing about it.",
+     "effects": [
+      {
+       "target": "reputation",
+       "key": "rome",
+       "delta": -2
+      },
+      {
+       "target": "reputation",
+       "key": "province",
+       "delta": 3
+      },
+      {
+       "target": "reputation",
+       "key": "order",
+       "delta": 1
+      },
+      {
+       "target": "stat",
+       "key": "administration",
+       "delta": 2
+      },
+      {
+       "target": "strain",
+       "key": "strain",
+       "delta": 6
+      }
+     ]
+    },
+    {
+     "id": "general",
+     "label": "Telephone the head of the order before you do anything else",
+     "outcome": "He has known for a month and could not tell you. He tells you now what the dicastery is looking for, which is not what the refectory thinks, and what to have ready.",
+     "effects": [
+      {
+       "target": "reputation",
+       "key": "order",
+       "delta": 3
+      },
+      {
+       "target": "reputation",
+       "key": "superiors",
+       "delta": 2
+      },
+      {
+       "target": "reputation",
+       "key": "rome",
+       "delta": -1
+      }
+     ]
+    }
+   ],
+   "once": true
+  },
+  {
+   "id": "av_house",
+   "phase": [
+    "parochial_vicar",
+    "administrator",
+    "pastor"
+   ],
+   "campaign": "religious",
+   "beat": "apostolic_visitation",
+   "severity": "NOTABLE",
+   "category": "chancery",
+   "baseWeight": 20,
+   "suppressYears": 2,
+   "pressure": [
+    "loyalty_vs_honesty"
+   ],
+   "requires": [
+    {
+     "type": "visitation",
+     "key": "scene",
+     "value": "house"
+    }
+   ],
+   "title": "Three Days",
+   "body": "{visitor} is in the house for three days, in the guest room at the end of the corridor, and the horarium is kept for three days as it has not been kept in years: every hour in choir, the table in silence with a reader, recreation with everyone present and nobody saying anything. He sees the books, the sacristy, the accounts, the kitchen. On the second evening he sits next to you at recreation and asks what the house is usually like.",
+   "choices": [
+    {
+     "id": "plain",
+     "label": "Tell him what it is usually like",
+     "outcome": "You tell him: which hours are said and which are not, who is at table and who eats at the hospital. He nods and does not write it down, which means he already knew.",
+     "effects": [
+      {
+       "target": "reputation",
+       "key": "rome",
+       "delta": 2
+      },
+      {
+       "target": "stat",
+       "key": "piety",
+       "delta": 1
+      },
+      {
+       "target": "reputation",
+       "key": "community",
+       "delta": -2
+      },
+      {
+       "target": "flag",
+       "key": "visitation:honest_house",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": "best",
+     "label": "Tell him it is a good house, which is true, and leave the rest",
+     "outcome": "It is a good house. He has seen worse this month and says so. The horarium comes off the wall the day after he leaves.",
+     "effects": [
+      {
+       "target": "reputation",
+       "key": "community",
+       "delta": 2
+      },
+      {
+       "target": "reputation",
+       "key": "rome",
+       "delta": 1
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "joke",
+     "label": "Say that it is usually like this, and let him hear that it is not",
+     "outcome": "He laughs, which was the point, and the house is grateful to you for a week. He also, you notice, sits next to {@old_friar} the next evening.",
+     "effects": [
+      {
+       "target": "reputation",
+       "key": "community",
+       "delta": 3
+      },
+      {
+       "target": "stat",
+       "key": "charisma",
+       "delta": 1
+      },
+      {
+       "target": "reputation",
+       "key": "rome",
+       "delta": -1
+      }
+     ]
+    }
+   ],
+   "once": true
+  },
+  {
+   "id": "av_interview",
+   "phase": [
+    "parochial_vicar",
+    "administrator",
+    "pastor"
+   ],
+   "campaign": "religious",
+   "beat": "apostolic_visitation",
+   "severity": "MAJOR",
+   "category": "chancery",
+   "baseWeight": 20,
+   "suppressYears": 2,
+   "pressure": [
+    "loyalty_vs_honesty",
+    "friendship_vs_duty"
+   ],
+   "requires": [
+    {
+     "type": "visitation",
+     "key": "scene",
+     "value": "interview"
+    },
+    {
+     "type": "flag",
+     "key": "office:provincial",
+     "value": false
+    }
+   ],
+   "title": "An Hour With the Door Shut",
+   "body": "{visitor} sees every man who asks, alone, for as long as he needs, and everyone has asked. Your hour is on a Tuesday, in the parlour, the door shut, a notebook he does not open. He asks about the house, the province, the men who left, the money, and the last word from Rome and what became of it here. He asks it as a man who has been a provincial himself and knows what the answers cost. What he hears goes to Rome and nowhere else.",
+   "choices": [
+    {
+     "id": "plain",
+     "label": "Tell him what you know, all of it, as plainly as you can",
+     "outcome": "You do. Some of it he has heard from others and some of it he has not, and the second kind he asks about twice. You come out of the parlour lighter and the house looks at you as if it knew.",
+     "effects": [
+      {
+       "target": "flag",
+       "key": "visitation:spoke",
+       "value": "plain"
+      },
+      {
+       "target": "stat",
+       "key": "piety",
+       "delta": 2
+      },
+      {
+       "target": "reputation",
+       "key": "community",
+       "delta": -2
+      }
+     ]
+    },
+    {
+     "id": "loyal",
+     "label": "Tell him the province is better than its reputation, and mean it",
+     "outcome": "You say what can be said for the province, which is a good deal, and he lets you say it. Whether it changes the report you will never know.",
+     "effects": [
+      {
+       "target": "flag",
+       "key": "visitation:spoke",
+       "value": "loyal"
+      },
+      {
+       "target": "reputation",
+       "key": "province",
+       "delta": 3
+      },
+      {
+       "target": "reputation",
+       "key": "community",
+       "delta": 2
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "silent",
+     "label": "Answer what he asks and volunteer nothing",
+     "outcome": "He asks good questions and you answer them. It takes twenty minutes of the hour. He thanks you, and you cannot tell what he thinks, which is presumably how he became a visitor.",
+     "effects": [
+      {
+       "target": "flag",
+       "key": "visitation:spoke",
+       "value": "silent"
+      },
+      {
+       "target": "stat",
+       "key": "administration",
+       "delta": 1
+      }
+     ]
+    }
+   ],
+   "once": true
+  },
+  {
+   "id": "av_interview_provincial",
+   "phase": [
+    "parochial_vicar",
+    "administrator",
+    "pastor"
+   ],
+   "campaign": "religious",
+   "beat": "apostolic_visitation",
+   "severity": "MAJOR",
+   "category": "chancery",
+   "baseWeight": 20,
+   "suppressYears": 2,
+   "pressure": [
+    "ambition_vs_integrity",
+    "loyalty_vs_honesty"
+   ],
+   "requires": [
+    {
+     "type": "visitation",
+     "key": "scene",
+     "value": "interview"
+    },
+    {
+     "type": "flag",
+     "key": "office:provincial",
+     "value": true
+    }
+   ],
+   "title": "The Books Open",
+   "body": "{visitor} has a week at the provincial curia, in the room next to yours, with the books, the personnel files, and the minutes of your council. On the fourth day he asks for the files of the men who left in your term, and on the fifth he asks you to sit down. He asks about the money, the houses that are dying, the last word from Rome and what you did with it, and the letter someone in the province wrote to the dicastery, which he does not show you.",
+   "choices": [
+    {
+     "id": "plain",
+     "label": "Tell him what you know, the failures first",
+     "outcome": "You give him the failures before he finds them, and he finds fewer than you gave him. He says, at the end, that he has rarely been given the failures first, and writes that down.",
+     "effects": [
+      {
+       "target": "flag",
+       "key": "visitation:spoke",
+       "value": "plain"
+      },
+      {
+       "target": "reputation",
+       "key": "rome",
+       "delta": 3
+      },
+      {
+       "target": "stat",
+       "key": "piety",
+       "delta": 1
+      },
+      {
+       "target": "strain",
+       "key": "strain",
+       "delta": 6
+      }
+     ]
+    },
+    {
+     "id": "loyal",
+     "label": "Defend the province and every decision of your term",
+     "outcome": "You defend it well; you have had two years to prepare. He hears you out and asks the same questions again in the afternoon, differently.",
+     "effects": [
+      {
+       "target": "flag",
+       "key": "visitation:spoke",
+       "value": "loyal"
+      },
+      {
+       "target": "reputation",
+       "key": "province",
+       "delta": 3
+      },
+      {
+       "target": "reputation",
+       "key": "rome",
+       "delta": -2
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "silent",
+     "label": "Answer what is asked, produce what is asked for, and nothing more",
+     "outcome": "It is the correct posture and he recognises it as one. The week ends with both of you tired and neither of you the wiser about the other.",
+     "effects": [
+      {
+       "target": "flag",
+       "key": "visitation:spoke",
+       "value": "silent"
+      },
+      {
+       "target": "stat",
+       "key": "administration",
+       "delta": 1
+      }
+     ]
+    }
+   ],
+   "once": true
+  },
+  {
+   "id": "av_report",
+   "phase": [
+    "parochial_vicar",
+    "administrator",
+    "pastor"
+   ],
+   "campaign": "religious",
+   "beat": "apostolic_visitation",
+   "severity": "NOTABLE",
+   "category": "chancery",
+   "baseWeight": 20,
+   "suppressYears": 2,
+   "pressure": [
+    "loyalty_vs_honesty"
+   ],
+   "requires": [
+    {
+     "type": "visitation",
+     "key": "scene",
+     "value": "report"
+    },
+    {
+     "type": "flag",
+     "key": "office:provincial",
+     "value": false
+    }
+   ],
+   "title": "The Report Gone to Rome",
+   "body": "{visitor} has gone home, and the report has gone to Rome, and nothing has come back. {@provincial} has been sent the dicastery's questions and asked to answer them in writing, and does not say what they are, which the province takes to mean they are bad. At table the men who spoke to the visitor look at the men who did not.",
+   "choices": [
+    {
+     "id": "ask",
+     "label": "Ask {@provincial} what the questions are",
+     "outcome": "He tells you two of them, which is more than he has told anyone, and asks you what you said in the parlour. You tell him the truth, which is that it is under the seal, and he accepts it.",
+     "effects": [
+      {
+       "target": "relationship",
+       "key": "@provincial",
+       "delta": 4
+      },
+      {
+       "target": "reputation",
+       "key": "superiors",
+       "delta": 1
+      }
+     ]
+    },
+    {
+     "id": "nothing",
+     "label": "Say nothing at table about any of it",
+     "outcome": "The house goes on. The men who spoke and the men who did not learn to sit together again by Advent.",
+     "effects": [
+      {
+       "target": "reputation",
+       "key": "community",
+       "delta": 2
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "write",
+     "label": "Write to {visitor} once more, with what you did not say in the parlour",
+     "outcome": "He answers that the report is written and that he has kept your letter. Whether it went into anything you will never know.",
+     "effects": [
+      {
+       "target": "reputation",
+       "key": "rome",
+       "delta": 1
+      },
+      {
+       "target": "reputation",
+       "key": "community",
+       "delta": -1
+      },
+      {
+       "target": "flag",
+       "key": "visitation:wrote",
+       "value": true
+      }
+     ]
+    }
+   ],
+   "once": true
+  },
+  {
+   "id": "av_report_provincial",
+   "phase": [
+    "parochial_vicar",
+    "administrator",
+    "pastor"
+   ],
+   "campaign": "religious",
+   "beat": "apostolic_visitation",
+   "severity": "NOTABLE",
+   "category": "chancery",
+   "baseWeight": 20,
+   "suppressYears": 2,
+   "pressure": [
+    "ambition_vs_integrity"
+   ],
+   "requires": [
+    {
+     "type": "visitation",
+     "key": "scene",
+     "value": "report"
+    },
+    {
+     "type": "flag",
+     "key": "office:provincial",
+     "value": true
+    }
+   ],
+   "title": "Twelve Questions",
+   "body": "The dicastery's questions come in a letter of twelve numbered paragraphs, with a month to answer. They are the questions {visitor} asked you in the room next to yours, worded by someone in Rome who has read his report, and two of them are questions you did not know he had thought to ask. The council wants to see them. Your secretary wants to know who is going to write the answers.",
+   "choices": [
+    {
+     "id": "self",
+     "label": "Answer them yourself, plainly, in a week",
+     "outcome": "Twelve answers, each a page, none of them what the council would have written. Rome does not acknowledge them. Rome never does; the decree will be the acknowledgement.",
+     "effects": [
+      {
+       "target": "reputation",
+       "key": "rome",
+       "delta": 3
+      },
+      {
+       "target": "stat",
+       "key": "administration",
+       "delta": 2
+      },
+      {
+       "target": "strain",
+       "key": "strain",
+       "delta": 8
+      }
+     ]
+    },
+    {
+     "id": "council",
+     "label": "Have the council answer them with you",
+     "outcome": "Four men and a month, and the answers are the province's rather than yours, which is what you wanted and what the dicastery may not.",
+     "effects": [
+      {
+       "target": "reputation",
+       "key": "order",
+       "delta": 2
+      },
+      {
+       "target": "reputation",
+       "key": "province",
+       "delta": 3
+      },
+      {
+       "target": "stat",
+       "key": "administration",
+       "delta": 1
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "letter",
+     "label": "Answer the letter of each question and not the question",
+     "outcome": "Twelve correct answers. Your secretary, reading them over, says they are the best answers he has ever seen to twelve other questions.",
+     "effects": [
+      {
+       "target": "reputation",
+       "key": "rome",
+       "delta": -3
+      },
+      {
+       "target": "reputation",
+       "key": "province",
+       "delta": 2
+      }
+     ]
+    }
+   ],
+   "once": true
+  },
+  {
+   "id": "av_decree_clean",
+   "phase": [
+    "parochial_vicar",
+    "administrator",
+    "pastor"
+   ],
+   "campaign": "religious",
+   "beat": "apostolic_visitation",
+   "severity": "NOTABLE",
+   "category": "chancery",
+   "baseWeight": 20,
+   "suppressYears": 2,
+   "pressure": [
+    "loyalty_vs_honesty"
+   ],
+   "requires": [
+    {
+     "type": "visitation",
+     "key": "scene",
+     "value": "decree"
+    },
+    {
+     "type": "visitation",
+     "key": "outcome",
+     "value": "clean"
+    }
+   ],
+   "title": "In Good Order",
+   "body": "The decree is read in every house on the same Sunday: the visitation has found the province in good order, faithful to its constitutions and its work. Three recommendations, none of them a surprise; a line of thanks to {visitor}; the dicastery's blessing. The refectory takes a week to believe it and then, being a refectory, begins to say it had known all along.",
+   "choices": [
+    {
+     "id": "mass",
+     "label": "Say a Mass of thanksgiving for the province, and say why",
+     "outcome": "Half the house comes, which for a weekday is everyone. {@old_friar} says afterwards that in 1974 nobody sang.",
+     "effects": [
+      {
+       "target": "stat",
+       "key": "piety",
+       "delta": 1
+      },
+      {
+       "target": "reputation",
+       "key": "community",
+       "delta": 3
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "nothing",
+     "label": "Say nothing; the province was never in danger",
+     "outcome": "You were right, and it is not remembered, which is the usual fate of having been right about a province.",
+     "effects": []
+    },
+    {
+     "id": "thank",
+     "label": "Write to {visitor} to thank him",
+     "outcome": "He answers that the province did the work and he only wrote it down, which is what visitors say, and is sometimes true.",
+     "effects": [
+      {
+       "target": "reputation",
+       "key": "rome",
+       "delta": 2
+      },
+      {
+       "target": "reputation",
+       "key": "order",
+       "delta": 1
+      }
+     ]
+    }
+   ],
+   "once": true
+  },
+  {
+   "id": "av_decree_norms",
+   "phase": [
+    "parochial_vicar",
+    "administrator",
+    "pastor"
+   ],
+   "campaign": "religious",
+   "beat": "apostolic_visitation",
+   "severity": "MAJOR",
+   "category": "chancery",
+   "baseWeight": 20,
+   "suppressYears": 2,
+   "pressure": [
+    "loyalty_vs_honesty",
+    "belief_vs_safety"
+   ],
+   "requires": [
+    {
+     "type": "visitation",
+     "key": "scene",
+     "value": "decree"
+    },
+    {
+     "type": "visitation",
+     "key": "outcome",
+     "value": "norms"
+    }
+   ],
+   "title": "The Norms",
+   "body": "The decree is read in every house on the same Sunday, and it is longer than anyone expected: the province is faithful in its work and uneven in its common life, and norms follow, binding on every house. The hours in common. The habit at the work as the constitutions ask. A formation reviewed by the general curia. A report from the province each year for three years. The older men read it as a vindication and the younger as a rebuke, and at table on Monday both are saying so.",
+   "choices": [
+    {
+     "id": "letter",
+     "label": "Keep the norms to the letter from Monday, and be seen to",
+     "outcome": "You are in choir for every hour and in the habit on the wards, and the men who were already doing it are glad of you, and the men who were not are not.",
+     "effects": [
+      {
+       "target": "reputation",
+       "key": "rome",
+       "delta": 2
+      },
+      {
+       "target": "reputation",
+       "key": "order",
+       "delta": 2
+      },
+      {
+       "target": "reputation",
+       "key": "superiors",
+       "delta": 2
+      },
+      {
+       "target": "reputation",
+       "key": "community",
+       "delta": -2
+      },
+      {
+       "target": "stat",
+       "key": "piety",
+       "delta": 1
+      }
+     ]
+    },
+    {
+     "id": "can",
+     "label": "Keep them as the house can, and say nothing about anyone else",
+     "outcome": "The house keeps most of them, most of the time, which is what the dicastery will find in three years and what it expects.",
+     "effects": [
+      {
+       "target": "reputation",
+       "key": "community",
+       "delta": 2
+      },
+      {
+       "target": "reputation",
+       "key": "rome",
+       "delta": 1
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "nobody",
+     "label": "Say at chapter that the norms are a rebuke to nobody in this room, and mean it",
+     "outcome": "It is the right thing said at the right moment, and the house, which had been about to divide, does not. {@old_friar} says it was the best thing said at chapter in a decade, and that he would have said it himself.",
+     "effects": [
+      {
+       "target": "reputation",
+       "key": "community",
+       "delta": 4
+      },
+      {
+       "target": "reputation",
+       "key": "order",
+       "delta": 1
+      },
+      {
+       "target": "stat",
+       "key": "charisma",
+       "delta": 1
+      }
+     ]
+    }
+   ],
+   "once": true
+  },
+  {
+   "id": "av_decree_closure",
+   "phase": [
+    "parochial_vicar",
+    "administrator",
+    "pastor"
+   ],
+   "campaign": "religious",
+   "beat": "apostolic_visitation",
+   "severity": "MAJOR",
+   "category": "chancery",
+   "baseWeight": 20,
+   "suppressYears": 2,
+   "pressure": [
+    "loyalty_vs_honesty",
+    "money"
+   ],
+   "requires": [
+    {
+     "type": "visitation",
+     "key": "scene",
+     "value": "decree"
+    },
+    {
+     "type": "visitation",
+     "key": "outcome",
+     "value": "closure"
+    }
+   ],
+   "title": "A House Closed by Decree",
+   "body": "The decree is read in every house on the same Sunday. Norms for the common life, binding on every house; and {closed_house} is to be closed by the end of the year, its men reassigned. Nobody in the province had expected Rome to close a house. The men of {closed_house} had not; they are given a month. {@confrere} lived there for his first years and goes quiet at table for a week.",
+   "choices": [
+    {
+     "id": "go",
+     "label": "Go to the last Mass there, and stay for the packing",
+     "outcome": "Nine men, a full church for once, a homily by a man who is too angry to preach it well. You carry boxes on the Monday. It is remembered in the province that you came.",
+     "effects": [
+      {
+       "target": "reputation",
+       "key": "community",
+       "delta": 3
+      },
+      {
+       "target": "reputation",
+       "key": "province",
+       "delta": 3
+      },
+      {
+       "target": "stat",
+       "key": "piety",
+       "delta": 1
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "write",
+     "label": "Write to Rome that the decree is wrong, and say why",
+     "outcome": "The dicastery answers in six weeks that the decree stands. Your letter is in the file with the others, and the province knows you wrote one, which is worth something to some of it and the opposite to the rest.",
+     "effects": [
+      {
+       "target": "reputation",
+       "key": "rome",
+       "delta": -6
+      },
+      {
+       "target": "reputation",
+       "key": "province",
+       "delta": 4
+      },
+      {
+       "target": "reputation",
+       "key": "order",
+       "delta": 2
+      },
+      {
+       "target": "reputation",
+       "key": "superiors",
+       "delta": -2
+      }
+     ]
+    },
+    {
+     "id": "nothing",
+     "label": "Say nothing; a house was going to close anyway",
+     "outcome": "It was. Somebody says so at table, and it is you, and it is not forgiven for a season.",
+     "effects": [
+      {
+       "target": "reputation",
+       "key": "community",
+       "delta": -3
+      },
+      {
+       "target": "stat",
+       "key": "administration",
+       "delta": 1
+      }
+     ]
+    }
+   ],
+   "once": true
+  },
+  {
+   "id": "av_decree_commissary",
+   "phase": [
+    "parochial_vicar",
+    "administrator",
+    "pastor"
+   ],
+   "campaign": "religious",
+   "beat": "apostolic_visitation",
+   "severity": "MAJOR",
+   "category": "chancery",
+   "baseWeight": 20,
+   "suppressYears": 2,
+   "pressure": [
+    "loyalty_vs_honesty",
+    "friendship_vs_duty"
+   ],
+   "requires": [
+    {
+     "type": "visitation",
+     "key": "scene",
+     "value": "decree"
+    },
+    {
+     "type": "visitation",
+     "key": "outcome",
+     "value": "commissary"
+    },
+    {
+     "type": "flag",
+     "key": "visitation:removed",
+     "value": false
+    }
+   ],
+   "title": "The Commissary",
+   "body": "The decree is read in every house on the same Sunday: {removed_provincial} is relieved of the office of provincial with immediate effect, and {visitor}, who a year ago sat next to you at recreation, is named commissary of the province, with a provincial's powers, until a chapter is held within the year. Norms follow. The province has not been governed from outside itself in living memory. The commissary arrives at the curia with one suitcase.",
+   "choices": [
+    {
+     "id": "speak",
+     "label": "Go to the commissary's first chapter and speak for the province's men",
+     "outcome": "You say what can be said for the men who served under the man Rome removed, which is a good deal, and the commissary listens as he listened in the parlour. It is remembered that somebody said it.",
+     "effects": [
+      {
+       "target": "reputation",
+       "key": "order",
+       "delta": 2
+      },
+      {
+       "target": "reputation",
+       "key": "superiors",
+       "delta": 1
+      },
+      {
+       "target": "reputation",
+       "key": "province",
+       "delta": 3
+      },
+      {
+       "target": "stat",
+       "key": "charisma",
+       "delta": 1
+      }
+     ]
+    },
+    {
+     "id": "write",
+     "label": "Write to the man who was provincial",
+     "outcome": "He answers from the house he has gone to, at the far end of the province, four lines, the last of them a joke. You are one of nine who wrote, he says, out of a province of a hundred and forty.",
+     "effects": [
+      {
+       "target": "reputation",
+       "key": "province",
+       "delta": 3
+      },
+      {
+       "target": "reputation",
+       "key": "order",
+       "delta": 1
+      },
+      {
+       "target": "stat",
+       "key": "piety",
+       "delta": 1
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "down",
+     "label": "Keep your head down until the chapter",
+     "outcome": "It is a year. The commissary is fair and remote and the province holds its breath, and at the chapter it elects a man nobody expected, which is what provinces do after a year like that.",
+     "effects": [
+      {
+       "target": "reputation",
+       "key": "community",
+       "delta": 1
+      }
+     ]
+    }
+   ],
+   "once": true
+  },
+  {
+   "id": "av_decree_commissary_provincial",
+   "phase": [
+    "parochial_vicar",
+    "administrator",
+    "pastor"
+   ],
+   "campaign": "religious",
+   "beat": "apostolic_visitation",
+   "severity": "CRITICAL",
+   "category": "chancery",
+   "baseWeight": 20,
+   "suppressYears": 2,
+   "pressure": [
+    "ambition_vs_integrity",
+    "doubt"
+   ],
+   "requires": [
+    {
+     "type": "visitation",
+     "key": "scene",
+     "value": "decree"
+    },
+    {
+     "type": "visitation",
+     "key": "outcome",
+     "value": "commissary"
+    },
+    {
+     "type": "flag",
+     "key": "visitation:removed",
+     "value": true
+    }
+   ],
+   "title": "The Seal and the Files",
+   "body": "The decree is addressed to you. The Holy See thanks you for your service and relieves you of the office of provincial with immediate effect; {visitor}, who a year ago sat in the room next to yours with the books open, is named commissary of the province until a chapter is held within the year. You are to hand him the seal and the files this week. The letter does not say why. It does not need to. The council is in the corridor, not knowing whether to come in.",
+   "choices": [
+    {
+     "id": "grace",
+     "label": "Hand him the seal on Monday, with the files in order and a page of what he will need to know",
+     "outcome": "He takes it as a man takes a thing he did not want. The page you wrote is on his desk for a year, the men of the curia tell you later, and used.",
+     "effects": [
+      {
+       "target": "reputation",
+       "key": "rome",
+       "delta": 2
+      },
+      {
+       "target": "reputation",
+       "key": "order",
+       "delta": 3
+      },
+      {
+       "target": "reputation",
+       "key": "superiors",
+       "delta": 2
+      },
+      {
+       "target": "reputation",
+       "key": "province",
+       "delta": 2
+      },
+      {
+       "target": "strain",
+       "key": "strain",
+       "delta": 10
+      },
+      {
+       "target": "stat",
+       "key": "piety",
+       "delta": 2
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "general",
+     "label": "Go to the head of the order first",
+     "outcome": "He receives you the same week and tells you, kindly, what you already know: the decree is the Holy See's and he cannot touch it. He tells you also what house he would go to, if he were you.",
+     "effects": [
+      {
+       "target": "reputation",
+       "key": "order",
+       "delta": 1
+      },
+      {
+       "target": "reputation",
+       "key": "rome",
+       "delta": -3
+      },
+      {
+       "target": "strain",
+       "key": "strain",
+       "delta": 6
+      }
+     ]
+    },
+    {
+     "id": "far",
+     "label": "Go to a house at the far end of the province, and ask for nothing",
+     "outcome": "You ask the commissary for the smallest house he has and get it. The men there had not expected to have you. By Easter they have stopped calling you Father Provincial, which you asked them to do on the first day.",
+     "effects": [
+      {
+       "target": "reputation",
+       "key": "province",
+       "delta": 4
+      },
+      {
+       "target": "stat",
+       "key": "piety",
+       "delta": 3
+      },
+      {
+       "target": "reputation",
+       "key": "community",
+       "delta": 2
+      },
+      {
+       "target": "strain",
+       "key": "strain",
+       "delta": -4
+      }
+     ]
+    }
+   ],
+   "once": true
+  }
+ ]
 }

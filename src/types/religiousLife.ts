@@ -503,6 +503,35 @@ export interface Province {
   /** The one visible problem. */
   complication: string;
   line: string;
+  /** E3 §16D: Rome's visitation of the province, while one is open; and the week the last one closed. */
+  visitation?: ApostolicVisitation;
+  lastVisitationWeek?: number;
+}
+
+/** E3 §16D: the apostolic visitation of a province, a multi-year arc. */
+export type VisitationStage = 'announced' | 'visiting' | 'report' | 'decree';
+/** Why Rome came: a document the province slow-walked or the man defied, a divided province, a shrinking one, or a complaint. */
+export type VisitationCause = 'document' | 'division' | 'decline' | 'complaint';
+export type VisitationOutcome = 'clean' | 'norms' | 'closure' | 'commissary';
+export type VisitationSceneKind = 'announced' | 'house' | 'interview' | 'report' | 'decree';
+
+export interface ApostolicVisitation {
+  id: string;
+  cause: VisitationCause;
+  /** The visitor: a friar of another province, named by Rome, an NPC of the seed. */
+  visitorId: string;
+  openedWeek: number;
+  stage: VisitationStage;
+  /** The week the next stage begins. */
+  nextWeek: number;
+  /** The scenes waiting for the man, each with the week it is due. */
+  scenes: { kind: VisitationSceneKind; dueWeek: number }[];
+  outcome?: VisitationOutcome;
+  /** What the report found against the province, 0..100, once it is written. */
+  findings?: number;
+  /** The house the decree closed; the provincial it removed. */
+  closedHouseId?: string;
+  removedId?: string;
 }
 
 export type ChapterLevel = 'house' | 'provincial' | 'general';
