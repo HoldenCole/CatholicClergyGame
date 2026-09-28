@@ -4,10 +4,13 @@ import Sheet from './Sheet';
 import Portrait from './portraits/Portrait';
 import { portraitForNpc, yearOf } from './portraits/spec';
 import TalkButton from './parish/TalkButton';
+import { LastTalk } from './parish/TalkButton';
+import { ENEMIES, mayMend } from '@/systems/enemies';
 
 /** The circle: everyone who matters to the man, across the whole life, and how each of them holds him now. */
 export default function CirclePanel() {
   const game = useGameStore((s) => s.game);
+  const mend = useGameStore((s) => s.mendWith);
   if (!game?.character) return null;
   const rows = circleOf(game);
   const year = yearOf(game.clock.startDay, game.clock.week);
@@ -32,11 +35,13 @@ export default function CirclePanel() {
                   {r.history && <span className="ink-faint block text-xs">{r.history}</span>}
                 </span>
                 {!r.status && (r.group === 'class' || r.group === 'brothers' || r.group === 'chancery' || r.group === 'parish') && <TalkButton npcId={r.npc.id} />}
+                {!r.status && r.npc.relationship <= ENEMIES.mendAt && (() => { const may = mayMend(game, r.npc.id); return <button className="pbtn-link text-xs" disabled={!may.ok} title={may.ok ? 'Two hours of the coming week: go to him, and see what kind of man he is' : may.why ?? ''} onClick={() => mend(r.npc.id)}>make amends</button>; })()}
               </li>
             ))}
           </ul>
         </div>
       ))}
+      <LastTalk npcIds={rows.map((r) => r.npc.id)} />
     </Sheet>
   );
 }

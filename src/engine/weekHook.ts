@@ -20,6 +20,7 @@ import { presetById } from '@/content/dioceses';
 import { staffWeek } from '@/systems/staff';
 import { deaneryWeek } from '@/systems/deanery';
 import { regardWeek } from '@/systems/regard';
+import { christmasLine } from '@/systems/kin';
 import { returnOfTheFormed, seminarianWeek, summerSeminarian } from '@/systems/formed';
 import { isYearStart } from './time';
 import { seminaryWeek } from '@/systems/seminaryWeek';
@@ -543,6 +544,9 @@ export function parishWeekHook(deps: EventDeps): WeekHook {
     const named = nameDayWeek(next);
     next = named.state;
     if (named.line) next = addDigestLine(next, named.line);
+    // Christmas at the family's, with whoever is left at the table (D9).
+    const table = christmasLine(next);
+    if (table) next = addDigestLine(next, table);
     if (isYearStart(next.clock)) {
       const owed = retreatYearEnd(next);
       next = owed.state;

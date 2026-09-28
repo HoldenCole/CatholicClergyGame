@@ -4,6 +4,7 @@ import { publicRecord, type PublicRecord } from './record';
 import { classmateLines, relationshipWord, type ClassmateLine } from './classmates';
 import { yearOf } from '@/ui/portraits/spec';
 import { bondCounts, bondsPhrase } from './bonds';
+import { mourners } from './lastDecade';
 
 /**
  * A life, read back at the end: the posts, the bishops, the stands, the
@@ -43,6 +44,8 @@ export interface Life {
   sacraments: { baptized: number; married: number; buried: number; anointed: number };
   /** The people who carry the most of you. */
   remembered: { npc: Npc; phrase: string }[];
+  /** Who came to the funeral, or who would. */
+  mourners: Npc[];
 }
 
 function yearsWord(weeks: number): string {
@@ -98,5 +101,5 @@ export function lifeOf(state: GameState): Life {
 
   const counts = bondCounts(state);
   const remembered = Object.values(state.npcs).filter((n) => (n.bonds?.length ?? 0) >= 2).sort((a, b) => (b.bonds!.length - a.bonds!.length) || b.relationship - a.relationship).slice(0, 6).map((npc) => ({ npc, phrase: bondsPhrase(npc) }));
-  return { years, age, posts, bishops, record: publicRecord(state), friends, enemies, classmates: classmateLines(state), letters, founded, decisions: state.history.length, file, sacraments: { baptized: counts.baptized, married: counts.married, buried: counts.buried, anointed: counts.anointed }, remembered };
+  return { years, age, posts, bishops, record: publicRecord(state), friends, enemies, classmates: classmateLines(state), letters, founded, decisions: state.history.length, file, sacraments: { baptized: counts.baptized, married: counts.married, buried: counts.buried, anointed: counts.anointed }, remembered, mourners: mourners(state) };
 }

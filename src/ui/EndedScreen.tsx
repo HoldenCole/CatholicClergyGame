@@ -127,6 +127,9 @@ export default function EndedScreen() {
             <p className="text-sm">
               You baptized {life.sacraments.baptized}, married {life.sacraments.married}, buried {life.sacraments.buried}, and anointed {life.sacraments.anointed} of the people whose names you knew.
             </p>
+            {life.mourners.length > 0 && (
+              <p className="ink-muted mt-2 text-sm">{game.mode.kind === 'ended' && game.mode.ending === 'died' ? 'At the funeral' : 'Who would come'}: {life.mourners.map((n) => `${n.title ? `${n.title} ` : ''}${n.name.first} ${n.name.last}`).join(', ')}.</p>
+            )}
             {life.remembered.length > 0 && (
               <ul className="mt-1 flex flex-col gap-0.5 text-sm">
                 {life.remembered.map((r) => <li key={r.npc.id} className="ink-muted">{r.npc.name.first} {r.npc.name.last}, {r.phrase}.</li>)}

@@ -1275,6 +1275,302 @@
           "outcome": "He finds someone else, and you hear about it from a third man, which is how you learn what it cost."
         }
       ]
+    },
+    {
+      "id": "ml_bloc_lost_you",
+      "from": "old_bloc",
+      "weight": 0,
+      "asks": true,
+      "suppressYears": 1,
+      "requires": [],
+      "title": "You were ours",
+      "body": [
+        "Father,",
+        "I have read what you have been saying lately, and so has everyone I know. For years you said what we said, and said it better, and we were glad of you. I do not know what happened. I would like to hear it from you before I hear it from the men who are enjoying it.",
+        "{sender}"
+      ],
+      "replies": [
+        {
+          "id": "own",
+          "label": "Own it: you changed your mind, and say why",
+          "hours": 2,
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@sender",
+              "delta": -6
+            },
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": 3
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 4
+            }
+          ],
+          "outcome": "He does not agree, and says so, and shakes your hand, and tells the others you were straight with him, which from him is a great deal."
+        },
+        {
+          "id": "explain",
+          "label": "Explain that the words changed, not the man",
+          "hours": 1,
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@sender",
+              "delta": -3
+            }
+          ],
+          "outcome": "He nods the way a man nods at a homily he has decided not to argue with."
+        },
+        {
+          "id": "deny",
+          "label": "Deny that anything has changed",
+          "hours": 0,
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@sender",
+              "delta": 2
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": -8
+            },
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": -3
+            }
+          ],
+          "outcome": "He believes you for a week, and then he reads the record, and then he tells the others what you said to his face."
+        }
+      ]
+    },
+    {
+      "id": "ml_kin_wedding",
+      "from": "kin",
+      "weight": 0,
+      "asks": true,
+      "suppressYears": 1,
+      "requires": [],
+      "title": "Would you marry us",
+      "body": [
+        "Uncle,",
+        "We are getting married in October and we would like it to be you. Mom says you are busy and I should not ask and she is the one who told me to ask. If you cannot, say so; but it would mean something to her, and to me, and I think to Grandma, wherever she is looking down from.",
+        "{sender}"
+      ],
+      "replies": [
+        {
+          "id": "yes",
+          "label": "Do the wedding",
+          "hours": 6,
+          "effects": [
+            {
+              "target": "bond",
+              "key": "@sender",
+              "value": "married:the two of them"
+            },
+            {
+              "target": "relationship",
+              "key": "@sender",
+              "delta": 20
+            }
+          ],
+          "outcome": "The family in the front pews, your sister crying at the part where you say the names, and afterward a nephew who has never called you anything but Father calling you Uncle in front of the whole hall."
+        },
+        {
+          "id": "no",
+          "label": "Write that you cannot, and send a chalice-sized gift",
+          "hours": 1,
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@sender",
+              "delta": -8
+            }
+          ],
+          "outcome": "The gift is on the table at the reception you did not go to. Your sister sends photographs, and does not write anything on the back."
+        }
+      ]
+    },
+    {
+      "id": "ml_sibling_house",
+      "from": "sibling",
+      "weight": 0,
+      "asks": true,
+      "suppressYears": 1,
+      "requires": [],
+      "title": "The house",
+      "body": [
+        "{sender_first} here.",
+        "We have to decide about the house. I can't keep paying the taxes on it out of sentiment, and you have a rectory. The lawyer says it is the two of us. I would like to keep it, if I can buy you out over time; or we sell it and split it; or you tell me you want it, and I will try to understand.",
+        "Mom's rosary is on the kitchen table. I have not moved it.",
+        "{sender}"
+      ],
+      "replies": [
+        {
+          "id": "give",
+          "label": "Let your sibling have it, and want nothing",
+          "hours": 1,
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@sender",
+              "delta": 18
+            }
+          ],
+          "outcome": "There is a silence on the telephone that is the whole of the thanks, and then a long conversation about the gutters."
+        },
+        {
+          "id": "sell",
+          "label": "Sell it, and split it, and give your half away",
+          "hours": 2,
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@sender",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 2
+            }
+          ],
+          "outcome": "The house goes to a young family who paint it a colour your mother would have had views about. Your half went to the school's tuition fund, in her name."
+        },
+        {
+          "id": "keep",
+          "label": "Ask to keep it for your retirement",
+          "hours": 1,
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@sender",
+              "delta": -20
+            }
+          ],
+          "outcome": "Your sibling says all right, in a voice that says it is not, and pays the taxes on it for a decade so that you will have somewhere to go at seventy-five."
+        }
+      ]
+    },
+    {
+      "id": "ml_former_funeral",
+      "from": "former_parish",
+      "weight": 6,
+      "asks": true,
+      "suppressYears": 3,
+      "requires": [
+        {
+          "type": "bond",
+          "kind": "any",
+          "op": ">=",
+          "value": 2
+        }
+      ],
+      "title": "Would you come back for the funeral",
+      "body": [
+        "Dear Father,",
+        "You will remember us from {former_parish}, or I hope you will. My father died on Sunday. The new pastor is a good man and we have nothing against him, but he did not know Dad, and you did, and I have been asked by the whole family to ask whether you would come and say the Mass.",
+        "{sender}"
+      ],
+      "replies": [
+        {
+          "id": "go",
+          "label": "Go back, and bury him",
+          "hours": 8,
+          "effects": [
+            {
+              "target": "bond",
+              "key": "@sender",
+              "value": "buried:the father"
+            },
+            {
+              "target": "relationship",
+              "key": "@sender",
+              "delta": 15
+            },
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": -1
+            }
+          ],
+          "outcome": "The new pastor concelebrates and is gracious about it and will remember it; the family stands in the aisle afterward and will not let you leave. It is the parish as you left it, for an afternoon."
+        },
+        {
+          "id": "write",
+          "label": "Write, and let the new pastor bury him",
+          "hours": 1,
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@sender",
+              "delta": -6
+            }
+          ],
+          "outcome": "The letter is read at the wake. It is a good letter. It is not the same."
+        }
+      ]
+    },
+    {
+      "id": "ml_former_wedding",
+      "from": "former_parish",
+      "weight": 5,
+      "asks": true,
+      "suppressYears": 3,
+      "requires": [
+        {
+          "type": "bond",
+          "kind": "baptized",
+          "op": ">=",
+          "value": 1
+        }
+      ],
+      "title": "The child you baptized is getting married",
+      "body": [
+        "Father,",
+        "You baptized our daughter at {former_parish} and probably do not remember it, though we have the photograph. She is getting married in June and she has asked, on her own, whether the priest who baptized her might do it. We know it is a great deal to ask.",
+        "{sender}"
+      ],
+      "replies": [
+        {
+          "id": "go",
+          "label": "Go back and marry her",
+          "hours": 8,
+          "effects": [
+            {
+              "target": "bond",
+              "key": "@sender",
+              "value": "married:the child you baptized"
+            },
+            {
+              "target": "relationship",
+              "key": "@sender",
+              "delta": 15
+            }
+          ],
+          "outcome": "She is taller than the font by some distance now. The photograph from the baptism is on the table at the reception beside one from the wedding, and someone has written the dates on both."
+        },
+        {
+          "id": "no",
+          "label": "Send a gift and a good priest's name",
+          "hours": 1,
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@sender",
+              "delta": -5
+            }
+          ],
+          "outcome": "They understand. They keep the photograph anyway."
+        }
+      ]
     }
   ]
 }

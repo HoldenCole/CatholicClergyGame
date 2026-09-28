@@ -1,6 +1,7 @@
 import type { GameState, PositionRecord } from '@/types';
 import { TOPIC } from './choiceMeaning';
 import { isFigure } from './reputation';
+import { sidesWord } from './sides';
 
 /**
  * The public record: every stand the man has taken, in words, and how the
@@ -55,7 +56,7 @@ export function publicRecord(state: GameState): PublicRecord {
   const bishopAlignment = state.world?.diocese.hidden.bishop.alignment ?? 0;
   const rows = [...c.positions].reverse().map((p) => ({ week: p.week, topic: topicWord(p.topic), side: sideWord(p), volume: volumeWord(p.volume), reading: readingOf(p, bishopAlignment) }));
   const figure = isFigure(c);
-  const standing = figure ? 'a figure: the wing that agrees with you speaks for you, and the other keeps a file' : outspokennessWord(c.outspokenness);
+  const standing = `${figure ? 'a figure: the wing that agrees with you speaks for you, and the other keeps a file' : outspokennessWord(c.outspokenness)}; ${sidesWord(state)}`;
   const aloud = rows.filter((r) => r.reading !== 'unread');
   const against = aloud.filter((r) => r.reading === 'against').length;
   const withHim = aloud.length - against;

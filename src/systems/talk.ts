@@ -134,6 +134,17 @@ function spawn(state: GameState, rng: Rng, kind: string, about: string, name: st
   };
 }
 
+/** A rumour about him seeded by another system (a former parish's fortunes, an enemy): it goes round from this week. */
+export function seedRumour(state: GameState, rng: Rng, kind: string, extra: Record<string, string> = {}): GameState {
+  if (!content.kinds[kind] || !state.character) return state;
+  const talk = talkOf(state);
+  if (talk.rumours.some((r) => r.kind === kind && r.about === 'you' && state.clock.week - r.week < 52)) return state;
+  const name = `Fr. ${state.character.name.last}`;
+  const r = spawn(state, rng, kind, 'you', name);
+  const text = Object.entries(extra).reduce((t, [k, v]) => t.split(`{${k}}`).join(v), r.text);
+  return { ...state, talk: { ...talk, rumours: [...talk.rumours, { ...r, text }].slice(-TALK.keep) } };
+}
+
 function reputationKey(state: GameState, who: 'brothers' | 'bishop'): string {
   if (state.religious) return who === 'brothers' ? 'community' : 'local_bishop';
   return who === 'brothers' ? 'brother_priests' : 'chancery';

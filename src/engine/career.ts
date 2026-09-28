@@ -23,6 +23,10 @@ import { closeRequest, markRequested, requestOf, requestYear } from '@/systems/r
 import { officialsWrite, writeFile } from '@/systems/file';
 import { emeritiYear } from '@/systems/emeriti';
 import { fillVacantParishes } from '@/systems/formed';
+import { formerParishesYear, rememberParish } from '@/systems/formerParishes';
+import { sidesYear } from '@/systems/sides';
+import { familyYear } from '@/systems/kin';
+import { enemiesYear } from '@/systems/enemies';
 import { ministryLine } from '@/systems/ministry';
 import { housesYear } from '@/systems/houses';
 import { pontificateLine } from '@/systems/rome/pontificateText';
@@ -158,6 +162,18 @@ export function careerYear(state: GameState, rng: Rng): GameState {
     // The parishes around him whose pastors have gone get new ones: the men he formed, grown, when they are due (D5).
     const filled = fillVacantParishes(next, rng.derive(`fill:${state.clock.week}`));
     next = addDigest(filled.state, filled.lines);
+    // The parishes he left remember him, and what became of them is talk (D6).
+    const former = formerParishesYear(next, rng.derive(`former:${state.clock.week}`));
+    next = addDigest(former.state, former.lines);
+    // Sides, and the cost of changing them (D7).
+    const crossed = sidesYear(next, rng.derive(`sides:${state.clock.week}`));
+    next = addDigest(crossed.state, crossed.lines);
+    // The family across the life: children born, weddings asked, the house when the mother dies (D9).
+    const kin = familyYear(next, rng.derive(`family:${state.clock.week}`));
+    next = addDigest(kin.state, kin.lines);
+    // Enemies act on their position (D10).
+    const foes = enemiesYear(next, rng.derive(`enemies:${state.clock.week}`));
+    next = addDigest(foes.state, foes.lines);
   }
   // The letter in the vicar for clergy's file: acted on, left to stand, or closed. DESIGN §7.6.
   next = markRequested(next);
@@ -215,7 +231,7 @@ export function die(state: GameState): GameState {
  * only in part. The caller clears the parish and sets the new assignment.
  */
 export function moveOut(state: GameState, rng: Rng, left: string): GameState {
-  let next = closeTenure(state, left);
+  let next = closeTenure(rememberParish(state), left);
   next = handoffProject(next, rng.derive(`handoff:${state.clock.week}`)).state;
   next = leaveCollapse(next);
   const c = next.character!;
