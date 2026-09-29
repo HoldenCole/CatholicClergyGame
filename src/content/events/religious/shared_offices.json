@@ -1,0 +1,1978 @@
+{
+  "_notes": "The specific offices deepened (friar round, batch D). E3 §3.10 the offices of the house in the prior's gift, §6.3 the province's appointed offices. Before this round no scene read a house office at all; these are gated on house_office:<id> (set when the prior names him) and office:<id> (set when the provincial appoints him), and the novice master's and master of students' scenes read the men the engine makes his (formed:any, @formed_man; systems/religious/formedMen.ts). Both orders' formation offices are gated together. Numbers invented.",
+  "events": [
+    {
+      "id": "ho_procurator_the_bill",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "ROUTINE",
+      "category": "finance",
+      "baseWeight": 14,
+      "suppressYears": 1,
+      "pressure": [
+        "money"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "house_office:procurator",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "office:prior",
+          "value": false
+        },
+        {
+          "type": "flag",
+          "key": "office:provincial",
+          "value": false
+        }
+      ],
+      "title": "The Roofer's Bill",
+      "body": "The procurator's desk has a bill on it the house cannot pay this month: the roofer, who did the work in March and is owed for it, and a purse that will not reach him until the school's cheque comes in June. {@prior} has said, passing the door, that you will manage, which is what priors say to procurators. The roofer is a parishioner and has a family and has telephoned twice.",
+      "choices": [
+        {
+          "id": "province",
+          "label": "Write to the provincial's procurator for a bridge",
+          "outcome": "The province's procurator, who has seen this letter from every house, sends the money with a note that says June, underlined. The roofer is paid on Friday. The house's books show a loan it will repay, and the province's books show a house that asks.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": -1
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "wait",
+          "label": "Ask the roofer to wait until June, and say why",
+          "outcome": "He waits, because you told him the truth and because his own father waited for the friars in his day. In June he is paid with a bottle on top. The house has learned that its procurator can say no to a parishioner and be liked for it.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": -1
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "collection",
+          "label": "Take a second collection at the priory church for the roof",
+          "outcome": "The people give, as they do when the roof is named, and the roofer is paid in a fortnight. The prior did not say yes to a second collection and did not say no, and says at chapter that the procurator has initiative, in a voice the house reads two ways.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 3
+            },
+            {
+              "target": "relationship",
+              "key": "@prior",
+              "delta": -3
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ho_procurator_the_brother_who_spends",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "finance",
+      "baseWeight": 12,
+      "suppressYears": 2,
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "house_office:procurator",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "office:prior",
+          "value": false
+        }
+      ],
+      "title": "The Receipts",
+      "body": "{@confrere} has handed in a month of receipts that do not add up to what he drew from the house, by a margin a procurator cannot help noticing and a brother cannot help forgiving. It is not the first month. The constitutions are clear about the common purse and clearer about charity, and the procurator is the one man in the house who has to hold both at once, on a Tuesday, with the books open.",
+      "choices": [
+        {
+          "id": "ask",
+          "label": "Ask him, alone, before you ask anyone else",
+          "outcome": "An hour in his cell. It is a sister, and a debt, and a shame he had not told anyone. You write it down as an advance and tell the prior only that the books are square, which they are now. He does not forget that you asked him first.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": 10
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "prior",
+          "label": "Take the books to the prior; it is his house",
+          "outcome": "The prior handles it, as priors do, and the brother is told what he already knew in a voice that is not yours, and it is square by Advent. The house has learned that the procurator brings things to the prior, which the prior likes and the brother does not.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@prior",
+              "delta": 5
+            },
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": -8
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "cover",
+          "label": "Square it from the discretionary line and say nothing",
+          "outcome": "The books balance and nobody knows, and the next month's receipts are short by the same margin, and the month after. In a year it is a sum the province would notice, and the procurator has been part of it since the first Tuesday.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": 4
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": -3
+            },
+            {
+              "target": "flag",
+              "key": "procurator:covered",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ho_procurator_the_provinces_audit",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "finance",
+      "baseWeight": 10,
+      "suppressYears": 3,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "house_office:procurator",
+          "value": true
+        }
+      ],
+      "title": "The Province's Auditor",
+      "body": "The province has sent a layman with a laptop to look at the house's books, as it does every few years and as it has never done to this house in the memory of the oldest friar. He is courteous and thorough and finds what auditors find: a discretionary line nobody can explain, a Mass stipend account that has not been reconciled since a procurator who is dead, and the roofer, twice. He would like a word before he writes.",
+      "choices": [
+        {
+          "id": "plain",
+          "label": "Tell him everything, including what you inherited",
+          "outcome": "He writes it down, all of it, and the report says the books were a mess and the procurator was honest, in that order, and the province reads the second sentence. The house is asked to reconcile the stipends, and does, and the procurator is asked to a meeting in the province's house, and goes.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -1
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 2
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 2
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "tidy",
+          "label": "Tidy what can be tidied overnight, and show him that",
+          "outcome": "A night with the ledgers and a discretionary line that has an explanation by morning. He finds less, and writes less, and the province's report is dull, which is what a house wants. The stipends are still not reconciled, and the next auditor will be less courteous.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": -2
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 4
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ho_sacristan_the_triduum",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 30,
+      "suppressYears": 1,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "house_office:sacristan",
+          "value": true
+        },
+        {
+          "type": "season",
+          "value": "holy_week"
+        }
+      ],
+      "title": "The Sacristan's Holy Week",
+      "body": "The sacristan's Holy Week is the sacristy at five in the morning and eleven at night, the oils, the fire, the candle that will not light in the wind, the vestments that were folded wrong last year, and a house of priests who each have a view about the Exsultet. The old sacristan left a notebook. The notebook is wrong about the fire.",
+      "choices": [
+        {
+          "id": "notebook",
+          "label": "Do it by the notebook, and fix the fire quietly",
+          "outcome": "The Triduum goes as it went, and the fire lights, and nobody knows the notebook was wrong except the sacristan and the wind. The old men are pleased that nothing changed. The candle is straight for the first time in a decade.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 3
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "better",
+          "label": "Do it the way it should be done, and let the old men notice",
+          "outcome": "The Vigil is the best the house has had, and the old men notice, and two of them say so and one of them says the other thing. The sacristan has a reputation now, in a house that keeps them, and the notebook has a new page in your hand.",
+          "effects": [
+            {
+              "target": "known",
+              "key": "liturgist",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 2
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ho_sacristan_the_chalice",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 10,
+      "suppressYears": 3,
+      "pressure": [
+        "money"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "house_office:sacristan",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "office:prior",
+          "value": false
+        }
+      ],
+      "title": "The Chalice in the Safe",
+      "body": "In the sacristy safe, behind the good vestments, is a chalice the house has not used since the war, gold, with a card in a dead friar's hand saying whose it was. A dealer who has seen it at a wedding has written to the sacristan, not to the prior, with a number. It would roof the church. It would also be gone.",
+      "choices": [
+        {
+          "id": "prior",
+          "label": "Take the letter and the chalice to the prior together",
+          "outcome": "The prior turns it over for a while and says it is the house's to decide and the chapter's to say, and the chapter says keep it, by one vote, and the roof waits. The sacristan brought it to the house and not to the dealer, and the house noticed.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 3
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "use",
+          "label": "Put it back on the altar, where it was made to be",
+          "outcome": "The chalice is used at the conventual Mass on Sunday, and the old men remember it, and one of them cries. The dealer does not write again. The roof still leaks, and the house has decided something about itself without a vote, which the sacristan did.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            },
+            {
+              "target": "known",
+              "key": "liturgist",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "dealer",
+          "label": "Answer the dealer: what would it fetch, exactly",
+          "outcome": "He answers with a number that would roof the church and re-plumb it. You have not sold anything. You have a letter in your desk that says what the house's chalice is worth, and the prior does not know it is there, and it is the kind of letter that is found.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": -2
+            },
+            {
+              "target": "flag",
+              "key": "sacristan:priced_the_chalice",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ho_infirmarian_the_old_man_dying",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "MAJOR",
+      "category": "personal",
+      "baseWeight": 12,
+      "suppressYears": 2,
+      "pressure": [
+        "body_vs_vow"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "house_office:infirmarian",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "office:prior",
+          "value": false
+        }
+      ],
+      "title": "The Infirmarian's Night",
+      "body": "{@old_friar} is dying, in the house, in the room on the ground floor the infirmarian keeps for it, with the doctor's number on the wall and the oils on the dresser. He has said he does not want the hospital. The infirmarian is the one who decides whether that is honoured, at three in the morning, with the breathing changed, and the prior asleep.",
+      "choices": [
+        {
+          "id": "stay",
+          "label": "Honour it: stay, and wake the house when it is time",
+          "outcome": "He dies at five with the house in the corridor and the prior saying the prayers, in the room he asked for. The infirmarian sat with him for the four hours before and will not say what was said. The house buries him from the priory church, and the infirmarian is the one the old men look at now.",
+          "effects": [
+            {
+              "target": "known",
+              "key": "pastor_of_dying",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 5
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 6
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "hospital",
+          "label": "Call the ambulance; the house is not a hospital",
+          "outcome": "He dies in the hospital at seven, with a nurse and not the house, and the prior says at the funeral that he died where he could be cared for, which is true. The old men have heard what he asked for. The infirmarian did what a doctor would have done and is not a doctor.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -4
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ho_infirmarian_the_pills",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 10,
+      "suppressYears": 2,
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "house_office:infirmarian",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "office:prior",
+          "value": false
+        }
+      ],
+      "title": "The Count",
+      "body": "The infirmarian keeps the pills, and the count is wrong: a brother's prescription is going faster than the label says, and has been for two months, and the brother is {@confrere}, who is not old and is not sick and has been very cheerful at recreation. The infirmarian is not a doctor and not a confessor and is the only man in the house who knows.",
+      "choices": [
+        {
+          "id": "him",
+          "label": "Go to him first, with the count, and no one else",
+          "outcome": "He denies it and then does not. It is a back, and a doctor who was easy, and a thing that started as pain. You go with him to a different doctor. It takes a year and it takes. The prior is told at the end, by him, which is how it should be told.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": 12
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 4
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "prior",
+          "label": "Tell the prior; it is his house and his brother",
+          "outcome": "The prior does what the constitutions say and it is done properly, and the brother goes to the province's place for it, and comes back in six months and is well and does not speak to the infirmarian for a year. Then he does. The house has learned that the count is kept.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@prior",
+              "delta": 4
+            },
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": -10
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "lock",
+          "label": "Lock the cabinet and change the count, and say nothing",
+          "outcome": "The cabinet is locked and the count is right and the brother finds another way, as men do, and it is a year before anyone else knows, and by then it is worse. The infirmarian kept the pills, which was the job, and did not keep the brother.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -1
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": -2
+            },
+            {
+              "target": "flag",
+              "key": "infirmarian:looked_away",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ho_guest_master_the_bishops_secretary",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "ROUTINE",
+      "category": "chancery",
+      "baseWeight": 12,
+      "suppressYears": 1,
+      "pressure": [
+        "ambition_vs_integrity"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "house_office:guest_master",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "office:prior",
+          "value": false
+        }
+      ],
+      "title": "A Guest Who Matters",
+      "body": "The bishop's secretary is staying two nights, on his way to somewhere, and the guest master has the room with the good chair ready and a decision to make about supper: the house's, at the house's table, with the house's wine, or the parlour, with the prior, and a bottle from the cupboard the procurator does not know about. The secretary has a file on the house in his bag, as secretaries do.",
+      "choices": [
+        {
+          "id": "table",
+          "label": "The house's table, the house's supper, the house's wine",
+          "outcome": "He eats what the house eats and hears what the house says at table, which is more than the file had, and is charmed, or says he is. The bishop hears that the friars fed his secretary lentils and were kind, which is what the bishop wanted to hear.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "local_bishop",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "parlour",
+          "label": "The parlour, the prior, and the good bottle",
+          "outcome": "A civilised evening and a secretary who leaves knowing the prior and not the house. The bishop hears that the friars keep a cellar. The house hears about the bottle from the procurator, who found out, and the guest master is asked at recreation what the secretary was like, in a tone.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "local_bishop",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -2
+            },
+            {
+              "target": "relationship",
+              "key": "@prior",
+              "delta": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ho_guest_master_the_man_at_the_door",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 12,
+      "suppressYears": 2,
+      "pressure": [
+        "belief_vs_safety"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "house_office:guest_master",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "office:prior",
+          "value": false
+        }
+      ],
+      "title": "A Bed for the Night",
+      "body": "A man at the door at ten, wet, with a bag and a story and a smell, who wants a bed and says a friar in another city told him this house would have one. The guest wing has a room. The constitutions say the guest is Christ; the prior's note on the guest master's desk says no overnight guests without his leave, and the prior is at the hospital with a dying man's family.",
+      "choices": [
+        {
+          "id": "bed",
+          "label": "Give him the bed, and tell the prior in the morning",
+          "outcome": "He sleeps, and eats at seven, and is gone by nine with a sandwich and a phone number, and nothing is missing. The prior, told, says nothing for a while and then says that the note was for the other kind of night. The house has a guest master who reads the constitutions first.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            },
+            {
+              "target": "relationship",
+              "key": "@prior",
+              "delta": 1
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "shelter",
+          "label": "Drive him to the shelter, and pay for the taxi back",
+          "outcome": "The shelter has a bed and he takes it, and thanks you at the door in a way that suggests he expected the other answer. The prior's note is honoured. The guest master has kept the house and not the constitutions, and knows which he kept.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": -1
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ho_librarian_the_students_books",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 10,
+      "suppressYears": 2,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "house_office:librarian",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "office:prior",
+          "value": false
+        }
+      ],
+      "title": "The Librarian's Boxes",
+      "body": "A friar has died in another house and left the province eleven boxes of books, and the province has sent them to this library because it has a librarian, which is you. Half are duplicates. A quarter are worth having. A few are worth money, and one is a first edition of the thing the order argues about, with the dead man's notes in the margin disagreeing with it.",
+      "choices": [
+        {
+          "id": "catalogue",
+          "label": "Catalogue them all, a winter of evenings",
+          "outcome": "A winter of evenings and a library that knows what it has, which the house of studies hears about and sends its students to. The first edition goes in the case. The margins are read by a student who writes a thesis on them, and cites the librarian in a footnote.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 2
+            },
+            {
+              "target": "known",
+              "key": "professor",
+              "delta": 2
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 3
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "sell",
+          "label": "Sell the duplicates and the valuable ones, and shelve the rest",
+          "outcome": "The procurator is delighted and the library has a fund, and the first edition goes to a collector who will not read the margins. The house of studies hears that the library sold a first edition and its regent writes a letter the prior shows you.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": -2
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ho_cantor_the_old_men",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 10,
+      "suppressYears": 2,
+      "pressure": [
+        "friendship_vs_duty"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "house_office:cantor",
+          "value": true
+        }
+      ],
+      "title": "The Pitch",
+      "body": "The cantor sets the pitch, and the old men cannot reach it, and have said so at chapter, and the young men can and have not said anything because the young men do not speak at chapter. The house sings the Office every day. It sings it, at the moment, in two keys.",
+      "choices": [
+        {
+          "id": "lower",
+          "label": "Lower it; the Office is theirs before it is anyone's",
+          "outcome": "The pitch comes down a third and the old men sing, and the young men sing, lower, and the house sounds like a house for the first time in a season. The old men do not thank the cantor, which is how they thank him.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "hold",
+          "label": "Hold it; the chant is written where it is written",
+          "outcome": "The chant is where it is written and the old men mouth the high notes and the young men carry them, and the house sounds better than it has in years to a visitor and worse to itself. The old men have a grievance that goes on for the cantor's whole term.",
+          "effects": [
+            {
+              "target": "known",
+              "key": "liturgist",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -3
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ho_vocations_the_boy_at_the_door",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 12,
+      "suppressYears": 2,
+      "pressure": [
+        "ambition_vs_integrity"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "house_office:local_vocations",
+          "value": true
+        }
+      ],
+      "title": "The Boy at the Door",
+      "body": "A boy of nineteen at the door on a Saturday, from the parish's altar servers, who wants to enter and has told his mother and not his father, and has a face you have seen before on men who lasted and on men who did not. The province wants men. The local promoter of vocations is the one who says come back in a year, or come to supper, or both.",
+      "choices": [
+        {
+          "id": "supper",
+          "label": "Bring him to supper, and let the house look at him",
+          "outcome": "He eats with the house and is quiet and helps with the dishes without being asked, which the old men notice. The vocation director's letter follows in a month. He enters in the autumn, and whether he lasts is the novitiate's business, and yours to have started.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "vocations:sent_one",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "year",
+          "label": "Tell him a year of college first, and to come to Vespers meanwhile",
+          "outcome": "He comes to Vespers all year, most weeks, and enters the year after, older by a year that mattered. The province waited a year for a man. The promoter has learned to say wait, which is harder than saying come.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 1
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "father",
+          "label": "Ask about the father, and go and see him",
+          "outcome": "The father is angry and then not, over a kitchen table, over an hour, and it is the hour that decides whether the boy enters with a family or without one. He enters with one. The promoter of vocations is a name in that house for twenty years.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 4
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ho_lay_chapter_the_tuesday",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "ROUTINE",
+      "category": "group",
+      "baseWeight": 10,
+      "suppressYears": 2,
+      "pressure": [
+        "belief_vs_safety"
+      ],
+      "requires": [
+        {
+          "type": "any",
+          "inner": [
+            {
+              "type": "flag",
+              "key": "house_office:lay_dominicans",
+              "value": true
+            },
+            {
+              "type": "flag",
+              "key": "house_office:lay_fraternity",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "title": "The Second Tuesday",
+      "body": "The lay chapter meets in the parlour on the second Tuesday, eleven of them, with a rule older than yours and a president who has run it for nineteen years and has views on the friars. They want a talk on the thing the order is arguing about this year. The president has said which side she would like the talk to come down on, kindly, at the door.",
+      "choices": [
+        {
+          "id": "both",
+          "label": "Give the talk as the order gives it: both sides, and the question open",
+          "outcome": "The talk is honest and the room is divided, which it was before, and the president thanks you at the door with a face. Three of the eleven come to Vespers the next week for the first time. The chapter has a friar who tells it the truth, which it will use.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 1
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "hers",
+          "label": "Give the talk she asked for; it is her chapter",
+          "outcome": "The room is pleased and the president is warm and the chapter's numbers are up by Advent. The friar assigned to it has told a room what it wanted to hear, which the room will remember when it wants to hear something else.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 3
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": -2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ao_novice_master_the_one_who_should_go",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "MAJOR",
+      "category": "formation",
+      "baseWeight": 14,
+      "suppressYears": 1,
+      "pressure": [
+        "friendship_vs_duty"
+      ],
+      "requires": [
+        {
+          "type": "any",
+          "inner": [
+            {
+              "type": "flag",
+              "key": "office:novice_master",
+              "value": true
+            },
+            {
+              "type": "flag",
+              "key": "office:novice_director",
+              "value": true
+            }
+          ]
+        },
+        {
+          "type": "flag",
+          "key": "formed:any",
+          "value": true
+        }
+      ],
+      "title": "The Novice Who Should Go",
+      "body": "{@formed_man} is the novice the house likes best, and the novice master has known since Advent that he should not profess: not a fault, a mismatch, the kind that makes a good man miserable for forty years. The vote is in June and the house will vote yes. He has not asked to go. The novice master is the one who says it first, or does not.",
+      "choices": [
+        {
+          "id": "say",
+          "label": "Tell him, in Lent, with the door shut",
+          "outcome": "He is angry and then relieved, in that order, over a fortnight, and goes home at Easter with the house's blessing and a letter from you he keeps. He writes at Christmas for thirty years. The house, which liked him, is sore at the master for a season and then knows.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@formed_man",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -2
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "vote",
+          "label": "Let the house vote; it is the house's man",
+          "outcome": "The house votes yes, and he professes, and is miserable in the way you knew, and leaves in simple vows three years on, from another house, with a note to nobody. The master who saw it and said nothing is the only one who knows he saw it.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 1
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": -3
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": -1
+            }
+          ]
+        },
+        {
+          "id": "wait",
+          "label": "Ask the house to hold him a year, and say why at chapter",
+          "outcome": "The house holds him, which it has done to others, and a year later he goes on his own, which is better, or stays, which is his. The master said a hard thing at chapter with the man's name in it, and the house has heard what the master's judgement sounds like.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 2
+            },
+            {
+              "target": "relationship",
+              "key": "@formed_man",
+              "delta": -4
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ao_novice_master_the_one_who_cannot_pray",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "formation",
+      "baseWeight": 12,
+      "suppressYears": 2,
+      "pressure": [
+        "doubt"
+      ],
+      "requires": [
+        {
+          "type": "any",
+          "inner": [
+            {
+              "type": "flag",
+              "key": "office:novice_master",
+              "value": true
+            },
+            {
+              "type": "flag",
+              "key": "office:novice_director",
+              "value": true
+            }
+          ]
+        },
+        {
+          "type": "flag",
+          "key": "formed:any",
+          "value": true
+        }
+      ],
+      "title": "The Dry Novice",
+      "body": "{@formed_man} has told you, in the hour the master gives each novice, that he cannot pray: that the Office is words, the hour of meditation is an hour, and he has felt nothing since October and is frightened. He is the best novice you have. The master has heard this before, from men who became saints and from men who left, and it sounds the same.",
+      "choices": [
+        {
+          "id": "stay",
+          "label": "Tell him it is the ordinary road, and to keep the hour anyway",
+          "outcome": "He keeps the hour, dry, through Lent and Easter and a summer, and in the autumn something is there that was not, and he does not tell you and does not need to. The master said the thing the old books say, and it was true this time.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@formed_man",
+              "delta": 8
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "known",
+              "key": "spiritual_director",
+              "delta": 3
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "director",
+          "label": "Send him to the old friar for direction; it is not the master's hour",
+          "outcome": "The old friar hears him for a year and says nothing to you, as he should not. The novice is directed and professes and is the old friar's for life, which is right. The master kept the forum where it belongs and lost the man a little.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@old_friar",
+              "delta": 4
+            },
+            {
+              "target": "relationship",
+              "key": "@formed_man",
+              "delta": 2
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "worry",
+          "label": "Write it in the book, and watch him",
+          "outcome": "The book has a line in it now that the house will read at the vote, and the house reads it, and holds him, and he leaves in the summer, dry and unheld. The master watched, which is the office, and did not say the thing, which was the man.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@formed_man",
+              "delta": -8
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": -1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ao_novice_master_the_first_profession",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "formation",
+      "baseWeight": 12,
+      "suppressYears": 1,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "any",
+          "inner": [
+            {
+              "type": "flag",
+              "key": "office:novice_master",
+              "value": true
+            },
+            {
+              "type": "flag",
+              "key": "office:novice_director",
+              "value": true
+            }
+          ]
+        },
+        {
+          "type": "flag",
+          "key": "formed:any",
+          "value": true
+        },
+        {
+          "type": "season",
+          "value": "easter"
+        }
+      ],
+      "title": "The Master's Report",
+      "body": "Before the house votes, the novice master reads his report on each man at chapter: two pages a man, in his own hand, the year as he saw it. {@formed_man}'s two pages are in front of you. The house will vote on what you read. The report is honest and one paragraph of it would decide the vote the wrong way, or the right way, and you are not sure which.",
+      "choices": [
+        {
+          "id": "all",
+          "label": "Read it all, the paragraph included",
+          "outcome": "The house hears the paragraph and votes yes anyway, closely, having heard the worst and decided. The man professes knowing what the master said of him, since novices hear everything, and it is between you for a year and then it is a thing he thanks you for at his ordination.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 3
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 3
+            },
+            {
+              "target": "relationship",
+              "key": "@formed_man",
+              "delta": -3
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "omit",
+          "label": "Leave the paragraph out; the year answered it",
+          "outcome": "The house votes yes easily and the man professes and the paragraph is in a drawer. If the year answered it, nothing is lost. If it did not, the house voted without knowing, and the master knew, and the drawer is where the province looks when a man goes wrong.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@formed_man",
+              "delta": 4
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": -2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ao_master_of_students_the_thesis",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "formation",
+      "baseWeight": 12,
+      "suppressYears": 2,
+      "pressure": [
+        "belief_vs_safety"
+      ],
+      "requires": [
+        {
+          "type": "any",
+          "inner": [
+            {
+              "type": "flag",
+              "key": "office:master_of_students",
+              "value": true
+            },
+            {
+              "type": "flag",
+              "key": "office:formation_director",
+              "value": true
+            }
+          ]
+        },
+        {
+          "type": "flag",
+          "key": "formed:any",
+          "value": true
+        }
+      ],
+      "title": "The Student's Thesis",
+      "body": "{@formed_man} has brought the master of students a thesis proposal on the thing the province argues about, taking the side the province's older men do not take, and is brilliant, and is twenty-six. The master's signature sends it to the regent. The regent will read the title and the student's name and the master's, in that order.",
+      "choices": [
+        {
+          "id": "sign",
+          "label": "Sign it, and write to the regent yourself",
+          "outcome": "The regent approves it with a note that says he hopes the master knows what he is doing. The thesis is written and defended and argued with, and the student is a theologian by thirty and knows whose signature it was. The province's older men have a name for the master now.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@formed_man",
+              "delta": 10
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": -2
+            },
+            {
+              "target": "known",
+              "key": "professor",
+              "delta": 3
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "narrow",
+          "label": "Ask him to narrow it to a question the province can hear",
+          "outcome": "He narrows it, resentfully, and writes a good thesis on a smaller question, and the province can hear it, and he is a theologian by thirty-five instead, on a different road. He does not forgive the master for a decade, and then does, and then does not again.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@formed_man",
+              "delta": -4
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ao_master_of_students_the_ordination_class",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "formation",
+      "baseWeight": 12,
+      "suppressYears": 1,
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "requires": [
+        {
+          "type": "any",
+          "inner": [
+            {
+              "type": "flag",
+              "key": "office:master_of_students",
+              "value": true
+            },
+            {
+              "type": "flag",
+              "key": "office:formation_director",
+              "value": true
+            }
+          ]
+        },
+        {
+          "type": "flag",
+          "key": "formed:any",
+          "value": true
+        }
+      ],
+      "title": "The Call to Orders",
+      "body": "The house of studies votes on which of the students are called to orders this year, and the master of students speaks first, on each man. {@formed_man} is the one the house is unsure of: the studies are fine, the Office is kept, and something the master has seen in three years of Thursdays is not fine and is hard to say at chapter in a sentence.",
+      "choices": [
+        {
+          "id": "say",
+          "label": "Say it, in a sentence, at chapter",
+          "outcome": "The sentence is said and the house holds him a year, and the year is the making of him, or the unmaking, and either way the master said the thing the office is for. He is ordained a year late and thanks you for it at the reception, in front of his mother, which costs him.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 3
+            },
+            {
+              "target": "relationship",
+              "key": "@formed_man",
+              "delta": -2
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 2
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "call",
+          "label": "Recommend him; the thing is not a canonical impediment",
+          "outcome": "He is called, and ordained, and the thing the master saw on Thursdays is a thing the province sees in ten years, and remembers who spoke first. He is grateful for the vote all his life, which is a kind of weight.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@formed_man",
+              "delta": 8
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": -2
+            },
+            {
+              "target": "flag",
+              "key": "students:called_the_doubtful",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ao_regent_the_studium_closes",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 8,
+      "suppressYears": 4,
+      "pressure": [
+        "money"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "office:regent_of_studies",
+          "value": true
+        }
+      ],
+      "title": "The Studium and the Union",
+      "body": "The province's council has asked the regent of studies whether the house of studies should stop teaching and send its students to the diocesan seminary or the university, where the degrees are the same and the cost is a third. The regent wrote his own thesis in the studium's library. The students would be formed by men who are not friars. The province would have money for the missions.",
+      "choices": [
+        {
+          "id": "keep",
+          "label": "Keep the studium, and say what it costs to lose one",
+          "outcome": "The council keeps it, by one vote, on the regent's page about what a house of studies is for that it could not have written itself. The province is poorer for a decade and has theologians of its own at the end of it, and the regent's page is quoted at chapters he is not at.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": -2
+            },
+            {
+              "target": "known",
+              "key": "professor",
+              "delta": 4
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "send",
+          "label": "Send them to the university, and keep the library",
+          "outcome": "The students go across the city and are taught well by men in ties, and come home for Vespers, and the province has money for the missions. Something is gone that the regent knew the name of. The old professors retire early and are not replaced.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -3
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ao_promoter_the_mission_that_failed",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 10,
+      "suppressYears": 2,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "office:promoter_of_preaching",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "office:provincial",
+          "value": false
+        }
+      ],
+      "title": "The Parish Mission That Emptied the Church",
+      "body": "The promoter of preaching sent two friars to give a parish mission and the mission emptied the church: the first night three hundred, the fourth night forty, and a pastor who has written to the provincial, not to the promoter. The two friars say the pastor did not advertise. The pastor says the friars preached at his people. Both are true and the promoter chose the friars.",
+      "choices": [
+        {
+          "id": "go",
+          "label": "Go and give the last night yourself, and see",
+          "outcome": "The last night has sixty, and you preach it, and see what the friars saw and what the pastor saw, and write to the provincial a letter that blames the promoter, which is fair. The pastor asks for a mission again in three years and asks for you by name.",
+          "effects": [
+            {
+              "target": "known",
+              "key": "preacher",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "diocesan_clergy",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 1
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 4
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "friars",
+          "label": "Stand by the friars; the pastor did not do his part",
+          "outcome": "The provincial hears the promoter's side and the pastor's and does nothing, as provincials do. The friars are grateful. The pastor tells the deanery, and the deanery does not ask the order for missions for a while, which the promoter's book shows in a year.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "diocesan_clergy",
+              "delta": -4
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ao_vocation_director_the_numbers",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 10,
+      "suppressYears": 2,
+      "pressure": [
+        "ambition_vs_integrity"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "office:vocation_director",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "office:provincial",
+          "value": false
+        }
+      ],
+      "title": "The Numbers the Council Wants",
+      "body": "The provincial's council wants the vocation director's numbers for the year and wants them to be higher, and there are four men who could be admitted to make them higher, and two of them should not be. The novice master has said so, privately. The council has said, not privately, that the province needs men and the director's job is to find them.",
+      "choices": [
+        {
+          "id": "two",
+          "label": "Admit the two, and tell the council why not four",
+          "outcome": "The council is disappointed in the tone of men who wanted six. The two enter and last. The vocation director's numbers are the lowest in a decade and the novice master, at the next chapter, says the class is the best in one, and names who sent it.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": -2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 3
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 3
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "four",
+          "label": "Admit all four; the novitiate can sort them",
+          "outcome": "The council is pleased and the numbers are up. Two of the four leave in the first year, one of them badly, and the novice master says at chapter what he said to you privately, with your name in it this time. The numbers were up for a year.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -3
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": -2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ao_prior_the_procurators_fault",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "finance",
+      "baseWeight": 10,
+      "suppressYears": 2,
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "office:prior",
+          "value": true
+        }
+      ],
+      "title": "The Prior and the Procurator",
+      "body": "The house's procurator, {@confrere}, has made a mistake with the province's money that a prior can cover and a province would not forgive: a payment made twice, a sum the house does not have, and a letter from the province's procurator asking, courteously, what happened. The prior signs the house's letters. The procurator is in the corridor waiting to hear what the prior will sign.",
+      "choices": [
+        {
+          "id": "own",
+          "label": "Sign a letter that says the prior's house made the mistake",
+          "outcome": "The province reads that the prior takes responsibility for his house, which priors are supposed to do and seldom put in writing. The procurator does not forget it. The province's procurator, who has seen the other letter a hundred times, keeps this one.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": 10
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 3
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "name",
+          "label": "Sign a letter that says what happened, with the procurator's name",
+          "outcome": "The province reads the name and the procurator is replaced by the next chapter, which he expected. The house has learned what the prior's letters say when a man makes a mistake, and the next procurator makes fewer and tells the prior less.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": -10
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ao_provincial_the_novice_masters_letter",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 10,
+      "suppressYears": 2,
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "office:provincial",
+          "value": true
+        }
+      ],
+      "title": "The Novice Master Writes",
+      "body": "The novice master has written to the provincial to say he wants to be relieved: eleven years, four classes, a man who has done the office as well as it has been done in the province and is tired in the way the office makes men tired. There is nobody to replace him, quite. The provincial's letter names the next novice master or names him again.",
+      "choices": [
+        {
+          "id": "relieve",
+          "label": "Relieve him, and name the second-best man",
+          "outcome": "He goes to a parish and sleeps, and the second-best man is the novice master and is adequate, and the class that enters that year is formed adequately, which the province will feel in twenty years and will not trace. The old master is grateful in a letter you keep.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "again",
+          "label": "Name him again, for one class more, and say why",
+          "outcome": "He does one class more, and it is his best, and he is a year older and very tired, and goes to a parish after it and sleeps for a year. The province has the class. The provincial has a letter in the file from a man who asked to go and was told not yet.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -2
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

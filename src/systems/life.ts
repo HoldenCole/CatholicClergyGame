@@ -6,6 +6,7 @@ import { yearOf } from '@/ui/portraits/spec';
 import { bondCounts, bondsPhrase } from './bonds';
 import { mourners } from './lastDecade';
 import { religiousOrder } from '@/content/religious';
+import { formedMenOf, stageWord } from './religious/formedMen';
 
 /**
  * A life, read back at the end: the posts, the bishops, the stands, the
@@ -49,6 +50,8 @@ export interface Life {
   mourners: Npc[];
   /** A friar's houses, in order, with the years in each and what he was sent to do. */
   houses?: { name: string; kind: string; years: string; work: string; grace: string }[];
+  /** The men he formed as novice master or master of students, and where the record last saw them. Friar round D8. */
+  formed?: { name: string; as: string; stage: string; year: number }[];
   /** A friar's offices: elected and appointed, with the body and the years. */
   terms?: { label: string; body: string; years: string }[];
   /** A friar's foundations, each in a line. */
@@ -92,7 +95,7 @@ const HOUSE_KIND: Record<string, string> = { priory: 'the priory', studium: 'the
 const WORK_WORD: Record<string, string> = { parish: 'for the parish', school: 'for the school', teaching: 'to teach', formation: 'for the formation house', mission: 'for the mission', curia: 'for the curia', priory_church: 'for the priory church', preaching: 'to preach', chaplaincy: 'for the chaplaincy' };
 
 /** What a friar's shelf adds: the houses he lived in, the offices he held, the houses he founded. Friar round Q2. */
-function friarLife(state: GameState): Pick<Life, 'houses' | 'terms' | 'foundations'> {
+function friarLife(state: GameState): Pick<Life, 'houses' | 'terms' | 'foundations' | 'formed'> {
   const r = state.religious;
   if (!r) return {};
   const week = state.clock.week;
@@ -110,7 +113,8 @@ function friarLife(state: GameState): Pick<Life, 'houses' | 'terms' | 'foundatio
     const years = yearsWord((f.failedWeek ?? week) - f.foundedWeek);
     return f.status === 'failed' ? `${name}, founded ${yearOf(state.clock.startDay, f.foundedWeek)}, failed after ${years}: ${f.failedWhy ?? 'the men were needed elsewhere'}.` : `${name}, founded ${yearOf(state.clock.startDay, f.foundedWeek)}, ${years} on and standing.`;
   });
-  return { houses, terms, foundations };
+  const formed = formedMenOf(state).map((f) => ({ name: `${f.npc.title} ${f.npc.name.first} ${f.npc.name.last}`, as: f.as === 'novice' ? 'clothed' : 'taught', stage: stageWord(f.stage), year: yearOf(state.clock.startDay, f.week) }));
+  return { houses, terms, foundations, ...(formed.length ? { formed } : {}) };
 }
 
 export function lifeOf(state: GameState): Life {

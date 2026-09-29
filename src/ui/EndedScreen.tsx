@@ -90,6 +90,13 @@ export default function EndedScreen() {
             </ol>
           </Section>
         )}
+        {life && life.formed && life.formed.length > 0 && (
+          <Section title="The men you formed">
+            <ul className="flex flex-col gap-0.5 text-sm">
+              {life.formed.map((f, i) => <li key={i}><span className="ink-faint mr-2 text-xs">{f.year}</span>{f.name}, {f.as}: {f.stage}.</li>)}
+            </ul>
+          </Section>
+        )}
         {life && life.foundations && life.foundations.length > 0 && (
           <Section title="The foundation">
             <ul className="flex flex-col gap-0.5 text-sm">{life.foundations.map((f, i) => <li key={i}>{f}</li>)}</ul>

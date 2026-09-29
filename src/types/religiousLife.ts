@@ -32,6 +32,8 @@ export interface OrderOfficeDef {
   id: string;
   label: string;
   kind: 'appointed' | 'elected';
+  /** The men the office forms become his for life: the novices he clothes, the students he teaches. Friar round D8. */
+  forms?: 'novices' | 'students';
   /** Years a term runs. */
   termYears: number;
   /** What the provincial looks for, as stat floors. */
@@ -751,11 +753,24 @@ export interface ReligiousPlayerState {
   petitionsMade?: number;
   /** The houses he founded and the ones his heirs founded from them. E3 §9. */
   foundations?: Foundation[];
+  /** The men he formed as novice master or master of students, his for life. Friar round D8. */
+  formed?: FormedMan[];
   /** The charter being written, between approval and the house. */
   charterDraft?: Charter;
   foundationLine?: string;
 }
 
+
+/** A man formed by the player: clothed as a novice or taught as a student, and followed through his vows, his ordination, his leaving, or his death. Friar round D8. */
+export interface FormedMan {
+  npcId: string;
+  /** The week he became yours. */
+  week: number;
+  as: 'novice' | 'student';
+  houseId: string;
+  /** Where the record last saw him. */
+  stage: 'novice' | 'simple' | 'solemn' | 'priest' | 'left' | 'dead';
+}
 
 /** The founding charter's dials. E3 §9.4. Options are data in content/religious/foundations.json. */
 export type CharterDial = 'observance' | 'liturgy' | 'primaryWork' | 'secondaryWork' | 'tertiaryWork' | 'university' | 'poverty' | 'sizeTarget' | 'formation' | 'hospitality' | 'governance' | 'dress' | 'language';

@@ -87,7 +87,7 @@ const SELECTORS = [
   '@dominican_prior', '@dominican_lector', '@dominican_student',
   '@franciscan_guardian', '@franciscan_kitchen', '@franciscan_confessor',
   '@augustinian_prior', '@augustinian_headmaster', '@augustinian_old_pastor',
-  '@prior', '@provincial', '@novice_master', '@master_of_students', '@confrere', '@old_friar',
+  '@prior', '@provincial', '@novice_master', '@master_of_students', '@confrere', '@old_friar', '@formed_man',
 ];
 const LIFE_IDS = lifeDefs.map((l) => l.id);
 const LIVE_SELECTORS = [...LIFE_IDS.map((id) => `@life:${id}`), '@rumour_subject'];

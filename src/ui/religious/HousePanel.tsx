@@ -6,6 +6,7 @@ import { horariumRows } from '@/systems/religious/horarium';
 import { formationStage } from '@/systems/religious/formation';
 import { pietyLabelsOf } from '@/systems/religious/feel';
 import { friendsOf } from '@/systems/religious/friendship';
+import { formedMenOf, formingOffice, stageWord } from '@/systems/religious/formedMen';
 import { religiousOrder } from '@/content/religious';
 import { instituteDef } from '@/content/institutes';
 import { standing } from '@/systems/reputation';
@@ -36,6 +37,7 @@ export default function HousePanel() {
   const [menOpen, toggleMen] = useFold('house:men', false);
   const [sayOpen, toggleSay] = useFold('house:saying', true);
   const [orderOpen, toggleOrder] = useFold('house:order', false);
+  const [formedOpen, toggleFormed] = useFold('house:formed', true);
   if (!game?.religious) return null;
   const house = currentHouse(game);
   if (!house) return null;
@@ -129,6 +131,15 @@ export default function HousePanel() {
                 {r.reachedBishop && !r.answered && <span className="ink-faint ml-1 text-xs">(the bishop has heard)</span>}
               </li>
             ))}
+          </ul>}
+        </div>
+      )}
+      {(formedMenOf(game).length > 0 || formingOffice(game)) && (
+        <div className="mt-4">
+          <FoldHeading open={formedOpen} onToggle={toggleFormed} title="Your men" summary={formedMenOf(game).length ? `${formedMenOf(game).length} formed; ${formedMenOf(game).filter((f) => f.stage === 'priest').length} priests, ${formedMenOf(game).filter((f) => f.stage === 'left').length} left` : 'none yet; the year names them'} />
+          {formedOpen && <ul className="mt-1 flex flex-col gap-0.5 text-sm">
+            {formedMenOf(game).length === 0 && <li className="ink-muted text-xs">The men of the house in your charge become yours at the year's end, and the record follows them for life.</li>}
+            {formedMenOf(game).map((f) => <li key={f.npcId}>{f.npc.title} {f.npc.name.first} {f.npc.name.last}, {f.as === 'novice' ? 'clothed' : 'taught'} {yearOf(game.clock.startDay, f.week)}: {stageWord(f.stage)}{f.npc.status === 'active' ? `, ${f.npc.relationship >= 40 ? 'a friend' : f.npc.relationship >= 15 ? 'warm' : 'civil'}` : ''}.</li>)}
           </ul>}
         </div>
       )}

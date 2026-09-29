@@ -19,6 +19,7 @@ import { foundationsYear } from './foundationYear';
 import { provinceGrowthYear } from './growth';
 import { endApostolate } from './requests';
 import { houseTeethYear } from './teeth';
+import { formedMenYear } from './formedMen';
 import { bishopAskDefs } from '@/content/religious';
 
 /**
@@ -42,6 +43,8 @@ export function religiousYear(state: GameState, rng: Rng): GameState {
   const r = state.religious;
   if (!r || !state.flags.ordained) return state;
   let next = chapterYear(state);
+  // The men his office forms become his, and the record follows them, before the office can run out. Friar round D8.
+  next = formedMenYear(next);
   next = appointmentYear(next);
   const conferred = conferCredentials(next);
   next = conferred.state;
