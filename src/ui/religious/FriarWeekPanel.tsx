@@ -8,6 +8,8 @@ import { BISHOP_ASKS } from '@/systems/religious/bishopAsks';
 import { chanceryAskDef } from '@/systems/religious/bishopAsks';
 import { spendBudget, spendBuilds, spendCost, spendOffered, spendsOf, spendsUsed } from '@/systems/religious/spends';
 import { spendDefs } from '@/content/religious';
+import { awayForRest, STRAIN } from '@/systems/religious/strain';
+import { strainOf } from '@/systems/week';
 import Sheet from '../Sheet';
 import { religiousOrder } from '@/content/religious';
 import Panel from '../Panel';
@@ -47,6 +49,12 @@ export default function FriarWeekPanel() {
           {extra ? ` The office, the work, and the asks take ${extra} blocks more.` : ''}
           {game.religious.deanery ? ' The parish sits in a deanery of the diocese: its sheet is beside the house\'s.' : ''}
         </p>
+        {(() => {
+          const away = awayForRest(game);
+          if (away) return <p className="ink-wine mt-2 text-sm">{away.kind === 'sabbatical' ? 'On sabbatical' : 'In the province\'s infirmary house'}: {Math.max(0, away.until - game.clock.week)} weeks left, the work someone else's, the free hours nobody's. The body rests faster away from the house.</p>;
+          if (strainOf(game) >= STRAIN.sick) return <p className="ink-wine mt-2 text-sm">Past the sick line: the week is cut by whoever is there to cut it, and half the free hours are the cell's until you are rested.</p>;
+          return null;
+        })()}
         <p className="ink-faint mt-2 text-xs">The provincial assigns you for a term of three to six years and consults you before each letter. A parish entrusted to the order is held by two keys. Chapters elect the prior and the provincial, and you watch the ballots.</p>
       </Panel>
       {game.flags.ordained && (() => {

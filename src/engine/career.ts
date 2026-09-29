@@ -13,6 +13,7 @@ import { handoffProject } from '@/systems/projects';
 import { ARC } from './parish';
 import { renderText } from './text';
 import { deliverLetter, yearInReview } from '@/systems/review';
+import { strainOf, WEEK } from '@/systems/week';
 import { closeTenure } from '@/systems/tenures';
 import { castYearStep } from './parish';
 import { townYear } from '@/systems/town';
@@ -42,6 +43,8 @@ export const CAREER = {
   retirementAcceptedPerYear: 0.4,
   forcedRetirementAge: 80,
   deathPerYearOver65: 0.012,
+  /** The death roll reads strain: at 100 the yearly chance is this much larger; below the worn line it reads nothing. Friar round Q8. Invented. */
+  deathStrainFactor: 0.75,
   /** Years ordained before the board considers a man for a pastorate at all. */
   minYearsForPastor: 3,
   /** When the board has nothing better, a pastor is renewed where he is this often; otherwise moved as pastor. Invented. */
@@ -206,8 +209,14 @@ export function careerYear(state: GameState, rng: Rng): GameState {
     }
     if (accepted) return retire(next);
   }
-  if (age >= 65 && rng.chance(CAREER.deathPerYearOver65 * (age - 60) / 5)) return die(next);
+  if (age >= 65 && rng.chance(deathChance(age, strainOf(next)))) return die(next);
   return next;
+}
+
+/** The yearly chance of dying past sixty-five: the age, and the body's wear on top of it. */
+export function deathChance(age: number, strain: number): number {
+  const worn = Math.max(0, Math.min(1, (strain - WEEK.strainWorn) / (100 - WEEK.strainWorn)));
+  return CAREER.deathPerYearOver65 * (age - 60) / 5 * (1 + worn * CAREER.deathStrainFactor);
 }
 
 export function retire(state: GameState): GameState {

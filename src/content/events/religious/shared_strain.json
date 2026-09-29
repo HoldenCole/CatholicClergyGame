@@ -1,0 +1,154 @@
+{
+  "_notes": "Strain that does something for a friar (friar round Q8). E3 §3.3: the house has an infirmarian and a prior, and a man burning out is everyone's business at table. At 80 the infirmarian speaks and the prior cuts the week (systems/religious/strain.ts does the cutting; these scenes are the conversations); past sixty-five the province offers the infirmary house or a sabbatical. The sabbatical and the infirmary are flags the engine reads (sabbatical:asked, infirmary:asked) and turns into weeks away from the work. Numbers invented.",
+  "events": [
+    {
+      "id": "st_infirmarian_speaks",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 40,
+      "suppressYears": 1,
+      "pressure": ["body_vs_vow"],
+      "requires": [
+        { "type": "strain", "op": ">=", "value": 80 },
+        { "type": "flag", "key": "away:until", "value": false }
+      ],
+      "title": "The Infirmarian at Your Door",
+      "body": "The infirmarian of the house, who keeps the pills and the thermometer and the list of who is not eating, knocks after Compline and does not come in. He says the house has noticed: the stall empty at Lauds twice this week, the cough, the plate sent back. He says he has said this to men who are dead now and to men who are seventy and fine, and that the difference was what they did the next week.",
+      "choices": [
+        {
+          "id": "listen",
+          "label": "Take the week he gives you: the afternoons in the cell, the work cut",
+          "outcome": "A week of afternoons in the cell with the door shut and the book you have not read, the work handed to whoever will take it, the Office from the stall and nothing else. The house covers. By Saturday you sleep through the night for the first time in a season, and the infirmarian nods at breakfast and says nothing.",
+          "effects": [
+            { "target": "strain", "key": "", "delta": -25 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "reputation", "key": "community", "delta": 2 }
+          ],
+          "default": true
+        },
+        {
+          "id": "fine",
+          "label": "Say you are fine, and thank him, and close the door",
+          "outcome": "You are not fine and both of you know it, and the door closes. The week goes on as it went. The house, which sent him, hears the answer and decides among itself that you are the kind of man who will not be helped, which is a thing a house remembers when it votes.",
+          "effects": [
+            { "target": "strain", "key": "", "delta": 3 },
+            { "target": "reputation", "key": "community", "delta": -3 }
+          ]
+        },
+        {
+          "id": "dispensation",
+          "label": "Ask him to ask for you: a month off the night Office and the early Mass",
+          "outcome": "He asks, as infirmarian, and it is granted the same evening, as those things are when the infirmarian asks. A month without Matins and the six o'clock, and a body that remembers what sleep was. The house sees the empty stall and knows why, this time, and is kinder about it than you feared.",
+          "effects": [
+            { "target": "strain", "key": "", "delta": -15 },
+            { "target": "reputation", "key": "community", "delta": 1 },
+            { "target": "stat", "key": "piety", "delta": -1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "st_prior_cuts_the_week",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 30,
+      "suppressYears": 1,
+      "pressure": ["body_vs_vow"],
+      "requires": [
+        { "type": "strain", "op": ">=", "value": 80 },
+        { "type": "flag", "key": "office:prior", "value": false },
+        { "type": "flag", "key": "away:until", "value": false }
+      ],
+      "title": "Called to the Prior's Room",
+      "body": "{@prior} has called you in, which he does not do, and has a sheet of paper on which he has written what you do in a week, from the men who told him. He reads it aloud, slowly, to the end. Then he says that half of it is now someone else's, that he has already told the someone elses, and that this is not a conversation.",
+      "choices": [
+        {
+          "id": "obey",
+          "label": "Say yes, Father, and mean it",
+          "outcome": "Half the week goes to men who did not want it and take it well enough. You have afternoons. The first one you do not know what to do with; the third you sleep through; the tenth you read. The prior does not mention it again, and the house, which told him, is glad it did.",
+          "effects": [
+            { "target": "strain", "key": "", "delta": -20 },
+            { "target": "reputation", "key": "community", "delta": 3 },
+            { "target": "relationship", "key": "@prior", "delta": 6 }
+          ],
+          "default": true
+        },
+        {
+          "id": "argue",
+          "label": "Argue for the work: the people need it and there is nobody else",
+          "outcome": "Ten minutes of argument he lets you have and then ends. Half the week is someone else's anyway, because he is the prior, and you kept the half you argued for, and the strain of the argument. He writes it down. The house hears that you argued and is divided on whether that was courage.",
+          "effects": [
+            { "target": "strain", "key": "", "delta": -8 },
+            { "target": "relationship", "key": "@prior", "delta": -6 },
+            { "target": "reputation", "key": "community", "delta": -1 }
+          ]
+        },
+        {
+          "id": "ask_more",
+          "label": "Ask for more than he offered: a month somewhere else",
+          "outcome": "He looks at you for a while and then says yes, and telephones the province's house by the sea that afternoon. A month in a house where nobody knows what you do, saying one Mass a day for six old men and walking. You come back to a week that is half of what it was, and the prior has kept it that way.",
+          "effects": [
+            { "target": "flag", "key": "infirmary:asked", "value": true },
+            { "target": "relationship", "key": "@prior", "delta": 3 },
+            { "target": "reputation", "key": "community", "delta": 1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "st_province_offers_rest",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "campaign": "religious",
+      "severity": "MAJOR",
+      "category": "personal",
+      "baseWeight": 50,
+      "suppressYears": 2,
+      "pressure": ["body_vs_vow"],
+      "requires": [
+        { "type": "strain", "op": ">=", "value": 80 },
+        { "type": "age", "op": ">=", "value": 65 },
+        { "type": "flag", "key": "away:until", "value": false },
+        { "type": "flag", "key": "office:provincial", "value": false }
+      ],
+      "title": "The Province Offers",
+      "body": "{@provincial} writes, in his own hand, which he does for two kinds of letter. The house has told him what the house tells provincials about a man past sixty-five who has stopped sleeping. He offers, without pressing, the infirmary house for a season, where the province keeps its old men and its tired ones, or a sabbatical: a semester somewhere with a library and a lake and nobody who needs you. He says a third thing too, which is that he would rather write this letter than the other kind.",
+      "choices": [
+        {
+          "id": "sabbatical",
+          "label": "Take the sabbatical: a semester with a library and a lake",
+          "outcome": "The letter back says yes, and the province finds the money, which it says it does not have. A semester in a house by a lake where the bell is optional and the library is open all night, and a body that remembers, by Lent, what it was for. The house at home covers, and misses you, and says so when you come back.",
+          "effects": [
+            { "target": "flag", "key": "sabbatical:asked", "value": true },
+            { "target": "reputation", "key": "superiors", "delta": 2 },
+            { "target": "relationship", "key": "@provincial", "delta": 5 }
+          ]
+        },
+        {
+          "id": "infirmary",
+          "label": "Go to the infirmary house for a season, among the old men",
+          "outcome": "A season in the house where the province keeps its old men, saying Mass for them and being one of them for a while, which is a thing worth learning before it is true. The infirmarian there is better than the one at home. You come back in three months with a colour in your face and a list of men to visit again before they die.",
+          "effects": [
+            { "target": "flag", "key": "infirmary:asked", "value": true },
+            { "target": "stat", "key": "piety", "delta": 2 },
+            { "target": "reputation", "key": "community", "delta": 2 }
+          ]
+        },
+        {
+          "id": "harness",
+          "label": "Thank him, and stay in harness; the work is the rest",
+          "outcome": "A letter back that he reads twice and puts in the file with the other letters from men who said the same. The work goes on and so do you, and the house watches, and the province has done what it could and written it down. The men who said it before were right about half the time, and dead the other half.",
+          "effects": [
+            { "target": "flag", "key": "strain:in_harness", "value": true },
+            { "target": "reputation", "key": "community", "delta": 2 },
+            { "target": "reputation", "key": "superiors", "delta": -1 },
+            { "target": "strain", "key": "", "delta": 4 }
+          ]
+        }
+      ]
+    }
+  ]
+}

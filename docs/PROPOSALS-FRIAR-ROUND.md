@@ -76,7 +76,12 @@ Events per year: 0–4 in formation, 15–18 in a posting, 0–2 in Rome. 346 sc
 
 **D10. The cardinal and the friar.** Made a cardinal at 61 while provincial, he was elected prior of a priory two years later and served, and the record never mentioned the red again. A cardinal of the order (real ones exist) should leave the ranks: consistories and a titular church in Rome, the general asking his help with the dicastery, the province proud and a little embarrassed, and the chapters electing without him.
 
-## 5. What the sweep measured
+## 5. Shipped since
+
+- **Batch A (Q1–Q5).** The friar's circle; the shelf that reads a friar's life; the provincial's desk; consultations that say what the house needs; talk in the friar's idiom.
+- **Batch B (Q6–Q10).** The general's years, the faculty's, and the Curia's for a friar are repeatable scenes drawn at a Roman posting's own rate, and the general's review counts the order; past the sick line the infirmarian or the prior cuts the week, a sabbatical or the infirmary house takes a man off the work for its weeks, the province offers past sixty-five, and the death roll reads strain; a house closed while its founder was away is a scene; the year in review has the friar's rows (the common life kept, what he is known for, the house and its men and purse, the obedience of the year, the province's books for a provincial).
+
+## 6. What the sweep measured
 
 | Sheet (prior, before) | Screens | After |
 |---|---|---|
