@@ -32,3 +32,4 @@ export * from './town';
 export * from './talk';
 export * from './night';
 export * from './rome';
+export * from './conference';

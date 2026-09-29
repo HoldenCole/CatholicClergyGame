@@ -1,0 +1,4493 @@
+{
+ "_notes": "E2 R1.2: the bishops' conference (docs/EXPANSION-E2-PROVINCE.md §2.3; systems/conference.ts). For a priest: the conference's document comes home some weeks after his bishop's letter as a scene of beat conference (scene cascade), one per document at priority 2 with a generic one under them; the choices record what he did with it on the document's own axis (document conference:<topic>), as Rome's cascade does, and take a position at a volume. The conference as weather: the bishop away at the assembly (conference assembly within 1), the bishop who voted no, the reporter, a friend on Fourth Street for a man who worked there as a student (flag worked_at_the_conference). For a player-bishop: the assembly's vote (scene assembly with a document issued this week, priority 2, a generic vote under), the corridor and the nuncio when there is none, the election scenes (scene election; conference next names the rung; the choice sets conference:stand to the office and the ballots run the following week in systems/conference.ts on the ballot engine), the result (scene result; conference result won/lost), and the offices held (conference office). Tokens: {conference_doc}, {conference_doc_gist}, {conference_president}, {conference_office}, {conference_winner}, {conference_temper}. The safeguarding norms are authored plainly, with no way to refuse them and nothing to optimize, per DESIGN §11.",
+ "events": [
+  {
+   "id": "cf_home_economy",
+   "phase": [
+    "parochial_vicar",
+    "administrator",
+    "pastor"
+   ],
+   "severity": "NOTABLE",
+   "category": "chancery",
+   "baseWeight": 30,
+   "suppressYears": 2,
+   "pressure": [
+    "ambition_vs_integrity"
+   ],
+   "requires": [
+    {
+     "type": "conference",
+     "key": "scene",
+     "value": "cascade"
+    },
+    {
+     "type": "conference",
+     "key": "document",
+     "value": "economy_pastoral"
+    }
+   ],
+   "title": "The Letter on the Economy",
+   "body": "{@bishop}'s covering note said three Sundays in the pulpit for Bread and Work, and a page to the chancery on what the poor of the town need. The letter is forty pages and the parish council chair, who owns the hardware store, has already read the part about wages and wants a word.",
+   "choices": [
+    {
+     "id": "preach",
+     "label": "Three Sundays, the whole of it, and the page to the chancery written with the St. Vincent de Paul men",
+     "outcome": "Three homilies on wages and work, one of which names the plant. The hardware store is cool for a month and the Vincentians are not. The page goes to the chancery with a list, and the chancery, for once, answers it.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:social_justice",
+       "value": "eager"
+      },
+      {
+       "target": "reputation",
+       "key": "parishioners",
+       "delta": 3
+      },
+      {
+       "target": "reputation",
+       "key": "progressive_bloc",
+       "delta": 4
+      },
+      {
+       "target": "reputation",
+       "key": "traditional_bloc",
+       "delta": -3
+      },
+      {
+       "target": "reputation",
+       "key": "chancery",
+       "delta": 3
+      }
+     ],
+     "volume": "semi_public",
+     "positionTopic": "social_justice",
+     "positionValue": 35
+    },
+    {
+     "id": "read",
+     "label": "Read it once, from the pulpit, as it was given",
+     "outcome": "One Sunday, the letter's own words and none of yours, and the page to the chancery a paragraph long. Nobody is angry. Nobody remembers it by Advent.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:social_justice",
+       "value": "faithful"
+      },
+      {
+       "target": "reputation",
+       "key": "chancery",
+       "delta": 1
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "insert",
+     "label": "A bulletin insert and a line at the announcements",
+     "outcome": "The insert is four pages the parish did not read, and the announcement is a sentence. The chancery's page is written by the secretary from the insert. The hardware store buys you lunch.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:social_justice",
+       "value": "minimal"
+      },
+      {
+       "target": "reputation",
+       "key": "traditional_bloc",
+       "delta": 2
+      },
+      {
+       "target": "reputation",
+       "key": "progressive_bloc",
+       "delta": -2
+      }
+     ]
+    },
+    {
+     "id": "not",
+     "label": "Not from this pulpit: a letter to the bishop saying why",
+     "outcome": "You write that the parish hears about the economy every day from the people who live in it and does not need forty pages from the bishops, and that the pulpit is for the Gospel. He does not answer. The page to the chancery does not go. Someone at the deanery has read your letter.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:social_justice",
+       "value": "defiant"
+      },
+      {
+       "target": "reputation",
+       "key": "chancery",
+       "delta": -5
+      },
+      {
+       "target": "reputation",
+       "key": "traditional_bloc",
+       "delta": 5
+      },
+      {
+       "target": "reputation",
+       "key": "progressive_bloc",
+       "delta": -6
+      }
+     ],
+     "volume": "semi_public",
+     "positionTopic": "social_justice",
+     "positionValue": -30
+    }
+   ],
+   "beat": "conference",
+   "priority": 2
+  },
+  {
+   "id": "cf_home_immigration",
+   "phase": [
+    "parochial_vicar",
+    "administrator",
+    "pastor"
+   ],
+   "severity": "NOTABLE",
+   "category": "chancery",
+   "baseWeight": 30,
+   "suppressYears": 2,
+   "pressure": [
+    "ambition_vs_integrity"
+   ],
+   "requires": [
+    {
+     "type": "conference",
+     "key": "scene",
+     "value": "cascade"
+    },
+    {
+     "type": "conference",
+     "key": "document",
+     "value": "immigration_statement"
+    }
+   ],
+   "title": "The Stranger at the Gate",
+   "body": "The conference's statement on immigration is on the desk with {@bishop}'s note, and under it a message from a man in the Spanish community who has read the statement in the paper and wants to know whether the parish means it. The sheriff's deputy who ushers at ten o'clock has read it too.",
+   "choices": [
+    {
+     "id": "open",
+     "label": "Say it from the pulpit, in both languages, and find the lawyer",
+     "outcome": "You say it at every Mass, in Spanish first, and the immigration lawyer from the next county gives an evening in the hall. Forty people come. The deputy stops ushering and does not say why. The Spanish community fills the front pews for a year.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:immigration",
+       "value": "eager"
+      },
+      {
+       "target": "reputation",
+       "key": "parishioners",
+       "delta": 4
+      },
+      {
+       "target": "reputation",
+       "key": "progressive_bloc",
+       "delta": 5
+      },
+      {
+       "target": "reputation",
+       "key": "traditional_bloc",
+       "delta": -4
+      },
+      {
+       "target": "reputation",
+       "key": "public",
+       "delta": 3
+      }
+     ],
+     "volume": "public",
+     "positionTopic": "immigration",
+     "positionValue": 45
+    },
+    {
+     "id": "read",
+     "label": "Read the statement as given, and answer the man privately",
+     "outcome": "The statement is read, without a homily on it, and the man who asked is told, in the office, what the parish will do for him and his family, which is a good deal, quietly. The deputy stays. The community notices who did not say it aloud.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:immigration",
+       "value": "faithful"
+      },
+      {
+       "target": "reputation",
+       "key": "parishioners",
+       "delta": 1
+      },
+      {
+       "target": "reputation",
+       "key": "chancery",
+       "delta": 1
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "bulletin",
+     "label": "The bulletin, and a line that the parish is for everyone",
+     "outcome": "The statement goes in the bulletin with a sentence of your own that offends no one and commits the parish to nothing. The man does not come back to the office. The deputy is grateful and says so, which is its own kind of cost.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:immigration",
+       "value": "minimal"
+      },
+      {
+       "target": "reputation",
+       "key": "traditional_bloc",
+       "delta": 2
+      },
+      {
+       "target": "reputation",
+       "key": "progressive_bloc",
+       "delta": -3
+      }
+     ]
+    },
+    {
+     "id": "not",
+     "label": "Tell the bishop the parish will keep its doors open and its mouth shut",
+     "outcome": "You write that the parish has served the undocumented for twenty years without a statement and will go on doing it without one, and that a pulpit that talks politics loses the people it is meant for. The bishop's reply is two lines. The chancery keeps the letter.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:immigration",
+       "value": "defiant"
+      },
+      {
+       "target": "reputation",
+       "key": "chancery",
+       "delta": -4
+      },
+      {
+       "target": "reputation",
+       "key": "traditional_bloc",
+       "delta": 4
+      },
+      {
+       "target": "reputation",
+       "key": "progressive_bloc",
+       "delta": -5
+      }
+     ],
+     "volume": "semi_public",
+     "positionTopic": "immigration",
+     "positionValue": -25
+    }
+   ],
+   "beat": "conference",
+   "priority": 2
+  },
+  {
+   "id": "cf_home_racism",
+   "phase": [
+    "parochial_vicar",
+    "administrator",
+    "pastor"
+   ],
+   "severity": "NOTABLE",
+   "category": "chancery",
+   "baseWeight": 30,
+   "suppressYears": 2,
+   "pressure": [
+    "ambition_vs_integrity"
+   ],
+   "requires": [
+    {
+     "type": "conference",
+     "key": "scene",
+     "value": "cascade"
+    },
+    {
+     "type": "conference",
+     "key": "document",
+     "value": "racism_pastoral"
+    }
+   ],
+   "title": "One Blood",
+   "body": "The pastoral letter on racism asks for an evening in every parish before Lent, and the diocese will ask who came. The parish has one Black family and a long memory of the neighborhood that used to be here, and the older ushers do not think an evening is needed.",
+   "choices": [
+    {
+     "id": "evening",
+     "label": "The evening, with the family asked to speak, and the history of the parish read aloud",
+     "outcome": "The family's mother speaks for twelve minutes and the hall is silent for all of them. You read the parish's own record: the school that closed in 1968 and why. Thirty people come; the ushers do not. The diocese writes down thirty. The family stays.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:social_justice",
+       "value": "eager"
+      },
+      {
+       "target": "reputation",
+       "key": "parishioners",
+       "delta": 2
+      },
+      {
+       "target": "reputation",
+       "key": "progressive_bloc",
+       "delta": 4
+      },
+      {
+       "target": "reputation",
+       "key": "traditional_bloc",
+       "delta": -3
+      },
+      {
+       "target": "stat",
+       "key": "charisma",
+       "delta": 1
+      }
+     ],
+     "volume": "semi_public",
+     "positionTopic": "social_justice",
+     "positionValue": 30
+    },
+    {
+     "id": "held",
+     "label": "The evening, as the letter asks, with the diocese's materials",
+     "outcome": "An evening with the diocese's slides and the diocese's questions, and eleven people, most of them the parish council. The report says eleven. Nothing is said that anyone will remember, and nothing is said that anyone will resent.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:social_justice",
+       "value": "faithful"
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "deanery",
+     "label": "Send the parish to the deanery's evening instead",
+     "outcome": "The deanery holds one evening for six parishes and four of your people go. The report says four. The letter sits in the sacristy for a year with the other letters.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:social_justice",
+       "value": "minimal"
+      },
+      {
+       "target": "reputation",
+       "key": "chancery",
+       "delta": -1
+      }
+     ]
+    },
+    {
+     "id": "not",
+     "label": "No evening; a homily on the Gospel instead, and the letter left on the shelf",
+     "outcome": "You preach on the Samaritan and do not mention the letter, and tell the chancery, when it asks, that the parish had its evening in the homily. The chancery does not agree. The family's mother asks you after Mass whether the bishops' letter was read here, and you tell her the truth.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:social_justice",
+       "value": "defiant"
+      },
+      {
+       "target": "reputation",
+       "key": "chancery",
+       "delta": -4
+      },
+      {
+       "target": "reputation",
+       "key": "parishioners",
+       "delta": -2
+      },
+      {
+       "target": "reputation",
+       "key": "traditional_bloc",
+       "delta": 3
+      },
+      {
+       "target": "reputation",
+       "key": "progressive_bloc",
+       "delta": -5
+      }
+     ]
+    }
+   ],
+   "beat": "conference",
+   "priority": 2
+  },
+  {
+   "id": "cf_home_translation",
+   "phase": [
+    "parochial_vicar",
+    "administrator",
+    "pastor"
+   ],
+   "severity": "NOTABLE",
+   "category": "chancery",
+   "baseWeight": 30,
+   "suppressYears": 2,
+   "pressure": [
+    "ambition_vs_integrity"
+   ],
+   "requires": [
+    {
+     "type": "conference",
+     "key": "scene",
+     "value": "cascade"
+    },
+    {
+     "type": "conference",
+     "key": "document",
+     "value": "translation_guidelines"
+    }
+   ],
+   "title": "Words for the Altar",
+   "body": "The new translations are to be used from Advent. The books cost the parish four thousand dollars, the responses will change in the pews, and the choir director has already found three collects she cannot sing. {@bishop}'s note says the old books are to be put away, not given away.",
+   "choices": [
+    {
+     "id": "early",
+     "label": "The new books at once, with four weeks of catechesis and the pew cards",
+     "outcome": "You begin in October, ahead of the diocese, with a homily a week on why the words changed and cards in the pews. The parish stumbles through Advent and by Lent says the new responses as if it had always said them. The choir director finds her collects.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:translation",
+       "value": "eager"
+      },
+      {
+       "target": "reputation",
+       "key": "parishioners",
+       "delta": 1
+      },
+      {
+       "target": "reputation",
+       "key": "traditional_bloc",
+       "delta": 3
+      },
+      {
+       "target": "reputation",
+       "key": "chancery",
+       "delta": 2
+      },
+      {
+       "target": "money",
+       "key": "",
+       "delta": -4000
+      }
+     ]
+    },
+    {
+     "id": "advent",
+     "label": "From the first Sunday of Advent, as the letter says",
+     "outcome": "The books arrive the week before and the parish reads from cards for a season. The responses come slowly and the choir director slower. By Easter it is simply the Mass.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:translation",
+       "value": "faithful"
+      },
+      {
+       "target": "money",
+       "key": "",
+       "delta": -4000
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "slow",
+     "label": "The new books when the old ones wear out",
+     "outcome": "You buy one altar book and keep the old missalettes in the pews until they fall apart, which takes two years. The chancery's liturgy office notices in the second. The choir keeps its collects.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:translation",
+       "value": "minimal"
+      },
+      {
+       "target": "reputation",
+       "key": "chancery",
+       "delta": -3
+      },
+      {
+       "target": "reputation",
+       "key": "progressive_bloc",
+       "delta": 2
+      }
+     ]
+    },
+    {
+     "id": "not",
+     "label": "Keep the old translation, and say so to the bishop",
+     "outcome": "You write that the parish learned the last translation twelve years ago and will not learn another, and that the money is needed for the roof. The bishop answers that the roof is the parish's and the Missal is the Church's, and the liturgy office sends a man to the ten o'clock.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:translation",
+       "value": "defiant"
+      },
+      {
+       "target": "reputation",
+       "key": "chancery",
+       "delta": -6
+      },
+      {
+       "target": "reputation",
+       "key": "progressive_bloc",
+       "delta": 4
+      },
+      {
+       "target": "reputation",
+       "key": "traditional_bloc",
+       "delta": -4
+      }
+     ],
+     "volume": "semi_public",
+     "positionTopic": "translation",
+     "positionValue": 30
+    }
+   ],
+   "beat": "conference",
+   "priority": 2
+  },
+  {
+   "id": "cf_home_voting_guide",
+   "phase": [
+    "parochial_vicar",
+    "administrator",
+    "pastor"
+   ],
+   "severity": "NOTABLE",
+   "category": "chancery",
+   "baseWeight": 30,
+   "suppressYears": 2,
+   "pressure": [
+    "ambition_vs_integrity"
+   ],
+   "requires": [
+    {
+     "type": "conference",
+     "key": "scene",
+     "value": "cascade"
+    },
+    {
+     "type": "conference",
+     "key": "document",
+     "value": "voting_guide"
+    }
+   ],
+   "title": "Conscience and the Ballot",
+   "body": "The voting guide is to be in the vestibule by October and a homily on conscience is asked for, and no candidate is to be named from the pulpit. The Knights want to hand it out at the doors; the peace and justice committee wants to hand out something else beside it.",
+   "choices": [
+    {
+     "id": "homily",
+     "label": "The guide in the vestibule and a homily on conscience that names no one and spares no one",
+     "outcome": "You preach on conscience for twenty minutes and the parish hears in it whatever it came with. The guide goes from the vestibule. Both committees are dissatisfied, which the guide's authors would recognize.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:authority",
+       "value": "eager"
+      },
+      {
+       "target": "reputation",
+       "key": "parishioners",
+       "delta": 1
+      },
+      {
+       "target": "reputation",
+       "key": "chancery",
+       "delta": 2
+      },
+      {
+       "target": "stat",
+       "key": "charisma",
+       "delta": 1
+      }
+     ],
+     "volume": "public",
+     "positionTopic": "authority",
+     "positionValue": 10
+    },
+    {
+     "id": "vestibule",
+     "label": "The guide in the vestibule, and no homily on it",
+     "outcome": "The guide sits in the vestibule until November and most of it is still there. The Knights are told no, and the committee is told no, and the homilies stay on the readings.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:authority",
+       "value": "faithful"
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "knights",
+     "label": "Let the Knights hand it out, with their own flyer",
+     "outcome": "The guide goes out with a flyer the Knights wrote that names no candidate and leaves no doubt. The committee complains to the chancery. The chancery asks for the flyer, and reads it, and asks you not to do that again.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:authority",
+       "value": "minimal"
+      },
+      {
+       "target": "reputation",
+       "key": "traditional_bloc",
+       "delta": 4
+      },
+      {
+       "target": "reputation",
+       "key": "progressive_bloc",
+       "delta": -4
+      },
+      {
+       "target": "reputation",
+       "key": "chancery",
+       "delta": -2
+      }
+     ],
+     "volume": "semi_public",
+     "positionTopic": "authority",
+     "positionValue": -20
+    },
+    {
+     "id": "not",
+     "label": "Not this year: the parish is not a polling place",
+     "outcome": "You leave the guide in its box and tell the chancery the parish will preach the Gospel through October and let the people vote as they like. The chancery reminds you of the letter. The peace and justice committee is delighted, and the Knights are not.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:authority",
+       "value": "defiant"
+      },
+      {
+       "target": "reputation",
+       "key": "chancery",
+       "delta": -3
+      },
+      {
+       "target": "reputation",
+       "key": "progressive_bloc",
+       "delta": 3
+      },
+      {
+       "target": "reputation",
+       "key": "traditional_bloc",
+       "delta": -4
+      }
+     ]
+    }
+   ],
+   "beat": "conference",
+   "priority": 2
+  },
+  {
+   "id": "cf_home_liberty",
+   "phase": [
+    "parochial_vicar",
+    "administrator",
+    "pastor"
+   ],
+   "severity": "NOTABLE",
+   "category": "chancery",
+   "baseWeight": 30,
+   "suppressYears": 2,
+   "pressure": [
+    "ambition_vs_integrity"
+   ],
+   "requires": [
+    {
+     "type": "conference",
+     "key": "scene",
+     "value": "cascade"
+    },
+    {
+     "type": "conference",
+     "key": "document",
+     "value": "religious_liberty_statement"
+    }
+   ],
+   "title": "A Liberty Older Than the Republic",
+   "body": "The fortnight of prayer for religious liberty is asked for in June, with a holy hour in every parish and the statement read at it. The parish has a holy hour already, on Thursdays, with nine people, and the peace and justice committee has opinions about the statement.",
+   "choices": [
+    {
+     "id": "full",
+     "label": "The fortnight in full: the holy hour nightly, the statement read, the bells rung",
+     "outcome": "Fourteen nights, the statement read on the first and the last, and the church half full on the Fourth. The Knights carry the flag in. The committee stays away and says so in the bulletin, which you let them.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:religious_liberty",
+       "value": "eager"
+      },
+      {
+       "target": "reputation",
+       "key": "traditional_bloc",
+       "delta": 5
+      },
+      {
+       "target": "reputation",
+       "key": "progressive_bloc",
+       "delta": -4
+      },
+      {
+       "target": "reputation",
+       "key": "parishioners",
+       "delta": 1
+      }
+     ],
+     "volume": "public",
+     "positionTopic": "religious_liberty",
+     "positionValue": -35
+    },
+    {
+     "id": "hour",
+     "label": "One holy hour, the statement read, the fortnight in the bulletin",
+     "outcome": "The Thursday holy hour reads the statement, the bulletin carries the fortnight, and June goes on. Nine people. The chancery's box is ticked.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:religious_liberty",
+       "value": "faithful"
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "quiet",
+     "label": "The Thursday holy hour as it is, with an intention added",
+     "outcome": "You add religious liberty to the Thursday intentions and read nothing. The Knights ask why the parish is not doing more, and you tell them the parish prays every Thursday, which is true.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:religious_liberty",
+       "value": "minimal"
+      },
+      {
+       "target": "reputation",
+       "key": "traditional_bloc",
+       "delta": -2
+      }
+     ]
+    },
+    {
+     "id": "not",
+     "label": "Decline it: the parish prays for the country every Sunday already",
+     "outcome": "You write to the bishop that the statement is a political document in a cassock and the parish will not read it at prayer. The bishop, who voted for it, answers in a hand that has not been that steady in years. The peace and justice committee frames your letter.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:religious_liberty",
+       "value": "defiant"
+      },
+      {
+       "target": "reputation",
+       "key": "chancery",
+       "delta": -5
+      },
+      {
+       "target": "reputation",
+       "key": "progressive_bloc",
+       "delta": 5
+      },
+      {
+       "target": "reputation",
+       "key": "traditional_bloc",
+       "delta": -6
+      }
+     ],
+     "volume": "semi_public",
+     "positionTopic": "religious_liberty",
+     "positionValue": 35
+    }
+   ],
+   "beat": "conference",
+   "priority": 2
+  },
+  {
+   "id": "cf_home_safeguarding",
+   "phase": [
+    "parochial_vicar",
+    "administrator",
+    "pastor"
+   ],
+   "severity": "NOTABLE",
+   "category": "chancery",
+   "baseWeight": 30,
+   "suppressYears": 2,
+   "pressure": [
+    "competence"
+   ],
+   "requires": [
+    {
+     "type": "conference",
+     "key": "scene",
+     "value": "cascade"
+    },
+    {
+     "type": "conference",
+     "key": "document",
+     "value": "safeguarding_norms"
+    }
+   ],
+   "title": "The Revised Norms",
+   "body": "The revised norms for the protection of minors have come with the chancery's dates: the audit within the year, every volunteer trained again, the reporting line on the wall. The parish did all of this once, in the years after the first norms, and the volunteers remember the training and not fondly.",
+   "choices": [
+    {
+     "id": "first",
+     "label": "The audit first, before the chancery's date, and the training led yourself",
+     "outcome": "You ask for the earliest audit date in the diocese and get it. The training is yours, not the diocese's video, and the volunteers who grumbled come out saying it was the first time anyone told them why. The auditor writes a clean report and a sentence about the pastor.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:abuse_handling",
+       "value": "eager"
+      },
+      {
+       "target": "reputation",
+       "key": "chancery",
+       "delta": 4
+      },
+      {
+       "target": "reputation",
+       "key": "parishioners",
+       "delta": 2
+      },
+      {
+       "target": "stat",
+       "key": "administration",
+       "delta": 2
+      },
+      {
+       "target": "strain",
+       "key": "",
+       "delta": 3
+      }
+     ]
+    },
+    {
+     "id": "date",
+     "label": "On the chancery's dates, with the diocese's materials",
+     "outcome": "The audit comes on its date and the video is shown on the three evenings, and the parish does what it must in the order it was asked. The report is clean. The volunteers say the video was long.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:abuse_handling",
+       "value": "faithful"
+      },
+      {
+       "target": "stat",
+       "key": "administration",
+       "delta": 1
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "minimum",
+     "label": "What the norms require and not a form more",
+     "outcome": "The audit is passed on the second visit, after the first found the training records incomplete, and the chancery's letter about it is polite. The volunteers do the video. The line is on the wall.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:abuse_handling",
+       "value": "minimal"
+      },
+      {
+       "target": "reputation",
+       "key": "chancery",
+       "delta": -3
+      }
+     ]
+    }
+   ],
+   "beat": "conference",
+   "priority": 2
+  },
+  {
+   "id": "cf_home_eucharist",
+   "phase": [
+    "parochial_vicar",
+    "administrator",
+    "pastor"
+   ],
+   "severity": "NOTABLE",
+   "category": "chancery",
+   "baseWeight": 30,
+   "suppressYears": 2,
+   "pressure": [
+    "ambition_vs_integrity"
+   ],
+   "requires": [
+    {
+     "type": "conference",
+     "key": "scene",
+     "value": "cascade"
+    },
+    {
+     "type": "conference",
+     "key": "document",
+     "value": "eucharist_pastoral"
+    }
+   ],
+   "title": "This Is My Body",
+   "body": "The pastoral letter on the Eucharist opens a three-year revival: adoration weekly, a procession on Corpus Christi, preaching on the Real Presence through the year. The parish has adoration on First Fridays with a faithful eleven, and has not had a procession since the pastor before the pastor before you.",
+   "choices": [
+    {
+     "id": "revival",
+     "label": "The whole of it: adoration every week, the procession through the town, a year of preaching on the Presence",
+     "outcome": "Adoration goes weekly and the eleven become forty by the second year. The procession goes down Main Street with the Knights and the first communicants and a police escort the mayor arranged. You preach the Presence until the parish can say the doctrine back to you. It is the best thing you have done here, and it cost the evenings.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:doctrine",
+       "value": "eager"
+      },
+      {
+       "target": "reputation",
+       "key": "parishioners",
+       "delta": 4
+      },
+      {
+       "target": "reputation",
+       "key": "traditional_bloc",
+       "delta": 5
+      },
+      {
+       "target": "reputation",
+       "key": "progressive_bloc",
+       "delta": -2
+      },
+      {
+       "target": "stat",
+       "key": "piety",
+       "delta": 2
+      },
+      {
+       "target": "strain",
+       "key": "",
+       "delta": 4
+      }
+     ],
+     "volume": "semi_public",
+     "positionTopic": "doctrine",
+     "positionValue": -20
+    },
+    {
+     "id": "asked",
+     "label": "Adoration weekly, the procession in the parking lot, the preaching when the readings allow",
+     "outcome": "Weekly adoration finds twenty. The procession goes around the church and back in. You preach the Presence on the feasts. The letter is honored and the parish is not changed by it.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:doctrine",
+       "value": "faithful"
+      },
+      {
+       "target": "reputation",
+       "key": "parishioners",
+       "delta": 1
+      },
+      {
+       "target": "stat",
+       "key": "piety",
+       "delta": 1
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "friday",
+     "label": "First Fridays as they are, and a homily on Corpus Christi",
+     "outcome": "The eleven keep their First Fridays and hear a homily on the feast. The diocese's revival office sends a survey and you fill it in honestly.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:doctrine",
+       "value": "minimal"
+      },
+      {
+       "target": "reputation",
+       "key": "chancery",
+       "delta": -2
+      }
+     ]
+    },
+    {
+     "id": "not",
+     "label": "Tell the bishop the parish believes in the Real Presence and does not need a program",
+     "outcome": "You write that a three-year program with a logo is not how the parish came to believe what it believes, and that the Mass is the revival. The bishop, who chairs the revival committee, reads it twice. The traditional men in the parish, who wanted the procession, are angrier than the chancery.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:doctrine",
+       "value": "defiant"
+      },
+      {
+       "target": "reputation",
+       "key": "chancery",
+       "delta": -5
+      },
+      {
+       "target": "reputation",
+       "key": "traditional_bloc",
+       "delta": -5
+      },
+      {
+       "target": "reputation",
+       "key": "progressive_bloc",
+       "delta": 3
+      }
+     ],
+     "volume": "semi_public",
+     "positionTopic": "doctrine",
+     "positionValue": 15
+    }
+   ],
+   "beat": "conference",
+   "priority": 2
+  },
+  {
+   "id": "cf_home_family",
+   "phase": [
+    "parochial_vicar",
+    "administrator",
+    "pastor"
+   ],
+   "severity": "NOTABLE",
+   "category": "chancery",
+   "baseWeight": 30,
+   "suppressYears": 2,
+   "pressure": [
+    "ambition_vs_integrity"
+   ],
+   "requires": [
+    {
+     "type": "conference",
+     "key": "scene",
+     "value": "cascade"
+    },
+    {
+     "type": "conference",
+     "key": "document",
+     "value": "family_pastoral"
+    }
+   ],
+   "title": "The Household of God",
+   "body": "The pastoral letter on marriage and the family lengthens marriage preparation to a year and asks for preaching on the letter through the autumn. The parish marries fourteen couples a year, most of them already living together, and the deacon who runs the preparation has been doing it in six sessions for twenty years.",
+   "choices": [
+    {
+     "id": "year",
+     "label": "The year of preparation, built with the deacon, and the letter preached in October",
+     "outcome": "The deacon rebuilds the course with you over a summer, and it is better: a year, with the older couples mentoring the young ones. Three couples go to the Methodists instead. The eleven who stay are married differently. The letter is preached and the parish hears it.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:doctrine",
+       "value": "eager"
+      },
+      {
+       "target": "reputation",
+       "key": "parishioners",
+       "delta": 1
+      },
+      {
+       "target": "reputation",
+       "key": "traditional_bloc",
+       "delta": 4
+      },
+      {
+       "target": "reputation",
+       "key": "progressive_bloc",
+       "delta": -2
+      },
+      {
+       "target": "stat",
+       "key": "theology",
+       "delta": 1
+      }
+     ],
+     "volume": "semi_public",
+     "positionTopic": "doctrine",
+     "positionValue": -20
+    },
+    {
+     "id": "year_quiet",
+     "label": "The year of preparation, as asked, and the letter in the bulletin",
+     "outcome": "The deacon stretches six sessions to twelve across a year, which is the letter's word if not its spirit, and the letter runs in the bulletin in four parts nobody reads. Two couples go elsewhere.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:doctrine",
+       "value": "faithful"
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "six",
+     "label": "The six sessions, called a year on the form",
+     "outcome": "The deacon keeps his six sessions and the form to the chancery says twelve months from first meeting to wedding, which is true if you count the first phone call. The chancery's family life office asks no questions.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:doctrine",
+       "value": "minimal"
+      },
+      {
+       "target": "reputation",
+       "key": "chancery",
+       "delta": -2
+      },
+      {
+       "target": "reputation",
+       "key": "progressive_bloc",
+       "delta": 2
+      }
+     ]
+    },
+    {
+     "id": "not",
+     "label": "Write to the bishop that a year would empty the church of weddings",
+     "outcome": "You write that the couples who come to you are the couples the Church has left, and a year's preparation is a year's excuse, and the bishop answers that the couples who come to you are the couples who will stay if they are asked to. Neither of you is wrong. The deacon keeps his six sessions and you keep the letter.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:doctrine",
+       "value": "defiant"
+      },
+      {
+       "target": "reputation",
+       "key": "chancery",
+       "delta": -4
+      },
+      {
+       "target": "reputation",
+       "key": "progressive_bloc",
+       "delta": 4
+      },
+      {
+       "target": "reputation",
+       "key": "traditional_bloc",
+       "delta": -4
+      }
+     ],
+     "volume": "semi_public",
+     "positionTopic": "doctrine",
+     "positionValue": 20
+    }
+   ],
+   "beat": "conference",
+   "priority": 2
+  },
+  {
+   "id": "cf_home_synod",
+   "phase": [
+    "parochial_vicar",
+    "administrator",
+    "pastor"
+   ],
+   "severity": "NOTABLE",
+   "category": "chancery",
+   "baseWeight": 30,
+   "suppressYears": 2,
+   "pressure": [
+    "ambition_vs_integrity"
+   ],
+   "requires": [
+    {
+     "type": "conference",
+     "key": "scene",
+     "value": "cascade"
+    },
+    {
+     "type": "conference",
+     "key": "document",
+     "value": "synod_guidelines"
+    }
+   ],
+   "title": "Listening Together",
+   "body": "The guidelines for the listening sessions are on the desk: every parish this year, a facilitator who is not the pastor, and what is heard sent to the diocese unedited. The parish council wants to run it; the traditional men want to know whether the diocese will listen to them.",
+   "choices": [
+    {
+     "id": "full",
+     "label": "Three sessions, a facilitator from outside, and every word sent up unedited",
+     "outcome": "The facilitator is a sister from the next town and the three evenings fill. What is heard is sent to the diocese as it was said, including the pages about you. The diocese's synthesis quotes the parish twice. The traditional men came, and were heard, and say so.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:synodality",
+       "value": "eager"
+      },
+      {
+       "target": "reputation",
+       "key": "parishioners",
+       "delta": 3
+      },
+      {
+       "target": "reputation",
+       "key": "progressive_bloc",
+       "delta": 4
+      },
+      {
+       "target": "reputation",
+       "key": "chancery",
+       "delta": 2
+      },
+      {
+       "target": "strain",
+       "key": "",
+       "delta": 2
+      }
+     ],
+     "volume": "semi_public",
+     "positionTopic": "synodality",
+     "positionValue": 30
+    },
+    {
+     "id": "one",
+     "label": "One session, the council facilitating, the notes sent as taken",
+     "outcome": "One evening in the hall with the council chair at the whiteboard, forty people, and the notes typed up and sent. The diocese acknowledges receipt.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:synodality",
+       "value": "faithful"
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "survey",
+     "label": "A survey in the bulletin instead of an evening",
+     "outcome": "The survey goes in the bulletin and thirty-one come back, most of them about the parking lot. You send them up. The diocese's synthesis does not mention the parking lot.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:synodality",
+       "value": "minimal"
+      },
+      {
+       "target": "reputation",
+       "key": "progressive_bloc",
+       "delta": -2
+      },
+      {
+       "target": "reputation",
+       "key": "chancery",
+       "delta": -1
+      }
+     ]
+    },
+    {
+     "id": "not",
+     "label": "No session: tell the bishop the parish listens on Sunday",
+     "outcome": "You write that the parish has a pastor who listens and a council that meets, and a listening session is a meeting about meetings. The bishop's reply quotes Rome. The council chair, who wanted to run it, is hurt; the traditional men are pleased for the wrong reasons.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:synodality",
+       "value": "defiant"
+      },
+      {
+       "target": "reputation",
+       "key": "chancery",
+       "delta": -4
+      },
+      {
+       "target": "reputation",
+       "key": "parishioners",
+       "delta": -2
+      },
+      {
+       "target": "reputation",
+       "key": "traditional_bloc",
+       "delta": 3
+      },
+      {
+       "target": "reputation",
+       "key": "progressive_bloc",
+       "delta": -5
+      }
+     ],
+     "volume": "semi_public",
+     "positionTopic": "synodality",
+     "positionValue": -30
+    }
+   ],
+   "beat": "conference",
+   "priority": 2
+  },
+  {
+   "id": "cf_home_creation",
+   "phase": [
+    "parochial_vicar",
+    "administrator",
+    "pastor"
+   ],
+   "severity": "NOTABLE",
+   "category": "chancery",
+   "baseWeight": 30,
+   "suppressYears": 2,
+   "pressure": [
+    "ambition_vs_integrity"
+   ],
+   "requires": [
+    {
+     "type": "conference",
+     "key": "scene",
+     "value": "cascade"
+    },
+    {
+     "type": "conference",
+     "key": "document",
+     "value": "creation_statement"
+    }
+   ],
+   "title": "The Land Is the Lord's",
+   "body": "The statement on the care of creation asks for preaching in September, an audit of the parish's own buildings, and a word on what will change. The boiler is thirty years old, the roof leaks, and the parish council's engineer has wanted to talk about solar panels for a year.",
+   "choices": [
+    {
+     "id": "audit",
+     "label": "Preach it, audit the buildings with the engineer, and put the panels on the school roof",
+     "outcome": "Four Septembers of homilies on the land, and the engineer's audit finds the boiler and the roof and the panels pay for themselves in nine years. You do the panels. The diocese puts the parish in its newsletter. The men who think this is politics stop giving for a season.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:creation",
+       "value": "eager"
+      },
+      {
+       "target": "reputation",
+       "key": "parishioners",
+       "delta": 1
+      },
+      {
+       "target": "reputation",
+       "key": "progressive_bloc",
+       "delta": 4
+      },
+      {
+       "target": "reputation",
+       "key": "traditional_bloc",
+       "delta": -3
+      },
+      {
+       "target": "reputation",
+       "key": "public",
+       "delta": 2
+      },
+      {
+       "target": "money",
+       "key": "",
+       "delta": -15000
+      }
+     ],
+     "volume": "semi_public",
+     "positionTopic": "creation",
+     "positionValue": 30
+    },
+    {
+     "id": "preach",
+     "label": "Preach it in September and send the diocese a page about the boiler",
+     "outcome": "A homily on the first Sunday of September, and a page to the diocese that says the boiler is thirty years old and the parish knows it. The diocese thanks the parish for its candor.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:creation",
+       "value": "faithful"
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "bulletin",
+     "label": "A bulletin note, and the engineer told not yet",
+     "outcome": "The statement goes in the bulletin under the bake sale. The engineer is told the roof comes first, which is true, and he does not bring it up again.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:creation",
+       "value": "minimal"
+      },
+      {
+       "target": "reputation",
+       "key": "progressive_bloc",
+       "delta": -2
+      }
+     ]
+    },
+    {
+     "id": "not",
+     "label": "Tell the bishop the parish will preach the Gospel in September as in every month",
+     "outcome": "You write that the readings in September are about the Kingdom and not the climate and the parish will hear the readings. The bishop, who did not vote for the statement, answers warmly and forwards nothing. The engineer leaves the council.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:creation",
+       "value": "defiant"
+      },
+      {
+       "target": "reputation",
+       "key": "chancery",
+       "delta": -2
+      },
+      {
+       "target": "reputation",
+       "key": "traditional_bloc",
+       "delta": 3
+      },
+      {
+       "target": "reputation",
+       "key": "progressive_bloc",
+       "delta": -4
+      }
+     ],
+     "volume": "semi_public",
+     "positionTopic": "creation",
+     "positionValue": -25
+    }
+   ],
+   "beat": "conference",
+   "priority": 2
+  },
+  {
+   "id": "cf_home_women",
+   "phase": [
+    "parochial_vicar",
+    "administrator",
+    "pastor"
+   ],
+   "severity": "NOTABLE",
+   "category": "chancery",
+   "baseWeight": 30,
+   "suppressYears": 2,
+   "pressure": [
+    "ambition_vs_integrity"
+   ],
+   "requires": [
+    {
+     "type": "conference",
+     "key": "scene",
+     "value": "cascade"
+    },
+    {
+     "type": "conference",
+     "key": "document",
+     "value": "women_statement"
+    }
+   ],
+   "title": "Daughters of the Church",
+   "body": "The statement on women in the life of the Church asks that every parish council have women on it by the year's end and say who. The parish council has two, and the finance council none, and the man who chairs the finance council has chaired it since the eighties.",
+   "choices": [
+    {
+     "id": "councils",
+     "label": "Women on both councils by Advent, named in the bulletin, and the statement preached",
+     "outcome": "You ask three women to the finance council and two say yes, one of them a CPA the chair has been afraid of for years. The statement is preached. The chair resigns in January and comes back in March, quieter. The bulletin names them.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:women_roles",
+       "value": "eager"
+      },
+      {
+       "target": "reputation",
+       "key": "parishioners",
+       "delta": 3
+      },
+      {
+       "target": "reputation",
+       "key": "progressive_bloc",
+       "delta": 4
+      },
+      {
+       "target": "reputation",
+       "key": "traditional_bloc",
+       "delta": -3
+      },
+      {
+       "target": "stat",
+       "key": "administration",
+       "delta": 1
+      }
+     ],
+     "volume": "semi_public",
+     "positionTopic": "women_roles",
+     "positionValue": 30
+    },
+    {
+     "id": "report",
+     "label": "Report the two on the parish council and add one to finance",
+     "outcome": "The chancery is told there are two women on the parish council and, from January, one on finance: the parish secretary, who was already at every meeting. The chancery is satisfied.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:women_roles",
+       "value": "faithful"
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "report_only",
+     "label": "Report the two, and leave the finance council alone",
+     "outcome": "The chancery's form is filled in with the two names. The finance council goes on as it has since the eighties. The statement is not mentioned from the pulpit.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:women_roles",
+       "value": "minimal"
+      },
+      {
+       "target": "reputation",
+       "key": "progressive_bloc",
+       "delta": -3
+      },
+      {
+       "target": "reputation",
+       "key": "traditional_bloc",
+       "delta": 2
+      }
+     ]
+    },
+    {
+     "id": "not",
+     "label": "Tell the bishop the parish names its councils by competence and will go on doing so",
+     "outcome": "You write that the finance council is the best in the deanery and you will not change it to satisfy a form, and the bishop writes back that the best finance council in the deanery has room for a woman. The CPA hears of the exchange from the secretary.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:women_roles",
+       "value": "defiant"
+      },
+      {
+       "target": "reputation",
+       "key": "chancery",
+       "delta": -3
+      },
+      {
+       "target": "reputation",
+       "key": "parishioners",
+       "delta": -2
+      },
+      {
+       "target": "reputation",
+       "key": "traditional_bloc",
+       "delta": 3
+      },
+      {
+       "target": "reputation",
+       "key": "progressive_bloc",
+       "delta": -5
+      }
+     ],
+     "volume": "semi_public",
+     "positionTopic": "women_roles",
+     "positionValue": -30
+    }
+   ],
+   "beat": "conference",
+   "priority": 2
+  },
+  {
+   "id": "cf_home_reverence",
+   "phase": [
+    "parochial_vicar",
+    "administrator",
+    "pastor"
+   ],
+   "severity": "NOTABLE",
+   "category": "chancery",
+   "baseWeight": 30,
+   "suppressYears": 2,
+   "pressure": [
+    "ambition_vs_integrity"
+   ],
+   "requires": [
+    {
+     "type": "conference",
+     "key": "scene",
+     "value": "cascade"
+    },
+    {
+     "type": "conference",
+     "key": "document",
+     "value": "reverence_guidelines"
+    }
+   ],
+   "title": "Before the Altar",
+   "body": "The guidelines on reverence at Mass ask for silence before it, a word on the posture at Communion, and a reading of them with the musicians. The choir director has read them already and has drafted her resignation twice. The parish talks before Mass and has for fifty years.",
+   "choices": [
+    {
+     "id": "full",
+     "label": "Silence before Mass from Sunday, the guidelines read with the choir, and a homily on posture",
+     "outcome": "You ask for silence and get, after a month, a quiet. The choir director stays, after a long evening, and drops two hymns. The homily on kneeling brings out the kneelers and offends the standers. The guidelines' authors would be pleased and your parish is divided about it for a year.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:liturgy",
+       "value": "eager"
+      },
+      {
+       "target": "reputation",
+       "key": "traditional_bloc",
+       "delta": 5
+      },
+      {
+       "target": "reputation",
+       "key": "progressive_bloc",
+       "delta": -4
+      },
+      {
+       "target": "reputation",
+       "key": "parishioners",
+       "delta": -1
+      },
+      {
+       "target": "stat",
+       "key": "piety",
+       "delta": 1
+      }
+     ],
+     "volume": "semi_public",
+     "positionTopic": "liturgy",
+     "positionValue": -30
+    },
+    {
+     "id": "read",
+     "label": "Read them with the musicians and say a word about silence, once",
+     "outcome": "The choir director reads them with you and finds nothing in them she was not already doing. A word about silence is said one Sunday, and the parish is quiet for a week.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:liturgy",
+       "value": "faithful"
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "file",
+     "label": "File them with the last guidelines on the same subject",
+     "outcome": "The guidelines go in the drawer with the guidelines of the last decade. The choir director is relieved. The parish talks before Mass, and the people who came for the quiet go to the Latin Mass across town.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:liturgy",
+       "value": "minimal"
+      },
+      {
+       "target": "reputation",
+       "key": "traditional_bloc",
+       "delta": -3
+      },
+      {
+       "target": "reputation",
+       "key": "progressive_bloc",
+       "delta": 2
+      }
+     ]
+    },
+    {
+     "id": "not",
+     "label": "Write to the bishop that the parish will keep its own manner of reverence",
+     "outcome": "You write that a parish that greets its neighbors before Mass is not irreverent and the guidelines mistake silence for prayer. The bishop, who did not vote for them either, does not disagree and does not say so. The men who wanted the silence write to the bishop themselves.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:liturgy",
+       "value": "defiant"
+      },
+      {
+       "target": "reputation",
+       "key": "chancery",
+       "delta": -2
+      },
+      {
+       "target": "reputation",
+       "key": "progressive_bloc",
+       "delta": 4
+      },
+      {
+       "target": "reputation",
+       "key": "traditional_bloc",
+       "delta": -5
+      }
+     ],
+     "volume": "semi_public",
+     "positionTopic": "liturgy",
+     "positionValue": 30
+    }
+   ],
+   "beat": "conference",
+   "priority": 2
+  },
+  {
+   "id": "cf_home_any",
+   "phase": [
+    "parochial_vicar",
+    "administrator",
+    "pastor"
+   ],
+   "severity": "ROUTINE",
+   "category": "chancery",
+   "baseWeight": 30,
+   "suppressYears": 2,
+   "pressure": [
+    "ambition_vs_integrity"
+   ],
+   "requires": [
+    {
+     "type": "conference",
+     "key": "scene",
+     "value": "cascade"
+    }
+   ],
+   "title": "What the Conference Asked",
+   "body": "{conference_doc}, the conference's document {conference_doc_gist}, has been on the desk for a month with {@bishop}'s note on it, and the chancery's form asking what the parish has done with it is due on Friday. The parish has not asked about it. The parish does not know it exists, and would not, if asked, be able to say what a bishops' conference is for.",
+   "choices": [
+    {
+     "id": "do",
+     "label": "Do what it asks, in full, and say so from the pulpit",
+     "outcome": "The document is preached and put into effect as it asks, and the form goes back with a page. The parish takes it as it takes most things that come from the bishops: politely, and without much change.",
+     "effects": [
+      {
+       "target": "reputation",
+       "key": "chancery",
+       "delta": 2
+      },
+      {
+       "target": "reputation",
+       "key": "parishioners",
+       "delta": 1
+      }
+     ]
+    },
+    {
+     "id": "form",
+     "label": "Do what the form requires",
+     "outcome": "The form is filled in truthfully and the document is honored to the letter of the form. Nobody is the worse for it and nobody is the better.",
+     "effects": [],
+     "default": true
+    },
+    {
+     "id": "drawer",
+     "label": "The drawer, with the others",
+     "outcome": "The form goes back late with a sentence. The document sits with the documents. In a year someone from the chancery will ask, and you will have forgotten which one it was.",
+     "effects": [
+      {
+       "target": "reputation",
+       "key": "chancery",
+       "delta": -2
+      }
+     ]
+    }
+   ],
+   "beat": "conference",
+   "priority": 1
+  },
+  {
+   "id": "cf_bishop_voted_against",
+   "phase": [
+    "parochial_vicar",
+    "administrator",
+    "pastor"
+   ],
+   "severity": "NOTABLE",
+   "category": "chancery",
+   "baseWeight": 28,
+   "suppressYears": 3,
+   "pressure": [
+    "ambition_vs_integrity"
+   ],
+   "requires": [
+    {
+     "type": "conference",
+     "key": "document",
+     "within": 8
+    },
+    {
+     "type": "relationship",
+     "op": ">=",
+     "value": 5,
+     "npcId": "@bishop"
+    }
+   ],
+   "title": "The Bishop Who Voted No",
+   "body": "At the deanery dinner {@bishop} is asked about {conference_doc}, and says, into his soup, that he voted against it and lost and will see it kept in this diocese because that is what a conference is for. The dean changes the subject. The vicar for clergy does not, and asks you what your parish will do with it.",
+   "choices": [
+    {
+     "id": "keep",
+     "label": "Say the parish will keep it, since the bishop will",
+     "outcome": "The bishop looks up from the soup and nods once. The vicar for clergy writes it down somewhere behind his eyes. The dean is relieved.",
+     "effects": [
+      {
+       "target": "relationship",
+       "key": "@bishop",
+       "delta": 3
+      },
+      {
+       "target": "reputation",
+       "key": "chancery",
+       "delta": 2
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "agree",
+     "label": "Say you would have voted with him",
+     "outcome": "He is pleased and says so, and the vicar for clergy is not, and says nothing. You have made a friend and been noticed for it, which are not always the same thing.",
+     "effects": [
+      {
+       "target": "relationship",
+       "key": "@bishop",
+       "delta": 5
+      },
+      {
+       "target": "reputation",
+       "key": "chancery",
+       "delta": -1
+      }
+     ],
+     "volume": "semi_public",
+     "positionTopic": "authority",
+     "positionValue": -10
+    },
+    {
+     "id": "other",
+     "label": "Say, gently, that you would have voted the other way",
+     "outcome": "The table goes quiet. The bishop says that is what the vote was for, and means it, and the dinner goes on. He does not forget it, and neither, you learn later, does he hold it against you.",
+     "effects": [
+      {
+       "target": "relationship",
+       "key": "@bishop",
+       "delta": -1
+      },
+      {
+       "target": "reputation",
+       "key": "brother_priests",
+       "delta": 3
+      }
+     ],
+     "volume": "semi_public",
+     "positionTopic": "authority",
+     "positionValue": 10
+    }
+   ]
+  },
+  {
+   "id": "cf_reporter_conference",
+   "phase": [
+    "parochial_vicar",
+    "administrator",
+    "pastor"
+   ],
+   "severity": "NOTABLE",
+   "category": "personal",
+   "baseWeight": 26,
+   "suppressYears": 3,
+   "pressure": [
+    "ambition_vs_integrity"
+   ],
+   "requires": [
+    {
+     "type": "conference",
+     "key": "document",
+     "within": 6
+    },
+    {
+     "type": "reputation",
+     "key": "public",
+     "op": ">=",
+     "value": 10
+    }
+   ],
+   "title": "The Parish's View",
+   "body": "A reporter from the paper calls about {conference_doc}: the bishops have spoken, in Baltimore or wherever it was, and she wants to know what a parish thinks of it, and what a pastor will do with it on Sunday. She has your name from the column, or from someone who reads it, and a deadline at four, and a way of asking that makes silence sound like an answer.",
+   "choices": [
+    {
+     "id": "speak",
+     "label": "Give her the parish's view, in your own words, on the record",
+     "outcome": "She quotes you in the third paragraph, accurately, which is rarer than it should be. The chancery reads the paper. So does the parish, which is pleased to be in it and divided about what you said.",
+     "effects": [
+      {
+       "target": "reputation",
+       "key": "public",
+       "delta": 4
+      },
+      {
+       "target": "reputation",
+       "key": "parishioners",
+       "delta": 1
+      },
+      {
+       "target": "reputation",
+       "key": "chancery",
+       "delta": -1
+      }
+     ],
+     "volume": "public",
+     "positionTopic": "authority",
+     "positionValue": 5
+    },
+    {
+     "id": "bishop",
+     "label": "Say the bishop speaks for the diocese, and give her his office's number",
+     "outcome": "She thanks you and calls the chancery, which gives her the statement's own words. The parish is not in the paper. The chancery notes who did not talk.",
+     "effects": [
+      {
+       "target": "reputation",
+       "key": "chancery",
+       "delta": 2
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "off",
+     "label": "Talk to her, off the record, for twenty minutes",
+     "outcome": "She is grateful and the piece is better for it and does not mention you, and the next time she needs a priest she calls you first, which will be a blessing and a problem in about equal measure.",
+     "effects": [
+      {
+       "target": "reputation",
+       "key": "public",
+       "delta": 2
+      },
+      {
+       "target": "stat",
+       "key": "knowledge",
+       "delta": 1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "cf_worked_there",
+   "phase": [
+    "parochial_vicar",
+    "administrator",
+    "pastor"
+   ],
+   "severity": "NOTABLE",
+   "category": "personal",
+   "baseWeight": 30,
+   "suppressYears": 4,
+   "pressure": [
+    "ambition_vs_integrity"
+   ],
+   "requires": [
+    {
+     "type": "flag",
+     "key": "worked_at_the_conference",
+     "value": true
+    },
+    {
+     "type": "conference",
+     "key": "assembly",
+     "within": 1
+    }
+   ],
+   "title": "A Friend on Fourth Street",
+   "body": "The bishop is at the assembly and a woman you knew in Washington, a committee secretary who is a committee director now, calls from the hotel lobby with the inside of it: what the vote was really about, who spoke, who did not, and what your bishop said in the corridor.",
+   "choices": [
+    {
+     "id": "listen",
+     "label": "Listen, and thank her, and keep it",
+     "outcome": "You learn more about your own bishop in twenty minutes than in five years, and keep it, and are the better priest for knowing what he carries. She promises to call after every assembly, and does.",
+     "effects": [
+      {
+       "target": "stat",
+       "key": "knowledge",
+       "delta": 2
+      },
+      {
+       "target": "reputation",
+       "key": "chancery",
+       "delta": 1
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "ask",
+     "label": "Ask her to put in a word for you, sometime, with the right people",
+     "outcome": "She laughs and says she already has, which you did not know, and that there is a committee memo she could use a priest's eye on. You have a friend in the building where the bishops meet, and a small job.",
+     "effects": [
+      {
+       "target": "stat",
+       "key": "knowledge",
+       "delta": 1
+      },
+      {
+       "target": "reputation",
+       "key": "rome",
+       "delta": 1
+      },
+      {
+       "target": "flag",
+       "key": "conference:friend",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": "deanery",
+     "label": "Tell it at the deanery, lightly, without her name",
+     "outcome": "The story is a good one and travels. It reaches the bishop in a month, without her name and with yours. He asks, mildly, where you heard it, and you learn that the corridor has walls.",
+     "effects": [
+      {
+       "target": "reputation",
+       "key": "brother_priests",
+       "delta": 3
+      },
+      {
+       "target": "relationship",
+       "key": "@bishop",
+       "delta": -3
+      }
+     ]
+    }
+   ],
+   "once": true
+  },
+  {
+   "id": "cf_vg_signs",
+   "phase": [
+    "parochial_vicar",
+    "administrator",
+    "pastor"
+   ],
+   "severity": "NOTABLE",
+   "category": "chancery",
+   "baseWeight": 22,
+   "suppressYears": 5,
+   "pressure": [
+    "ambition_vs_integrity"
+   ],
+   "requires": [
+    {
+     "type": "conference",
+     "key": "assembly",
+     "within": 1
+    },
+    {
+     "type": "role",
+     "value": "pastor"
+    }
+   ],
+   "title": "While the Bishop Is Away",
+   "body": "The bishop is at the assembly and {@vicar_general} is signing the mail, and one of the things he signs is the deanery's parish boundary change that has waited a year for the bishop's own hand, and it moves two streets from your parish to the next one. He calls to tell you, apologetically, after.",
+   "choices": [
+    {
+     "id": "bishop",
+     "label": "Wait for the bishop, and put it to him when he is home",
+     "outcome": "The bishop, home and tired, reads the decree and lets it stand, since it is signed, and says he is sorry, and means it, and remembers that his vicar general signs things while he is away. The two streets go.",
+     "effects": [
+      {
+       "target": "relationship",
+       "key": "@bishop",
+       "delta": 1
+      },
+      {
+       "target": "relationship",
+       "key": "@vicar_general",
+       "delta": -2
+      },
+      {
+       "target": "reputation",
+       "key": "chancery",
+       "delta": 1
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "vg",
+     "label": "Take it up with the vicar general now, and hard",
+     "outcome": "He is not used to being spoken to that way by a pastor and says so, and the decree stands, and the chancery has a note that you are difficult when crossed. The two streets go.",
+     "effects": [
+      {
+       "target": "relationship",
+       "key": "@vicar_general",
+       "delta": -6
+      },
+      {
+       "target": "reputation",
+       "key": "chancery",
+       "delta": -3
+      },
+      {
+       "target": "reputation",
+       "key": "brother_priests",
+       "delta": 2
+      }
+     ]
+    },
+    {
+     "id": "let",
+     "label": "Let it go; two streets and a grudge are not worth each other",
+     "outcome": "The streets go and the families in them are told by you, in person, that they may keep coming, and most do. The vicar general owes you one, and knows it.",
+     "effects": [
+      {
+       "target": "relationship",
+       "key": "@vicar_general",
+       "delta": 4
+      },
+      {
+       "target": "reputation",
+       "key": "parishioners",
+       "delta": 1
+      }
+     ]
+    }
+   ],
+   "once": true
+  },
+  {
+   "id": "cf_as_vote_immigration",
+   "phase": "bishop",
+   "severity": "NOTABLE",
+   "category": "chancery",
+   "baseWeight": 30,
+   "suppressYears": 2,
+   "pressure": [
+    "ambition_vs_integrity"
+   ],
+   "requires": [
+    {
+     "type": "flag",
+     "key": "study:see",
+     "value": true
+    },
+    {
+     "type": "conference",
+     "key": "scene",
+     "value": "assembly"
+    },
+    {
+     "type": "conference",
+     "key": "document",
+     "value": [
+      "immigration_statement"
+     ],
+     "within": 1
+    }
+   ],
+   "title": "The Vote on the Stranger",
+   "body": "The floor has {conference_doc} before it, the statement on immigration, and the debate has run an hour over. {conference_president} is chairing it with visible patience. The bishops of the border sees have spoken; the bishops of the sees with the deputies in the pews have spoken. The card is in your hand.",
+   "choices": [
+    {
+     "id": "for",
+     "label": "Vote for it, and say so if asked",
+     "outcome": "Your card goes up with the majority and the paper's photographer finds it. Your diocese reads in the morning that its bishop voted for the stranger, and the deputies in your own cathedral's pews read it too.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:immigration",
+       "value": "eager"
+      },
+      {
+       "target": "see",
+       "key": "rome",
+       "delta": 1
+      },
+      {
+       "target": "see",
+       "key": "people",
+       "delta": -1
+      },
+      {
+       "target": "reputation",
+       "key": "progressive_bloc",
+       "delta": 4
+      },
+      {
+       "target": "reputation",
+       "key": "traditional_bloc",
+       "delta": -3
+      },
+      {
+       "target": "reputation",
+       "key": "public",
+       "delta": 2
+      }
+     ],
+     "volume": "public",
+     "positionTopic": "immigration",
+     "positionValue": 30
+    },
+    {
+     "id": "against",
+     "label": "Vote against it, and say so if asked",
+     "outcome": "Your card goes up with the minority and is counted, and the bishop beside you, who voted the other way, says nothing to you at dinner. Your diocese reads that its bishop voted against, and half of it is grateful.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:immigration",
+       "value": "defiant"
+      },
+      {
+       "target": "see",
+       "key": "rome",
+       "delta": -1
+      },
+      {
+       "target": "see",
+       "key": "people",
+       "delta": 1
+      },
+      {
+       "target": "reputation",
+       "key": "traditional_bloc",
+       "delta": 4
+      },
+      {
+       "target": "reputation",
+       "key": "progressive_bloc",
+       "delta": -5
+      },
+      {
+       "target": "reputation",
+       "key": "public",
+       "delta": 1
+      }
+     ],
+     "volume": "public",
+     "positionTopic": "immigration",
+     "positionValue": -30
+    },
+    {
+     "id": "floor",
+     "label": "Speak from the floor for an amendment, then vote with the majority",
+     "outcome": "You ask for a sentence about the law and the men who enforce it, and the drafting committee takes it, and you vote with the majority. The border bishops thank you; so, oddly, does the sheriff at home.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:immigration",
+       "value": "faithful"
+      },
+      {
+       "target": "see",
+       "key": "rome",
+       "delta": 1
+      },
+      {
+       "target": "reputation",
+       "key": "brother_priests",
+       "delta": 1
+      },
+      {
+       "target": "stat",
+       "key": "charisma",
+       "delta": 1
+      }
+     ],
+     "volume": "semi_public",
+     "positionTopic": "immigration",
+     "positionValue": 0
+    },
+    {
+     "id": "absent",
+     "label": "Be in the corridor when the vote is taken",
+     "outcome": "The vote is taken while you are on the telephone to the chancery about the boiler. Nobody notices. The nuncio, who notices everything, notices.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:immigration",
+       "value": "minimal"
+      },
+      {
+       "target": "see",
+       "key": "rome",
+       "delta": -1
+      }
+     ],
+     "default": true
+    }
+   ],
+   "beat": "conference",
+   "priority": 2
+  },
+  {
+   "id": "cf_as_vote_liberty",
+   "phase": "bishop",
+   "severity": "NOTABLE",
+   "category": "chancery",
+   "baseWeight": 30,
+   "suppressYears": 2,
+   "pressure": [
+    "ambition_vs_integrity"
+   ],
+   "requires": [
+    {
+     "type": "flag",
+     "key": "study:see",
+     "value": true
+    },
+    {
+     "type": "conference",
+     "key": "scene",
+     "value": "assembly"
+    },
+    {
+     "type": "conference",
+     "key": "document",
+     "value": [
+      "religious_liberty_statement"
+     ],
+     "within": 1
+    }
+   ],
+   "title": "The Vote on Liberty",
+   "body": "{conference_doc}, the statement on religious liberty, is on the floor, and the bishops who wanted it stronger and the bishops who did not want it at all have both spoken. {conference_president} calls the question. The nuncio is in the gallery.",
+   "choices": [
+    {
+     "id": "for",
+     "label": "Vote for it, and say so if asked",
+     "outcome": "You vote for it and it passes, and the fortnight of prayer is yours to keep in June, with the Knights and the flag. The paper at home runs it under a photograph of the courthouse.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:religious_liberty",
+       "value": "eager"
+      },
+      {
+       "target": "see",
+       "key": "rome",
+       "delta": 1
+      },
+      {
+       "target": "reputation",
+       "key": "traditional_bloc",
+       "delta": 4
+      },
+      {
+       "target": "reputation",
+       "key": "progressive_bloc",
+       "delta": -3
+      },
+      {
+       "target": "reputation",
+       "key": "public",
+       "delta": 1
+      }
+     ],
+     "volume": "public",
+     "positionTopic": "religious_liberty",
+     "positionValue": -30
+    },
+    {
+     "id": "against",
+     "label": "Vote against it, and say so if asked",
+     "outcome": "You vote against, and the bishop who drafted it looks for you at the break and finds you. Your diocese hears that its bishop would not pray for its liberty, which is not what you voted, and is what they hear.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:religious_liberty",
+       "value": "defiant"
+      },
+      {
+       "target": "see",
+       "key": "people",
+       "delta": -1
+      },
+      {
+       "target": "reputation",
+       "key": "progressive_bloc",
+       "delta": 4
+      },
+      {
+       "target": "reputation",
+       "key": "traditional_bloc",
+       "delta": -5
+      },
+      {
+       "target": "reputation",
+       "key": "public",
+       "delta": -1
+      }
+     ],
+     "volume": "public",
+     "positionTopic": "religious_liberty",
+     "positionValue": 30
+    },
+    {
+     "id": "floor",
+     "label": "Speak from the floor for an amendment, then vote with the majority",
+     "outcome": "You ask, from the floor, for the paragraph about the law's other victims, and get half of it, and vote with the majority. The drafting bishop is not pleased and the nuncio, from the gallery, is.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:religious_liberty",
+       "value": "faithful"
+      },
+      {
+       "target": "see",
+       "key": "rome",
+       "delta": 1
+      },
+      {
+       "target": "stat",
+       "key": "charisma",
+       "delta": 1
+      }
+     ],
+     "volume": "semi_public",
+     "positionTopic": "religious_liberty",
+     "positionValue": 0
+    },
+    {
+     "id": "absent",
+     "label": "Be in the corridor when the vote is taken",
+     "outcome": "You are in the corridor with the bishop of the next see, talking about a priest, when the question is called. The statement passes without you. The Knights at home ask, and you tell them you were for it, which is true.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:religious_liberty",
+       "value": "minimal"
+      },
+      {
+       "target": "see",
+       "key": "rome",
+       "delta": -1
+      }
+     ],
+     "default": true
+    }
+   ],
+   "beat": "conference",
+   "priority": 2
+  },
+  {
+   "id": "cf_as_vote_social",
+   "phase": "bishop",
+   "severity": "NOTABLE",
+   "category": "chancery",
+   "baseWeight": 30,
+   "suppressYears": 2,
+   "pressure": [
+    "ambition_vs_integrity"
+   ],
+   "requires": [
+    {
+     "type": "flag",
+     "key": "study:see",
+     "value": true
+    },
+    {
+     "type": "conference",
+     "key": "scene",
+     "value": "assembly"
+    },
+    {
+     "type": "conference",
+     "key": "document",
+     "value": [
+      "economy_pastoral",
+      "racism_pastoral"
+     ],
+     "within": 1
+    }
+   ],
+   "title": "The Vote on the Poor",
+   "body": "{conference_doc}, {conference_doc_gist}, is before the floor, forty pages the drafting committee has bled over for two years. The debate is about a sentence in the third section and everyone knows it is about more than the sentence. {conference_president} is looking at the clock.",
+   "choices": [
+    {
+     "id": "for",
+     "label": "Vote for it, and say so if asked",
+     "outcome": "You vote for it and it passes, and your diocese has three Sundays of it to preach and an evening in every parish, and a bishop who will be asked at the Chamber of Commerce lunch what he meant by it.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:social_justice",
+       "value": "eager"
+      },
+      {
+       "target": "see",
+       "key": "rome",
+       "delta": 1
+      },
+      {
+       "target": "see",
+       "key": "money",
+       "delta": -1
+      },
+      {
+       "target": "reputation",
+       "key": "progressive_bloc",
+       "delta": 4
+      },
+      {
+       "target": "reputation",
+       "key": "traditional_bloc",
+       "delta": -3
+      }
+     ],
+     "volume": "public",
+     "positionTopic": "social_justice",
+     "positionValue": 30
+    },
+    {
+     "id": "against",
+     "label": "Vote against it, and say so if asked",
+     "outcome": "You vote against, one of a few dozen, and the paper counts you. Your diocese's poor do not read the paper; your diocese's donors do.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:social_justice",
+       "value": "defiant"
+      },
+      {
+       "target": "see",
+       "key": "money",
+       "delta": 1
+      },
+      {
+       "target": "reputation",
+       "key": "traditional_bloc",
+       "delta": 4
+      },
+      {
+       "target": "reputation",
+       "key": "progressive_bloc",
+       "delta": -5
+      },
+      {
+       "target": "reputation",
+       "key": "public",
+       "delta": -1
+      }
+     ],
+     "volume": "public",
+     "positionTopic": "social_justice",
+     "positionValue": -30
+    },
+    {
+     "id": "floor",
+     "label": "Speak from the floor for an amendment, then vote with the majority",
+     "outcome": "You speak for the sentence to be softened, and it is, a little, and you vote for the letter. The drafting bishop thanks you for the vote and not the speech.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:social_justice",
+       "value": "faithful"
+      },
+      {
+       "target": "see",
+       "key": "rome",
+       "delta": 1
+      },
+      {
+       "target": "stat",
+       "key": "charisma",
+       "delta": 1
+      }
+     ],
+     "volume": "semi_public",
+     "positionTopic": "social_justice",
+     "positionValue": 0
+    },
+    {
+     "id": "absent",
+     "label": "Be in the corridor when the vote is taken",
+     "outcome": "The question is called while you are signing something for the chancery in the corridor. The letter passes. Your vicar general, when asked at home, says the bishop was for it.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:social_justice",
+       "value": "minimal"
+      },
+      {
+       "target": "see",
+       "key": "rome",
+       "delta": -1
+      }
+     ],
+     "default": true
+    }
+   ],
+   "beat": "conference",
+   "priority": 2
+  },
+  {
+   "id": "cf_as_vote_liturgy",
+   "phase": "bishop",
+   "severity": "NOTABLE",
+   "category": "chancery",
+   "baseWeight": 30,
+   "suppressYears": 2,
+   "pressure": [
+    "ambition_vs_integrity"
+   ],
+   "requires": [
+    {
+     "type": "flag",
+     "key": "study:see",
+     "value": true
+    },
+    {
+     "type": "conference",
+     "key": "scene",
+     "value": "assembly"
+    },
+    {
+     "type": "conference",
+     "key": "document",
+     "value": [
+      "translation_guidelines",
+      "reverence_guidelines"
+     ],
+     "within": 1
+    }
+   ],
+   "title": "The Vote on the Altar",
+   "body": "{conference_doc} is on the floor: the liturgy committee's work, {conference_doc_gist}, and the bishops who know Latin and the bishops who know parishes have been at it since morning. {conference_president} has ruled twice on points of order. The liturgy office at home has sent you a memo you have not read.",
+   "choices": [
+    {
+     "id": "for",
+     "label": "Vote for it, and say so if asked",
+     "outcome": "You vote for it and it passes by less than the committee wanted. Your diocese has new books to buy, or a silence to keep, and a bishop who voted for it and will be told so by every choir director in the diocese.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:liturgy",
+       "value": "eager"
+      },
+      {
+       "target": "see",
+       "key": "rome",
+       "delta": 1
+      },
+      {
+       "target": "see",
+       "key": "presbyterate",
+       "delta": -1
+      },
+      {
+       "target": "reputation",
+       "key": "traditional_bloc",
+       "delta": 4
+      },
+      {
+       "target": "reputation",
+       "key": "progressive_bloc",
+       "delta": -3
+      }
+     ],
+     "volume": "public",
+     "positionTopic": "liturgy",
+     "positionValue": -25
+    },
+    {
+     "id": "against",
+     "label": "Vote against it, and say so if asked",
+     "outcome": "You vote against, and it passes anyway, and you will have to keep in your diocese what you did not want, which is the conference's oldest lesson. Your choir directors love you.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:liturgy",
+       "value": "defiant"
+      },
+      {
+       "target": "see",
+       "key": "rome",
+       "delta": -1
+      },
+      {
+       "target": "see",
+       "key": "presbyterate",
+       "delta": 1
+      },
+      {
+       "target": "reputation",
+       "key": "progressive_bloc",
+       "delta": 4
+      },
+      {
+       "target": "reputation",
+       "key": "traditional_bloc",
+       "delta": -4
+      }
+     ],
+     "volume": "public",
+     "positionTopic": "liturgy",
+     "positionValue": 25
+    },
+    {
+     "id": "floor",
+     "label": "Speak from the floor for an amendment, then vote with the majority",
+     "outcome": "You ask for the timeline to be lengthened and it is, a year, and you vote for it. The liturgy committee's chair says that was the amendment that got it through, and may be right.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:liturgy",
+       "value": "faithful"
+      },
+      {
+       "target": "see",
+       "key": "rome",
+       "delta": 1
+      },
+      {
+       "target": "see",
+       "key": "presbyterate",
+       "delta": 1
+      }
+     ],
+     "volume": "semi_public",
+     "positionTopic": "liturgy",
+     "positionValue": 0
+    },
+    {
+     "id": "absent",
+     "label": "Be in the corridor when the vote is taken",
+     "outcome": "The vote is taken while you are on the telephone to the seminary rector about a man. It passes. The liturgy office at home does not know how you voted and does not ask.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:liturgy",
+       "value": "minimal"
+      },
+      {
+       "target": "see",
+       "key": "rome",
+       "delta": -1
+      }
+     ],
+     "default": true
+    }
+   ],
+   "beat": "conference",
+   "priority": 2
+  },
+  {
+   "id": "cf_as_vote_doctrine",
+   "phase": "bishop",
+   "severity": "NOTABLE",
+   "category": "chancery",
+   "baseWeight": 30,
+   "suppressYears": 2,
+   "pressure": [
+    "ambition_vs_integrity"
+   ],
+   "requires": [
+    {
+     "type": "flag",
+     "key": "study:see",
+     "value": true
+    },
+    {
+     "type": "conference",
+     "key": "scene",
+     "value": "assembly"
+    },
+    {
+     "type": "conference",
+     "key": "document",
+     "value": [
+      "eucharist_pastoral",
+      "family_pastoral"
+     ],
+     "within": 1
+    }
+   ],
+   "title": "The Vote on the Letter",
+   "body": "{conference_doc}, the pastoral letter {conference_doc_gist}, is before the floor. The doctrine committee's chair has spoken for it and a cardinal has spoken, carefully, about what Rome will think of a paragraph. {conference_president} asks whether the bishops are ready for the question. They are not, and he calls it.",
+   "choices": [
+    {
+     "id": "for",
+     "label": "Vote for it, and say so if asked",
+     "outcome": "You vote for it and it passes, paragraph and all. Your diocese has a program to run and a letter to preach, and Rome has a paragraph to read, and the cardinal was right about that.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:doctrine",
+       "value": "eager"
+      },
+      {
+       "target": "see",
+       "key": "rome",
+       "delta": -1
+      },
+      {
+       "target": "reputation",
+       "key": "traditional_bloc",
+       "delta": 4
+      },
+      {
+       "target": "reputation",
+       "key": "progressive_bloc",
+       "delta": -3
+      },
+      {
+       "target": "reputation",
+       "key": "parishioners",
+       "delta": 1
+      }
+     ],
+     "volume": "public",
+     "positionTopic": "doctrine",
+     "positionValue": -25
+    },
+    {
+     "id": "against",
+     "label": "Vote against it, and say so if asked",
+     "outcome": "You vote against, with the cardinal and a third of the floor, and it passes. Your diocese will keep it as the conference's, and your priests will know you did not want it, and some of them will like you better for it.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:doctrine",
+       "value": "defiant"
+      },
+      {
+       "target": "see",
+       "key": "rome",
+       "delta": 1
+      },
+      {
+       "target": "see",
+       "key": "presbyterate",
+       "delta": 1
+      },
+      {
+       "target": "reputation",
+       "key": "progressive_bloc",
+       "delta": 4
+      },
+      {
+       "target": "reputation",
+       "key": "traditional_bloc",
+       "delta": -5
+      }
+     ],
+     "volume": "public",
+     "positionTopic": "doctrine",
+     "positionValue": 25
+    },
+    {
+     "id": "floor",
+     "label": "Speak from the floor for an amendment, then vote with the majority",
+     "outcome": "You speak for the paragraph to be sent back to the committee, and it is, and comes back an hour later with a comma moved, and you vote for it. The cardinal nods to you at dinner.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:doctrine",
+       "value": "faithful"
+      },
+      {
+       "target": "see",
+       "key": "rome",
+       "delta": 1
+      },
+      {
+       "target": "stat",
+       "key": "theology",
+       "delta": 1
+      }
+     ],
+     "volume": "semi_public",
+     "positionTopic": "doctrine",
+     "positionValue": 0
+    },
+    {
+     "id": "absent",
+     "label": "Be in the corridor when the vote is taken",
+     "outcome": "You are with the nuncio in the corridor when the question is called, which is where the nuncio wanted you. The letter passes. The nuncio does not mention the vote, and mentions everything else.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:doctrine",
+       "value": "minimal"
+      },
+      {
+       "target": "see",
+       "key": "rome",
+       "delta": -1
+      }
+     ],
+     "default": true
+    }
+   ],
+   "beat": "conference",
+   "priority": 2
+  },
+  {
+   "id": "cf_as_vote_reform",
+   "phase": "bishop",
+   "severity": "NOTABLE",
+   "category": "chancery",
+   "baseWeight": 30,
+   "suppressYears": 2,
+   "pressure": [
+    "ambition_vs_integrity"
+   ],
+   "requires": [
+    {
+     "type": "flag",
+     "key": "study:see",
+     "value": true
+    },
+    {
+     "type": "conference",
+     "key": "scene",
+     "value": "assembly"
+    },
+    {
+     "type": "conference",
+     "key": "document",
+     "value": [
+      "synod_guidelines",
+      "women_statement",
+      "creation_statement"
+     ],
+     "within": 1
+    }
+   ],
+   "title": "The Vote on the Council Floor",
+   "body": "{conference_doc}, {conference_doc_gist}, is before the floor, and the bishops who came in with this pontificate and the bishops who came in with the last are, for once, saying what they think of each other. {conference_president} lets it run. The nuncio is taking notes.",
+   "choices": [
+    {
+     "id": "for",
+     "label": "Vote for it, and say so if asked",
+     "outcome": "You vote for it and it passes, and the nuncio's note beside your name is a check mark. Your diocese has sessions to hold, or councils to fill, or roofs to look at, and the older priests have a bishop to sigh about.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:synodality",
+       "value": "eager"
+      },
+      {
+       "target": "see",
+       "key": "rome",
+       "delta": 2
+      },
+      {
+       "target": "see",
+       "key": "presbyterate",
+       "delta": -1
+      },
+      {
+       "target": "reputation",
+       "key": "progressive_bloc",
+       "delta": 4
+      },
+      {
+       "target": "reputation",
+       "key": "traditional_bloc",
+       "delta": -4
+      }
+     ],
+     "volume": "public",
+     "positionTopic": "synodality",
+     "positionValue": 30
+    },
+    {
+     "id": "against",
+     "label": "Vote against it, and say so if asked",
+     "outcome": "You vote against, and it passes, and the nuncio's note beside your name is a different mark. Your older priests are pleased and your younger ones are not, and Rome under this pope reads the paper.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:synodality",
+       "value": "defiant"
+      },
+      {
+       "target": "see",
+       "key": "rome",
+       "delta": -2
+      },
+      {
+       "target": "see",
+       "key": "presbyterate",
+       "delta": 1
+      },
+      {
+       "target": "reputation",
+       "key": "traditional_bloc",
+       "delta": 4
+      },
+      {
+       "target": "reputation",
+       "key": "progressive_bloc",
+       "delta": -5
+      }
+     ],
+     "volume": "public",
+     "positionTopic": "synodality",
+     "positionValue": -30
+    },
+    {
+     "id": "floor",
+     "label": "Speak from the floor for an amendment, then vote with the majority",
+     "outcome": "You ask that the parishes be given two years and not one, and get it, and vote for the document. The bishops who wanted it thank you for the votes it brought; the bishops who did not thank you for the year.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:synodality",
+       "value": "faithful"
+      },
+      {
+       "target": "see",
+       "key": "rome",
+       "delta": 1
+      },
+      {
+       "target": "see",
+       "key": "presbyterate",
+       "delta": 1
+      },
+      {
+       "target": "stat",
+       "key": "charisma",
+       "delta": 1
+      }
+     ],
+     "volume": "semi_public",
+     "positionTopic": "synodality",
+     "positionValue": 0
+    },
+    {
+     "id": "absent",
+     "label": "Be in the corridor when the vote is taken",
+     "outcome": "The question is called while you are at the hotel desk about a room. It passes. The nuncio's note beside your name is blank, which he will fill in later from other evidence.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:synodality",
+       "value": "minimal"
+      },
+      {
+       "target": "see",
+       "key": "rome",
+       "delta": -1
+      }
+     ],
+     "default": true
+    }
+   ],
+   "beat": "conference",
+   "priority": 2
+  },
+  {
+   "id": "cf_as_vote_guide",
+   "phase": "bishop",
+   "severity": "NOTABLE",
+   "category": "chancery",
+   "baseWeight": 30,
+   "suppressYears": 2,
+   "pressure": [
+    "ambition_vs_integrity"
+   ],
+   "requires": [
+    {
+     "type": "flag",
+     "key": "study:see",
+     "value": true
+    },
+    {
+     "type": "conference",
+     "key": "scene",
+     "value": "assembly"
+    },
+    {
+     "type": "conference",
+     "key": "document",
+     "value": [
+      "voting_guide"
+     ],
+     "within": 1
+    }
+   ],
+   "title": "The Voting Guide",
+   "body": "The election year's guide, {conference_doc}, is on the floor with its new introduction, and the floor is arguing about a word in it that the paper will print tomorrow whatever the vote. {conference_president} has asked for charity three times and been given it twice. The bishop beside you has drafted an amendment on a napkin and is looking for a second.",
+   "choices": [
+    {
+     "id": "for",
+     "label": "Vote for it, and say so if asked",
+     "outcome": "You vote for it with the introduction and it passes, and the paper prints the word, and your chancery's telephone rings for a week from both sides, which is the guide working as designed.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:authority",
+       "value": "eager"
+      },
+      {
+       "target": "see",
+       "key": "people",
+       "delta": -1
+      },
+      {
+       "target": "reputation",
+       "key": "public",
+       "delta": 2
+      },
+      {
+       "target": "reputation",
+       "key": "traditional_bloc",
+       "delta": 2
+      },
+      {
+       "target": "reputation",
+       "key": "progressive_bloc",
+       "delta": -2
+      }
+     ],
+     "volume": "public",
+     "positionTopic": "authority",
+     "positionValue": 10
+    },
+    {
+     "id": "against",
+     "label": "Vote against it, and say so if asked",
+     "outcome": "You vote against the introduction and lose, and the paper counts the noes, and your diocese has a guide in the vestibule its bishop did not want and will distribute anyway.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:authority",
+       "value": "defiant"
+      },
+      {
+       "target": "see",
+       "key": "rome",
+       "delta": -1
+      },
+      {
+       "target": "reputation",
+       "key": "progressive_bloc",
+       "delta": 3
+      },
+      {
+       "target": "reputation",
+       "key": "traditional_bloc",
+       "delta": -3
+      },
+      {
+       "target": "reputation",
+       "key": "public",
+       "delta": 1
+      }
+     ],
+     "volume": "public",
+     "positionTopic": "authority",
+     "positionValue": -10
+    },
+    {
+     "id": "floor",
+     "label": "Speak from the floor for an amendment, then vote with the majority",
+     "outcome": "You speak for the word to be changed to the word from four years ago, and it is not, and you vote for the guide. The paper does not print your speech. The bishops remember it.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:authority",
+       "value": "faithful"
+      },
+      {
+       "target": "stat",
+       "key": "charisma",
+       "delta": 1
+      },
+      {
+       "target": "reputation",
+       "key": "brother_priests",
+       "delta": 1
+      }
+     ],
+     "volume": "semi_public",
+     "positionTopic": "authority",
+     "positionValue": 0
+    },
+    {
+     "id": "absent",
+     "label": "Be in the corridor when the vote is taken",
+     "outcome": "You are at the back with the bishop of the next see when the vote is taken, discussing a priest on loan, and the guide passes. The paper does not count the absent.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:authority",
+       "value": "minimal"
+      },
+      {
+       "target": "see",
+       "key": "rome",
+       "delta": -1
+      }
+     ],
+     "default": true
+    }
+   ],
+   "beat": "conference",
+   "priority": 2
+  },
+  {
+   "id": "cf_as_vote_norms",
+   "phase": "bishop",
+   "severity": "NOTABLE",
+   "category": "chancery",
+   "baseWeight": 30,
+   "suppressYears": 2,
+   "pressure": [
+    "competence"
+   ],
+   "requires": [
+    {
+     "type": "flag",
+     "key": "study:see",
+     "value": true
+    },
+    {
+     "type": "conference",
+     "key": "scene",
+     "value": "assembly"
+    },
+    {
+     "type": "conference",
+     "key": "document",
+     "value": [
+      "safeguarding_norms"
+     ],
+     "within": 1
+    }
+   ],
+   "title": "The Revised Norms",
+   "body": "The revised norms for the protection of minors are before the floor. There is no debate about whether; there is an hour of debate about the audit's form and the review board's makeup, and a bishop who has lived through the worst of it stands and says, quietly, that the form is not the point, and sits down. {conference_president} calls the question.",
+   "choices": [
+    {
+     "id": "for",
+     "label": "Vote for the norms, and for the stricter audit",
+     "outcome": "You vote for the norms and for the amendment that made the audit yearly. Your diocese has a year of audits ahead, and a bishop who was on the right side of a vote nobody wanted to be on any side of.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:abuse_handling",
+       "value": "eager"
+      },
+      {
+       "target": "see",
+       "key": "rome",
+       "delta": 1
+      },
+      {
+       "target": "see",
+       "key": "people",
+       "delta": 1
+      },
+      {
+       "target": "stat",
+       "key": "administration",
+       "delta": 1
+      }
+     ]
+    },
+    {
+     "id": "as",
+     "label": "Vote for the norms as drafted",
+     "outcome": "You vote for the norms as the committee brought them, and they pass. The audit is on the chancery's calendar before you are home.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:abuse_handling",
+       "value": "faithful"
+      },
+      {
+       "target": "see",
+       "key": "rome",
+       "delta": 1
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "speak",
+     "label": "Stand, and say what your own diocese learned, and vote for them",
+     "outcome": "You say, in four minutes, what the review board at home found and how the priests took it, and the floor is quiet, and the norms pass. Two bishops ask you afterward for the board's chair's name.",
+     "effects": [
+      {
+       "target": "document",
+       "key": "conference:abuse_handling",
+       "value": "eager"
+      },
+      {
+       "target": "see",
+       "key": "rome",
+       "delta": 1
+      },
+      {
+       "target": "see",
+       "key": "presbyterate",
+       "delta": 1
+      },
+      {
+       "target": "reputation",
+       "key": "brother_priests",
+       "delta": 2
+      },
+      {
+       "target": "stat",
+       "key": "charisma",
+       "delta": 1
+      },
+      {
+       "target": "strain",
+       "key": "",
+       "delta": 3
+      }
+     ]
+    }
+   ],
+   "beat": "conference",
+   "priority": 2
+  },
+  {
+   "id": "cf_as_vote_any",
+   "phase": "bishop",
+   "severity": "ROUTINE",
+   "category": "chancery",
+   "baseWeight": 30,
+   "suppressYears": 2,
+   "pressure": [
+    "ambition_vs_integrity"
+   ],
+   "requires": [
+    {
+     "type": "flag",
+     "key": "study:see",
+     "value": true
+    },
+    {
+     "type": "conference",
+     "key": "scene",
+     "value": "assembly"
+    },
+    {
+     "type": "conference",
+     "key": "document",
+     "within": 1
+    }
+   ],
+   "title": "The Card in Your Hand",
+   "body": "{conference_doc}, {conference_doc_gist}, is on the floor and {conference_president} has called the question after a debate that was shorter than the document and longer than it needed to be. You have read it on the plane and marked two paragraphs. The bishop beside you has not read it, and votes anyway, and asks you afterward what it was.",
+   "choices": [
+    {
+     "id": "for",
+     "label": "For",
+     "outcome": "Your card goes up with the majority and the document passes. Your diocese will hear of it in the bishop's letter, which is yours to write.",
+     "effects": [
+      {
+       "target": "see",
+       "key": "rome",
+       "delta": 1
+      }
+     ]
+    },
+    {
+     "id": "against",
+     "label": "Against",
+     "outcome": "Your card goes up with the few. It passes anyway. Your diocese will keep it, and your priests will know you did not vote for it, which is a kind of leadership.",
+     "effects": [
+      {
+       "target": "see",
+       "key": "presbyterate",
+       "delta": 1
+      },
+      {
+       "target": "see",
+       "key": "rome",
+       "delta": -1
+      }
+     ]
+    },
+    {
+     "id": "abstain",
+     "label": "Abstain",
+     "outcome": "You do not raise the card, and the bishop beside you notices, and asks at the break what that was about. You tell him. He does not understand, and does not need to.",
+     "effects": [],
+     "default": true
+    }
+   ],
+   "beat": "conference",
+   "priority": 1
+  },
+  {
+   "id": "cf_as_floor",
+   "phase": "bishop",
+   "severity": "NOTABLE",
+   "category": "chancery",
+   "baseWeight": 30,
+   "suppressYears": 2,
+   "pressure": [
+    "ambition_vs_integrity"
+   ],
+   "requires": [
+    {
+     "type": "flag",
+     "key": "study:see",
+     "value": true
+    },
+    {
+     "type": "conference",
+     "key": "scene",
+     "value": "assembly"
+    },
+    {
+     "type": "not",
+     "inner": {
+      "type": "conference",
+      "key": "document",
+      "within": 1
+     }
+    }
+   ],
+   "title": "The Corridor",
+   "body": "No document this session, only reports and the budget, and the real assembly is in the corridor: the bishop of the next see wants one of your priests on loan for two years, the bishop of a great see wants your vote on a committee chair, and {conference_president} wants five minutes about the collection for the missions.",
+   "choices": [
+    {
+     "id": "loan",
+     "label": "Give the bishop of the next see his two years, and ask what he has for you",
+     "outcome": "He has a Spanish-speaking priest he can spare in the spring, which is the thing you needed most and did not say. The loan is agreed on a napkin and the chancery will hate the napkin.",
+     "effects": [
+      {
+       "target": "relationship",
+       "key": "@province_bishop",
+       "delta": 6
+      },
+      {
+       "target": "see",
+       "key": "shortage",
+       "delta": 0
+      },
+      {
+       "target": "flag",
+       "key": "conference:loan_promised",
+       "value": true
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "vote",
+     "label": "Give the great see its vote, and be seen doing it",
+     "outcome": "The chair goes to the great see's man, and the great see's bishop remembers who was seen with him. It is the kind of debt a small see can collect on for a decade.",
+     "effects": [
+      {
+       "target": "see",
+       "key": "rome",
+       "delta": 1
+      },
+      {
+       "target": "reputation",
+       "key": "chancery",
+       "delta": 1
+      },
+      {
+       "target": "strain",
+       "key": "",
+       "delta": 1
+      }
+     ]
+    },
+    {
+     "id": "president",
+     "label": "The five minutes with the president, and then ten",
+     "outcome": "He asks about the missions and then about the province and then about you, and you learn that a president listens for a living. When it is over you have been asked, lightly, whether you would serve on a committee.",
+     "effects": [
+      {
+       "target": "see",
+       "key": "rome",
+       "delta": 1
+      },
+      {
+       "target": "stat",
+       "key": "knowledge",
+       "delta": 1
+      },
+      {
+       "target": "flag",
+       "key": "conference:noticed",
+       "value": true
+      }
+     ]
+    }
+   ],
+   "beat": "conference",
+   "priority": 1
+  },
+  {
+   "id": "cf_as_nuncio_corridor",
+   "phase": "bishop",
+   "severity": "NOTABLE",
+   "category": "chancery",
+   "baseWeight": 30,
+   "suppressYears": 2,
+   "pressure": [
+    "ambition_vs_integrity"
+   ],
+   "requires": [
+    {
+     "type": "flag",
+     "key": "study:see",
+     "value": true
+    },
+    {
+     "type": "conference",
+     "key": "scene",
+     "value": "assembly"
+    },
+    {
+     "type": "not",
+     "inner": {
+      "type": "conference",
+      "key": "document",
+      "within": 1
+     }
+    }
+   ],
+   "title": "The Nuncio in the Corridor",
+   "body": "{@nuncio} finds you at the coffee, which is where he finds everyone, and asks after the diocese with the particularity of a man who has read the file this morning. He mentions a see. He does not say why. He asks what you think of its retiring bishop, whom you like.",
+   "choices": [
+    {
+     "id": "honest",
+     "label": "Say what you think of him, which is good, and of the see, which is harder",
+     "outcome": "He listens without writing and thanks you, and you learn a month later that the retiring bishop's successor was a man you did not name, and that the nuncio had not asked you to name one.",
+     "effects": [
+      {
+       "target": "relationship",
+       "key": "@nuncio",
+       "delta": 4
+      },
+      {
+       "target": "see",
+       "key": "rome",
+       "delta": 1
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "careful",
+     "label": "Say only good things, of both",
+     "outcome": "He hears the difference between what you said and what you think, because that is his trade, and moves on to the weather. The file has a note.",
+     "effects": [
+      {
+       "target": "relationship",
+       "key": "@nuncio",
+       "delta": -1
+      }
+     ]
+    },
+    {
+     "id": "yourself",
+     "label": "Ask him, lightly, whether he has a see in mind for you",
+     "outcome": "He smiles the smile of a man who has been asked that at every coffee for twenty years and says the Holy Father is well informed. It is not a no. It is not anything.",
+     "effects": [
+      {
+       "target": "relationship",
+       "key": "@nuncio",
+       "delta": -2
+      },
+      {
+       "target": "see",
+       "key": "rome",
+       "delta": -1
+      },
+      {
+       "target": "reputation",
+       "key": "rome",
+       "delta": -1
+      }
+     ]
+    }
+   ],
+   "beat": "conference",
+   "priority": 1
+  },
+  {
+   "id": "cf_as_stand_committee",
+   "phase": "bishop",
+   "severity": "NOTABLE",
+   "category": "chancery",
+   "baseWeight": 30,
+   "suppressYears": 1,
+   "pressure": [
+    "ambition_vs_integrity"
+   ],
+   "requires": [
+    {
+     "type": "flag",
+     "key": "study:see",
+     "value": true
+    },
+    {
+     "type": "conference",
+     "key": "scene",
+     "value": "election"
+    },
+    {
+     "type": "conference",
+     "key": "next",
+     "value": "committee"
+    }
+   ],
+   "title": "A Seat on a Committee",
+   "body": "The November assembly elects, and the committee slate has a place on it with your name pencilled beside it by someone who liked what you said in the corridor. A committee is four meetings a year in Washington and a stack of memos, and the first rung of a ladder nobody admits is a ladder.",
+   "choices": [
+    {
+     "id": "stand",
+     "label": "Let your name stand",
+     "outcome": "Your name goes on the slate. The ballots are next week, by mail from the floor, and you will hear at breakfast.",
+     "effects": [
+      {
+       "target": "flag",
+       "key": "conference:stand",
+       "value": "committee"
+      }
+     ]
+    },
+    {
+     "id": "decline",
+     "label": "Decline, with thanks",
+     "outcome": "You tell the committee's chair you have a diocese to run, and he says they all do, and pencils someone else. The ladder stays where it is.",
+     "effects": [
+      {
+       "target": "flag",
+       "key": "conference:declined",
+       "value": "committee"
+      }
+     ],
+     "default": true
+    }
+   ],
+   "beat": "conference",
+   "priority": 3
+  },
+  {
+   "id": "cf_as_stand_chair",
+   "phase": "bishop",
+   "severity": "NOTABLE",
+   "category": "chancery",
+   "baseWeight": 30,
+   "suppressYears": 1,
+   "pressure": [
+    "ambition_vs_integrity"
+   ],
+   "requires": [
+    {
+     "type": "flag",
+     "key": "study:see",
+     "value": true
+    },
+    {
+     "type": "conference",
+     "key": "scene",
+     "value": "election"
+    },
+    {
+     "type": "conference",
+     "key": "next",
+     "value": "chair"
+    }
+   ],
+   "title": "The Chair of a Committee",
+   "body": "The committee's chair is retiring and the members have looked at each other and then at you. A chair is the committee's memos with your name on them, a seat at the president's table, and a quiet word from the nuncio, once, about whether you wanted it.",
+   "choices": [
+    {
+     "id": "stand",
+     "label": "Let your name stand",
+     "outcome": "Your name goes forward. The election is by the whole floor, next week, and the whole floor does not know you, which is the point of the memos.",
+     "effects": [
+      {
+       "target": "flag",
+       "key": "conference:stand",
+       "value": "chair"
+      }
+     ]
+    },
+    {
+     "id": "decline",
+     "label": "Decline, with thanks",
+     "outcome": "You let the committee know the vice-chair would be the better man, and he is elected, and thanks you in a way that suggests he will remember.",
+     "effects": [
+      {
+       "target": "flag",
+       "key": "conference:declined",
+       "value": "chair"
+      }
+     ],
+     "default": true
+    }
+   ],
+   "beat": "conference",
+   "priority": 3
+  },
+  {
+   "id": "cf_as_stand_secretary",
+   "phase": "bishop",
+   "severity": "NOTABLE",
+   "category": "chancery",
+   "baseWeight": 30,
+   "suppressYears": 1,
+   "pressure": [
+    "ambition_vs_integrity"
+   ],
+   "requires": [
+    {
+     "type": "flag",
+     "key": "study:see",
+     "value": true
+    },
+    {
+     "type": "conference",
+     "key": "scene",
+     "value": "election"
+    },
+    {
+     "type": "conference",
+     "key": "next",
+     "value": "secretary"
+    }
+   ],
+   "title": "The Secretary",
+   "body": "The secretary's chair is open, the conference's third office: the minutes, the correspondence, and the ear of the president, and the office from which the last two vice-presidents came. The men who run these things have asked whether you would.",
+   "choices": [
+    {
+     "id": "stand",
+     "label": "Let your name stand",
+     "outcome": "Your name goes forward for secretary. It is the first election the paper will report, and the first one your priests will notice.",
+     "effects": [
+      {
+       "target": "flag",
+       "key": "conference:stand",
+       "value": "secretary"
+      }
+     ]
+    },
+    {
+     "id": "decline",
+     "label": "Decline, with thanks",
+     "outcome": "You say no, and mean it, and the men who run these things make a note that you are a man who says no, which is worth something to them and costs you nothing.",
+     "effects": [
+      {
+       "target": "flag",
+       "key": "conference:declined",
+       "value": "secretary"
+      }
+     ],
+     "default": true
+    }
+   ],
+   "beat": "conference",
+   "priority": 3
+  },
+  {
+   "id": "cf_as_stand_vice_president",
+   "phase": "bishop",
+   "severity": "NOTABLE",
+   "category": "chancery",
+   "baseWeight": 30,
+   "suppressYears": 1,
+   "pressure": [
+    "ambition_vs_integrity"
+   ],
+   "requires": [
+    {
+     "type": "flag",
+     "key": "study:see",
+     "value": true
+    },
+    {
+     "type": "conference",
+     "key": "scene",
+     "value": "election"
+    },
+    {
+     "type": "conference",
+     "key": "next",
+     "value": "vice_president"
+    }
+   ],
+   "title": "The Vice-President",
+   "body": "The vice-presidency is open, and the custom is that the vice-president becomes president three years on, which everyone on the floor knows and nobody says. The nuncio has asked, in the corridor, whether you have thought about it, which is how the nuncio says he has.",
+   "choices": [
+    {
+     "id": "stand",
+     "label": "Let your name stand",
+     "outcome": "Your name goes forward. It is a real election, against real men, by a floor that has read your votes for a decade. The ballots are next week.",
+     "effects": [
+      {
+       "target": "flag",
+       "key": "conference:stand",
+       "value": "vice_president"
+      }
+     ]
+    },
+    {
+     "id": "decline",
+     "label": "Decline, with thanks",
+     "outcome": "You tell the nuncio you have a diocese, and he says the conference has had presidents with dioceses, and lets it go. You will not be asked again for three years, if then.",
+     "effects": [
+      {
+       "target": "flag",
+       "key": "conference:declined",
+       "value": "vice_president"
+      }
+     ],
+     "default": true
+    }
+   ],
+   "beat": "conference",
+   "priority": 3
+  },
+  {
+   "id": "cf_as_stand_president",
+   "phase": "bishop",
+   "severity": "NOTABLE",
+   "category": "chancery",
+   "baseWeight": 30,
+   "suppressYears": 1,
+   "pressure": [
+    "ambition_vs_integrity"
+   ],
+   "requires": [
+    {
+     "type": "flag",
+     "key": "study:see",
+     "value": true
+    },
+    {
+     "type": "conference",
+     "key": "scene",
+     "value": "election"
+    },
+    {
+     "type": "conference",
+     "key": "next",
+     "value": "president"
+    }
+   ],
+   "title": "The President",
+   "body": "The presidency of the conference is open and you are the vice-president, which by custom makes you the man, and by the ballot makes you a candidate. The floor has changed under this pope. So has the floor's reading of you.",
+   "choices": [
+    {
+     "id": "stand",
+     "label": "Let your name stand",
+     "outcome": "Your name goes forward. If the floor keeps its custom you will be president by breakfast; if it does not, the paper will explain why for a week.",
+     "effects": [
+      {
+       "target": "flag",
+       "key": "conference:stand",
+       "value": "president"
+      }
+     ]
+    },
+    {
+     "id": "decline",
+     "label": "Decline, with thanks",
+     "outcome": "You decline the custom, which has been done twice in living memory, and the floor is surprised and the nuncio is not. Someone else will speak for the bishops. You will speak for your diocese, which is what you were ordained a bishop for.",
+     "effects": [
+      {
+       "target": "flag",
+       "key": "conference:declined",
+       "value": "president"
+      }
+     ],
+     "default": true
+    }
+   ],
+   "beat": "conference",
+   "priority": 3
+  },
+  {
+   "id": "cf_as_won",
+   "phase": "bishop",
+   "severity": "NOTABLE",
+   "category": "chancery",
+   "baseWeight": 30,
+   "suppressYears": 1,
+   "pressure": [
+    "ambition_vs_integrity"
+   ],
+   "requires": [
+    {
+     "type": "flag",
+     "key": "study:see",
+     "value": true
+    },
+    {
+     "type": "conference",
+     "key": "scene",
+     "value": "result"
+    },
+    {
+     "type": "conference",
+     "key": "result",
+     "value": "won"
+    }
+   ],
+   "title": "Elected",
+   "body": "The ballots are read at breakfast and yours is the name, on the {conference_office}, and the room applauds the way bishops applaud, briefly. {conference_president} shakes your hand and says the first meeting is Tuesday. Your vicar general, on the telephone, asks what it means for the diocese.",
+   "choices": [
+    {
+     "id": "diocese",
+     "label": "Tell him it means the diocese comes first and the conference gets what is left",
+     "outcome": "He believes you, mostly. The conference gets Tuesdays and the memos, and the diocese gets the rest of the week, and in a year you will know whether that was true.",
+     "effects": [
+      {
+       "target": "see",
+       "key": "presbyterate",
+       "delta": 1
+      },
+      {
+       "target": "strain",
+       "key": "",
+       "delta": 2
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "both",
+     "label": "Tell him it means the diocese will be heard where it was not before",
+     "outcome": "He is pleased, and tells the priests, and the priests are pleased in the way priests are when their bishop is somewhere else. The nuncio's next letter uses your new title.",
+     "effects": [
+      {
+       "target": "see",
+       "key": "rome",
+       "delta": 1
+      },
+      {
+       "target": "see",
+       "key": "presbyterate",
+       "delta": 1
+      },
+      {
+       "target": "strain",
+       "key": "",
+       "delta": 3
+      }
+     ]
+    },
+    {
+     "id": "honest",
+     "label": "Tell him you do not know yet, and that you will be away more",
+     "outcome": "He says the chancery will manage, which it will, and that the priests will notice, which they will. It is the honest answer and he respects it, and starts signing more of the mail.",
+     "effects": [
+      {
+       "target": "see",
+       "key": "presbyterate",
+       "delta": -1
+      },
+      {
+       "target": "strain",
+       "key": "",
+       "delta": 1
+      },
+      {
+       "target": "reputation",
+       "key": "brother_priests",
+       "delta": 1
+      }
+     ]
+    }
+   ],
+   "beat": "conference",
+   "priority": 2
+  },
+  {
+   "id": "cf_as_lost",
+   "phase": "bishop",
+   "severity": "NOTABLE",
+   "category": "chancery",
+   "baseWeight": 30,
+   "suppressYears": 1,
+   "pressure": [
+    "ambition_vs_integrity"
+   ],
+   "requires": [
+    {
+     "type": "flag",
+     "key": "study:see",
+     "value": true
+    },
+    {
+     "type": "conference",
+     "key": "scene",
+     "value": "result"
+    },
+    {
+     "type": "conference",
+     "key": "result",
+     "value": "lost"
+    }
+   ],
+   "title": "Not This Time",
+   "body": "The ballots are read at breakfast and the name is {conference_winner}'s, on the {conference_office}, on a later ballot than the custom likes. The room applauds him. Two bishops find you at the coffee to say they voted for you, which is two fewer than said they would.",
+   "choices": [
+    {
+     "id": "congratulate",
+     "label": "Congratulate him first, before anyone else can",
+     "outcome": "You are at his elbow before the applause ends and he is grateful for it, and says so, and remembers it when there is a committee to fill. The floor sees it. The floor is the electorate.",
+     "effects": [
+      {
+       "target": "relationship",
+       "key": "@province_bishop",
+       "delta": 2
+      },
+      {
+       "target": "see",
+       "key": "rome",
+       "delta": 1
+      },
+      {
+       "target": "reputation",
+       "key": "brother_priests",
+       "delta": 1
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "home",
+     "label": "Fly home on the early flight",
+     "outcome": "The diocese is glad to have you back a day early and does not know why. The nuncio's office notes the empty chair at the afternoon session. It was one afternoon.",
+     "effects": [
+      {
+       "target": "see",
+       "key": "presbyterate",
+       "delta": 1
+      },
+      {
+       "target": "see",
+       "key": "rome",
+       "delta": -1
+      }
+     ]
+    },
+    {
+     "id": "count",
+     "label": "Ask the secretary, quietly, for the count by round",
+     "outcome": "He gives it to you, which he should not, and you learn who moved and when. It is useful and it is a thing you now know about yourself: that you asked.",
+     "effects": [
+      {
+       "target": "stat",
+       "key": "knowledge",
+       "delta": 1
+      },
+      {
+       "target": "strain",
+       "key": "",
+       "delta": 2
+      },
+      {
+       "target": "reputation",
+       "key": "rome",
+       "delta": -1
+      }
+     ]
+    }
+   ],
+   "beat": "conference",
+   "priority": 2
+  },
+  {
+   "id": "cf_as_committee_work",
+   "phase": "bishop",
+   "severity": "NOTABLE",
+   "category": "chancery",
+   "baseWeight": 30,
+   "suppressYears": 1,
+   "pressure": [
+    "ambition_vs_integrity"
+   ],
+   "requires": [
+    {
+     "type": "flag",
+     "key": "study:see",
+     "value": true
+    },
+    {
+     "type": "any",
+     "inner": [
+      {
+       "type": "conference",
+       "key": "office",
+       "value": "committee"
+      },
+      {
+       "type": "conference",
+       "key": "office",
+       "value": "chair"
+      }
+     ]
+    }
+   ],
+   "title": "The Committee's Draft",
+   "body": "The committee's draft is due in Washington on Friday and it is Tuesday and the staff have sent you sixty pages that say what the staff think. The chair wants your section by Thursday. The diocese has a funeral Wednesday and a confirmation Thursday.",
+   "choices": [
+    {
+     "id": "write",
+     "label": "Write it yourself, at night, and send it Thursday",
+     "outcome": "Your section says what you think, in your own sentences, and the chair reads it aloud at the meeting, which does not happen to staff drafts. The confirmation goes well. You sleep on the plane.",
+     "effects": [
+      {
+       "target": "stat",
+       "key": "administration",
+       "delta": 2
+      },
+      {
+       "target": "stat",
+       "key": "theology",
+       "delta": 1
+      },
+      {
+       "target": "see",
+       "key": "rome",
+       "delta": 1
+      },
+      {
+       "target": "strain",
+       "key": "",
+       "delta": 4
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "staff",
+     "label": "Sign the staff's draft with three changes",
+     "outcome": "The staff's draft goes with your name on it and three sentences that are yours, and nobody at the meeting reads it aloud. The funeral and the confirmation get the bishop they deserved.",
+     "effects": [
+      {
+       "target": "see",
+       "key": "presbyterate",
+       "delta": 1
+      },
+      {
+       "target": "strain",
+       "key": "",
+       "delta": 1
+      }
+     ]
+    },
+    {
+     "id": "late",
+     "label": "Ask the chair for a week",
+     "outcome": "He gives you the week, since the chair always does, and the memo goes late and is read by nobody, and the chair makes a note that the diocese comes first with you, which is true and is not what a chair wants.",
+     "effects": [
+      {
+       "target": "see",
+       "key": "presbyterate",
+       "delta": 1
+      },
+      {
+       "target": "reputation",
+       "key": "rome",
+       "delta": -1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "cf_as_president_speaks",
+   "phase": "bishop",
+   "severity": "NOTABLE",
+   "category": "chancery",
+   "baseWeight": 34,
+   "suppressYears": 1,
+   "pressure": [
+    "ambition_vs_integrity"
+   ],
+   "requires": [
+    {
+     "type": "flag",
+     "key": "study:see",
+     "value": true
+    },
+    {
+     "type": "conference",
+     "key": "office",
+     "value": "president"
+    }
+   ],
+   "title": "In the Conference's Name",
+   "body": "The staff have drafted a statement for the president's signature, which is yours, on a matter the papers have already decided the bishops' view of. There is a strong draft and a mild one, and a general secretary who wants an answer by noon. Whatever you sign, every bishop in the country will read it under his own name.",
+   "choices": [
+    {
+     "id": "strong",
+     "label": "Sign the strong draft",
+     "outcome": "It runs on the wire by two and the telephone starts. A third of the bishops write to thank you and a third write the other thing and the nuncio writes nothing, which is a letter of its own. The conference has a voice, and it is yours.",
+     "effects": [
+      {
+       "target": "see",
+       "key": "rome",
+       "delta": -1
+      },
+      {
+       "target": "reputation",
+       "key": "public",
+       "delta": 4
+      },
+      {
+       "target": "reputation",
+       "key": "progressive_bloc",
+       "delta": 2
+      },
+      {
+       "target": "reputation",
+       "key": "traditional_bloc",
+       "delta": -2
+      },
+      {
+       "target": "strain",
+       "key": "",
+       "delta": 3
+      }
+     ],
+     "volume": "public",
+     "positionTopic": "authority",
+     "positionValue": 15
+    },
+    {
+     "id": "mild",
+     "label": "Sign the mild draft",
+     "outcome": "It runs, and is quoted, and offends no one, and the papers say the bishops were cautious, which they were. The general secretary is relieved. The bishops who wanted a voice are not.",
+     "effects": [
+      {
+       "target": "reputation",
+       "key": "public",
+       "delta": 1
+      },
+      {
+       "target": "see",
+       "key": "rome",
+       "delta": 1
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "none",
+     "label": "Sign nothing; the conference speaks in assembly, not by press release",
+     "outcome": "The general secretary is surprised and the staff are dismayed and the bishops who read the papers are, most of them, quietly relieved that nothing went out under their name that they had not voted. The papers say the bishops were silent.",
+     "effects": [
+      {
+       "target": "reputation",
+       "key": "public",
+       "delta": -2
+      },
+      {
+       "target": "see",
+       "key": "rome",
+       "delta": 1
+      },
+      {
+       "target": "reputation",
+       "key": "brother_priests",
+       "delta": 2
+      }
+     ],
+     "volume": "semi_public",
+     "positionTopic": "authority",
+     "positionValue": -15
+    }
+   ]
+  },
+  {
+   "id": "cf_as_president_rome",
+   "phase": "bishop",
+   "severity": "NOTABLE",
+   "category": "chancery",
+   "baseWeight": 30,
+   "suppressYears": 2,
+   "pressure": [
+    "ambition_vs_integrity"
+   ],
+   "requires": [
+    {
+     "type": "flag",
+     "key": "study:see",
+     "value": true
+    },
+    {
+     "type": "conference",
+     "key": "office",
+     "value": "president"
+    }
+   ],
+   "title": "A Call from the Nunciature",
+   "body": "{@nuncio} telephones the president, which is you, about the conference's tone. He does not say Rome is displeased; he says the Holy Father follows the conference's work with interest, and asks whether the June assembly might take up a theme he names. It is a theme the floor will not like.",
+   "choices": [
+    {
+     "id": "take",
+     "label": "Put the theme on the June agenda",
+     "outcome": "June takes it up and dislikes it and passes something on it, and the nuncio reports that the president is a man who can be worked with. The floor reports, in the corridor, the same thing, in a different tone.",
+     "effects": [
+      {
+       "target": "see",
+       "key": "rome",
+       "delta": 2
+      },
+      {
+       "target": "reputation",
+       "key": "rome",
+       "delta": 2
+      },
+      {
+       "target": "reputation",
+       "key": "brother_priests",
+       "delta": -2
+      },
+      {
+       "target": "strain",
+       "key": "",
+       "delta": 2
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "floor",
+     "label": "Tell him the floor sets its agenda, and you will put it to the floor",
+     "outcome": "You put it to the agenda committee, which declines it, and tell the nuncio so, and he thanks you and the Holy Father's interest cools by a degree that can be measured in the next terna. The floor knows what you did and is grateful in its way.",
+     "effects": [
+      {
+       "target": "see",
+       "key": "rome",
+       "delta": -2
+      },
+      {
+       "target": "reputation",
+       "key": "rome",
+       "delta": -2
+      },
+      {
+       "target": "reputation",
+       "key": "brother_priests",
+       "delta": 3
+      }
+     ]
+    },
+    {
+     "id": "both",
+     "label": "Take the theme, and put beside it the theme the floor wants",
+     "outcome": "June takes up both, and the nuncio's report and the floor's corridor agree, for once, that the president had found a way. It cost a week of telephone calls and it was worth it.",
+     "effects": [
+      {
+       "target": "see",
+       "key": "rome",
+       "delta": 1
+      },
+      {
+       "target": "reputation",
+       "key": "rome",
+       "delta": 1
+      },
+      {
+       "target": "reputation",
+       "key": "brother_priests",
+       "delta": 1
+      },
+      {
+       "target": "stat",
+       "key": "administration",
+       "delta": 1
+      },
+      {
+       "target": "strain",
+       "key": "",
+       "delta": 3
+      }
+     ]
+    }
+   ],
+   "once": true
+  },
+  {
+   "id": "cf_as_new_president",
+   "phase": "bishop",
+   "severity": "NOTABLE",
+   "category": "chancery",
+   "baseWeight": 26,
+   "suppressYears": 3,
+   "pressure": [
+    "ambition_vs_integrity"
+   ],
+   "requires": [
+    {
+     "type": "flag",
+     "key": "study:see",
+     "value": true
+    },
+    {
+     "type": "conference",
+     "key": "president",
+     "value": "new"
+    },
+    {
+     "type": "not",
+     "inner": {
+      "type": "conference",
+      "key": "president",
+      "value": "player"
+     }
+    }
+   ],
+   "title": "The New President Writes",
+   "body": "{conference_president}, elected president in November, writes to every bishop in the country in December, which the last president did not. The letter asks each diocese for one thing by Lent, and the thing is not small, and the letter is warm about it in a way that will make refusing feel like bad manners.",
+   "choices": [
+    {
+     "id": "do",
+     "label": "Do the thing, and write to say so",
+     "outcome": "The diocese does it by Lent and you write to say so, and his reply is a line in his own hand, and you are on a list now, which is what the letter was for.",
+     "effects": [
+      {
+       "target": "see",
+       "key": "rome",
+       "delta": 1
+      },
+      {
+       "target": "reputation",
+       "key": "rome",
+       "delta": 1
+      },
+      {
+       "target": "strain",
+       "key": "",
+       "delta": 2
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "later",
+     "label": "Write that the diocese will do it in its own time",
+     "outcome": "He answers that he understands, and you are on a different list. The thing is done by Advent, and nobody in Washington notices.",
+     "effects": [
+      {
+       "target": "see",
+       "key": "presbyterate",
+       "delta": 1
+      }
+     ]
+    },
+    {
+     "id": "not",
+     "label": "Let the letter sit",
+     "outcome": "Lent comes and goes and the letter is under the others. The president's office sends a reminder in April with a form. You are the last diocese on the form.",
+     "effects": [
+      {
+       "target": "reputation",
+       "key": "rome",
+       "delta": -1
+      },
+      {
+       "target": "see",
+       "key": "rome",
+       "delta": -1
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

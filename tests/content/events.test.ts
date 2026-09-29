@@ -11,8 +11,11 @@ import { SEALED_TARGETS } from '@/engine/internalForum';
 import { arcDefs } from '@/content/arcs';
 import { orderDefs } from '@/content/houses';
 import { policyAxes } from '@/content/rome';
+import { conferenceDocuments } from '@/content/conference';
 const AXES = new Map(policyAxes.map((a) => [a.key, new Set(a.values.map((v) => v.key))]));
 const NORMS = ['enthusiastic', 'faithful', 'minimal', 'slow'];
+const CONFERENCE_DOCS = new Set(conferenceDocuments.map((d) => d.id));
+const CONFERENCE_TOPICS = new Set(conferenceDocuments.map((d) => `conference:${d.topic}`));
 const IMPLEMENTATIONS = ['eager', 'faithful', 'minimal', 'defiant'];
 const asList = (v: unknown): unknown[] => (Array.isArray(v) ? v : [v]);
 const ARC_IDS = new Set(arcDefs.map((a) => a.id));
@@ -263,6 +266,9 @@ function checkCondition(c: Condition, where: string, problems: Problem[]): void 
     case 'visitation':
       if (!({ scene: ['announced', 'house', 'interview', 'report', 'decree'], stage: ['announced', 'visiting', 'report', 'decree'], cause: ['document', 'division', 'decline', 'complaint'], outcome: ['clean', 'norms', 'closure', 'commissary'] } as Record<string, string[]>)[c.key]?.includes(String(c.value))) problems.push(`${where}: bad visitation condition`);
       break;
+    case 'conference':
+      if (c.key === 'scene' ? !['cascade', 'assembly', 'election', 'result'].includes(c.value) : c.key === 'document' ? (c.value !== undefined && !asList(c.value).every((v) => CONFERENCE_DOCS.has(v as string))) || (c.within !== undefined && typeof c.within !== 'number') : c.key === 'assembly' || c.key === 'election' ? c.within !== undefined && typeof c.within !== 'number' : c.key === 'temper' ? !hasOp(c.op) || typeof c.value !== 'number' : c.key === 'office' ? !['committee', 'chair', 'secretary', 'vice_president', 'president', 'none'].includes(c.value) : c.key === 'next' ? !['committee', 'chair', 'secretary', 'vice_president', 'president'].includes(c.value) : c.key === 'result' ? !['won', 'lost', 'watched'].includes(c.value) : c.key === 'president' ? !['player', 'new'].includes(c.value) : true) problems.push(`${where}: bad conference condition`);
+      break;
     case 'metropolia':
       if (c.key === 'rank' ? !['metropolitan', 'suffragan'].includes(c.value) : c.key === 'policy' ? typeof c.value !== 'string' : c.key === 'meeting' ? c.within !== undefined && typeof c.within !== 'number' : c.key === 'metropolitan' ? !['vacant', 'new'].includes(c.value) : true) problems.push(`${where}: bad metropolia condition`);
       break;
@@ -339,7 +345,7 @@ function checkEffect(e: Effect, where: string, problems: Problem[]): void {
   if (e.target === 'place' && (!PLACE_DIALS.has(e.key) || typeof e.delta !== 'number')) problems.push(`${where}: place effect needs a known dial and a delta: ${e.key}`);
   if (e.target === 'record' && (!BOOK_KEYS.has(e.key) || typeof e.delta !== 'number')) problems.push(`${where}: record effect needs a known book entry and a delta: ${e.key}`);
   if (e.target === 'transfer' && !['flagship_suburban', 'struggling_urban', 'immigrant_growing', 'rural', 'difficult'].includes(e.key)) problems.push(`${where}: transfer key must be a parish kind`);
-  if (e.target === 'document' && (!AXES.has(e.key) || !IMPLEMENTATIONS.includes(String(e.value)))) problems.push(`${where}: document effect needs an axis and an implementation`);
+  if (e.target === 'document' && (!(AXES.has(e.key) || CONFERENCE_TOPICS.has(e.key)) || !IMPLEMENTATIONS.includes(String(e.value)))) problems.push(`${where}: document effect needs an axis and an implementation`);
   if (e.target === 'building' && (!['church', 'rectory', 'hall', 'school'].includes(e.key) || typeof e.delta !== 'number')) problems.push(`${where}: bad building effect`);
   if (e.target === 'permission' && (!LITURGICAL_TOPICS.includes(e.key) || !['granted', 'denied'].includes(String(e.value)))) problems.push(`${where}: bad permission effect`);
 }
@@ -384,7 +390,7 @@ function checkEvent(ev: GameEvent, file: string, problems: Problem[], ids: Set<s
   });
   for (const token of tokensIn(ev.title + ' ' + ev.body)) {
     if (token.startsWith('@') && !SELECTORS.includes(token) && !LIVE_SELECTORS.includes(token)) problems.push(`${where}: unknown selector ${token}`);
-    if (!token.startsWith('@') && !['name', 'first_name', 'surname', 'diocese', 'parish', 'seminary', 'school', 'city', 'residence', 'appointment', 'appointment_residence', 'appointment_from', 'town'].includes(token) && !(token.startsWith('town:') && TOWN_PLACE_KINDS.includes(token.slice(5) as never)) && !isRomeToken(token) && !['nuncio_view', 'see', 'see_city', 'named', 'dicastery', 'dicastery_short', 'dicastery_work', 'curia_rank', 'curia_offer', 'titular', 'college_electors', 'pope_name', 'pope_journey', 'pope_draft', 'pope_years', 'pope_from', 'pope_age', 'country', 'country_next', 'country_church', 'diplomat_rank', 'nunciature', 'visitor', 'visitor_first', 'visitation_cause', 'closed_house', 'removed_provincial', 'direction_priest', 'direction_parish', 'visit_parish', 'visit_town', 'visit_pastor', 'seminary_man', 'presbyterate_man'].includes(token)) {
+    if (!token.startsWith('@') && !['name', 'first_name', 'surname', 'diocese', 'parish', 'seminary', 'school', 'city', 'residence', 'appointment', 'appointment_residence', 'appointment_from', 'town'].includes(token) && !(token.startsWith('town:') && TOWN_PLACE_KINDS.includes(token.slice(5) as never)) && !isRomeToken(token) && !['nuncio_view', 'see', 'see_city', 'named', 'dicastery', 'dicastery_short', 'dicastery_work', 'curia_rank', 'curia_offer', 'titular', 'college_electors', 'pope_name', 'pope_journey', 'pope_draft', 'pope_years', 'pope_from', 'pope_age', 'country', 'country_next', 'country_church', 'diplomat_rank', 'nunciature', 'visitor', 'visitor_first', 'visitation_cause', 'closed_house', 'removed_provincial', 'direction_priest', 'direction_parish', 'visit_parish', 'visit_town', 'visit_pastor', 'seminary_man', 'presbyterate_man', 'conference_doc', 'conference_doc_gist', 'conference_president', 'conference_office', 'conference_winner', 'conference_temper'].includes(token)) {
       problems.push(`${where}: unknown token {${token}}`);
     }
   }

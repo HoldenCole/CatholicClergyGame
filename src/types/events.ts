@@ -3,6 +3,7 @@ import type { ConstituencyKey, Phase, StatKey, Volume } from './stats';
 import type { Season } from './time';
 import type { DecorPlace, DecorSlot } from './decor';
 import type { LiturgicalStance, LiturgicalTopic } from './world';
+import type { ConferenceOffice, ConferenceSceneKind } from './conference';
 import type { MinistryKey } from './ministry';
 
 /** Drives interrupts. See DESIGN.md §12.3. */
@@ -168,6 +169,21 @@ export type Condition =
       /** R1.2: it turns back an earlier document he answered (true), or one he answered this way. */
       reverses?: boolean | string | string[];
     }
+  /**
+   * E2 R1.2: the bishops' conference: its scene due for the man (cascade at home, the assembly, the election, its result);
+   * the latest document it issued (value: an id or ids; within weeks; answered in his parish or not); an assembly or an
+   * election this week (within, default three); its temper against a value; the office he holds ('none' for none);
+   * how the last election went for him; its president ('player', or 'new' within a year).
+   */
+  | { type: 'conference'; key: 'scene'; value: ConferenceSceneKind }
+  | { type: 'conference'; key: 'document'; value?: string | string[]; within?: number; implemented?: boolean }
+  | { type: 'conference'; key: 'assembly' | 'election'; within?: number }
+  | { type: 'conference'; key: 'temper'; op: Op; value: number }
+  | { type: 'conference'; key: 'office'; value: ConferenceOffice | 'none' }
+  /** The rung he may stand for at the next election. */
+  | { type: 'conference'; key: 'next'; value: ConferenceOffice }
+  | { type: 'conference'; key: 'result'; value: 'won' | 'lost' | 'watched' }
+  | { type: 'conference'; key: 'president'; value: 'player' | 'new' }
   /** E1 R1.3: the nuncio: his scene due for the man now, or his view of the man (0..100) against a value. */
   /** E1 R1.5: the College's scene due for the man now (created, titular, eve, after, eighty, consistory). */
   | { type: 'college'; key: 'scene'; value: string }

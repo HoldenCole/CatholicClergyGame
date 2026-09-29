@@ -2,6 +2,7 @@ import { useGameStore } from '@/engine/store';
 import { moneyWord, regardWord, shortageWord } from '@/engine/see';
 import { seeDef } from '@/content/sees';
 import { OFFICE_LABEL } from '@/generation/chancery';
+import { CONFERENCE, OFFICE_LABEL as CONFERENCE_OFFICE_LABEL, nextOffice, temperWord } from '@/systems/conference';
 import type { ChanceryOffice } from '@/types';
 import Sheet from '../Sheet';
 
@@ -48,6 +49,32 @@ export default function SeePanel() {
               ))}
               {emeritus && <div className="flex justify-between gap-2"><dt className="ink-muted">Bishop emeritus</dt><dd>{emeritus.title} {emeritus.name.last}</dd></div>}
             </dl>
+          </Sheet>
+        );
+      })()}
+      {game.conference && (() => {
+        const c = game.conference;
+        const held = c.held;
+        const yearsLeft = held ? Math.max(0, Math.ceil((held.endWeek - game.clock.week) / 52)) : 0;
+        const next = nextOffice(game);
+        const last = c.elections?.at(-1);
+        const issued = (game.rome?.issued ?? []).filter((d) => d.source === 'conference').slice(-3).reverse();
+        const nextElectionYear = (() => { const y = new Date((game.clock.startDay + game.clock.week * 7) * 86_400_000).getUTCFullYear(); let n = y; while (n % 3 !== CONFERENCE.electionYearMod) n++; return n; })();
+        return (
+          <Sheet title="The conference" fold="closed" summary={held ? `${CONFERENCE_OFFICE_LABEL[held.office]}, ${yearsLeft} year${yearsLeft === 1 ? '' : 's'} to run` : `${temperWord(c.temper)}; ${c.president.name} presides`}>
+            <dl className="grid grid-cols-2 gap-x-6 gap-y-1 text-sm">
+              <div className="flex justify-between gap-2"><dt className="ink-muted">Its temper</dt><dd>{temperWord(c.temper)}</dd></div>
+              <div className="flex justify-between gap-2"><dt className="ink-muted">President</dt><dd>{c.president.npcId === 'player' ? 'you' : c.president.name}</dd></div>
+              <div className="flex justify-between gap-2"><dt className="ink-muted">Vice-president</dt><dd>{c.vicePresident.npcId === 'player' ? 'you' : c.vicePresident.name}</dd></div>
+              <div className="flex justify-between gap-2"><dt className="ink-muted">Your office</dt><dd>{held ? `${CONFERENCE_OFFICE_LABEL[held.office]}, ${yearsLeft} year${yearsLeft === 1 ? '' : 's'} to run` : next ? `none; ${CONFERENCE_OFFICE_LABEL[next]} is the next rung, elected in November ${nextElectionYear}` : 'none'}</dd></div>
+            </dl>
+            {last && <p className="ink-muted mt-2 text-xs">Last election: {CONFERENCE_OFFICE_LABEL[last.office]} went to {last.won ? 'you' : last.winnerName} on the {last.rounds === 1 ? 'first' : last.rounds === 2 ? 'second' : last.rounds === 3 ? 'third' : `${last.rounds}th`} ballot{last.stood && !last.won ? '; you stood' : ''}.</p>}
+            {c.past && c.past.length > 0 && <p className="ink-muted mt-1 text-xs">Held: {c.past.map((h) => CONFERENCE_OFFICE_LABEL[h.office]).join(', ')}.</p>}
+            {issued.length > 0 && (
+              <ul className="mt-2 flex flex-col gap-1 text-xs">
+                {issued.map((d) => <li key={d.id} className="ink-muted">{d.title}, {d.gist}{d.implemented ? ` (your vote: ${d.implemented === 'eager' ? 'for' : d.implemented === 'defiant' ? 'against' : d.implemented === 'faithful' ? 'with the majority, after an amendment' : 'absent'})` : ''}.</li>)}
+              </ul>
+            )}
           </Sheet>
         );
       })()}

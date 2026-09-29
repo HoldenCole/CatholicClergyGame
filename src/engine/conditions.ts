@@ -16,6 +16,7 @@ import { dueCollegeScene } from '@/systems/rome/college';
 import { duePopeScene } from '@/systems/rome/pontificate';
 import { dueDiplomacyScene, nunciatureDef } from '@/systems/rome/diplomacy';
 import { nuncioView } from '@/systems/rome/nuncioView';
+import { CONFERENCE, dueConferenceScene, latestConferenceDocument, nextOffice } from '@/systems/conference';
 
 import type { Group } from '@/types';
 import { vitalityBand } from '@/systems/groups';
@@ -245,6 +246,28 @@ export function evaluateCondition(
       if (cond.key === 'reigning') return !!state.rome?.pontificate === cond.value;
       if (cond.key === 'scene') return duePopeScene(state) === cond.value;
       return !!state.rome?.vacancy === cond.value;
+    case 'conference': {
+      if (cond.key === 'scene') return dueConferenceScene(state) === cond.value;
+      const c = state.conference;
+      if (!c) return false;
+      const week = state.clock.week;
+      if (cond.key === 'document') {
+        const latest = latestConferenceDocument(state);
+        if (!latest) return false;
+        const d = latest.doc;
+        if (cond.value !== undefined && !(Array.isArray(cond.value) ? cond.value.includes(d.value ?? '') : d.value === cond.value)) return false;
+        if (cond.within !== undefined && week - d.week > cond.within) return false;
+        if (cond.implemented !== undefined && !!d.implemented !== cond.implemented) return false;
+        return true;
+      }
+      if (cond.key === 'assembly' || cond.key === 'election') { const at = state.flags[`conference:${cond.key}`]; return typeof at === 'number' && week - at <= (cond.within ?? CONFERENCE.assemblyOpen); }
+      if (cond.key === 'temper') return compare(cond.op, c.temper, cond.value);
+      if (cond.key === 'office') return (c.held?.office ?? 'none') === cond.value;
+      if (cond.key === 'next') return nextOffice(state) === cond.value;
+      if (cond.key === 'result') return state.flags['conference:result'] === cond.value;
+      if (cond.key === 'president') return cond.value === 'player' ? c.president.npcId === 'player' : week - c.president.sinceWeek <= 52;
+      return false;
+    }
     case 'metropolia': {
       const m = state.world?.metropolia;
       if (!m) return false;

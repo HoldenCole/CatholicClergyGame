@@ -34,6 +34,7 @@ import { housesYear } from '@/systems/houses';
 import { pontificateLine } from '@/systems/rome/pontificateText';
 import { afar, homeSuccession } from '@/systems/homeFromAfar';
 import { metropoliaYear } from '@/systems/metropolia';
+import { conferenceYear } from '@/systems/conference';
 
 /** What a letter naming a parish is worth when the board has nothing else in mind. Invented. */
 const REQUEST_WEIGHT = 45;
@@ -145,6 +146,8 @@ export function careerYear(state: GameState, rng: Rng): GameState {
   // The province's bishops age, leave, and are replaced. E2 §2.1.
   const province = metropoliaYear(next, rng.derive(`metropolia:${state.clock.week}`));
   next = province.lines.length ? addDigest(province.state, province.lines) : province.state;
+  // The conference's temper drifts with Rome and the nuncio's appointments. E2 §2.3.
+  next = conferenceYear(next, rng.derive(`conference:${state.clock.week}`)).state;
   if (succession.newBishop) {
     next = addDigest(next, succession.lines);
     next = note(next, 'succession', succession.lines.join(' '));
