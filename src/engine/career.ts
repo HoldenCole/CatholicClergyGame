@@ -26,6 +26,7 @@ import { fillVacantParishes } from '@/systems/formed';
 import { formerParishesYear, rememberParish } from '@/systems/formerParishes';
 import { sidesYear } from '@/systems/sides';
 import { familyYear } from '@/systems/kin';
+import { religiousOrder } from '@/content/religious';
 import { enemiesYear } from '@/systems/enemies';
 import { ministryLine } from '@/systems/ministry';
 import { housesYear } from '@/systems/houses';
@@ -373,6 +374,24 @@ function leaveCollapse(state: GameState): GameState {
 }
 
 /** DESIGN 15: a career summary that reads like a life rather than a score. */
+/** A friar's arc: the obediences, the offices, the house he founded. Friar round Q2. */
+function friarArc(state: GameState): string {
+  const r = state.religious!;
+  const order = religiousOrder(r.order);
+  const sent = r.assignments.filter((a) => a.startWeek > 0).length;
+  const o = r.obedience;
+  const count = (id: string) => r.termsServed.filter((t) => t.office === id).length + (r.office?.office === id ? 1 : 0);
+  const offices = [['prior', order.governance.priorTitle], ['provincial', order.governance.provincialTitle], ['general', order.governance.generalTitle]].map(([id, label]) => [count(id!), label!] as const).filter(([n]) => n > 0).map(([n, label]) => `${label} ${n === 1 ? 'once' : `${n} times`}`);
+  const appointed = r.termsServed.filter((t) => !['prior', 'provincial', 'general'].includes(t.office)).map((t) => order.offices.find((x) => x.id === t.office)?.label.toLowerCase() ?? t.office.replace(/_/g, ' '));
+  const founded = (r.foundations ?? []).length;
+  const parts = [
+    `Sent ${sent === 1 ? 'once' : `${sent} times`} under obedience${o.reluctant || o.refused ? ` (${o.reluctant ? `${o.reluctant} taken badly` : ''}${o.reluctant && o.refused ? ', ' : ''}${o.refused ? `${o.refused} refused` : ''})` : ', and went every time'}.`,
+    offices.length ? `${offices.join(', ')}${appointed.length ? `; ${[...new Set(appointed)].join(', ')}` : ''}.` : appointed.length ? `${[...new Set(appointed)].map((s) => s.charAt(0).toUpperCase() + s.slice(1)).join(', ')}.` : 'Never elected to anything, which the province counts as a kind of grace.',
+    founded ? `Founded ${founded === 1 ? 'a house' : `${founded} houses`}.` : '',
+  ].filter(Boolean);
+  return parts.join(' ');
+}
+
 export function careerSummary(state: GameState, ending: 'retired' | 'died' | 'left_priesthood' | 'elected_pope' | 'pope_died' | 'pope_renounced'): string {
   const c = state.character!;
   const age = playerAge(state);
@@ -396,6 +415,7 @@ export function careerSummary(state: GameState, ending: 'retired' | 'died' | 'le
   const arc =
     reign ? `${reign}${state.flags['pope:former_see'] ? ` Before the conclave you had been Bishop of ${String(state.flags['pope:former_see'])}.` : ''}` :
     see ? `You were named Bishop of ${see.see} and held ${see.name} for ${Math.max(1, Math.round((state.clock.week - see.installedWeek) / 52))} years: ${see.ordinations} ordained, ${see.closings} parish${see.closings === 1 ? '' : 'es'} closed, the priests ${see.presbyterate >= 20 ? 'with you' : see.presbyterate <= -20 ? 'against you' : 'watching'} at the end.` :
+    state.religious ? friarArc(state) :
     promotions === 0 ? 'You were never made a pastor.' :
     `You were appointed ${promotions === 1 ? 'once' : `${promotions} times`}${passed ? ` and passed over ${passed === 1 ? 'once' : `${passed} times`}` : ''}.`;
   const bishops = successions === 0 ? 'You served one bishop.' : `You served ${successions + 1} bishops, and each read you differently.`;

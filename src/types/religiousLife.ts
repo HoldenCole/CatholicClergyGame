@@ -642,6 +642,8 @@ export interface ConsultationOption {
   fit: number;
   formation: number;
   line: string;
+  /** What the provincial says the house needs of him, how it keeps the common life against his own, and who is there that he knows. Friar round Q4. */
+  why?: string;
 }
 
 /** The talk before the letter: preferences stated, an objection made or not, then the provincial decides. E3 §3.1. */

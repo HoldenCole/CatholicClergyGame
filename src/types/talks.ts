@@ -2,7 +2,7 @@ import type { Effect } from './events';
 
 /** Who a priest can have a word with. Group leaders are keyed by agenda. */
 export type TalkWho =
-  | 'pastor' | 'secretary' | 'dre' | 'music_director' | 'maintenance' | 'bishop' | 'brother_priest' | 'classmate'
+  | 'pastor' | 'secretary' | 'dre' | 'music_director' | 'maintenance' | 'bishop' | 'brother_priest' | 'classmate' | 'confrere' | 'directee'
   | 'leader_saintly' | 'leader_empire' | 'leader_political' | 'leader_tired' | 'leader_new' | 'leader_grieving';
 
 export type TalkBand = 'cold' | 'neutral' | 'warm';

@@ -85,9 +85,26 @@ export function consult(state: GameState, rng: Rng, reason: Consultation['reason
   const picked = rest.length ? [...top, rng.pick(rest)] : top;
   const options: ConsultationOption[] = picked.map(({ house, need, fit, formation }) => {
     const works = openWorks(state, house, year);
-    return { houseId: house.id, work: house.works[0] ?? 'priory_church', ...(works ? { works } : {}), need, fit, formation, line: houseLine(state, house) };
+    return { houseId: house.id, work: house.works[0] ?? 'priory_church', ...(works ? { works } : {}), need, fit, formation, line: houseLine(state, house), why: whyThisHouse(state, house, year) };
   });
   return { ...state, religious: { ...r, consultation: { week: state.clock.week, options, reason } } };
+}
+
+const WORK_NEED: Record<string, string> = { parish: 'the parish wants a man for the Sunday Masses and the sick calls', school: 'the school has a chair to fill', teaching: 'the lectern is empty', formation: 'the formation house needs another formator', mission: 'the mission is a man short', curia: 'the curia wants a man who can write a letter', priory_church: 'the priory church needs a preacher and a confessor', preaching: 'the preaching band is a voice short', chaplaincy: 'the chaplaincy has nobody' };
+
+/** In the provincial's words: what the house needs, how it keeps the common life against his own, and who is there that he knows. Friar round Q4. */
+function whyThisHouse(state: GameState, house: OrderHouse, year: number): string {
+  const r = state.religious!;
+  const works = openWorks(state, house, year);
+  const need = works && works.length > 1 ? `short of men for ${works.map((w) => WORK_NEED[w]?.split(' ')[1] ?? w.replace(/_/g, ' ')).join(' and ')}` : (WORK_NEED[house.works[0] ?? ''] ?? 'the house needs a man');
+  const mine = r.observance ?? 50;
+  const gap = house.observance - mine;
+  const life = gap >= 15 ? 'a house stricter than you keep' : gap <= -15 ? 'a house looser than you keep' : 'a house that keeps the life about as you do';
+  const known = membersOf(state, house).filter((m) => Math.abs(m.relationship) >= 15).sort((a, b) => Math.abs(b.relationship) - Math.abs(a.relationship)).slice(0, 2);
+  const who = known.length ? `; ${known.map((m) => `${m.title} ${m.name.last}, ${m.relationship >= 40 ? 'a friend' : m.relationship >= 15 ? 'who thinks well of you' : m.relationship <= -40 ? 'who cannot stand you' : 'who does not care for you'}, is there`).join(', and ')}` : '';
+  const old = membersOf(state, house).filter((m) => year - m.birthYear >= 70).length;
+  const age = old >= 3 ? `; ${old} of the men are past seventy` : '';
+  return `${need.charAt(0).toUpperCase()}${need.slice(1)}; ${life}${who}${age}.`;
 }
 
 /** The man states a preference, or objects on real grounds. Both are remembered. */
