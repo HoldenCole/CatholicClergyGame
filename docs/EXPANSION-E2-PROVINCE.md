@@ -27,11 +27,11 @@ The word "province" belongs to the religious order (`Province` in `types/religio
 | New York | Albany, Brooklyn, Buffalo, Ogdensburg, Rochester, Rockville Centre, Syracuse |
 | Chicago | Belleville, Joliet, Peoria, Rockford, Springfield in Illinois |
 | Los Angeles | Fresno, Monterey, Orange, San Bernardino, San Diego |
-| Galveston-Houston | Austin, Beaumont, Brownsville, Corpus Christi, Laredo, Tyler, Victoria |
+| Galveston-Houston | Austin, Beaumont, Brownsville, Corpus Christi, Tyler, Victoria (Laredo sits under San Antonio) |
 | Washington | Saint Thomas in the Virgin Islands |
 | Philadelphia | Allentown, Erie, Greensburg, Harrisburg, Pittsburgh, Scranton |
 | Boston | Burlington, Fall River, Manchester, Portland in Maine, Springfield in Massachusetts, Worcester |
-| San Francisco | Honolulu, Las Vegas, Oakland, Reno, Sacramento, Salt Lake City, San Jose, Santa Rosa, Stockton |
+| San Francisco | Honolulu, Oakland, Sacramento, San Jose, Santa Rosa, Stockton (Las Vegas became a metropolitan see in 2023, with Reno and Salt Lake City) |
 | Miami | Orlando, Palm Beach, Pensacola-Tallahassee, Saint Augustine, Saint Petersburg, Venice in Florida |
 | New Orleans | Alexandria, Baton Rouge, Houma-Thibodaux, Lafayette in Louisiana, Lake Charles, Shreveport |
 
@@ -89,7 +89,11 @@ A constituency beyond the diocese for the diocesan campaign, `ALL_CONSTITUENCY_K
 
 ---
 
-## 4. Build order
+## 4. As built
+
+**R1.0 The province as data and as bishops.** `content/dioceses/metropolias.json` holds the 33 Latin-rite provinces with every preset, every pool city, and every small see in one of them (aliases carry Houston, Baker City, Great Falls; the file is flagged to verify). `Diocese.visible.metropolia` says the province, the rank, the metropolitan's city, and the count, and the diocese card prints it ("A suffragan see of the Province of Chicago; the archbishop sits at Chicago"). `World.metropolia` holds the province's other sees as light records (`MetropoliaSee`: pool id when the city is in the synth pool, the bishop of record, the year installed, the vacancy and its cause), generated from the seed with a bishop NPC for each (`generation/metropolia.ts`: the region's lean and Rome's temper, a spread of thirty, the metropolitan titled Archbishop, tagged `province_bishop` and `see:<id>`; the Circle and the clock's stops leave them alone until something has passed between them). `systems/metropolia.ts`: `ensureMetropolia` rolls the province on first sight (a new world, a see installed, a friar's move, a save from before), and `metropoliaYear` runs after the home see's succession each year with the same rolls (retirement at seventy-five at 0.35 a year, death past seventy at 0.025, a promotion for an ambitious man under sixty-eight at 0.04); a see that falls vacant is the nuncio's first business (`openTerna` takes a vacant pool-backed see of the province before rolling one from the pool of names, with its true cause), the man named takes its chair (`nameBishops` seats the player, the priest consulted about, or a new man with the stranger's name), and a vacancy no terna watched is filled from Rome's temper after a year. A pool city is a see a bishop can be named to (`poolSeeDef`), so a terna for a see of the province can end with the player installed there. The home see's succession no longer skips a generated diocese (its bishops roll from the region's lean and heritage). Tests: `tests/systems/metropolia.test.ts` (16).
+
+## 5. Build order
 
 - **R1.0 The province as data and as bishops.** `content/dioceses/metropolias.json`; `Diocese.visible.metropolia`; `Metropolia` and `MetropoliaSee` types; `generation/metropolia.ts` (the province's bishops from the seed); `systems/metropolia.ts` (`metropoliaYear`: retirements, deaths, promotions, successors; vacancies feed `openTerna`; the terna's winner takes the chair); `succession.ts` without the preset skip; the preview line; the save upgrade. Tests: the file covers every pool city; 1,000 provinces from fixed seeds have no bishop collapse; a vacancy opens a terna for that see and closes with a bishop in it; a save without a province loads as the diocesan game.
 - **R1.1 The metropolitan.** The province's word in `nuncioView`; `openTerna`'s weight for the province; the provincial meeting as a document source and as a bishop's scene; the tribunal's appeals; the pallium and the player-metropolitan's desk (consultation, appeals, the meeting he calls). ~15 scenes.

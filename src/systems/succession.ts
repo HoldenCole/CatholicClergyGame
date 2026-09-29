@@ -7,6 +7,8 @@ import { prioritiesLine } from '@/generation/diocese';
 import type { Rng } from '@/engine/rng';
 import { generateBishop, temperamentLine } from '@/generation/bishop';
 import { presetById } from '@/content/dioceses';
+import { synthPool } from '@/content/dioceses/synth';
+import { SYNTH } from '@/generation/dioceseSynth';
 import { clampSigned } from './reputation';
 import { readFile } from './file';
 import { formedAsBishop } from './formed';
@@ -204,8 +206,8 @@ export function successionYear(state: GameState, rng: Rng, opts: { afar?: boolea
   else if (world.diocese.hidden.bishop.ambition >= 70 && age < 68 && rng.chance(0.04)) why = 'promoted';
   if (!why) return { state, newBishop: null, lines: [] };
 
-  const preset = presetById(world.diocese.presetId);
-  if (!preset) return { state, newBishop: null, lines: [] };
+  // A generated see has no preset: its bishops roll from the region's lean and its heritage, as the province's do. E2 §2.1.
+  const preset = presetById(world.diocese.presetId) ?? { heritage: synthPool.heritage[world.diocese.visible.region] ?? {}, dispositionBias: SYNTH.regionLean[world.diocese.visible.region] ?? 0 };
   // A friar's save holds every diocese of the province: the successor's id says whose he is. E3 §3.1.
   const successorId = state.territory ? `${world.diocese.presetId}:bishop_${year}` : `bishop_${year}`;
   const seeded = generateBishop(rng.derive(`successor:${year}`), { ...preset, dispositionBias: state.romeTemperament * 0.6 + (world.diocese.hidden.financial === 'crisis' ? 0 : preset.dispositionBias * 0.3) }, year, successorId);

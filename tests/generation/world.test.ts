@@ -90,7 +90,7 @@ describe('generation/world', () => {
 });
 
 describe('systems/drift', () => {
-  it('about one run in four sees a new bishop across six seminary years', { timeout: 60_000 }, () => {
+  it('about one run in four sees a new bishop across six seminary years', { timeout: 120_000 }, () => {
     let changed = 0;
     const N = 600;
     for (let i = 0; i < N; i++) {

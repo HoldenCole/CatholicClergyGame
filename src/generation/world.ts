@@ -1,3 +1,4 @@
+import { ensureMetropolia } from '@/systems/metropolia';
 import type { Diocese, DioceseTie, GameState, Npc, Parish, RevealedField, World } from '@/types';
 import type { Rng } from '@/engine/rng';
 import { diocesePresets } from '@/content/dioceses';
@@ -34,7 +35,7 @@ export function installWorld(state: GameState, candidate: Candidate, year: numbe
   const flags: GameState['flags'] = { ...state.flags };
   for (const k of Object.keys(flags)) if (k.startsWith('diocese:')) delete flags[k];
   flags[`diocese:${candidate.presetId}`] = true;
-  return { ...state, world, npcs, flags, candidates: state.candidates };
+  return ensureMetropolia({ ...state, world, npcs, flags, candidates: state.candidates });
 }
 
 const TRAIT_TEXT: Record<string, string> = {

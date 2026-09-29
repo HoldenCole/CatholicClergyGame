@@ -99,6 +99,50 @@ export interface DioceseVisible {
   houses: ReligiousHouse[];
   /** One visible problem. */
   complication: string;
+  /** The ecclesiastical province the see sits in: public structure, shown on the card. E2 §2.1. */
+  metropolia?: DioceseMetropolia;
+}
+
+/** What the preview may say of the province: its name, the see's rank in it, and how many sees it has. E2 §2.1. */
+export interface DioceseMetropolia {
+  id: string;
+  name: string;
+  rank: 'metropolitan' | 'suffragan';
+  /** The metropolitan see's city. */
+  metropolitanSee: string;
+  /** Sees in the province, the metropolitan's counted. */
+  sees: number;
+}
+
+/**
+ * The province as bishops: every see of it but the man's own, each a light
+ * record with a bishop NPC that ticks yearly (retirement, death, promotion,
+ * a successor), so a see falls vacant because someone left it and the
+ * nuncio's terna is that see's. E2 §2.1, decision B: records, not worlds.
+ */
+export interface MetropoliaSee {
+  id: string;
+  name: string;
+  see: string;
+  state: string;
+  region: string;
+  rank: 'metropolitan' | 'suffragan';
+  /** The synth pool's see, when the city is in it: a world can be rolled for it. */
+  poolId?: string;
+  /** The bishop of record ('player' when he holds it); absent while vacant. */
+  bishopId?: string;
+  installedYear?: number;
+  vacantSince?: number;
+  vacantWhy?: 'retired' | 'died' | 'transferred';
+}
+
+export interface Metropolia {
+  id: string;
+  name: string;
+  metropolitanSee: string;
+  /** The home diocese's rank in it. */
+  rank: 'metropolitan' | 'suffragan';
+  sees: MetropoliaSee[];
 }
 
 /**
@@ -249,6 +293,8 @@ export interface World {
   bishopHistory: string[];
   /** Institutes present in the diocese. DESIGN.md §9.4. */
   institutes?: Institute[];
+  /** The province's other sees and their bishops. E2 §2.1; absent on older saves and filled on load. */
+  metropolia?: Metropolia;
 }
 
 export type Role = 'parochial_vicar' | 'administrator' | 'pastor';

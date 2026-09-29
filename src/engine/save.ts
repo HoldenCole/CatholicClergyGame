@@ -6,6 +6,7 @@ import { generateHouses } from '@/generation/houses';
 import { patronalOf } from '@/generation/patronal';
 import { placeParish } from '@/generation/geo';
 import { presetById } from '@/content/dioceses';
+import { ensureMetropolia } from '@/systems/metropolia';
 
 /** Parishes saved before the pastor's Mass existed get one now, rolled from the seed so a reload rolls the same. */
 function giveEveryParishItsMass(state: GameState): void {
@@ -178,9 +179,12 @@ export function deserialize(json: string): SaveFile {
   if (isRecord(raw.previous)) giveEveryParishItsPatron(raw.previous.state as GameState);
   giveEveryParishItsPlace(raw.state as GameState);
   if (isRecord(raw.previous)) giveEveryParishItsPlace(raw.previous.state as GameState);
+  // A save from before the province existed gets one on load, rolled from the seed. E2 §2.1.
+  const state = ensureMetropolia(raw.state as GameState);
+  if (isRecord(raw.previous)) raw.previous.state = ensureMetropolia(raw.previous.state as GameState);
   return {
     version: SAVE_VERSION,
-    state: raw.state,
+    state,
     rngState: raw.rngState,
     previous: (raw.previous as Snapshot | null | undefined) ?? null,
     prose,

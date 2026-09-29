@@ -1,6 +1,7 @@
 import type { SeeDef } from '@/types';
 import sees from './sees.json';
 import { diocesePresets } from './dioceses';
+import { synthSeeById } from './dioceses/synth';
 
 /** The small sees a man is first named to. */
 export const smallSees = (sees as { sees: SeeDef[] }).sees;
@@ -26,6 +27,14 @@ export const presetSees: SeeDef[] = diocesePresets.map((p) => ({
 
 export const seeDefs: SeeDef[] = [...smallSees, ...presetSees];
 
+/** A see of the synth pool as a see def, so a vacancy in the province can be a man's first see. E2 §2.1. */
+export function poolSeeDef(id: string): SeeDef | undefined {
+  const s = synthSeeById(id);
+  if (!s) return undefined;
+  const parishes = { small: 14, medium: 20, large: 28, huge: 36 }[s.size];
+  return { id: s.id, name: s.name, see: s.see, region: s.region, character: '', priests: Math.round(parishes * 1.4), parishes, leans: { shortage: s.growth === 'shrinking' ? 1 : 0 }, synth: { state: s.state, region: s.region, lat: s.lat, lon: s.lon, size: s.size, latinoShare: s.latinoShare, growth: s.growth, climate: s.climate } };
+}
+
 export function seeDef(id: string): SeeDef | undefined {
-  return seeDefs.find((s) => s.id === id);
+  return seeDefs.find((s) => s.id === id) ?? poolSeeDef(id);
 }
