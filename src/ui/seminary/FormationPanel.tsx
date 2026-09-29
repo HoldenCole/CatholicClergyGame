@@ -1,6 +1,7 @@
 import { pillarLabel } from '@/systems/campaign';
 import { useState } from 'react';
 import { useGameStore } from '@/engine/store';
+import { currentHouse } from '@/systems/religious/house';
 import { explainAlignment, explainStat, reasonsLine } from '@/systems/movers';
 import { FORMATION } from '@/systems/formation';
 import { PILLARS, STAT_KEYS, CONSTITUENCY_KEYS, type Pillar } from '@/types';
@@ -26,7 +27,7 @@ export default function FormationPanel() {
 
   return (
     <>
-      <Sheet title={`${c.name.first} ${c.name.last} · year ${sem.year} · ${sem.name}`}>
+      <Sheet title={`${c.name.first} ${c.name.last} · year ${sem.year} · ${(game.religious && currentHouse(game)?.name) || sem.name}`}>
         <div className="mb-3 flex items-center gap-3">
           <Portrait portrait={portraitForCharacter(c, year, game.phase)} size={72} title={`${c.name.first} ${c.name.last}`} />
           <p className="ink-muted text-sm">Entered at {c.background.entryAge}. {sem.year <= 2 ? 'Philosophy.' : sem.year <= 5 ? 'Theology.' : 'The last stretch.'}</p>

@@ -46,9 +46,9 @@ export default function SceneArt({ scene, season, state, plain = false, weather 
       {scene === 'street' && <Street terrain={parish?.terrain} {...(state.world ? { see: state.world.diocese.presetId } : {})} />}
       {scene === 'study' && <Study ambient={ambient('office')} />}
       {scene === 'seminary_room' && <SeminaryRoom ambient={ambient('seminary_room')} seminaryName={state.seminary?.name} />}
-      {scene === 'seminary_hall' && <SeminaryHall />}
+      {scene === 'seminary_hall' && (state.religious ? <SeminaryHall plates={['Library', 'Master', 'Cell', 'Prior', 'Common']} /> : <SeminaryHall />)}
       {scene === 'friar_cell' && <SeminaryRoom ambient={ambient('seminary_room')} seminaryName={state.orderHouses?.[state.religious?.houseId ?? '']?.name ?? state.seminary?.name} {...(state.religious ? { frame: religiousOrder(state.religious.order).mottoShort ?? religiousOrder(state.religious.order).motto } : {})} />}
-      {scene === 'friar_cloister' && <SeminaryHall />}
+      {scene === 'friar_cloister' && <SeminaryHall plates={['Library', 'Confessional', 'Cell', 'Prior', 'Common']} mat="To the city" />}
       {scene === 'study_room' && <StudyRoom city={state.study?.city ?? 'rome'} school={state.study?.school ?? 'the Gregorian'} />}
       {scene === 'study_city' && (state.study?.city === 'residence' || state.study?.city === 'chancery' || state.study?.city === 'auxiliary' || state.study?.city === 'see') && <Chancery ambient={ambient('chancery')} rank="corner" bishopName={bishop ? `${bishop.title} ${bishop.name.first} ${bishop.name.last}` : 'The bishop'} />}
       {scene === 'study_city' && state.study?.city === 'seminary' && <SeminaryHall />}

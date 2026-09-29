@@ -154,7 +154,7 @@ export function SeminaryRoom({ ambient, seminaryName, frame }: { ambient: Ambien
 }
 
 /** The corridor outside the room: the chapel at the end, doors on both sides, the gym and the language lab, the front door. */
-export function SeminaryHall() {
+export function SeminaryHall({ plates = ['Library', 'Director', 'Room 12', 'Rector', 'Common'], mat = 'To the parishes' }: { plates?: [string, string, string, string, string]; mat?: string } = {}) {
   const sign = (x: number, y: number, text: string) => (
     <g>
       <rect x={x - 5} y={y - 1.4} width="10" height="2.8" fill="#e9e2cc" stroke="#7a6a4a" strokeWidth="0.2" />
@@ -191,11 +191,11 @@ export function SeminaryHall() {
       {sideDoor('left', 27, 32)}
       {sideDoor('right', 78, 84)}
       {sideDoor('right', 87, 96)}
-      <g>{sign(8, 12, 'Library')}</g>
-      <g>{sign(19, 14, 'Director')}</g>
-      <g>{sign(29.5, 16, 'Room 12')}</g>
-      <g>{sign(81, 14, 'Rector')}</g>
-      <g>{sign(91.5, 12, 'Common')}</g>
+      <g>{sign(8, 12, plates[0])}</g>
+      <g>{sign(19, 14, plates[1])}</g>
+      <g>{sign(29.5, 16, plates[2])}</g>
+      <g>{sign(81, 14, plates[3])}</g>
+      <g>{sign(91.5, 12, plates[4])}</g>
       {/* the gym bag, the language lab cart, the front door mat */}
       <Shadow x={8} y={57} w={12} />
       <path d="M8 48 q1 -3 4 -3 h6 q3 0 4 3 v7 h-14 Z" fill="#2f3a4a" />
@@ -209,7 +209,7 @@ export function SeminaryHall() {
       <rect x="78" y="47.5" width="7" height="0.6" fill="#e9e2cc" opacity="0.7" />
       {[79, 82, 85].map((x) => <rect key={x} x={x} y="50" width="2.4" height="3" fill={['#7a1f1f', '#2e6b4f', '#c9a24a'][(x - 79) / 3]} />)}
       <rect x="40" y="50" width="20" height="4" fill="#5a3a12" opacity="0.6" />
-      <text x="50" y="52.9" fontSize="1.8" textAnchor="middle" fill="#e9e2cc" fontFamily="serif" opacity="0.8">To the parishes</text>
+      <text x="50" y="52.9" fontSize="1.8" textAnchor="middle" fill="#e9e2cc" fontFamily="serif" opacity="0.8">{mat}</text>
       <Door x={44} y={40} w={12} h={10} color="#8a8378" />
     </g>
   );

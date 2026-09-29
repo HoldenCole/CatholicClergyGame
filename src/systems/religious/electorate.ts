@@ -158,7 +158,7 @@ export function electorsOf(state: GameState, level: ChapterLevel, bodyId: string
     const house = state.orderHouses?.[bodyId];
     if (!house) return out;
     for (const n of membersOf(state, house)) if (solemn(n)) add(n, house.id);
-    if (playerSolemn(state) && state.religious?.houseId === house.id && !awayAsGeneral(state)) out.push(playerVoter(state));
+    if (playerSolemn(state) && state.religious?.houseId === house.id && !awayFromChapters(state)) out.push(playerVoter(state));
     return out;
   }
   // Provincial chapter: the provincial and council ex officio, every prior, and one delegate elected by each house (the man the house would send).
@@ -176,13 +176,18 @@ export function electorsOf(state: GameState, level: ChapterLevel, bodyId: string
       add(m, h.id);
     }
   }
-  if (playerSolemn(state) && (state.religious?.office || state.flags['chapter:delegate']) && !awayAsGeneral(state)) out.push(playerVoter(state));
+  if (playerSolemn(state) && (state.religious?.office || state.flags['chapter:delegate']) && !awayFromChapters(state)) out.push(playerVoter(state));
   return out;
 }
 
 /** The head of the order lives in Rome for his term, and a bishop has left the order's governance for good: his house and province elect without him, and may not elect him. E3 §16A, §16B. */
 export function awayAsGeneral(state: GameState): boolean {
   return state.religious?.office?.office === 'general' || !!state.flags.ordained_bishop;
+}
+
+/** Away from the house altogether: as head of the order, as a bishop, or posted away (Rome, a faculty, the Holy See). He is neither elector nor candidate while he is gone. */
+export function awayFromChapters(state: GameState): boolean {
+  return awayAsGeneral(state) || !!state.study;
 }
 
 function playerVoter(state: GameState): Voter {
@@ -208,6 +213,8 @@ export function contendersOf(state: GameState, office: ChapterOffice, bodyId: st
     const age = ageOf(state, n);
     if (age < ELECTORATE.eligibleAge[office]) continue;
     // The incumbent, if he has served the most consecutive terms the constitutions allow, sits this one out.
+    // A house does not elect the provincial its prior: one office at a time, and his is the larger. E3 §3.7.
+    if (office === 'prior' && state.province?.provincialId === n.id) continue;
     const incumbent = office === 'prior' ? state.orderHouses?.[bodyId]?.priorId === n.id : office === 'general' ? state.generalCuria?.generalId === n.id : state.province?.provincialId === n.id;
     const served = Number(state.flags[`terms:${office}:${n.id}`] ?? (incumbent ? 1 : 0));
     if (incumbent && served >= max) continue;
@@ -217,7 +224,8 @@ export function contendersOf(state: GameState, office: ChapterOffice, bodyId: st
     out.push(c);
   }
   if (r && state.character && playerSolemn(state) && state.flags.ordained) {
-    const inBody = office === 'general' ? nameableByTheOrder(state) : awayAsGeneral(state) ? false : office === 'prior' ? r.houseId === bodyId : true;
+    // A provincial is not elected prior under himself: the chair he holds is the larger one. E3 §3.7.
+    const inBody = office === 'general' ? nameableByTheOrder(state) : awayFromChapters(state) ? false : office === 'prior' ? r.houseId === bodyId && r.office?.office !== 'provincial' : true;
     const age = playerAge(state);
     const declined = r.declined?.[office] ?? 0;
     // The head of the order's terms count for life, not in a row: a master serves once, a prior general twice.

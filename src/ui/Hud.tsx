@@ -1,4 +1,4 @@
-import { friarWord } from '@/systems/religious/who';
+import { friarName, friarWord } from '@/systems/religious/who';
 import { useGameStore } from '@/engine/store';
 import { weatherOfWeek } from '@/systems/weather';
 import { dateOf, gameYearOf, priesthoodYear, seasonOf, weekOfYear } from '@/engine/time';
@@ -72,7 +72,7 @@ export default function Hud() {
         <h1 className="title text-lg tracking-wide" style={{ color: '#e6c25a' }}>Vocation</h1>
         {c && <Portrait portrait={portraitForPlayer(game)} size={34} title={`${c.name.first} ${c.name.last}`} />}
         <span className="truncate text-sm">
-          {c ? `${c.name.first} ${c.name.last}, ` : ''}{game.study ? `${game.see ? `Bishop of ${game.see.see}` : game.study.city === 'rome' || game.study.city === 'washington' ? `Studying in ${game.study.city === 'rome' ? 'Rome' : 'Washington'}` : game.study.label}, year ${Math.floor((clock.week - game.study.startWeek) / 52) + 1}` : (friarWord(game) ?? PHASE_LABELS[game.phase] ?? game.phase)}
+          {c ? `${friarName(game) ?? `${c.name.first} ${c.name.last}`}, ` : ''}{game.study ? `${game.see ? `Bishop of ${game.see.see}` : game.study.city === 'rome' || game.study.city === 'washington' ? `Studying in ${game.study.city === 'rome' ? 'Rome' : 'Washington'}` : game.study.label}, year ${Math.floor((clock.week - game.study.startWeek) / 52) + 1}` : (friarWord(game) ?? PHASE_LABELS[game.phase] ?? game.phase)}
         </span>
         <span className="truncate text-sm opacity-80">
           Week of {formatDate(dateOf(clock))} · {SEASON_LABELS[seasonOf(clock)]}{game.world ? ` · ${weatherOfWeek(game.seed, clock, game.world.diocese.visible.region).word}` : ''} · {yearLine}

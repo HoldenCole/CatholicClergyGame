@@ -3,6 +3,7 @@ import { diocesanClassmateLine, diocesanClassmates } from '@/systems/religious/d
 import { directees, DIRECTING } from '@/systems/religious/directing';
 import { relationshipWord } from '@/systems/classmates';
 import Panel from '../Panel';
+import { FoldHeading, useFold } from '../Sheet';
 import Portrait from '../portraits/Portrait';
 import { portraitForNpc, yearOf } from '../portraits/spec';
 
@@ -15,6 +16,7 @@ export default function DiocesanMenPanel() {
   const game = useGameStore((s) => s.game);
   const answer = useGameStore((s) => s.answerDirectionAsk);
   const end = useGameStore((s) => s.endDirectee);
+  const [menOpen, toggleMen] = useFold('diocesan:men', false);
   if (!game?.religious) return null;
   const r = game.religious;
   const year = yearOf(game.clock.startDay, game.clock.week);
@@ -44,9 +46,9 @@ export default function DiocesanMenPanel() {
       )}
       {men.length > 0 && (
         <div className="mt-3 text-sm">
-          <div className="heading text-sm">The seminary's men</div>
-          <p className="ink-faint text-xs">The diocesan seminary's students, while you teach there. They will be this diocese's priests, and they will remember who taught them.</p>
-          <ul className="mt-1 flex flex-col gap-1">
+          <FoldHeading open={menOpen} onToggle={toggleMen} title="The seminary's men" summary={`${men.length} men`} />
+          {menOpen && <p className="ink-faint text-xs">The diocesan seminary's students, while you teach there. They will be this diocese's priests, and they will remember who taught them.</p>}
+          {menOpen && <ul className="mt-1 flex flex-col gap-1">
             {men.map((n) => (
               <li key={n!.id} className="flex items-center gap-2">
                 <Portrait portrait={portraitForNpc(n!, year)} size={22} />
@@ -54,7 +56,7 @@ export default function DiocesanMenPanel() {
                 <span className="ink-muted text-xs">{relationshipWord(n!.relationship)}</span>
               </li>
             ))}
-          </ul>
+          </ul>}
         </div>
       )}
       <div className="mt-3 text-sm">
