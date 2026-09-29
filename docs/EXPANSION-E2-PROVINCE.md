@@ -1,0 +1,100 @@
+# Expansion E2 — Province and conference
+
+*DESIGN.md §16 lists E2 in one paragraph: metropolitan archbishops, suffragan dioceses, the national conference, priest loans across diocesan lines, regional reputation. It called E2 "not a standalone expansion, a prerequisite for the bishop tier". The bishop tier (E4) was built without it, so E2 is now the layer between the diocese and Rome that the built game lacks: the bishops next door, the archbishop over them, and the body they all sit in. Specified before the build, as E1 and E4 were. Canonical details are close to current practice and flagged for verification (CLAUDE.md rule 12).*
+
+---
+
+## 1. What was there
+
+The game knows one diocese at a time. `state.world` is the diocese the man lives in; a friar's other dioceses and a bishop's home wait frozen in `state.territory` (`systems/religious/transfer.ts`, `engine/seeWorld.ts`). The ten presets are all archdioceses, and the synthesizer's pool of 108 real see cities (`content/dioceses/synth/pool.json`) has twenty more archdioceses among them, but nothing in the data or the code says which see is a metropolitan's and which sees are its suffragans: "Archdiocese" is a word in a name string. `SeeDef.great` (the ten presets) is the only rank the engine reads, for the see pool, the nuncio's vacancies, the red hat, and the conclave.
+
+Three systems that should be one are three. The nuncio opens a terna for a vacant see about 0.6 times a year (`systems/rome/nuncio.ts`), but the see is a name from `seeDefs` with no bishop behind it: nobody died or retired there, and the winner, when it is not the player, is a stranger's name. Bishop succession (`systems/succession.ts`) runs only for the current world and only when it has a preset, so a synth see never changes bishops, and a bishop "promoted" elsewhere goes nowhere (he is tagged `archbishop_elsewhere` and vanishes). Rome's documents reach the diocesan bishop directly (`systems/rome/policy.ts`, `readerOf`), with nothing between Rome and the chancery.
+
+A priest cannot leave his diocese. The twelve-week summer supply (`systems/away.ts`) sets flags and adds a friend; the Curia and the nunciature lend him to Rome on the posting machinery; crossing over is the religious road. There is no incardination, no excardination, no loan to the diocese next door, though the friar's `moveToHouse` already swaps worlds and carries a file. Regard beyond the diocese has no home: `reputation.rome` is Rome's, `chancery` is his own bishop's, and what the bishops of the province think of him is nowhere.
+
+The word "province" belongs to the religious order (`Province` in `types/religiousLife.ts`, `generation/province.ts`). The ecclesiastical province needs its own name throughout: **metropolia** in the types (`Metropolia`, `metropolia.ts`), "the province" in prose where the campaign makes it unambiguous.
+
+---
+
+## 2. The design, in five systems
+
+### 2.1 The province as data and as bishops (R1.0)
+
+**Data.** `content/dioceses/metropolias.json`: the real Latin-rite provinces of the United States as data, each a metropolitan see and its suffragans by see city, covering every preset and every city in the synth pool (the 32 provinces, plus the military archdiocese and the Eastern eparchies left out; to verify against the current *Annuario* — provinces have been redrawn within living memory). The ten presets' provinces, for the record and to verify:
+
+| Metropolitan | Suffragans |
+|---|---|
+| New York | Albany, Brooklyn, Buffalo, Ogdensburg, Rochester, Rockville Centre, Syracuse |
+| Chicago | Belleville, Joliet, Peoria, Rockford, Springfield in Illinois |
+| Los Angeles | Fresno, Monterey, Orange, San Bernardino, San Diego |
+| Galveston-Houston | Austin, Beaumont, Brownsville, Corpus Christi, Laredo, Tyler, Victoria |
+| Washington | Saint Thomas in the Virgin Islands |
+| Philadelphia | Allentown, Erie, Greensburg, Harrisburg, Pittsburgh, Scranton |
+| Boston | Burlington, Fall River, Manchester, Portland in Maine, Springfield in Massachusetts, Worcester |
+| San Francisco | Honolulu, Las Vegas, Oakland, Reno, Sacramento, Salt Lake City, San Jose, Santa Rosa, Stockton |
+| Miami | Orlando, Palm Beach, Pensacola-Tallahassee, Saint Augustine, Saint Petersburg, Venice in Florida |
+| New Orleans | Alexandria, Baton Rouge, Houma-Thibodaux, Lafayette in Louisiana, Lake Charles, Shreveport |
+
+A diocese generated from a city not in the file (rule 13's generic pools) is placed in the nearest province by region. The diocese type gains `metropolia: { id; metropolitanId; suffraganIds; rank: 'metropolitan' | 'suffragan' }` in the **visible** half: the preview may say "a suffragan see of Chicago; the archbishop is seventy and has held the province eleven years" (rule 6: it reads the rolled state).
+
+**The bishops.** A province's sees other than the man's own are not worlds; they are **light bishop records** (`MetropoliaSee { seeId; name; bishop: Npc (role 'bishop', tag `see:<id>`); installedYear; vacantSince? }`), generated at world creation from the region's lean and Rome's temper, so that the province has faces: the archbishop, the bishop of the next diocese, the one everyone says is going up. They tick once a year in `metropoliaYear`: the same retirement, death, and promotion rolls the home bishop gets (`succession.ts`), with the successor rolled from Rome's temper. This is what unifies the three systems: **a see falls vacant because its bishop retired or died**, and the terna the nuncio opens is that see's terna; the winner takes the chair and is a person the province knows; a bishop "promoted" from one see arrives at the other. The preview's `bishop` line and `bishopHistory` keep working; `succession.ts` gains a fallback so a synth home see changes bishops too (the skip at :207 goes).
+
+Rule 11: the diocesan game reads the same. A save without `metropolia` is upgraded on load: the file is consulted for the diocese's city and the province's sees are rolled from the seed, and nothing about the home diocese moves.
+
+### 2.2 The metropolitan (R1.1)
+
+The archbishop of the province is a person with a role. What the office does in the game, each to verify against can. 435–437:
+
+- **He is consulted on every terna for a suffragan see**, and the bishops of the province with him. The nuncio's reading of the player (`nuncioView.ts`) gains a term for **the province's word**: the metropolitan's regard and the suffragan bishops' at up to ±8, so a priest known to the bishops next door goes onto ternas in his own province first (a suffragan see of his province weighs 3 against 1 elsewhere in `openTerna`). The consulted priest scene (`fr_nu_consulted`, `nu_consulted`) gains a variant where the metropolitan, not the nuncio, asks.
+- **The provincial meeting.** The bishops of the province meet twice a year (custom, not law; verify). For a priest it is a line and, now and then, a scene: the bishop comes back from the province with a common policy (a shared Mass schedule for the clergy shortage, a joint statement, a common seminary), delivered through the cascade machinery as a document of `source: 'metropolia'`, with the bishop's norm rolled as for Rome's. For a player-bishop of a suffragan see it is a scene each time: the agenda, his vote, the archbishop's weight, the bishop who always disagrees; the vote goes into the public record at semi-public volume.
+- **The metropolitan tribunal.** Appeals from a suffragan diocese's tribunal go to the metropolitan's (can. 1438; verify). For a player-bishop: a case appealed against his tribunal is a scene with the archbishop's letter; for a player-metropolitan: the appeals of the province come to his desk as acts.
+- **The pallium and the player-metropolitan.** A player translated to a metropolitan see (the see pool already favours great sees for a second see) receives the pallium at Rome on 29 June (a scene; the journey on the pope's machinery is not needed, a letter and a scene suffice) and presides: the provincial meeting is his to call, the ternas of his suffragans are his to be consulted on (a scene naming his own priests among the candidates, with the nuncio's letter and his answer), the appeals are his, and a suffragan who will not cooperate is a problem he has few tools for (a letter to the nuncio, or patience).
+- **Regard with the metropolitan** is a relationship, not a constituency: the archbishop is an NPC of the province with marks and contact like any bishop of `bishops` (D3 of the diocesan round), warmed by a loan, by a talk at the provincial convocation, by the column, by a stand he agrees with, and cooled by the same.
+
+### 2.3 The conference (R1.2)
+
+The national conference of bishops meets in plenary twice a year (June and November; the president and vice-president are elected for three-year terms by the members, committee chairs likewise; verify against the current statutes). In the game:
+
+**The conference's temper.** A number, −100..100, aggregated from the bishops the game knows (the home bishop, the province's, the see's when he is a bishop) and a rolled national remainder that drifts toward Rome's temper more slowly than a bishop does (`driftRome` at a third of the rate), with the nuncio's appointments moving it a point at a time: the conference is what ten years of a pope's ternas make it. It is read by: the nuncio when he weighs a candidate (a man far from the conference's temper is a harder appointment); the offscreen bishops' successors; and the documents the conference issues.
+
+**Assemblies as events.** Each assembly the conference may issue a statement or a document on one of the axes Rome writes on (`content/rome/axes.json`), plus a few of its own (a pastoral on the economy, on immigration, on racism, on the liturgy's translation, a voting guide in an election year): `content/conference/documents.json`, ~12 documents, each with a lean and a strength, issued when the temper and the year favour it. A conference document goes down the same cascade as Rome's, with `source: 'conference'`: the bishop's norm, the parish scene weeks later, the implementation recorded, the reversal possible when the conference's temper turns. E5's "a document that lands in every parish the same week" is this.
+
+**For a priest** the conference is weather with a face: the bishop is away the assembly week (a digest line; the vicar general signs), comes back with a document or a mood, and a scene now and then (the bishop who voted against the statement and says so at the priests' dinner; the reporter who wants the parish's view of the voting guide).
+
+**For a player-bishop** the conference is a place he goes. Each assembly is a scene on the posting-week model: the votes of the session (two or three questions with his position and its volume, each a `position` at public volume in the public record), a corridor (a brother bishop's ask, the nuncio's word), and the elections when they fall. **Conference offices** are an elected ladder on the chapter engine (`systems/ballot.ts`, rule 10): a committee seat (the offscreen bishops vote on standing and temper), a committee chair, the secretary, the vice-president, the president, each a three-year term with a cost in hours and a gain in Rome's regard and the conference's; the president speaks for the conference and is a name Rome reads for the red hat (`college.ts` gains a term). The elections are deterministic from seed, electorate, and the bishops' regard for him, table-tested like the chapters.
+
+### 2.4 Loans across diocesan lines (R1.3)
+
+A priest belongs to a diocese (incardination) and may be lent to another. In the game:
+
+**The loan.** A bishop of the province (or beyond, rarely) short of priests asks the home bishop for a man: a Spanish-speaking priest for a diocese with none, a canonist for a tribunal, a pastor for a parish the borrowing diocese cannot staff, a seminary professor. The ask arrives on the bishop's-letter machinery as an offer with a term (three or five years; verify the usual agreement), the home bishop having said yes or no first by his own shortage and his regard. Accepting **swaps the world** as a friar's move does (`moveToHouse` generalised to `moveToDiocese`): the man lives the parish loop in the other diocese, with its bishop, its chancery, its deanery, and its presbyterate, and a `dioceseFile` for the diocese he left, as the friar has. His standing with home decays as the friar's does; the home bishop remembers him or forgets him by the same rules (`fileCarry`).
+
+**Coming back, or not.** At the term's end the borrowing bishop may ask to keep him and the home bishop may let him go: **incardination** into the new diocese (can. 267–268: after five years' lawful residence a priest may be incardinated with the consent of both bishops, or by a written request the home bishop does not refuse within four months; verify) is a decision on the obedience-letter model, with a consequence either way (a man who stayed is the new diocese's, and home writes him down; a man who came home is welcomed or forgotten). **Excardination asked for** is the rarer door: a priest may ask his bishop to let him go to a diocese that wants him (rule 8: the request is an offer evaluated against state, with a refusal's consequence), and the answer reads the shortage, his file, and the bishop's regard.
+
+**For a player-bishop** the mirror: an act on the desk (E4 R1.1) to ask a brother bishop for a man, answered by the offscreen bishop's shortage and regard; and the letters that arrive asking for his own priests, answered by him, each with the presbyterate's opinion of a bishop who lends his best men or hoards them.
+
+### 2.5 Regional reputation (the through-line)
+
+A constituency beyond the diocese for the diocesan campaign, `ALL_CONSTITUENCY_KEYS` gaining **`bishops`**: what the bishops of the province and the conference think of him, as `chancery` is what his own does. Fed by: a stand at public volume, the column, preaching outside the diocese (missions, the province's clergy convocation, a retreat for another diocese's priests), the loan and how it went, the metropolitan's and the emeritus's word, a conference document he implemented eagerly or defied, a classmate made bishop (D4 of the diocesan round). Read by: the nuncio's view (with the province's word above), `openTerna`'s weight for the province's sees, the loans that are asked for him, the conference offices when he is a bishop, and the year in review ("The bishops beyond: warm, warmer"). It fades toward zero as the others do (`fadeReputation`), since a name outside the diocese is kept by doing things outside it. A friar has it already under another name (`superiors`, `order`); the friar-bishop gets `bishops` with the see.
+
+---
+
+## 3. Decisions the owner holds
+
+- **(A) Real provinces as data.** The metropolitan-suffragan structure of the real provinces is public fact of the same kind as the real see cities (rule 13 permits real sees and forbids real living people), and playing "a suffragan of Chicago" is the point. Recommended: **real for every city in the pool, the nearest province by region for a generated see**, all flagged for verification against the current directory.
+- **(B) Light bishop records, not worlds.** A province of six dioceses as six `World`s would be six parish lists nobody visits. Recommended: **light records** (a bishop NPC, an installed year, a vacancy) that tick yearly, and a full `World` only when the man goes there (a loan, a see).
+- **(C) A conference ladder for the player-bishop, up to president.** Recommended: **yes**, on the chapter engine, so it is deterministic and tested, with the president's seat rare (three-year terms, the electorate's regard, and a cost in Rome's patience when the conference's temper is far from the pope's).
+- **(D) Loans as a world swap, and incardination as a decision.** The alternative is a posting-style abstraction (the man "away at Tyler for three years" with dials). Recommended: **the world swap**, since the friar's machinery exists and a loan is a real parish under a real bishop; incardination after five years as an obedience-letter decision; excardination asked for, rare, gated on the home bishop's consent.
+- **(E) The conference's documents through the cascade.** Recommended: **yes**, the same cascade, `source` on the document, ~12 conference documents in round one.
+
+---
+
+## 4. Build order
+
+- **R1.0 The province as data and as bishops.** `content/dioceses/metropolias.json`; `Diocese.visible.metropolia`; `Metropolia` and `MetropoliaSee` types; `generation/metropolia.ts` (the province's bishops from the seed); `systems/metropolia.ts` (`metropoliaYear`: retirements, deaths, promotions, successors; vacancies feed `openTerna`; the terna's winner takes the chair); `succession.ts` without the preset skip; the preview line; the save upgrade. Tests: the file covers every pool city; 1,000 provinces from fixed seeds have no bishop collapse; a vacancy opens a terna for that see and closes with a bishop in it; a save without a province loads as the diocesan game.
+- **R1.1 The metropolitan.** The province's word in `nuncioView`; `openTerna`'s weight for the province; the provincial meeting as a document source and as a bishop's scene; the tribunal's appeals; the pallium and the player-metropolitan's desk (consultation, appeals, the meeting he calls). ~15 scenes.
+- **R1.2 The conference.** `GameState.conference { temper; president; offices; assemblies[] }`; `systems/conference.ts` (the temper, the assemblies, the elections on the ballot engine); `content/conference/documents.json`; the cascade's `source`; the priest's lines and scenes; the bishop's assembly scenes and offices. ~20 scenes, 12 documents.
+- **R1.3 Loans.** `moveToDiocese`; the loan offer and its term; the return; incardination and excardination as decisions; the bishop's-desk act and the letters asking for his men. ~12 scenes.
+- **R1.4 Regional reputation and the review.** The `bishops` constituency, its feeds and reads, the year in review's row, the You sheet's line. Small, but touched by every round above, so last.
+
+Each round: types, engine, content, UI; `npm run check`; the full suite; a PR.
