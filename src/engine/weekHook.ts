@@ -131,6 +131,9 @@ export function resolvePending(state: GameState, pending: PendingEvent, choiceId
   return next;
 }
 
+/** How often an unplayed week of a friar's formation carries a scene. Invented. */
+const FORMATION_WEEK_CHANCE = 0.12;
+
 /** The seminary week: formation accrual and beats, then any played-week event. */
 export function seminaryWeekHook(deps: EventDeps): WeekHook {
   return (state: GameState, rng: Rng, reachedBeats: Beat[]) => {
@@ -151,6 +154,10 @@ export function seminaryWeekHook(deps: EventDeps): WeekHook {
     const pool = weekPool(deps.pool, next);
     if (pool.length > 0) {
       const [event] = drawEvents(pool, next, rng, 1);
+      if (event) next = fireOrResolve(next, event, rng, deps);
+    } else if (next.religious && rng.derive(`formation-scene:${next.clock.week}`).chance(FORMATION_WEEK_CHANCE)) {
+      // A friar's formation is lived weekly, not on three played weeks a year: the novitiate and the studium draw at a low chance every week. Friar round D3.
+      const [event] = drawEvents(deps.pool.filter((e) => !e.beat), next, rng, 1);
       if (event) next = fireOrResolve(next, event, rng, deps);
     }
     // The house's invitations and the chancery's summers come by letter, week by week, like everyone else's.

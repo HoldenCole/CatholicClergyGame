@@ -1,0 +1,327 @@
+{
+  "_notes": "Cohesion and observance with teeth (friar round D4). E3 §3.2. The engine sets house:cohesion:low, house:observance:low, rule:rubs, and provincial:visited:recent (systems/religious/teeth.ts); these are the scenes those flags open: a man packing in a cold house, the week after the provincial's visitation, and the men the prior's rule rubs. Numbers invented.",
+  "events": [
+    {
+      "id": "ht_a_man_packs",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 22,
+      "suppressYears": 2,
+      "pressure": [
+        "friendship_vs_duty"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "house:cohesion:low",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "office:provincial",
+          "value": false
+        }
+      ],
+      "title": "A Man Packing",
+      "body": "{@confrere} is packing. Not leaving the order: he has written to the provincial for a move, and has it, and is putting his books in boxes in a cell with the door open so that the house will see. The house has two tables at dinner and a silence at supper that is not the Rule, and he has decided he is too old for it, or too young. He looks up when you pass and says he supposes you will be next.",
+      "choices": [
+        {
+          "id": "stay",
+          "label": "Say you are staying, and that the house can be mended",
+          "outcome": "He looks at you as at a man who has not lived here as long as he has. But he says it to the others, that you said it, and two of them decide that if you are staying they might, and the silence at supper has one less man in it and one more who talks. It is a small thing and the house is made of them.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 4
+            },
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "help",
+          "label": "Help him carry the boxes, and say nothing about the house",
+          "outcome": "Four trips to the car and a handshake at the door. He writes from the new house that it is better, and it is. The house notices that you helped him go and did not argue, and is divided on whether that was kindness or the first box of your own.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": 8
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -1
+            }
+          ]
+        },
+        {
+          "id": "write",
+          "label": "Write to the provincial yourself, about the house and not about you",
+          "outcome": "Two pages on what the house has become and what it would take, with no ask in it for yourself. The provincial answers in a line that says he has read it and will come. He does, in the spring, and the house has a visitation it did not expect and needed, and knows who wrote.",
+          "effects": [
+            {
+              "target": "flag",
+              "key": "provincial:visited",
+              "value": true
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -2
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ht_after_the_visitation",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 30,
+      "suppressYears": 2,
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "provincial:visited:recent",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "office:prior",
+          "value": false
+        },
+        {
+          "type": "flag",
+          "key": "office:provincial",
+          "value": false
+        }
+      ],
+      "title": "The Week After the Visitation",
+      "body": "The provincial has been and gone, and the house is doing what houses do after a visitation, which is talking about it in twos in the corridor. {@prior} read the letter at chapter without comment. The men who were interviewed are comparing what they said. Somebody said something about the prior, and somebody said something about you, and the house would like to know which somebody, and is looking at you.",
+      "choices": [
+        {
+          "id": "own",
+          "label": "Say what you said in your quarter of an hour, plainly, at recreation",
+          "outcome": "You say it: the Office when enough men are home, the habit seldom, and the prior doing his best with what he has. It was what everyone said. The corridor stops, because there is nothing to find out. The prior hears what you said about him and does not mind it, which is rare.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 4
+            },
+            {
+              "target": "relationship",
+              "key": "@prior",
+              "delta": 3
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 2
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "silent",
+          "label": "Say the interview was the provincial's, and keep it",
+          "outcome": "It was, and you keep it, and the corridor decides you said the worst things, which you did not. The prior is cool for a season. In a year the house has forgotten which visitation it was; the prior has not.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -3
+            },
+            {
+              "target": "relationship",
+              "key": "@prior",
+              "delta": -4
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "mend",
+          "label": "Go to the prior and ask what the letter asks of the house, and offer a piece of it",
+          "outcome": "He shows you the letter, which nobody else has seen, and it asks the ordinary things: Vespers in common, the habit in the house, a chapter that meets. You take the Vespers. The house has a man in choir every evening now, and the ones who follow him are the visitation's fruit, and the prior knows whose.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@prior",
+              "delta": 8
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "house:took_vespers",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ht_the_rule_rubs",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "admin",
+      "baseWeight": 24,
+      "suppressYears": 1,
+      "pressure": [
+        "belief_vs_safety"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "rule:rubs",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "office:prior",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "office:provincial",
+          "value": false
+        }
+      ],
+      "title": "The Men the Rule Rubs",
+      "body": "You set the house a rule and the house is moving toward it, and the men who liked the house as it was have found each other. {@confrere} speaks for them, at chapter, courteously: the old men cannot sing Matins, the young men cannot keep a silence that was not kept when they entered, and the rule was set by a prior who will be gone in three years and they will not. He sits down. The house looks at the prior's chair.",
+      "choices": [
+        {
+          "id": "hold",
+          "label": "Hold the rule, and say why, in the words of the constitutions",
+          "outcome": "The constitutions say what they say and you say it, and the house has heard a prior quote them before. The rule holds. The men it rubs go on being rubbed, and one of them writes to the provincial, who does nothing, and the house is a little more what you wanted and a little less a house.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -4
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 2
+            },
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": -6
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "bend",
+          "label": "Keep the rule and dispense the old men from the parts they cannot keep",
+          "outcome": "Matins for those who can, the silence for those who entered under it, and a dispensation read at chapter with the names in it. The men who spoke are half answered, which is more than they expected, and the house moves toward the rule with fewer of the old men limping. It takes longer. It holds.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 3
+            },
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": 4
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "drop",
+          "label": "Let the rule go; a house is its men",
+          "outcome": "You say at chapter that the house will keep the province's custom and no more, and the men who spoke are relieved and a little ashamed, and the men who had begun to like the choir at Matins are not. The house is as it was. The province hears the prior set a rule and could not hold it.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": -3
+            },
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": -2
+            },
+            {
+              "target": "relationship",
+              "key": "@confrere",
+              "delta": 6
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

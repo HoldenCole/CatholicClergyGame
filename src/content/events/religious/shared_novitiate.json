@@ -1,0 +1,1046 @@
+{
+  "_notes": "The novitiate as the most formative year of the life (friar round D3). E3 §5. Shared by both orders: the Dominican novitiate is year one, the Augustinian year two after the pre-novitiate, and each scene is gated on the order's own year. The novice master's talks, the first Christmas away, the night the man next door cries, the manual work, the letter from home, the classmate who leaves, the vote before profession. Numbers invented.",
+  "events": [
+    {
+      "id": "nv_master_first_talk",
+      "phase": [
+        "seminary"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "formation",
+      "baseWeight": 16,
+      "once": true,
+      "suppressYears": 1,
+      "pressure": [
+        "doubt"
+      ],
+      "requires": [
+        {
+          "type": "any",
+          "inner": [
+            {
+              "type": "all",
+              "inner": [
+                {
+                  "type": "flag",
+                  "key": "order:OP",
+                  "value": true
+                },
+                {
+                  "type": "year",
+                  "op": "<=",
+                  "value": 1
+                }
+              ]
+            },
+            {
+              "type": "all",
+              "inner": [
+                {
+                  "type": "flag",
+                  "key": "order:OSA",
+                  "value": true
+                },
+                {
+                  "type": "year",
+                  "op": ">=",
+                  "value": 2
+                },
+                {
+                  "type": "year",
+                  "op": "<=",
+                  "value": 2
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "title": "The Novice Master's First Talk",
+      "body": "{@novice_master} has the novices in the common room on the first Sunday, seven of you on chairs that do not match, and says that half of you will not be here in five years and that he does not know which half, and that neither do you. Then he says the year is for finding out, and that the finding out is done by the bell, the silence, the table, and the men beside you, and not by him. Then he asks who has a question, and nobody does.",
+      "choices": [
+        {
+          "id": "ask",
+          "label": "Ask the question you actually have: how does a man know?",
+          "outcome": "He looks at you for a while and says that a man knows the way he knows a friend, by living beside the thing and not by deciding about it, and that the ones who decide in the first month are the ones he worries about. The others look at you as the one who asked, which follows you a year.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@novice_master",
+              "delta": 6
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "pillar",
+              "key": "human",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "silent",
+          "label": "Say nothing; the year will answer",
+          "outcome": "Nobody asks and he nods as if that were the answer he expected and dismisses you to Vespers. The year answers, slowly. You are one of the seven who did not ask, and he has written that down too, in a book nobody sees.",
+          "effects": [
+            {
+              "target": "pillar",
+              "key": "spiritual",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "joke",
+          "label": "Ask which half, and get the laugh",
+          "outcome": "The room laughs, which it needed, and he laughs too, once, and says that he will tell you at profession. The novices like you from that afternoon; the master has you marked as the one who talks, which is not a fault and is not nothing.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "relationship",
+              "key": "@random_classmate",
+              "delta": 5
+            },
+            {
+              "target": "relationship",
+              "key": "@novice_master",
+              "delta": -2
+            }
+          ]
+        }
+      ],
+      "yearGate": [
+        1,
+        2
+      ]
+    },
+    {
+      "id": "nv_first_christmas",
+      "phase": [
+        "seminary"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 30,
+      "once": true,
+      "suppressYears": 1,
+      "pressure": [
+        "body_vs_vow"
+      ],
+      "requires": [
+        {
+          "type": "season",
+          "value": "christmas"
+        },
+        {
+          "type": "any",
+          "inner": [
+            {
+              "type": "all",
+              "inner": [
+                {
+                  "type": "flag",
+                  "key": "order:OP",
+                  "value": true
+                },
+                {
+                  "type": "year",
+                  "op": "<=",
+                  "value": 1
+                }
+              ]
+            },
+            {
+              "type": "all",
+              "inner": [
+                {
+                  "type": "flag",
+                  "key": "order:OSA",
+                  "value": true
+                },
+                {
+                  "type": "year",
+                  "op": ">=",
+                  "value": 2
+                },
+                {
+                  "type": "year",
+                  "op": "<=",
+                  "value": 2
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "title": "The First Christmas Away",
+      "body": "The novitiate does not go home for Christmas. The house sings the Office at midnight and eats a dinner the brother cook has been planning since Advent, and there is a telephone in the corridor with a list of times beside it, ten minutes a man. {@mother} is on the other end of yours at four o'clock, and the house is very quiet behind you, and she asks whether they are feeding you.",
+      "choices": [
+        {
+          "id": "brave",
+          "label": "Tell her it is the best Christmas you have had, and half mean it",
+          "outcome": "She hears the half and does not say so. The ten minutes go, and the brother behind you in the corridor takes the receiver still warm. The house at supper is a family that is not yours yet and is trying, and you let it.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 2
+            },
+            {
+              "target": "relationship",
+              "key": "@mother",
+              "delta": 2
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "honest",
+          "label": "Tell her you miss the house, and cry a little",
+          "outcome": "She cries too, which she had been holding, and the ten minutes are the best of the year for both of you. The brother behind you in the corridor pretends not to have heard and is kind to you at supper without saying why.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@mother",
+              "delta": 6
+            },
+            {
+              "target": "pillar",
+              "key": "human",
+              "delta": 1
+            },
+            {
+              "target": "relationship",
+              "key": "@random_classmate",
+              "delta": 3
+            }
+          ]
+        },
+        {
+          "id": "short",
+          "label": "Keep it short; there are men waiting",
+          "outcome": "Six minutes, and the receiver handed on with four to spare, which the next man uses. She understood, or said she did. The house notices that you gave your minutes away, and the novice master hears of it, and it is the kind of thing that is remembered at a vote.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 3
+            },
+            {
+              "target": "relationship",
+              "key": "@mother",
+              "delta": -3
+            },
+            {
+              "target": "pillar",
+              "key": "spiritual",
+              "delta": 1
+            }
+          ]
+        }
+      ],
+      "yearGate": [
+        1,
+        2
+      ]
+    },
+    {
+      "id": "nv_the_man_next_door",
+      "phase": [
+        "seminary"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "classmate",
+      "baseWeight": 14,
+      "once": true,
+      "suppressYears": 1,
+      "pressure": [
+        "friendship_vs_duty"
+      ],
+      "requires": [
+        {
+          "type": "any",
+          "inner": [
+            {
+              "type": "all",
+              "inner": [
+                {
+                  "type": "flag",
+                  "key": "order:OP",
+                  "value": true
+                },
+                {
+                  "type": "year",
+                  "op": "<=",
+                  "value": 1
+                }
+              ]
+            },
+            {
+              "type": "all",
+              "inner": [
+                {
+                  "type": "flag",
+                  "key": "order:OSA",
+                  "value": true
+                },
+                {
+                  "type": "year",
+                  "op": ">=",
+                  "value": 2
+                },
+                {
+                  "type": "year",
+                  "op": "<=",
+                  "value": 2
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "title": "The Cell Next Door",
+      "body": "The walls are thin and the silence after Compline is the Rule, and {@random_classmate} in the next cell is crying, not loudly, for the third night. The novice master's door is at the end of the corridor with a light under it. The Rule says the silence is kept. The Rule was written by men who had heard this.",
+      "choices": [
+        {
+          "id": "knock",
+          "label": "Knock, and sit with him, and break the silence",
+          "outcome": "An hour on the edge of his bed saying almost nothing. He stays, in the end, and never says it was that night, and you never ask. The master, who heard the door, says nothing about the silence in the morning, which is his way of saying he knows what it is for.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@random_classmate",
+              "delta": 12
+            },
+            {
+              "target": "pillar",
+              "key": "human",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "master",
+          "label": "Go to the master's door and tell him",
+          "outcome": "He thanks you and goes, and is with the man until Lauds, and the man stays. The man knows who told, and is grateful and a little ashamed, and it is between you for a year. The master has learned that you bring things to him, which he likes in a novice and does not like in a prior.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@novice_master",
+              "delta": 5
+            },
+            {
+              "target": "relationship",
+              "key": "@random_classmate",
+              "delta": 2
+            },
+            {
+              "target": "pillar",
+              "key": "pastoral",
+              "delta": 1
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "silence",
+          "label": "Keep the silence; it is the Rule, and he chose it",
+          "outcome": "The silence is kept. He is gone by Easter, and you do not know whether the night was why, and you will not ever. The Rule was kept and the master says nothing, and it is the first thing in the year you would do differently.",
+          "effects": [
+            {
+              "target": "pillar",
+              "key": "spiritual",
+              "delta": 1
+            },
+            {
+              "target": "pillar",
+              "key": "human",
+              "delta": -2
+            },
+            {
+              "target": "relationship",
+              "key": "@random_classmate",
+              "delta": -8
+            }
+          ]
+        }
+      ],
+      "yearGate": [
+        1,
+        2
+      ]
+    },
+    {
+      "id": "nv_manual_work",
+      "phase": [
+        "seminary"
+      ],
+      "campaign": "religious",
+      "severity": "ROUTINE",
+      "category": "formation",
+      "baseWeight": 12,
+      "once": true,
+      "suppressYears": 1,
+      "pressure": [
+        "competence"
+      ],
+      "requires": [
+        {
+          "type": "any",
+          "inner": [
+            {
+              "type": "all",
+              "inner": [
+                {
+                  "type": "flag",
+                  "key": "order:OP",
+                  "value": true
+                },
+                {
+                  "type": "year",
+                  "op": "<=",
+                  "value": 1
+                }
+              ]
+            },
+            {
+              "type": "all",
+              "inner": [
+                {
+                  "type": "flag",
+                  "key": "order:OSA",
+                  "value": true
+                },
+                {
+                  "type": "year",
+                  "op": ">=",
+                  "value": 2
+                },
+                {
+                  "type": "year",
+                  "op": "<=",
+                  "value": 2
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "title": "Wednesday Afternoons",
+      "body": "Wednesday afternoons are manual work, which in this house means the garden, the gutters, and the brother in charge of both, who has been a lay brother for forty years and has opinions about novices with degrees. He hands you a hoe. You have not held one. He watches you not hold it properly for a minute and then takes it back and shows you, once, and does not show you twice.",
+      "choices": [
+        {
+          "id": "learn",
+          "label": "Learn it, badly, and come back every Wednesday",
+          "outcome": "By Lent the rows are straight. He says nothing about it and gives you the gutters, which is promotion. Forty years from now you will still hoe like him, and will tell novices about him, and will not remember that you resented the first afternoon.",
+          "effects": [
+            {
+              "target": "pillar",
+              "key": "human",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 3
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": -2
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "book",
+          "label": "Ask whether a man with your degree might be more use in the library",
+          "outcome": "He says yes, and means it, and you catalogue for a year, which is useful, and the house remembers that you asked. The brother is courteous to you for forty years and never once gives you the gutters.",
+          "effects": [
+            {
+              "target": "pillar",
+              "key": "intellectual",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -3
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 1
+            }
+          ]
+        }
+      ],
+      "yearGate": [
+        1,
+        2
+      ]
+    },
+    {
+      "id": "nv_letter_from_home",
+      "phase": [
+        "seminary"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 12,
+      "once": true,
+      "suppressYears": 1,
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "requires": [
+        {
+          "type": "any",
+          "inner": [
+            {
+              "type": "all",
+              "inner": [
+                {
+                  "type": "flag",
+                  "key": "order:OP",
+                  "value": true
+                },
+                {
+                  "type": "year",
+                  "op": "<=",
+                  "value": 1
+                }
+              ]
+            },
+            {
+              "type": "all",
+              "inner": [
+                {
+                  "type": "flag",
+                  "key": "order:OSA",
+                  "value": true
+                },
+                {
+                  "type": "year",
+                  "op": ">=",
+                  "value": 2
+                },
+                {
+                  "type": "year",
+                  "op": "<=",
+                  "value": 2
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "title": "The Letter from Home",
+      "body": "The novitiate reads its mail on Saturdays, in the common room, and a letter from {@father} says, in his handwriting, which you have not seen since school, that there is a job at the firm if the year does not work out, and that nobody would think less of you, and that he does not understand what the year is for but has stopped saying so to your mother. It is the kindest thing he has ever written and it is a door.",
+      "choices": [
+        {
+          "id": "answer",
+          "label": "Write back the same day: what the year is for, as well as you can say it",
+          "outcome": "Three pages, the best you will write for a decade, on the bell and the silence and the men beside you. He does not answer it; your mother says he read it twice and kept it in the desk. The door is still there. You have said, to the one who needed to hear it, why you are not walking through it.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@father",
+              "delta": 8
+            },
+            {
+              "target": "pillar",
+              "key": "spiritual",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "keep",
+          "label": "Keep the letter, and answer it at Easter",
+          "outcome": "The letter goes in the breviary and stays there through Lent, where you see it every day, which is a kind of answer. At Easter you write two lines that say you are well. He is not hurt; he is not answered either. The door stays open a long time.",
+          "effects": [
+            {
+              "target": "pillar",
+              "key": "human",
+              "delta": 1
+            },
+            {
+              "target": "relationship",
+              "key": "@father",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "master",
+          "label": "Show it to the novice master",
+          "outcome": "He reads it and hands it back and says that every man in the room has one of these somewhere, and that the ones who show it to him are the ones who have already decided. He is right. He tells you to answer it, and you do, and he never mentions it again.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@novice_master",
+              "delta": 6
+            },
+            {
+              "target": "relationship",
+              "key": "@father",
+              "delta": 3
+            },
+            {
+              "target": "pillar",
+              "key": "spiritual",
+              "delta": 1
+            }
+          ]
+        }
+      ],
+      "yearGate": [
+        1,
+        2
+      ]
+    },
+    {
+      "id": "nv_classmate_leaves",
+      "phase": [
+        "seminary"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "classmate",
+      "baseWeight": 12,
+      "once": true,
+      "suppressYears": 1,
+      "pressure": [
+        "doubt"
+      ],
+      "requires": [
+        {
+          "type": "any",
+          "inner": [
+            {
+              "type": "all",
+              "inner": [
+                {
+                  "type": "flag",
+                  "key": "order:OP",
+                  "value": true
+                },
+                {
+                  "type": "year",
+                  "op": "<=",
+                  "value": 1
+                }
+              ]
+            },
+            {
+              "type": "all",
+              "inner": [
+                {
+                  "type": "flag",
+                  "key": "order:OSA",
+                  "value": true
+                },
+                {
+                  "type": "year",
+                  "op": ">=",
+                  "value": 2
+                },
+                {
+                  "type": "year",
+                  "op": "<=",
+                  "value": 2
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "title": "An Empty Place at Table",
+      "body": "{@closest_classmate} is gone. Not dismissed: he asked to go, on a Tuesday, and the novice master drove him to the station himself, and his place at table was cleared before supper, and the master said at chapter that he had gone with the house's blessing and that the house would pray for him, and then said the grace. Nobody said his name at recreation. His breviary is still in the choir stall.",
+      "choices": [
+        {
+          "id": "write",
+          "label": "Write to him that week, and keep writing",
+          "outcome": "He answers from his parents' house, then from a job, then from a wedding you are not free to attend. The letters thin over years and do not stop. The master, who knows, says nothing, and the house, which knows, is a little warmer to you for it. He is the first of the men you will keep.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@closest_classmate",
+              "delta": 10
+            },
+            {
+              "target": "pillar",
+              "key": "human",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 1
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "stall",
+          "label": "Take his breviary from the stall to the master, and say his name at chapter",
+          "outcome": "The master takes the book and thanks you and, at the next chapter, says the name himself, and the house says the prayer with a name in it. It costs nothing and it changes the room. Some of the men decide that week that you are the one who says the thing.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 4
+            },
+            {
+              "target": "relationship",
+              "key": "@novice_master",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "doubt",
+          "label": "Wonder, for a week, whether he was the honest one",
+          "outcome": "A week of the bell going and you going with it and not knowing why. It passes, or is decided, or both. The master, who has seen the week on a hundred faces, says nothing until it is over, and then says, at the door, that the ones who never wonder are the ones he sends home.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": -1
+            },
+            {
+              "target": "pillar",
+              "key": "spiritual",
+              "delta": 2
+            },
+            {
+              "target": "relationship",
+              "key": "@novice_master",
+              "delta": 2
+            }
+          ]
+        }
+      ],
+      "yearGate": [
+        1,
+        2
+      ]
+    },
+    {
+      "id": "nv_the_master_on_you",
+      "phase": [
+        "seminary"
+      ],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "formation",
+      "baseWeight": 12,
+      "once": true,
+      "suppressYears": 1,
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "requires": [
+        {
+          "type": "season",
+          "value": "lent"
+        },
+        {
+          "type": "any",
+          "inner": [
+            {
+              "type": "all",
+              "inner": [
+                {
+                  "type": "flag",
+                  "key": "order:OP",
+                  "value": true
+                },
+                {
+                  "type": "year",
+                  "op": "<=",
+                  "value": 1
+                }
+              ]
+            },
+            {
+              "type": "all",
+              "inner": [
+                {
+                  "type": "flag",
+                  "key": "order:OSA",
+                  "value": true
+                },
+                {
+                  "type": "year",
+                  "op": ">=",
+                  "value": 2
+                },
+                {
+                  "type": "year",
+                  "op": "<=",
+                  "value": 2
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "title": "The Master's Word About You",
+      "body": "In Lent {@novice_master} sees each novice alone for an hour and says what he has seen. Yours is on a Thursday. He says one true thing about you that you had hoped nobody had noticed, and one that you had not noticed yourself, and then asks whether he is wrong. The chair is hard and the hour is long and he is not wrong.",
+      "choices": [
+        {
+          "id": "own",
+          "label": "Say he is right, and say what you will do about it",
+          "outcome": "He listens to what you will do about it and says it is the right thing and that you will not do it, not this year, and that he will ask again in the summer. He asks again in the summer. You have done half of it. He writes that down, and it is the half that the house votes on.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@novice_master",
+              "delta": 8
+            },
+            {
+              "target": "pillar",
+              "key": "human",
+              "delta": 2
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 2
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "argue",
+          "label": "Argue the second thing; he has it wrong",
+          "outcome": "He lets you argue it for ten minutes and then says that he may have it wrong and that you argued it the way a man argues a thing he has it right about. You leave the room having lost and having been, in some way you cannot name, respected for it.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "relationship",
+              "key": "@novice_master",
+              "delta": 2
+            },
+            {
+              "target": "pillar",
+              "key": "intellectual",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "shut",
+          "label": "Say nothing, and thank him, and leave",
+          "outcome": "He lets you go. The hour is over in twenty minutes and he has learned the thing about you that the hour was for, which is that you close. He is gentle with you for the rest of the year and it is the gentleness of a man who has decided something.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@novice_master",
+              "delta": -4
+            },
+            {
+              "target": "pillar",
+              "key": "human",
+              "delta": -1
+            },
+            {
+              "target": "pillar",
+              "key": "spiritual",
+              "delta": 1
+            }
+          ]
+        }
+      ],
+      "yearGate": [
+        1,
+        2
+      ]
+    },
+    {
+      "id": "nv_before_the_vote",
+      "phase": [
+        "seminary"
+      ],
+      "campaign": "religious",
+      "severity": "MAJOR",
+      "category": "formation",
+      "baseWeight": 24,
+      "once": true,
+      "suppressYears": 1,
+      "pressure": [
+        "ambition_vs_integrity"
+      ],
+      "requires": [
+        {
+          "type": "season",
+          "value": "easter"
+        },
+        {
+          "type": "any",
+          "inner": [
+            {
+              "type": "all",
+              "inner": [
+                {
+                  "type": "flag",
+                  "key": "order:OP",
+                  "value": true
+                },
+                {
+                  "type": "year",
+                  "op": "<=",
+                  "value": 1
+                }
+              ]
+            },
+            {
+              "type": "all",
+              "inner": [
+                {
+                  "type": "flag",
+                  "key": "order:OSA",
+                  "value": true
+                },
+                {
+                  "type": "year",
+                  "op": ">=",
+                  "value": 2
+                },
+                {
+                  "type": "year",
+                  "op": "<=",
+                  "value": 2
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "title": "The Week Before the Vote",
+      "body": "The professed of the house vote on the novices in June, one by one, in chapter, with the novices out of the room. Everyone knows the week. The old men are watched at table as if they were weather. {@old_friar}, who has voted on forty years of novices, says at recreation, to nobody, that the ones who campaign are the ones he votes against, and that the ones who hide are the ones he does not notice, and then he goes to bed.",
+      "choices": [
+        {
+          "id": "usual",
+          "label": "Do the week as you have done the year: nothing more, nothing less",
+          "outcome": "The bell, the table, the garden, the stall, and no more visits to old men than the year had in it. The house sees a man who did not change for the week, and the ones who were going to vote for you do, and the ones who were not, mostly do too.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 4
+            },
+            {
+              "target": "pillar",
+              "key": "spiritual",
+              "delta": 1
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 2
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "old_men",
+          "label": "Sit with the old men every recreation; they have the votes",
+          "outcome": "The old men enjoy it and know exactly what it is. Two of them vote for you because you listened; one votes against because you listened in June and not in October, and says so to the master. The house has learned you count votes, which is remembered when there are more of them at stake.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 1
+            },
+            {
+              "target": "relationship",
+              "key": "@old_friar",
+              "delta": -5
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "novice:campaigned",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "hide",
+          "label": "Keep to the cell and the choir; let the year speak",
+          "outcome": "The year speaks, quietly. The house, which had not much noticed you, does not much notice you in June either, and the vote is closer than it needed to be, and passes. The master says afterward that he had to speak for you, which he did not mind, and that next time you should be seen.",
+          "effects": [
+            {
+              "target": "pillar",
+              "key": "spiritual",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -2
+            },
+            {
+              "target": "relationship",
+              "key": "@novice_master",
+              "delta": 3
+            }
+          ]
+        }
+      ],
+      "yearGate": [
+        1,
+        2
+      ]
+    }
+  ]
+}
