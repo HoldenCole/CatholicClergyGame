@@ -87,7 +87,7 @@ const SELECTORS = [
   '@dominican_prior', '@dominican_lector', '@dominican_student',
   '@franciscan_guardian', '@franciscan_kitchen', '@franciscan_confessor',
   '@augustinian_prior', '@augustinian_headmaster', '@augustinian_old_pastor',
-  '@prior', '@provincial', '@novice_master', '@master_of_students', '@confrere', '@old_friar', '@formed_man',
+  '@prior', '@provincial', '@novice_master', '@master_of_students', '@confrere', '@old_friar', '@formed_man', '@metropolitan', '@province_bishop',
 ];
 const LIFE_IDS = lifeDefs.map((l) => l.id);
 const LIVE_SELECTORS = [...LIFE_IDS.map((id) => `@life:${id}`), '@rumour_subject'];
@@ -262,6 +262,9 @@ function checkCondition(c: Condition, where: string, problems: Problem[]): void 
       break;
     case 'visitation':
       if (!({ scene: ['announced', 'house', 'interview', 'report', 'decree'], stage: ['announced', 'visiting', 'report', 'decree'], cause: ['document', 'division', 'decline', 'complaint'], outcome: ['clean', 'norms', 'closure', 'commissary'] } as Record<string, string[]>)[c.key]?.includes(String(c.value))) problems.push(`${where}: bad visitation condition`);
+      break;
+    case 'metropolia':
+      if (c.key === 'rank' ? !['metropolitan', 'suffragan'].includes(c.value) : c.key === 'policy' ? typeof c.value !== 'string' : c.key === 'meeting' ? c.within !== undefined && typeof c.within !== 'number' : c.key === 'metropolitan' ? !['vacant', 'new'].includes(c.value) : true) problems.push(`${where}: bad metropolia condition`);
       break;
     case 'nuncio':
       if (c.key === 'scene' ? !['consulted', 'about_you', 'passed', 'subject_named', 'arrival', 'remembers', 'aux_request'].includes(c.value) : !hasOp(c.op) || typeof c.value !== 'number') problems.push(`${where}: bad nuncio condition`);

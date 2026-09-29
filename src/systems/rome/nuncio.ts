@@ -1,3 +1,4 @@
+import { metropoliaOfSee } from '@/content/metropolias';
 import type { GameState, Letter, Npc, Nuncio, NuncioSceneKind, Terna, TernaCause } from '@/types';
 import { createRng, type Rng } from '@/engine/rng';
 import { sundayOf } from '@/engine/time';
@@ -22,6 +23,8 @@ import { nuncioView } from './nuncioView';
  * invented and flagged.
  */
 export const NUNCIO = {
+  /** A vacant see of the man's own province weighs this much more in the nuncio's choice of which vacancy to work. E2 §2.2. Invented. */
+  provinceWeight: 3,
   termYears: [5, 8] as [number, number],
   /** A new pope recalls the nuncio within this many days. */
   newPopeDays: [180, 420] as [number, number],
@@ -206,7 +209,9 @@ function openTerna(state: GameState, lines: string[]): GameState {
   const pool = seeDefs.filter((d) => d.id !== home && d.id !== state.see?.id);
   if (!pool.length && !vacant.length) return state;
   const vacancy = vacant.length ? rng.pick(vacant) : null;
-  const see = vacancy ? { id: vacancy.id, name: vacancy.name, see: vacancy.see } : rng.weighted(pool, (d) => (d.great ? 1 : 4));
+  // A see of his own province is likelier to be the one he is named to: the bishops who know him are the ones consulted. E2 §2.2.
+  const provinceId = state.world?.metropolia?.id;
+  const see = vacancy ? { id: vacancy.id, name: vacancy.name, see: vacancy.see } : rng.weighted(pool, (d) => (d.great ? 1 : 4) * (provinceId && metropoliaOfSee(d.see)?.def.id === provinceId ? NUNCIO.provinceWeight : 1));
   const cause = vacancy?.vacantWhy ?? rng.weighted(['retired', 'died', 'transferred'] as const, (c) => ({ retired: 5, died: 2, transferred: 2 })[c]);
   const sendWeek = week + rng.int(NUNCIO.sendAfter[0], NUNCIO.sendAfter[1]);
   const terna: Terna = { id: `terna:${ternas.length + 1}`, seeId: see.id, seeName: see.name, cause, openedWeek: week, sendWeek, nameWeek: sendWeek + rng.int(NUNCIO.nameAfter[0], NUNCIO.nameAfter[1]), player: false };

@@ -61,6 +61,7 @@ import { directionsWeek } from '@/systems/bishop/directions';
 import { renderText } from './text';
 import { closeCascade, dueCascade } from '@/systems/rome/documents';
 import { closeNuncioScene, dueNuncioScene } from '@/systems/rome/nuncio';
+import { metropolitanWeek } from '@/systems/metropolitan';
 import { curiaWeek } from '@/systems/rome/curia';
 import { closeCollegeScene, dueCollegeScene } from '@/systems/rome/college';
 import { popeHomeYear } from '@/systems/homeFromAfar';
@@ -266,6 +267,14 @@ export function studyWeekHook(deps: EventDeps): WeekHook {
       // Rome's document, some weeks on: the diocese waits for his reading of it. E4 R1.1, E1 §4.2.
       if (dueCascade(next)) {
         next = cascadeScene(next, rng.derive(`cascade:${next.clock.week}`), deps);
+        if (next.mode.kind !== 'clock' || next.pending.length > 0) return next;
+      }
+      // The province's bishops meet; the nuncio's questions reach a bishop too. E2 §2.2.
+      const province = metropolitanWeek(next, rng.derive(`metropolitan:${next.clock.week}`));
+      next = province.state;
+      for (const line of province.lines) next = addDigestLine(next, line);
+      if (dueNuncioScene(next)) {
+        next = nuncioScene(next, rng.derive(`nuncio:${next.clock.week}`), deps);
         if (next.mode.kind !== 'clock' || next.pending.length > 0) return next;
       }
     }
@@ -603,6 +612,12 @@ export function parishWeekHook(deps: EventDeps): WeekHook {
     const letters = resolvePermissions(next, rng.derive(`permissions:${next.clock.week}`));
     next = letters.state;
     for (const line of letters.lines) next = addDigestLine(next, line);
+    // The province's bishops meet, and what they agreed comes home as the bishop's letter. E2 §2.2.
+    if (!next.religious) {
+      const province = metropolitanWeek(next, rng.derive(`metropolitan:${next.clock.week}`));
+      next = province.state;
+      for (const line of province.lines) next = addDigestLine(next, line);
+    }
     const turned = turnaroundStep(next);
     next = turned.state;
     if (turned.line) {

@@ -60,6 +60,8 @@ describe('engine/parish', () => {
     for (let guard = 0; guard < 80 && s.clock.week < 52; guard++) {
       const r = runClock(s, rng, { maxWeeks: 52 - s.clock.week, hook: parishWeekHook(d) });
       s = r.state;
+      // A letter stops the clock too (the province's bishops write in week 18, E2 §2.2): read it and go on.
+      if (s.mode.kind === 'letter') s = readLetter(s);
       if (s.pending.length) {
         events++;
         s = resolvePending(s, s.pending[0]!, 'a', rng, d);
