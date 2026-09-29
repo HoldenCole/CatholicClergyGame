@@ -72,7 +72,7 @@ export default function Hud() {
         <h1 className="title text-lg tracking-wide" style={{ color: '#e6c25a' }}>Vocation</h1>
         {c && <Portrait portrait={portraitForPlayer(game)} size={34} title={`${c.name.first} ${c.name.last}`} />}
         <span className="truncate text-sm">
-          {c ? `${friarName(game) ?? `${c.name.first} ${c.name.last}`}, ` : ''}{game.study ? `${game.see ? `Bishop of ${game.see.see}` : game.study.city === 'rome' || game.study.city === 'washington' ? `Studying in ${game.study.city === 'rome' ? 'Rome' : 'Washington'}` : game.study.label}, year ${Math.floor((clock.week - game.study.startWeek) / 52) + 1}` : (friarWord(game) ?? PHASE_LABELS[game.phase] ?? game.phase)}
+          {c ? `${friarName(game) ?? `${c.name.first} ${c.name.last}`}, ` : ''}{game.loan && game.world ? `On loan to ${game.world.diocese.visible.name}, year ${Math.floor((clock.week - game.loan.startWeek) / 52) + 1} of ${game.loan.years + (game.loan.extended ? 2 : 0)}` : game.study ? `${game.see ? `Bishop of ${game.see.see}` : game.study.city === 'rome' || game.study.city === 'washington' ? `Studying in ${game.study.city === 'rome' ? 'Rome' : 'Washington'}` : game.study.label}, year ${Math.floor((clock.week - game.study.startWeek) / 52) + 1}` : (friarWord(game) ?? PHASE_LABELS[game.phase] ?? game.phase)}
         </span>
         <span className="truncate text-sm opacity-80">
           Week of {formatDate(dateOf(clock))} · {SEASON_LABELS[seasonOf(clock)]}{game.world ? ` · ${weatherOfWeek(game.seed, clock, game.world.diocese.visible.region).word}` : ''} · {yearLine}

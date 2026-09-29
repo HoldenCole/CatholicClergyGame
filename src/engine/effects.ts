@@ -32,6 +32,9 @@ import { gainReputation } from '@/systems/religious/reputations';
 import { ministryOf } from '@/systems/ministry';
 import type { DiocesanNorm, Implementation, MinistryKey } from '@/types';
 import { recordImplementation } from '@/systems/rome/documents';
+import { askExcardination, askLoan, extendLoan, incardinate, lendPriest, LOAN, loanRng, returnHome } from '@/systems/loan';
+import { metropoliaSeeById } from '@/systems/metropolia';
+import type { LoanKind } from '@/types';
 import { createRng, type Rng } from './rng';
 
 /**
@@ -276,6 +279,26 @@ export function applyEffect(
     // What he did in his parish with Rome's latest document on an axis. E1 §4.2.
     case 'document':
       return recordImplementation(state, effect.key, String(effect.value) as Implementation);
+    // A loan across diocesan lines. E2 R1.3.
+    case 'loan': {
+      if (effect.key === 'ask') return askLoan(state, String(effect.value) as LoanKind, bindings['@province_bishop'], loanRng(state, 'ask'));
+      if (effect.key === 'home') {
+        if (!state.loan) return state;
+        const r = returnHome(state, loanRng(state, 'home'));
+        return { ...r.state, letters: [...(r.state.letters ?? []), r.letter], letterQueue: [...(r.state.letterQueue ?? []), r.letter] };
+      }
+      if (effect.key === 'stay') return state.loan ? incardinate(state) : state;
+      if (effect.key === 'extend') return state.loan ? extendLoan(state) : state;
+      if (effect.key === 'excardinate') return askExcardination(state, loanRng(state, 'excardinate'));
+      if (effect.key === 'lend') {
+        const priest = resolveSelector(state, bindings[String(effect.value)] ?? String(effect.value));
+        const askerId = bindings['@province_bishop'];
+        const tag = askerId ? state.npcs[askerId]?.tags.find((t) => t.startsWith('see:')) : undefined;
+        const see = tag ? metropoliaSeeById(state, tag.slice(4)) : undefined;
+        return priest ? lendPriest(state, priest.id, see?.see ?? 'the next diocese', effect.delta ?? LOAN.bishop.years) : state;
+      }
+      return state;
+    }
     // A dial of the see he holds. E4 R1.1.
     case 'see':
       return state.see && effect.delta !== undefined ? { ...state, see: applySeeHours(state.see, { [effect.key]: effect.delta }, 1) } : state;

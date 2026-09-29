@@ -1,5 +1,5 @@
 {
-  "_notes": "Parish-tier offers (DESIGN.md §7.5), vicar (pv_) and pastor (pa_). Flags defined here: rome_alumnus / refused_rome / rome_washed_out (pv_rome_study; the terna and assignment should read rome_alumnus), tribunal_ready / refused_canon_law / jcl_washed_out (pv_canon_law_licentiate), research_project / abandoned_research / refused_research (pv_dissertation; published is also set by careers.json), seminary_faculty / refused_faculty (pv_seminary_faculty), adjunct_faculty / refused_adjunct, declined_spanish_study, speaks_italian / declined_italian, office:vocations / refused_vocations_office, office:tribunal / knows_secrets / refused_tribunal, office:finance_council / refused_finance_council, office:bishops_secretary / refused_secretary, office:communications / refused_communications, refused_patron (patron:prominent_priest and the risk sem_patron_exposure are shared with seminary.json so one fall-event can read both), refused_chancery_mentor (mentor:chancery shared with seminary.json), substituted_for_bishop / failed_substitution / declined_substitution, affiliation:opus_dei / refused_opus_dei, refused_cursillo, refused_trad_fraternity, refused_prog_caucus (affiliation:cursillo, affiliation:trad_fraternity, affiliation:prog_caucus shared with seminary.json), affiliation:diocesan_fraternity / refused_diocesan_fraternity, donor:named / refused_donor, board:civic / refused_civic_board, board:interfaith / refused_interfaith, chaplain:hospital / chaplain:prison / chaplain:university / chaplain:police_fire / chaplain:military and refused_<x>_chaplaincy for each, took_the_hard_parish / refused_hard_parish (the assignment engine should read took_the_hard_parish and place him in a difficult parish), hard_parish_turned. Credentials granted: STL, JCL, spanish, italian. Risks: sem_patron_exposure (shared), pv_spokesman_exposure, pa_donor_expectations. Selectors: only the seminary-era selectors plus @bishop and @vocation_director resolve in the offer test, so chancery officials (chancellor, vicar general, judicial vicar) are named by title in prose and their offers carry decline effects instead of `from`; the chancery-mentor gate therefore reads mentor:chancery or reputation chancery instead of a @vicar_general relationship. Study away from the parish uses apPerWeek 10 so the parish loop cuts the whole week.",
+  "_notes": "Parish-tier offers (DESIGN.md §7.5), vicar (pv_) and pastor (pa_). Flags defined here: rome_alumnus / refused_rome / rome_washed_out (pv_rome_study; the terna and assignment should read rome_alumnus), tribunal_ready / refused_canon_law / jcl_washed_out (pv_canon_law_licentiate), research_project / abandoned_research / refused_research (pv_dissertation; published is also set by careers.json), seminary_faculty / refused_faculty (pv_seminary_faculty), adjunct_faculty / refused_adjunct, declined_spanish_study, speaks_italian / declined_italian, office:vocations / refused_vocations_office, office:tribunal / knows_secrets / refused_tribunal, office:finance_council / refused_finance_council, office:bishops_secretary / refused_secretary, office:communications / refused_communications, refused_patron (patron:prominent_priest and the risk sem_patron_exposure are shared with seminary.json so one fall-event can read both), refused_chancery_mentor (mentor:chancery shared with seminary.json), substituted_for_bishop / failed_substitution / declined_substitution, affiliation:opus_dei / refused_opus_dei, refused_cursillo, refused_trad_fraternity, refused_prog_caucus (affiliation:cursillo, affiliation:trad_fraternity, affiliation:prog_caucus shared with seminary.json), affiliation:diocesan_fraternity / refused_diocesan_fraternity, donor:named / refused_donor, board:civic / refused_civic_board, board:interfaith / refused_interfaith, chaplain:hospital / chaplain:prison / chaplain:university / chaplain:police_fire / chaplain:military and refused_<x>_chaplaincy for each, took_the_hard_parish / refused_hard_parish (the assignment engine should read took_the_hard_parish and place him in a difficult parish), hard_parish_turned. Credentials granted: STL, JCL, spanish, italian. Risks: sem_patron_exposure (shared), pv_spokesman_exposure, pa_donor_expectations. Selectors: only the seminary-era selectors plus @bishop and @vocation_director resolve in the offer test, so chancery officials (chancellor, vicar general, judicial vicar) are named by title in prose and their offers carry decline effects instead of `from`; the chancery-mentor gate therefore reads mentor:chancery or reputation chancery instead of a @vicar_general relationship. Study away from the parish uses apPerWeek 10 so the parish loop cuts the whole week. E2 R1.3: the loans (ln_loan_*): a brother bishop of the province asks for a man (loan available; the kind by what he has: Spanish, the licentiate, a pastor's years); a yes puts the home bishop's answer on the calendar (loan ask; systems/loan.ts), a no costs the asking bishop's regard.",
   "offers": [
     {
       "id": "pv_rome_study",
@@ -6838,6 +6838,203 @@
           }
         ],
         "outcome": "You say no and the board gets its consultant, and the schools are run competently by a man who has never said Mass in one, and the pastor with a school telephones you anyway, before eight."
+      }
+    },
+    {
+      "id": "ln_loan_spanish",
+      "category": "chancery",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "title": "A Diocese That Needs Your Spanish",
+      "body": "{@province_bishop} writes to {@bishop}, and {@bishop} forwards the letter with a line of his own: the diocese of the next see over has twelve thousand Spanish-speaking Catholics and two priests who can say the Mass for them, one of whom is seventy-eight. He asks for a man for three years, on loan, incardination untouched, the years counting at home. {@bishop}'s line says he has not said yes, and has not said no, and would like to know what you think before he says either.",
+      "from": "@province_bishop",
+      "requires": [
+        {
+          "type": "loan",
+          "key": "available",
+          "value": true
+        },
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 4
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "loan:refused_offer",
+            "value": true
+          }
+        },
+        {
+          "type": "flag",
+          "key": "speaks_spanish",
+          "value": true
+        }
+      ],
+      "weight": 26,
+      "windowWeeks": 3,
+      "once": false,
+      "cluster": "loan",
+      "accept": {
+        "effects": [
+          {
+            "target": "loan",
+            "key": "ask",
+            "value": "spanish"
+          }
+        ],
+        "outcome": "You tell {@bishop} you would go if he lets you. He says he will think about what the diocese can spare, which is what a bishop says before he decides, and that the letter will come."
+      },
+      "decline": {
+        "effects": [
+          {
+            "target": "relationship",
+            "key": "@province_bishop",
+            "delta": -3
+          },
+          {
+            "target": "flag",
+            "key": "loan:declined",
+            "value": true
+          }
+        ],
+        "outcome": "You write to {@province_bishop} that your own parish's Spanish Mass would go with you, and he understands, and writes to say so, and will ask someone else. {@bishop} is relieved and does not say so."
+      }
+    },
+    {
+      "id": "ln_loan_canonist",
+      "category": "chancery",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "title": "A Tribunal Without a Canonist",
+      "body": "{@province_bishop}'s judicial vicar has died and his tribunal has three hundred marriage cases and no one with a licentiate to sign them. He has written to {@bishop} for you by name, three years on loan, the cathedral rectory, and, he adds, the best fishing in the province. {@bishop} forwards the letter with a note that says only: Well?",
+      "from": "@province_bishop",
+      "requires": [
+        {
+          "type": "loan",
+          "key": "available",
+          "value": true
+        },
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 4
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "loan:refused_offer",
+            "value": true
+          }
+        },
+        {
+          "type": "credential",
+          "key": "JCL"
+        }
+      ],
+      "weight": 24,
+      "windowWeeks": 3,
+      "once": false,
+      "cluster": "loan",
+      "accept": {
+        "effects": [
+          {
+            "target": "loan",
+            "key": "ask",
+            "value": "canonist"
+          }
+        ],
+        "outcome": "You tell {@bishop} you would take the tribunal for three years if he can spare you. He says the tribunal here will survive, which is not the same as saying yes, and that the letter will come."
+      },
+      "decline": {
+        "effects": [
+          {
+            "target": "relationship",
+            "key": "@province_bishop",
+            "delta": -3
+          },
+          {
+            "target": "flag",
+            "key": "loan:declined",
+            "value": true
+          }
+        ],
+        "outcome": "You write that the tribunal here has cases too, which is true, and {@province_bishop} writes back that he understands and had to ask. {@bishop} files the exchange."
+      }
+    },
+    {
+      "id": "ln_loan_pastor",
+      "category": "chancery",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "title": "A Parish Nobody Can Staff",
+      "body": "{@province_bishop} has a parish in the far corner of his diocese with a school, a debt, and no pastor since Easter, and has asked the bishops of the province for a man who can hold a parish. {@bishop} has put your name forward, he says, because it is a compliment, and would like to know before he sends it whether you want the compliment: five years on loan, a pastor's chair in a place you have never heard of, and home after.",
+      "from": "@province_bishop",
+      "requires": [
+        {
+          "type": "loan",
+          "key": "available",
+          "value": true
+        },
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 4
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "loan:refused_offer",
+            "value": true
+          }
+        },
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 8
+        }
+      ],
+      "weight": 20,
+      "windowWeeks": 3,
+      "once": false,
+      "cluster": "loan",
+      "accept": {
+        "effects": [
+          {
+            "target": "loan",
+            "key": "ask",
+            "value": "pastor"
+          }
+        ],
+        "outcome": "You tell {@bishop} to send the name. He says he already has, and that if {@province_bishop} wants you the letter will come, and that five years is a long time to be a stranger."
+      },
+      "decline": {
+        "effects": [
+          {
+            "target": "relationship",
+            "key": "@province_bishop",
+            "delta": -3
+          },
+          {
+            "target": "flag",
+            "key": "loan:declined",
+            "value": true
+          }
+        ],
+        "outcome": "You tell {@bishop} you would rather hold a parish here. He says that is what he expected and is glad to hear it, and {@province_bishop} finds a religious."
       }
     }
   ]

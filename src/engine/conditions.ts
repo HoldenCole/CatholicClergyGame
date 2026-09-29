@@ -17,6 +17,7 @@ import { duePopeScene } from '@/systems/rome/pontificate';
 import { dueDiplomacyScene, nunciatureDef } from '@/systems/rome/diplomacy';
 import { nuncioView } from '@/systems/rome/nuncioView';
 import { CONFERENCE, dueConferenceScene, latestConferenceDocument, nextOffice } from '@/systems/conference';
+import { dueLoanScene, loanAvailable } from '@/systems/loan';
 
 import type { Group } from '@/types';
 import { vitalityBand } from '@/systems/groups';
@@ -246,6 +247,17 @@ export function evaluateCondition(
       if (cond.key === 'reigning') return !!state.rome?.pontificate === cond.value;
       if (cond.key === 'scene') return duePopeScene(state) === cond.value;
       return !!state.rome?.vacancy === cond.value;
+    case 'loan': {
+      const loan = state.loan;
+      if (cond.key === 'scene') return dueLoanScene(state) === cond.value;
+      if (cond.key === 'available') return loanAvailable(state) === cond.value;
+      if (cond.key === 'on') return !!loan === cond.value;
+      if (cond.key === 'ending') return (!!loan && state.clock.week >= loan.endWeek) === cond.value;
+      if (cond.key === 'wanted') return (!!loan && !!loan.wanted) === cond.value;
+      if (cond.key === 'years') return !!loan && compare(cond.op, (state.clock.week - loan.startWeek) / 52, cond.value);
+      if (cond.key === 'since') { const at = state.flags[`loan:${cond.value}`]; return typeof at === 'number' && state.clock.week - at <= cond.within; }
+      return false;
+    }
     case 'conference': {
       if (cond.key === 'scene') return dueConferenceScene(state) === cond.value;
       const c = state.conference;
