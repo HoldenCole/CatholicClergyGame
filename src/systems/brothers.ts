@@ -1,3 +1,4 @@
+import { applyEffects } from '@/engine/effects';
 import type { GameState, Npc } from '@/types';
 import type { Rng } from '@/engine/rng';
 import { relationshipWord } from './classmates';
@@ -14,6 +15,8 @@ import { FILE, revealFile } from './file';
  * people who would once have answered have not heard from him since 2009.
  */
 export const BROTHERS = {
+  /** What a classmate bishop's word is worth with the bishops beyond the diocese. E2 §2.5. Invented. */
+  bishopsBeyond: 5,
   /** What an hour a week with brother priests is worth to the man it is spent on. */
   perHour: 1.4,
   /** Where a classmate's regard settles with no history: nobody forgets the seminary entirely (REGARD.base.classmate). */
@@ -156,6 +159,8 @@ export function askBrother(state: GameState, npcId: string, favourId: string): F
     }
     case 'speak': {
       next = { ...next, flags: { ...next.flags, 'brother:bishop_spoke': state.clock.week } };
+      // A bishop of his own class saying his name: the bishops beyond the diocese hear it. E2 §2.5.
+      if (!next.religious) next = applyEffects(next, [{ target: 'reputation', key: 'bishops', delta: BROTHERS.bishopsBeyond }], {}, `${name} spoke for you`);
       line = `${name} says he will, and does, at the next meeting of the bishops, to the nuncio's secretary over the coffee, which is where these things are said. It will be remembered for a few years, and it cost him something to say it.`;
       break;
     }

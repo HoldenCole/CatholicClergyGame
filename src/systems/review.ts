@@ -28,7 +28,11 @@ function word(v: number): string {
 function moved(delta: number, dead = 4): string {
   return delta >= dead * 3 ? 'much warmer' : delta >= dead ? 'warmer' : delta <= -dead * 3 ? 'much colder' : delta <= -dead ? 'colder' : 'about the same';
 }
-const REP: Record<string, string> = { parishioners: 'The people', chancery: 'The chancery', brother_priests: 'Brother priests', public: 'The town', rome: 'Rome' };
+const REP: Record<string, string> = { parishioners: 'The people', chancery: 'The chancery', brother_priests: 'Brother priests', public: 'The town', rome: 'Rome', bishops: 'The bishops beyond' };
+/** The rows a man has: the bishops beyond only once something has written it. E2 §2.5. */
+function repRows(rep: Record<string, string>, c: { reputation: Record<string, number | undefined> }): [string, string][] {
+  return Object.entries(rep).filter(([k]) => k !== 'bishops' || c.reputation.bishops !== undefined);
+}
 /** A friar's year is read against the order's constituencies, not the diocese's. E3 §3.9. */
 const REP_RELIGIOUS: Record<string, string> = { community: 'The house', province: 'The province', superiors: 'The provincial', local_bishop: 'The bishop', laity: 'The people', diocesan_clergy: 'The diocesan clergy' };
 
@@ -59,12 +63,12 @@ export function yearInReview(state: GameState): { letter: Letter; baseline: NonN
 
   // What moved with each constituency.
   if (base) {
-    const parts = Object.entries(state.religious ? REP_RELIGIOUS : REP).map(([k, label]) => `${label}: ${word((c.reputation[k as keyof typeof c.reputation] ?? 0))}, ${moved((c.reputation[k as keyof typeof c.reputation] ?? 0) - (base.reputation[k] ?? 0))}`);
+    const parts = repRows(state.religious ? REP_RELIGIOUS : REP, c).map(([k, label]) => `${label}: ${word((c.reputation[k as keyof typeof c.reputation] ?? 0))}, ${moved((c.reputation[k as keyof typeof c.reputation] ?? 0) - (base.reputation[k] ?? 0))}`);
     body.push(parts.join('. ') + '.');
     const statMoves = (['piety', 'theology', 'knowledge', 'charisma', 'administration'] as const).map((k) => [k, c.stats[k] - (base.stats[k] ?? c.stats[k])] as const).filter(([, d]) => Math.abs(d) >= 2);
     if (statMoves.length) rows.push({ label: 'What grew or faded', value: statMoves.map(([k, d]) => `${{ piety: 'piety', theology: 'theology', knowledge: 'learning', charisma: 'presence', administration: 'order' }[k]} ${d > 0 ? 'up' : 'down'}`).join(', ') });
   } else {
-    body.push(Object.entries(REP).map(([k, label]) => `${label}: ${word((c.reputation[k as keyof typeof c.reputation] ?? 0))}`).join('. ') + '.');
+    body.push(repRows(REP, c).map(([k, label]) => `${label}: ${word((c.reputation[k as keyof typeof c.reputation] ?? 0))}`).join('. ') + '.');
   }
 
   // What the chancery noticed: the file this year.

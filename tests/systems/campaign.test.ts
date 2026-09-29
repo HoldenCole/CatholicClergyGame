@@ -7,7 +7,7 @@ import { applyEffects } from '@/engine/effects';
 import { evaluateCondition } from '@/engine/conditions';
 import { emptyReputation, standing } from '@/systems/reputation';
 import { formationWeek, setEmphasis } from '@/systems/formation';
-import { ALL_CONSTITUENCY_KEYS, CONSTITUENCY_KEYS, PILLARS, RELIGIOUS_CONSTITUENCY_KEYS, STAT_KEYS, type GameState, type ReligiousPlayerState } from '@/types';
+import { ALL_CONSTITUENCY_KEYS, PROVINCE_CONSTITUENCY_KEYS, CONSTITUENCY_KEYS, PILLARS, RELIGIOUS_CONSTITUENCY_KEYS, STAT_KEYS, type GameState, type ReligiousPlayerState } from '@/types';
 
 function friar(seed = 'friar'): GameState {
   const s = seminaryState(seed);
@@ -20,7 +20,8 @@ describe('per-campaign constituencies (E3 §3.9, §13.2)', () => {
     const s = seminaryState();
     expect(s.campaign).toBeUndefined();
     expect(campaignOf(s)).toBe('diocesan');
-    expect(constituenciesOf(s).map((c) => c.key)).toEqual([...CONSTITUENCY_KEYS]);
+    // The base seven, and E2's bishops beyond the diocese after them: a key no base save carries until something writes it.
+    expect(constituenciesOf(s).map((c) => c.key)).toEqual([...CONSTITUENCY_KEYS, ...PROVINCE_CONSTITUENCY_KEYS]);
     expect(Object.keys(emptyReputation())).toEqual([...CONSTITUENCY_KEYS]);
     expect(institutionWords(s)).toEqual({ noun: 'the diocese', superior: 'the bishop' });
   });

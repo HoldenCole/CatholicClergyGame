@@ -7,6 +7,7 @@ import { dateWords, recordEndDay, romeOn, walkRome } from './papacy';
 import { docLean, initialPolicies, isoDay, readerOf, readingLine, rollNorm } from './policy';
 import { axisDef } from '@/content/rome';
 import { readBackLine, reversalOf, undoneBy } from './reversal';
+import { applyReputation } from '../reputation';
 
 /**
  * E1 R1.1 — the documents (§4.1) and the cascade (§4.2). The record's
@@ -25,6 +26,8 @@ export const DOCUMENTS = {
   /** Weeks from the document to the parish's scene; and how long a scene waits for a man who is away. */
   cascadeAfter: [3, 10] as [number, number],
   cascadeLapse: 26,
+  /** E2 R1.4: what a conference document kept eagerly, or defied, is worth with the bishops beyond the diocese. Invented. */
+  bishopsBeyond: 3,
 } as const;
 
 /** The generated line's weeks, counted from the day the record ends. */
@@ -257,6 +260,11 @@ export function recordImplementation(state: GameState, axis: string, how: Implem
   while (i >= 0 && issued[i]!.axis !== axis) i--;
   if (i < 0) return state;
   const doc: IssuedDocument = { ...issued[i]!, implemented: how, implementedWeek: state.clock.week, ...(state.assignment ? { parishId: state.assignment.parishId } : {}) };
+  // A conference document put into effect ahead of the diocese, or not at all: the bishops who voted it hear of it. E2 §2.5.
+  if (doc.source === 'conference' && state.character && (how === 'eager' || how === 'defiant')) {
+    const c = state.character;
+    state = { ...state, character: { ...c, reputation: applyReputation(c.reputation, 'bishops', how === 'eager' ? DOCUMENTS.bishopsBeyond : -DOCUMENTS.bishopsBeyond) } };
+  }
   const words: Record<Implementation, string> = { eager: state.religious ? 'ahead of the province' : 'ahead of the diocese', faithful: 'as it was given', minimal: 'to the letter and no further', defiant: 'not at all' };
   return {
     ...state,

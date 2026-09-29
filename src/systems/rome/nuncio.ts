@@ -25,6 +25,8 @@ import { nuncioView } from './nuncioView';
 export const NUNCIO = {
   /** A vacant see of the man's own province weighs this much more in the nuncio's choice of which vacancy to work. E2 §2.2. Invented. */
   provinceWeight: 3,
+  /** E2 R1.4: the province's weight grows by the bishops beyond's regard over this. */
+  bishopsBeyondPer: 50,
   termYears: [5, 8] as [number, number],
   /** A new pope recalls the nuncio within this many days. */
   newPopeDays: [180, 420] as [number, number],
@@ -211,7 +213,7 @@ function openTerna(state: GameState, lines: string[]): GameState {
   const vacancy = vacant.length ? rng.pick(vacant) : null;
   // A see of his own province is likelier to be the one he is named to: the bishops who know him are the ones consulted. E2 §2.2.
   const provinceId = state.world?.metropolia?.id;
-  const see = vacancy ? { id: vacancy.id, name: vacancy.name, see: vacancy.see } : rng.weighted(pool, (d) => (d.great ? 1 : 4) * (provinceId && metropoliaOfSee(d.see)?.def.id === provinceId ? NUNCIO.provinceWeight : 1));
+  const see = vacancy ? { id: vacancy.id, name: vacancy.name, see: vacancy.see } : rng.weighted(pool, (d) => (d.great ? 1 : 4) * (provinceId && metropoliaOfSee(d.see)?.def.id === provinceId ? provinceTernaWeight(state) : 1));
   const cause = vacancy?.vacantWhy ?? rng.weighted(['retired', 'died', 'transferred'] as const, (c) => ({ retired: 5, died: 2, transferred: 2 })[c]);
   const sendWeek = week + rng.int(NUNCIO.sendAfter[0], NUNCIO.sendAfter[1]);
   const terna: Terna = { id: `terna:${ternas.length + 1}`, seeId: see.id, seeName: see.name, cause, openedWeek: week, sendWeek, nameWeek: sendWeek + rng.int(NUNCIO.nameAfter[0], NUNCIO.nameAfter[1]), player: false };
@@ -281,6 +283,11 @@ function auxRequest(state: GameState): GameState {
   const rng = createRng(`${state.seed}:aux:${state.clock.week}`);
   if (!rng.chance(NUNCIO.aux.perYear / 52) || nuncioView(state).value < NUNCIO.aux.view) return state;
   return schedule(state, 'aux_request', rng);
+}
+
+/** A see of his own province's weight in the nuncio's choice: the province's, and more the better the bishops beyond know him. E2 §2.2, §2.5. */
+export function provinceTernaWeight(state: GameState): number {
+  return NUNCIO.provinceWeight * (1 + Math.max(0, state.character?.reputation.bishops ?? 0) / NUNCIO.bishopsBeyondPer);
 }
 
 /** The see's city: "Gaylord". */
