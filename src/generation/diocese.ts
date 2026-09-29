@@ -12,6 +12,7 @@ import type {
 } from '@/types';
 import type { Rng } from '@/engine/rng';
 import { generateBishop, PRIORITY_LABEL, temperamentLine } from './bishop';
+import { visibleMetropolia } from './metropolia';
 import { generateChancery } from './chancery';
 import { generateParishes } from './parishes';
 import { generateHouses, linkHouses, presenceLines } from './houses';
@@ -137,6 +138,7 @@ export function generateDiocese(rng: Rng, preset: DiocesePreset, year: number): 
       institutions: preset.institutions,
       houses: linked.houses,
       complication: rng.pick(preset.complications),
+      metropolia: visibleMetropolia(preset.see, preset.region),
     },
     hidden: {
       factions: { traditional: round2(traditional), mainstream: round2(mainstream), progressive: round2(progressive), hostility },

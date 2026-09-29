@@ -1,3 +1,4 @@
+import { ensureMetropolia } from '@/systems/metropolia';
 import type { BishopProfile, GameState, Npc, SeeDef, SeeState, World } from '@/types';
 import type { Rng } from './rng';
 import { seeDef } from '@/content/sees';
@@ -139,7 +140,8 @@ export function installSeeWorld(state: GameState, rng: Rng): GameState {
   const flags: GameState['flags'] = { ...state.flags };
   for (const k of Object.keys(flags)) if (k.startsWith('diocese:')) delete flags[k];
   flags[`diocese:${presetId}`] = true;
-  const installed: GameState = { ...state, npcs, world: seeWorldNow, territory, flags, homeDioceseId: homeId, see: { ...see, dioceseId: presetId } };
+  // The see's province, rolled with it. E2 §2.1.
+  const installed: GameState = ensureMetropolia({ ...state, npcs, world: seeWorldNow, territory, flags, homeDioceseId: homeId, see: { ...see, dioceseId: presetId } });
   // The seminary as the chair finds it: men across the years. E4 R1.4.
   const withSeminary: GameState = { ...installed, see: { ...installed.see!, seminary: installed.see!.seminary ?? seedSeminary(installed, rng.derive(`seminary:${see.id}`)) } };
   // The council of priests as the chair finds it. E4 R1.5.

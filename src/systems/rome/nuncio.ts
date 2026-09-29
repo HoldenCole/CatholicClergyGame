@@ -2,7 +2,8 @@ import type { GameState, Letter, Npc, Nuncio, NuncioSceneKind, Terna, TernaCause
 import { createRng, type Rng } from '@/engine/rng';
 import { sundayOf } from '@/engine/time';
 import { fromDayNumber } from '@/engine/calendar';
-import { seeDefs } from '@/content/sees';
+import { poolSeeDef, seeDefs } from '@/content/sees';
+import { fillMetropoliaSee, metropoliaSeeById, vacantMetropoliaSees } from '@/systems/metropolia';
 import { finishNpc, rollBaseStats, addStats } from '@/generation/npc';
 import { rollMaleName } from '@/generation/names';
 import type { Heritage } from '@/content/names';
@@ -200,10 +201,13 @@ function openTerna(state: GameState, lines: string[]): GameState {
   const rng = createRng(`${state.seed}:terna:${week}`);
   if (!rng.chance(NUNCIO.vacancyPerYear / 52)) return state;
   const home = state.world?.diocese.presetId;
+  // A see of the province that fell vacant is the nuncio's first business. E2 §2.1.
+  const vacant = vacantMetropoliaSees(state).filter((v) => v.poolId && !ternas.some((t) => t.seeId === v.id && t.openedWeek >= (v.vacantSince ?? 0)));
   const pool = seeDefs.filter((d) => d.id !== home && d.id !== state.see?.id);
-  if (!pool.length) return state;
-  const see = rng.weighted(pool, (d) => (d.great ? 1 : 4));
-  const cause = rng.weighted(['retired', 'died', 'transferred'] as const, (c) => ({ retired: 5, died: 2, transferred: 2 })[c]);
+  if (!pool.length && !vacant.length) return state;
+  const vacancy = vacant.length ? rng.pick(vacant) : null;
+  const see = vacancy ? { id: vacancy.id, name: vacancy.name, see: vacancy.see } : rng.weighted(pool, (d) => (d.great ? 1 : 4));
+  const cause = vacancy?.vacantWhy ?? rng.weighted(['retired', 'died', 'transferred'] as const, (c) => ({ retired: 5, died: 2, transferred: 2 })[c]);
   const sendWeek = week + rng.int(NUNCIO.sendAfter[0], NUNCIO.sendAfter[1]);
   const terna: Terna = { id: `terna:${ternas.length + 1}`, seeId: see.id, seeName: see.name, cause, openedWeek: week, sendWeek, nameWeek: sendWeek + rng.int(NUNCIO.nameAfter[0], NUNCIO.nameAfter[1]), player: false };
   let s = state;
@@ -252,7 +256,12 @@ function nameBishops(state: GameState, lines: string[]): GameState {
     }
     const done: Terna = { ...t, winner, winnerName, done: true };
     s = { ...s, rome: { ...s.rome!, ternas: (s.rome!.ternas ?? []).map((x) => (x.id === t.id ? done : x)) } };
-    if (winner !== 'player') lines.push(`Rome names ${winner.startsWith('stranger:') ? 'Msgr.' : 'Fr.'} ${winnerName} bishop of ${seeCity(t.seeId)}.`);
+    // A see of the province: the man named takes its chair. E2 §2.1.
+    if (metropoliaSeeById(s, t.seeId)) {
+      const [first, ...rest] = winnerName.split(' ');
+      s = fillMetropoliaSee(s, t.seeId, winner === 'player' ? 'player' : winner.startsWith('stranger:') ? 'new' : winner, rng.derive('chair'), winner.startsWith('stranger:') ? { first: first ?? 'John', last: rest.join(' ') } : undefined).state;
+    }
+    if (winner !== 'player') lines.push(`Rome names ${winner.startsWith('stranger:') ? 'Msgr.' : 'Fr.'} ${winnerName} bishop of ${seeCity(t.seeId, s)}.`);
     if (t.player && winner !== 'player') s = schedule(s, 'passed', rng, t.id);
     else if (winner === t.consultedAbout) s = schedule(s, 'subject_named', rng, t.id);
     else if (!t.player && (weeksOrdained(s) ?? 0) >= 10 && rng.chance(NUNCIO.remembersChance)) s = schedule(s, 'remembers', rng, t.id);
@@ -270,8 +279,8 @@ function auxRequest(state: GameState): GameState {
 }
 
 /** The see's city: "Gaylord". */
-export function seeCity(seeId: string): string {
-  return seeDefs.find((d) => d.id === seeId)?.see ?? 'a see of the region';
+export function seeCity(seeId: string, state?: GameState): string {
+  return seeDefs.find((d) => d.id === seeId)?.see ?? (state ? metropoliaSeeById(state, seeId)?.see : undefined) ?? poolSeeDef(seeId)?.see ?? 'a see of the region';
 }
 
 /** The nuncio's scene due this week, if any. */

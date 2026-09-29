@@ -34,7 +34,7 @@ export interface GeneratedBishop {
  * year of generation; `dispositionBias` tilts alignment toward the preset's
  * culture without fixing it.
  */
-export function generateBishop(rng: Rng, preset: DiocesePreset, year: number, id = 'bishop'): GeneratedBishop {
+export function generateBishop(rng: Rng, preset: Pick<DiocesePreset, 'heritage' | 'dispositionBias'>, year: number, id = 'bishop'): GeneratedBishop {
   const age = rng.int(52, 74);
   const birthYear = year - age;
   const yearsInOffice = Math.min(age - 45, rng.int(1, 14));

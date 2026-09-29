@@ -1,3 +1,4 @@
+import { ensureMetropolia } from '@/systems/metropolia';
 import type { GameState, Npc, ReligiousPlayerState, World } from '@/types';
 import type { GeneratedProvince } from '@/generation/province';
 import { defaultHorarium } from './horarium';
@@ -43,5 +44,6 @@ export function installProvince(state: GameState, gen: GeneratedProvince, year: 
     religious,
     flags: { ...state.flags, [`diocese:${house.dioceseId}`]: true, [`order:${gen.province.order}`]: true },
   };
-  return moveToHouse(next, house.id, house.works[0] ?? 'formation');
+  // The friar's first diocese has a province of its own. E2 §2.1.
+  return ensureMetropolia(moveToHouse(next, house.id, house.works[0] ?? 'formation'));
 }

@@ -1,3 +1,4 @@
+import { metropoliaLine } from '@/systems/metropolia';
 import { useState } from 'react';
 import type { DioceseVisible } from '@/types';
 import { parishKindWord, type Placement } from '@/systems/placement';
@@ -94,6 +95,7 @@ function Card({ d, placement }: { d: DioceseVisible; placement: Placement | null
         </div>
       </div>
       <Row label="Clergy need">{NEED_LABEL[d.clergyNeed]}</Row>
+      {d.metropolia && <Row label="The province">{metropoliaLine(d.metropolia)}</Row>}
       <Row label="The bishop">
         <BishopFace d={d} />
         {d.bishop.name}, {d.bishop.age}, {d.bishop.yearsInOffice === 0 ? 'newly installed' : `${d.bishop.yearsInOffice} years in office`}. {d.bishop.temperamentLine} Says his priorities are {prioritiesLine(d.bishop.priorities)}.

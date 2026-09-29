@@ -1,3 +1,4 @@
+import { ensureMetropolia } from '@/systems/metropolia';
 import type { GameState, ReligiousAssignment, World } from '@/types';
 import { HOUSE, houseById, houseLine } from './house';
 import { defaultHorarium } from './horarium';
@@ -62,7 +63,8 @@ export function moveToHouse(state: GameState, houseId: string, work: string, opt
     const dioceseFile = { ...(r.dioceseFile ?? {}) };
     if (c0) dioceseFile[leaving] = { local_bishop: c0.reputation.local_bishop ?? 0, laity: c0.reputation.laity ?? 0, diocesan_clergy: c0.reputation.diocesan_clergy ?? 0, bishopId: next.world.diocese.hidden.bishop.npcId, leftWeek: week };
     const remembered = fileCarry({ ...next, religious: { ...r, dioceseFile } }, house.dioceseId, incoming);
-    next = { ...next, world: incoming, territory, flags, religious: { ...next.religious!, dioceseFile } };
+    // The diocese he arrives in has a province of its own. E2 §2.1.
+    next = ensureMetropolia({ ...next, world: incoming, territory, flags, religious: { ...next.religious!, dioceseFile } });
     // The standings that belong to a place: reset, unless the place remembers him.
     const c = next.character;
     if (c) {

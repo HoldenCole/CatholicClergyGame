@@ -15,7 +15,7 @@ export function peopleStop(state: GameState): string | null {
   const news = week.lines.filter((l) => NEWS.test(l));
   if (!news.length) return null;
   const names = Object.values(state.npcs)
-    .filter((n) => n.id !== 'player' && (n.role === 'family' || n.role === 'classmate' || n.role === 'bishop' || n.tags.includes('bishop_emeritus') || Math.abs(n.relationship) >= 40))
+    .filter((n) => n.id !== 'player' && (n.tags.includes('province_bishop') ? Math.abs(n.relationship) >= 40 : n.role === 'family' || n.role === 'classmate' || n.role === 'bishop' || n.tags.includes('bishop_emeritus') || Math.abs(n.relationship) >= 40))
     .map((n) => n.name.last)
     .filter((s) => s.length >= 3);
   if (!names.length) return null;

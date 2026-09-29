@@ -59,6 +59,8 @@ export function inCircle(npc: Npc, state?: Pick<GameState, 'religious' | 'orderH
     const house = state.orderHouses?.[state.religious.houseId];
     if (house?.memberIds.includes(npc.id) || npc.tags.includes('directee')) return true;
   }
+  // The bishops of the province (E2) are the Church's, not his, until something has passed between them.
+  if (npc.tags.includes('province_bishop')) return Math.abs(npc.relationship) >= 15 || (npc.marks?.length ?? 0) > 0;
   return Math.abs(npc.relationship) >= 15 || (npc.bonds?.length ?? 0) > 0 || (npc.marks?.length ?? 0) > 0 || npc.role === 'bishop' || npc.role === 'family';
 }
 
