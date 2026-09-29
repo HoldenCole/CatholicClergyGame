@@ -1,3 +1,4 @@
+import { metropolitanOf } from '@/systems/metropolia';
 import type { GameState, Npc } from '@/types';
 import { lifeSelector } from '@/systems/lives';
 import { rumourSubject } from '@/systems/talk';
@@ -74,6 +75,17 @@ export function resolveSelector(state: GameState, key: string, rng?: Rng): Npc |
     case 'religious': {
       const all = Object.values(state.npcs).filter((n) => n.status === 'active' && n.role === 'religious' && !n.tags.includes('diverged') && inDiocese(state, n)).sort((a, b) => (a.id < b.id ? -1 : 1));
       return all.length ? (rng ? rng.pick(all) : all[0]!) : null;
+    }
+    // E2 §2.2: the archbishop of the province, when the man's own see is not the metropolitan one.
+    case 'metropolitan':
+      return metropolitanOf(state) ?? null;
+    // E2 §2.2: a bishop of the province who is not his own: the archbishop where there is one over him, else a suffragan, the province having noticed.
+    case 'province_bishop': {
+      const own = state.see ? 'player' : state.world?.diocese.hidden.bishop.npcId;
+      const men = Object.values(state.npcs).filter((n) => n.status === 'active' && n.tags.includes('province_bishop') && n.id !== own).sort((a, b) => (a.id < b.id ? -1 : 1));
+      if (!men.length) return null;
+      const met = metropolitanOf(state);
+      return met && met.id !== own ? met : rng ? rng.pick(men) : men[0]!;
     }
     // E1 R1.3: the priest the nuncio has asked him about.
     case 'terna_subject': {

@@ -1,0 +1,1614 @@
+{
+ "_notes": "The metropolitan and the provincial meeting (E2 §2.2). For a priest: what the province's bishops agreed comes home as his bishop's letter (systems/metropolitan.ts) and these scenes read the policy flags (metropolia policy <id> within so many weeks), the province's rank, and a new archbishop. For a bishop (phase bishop, flag study:see): the meeting he sits in (metropolia meeting, set by the week for three weeks), the appeals between his tribunal and the metropolitan's, the pallium and the presiding when the see is the metropolitan one, and the nuncio's questions, which reach a bishop about his own priests. @metropolitan is the archbishop of the province; there is no token for the see. Numbers invented.",
+ "events": [
+  {
+   "id": "mp_mass_schedule",
+   "phase": [
+    "parochial_vicar",
+    "administrator",
+    "pastor"
+   ],
+   "severity": "NOTABLE",
+   "category": "admin",
+   "baseWeight": 30,
+   "once": true,
+   "suppressYears": 3,
+   "pressure": [
+    "competence"
+   ],
+   "requires": [
+    {
+     "type": "metropolia",
+     "key": "policy",
+     "value": "common_mass_schedule",
+     "within": 26
+    }
+   ],
+   "title": "The Province's Schedule",
+   "body": "The province's bishops have set a floor for Sunday Masses and the deanery meets in the school cafeteria to apply it: no parish with one priest keeps more than three, no two parishes within five miles the same hour. Every pastor at the table has a Mass he cannot lose and a reason. The dean has a map with pins in it and a bishop's letter that says the deanery will sort it out or he will.",
+   "choices": [
+    {
+     "id": "give",
+     "label": "Give up the Mass the map says you should, and say so first",
+     "outcome": "The eleven o'clock goes, and the people who came to it go to the next parish's or to yours at nine, and about a third of them go nowhere for a season and then come back. The dean writes the bishop that the deanery sorted it out, and names who went first. The province's schedule is kept, in your deanery, because of you.",
+     "effects": [
+      {
+       "target": "reputation",
+       "key": "chancery",
+       "delta": 4
+      },
+      {
+       "target": "reputation",
+       "key": "brother_priests",
+       "delta": 3
+      },
+      {
+       "target": "reputation",
+       "key": "parishioners",
+       "delta": -4
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "fight",
+     "label": "Fight for every Mass on your schedule",
+     "outcome": "Two hours of the cafeteria and you keep all four, because you argued and the others were tired. The next parish loses two. Its pastor does not forget the cafeteria, and the dean's letter to the bishop, which sorted it out, has a paragraph about you that the bishop reads twice.",
+     "effects": [
+      {
+       "target": "reputation",
+       "key": "parishioners",
+       "delta": 3
+      },
+      {
+       "target": "reputation",
+       "key": "brother_priests",
+       "delta": -5
+      },
+      {
+       "target": "reputation",
+       "key": "chancery",
+       "delta": -3
+      }
+     ]
+    },
+    {
+     "id": "trade",
+     "label": "Propose the trade nobody had thought of: share the priests, not the Masses",
+     "outcome": "Two parishes, two priests, five Masses between them instead of seven, and a car. The dean looks at the map for a while and says it works. It works for a year and then it works with a different priest, and the province's floor is met without a Mass lost, and the vicar for clergy hears whose idea it was.",
+     "effects": [
+      {
+       "target": "reputation",
+       "key": "chancery",
+       "delta": 3
+      },
+      {
+       "target": "reputation",
+       "key": "brother_priests",
+       "delta": 4
+      },
+      {
+       "target": "stat",
+       "key": "administration",
+       "delta": 2
+      },
+      {
+       "target": "strain",
+       "key": "",
+       "delta": 4
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "mp_common_seminary",
+   "phase": [
+    "parochial_vicar",
+    "administrator",
+    "pastor"
+   ],
+   "severity": "NOTABLE",
+   "category": "chancery",
+   "baseWeight": 24,
+   "once": true,
+   "suppressYears": 3,
+   "pressure": [
+    "ambition_vs_integrity"
+   ],
+   "requires": [
+    {
+     "type": "metropolia",
+     "key": "policy",
+     "value": "common_seminary",
+     "within": 30
+    },
+    {
+     "type": "stat",
+     "key": "theology",
+     "op": ">=",
+     "value": 45
+    }
+   ],
+   "title": "A Professor for the Province",
+   "body": "{@bishop} writes that the province's seminary, now the province's only one, wants a professor from each diocese, and that he has been asked for a name by the archbishop. He would like to send the diocese's best man and keep him too, and cannot. He asks, in the last line, whether you would go: three years at the seminary, the parish to someone else, and the men of six dioceses in your classroom.",
+   "choices": [
+    {
+     "id": "go",
+     "label": "Say you would go",
+     "outcome": "He sends your name and the archbishop takes it, and the parish has a new pastor by Advent, and you have a classroom with the province's men in it and a house full of professors who have opinions about everything. The bishops of the province learn your name in three years, one seminarian at a time, which is how bishops learn names.",
+     "effects": [
+      {
+       "target": "reputation",
+       "key": "chancery",
+       "delta": 3
+      },
+      {
+       "target": "relationship",
+       "key": "@province_bishop",
+       "delta": 6
+      },
+      {
+       "target": "relationship",
+       "key": "@bishop",
+       "delta": 3
+      },
+      {
+       "target": "flag",
+       "key": "metropolia:seminary_professor",
+       "value": true
+      },
+      {
+       "target": "stat",
+       "key": "theology",
+       "delta": 2
+      }
+     ]
+    },
+    {
+     "id": "name",
+     "label": "Say the parish needs you, and name the man who should go",
+     "outcome": "You name him, and he goes, and is good at it, and the bishop is grateful to have been told what he half knew. The parish keeps its pastor. The province's seminary has a professor from your diocese who says, when asked, who suggested him.",
+     "effects": [
+      {
+       "target": "reputation",
+       "key": "brother_priests",
+       "delta": 3
+      },
+      {
+       "target": "reputation",
+       "key": "chancery",
+       "delta": 2
+      },
+      {
+       "target": "reputation",
+       "key": "parishioners",
+       "delta": 2
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "decline",
+     "label": "Say you are not a professor, and leave it there",
+     "outcome": "He does not press. Somebody else goes. The archbishop's list has the diocese's name on it with a man beside it who is not you, which is nothing, and is in a file.",
+     "effects": [
+      {
+       "target": "reputation",
+       "key": "chancery",
+       "delta": -1
+      },
+      {
+       "target": "honesty",
+       "key": "",
+       "delta": 1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "mp_statement_immigration",
+   "phase": [
+    "parochial_vicar",
+    "administrator",
+    "pastor"
+   ],
+   "severity": "NOTABLE",
+   "category": "personal",
+   "baseWeight": 40,
+   "once": true,
+   "suppressYears": 3,
+   "pressure": [
+    "belief_vs_safety"
+   ],
+   "requires": [
+    {
+     "type": "metropolia",
+     "key": "policy",
+     "value": "common_statement_immigration",
+     "within": 8
+    }
+   ],
+   "title": "The Statement on Immigration",
+   "body": "The bishops of the province have issued a statement on the treatment of immigrants, to be read at every Mass on Sunday, and it is on the ambo in the sacristy in a folder with the bishop's note on top saying he signed it. It is four pages. It names things that happened in the province's cities. The parish has people in it on both sides of those things, and some of them are the people it is about.",
+   "choices": [
+    {
+     "id": "read",
+     "label": "Read it, all four pages, at every Mass",
+     "volume": "public",
+     "positionTopic": "immigration",
+     "positionValue": 45,
+     "outcome": "Four pages at five Masses. Two families walk out at the ten-thirty and one man stays after the five to say his mother came here without papers in 1962 and thank you. The collection the Sunday after is the largest for anything that is not the roof. The bishop hears who read and who summarised.",
+     "effects": [
+      {
+       "target": "reputation",
+       "key": "chancery",
+       "delta": 3
+      },
+      {
+       "target": "reputation",
+       "key": "parishioners",
+       "delta": -2
+      },
+      {
+       "target": "reputation",
+       "key": "public",
+       "delta": 3
+      },
+      {
+       "target": "relationship",
+       "key": "@province_bishop",
+       "delta": 3
+      }
+     ]
+    },
+    {
+     "id": "summarise",
+     "label": "Summarise it in a paragraph, and put the folder in the vestibule",
+     "volume": "semi_public",
+     "positionTopic": "immigration",
+     "positionValue": 15,
+     "outcome": "A paragraph, fair, and the folder in the vestibule where eleven people take a copy. Nobody walks out. The bishop's note said he knew which parishes would read and which would summarise, and now he knows.",
+     "effects": [
+      {
+       "target": "reputation",
+       "key": "parishioners",
+       "delta": 1
+      },
+      {
+       "target": "reputation",
+       "key": "chancery",
+       "delta": -1
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "skip",
+     "label": "Leave it in the folder; the Gospel is enough this Sunday",
+     "volume": "semi_public",
+     "positionTopic": "immigration",
+     "positionValue": -20,
+     "outcome": "It stays in the folder. The vicar for clergy telephones on Tuesday, not to ask, and the bishop's next letter to the deanery has a sentence in it about the province's statements being the diocese's. A parishioner who wanted to hear it read finds the statement online and reads it to her mother.",
+     "effects": [
+      {
+       "target": "reputation",
+       "key": "chancery",
+       "delta": -5
+      },
+      {
+       "target": "reputation",
+       "key": "parishioners",
+       "delta": 2
+      },
+      {
+       "target": "relationship",
+       "key": "@province_bishop",
+       "delta": -3
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "mp_statement_liberty",
+   "phase": [
+    "parochial_vicar",
+    "administrator",
+    "pastor"
+   ],
+   "severity": "NOTABLE",
+   "category": "personal",
+   "baseWeight": 40,
+   "once": true,
+   "suppressYears": 3,
+   "pressure": [
+    "belief_vs_safety"
+   ],
+   "requires": [
+    {
+     "type": "metropolia",
+     "key": "policy",
+     "value": "common_statement_liberty",
+     "within": 8
+    }
+   ],
+   "title": "The Statement on Religious Liberty",
+   "body": "The bishops of the province have issued a statement on religious liberty and the conscience of Catholic institutions, to be read at every Mass on Sunday and printed in the bulletin, and it is in the sacristy with the bishop's note on top saying he expects it read and not summarised. It is three pages. It names a law and a lawsuit. The parish has a nurse in it who works at the hospital the lawsuit is about, and a lawyer on the other side.",
+   "choices": [
+    {
+     "id": "read",
+     "label": "Read it, all three pages, at every Mass",
+     "volume": "public",
+     "positionTopic": "religious_liberty",
+     "positionValue": 45,
+     "outcome": "Three pages at five Masses. The lawyer leaves at the ten-thirty and writes to the bishop; the nurse stays after the five and cries, and is not sure why. The Knights print it in their newsletter. The bishop's note said read and not summarised, and the bishop hears who did.",
+     "effects": [
+      {
+       "target": "reputation",
+       "key": "chancery",
+       "delta": 3
+      },
+      {
+       "target": "reputation",
+       "key": "parishioners",
+       "delta": -2
+      },
+      {
+       "target": "reputation",
+       "key": "public",
+       "delta": 2
+      },
+      {
+       "target": "relationship",
+       "key": "@province_bishop",
+       "delta": 3
+      }
+     ]
+    },
+    {
+     "id": "summarise",
+     "label": "Summarise it, and print it whole in the bulletin",
+     "volume": "semi_public",
+     "positionTopic": "religious_liberty",
+     "positionValue": 15,
+     "outcome": "A paragraph from the ambo and the whole in the bulletin, where it is read by the ones who read bulletins. The bishop's note said read; the vicar for clergy says, on the telephone, that the bishop noticed the bulletin, in a tone that could be either thing.",
+     "effects": [
+      {
+       "target": "reputation",
+       "key": "parishioners",
+       "delta": 1
+      },
+      {
+       "target": "reputation",
+       "key": "chancery",
+       "delta": -1
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "skip",
+     "label": "Leave it in the sacristy",
+     "volume": "semi_public",
+     "positionTopic": "religious_liberty",
+     "positionValue": -20,
+     "outcome": "It stays in the sacristy. The bishop's next letter to the deanery says that the province's statements are the diocese's and are read. The Knights' newsletter prints it with a note about which parishes did.",
+     "effects": [
+      {
+       "target": "reputation",
+       "key": "chancery",
+       "delta": -5
+      },
+      {
+       "target": "reputation",
+       "key": "parishioners",
+       "delta": 1
+      },
+      {
+       "target": "relationship",
+       "key": "@province_bishop",
+       "delta": -3
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "mp_older_mass_norm",
+   "phase": [
+    "parochial_vicar",
+    "administrator",
+    "pastor"
+   ],
+   "severity": "NOTABLE",
+   "category": "admin",
+   "baseWeight": 24,
+   "once": true,
+   "suppressYears": 3,
+   "pressure": [
+    "loyalty_vs_honesty"
+   ],
+   "requires": [
+    {
+     "type": "metropolia",
+     "key": "policy",
+     "value": "older_mass_common_norm",
+     "within": 26
+    }
+   ],
+   "title": "The Province's Norm",
+   "body": "The province's bishops have agreed one norm for the older form of the Mass across six dioceses, so that a family cannot drive to the next diocese for what it cannot have at home, and the norm is stricter than your bishop's was and looser than the next bishop's. Your bishop's covering note says the norm is the province's and the exceptions are his. Two families who drove forty minutes every Sunday are at the rectory door on Monday.",
+   "choices": [
+    {
+     "id": "norm",
+     "label": "Tell them the norm, and that it is the province's and not yours",
+     "outcome": "They hear it and do not like it and thank you for saying it straight, and one family stops coming and one drives further. The bishop's exceptions go unasked for. The deanery notices that you did not ask, which it reads as loyalty or as indifference according to the deanery.",
+     "effects": [
+      {
+       "target": "reputation",
+       "key": "chancery",
+       "delta": 3
+      },
+      {
+       "target": "reputation",
+       "key": "parishioners",
+       "delta": -3
+      },
+      {
+       "target": "honesty",
+       "key": "",
+       "delta": 1
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "ask",
+     "label": "Ask the bishop for one of his exceptions, for them",
+     "outcome": "The letter goes and the answer takes two months and is yes, once, for this parish, quietly. The families stay. The next diocese's bishop hears that yours made an exception in the first year of the province's norm, and says so at the provincial meeting, and your bishop remembers who asked.",
+     "effects": [
+      {
+       "target": "reputation",
+       "key": "parishioners",
+       "delta": 4
+      },
+      {
+       "target": "reputation",
+       "key": "chancery",
+       "delta": -2
+      },
+      {
+       "target": "relationship",
+       "key": "@bishop",
+       "delta": -3
+      },
+      {
+       "target": "flag",
+       "key": "metropolia:asked_exception",
+       "value": true
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "mp_convocation",
+   "phase": [
+    "parochial_vicar",
+    "administrator",
+    "pastor"
+   ],
+   "severity": "NOTABLE",
+   "category": "personal",
+   "baseWeight": 14,
+   "suppressYears": 3,
+   "pressure": [
+    "ambition_vs_integrity"
+   ],
+   "requires": [
+    {
+     "type": "metropolia",
+     "key": "policy",
+     "value": "clergy_convocation",
+     "within": 52
+    },
+    {
+     "type": "reputation",
+     "key": "brother_priests",
+     "op": ">=",
+     "value": 15
+    }
+   ],
+   "title": "The Province's Priests, Four Days",
+   "body": "The province's clergy convocation is four days at the provincial seminary with three hundred priests from six dioceses, the bishops in the back row, and a speaker the province chose. The organising committee has asked, through your dean, whether you would give one of the afternoon sessions: forty minutes on the thing you are known for, to men who do the same work in other dioceses and will decide in forty minutes what your diocese is like.",
+   "choices": [
+    {
+     "id": "give",
+     "label": "Give the session, from what you know",
+     "outcome": "Forty minutes and a question period that runs over. Priests from four dioceses come up after with cards. {@province_bishop}, in the back row, asks your bishop at dinner who you are, which is the question a bishop wants asked about his men in front of the others. The province has a name for you now, and it is your own.",
+     "effects": [
+      {
+       "target": "relationship",
+       "key": "@province_bishop",
+       "delta": 8
+      },
+      {
+       "target": "reputation",
+       "key": "brother_priests",
+       "delta": 4
+      },
+      {
+       "target": "reputation",
+       "key": "chancery",
+       "delta": 3
+      },
+      {
+       "target": "stat",
+       "key": "charisma",
+       "delta": 1
+      },
+      {
+       "target": "strain",
+       "key": "",
+       "delta": 3
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "decline",
+     "label": "Decline; the parish cannot spare four days",
+     "outcome": "Somebody from the next diocese gives the session and is good. You go for the last day, which the bishop expects, and sit at the back. The dean says the committee will ask again in three years, in the voice of a man who is not sure it will.",
+     "effects": [
+      {
+       "target": "reputation",
+       "key": "parishioners",
+       "delta": 2
+      },
+      {
+       "target": "reputation",
+       "key": "brother_priests",
+       "delta": -1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "mp_jubilee_archbishop",
+   "phase": [
+    "parochial_vicar",
+    "administrator",
+    "pastor"
+   ],
+   "severity": "NOTABLE",
+   "category": "personal",
+   "baseWeight": 14,
+   "once": true,
+   "suppressYears": 5,
+   "pressure": [
+    "friendship_vs_duty"
+   ],
+   "requires": [
+    {
+     "type": "years_ordained",
+     "op": ">=",
+     "value": 25
+    },
+    {
+     "type": "metropolia",
+     "key": "rank",
+     "value": "suffragan"
+    }
+   ],
+   "title": "The Archbishop at the Jubilee",
+   "body": "The diocese's jubilarians are honoured at a Mass in the cathedral, and this year {@metropolitan} has come down from the metropolitan see to preside, because the archbishop does that every few years for the province and because it was your bishop's turn to ask. He preaches on fidelity for eleven minutes. At the lunch he goes down the table of silver jubilarians and asks each man one question, and yours is what you would do differently.",
+   "choices": [
+    {
+     "id": "honest",
+     "label": "Tell him the true thing, in one sentence",
+     "outcome": "He listens to the sentence and does not say anything for a moment and then says that is the first honest answer he has had at one of these lunches in a decade, and moves on. Your bishop, two seats down, heard it. The archbishop remembers the sentence; he says it, without your name, in a talk to the province's seminarians a year later.",
+     "effects": [
+      {
+       "target": "relationship",
+       "key": "@metropolitan",
+       "delta": 10
+      },
+      {
+       "target": "relationship",
+       "key": "@bishop",
+       "delta": 2
+      },
+      {
+       "target": "honesty",
+       "key": "",
+       "delta": 2
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "polite",
+     "label": "Say nothing you would not say to the paper",
+     "outcome": "A good answer, the kind the lunch is for, and he nods and moves on, and asks the next man the same question. The province's archbishop has met you and would not know you at the airport.",
+     "effects": [
+      {
+       "target": "relationship",
+       "key": "@metropolitan",
+       "delta": 2
+      },
+      {
+       "target": "reputation",
+       "key": "chancery",
+       "delta": 1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "mp_new_archbishop_priest",
+   "phase": [
+    "parochial_vicar",
+    "administrator",
+    "pastor"
+   ],
+   "severity": "ROUTINE",
+   "category": "chancery",
+   "baseWeight": 20,
+   "suppressYears": 4,
+   "pressure": [
+    "competence"
+   ],
+   "requires": [
+    {
+     "type": "metropolia",
+     "key": "metropolitan",
+     "value": "new",
+     "within": 52
+    },
+    {
+     "type": "metropolia",
+     "key": "rank",
+     "value": "suffragan"
+    }
+   ],
+   "title": "The New Archbishop's Letter",
+   "body": "The province has a new archbishop, {@metropolitan}, and his first letter to the priests of the province is in the rectory mail: two pages, warmer than the last man's, with a paragraph about the priests of the suffragan dioceses being his brothers and not his subjects, and a line at the end saying he means to visit every diocese of the province in his first year and would like to meet the priests, not the chanceries.",
+   "choices": [
+    {
+     "id": "write",
+     "label": "Write him a note of welcome, one paragraph, with something true in it",
+     "outcome": "A paragraph, and a reply in his own hand three weeks later that says he has your name now. When he comes to the diocese he asks for you at the priests' lunch, which the vicar general notices and your bishop does not mind.",
+     "effects": [
+      {
+       "target": "relationship",
+       "key": "@metropolitan",
+       "delta": 6
+      },
+      {
+       "target": "reputation",
+       "key": "chancery",
+       "delta": 1
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "file",
+     "label": "File it with the other letters from archbishops",
+     "outcome": "It goes in the drawer. He comes to the diocese in the spring and meets the priests who came to the lunch, and you were at a funeral. The province's archbishop is a name on a letterhead, which is what he was before.",
+     "effects": [
+      {
+       "target": "reputation",
+       "key": "parishioners",
+       "delta": 1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "mp_meeting_agenda",
+   "phase": "bishop",
+   "severity": "NOTABLE",
+   "category": "chancery",
+   "baseWeight": 40,
+   "suppressYears": 1,
+   "pressure": [
+    "loyalty_vs_honesty"
+   ],
+   "requires": [
+    {
+     "type": "flag",
+     "key": "study:see",
+     "value": true
+    },
+    {
+     "type": "metropolia",
+     "key": "meeting",
+     "within": 3
+    },
+    {
+     "type": "metropolia",
+     "key": "rank",
+     "value": "suffragan"
+    }
+   ],
+   "title": "The Province's Bishops at Table",
+   "body": "The bishops of the province meet for two days at the metropolitan see: seven men and {@metropolitan} at the head of a table that has heard forty years of this. The agenda has a vote on it: a common floor for Sunday Masses across the province, which the dioceses with priests do not need and the dioceses without them cannot survive without. Your diocese is one of the two that will lose Masses. The archbishop wants it unanimous.",
+   "choices": [
+    {
+     "id": "for",
+     "label": "Vote for it, and say what it will cost your diocese",
+     "volume": "semi_public",
+     "positionTopic": "provincial_policy",
+     "positionValue": 30,
+     "outcome": "Unanimous, with your paragraph in the minutes about what it costs. The archbishop thanks you by name at the dinner. Your presbyterate, when the schedule comes home, knows the bishop voted for the thing that closed the eleven o'clock, and that he said what it cost, and half of them think the second thing matters.",
+     "effects": [
+      {
+       "target": "relationship",
+       "key": "@metropolitan",
+       "delta": 6
+      },
+      {
+       "target": "see",
+       "key": "presbyterate",
+       "delta": -3
+      },
+      {
+       "target": "see",
+       "key": "rome",
+       "delta": 1
+      },
+      {
+       "target": "flag",
+       "key": "metropolia:voted_with",
+       "value": true
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "against",
+     "label": "Vote against it, alone if need be",
+     "volume": "semi_public",
+     "positionTopic": "provincial_policy",
+     "positionValue": -30,
+     "outcome": "Seven to one, and the one is in the minutes. The archbishop is courteous for the rest of the two days in the way that means something. The policy passes and applies to your diocese anyway, since a province's policy does, and your presbyterate hears that its bishop stood alone for it, which buys a season of goodwill and nothing else.",
+     "effects": [
+      {
+       "target": "relationship",
+       "key": "@metropolitan",
+       "delta": -8
+      },
+      {
+       "target": "see",
+       "key": "presbyterate",
+       "delta": 4
+      },
+      {
+       "target": "see",
+       "key": "rome",
+       "delta": -1
+      },
+      {
+       "target": "flag",
+       "key": "metropolia:voted_against",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": "amend",
+     "label": "Move an amendment: the floor, with an exception a bishop can grant",
+     "volume": "semi_public",
+     "positionTopic": "provincial_policy",
+     "positionValue": 10,
+     "outcome": "Twenty minutes of the archbishop not wanting an amendment and then having one, since two other bishops wanted the exception and had not said so. It passes with the exception. The province's schedule has a door in it with your name on the hinge, and the archbishop has learned you can count a table.",
+     "effects": [
+      {
+       "target": "relationship",
+       "key": "@metropolitan",
+       "delta": 2
+      },
+      {
+       "target": "see",
+       "key": "presbyterate",
+       "delta": 2
+      },
+      {
+       "target": "stat",
+       "key": "administration",
+       "delta": 1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "mp_meeting_statement",
+   "phase": "bishop",
+   "severity": "NOTABLE",
+   "category": "chancery",
+   "baseWeight": 30,
+   "suppressYears": 2,
+   "pressure": [
+    "belief_vs_safety"
+   ],
+   "requires": [
+    {
+     "type": "flag",
+     "key": "study:see",
+     "value": true
+    },
+    {
+     "type": "metropolia",
+     "key": "meeting",
+     "within": 3
+    },
+    {
+     "type": "metropolia",
+     "key": "rank",
+     "value": "suffragan"
+    }
+   ],
+   "title": "A Statement the Province Will Sign",
+   "body": "{@metropolitan} has a draft on the table: a joint statement of the province's bishops on immigration, four pages, to be read in every parish of six dioceses on one Sunday. It says things that are true and names a thing that happened in your diocese's largest city. He wants every signature on it before dinner. Two bishops have already said they will sign and one has gone quiet.",
+   "choices": [
+    {
+     "id": "sign",
+     "label": "Sign it",
+     "volume": "public",
+     "positionTopic": "immigration",
+     "positionValue": 45,
+     "outcome": "Your signature under the archbishop's. It is read in every parish of the diocese, or summarised, and the paper prints it with your name among the eight, and a legislator who was at the cathedral for Easter writes you a letter you keep. The province's bishops have said a thing together, which is rarer than it should be.",
+     "effects": [
+      {
+       "target": "relationship",
+       "key": "@metropolitan",
+       "delta": 6
+      },
+      {
+       "target": "see",
+       "key": "people",
+       "delta": 3
+      },
+      {
+       "target": "see",
+       "key": "rome",
+       "delta": 1
+      },
+      {
+       "target": "reputation",
+       "key": "public",
+       "delta": 3
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "decline",
+     "label": "Decline: the diocese will speak for itself",
+     "volume": "public",
+     "positionTopic": "immigration",
+     "positionValue": -25,
+     "outcome": "Seven signatures, and the paper counts to seven and names the eighth. The archbishop says nothing at dinner, which is the loudest thing he does. Your own statement, two weeks later, says less and is read by fewer, and is yours.",
+     "effects": [
+      {
+       "target": "relationship",
+       "key": "@metropolitan",
+       "delta": -10
+      },
+      {
+       "target": "see",
+       "key": "people",
+       "delta": -2
+      },
+      {
+       "target": "reputation",
+       "key": "public",
+       "delta": -3
+      }
+     ]
+    },
+    {
+     "id": "amend",
+     "label": "Sign it if the paragraph about your city is rewritten with you",
+     "volume": "public",
+     "positionTopic": "immigration",
+     "positionValue": 30,
+     "outcome": "An hour with the archbishop's secretary and a paragraph that says the same thing more exactly and names the city's mayor, who deserved it. Eight signatures before dinner. The archbishop learned that you read what you sign, and says so, to your face, which he does not with everyone.",
+     "effects": [
+      {
+       "target": "relationship",
+       "key": "@metropolitan",
+       "delta": 4
+      },
+      {
+       "target": "see",
+       "key": "people",
+       "delta": 2
+      },
+      {
+       "target": "stat",
+       "key": "knowledge",
+       "delta": 1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "mp_appeal_against_tribunal",
+   "phase": "bishop",
+   "severity": "NOTABLE",
+   "category": "admin",
+   "baseWeight": 8,
+   "suppressYears": 2,
+   "pressure": [
+    "competence"
+   ],
+   "requires": [
+    {
+     "type": "flag",
+     "key": "study:see",
+     "value": true
+    },
+    {
+     "type": "metropolia",
+     "key": "rank",
+     "value": "suffragan"
+    },
+    {
+     "type": "see",
+     "key": "years",
+     "op": ">=",
+     "value": 1
+    }
+   ],
+   "title": "Appealed to the Metropolitan",
+   "body": "A pastor you removed has appealed the decree to the metropolitan tribunal, as he may, and {@metropolitan}'s court has taken the case, as it must. The file is a hundred and forty pages of your chancery's work and eleven pages of his. The archbishop's canonist has telephoned your vicar general, courteously, to say the decree has a defect of form that a first-year student would have caught, and that the tribunal would rather not have to say so in a sentence.",
+   "choices": [
+    {
+     "id": "withdraw",
+     "label": "Withdraw the decree, fix the form, and issue it again",
+     "outcome": "The decree comes back in three weeks without the defect, and the appeal is moot, and the pastor is removed the same way twice. The metropolitan tribunal does not have to say anything. Your chancery has learned what a first-year student knows, at the cost of three weeks and the archbishop's canonist's opinion of it.",
+     "effects": [
+      {
+       "target": "see",
+       "key": "rome",
+       "delta": 1
+      },
+      {
+       "target": "see",
+       "key": "presbyterate",
+       "delta": -1
+      },
+      {
+       "target": "relationship",
+       "key": "@metropolitan",
+       "delta": 3
+      },
+      {
+       "target": "stat",
+       "key": "administration",
+       "delta": 1
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "stand",
+     "label": "Let the tribunal rule; the decree was right in substance",
+     "outcome": "The tribunal rules for the pastor on the form, in a sentence that says nothing about the substance and everything about the chancery, and the province's canonists read it, and the pastor is back in the parish for a year until it is done properly. The archbishop did not want to sign that sentence and signed it.",
+     "effects": [
+      {
+       "target": "see",
+       "key": "presbyterate",
+       "delta": -4
+      },
+      {
+       "target": "see",
+       "key": "rome",
+       "delta": -2
+      },
+      {
+       "target": "relationship",
+       "key": "@metropolitan",
+       "delta": -5
+      }
+     ]
+    },
+    {
+     "id": "call",
+     "label": "Telephone the archbishop yourself, bishop to bishop",
+     "outcome": "Ten minutes. He says the tribunal is the tribunal and he does not put his thumb on it, which is true, and that his canonist was doing you a kindness, which is also true, and that the pastor in question was a problem in his own seminary days. You withdraw the decree and reissue it, and the archbishop has had a telephone call he did not mind.",
+     "effects": [
+      {
+       "target": "relationship",
+       "key": "@metropolitan",
+       "delta": 5
+      },
+      {
+       "target": "see",
+       "key": "rome",
+       "delta": 1
+      },
+      {
+       "target": "honesty",
+       "key": "",
+       "delta": 1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "mp_new_archbishop_bishop",
+   "phase": "bishop",
+   "severity": "NOTABLE",
+   "category": "chancery",
+   "baseWeight": 30,
+   "suppressYears": 4,
+   "pressure": [
+    "friendship_vs_duty"
+   ],
+   "requires": [
+    {
+     "type": "flag",
+     "key": "study:see",
+     "value": true
+    },
+    {
+     "type": "metropolia",
+     "key": "metropolitan",
+     "value": "new",
+     "within": 52
+    },
+    {
+     "type": "metropolia",
+     "key": "rank",
+     "value": "suffragan"
+    }
+   ],
+   "title": "The New Metropolitan Calls",
+   "body": "The province has a new archbishop, {@metropolitan}, and he telephones each of his suffragans in his first month, in alphabetical order of the sees, for twenty minutes. He asks what the province has been doing right and wrong, and what you would change, and whether the last man ever visited your diocese. He is taking notes; you can hear the pen.",
+   "choices": [
+    {
+     "id": "candid",
+     "label": "Tell him what is wrong with the province, plainly",
+     "outcome": "Twenty minutes become forty. He says at the end that three of the suffragans have told him the province is fine and two have told him what you did, and that he can count. The first provincial meeting under him has your three items on the agenda, without your name, which is how he does it.",
+     "effects": [
+      {
+       "target": "relationship",
+       "key": "@metropolitan",
+       "delta": 8
+      },
+      {
+       "target": "see",
+       "key": "rome",
+       "delta": 1
+      },
+      {
+       "target": "honesty",
+       "key": "",
+       "delta": 2
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "welcome",
+     "label": "Welcome him, and keep the province's business for the meeting",
+     "outcome": "Twenty minutes of welcome and weather, which he expected, and a note in his file that says cordial. The province's business waits for the meeting, where it is raised by the bishop who told him on the telephone.",
+     "effects": [
+      {
+       "target": "relationship",
+       "key": "@metropolitan",
+       "delta": 2
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "mp_pallium",
+   "phase": "bishop",
+   "severity": "MAJOR",
+   "category": "personal",
+   "baseWeight": 60,
+   "once": true,
+   "suppressYears": 10,
+   "pressure": [
+    "ambition_vs_integrity"
+   ],
+   "requires": [
+    {
+     "type": "flag",
+     "key": "study:see",
+     "value": true
+    },
+    {
+     "type": "metropolia",
+     "key": "rank",
+     "value": "metropolitan"
+    },
+    {
+     "type": "see",
+     "key": "years",
+     "op": "<=",
+     "value": 1
+    }
+   ],
+   "title": "The Pallium",
+   "body": "The pallium, the band of lambs' wool a metropolitan wears over the chasuble, is blessed by the pope on the feast of Saints Peter and Paul and given to the new archbishops of the year, and you are one of them: a June in Rome, a row of men in white under the baldachin, the wool laid on your shoulders by the pope's own hands or by the nuncio at home in the autumn, as the custom now allows. The suffragans have been asked which they would attend. Three said Rome.",
+   "choices": [
+    {
+     "id": "rome",
+     "label": "Receive it in Rome, from the pope, with the suffragans who came",
+     "outcome": "The Mass under the dome with the archbishops of the year, and the wool laid on, and the three suffragans in the front rows and a dinner after at the college where two of them tell you what they think of the province. The pope says one sentence to you at the sacristy door, which you write down that night. The province has an archbishop it has seen in Rome.",
+     "effects": [
+      {
+       "target": "see",
+       "key": "rome",
+       "delta": 4
+      },
+      {
+       "target": "reputation",
+       "key": "rome",
+       "delta": 3
+      },
+      {
+       "target": "see",
+       "key": "presbyterate",
+       "delta": 1
+      },
+      {
+       "target": "strain",
+       "key": "",
+       "delta": 4
+      },
+      {
+       "target": "flag",
+       "key": "metropolia:pallium",
+       "value": true
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "home",
+     "label": "Receive it at home, from the nuncio, in the cathedral, with the province present",
+     "outcome": "The nuncio comes in October and lays the wool on in your own cathedral with all the suffragans in choir and the province's priests in the nave, which none of them would have seen in Rome. The pope's sentence is not said. The province has an archbishop it has seen at home, which some of the suffragans count higher.",
+     "effects": [
+      {
+       "target": "see",
+       "key": "people",
+       "delta": 4
+      },
+      {
+       "target": "see",
+       "key": "presbyterate",
+       "delta": 3
+      },
+      {
+       "target": "see",
+       "key": "rome",
+       "delta": 1
+      },
+      {
+       "target": "flag",
+       "key": "metropolia:pallium",
+       "value": true
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "mp_presiding",
+   "phase": "bishop",
+   "severity": "NOTABLE",
+   "category": "chancery",
+   "baseWeight": 40,
+   "suppressYears": 1,
+   "pressure": [
+    "loyalty_vs_honesty"
+   ],
+   "requires": [
+    {
+     "type": "flag",
+     "key": "study:see",
+     "value": true
+    },
+    {
+     "type": "metropolia",
+     "key": "meeting",
+     "within": 3
+    },
+    {
+     "type": "metropolia",
+     "key": "rank",
+     "value": "metropolitan"
+    }
+   ],
+   "title": "The Head of the Table",
+   "body": "The bishops of the province meet at your see, and you preside: the agenda is yours, the chair is yours, the dinner is yours, and the seven men at the table are your suffragans in law and your brothers in fact, which is the whole difficulty of the office. One of them has come with a paper against the common seminary and the votes of two others in his pocket. The archbishop has a casting voice and a reputation to spend.",
+   "choices": [
+    {
+     "id": "vote",
+     "label": "Put it to a vote and abide by the count",
+     "outcome": "Four to three for the seminary, with your voice the fourth. The paper's author says at dinner that the province was governed today, in a tone that could be read two ways, and the province has a common seminary by a vote and not by an archbishop. The suffragans have learned what your table is: a table.",
+     "effects": [
+      {
+       "target": "see",
+       "key": "rome",
+       "delta": 1
+      },
+      {
+       "target": "see",
+       "key": "presbyterate",
+       "delta": 2
+      },
+      {
+       "target": "stat",
+       "key": "administration",
+       "delta": 1
+      },
+      {
+       "target": "flag",
+       "key": "metropolia:presided_by_vote",
+       "value": true
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "defer",
+     "label": "Defer the vote a year, and visit the three who are against it first",
+     "outcome": "No vote, and a year of driving to three dioceses to sit at three tables and hear the paper's author say in his own house what he would not say at yours. The vote the next year is seven to nothing. The province has learned what kind of archbishop it has, which is a slow one, and the seminary has a year it did not want to wait.",
+     "effects": [
+      {
+       "target": "see",
+       "key": "presbyterate",
+       "delta": 3
+      },
+      {
+       "target": "see",
+       "key": "rome",
+       "delta": -1
+      },
+      {
+       "target": "strain",
+       "key": "",
+       "delta": 4
+      }
+     ]
+    },
+    {
+     "id": "rule",
+     "label": "Rule from the chair: the seminary stands, the paper is noted",
+     "outcome": "The paper is noted and the seminary stands and the meeting is over by four. The author writes to the nuncio, who does nothing, and tells the other suffragans he wrote, who now know two things about you. The province is governed. It is not sure it likes the verb.",
+     "effects": [
+      {
+       "target": "see",
+       "key": "rome",
+       "delta": 2
+      },
+      {
+       "target": "see",
+       "key": "presbyterate",
+       "delta": -3
+      },
+      {
+       "target": "reputation",
+       "key": "chancery",
+       "delta": 2
+      },
+      {
+       "target": "flag",
+       "key": "metropolia:ruled_from_chair",
+       "value": true
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "mp_appeal_from_suffragan",
+   "phase": "bishop",
+   "severity": "NOTABLE",
+   "category": "admin",
+   "baseWeight": 8,
+   "suppressYears": 2,
+   "pressure": [
+    "friendship_vs_duty"
+   ],
+   "requires": [
+    {
+     "type": "flag",
+     "key": "study:see",
+     "value": true
+    },
+    {
+     "type": "metropolia",
+     "key": "rank",
+     "value": "metropolitan"
+    },
+    {
+     "type": "see",
+     "key": "years",
+     "op": ">=",
+     "value": 1
+    }
+   ],
+   "title": "An Appeal from a Brother Bishop's Court",
+   "body": "A parish closed by one of your suffragans has appealed the decree to your tribunal, as it may, with a lawyer the parish council hired and a petition signed by nine hundred people. The file says the suffragan did it properly. The petition says he did not consult anyone, which is a different thing, and also true. The suffragan telephoned last night to say he assumes the province will back him, and did not quite ask.",
+   "choices": [
+    {
+     "id": "uphold",
+     "label": "Let the tribunal uphold the decree, since the law was kept",
+     "outcome": "The tribunal upholds it in a sentence that says the law was kept and says nothing about the consulting, which the sentence is not for. The parish's lawyer goes to Rome and loses there too, a year on. The suffragan is grateful in the way of a man who assumed. The nine hundred are the province's now, in the way that a grievance is.",
+     "effects": [
+      {
+       "target": "see",
+       "key": "rome",
+       "delta": 2
+      },
+      {
+       "target": "see",
+       "key": "people",
+       "delta": -2
+      },
+      {
+       "target": "see",
+       "key": "presbyterate",
+       "delta": 1
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "remand",
+     "label": "Send it back to him: consult, then close, and the province will uphold that",
+     "outcome": "The tribunal remands it on a point of procedure that is real and that a kinder canonist would have missed. The suffragan consults, furious, for six months, and closes the parish, and the nine hundred have been heard and lost, which is different from not being heard. He does not telephone again for a year. Rome, which read the file, thinks the province has a tribunal.",
+     "effects": [
+      {
+       "target": "see",
+       "key": "people",
+       "delta": 3
+      },
+      {
+       "target": "see",
+       "key": "rome",
+       "delta": 3
+      },
+      {
+       "target": "see",
+       "key": "presbyterate",
+       "delta": -2
+      },
+      {
+       "target": "flag",
+       "key": "metropolia:remanded",
+       "value": true
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "mp_suffragan_wont_cooperate",
+   "phase": "bishop",
+   "severity": "NOTABLE",
+   "category": "chancery",
+   "baseWeight": 6,
+   "suppressYears": 3,
+   "pressure": [
+    "loyalty_vs_honesty"
+   ],
+   "requires": [
+    {
+     "type": "flag",
+     "key": "study:see",
+     "value": true
+    },
+    {
+     "type": "metropolia",
+     "key": "rank",
+     "value": "metropolitan"
+    },
+    {
+     "type": "see",
+     "key": "years",
+     "op": ">=",
+     "value": 2
+    }
+   ],
+   "title": "The Suffragan Who Will Not",
+   "body": "One of the province's bishops has stopped coming to the provincial meetings, sends his vicar general with regrets, has not sent his men to the province's seminary in two years, and has told his priests, one of whom told yours, that the province is a fiction of the directory. The law gives a metropolitan almost nothing to do about a suffragan: a visitation with Rome's leave, a report to the nuncio, and patience. He is sixty-eight.",
+   "choices": [
+    {
+     "id": "visit",
+     "label": "Drive to him, unannounced, and stay for supper",
+     "outcome": "Four hours in a car and a supper at which he says nothing for an hour and then says what it is: the last archbishop humiliated him at a meeting in front of his own priests and he decided the province could do without him. You say the last archbishop is dead. He comes to the next meeting and sits at the far end and says nothing, which is more than he did.",
+     "effects": [
+      {
+       "target": "see",
+       "key": "presbyterate",
+       "delta": 1
+      },
+      {
+       "target": "see",
+       "key": "rome",
+       "delta": 1
+      },
+      {
+       "target": "stat",
+       "key": "charisma",
+       "delta": 1
+      },
+      {
+       "target": "strain",
+       "key": "",
+       "delta": 3
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "nuncio",
+     "label": "Write to the nuncio, since the law gives you nothing else",
+     "outcome": "The nuncio's reply is courteous and says he will look into it, and he does, over eighteen months, and the suffragan's letter of resignation at seventy-five is accepted the week it arrives, which is the nuncio's way of looking into things. The province's other bishops know who wrote, and are divided on whether they would have.",
+     "effects": [
+      {
+       "target": "see",
+       "key": "rome",
+       "delta": 2
+      },
+      {
+       "target": "see",
+       "key": "presbyterate",
+       "delta": -2
+      },
+      {
+       "target": "flag",
+       "key": "metropolia:wrote_nuncio",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": "wait",
+     "label": "Wait; he is sixty-eight and the province is older than he is",
+     "outcome": "Seven years. He does not come, and the province meets without him, and the seminary forms the men of six dioceses and not seven, and at seventy-five he goes, and his successor comes to the first meeting and apologises for a thing that was not his. The province has learned that its archbishop can wait, which is a virtue that looks like the other thing.",
+     "effects": [
+      {
+       "target": "see",
+       "key": "presbyterate",
+       "delta": 1
+      },
+      {
+       "target": "stat",
+       "key": "piety",
+       "delta": 1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "mp_consulted_as_bishop",
+   "phase": "bishop",
+   "beat": "nuncio",
+   "severity": "NOTABLE",
+   "category": "chancery",
+   "baseWeight": 30,
+   "suppressYears": 1,
+   "pressure": [
+    "loyalty_vs_honesty"
+   ],
+   "requires": [
+    {
+     "type": "flag",
+     "key": "study:see",
+     "value": true
+    },
+    {
+     "type": "nuncio",
+     "key": "scene",
+     "value": "consulted"
+    }
+   ],
+   "title": "The Nuncio Asks About One of Your Own",
+   "body": "The nunciature's envelope is thicker for a bishop: twenty-seven questions about {@terna_subject.full}, one of your own priests, whom a vacant see of the province has put on a list. The nuncio's covering letter says a bishop's word about his own man weighs most and is trusted least, and asks for it anyway. If he is named you lose a priest you cannot spare. If he is not, he will never know you were asked.",
+   "choices": [
+    {
+     "id": "honest",
+     "label": "Answer every question as truly as you can, for him and against him",
+     "outcome": "Twenty-seven true answers, three of them against him, mailed on Friday. The nuncio's secretary telephones a month later to say the nuncio said it was the most useful questionnaire he had had from a bishop in the province, which is what he says, and this time means. Whether the man is named is Rome's; whether you told the truth about him is yours.",
+     "effects": [
+      {
+       "target": "see",
+       "key": "rome",
+       "delta": 3
+      },
+      {
+       "target": "flag",
+       "key": "nuncio:trusted",
+       "value": true
+      },
+      {
+       "target": "honesty",
+       "key": "",
+       "delta": 3
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "keep",
+     "label": "Answer so that he is not named; the diocese cannot spare him",
+     "outcome": "Twenty-seven careful answers that are none of them false and add up to a man who should stay where he is. He stays where he is. The nuncio, who has read a thousand of these, reads this one twice and writes something in a margin. Your diocese keeps its priest and its bishop keeps a page in a file in Washington.",
+     "effects": [
+      {
+       "target": "see",
+       "key": "presbyterate",
+       "delta": 2
+      },
+      {
+       "target": "see",
+       "key": "rome",
+       "delta": -3
+      },
+      {
+       "target": "relationship",
+       "key": "@terna_subject",
+       "delta": 0
+      },
+      {
+       "target": "honesty",
+       "key": "",
+       "delta": -3
+      },
+      {
+       "target": "flag",
+       "key": "nuncio:kept_a_man",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": "push",
+     "label": "Answer so that he is named; he should be a bishop and you can spare him",
+     "outcome": "Twenty-seven answers that make the case, and a covering letter that says so in your own hand, which the nuncio can weigh as he likes. He is named or he is not. If he is, the province has a bishop who knows whose letter it was, and your presbyterate knows too, and counts the loss and the honour and is not sure which was larger.",
+     "effects": [
+      {
+       "target": "see",
+       "key": "rome",
+       "delta": 1
+      },
+      {
+       "target": "see",
+       "key": "presbyterate",
+       "delta": -2
+      },
+      {
+       "target": "relationship",
+       "key": "@terna_subject",
+       "delta": 8
+      },
+      {
+       "target": "flag",
+       "key": "nuncio:pushed_a_man",
+       "value": true
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

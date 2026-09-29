@@ -1,3 +1,4 @@
+import { provinceWord } from '@/systems/metropolitan';
 import type { GameState, Implementation } from '@/types';
 
 /**
@@ -114,6 +115,11 @@ export function nuncioView(state: GameState): NuncioView {
   v += rel / VIEW.bishopPer;
   if (rel >= 30) good.push(r ? "your provincial's letter" : "your bishop's letter");
   else if (rel <= -20) bad.push(r ? "your provincial's letter, which was cool" : "your bishop's letter, which was cool");
+  // The province's word: the archbishop's regard and the suffragans'. E2 §2.2.
+  const province = provinceWord(state);
+  v += province.value;
+  good.push(...province.good);
+  bad.push(...province.bad);
   if (f['nuncio:trusted']) { v += VIEW.trusted; good.push('an honest answer you once gave him about another man'); }
   if (f['nuncio:broke_secret']) { v += VIEW.brokeSecret; bad.push('a secret you did not keep'); }
   return { value: Math.round(clamp(v, 0, 100)), good, bad };

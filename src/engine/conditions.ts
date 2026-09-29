@@ -245,6 +245,19 @@ export function evaluateCondition(
       if (cond.key === 'reigning') return !!state.rome?.pontificate === cond.value;
       if (cond.key === 'scene') return duePopeScene(state) === cond.value;
       return !!state.rome?.vacancy === cond.value;
+    case 'metropolia': {
+      const m = state.world?.metropolia;
+      if (!m) return false;
+      const week = state.clock.week;
+      if (cond.key === 'rank') return m.rank === cond.value;
+      if (cond.key === 'policy') { const at = m.policies?.find((p) => p.id === cond.value)?.week; return at !== undefined && (cond.within === undefined || week - at <= cond.within); }
+      if (cond.key === 'meeting') { const at = state.flags['metropolia:meeting']; return typeof at === 'number' && week - at <= (cond.within ?? 3); }
+      const see = m.sees.find((s) => s.rank === 'metropolitan');
+      if (!see) return false;
+      if (cond.value === 'vacant') return !see.bishopId;
+      const installed = see.installedYear !== undefined ? see.installedYear : undefined;
+      return !!see.bishopId && installed !== undefined && (dateOf(state.clock).year - installed) * 52 <= (cond.within ?? 52);
+    }
     case 'nuncio':
       if (cond.key === 'scene') return dueNuncioScene(state) === cond.value;
       return compare(cond.op, nuncioView(state).value, cond.value);

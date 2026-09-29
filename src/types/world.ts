@@ -143,6 +143,9 @@ export interface Metropolia {
   /** The home diocese's rank in it. */
   rank: 'metropolitan' | 'suffragan';
   sees: MetropoliaSee[];
+  /** The province's bishops' last meeting, and the common policies they adopted. E2 §2.2. */
+  lastMeetingWeek?: number;
+  policies?: { id: string; week: number }[];
 }
 
 /**

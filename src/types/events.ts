@@ -179,6 +179,11 @@ export type Condition =
   /** E1 R1.7: the diplomatic service: its scene due now (mission, rotation, terna, seventy_five), his rank, or his post's hardship (1..3) against a value. */
   | { type: 'diplomacy'; key: 'scene' | 'rank'; value: string }
   | { type: 'diplomacy'; key: 'hardship'; op: Op; value: number }
+  /** E2 §2.2: the man's diocese's rank in its province; a common policy the province adopted (within so many weeks); the province's meeting this month; the metropolitan see vacant or newly filled. */
+  | { type: 'metropolia'; key: 'rank'; value: 'metropolitan' | 'suffragan' }
+  | { type: 'metropolia'; key: 'policy'; value: string; within?: number }
+  | { type: 'metropolia'; key: 'meeting'; within?: number }
+  | { type: 'metropolia'; key: 'metropolitan'; value: 'vacant' | 'new'; within?: number }
   | { type: 'nuncio'; key: 'scene'; value: string }
   | { type: 'nuncio'; key: 'view'; op: Op; value: number }
   /** E3 §16D: Rome's visitation of the province: its scene due now, its stage, its cause, or (after the decree) its outcome. */
