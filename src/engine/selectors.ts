@@ -104,6 +104,14 @@ export function resolveSelector(state: GameState, key: string, rng?: Rng): Npc |
       const men = (house?.memberIds ?? []).map((id) => state.npcs[id]).filter((n): n is Npc => !!n && n.status === 'active' && n.id !== house?.priorId).sort((a, b) => (a.id < b.id ? -1 : 1));
       return men.length ? (rng ? rng.pick(men) : men[0]!) : null;
     }
+    // A man he formed: one of his novices or students, the ones in his house first. Friar round D8.
+    case 'formed_man': {
+      const here = state.religious?.houseId;
+      const men = Object.values(state.npcs).filter((n) => n.status === 'active' && n.tags.includes('formed_by:player')).sort((a, b) => (a.id < b.id ? -1 : 1));
+      const near = men.filter((n) => here && n.tags.includes(`house:${here}`));
+      const pool = near.length ? near : men;
+      return pool.length ? (rng ? rng.pick(pool) : pool[0]!) : null;
+    }
     case 'old_friar': {
       const house = state.religious?.houseId ? state.orderHouses?.[state.religious.houseId] : undefined;
       const men = (house?.memberIds ?? []).map((id) => state.npcs[id]).filter((n): n is Npc => !!n && n.status === 'active').sort((a, b) => a.birthYear - b.birthYear || (a.id < b.id ? -1 : 1));

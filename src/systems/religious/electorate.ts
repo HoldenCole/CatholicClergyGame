@@ -1,6 +1,7 @@
 import type { GameState, Npc, OrderHouse, ChapterLevel, ChapterOffice, StatKey } from '@/types';
 import { createRng } from '@/engine/rng';
 import { religiousOrder } from '@/content/religious';
+import { FORMED } from './formedMen';
 import { dateOf } from '@/engine/time';
 import { membersOf } from './house';
 import { legibilityFromReputations } from './reputations';
@@ -147,7 +148,8 @@ export function orderLegibility(state: GameState): number {
 export function electorsOf(state: GameState, level: ChapterLevel, bodyId: string): Voter[] {
   const houses = Object.values(state.orderHouses ?? {}).filter((h) => h.provinceId === state.religious?.provinceId);
   const out: Voter[] = [];
-  const add = (n: Npc, houseId: string) => out.push({ id: n.id, npc: n, isPlayer: false, alignment: n.alignment, relationshipWithPlayer: n.relationship, houseId });
+  // A man he formed votes warmer than his regard alone says. Friar round D8.
+  const add = (n: Npc, houseId: string) => out.push({ id: n.id, npc: n, isPlayer: false, alignment: n.alignment, relationshipWithPlayer: Math.min(100, n.relationship + (n.tags.includes(FORMED.tag) ? FORMED.voteWarmth : 0)), houseId });
   if (level === 'general') {
     // The general chapter: the capitulars of the provinces present; the player as provincial, or as his province's delegate.
     for (const n of Object.values(state.npcs)) if (n.status === 'active' && n.tags.includes(CAPITULAR_TAG)) out.push({ id: n.id, npc: n, isPlayer: false, alignment: n.alignment, relationshipWithPlayer: n.relationship });
