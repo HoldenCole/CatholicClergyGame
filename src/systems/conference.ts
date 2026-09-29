@@ -198,7 +198,7 @@ export function playerStanding(state: GameState): number {
   const c = state.character!;
   const years = state.see ? (state.clock.week - state.see.installedWeek) / 52 : 0;
   const past = state.conference?.past?.length ?? 0;
-  return (c.reputation.rome ?? 0) / 10 + Math.min(10, years) + past * 3 + (state.see?.rome ?? 0) / 20 + provinceWord(state).value;
+  return (c.reputation.rome ?? 0) / 10 + Math.min(10, years) + past * 3 + (state.see?.rome ?? 0) / 20 + provinceWord(state).value + (c.reputation.bishops ?? 0) / 10;
 }
 
 interface Rival { id: string; name: string; alignment: number; standing: number }

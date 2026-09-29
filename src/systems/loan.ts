@@ -11,7 +11,7 @@ import { metropoliaSees, metropoliaSeeById, metropolitanOf } from './metropolia'
 import { temperamentLine } from '@/generation/bishop';
 import { finishNpc, rollBaseStats } from '@/generation/npc';
 import { CLERGY_HERITAGE, eraForBirthYear, rollHeritage, rollMaleName } from '@/generation/names';
-import { clampSigned } from './reputation';
+import { applyReputation, clampSigned } from './reputation';
 
 /**
  * E2 R1.3 — loans across diocesan lines (§2.4). A bishop of the province
@@ -41,6 +41,8 @@ export const LOAN = {
   excardination: { base: 0.45, criticallyShort: -0.25, stretched: -0.1, coolBishop: 0.2, warmBishop: -0.15, floor: 0.1, ceiling: 0.9 },
   /** A bishop's ask from the desk: a brother bishop lends by his regard; the man stays three years. */
   bishop: { base: 0.45, perRegard: 150, years: 3 },
+  /** E2 R1.4: what a loan is worth with the bishops beyond the diocese: being asked for, coming home (well, or plainly), staying. */
+  bishopsBeyond: { lent: 4, home: 2, wentWell: 6, stayed: 3 },
 } as const;
 
 export const LOAN_KIND_LABEL: Record<LoanKind, string> = { spanish: 'a Spanish-speaking priest', canonist: 'a canonist for the tribunal', pastor: 'a pastor' };
@@ -206,7 +208,7 @@ export function moveToDiocese(state: GameState, seeId: string, kind: LoanKind, y
     flags,
     loan,
     homeDioceseId: state.homeDioceseId ?? homeId,
-    character: { ...ch, reputation: { ...ch.reputation, chancery: LOAN.arrivalChancery, brother_priests: 0 } },
+    character: { ...ch, reputation: applyReputation({ ...ch.reputation, chancery: LOAN.arrivalChancery, brother_priests: 0 }, 'bishops', LOAN.bishopsBeyond.lent) },
     career: [...next.career, { week, kind: 'assignment', text: `Lent to ${see.name} for ${years} years, as ${LOAN_KIND_LABEL[kind]}.` }],
   };
   const placed = parishFor(next, world, kind, rng.derive('parish'));
@@ -245,13 +247,14 @@ export function returnHome(state: GameState, rng: Rng): { state: GameState; lett
   const world: World = { ...home, ...(metropolia ? { metropolia } : {}) };
   const carry = homeCarry(next, loan, home);
   const ch = next.character!;
+  const borrowedBishop = next.npcs[borrowed.diocese.hidden.bishop.npcId];
   const done: LoanState = { ...loan, decided: 'home' };
   next = {
     ...next,
     world,
     territory,
     flags,
-    character: { ...ch, reputation: { ...ch.reputation, chancery: carry.chancery, brother_priests: carry.brother_priests } },
+    character: { ...ch, reputation: applyReputation({ ...ch.reputation, chancery: carry.chancery, brother_priests: carry.brother_priests }, 'bishops', borrowedBishop && borrowedBishop.relationship >= 20 ? LOAN.bishopsBeyond.wentWell : borrowedBishop && borrowedBishop.relationship <= -20 ? -LOAN.bishopsBeyond.wentWell : LOAN.bishopsBeyond.home) },
     loanHistory: [...(next.loanHistory ?? []), done],
     career: [...next.career, { week, kind: 'note', text: `Home from ${borrowed.diocese.visible.name} after ${Math.max(1, Math.round(carry.years))} year${Math.round(carry.years) === 1 ? '' : 's'}: ${carry.sameBishop ? 'the same bishop, who remembers you' : 'a new bishop, who has read your file'} ${carry.chancery >= 15 ? 'warmly' : carry.chancery <= -15 ? 'and not kindly' : 'a little'}.` }],
   };
@@ -277,7 +280,8 @@ export function incardinate(state: GameState): GameState {
   const done: LoanState = { ...loan, decided: 'stayed' };
   const flags = { ...state.flags, [`incardinated:${loan.dioceseId}`]: week, 'loan:stayed': week };
   for (const k of Object.keys(flags)) if (k === 'loan:on') delete flags[k];
-  const next: GameState = { ...state, npcs, flags, homeDioceseId: loan.dioceseId, loanHistory: [...(state.loanHistory ?? []), done], career: [...state.career, { week, kind: 'note', text: `Incardinated into ${state.world!.diocese.visible.name}; ${home?.diocese.visible.name ?? 'home'} let you go, and wrote it down.` }] };
+  const ch = state.character!;
+  const next: GameState = { ...state, npcs, flags, character: { ...ch, reputation: applyReputation(ch.reputation, 'bishops', LOAN.bishopsBeyond.stayed) }, homeDioceseId: loan.dioceseId, loanHistory: [...(state.loanHistory ?? []), done], career: [...state.career, { week, kind: 'note', text: `Incardinated into ${state.world!.diocese.visible.name}; ${home?.diocese.visible.name ?? 'home'} let you go, and wrote it down.` }] };
   delete (next as { loan?: LoanState }).loan;
   return next;
 }

@@ -227,6 +227,8 @@ export function applyChoice(
         week: state.clock.week,
       }, positionWeight(next, choice.positionTopic)),
     };
+    // On the record, the bishops beyond the diocese hear of it: a name kept by saying things. E2 §2.5.
+    if (choice.volume === 'public' && !next.religious) next = applyEffects(next, [{ target: 'reputation', key: 'bishops', delta: 1 }], {}, 'a stand on the record');
     // Said aloud, it is in the file; the chancellor keeps the clippings.
     if (choice.volume !== 'private') next = writeFile(next, { by: 'chancellor', byLabel: 'the chancellor', kind: 'position', text: `${choice.volume === 'public' ? 'On the record' : 'Said aloud'}, on ${choice.positionTopic.replace(/_/g, ' ')}: ${choice.label}`, weight: choice.volume === 'public' ? 2 : 1, lean: choice.positionValue > 0 ? 1 : choice.positionValue < 0 ? -1 : 0, seen: true });
   }

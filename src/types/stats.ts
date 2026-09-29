@@ -37,7 +37,10 @@ export type ReligiousConstituencyKey =
   /** The presbyterate of the diocese he is posted in now: the deanery, the pastors who ask for him. E3 §3.12. */
   | 'diocesan_clergy';
 
-export type ConstituencyKey = DiocesanConstituencyKey | ReligiousConstituencyKey;
+/** E2 R1.4: the bishops beyond the diocese, the province's and the conference's, as `chancery` is his own. Present only once something has written it. */
+export type ProvinceConstituencyKey = 'bishops';
+
+export type ConstituencyKey = DiocesanConstituencyKey | ReligiousConstituencyKey | ProvinceConstituencyKey;
 
 /** The diocesan campaign's constituencies, the base game's set, in the order the sheets show them. */
 export const CONSTITUENCY_KEYS: readonly DiocesanConstituencyKey[] = [
@@ -61,14 +64,16 @@ export const RELIGIOUS_CONSTITUENCY_KEYS: readonly ReligiousConstituencyKey[] = 
   'diocesan_clergy',
 ] as const;
 
-export const ALL_CONSTITUENCY_KEYS: readonly ConstituencyKey[] = [...CONSTITUENCY_KEYS, ...RELIGIOUS_CONSTITUENCY_KEYS] as const;
+export const PROVINCE_CONSTITUENCY_KEYS: readonly ProvinceConstituencyKey[] = ['bishops'] as const;
+
+export const ALL_CONSTITUENCY_KEYS: readonly ConstituencyKey[] = [...CONSTITUENCY_KEYS, ...RELIGIOUS_CONSTITUENCY_KEYS, ...PROVINCE_CONSTITUENCY_KEYS] as const;
 
 /**
  * The base keys are always present; the religious keys exist only once
  * something has written them, so a diocesan save is byte-for-byte what it was.
  * Read a key through `standing()` in systems/reputation.ts rather than by index.
  */
-export type Reputation = Record<DiocesanConstituencyKey, number> & Partial<Record<ReligiousConstituencyKey, number>>;
+export type Reputation = Record<DiocesanConstituencyKey, number> & Partial<Record<ReligiousConstituencyKey, number>> & Partial<Record<ProvinceConstituencyKey, number>>;
 
 /** How loudly a position was taken. See DESIGN.md §5.2. */
 export type Volume = 'private' | 'semi_public' | 'public';

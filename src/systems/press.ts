@@ -7,6 +7,8 @@ import { recordPosition } from './reputation';
 
 /** A column in the diocesan paper: a topic, a stance, and a public position that draws replies. Requested in playtesting; numbers invented. */
 export const PRESS = {
+  /** What a column is worth with the bishops beyond the diocese. E2 §2.5. Invented. */
+  bishopsBeyond: 2,
   /** Weeks between columns: the editor has other priests. */
   everyWeeks: 13,
   /** The block of the week the writing takes. */
@@ -75,6 +77,8 @@ export function writeColumn(state: GameState, topicId: string, stanceId: string)
   const why = `a column on ${topic.label.toLowerCase()}`;
   let next = applyEffects(state, stance.effects, {}, why);
   next = { ...next, character: recordPosition(next.character!, { topic: topic.id, value: stance.value, volume: 'public', week: state.clock.week }) };
+  // The column travels: the bishops of the province read the diocesan papers. E2 §2.5.
+  if (!next.religious) next = applyEffects(next, [{ target: 'reputation', key: 'bishops', delta: PRESS.bishopsBeyond }], {}, why);
   const bishop = next.world ? next.npcs[next.world.diocese.hidden.bishop.npcId] : undefined;
   const crossed = !!bishop && Math.abs(stance.value - bishop.alignment) >= PRESS.crossBishopGap && Math.abs(stance.value) >= 40;
   if (crossed) next = applyEffects(next, [{ target: 'reputation', key: 'chancery', delta: PRESS.crossChancery }, { target: 'relationship', key: '@bishop', delta: PRESS.crossBishop }], {}, `${why}, on the far side of the bishop`);

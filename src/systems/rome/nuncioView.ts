@@ -12,6 +12,8 @@ import type { GameState, Implementation } from '@/types';
 export const VIEW = {
   base: 24,
   rome: 20,
+  /** E2 R1.4: the bishops beyond the diocese, at full scale. */
+  bishopsBeyond: 8,
   /** The man himself: a bishop governs, speaks, and teaches. Up to fifteen points between them. */
   stats: { administration: 6, charisma: 5, theology: 4 } as const,
   chancery: 8,
@@ -121,6 +123,11 @@ export function nuncioView(state: GameState): NuncioView {
   v += province.value;
   good.push(...province.good);
   bad.push(...province.bad);
+  // The bishops beyond the diocese: the name he has kept outside it. E2 §2.5.
+  const beyond = c.reputation.bishops ?? 0;
+  v += (beyond / 100) * VIEW.bishopsBeyond;
+  if (beyond >= 25) good.push('the bishops of the region know your name');
+  else if (beyond <= -20) bad.push('the bishops of the region know your name, and not for the right reasons');
   // The conference's word: a man far from its temper, or a man with a seat at it. E2 §2.3.
   const conference = conferenceWord(state);
   v += conference.value;

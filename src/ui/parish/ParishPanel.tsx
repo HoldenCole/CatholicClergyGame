@@ -82,6 +82,7 @@ export default function ParishPanel() {
           <Standing label="The people" value={word(c.reputation.parishioners)} why={whyRep('parishioners')} />
           <Standing label="The chancery" value={word(c.reputation.chancery)} why={whyRep('chancery')} />
           <Standing label="Brother priests" value={word(c.reputation.brother_priests)} why={whyRep('brother_priests')} />
+          {c.reputation.bishops !== undefined && <Standing label="The bishops beyond" value={word(c.reputation.bishops)} why={whyRep('bishops')} />}
           <Standing label="Attendance" value={`${Math.round(p.attendance * 100)}% of the rolls`} why={whyPews} />
           <Standing label="Collections" value={`$${fin.averageCollection.toLocaleString()} a week`} why={whyPlate} />
           <div className="flex justify-between"><dt className="ink-muted">Cash</dt><dd>${fin.cash.toLocaleString()}</dd></div>
@@ -311,6 +312,7 @@ export default function ParishPanel() {
             {CONSTITUENCY_KEYS.map((k) => (
               <div key={k} className="flex justify-between"><span>{k}</span><span>{c.reputation[k].toFixed(0)}</span></div>
             ))}
+            {c.reputation.bishops !== undefined && <div className="flex justify-between"><span>bishops</span><span>{c.reputation.bishops.toFixed(0)}</span></div>}
           </div>
         )}
       </Sheet>
