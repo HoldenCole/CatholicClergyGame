@@ -3,7 +3,7 @@ import { religiousOrder } from '@/content/religious';
 import { apostolateDef, apostolateOffers, houseOfficeDef, houseOfficeOffers, requestChance, requestWord, REQUESTS } from '@/systems/religious/requests';
 import { currentHouse, priorOf } from '@/systems/religious/house';
 import { chanceryAskDef } from '@/systems/religious/bishopAsks';
-import Sheet from '../Sheet';
+import Sheet, { FoldHeading, useFold } from '../Sheet';
 
 /**
  * The friar's jobs sheet: the offices of the house he can ask the prior
@@ -12,6 +12,7 @@ import Sheet from '../Sheet';
  */
 export default function FriarJobsPanel() {
   const game = useGameStore((s) => s.game);
+  const [movesOpen, toggleMoves] = useFold('jobs:moves', false);
   const askHouseOffice = useGameStore((s) => s.askHouseOffice);
   const resignHouseOffice = useGameStore((s) => s.resignHouseOffice);
   const file = useGameStore((s) => s.fileFriarRequest);
@@ -112,9 +113,9 @@ export default function FriarJobsPanel() {
             </ul>
           </div>
           <div className="mt-3">
-            <div className="heading text-sm">Houses of the province</div>
-            {moves.length === 0 && <p className="ink-faint text-xs">No house of the kinds a man can ask for, beyond this one.</p>}
-            <ul className="mt-1 flex flex-col gap-1 text-sm">
+            <FoldHeading open={movesOpen} onToggle={toggleMoves} title="Houses of the province" summary={`${moves.filter((o) => o.available).length} you could write for`} />
+            {movesOpen && moves.length === 0 && <p className="ink-faint text-xs">No house of the kinds a man can ask for, beyond this one.</p>}
+            {movesOpen && <ul className="mt-1 flex flex-col gap-1 text-sm">
               {moves.map((o) => (
                 <li key={`${o.def.id}:${o.houseId}`} className="flex flex-wrap items-center justify-between gap-2 rounded border rule bg-white/30 px-3 py-1.5">
                   <span><span className="font-medium">{o.label}</span> <span className="ink-muted text-xs">· {o.def.line}</span></span>
@@ -128,7 +129,7 @@ export default function FriarJobsPanel() {
                   )}
                 </li>
               ))}
-            </ul>
+            </ul>}
           </div>
         </Sheet>
       )}

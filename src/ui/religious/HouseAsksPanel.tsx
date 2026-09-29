@@ -7,10 +7,13 @@ import { officeOffers } from '@/systems/religious/offices';
 import { confrereAskDefs, pastorAskDefs } from '@/content/religious';
 import { religiousOrder } from '@/content/religious';
 import Panel from '../Panel';
+import { FoldHeading, useFold } from '../Sheet';
 
 /** What a friar asks for: permissions, a dispensation, a friendship named, an office accepted. E3 §3.4, §6.2, §7.2, §6.3. */
 export default function HouseAsksPanel() {
   const game = useGameStore((s) => s.game);
+  const [officesOpen, toggleOffices] = useFold('asks:offices', false);
+  const [permsOpen, togglePerms] = useFold('asks:permissions', false);
   const askPermission = useGameStore((s) => s.askPermission);
   const askDispensation = useGameStore((s) => s.askDispensation);
   const befriend = useGameStore((s) => s.befriend);
@@ -34,8 +37,9 @@ export default function HouseAsksPanel() {
   return (
     <Panel title="Asking the prior">
       {line && <p className="mb-3 rounded border rule bg-white/30 p-3 text-sm italic">{line}</p>}
-      <p className="ink-faint text-xs">You have no money. Every expense is a permission, and he remembers what he has said before.</p>
-      <ul className="mt-2 grid grid-cols-2 gap-2 text-sm">
+      <FoldHeading open={permsOpen} onToggle={togglePerms} title="Permissions" summary={`${offers.filter((o) => o.available).length} you could ask for`} />
+      {permsOpen && <p className="ink-faint text-xs">You have no money. Every expense is a permission, and he remembers what he has said before.</p>}
+      {permsOpen && <ul className="mt-2 grid grid-cols-2 gap-2 text-sm">
         {offers.map((o) => (
           <li key={o.def.id} className="flex flex-col gap-1 rounded border rule bg-white/30 px-3 py-2">
             <span className="font-medium">{o.def.label} <span className="ink-faint text-xs">· ${o.def.cost.toLocaleString()}</span></span>
@@ -47,7 +51,7 @@ export default function HouseAsksPanel() {
             )}
           </li>
         ))}
-      </ul>
+      </ul>}
       {order.mechanics.studyDispensation && (
         <div className="mt-4 text-sm">
           <div className="heading text-sm">A dispensation for study</div>
@@ -121,8 +125,8 @@ export default function HouseAsksPanel() {
       )}
       {game.flags.ordained && (
         <div className="mt-4 text-sm">
-          <div className="heading text-sm">Offices</div>
-          {held ? (
+          <FoldHeading open={officesOpen || !!held} onToggle={toggleOffices} title="Offices" summary={`${offices.filter((o) => o.available).length} the provincial would give you`} />
+          {!officesOpen && !held ? null : held ? (
             <p className="text-xs">{held.label}, until the term runs. {held.line}</p>
           ) : (
             <ul className="mt-1 flex flex-col gap-1 text-xs">

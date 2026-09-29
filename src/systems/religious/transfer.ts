@@ -2,6 +2,7 @@ import type { GameState, ReligiousAssignment, World } from '@/types';
 import { HOUSE, houseById, houseLine } from './house';
 import { defaultHorarium } from './horarium';
 import { splitFriends } from './friendship';
+import { vacateOffice } from './vacate';
 
 /**
  * Reassignment across dioceses. E3 §3.1: each assignment places the friar
@@ -85,6 +86,10 @@ export function moveToHouse(state: GameState, houseId: string, work: string, opt
   }
   // Friends left behind: for an order that keeps such bonds, the move that hurts most. E3 §7.2.
   if (r.houseId !== houseId) next = splitFriends(next, r.houseId);
+  // A prior does not govern a house he has been sent away from: the chair stays with the house. E3 §3.7.
+  if (r.houseId !== houseId && next.religious?.office?.office === 'prior' && next.religious.office.bodyId !== houseId) next = vacateOffice(next, 'sent to another house');
+  // The men he directed in the diocese he leaves are let go, with a name for someone else: the room does not travel. E3 §3.13.
+  if (next.world?.diocese.presetId !== house.dioceseId && next.religious?.directees?.length) next = endDirecteesOnMove(next);
   const assignments = r.assignments.map((a, i) => (i === r.assignments.length - 1 && a.endWeek === undefined ? { ...a, endWeek: week } : a));
   const posting: ReligiousAssignment = { houseId, dioceseId: house.dioceseId, work, startWeek: week, ...(opts.dual ? { dual: true } : {}), ...(opts.grace ? { grace: opts.grace } : {}) };
   // An office of the house stays with the house; a local work stays with the diocese. E3 §3.10.
@@ -99,6 +104,17 @@ export function moveToHouse(state: GameState, houseId: string, work: string, opt
 }
 
 /** The posting he holds now. */
+/** Every direction ends when he moves dioceses: one note, not one per man, and the tag comes off each. */
+function endDirecteesOnMove(state: GameState): GameState {
+  const r = state.religious!;
+  const gone = r.directees ?? [];
+  const names = gone.map((d) => state.npcs[d.npcId]).filter((n): n is NonNullable<typeof n> => !!n).map((n) => `${n.title ? `${n.title} ` : ''}${n.name.first} ${n.name.last}`);
+  const npcs = { ...state.npcs };
+  for (const d of gone) { const n = npcs[d.npcId]; if (n) npcs[d.npcId] = { ...n, tags: n.tags.filter((t) => t !== 'directee') }; }
+  const { directees: _d, directionAsk: _a, ...rest } = r;
+  return { ...state, npcs, religious: rest, flags: { ...state.flags, 'directees:count': 0 }, career: names.length ? [...state.career, { week: state.clock.week, kind: 'note', text: `The move ended the direction you gave ${names.join(', ')}; each was given a name.` }] : state.career };
+}
+
 export function currentPosting(state: GameState): ReligiousAssignment | undefined {
   return state.religious?.assignments.find((a) => a.endWeek === undefined);
 }

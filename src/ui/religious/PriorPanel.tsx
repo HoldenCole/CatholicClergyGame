@@ -4,6 +4,7 @@ import { houseRules, mayGovern, officerRows, purseOffers, ruleOf } from '@/syste
 import { buildDef, buildOffers, capacityOf, expectedHouseVocations, grantChance, houseMoney, mayAskGrant } from '@/systems/religious/growth';
 import { religiousOrder } from '@/content/religious';
 import Panel from '../Panel';
+import { FoldHeading, useFold } from '../Sheet';
 
 /**
  * The prior's desk. E3 §3.2, §3.10: the rule of the house, the offices in
@@ -18,6 +19,9 @@ export default function PriorPanel() {
   const startBuild = useGameStore((s) => s.startBuild);
   const askBuildGrant = useGameStore((s) => s.askBuildGrant);
   const line = useGameStore((s) => s.lastPriorLine);
+  const [buildOpen, toggleBuild] = useFold('prior:building', false);
+  const [purseOpen, togglePurse] = useFold('prior:purse', false);
+  const [officesOpen, toggleOffices] = useFold('prior:offices', false);
   if (!game?.religious || !game.flags.ordained) return null;
   const house = currentHouse(game);
   if (!house) return null;
@@ -53,9 +57,9 @@ export default function PriorPanel() {
         {rule && <p className="ink-muted mt-1 text-xs">{rule.line}</p>}
       </div>
       <div className="mt-4">
-        <div className="heading text-sm">The offices of the house</div>
-        <p className="ink-faint text-xs">In the {title}'s gift. A house whose offices are filled runs; the man named is grateful, and a better-fitted man passed over notices.</p>
-        <ul className="mt-1 flex flex-col gap-1 text-sm">
+        <FoldHeading open={officesOpen} onToggle={toggleOffices} title="The offices of the house" summary={`${rows.filter((r) => !r.holder).length} vacant of ${rows.length}`} />
+        {officesOpen && <p className="ink-faint text-xs">In the {title}'s gift. A house whose offices are filled runs; the man named is grateful, and a better-fitted man passed over notices.</p>}
+        {officesOpen && <ul className="mt-1 flex flex-col gap-1 text-sm">
           {rows.map((row) => (
             <li key={row.def.id} className="flex flex-wrap items-center justify-between gap-2 rounded border rule bg-white/30 px-3 py-1">
               <span>
@@ -76,7 +80,7 @@ export default function PriorPanel() {
               )}
             </li>
           ))}
-        </ul>
+        </ul>}
       </div>
       <div className="mt-4">
         <div className="heading text-sm">The house's year</div>
@@ -87,7 +91,8 @@ export default function PriorPanel() {
         </p>
       </div>
       <div className="mt-4">
-        <div className="heading text-sm">Building</div>
+        <FoldHeading open={buildOpen} onToggle={toggleBuild} title="Building" summary={house.build ? `building ${buildDef(house.build.id)?.label.toLowerCase() ?? ''}` : `${builds.filter((b) => b.available).length} you could begin`} />
+        {buildOpen && <div>
         <p className="ink-faint text-xs">
           {house.build ? `Under way: ${buildDef(house.build.id)?.label.toLowerCase() ?? house.build.id}, done in about ${Math.max(1, Math.round((house.build.endWeek - game.clock.week) / 4))} months.` : 'One thing at a time, from the purse; the province can be asked for half.'}
           {house.buildings?.length ? ` Built: ${house.buildings.map((id) => buildDef(id)?.label.toLowerCase() ?? id).join(', ')}.` : ''}
@@ -108,9 +113,11 @@ export default function PriorPanel() {
             </li>
           ))}
         </ul>
+        </div>}
       </div>
       <div className="mt-4">
-        <div className="heading text-sm">The purse</div>
+        <FoldHeading open={purseOpen} onToggle={togglePurse} title="The purse" summary={`$${house.budget.toLocaleString()} in common`} />
+        {purseOpen && <div>
         <p className="ink-faint text-xs">Held in common: ${house.budget.toLocaleString()}. {mine ? 'What it is spent on, the house sees.' : ''}</p>
         <ul className="mt-1 grid grid-cols-2 gap-2 text-sm">
           {purse.map((o) => (
@@ -123,6 +130,7 @@ export default function PriorPanel() {
             </li>
           ))}
         </ul>
+        </div>}
       </div>
     </Panel>
   );

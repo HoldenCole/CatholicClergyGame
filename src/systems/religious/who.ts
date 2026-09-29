@@ -25,6 +25,17 @@ function cap(s: string): string {
   return s.charAt(0).toUpperCase() + s.slice(1);
 }
 
+/** The name on the plate: the religious name he was given, the title his vows and orders allow, and the order's letters after it. */
+export function friarName(state: GameState): string | null {
+  const r = state.religious;
+  const c = state.character;
+  if (!r || !c) return null;
+  const first = r.religiousName ?? c.name.first;
+  const title = state.flags.ordained ? 'Fr.' : r.vows.simpleWeek !== undefined || formationStage(state)?.house !== 'priory' ? 'Br.' : '';
+  const letters = r.order.split('').join('.') + '.';
+  return `${title ? `${title} ` : ''}${first} ${c.name.last}, ${letters}`;
+}
+
 /** The word on the plate: Novice, Student brother, Prior, Friar, at the parish. */
 export function friarWord(state: GameState): string | null {
   const r = state.religious;

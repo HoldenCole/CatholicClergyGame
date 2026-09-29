@@ -11,7 +11,6 @@ import { spendDefs } from '@/content/religious';
 import Sheet from '../Sheet';
 import { religiousOrder } from '@/content/religious';
 import Panel from '../Panel';
-import DigestPanel from '../DigestPanel';
 
 const WORK: Record<string, string> = {
   parish: 'the parish the house serves',
@@ -86,7 +85,6 @@ export default function FriarWeekPanel() {
           </Sheet>
         );
       })()}
-      <DigestPanel />
     </>
   );
 }

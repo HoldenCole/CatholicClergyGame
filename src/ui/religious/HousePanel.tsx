@@ -11,6 +11,7 @@ import { instituteDef } from '@/content/institutes';
 import { standing } from '@/systems/reputation';
 import type { Quality } from '@/types';
 import Panel from '../Panel';
+import { FoldHeading, useFold } from '../Sheet';
 import Portrait from '../portraits/Portrait';
 import { portraitForNpc, yearOf } from '../portraits/spec';
 
@@ -32,6 +33,9 @@ export default function HousePanel() {
   const game = useGameStore((s) => s.game);
   const setHorarium = useGameStore((s) => s.setHorarium);
   const setCappa = useGameStore((s) => s.setCappa);
+  const [menOpen, toggleMen] = useFold('house:men', false);
+  const [sayOpen, toggleSay] = useFold('house:saying', true);
+  const [orderOpen, toggleOrder] = useFold('house:order', false);
   if (!game?.religious) return null;
   const house = currentHouse(game);
   if (!house) return null;
@@ -97,8 +101,8 @@ export default function HousePanel() {
         </div>
       )}
       <div className="mt-4">
-        <div className="heading text-sm">The men ({members.length})</div>
-        <ul className="mt-1 grid grid-cols-2 gap-x-4 gap-y-1 text-sm">
+        <FoldHeading open={menOpen} onToggle={toggleMen} title={`The men (${members.length})`} summary={`${members.filter((m) => m.relationship >= 15).length} warm to you`} />
+        {menOpen && <ul className="mt-1 grid grid-cols-2 gap-x-4 gap-y-1 text-sm">
           {members.map((m) => (
             <li key={m.id} className="flex items-center gap-2">
               <Portrait portrait={portraitForNpc(m, year)} size={22} />
@@ -111,12 +115,12 @@ export default function HousePanel() {
               </span>
             </li>
           ))}
-        </ul>
+        </ul>}
       </div>
       {whatTheySay(game).length > 0 && (
         <div className="mt-4">
-          <div className="heading text-sm">What the house is saying</div>
-          <ul className="mt-1 flex flex-col gap-1 text-sm">
+          <FoldHeading open={sayOpen} onToggle={toggleSay} title="What the house is saying" summary={`${whatTheySay(game).length} things; ${whatTheySay(game).filter((r) => r.about === 'you').length} about you`} />
+          {sayOpen && <ul className="mt-1 flex flex-col gap-1 text-sm">
             {whatTheySay(game).map((r) => (
               <li key={r.id} className={r.about === 'you' ? 'ink-wine' : ''}>
                 <span className="ink-faint mr-1 text-xs">{venueLabel(r.venue)}:</span>{r.text}
@@ -125,14 +129,14 @@ export default function HousePanel() {
                 {r.reachedBishop && !r.answered && <span className="ink-faint ml-1 text-xs">(the bishop has heard)</span>}
               </li>
             ))}
-          </ul>
+          </ul>}
         </div>
       )}
       <div className="mt-4">
-        <div className="heading text-sm">What this order is like</div>
-        <ul className="ink-muted mt-1 flex flex-col gap-0.5 text-xs">
+        <FoldHeading open={orderOpen} onToggle={toggleOrder} title="What this order is like" />
+        {orderOpen && <ul className="ink-muted mt-1 flex flex-col gap-0.5 text-xs">
           {pietyLabelsOf(game).map((l) => <li key={l}>· {l}</li>)}
-        </ul>
+        </ul>}
       </div>
     </Panel>
   );
