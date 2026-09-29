@@ -7457,6 +7457,153 @@
           ]
         }
       ]
+    },
+    {
+      "id": "fd_end_closed_while_away",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor",
+        "study"
+      ],
+      "campaign": "religious",
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 60,
+      "once": true,
+      "suppressYears": 5,
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "requires": [
+        {
+          "type": "flag",
+          "key": "foundation:failed",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "foundation:failed:mine",
+          "value": false
+        },
+        {
+          "type": "flag",
+          "key": "foundation:daughter",
+          "value": false
+        }
+      ],
+      "title": "The House You Founded Is Closed, and You Were Not There",
+      "body": "The house you founded is closed, and you learned it from a letter, because you were not there: the province had sent you elsewhere, or elected you to something, and the house you wrote the charter for was someone else's when the decree came. The last Mass was said by a man you did not choose. The men are in other houses by now. The bishop who invited the order has written to the province, not to you, and a copy has come, two paragraphs, the second about something else. {@provincial} signed the decree, and has written separately, in his own hand, to say he is sorry, and that he would do it again.",
+      "choices": [
+        {
+          "id": "go",
+          "label": "Go and see it: the empty church, the men, the bishop",
+          "outcome": "Three days you were not given leave for and took. The church is locked and a diocesan priest has the key and is kind about it. Two of the men are in a house an hour away and are glad to see you and say so, and one is not, and says that too. The bishop gives you twenty minutes and is sorrier than his letter was. You come back with nothing but having gone, which the men will remember.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "local_bishop",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": -2
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 6
+            }
+          ]
+        },
+        {
+          "id": "write",
+          "label": "Write to the provincial: it should not have closed, and here is why",
+          "outcome": "Four pages, honest, on what the house was for and what the province lost by closing it, and what it might have cost to keep. He reads them and answers in one, which agrees with two of your pages and not the others, and files yours with the charter. The province hears that the founder wrote, and what he said, and some of it agrees with him.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": -4
+            },
+            {
+              "target": "relationship",
+              "key": "@provincial",
+              "delta": -5
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "accept",
+          "label": "Accept it: a house is the province's, and the province decided",
+          "outcome": "A short letter back that says the charter was written to be the province's and the province has used it. The provincial reads it aloud to the council, which had expected the other letter. The men who were in the house hear that the founder said nothing, and are divided on whether that was obedience or absence, and the house is in the archive with the decree of erection and the decree of closure.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "superiors",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "community",
+              "delta": -3
+            },
+            {
+              "target": "relationship",
+              "key": "@provincial",
+              "delta": 4
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "again",
+          "label": "Say, to the provincial and to anyone who asks, that you will found another",
+          "outcome": "You say it at table, and in the letter, and to the bishop's secretary on the telephone, and it is repeated, as things are. The province is half amused and half moved. A bishop two dioceses over, who heard, writes to ask whether you meant it. The provincial does not answer the letter for a month, and then answers it with a question.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "province",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "laity",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "foundation:again",
+              "value": true
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 3
+            }
+          ]
+        }
+      ]
     }
   ]
 }

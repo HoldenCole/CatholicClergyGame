@@ -19,6 +19,7 @@ import { townReviewLine } from './town';
 import { livesReviewLine } from './lives';
 import { talkReviewLine } from './talk';
 import { nightReviewLine } from './night';
+import { friarReviewRows } from './religious/review';
 
 /** The reputation and stat words the sheets use. */
 function word(v: number): string {
@@ -106,6 +107,8 @@ export function yearInReview(state: GameState): { letter: Letter; baseline: NonN
     const min = obligationDefs.filter((d) => q[d.key] === 'min').map((d) => d.label.toLowerCase());
     rows.push({ label: 'The hours went to', value: `${full.length ? `full on ${full.join(', ')}` : 'nothing run full'}${min.length ? `; the minimum on ${min.join(', ')}` : ''}` });
   }
+  // A friar's year: the common life kept, what he is known for, the house, the obedience, the province. Friar round Q10.
+  if (state.religious) rows.push(...friarReviewRows(state));
   rows.push({ label: 'You', value: `${strainWord(strainOf(state))}, ${Math.round(years)} years a priest` });
   const book = ministryLine(state);
   if (book) rows.push({ label: 'The book, so far', value: book.replace(/\.$/, '') });

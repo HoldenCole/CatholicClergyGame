@@ -1,4 +1,4 @@
-import type { Beat, Condition, GameEvent, GameState, OfferDef, PendingEvent, Role } from '@/types';
+import type { Beat, Condition, GameEvent, GameState, OfferDef, PendingEvent, Role, StudyState } from '@/types';
 import { applyChoice, defaultChoice, drawEvents, fireEvent, isEligible } from './events';
 import { evaluateAll } from './conditions';
 import { shouldInterrupt } from './interrupts';
@@ -32,6 +32,7 @@ import { expireAsks } from '@/systems/houses';
 import { ARCS, dueArc, endArc, maybeOpenArc } from '@/systems/arcs';
 import { requestWeek } from '@/systems/religious/requests';
 import { defaultFormationRoutine, defaultSpends, spendsWeek } from '@/systems/religious/spends';
+import { strainWeek } from '@/systems/religious/strain';
 import { houseLifeLine } from '@/systems/religious/houseLife';
 import { foundingWeek } from '@/systems/religious/founding';
 import { anniversaryWeek, nameDayWeek } from '@/systems/anniversaries';
@@ -206,6 +207,12 @@ function letterStep(state: GameState, rng: Rng, deps: EventDeps): { state: GameS
 
 /** Roughly how often a week away carries a scene. Invented. */
 const STUDY_EVENT_CHANCE = 0.1;
+/** A friar's Roman posting is a life and not a course: the generalate, the order's faculty, and the Curia draw a scene more often (friar round Q6, Q7). Invented. */
+const ROMAN_FRIAR_EVENT_CHANCE: Partial<Record<StudyState['city'], number>> = { generalate: 0.28, faculty: 0.22, curia: 0.2 };
+export function studySceneChance(state: GameState): number {
+  const city = state.study?.city;
+  return (state.religious && city && ROMAN_FRIAR_EVENT_CHANCE[city]) || STUDY_EVENT_CHANCE;
+}
 
 /** The week away: the hours resolve, a scene may come, the years end with the board. */
 export function studyWeekHook(deps: EventDeps): WeekHook {
@@ -271,7 +278,7 @@ export function studyWeekHook(deps: EventDeps): WeekHook {
       const done = def ? endStudy(next, def, rng.derive(`study-end:${next.clock.week}`)) : null;
       if (done) return addDigestLine(done, next.study.city === 'see' ? 'The letter went to Rome on your seventy-fifth birthday, as the canon requires, and Rome, for once, answered quickly.' : next.study.city === 'academy' ? 'The Academy gives its students a dinner and a blessing, and the Secretariat gives each of them a country.' : next.study.city === 'nunciature' ? (next.rome?.diplomacy?.rank === 'nuncio' || next.flags['diplomat:seventy_five'] ? 'The Secretariat accepts the letter with thanks, and a date, and a medal.' : 'The Secretariat lets you go with a letter of thanks. The diocese has a parish for you.') : next.study.city === 'residence' ? 'The bishop thanks you at dinner, in front of the sisters, and names your successor before dessert. The board has a parish for you.' : next.study.city === 'rome' && next.flags['academy:recruited'] && next.study.failed ? 'The degree does not come. The Academy\'s president writes a kind letter: without it they cannot take you, and he hopes you will not mind his saying he is sorry. The plane home is full of people going somewhere else.' : next.study.city === 'rome' && next.flags['academy:recruited'] && pendingAppointment(done) ? 'The degree is defended, and the Academy\'s year does not open until October: you fly home to wait for it, and the diocese finds you something to do until then.' : next.study.city === 'rome' && next.flags['academy:recruited'] ? 'The degree is defended, the room is packed, and on Monday you carry your books across the city to the Academy.' : next.study.city === 'rome' || next.study.city === 'washington' ? 'The degree is defended, the room is packed, and the plane home is full of people going somewhere else.' : 'The appointment ends the way they do: a dinner, a card signed by everyone, and a letter from the personnel board that was in the mail before the dinner.');
     }
-    if (rng.derive(`study-scene:${next.clock.week}`).chance(STUDY_EVENT_CHANCE)) {
+    if (rng.derive(`study-scene:${next.clock.week}`).chance(studySceneChance(next))) {
       const [event] = drawEvents(deps.pool.filter((e) => !e.beat), next, rng, 1);
       if (event) next = fireOrResolve(next, event, rng, deps);
     }
@@ -396,6 +403,10 @@ export function friarWeekHook(deps: EventDeps): WeekHook {
     // A build on the house comes in its time. E3 §3.2.
     const built = buildWeek(next);
     next = built.line ? addDigestLine(built.state, built.line) : built.state;
+    // The body's accounting first: a rest begun or running, or a week cut past the sick line. Friar round Q8.
+    const rested = strainWeek(next);
+    next = rested.state;
+    if (rested.line) next = addDigestLine(next, rested.line);
     // The blocks that are his: what they built, in the digest. E3 §3.3.
     const spent = spendsWeek(next, rng.derive(`spends:${next.clock.week}`));
     next = spent.state;
