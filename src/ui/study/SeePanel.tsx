@@ -49,6 +49,12 @@ export default function SeePanel() {
               ))}
               {emeritus && <div className="flex justify-between gap-2"><dt className="ink-muted">Bishop emeritus</dt><dd>{emeritus.title} {emeritus.name.last}</dd></div>}
             </dl>
+            {(see.borrowed?.length || see.lent?.length) ? (
+              <p className="ink-muted mt-2 text-xs">
+                {see.borrowed?.length ? `On loan to you: ${see.borrowed.map((l) => `${l.name} from ${l.see}, ${Math.max(1, Math.ceil((l.untilWeek - game.clock.week) / 52))} year${Math.ceil((l.untilWeek - game.clock.week) / 52) === 1 ? '' : 's'} to run`).join('; ')}. ` : ''}
+                {see.lent?.length ? `Lent: ${see.lent.map((l) => `${l.name} to ${l.see}`).join('; ')}.` : ''}
+              </p>
+            ) : null}
           </Sheet>
         );
       })()}

@@ -3,6 +3,7 @@ import type { ChanceryOffice, LiturgicalStance, LiturgicalTopic } from './world'
 import type { Struggle } from './npc';
 import type { StatKey } from './stats';
 import type { Pillar } from './character';
+import type { SeeLoan } from './loan';
 
 /** A small see from the pool. content/sees.json */
 export interface SeeDef {
@@ -80,6 +81,9 @@ export interface SeeState {
   /** E4 R1.5: the council of priests (the men elected by the presbyterate, and the men the bishop named), and the year's losses. */
   council?: { electedIds: string[]; namedIds: string[]; electedWeek: number };
   losses?: { week: number; npcId: string; name: string; why: 'died' | 'retired' }[];
+  /** E2 R1.3: the priests borrowed from brother bishops, and the ones lent. */
+  borrowed?: SeeLoan[];
+  lent?: SeeLoan[];
 }
 
 /** E4 R1.4: where a see's men are formed. */

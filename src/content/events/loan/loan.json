@@ -1,0 +1,1244 @@
+{
+ "_notes": "E2 R1.3: loans across diocesan lines (docs/EXPANSION-E2-PROVINCE.md §2.4; systems/loan.ts). For a priest: a brother bishop's ask arrives as an offer (content/offers/parish.json, ln_loan_*); the home bishop's answer comes as a letter (loan:refused when he keeps him, and ln_refused_release); a yes swaps the world and the parish loop goes on under the borrowing bishop, with scenes on the loan (loan on, years); the term's end is a scene of beat loan (scene end): the bishop would keep him (loan wanted; stay incardinates, home returns him, extend adds two years) or not; excardination asked for early (loan excardinate) is answered by home's shortage and regard; the return (loan since returned) and the staying (loan since stayed) each have a scene. For a player-bishop: the letter asking for his priest (loan lend: the man is lent and the see is a man shorter), the man he asked a brother bishop for from the desk (ask_loan act; loan since borrowed / bishop_refused). Tokens: {loan_diocese}, {loan_home}, {loan_bishop}, {loan_years}, {loan_kind}.",
+ "events": [
+  {
+   "id": "ln_arrive",
+   "phase": [
+    "parochial_vicar",
+    "administrator",
+    "pastor"
+   ],
+   "severity": "NOTABLE",
+   "category": "chancery",
+   "baseWeight": 60,
+   "suppressYears": 1,
+   "pressure": [
+    "ambition_vs_integrity"
+   ],
+   "requires": [
+    {
+     "type": "loan",
+     "key": "on",
+     "value": true
+    },
+    {
+     "type": "loan",
+     "key": "years",
+     "op": "<=",
+     "value": 0.2
+    }
+   ],
+   "title": "A Stranger at the Bishop's Table",
+   "body": "{loan_bishop} has you to dinner the first week, alone, in a dining room that has seen a great many first dinners. He asks about {loan_home}, and about your bishop, with the particular attention of a man who will write a letter about you in three years. He says the diocese is grateful. He says it twice. He does not say what he needs, because the letter said, and asks instead what you need.",
+   "choices": [
+    {
+     "id": "plain",
+     "label": "Tell him plainly what you need to do the work: the car, the Spanish missal, a second man on Sundays",
+     "outcome": "He writes it on the back of the menu and most of it is done by Advent. It is the most useful dinner you have had with a bishop, and he remembers that you asked for the work and not for yourself.",
+     "effects": [
+      {
+       "target": "relationship",
+       "key": "@bishop",
+       "delta": 6
+      },
+      {
+       "target": "reputation",
+       "key": "chancery",
+       "delta": 3
+      },
+      {
+       "target": "stat",
+       "key": "administration",
+       "delta": 1
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "nothing",
+     "label": "Say you need nothing but the work",
+     "outcome": "He nods, and you learn in February that you needed the car. He is warm about it when you ask, and the delay is yours.",
+     "effects": [
+      {
+       "target": "relationship",
+       "key": "@bishop",
+       "delta": 3
+      },
+      {
+       "target": "reputation",
+       "key": "parishioners",
+       "delta": -1
+      }
+     ]
+    },
+    {
+     "id": "home",
+     "label": "Ask what {loan_home} was told about you",
+     "outcome": "He looks at you over the glass and says your bishop wrote a page, and that it was a good page, and that he will not show it to you, which is how you learn there is a file that travels.",
+     "effects": [
+      {
+       "target": "relationship",
+       "key": "@bishop",
+       "delta": 1
+      },
+      {
+       "target": "stat",
+       "key": "knowledge",
+       "delta": 1
+      }
+     ]
+    }
+   ],
+   "once": true
+  },
+  {
+   "id": "ln_stranger",
+   "phase": [
+    "parochial_vicar",
+    "administrator",
+    "pastor"
+   ],
+   "severity": "NOTABLE",
+   "category": "group",
+   "baseWeight": 34,
+   "suppressYears": 2,
+   "pressure": [
+    "ambition_vs_integrity"
+   ],
+   "requires": [
+    {
+     "type": "loan",
+     "key": "on",
+     "value": true
+    },
+    {
+     "type": "loan",
+     "key": "years",
+     "op": ">=",
+     "value": 0.3
+    }
+   ],
+   "title": "The Borrowed Man",
+   "body": "The deanery meets and you are introduced as the man on loan from {loan_home}, and the dean says it kindly and the table hears it as it is meant: a visitor, who will be gone, whose opinions on the deanery's business are the opinions of a guest. The pastor beside you has been here thirty-one years and says so.",
+   "choices": [
+    {
+     "id": "work",
+     "label": "Say nothing at the meeting and do the work; the deanery will notice or it will not",
+     "outcome": "The deanery notices in about a year, which is the speed of deaneries, and by the second year the dean asks your view first on the Spanish question, because you are the only man at the table who has one from the inside.",
+     "effects": [
+      {
+       "target": "reputation",
+       "key": "brother_priests",
+       "delta": 4
+      },
+      {
+       "target": "stat",
+       "key": "piety",
+       "delta": 1
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "speak",
+     "label": "Speak up on the first question, as a priest of the province and not a guest",
+     "outcome": "The thirty-one-year man is affronted and the younger men are pleased, and the dean, who has to live with both, writes to your bishop at home that you have settled in quickly, which is a sentence that can be read two ways.",
+     "effects": [
+      {
+       "target": "reputation",
+       "key": "brother_priests",
+       "delta": 2
+      },
+      {
+       "target": "reputation",
+       "key": "chancery",
+       "delta": -1
+      },
+      {
+       "target": "stat",
+       "key": "charisma",
+       "delta": 1
+      }
+     ]
+    },
+    {
+     "id": "home",
+     "label": "Write to your classmates at home that you are a guest here and will be glad to be home",
+     "outcome": "The letter is answered in the tone of men who are glad you are gone and would never say so. You keep your head down at the deanery and count the years.",
+     "effects": [
+      {
+       "target": "reputation",
+       "key": "brother_priests",
+       "delta": -1
+      },
+      {
+       "target": "strain",
+       "key": "",
+       "delta": 2
+      }
+     ]
+    }
+   ],
+   "once": true
+  },
+  {
+   "id": "ln_letter_from_home",
+   "phase": [
+    "parochial_vicar",
+    "administrator",
+    "pastor"
+   ],
+   "severity": "NOTABLE",
+   "category": "personal",
+   "baseWeight": 30,
+   "suppressYears": 3,
+   "pressure": [
+    "ambition_vs_integrity"
+   ],
+   "requires": [
+    {
+     "type": "loan",
+     "key": "on",
+     "value": true
+    },
+    {
+     "type": "loan",
+     "key": "years",
+     "op": ">=",
+     "value": 1
+    }
+   ],
+   "title": "News from Home",
+   "body": "A letter from {loan_home}: the vicar general, who writes to the men on loan once a year because someone told him to. The parish you left has a new pastor and the parish council did not like him and then did. Your bishop is well. The presbyterate has forgotten you in the way presbyterates do, which the vicar general does not say and the letter says anyway.",
+   "choices": [
+    {
+     "id": "answer",
+     "label": "Answer it at length: the work here, the Spanish Mass, the numbers",
+     "outcome": "He reads it, and forwards it to the bishop, who reads the numbers. Home has a page about you that says something other than that you left.",
+     "effects": [
+      {
+       "target": "reputation",
+       "key": "rome",
+       "delta": 0
+      },
+      {
+       "target": "flag",
+       "key": "loan:wrote_home",
+       "value": true
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "brief",
+     "label": "Answer it in three lines",
+     "outcome": "He files it. The file at home has three lines in it for this year, which is three more than most men on loan.",
+     "effects": []
+    },
+    {
+     "id": "none",
+     "label": "Leave it in the drawer",
+     "outcome": "He does not write again. The file at home has the year blank, and a blank year reads, when it is read, as a year that went badly.",
+     "effects": [
+      {
+       "target": "reputation",
+       "key": "chancery",
+       "delta": -2
+      }
+     ]
+    }
+   ],
+   "once": true
+  },
+  {
+   "id": "ln_end_wanted",
+   "phase": [
+    "parochial_vicar",
+    "administrator",
+    "pastor"
+   ],
+   "severity": "NOTABLE",
+   "category": "chancery",
+   "baseWeight": 30,
+   "suppressYears": 1,
+   "pressure": [
+    "loyalty_vs_honesty"
+   ],
+   "requires": [
+    {
+     "type": "loan",
+     "key": "scene",
+     "value": "end"
+    },
+    {
+     "type": "loan",
+     "key": "wanted",
+     "value": true
+    }
+   ],
+   "title": "The Bishop Would Keep You",
+   "body": "The loan's term is up and {loan_bishop} asks you to stay, not for another term but for good: incardination, the decree ready for signing, a pastorate of your own by Advent. {loan_home} would have to let you go, and he has written to ask, and has not yet been answered. He says the diocese has become yours in the way that matters, and asks whether that is true.",
+   "choices": [
+    {
+     "id": "stay",
+     "label": "Stay: ask {loan_home} to let you go, and sign what he puts in front of you",
+     "outcome": "The letter from home comes in a month and it is correct and it is cold, and you are a priest of {loan_diocese} from the day it is signed. The men at home write it down. The men here do not need to.",
+     "effects": [
+      {
+       "target": "loan",
+       "key": "stay"
+      },
+      {
+       "target": "relationship",
+       "key": "@bishop",
+       "delta": 10
+      },
+      {
+       "target": "reputation",
+       "key": "chancery",
+       "delta": 6
+      },
+      {
+       "target": "reputation",
+       "key": "parishioners",
+       "delta": 2
+      }
+     ],
+     "volume": "semi_public",
+     "positionTopic": "authority",
+     "positionValue": 0
+    },
+    {
+     "id": "home",
+     "label": "Go home; the diocese that ordained you is the diocese",
+     "outcome": "He is disappointed and does not hide it, and drives you to the airport himself, which is a thing bishops do not do. The file he sends home is a page and a half, and warm.",
+     "effects": [
+      {
+       "target": "loan",
+       "key": "home"
+      },
+      {
+       "target": "relationship",
+       "key": "@bishop",
+       "delta": 4
+      },
+      {
+       "target": "reputation",
+       "key": "rome",
+       "delta": 1
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "extend",
+     "label": "Ask for two more years, and decide then",
+     "outcome": "He agrees at once, since a man who stays two years is halfway to staying, and writes to {loan_home}, which agrees more slowly. Two more years of the work, and the question waiting at the end of them.",
+     "effects": [
+      {
+       "target": "loan",
+       "key": "extend"
+      },
+      {
+       "target": "relationship",
+       "key": "@bishop",
+       "delta": 3
+      }
+     ],
+     "requires": [
+      {
+       "type": "loan",
+       "key": "years",
+       "op": "<=",
+       "value": 5.5
+      }
+     ]
+    }
+   ],
+   "beat": "loan",
+   "priority": 2
+  },
+  {
+   "id": "ln_end_term",
+   "phase": [
+    "parochial_vicar",
+    "administrator",
+    "pastor"
+   ],
+   "severity": "NOTABLE",
+   "category": "chancery",
+   "baseWeight": 30,
+   "suppressYears": 1,
+   "pressure": [
+    "ambition_vs_integrity"
+   ],
+   "requires": [
+    {
+     "type": "loan",
+     "key": "scene",
+     "value": "end"
+    },
+    {
+     "type": "loan",
+     "key": "wanted",
+     "value": false
+    }
+   ],
+   "title": "The Term Is Up",
+   "body": "The loan's term is up and {loan_bishop} says so at a dinner that is not unlike the first one, with the same grateful sentences. He does not ask you to stay. He thanks you, and means it, and says the diocese will manage, and you can see him already managing. {loan_home} expects you by the first of the month.",
+   "choices": [
+    {
+     "id": "home",
+     "label": "Go home",
+     "outcome": "The parish gives you a card and a cake, and the Spanish community gives you a Mass, and you drive home across a state line with the car the diocese bought you, which they let you keep.",
+     "effects": [
+      {
+       "target": "loan",
+       "key": "home"
+      },
+      {
+       "target": "reputation",
+       "key": "parishioners",
+       "delta": 2
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "extend",
+     "label": "Ask him for two more years",
+     "outcome": "He is surprised, and pleased in a way he had not planned for, and writes to {loan_home} that night. Home agrees, since a man who asks to stay away is a man home was not going to know what to do with. Two more years.",
+     "effects": [
+      {
+       "target": "loan",
+       "key": "extend"
+      },
+      {
+       "target": "relationship",
+       "key": "@bishop",
+       "delta": 5
+      }
+     ],
+     "requires": [
+      {
+       "type": "loan",
+       "key": "years",
+       "op": "<=",
+       "value": 5.5
+      }
+     ]
+    },
+    {
+     "id": "stay",
+     "label": "Ask whether he would keep you for good",
+     "outcome": "He has not thought about it, and thinks about it now, in front of you, and says he would have to see what home says. He writes. Home says no, kindly, and you go home the following month with a letter in the file that says you asked.",
+     "effects": [
+      {
+       "target": "loan",
+       "key": "excardinate"
+      },
+      {
+       "target": "relationship",
+       "key": "@bishop",
+       "delta": 2
+      }
+     ]
+    }
+   ],
+   "beat": "loan",
+   "priority": 1
+  },
+  {
+   "id": "ln_end_any",
+   "phase": [
+    "parochial_vicar",
+    "administrator",
+    "pastor"
+   ],
+   "severity": "ROUTINE",
+   "category": "chancery",
+   "baseWeight": 30,
+   "suppressYears": 1,
+   "pressure": [
+    "ambition_vs_integrity"
+   ],
+   "requires": [
+    {
+     "type": "loan",
+     "key": "scene",
+     "value": "end"
+    }
+   ],
+   "title": "The Term",
+   "body": "The years on loan are over. {loan_bishop}'s office has sent the dates, {loan_home} has sent a letter with the first of the month underlined, and the parish has started to say goodbye in the way parishes do, which is by asking every Sunday whether you will really go, and then asking who is coming, and then not asking.",
+   "choices": [
+    {
+     "id": "home",
+     "label": "Home",
+     "outcome": "You go home on the first of the month with the diocese's thanks in a frame.",
+     "effects": [
+      {
+       "target": "loan",
+       "key": "home"
+      }
+     ],
+     "default": true
+    }
+   ],
+   "beat": "loan"
+  },
+  {
+   "id": "ln_ask_excardination",
+   "phase": [
+    "parochial_vicar",
+    "administrator",
+    "pastor"
+   ],
+   "severity": "NOTABLE",
+   "category": "chancery",
+   "baseWeight": 28,
+   "suppressYears": 3,
+   "pressure": [
+    "loyalty_vs_honesty"
+   ],
+   "requires": [
+    {
+     "type": "loan",
+     "key": "on",
+     "value": true
+    },
+    {
+     "type": "loan",
+     "key": "years",
+     "op": ">=",
+     "value": 1.5
+    },
+    {
+     "type": "loan",
+     "key": "ending",
+     "value": false
+    }
+   ],
+   "title": "Whether You Would Stay",
+   "body": "{loan_bishop} asks, at a confirmation dinner, whether you have thought about staying, and says it lightly enough that you could let it go by. The question is not light. A man on loan who asks his own bishop for excardination before the term is up is asking home to say, in writing, whether it wants him.",
+   "choices": [
+    {
+     "id": "ask",
+     "label": "Ask home now: write to your bishop for excardination",
+     "outcome": "You write the letter, which takes a week, and home answers in a month. Whatever it says, you have said something to home that cannot be unsaid, and {loan_bishop} knows you said it.",
+     "effects": [
+      {
+       "target": "loan",
+       "key": "excardinate"
+      }
+     ]
+    },
+    {
+     "id": "term",
+     "label": "Say you will decide when the term is up",
+     "outcome": "He nods and says that is fair, and the dinner goes on, and the question sits at the table with you for the rest of the loan.",
+     "effects": [
+      {
+       "target": "relationship",
+       "key": "@bishop",
+       "delta": 1
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "no",
+     "label": "Say no, kindly: you are {loan_home}'s, and will go home",
+     "outcome": "He is not surprised and says the diocese is the better for having had you, and asks for one thing before you go, which is the Spanish Mass schedule written down so the next man can keep it.",
+     "effects": [
+      {
+       "target": "relationship",
+       "key": "@bishop",
+       "delta": 3
+      },
+      {
+       "target": "reputation",
+       "key": "rome",
+       "delta": 1
+      }
+     ]
+    }
+   ],
+   "once": true
+  },
+  {
+   "id": "ln_refused_release",
+   "phase": [
+    "parochial_vicar",
+    "administrator",
+    "pastor"
+   ],
+   "severity": "NOTABLE",
+   "category": "chancery",
+   "baseWeight": 40,
+   "suppressYears": 3,
+   "pressure": [
+    "ambition_vs_integrity"
+   ],
+   "requires": [
+    {
+     "type": "loan",
+     "key": "since",
+     "value": "refused",
+     "within": 8
+    }
+   ],
+   "title": "The Bishop Keeps You",
+   "body": "{@bishop} would not lend you, and has said so, and the diocese that asked has found a religious. At the deanery the dean says, to the table, that the bishop knows what he has, and the table looks at you, and you understand that a man a bishop will not lend is a man the presbyterate has an opinion about.",
+   "choices": [
+    {
+     "id": "grateful",
+     "label": "Take it as the compliment he meant",
+     "outcome": "You tell him so, and he is pleased, and something in the file says the man was asked for by another diocese and kept, which is a sentence the terna reads well.",
+     "effects": [
+      {
+       "target": "relationship",
+       "key": "@bishop",
+       "delta": 4
+      },
+      {
+       "target": "reputation",
+       "key": "chancery",
+       "delta": 3
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "ask",
+     "label": "Ask him, privately, why",
+     "outcome": "He tells you: the diocese is short, and the Spanish Mass is yours, and he does not lend the men he would miss. It is the truth and it is also a leash, and you both know it.",
+     "effects": [
+      {
+       "target": "relationship",
+       "key": "@bishop",
+       "delta": 2
+      },
+      {
+       "target": "stat",
+       "key": "knowledge",
+       "delta": 1
+      }
+     ]
+    },
+    {
+     "id": "sore",
+     "label": "Let the deanery see that you minded",
+     "outcome": "The dean notices, and the bishop hears of it, and the next diocese that asks is told no before you are told it asked.",
+     "effects": [
+      {
+       "target": "relationship",
+       "key": "@bishop",
+       "delta": -4
+      },
+      {
+       "target": "reputation",
+       "key": "brother_priests",
+       "delta": -2
+      }
+     ]
+    }
+   ],
+   "once": true
+  },
+  {
+   "id": "ln_home_again",
+   "phase": [
+    "parochial_vicar",
+    "administrator",
+    "pastor"
+   ],
+   "severity": "NOTABLE",
+   "category": "group",
+   "baseWeight": 44,
+   "suppressYears": 3,
+   "pressure": [
+    "ambition_vs_integrity"
+   ],
+   "requires": [
+    {
+     "type": "loan",
+     "key": "since",
+     "value": "returned",
+     "within": 30
+    },
+    {
+     "type": "loan",
+     "key": "on",
+     "value": false
+    }
+   ],
+   "title": "Home, and a Stranger Again",
+   "body": "The first deanery meeting home from {loan_diocese}: the men who were vicars are pastors, the pastor who was the dean is dead, and the questions on the table are the questions you left, older. Someone asks how it was out there, in the tone of a man asking about a war he did not fight in.",
+   "choices": [
+    {
+     "id": "tell",
+     "label": "Tell them how it was: the Spanish Mass, the far parish, the bishop who bought you a car",
+     "outcome": "They listen, and one of them asks a real question, and the dean writes to the bishop that the man has come back with something. The file has a page about the years that is not blank.",
+     "effects": [
+      {
+       "target": "reputation",
+       "key": "brother_priests",
+       "delta": 3
+      },
+      {
+       "target": "reputation",
+       "key": "chancery",
+       "delta": 2
+      },
+      {
+       "target": "stat",
+       "key": "charisma",
+       "delta": 1
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "quiet",
+     "label": "Say it was fine, and ask about the questions on the table",
+     "outcome": "They tell you, and you are back inside the deanery by the end of the meeting, and nobody asks about the years again, which is what you wanted and also is not.",
+     "effects": [
+      {
+       "target": "reputation",
+       "key": "brother_priests",
+       "delta": 2
+      }
+     ]
+    },
+    {
+     "id": "better",
+     "label": "Say, too plainly, that they do things better out there",
+     "outcome": "The table goes quiet and the dean changes the subject, and for a year you are the man who came back from the loan with opinions.",
+     "effects": [
+      {
+       "target": "reputation",
+       "key": "brother_priests",
+       "delta": -4
+      },
+      {
+       "target": "reputation",
+       "key": "chancery",
+       "delta": -1
+      },
+      {
+       "target": "stat",
+       "key": "knowledge",
+       "delta": 1
+      }
+     ],
+     "volume": "semi_public",
+     "positionTopic": "authority",
+     "positionValue": 10
+    }
+   ],
+   "once": true
+  },
+  {
+   "id": "ln_stayed",
+   "phase": [
+    "parochial_vicar",
+    "administrator",
+    "pastor"
+   ],
+   "severity": "NOTABLE",
+   "category": "personal",
+   "baseWeight": 44,
+   "suppressYears": 5,
+   "pressure": [
+    "ambition_vs_integrity"
+   ],
+   "requires": [
+    {
+     "type": "loan",
+     "key": "since",
+     "value": "stayed",
+     "within": 40
+    }
+   ],
+   "title": "What Home Wrote Down",
+   "body": "A letter from a classmate at {loan_home}, the first since you were incardinated here: the bishop read your excardination at the presbyteral council without comment, which the council understood as comment; two men said you had been ambitious and one said you had been brave, and the classmate is not sure which he thinks. He asks whether you are happy. He does not ask whether you are right.",
+   "choices": [
+    {
+     "id": "happy",
+     "label": "Write that you are, and why",
+     "outcome": "He answers that he believes you, and that he is a little envious, and that home will forget it in five years, which is roughly true and also the point.",
+     "effects": [
+      {
+       "target": "reputation",
+       "key": "rome",
+       "delta": 0
+      },
+      {
+       "target": "strain",
+       "key": "",
+       "delta": -2
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "right",
+     "label": "Write that you were right, and let him decide about happy",
+     "outcome": "He does not answer for a year, and when he does it is about something else. Home has decided.",
+     "effects": [
+      {
+       "target": "reputation",
+       "key": "brother_priests",
+       "delta": -1
+      }
+     ]
+    },
+    {
+     "id": "nothing",
+     "label": "Do not answer; that life is closed",
+     "outcome": "He does not write again. It is one letter fewer a year, and you notice it more than you expected.",
+     "effects": [
+      {
+       "target": "strain",
+       "key": "",
+       "delta": 2
+      }
+     ]
+    }
+   ],
+   "once": true
+  },
+  {
+   "id": "ln_excardination_refused",
+   "phase": [
+    "parochial_vicar",
+    "administrator",
+    "pastor"
+   ],
+   "severity": "NOTABLE",
+   "category": "personal",
+   "baseWeight": 44,
+   "suppressYears": 5,
+   "pressure": [
+    "ambition_vs_integrity"
+   ],
+   "requires": [
+    {
+     "type": "loan",
+     "key": "since",
+     "value": "excardination_refused",
+     "within": 10
+    }
+   ],
+   "title": "Kept, at a Distance",
+   "body": "{loan_home} has refused your excardination, and the refusal is in the file here and in the file there. {loan_bishop} says he is sorry and means it, and says that it changes nothing about the work, which is not true, and you both go on as if it were.",
+   "choices": [
+    {
+     "id": "work",
+     "label": "Do the work as before, and go home when the term is up",
+     "outcome": "The last year of the loan is the best of them, since a man who knows he is leaving does the work for its own sake, and {loan_bishop} says so in the file he sends home, which home reads with a face.",
+     "effects": [
+      {
+       "target": "relationship",
+       "key": "@bishop",
+       "delta": 4
+      },
+      {
+       "target": "reputation",
+       "key": "parishioners",
+       "delta": 2
+      },
+      {
+       "target": "strain",
+       "key": "",
+       "delta": 1
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "sulk",
+     "label": "Do the work, and count the days",
+     "outcome": "The parish notices, the way parishes do, and the last year is a year. {loan_bishop} writes a fair file. Home reads it and thinks it was right.",
+     "effects": [
+      {
+       "target": "reputation",
+       "key": "parishioners",
+       "delta": -3
+      },
+      {
+       "target": "strain",
+       "key": "",
+       "delta": 3
+      }
+     ]
+    },
+    {
+     "id": "rome",
+     "label": "Write to the nuncio about the refusal",
+     "outcome": "The nuncio's office answers that a bishop's consent is his own and that the Holy See does not adjudicate a diocese's shortage, and your name is in a file in Washington under a heading you did not want.",
+     "effects": [
+      {
+       "target": "reputation",
+       "key": "rome",
+       "delta": -4
+      },
+      {
+       "target": "relationship",
+       "key": "@bishop",
+       "delta": -1
+      }
+     ]
+    }
+   ],
+   "once": true
+  },
+  {
+   "id": "ln_declined",
+   "phase": [
+    "parochial_vicar",
+    "administrator",
+    "pastor"
+   ],
+   "severity": "NOTABLE",
+   "category": "chancery",
+   "baseWeight": 24,
+   "suppressYears": 5,
+   "pressure": [
+    "ambition_vs_integrity"
+   ],
+   "requires": [
+    {
+     "type": "flag",
+     "key": "loan:declined",
+     "value": true
+    },
+    {
+     "type": "loan",
+     "key": "on",
+     "value": false
+    }
+   ],
+   "title": "The Loan You Declined",
+   "body": "{@bishop} mentions, months later, in the corridor, that the diocese that asked for you found a religious who does not speak the language it asked for, and that the bishop there has written to say so, and that he had told the man you were the best he had. He says it without weight. It has weight.",
+   "choices": [
+    {
+     "id": "own",
+     "label": "Say you would go, next time, if asked",
+     "outcome": "He says he will remember, and does, and the next letter from the province is answered before you see it, with your name.",
+     "effects": [
+      {
+       "target": "relationship",
+       "key": "@bishop",
+       "delta": 2
+      },
+      {
+       "target": "flag",
+       "key": "loan:refused_offer",
+       "value": false
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "stand",
+     "label": "Say the parish needed you more, and still does",
+     "outcome": "He agrees that it does, and the province learns that {@bishop} keeps his men, which is a thing the province thinks about when it writes.",
+     "effects": [
+      {
+       "target": "relationship",
+       "key": "@bishop",
+       "delta": 1
+      },
+      {
+       "target": "reputation",
+       "key": "parishioners",
+       "delta": 1
+      },
+      {
+       "target": "flag",
+       "key": "loan:refused_offer",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": "sorry",
+     "label": "Say you are sorry it went badly for them",
+     "outcome": "He says these things do, and that a man cannot be in two dioceses, and that he was glad of the parish's Spanish Mass on Sunday. The corridor goes on.",
+     "effects": []
+    }
+   ],
+   "once": true
+  },
+  {
+   "id": "ln_bp_asked",
+   "phase": "bishop",
+   "severity": "NOTABLE",
+   "category": "chancery",
+   "baseWeight": 30,
+   "suppressYears": 3,
+   "pressure": [
+    "ambition_vs_integrity"
+   ],
+   "requires": [
+    {
+     "type": "flag",
+     "key": "study:see",
+     "value": true
+    },
+    {
+     "type": "see",
+     "key": "years",
+     "op": ">=",
+     "value": 1
+    },
+    {
+     "type": "see",
+     "key": "shortage",
+     "op": "<=",
+     "value": 4
+    }
+   ],
+   "title": "A Brother Bishop Asks for a Man",
+   "body": "{@province_bishop} writes for {@brother_priest} by name: three years on loan, a parish he cannot staff, and a promise to send him back better. The letter is warm and the arithmetic under it is cold: the diocese is a man shorter for three years, and the presbyterate will hear that the bishop lent one of its own to a diocese that did not form him.",
+   "choices": [
+    {
+     "id": "lend",
+     "label": "Lend him, for three years, with a letter that says what he is worth",
+     "outcome": "He goes in the spring with a car full of books and the diocese is a man shorter. {@province_bishop} owes you one and knows it, and the presbyterate mutters for a season and then stops, since the man wanted to go.",
+     "effects": [
+      {
+       "target": "loan",
+       "key": "lend",
+       "value": "@brother_priest",
+       "delta": 3
+      },
+      {
+       "target": "relationship",
+       "key": "@province_bishop",
+       "delta": 8
+      },
+      {
+       "target": "see",
+       "key": "presbyterate",
+       "delta": -1
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "year",
+     "label": "Lend him for one year, and see",
+     "outcome": "{@province_bishop} takes the year and is grateful for less than he asked for, and the man goes and comes back, and the presbyterate hardly notices. A year is not a loan; it is a favour.",
+     "effects": [
+      {
+       "target": "loan",
+       "key": "lend",
+       "value": "@brother_priest",
+       "delta": 1
+      },
+      {
+       "target": "relationship",
+       "key": "@province_bishop",
+       "delta": 4
+      }
+     ]
+    },
+    {
+     "id": "refuse",
+     "label": "Refuse: the diocese cannot spare him",
+     "outcome": "{@province_bishop} writes back that he understands, and finds a religious, and the presbyterate hears that the bishop keeps his men, which it likes. The province hears it too.",
+     "effects": [
+      {
+       "target": "relationship",
+       "key": "@province_bishop",
+       "delta": -5
+      },
+      {
+       "target": "see",
+       "key": "presbyterate",
+       "delta": 1
+      },
+      {
+       "target": "relationship",
+       "key": "@brother_priest",
+       "delta": -3
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "ln_bp_borrowed_arrives",
+   "phase": "bishop",
+   "severity": "NOTABLE",
+   "category": "chancery",
+   "baseWeight": 44,
+   "suppressYears": 2,
+   "pressure": [
+    "ambition_vs_integrity"
+   ],
+   "requires": [
+    {
+     "type": "flag",
+     "key": "study:see",
+     "value": true
+    },
+    {
+     "type": "loan",
+     "key": "since",
+     "value": "borrowed",
+     "within": 6
+    }
+   ],
+   "title": "The Man on Loan Arrives",
+   "body": "The priest a brother bishop lent you arrives with a car full of books and a manner that says he has been lent before. The vicar general has a parish for him and the presbyterate has a name for him already, which is the loaner, and he has heard it, and does not mind, and will.",
+   "choices": [
+    {
+     "id": "dinner",
+     "label": "Have him to dinner the first week, and ask what he needs",
+     "outcome": "He needs a Spanish missal and a second man on Sundays, and gets both, and the parish he is given is the better for three years of a man who knew he was leaving. The bishop who lent him hears you were kind, and remembers.",
+     "effects": [
+      {
+       "target": "see",
+       "key": "presbyterate",
+       "delta": 1
+      },
+      {
+       "target": "see",
+       "key": "people",
+       "delta": 1
+      },
+      {
+       "target": "relationship",
+       "key": "@province_bishop",
+       "delta": 3
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "vg",
+     "label": "Leave him to the vicar general",
+     "outcome": "The vicar general is fair and busy and the man does the work and goes home in three years having met you twice. The bishop who lent him hears that too.",
+     "effects": [
+      {
+       "target": "see",
+       "key": "presbyterate",
+       "delta": 0
+      }
+     ]
+    },
+    {
+     "id": "council",
+     "label": "Put him on the council of priests, so the presbyterate has to sit with him",
+     "outcome": "The presbyterate is affronted, since the council is theirs, and then, over a year, is not. The loaner becomes the man from the next diocese who knows how they do it there, which is a thing a council can use.",
+     "effects": [
+      {
+       "target": "see",
+       "key": "presbyterate",
+       "delta": -1
+      },
+      {
+       "target": "stat",
+       "key": "administration",
+       "delta": 1
+      },
+      {
+       "target": "relationship",
+       "key": "@province_bishop",
+       "delta": 2
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "ln_bp_no_priest",
+   "phase": "bishop",
+   "severity": "NOTABLE",
+   "category": "chancery",
+   "baseWeight": 44,
+   "suppressYears": 2,
+   "pressure": [
+    "ambition_vs_integrity"
+   ],
+   "requires": [
+    {
+     "type": "flag",
+     "key": "study:see",
+     "value": true
+    },
+    {
+     "type": "loan",
+     "key": "since",
+     "value": "bishop_refused",
+     "within": 6
+    }
+   ],
+   "title": "No Man to Spare",
+   "body": "The brother bishop you wrote to has answered: he has no priest to spare, and he encloses, as a kindness, the name of a religious provincial who might. The vicar general reads the letter and says what the vicar general always says, which is that the diocese will manage, and the parish that needed the man is told nothing.",
+   "choices": [
+    {
+     "id": "provincial",
+     "label": "Write to the provincial he names",
+     "outcome": "The provincial has a man, for a price the diocese can pay, and the parish has a friar for three years and learns to like him. The brother bishop is thanked for the name.",
+     "effects": [
+      {
+       "target": "see",
+       "key": "shortage",
+       "delta": -1
+      },
+      {
+       "target": "see",
+       "key": "money",
+       "delta": -2
+      },
+      {
+       "target": "relationship",
+       "key": "@province_bishop",
+       "delta": 1
+      }
+     ],
+     "default": true
+    },
+    {
+     "id": "cluster",
+     "label": "Cluster the parish with the next one and tell them why",
+     "outcome": "The two parishes share a pastor and resent it and then, slowly, do not. The presbyterate approves of a bishop who does not beg.",
+     "effects": [
+      {
+       "target": "see",
+       "key": "people",
+       "delta": -2
+      },
+      {
+       "target": "see",
+       "key": "presbyterate",
+       "delta": 1
+      }
+     ]
+    },
+    {
+     "id": "again",
+     "label": "Write to another bishop of the province",
+     "outcome": "The second letter is answered like the first, since the province talks, and the diocese learns that a bishop who asks twice is a bishop who is short, which it knew.",
+     "effects": [
+      {
+       "target": "relationship",
+       "key": "@province_bishop",
+       "delta": -1
+      },
+      {
+       "target": "see",
+       "key": "rome",
+       "delta": -1
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

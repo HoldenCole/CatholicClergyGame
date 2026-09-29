@@ -63,6 +63,7 @@ import { closeCascade, dueCascade } from '@/systems/rome/documents';
 import { closeNuncioScene, dueNuncioScene } from '@/systems/rome/nuncio';
 import { metropolitanWeek } from '@/systems/metropolitan';
 import { closeConferenceScene, conferenceWeek, dueConferenceScene } from '@/systems/conference';
+import { closeLoanScene, dueLoanScene, lentReturns, loanWeek, loanWeekForSee } from '@/systems/loan';
 import { curiaWeek } from '@/systems/rome/curia';
 import { closeCollegeScene, dueCollegeScene } from '@/systems/rome/college';
 import { popeHomeYear } from '@/systems/homeFromAfar';
@@ -283,6 +284,11 @@ export function studyWeekHook(deps: EventDeps): WeekHook {
         next = dueBeatScene(next, 'conference', closeConferenceScene, rng.derive(`conference-scene:${next.clock.week}`), deps);
         if (next.mode.kind !== 'clock' || next.pending.length > 0) return next;
       }
+      // Priests borrowed and lent. E2 §2.4.
+      const loans = loanWeekForSee(lentReturns(next), rng.derive(`loan:${next.clock.week}`));
+      next = loans.state;
+      for (const line of loans.lines) next = addDigestLine(next, line);
+      for (const l of loans.letters) next = deliverLetter(next, l);
       if (dueNuncioScene(next)) {
         next = nuncioScene(next, rng.derive(`nuncio:${next.clock.week}`), deps);
         if (next.mode.kind !== 'clock' || next.pending.length > 0) return next;
@@ -634,6 +640,16 @@ export function parishWeekHook(deps: EventDeps): WeekHook {
       for (const l of conference.letters) next = deliverLetter(next, l);
       if (dueConferenceScene(next)) {
         next = dueBeatScene(next, 'conference', closeConferenceScene, rng.derive(`conference-scene:${next.clock.week}`), deps);
+        if (next.mode.kind !== 'clock' || next.pending.length > 0) return next;
+      }
+      // A loan across diocesan lines: the home bishop's answer, and the term's end. E2 §2.4.
+      const loan = loanWeek(next, rng.derive(`loan:${next.clock.week}`));
+      next = loan.state;
+      for (const line of loan.lines) next = addDigestLine(next, line);
+      for (const l of loan.letters) next = deliverLetter(next, l);
+      if (next.mode.kind !== 'clock') return next;
+      if (dueLoanScene(next)) {
+        next = dueBeatScene(next, 'loan', closeLoanScene, rng.derive(`loan-scene:${next.clock.week}`), deps);
         if (next.mode.kind !== 'clock' || next.pending.length > 0) return next;
       }
     }

@@ -184,6 +184,15 @@ export type Condition =
   | { type: 'conference'; key: 'next'; value: ConferenceOffice }
   | { type: 'conference'; key: 'result'; value: 'won' | 'lost' | 'watched' }
   | { type: 'conference'; key: 'president'; value: 'player' | 'new' }
+  /**
+   * E2 R1.3: a loan across diocesan lines: on one (or not); one could be asked of him; the term is up; the borrowing bishop would keep him;
+   * the scene of the term's end is due; the years on it against a value.
+   */
+  | { type: 'loan'; key: 'on' | 'available' | 'ending' | 'wanted'; value: boolean }
+  | { type: 'loan'; key: 'scene'; value: 'end' }
+  /** Something the loan wrote down (flag loan:<value>, a week), within so many weeks. */
+  | { type: 'loan'; key: 'since'; value: 'returned' | 'stayed' | 'refused' | 'excardination_refused' | 'borrowed' | 'bishop_refused' | 'on'; within: number }
+  | { type: 'loan'; key: 'years'; op: Op; value: number }
   /** E1 R1.3: the nuncio: his scene due for the man now, or his view of the man (0..100) against a value. */
   /** E1 R1.5: the College's scene due for the man now (created, titular, eve, after, eighty, consistory). */
   | { type: 'college'; key: 'scene'; value: string }
@@ -289,7 +298,9 @@ export type EffectTarget =
   /** Write into the book of a ministry (DESIGN §8.6): key is what was counted, delta how many. */
   | 'ministry'
   /** E1 R1.1: what he did in his parish with the latest document on an axis (key: the axis; value: eager | faithful | minimal | defiant). The record keeps it. */
-  | 'document';
+  | 'document'
+  /** E2 R1.3: a loan: key ask (value: the kind), home, stay, extend, excardinate; for a bishop, lend (value: the priest's selector, the see from the @province_bishop binding). */
+  | 'loan';
 
 export interface Effect {
   target: EffectTarget;

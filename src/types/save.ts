@@ -1,5 +1,6 @@
 import type { RomeState } from './rome';
 import type { ConferenceState } from './conference';
+import type { LoanState } from './loan';
 import type { Character } from './character';
 import type { FileEntry } from './career';
 import type { HistoryEntry, PendingEvent } from './events';
@@ -188,6 +189,9 @@ export interface GameState {
   rome?: RomeState;
   /** E2 R1.2: the national conference of bishops; absent in older saves until the first week reads it. */
   conference?: ConferenceState;
+  /** E2 R1.3: the loan he is on, and the loans he has been on. */
+  loan?: LoanState;
+  loanHistory?: LoanState[];
   /** How places look: chosen furnishings by place key. */
   decor: DecorState;
   /** Letters to the chancery about the liturgy, by topic. Answered by the week hook. */

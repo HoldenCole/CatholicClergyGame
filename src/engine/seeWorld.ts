@@ -71,7 +71,7 @@ export function playerBishopProfile(state: GameState, rng: Rng, year: number): B
 }
 
 /** Roll the see's world, its people namespaced and tagged with the see so a selector knows whose priests are whose. */
-export function generateSeeWorld(state: GameState, see: SeeState, rng: Rng): { world: World; npcs: Npc[]; presetId: string } {
+export function generateSeeWorld(state: GameState, see: Pick<SeeState, 'id'>, rng: Rng): { world: World; npcs: Npc[]; presetId: string } {
   const def = seeDef(see.id);
   if (!def) throw new Error(`no see ${see.id}`);
   const year = dateOf(state.clock).year;
