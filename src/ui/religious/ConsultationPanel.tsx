@@ -40,6 +40,7 @@ export default function ConsultationPanel() {
             <li key={o.houseId} className={'rounded border rule px-3 py-2 ' + (chosen ? 'choice-chosen' : 'bg-white/30')}>
               <div className="font-medium">{house?.name ?? o.houseId} <span className="ink-faint text-xs">· {o.work.replace('_', ' ')}</span></div>
               <p className="ink-muted text-xs">{o.line}</p>
+              {o.why && <p className="mt-0.5 text-xs">{o.why}</p>}
               <p className="ink-faint text-xs">As he puts it: {need(o.need)}; {fit(o.fit)}{o.formation >= 60 ? '; and a young friar should see it' : ''}.</p>
               {o.works && o.works.length > 1 ? (
                 <div className="mt-1 flex flex-wrap items-center gap-1">

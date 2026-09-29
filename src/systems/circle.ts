@@ -9,11 +9,14 @@ import { yearOf } from '@/ui/portraits/spec';
  * the groups the shelf uses at the end. A view over records the game
  * already keeps; nothing here is stored.
  */
-export type CircleGroup = 'family' | 'class' | 'brothers' | 'chancery' | 'bishops' | 'parish' | 'former' | 'others';
+export type CircleGroup = 'family' | 'house' | 'class' | 'province' | 'directees' | 'brothers' | 'chancery' | 'bishops' | 'parish' | 'former' | 'others';
 
-export const CIRCLE_LABEL: Record<CircleGroup, string> = {
+const CIRCLE_LABEL: Record<CircleGroup, string> = {
   family: 'The family',
+  house: 'The house',
   class: 'The class',
+  province: 'The province',
+  directees: 'The men you direct',
   brothers: 'Brother priests',
   chancery: 'The chancery',
   bishops: 'The bishops',
@@ -21,8 +24,20 @@ export const CIRCLE_LABEL: Record<CircleGroup, string> = {
   former: 'The people of the parishes before',
   others: 'Others',
 };
+/** A friar's words for the same groups: the men at table, the novitiate class, the diocese's priests. */
+const FRIAR_LABEL: Partial<Record<CircleGroup, string>> = { house: 'The house, at table', class: 'The novitiate class', brothers: 'Diocesan priests', former: 'The people of the parishes before' };
 
-export const CIRCLE_ORDER: readonly CircleGroup[] = ['family', 'class', 'brothers', 'chancery', 'bishops', 'parish', 'former', 'others'];
+export function circleLabel(state: Pick<GameState, 'religious'>, group: CircleGroup): string {
+  return (state.religious ? FRIAR_LABEL[group] : undefined) ?? CIRCLE_LABEL[group];
+}
+
+const DIOCESAN_ORDER: readonly CircleGroup[] = ['family', 'class', 'brothers', 'chancery', 'bishops', 'parish', 'former', 'others'];
+/** A friar's circle is his house first, then the men he entered with, then the province. */
+const FRIAR_ORDER: readonly CircleGroup[] = ['family', 'house', 'class', 'province', 'directees', 'bishops', 'brothers', 'chancery', 'parish', 'former', 'others'];
+
+export function circleOrder(state: Pick<GameState, 'religious'>): readonly CircleGroup[] {
+  return state.religious ? FRIAR_ORDER : DIOCESAN_ORDER;
+}
 
 export interface CircleRow {
   npc: Npc;
@@ -38,8 +53,12 @@ export interface CircleRow {
   status: string;
 }
 
-/** Who counts: anyone with regard past the line, a bond, a mark, or a chair he sat under. */
-export function inCircle(npc: Npc): boolean {
+/** Who counts: anyone with regard past the line, a bond, a mark, or a chair he sat under; for a friar, every man at his table and every man he directs. */
+export function inCircle(npc: Npc, state?: Pick<GameState, 'religious' | 'orderHouses'>): boolean {
+  if (state?.religious) {
+    const house = state.orderHouses?.[state.religious.houseId];
+    if (house?.memberIds.includes(npc.id) || npc.tags.includes('directee')) return true;
+  }
   return Math.abs(npc.relationship) >= 15 || (npc.bonds?.length ?? 0) > 0 || (npc.marks?.length ?? 0) > 0 || npc.role === 'bishop' || npc.role === 'family';
 }
 
@@ -47,6 +66,12 @@ function groupOf(state: GameState, npc: Npc): CircleGroup {
   const pid = state.assignment?.parishId;
   if (npc.role === 'family') return 'family';
   if (npc.role === 'classmate') return 'class';
+  if (state.religious) {
+    const house = state.orderHouses?.[state.religious.houseId];
+    if (house?.memberIds.includes(npc.id)) return 'house';
+    if (npc.tags.includes('directee')) return 'directees';
+    if (npc.tags.includes('friar') || npc.tags.includes('provincial') || npc.tags.includes('prior')) return 'province';
+  }
   if (npc.role === 'bishop' || npc.tags.includes('bishop_emeritus')) return 'bishops';
   if (npc.role === 'official' || npc.tags.includes('chancery')) return 'chancery';
   if (npc.role === 'priest' || npc.role === 'formator') return 'brothers';
@@ -77,7 +102,7 @@ function historyOf(state: GameState, npc: Npc): string {
 export function circleOf(state: GameState): CircleRow[] {
   const year = (w: number) => yearOf(state.clock.startDay, w);
   return Object.values(state.npcs)
-    .filter((n) => n.id !== 'player' && inCircle(n) && n.status !== 'dismissed')
+    .filter((n) => n.id !== 'player' && inCircle(n, state) && n.status !== 'dismissed')
     .map((npc) => ({
       npc,
       group: groupOf(state, npc),
@@ -87,5 +112,5 @@ export function circleOf(state: GameState): CircleRow[] {
       seen: npc.status === 'active' ? seenWord(state, npc) : '',
       status: npc.status === 'active' ? '' : npc.status,
     }))
-    .sort((a, b) => CIRCLE_ORDER.indexOf(a.group) - CIRCLE_ORDER.indexOf(b.group) || (a.status ? 1 : 0) - (b.status ? 1 : 0) || b.npc.relationship - a.npc.relationship || a.npc.id.localeCompare(b.npc.id));
+    .sort((a, b) => circleOrder(state).indexOf(a.group) - circleOrder(state).indexOf(b.group) || (a.status ? 1 : 0) - (b.status ? 1 : 0) || b.npc.relationship - a.npc.relationship || a.npc.id.localeCompare(b.npc.id));
 }

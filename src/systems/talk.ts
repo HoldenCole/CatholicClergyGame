@@ -16,7 +16,7 @@ import { strainOf, WEEK } from './week';
  * with his brothers as they go, and reaching the bishop a step later
  * unless he answers them first.
  */
-interface KindDef { about: 'you' | 'other'; standing: number; true: string[]; false: string[] }
+interface KindDef { about: 'you' | 'other'; standing: number; true: string[]; false: string[]; /** The same talk as a friar's house would have it. */ religious?: { true: string[]; false: string[] } }
 interface VenueDef { id: string; label: string; weight: number; when?: string }
 const content = rumoursJson as unknown as { truth: number; spawnChance: number; hearChance: number; hearAboutYouChance: number; bishopWeeks: [number, number]; kinds: Record<string, KindDef>; venues: { diocesan: VenueDef[]; religious: VenueDef[] }; aboutYouHeard: string[] };
 
@@ -121,8 +121,9 @@ function fill(template: string, name: string, state: GameState): string {
 
 function spawn(state: GameState, rng: Rng, kind: string, about: string, name: string): Rumour {
   const def = content.kinds[kind]!;
-  const isTrue = rng.chance(TALK.truth) || !def.false.length;
-  const pool = isTrue ? def.true : def.false;
+  const idiom = state.religious && def.religious ? def.religious : def;
+  const isTrue = rng.chance(TALK.truth) || !idiom.false.length;
+  const pool = isTrue ? idiom.true : idiom.false;
   const week = state.clock.week;
   return {
     id: `${kind}:${about}:${week}`,
@@ -146,7 +147,7 @@ export function seedRumour(state: GameState, rng: Rng, kind: string, extra: Reco
 }
 
 function reputationKey(state: GameState, who: 'brothers' | 'bishop'): string {
-  if (state.religious) return who === 'brothers' ? 'community' : 'local_bishop';
+  if (state.religious) return who === 'brothers' ? 'community' : 'superiors';
   return who === 'brothers' ? 'brother_priests' : 'chancery';
 }
 
@@ -217,8 +218,9 @@ export function talkWeek(state: GameState, rng: Rng): { state: GameState; lines:
     rumours = rumours.map((x) => (x.id === r.id ? { ...x, reachedBishop: true } : x));
     const delta = Math.round(r.standing * TALK.bishopShare);
     if (delta) next = applyEffects(next, [{ target: 'reputation', key: reputationKey(next, 'bishop'), delta }], {}, 'what reached the bishop');
-    next = { ...next, career: [...next.career, { week, kind: 'note', text: `The bishop has heard what is being said: ${r.text}` }] };
-    next = writeFile(next, { by: 'bishop', byLabel: 'the bishop, from what he heard', kind: 'rumour', text: r.text, weight: r.standing < 0 ? -1 : r.standing > 0 ? 1 : 0, lean: 0, seen: false });
+    const ear = next.religious ? 'The provincial' : 'The bishop';
+    next = { ...next, career: [...next.career, { week, kind: 'note', text: `${ear} has heard what is being said: ${r.text}` }] };
+    next = writeFile(next, next.religious ? { by: 'provincial', byLabel: 'the provincial, from what he heard', kind: 'rumour', text: r.text, weight: r.standing < 0 ? -1 : r.standing > 0 ? 1 : 0, lean: 0, seen: false } : { by: 'bishop', byLabel: 'the bishop, from what he heard', kind: 'rumour', text: r.text, weight: r.standing < 0 ? -1 : r.standing > 0 ? 1 : 0, lean: 0, seen: false });
   }
   rumours = rumours.slice(-TALK.keep);
   return { state: { ...next, talk: { rumours, snapshot } }, lines };

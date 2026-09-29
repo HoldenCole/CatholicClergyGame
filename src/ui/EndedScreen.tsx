@@ -66,6 +66,35 @@ export default function EndedScreen() {
         <p className="whitespace-pre-line leading-relaxed">{game.mode.summary}</p>
         {summary && <p className="ink-muted whitespace-pre-line leading-relaxed">{summary.split('\n').slice(0, 4).join(' ')}</p>}
 
+        {life && life.houses && life.houses.length > 0 && (
+          <Section title="The houses">
+            <ol className="flex flex-col gap-1 text-sm">
+              {life.houses.map((h, i) => (
+                <li key={i} className="flex flex-col gap-0.5 sm:flex-row sm:items-baseline sm:gap-3">
+                  <span className="ink-faint w-20 shrink-0 text-xs">{h.years}</span>
+                  <span className="min-w-0 flex-1">{h.name}, {h.kind}, {h.work}{h.grace ? <span className="ink-wine"> ({h.grace})</span> : ''}.</span>
+                </li>
+              ))}
+            </ol>
+          </Section>
+        )}
+        {life && life.terms && life.terms.length > 0 && (
+          <Section title="The offices">
+            <ol className="flex flex-col gap-1 text-sm">
+              {life.terms.map((t, i) => (
+                <li key={i} className="flex flex-col gap-0.5 sm:flex-row sm:items-baseline sm:gap-3">
+                  <span className="ink-faint w-20 shrink-0 text-xs">{t.years}</span>
+                  <span className="min-w-0 flex-1">{t.label.charAt(0).toUpperCase() + t.label.slice(1)}, {t.body}.</span>
+                </li>
+              ))}
+            </ol>
+          </Section>
+        )}
+        {life && life.foundations && life.foundations.length > 0 && (
+          <Section title="The foundation">
+            <ul className="flex flex-col gap-0.5 text-sm">{life.foundations.map((f, i) => <li key={i}>{f}</li>)}</ul>
+          </Section>
+        )}
         {life && life.posts.length > 0 && (
           <Section title="The posts">
             <ol className="flex flex-col gap-1 text-sm">

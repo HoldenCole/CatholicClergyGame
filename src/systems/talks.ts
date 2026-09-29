@@ -34,6 +34,8 @@ export function whoIs(state: GameState, npc: Npc): TalkWho | null {
   const led = parishGroups(state).find((g) => g.leaderId === npc.id);
   if (led) return `leader_${led.agenda}`;
   if (npc.role === 'classmate') return 'classmate';
+  if (npc.tags.includes('directee')) return 'directee';
+  if (state.religious && (npc.tags.includes('friar') || npc.role === 'religious')) return 'confrere';
   if (npc.role === 'priest') return 'brother_priest';
   return null;
 }
@@ -49,7 +51,7 @@ export function mayTalk(state: GameState, npcId: string): TalkAvailability {
   if (!npc || npc.status !== 'active') return { ok: false, why: 'Not here.', who: null };
   const who = whoIs(state, npc);
   if (!who) return { ok: false, why: 'Nothing to say yet.', who: null };
-  if (!state.parish || state.mode.kind !== 'clock') return { ok: false, why: 'Not now.', who };
+  if ((!state.parish && !(state.religious && state.flags.ordained)) || state.mode.kind !== 'clock') return { ok: false, why: 'Not now.', who };
   const last = talksOf(state).last[npcId];
   if (last !== undefined && state.clock.week - last < TALKS.cooldownWeeks) {
     const weeks = TALKS.cooldownWeeks - (state.clock.week - last);

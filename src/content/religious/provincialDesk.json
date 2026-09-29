@@ -1,0 +1,69 @@
+{
+  "_notes": "The provincial's desk (friar round, Q3). E3 §3.1 obedience, §3.7 the province, §3.14 closures. Every act is data; the numbers are invented. An act's target says what the sheet asks him to name: a man and a house, a house, a house under its floor, a house with something to sell, or nothing.",
+  "acts": [
+    {
+      "id": "move_man",
+      "label": "Send a man",
+      "blurb": "A friar of the province to another of its houses, by letter, with a month's notice. He goes; the house he leaves is a man short and the one he reaches a man up.",
+      "target": "man_and_house",
+      "cooldownWeeks": 8,
+      "effects": [{ "target": "reputation", "key": "superiors", "delta": 1 }],
+      "line": "The letter went out on Monday. {man} will be at {house} by the first of the month, and the men at table where he was have opinions."
+    },
+    {
+      "id": "visit_house",
+      "label": "Visit a house",
+      "blurb": "Three days in the house: the books, the chapter, every man alone for a quarter of an hour. The house tidies its observance for the week you are in it, and remembers that you came.",
+      "target": "house",
+      "cooldownWeeks": 6,
+      "effects": [{ "target": "reputation", "key": "province", "delta": 1 }],
+      "line": "Three days at {house}. {finding}"
+    },
+    {
+      "id": "close_house",
+      "label": "Close a house",
+      "blurb": "A house under the floor for its kind is closed: its men go where there is room, a parish it held goes back to the diocese, and the town notices. The council has wanted this for a decade and no provincial has said it.",
+      "target": "house_under_floor",
+      "cooldownWeeks": 52,
+      "effects": [
+        { "target": "reputation", "key": "community", "delta": -6 },
+        { "target": "reputation", "key": "superiors", "delta": 4 },
+        { "target": "reputation", "key": "province", "delta": -3 }
+      ],
+      "line": "{closing} The province is lighter by a house and the men who lived in it will not forget whose signature was on the letter."
+    },
+    {
+      "id": "levy_houses",
+      "label": "Levy the houses",
+      "blurb": "A tenth of every house's purse to the province, once a year. The priors write back; the procurators sigh.",
+      "target": "none",
+      "cooldownWeeks": 52,
+      "share": 0.1,
+      "effects": [
+        { "target": "reputation", "key": "community", "delta": -4 },
+        { "target": "reputation", "key": "province", "delta": -2 }
+      ],
+      "line": "The levy brought ${amount} to the province, and a letter from every prior."
+    },
+    {
+      "id": "ask_general",
+      "label": "Write to the general",
+      "blurb": "A subsidy from the order's curia, which reads the province's books before it answers, and remembers having been asked.",
+      "target": "none",
+      "cooldownWeeks": 52,
+      "amount": 500000,
+      "effects": [{ "target": "reputation", "key": "order", "delta": -4 }],
+      "line": "{answer}"
+    },
+    {
+      "id": "sell_building",
+      "label": "Sell a building",
+      "blurb": "A house with a wing it no longer fills sells it. The province gets most of what it cost; the house gets a smaller cloister and a grievance.",
+      "target": "house_with_building",
+      "cooldownWeeks": 52,
+      "share": 0.6,
+      "effects": [{ "target": "reputation", "key": "community", "delta": -5 }],
+      "line": "{house} sold its {building} for ${amount}. The men who had rooms in it are in rooms elsewhere."
+    }
+  ]
+}

@@ -53,6 +53,7 @@ import { reviseCharter as reviseCharterSys, writeCharter as writeCharterSys } fr
 import { addFoundationWork as addFoundationWorkSys, myFoundation, sendDaughter as sendDaughterSys } from '@/systems/religious/foundationYear';
 import { castVote, closeChapter, holdElection, resolveElection, returnToRanks, signalWillingness, speakFor, steerBloc, successorChapter } from '@/systems/religious/chapter';
 import { nameOfficer as nameOfficerSys, setHouseRule as setHouseRuleSys, spendPurse as spendPurseSys } from '@/systems/religious/priorDesk';
+import { provincialAct as provincialActSys } from '@/systems/religious/provincialDesk';
 import { askGrant as askGrantSys, startBuild as startBuildSys } from '@/systems/religious/growth';
 import { fromDayNumber } from './calendar';
 import { acceptAssignment as doAcceptAssignment } from './seminary';
@@ -197,6 +198,9 @@ export interface GameStore {
   setHouseRule(ruleId: string): void;
   nameOfficer(officeId: string, npcId: string | null): void;
   spendPurse(id: string): void;
+  /** The provincial's desk: an act of content/religious/provincialDesk.json, with the man or the house it names. */
+  provincialAct(id: string, target?: { npcId?: string; houseId?: string }): void;
+  lastProvincialLine: string | null;
   /** Build: begin a work on the house, or ask the province for a grant toward one. */
   startBuild(id: string): void;
   askBuildGrant(id: string): void;
@@ -465,6 +469,7 @@ export const useGameStore = create<GameStore>()((set, get) => ({
   error: null,
   lastOfferOutcome: null,
   lastPriorLine: null,
+  lastProvincialLine: null,
   lastTalk: null,
   lastFurnishLine: null,
   lastHouseLine: null,
@@ -945,6 +950,13 @@ export const useGameStore = create<GameStore>()((set, get) => ({
       const chapter = successorChapter(returned, office.office, office.bodyId, r.derive(`successor:${game.clock.week}`));
       if (chapter.letter) return deliverLetter(chapter.state, chapter.letter);
       return chapter.state.religious?.chapter ? { ...chapter.state, mode: { kind: 'chapter' } } : chapter.state;
+    });
+  },
+  provincialAct(id, target = {}) {
+    update(set, get, (game, r) => {
+      const res = provincialActSys(game, id, target, r.derive(`provincial:${id}:${game.clock.week}`));
+      if (res.line) set({ lastProvincialLine: res.line });
+      return res.state;
     });
   },
   setHouseRule(ruleId) {

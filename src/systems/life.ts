@@ -5,6 +5,7 @@ import { classmateLines, relationshipWord, type ClassmateLine } from './classmat
 import { yearOf } from '@/ui/portraits/spec';
 import { bondCounts, bondsPhrase } from './bonds';
 import { mourners } from './lastDecade';
+import { religiousOrder } from '@/content/religious';
 
 /**
  * A life, read back at the end: the posts, the bishops, the stands, the
@@ -46,6 +47,12 @@ export interface Life {
   remembered: { npc: Npc; phrase: string }[];
   /** Who came to the funeral, or who would. */
   mourners: Npc[];
+  /** A friar's houses, in order, with the years in each and what he was sent to do. */
+  houses?: { name: string; kind: string; years: string; work: string; grace: string }[];
+  /** A friar's offices: elected and appointed, with the body and the years. */
+  terms?: { label: string; body: string; years: string }[];
+  /** A friar's foundations, each in a line. */
+  foundations?: string[];
 }
 
 function yearsWord(weeks: number): string {
@@ -56,17 +63,54 @@ function yearsWord(weeks: number): string {
 }
 
 export function whoWord(state: GameState, npc: Npc): string {
-  if (npc.role === 'classmate') return 'classmate';
+  if (npc.role === 'classmate') return state.religious ? 'of the novitiate class' : 'classmate';
+  if (npc.tags.includes('friar') || npc.role === 'religious') {
+    if (npc.tags.includes('provincial')) return 'provincial';
+    if (npc.tags.includes('prior')) return 'prior';
+    if (npc.tags.includes('novice_master')) return 'novice master';
+    if (npc.tags.includes('master_of_students')) return 'master of students';
+    if (npc.tags.includes('vows:novice')) return 'novice';
+    if (npc.tags.includes('vows:simple')) return 'student brother';
+    if (npc.tags.includes('lay_brother')) return 'brother';
+    if (npc.tags.includes('directee')) return 'a man you direct';
+    return npc.role === 'religious' && !npc.tags.includes('friar') ? 'religious' : 'friar';
+  }
+  if (npc.tags.includes('directee')) return 'a priest you direct';
   if (npc.role === 'family') return npc.tags.find((t) => ['mother', 'father', 'sibling'].includes(t)) ?? 'family';
   if (npc.role === 'bishop') return 'bishop';
   if (npc.role === 'formator') return npc.tags.find((t) => ['rector', 'spiritual_director', 'formation_advisor', 'vocation_director'].includes(t))?.replace(/_/g, ' ') ?? 'formator';
   if (npc.role === 'official') return npc.tags.find((t) => ['vicar_general', 'chancellor', 'vicar_for_clergy'].includes(t))?.replace(/_/g, ' ') ?? 'chancery';
-  if (npc.role === 'priest') return npc.tags.some((t) => t.startsWith('pastor:')) ? 'pastor' : 'brother priest';
+  if (npc.role === 'priest') return npc.tags.some((t) => t.startsWith('pastor:')) ? 'pastor' : state.religious ? 'diocesan priest' : 'brother priest';
   const staff = npc.tags.find((t) => ['secretary', 'dre', 'music_director', 'maintenance'].includes(t));
   if (staff) return staff.replace(/_/g, ' ');
   const led = Object.values(state.groups).find((g) => g.leaderId === npc.id);
   if (led) return 'group leader';
   return 'parishioner';
+}
+
+const HOUSE_KIND: Record<string, string> = { priory: 'the priory', studium: 'the house of studies', novitiate: 'the novitiate', parish: 'the parish house', school: 'the school', mission: 'the mission', curia: 'the curia' };
+const WORK_WORD: Record<string, string> = { parish: 'for the parish', school: 'for the school', teaching: 'to teach', formation: 'for the formation house', mission: 'for the mission', curia: 'for the curia', priory_church: 'for the priory church', preaching: 'to preach', chaplaincy: 'for the chaplaincy' };
+
+/** What a friar's shelf adds: the houses he lived in, the offices he held, the houses he founded. Friar round Q2. */
+function friarLife(state: GameState): Pick<Life, 'houses' | 'terms' | 'foundations'> {
+  const r = state.religious;
+  if (!r) return {};
+  const week = state.clock.week;
+  const houses = r.assignments.map((a) => {
+    const house = state.orderHouses?.[a.houseId];
+    return { name: house?.name ?? 'a house since closed', kind: HOUSE_KIND[house?.kind ?? ''] ?? house?.kind ?? '', years: yearsWord((a.endWeek ?? week) - a.startWeek), work: WORK_WORD[a.work] ?? a.work.replace(/_/g, ' '), grace: a.grace === 'reluctant' ? 'taken badly' : a.grace === 'refused' ? 'refused' : '' };
+  });
+  const order = religiousOrder(r.order);
+  const officeLabel = (id: string) => id === 'prior' ? order.governance.priorTitle : id === 'provincial' ? order.governance.provincialTitle : id === 'general' ? order.governance.generalTitle : order.offices.find((o) => o.id === id)?.label.toLowerCase() ?? id.replace(/_/g, ' ');
+  const bodyOf = (id: string, t: { office: string; startWeek: number }) => id === 'general' ? order.name : id === 'provincial' ? (state.province?.name ?? 'the province') : id === 'prior' ? (r.assignments.find((a) => a.startWeek <= t.startWeek && (a.endWeek ?? week) >= t.startWeek)?.houseId ? state.orderHouses?.[r.assignments.find((a) => a.startWeek <= t.startWeek && (a.endWeek ?? week) >= t.startWeek)!.houseId]?.name ?? 'a house' : 'a house') : (state.province?.name ?? 'the province');
+  const held = [...r.termsServed, ...(r.office ? [{ office: r.office.office, startWeek: r.office.startWeek, endWeek: week }] : []), ...(r.appointment ? [{ office: r.appointment.id, startWeek: r.appointment.startWeek, endWeek: week }] : [])];
+  const terms = held.sort((a, b) => a.startWeek - b.startWeek).map((t) => ({ label: officeLabel(t.office), body: bodyOf(t.office, t), years: yearsWord(t.endWeek - t.startWeek) }));
+  const foundations = (r.foundations ?? []).map((f) => {
+    const name = state.orderHouses?.[f.houseId]?.name ?? 'the house';
+    const years = yearsWord((f.failedWeek ?? week) - f.foundedWeek);
+    return f.status === 'failed' ? `${name}, founded ${yearOf(state.clock.startDay, f.foundedWeek)}, failed after ${years}: ${f.failedWhy ?? 'the men were needed elsewhere'}.` : `${name}, founded ${yearOf(state.clock.startDay, f.foundedWeek)}, ${years} on and standing.`;
+  });
+  return { houses, terms, foundations };
 }
 
 export function lifeOf(state: GameState): Life {
@@ -101,5 +145,6 @@ export function lifeOf(state: GameState): Life {
 
   const counts = bondCounts(state);
   const remembered = Object.values(state.npcs).filter((n) => (n.bonds?.length ?? 0) >= 2).sort((a, b) => (b.bonds!.length - a.bonds!.length) || b.relationship - a.relationship).slice(0, 6).map((npc) => ({ npc, phrase: bondsPhrase(npc) }));
-  return { years, age, posts, bishops, record: publicRecord(state), friends, enemies, classmates: classmateLines(state), letters, founded, decisions: state.history.length, file, sacraments: { baptized: counts.baptized, married: counts.married, buried: counts.buried, anointed: counts.anointed }, remembered, mourners: mourners(state) };
+  const friar = friarLife(state);
+  return { years, age, posts, bishops, record: publicRecord(state), friends, enemies, classmates: classmateLines(state), letters, founded, decisions: state.history.length, file, sacraments: { baptized: counts.baptized, married: counts.married, buried: counts.buried, anointed: counts.anointed }, remembered, mourners: mourners(state), ...friar };
 }

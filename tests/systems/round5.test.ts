@@ -197,7 +197,8 @@ describe('having a word', () => {
     expect(bandOf({ ...bishop, relationship: -20 })).toBe('cold');
     expect(bandOf({ ...bishop, relationship: 0 })).toBe('neutral');
     expect(talkDefs.length).toBeGreaterThanOrEqual(42);
-    expect(new Set(talkDefs.map((d) => d.who)).size).toBe(14);
+    // Sixteen kinds since the friar round: a confrere and a man he directs joined the fourteen.
+    expect(new Set(talkDefs.map((d) => d.who)).size).toBe(16);
   });
 
   it('plays an exchange, moves the relationship, takes a block, and waits eight weeks before the next', () => {
