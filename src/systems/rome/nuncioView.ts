@@ -1,4 +1,5 @@
 import { provinceWord } from '@/systems/metropolitan';
+import { conferenceWord } from '@/systems/conference';
 import type { GameState, Implementation } from '@/types';
 
 /**
@@ -120,6 +121,11 @@ export function nuncioView(state: GameState): NuncioView {
   v += province.value;
   good.push(...province.good);
   bad.push(...province.bad);
+  // The conference's word: a man far from its temper, or a man with a seat at it. E2 §2.3.
+  const conference = conferenceWord(state);
+  v += conference.value;
+  good.push(...conference.good);
+  bad.push(...conference.bad);
   if (f['nuncio:trusted']) { v += VIEW.trusted; good.push('an honest answer you once gave him about another man'); }
   if (f['nuncio:broke_secret']) { v += VIEW.brokeSecret; bad.push('a secret you did not keep'); }
   return { value: Math.round(clamp(v, 0, 100)), good, bad };

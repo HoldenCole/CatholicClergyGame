@@ -222,7 +222,9 @@ export type NuncioSceneKind = 'consulted' | 'about_you' | 'passed' | 'subject_na
  */
 export type DocumentKind =
   | 'encyclical' | 'apostolic_exhortation' | 'apostolic_constitution' | 'apostolic_letter' | 'motu_proprio'
-  | 'instruction' | 'declaration' | 'circular_letter' | 'bull' | 'missal' | 'synod' | 'responsum' | 'council';
+  | 'instruction' | 'declaration' | 'circular_letter' | 'bull' | 'missal' | 'synod' | 'responsum' | 'council'
+  /** E2 R1.2: what the bishops' conference issues; never Rome's. */
+  | 'statement' | 'pastoral_letter' | 'voting_guide' | 'guidelines';
 
 /** How the diocesan bishop receives a document (§4.2). */
 export type DiocesanNorm = 'enthusiastic' | 'faithful' | 'minimal' | 'slow';
@@ -287,9 +289,11 @@ export interface HistoricalDocumentDef {
 }
 
 export interface IssuedDocument {
-  /** 'hist:<key>' or 'gen:<n>'. */
+  /** 'hist:<key>' or 'gen:<n>'; 'conf:<id>:<week>' for the conference's (E2 R1.2). */
   id: string;
   kind: DocumentKind;
+  /** E2 R1.2: issued by the bishops' conference, not Rome: its axis is 'conference:<topic>' and moves no law. */
+  source?: 'conference';
   title: string;
   gist: string;
   day: number;

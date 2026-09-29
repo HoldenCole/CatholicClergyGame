@@ -1,4 +1,5 @@
 import type { RomeState } from './rome';
+import type { ConferenceState } from './conference';
 import type { Character } from './character';
 import type { FileEntry } from './career';
 import type { HistoryEntry, PendingEvent } from './events';
@@ -185,6 +186,8 @@ export interface GameState {
   romeTemperament: number;
   /** The papacy as he lives under it. E1 §3; absent in older saves until the first week reads it. */
   rome?: RomeState;
+  /** E2 R1.2: the national conference of bishops; absent in older saves until the first week reads it. */
+  conference?: ConferenceState;
   /** How places look: chosen furnishings by place key. */
   decor: DecorState;
   /** Letters to the chancery about the liturgy, by topic. Answered by the week hook. */

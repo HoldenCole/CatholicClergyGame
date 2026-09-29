@@ -17,6 +17,7 @@ import { seminaryTokens } from '@/systems/bishop/seminary';
 import { presbyterateTokens } from '@/systems/bishop/presbyterate';
 import { popeTokens } from '@/systems/rome/pontificateText';
 import { diplomacyTokens } from '@/systems/rome/diplomacy';
+import { conferenceTokens } from '@/systems/conference';
 
 /** Tokens every piece of text can use, derived from state. Later phases add {diocese} and {parish}. */
 export function textExtras(state: GameState): Record<string, string> {
@@ -51,6 +52,7 @@ export function textExtras(state: GameState): Record<string, string> {
   Object.assign(out, reversalTokens(state));
   Object.assign(out, nuncioTokens(state));
   Object.assign(out, curiaTokens(state));
+  Object.assign(out, conferenceTokens(state));
   Object.assign(out, collegeTokens(state));
   Object.assign(out, romanTokens(state));
   Object.assign(out, visitationTokens(state));

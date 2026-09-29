@@ -40,7 +40,7 @@ export const COLLEGE = {
    * scaled down by how far his reading is from the pope's (nothing at `gap`); and the College's room for another
    * elector from his part of the world, by the pools' shares plus a small margin.
    */
-  player: { rome: 40, minAge: 52, seeYears: 3, curiaWeeks: 312, nuncioYears: 8, gap: 100, chance: 0.32, perRome: 200, chanceFloor: 0.05, chanceCap: 0.5, roomMargin: 2 },
+  player: { rome: 40, minAge: 52, seeYears: 3, curiaWeeks: 312, nuncioYears: 8, gap: 100, chance: 0.32, perRome: 200, chanceFloor: 0.05, chanceCap: 0.5, roomMargin: 2, /** E2 R1.2: the president of the conference is a name Rome reads. */ president: 0.15 },
   sceneAfter: [2, 6] as [number, number],
   sceneLapse: 26,
 } as const;
@@ -111,7 +111,7 @@ function playerAge(state: GameState, day: number): number {
 export function redHatChance(state: GameState, pope: Pick<Papacy, 'temperament'>): number {
   const c = state.character!;
   const P = COLLEGE.player;
-  const p = Math.max(P.chanceFloor, Math.min(P.chanceCap, P.chance + ((c.reputation.rome ?? 0) - P.rome) / P.perRome));
+  const p = Math.max(P.chanceFloor, Math.min(P.chanceCap, P.chance + ((c.reputation.rome ?? 0) - P.rome) / P.perRome)) + (state.conference?.held?.office === 'president' ? P.president : 0);
   return p * Math.max(0, 1 - Math.abs(pope.temperament - c.alignment) / P.gap);
 }
 

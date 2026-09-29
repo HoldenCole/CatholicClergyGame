@@ -62,6 +62,7 @@ import { renderText } from './text';
 import { closeCascade, dueCascade } from '@/systems/rome/documents';
 import { closeNuncioScene, dueNuncioScene } from '@/systems/rome/nuncio';
 import { metropolitanWeek } from '@/systems/metropolitan';
+import { closeConferenceScene, conferenceWeek, dueConferenceScene } from '@/systems/conference';
 import { curiaWeek } from '@/systems/rome/curia';
 import { closeCollegeScene, dueCollegeScene } from '@/systems/rome/college';
 import { popeHomeYear } from '@/systems/homeFromAfar';
@@ -273,6 +274,15 @@ export function studyWeekHook(deps: EventDeps): WeekHook {
       const province = metropolitanWeek(next, rng.derive(`metropolitan:${next.clock.week}`));
       next = province.state;
       for (const line of province.lines) next = addDigestLine(next, line);
+      // The conference: the assembly, its documents, its elections. E2 §2.3.
+      const conference = conferenceWeek(next, rng.derive(`conference:${next.clock.week}`));
+      next = conference.state;
+      for (const line of conference.lines) next = addDigestLine(next, line);
+      for (const l of conference.letters) next = deliverLetter(next, l);
+      if (dueConferenceScene(next)) {
+        next = dueBeatScene(next, 'conference', closeConferenceScene, rng.derive(`conference-scene:${next.clock.week}`), deps);
+        if (next.mode.kind !== 'clock' || next.pending.length > 0) return next;
+      }
       if (dueNuncioScene(next)) {
         next = nuncioScene(next, rng.derive(`nuncio:${next.clock.week}`), deps);
         if (next.mode.kind !== 'clock' || next.pending.length > 0) return next;
@@ -617,6 +627,15 @@ export function parishWeekHook(deps: EventDeps): WeekHook {
       const province = metropolitanWeek(next, rng.derive(`metropolitan:${next.clock.week}`));
       next = province.state;
       for (const line of province.lines) next = addDigestLine(next, line);
+      // The conference's assembly sends the bishop away, and its document comes home as his letter and, later, a scene. E2 §2.3.
+      const conference = conferenceWeek(next, rng.derive(`conference:${next.clock.week}`));
+      next = conference.state;
+      for (const line of conference.lines) next = addDigestLine(next, line);
+      for (const l of conference.letters) next = deliverLetter(next, l);
+      if (dueConferenceScene(next)) {
+        next = dueBeatScene(next, 'conference', closeConferenceScene, rng.derive(`conference-scene:${next.clock.week}`), deps);
+        if (next.mode.kind !== 'clock' || next.pending.length > 0) return next;
+      }
     }
     const turned = turnaroundStep(next);
     next = turned.state;
