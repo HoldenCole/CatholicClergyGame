@@ -33,6 +33,8 @@ export const GROWTH = {
   /** Deaths a year by age band; leaving a year by vows. */
   death: { 85: 0.18, 75: 0.07, 65: 0.02, 0: 0.004 } as Record<number, number>,
   leave: { novice: 0.1, simple: 0.05, youngSolemn: 0.008 },
+  /** A house at odds with itself (cohesion under the line) loses men: leaving is this much likelier at cohesion 0, and a professed man asks to be moved at this chance. Friar round D4. */
+  cold: { cohesionBelow: 35, leaveFactorAtZero: 3, askToMove: 0.08 },
   /** Dollars a year each work brings a house, and what each man costs. */
   income: { parish: 140_000, school: 260_000, priory_church: 70_000, preaching: 50_000, teaching: 40_000, chaplaincy: 60_000, mission: 25_000, formation: 0, curia: 0 } as Record<string, number>,
   costPerMan: 28_000,
@@ -120,7 +122,8 @@ function houseYear(state: GameState, house0: OrderHouse, rng: Rng): { state: Gam
       if (mine) lines.push(`${m.title} ${m.name.first} ${m.name.last} died, ${age}, in the house; the necrology has him now.`);
       continue;
     }
-    const leaveChance = m.tags.includes('vows:novice') ? GROWTH.leave.novice : m.tags.includes('vows:simple') ? GROWTH.leave.simple : age < 45 ? GROWTH.leave.youngSolemn : 0;
+    const cold = house.cohesion < GROWTH.cold.cohesionBelow ? 1 + (GROWTH.cold.cohesionBelow - house.cohesion) / GROWTH.cold.cohesionBelow * (GROWTH.cold.leaveFactorAtZero - 1) : 1;
+    const leaveChance = (m.tags.includes('vows:novice') ? GROWTH.leave.novice : m.tags.includes('vows:simple') ? GROWTH.leave.simple : age < 45 ? GROWTH.leave.youngSolemn : 0) * cold;
     if (leaveChance && rng.derive(`leave:${m.id}`).chance(leaveChance)) {
       npcs[m.id] = { ...m, status: 'left', tags: m.tags.filter((t) => t !== 'prior') };
       left += 1;
@@ -131,6 +134,22 @@ function houseYear(state: GameState, house0: OrderHouse, rng: Rng): { state: Gam
   const gone = new Set(Object.keys(npcs).filter((id) => npcs[id]!.status !== 'active' && house.memberIds.includes(id)));
   house = { ...house, memberIds: house.memberIds.filter((id) => !gone.has(id)) };
   next = { ...next, npcs, orderHouses: { ...next.orderHouses!, [house.id]: house } };
+  // A cold house: a professed man writes to the provincial and is moved to a house with room. Friar round D4.
+  if (house.cohesion < GROWTH.cold.cohesionBelow) {
+    const houses = next.orderHouses!;
+    const elsewhere = Object.values(houses).filter((h) => h.id !== house.id && h.provinceId === house.provinceId && h.kind !== 'novitiate').sort((a, b) => a.id.localeCompare(b.id));
+    for (const m of membersOf(next, house).filter((x) => x.tags.includes('vows:solemn') && x.id !== house.priorId)) {
+      if (!elsewhere.length || !rng.derive(`ask-move:${m.id}`).chance(GROWTH.cold.askToMove)) continue;
+      const to = rng.derive(`ask-move-to:${m.id}`).pick(elsewhere);
+      const from = houses[house.id]!;
+      houses[house.id] = { ...from, memberIds: from.memberIds.filter((id) => id !== m.id), officers: Object.fromEntries(Object.entries(from.officers ?? {}).filter(([, id]) => id !== m.id)) };
+      houses[to.id] = { ...houses[to.id]!, memberIds: [...houses[to.id]!.memberIds, m.id] };
+      next = { ...next, orderHouses: { ...houses }, npcs: { ...next.npcs, [m.id]: { ...m, tags: m.tags.filter((t) => !t.startsWith('house:')).concat(`house:${to.id}`) } } };
+      house = houses[house.id]!;
+      if (mine) lines.push(`${m.title} ${m.name.first} ${m.name.last} asked to be moved, and was, to ${to.name}: the house, he told the provincial, was not a house.`);
+      break;
+    }
+  }
   // Vocations: the house's own draw; the men go to the novitiate and come home professed, credited to the house.
   const expected = expectedHouseVocations(next, house);
   const count = Math.floor(expected) + (rng.derive('vocation').chance(expected - Math.floor(expected)) ? 1 : 0);

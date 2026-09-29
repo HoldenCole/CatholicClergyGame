@@ -1,0 +1,332 @@
+{
+  "_notes": "Reputations tested in public (friar round D9). E3 §8.3: a reputation not earned is a liability, and the game asks the man to do the thing he is known for in front of people who can tell. Each scene is gated on the reputation being high; the choice that does it well is gated on the stats the reputation rests on, and a man whose reputation has outrun him has only the other choices, which cost the reputation and something else. The known target moves the §8 reputation itself. Numbers invented.",
+  "events": [
+    {
+      "id": "rt_preacher_the_province_retreat",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 12,
+      "suppressYears": 3,
+      "pressure": ["ambition_vs_integrity"],
+      "requires": [
+        { "type": "flag", "key": "rep:preacher:high", "value": true },
+        { "type": "flag", "key": "office:provincial", "value": false }
+      ],
+      "title": "The Retreat for the Province's Priests",
+      "body": "The provincial's council has asked you to preach the province's annual retreat: five days, four conferences a day, ninety friars in a house by the sea, half of them older than you and all of them men who have preached. It is the room in which a reputation for preaching is either confirmed or ended, and the ones who ended there are still talked about.",
+      "choices": [
+        {
+          "id": "well",
+          "label": "Preach it from what you have, and it holds",
+          "outcome": "Twenty conferences and none of them from a book. The old men who came to sleep through it stop sleeping by the second day. On the last night the oldest friar in the province says, at supper, that he had wondered, and had been wrong, and the room hears him. The province has a preacher and knows it.",
+          "requires": [
+            { "type": "stat", "key": "charisma", "op": ">=", "value": 60 },
+            { "type": "stat", "key": "theology", "op": ">=", "value": 55 }
+          ],
+          "effects": [
+            { "target": "known", "key": "preacher", "delta": 8 },
+            { "target": "reputation", "key": "province", "delta": 6 },
+            { "target": "reputation", "key": "community", "delta": 2 },
+            { "target": "strain", "key": "", "delta": 5 }
+          ]
+        },
+        {
+          "id": "thin",
+          "label": "Preach it, and it is thinner than the reputation",
+          "outcome": "Twenty conferences, and by the third day the old men are asleep again and the young ones are reading. Nobody is unkind. The oldest friar in the province says, at supper, that it was a pleasant week, which is the worst thing said about a retreat in that house in a decade. The reputation is the size of the man now, and the province has measured it.",
+          "effects": [
+            { "target": "known", "key": "preacher", "delta": -14 },
+            { "target": "reputation", "key": "province", "delta": -4 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "strain", "key": "", "delta": 6 }
+          ],
+          "default": true
+        },
+        {
+          "id": "decline",
+          "label": "Decline: you preach to the people, not to preachers",
+          "outcome": "A kind letter to the council saying so. They ask someone else, who is fine. The reputation is a little smaller for the refusal and a little safer, and the men who wondered whether you could do it go on wondering, which is not nothing in a province that talks.",
+          "effects": [
+            { "target": "known", "key": "preacher", "delta": -4 },
+            { "target": "reputation", "key": "superiors", "delta": -2 },
+            { "target": "honesty", "key": "", "delta": 1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rt_professor_the_book_reviewed",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 12,
+      "suppressYears": 3,
+      "pressure": ["competence"],
+      "requires": [
+        { "type": "flag", "key": "rep:professor:high", "value": true }
+      ],
+      "title": "The Book, and Who Reviews It",
+      "body": "The order's review has asked for a book from the professor, and a publisher has agreed before it is written, and the review has already chosen who will review it: a friar of another province who reviews the way other men prosecute. Two years of evenings, and then a journal with your name in it and his under it. The province reads the review and not the book.",
+      "choices": [
+        {
+          "id": "well",
+          "label": "Write the book you have in you, and it survives him",
+          "outcome": "Two years of evenings and a book that is argued with, which is what a book is for. The review is long and hard and ends by conceding the thesis, which the province reads as a triumph because it was. Doctoral students write from three countries. The professor has a book, and the province has a professor.",
+          "requires": [
+            { "type": "stat", "key": "theology", "op": ">=", "value": 65 },
+            { "type": "stat", "key": "knowledge", "op": ">=", "value": 60 }
+          ],
+          "effects": [
+            { "target": "known", "key": "professor", "delta": 8 },
+            { "target": "reputation", "key": "order", "delta": 5 },
+            { "target": "reputation", "key": "rome", "delta": 2 },
+            { "target": "strain", "key": "", "delta": 6 }
+          ]
+        },
+        {
+          "id": "thin",
+          "label": "Write it, and the review says what the province had not",
+          "outcome": "Two years of evenings and a book that is competent and says nothing new, and a review that says so in eight pages with footnotes, courteously, which is worse. The province reads the review. The doctoral students go elsewhere. You teach as well as you did; the province has decided what that is.",
+          "effects": [
+            { "target": "known", "key": "professor", "delta": -14 },
+            { "target": "reputation", "key": "order", "delta": -3 },
+            { "target": "stat", "key": "theology", "delta": 1 },
+            { "target": "strain", "key": "", "delta": 8 }
+          ],
+          "default": true
+        },
+        {
+          "id": "decline",
+          "label": "Say the lectures are the work, and there will be no book",
+          "outcome": "The publisher is disappointed and the reviewer reviews someone else. The lectures go on being the work. The province, which had expected a book, has a professor without one, and in a faculty that is a thing the other professors know how to say.",
+          "effects": [
+            { "target": "known", "key": "professor", "delta": -5 },
+            { "target": "reputation", "key": "community", "delta": 1 },
+            { "target": "honesty", "key": "", "delta": 1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rt_confessor_the_penitent_who_matters",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "campaign": "religious",
+      "severity": "MAJOR",
+      "category": "personal",
+      "baseWeight": 12,
+      "suppressYears": 3,
+      "pressure": ["belief_vs_safety"],
+      "requires": [
+        { "type": "flag", "key": "rep:confessor:high", "value": true }
+      ],
+      "title": "The Penitent Who Matters",
+      "body": "A man who matters, whose name is in the papers for reasons that are not this one, has asked for you by name, on a Tuesday, in the box and not the parlour. What he brings is heavy and old and he has carried it to three priests before you who were kind and gave him nothing he could use. The reputation for the box is what brought him. It is a reputation that is tested one man at a time, and this is the man.",
+      "choices": [
+        {
+          "id": "well",
+          "label": "Hear him the way the reputation says you can",
+          "outcome": "An hour and a half in the box. What you say is not kind and is not unkind; it is the thing he came for, which none of the three had said. He comes back the next month, and the month after, and something in the papers changes that nobody connects to a Tuesday. Nobody will ever know. Some things about a confessor are known anyway.",
+          "requires": [
+            { "type": "stat", "key": "piety", "op": ">=", "value": 60 },
+            { "type": "stat", "key": "theology", "op": ">=", "value": 50 }
+          ],
+          "effects": [
+            { "target": "known", "key": "confessor", "delta": 8 },
+            { "target": "stat", "key": "piety", "delta": 2 },
+            { "target": "reputation", "key": "laity", "delta": 2 }
+          ]
+        },
+        {
+          "id": "thin",
+          "label": "Hear him, and give him what the three gave him",
+          "outcome": "An hour in the box and the same kindness the three had given him, because it is what you have. He thanks you and does not come back. Nothing is said, since nothing can be. But he asked for you by name and went elsewhere, and the men who sent him notice where he went next, and the reputation is quieter for it in the places it was loudest.",
+          "effects": [
+            { "target": "known", "key": "confessor", "delta": -12 },
+            { "target": "stat", "key": "piety", "delta": -1 },
+            { "target": "strain", "key": "", "delta": 4 }
+          ],
+          "default": true
+        },
+        {
+          "id": "send",
+          "label": "Send him to the old friar down the corridor, who is the real thing",
+          "outcome": "You say at the grille that there is a man in this house who has heard more than you have, and give the name, and the man goes. The old friar hears him for two years and never says so. The reputation is a little smaller and a great deal truer, and the old friar, who knows what it cost, is kinder to you at table.",
+          "effects": [
+            { "target": "known", "key": "confessor", "delta": -5 },
+            { "target": "relationship", "key": "@old_friar", "delta": 8 },
+            { "target": "honesty", "key": "", "delta": 3 },
+            { "target": "stat", "key": "piety", "delta": 1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rt_director_the_formators_retreat",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 11,
+      "suppressYears": 3,
+      "pressure": ["competence"],
+      "requires": [
+        { "type": "flag", "key": "rep:spiritual_director:high", "value": true },
+        { "type": "flag", "key": "office:provincial", "value": false }
+      ],
+      "title": "Directing the Formators",
+      "body": "The province's formators, the novice master and the master of students and the men under them, are to make a directed retreat, and the provincial has named you to direct it: eight days, one man at a time, twelve men who direct for a living and know what direction is. It is the reputation asked to do, in front of the only judges who can tell, exactly the thing it is a reputation for.",
+      "choices": [
+        {
+          "id": "well",
+          "label": "Direct them one at a time, and they are directed",
+          "outcome": "Eight days and twelve men, each of whom came to see whether you were what they had heard. Each of them leaves having been seen, which they had not expected and cannot say. The novice master says at the last supper that he had come to teach and had been taught, and the province's formation has your hand on it for a generation.",
+          "requires": [
+            { "type": "stat", "key": "piety", "op": ">=", "value": 60 },
+            { "type": "stat", "key": "knowledge", "op": ">=", "value": 55 }
+          ],
+          "effects": [
+            { "target": "known", "key": "spiritual_director", "delta": 8 },
+            { "target": "reputation", "key": "province", "delta": 5 },
+            { "target": "reputation", "key": "superiors", "delta": 3 },
+            { "target": "strain", "key": "", "delta": 5 }
+          ]
+        },
+        {
+          "id": "thin",
+          "label": "Direct them, and they can tell the difference",
+          "outcome": "Eight days and twelve men who know what direction is and receive something that is not quite it: kindness, attention, the right questions in the wrong order. They are courteous. The novice master says at the last supper that it was a restful week. The formators go home and direct as they did, and the province's phrase for you is used a little less.",
+          "effects": [
+            { "target": "known", "key": "spiritual_director", "delta": -12 },
+            { "target": "reputation", "key": "province", "delta": -3 },
+            { "target": "stat", "key": "knowledge", "delta": 1 },
+            { "target": "strain", "key": "", "delta": 6 }
+          ],
+          "default": true
+        },
+        {
+          "id": "decline",
+          "label": "Decline: a director does not direct directors",
+          "outcome": "A letter to the provincial saying that the formators should be directed by a monk from outside, who does not know their names, and naming one. He agrees, and the retreat is better for it, and the province notes that its director declined the province, which it reads two ways.",
+          "effects": [
+            { "target": "known", "key": "spiritual_director", "delta": -4 },
+            { "target": "reputation", "key": "superiors", "delta": 1 },
+            { "target": "honesty", "key": "", "delta": 2 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rt_builder_the_broken_house",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "admin",
+      "baseWeight": 11,
+      "suppressYears": 3,
+      "pressure": ["competence"],
+      "requires": [
+        { "type": "flag", "key": "rep:builder:high", "value": true },
+        { "type": "flag", "key": "office:provincial", "value": false }
+      ],
+      "title": "Sent Where It Is Broken",
+      "body": "The provincial has sent you, for a season and without moving your cell, to a house of the province whose books have not balanced in six years, whose roof is the diocese's problem in the diocese's opinion, and whose procurator has just died with the accounts in his head. The reputation for fixing things is what sent you. The house knows why you have come and has its arms folded.",
+      "choices": [
+        {
+          "id": "well",
+          "label": "Open the books, find the money, and leave the house with a procurator",
+          "outcome": "A season of ledgers and a roofer who owed the order a favour, and a young friar of the house who is a procurator by Advent because you taught him to be. The books balance. The house unfolds its arms in about the ninth week. The provincial writes to say he has three more like it.",
+          "requires": [
+            { "type": "stat", "key": "administration", "op": ">=", "value": 65 }
+          ],
+          "effects": [
+            { "target": "known", "key": "builder", "delta": 8 },
+            { "target": "reputation", "key": "superiors", "delta": 6 },
+            { "target": "reputation", "key": "province", "delta": 3 },
+            { "target": "strain", "key": "", "delta": 6 }
+          ]
+        },
+        {
+          "id": "thin",
+          "label": "Open the books, and find you cannot read them",
+          "outcome": "A season of ledgers that do not yield, a roofer who wants money the house does not have, and a report to the provincial that says what the house already knew. The house is polite. The provincial sends an accountant from the diocese, who fixes it in a month, and the reputation that sent you is smaller for the season.",
+          "effects": [
+            { "target": "known", "key": "builder", "delta": -12 },
+            { "target": "reputation", "key": "superiors", "delta": -4 },
+            { "target": "stat", "key": "administration", "delta": 2 },
+            { "target": "strain", "key": "", "delta": 8 }
+          ],
+          "default": true
+        },
+        {
+          "id": "ask",
+          "label": "Tell the provincial the house needs an accountant, not a friar",
+          "outcome": "A letter in the first week saying so, plainly, with the name of a firm. He is annoyed and then agrees, and the firm fixes it, and the house is grateful to you for the letter in a way it would not have been for the season. The reputation for fixing things is now also a reputation for knowing what it cannot fix.",
+          "effects": [
+            { "target": "known", "key": "builder", "delta": -3 },
+            { "target": "reputation", "key": "community", "delta": 3 },
+            { "target": "honesty", "key": "", "delta": 2 },
+            { "target": "stat", "key": "administration", "delta": 1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rt_dying_the_public_death",
+      "phase": ["parochial_vicar", "administrator", "pastor"],
+      "campaign": "religious",
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 11,
+      "suppressYears": 3,
+      "pressure": ["body_vs_vow"],
+      "requires": [
+        { "type": "flag", "key": "rep:pastor_of_dying:high", "value": true }
+      ],
+      "title": "A Death the Town Watches",
+      "body": "A man the town knows is dying in the hospital, slowly, with a family that has stopped speaking to itself and a newspaper that has not, and the family has asked for the friar the nurses talk about. The reputation for the two in the morning was made one bedside at a time in rooms nobody saw. This room has a corridor full of people in it and a reporter at the end.",
+      "choices": [
+        {
+          "id": "well",
+          "label": "Do at this bedside what you have done at every other",
+          "outcome": "Eleven days. You are there at the hours nobody else is, and the family, which had stopped speaking, speaks in the corridor because you asked one of them to fetch the other. He dies at four in the morning with the room quiet and you in it. The newspaper prints something decent. The nurses were right.",
+          "requires": [
+            { "type": "stat", "key": "piety", "op": ">=", "value": 60 },
+            { "type": "stat", "key": "charisma", "op": ">=", "value": 50 }
+          ],
+          "effects": [
+            { "target": "known", "key": "pastor_of_dying", "delta": 8 },
+            { "target": "reputation", "key": "laity", "delta": 6 },
+            { "target": "reputation", "key": "local_bishop", "delta": 2 },
+            { "target": "strain", "key": "", "delta": 7 }
+          ]
+        },
+        {
+          "id": "thin",
+          "label": "Do what you can, and the corridor sees it is not enough",
+          "outcome": "Eleven days. The family goes on not speaking and you cannot make them, and the hours you keep are the ordinary ones, and he dies at four in the morning with a nurse in the room and not you. The newspaper prints something decent anyway. The nurses, who talk, talk a little less.",
+          "effects": [
+            { "target": "known", "key": "pastor_of_dying", "delta": -12 },
+            { "target": "reputation", "key": "laity", "delta": -3 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "strain", "key": "", "delta": 8 }
+          ],
+          "default": true
+        },
+        {
+          "id": "chaplain",
+          "label": "Bring the hospital's chaplain with you, and let him lead",
+          "outcome": "The chaplain, who has done this in this hospital for twenty years, leads, and you are the second priest in the room, which the family does not mind and the reporter does not notice. He dies well. The chaplain says afterward that most friars would not have asked, and is your friend for it.",
+          "effects": [
+            { "target": "known", "key": "pastor_of_dying", "delta": -3 },
+            { "target": "reputation", "key": "diocesan_clergy", "delta": 4 },
+            { "target": "honesty", "key": "", "delta": 2 },
+            { "target": "stat", "key": "piety", "delta": 1 }
+          ]
+        }
+      ]
+    }
+  ]
+}
