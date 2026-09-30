@@ -118,8 +118,8 @@ describe('engine/seminary', () => {
     const s1 = emphasis(s0, E(3, 3, 2, 2), createRng('sched'));
     expect(s1.mode.kind).toBe('clock');
     const sem = s1.seminary!;
-    expect(sem.playedWeeks.length).toBeGreaterThanOrEqual(2);
-    expect(sem.playedWeeks.length).toBeLessThanOrEqual(3);
+    expect(sem.playedWeeks.length).toBeGreaterThanOrEqual(3);
+    expect(sem.playedWeeks.length).toBeLessThanOrEqual(4);
     for (const w of sem.playedWeeks) {
       expect(w).toBeGreaterThanOrEqual(YEAR_SHAPE.firstPlayedWeek);
       expect(w).toBeLessThanOrEqual(YEAR_SHAPE.lastPlayedWeek);
@@ -198,12 +198,13 @@ describe('engine/seminary', () => {
     while (s.clock.week < last) {
       s = pastDirector(runClock(s, rng, { hook: seminaryWeekHook(d) }).state);
       if (s.pending.length) {
-        if (s.clock.week === last) {
+        // The beat may be drawn on any played week; if it has not come by the last one, the last one is it.
+        if (s.pending[0]!.eventId === 'beat_candidacy') {
           expect(playedWeekBeat({ ...s, clock: { ...s.clock } }).played).toBe(true);
-          expect(s.pending[0]!.eventId).toBe('beat_candidacy');
           sawBeat = true;
           s = resolvePending(s, s.pending[0]!, 'yes', rng, d);
         } else {
+          if (s.clock.week === last) expect(sawBeat).toBe(true);
           s = resolvePending(s, s.pending[0]!, 'a', rng, d);
         }
       }

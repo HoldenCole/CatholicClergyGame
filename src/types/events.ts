@@ -309,11 +309,29 @@ export interface Effect {
   value?: string | boolean | number;
 }
 
+/**
+ * A choice that may go either way (owner's feedback: some things always fire
+ * on choices and stats, and some are dice). Deterministic in the seed, the
+ * scene, and the week; a stat moves the odds. The base effects apply either
+ * way, then the branch's own, and the branch's prose is what he reads.
+ */
+export interface ChoiceRoll {
+  /** The chance of success before the stat, 0..1. */
+  chance: number;
+  /** A stat that moves it: (stat − 50) / per is added to the chance. */
+  stat?: StatKey;
+  per?: number;
+  success: { outcome: string; effects: Effect[] };
+  failure: { outcome: string; effects: Effect[] };
+}
+
 export interface Choice {
   id: string;
   label: string;
   /** Prose shown after the choice is taken. May contain {tokens}. */
   outcome?: string;
+  /** The dice, when the choice has them: the branch's outcome replaces `outcome`. */
+  roll?: ChoiceRoll;
   requires?: Condition[];
   hidden?: boolean;
   /** Extension: the choice taken when the event resolves without the player. */
@@ -385,6 +403,8 @@ export interface HistoryEntry {
   eventId: string;
   choiceId: string;
   week: number;
+  /** How the choice's dice fell, when it had them. */
+  rolled?: 'success' | 'failure';
   /** True when the clock resolved it without the player. */
   auto?: boolean;
 }

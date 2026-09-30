@@ -1,5 +1,5 @@
 {
-  "_notes": "Parish-tier offers (DESIGN.md §7.5), vicar (pv_) and pastor (pa_). Flags defined here: rome_alumnus / refused_rome / rome_washed_out (pv_rome_study; the terna and assignment should read rome_alumnus), tribunal_ready / refused_canon_law / jcl_washed_out (pv_canon_law_licentiate), research_project / abandoned_research / refused_research (pv_dissertation; published is also set by careers.json), seminary_faculty / refused_faculty (pv_seminary_faculty), adjunct_faculty / refused_adjunct, declined_spanish_study, speaks_italian / declined_italian, office:vocations / refused_vocations_office, office:tribunal / knows_secrets / refused_tribunal, office:finance_council / refused_finance_council, office:bishops_secretary / refused_secretary, office:communications / refused_communications, refused_patron (patron:prominent_priest and the risk sem_patron_exposure are shared with seminary.json so one fall-event can read both), refused_chancery_mentor (mentor:chancery shared with seminary.json), substituted_for_bishop / failed_substitution / declined_substitution, affiliation:opus_dei / refused_opus_dei, refused_cursillo, refused_trad_fraternity, refused_prog_caucus (affiliation:cursillo, affiliation:trad_fraternity, affiliation:prog_caucus shared with seminary.json), affiliation:diocesan_fraternity / refused_diocesan_fraternity, donor:named / refused_donor, board:civic / refused_civic_board, board:interfaith / refused_interfaith, chaplain:hospital / chaplain:prison / chaplain:university / chaplain:police_fire / chaplain:military and refused_<x>_chaplaincy for each, took_the_hard_parish / refused_hard_parish (the assignment engine should read took_the_hard_parish and place him in a difficult parish), hard_parish_turned. Credentials granted: STL, JCL, spanish, italian. Risks: sem_patron_exposure (shared), pv_spokesman_exposure, pa_donor_expectations. Selectors: only the seminary-era selectors plus @bishop and @vocation_director resolve in the offer test, so chancery officials (chancellor, vicar general, judicial vicar) are named by title in prose and their offers carry decline effects instead of `from`; the chancery-mentor gate therefore reads mentor:chancery or reputation chancery instead of a @vicar_general relationship. Study away from the parish uses apPerWeek 10 so the parish loop cuts the whole week. E2 R1.3: the loans (ln_loan_*): a brother bishop of the province asks for a man (loan available; the kind by what he has: Spanish, the licentiate, a pastor's years); a yes puts the home bishop's answer on the calendar (loan ask; systems/loan.ts), a no costs the asking bishop's regard.",
+  "_notes": "Parish-tier offers (DESIGN.md §7.5), vicar (pv_) and pastor (pa_). Flags defined here: rome_alumnus / refused_rome / rome_washed_out (pv_rome_study; the terna and assignment should read rome_alumnus), tribunal_ready / refused_canon_law / jcl_washed_out (pv_canon_law_licentiate), research_project / abandoned_research / refused_research (pv_dissertation; published is also set by careers.json), seminary_faculty / refused_faculty (pv_seminary_faculty), adjunct_faculty / refused_adjunct, declined_spanish_study, speaks_italian / declined_italian, office:vocations / refused_vocations_office, office:tribunal / knows_secrets / refused_tribunal, office:finance_council / refused_finance_council, office:bishops_secretary / refused_secretary, office:communications / refused_communications, refused_patron (patron:prominent_priest and the risk sem_patron_exposure are shared with seminary.json so one fall-event can read both), refused_chancery_mentor (mentor:chancery shared with seminary.json), substituted_for_bishop / failed_substitution / declined_substitution, affiliation:opus_dei / refused_opus_dei, refused_cursillo, refused_trad_fraternity, refused_prog_caucus (affiliation:cursillo, affiliation:trad_fraternity, affiliation:prog_caucus shared with seminary.json), affiliation:diocesan_fraternity / refused_diocesan_fraternity, donor:named / refused_donor, board:civic / refused_civic_board, board:interfaith / refused_interfaith, chaplain:hospital / chaplain:prison / chaplain:university / chaplain:police_fire / chaplain:military and refused_<x>_chaplaincy for each, took_the_hard_parish / refused_hard_parish (the assignment engine should read took_the_hard_parish and place him in a difficult parish), hard_parish_turned. Credentials granted: STL, JCL, spanish, italian. Risks: sem_patron_exposure (shared), pv_spokesman_exposure, pa_donor_expectations. Selectors: only the seminary-era selectors plus @bishop and @vocation_director resolve in the offer test, so chancery officials (chancellor, vicar general, judicial vicar) are named by title in prose and their offers carry decline effects instead of `from`; the chancery-mentor gate therefore reads mentor:chancery or reputation chancery instead of a @vicar_general relationship. Study away from the parish uses apPerWeek 10 so the parish loop cuts the whole week. E2 R1.3: the loans (ln_loan_*): a brother bishop of the province asks for a man (loan available; the kind by what he has: Spanish, the licentiate, a pastor's years); a yes puts the home bishop's answer on the calendar (loan ask; systems/loan.ts), a no costs the asking bishop's regard. Promises kept (feedback round): mentor:chancery, patron:prominent_priest, rome_track, canon_law_track, vocations_helper and sem_cathedral_mc each carry a guarantee on the letter they were a promise of (pv_chancery_mentor, pv_assist_prominent_priest, pv_rome_study and pv_italian_lessons, pv_canon_law_licentiate, pv_vocations_office, pv_bishops_secretary); the rector's plan (rector_plan, semc_rector_quiet_word › go_along) guarantees one of Rome, the tribunal or the chancery after the two years, by theology and knowledge at 60.",
   "offers": [
     {
       "id": "pv_rome_study",
@@ -70,6 +70,22 @@
                   "key": "chancery",
                   "op": ">=",
                   "value": 20
+                }
+              ]
+            },
+            {
+              "type": "all",
+              "inner": [
+                {
+                  "type": "flag",
+                  "key": "rector_plan",
+                  "value": true
+                },
+                {
+                  "type": "stat",
+                  "key": "theology",
+                  "op": ">=",
+                  "value": 60
                 }
               ]
             }
@@ -234,7 +250,38 @@
         ],
         "outcome": "The second-year examinations are in Italian and in a theology you were never quite prepared for. You fail the comprehensive twice. The rector of the Casa writes to {@bishop}; the letter is kind and the outcome is not. You come home with the language, a good tailor, and no degree, and the diocese has paid for three years of that."
       },
-      "interest": "rome"
+      "interest": "rome",
+      "guarantee": {
+        "when": [
+          {
+            "type": "any",
+            "inner": [
+              {
+                "type": "flag",
+                "key": "rome_track",
+                "value": true
+              },
+              {
+                "type": "all",
+                "inner": [
+                  {
+                    "type": "flag",
+                    "key": "rector_plan",
+                    "value": true
+                  },
+                  {
+                    "type": "stat",
+                    "key": "theology",
+                    "op": ">=",
+                    "value": 60
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "withinWeeks": 40
+      }
     },
     {
       "id": "pv_canon_law_licentiate",
@@ -280,6 +327,31 @@
             {
               "type": "credential",
               "key": "partial_jcl"
+            },
+            {
+              "type": "all",
+              "inner": [
+                {
+                  "type": "flag",
+                  "key": "rector_plan",
+                  "value": true
+                },
+                {
+                  "type": "stat",
+                  "key": "knowledge",
+                  "op": ">=",
+                  "value": 60
+                },
+                {
+                  "type": "not",
+                  "inner": {
+                    "type": "stat",
+                    "key": "theology",
+                    "op": ">=",
+                    "value": 60
+                  }
+                }
+              ]
             }
           ]
         }
@@ -428,7 +500,47 @@
         ],
         "outcome": "The Latin of the Code and the Latin of the seminary turn out to be different animals, and the second year's examinations catch you. You are advised, gently, to withdraw before the results are formal. You come back with credit hours, no degree, and a reputation in the chancery for having been sent and not returned."
       },
-      "interest": "canon_law"
+      "interest": "canon_law",
+      "guarantee": {
+        "when": [
+          {
+            "type": "any",
+            "inner": [
+              {
+                "type": "flag",
+                "key": "canon_law_track",
+                "value": true
+              },
+              {
+                "type": "all",
+                "inner": [
+                  {
+                    "type": "flag",
+                    "key": "rector_plan",
+                    "value": true
+                  },
+                  {
+                    "type": "stat",
+                    "key": "knowledge",
+                    "op": ">=",
+                    "value": 60
+                  },
+                  {
+                    "type": "not",
+                    "inner": {
+                      "type": "stat",
+                      "key": "theology",
+                      "op": ">=",
+                      "value": 60
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "withinWeeks": 40
+      }
     },
     {
       "id": "pv_dissertation",
@@ -1183,6 +1295,16 @@
           }
         ],
         "outcome": "You thank her and say there is no time. She says there never is and goes back to her pew. The next priest she teaches is younger than you, and three years later he is in Rome, and she does not say anything about it, which is how you know she thinks it."
+      },
+      "guarantee": {
+        "when": [
+          {
+            "type": "flag",
+            "key": "rome_track",
+            "value": true
+          }
+        ],
+        "withinWeeks": 16
       }
     },
     {
@@ -1222,6 +1344,11 @@
             {
               "type": "flag",
               "key": "vocation:entered",
+              "value": true
+            },
+            {
+              "type": "flag",
+              "key": "vocations_helper",
               "value": true
             }
           ]
@@ -1352,6 +1479,16 @@
           }
         ],
         "outcome": "You say you are not ready to be the man with the clipboard. He says that is what he said too, and orders finally, and does not press. The office goes to {@random_classmate}, who takes a call from the bishop's office every month for three years and is seen to."
+      },
+      "guarantee": {
+        "when": [
+          {
+            "type": "flag",
+            "key": "vocations_helper",
+            "value": true
+          }
+        ],
+        "withinWeeks": 52
       }
     },
     {
@@ -1703,16 +1840,31 @@
           }
         },
         {
-          "type": "relationship",
-          "npcId": "@bishop",
-          "op": ">=",
-          "value": 20
-        },
-        {
-          "type": "reputation",
-          "key": "chancery",
-          "op": ">=",
-          "value": 25
+          "type": "any",
+          "inner": [
+            {
+              "type": "all",
+              "inner": [
+                {
+                  "type": "relationship",
+                  "npcId": "@bishop",
+                  "op": ">=",
+                  "value": 20
+                },
+                {
+                  "type": "reputation",
+                  "key": "chancery",
+                  "op": ">=",
+                  "value": 25
+                }
+              ]
+            },
+            {
+              "type": "flag",
+              "key": "sem_cathedral_mc",
+              "value": true
+            }
+          ]
         }
       ],
       "weight": 25,
@@ -1834,7 +1986,17 @@
         ],
         "outcome": "You tell him you became a priest for the parish. He nods slowly and says he had hoped you would say something else, and that he respects it, and both are true. He takes {@rival_classmate} instead. The priests of the diocese, who mistrust secretaries, think a little better of you for it and will forget why."
       },
-      "interest": "secretary"
+      "interest": "secretary",
+      "guarantee": {
+        "when": [
+          {
+            "type": "flag",
+            "key": "sem_cathedral_mc",
+            "value": true
+          }
+        ],
+        "withinWeeks": 52
+      }
     },
     {
       "id": "pv_communications",
@@ -2186,6 +2348,16 @@
           }
         ],
         "outcome": "You tell him you belong to your parish, and he smiles the smile he uses from the pulpit and takes {@random_classmate} instead. For a year and a half your classmate is at every dinner and you are not. Some of the older priests, who have watched the great man for years, nod at you a little differently."
+      },
+      "guarantee": {
+        "when": [
+          {
+            "type": "flag",
+            "key": "patron:prominent_priest",
+            "value": true
+          }
+        ],
+        "withinWeeks": 26
       }
     },
     {
@@ -2222,6 +2394,34 @@
               "type": "flag",
               "key": "summer:chancery",
               "value": true
+            },
+            {
+              "type": "all",
+              "inner": [
+                {
+                  "type": "flag",
+                  "key": "rector_plan",
+                  "value": true
+                },
+                {
+                  "type": "not",
+                  "inner": {
+                    "type": "stat",
+                    "key": "theology",
+                    "op": ">=",
+                    "value": 60
+                  }
+                },
+                {
+                  "type": "not",
+                  "inner": {
+                    "type": "stat",
+                    "key": "knowledge",
+                    "op": ">=",
+                    "value": 60
+                  }
+                }
+              ]
             }
           ]
         }
@@ -2333,6 +2533,49 @@
           }
         ],
         "outcome": "You say your Fridays are for hospital calls. He does not argue. He pays the bill and says he hopes the hospital appreciates it. The next time you need something from the second floor, the letter is answered in the ordinary way, which is to say in eight weeks, by a secretary."
+      },
+      "guarantee": {
+        "when": [
+          {
+            "type": "any",
+            "inner": [
+              {
+                "type": "flag",
+                "key": "mentor:chancery",
+                "value": true
+              },
+              {
+                "type": "all",
+                "inner": [
+                  {
+                    "type": "flag",
+                    "key": "rector_plan",
+                    "value": true
+                  },
+                  {
+                    "type": "not",
+                    "inner": {
+                      "type": "stat",
+                      "key": "theology",
+                      "op": ">=",
+                      "value": 60
+                    }
+                  },
+                  {
+                    "type": "not",
+                    "inner": {
+                      "type": "stat",
+                      "key": "knowledge",
+                      "op": ">=",
+                      "value": 60
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "withinWeeks": 26
       }
     },
     {

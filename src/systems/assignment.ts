@@ -25,6 +25,11 @@ export const ASSIGNMENT = {
   /** What the seminary said he was for, when a posting matches it. */
   known: 14,
   noticed: 8,
+  /** The seminary's promises, kept at the board: the vocation director's word, the famous pastor's friends, the rector's plan. */
+  mentor: 8,
+  mentorPrestige: 20,
+  patron: 12,
+  rectorPlan: 16,
   wary: -10,
   noise: 10,
 } as const;
@@ -120,6 +125,21 @@ export function scoreParish(state: GameState, world: World, parish: Parish, opts
   }
   if (state.flags.noticed_by_bishop) trust += ASSIGNMENT.noticed;
   if (state.flags.bishop_wary) trust += ASSIGNMENT.wary;
+
+  // The promises made in the seminary are kept here, where the man was told they would be.
+  if (state.flags['mentor:chancery'] && !state.flags['mentor:cooling']) {
+    trust += ASSIGNMENT.mentor;
+    fit += (prestige - 0.35) * ASSIGNMENT.mentorPrestige;
+    if (prestige >= 0.5) reasons.push("The vocation director's word in the right ear, as he said there would be");
+  }
+  if (state.flags['patron:prominent_priest'] && (parish.kind === 'flagship_suburban' || parish.kind === 'immigrant_growing')) {
+    fit += ASSIGNMENT.patron;
+    reasons.push("The famous pastor's friends sit on the personnel board, and wanted you somewhere with a crowd");
+  }
+  if (state.flags.rector_plan && parish.kind !== 'rural' && prestige >= 0.3 && prestige <= 0.7) {
+    fit += ASSIGNMENT.rectorPlan;
+    reasons.push("The rector's plan: two years under a pastor who forms priests well and is not easy");
+  }
 
   // The summers are remembered.
   if (state.flags['summer:hard_parish'] && parish.kind === 'difficult') {

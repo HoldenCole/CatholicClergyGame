@@ -46,11 +46,12 @@ export function skinEvent(state: GameState, event: GameEvent, pending: PendingEv
   return skin(eventKey(pending), cache, provider, () => eventContext(state, event, pending));
 }
 
-export function skinOutcome(state: GameState, event: GameEvent, pending: PendingEvent, choiceId: string, cache: Record<string, string>, provider: Provider): Promise<SkinResult | null> {
+export function skinOutcome(state: GameState, event: GameEvent, pending: PendingEvent, choiceId: string, cache: Record<string, string>, provider: Provider, resolved?: string): Promise<SkinResult | null> {
   if (isSensitive(event)) return Promise.resolve(null);
   const choice = event.choices.find((c) => c.id === choiceId);
-  if (!choice?.outcome) return Promise.resolve(null);
-  return skin(outcomeKey(pending, choiceId), cache, provider, () => eventContext(state, event, pending, choice.outcome));
+  const text = resolved ?? choice?.outcome;
+  if (!text) return Promise.resolve(null);
+  return skin(outcomeKey(pending, choiceId), cache, provider, () => eventContext(state, event, pending, text));
 }
 
 export function skinArc(state: GameState, cache: Record<string, string>, provider: Provider): Promise<SkinResult | null> {

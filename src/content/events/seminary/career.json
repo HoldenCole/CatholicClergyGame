@@ -1,5 +1,5 @@
 {
-  "_notes": "Seminary events with career teeth (years 2-7): choices that change where the diocese sends the man after ordination, not only the year's pillars. Engine-read flags written here (assignment.ts, standing.ts, the personnel board): noticed_by_bishop (semc_bishops_visit › answer_plainly, semc_summer_parish_letter › draft_it_plain, semc_pontifical_mass › turn_the_page, semc_diaconate_homily › soften_it); bishop_wary (semc_bishops_visit › press_him, semc_public_stand_class › say_it, semc_diaconate_homily › preach_it); rector_recommends (semc_missing_money › bring_it_to_rector, semc_classmate_in_trouble › tell_him, semc_rector_quiet_word › go_along); rector_doubts (semc_rule_broken › shade_it, semc_classmate_in_trouble › say_nothing_is_wrong, semc_rector_quiet_word › say_no_politely); seminary_leader (semc_house_fight › settle_it, semc_newspaper › take_it); known_pastoral (semc_pastoral_year_pastor › stay_for_holy_week); known_scholar (semc_visiting_cardinal › disagree_in_public); known_administrator (semc_fundraiser › chair_it); chancery_favor_owed (semc_chancery_internship › take_it, semc_rome_ticket › decline_for_the_children). Also written: speaks_spanish with credential spanish (semc_spanish_mass › learn_it; the same pair y5_spanish_mass grants). semc_personnel_questionnaire › write_to_the_file reads noticed_by_bishop, rector_recommends, known_pastoral, known_scholar, known_administrator. Risks: semc_covered_fund, semc_own_reference. No threads. Sensitive events (missing money, a classmate's drinking, the hospital death, the curfew) carry no flavorPrompt and are not to be skinned.",
+  "_notes": "Seminary events with career teeth (years 2-7): choices that change where the diocese sends the man after ordination, not only the year's pillars. Engine-read flags written here (assignment.ts, standing.ts, the personnel board): noticed_by_bishop (semc_bishops_visit › answer_plainly, semc_summer_parish_letter › draft_it_plain, semc_pontifical_mass › turn_the_page, semc_diaconate_homily › soften_it); bishop_wary (semc_bishops_visit › press_him, semc_public_stand_class › say_it, semc_diaconate_homily › preach_it); rector_recommends (semc_missing_money › bring_it_to_rector, semc_classmate_in_trouble › tell_him, semc_rector_quiet_word › go_along); rector_doubts (semc_rule_broken › shade_it, semc_classmate_in_trouble › say_nothing_is_wrong, semc_rector_quiet_word › say_no_politely); seminary_leader (semc_house_fight › settle_it, semc_newspaper › take_it); known_pastoral (semc_pastoral_year_pastor › stay_for_holy_week); known_scholar (semc_visiting_cardinal › disagree_in_public); known_administrator (semc_fundraiser › chair_it); chancery_favor_owed (semc_chancery_internship › take_it, semc_rome_ticket › decline_for_the_children). Also written: speaks_spanish with credential spanish (semc_spanish_mass › learn_it; the same pair y5_spanish_mass grants). semc_personnel_questionnaire › write_to_the_file reads noticed_by_bishop, rector_recommends, known_pastoral, known_scholar, known_administrator. Risks: semc_covered_fund, semc_own_reference. Promises kept (feedback round): rector_plan (semc_rector_quiet_word › go_along; assignment.ts sends him under a pastor who forms men, parish.ts makes that pastor a mentor, and the parish offers guarantee the second step); the follow-up scenes semc_mentor_errand (mentor:chancery), semc_patron_enemy (patron:prominent_priest), semc_rector_letter (rector_plan), semc_back_row (vocations_helper), semc_rome_italian (rome_track), semc_tribunal_hearing (canon_law_track) each turn on a roll (choice.roll) and write mentor:trusted / mentor:cooling, patron:used, vocations_recruited, italian_basic, tribunal_ready. No threads. Sensitive events (missing money, a classmate's drinking, the hospital death, the curfew) carry no flavorPrompt and are not to be skinned.",
   "events": [
     {
       "id": "semc_bishops_visit",
@@ -938,6 +938,7 @@
           "outcome": "He is pleased, in the quiet way he is pleased. The letter goes in May and says what he said it would say, and the bishop reads it, and something in the assignment that comes is shaped by it, though you will never learn which part. You have given a man the right to plan for you. It is a real thing to give, and it is not given back.",
           "effects": [
             { "target": "flag", "key": "rector_recommends", "value": true },
+            { "target": "flag", "key": "rector_plan", "value": true },
             { "target": "relationship", "key": "@rector", "delta": 7 },
             { "target": "outspokenness", "key": "", "delta": -1 },
             { "target": "reputation", "key": "chancery", "delta": 2 },
@@ -1147,6 +1148,459 @@
             { "target": "outspokenness", "key": "", "delta": -2 },
             { "target": "pillar", "key": "spiritual", "delta": 1 },
             { "target": "trait", "key": "wrote that he would go where he was sent" }
+          ]
+        }
+      ]
+    }    ,
+    {
+      "id": "semc_mentor_errand",
+      "phase": "seminary",
+      "yearGate": [5, 6, 7],
+      "pressure": ["loyalty_vs_honesty"],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 12,
+      "suppressYears": 3,
+      "once": true,
+      "requires": [ { "type": "flag", "key": "mentor:chancery", "value": true } ],
+      "title": "A Small Thing for the Vocation Director",
+      "body": "The interest {@vocation_director} took in you has been, so far, lunches and a chair at the chancery's table. Now it has a price, and the price is small, which is how prices begin. There is a man applying to the seminary whom the faculty does not want and the vocation director does, and the faculty's reasons are in a file he is not allowed to see. He would like you to find out, over a week, what the house actually thinks of the man: what {@formation_advisor} said at table, what the older men say in the corridor. He does not use the word report. He says he would like to know the temperature. He says it over the second coffee, in the tone of a man asking about the weather, and then he says that a man in the chancery is a man who knows how to find things out, and that he has always thought you were one.",
+      "flavorPrompt": "A diner near the chancery, a vocation director who pays now, the first favour asked in the voice of a man who does not ask favours.",
+      "choices": [
+        {
+          "id": "find_out",
+          "label": "Find out, quietly, and tell him",
+          "outcome": "You spend the week listening in the way the house listens, and on Friday you tell him what you heard.",
+          "roll": {
+            "chance": 0.55,
+            "stat": "administration",
+            "per": 80,
+            "success": {
+              "outcome": "You do it the way it should be done: nothing asked, everything overheard, a week of sitting at the right tables. What you bring him is accurate and short and, it turns out, decisive. The man is admitted. {@formation_advisor} never learns where the temperature was taken. The vocation director says nothing about it, and then, in a month, a chancery dinner has your name on a card by the chancellor.",
+              "effects": [
+                { "target": "reputation", "key": "chancery", "delta": 3 },
+                { "target": "relationship", "key": "@vocation_director", "delta": 6 },
+                { "target": "stat", "key": "administration", "delta": 1 },
+                { "target": "flag", "key": "mentor:trusted", "value": true },
+                { "target": "trait", "key": "took the house's temperature for the vocation director, and was not caught" }
+              ]
+            },
+            "failure": {
+              "outcome": "You ask one question too many at one table too few, and by Wednesday {@formation_advisor} knows that someone is asking, and by Thursday he knows who. He does not raise it with you. He raises it with {@rector}, and the rector raises it with the vocation director, who tells them both, smoothly, that he asked you nothing. You have learned what his interest costs when it is spent, and that he does not pay it back.",
+              "effects": [
+                { "target": "relationship", "key": "@formation_advisor", "delta": -6 },
+                { "target": "relationship", "key": "@rector", "delta": -3 },
+                { "target": "relationship", "key": "@vocation_director", "delta": 2 },
+                { "target": "reputation", "key": "chancery", "delta": -1 },
+                { "target": "flag", "key": "mentor:exposed", "value": true },
+                { "target": "trait", "key": "was caught asking questions for the vocation director" }
+              ]
+            }
+          },
+          "effects": [
+            { "target": "honesty", "key": "", "delta": -1 },
+            { "target": "pillar", "key": "human", "delta": -1 }
+          ]
+        },
+        {
+          "id": "tell_him_what_you_would_tell_anyone",
+          "label": "Say you will tell him what you would tell anyone who asked, and nothing you overheard",
+          "default": true,
+          "outcome": "You tell him your own view of the man, which is worth something, and nothing the house said, which is what he wanted. He takes it well, because he is good at taking things, and he pays for the coffee, and the lunches go on. Something has been measured, on both sides. You know now what the interest is for. He knows now what it will not buy.",
+          "effects": [
+            { "target": "honesty", "key": "", "delta": 1 },
+            { "target": "relationship", "key": "@vocation_director", "delta": 2 },
+            { "target": "pillar", "key": "human", "delta": 1 }
+          ]
+        },
+        {
+          "id": "refuse",
+          "label": "Tell him no, and say why",
+          "outcome": "You say you will not carry the house's talk to the chancery, and that he should not have asked. It is the right answer and it costs what right answers cost. He says of course, of course, and finishes his coffee, and the next lunch is a month later and the one after it does not come. The chancellor's dinner goes on without you. You have kept something, and it is not an ally.",
+          "effects": [
+            { "target": "honesty", "key": "", "delta": 2 },
+            { "target": "outspokenness", "key": "", "delta": 1 },
+            { "target": "relationship", "key": "@vocation_director", "delta": -6 },
+            { "target": "reputation", "key": "chancery", "delta": -2 },
+            { "target": "flag", "key": "mentor:cooling", "value": true },
+            { "target": "pillar", "key": "spiritual", "delta": 1 },
+            { "target": "trait", "key": "refused to carry the house's talk to the chancery" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "semc_patron_enemy",
+      "phase": "seminary",
+      "yearGate": [4, 5, 6, 7],
+      "pressure": ["friendship_vs_duty", "competence"],
+      "severity": "NOTABLE",
+      "category": "formation",
+      "baseWeight": 12,
+      "suppressYears": 3,
+      "once": true,
+      "requires": [ { "type": "flag", "key": "patron:prominent_priest", "value": true } ],
+      "title": "The Homily He Did Not Like",
+      "body": "The famous pastor's enemies were promised to you with his friends, and the first of them turns out to be on the faculty. {@formation_advisor} has never liked the radio hour, or the man behind it, or the three Sunday Masses that fill because the city has been told to fill them. He does not say any of this. He says, after your practice homily, in front of the class, that it sounded like something one would hear on the radio, and he does not mean it kindly, and everyone in the room knows whose radio. The homily was good. It was, you can hear now, his: the cadence, the pause before the turn, the joke placed where the famous pastor places his jokes. You have a second practice homily due in three weeks, and the advisor's note is on the desk in front of you, and the summer's lessons are in your mouth.",
+      "flavorPrompt": "A homiletics classroom, a faculty man with an old grudge and a fair point, a seminarian who has learned to preach in someone else's voice.",
+      "choices": [
+        {
+          "id": "find_your_own",
+          "label": "Preach the second one in a voice you have to find",
+          "outcome": "You spend three weeks taking the famous pastor out of your homily, sentence by sentence, and find out what is left.",
+          "roll": {
+            "chance": 0.5,
+            "stat": "charisma",
+            "success": {
+              "outcome": "What is left is smaller and it is yours, and the class hears the difference before the advisor does. He says, at the end, that it was a homily, which from him is the whole prize. The famous pastor, when you tell him, laughs and says that the advisor said the same about him thirty years ago and was right then too. You have a voice. It is going to take years to fill it.",
+              "effects": [
+                { "target": "pillar", "key": "pastoral", "delta": 2 },
+                { "target": "relationship", "key": "@formation_advisor", "delta": 5 },
+                { "target": "stat", "key": "charisma", "delta": 1 },
+                { "target": "trait", "key": "found a voice of his own under the famous pastor's" }
+              ]
+            },
+            "failure": {
+              "outcome": "What is left, with the borrowed cadence taken out, is a man reading a page, and the class is polite about it, which is worse than the note. The advisor says it was honest. You go back to the famous pastor's rhythms the next Sunday you preach, because they work, and the advisor hears that too, and files it, and you understand that you have been given a choice between two men's opinion of you and have not yet made it.",
+              "effects": [
+                { "target": "pillar", "key": "pastoral", "delta": -1 },
+                { "target": "relationship", "key": "@formation_advisor", "delta": -2 },
+                { "target": "pillar", "key": "human", "delta": 1 }
+              ]
+            }
+          },
+          "effects": [
+            { "target": "pillar", "key": "intellectual", "delta": 1 }
+          ]
+        },
+        {
+          "id": "take_the_note",
+          "label": "Take the note as given, and cut the radio out of the second one",
+          "default": true,
+          "outcome": "You do what the note says, carefully, and the second homily is plainer and shorter and the advisor is satisfied, in the way a man is satisfied when he has won. The famous pastor asks, in June, why you have stopped pausing before the turn, and you tell him, and he says nothing for a moment and then says that the advisor is a good priest. You are being formed by two men who do not speak. It is a common way to be formed.",
+          "effects": [
+            { "target": "pillar", "key": "intellectual", "delta": 1 },
+            { "target": "relationship", "key": "@formation_advisor", "delta": 3 },
+            { "target": "pillar", "key": "pastoral", "delta": 1 }
+          ]
+        },
+        {
+          "id": "tell_the_pastor",
+          "label": "Tell the famous pastor what was said, and let him deal with it",
+          "outcome": "He deals with it. You never learn how; a phone call, a word at a funeral, the kind of thing a man with a radio hour can do. The advisor's notes on your homilies become short and correct and have nothing in them. The class notices. {@closest_classmate} says, not unkindly, that it must be nice to have someone. You have used the patron once, and now everyone knows that you will.",
+          "effects": [
+            { "target": "relationship", "key": "@formation_advisor", "delta": -8 },
+            { "target": "reputation", "key": "brother_priests", "delta": -2 },
+            { "target": "relationship", "key": "@closest_classmate", "delta": -3 },
+            { "target": "pillar", "key": "human", "delta": -1 },
+            { "target": "flag", "key": "patron:used", "value": true },
+            { "target": "trait", "key": "let the famous pastor settle a faculty grudge for him" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "semc_rector_letter",
+      "phase": "seminary",
+      "yearGate": [7],
+      "pressure": ["ambition_vs_integrity"],
+      "severity": "NOTABLE",
+      "category": "formation",
+      "baseWeight": 14,
+      "suppressYears": 1,
+      "once": true,
+      "requires": [ { "type": "flag", "key": "rector_plan", "value": true } ],
+      "title": "The Letter in May",
+      "body": "{@rector} does not show men the letters he writes about them. He shows you yours, in his office, without explanation, and sits back while you read it. It is the plan, written as he said it would be written: two years under the pastor he named, whom the letter calls a man who forms priests and is not easy on them, and then a sentence that says the diocese should think of you for Rome, or the tribunal, or the chancery, depending on how the two years go. The letter says you are willing to be planned for. It says it as a virtue. It also says, in a line you read twice, that you have not always known your own mind, which is his way of telling the bishop why the plan is his and not yours. He asks whether there is anything in it you would change. It is a real question, and it is also a test of whether you have understood what you agreed to on the walk.",
+      "flavorPrompt": "The rector's office in May, a letter on the desk turned to face the reader, a man who has planned a career watching to see whether the career agrees.",
+      "choices": [
+        {
+          "id": "ask_for_a_line",
+          "label": "Ask him to take out the line about not knowing your own mind",
+          "outcome": "You put your finger on the line and say that it is not true, or not any longer, and ask him to take it out.",
+          "roll": {
+            "chance": 0.5,
+            "stat": "charisma",
+            "per": 80,
+            "success": {
+              "outcome": "He looks at the line for a while and then at you, and takes out his pen and strikes it. He says a man who can ask for that has answered it. The letter goes to the bishop a sentence shorter and a good deal stronger, and the plan in it is now, in a way it was not before, one you have signed.",
+              "effects": [
+                { "target": "relationship", "key": "@rector", "delta": 4 },
+                { "target": "reputation", "key": "chancery", "delta": 2 },
+                { "target": "pillar", "key": "human", "delta": 2 },
+                { "target": "outspokenness", "key": "", "delta": 1 },
+                { "target": "trait", "key": "asked the rector to strike a line, and he struck it" }
+              ]
+            },
+            "failure": {
+              "outcome": "He says that the line stays because it is true, and that the bishop will read it as he means it, and that a man who is being planned for does not edit the plan. It is said gently and it closes the subject. The letter goes as written. You have learned where the edge of the arrangement is, which is something; and the rector has learned that you looked for it, which is something else.",
+              "effects": [
+                { "target": "relationship", "key": "@rector", "delta": -3 },
+                { "target": "outspokenness", "key": "", "delta": 1 },
+                { "target": "pillar", "key": "spiritual", "delta": 1 }
+              ]
+            }
+          },
+          "effects": [
+            { "target": "honesty", "key": "", "delta": 1 }
+          ]
+        },
+        {
+          "id": "sign_off",
+          "label": "Say it is fair, all of it, and thank him",
+          "default": true,
+          "outcome": "You say it is fair, and it is, and he nods and folds it. He says the pastor he named has been told to expect you and has said he will make you work. The plan is in motion now, in the bishop's office and in a rectory across the diocese, and it has your name on it in someone else's hand, which is what you agreed to on the walk and is no worse for being seen in ink.",
+          "effects": [
+            { "target": "relationship", "key": "@rector", "delta": 4 },
+            { "target": "reputation", "key": "chancery", "delta": 1 },
+            { "target": "pillar", "key": "spiritual", "delta": 1 }
+          ]
+        },
+        {
+          "id": "ask_to_add_rome",
+          "label": "Ask him to say Rome, and not the other two",
+          "requires": [ { "type": "stat", "key": "theology", "op": ">=", "value": 55 } ],
+          "outcome": "He says the letter says Rome already, for a man who earns it in the two years, and that a letter which says only Rome is a letter about a man who wants Rome, which the bishop has a drawer for. He leaves the sentence as it is. But he has heard you, and the bishop, when he reads it, will be told over lunch what you asked for. That is not nothing. It is not the plan, either.",
+          "effects": [
+            { "target": "reputation", "key": "rome", "delta": 2 },
+            { "target": "relationship", "key": "@rector", "delta": -1 },
+            { "target": "outspokenness", "key": "", "delta": 1 },
+            { "target": "flag", "key": "rome_track", "value": true },
+            { "target": "trait", "key": "asked the rector to write Rome into the plan" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "semc_back_row",
+      "phase": "seminary",
+      "yearGate": [4, 5, 6, 7],
+      "pressure": ["doubt", "belief_vs_safety"],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 12,
+      "suppressYears": 3,
+      "once": true,
+      "requires": [ { "type": "flag", "key": "vocations_helper", "value": true } ],
+      "title": "The Man in the Back Row",
+      "body": "The second discernment weekend is easier than the first until it is not. You have told your story and it went well, and {@vocation_director} is pleased, and then a man in the back row, older than the others, a man who has plainly come against his own better judgment, asks whether you have ever wanted to leave. Not the seminary. The whole thing. The room goes quiet in the particular way of forty men who all wanted to ask that and did not. The vocation director is at the side of the room with his coffee and does not move to help, because he has told you that the men are watching to see whether they are being sold something, and this is the moment they find out. You have an answer that is true. You have an answer that is safe. They are not the same answer.",
+      "flavorPrompt": "A retreat house conference room, forty men on folding chairs, one honest question from the back and a vocation director who has decided not to rescue his speaker.",
+      "choices": [
+        {
+          "id": "answer_true",
+          "label": "Tell him the truth, whatever it costs the room",
+          "outcome": "You tell him. It takes longer than the safe answer and it is not tidy, and you watch the room while you say it.",
+          "roll": {
+            "chance": 0.6,
+            "stat": "charisma",
+            "success": {
+              "outcome": "The room does not break; it leans in. The man in the back row nods once, slowly, as if something has been settled. Six of the forty apply, which is a record, and two of them say, on their forms, that it was the back-row answer. {@vocation_director} says nothing on the drive home for twenty miles and then says that he would like you at every weekend until you are ordained, and that the bishop will hear whose weekend it was.",
+              "effects": [
+                { "target": "relationship", "key": "@vocation_director", "delta": 6 },
+                { "target": "reputation", "key": "chancery", "delta": 2 },
+                { "target": "stat", "key": "charisma", "delta": 1 },
+                { "target": "pillar", "key": "human", "delta": 1 },
+                { "target": "flag", "key": "vocations_recruited", "value": true },
+                { "target": "trait", "key": "answered the back row honestly at a discernment weekend, and the room leaned in" }
+              ]
+            },
+            "failure": {
+              "outcome": "You say it badly. The truth is there but it comes out as doubt without a shape, and the room hears a seminarian who might not stay, and two men leave at the break. {@vocation_director} handles the rest of the weekend himself and is kind about it in the car, which is worse. The formation office hears that the weekend went sideways. You are not asked to the next one.",
+              "effects": [
+                { "target": "relationship", "key": "@vocation_director", "delta": -3 },
+                { "target": "reputation", "key": "chancery", "delta": -1 },
+                { "target": "pillar", "key": "spiritual", "delta": 1 },
+                { "target": "trait", "key": "told the truth at a discernment weekend and told it badly" }
+              ]
+            }
+          },
+          "effects": [
+            { "target": "honesty", "key": "", "delta": 2 }
+          ]
+        },
+        {
+          "id": "answer_safe",
+          "label": "Give the answer that keeps the room",
+          "default": true,
+          "outcome": "You say that every man has hard days and that the hard days are where the vocation is tested, which is true and which forty men have heard before. The room relaxes. The man in the back row looks at his hands. Four apply, which is the usual number, and the vocation director says it went fine. On the drive home you compose the other answer, and it is better, and you are not sure it would have been.",
+          "effects": [
+            { "target": "relationship", "key": "@vocation_director", "delta": 2 },
+            { "target": "pillar", "key": "human", "delta": 1 },
+            { "target": "honesty", "key": "", "delta": -1 }
+          ]
+        },
+        {
+          "id": "hand_it_over",
+          "label": "Say it is a question for the vocation director, and look at him",
+          "outcome": "He takes it, because he has to, and answers it well, because he has answered it a hundred times. The room gets an answer. It does not get yours. Afterwards he says, without heat, that he brought you because you can talk, and that next time you should. The man in the back row does not apply. You think about him more than you expected to.",
+          "effects": [
+            { "target": "relationship", "key": "@vocation_director", "delta": -2 },
+            { "target": "pillar", "key": "spiritual", "delta": 1 },
+            { "target": "outspokenness", "key": "", "delta": -1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "semc_rome_italian",
+      "phase": "seminary",
+      "yearGate": [5, 6, 7],
+      "pressure": ["competence"],
+      "severity": "ROUTINE",
+      "category": "formation",
+      "baseWeight": 12,
+      "suppressYears": 3,
+      "once": true,
+      "requires": [
+        { "type": "flag", "key": "rome_track", "value": true },
+        { "type": "not", "inner": { "type": "credential", "key": "italian" } },
+        { "type": "not", "inner": { "type": "credential", "key": "italian_basic" } }
+      ],
+      "title": "Tuesdays with the Grammar",
+      "body": "The place at the Gregorian, once written down, turns out to have homework. {@rector} has found an Italian tutor, a retired Sister from the north of the diocese who taught the language for forty years and has opinions about the subjunctive, and she will come on Tuesday evenings, and the rector would take it kindly if you were there. Every Tuesday. The evening is the one the house uses for everything else: the society meetings, the long walk, the phone call home. The Sister does not accept absences, and she reports to the rector, who wrote your name into a plan that has Rome at the end of it and would like the man who arrives there to be able to order lunch. It is a small thing. The plan is made of small things, and you are finding out that each of them is a Tuesday.",
+      "flavorPrompt": "A seminary parlor on a Tuesday evening, a retired Sister with a grammar book and no patience, the far side of the Tiber made of verb tables.",
+      "choices": [
+        {
+          "id": "work_at_it",
+          "label": "Be there every Tuesday and do the work",
+          "outcome": "You give the Sister her Tuesdays, all of them, and the grammar its due.",
+          "roll": {
+            "chance": 0.55,
+            "stat": "knowledge",
+            "success": {
+              "outcome": "By Lent you can read a page of Italian with a dictionary and say a sentence without one, and the Sister tells the rector so, in Italian, in front of you, to see whether you follow. You do. He is pleased in his quiet way. Rome, when it comes, will not be a country where you are a child.",
+              "effects": [
+                { "target": "credential", "key": "italian_basic" },
+                { "target": "stat", "key": "knowledge", "delta": 1 },
+                { "target": "relationship", "key": "@rector", "delta": 3 },
+                { "target": "trait", "key": "learned his Italian on Tuesday evenings from a retired Sister" }
+              ]
+            },
+            "failure": {
+              "outcome": "You are there every Tuesday and the language does not come. The Sister is patient for a term and then tells the rector that you will manage in Rome the way most of them manage, which is badly for a year. He does not hold it against you. He writes it down. The plan is intact and the man in it is a little less ready than the plan wanted.",
+              "effects": [
+                { "target": "pillar", "key": "intellectual", "delta": -1 },
+                { "target": "relationship", "key": "@rector", "delta": 1 },
+                { "target": "pillar", "key": "human", "delta": 1 }
+              ]
+            }
+          },
+          "effects": [
+            { "target": "pillar", "key": "intellectual", "delta": 1 }
+          ]
+        },
+        {
+          "id": "trade_evenings",
+          "label": "Get {@random_classmate}, who has the Italian, to teach you over meals instead",
+          "default": true,
+          "outcome": "You tell the rector that the Tuesdays are spoken for and that you have your own arrangement, and he lets it go, because the arrangement exists. {@random_classmate} teaches you at table.",
+          "roll": {
+            "chance": 0.4,
+            "stat": "knowledge",
+            "success": {
+              "outcome": "It works, in the ragged way things learned at table work. By spring you have the Italian of a man who has eaten with Italians: fast, ungrammatical, understood. The Sister, told of it by the rector, sniffs. {@random_classmate} has become a friend in the process, which no Tuesday would have managed.",
+              "effects": [
+                { "target": "credential", "key": "italian_basic" },
+                { "target": "relationship", "key": "@random_classmate", "delta": 6 },
+                { "target": "pillar", "key": "human", "delta": 1 }
+              ]
+            },
+            "failure": {
+              "outcome": "It does not work; meals are for eating, and the classmate's Italian turns out to be his grandmother's and mostly about food. You have a friend and no verbs. The rector, in May, notes that you declined the tutor he found, and writes a sentence about it that the Gregorian will never see and the bishop will.",
+              "effects": [
+                { "target": "relationship", "key": "@random_classmate", "delta": 4 },
+                { "target": "relationship", "key": "@rector", "delta": -3 },
+                { "target": "pillar", "key": "intellectual", "delta": -1 }
+              ]
+            }
+          },
+          "effects": [
+            { "target": "relationship", "key": "@random_classmate", "delta": 2 }
+          ]
+        },
+        {
+          "id": "beg_off",
+          "label": "Tell the rector the Tuesdays are the house's, and Rome can teach its own Italian",
+          "outcome": "He accepts it without comment, and the Sister is told, and the Tuesdays stay the house's. It is a reasonable position and he receives it as one, which is not the same as agreeing with it. A man who is being planned for has said that a piece of the plan is not for him. He does not raise it again. It is in the letter, briefly, as a thing observed.",
+          "effects": [
+            { "target": "relationship", "key": "@rector", "delta": -4 },
+            { "target": "pillar", "key": "pastoral", "delta": 1 },
+            { "target": "outspokenness", "key": "", "delta": 1 },
+            { "target": "reputation", "key": "rome", "delta": -1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "semc_tribunal_hearing",
+      "phase": "seminary",
+      "yearGate": [5, 6, 7],
+      "pressure": ["competence"],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 12,
+      "suppressYears": 3,
+      "once": true,
+      "requires": [ { "type": "flag", "key": "canon_law_track", "value": true } ],
+      "title": "The Hearing",
+      "body": "The judicial vicar, who is seventy and has no one else, invites the diocese's future canonist to observe a hearing, and then, ten minutes before it begins, to take the notes, because the notary has the flu. It is a marriage case. Two people who were young together sit at either end of a table in a room with a crucifix and a water jug and describe, to a priest with a legal pad, the reasons the thing they promised each other was not, in the Church's eyes, a thing at all. The judicial vicar asks the questions. You write. Afterwards he asks whether you would draft the summary, the one that goes in the acts, and says that if it is good he will use it, and that if it is not he will know what the three years would be spent on. {@vocation_director} did not warn you that the tribunal would test you before it trained you. He may not have known. The legal pad is in front of you and the water jug is empty and the two people have gone home separately.",
+      "flavorPrompt": "A tribunal hearing room, a legal pad, an old judicial vicar who wants to know before he spends three years on a man.",
+      "choices": [
+        {
+          "id": "draft_it",
+          "label": "Draft the summary, and draft it well",
+          "outcome": "You take the pad home and write the summary the way the acts want it, which you have to learn as you go.",
+          "roll": {
+            "chance": 0.5,
+            "stat": "knowledge",
+            "success": {
+              "outcome": "He uses it. He changes eleven words and uses it, and sends a note to the vocation director that says the diocese can stop looking for its second canonist, which is a sentence that gets read aloud at the chancery. You have learned that a marriage case is a story with the tenderness cut out, and that you can cut it, which is a thing to know about oneself.",
+              "effects": [
+                { "target": "flag", "key": "tribunal_ready", "value": true },
+                { "target": "reputation", "key": "chancery", "delta": 3 },
+                { "target": "stat", "key": "knowledge", "delta": 1 },
+                { "target": "relationship", "key": "@vocation_director", "delta": 3 },
+                { "target": "trait", "key": "drafted a tribunal summary the judicial vicar used" }
+              ]
+            },
+            "failure": {
+              "outcome": "He reads it twice and says, kindly, that it is a homily, and that the acts do not want to know what anyone felt. He writes the summary himself in twenty minutes while you watch, and it is cold and exact and true, and you understand what the three years would be for and are not sure you want them. The vocation director hears that it was a fair first try. Fair is a word that goes in a file.",
+              "effects": [
+                { "target": "reputation", "key": "chancery", "delta": -1 },
+                { "target": "relationship", "key": "@vocation_director", "delta": -2 },
+                { "target": "pillar", "key": "intellectual", "delta": 1 },
+                { "target": "trait", "key": "wrote a tribunal summary that read like a homily" }
+              ]
+            }
+          },
+          "effects": [
+            { "target": "pillar", "key": "intellectual", "delta": 1 },
+            { "target": "stat", "key": "administration", "delta": 1 }
+          ]
+        },
+        {
+          "id": "notes_only",
+          "label": "Give him the notes, and say the summary is his to write",
+          "default": true,
+          "outcome": "He takes the notes, reads them, and says they will do, and writes the summary himself while you watch, which turns out to be the lesson. You learn the shape of the acts from the outside. It is not the test he set. It is not a failure either; the vocation director is told that you were careful, and careful is the word the tribunal likes best.",
+          "effects": [
+            { "target": "stat", "key": "knowledge", "delta": 1 },
+            { "target": "pillar", "key": "intellectual", "delta": 1 },
+            { "target": "reputation", "key": "chancery", "delta": 1 }
+          ]
+        },
+        {
+          "id": "say_what_you_saw",
+          "label": "Tell him the case was decided before the hearing began, and ask why he held it",
+          "requires": [ { "type": "outspokenness", "op": ">=", "value": 15 } ],
+          "outcome": "He looks at you over the pad for a while and says that of course it was, and that the hearing is what the law owes the two people, and that a canonist who cannot see the difference should stay in a parish. Then he says that a seminarian who saw it was decided has the eye, and that the eye is the part that cannot be taught. He does not ask for the summary. He asks for you, in three years, in a letter to the vocation director that says so.",
+          "effects": [
+            { "target": "outspokenness", "key": "", "delta": 1 },
+            { "target": "stat", "key": "knowledge", "delta": 1 },
+            { "target": "reputation", "key": "chancery", "delta": 2 },
+            { "target": "flag", "key": "tribunal_ready", "value": true },
+            { "target": "pillar", "key": "human", "delta": 1 },
+            { "target": "trait", "key": "told the judicial vicar the case was decided before the hearing" }
           ]
         }
       ]

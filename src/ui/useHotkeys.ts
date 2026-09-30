@@ -45,6 +45,11 @@ export function useHotkeys(): void {
       }
       const key = e.key.toLowerCase();
       // Escape closes whatever is on the table that has no decision in it: a letter, an offer unread, the furnishing.
+      // What came of a choice lies on the table until it is read: Enter or Escape folds it, and no key moves the week past it.
+      if (st.lastOutcome) {
+        if (key === 'escape' || key === 'enter') { e.preventDefault(); st.dismissOutcome(); }
+        return;
+      }
       if (key === 'escape') {
         const ui = useUiStore.getState();
         if (game.mode.kind === 'letter') { e.preventDefault(); if (game.mode.letter.sort === 'mail') st.answerMail(null); else st.readLetter(); return; }

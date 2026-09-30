@@ -64,7 +64,7 @@ import {
   leaveSeminary as leave,
   ordain as doOrdain,
 } from './seminary';
-import { parishWeekHook, friarWeekHook, resolvePending, seminaryWeekHook, studyWeekHook, type EventDeps } from './weekHook';
+import { parishWeekHook, friarWeekHook, resolvePendingWithOutcome, seminaryWeekHook, studyWeekHook, type ChoiceOutcome, type EventDeps } from './weekHook';
 import { setDiscretionary as doSetDiscretionary, setObligation as doSetObligation, startAssignment } from './parish';
 import { focusGroup as doFocus, replaceLeader as doReplaceLeader, startFounding as doStartFounding, suppressGroup as doSuppress } from '@/systems/groups';
 import { startWork as doStartWork, stopWork as doStopWork } from '@/systems/problems';
@@ -368,6 +368,9 @@ export interface GameStore {
   deferOffer(offerId: string): void;
   /** Prose from the last offer decision, for the UI. */
   lastOfferOutcome: string | null;
+  /** What came of the last choice the player made, until he has read it. */
+  lastOutcome: ChoiceOutcome | null;
+  dismissOutcome(): void;
 }
 
 // The live RNG is deliberately kept out of the reactive state: it is mutable,
@@ -468,6 +471,7 @@ export const useGameStore = create<GameStore>()((set, get) => ({
   running: false,
   error: null,
   lastOfferOutcome: null,
+  lastOutcome: null,
   lastPriorLine: null,
   lastProvincialLine: null,
   lastTalk: null,
@@ -510,7 +514,7 @@ export const useGameStore = create<GameStore>()((set, get) => ({
     rng = built.rng;
     const year = fromDayNumber(built.state.clock.startDay).year;
     const candidates = generateCandidates(rng.derive('world'), year);
-    set({ game: { ...built.state, candidates }, previous: null, prose: {}, lastStop: null, running: false, error: null, lastOfferOutcome: null, slotId: null, slots: listSlots() });
+    set({ game: { ...built.state, candidates }, previous: null, prose: {}, lastStop: null, running: false, error: null, lastOfferOutcome: null, lastOutcome: null, slotId: null, slots: listSlots() });
   },
 
   chooseDiocese(presetId) {
@@ -1014,17 +1018,25 @@ export const useGameStore = create<GameStore>()((set, get) => ({
     const pending = before?.pending[0];
     const event = pending ? eventById(pending.eventId) : undefined;
     const provider = providerFor(get().llm);
-    if (before && pending && event && provider) {
-      void skinOutcome(before, event, pending, choiceId, get().prose, provider).then((r) => {
-        if (r) set({ prose: { ...get().prose, [r.key]: r.prose } });
-      });
-    }
+    const came: { outcome: ChoiceOutcome | null } = { outcome: null };
     update(set, get, (game, r) => {
       const p = game.pending[0];
       if (!p) return game;
-      return resolvePending(game, p, choiceId, r, depsFor(game));
+      const resolved = resolvePendingWithOutcome(game, p, choiceId, r, depsFor(game));
+      came.outcome = resolved.outcome;
+      return resolved.state;
     });
-    set({ previous: null });
+    // What came of it, on a sheet, before the clock goes on; the skin rewrites the resolved branch, not the authored one.
+    set({ previous: null, lastOutcome: came.outcome });
+    if (before && pending && event && provider && came.outcome) {
+      const text = came.outcome.text;
+      void skinOutcome(before, event, pending, choiceId, get().prose, provider, text).then((r) => {
+        if (r) set({ prose: { ...get().prose, [r.key]: r.prose } });
+      });
+    }
+  },
+  dismissOutcome() {
+    set({ lastOutcome: null });
   },
   acknowledgeEvaluation() {
     update(set, get, (game) => ackEvaluation(game));

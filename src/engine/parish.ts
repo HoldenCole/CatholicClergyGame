@@ -239,11 +239,13 @@ function placeAmongPriests(state: GameState, rng: Rng): GameState {
     const pastor = Object.values(next.npcs).find((n) => n.status === 'active' && n.tags.includes(`pastor:${pid}`));
     if (pastor) {
       const known = pastor.tags.find((t) => t.startsWith('temperament:'))?.slice('temperament:'.length);
-      const temperament = known ?? rng.derive(`boss:${pid}`).weighted(['mentor', 'micromanager', 'absent'], (t) => ({ mentor: 3, micromanager: 3, absent: 2 })[t]!);
+      // The rector's plan named a pastor who forms priests: the first pastor is that man.
+      const planned = state.flags.rector_plan && !state.flags['rector_plan:placed'] ? 'mentor' : undefined;
+      const temperament = known ?? planned ?? rng.derive(`boss:${pid}`).weighted(['mentor', 'micromanager', 'absent'], (t) => ({ mentor: 3, micromanager: 3, absent: 2 })[t]!);
       next = {
         ...next,
         npcs: { ...next.npcs, [pastor.id]: { ...pastor, tags: known ? pastor.tags : [...pastor.tags, `temperament:${temperament}`] } },
-        flags: { ...next.flags, [`boss:${temperament}`]: true },
+        flags: { ...next.flags, [`boss:${temperament}`]: true, ...(planned ? { 'rector_plan:placed': true } : {}) },
       };
     }
   }

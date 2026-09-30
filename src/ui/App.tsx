@@ -9,6 +9,7 @@ import CreationScreen from './creation/CreationScreen';
 import EndedScreen from './EndedScreen';
 import EmphasisPanel from './seminary/EmphasisPanel';
 import EventPanel from './seminary/EventPanel';
+import OutcomePanel from './seminary/OutcomePanel';
 import SummerPanel from './seminary/SummerPanel';
 import EvaluationPanel from './seminary/EvaluationPanel';
 import OrdinationPanel from './seminary/OrdinationPanel';
@@ -33,6 +34,7 @@ import { useUiStore } from './uiStore';
 
 export default function App() {
   const game = useGameStore((s) => s.game);
+  const lastOutcome = useGameStore((s) => s.lastOutcome);
   const error = useGameStore((s) => s.error);
   const lastStop = useGameStore((s) => s.lastStop);
   const openSheet = useUiStore((s) => s.openSheet);
@@ -90,6 +92,8 @@ export default function App() {
   const pending = game.pending.length > 0;
   const tray = game.mode.kind === 'letter' && letterFolded ? game.mode.letter : null;
   const decision =
+    // What came of the last choice is read before anything else is put on the table.
+    lastOutcome ? <OutcomePanel /> :
     pending ? <EventPanel /> :
     game.mode.kind === 'year_start' ? <EmphasisPanel /> :
     game.mode.kind === 'summer' ? <SummerPanel /> :
