@@ -91,7 +91,7 @@ function playYear(state: GameState, rng: ReturnType<typeof createRng>, d: EventD
       continue;
     }
     if (s.mode.kind === 'summer') {
-      s = chooseSummer(s, 'hard_parish');
+      s = chooseSummer(s, availableSummers(s).find((o) => o.available)!.option.id);
       continue;
     }
     // Year one asks who he will see; the test takes the first man offered.
@@ -177,8 +177,8 @@ describe('engine/seminary', () => {
     expect(availableSummers(s0).find((o) => o.option.id === 'home_parish')?.available).toBe(true);
     const s = playYear(s0, rng, d);
     expect(s.mode.kind).toBe('evaluation');
-    expect(s.seminary!.summers[1]).toBe('hard_parish');
-    expect(s.flags['summer:hard_parish']).toBe(true);
+    expect(typeof s.seminary!.summers[1]).toBe('string');
+    expect(s.flags[`summer:${s.seminary!.summers[1]}`] ?? s.seminary!.summers[1] === 'home_parish').toBe(true);
     if (s.mode.kind !== 'evaluation') throw new Error('unreachable');
     expect(['ADVANCED', 'ADVANCED_WITH_CONCERNS']).toContain(s.mode.record.result);
     const s2 = acknowledgeEvaluation(s);

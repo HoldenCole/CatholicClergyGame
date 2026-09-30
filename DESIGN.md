@@ -313,6 +313,8 @@ Each year runs: an **opening emphasis choice** → **3–4 played weeks** drawn 
 
 The year's pool is three kinds of scene: the beats that always come (candidacy, the ministries, the diaconate, the eve of ordination), the scenes a man's choices and stats open (the promise scenes in `career.json`, gated on the flag a promise wrote), and the chance scenes (`seminary/chance.json`), which fire from the ordinary draw and whose outcome turns on a roll (§12.3 `roll`). A promise made in seminary is kept where it was promised: the parish offer it pointed at carries a `guarantee` on that flag, the rector's plan shapes the first posting and its pastor, and each promise has a follow-up scene of its own.
 
+The summer between years is chosen from the diocese's own list (`content/seminary/summers.json`): the plain summers every diocese has (a regular parish, a hard parish, the hospital, the chancery, the mission, Rome, Spanish immersion, a Spanish-speaking parish where any parish needs it), the ones the generated world answers for (`where` conditions on the diocese's region, size, institutions, and its parishes' peoples), and two or three named for each preset see. A summer spent once is not offered again. The first posting remembers them (`systems/assignment.ts`).
+
 ### 6.2 The four pillars
 
 Formation is scored on the Church's own four pillars, mapped to stats: **Human** (Charisma), **Spiritual** (Piety), **Intellectual** (Theology + Knowledge), **Pastoral** (blend). The annual emphasis is an allocation across the four. A pillar left at zero for consecutive years becomes a flag on the record.

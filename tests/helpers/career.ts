@@ -50,7 +50,7 @@ export function playCareer(seed: string, diocese: string, maxWeeks: number, a: C
         s.getState().chooseEmphasis(policy === 'last' ? { human: 2, spiritual: 2 + x, intellectual: 3, pastoral: 3 } : { human: 3, spiritual: 3, intellectual: 2 + x, pastoral: 2 });
         break;
       }
-      case 'summer': s.getState().chooseSummer(policy === 'last' ? 'chancery' : 'hard_parish'); break;
+      case 'summer': { const open = availableSummers(game).filter((o) => o.available); s.getState().chooseSummer((policy === 'last' ? open.at(-1) : open[0])!.option.id); break; }
       case 'evaluation': s.getState().acknowledgeEvaluation(); break;
       case 'ordination': s.getState().ordain(); break;
       case 'assignment': s.getState().acceptAssignment(); break;

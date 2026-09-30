@@ -194,13 +194,23 @@ export function summerOptionsFor(state: GameState) {
   return religiousSummerOptions.filter((o) => (!o.orders || o.orders.includes(r.order)) && (!o.houses || o.houses.includes(house)));
 }
 
+/** The summers this diocese has to offer: those with no `where`, and those whose `where` the generated world answers. */
+export function summersOffered(state: GameState) {
+  return summerOptionsFor(state).filter((o) => !o.where || evaluateAll(o.where, state));
+}
+
+/** A summer already spent is not offered again: the diocese sends a man somewhere new. */
+export function summerTaken(state: GameState, id: SummerAssignment): boolean {
+  return Object.values(state.seminary?.summers ?? {}).includes(id);
+}
+
 export function availableSummers(state: GameState) {
-  return summerOptionsFor(state).map((o) => ({ option: o, available: evaluateAll(o.requires, state) }));
+  return summersOffered(state).map((o) => ({ option: o, available: evaluateAll(o.requires, state) && !summerTaken(state, o.id), taken: summerTaken(state, o.id) }));
 }
 
 export function chooseSummer(state: GameState, id: SummerAssignment): GameState {
-  const option = summerOptionsFor(state).find((o) => o.id === id);
-  if (!option || !evaluateAll(option.requires, state)) throw new Error(`summer ${id} unavailable`);
+  const option = summersOffered(state).find((o) => o.id === id);
+  if (!option || !evaluateAll(option.requires, state) || summerTaken(state, id)) throw new Error(`summer ${id} unavailable`);
   const sem = state.seminary!;
   const next = applyEffects(state, option.effects);
   return {

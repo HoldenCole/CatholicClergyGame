@@ -223,8 +223,17 @@ export function evaluateCondition(
     case 'month':
       return compare(cond.op, dateOf(state.clock).month, cond.value);
     case 'diocese': {
-      const id = state.world?.diocese.presetId;
-      return !!id && (Array.isArray(cond.value) ? cond.value.includes(id) : cond.value === id);
+      const w = state.world;
+      if (!w) return false;
+      const has = (v: string) => (Array.isArray(cond.value) ? cond.value.includes(v) : cond.value === v);
+      switch (cond.key) {
+        case 'region': return has(w.diocese.visible.region);
+        case 'size': return has(w.diocese.visible.size);
+        case 'institution': return w.diocese.visible.institutions.some((i) => has(i));
+        case 'spanish': return w.parishes.some((p) => p.needsSpanish);
+        case 'ethnic': return w.parishes.some((p) => Object.entries(p.ethnic).some(([k, share]) => has(k) && share >= (cond.share ?? 0.3)));
+        default: return has(w.diocese.presetId);
+      }
     }
     case 'confessor':
       return compare(cond.op, state.character?.confessor ?? 0, cond.value);
