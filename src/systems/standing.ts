@@ -20,6 +20,8 @@ export const STANDING = {
   rectorRecommends: 12,
   rectorDoubts: -12,
   leader: 6,
+  /** Led an apostolate outside the house: the January bus, the retreat, the Sunday service, the kitchen. */
+  apostolate: 6,
   noticed: 8,
   wary: -10,
   cap: [0, 100] as [number, number],
@@ -64,6 +66,7 @@ export function formationStanding(state: GameState): Standing {
   if (state.flags.rector_recommends) value += STANDING.rectorRecommends;
   if (state.flags.rector_doubts) value += STANDING.rectorDoubts;
   if (state.flags.seminary_leader) value += STANDING.leader;
+  if (state.flags.apostolate_leader) value += STANDING.apostolate;
   if (state.flags.noticed_by_bishop) value += STANDING.noticed;
   if (state.flags.bishop_wary) value += STANDING.wary;
   value = Math.max(STANDING.cap[0], Math.min(STANDING.cap[1], value));
@@ -80,6 +83,7 @@ export function formationStanding(state: GameState): Standing {
   if (state.flags.rector_recommends) reasons.push('the rector will write for you');
   if (state.flags.rector_doubts) reasons.push("the rector's letter will be careful");
   if (state.flags.seminary_leader) reasons.push('the house followed you');
+  if (state.flags.apostolate_leader) reasons.push('you led something outside the house');
   if (state.flags.noticed_by_bishop) reasons.push('the bishop knows your name, and likes it');
   if (state.flags.bishop_wary) reasons.push('the bishop has a reservation');
   return { value, word: standingWord(value), reasons };

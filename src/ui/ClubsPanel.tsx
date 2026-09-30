@@ -1,5 +1,5 @@
 import { useGameStore } from '@/engine/store';
-import { clubAvailability, clubHours, clubsOf } from '@/systems/clubs';
+import { clubAvailability, clubHours, clubsOf, contactOf } from '@/systems/clubs';
 import { hoursOf } from '@/systems/week';
 import Sheet from './Sheet';
 import Portrait from './portraits/Portrait';
@@ -32,10 +32,16 @@ export default function ClubsPanel() {
               {mine.map(({ def }) => {
                 const m = clubsOf(game).memberships[def.id]!;
                 const fellows = m.fellows.map((id) => game.npcs[id]).filter((n): n is NonNullable<typeof n> => !!n);
+                const contact = contactOf(game, def.id);
                 return (
                   <li key={def.id} className="flex items-start justify-between gap-2">
                     <div className="min-w-0">
-                      <div>{def.label} <span className="ink-faint text-xs">· {unit(def.hours)} a week · {def.builds}</span></div>
+                      <div>{def.label} <span className="ink-faint text-xs">· {def.kind === 'apostolate' ? 'an apostolate · ' : ''}{unit(def.hours)} a week · {def.builds}</span></div>
+                      {contact && def.contact && (
+                        <div className="ink-muted text-xs">
+                          <span className="inline-flex items-center gap-1 align-middle"><Portrait portrait={portraitForNpc(contact, year)} size={16} /> {contact.title} {contact.name.first} {contact.name.last}</span>, {def.contact.who}{game.flags[`led:${def.id}`] ? '; you have led it' : game.flags[`apostolate:${def.id}:veteran`] ? '; she or he has begun to count on you' : ''}.
+                        </div>
+                      )}
                       <div className="ink-muted text-xs">
                         {Math.floor(m.weeks / 52) > 0 ? `${Math.floor(m.weeks / 52)} years in. ` : `${m.weeks} weeks in. `}
                         {def.credentialAfter && !m.earned ? `${Math.max(0, def.credentialAfter.weeks - m.weeks)} weeks to something to show for it. ` : ''}
@@ -64,7 +70,7 @@ export default function ClubsPanel() {
             {open.map(({ def }) => (
               <li key={def.id} className="flex items-start justify-between gap-2">
                 <div className="min-w-0">
-                  <div>{def.label} <span className="ink-faint text-xs">· {unit(def.hours)} a week · {def.builds}</span></div>
+                  <div>{def.label} <span className="ink-faint text-xs">· {def.kind === 'apostolate' ? 'an apostolate · ' : ''}{unit(def.hours)} a week · {def.builds}</span></div>
                   <div className="ink-muted text-xs">{def.blurb}</div>
                 </div>
                 <button className="pbtn shrink-0 px-2 py-0 text-xs" onClick={() => join(def.id)}>join</button>

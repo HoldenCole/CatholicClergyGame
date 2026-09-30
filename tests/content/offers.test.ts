@@ -9,7 +9,7 @@ const PROGRAM_IDS = (programs as { id: string }[]).map((p) => p.id);
 
 const PHASES = ['seminary', 'parochial_vicar', 'administrator', 'pastor', 'chancery', 'bishop', 'study'];
 const CATEGORIES = ['academic', 'chancery', 'patronage', 'social', 'seminary'];
-const SELECTORS = ['@province_bishop', '@nuncio', 
+const SELECTORS = ['@contact:respect_life', '@contact:school_teaching', '@contact:nursing_home', '@contact:soup_kitchen', '@province_bishop', '@nuncio', 
   '@rector', '@spiritual_director', '@formation_advisor', '@vocation_director', '@professor_trad', '@professor_prog',
   '@bishop', '@mother', '@father', '@sibling', '@mentor_priest', '@home_pastor', '@closest_classmate', '@rival_classmate',
   '@random_classmate', '@pastor', '@secretary', '@dre', '@music_director', '@maintenance', '@parishioner', '@bonded_parishioner', '@brother_priest', '@resident',

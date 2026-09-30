@@ -3,6 +3,9 @@ import type { Rng } from '@/engine/rng';
 import { clubDefs, clubDef } from '@/content/clubs';
 import { applyEffects } from '@/engine/effects';
 import { describeUnmet } from './doors';
+import { CLERGY_HERITAGE, eraForBirthYear, rollFemaleName, rollHeritage, rollMaleName } from '@/generation/names';
+import { finishNpc, rollAlignment, rollBaseStats } from '@/generation/npc';
+import { dateOf } from '@/engine/time';
 
 /** Invented. */
 export const CLUBS = {
@@ -72,6 +75,32 @@ export function clubAvailability(state: GameState): ClubAvailability[] {
   });
 }
 
+/** The layperson who runs an apostolate: rolled like anyone else, tagged for the scenes (@contact:<club id>). */
+function makeContact(state: GameState, def: ClubDef, rng: Rng) {
+  const spec = def.contact!;
+  const year = dateOf(state.clock).year;
+  const birthYear = year - rng.int(spec.ageRange[0], spec.ageRange[1]);
+  const heritage = rollHeritage(rng, CLERGY_HERITAGE);
+  return finishNpc(rng, {
+    id: `contact_${def.id}`,
+    name: spec.sex === 'f' ? rollFemaleName(rng, heritage) : rollMaleName(rng, heritage, eraForBirthYear(birthYear)),
+    role: 'lay',
+    title: spec.sex === 'f' ? 'Mrs.' : 'Mr.',
+    birthYear,
+    origin: rng.pick(['urban_ethnic', 'suburban', 'rural', 'latino_immigrant'] as const),
+    stats: rollBaseStats(rng, 30, 60),
+    tags: [`contact:${def.id}`, 'apostolate_contact', 'lay'],
+    alignment: rollAlignment(rng, 0, 30),
+    relationship: rng.int(5, 15),
+  });
+}
+
+/** Who runs the apostolate the man belongs to, if it has someone. */
+export function contactOf(state: GameState, clubId: string) {
+  const id = clubsOf(state).memberships[clubId]?.contact;
+  return id ? state.npcs[id] ?? null : null;
+}
+
 function pickFellows(state: GameState, def: ClubDef, rng: Rng): string[] {
   // A religious circle's fellows are friars of the order; a diocesan table's are the diocese's priests.
   const orderKey = state.religious ? `order:${state.religious.order}` : '';
@@ -100,6 +129,12 @@ export function joinClub(state: GameState, id: string, rng: Rng, byInvitation = 
   const membership: ClubMembership = { joinedWeek: state.clock.week, weeks: 0, fellows: pickFellows(state, def, rng) };
   const clubs = clubsOf(state);
   let next: GameState = { ...state, clubs: { ...clubs, memberships: { ...clubs.memberships, [id]: membership } } };
+  // An apostolate has someone who runs it: made once, kept, and met again if the man comes back.
+  if (def.contact) {
+    const existing = Object.values(state.npcs).find((n) => n.tags.includes(`contact:${id}`));
+    const contact = existing ?? makeContact(state, def, rng.derive(`contact:${id}`));
+    next = { ...next, npcs: { ...next.npcs, [contact.id]: contact }, clubs: { ...next.clubs!, memberships: { ...next.clubs!.memberships, [id]: { ...membership, contact: contact.id } } } };
+  }
   if (def.onJoin) next = applyEffects(next, def.onJoin, {}, `joining ${def.label}`);
   return { ...next, career: [...next.career, { week: next.clock.week, kind: 'note', text: `Joined ${def.label}.` }] };
 }
