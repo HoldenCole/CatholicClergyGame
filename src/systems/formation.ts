@@ -124,7 +124,12 @@ export interface EvaluationInput {
   /** Concerns recorded during this year (not carried from earlier years). */
   newConcerns: string[];
   flags: GameState['flags'];
+  /** The rector's relationship with the man, −100..100. His report is the evaluation's last word. */
+  rectorRegard?: number;
 }
+
+/** Where the rector's regard turns an evaluation: a warm rector forgives one weak pillar, a cold one withholds a clean year. */
+export const RECTOR_REPORT = { forgives: 30, withholds: -25 } as const;
 
 const PILLAR_LABEL: Record<Pillar, string> = {
   human: 'human formation',
@@ -167,8 +172,18 @@ export function evaluate(input: EvaluationInput): EvaluationRecord {
     notes.push('Not ready to advance; the year will be repeated.');
   } else if (notes.length > 0 || flags.candidacy_concern === true) {
     result = 'ADVANCED_WITH_CONCERNS';
+    // The rector's report: one weak pillar and nothing else, and a rector who thinks well of him, is a clean year.
+    const onlyWeak = notes.length === 1 && /^Weak in /.test(notes[0]!) && newConcerns.length === 0 && flags.candidacy_concern !== true;
+    if (onlyWeak && (input.rectorRegard ?? 0) >= RECTOR_REPORT.forgives) {
+      result = 'ADVANCED';
+      notes.push("The rector's report carried the year.");
+    }
     if (flags.candidacy_concern === true && seminary.year === 4) notes.push('Admitted to candidacy with reservations noted.');
     if (first && failing) notes.push('A poor first year, forgiven once.');
+  } else if ((input.rectorRegard ?? 0) <= RECTOR_REPORT.withholds) {
+    // A clean year the rector will not call clean: his report is cool, and the file reads it.
+    result = 'ADVANCED_WITH_CONCERNS';
+    notes.push("The rector's report was cool.");
   } else {
     result = 'ADVANCED';
   }

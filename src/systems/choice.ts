@@ -23,6 +23,8 @@ import { moveOut } from '@/engine/career';
  * the kind the man asked for. Requested in playtesting; numbers invented.
  */
 export const CHOICE = {
+  /** A rector who thinks this well of a man puts him at the table whatever the file says. */
+  rectorRegard: 35,
   /** Formation standing that earns a choice at ordination. */
   ordinationStanding: 66,
   /** Chancery regard that earns a choice at a board. */
@@ -129,9 +131,14 @@ export function flagshipFor(state: GameState): Parish | undefined {
 }
 
 /** Whether this occasion earns the man a choice at all. */
+function rectorRegard(state: GameState): number {
+  return Object.values(state.npcs).find((n) => n.status === 'active' && n.tags.includes('rector'))?.relationship ?? 0;
+}
+
 export function earnsChoice(state: GameState, occasion: Occasion): boolean {
   if (!state.world || !state.character) return false;
-  if (occasion === 'ordination') return formationStanding(state).value >= CHOICE.ordinationStanding || !!state.flags.seminary_leader || !!state.flags.rector_recommends;
+  // The rector's word carries a man to the table: his letter, or seven years of his regard.
+  if (occasion === 'ordination') return formationStanding(state).value >= CHOICE.ordinationStanding || !!state.flags.seminary_leader || !!state.flags.rector_recommends || rectorRegard(state) >= CHOICE.rectorRegard;
   if (occasion === 'degree') return true;
   return state.character.reputation.chancery >= CHOICE.boardChancery;
 }

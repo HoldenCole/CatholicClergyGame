@@ -84,8 +84,19 @@ export function startSeminary(state: GameState, classmateIds: string[], name?: s
     ...state,
     phase: 'seminary',
     seminary,
+    flags: { ...state.flags, ...houseFlags(state) },
     mode: { kind: 'year_start', year: seminary.year },
   };
+}
+
+/** The house as flags the scenes can read: how the rector runs it and what the vice-rector is for (generation/formators.ts). */
+export function houseFlags(state: GameState): Record<string, boolean> {
+  const out: Record<string, boolean> = {};
+  for (const n of Object.values(state.npcs)) {
+    if (n.role !== 'formator') continue;
+    for (const t of n.tags) if (t.startsWith('rector:') || t.startsWith('vice_rector:')) out[t] = true;
+  }
+  return out;
 }
 
 /** The absolute week the current or next formation year opens on. */
@@ -231,9 +242,11 @@ function withLine(entry: GameState['digest'][number] | undefined, line: string) 
 function runEvaluation(state: GameState) {
   const sem = state.seminary!;
   const concernsBefore = Number(state.flags.concerns_at_year_start ?? 0);
+  const rector = Object.values(state.npcs).find((n) => n.status === 'active' && n.tags.includes('rector'));
   return evaluate({
     seminary: sem,
     newConcerns: sem.concerns.slice(concernsBefore),
+    ...(rector ? { rectorRegard: rector.relationship } : {}),
     flags: state.flags,
   });
 }

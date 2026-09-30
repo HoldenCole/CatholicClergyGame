@@ -32,7 +32,7 @@ const REP: Record<string, string> = {
   traditional_bloc: 'the traditional wing', progressive_bloc: 'the progressive wing',
 };
 const SELECTOR: Record<string, string> = {
-  '@bishop': 'the bishop', '@rector': 'the rector', '@pastor': 'the pastor', '@spiritual_director': 'your director', '@formation_advisor': 'your advisor',
+  '@bishop': 'the bishop', '@rector': 'the rector', '@vice_rector': 'the vice-rector', '@pastor': 'the pastor', '@spiritual_director': 'your director', '@formation_advisor': 'your advisor',
   '@vocation_director': 'the vocation director', '@closest_classmate': 'your closest friend', '@random_classmate': 'a classmate', '@rival_classmate': 'your rival',
   '@mother': 'your mother', '@father': 'your father', '@sibling': 'your sibling', '@group_leader': 'the group\'s leader', '@vicar_general': 'the vicar general',
   '@chancellor': 'the chancellor', '@nuncio': 'the nuncio', '@terna_subject': 'the man you were asked about', '@metropolitan': 'the archbishop', '@province_bishop': 'a bishop of the province', '@curia_prefect': 'the prefect', '@curia_secretary': 'the secretary', '@curia_colleague': 'your colleague', '@vicar_for_clergy': 'the vicar for clergy', '@brother_priest': 'a brother priest', '@mentor_priest': 'your mentor',

@@ -1,0 +1,1248 @@
+{
+  "_notes": "The house (depth round): scenes with the rector and the vice-rector, who run the seminary and write the reports that follow a man. The rector's style (rector:pastoral | rector:academic | rector:disciplinarian) and the vice-rector's temper (vice_rector:enforcer | vice_rector:confidant) are rolled apart from everything else about them in generation/formators.ts and written as flags at startSeminary; four scenes here gate on them, the rest come to any house. Engine reads: the rector's regard turns the evaluation (systems/formation.ts RECTOR_REPORT) and puts a man at the ordination table (systems/choice.ts CHOICE.rectorRegard); the vice-rector's regard counts in standing (STANDING.vicePerPoint). Flags written: seminary_leader (house_rector_ill › take_it on success, house_prefect › accept, accept_for_the_class), known_scholar (house_rector_academic › read_it on success). No threads; nothing sensitive.",
+  "events": [
+    {
+      "id": "house_vice_list",
+      "phase": "seminary",
+      "yearGate": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "pressure": [
+        "competence"
+      ],
+      "severity": "NOTABLE",
+      "category": "formation",
+      "baseWeight": 13,
+      "suppressYears": 3,
+      "once": true,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "vice_rector:enforcer",
+          "value": true
+        }
+      ],
+      "title": "The Vice-Rector's List",
+      "body": "{@vice_rector} runs the house. The rector has the office and the bishop's ear; the vice-rector has the corridor, the sign-out sheet, the chapel door at six, and a small black notebook in which, the house believes, he writes the name of every man who is late to Lauds. Nobody has seen inside it. This morning you were late to Lauds, by four minutes, for a reason that is true and would sound thin, and he was standing at the chapel door with the notebook open. He has not said anything. He says nothing until he says everything, usually in an evaluation.",
+      "flavorPrompt": "A chapel door at six in the morning, a vice-rector with a small notebook, four minutes.",
+      "choices": [
+        {
+          "id": "go_and_say",
+          "label": "Go to his office and tell him why, before he asks",
+          "outcome": "You knock on his door at ten and tell him the four minutes and the reason, plainly, and let him do what he does with it.",
+          "roll": {
+            "chance": 0.55,
+            "stat": "charisma",
+            "success": {
+              "outcome": "He listens, closes the notebook, and says that the men who come to him are not the men in it. It is the first thing he has said to you that was not a rule. He asks how the year is going, and means it, and you find out that the vice-rector is a person, which the house does not generally discover until sixth year.",
+              "effects": [
+                {
+                  "target": "relationship",
+                  "key": "@vice_rector",
+                  "delta": 7
+                },
+                {
+                  "target": "pillar",
+                  "key": "human",
+                  "delta": 1
+                },
+                {
+                  "target": "trait",
+                  "key": "went to the vice-rector before he came to him"
+                }
+              ]
+            },
+            "failure": {
+              "outcome": "He listens and writes something down while you talk, which is the worst outcome, and thanks you, and says that punctuality is a form of charity, which is in the rule of the house and which you have now heard from him personally. You are in the notebook and you have also been to the office, and it is not clear which was worse.",
+              "effects": [
+                {
+                  "target": "relationship",
+                  "key": "@vice_rector",
+                  "delta": 1
+                },
+                {
+                  "target": "pillar",
+                  "key": "human",
+                  "delta": -1
+                },
+                {
+                  "target": "stat",
+                  "key": "piety",
+                  "delta": 1
+                }
+              ]
+            }
+          },
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "say_nothing",
+          "label": "Say nothing; four minutes is four minutes",
+          "default": true,
+          "outcome": "You say nothing and he says nothing and the notebook goes back in his pocket. In May the evaluation has a line about punctuality that the rector reads aloud with a small sigh. It is one line. The house has taught you what the notebook is for, and you have taught it that you can take a line.",
+          "effects": [
+            {
+              "target": "pillar",
+              "key": "human",
+              "delta": -1
+            },
+            {
+              "target": "relationship",
+              "key": "@vice_rector",
+              "delta": -3
+            },
+            {
+              "target": "concern",
+              "key": "Late to the Office, noted"
+            }
+          ]
+        },
+        {
+          "id": "make_it_up",
+          "label": "Be first through the chapel door for a month, and let him see it",
+          "outcome": "You are at the door at ten to six for a month, every morning, and he sees it, because seeing it is his job. He does not mention the four minutes. He does not mention the month either. In May the evaluation says you are a man of the Office, which is a phrase the rector uses for perhaps two men a year, and which the vice-rector gave him.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "pillar",
+              "key": "spiritual",
+              "delta": 1
+            },
+            {
+              "target": "relationship",
+              "key": "@vice_rector",
+              "delta": 5
+            },
+            {
+              "target": "trait",
+              "key": "answered the vice-rector’s notebook with a month at the chapel door"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "house_vice_confidant",
+      "phase": "seminary",
+      "yearGate": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "pressure": [
+        "friendship_vs_duty",
+        "loyalty_vs_honesty"
+      ],
+      "severity": "NOTABLE",
+      "category": "formation",
+      "baseWeight": 13,
+      "suppressYears": 3,
+      "once": true,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "vice_rector:confidant",
+          "value": true
+        }
+      ],
+      "title": "The Vice-Rector's Door",
+      "body": "{@vice_rector} keeps his door open in the evenings, which the rector does not, and the house has learned that a man can sit in the chair by his desk and say things that do not go in the file. It is not spiritual direction; he is careful about that. It is a place to say what the house is like, and what it is doing to you, to a man who was in it twenty years ago and remembers. Tonight you are in the chair. You have been in the chair before. What you have to say tonight is about {@closest_classmate}, who is not well, and who has asked you to say nothing, and the vice-rector has just asked, in his way, how your friend is.",
+      "flavorPrompt": "An open office door at nine at night, a chair by the desk, a vice-rector who remembers being twenty-five.",
+      "choices": [
+        {
+          "id": "tell_him",
+          "label": "Tell him, because the door is open for exactly this",
+          "outcome": "You tell him, and watch him decide what to do with it.",
+          "roll": {
+            "chance": 0.5,
+            "stat": "charisma",
+            "success": {
+              "outcome": "He does the right thing, which is nothing visible: {@closest_classmate} is asked to lunch by the vice-rector the next week, and the week after, and by Advent is better, and never learns that you said anything. The vice-rector does not thank you. He says, months later, that a house works when men tell him things, and looks at you when he says it.",
+              "effects": [
+                {
+                  "target": "relationship",
+                  "key": "@vice_rector",
+                  "delta": 6
+                },
+                {
+                  "target": "relationship",
+                  "key": "@closest_classmate",
+                  "delta": 2
+                },
+                {
+                  "target": "pillar",
+                  "key": "human",
+                  "delta": 2
+                },
+                {
+                  "target": "trait",
+                  "key": "told the vice-rector about a friend, and it went well"
+                }
+              ]
+            },
+            "failure": {
+              "outcome": "He does the wrong thing with it, or the right thing badly: {@closest_classmate} is called in on Monday, formally, and knows within an hour who said what. He does not stop speaking to you. He stops saying anything to you that matters. The vice-rector says you did right. It does not feel like it, and the file does not have a column for that.",
+              "effects": [
+                {
+                  "target": "relationship",
+                  "key": "@vice_rector",
+                  "delta": 3
+                },
+                {
+                  "target": "relationship",
+                  "key": "@closest_classmate",
+                  "delta": -12
+                },
+                {
+                  "target": "pillar",
+                  "key": "human",
+                  "delta": -1
+                },
+                {
+                  "target": "trait",
+                  "key": "told the vice-rector about a friend, and lost the friend"
+                }
+              ]
+            }
+          },
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "keep_it",
+          "label": "Say your friend is tired, and keep what you were asked to keep",
+          "default": true,
+          "outcome": "You say he is tired, which is true, and the vice-rector looks at you for a moment and lets it go, because his door is open and not a trap. {@closest_classmate} gets better on his own, or does not; that is the next year's story. You have kept a promise. The vice-rector has noted that you keep them, and what that is worth to a house depends on the year.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@closest_classmate",
+              "delta": 5
+            },
+            {
+              "target": "relationship",
+              "key": "@vice_rector",
+              "delta": -2
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": -1
+            },
+            {
+              "target": "pillar",
+              "key": "spiritual",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "send_him",
+          "label": "Tell your friend, tonight, that the chair is there and he should sit in it",
+          "outcome": "You go from the vice-rector's door to your friend's and say the chair is there, and that you sat in it, and what it was like. He goes in on Thursday. It is his story from there, and it goes as those go, and the vice-rector, who knows how men arrive at his door, knows who sent this one, and does not say so.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@closest_classmate",
+              "delta": 6
+            },
+            {
+              "target": "relationship",
+              "key": "@vice_rector",
+              "delta": 4
+            },
+            {
+              "target": "pillar",
+              "key": "human",
+              "delta": 1
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "house_rector_disciplinarian",
+      "phase": "seminary",
+      "yearGate": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "pressure": [
+        "loyalty_vs_honesty",
+        "friendship_vs_duty"
+      ],
+      "severity": "NOTABLE",
+      "category": "formation",
+      "baseWeight": 13,
+      "suppressYears": 3,
+      "once": true,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "rector:disciplinarian",
+          "value": true
+        }
+      ],
+      "title": "The Rule, Read Aloud",
+      "body": "{@rector} runs the house by the rule and reads it aloud in September so that no one can say he did not hear it. This week the rule has been broken, and not by you: a group of third-year men were at a bar past the hour on Saturday and came in through the kitchen, and the vice-rector knows, and the rector has called the whole house to the chapel to say, without names, that he knows too, and that he will wait until Friday for the men to come to him. Two of them are men you like. One of them, {@closest_classmate}, has asked you what he should do, and the rector, passing you in the corridor after, has said your name in a way that means he would like to hear from you.",
+      "flavorPrompt": "A chapel full of men being told that the rector knows, a Friday deadline, a rule read aloud.",
+      "choices": [
+        {
+          "id": "go_to_the_rector",
+          "label": "Go to the rector and tell him you know nothing he does not, and that they will come",
+          "outcome": "You go in and say that they will come, and that you would rather they said it than you.",
+          "roll": {
+            "chance": 0.5,
+            "stat": "charisma",
+            "success": {
+              "outcome": "He looks at you for a long moment and says that this is the right answer and that he did not expect it, and that he will hold Friday open. They come on Thursday. He is hard with them and fair, and the house learns that the rule is real and so is the door. He remembers who told him they would come.",
+              "effects": [
+                {
+                  "target": "relationship",
+                  "key": "@rector",
+                  "delta": 7
+                },
+                {
+                  "target": "relationship",
+                  "key": "@closest_classmate",
+                  "delta": 3
+                },
+                {
+                  "target": "pillar",
+                  "key": "spiritual",
+                  "delta": 1
+                },
+                {
+                  "target": "trait",
+                  "key": "told the disciplinarian rector the men would come, and they came"
+                }
+              ]
+            },
+            "failure": {
+              "outcome": "He says that the right answer is the names and that he is disappointed, and lets you go. They come on Friday, late, and he is harder with them than he would have been on Thursday, and they know why, and so do you. The rule was real. So, it turns out, was the rector's disappointment, which he keeps.",
+              "effects": [
+                {
+                  "target": "relationship",
+                  "key": "@rector",
+                  "delta": -4
+                },
+                {
+                  "target": "relationship",
+                  "key": "@closest_classmate",
+                  "delta": 2
+                },
+                {
+                  "target": "pillar",
+                  "key": "human",
+                  "delta": 1
+                }
+              ]
+            },
+            "per": 80
+          },
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            },
+            {
+              "target": "pillar",
+              "key": "human",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "stay_out",
+          "label": "Stay out of it; it is not your rule and not your Saturday",
+          "default": true,
+          "outcome": "You stay out of it, which is what most of the house does, and they come on Friday at five, and the rector does what the rule says. He does not ask you again. The corridor has a way of remembering who was asked and did not answer, and so does the man who asked.",
+          "effects": [
+            {
+              "target": "pillar",
+              "key": "spiritual",
+              "delta": 1
+            },
+            {
+              "target": "relationship",
+              "key": "@rector",
+              "delta": -3
+            },
+            {
+              "target": "pillar",
+              "key": "human",
+              "delta": -1
+            }
+          ]
+        },
+        {
+          "id": "tell_your_friend_to_go",
+          "label": "Tell your friend to go in first, alone, before the others decide",
+          "outcome": "He goes in on Tuesday, alone, and it is the best thing that happens to him that year: the rector, who respects a man who comes first, is hard and then is not, and {@closest_classmate} leaves the office with a penance and a rector who knows his name. The others come on Friday and get the rule. Your friend knows who told him to go.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@closest_classmate",
+              "delta": 7
+            },
+            {
+              "target": "relationship",
+              "key": "@rector",
+              "delta": 3
+            },
+            {
+              "target": "pillar",
+              "key": "human",
+              "delta": 2
+            },
+            {
+              "target": "trait",
+              "key": "sent a friend to the rector first"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "house_rector_academic",
+      "phase": "seminary",
+      "yearGate": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "pressure": [
+        "competence"
+      ],
+      "severity": "NOTABLE",
+      "category": "formation",
+      "baseWeight": 13,
+      "suppressYears": 3,
+      "once": true,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "rector:academic",
+          "value": true
+        }
+      ],
+      "title": "The Rector's Seminar",
+      "body": "{@rector} was a professor before he was a rector and has never forgiven the promotion. Once a term he takes six men into his sitting room for an evening on a text of his choosing, and the six are chosen, and the house reads the list the way a chancery reads an appointments page. Your name is on it this term. The text is Newman, the Grammar of Assent, which you have not read and which he assumes you have. The evening is Thursday. He does not lecture; he asks, and waits, and the silence in that room has ended vocations.",
+      "flavorPrompt": "A rector's sitting room on a Thursday night, six chairs, a text he assumes you have read, and his silence.",
+      "choices": [
+        {
+          "id": "read_it",
+          "label": "Read the whole thing by Thursday, and go in ready",
+          "outcome": "You read Newman in three nights, badly and then well, and go into the sitting room with a page of questions.",
+          "roll": {
+            "chance": 0.5,
+            "stat": "theology",
+            "success": {
+              "outcome": "He asks the hard question first and you answer it, not brilliantly but from the text, and he leans back, which the men who have been before say is the sign. By the end of the evening he is arguing with you rather than at you, and the other five have gone quiet. He says at the door that you should come again. The house hears that by breakfast.",
+              "effects": [
+                {
+                  "target": "relationship",
+                  "key": "@rector",
+                  "delta": 8
+                },
+                {
+                  "target": "stat",
+                  "key": "theology",
+                  "delta": 2
+                },
+                {
+                  "target": "pillar",
+                  "key": "intellectual",
+                  "delta": 2
+                },
+                {
+                  "target": "flag",
+                  "key": "known_scholar",
+                  "value": true
+                },
+                {
+                  "target": "trait",
+                  "key": "held his own in the rector’s seminar"
+                }
+              ]
+            },
+            "failure": {
+              "outcome": "You read it and he asks a question you had not thought of, and then another, and the silence comes and sits in the room, and one of the other men breaks it, and the evening moves on without you. He is kind at the door. You are not asked again that year. It is the house's way of learning what you are, and it has learned something true, if not the whole thing.",
+              "effects": [
+                {
+                  "target": "relationship",
+                  "key": "@rector",
+                  "delta": 1
+                },
+                {
+                  "target": "pillar",
+                  "key": "intellectual",
+                  "delta": 1
+                },
+                {
+                  "target": "pillar",
+                  "key": "human",
+                  "delta": -1
+                }
+              ]
+            },
+            "per": 80
+          },
+          "effects": [
+            {
+              "target": "pillar",
+              "key": "intellectual",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "say_you_have_not",
+          "label": "Tell him beforehand that you have not read it, and ask for a term",
+          "default": true,
+          "outcome": "You go to his office on Monday and say you have not read Newman and would rather come next term than sit in his room a fraud. He looks at you over his glasses and says that is the first honest thing a man has said to him about the seminar in years, and gives you the term, and the book. You read it properly. Next term you go in, and it is a different evening.",
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "relationship",
+              "key": "@rector",
+              "delta": 4
+            },
+            {
+              "target": "pillar",
+              "key": "intellectual",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "wing_it",
+          "label": "Go in on what you know, and let the evening take you",
+          "outcome": "It takes you, and not where you wanted. He finds out in four minutes that you have not read it and does not say so; he simply asks you nothing for the rest of the evening, which the other five notice. The house hears that you were in the seminar and hears nothing else, which in this house is how a story is told.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@rector",
+              "delta": -5
+            },
+            {
+              "target": "pillar",
+              "key": "intellectual",
+              "delta": -1
+            },
+            {
+              "target": "pillar",
+              "key": "human",
+              "delta": -1
+            },
+            {
+              "target": "trait",
+              "key": "went into the rector’s seminar unread"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "house_rector_pastoral",
+      "phase": "seminary",
+      "yearGate": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "pressure": [
+        "doubt",
+        "competence"
+      ],
+      "severity": "NOTABLE",
+      "category": "formation",
+      "baseWeight": 13,
+      "suppressYears": 3,
+      "once": true,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "rector:pastoral",
+          "value": true
+        }
+      ],
+      "title": "The Rector's Sunday",
+      "body": "{@rector} says the ten o'clock at a parish across the river every Sunday, has for twenty years, and takes one seminarian with him each week, in the car, to serve and to be looked at by people. It is the only time he is not the rector. This Sunday it is you. In the car he asks nothing about the house and everything about your mother, and at the parish he introduces you to a widow in the front pew as a man to watch, and after Mass, at the coffee, an old man takes your arm and tells you, in some detail, that the rector saved his marriage in 1994, and asks whether you will be that kind of priest.",
+      "flavorPrompt": "A parish across the river on a Sunday, coffee in the hall, an old man holding a seminarian's arm, a rector pretending not to listen.",
+      "choices": [
+        {
+          "id": "answer_him",
+          "label": "Answer the old man, honestly, in front of the rector",
+          "outcome": "You tell him what kind of priest you hope to be, and it takes longer than coffee should.",
+          "roll": {
+            "chance": 0.55,
+            "stat": "piety",
+            "success": {
+              "outcome": "It comes out true, and the old man's eyes fill, and the rector, who has been pretending to talk to the widow, has heard every word. In the car he says nothing for ten miles and then says that he has taken two hundred men to that parish and that perhaps ten of them answered that question. He does not say which ten. He has just added one.",
+              "effects": [
+                {
+                  "target": "relationship",
+                  "key": "@rector",
+                  "delta": 8
+                },
+                {
+                  "target": "stat",
+                  "key": "piety",
+                  "delta": 1
+                },
+                {
+                  "target": "pillar",
+                  "key": "pastoral",
+                  "delta": 2
+                },
+                {
+                  "target": "pillar",
+                  "key": "spiritual",
+                  "delta": 1
+                },
+                {
+                  "target": "trait",
+                  "key": "answered the old man at the rector’s parish"
+                }
+              ]
+            },
+            "failure": {
+              "outcome": "It comes out as a homily, which the old man did not ask for and endures, and the rector rescues you both with a joke about the coffee. In the car he says that the old man asks every seminarian that question and that most of them preach at him, and that it is a hard question to answer as a man and not a priest, and that it will come again. He is kind about it. He is also, you understand, still waiting.",
+              "effects": [
+                {
+                  "target": "relationship",
+                  "key": "@rector",
+                  "delta": 2
+                },
+                {
+                  "target": "pillar",
+                  "key": "pastoral",
+                  "delta": 1
+                },
+                {
+                  "target": "pillar",
+                  "key": "human",
+                  "delta": 1
+                }
+              ]
+            }
+          },
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "turn_it",
+          "label": "Turn it back to him: ask what the rector did, in 1994",
+          "default": true,
+          "outcome": "You ask, and the old man tells you, and it is a story about a priest sitting in a kitchen for three hours saying almost nothing, and the rector, hearing his own story told, goes a little red and busies himself with the widow. In the car he says that you should not have done that, and then that he is glad you did, and then nothing, pleased. You have seen the rector at his parish. It is a thing to have seen.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@rector",
+              "delta": 5
+            },
+            {
+              "target": "pillar",
+              "key": "pastoral",
+              "delta": 1
+            },
+            {
+              "target": "pillar",
+              "key": "human",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "deflect",
+          "label": "Say something modest and get to the car",
+          "outcome": "You say you hope so, and thank him, and the coffee ends, and the rector says nothing in the car for twenty miles and then talks about the Bears. It was a fair answer. It was the answer of a man who did not want to be looked at, and the rector, who takes men to that parish to be looked at, has seen that too.",
+          "effects": [
+            {
+              "target": "pillar",
+              "key": "human",
+              "delta": 1
+            },
+            {
+              "target": "relationship",
+              "key": "@rector",
+              "delta": 1
+            },
+            {
+              "target": "pillar",
+              "key": "pastoral",
+              "delta": -1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "house_two_men",
+      "phase": "seminary",
+      "yearGate": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "pressure": [
+        "loyalty_vs_honesty",
+        "friendship_vs_duty"
+      ],
+      "severity": "NOTABLE",
+      "category": "formation",
+      "baseWeight": 12,
+      "suppressYears": 3,
+      "once": true,
+      "title": "The Two Men Disagree",
+      "body": "The rector and the vice-rector disagree about {@rival_classmate}, and the house knows it, because the house always knows. {@rector} thinks he should be sent home at the end of the year; {@vice_rector} thinks he is the best man in the class and that the rector cannot see it. It is the kind of disagreement a faculty has in private and a house watches in public. This week it has come to you: the vice-rector has asked you, over supper, what you think of him, and the rector, the next day, has asked the same question in his office, and neither of them has mentioned the other, and both of them will remember the answer.",
+      "flavorPrompt": "Two offices on two days, the same question about a classmate, a faculty's quarrel watched by a house.",
+      "choices": [
+        {
+          "id": "same_answer",
+          "label": "Give both men the same honest answer, whatever it costs with either",
+          "outcome": "You tell them both the truth about {@rival_classmate}, which is mixed, and the same on both days.",
+          "roll": {
+            "chance": 0.5,
+            "stat": "charisma",
+            "success": {
+              "outcome": "It holds. Each man hears a fair account and, because it is the same account, hears also that you did not tell him what he wanted. The rector says that is useful. The vice-rector says that is rare. {@rival_classmate} is given another year, on the strength of a report both men signed, and never learns that yours was the answer they agreed on.",
+              "effects": [
+                {
+                  "target": "relationship",
+                  "key": "@rector",
+                  "delta": 5
+                },
+                {
+                  "target": "relationship",
+                  "key": "@vice_rector",
+                  "delta": 5
+                },
+                {
+                  "target": "pillar",
+                  "key": "human",
+                  "delta": 2
+                },
+                {
+                  "target": "trait",
+                  "key": "gave the rector and the vice-rector the same answer about a classmate"
+                }
+              ]
+            },
+            "failure": {
+              "outcome": "It holds, and it costs: the rector hears that you think the man has something and is cool about it, and the vice-rector hears that you think the man has faults and is cooler. You have told the truth to two men who each wanted an ally, and got neither. {@rival_classmate} is given another year anyway. He is not told why.",
+              "effects": [
+                {
+                  "target": "relationship",
+                  "key": "@rector",
+                  "delta": -2
+                },
+                {
+                  "target": "relationship",
+                  "key": "@vice_rector",
+                  "delta": -2
+                },
+                {
+                  "target": "pillar",
+                  "key": "spiritual",
+                  "delta": 1
+                },
+                {
+                  "target": "honesty",
+                  "key": "",
+                  "delta": 1
+                }
+              ]
+            },
+            "per": 80
+          },
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "side_with_the_rector",
+          "label": "Tell the rector what he wants to hear, and the vice-rector less",
+          "default": true,
+          "outcome": "You give the rector the doubts and the vice-rector a shrug, and the rector is warm and the vice-rector is not, and {@rival_classmate} is sent home in May with your account, unnamed, in the file. The house does not know it was you. The vice-rector does, and runs the house.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@rector",
+              "delta": 5
+            },
+            {
+              "target": "relationship",
+              "key": "@vice_rector",
+              "delta": -6
+            },
+            {
+              "target": "relationship",
+              "key": "@rival_classmate",
+              "delta": -4
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": -1
+            },
+            {
+              "target": "trait",
+              "key": "sided with the rector against the vice-rector"
+            }
+          ]
+        },
+        {
+          "id": "side_with_the_vice",
+          "label": "Tell the vice-rector what he wants to hear, and the rector less",
+          "outcome": "You give the vice-rector the praise and the rector a careful nothing, and the vice-rector is warm and the rector is not, and {@rival_classmate} is kept in May because the vice-rector fought for him with a seminarian's word in his pocket. The rector signs it. He remembers who gave him a careful nothing.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@vice_rector",
+              "delta": 6
+            },
+            {
+              "target": "relationship",
+              "key": "@rector",
+              "delta": -5
+            },
+            {
+              "target": "relationship",
+              "key": "@rival_classmate",
+              "delta": 3
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": -1
+            },
+            {
+              "target": "trait",
+              "key": "sided with the vice-rector against the rector"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "house_rector_ill",
+      "phase": "seminary",
+      "yearGate": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "pressure": [
+        "competence",
+        "ambition_vs_integrity"
+      ],
+      "severity": "NOTABLE",
+      "category": "formation",
+      "baseWeight": 12,
+      "suppressYears": 3,
+      "once": true,
+      "title": "The Rector's Heart",
+      "body": "{@rector} is taken to the hospital on a Tuesday in Lent with his heart, and {@vice_rector} runs the house for six weeks, and it is a different house: the rule is the same and the man reading it is not. Some of the men like it better. The vice-rector asks you, in the second week, to take the house's Holy Week liturgies in hand, the whole of them, because the man who did it every year is the man in the hospital. It is a compliment and a burden and, the house understands, an audition for something the vice-rector has not named.",
+      "flavorPrompt": "A seminary in Lent with the rector in the hospital, a vice-rector running the house, the Triduum in someone's hands.",
+      "choices": [
+        {
+          "id": "take_it",
+          "label": "Take Holy Week, all of it",
+          "outcome": "You take the Triduum in hand: the books, the servers, the fire, the rector's notes from twenty years, in his hand.",
+          "roll": {
+            "chance": 0.55,
+            "stat": "administration",
+            "success": {
+              "outcome": "It goes as if he had been there. The vice-rector says so in the sacristy on Easter morning, and says it again to the rector in the hospital, and the rector, back in May, walking slowly, stops you in the corridor and says that he heard, and that he will not be doing the Triduum forever, and walks on. The house has a new fact about you.",
+              "effects": [
+                {
+                  "target": "relationship",
+                  "key": "@vice_rector",
+                  "delta": 7
+                },
+                {
+                  "target": "relationship",
+                  "key": "@rector",
+                  "delta": 5
+                },
+                {
+                  "target": "stat",
+                  "key": "administration",
+                  "delta": 2
+                },
+                {
+                  "target": "pillar",
+                  "key": "spiritual",
+                  "delta": 1
+                },
+                {
+                  "target": "flag",
+                  "key": "seminary_leader",
+                  "value": true
+                },
+                {
+                  "target": "trait",
+                  "key": "ran the house’s Holy Week the year the rector was ill"
+                }
+              ]
+            },
+            "failure": {
+              "outcome": "It goes, which is not the same. The fire will not light, the servers go wrong at the Exsultet, and the vice-rector takes the Vigil in hand himself at the last minute, kindly. The rector, back in May, does not mention it. The house does, for a while. You have learned what the Triduum is made of, which is not nothing; it is just not what you were auditioning for.",
+              "effects": [
+                {
+                  "target": "relationship",
+                  "key": "@vice_rector",
+                  "delta": 2
+                },
+                {
+                  "target": "stat",
+                  "key": "administration",
+                  "delta": 1
+                },
+                {
+                  "target": "pillar",
+                  "key": "human",
+                  "delta": -1
+                },
+                {
+                  "target": "trait",
+                  "key": "tried to run Holy Week the year the rector was ill, and it went"
+                }
+              ]
+            }
+          },
+          "effects": [
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "share_it",
+          "label": "Say yes, with two other men named, and run it as three",
+          "default": true,
+          "outcome": "You name {@closest_classmate} and one other and run the week as three, and it goes well, because three is the right number and you knew it. The vice-rector notices that you knew it. The rector, back in May, hears that the Triduum was done by a committee and is a little sorry, in the way of a man whose thing has been done without him, and a little relieved.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@vice_rector",
+              "delta": 5
+            },
+            {
+              "target": "relationship",
+              "key": "@closest_classmate",
+              "delta": 5
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            },
+            {
+              "target": "pillar",
+              "key": "human",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "decline",
+          "label": "Say the liturgy is the rector's, and it should wait for him",
+          "outcome": "The vice-rector says, evenly, that the Triduum does not wait for anyone, and gives it to {@rival_classmate}, who does it well. The rector, back in May, hears that you said it should wait for him and is touched, briefly, and then hears who did it instead. The house has a new fact about you, and it is not the one you meant.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@rector",
+              "delta": 2
+            },
+            {
+              "target": "relationship",
+              "key": "@vice_rector",
+              "delta": -5
+            },
+            {
+              "target": "relationship",
+              "key": "@rival_classmate",
+              "delta": -2
+            },
+            {
+              "target": "pillar",
+              "key": "spiritual",
+              "delta": 1
+            },
+            {
+              "target": "pillar",
+              "key": "human",
+              "delta": -1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "house_prefect",
+      "phase": "seminary",
+      "yearGate": [
+        4,
+        5,
+        6
+      ],
+      "pressure": [
+        "friendship_vs_duty",
+        "ambition_vs_integrity"
+      ],
+      "severity": "NOTABLE",
+      "category": "formation",
+      "baseWeight": 12,
+      "suppressYears": 3,
+      "once": true,
+      "title": "The House Prefect",
+      "body": "Each September the rector names a house prefect: the seminarian who keeps the sign-out sheet, runs the house meeting, carries the men's complaints to the faculty and the faculty's to the men, and is, for one year, the only man in the house who is trusted by both sides or by neither. {@rector} and {@vice_rector} have agreed on you, which is rare, and the rector has called you in to ask. He is honest about what it costs: the class will treat you as the faculty's man, and the faculty will expect you to be theirs, and the rector who is asking will be the first to be disappointed if you are.",
+      "flavorPrompt": "A rector's office in September, an offer both men agreed on, a year in the middle of the house.",
+      "choices": [
+        {
+          "id": "accept",
+          "label": "Accept, and try to be nobody's man",
+          "outcome": "You take the sheet and the meeting and the two sets of complaints, and find out what a year of it does to a man.",
+          "roll": {
+            "chance": 0.5,
+            "stat": "charisma",
+            "success": {
+              "outcome": "It can be done, it turns out, if a man is willing to be disliked by both sides on alternate weeks. By spring the class trusts you with the things they will not tell the faculty and the faculty trusts you with the things they will not tell the class, and you carry neither where it should not go. The rector says at the end of the year that he has had one other prefect like that. He names him. He is a bishop.",
+              "effects": [
+                {
+                  "target": "flag",
+                  "key": "seminary_leader",
+                  "value": true
+                },
+                {
+                  "target": "relationship",
+                  "key": "@rector",
+                  "delta": 7
+                },
+                {
+                  "target": "relationship",
+                  "key": "@vice_rector",
+                  "delta": 5
+                },
+                {
+                  "target": "stat",
+                  "key": "administration",
+                  "delta": 2
+                },
+                {
+                  "target": "stat",
+                  "key": "charisma",
+                  "delta": 1
+                },
+                {
+                  "target": "pillar",
+                  "key": "human",
+                  "delta": 2
+                },
+                {
+                  "target": "reputation",
+                  "key": "chancery",
+                  "delta": 2
+                },
+                {
+                  "target": "trait",
+                  "key": "the house prefect, and nobody’s man"
+                }
+              ]
+            },
+            "failure": {
+              "outcome": "It cannot be done, or not by you this year: by Advent the class has decided you are the faculty's and the faculty has decided you are the class's, and the sign-out sheet is a weekly argument. You finish the year. The rector says it was a hard year to be prefect, which is generous, and does not say the other thing. You have learned what the middle costs, which is worth knowing before a chancery teaches it.",
+              "effects": [
+                {
+                  "target": "flag",
+                  "key": "seminary_leader",
+                  "value": true
+                },
+                {
+                  "target": "relationship",
+                  "key": "@rector",
+                  "delta": 1
+                },
+                {
+                  "target": "relationship",
+                  "key": "@vice_rector",
+                  "delta": 1
+                },
+                {
+                  "target": "relationship",
+                  "key": "@closest_classmate",
+                  "delta": -4
+                },
+                {
+                  "target": "stat",
+                  "key": "administration",
+                  "delta": 1
+                },
+                {
+                  "target": "pillar",
+                  "key": "human",
+                  "delta": -1
+                },
+                {
+                  "target": "trait",
+                  "key": "the house prefect, in a hard year"
+                }
+              ]
+            },
+            "per": 80
+          },
+          "effects": [
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "decline",
+          "label": "Decline, and say why: the year is yours and you would rather have it",
+          "default": true,
+          "outcome": "The rector accepts it, and gives the year to {@rival_classmate}, who is good at it, and is the faculty's man by Advent and does not mind. You keep your year. The rector remembers that you were asked and said no, which he reads two ways and, being a fair man, writes down only one.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@rector",
+              "delta": -2
+            },
+            {
+              "target": "relationship",
+              "key": "@rival_classmate",
+              "delta": -3
+            },
+            {
+              "target": "pillar",
+              "key": "spiritual",
+              "delta": 1
+            },
+            {
+              "target": "pillar",
+              "key": "human",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "accept_for_the_class",
+          "label": "Accept, and say plainly that you will be the class's man",
+          "outcome": "He says that is honest and that it will not work, and gives you the year anyway, and it works better than he expected and worse than you did: the class trusts you completely and the faculty not at all, and by spring the vice-rector has begun to route around you. You have led something. The rector, at the end, says you were a good prefect for the men, which is half the job, said exactly.",
+          "effects": [
+            {
+              "target": "flag",
+              "key": "seminary_leader",
+              "value": true
+            },
+            {
+              "target": "relationship",
+              "key": "@closest_classmate",
+              "delta": 6
+            },
+            {
+              "target": "relationship",
+              "key": "@random_classmate",
+              "delta": 5
+            },
+            {
+              "target": "relationship",
+              "key": "@vice_rector",
+              "delta": -5
+            },
+            {
+              "target": "relationship",
+              "key": "@rector",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            },
+            {
+              "target": "trait",
+              "key": "the house prefect, and the class’s man"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

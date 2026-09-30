@@ -46,6 +46,7 @@ const NPC_STATUSES = ['active', 'left', 'dead', 'retired', 'dismissed'];
 const SELECTORS = [
   '@nuncio', '@terna_subject', '@curia_prefect', '@curia_secretary', '@curia_colleague', '@secretary_of_state', '@pope_secretary', '@nuncio_chief',
   '@rector',
+  '@vice_rector',
   '@spiritual_director',
   '@formation_advisor',
   '@vocation_director',

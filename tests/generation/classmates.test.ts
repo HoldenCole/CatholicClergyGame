@@ -109,7 +109,10 @@ describe('generation/formators and family', () => {
       expect(byTag.professor_prog!.alignment).toBeGreaterThan(30);
       expect(byTag.bishop!.title).toBe('Bishop');
       expect(byTag.spiritual_director!.stats.piety).toBeGreaterThan(50);
-      expect(new Set(f.map((n) => n.id)).size).toBe(7);
+      expect(new Set(f.map((n) => n.id)).size).toBe(8);
+      // The house: a vice-rector, and a style for each man rolled apart from everything else about him.
+      expect(byTag.vice_rector!.tags.some((t: string) => /^vice_rector:(enforcer|confidant)$/.test(t))).toBe(true);
+      expect(byTag.rector!.tags.some((t: string) => /^rector:(pastoral|academic|disciplinarian)$/.test(t))).toBe(true);
     }
   });
 

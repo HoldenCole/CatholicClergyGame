@@ -14,6 +14,8 @@ export const STANDING = {
   pillarPerPoint: 1.5,
   pillarSteady: 9,
   rectorPerPoint: 0.12,
+  /** The vice-rector runs the house and writes the second report; it counts, less. */
+  vicePerPoint: 0.06,
   summer: 4,
   rectorRecommends: 12,
   rectorDoubts: -12,
@@ -54,6 +56,8 @@ export function formationStanding(state: GameState): Standing {
   }
   const rector = Object.values(state.npcs).find((n) => n.tags.includes('rector'));
   if (rector) value += rector.relationship * STANDING.rectorPerPoint;
+  const vice = Object.values(state.npcs).find((n) => n.tags.includes('vice_rector'));
+  if (vice) value += vice.relationship * STANDING.vicePerPoint;
   const summers = Object.values(sem.summers).filter((s) => s !== 'home_parish').length;
   value += summers * STANDING.summer;
   // What the seminary years wrote in the file (events/seminary/career.json).
@@ -70,6 +74,8 @@ export function formationStanding(state: GameState): Standing {
   if (sem.heldBackCount > 0) reasons.push('a year repeated');
   if (rector && rector.relationship >= 30) reasons.push('the rector spoke for you');
   if (rector && rector.relationship <= -20) reasons.push('the rector did not');
+  if (vice && vice.relationship >= 25) reasons.push('the vice-rector speaks for you');
+  if (vice && vice.relationship <= -15) reasons.push("the vice-rector's list has your name on it");
   if (summers >= 3) reasons.push('the summers were used well');
   if (state.flags.rector_recommends) reasons.push('the rector will write for you');
   if (state.flags.rector_doubts) reasons.push("the rector's letter will be careful");
