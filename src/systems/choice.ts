@@ -1,3 +1,4 @@
+import { evaluateAll } from '@/engine/conditions';
 import type { Assignment, AssignmentOption, GameState, Opening, Parish, Role } from '@/types';
 import type { Rng } from '@/engine/rng';
 import { CAREER, letterFor } from '@/engine/career';
@@ -25,6 +26,8 @@ import { moveOut } from '@/engine/career';
 export const CHOICE = {
   /** A rector who thinks this well of a man puts him at the table whatever the file says. */
   rectorRegard: 35,
+  /** The director takes a licentiate this good on for the doctorate. */
+  doctorateTheology: 60,
   /** Formation standing that earns a choice at ordination. */
   ordinationStanding: 66,
   /** Chancery regard that earns a choice at a board. */
@@ -202,6 +205,10 @@ export function buildChoice(state: GameState, rng: Rng, occasion: Occasion, fall
     const good = goodOnes.length ? rng.pick(goodOnes) : undefined;
     const office = jcl ? 'tribunal' : 'worship';
     if (good && !holdsOrHeld(state, office)) options.push(option(state, 'office', `${experienced ? 'Pastor' : 'Parochial vicar'} of ${good.name}, and ${officeDef(office)!.label.toLowerCase()}`, `${officeDef(office)!.blurb} A good parish, so the office has your afternoons.`, good, experienced ? 'pastor' : 'parochial_vicar', [useOf, 'The chancery has a chair with your name on it'], office));
+    // Home with the licentiate, the director's offer is on the table before the plane: stay on for the doctorate. It is how it is done.
+    const justLicensed = stl && !c.credentials.includes('STD') && !state.flags.rome_doctor && !state.flags.refused_doctorate && state.offerHistory.some((h) => h.offerId === 'pv_rome_study' && h.decision === 'completed' && h.week === state.clock.week);
+    const doctorate = offerById('pv_rome_doctorate');
+    if (justLicensed && doctorate && c.stats.theology >= CHOICE.doctorateTheology) options.push({ id: 'doctorate', headline: 'Stay in Rome for the doctorate', blurb: 'Your director will take you for the doctorate: two more years, the dissertation the licentiate began, a room at the Casa. The bishop has already said yes to the Gregorian. No parish for two years more; the diocese has not had a doctor of theology in thirty years.', assignment: fallback, prestige: 'a name Rome writes down twice', time: 'Rome, two years more', involves: ['The dissertation, and a director who kept your file', 'A city you already know, and the men in it who will be bishops', 'A parish when you come home, chosen with two degrees in hand'], posting: doctorate.id });
     if (stl && offerById('pv_seminary_faculty')) options.push({ id: 'faculty', headline: 'A chair at the seminary', blurb: 'Two courses a semester, the seminar, the formation reports. No parish; every future priest of the diocese through your classroom.', assignment: fallback, prestige: 'the presbyterate of the next forty years', time: 'the seminary, all of it', involves: ['The faculty wing, not a rectory', 'Forty men a year who decide what they think of you from the way you walk in', 'The rector, who asked for you'], posting: 'pv_seminary_faculty' });
     if (offerById('pv_bishops_secretary') && !state.flags['office:bishops_secretary'] && !state.flags['held:office:bishops_secretary']) options.push({ id: 'secretary', headline: 'The bishop\'s secretary', blurb: 'He wants the man with the degree at the next desk: the calendar, the car, the phone, and his mind from the next chair. No parish; the residence, for three years, and the chancery\'s regard after.', assignment: fallback, prestige: 'every priest of the diocese learns your name in a month', time: 'the residence, all of it', involves: ['The calendar, and who gets ten minutes', 'The car, and what he says in it', 'A parish when he lets you go, and the chancery\'s regard with it'], posting: 'pv_bishops_secretary' });
     if (jcl && experienced) {
@@ -312,10 +319,12 @@ export function chooseAssignment(state: GameState, id: string, rng: Rng): GameSt
   if (opt.requested === 'go') next = closeRequest(clearRequestAnswer(next), 'granted');
   if (opt.posting) {
     const def = offerById(opt.posting)!;
-    next = { ...next, mode: { kind: 'clock' } };
+    next = { ...next, mode: { kind: 'clock' }, offerHistory: [...next.offerHistory, { offerId: def.id, week: state.clock.week, decision: 'accepted' }] };
+    // The posting's own risk, as the letter would have rolled it: a doctorate a man is not ready for can be lost.
+    const failed = !!def.failure && !evaluateAll(def.failure.unless, next) && rng.derive(`posting:${def.id}`).chance(def.failure.chance);
     // A man still in a parish keeps his letter until beginStudy closes the tenure with it; at a
     // board or at ordination the post is already closed and the assignment is only in the way.
-    return beginStudy({ ...next, assignment: next.parish ? next.assignment : null }, def, false, rng);
+    return beginStudy({ ...next, assignment: next.parish ? next.assignment : null }, def, failed, rng);
   }
   // A move he asked for happens in the middle of an arc: the post he holds must be closed first.
   if (opt.requested === 'go' && next.parish) {
