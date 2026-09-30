@@ -149,8 +149,13 @@ export type Condition =
   | { type: 'calendar_year'; op: Op; value: number }
   /** Whether the diocese has a religious house, of a charism if given. */
   | { type: 'house'; charism?: 'contemplative' | 'active'; order?: string; value: boolean }
-  /** The diocese by preset id, one or several: storm country, the Gulf, the coasts. */
-  | { type: 'diocese'; value: string | string[] }
+  /**
+   * The diocese by preset id, one or several: storm country, the Gulf, the coasts. With a `key`, a
+   * fact of the generated world instead (so a synthesized diocese answers too): its region or size
+   * (value, one or several), an institution it has, whether any parish needs Spanish, or whether any
+   * parish has that people ('ethnic', with `share` as the least share of the parish, default 0.3).
+   */
+  | { type: 'diocese'; value?: string | string[]; key?: 'region' | 'size' | 'institution' | 'spanish' | 'ethnic'; share?: number }
   /** The calendar month of the current week, 1..12. */
   | { type: 'month'; op: Op; value: number }
   /** The man's name as a confessor, 0..100 (systems/confessor.ts). */

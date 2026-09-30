@@ -158,6 +158,18 @@ export function scoreParish(state: GameState, world: World, parish: Parish, opts
     fit += ASSIGNMENT.summerMission;
     reasons.push('The mission summer');
   }
+  if (state.flags['summer:spanish_parish'] && parish.needsSpanish) {
+    fit += ASSIGNMENT.summerMission;
+    reasons.push('The summer at the Spanish parish');
+  }
+  if (state.flags['summer:rural_circuit'] && parish.kind === 'rural') {
+    fit += ASSIGNMENT.summerMission;
+    reasons.push('The summer on the mission circuit');
+  }
+  if ((state.flags['summer:charities'] || state.flags['summer:la_skid_row'] || state.flags['summer:sf_tenderloin'] || state.flags['summer:ny_bronx']) && parish.kind === 'struggling_urban') {
+    fit += ASSIGNMENT.summerMission;
+    reasons.push('A summer spent where the city is poorest');
+  }
 
   const fitEffective = fit * (1 + c.outspokenness / 100);
   return { parish, score: need + fitEffective + trust, reasons };

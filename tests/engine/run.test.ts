@@ -1,3 +1,4 @@
+import { availableSummers } from '@/engine/seminary';
 import { describe, it, expect, beforeEach } from 'vitest';
 import { eventById, allEvents } from '@/content';
 import { visibleChoices } from '@/engine/events';
@@ -64,7 +65,7 @@ function autoplay(maxSteps = 5000): GameState {
         break;
       }
       case 'summer':
-        s.getState().chooseSummer('hard_parish');
+        s.getState().chooseSummer(availableSummers(s.getState().game!).find((o) => o.available)!.option.id);
         break;
       case 'evaluation':
         s.getState().acknowledgeEvaluation();

@@ -8,7 +8,10 @@ export interface SummerOption {
   label: string;
   blurb: string;
   outcome: string;
+  /** Greyed when these fail: the man is not ready for it. */
   requires?: Condition[];
+  /** Not listed at all where these fail: the diocese has no such place. Diocese-specific summers live here. */
+  where?: Condition[];
   effects: Effect[];
   /** Absent: the diocesan seminary's. E3: an order's summers live in content/religious/summers.json. */
   campaign?: 'diocesan' | 'religious';

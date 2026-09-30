@@ -185,7 +185,10 @@ function checkCondition(c: Condition, where: string, problems: Problem[]): void 
       if (typeof c.value !== 'boolean' || (c.charism !== undefined && !['contemplative', 'active'].includes(c.charism)) || (c.order !== undefined && !HOUSE_ORDERS.includes(c.order))) problems.push(`${where}: bad house condition`);
       break;
     case 'diocese':
-      if (!(typeof c.value === 'string' || (Array.isArray(c.value) && c.value.every((v: unknown) => typeof v === 'string')))) problems.push(`${where}: bad diocese condition`);
+      if (c.key !== undefined && !['region', 'size', 'institution', 'spanish', 'ethnic'].includes(c.key)) problems.push(`${where}: bad diocese key ${c.key}`);
+      if (c.key === 'spanish') { if (c.value !== undefined) problems.push(`${where}: diocese spanish takes no value`); }
+      else if (!(typeof c.value === 'string' || (Array.isArray(c.value) && c.value.every((v: unknown) => typeof v === 'string')))) problems.push(`${where}: bad diocese condition`);
+      if (c.share !== undefined && (typeof c.share !== 'number' || c.share <= 0 || c.share > 1)) problems.push(`${where}: bad diocese share`);
       break;
     case 'month':
       if (!hasOp(c.op) || typeof c.value !== 'number' || c.value < 1 || c.value > 12) problems.push(`${where}: bad month condition`);
