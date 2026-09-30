@@ -46,5 +46,6 @@ export function generateRun(state: GameState, answers: CreationAnswers, rng: Rng
   });
   const preset = created.world ? presetById(created.world.diocese.presetId) : undefined;
   const seminaryName = created.religious ? (created.orderHouses?.[created.religious.houseId]?.name ?? 'the novitiate') : preset?.seminaryName ?? rng.derive('seminary').pick(SEMINARY_NAMES);
-  return startSeminary({ ...created, character: { ...created.character!, hooks }, npcs: map }, classmateIds, seminaryName);
+  // A friar's novitiate is its own first year; a diocesan seminary may or may not run a propaedeutic year.
+  return startSeminary({ ...created, character: { ...created.character!, hooks }, npcs: map }, classmateIds, seminaryName, created.religious ? true : answers.propaedeutic !== false);
 }

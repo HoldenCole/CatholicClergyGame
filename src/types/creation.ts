@@ -99,6 +99,8 @@ export interface CreationAnswers {
   motive: Motive;
   family: string;
   past: string | null;
+  /** Whether the seminary runs a propaedeutic year before philosophy. Absent means yes. Not every seminary does. */
+  propaedeutic?: boolean;
 }
 
 /** DESIGN.md §3.3: entry age is capped at 40. */

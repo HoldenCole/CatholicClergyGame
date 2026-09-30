@@ -13,7 +13,7 @@ import { applyEffects } from './effects';
 import type { Rng } from './rng';
 import { gameYearOf, yearStartDay } from './time';
 import { leaveSeminaryClubs } from '@/systems/clubs';
-import { evaluate, formationWeek, nameArchetype, setEmphasis, zeroPillars } from '@/systems/formation';
+import { evaluate, formationWeek, nameArchetype, setEmphasis, zeroPillars, firstFormationYear } from '@/systems/formation';
 import { religiousSummerOptions, summerOptions } from '@/content/seminary';
 import { formationStage } from '@/systems/religious/formation';
 import { renderText } from './text';
@@ -55,10 +55,11 @@ export const SEMINARY_NAMES = [
   'Christ the King Seminary',
 ] as const;
 
-export function freshSeminary(classmateIds: string[], name: string = SEMINARY_NAMES[0]): SeminaryState {
+export function freshSeminary(classmateIds: string[], name: string = SEMINARY_NAMES[0], propaedeutic = true): SeminaryState {
   return {
     name,
-    year: 1,
+    year: propaedeutic ? 1 : 2,
+    ...(propaedeutic ? {} : { propaedeutic: false }),
     emphasis: null,
     pillarScores: zeroPillars(),
     zeroStreak: zeroPillars(),
@@ -77,12 +78,13 @@ export function freshSeminary(classmateIds: string[], name: string = SEMINARY_NA
 }
 
 /** Enter seminary: phase, state, and the first emphasis choice. */
-export function startSeminary(state: GameState, classmateIds: string[], name?: string): GameState {
+export function startSeminary(state: GameState, classmateIds: string[], name?: string, propaedeutic = true): GameState {
+  const seminary = freshSeminary(classmateIds, name, propaedeutic);
   return {
     ...state,
     phase: 'seminary',
-    seminary: freshSeminary(classmateIds, name),
-    mode: { kind: 'year_start', year: 1 },
+    seminary,
+    mode: { kind: 'year_start', year: seminary.year },
   };
 }
 
@@ -136,7 +138,7 @@ export function chooseEmphasis(state: GameState, emphasis: Record<Pillar, number
   }
   // Year one: the formation office asks who he will see, which is presented as an
   // administrative matter and is one of the most consequential choices in the game.
-  if (sem.year === 1 && !next.flags['direction:chosen']) {
+  if (sem.year === firstFormationYear(sem) && !next.flags['direction:chosen']) {
     const offered = offerDirectors(next, rng.derive('directors'));
     next = offered.state;
     if (offered.options.length >= 2) return { ...next, mode: { kind: 'director', options: offered.options } };

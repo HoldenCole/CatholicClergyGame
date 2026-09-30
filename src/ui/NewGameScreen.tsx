@@ -110,7 +110,7 @@ export default function NewGameScreen() {
             <label className="flex flex-col gap-1 text-sm">
               <span className="heading">{campaign === 'religious' ? 'Entry year' : 'Seminary entry year'}</span>
               <input type="number" className="pinput font-mono" value={startYear} min={1950} max={2040} onChange={(e) => setStartYear(Number(e.target.value))} />
-              <span className="ink-faint text-xs">Ordination follows seven years later.</span>
+              <span className="ink-faint text-xs">Ordination follows six or seven years later, as the seminary runs.</span>
             </label>
             <button className="pbtn pbtn-primary self-start px-5 py-2" disabled={seed.trim().length === 0} onClick={() => newGame({ seed: seed.trim(), startYear, campaign })}>
               Begin

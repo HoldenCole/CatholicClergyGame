@@ -114,6 +114,11 @@ export function formationWeek(state: GameState): GameState {
   return { ...next, character: { ...c, stats }, seminary: { ...sem, pillarScores } };
 }
 
+/** The first year of formation: the propaedeutic year, or philosophy where the seminary runs none. */
+export function firstFormationYear(seminary: Pick<SeminaryState, 'propaedeutic'>): number {
+  return seminary.propaedeutic === false ? 2 : 1;
+}
+
 export interface EvaluationInput {
   seminary: SeminaryState;
   /** Concerns recorded during this year (not carried from earlier years). */
@@ -151,17 +156,19 @@ export function evaluate(input: EvaluationInput): EvaluationRecord {
   const chronicZero = PILLARS.some((p) => emphasis[p] === 0 && seminary.zeroStreak[p] + 1 >= FORMATION.zeroStreakDismissal);
   const failing = scores[weakest] < FORMATION.failingPillar || total < FORMATION.failingTotal;
 
+  // The first year is forgiven once, whichever year that is; after it the house keeps score.
+  const first = seminary.year === firstFormationYear(seminary);
   let result: EvaluationResult;
-  if (seminary.year >= 2 && (seriousFlag || chronicZero || (failing && seminary.heldBackCount >= 1))) {
+  if (!first && (seriousFlag || chronicZero || (failing && seminary.heldBackCount >= 1))) {
     result = 'DISMISSED';
     notes.push(seriousFlag ? 'The rector has recommended dismissal.' : 'Sustained neglect of formation.');
-  } else if (seminary.year >= 2 && failing) {
+  } else if (!first && failing) {
     result = 'HELD_BACK';
     notes.push('Not ready to advance; the year will be repeated.');
   } else if (notes.length > 0 || flags.candidacy_concern === true) {
     result = 'ADVANCED_WITH_CONCERNS';
     if (flags.candidacy_concern === true && seminary.year === 4) notes.push('Admitted to candidacy with reservations noted.');
-    if (seminary.year === 1 && failing) notes.push('A poor first year, forgiven once.');
+    if (first && failing) notes.push('A poor first year, forgiven once.');
   } else {
     result = 'ADVANCED';
   }

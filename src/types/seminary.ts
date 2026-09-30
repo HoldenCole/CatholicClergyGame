@@ -50,6 +50,8 @@ export interface SeminaryState {
   name: string;
   /** 1 (propaedeutic) .. 7 (transitional deacon). */
   year: number;
+  /** False when the seminary runs no propaedeutic year: formation began in philosophy, year 2. Absent means it did. */
+  propaedeutic?: boolean;
   /** Chosen at year start. Sums to EMPHASIS_POINTS. Null until chosen. */
   emphasis: Record<Pillar, number> | null;
   /** Accumulated this year from emphasis and events. */
