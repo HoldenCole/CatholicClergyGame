@@ -62,10 +62,12 @@ export const REQUESTABLE_POSTS: readonly string[] = [
   'pv_hospital_chaplain',
   'pv_university_chaplain',
   'pv_rome_study',
+  'pv_rome_doctorate',
   'pv_canon_law_licentiate',
   'pv_seminary_faculty',
   'pv_bishops_secretary',
   'pa_vicar_general',
+  'pa_judicial_vicar',
   // The special assignments. DESIGN §7.7. A man may ask for the penitentiary or the missions; a deployment comes on orders.
   'pa_penitentiary_chaplain',
   'pv_mission_loan',

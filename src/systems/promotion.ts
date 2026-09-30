@@ -32,10 +32,10 @@ export const PROMOTION = {
   } as Record<Opening['kind'], Record<NonNullable<Candidate['degree']>, number>>,
   /** Credentials that count toward readiness, by opening kind. */
   credentialBonus: {
-    pastor: { partial_cpa: 8, partial_jcl: 5, partial_doctorate: 4, partial_msw: 4, MBA: 10, JCL: 6, STL: 4, JCD: 6 },
+    pastor: { partial_cpa: 8, partial_jcl: 5, partial_doctorate: 4, partial_msw: 4, MBA: 10, JCL: 6, STL: 8, STD: 10, JCD: 6 },
     administrator: { partial_cpa: 10, partial_jcl: 6, partial_msw: 3, MBA: 10, JCL: 8, JCD: 6 },
     parochial_vicar: {},
-    chancery: { JCL: 20, partial_jcl: 10, JCD: 25, MBA: 10, partial_cpa: 8, partial_doctorate: 6, partial_msw: 4, STL: 6, STD: 8 },
+    chancery: { JCL: 20, partial_jcl: 10, JCD: 25, MBA: 10, partial_cpa: 8, partial_doctorate: 6, partial_msw: 4, STL: 12, STD: 16 },
   } as Record<Opening['kind'], Record<string, number>>,
   /** Credentials and degrees together cap here. */
   credentialCap: 28,

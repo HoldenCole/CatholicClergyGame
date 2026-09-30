@@ -1,0 +1,1221 @@
+{
+  "_notes": "The Roman network (depth round): what a man who came home from the Gregorian is asked, and by whom. Ids ra_*; every scene requires rome_alumnus and turns on a roll (theology or charisma or knowledge). Selectors: @bishop, @brother_priest, @rector, @nuncio. Flags written: rome:known_in_a_dicastery, known_scholar, published (the reporter), press:source, nuncio:noticed, nuncio:consulted, rome:asked_for_a_fit. The nuncio's questionnaire (ra_the_recommendation) is authored only. The doctorate (pv_rome_doctorate), the bishop's theologian (pv_bishops_theologian, office bishops_theologian) and the seminary chair guaranteed for an STL (pv_seminary_faculty) are in offers/parish.json; promotion and the nuncio's view weigh the degree more heavily than before.",
+  "events": [
+    {
+      "id": "ra_the_letter_from_the_curia",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "pressure": [
+        "ambition_vs_integrity"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 11,
+      "suppressYears": 3,
+      "once": true,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "rome_alumnus",
+          "value": true
+        }
+      ],
+      "title": "A Letter from a Dicastery",
+      "body": "A man you sat beside at the Gregorian for three years, who is now a minutante in a dicastery whose name the diocese has to look up, writes to ask a favour: a document the dicastery is preparing touches on something American bishops do differently, and he would like a page from a priest who knows both the theology and a parish, unofficially, by Friday, not for attribution. It is the kind of letter that a man with a Roman degree gets and a man without one does not, and it is also a page that will be read in a building where pages are remembered.",
+      "flavorPrompt": "A letter on Vatican paper from a man who sat beside you at the Gregorian, asking for a page by Friday.",
+      "choices": [
+        {
+          "id": "write_it",
+          "label": "Write the page: what the theology says, what the parish does, where they meet",
+          "outcome": "You write the page over two nights and send it to Rome without your name on it, which is how he asked.",
+          "roll": {
+            "chance": 0.5,
+            "stat": "theology",
+            "success": {
+              "outcome": "The page is used, a paragraph of it nearly verbatim, in a document your bishop receives from Rome six months later and reads aloud at a clergy day, and you sit in the third row and say nothing. Your friend writes to say the prefect asked who wrote the paragraph. He told him. Rome has your name in a file that is not the diocese's, and it is the right file.",
+              "effects": [
+                {
+                  "target": "reputation",
+                  "key": "rome",
+                  "delta": 8
+                },
+                {
+                  "target": "reputation",
+                  "key": "bishops",
+                  "delta": 2
+                },
+                {
+                  "target": "stat",
+                  "key": "theology",
+                  "delta": 2
+                },
+                {
+                  "target": "flag",
+                  "key": "rome:known_in_a_dicastery",
+                  "value": true
+                },
+                {
+                  "target": "trait",
+                  "key": "wrote a paragraph a dicastery used"
+                }
+              ]
+            },
+            "failure": {
+              "outcome": "The page is read and not used, and your friend writes, kindly, that it was more parish than the dicastery wanted, and that the document went another way. It is a small thing. It is also the first time Rome has asked you a question and not liked the answer, and Rome keeps that file too.",
+              "effects": [
+                {
+                  "target": "reputation",
+                  "key": "rome",
+                  "delta": 1
+                },
+                {
+                  "target": "stat",
+                  "key": "theology",
+                  "delta": 1
+                },
+                {
+                  "target": "pillar",
+                  "key": "human",
+                  "delta": 1
+                }
+              ]
+            },
+            "per": 80
+          },
+          "effects": [
+            {
+              "target": "pillar",
+              "key": "intellectual",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "tell_the_bishop",
+          "label": "Tell the bishop first, and write it only if he says yes",
+          "default": true,
+          "outcome": "He says yes, after a day, and adds a sentence of his own that you fold in, and the page goes to Rome with two men's thinking in it and one man's name off it. The document, when it comes, has a line the bishop recognises, and he is pleased in the way of a man who was consulted by Rome without Rome knowing. Your friend says the page was fine. Fine is what Rome says of things it did not use.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 3
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "decline",
+          "label": "Write back that you are a parish priest now, and that Rome has theologians",
+          "outcome": "He writes back that Rome has theologians and wanted a priest, and does not ask again, and the document comes out without you. It is not held against you in Rome, which holds nothing against anyone it has stopped thinking about. The parish has you on Friday night. It does not know what it had.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": -3
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ra_the_lecture",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "pressure": [
+        "ambition_vs_integrity"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 11,
+      "suppressYears": 3,
+      "once": true,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "rome_alumnus",
+          "value": true
+        }
+      ],
+      "title": "The Lecture at the Seminary",
+      "body": "The seminary rector, {@rector}, writes to ask whether the diocese's man from the Gregorian would give the Aquinas lecture this year, which is the one lecture a year the whole house attends and the faculty judges. It is forty-five minutes on a Thursday in January. It is also, the rector says without saying it, an audition: the seminary needs a theologian on the faculty and would rather one of its own than a stranger, and the bishop, who will be in the front row, has been told so.",
+      "flavorPrompt": "A seminary lecture hall in January, the whole house and the faculty and the bishop in the front row, forty-five minutes.",
+      "choices": [
+        {
+          "id": "give_it",
+          "label": "Give the lecture, the real one, on the thing you actually think",
+          "outcome": "You write forty-five minutes on the question the licentiate never answered, and say them to the house.",
+          "roll": {
+            "chance": 0.5,
+            "stat": "theology",
+            "success": {
+              "outcome": "It lands. The house, which came to sit through it, does not, and the faculty, which came to judge, asks questions that are real, and the bishop in the front row asks the last one and is answered. The rector says at the door that the chair is yours when you want it. The seminarians talk about it for a month, which is what a lecture is for.",
+              "effects": [
+                {
+                  "target": "reputation",
+                  "key": "chancery",
+                  "delta": 4
+                },
+                {
+                  "target": "reputation",
+                  "key": "rome",
+                  "delta": 3
+                },
+                {
+                  "target": "reputation",
+                  "key": "brother_priests",
+                  "delta": 2
+                },
+                {
+                  "target": "relationship",
+                  "key": "@rector",
+                  "delta": 6
+                },
+                {
+                  "target": "relationship",
+                  "key": "@bishop",
+                  "delta": 4
+                },
+                {
+                  "target": "stat",
+                  "key": "theology",
+                  "delta": 2
+                },
+                {
+                  "target": "flag",
+                  "key": "known_scholar",
+                  "value": true
+                },
+                {
+                  "target": "trait",
+                  "key": "gave the Aquinas lecture, and the house listened"
+                }
+              ]
+            },
+            "failure": {
+              "outcome": "It does not land. It is a licentiate's lecture given to a house that wanted a priest's, and the questions are polite and the faculty's are pointed, and the bishop in the front row asks nothing. The rector is kind at the door. The chair goes to a Dominican that spring. You have learned what a lecture is for, and what a house is, which was not the Gregorian.",
+              "effects": [
+                {
+                  "target": "reputation",
+                  "key": "chancery",
+                  "delta": 0
+                },
+                {
+                  "target": "relationship",
+                  "key": "@rector",
+                  "delta": 1
+                },
+                {
+                  "target": "stat",
+                  "key": "theology",
+                  "delta": 1
+                },
+                {
+                  "target": "pillar",
+                  "key": "human",
+                  "delta": -1
+                }
+              ]
+            },
+            "per": 80
+          },
+          "effects": [
+            {
+              "target": "pillar",
+              "key": "intellectual",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "give_a_safe_one",
+          "label": "Give a lecture the house will like and the faculty will forgive",
+          "default": true,
+          "outcome": "You give forty-five minutes on Aquinas and the Eucharist that the house enjoys and the faculty recognises as a Sunday homily with footnotes, and the rector thanks you warmly and does not mention the chair. The bishop enjoys it. You have not embarrassed anyone, which in that room is a result and not the one you were asked for.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": 2
+            },
+            {
+              "target": "relationship",
+              "key": "@rector",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "decline",
+          "label": "Say the parish has you on Thursdays, and let the seminary find a scholar",
+          "outcome": "It finds one, a Dominican, who gives a good lecture and is offered the chair and takes it, and the seminary has a theologian who is not the diocese's. The rector does not write again. The bishop mentions, once, that the man from the Gregorian was asked. You have a parish on Thursdays. It has you.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": -2
+            },
+            {
+              "target": "relationship",
+              "key": "@rector",
+              "delta": -3
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ra_the_envy",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "pressure": [
+        "friendship_vs_duty"
+      ],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 11,
+      "suppressYears": 3,
+      "once": true,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "rome_alumnus",
+          "value": true
+        }
+      ],
+      "title": "Father Doctor",
+      "body": "{@brother_priest} calls you Father Doctor at the deanery dinner, in front of everyone, in a tone that is a joke and is not, and the table laughs, and he does it again at the next one. He was ordained the year before you and has a parish with a debt and a school with a waiting list and no degree from anywhere, and the deanery has noticed that the chancery calls you and not him. It is a small thing. It is the small thing that decides whether the presbyterate thinks the Roman degree is a gift to the diocese or a thing one man got.",
+      "flavorPrompt": "A deanery dinner, a joke made twice, a table deciding what a Roman degree is for.",
+      "choices": [
+        {
+          "id": "go_and_see_him",
+          "label": "Go and see him, alone, and ask what you can do for his parish",
+          "outcome": "You drive over on a Tuesday and sit in his office and ask about the school.",
+          "roll": {
+            "chance": 0.55,
+            "stat": "charisma",
+            "success": {
+              "outcome": "He tells you about the school for an hour, and the debt, and the pastor before him, and you write two paragraphs for his capital campaign that the diocese's development office uses, and the campaign works, and he calls you Father Doctor once more at the next dinner, and then never again, and once, years later, in a different tone. The deanery has decided the degree is a gift. It decided it because you drove over.",
+              "effects": [
+                {
+                  "target": "relationship",
+                  "key": "@brother_priest",
+                  "delta": 12
+                },
+                {
+                  "target": "reputation",
+                  "key": "brother_priests",
+                  "delta": 5
+                },
+                {
+                  "target": "reputation",
+                  "key": "chancery",
+                  "delta": 1
+                },
+                {
+                  "target": "trait",
+                  "key": "drove over to the man who called him Father Doctor"
+                }
+              ]
+            },
+            "failure": {
+              "outcome": "He tells you about the school for an hour and takes the two paragraphs and does not use them, and calls you Father Doctor at the next dinner in the same tone, because a man who has decided is not undecided by a Tuesday. The deanery is kind to you and warmer to him. You have done what could be done. It is not always enough, and the presbyterate does not grade on effort.",
+              "effects": [
+                {
+                  "target": "relationship",
+                  "key": "@brother_priest",
+                  "delta": 3
+                },
+                {
+                  "target": "reputation",
+                  "key": "brother_priests",
+                  "delta": 1
+                },
+                {
+                  "target": "pillar",
+                  "key": "human",
+                  "delta": 1
+                }
+              ]
+            }
+          },
+          "effects": [
+            {
+              "target": "pillar",
+              "key": "human",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "laugh",
+          "label": "Laugh with the table, and call him Father Pastor back",
+          "default": true,
+          "outcome": "The table laughs harder at yours, and it becomes a bit, and the deanery has two names for two men, and the two men are the joke's owners rather than its subject. He does not like you. He does not dislike you either, which in a presbyterate is the usual weather.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "relationship",
+              "key": "@brother_priest",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "ignore_it",
+          "label": "Let it pass; a degree is a degree and a joke is a joke",
+          "outcome": "You let it pass, twice, three times, and it becomes what he calls you, and the deanery uses it when you are not there, and the chancery hears it and understands what it means. The degree becomes, in the deanery's mouth, a thing one man got. You did not decide that. You let it be decided.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": -3
+            },
+            {
+              "target": "relationship",
+              "key": "@brother_priest",
+              "delta": -2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ra_the_conference_draft",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "pressure": [
+        "ambition_vs_integrity"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 10,
+      "suppressYears": 3,
+      "once": true,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "rome_alumnus",
+          "value": true
+        }
+      ],
+      "title": "The Conference's Draft",
+      "body": "The conference has circulated a draft to the bishops for comment, and {@bishop} has handed it to you with a note that says two pages by Monday, and the draft is bad in the way conference drafts are bad, which is that it is true and says nothing, and the two pages he wants will go to the conference with his name on them and be read by the men who write these things, some of whom you knew in Rome. It is the first time your theology has been asked for by the Church rather than by a professor.",
+      "flavorPrompt": "A conference draft on a rectory desk with a bishop's note on it, two pages by Monday.",
+      "choices": [
+        {
+          "id": "say_what_is_wrong",
+          "label": "Write the two pages that say what is wrong with it, and how to fix it",
+          "outcome": "You write two pages that a conference committee will not enjoy and cannot ignore.",
+          "roll": {
+            "chance": 0.5,
+            "stat": "theology",
+            "success": {
+              "outcome": "The committee does not enjoy them and uses them: the final document has a section that is yours in structure and the bishop's in name, and a staffer you knew at the Casa calls to ask whether the bishop wrote it himself, and you say yes, which is the arrangement. The bishop is invited onto the committee. He takes you to the first meeting as his theologian, which the other bishops notice.",
+              "effects": [
+                {
+                  "target": "reputation",
+                  "key": "bishops",
+                  "delta": 6
+                },
+                {
+                  "target": "reputation",
+                  "key": "rome",
+                  "delta": 3
+                },
+                {
+                  "target": "reputation",
+                  "key": "chancery",
+                  "delta": 4
+                },
+                {
+                  "target": "relationship",
+                  "key": "@bishop",
+                  "delta": 6
+                },
+                {
+                  "target": "stat",
+                  "key": "theology",
+                  "delta": 2
+                },
+                {
+                  "target": "trait",
+                  "key": "wrote the bishop’s comment the conference used"
+                }
+              ]
+            },
+            "failure": {
+              "outcome": "The committee does not enjoy them and does not use them, and the bishop's comment is filed with the others, and the final document is the draft with commas moved. The bishop says the pages were good. They were. The conference does not read for good; it reads for votes, which the Gregorian did not teach and the diocese has now.",
+              "effects": [
+                {
+                  "target": "reputation",
+                  "key": "bishops",
+                  "delta": 1
+                },
+                {
+                  "target": "relationship",
+                  "key": "@bishop",
+                  "delta": 2
+                },
+                {
+                  "target": "stat",
+                  "key": "theology",
+                  "delta": 1
+                },
+                {
+                  "target": "stat",
+                  "key": "knowledge",
+                  "delta": 1
+                }
+              ]
+            },
+            "per": 80
+          },
+          "effects": [
+            {
+              "target": "pillar",
+              "key": "intellectual",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "say_what_is_right",
+          "label": "Write two pages that praise the draft and add a paragraph",
+          "default": true,
+          "outcome": "The bishop signs them and the conference thanks him, and the paragraph appears in the final document as a footnote, and the bishop is pleased to have been useful and the committee is pleased to have been praised. You have learned how a comment is written that is used. It was not theology. It was two pages that knew the room.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "bishops",
+              "delta": 3
+            },
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 2
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": -1
+            }
+          ]
+        },
+        {
+          "id": "ask_for_more_time",
+          "label": "Tell the bishop two pages by Monday is not what the draft deserves, and ask for a month",
+          "outcome": "He says the conference does not give months, and sends the chancery's comment instead, which says nothing and is filed. You were right about the draft. You have learned that a bishop's theologian is a man who writes two pages by Monday, and that the ones who ask for a month are asked less.",
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            },
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": -3
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": -2
+            },
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ra_the_nuncio_dinner",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "pressure": [
+        "ambition_vs_integrity"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 9,
+      "suppressYears": 3,
+      "once": true,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "rome_alumnus",
+          "value": true
+        }
+      ],
+      "title": "The Nuncio's Table",
+      "body": "The nuncio, {@nuncio}, is in the diocese for an installation and stays the night at the residence, and the bishop's dinner for him has eight places, and one of them is yours, because the nuncio asked for the priest from the Gregorian, whose director he knew. It is a dinner at which nothing is said and everything is noticed. The nuncio asks you, over the fish, what you make of the diocese's seminary, and the rector is three chairs down.",
+      "flavorPrompt": "A bishop's dinner for the nuncio, eight places, a question over the fish with the rector three chairs down.",
+      "choices": [
+        {
+          "id": "answer_truly",
+          "label": "Answer him truly, and carefully, with the rector three chairs down",
+          "outcome": "You say what you think of the seminary in a sentence the rector can hear and the nuncio can use.",
+          "roll": {
+            "chance": 0.5,
+            "stat": "charisma",
+            "success": {
+              "outcome": "The sentence is true and kind and exact, and the nuncio nods and the rector, three chairs down, does not flinch, because it was a sentence he could have said himself. After dinner the nuncio takes your arm in the hall and asks about your director's health, and mentions that Rome is short of Americans who can write. The bishop saw the hall. Everyone saw the hall.",
+              "effects": [
+                {
+                  "target": "reputation",
+                  "key": "rome",
+                  "delta": 6
+                },
+                {
+                  "target": "reputation",
+                  "key": "bishops",
+                  "delta": 4
+                },
+                {
+                  "target": "relationship",
+                  "key": "@nuncio",
+                  "delta": 6
+                },
+                {
+                  "target": "relationship",
+                  "key": "@rector",
+                  "delta": 2
+                },
+                {
+                  "target": "flag",
+                  "key": "nuncio:noticed",
+                  "value": true
+                },
+                {
+                  "target": "trait",
+                  "key": "the nuncio took his arm in the hall"
+                }
+              ]
+            },
+            "failure": {
+              "outcome": "The sentence is true and not careful, and the rector three chairs down goes quiet, and the nuncio, who collects sentences, has this one, and the bishop, at the head of the table, has watched his theologian criticize his seminary to Rome over fish. Nothing is said. The rector says something, later, to the vocation director. The nuncio remembers you as candid, which in his profession is a word with a second meaning.",
+              "effects": [
+                {
+                  "target": "reputation",
+                  "key": "rome",
+                  "delta": 2
+                },
+                {
+                  "target": "relationship",
+                  "key": "@rector",
+                  "delta": -6
+                },
+                {
+                  "target": "relationship",
+                  "key": "@bishop",
+                  "delta": -3
+                },
+                {
+                  "target": "outspokenness",
+                  "key": "",
+                  "delta": 1
+                }
+              ]
+            },
+            "per": 80
+          },
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "praise_the_rector",
+          "label": "Say the seminary is well run, and turn the question to the rector",
+          "default": true,
+          "outcome": "The rector answers it, well, and the nuncio listens, and the dinner moves on, and you have given the rector the floor at a table where the floor was yours. He does not forget it. The nuncio has learned that you defer, which he files under one heading and the bishop under another.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@rector",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 1
+            },
+            {
+              "target": "relationship",
+              "key": "@nuncio",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "deflect",
+          "label": "Say it is not for a young priest to judge, and eat the fish",
+          "outcome": "The nuncio smiles and eats his fish and asks the bishop about the weather, and the dinner is a dinner. You were at the nuncio's table and said nothing he will remember, which is the safe outcome and the one the Gregorian did not send you home for. The bishop says afterward that you were quiet. He does not say it as a compliment.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": -1
+            },
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": -1
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ra_the_journalist",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "pressure": [
+        "belief_vs_safety",
+        "ambition_vs_integrity"
+      ],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 9,
+      "suppressYears": 3,
+      "once": true,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "rome_alumnus",
+          "value": true
+        }
+      ],
+      "title": "The Reporter Who Read Your Thesis",
+      "body": "A reporter from a national Catholic paper calls the rectory because she has read your licentiate thesis, which is online, and because the thing the thesis is about has become, this month, the thing the Church is arguing about, and she would like a quote from a parish priest who has thought about it. The chancery has a policy about the press, which is that the chancery talks to it. The reporter has a deadline, which is tomorrow. Your thesis is your name, and the argument is the Church's.",
+      "flavorPrompt": "A reporter on the rectory phone with a deadline, a thesis online, a chancery with a policy.",
+      "choices": [
+        {
+          "id": "give_the_quote",
+          "label": "Give her the quote, carefully, and tell the chancery after",
+          "outcome": "You give her three sentences you can stand behind and call the chancery when she rings off.",
+          "roll": {
+            "chance": 0.5,
+            "stat": "theology",
+            "success": {
+              "outcome": "The three sentences are the ones the piece is built around, and they are careful and true and quoted in two other papers by the weekend, and the chancery, which was going to be annoyed, finds that the diocese is being praised for having a priest who can say it. The bishop calls to say the quote was good and that next time you will call first. The next time, you do.",
+              "effects": [
+                {
+                  "target": "reputation",
+                  "key": "public",
+                  "delta": 6
+                },
+                {
+                  "target": "reputation",
+                  "key": "rome",
+                  "delta": 3
+                },
+                {
+                  "target": "reputation",
+                  "key": "chancery",
+                  "delta": 2
+                },
+                {
+                  "target": "stat",
+                  "key": "theology",
+                  "delta": 1
+                },
+                {
+                  "target": "flag",
+                  "key": "published",
+                  "value": true
+                },
+                {
+                  "target": "trait",
+                  "key": "quoted in the national press on his thesis"
+                }
+              ]
+            },
+            "failure": {
+              "outcome": "The three sentences are cut to one and the one is the wrong one, and the piece runs with your name and the diocese's under a headline neither would have chosen, and the chancery is annoyed as it planned to be, and the bishop calls to say that the policy exists for this. It blows over in a month. The reporter calls again a year later. You do not answer.",
+              "effects": [
+                {
+                  "target": "reputation",
+                  "key": "public",
+                  "delta": 2
+                },
+                {
+                  "target": "reputation",
+                  "key": "chancery",
+                  "delta": -5
+                },
+                {
+                  "target": "relationship",
+                  "key": "@bishop",
+                  "delta": -3
+                },
+                {
+                  "target": "outspokenness",
+                  "key": "",
+                  "delta": 1
+                }
+              ]
+            },
+            "per": 80
+          },
+          "effects": [
+            {
+              "target": "outspokenness",
+              "key": "",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "send_her_to_the_chancery",
+          "label": "Tell her the chancery speaks for the diocese, and give her the number",
+          "default": true,
+          "outcome": "The chancery gives her a sentence that says nothing, and the piece runs without the diocese, and your thesis stays online and unquoted. The bishop is pleased with the policy. The reporter is not, and says so in a footnote about dioceses that do not let their priests think in public, which the bishop does not read and the vicar general does.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": -1
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "background",
+          "label": "Talk to her on background, for an hour, and let her quote nobody",
+          "outcome": "You talk for an hour and she quotes nobody, and the piece is better for it, and three people in the diocese can tell, and one of them is the bishop, who does not ask and knows. The reporter has a source now. That is a thing to have, and a thing to be, and the two are not the same.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 1
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": -1
+            },
+            {
+              "target": "flag",
+              "key": "press:source",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ra_the_stranger",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "pressure": [
+        "doubt",
+        "friendship_vs_duty"
+      ],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 11,
+      "suppressYears": 3,
+      "once": true,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "rome_alumnus",
+          "value": true
+        }
+      ],
+      "title": "Slightly a Stranger",
+      "body": "The parish council chair says it at the end of a meeting, not unkindly: that the parish had hoped, when you came back from Rome, that you would be the same priest, and that you are not, quite; that the homilies are harder and the Italian phrases are a joke the parish has stopped finding funny, and that the eight o'clock crowd, who liked you before, are not sure you like them. It is said with love. It is also true, and you had not known it was visible.",
+      "flavorPrompt": "The end of a parish council meeting, a chairman who says it with love, the eight o'clock crowd not at the door.",
+      "choices": [
+        {
+          "id": "hear_it",
+          "label": "Hear it, and spend the year becoming a parish priest again on purpose",
+          "outcome": "You take it home and decide to be the priest they had, without giving up the one you became.",
+          "roll": {
+            "chance": 0.55,
+            "stat": "charisma",
+            "success": {
+              "outcome": "It takes a year, and it works: the homilies stay hard and get shorter, the Italian goes, the eight o'clock crowd finds you at the door again, and the council chair says at the end of the next year that he was wrong, which he was not, and that you are the priest they had, which you are not, and better. The parish has a theologian who says the eight o'clock. Not many do.",
+              "effects": [
+                {
+                  "target": "reputation",
+                  "key": "parishioners",
+                  "delta": 7
+                },
+                {
+                  "target": "stat",
+                  "key": "charisma",
+                  "delta": 2
+                },
+                {
+                  "target": "pillar",
+                  "key": "pastoral",
+                  "delta": 2
+                },
+                {
+                  "target": "pillar",
+                  "key": "human",
+                  "delta": 2
+                },
+                {
+                  "target": "trait",
+                  "key": "came home from Rome twice"
+                }
+              ]
+            },
+            "failure": {
+              "outcome": "It takes a year and does not quite work: you become a priest who is trying to be liked, which the eight o'clock crowd can smell, and the homilies get shorter without getting warmer. The council chair is kind about it. The parish has decided you are the priest who went to Rome, and a parish that has decided is a slow thing to undecide.",
+              "effects": [
+                {
+                  "target": "reputation",
+                  "key": "parishioners",
+                  "delta": 2
+                },
+                {
+                  "target": "stat",
+                  "key": "charisma",
+                  "delta": 1
+                },
+                {
+                  "target": "pillar",
+                  "key": "human",
+                  "delta": -1
+                }
+              ]
+            }
+          },
+          "effects": [
+            {
+              "target": "pillar",
+              "key": "pastoral",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "defend_it",
+          "label": "Say that the parish has a priest who can think, and that it should be glad of it",
+          "default": true,
+          "outcome": "You say it, and it is true, and the council chair says that he did not say otherwise, and the meeting ends. The eight o'clock crowd does not come back to the door. The chancery, which hears everything, hears that the man from Rome told his council what it should be glad of, and files that beside the degree.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": -4
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": -1
+            },
+            {
+              "target": "outspokenness",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "ask_to_move",
+          "label": "Ask the bishop for a parish that wants what Rome made",
+          "outcome": "He gives you one, in a year, a parish with a lecture series and a Sunday crowd that reads, and you are happy there and the old parish gets a priest who says the eight o'clock without an accent. It was the honest thing. It was also the moment you stopped being a priest of every parish and became a priest of some.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": -2
+            },
+            {
+              "target": "flag",
+              "key": "rome:asked_for_a_fit",
+              "value": true
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": -1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ra_the_recommendation",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "pressure": [
+        "ambition_vs_integrity"
+      ],
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 9,
+      "suppressYears": 3,
+      "once": true,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "rome_alumnus",
+          "value": true
+        }
+      ],
+      "title": "Rome Asks About a Man",
+      "body": "A letter comes from the nunciature, in the formal way, asking for your view of a priest of the diocese, {@brother_priest}, under the pontifical secret, on the usual points: doctrine, prudence, the way he lives, whether he would be obeyed. It is the nuncio's questionnaire, the one that precedes a terna, and it has come to you because the nuncio asked the priests who would know and because the Gregorian is on your file. You know the man. You know two things about him that the questionnaire asks for and that he does not know you know.",
+      "choices": [
+        {
+          "id": "answer_fully",
+          "label": "Answer every point fully, the two things included, under the secret",
+          "outcome": "You write the letter Rome asked for, the whole of it, and seal it.",
+          "roll": {
+            "chance": 0.5,
+            "stat": "knowledge",
+            "success": {
+              "outcome": "The letter is exact and fair and the two things are in it as facts and not as judgments, and the man is not made a bishop that year, and is made one three years later after the two things were seen to, and you learn from the nuncio, who says it in the hall at an installation, that the letter was the one they read twice. Rome trusts a man who answers its questionnaire. It trusts him with more questionnaires.",
+              "effects": [
+                {
+                  "target": "reputation",
+                  "key": "rome",
+                  "delta": 6
+                },
+                {
+                  "target": "reputation",
+                  "key": "bishops",
+                  "delta": 4
+                },
+                {
+                  "target": "relationship",
+                  "key": "@nuncio",
+                  "delta": 4
+                },
+                {
+                  "target": "stat",
+                  "key": "knowledge",
+                  "delta": 1
+                },
+                {
+                  "target": "flag",
+                  "key": "nuncio:consulted",
+                  "value": true
+                },
+                {
+                  "target": "trait",
+                  "key": "answered the nuncio’s questionnaire in full"
+                }
+              ]
+            },
+            "failure": {
+              "outcome": "The letter is exact and the two things are in it as judgments, which a nuncio's office can tell from facts, and the man is not made a bishop, and hears, somehow, that a priest with a Roman degree was asked and wrote, and looks at you at the next deanery dinner in a way that lasts ten years. Rome read the letter. Rome does not tell you what it thought.",
+              "effects": [
+                {
+                  "target": "reputation",
+                  "key": "rome",
+                  "delta": 2
+                },
+                {
+                  "target": "relationship",
+                  "key": "@brother_priest",
+                  "delta": -8
+                },
+                {
+                  "target": "reputation",
+                  "key": "brother_priests",
+                  "delta": -2
+                },
+                {
+                  "target": "honesty",
+                  "key": "",
+                  "delta": 1
+                }
+              ]
+            },
+            "per": 80
+          },
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "answer_the_easy_points",
+          "label": "Answer the points that are easy, and say of the rest that you do not know him well enough",
+          "default": true,
+          "outcome": "The letter goes with three points answered and two declined, and the nuncio's office reads a priest who was careful, and the man is made a bishop the next year, and the two things surface in his third, and the nuncio's office remembers who was asked and what he did not say. You did not lie. Rome's questionnaire is not about lying.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": -2
+            },
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": 2
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": -1
+            }
+          ]
+        },
+        {
+          "id": "decline",
+          "label": "Write to the nuncio that you cannot in conscience judge a brother priest for Rome",
+          "outcome": "The nuncio's office writes back a courteous line and does not ask again, of you, about anyone, and the man is made a bishop or not on other letters. You have kept something clean and given something up: the thing Rome asks of the men it trusts, which is their view of other men. It is a real refusal, and it is remembered as one.",
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": -4
+            },
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -313,6 +313,12 @@ Each year runs: an **opening emphasis choice** → **3–4 played weeks** drawn 
 
 The year's pool is three kinds of scene: the beats that always come (candidacy, the ministries, the diaconate, the eve of ordination), the scenes a man's choices and stats open (the promise scenes in `career.json`, gated on the flag a promise wrote), and the chance scenes (`seminary/chance.json`), which fire from the ordinary draw and whose outcome turns on a roll (§12.3 `roll`). A promise made in seminary is kept where it was promised: the parish offer it pointed at carries a `guarantee` on that flag, the rector's plan shapes the first posting and its pastor, and each promise has a follow-up scene of its own.
 
+The seminary begins one of two ways, chosen at creation: a propaedeutic year first (seven years to ordination) or straight into philosophy (six). The first year's mercies follow the first year whichever it is.
+
+The house has a rector and a vice-rector, each with a style rolled apart from everything else about him (`generation/formators.ts`; the styles are flags the house scenes read). The rector's report is the evaluation's last word: a rector who thinks well of a man forgives one weak pillar, one who does not withholds a clean year (`systems/formation.ts` `RECTOR_REPORT`); his regard alone puts a man at the ordination table. The vice-rector's regard counts in standing.
+
+Beside the societies (`content/clubs/seminary.json`) are the apostolates, marked `kind: 'apostolate'`: the Respect Life group, the parish school, the nursing home, the soup kitchen. Joining one makes the layperson who runs it; thirty weeks earns a veteran's standing and a promised letter to lead something; leading it is read by standing, by the first posting, and by the parish offers.
+
 The summer between years is chosen from the diocese's own list (`content/seminary/summers.json`): the plain summers every diocese has (a regular parish, a hard parish, the hospital, the chancery, the mission, Rome, Spanish immersion, a Spanish-speaking parish where any parish needs it), the ones the generated world answers for (`where` conditions on the diocese's region, size, institutions, and its parishes' peoples), and two or three named for each preset see. A summer spent once is not offered again. The first posting remembers them (`systems/assignment.ts`).
 
 ### 6.2 The four pillars
@@ -511,6 +517,12 @@ Design rules: each must be **legible in hindsight** (the penitentiary comes to t
 
 
 ---
+
+### 7.9 Two degrees that carry
+
+**Canon law.** The licentiate (`pv_canon_law_licentiate`) is the road to the tribunal's afternoons (`pv_tribunal`) and, after them, the judicial vicar's chair (`pa_judicial_vicar`, a posting with its own dials and book, `study/tribunal.json`), promised to a canonist who served the tribunal. In the parish years a canonist is brought cases (`parish/canon.json`): a wedding the law does not allow, a petition in a drawer, a pastor to be removed by process, a decree of suppression, a bishop's Sunday-night question; each turns on a roll of knowledge. The nuncio counts the years as judicial vicar.
+
+**The Roman degree.** The licentiate (`pv_rome_study`) is followed by the doctorate (`pv_rome_doctorate`, two more years at the Gregorian), the seminary's chair guaranteed for an STL (`pv_seminary_faculty`), and the bishop's theologian (`pv_bishops_theologian`, an office beside the parish). An alumnus is asked things (`parish/rome_alumni.json`): a page for a dicastery, the Aquinas lecture, the conference's draft, the nuncio's table, the nuncio's questionnaire; and is called Father Doctor at the deanery dinner. Promotion and the nuncio weigh the degree heavily.
 
 ## 8. The parish
 

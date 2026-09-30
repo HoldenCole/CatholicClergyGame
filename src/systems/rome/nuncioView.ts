@@ -25,7 +25,7 @@ export const VIEW = {
   gapCap: 20,
   loud: 50,
   loudCost: 6,
-  credit: { JCL: 6, STL: 3, STD: 3, rome_alumnus: 5, vg_served: 8, bishops_secretary: 4, hard_parish_turned: 3, auxiliary: 10, curia: 8 },
+  credit: { JCL: 6, STL: 6, STD: 8, rome_alumnus: 5, vg_served: 8, jv_served: 6, bishops_secretary: 4, hard_parish_turned: 3, auxiliary: 10, curia: 8 },
   /** A friar's own credits (E3 §16B): a provincial's term, a prior's, the head of the order's. */
   friar: { provincial: 8, prior: 3, general: 10 },
   bishopPer: 10,
@@ -98,9 +98,10 @@ export function nuncioView(state: GameState): NuncioView {
   const f = state.flags;
   if (c.credentials.includes('JCL')) { v += VIEW.credit.JCL; good.push('the canon law'); }
   if (c.credentials.includes('STL')) v += VIEW.credit.STL;
-  if (c.credentials.includes('STD')) v += VIEW.credit.STD;
+  if (c.credentials.includes('STD')) { v += VIEW.credit.STD; good.push('the doctorate'); }
   if (f.rome_alumnus) { v += VIEW.credit.rome_alumnus; good.push('the Roman degree'); }
   if (f.vg_served) { v += VIEW.credit.vg_served; good.push('the years as vicar general'); }
+  if (f.jv_served) { v += VIEW.credit.jv_served; good.push('the years as judicial vicar'); }
   if (f['office:bishops_secretary']) { v += VIEW.credit.bishops_secretary; good.push("the bishop's secretary's desk"); }
   if (f['office:auxiliary_bishop'] || f.served_auxiliary) { v += VIEW.credit.auxiliary; good.push('the years as an auxiliary'); }
   if (f.curia_served || f['curia:rank']) { v += VIEW.credit.curia; good.push('the years in the Curia'); }
