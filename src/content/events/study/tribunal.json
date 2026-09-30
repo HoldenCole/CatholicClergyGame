@@ -1,0 +1,1124 @@
+{
+  "_notes": "The tribunal years (depth round): a priest serving as judicial vicar of the diocese, run as a posting with phase study and the flag study:tribunal set by the engine (programs.json judicial_vicar, city tribunal), gated here on office:judicial_vicar, which the letter pa_judicial_vicar sets. The posting's dials are cases, bishop, priests; its book is decided, appeals, dispensations. Selectors: @bishop, @brother_priest, @closest_classmate. The sentence he does not believe and the priest's case are authored only. Flags written: jv:fridays, jv:granted_it, jv:did_not_open, jv:sent_his_friend.",
+  "events": [
+    {
+      "id": "jv_the_docket",
+      "phase": [
+        "study"
+      ],
+      "pressure": [
+        "competence"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 13,
+      "suppressYears": 3,
+      "once": true,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "office:judicial_vicar",
+          "value": true
+        }
+      ],
+      "title": "Three Hundred Cases",
+      "body": "The docket on your first Monday is three hundred cases, forty of them older than five years, and the metropolitan's tribunal has written twice about the forty. The staff is a notary who has been there thirty years, a defender of the bond who is a pastor two days a week, and two lay judges who are good and paid badly. The bishop has said, at your installation, that he wants the backlog gone in a year. The notary, when the bishop left, said that the last three judicial vicars said that too.",
+      "flavorPrompt": "A third-floor office with three hundred files, a notary of thirty years, a bishop who wants it gone in a year.",
+      "choices": [
+        {
+          "id": "triage",
+          "label": "Triage the forty: the simple ones decided in a month, the hard ones told the truth",
+          "outcome": "You read forty files in a fortnight and sort them by what they need.",
+          "roll": {
+            "chance": 0.55,
+            "stat": "administration",
+            "success": {
+              "outcome": "Twenty-two of the forty were simple and had been waiting for someone to say so, and are decided by Easter, and the other eighteen get a letter from you that says how long, honestly, which nobody has told them in five years. The metropolitan's tribunal stops writing. The notary says nothing, and starts bringing you coffee, which in thirty years she has done for one other man.",
+              "effects": [
+                {
+                  "target": "place",
+                  "key": "cases",
+                  "delta": 20
+                },
+                {
+                  "target": "record",
+                  "key": "decided",
+                  "delta": 22
+                },
+                {
+                  "target": "reputation",
+                  "key": "chancery",
+                  "delta": 5
+                },
+                {
+                  "target": "reputation",
+                  "key": "bishops",
+                  "delta": 3
+                },
+                {
+                  "target": "stat",
+                  "key": "administration",
+                  "delta": 2
+                },
+                {
+                  "target": "trait",
+                  "key": "cleared the forty"
+                }
+              ]
+            },
+            "failure": {
+              "outcome": "You sort them and the sorting is wrong: three of the simple ones were not, and are decided badly and appealed, and the metropolitan's tribunal writes a third time, about the appeals now. The notary says the last man sorted too. You start over in the summer, slower. The bishop asks at Christmas how the year went.",
+              "effects": [
+                {
+                  "target": "place",
+                  "key": "cases",
+                  "delta": 5
+                },
+                {
+                  "target": "record",
+                  "key": "decided",
+                  "delta": 10
+                },
+                {
+                  "target": "record",
+                  "key": "appeals",
+                  "delta": 0
+                },
+                {
+                  "target": "reputation",
+                  "key": "chancery",
+                  "delta": -2
+                },
+                {
+                  "target": "stat",
+                  "key": "administration",
+                  "delta": 1
+                }
+              ]
+            }
+          },
+          "effects": [
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "hire",
+          "label": "Go to the bishop for a second lay judge, and take the year the docket needs",
+          "default": true,
+          "outcome": "He gives you the judge, grumbling about the money, and the docket moves at the pace a docket moves with three judges instead of two, which is a real pace and not the bishop's. By the second year the forty are gone and the three hundred are two hundred. The bishop says it took two years. The metropolitan says it took two years and was done.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "cases",
+              "delta": 12
+            },
+            {
+              "target": "record",
+              "key": "decided",
+              "delta": 15
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 3
+            },
+            {
+              "target": "place",
+              "key": "bishop",
+              "delta": -2
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "decide_fast",
+          "label": "Decide the forty in a year by deciding them fast",
+          "outcome": "The forty are gone in a year and the bishop is pleased and eleven of them come back on appeal, and the metropolitan's tribunal reverses six, and writes about the six. You have cleared a backlog into the province's file. The notary does not bring you coffee.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "cases",
+              "delta": 15
+            },
+            {
+              "target": "record",
+              "key": "decided",
+              "delta": 40
+            },
+            {
+              "target": "record",
+              "key": "appeals",
+              "delta": -3
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "bishops",
+              "delta": -4
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": -1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "jv_the_pastor_on_the_phone",
+      "phase": [
+        "study"
+      ],
+      "pressure": [
+        "loyalty_vs_honesty",
+        "money"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 12,
+      "suppressYears": 3,
+      "once": true,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "office:judicial_vicar",
+          "value": true
+        }
+      ],
+      "title": "The Pastor on the Phone",
+      "body": "A pastor calls on a Friday about a wedding on Saturday, which is the call every judicial vicar gets every week, and this one is a pastor who has done it three times this year and has been told three times, and this time the bride is the daughter of the man who chairs the diocesan finance council. The pastor would like the sentence by tonight. The case is in the docket and is nowhere near decided. He says the bishop will understand. He says the finance council chairman will not.",
+      "flavorPrompt": "A judicial vicar's office at five on a Friday, a pastor on the phone, the finance council's daughter.",
+      "choices": [
+        {
+          "id": "hold_the_line",
+          "label": "Say no, courteously, and say why in writing to the pastor and the bishop both",
+          "outcome": "You write the letter that says no and copies the bishop, and wait for the phone.",
+          "roll": {
+            "chance": 0.5,
+            "stat": "administration",
+            "success": {
+              "outcome": "The phone rings: the bishop, who has had the finance chairman on the other line, and who says, after a silence, that you were right and that he will say so to the chairman himself. The wedding is a blessing on Saturday and a Mass in the spring, when the sentence comes. The pastor does not call on Fridays again. The presbyterate hears that the tribunal said no to the finance council and lived.",
+              "effects": [
+                {
+                  "target": "place",
+                  "key": "priests",
+                  "delta": 8
+                },
+                {
+                  "target": "place",
+                  "key": "bishop",
+                  "delta": 8
+                },
+                {
+                  "target": "reputation",
+                  "key": "chancery",
+                  "delta": 5
+                },
+                {
+                  "target": "reputation",
+                  "key": "brother_priests",
+                  "delta": 3
+                },
+                {
+                  "target": "relationship",
+                  "key": "@bishop",
+                  "delta": 5
+                },
+                {
+                  "target": "trait",
+                  "key": "said no to the finance council’s wedding"
+                }
+              ]
+            },
+            "failure": {
+              "outcome": "The phone rings: the bishop, who has had the chairman on the other line, and who says that surely something can be done, and you say what can be done, which is nothing tonight, and he says he will remember your position. He does. The chairman's daughter is married in the garden and the finance council's next budget has a line about the tribunal's staffing.",
+              "effects": [
+                {
+                  "target": "place",
+                  "key": "priests",
+                  "delta": 6
+                },
+                {
+                  "target": "place",
+                  "key": "bishop",
+                  "delta": -6
+                },
+                {
+                  "target": "reputation",
+                  "key": "chancery",
+                  "delta": -2
+                },
+                {
+                  "target": "reputation",
+                  "key": "brother_priests",
+                  "delta": 3
+                },
+                {
+                  "target": "place",
+                  "key": "bishop",
+                  "delta": -2
+                }
+              ]
+            }
+          },
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "find_something",
+          "label": "Find something: the case read tonight, and a sentence if the file allows one",
+          "default": true,
+          "outcome": "You read the file at nine at night and it allows one, barely, and you sign it at eleven, and the wedding is Saturday, and the pastor tells the deanery that the judicial vicar came through. The bishop is pleased. The notary looks at the sentence on Monday for a long time and says nothing, and you know what she did not say, because it is what you did not say to yourself at eleven.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "priests",
+              "delta": 10
+            },
+            {
+              "target": "place",
+              "key": "bishop",
+              "delta": 6
+            },
+            {
+              "target": "place",
+              "key": "cases",
+              "delta": -4
+            },
+            {
+              "target": "record",
+              "key": "decided",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": 4
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": -1
+            },
+            {
+              "target": "flag",
+              "key": "jv:fridays",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "let_the_bishop",
+          "label": "Send the pastor to the bishop, and let the bishop decide what the law is",
+          "outcome": "The bishop decides what the law is, which is what a bishop does when a judicial vicar sends him the question, and the wedding happens, and the sentence is signed by the bishop under a canon that exists for other things. The chairman is grateful to the bishop. The bishop has learned that the tribunal sends him the hard ones, which he did not want to learn.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "bishop",
+              "delta": -8
+            },
+            {
+              "target": "place",
+              "key": "priests",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": -3
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "jv_the_sentence_you_believe",
+      "phase": [
+        "study"
+      ],
+      "pressure": [
+        "loyalty_vs_honesty",
+        "belief_vs_safety"
+      ],
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 11,
+      "suppressYears": 3,
+      "once": true,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "office:judicial_vicar",
+          "value": true
+        }
+      ],
+      "title": "The Sentence You Do Not Believe",
+      "body": "A case comes to you for the sentence and the file says one thing and your judgment says another: the marriage was valid, on the evidence, and the petitioner is a woman whose life will be ruined by that sentence, and whose new husband is a deacon of the diocese, and whose case has been in the tribunal so long that everyone assumes it will be granted. The evidence does not grant it. You are the judge. The defender of the bond, who is a pastor two days a week and tired, has written a page that does not fight.",
+      "choices": [
+        {
+          "id": "negative",
+          "label": "Write the negative sentence the evidence requires, and write it so it can be appealed",
+          "outcome": "You write the sentence the file supports, and write the reasons so that Rome could read them.",
+          "roll": {
+            "chance": 0.5,
+            "stat": "knowledge",
+            "success": {
+              "outcome": "It is appealed, to the metropolitan and then to the Rota, and the Rota upholds it in two years in a decision that cites your reasons, which is a thing that happens to perhaps one diocesan judge in a decade. The woman's life is what it is. The deacon leaves the diaconate. The bishop, who wanted the case granted, says nothing for a year and then says, at a dinner, that the tribunal is the one office he does not worry about.",
+              "effects": [
+                {
+                  "target": "place",
+                  "key": "cases",
+                  "delta": 6
+                },
+                {
+                  "target": "place",
+                  "key": "bishop",
+                  "delta": 4
+                },
+                {
+                  "target": "record",
+                  "key": "appeals",
+                  "delta": 2
+                },
+                {
+                  "target": "reputation",
+                  "key": "rome",
+                  "delta": 6
+                },
+                {
+                  "target": "reputation",
+                  "key": "chancery",
+                  "delta": 3
+                },
+                {
+                  "target": "reputation",
+                  "key": "parishioners",
+                  "delta": -3
+                },
+                {
+                  "target": "stat",
+                  "key": "knowledge",
+                  "delta": 2
+                },
+                {
+                  "target": "trait",
+                  "key": "a sentence the Rota upheld"
+                }
+              ]
+            },
+            "failure": {
+              "outcome": "It is appealed, and the metropolitan's tribunal reverses, on the evidence you read differently, in a decree that is polite and long. The woman is granted her case on appeal. The deacon stays. You were wrong, or you were right and outvoted, and the province's file cannot tell the two apart. The bishop does not mention it.",
+              "effects": [
+                {
+                  "target": "place",
+                  "key": "cases",
+                  "delta": 2
+                },
+                {
+                  "target": "place",
+                  "key": "bishop",
+                  "delta": -3
+                },
+                {
+                  "target": "record",
+                  "key": "appeals",
+                  "delta": -1
+                },
+                {
+                  "target": "reputation",
+                  "key": "chancery",
+                  "delta": -2
+                },
+                {
+                  "target": "honesty",
+                  "key": "",
+                  "delta": 1
+                },
+                {
+                  "target": "stat",
+                  "key": "knowledge",
+                  "delta": 1
+                }
+              ]
+            },
+            "per": 80
+          },
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "affirmative",
+          "label": "Write the affirmative sentence everyone expects, on the evidence as it can be read",
+          "default": true,
+          "outcome": "You find a reading of the evidence that grants it, because there almost always is one, and sign. The woman is married in the Church. The deacon serves. Nobody appeals, because nobody wanted to. You have done what the diocese wanted and the file did not, and you will read that file again, in your head, for years.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "bishop",
+              "delta": 5
+            },
+            {
+              "target": "place",
+              "key": "priests",
+              "delta": 3
+            },
+            {
+              "target": "record",
+              "key": "decided",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 2
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": -2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": -1
+            },
+            {
+              "target": "flag",
+              "key": "jv:granted_it",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "recuse",
+          "label": "Recuse yourself, because the deacon is the diocese's, and send it to the province",
+          "outcome": "You send it to a judge in the next diocese, who grants it on the same evidence in a month, and everyone is relieved, and you have kept your hands off it and lost the case anyway. The bishop asks why the diocese's judicial vicar sent a diocesan case away. You tell him. He says that is a canonist's answer.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "bishop",
+              "delta": -4
+            },
+            {
+              "target": "place",
+              "key": "cases",
+              "delta": -2
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": -1
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "jv_the_priest_case",
+      "phase": [
+        "study"
+      ],
+      "pressure": [
+        "loyalty_vs_honesty",
+        "friendship_vs_duty"
+      ],
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 10,
+      "suppressYears": 3,
+      "once": true,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "office:judicial_vicar",
+          "value": true
+        }
+      ],
+      "title": "The Priest's Case",
+      "body": "{@bishop} brings you a case that is not a marriage: a priest of the diocese, accused of a thing the law names, and the bishop must decide whether the preliminary investigation the law requires is opened, and who conducts it, and he has brought it to the judicial vicar because the law says the judicial vicar is who he brings it to. The priest is {@brother_priest}. You have concelebrated with him a hundred times. The accusation is thin and it is not nothing. The bishop would like your advice by Monday and the law would like it to be right.",
+      "choices": [
+        {
+          "id": "open_it",
+          "label": "Advise him to open the investigation, by the book, and offer to conduct it",
+          "outcome": "You say the law requires it and that you will do it, and you do it, for four months.",
+          "roll": {
+            "chance": 0.55,
+            "stat": "knowledge",
+            "success": {
+              "outcome": "You conduct it as the law says: the accuser heard, the priest heard with his advocate, every page dated. It comes to nothing that the law can act on, and the file says so in a way that will hold if it is ever opened again, and the priest is restored with a letter that says why. He does not forgive you for four months. He tells the presbyterate, years later, that you were fair, which is what he could say.",
+              "effects": [
+                {
+                  "target": "place",
+                  "key": "bishop",
+                  "delta": 8
+                },
+                {
+                  "target": "place",
+                  "key": "priests",
+                  "delta": -4
+                },
+                {
+                  "target": "reputation",
+                  "key": "chancery",
+                  "delta": 5
+                },
+                {
+                  "target": "reputation",
+                  "key": "rome",
+                  "delta": 3
+                },
+                {
+                  "target": "reputation",
+                  "key": "brother_priests",
+                  "delta": -1
+                },
+                {
+                  "target": "relationship",
+                  "key": "@brother_priest",
+                  "delta": -6
+                },
+                {
+                  "target": "stat",
+                  "key": "knowledge",
+                  "delta": 2
+                },
+                {
+                  "target": "trait",
+                  "key": "conducted a preliminary investigation that held"
+                }
+              ]
+            },
+            "failure": {
+              "outcome": "You conduct it, and a thing goes wrong: the accuser's statement taken without a notary present, your error in the first week, and the priest's advocate finds it, and the investigation is voided and begun again by a canonist from the province, and takes a year instead of four months, and the priest is on leave the whole of it. It comes to nothing. He does not forgive the year.",
+              "effects": [
+                {
+                  "target": "place",
+                  "key": "bishop",
+                  "delta": -4
+                },
+                {
+                  "target": "place",
+                  "key": "priests",
+                  "delta": -8
+                },
+                {
+                  "target": "reputation",
+                  "key": "chancery",
+                  "delta": -3
+                },
+                {
+                  "target": "relationship",
+                  "key": "@brother_priest",
+                  "delta": -12
+                },
+                {
+                  "target": "stat",
+                  "key": "knowledge",
+                  "delta": 1
+                },
+                {
+                  "target": "honesty",
+                  "key": "",
+                  "delta": 1
+                }
+              ]
+            }
+          },
+          "effects": [
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "open_it_stranger",
+          "label": "Advise him to open it, and to bring in a canonist who has never met the man",
+          "default": true,
+          "outcome": "He brings in a stranger from the province, on your advice, and the stranger conducts it as the law says, and it comes to nothing, and the priest is restored, and he knows that you advised the investigation and did not conduct it, and reads that the way a man reads it. The bishop says it was the right call. It was. It was also the safe one, and you know which you were making.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "bishop",
+              "delta": 5
+            },
+            {
+              "target": "place",
+              "key": "priests",
+              "delta": -2
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": 0
+            },
+            {
+              "target": "relationship",
+              "key": "@brother_priest",
+              "delta": -4
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "thin",
+          "label": "Tell him the accusation is thin and does not reach the threshold, and say why",
+          "outcome": "You say it, with the canon, and the bishop accepts it, and does not open the investigation, and the priest never knows. It was thin. It was also not nothing, and two years later there is a second accusation, and the first is in the file with your name on the advice, and the bishop, who trusted it, opens the second one himself.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "bishop",
+              "delta": -6
+            },
+            {
+              "target": "place",
+              "key": "priests",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": -5
+            },
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": 2
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": -1
+            },
+            {
+              "target": "flag",
+              "key": "jv:did_not_open",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "jv_the_rota_letter",
+      "phase": [
+        "study"
+      ],
+      "pressure": [
+        "competence",
+        "ambition_vs_integrity"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 10,
+      "suppressYears": 3,
+      "once": true,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "office:judicial_vicar",
+          "value": true
+        }
+      ],
+      "title": "A Letter from the Rota",
+      "body": "The Roman Rota writes, in Latin, about a case of yours it has on appeal, and the letter asks for the acts to be re-sent because the first copy was incomplete, and adds, in the last paragraph, a sentence about the diocese's tribunal that is either a compliment or a warning and that the notary, who reads Latin, says is the first the Rota has written to this diocese in her thirty years. The bishop wants to know what it says. The chancellor wants to know whether Rome is watching. Rome, which is always watching, is.",
+      "flavorPrompt": "A letter from the Roman Rota in Latin, a notary who reads it, a bishop and a chancellor who want to know.",
+      "choices": [
+        {
+          "id": "answer_well",
+          "label": "Answer the Rota as the Rota should be answered: the acts complete, and a letter in Latin",
+          "outcome": "You assemble the acts and write the Rota a letter in a Latin the notary checks twice.",
+          "roll": {
+            "chance": 0.5,
+            "stat": "knowledge",
+            "success": {
+              "outcome": "The Rota answers, months later, with a decision that upholds the sentence and, in a footnote, thanks the tribunal for the completeness of its acts, which the notary has framed. The bishop shows it to the nuncio at the next provincial meeting. A judicial vicar whose tribunal the Rota thanks is a man Rome keeps in a file, and Rome's files are read when sees are empty.",
+              "effects": [
+                {
+                  "target": "place",
+                  "key": "bishop",
+                  "delta": 6
+                },
+                {
+                  "target": "reputation",
+                  "key": "rome",
+                  "delta": 8
+                },
+                {
+                  "target": "reputation",
+                  "key": "bishops",
+                  "delta": 4
+                },
+                {
+                  "target": "reputation",
+                  "key": "chancery",
+                  "delta": 4
+                },
+                {
+                  "target": "record",
+                  "key": "appeals",
+                  "delta": 1
+                },
+                {
+                  "target": "stat",
+                  "key": "knowledge",
+                  "delta": 2
+                },
+                {
+                  "target": "trait",
+                  "key": "a tribunal the Rota thanked in a footnote"
+                }
+              ]
+            },
+            "failure": {
+              "outcome": "The Rota answers with a decision that reverses on a point of procedure in the acts, which were complete and were also, it turns out, out of order, a thing the notary caught too late. The bishop asks what the letter meant. It meant that. Rome's file has the diocese's tribunal in it now, and the entry is short and not warm.",
+              "effects": [
+                {
+                  "target": "place",
+                  "key": "bishop",
+                  "delta": -3
+                },
+                {
+                  "target": "reputation",
+                  "key": "rome",
+                  "delta": -4
+                },
+                {
+                  "target": "reputation",
+                  "key": "chancery",
+                  "delta": -2
+                },
+                {
+                  "target": "record",
+                  "key": "appeals",
+                  "delta": -1
+                },
+                {
+                  "target": "stat",
+                  "key": "knowledge",
+                  "delta": 1
+                }
+              ]
+            },
+            "per": 80
+          },
+          "effects": [
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "send_the_acts",
+          "label": "Send the acts and a courteous line, in English, and let the Rota do its work",
+          "default": true,
+          "outcome": "The acts go and the Rota does its work and upholds the sentence in a year, without a footnote. The bishop is satisfied. The notary is a little disappointed, and says that the last judicial vicar wrote to Rome in Latin, and that Rome noticed. You have answered Rome adequately. Rome remembers adequately for about a year.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 2
+            },
+            {
+              "target": "record",
+              "key": "appeals",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "call_a_friend",
+          "label": "Call the man you knew at the Gregorian who is at the Rota now, and ask what the sentence meant",
+          "requires": [
+            {
+              "type": "flag",
+              "key": "rome_alumnus",
+              "value": true
+            }
+          ],
+          "outcome": "He tells you, in an hour on the phone, what the sentence meant and who wrote it and what would please him, and the acts go with a letter that pleases him, and the Rota upholds and thanks. It was the Roman way. The notary, told, says that is how it is done in Rome and that she has never liked it. Rome's file has your name in it now, and a friend's beside it.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 2
+            },
+            {
+              "target": "place",
+              "key": "bishop",
+              "delta": 3
+            },
+            {
+              "target": "record",
+              "key": "appeals",
+              "delta": 1
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": -1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "jv_the_successor",
+      "phase": [
+        "study"
+      ],
+      "pressure": [
+        "friendship_vs_duty",
+        "competence"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 10,
+      "suppressYears": 3,
+      "once": true,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "office:judicial_vicar",
+          "value": true
+        }
+      ],
+      "title": "The Man You Train",
+      "body": "The tribunal cannot run on one canonist, and in your third year the bishop lets you send a priest for the licentiate, and asks you to choose him: {@closest_classmate}, who asked, and who would be loyal to you and adequate to the law; or a younger man, {@brother_priest}, who did not ask, and who has the mind for it and no patience for the chancery. The one you send will sit in this chair after you. The bishop says it is your call. The notary says, unasked, that the last judicial vicar sent his friend.",
+      "flavorPrompt": "A judicial vicar's office in his third year, two names, a chair that will be someone's after him.",
+      "choices": [
+        {
+          "id": "send_the_mind",
+          "label": "Send the one with the mind, and tell your friend why to his face",
+          "outcome": "You send the younger man and go to your friend's rectory to say so.",
+          "roll": {
+            "chance": 0.5,
+            "stat": "charisma",
+            "success": {
+              "outcome": "Your friend hears it, and it costs the evening, and then he says that he would have sent the same man and would not have come to say so, and pours the second drink. The younger man comes back with the licentiate and the mind and sits in the chair after you, and runs it well, and tells people who trained him. The tribunal outlives you, which is the only thing a judicial vicar builds.",
+              "effects": [
+                {
+                  "target": "place",
+                  "key": "priests",
+                  "delta": 6
+                },
+                {
+                  "target": "place",
+                  "key": "cases",
+                  "delta": 4
+                },
+                {
+                  "target": "relationship",
+                  "key": "@closest_classmate",
+                  "delta": -2
+                },
+                {
+                  "target": "relationship",
+                  "key": "@brother_priest",
+                  "delta": 10
+                },
+                {
+                  "target": "reputation",
+                  "key": "chancery",
+                  "delta": 4
+                },
+                {
+                  "target": "reputation",
+                  "key": "brother_priests",
+                  "delta": 2
+                },
+                {
+                  "target": "trait",
+                  "key": "sent the better man for the licentiate and said so to his friend"
+                }
+              ]
+            },
+            "failure": {
+              "outcome": "Your friend hears it and does not take it well, and the evening ends early, and the presbyterate hears that the judicial vicar passed over the man who asked. The younger man comes back with the licentiate and the mind and no patience, and leaves the chancery for a parish in two years, and the chair goes to a stranger. You chose right and it did not hold, which is a thing that happens to right choices.",
+              "effects": [
+                {
+                  "target": "place",
+                  "key": "priests",
+                  "delta": -4
+                },
+                {
+                  "target": "relationship",
+                  "key": "@closest_classmate",
+                  "delta": -8
+                },
+                {
+                  "target": "relationship",
+                  "key": "@brother_priest",
+                  "delta": 4
+                },
+                {
+                  "target": "reputation",
+                  "key": "brother_priests",
+                  "delta": -2
+                },
+                {
+                  "target": "honesty",
+                  "key": "",
+                  "delta": 1
+                }
+              ]
+            },
+            "per": 80
+          },
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "send_the_friend",
+          "label": "Send your friend; loyalty runs a tribunal as well as brilliance",
+          "default": true,
+          "outcome": "You send him and he comes back with the licentiate and sits in the chair after you, loyal and adequate, and runs it adequately, and the docket grows again in his fourth year, and the metropolitan writes. He does not blame you. The notary, who is retired by then, hears of it and is not surprised.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "priests",
+              "delta": 4
+            },
+            {
+              "target": "relationship",
+              "key": "@closest_classmate",
+              "delta": 10
+            },
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": -1
+            },
+            {
+              "target": "flag",
+              "key": "jv:sent_his_friend",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "send_both",
+          "label": "Ask the bishop for both, and find the money somewhere",
+          "outcome": "He says the diocese cannot afford two, and you find the second licentiate's money in a bequest the finance officer had forgotten, and both go, and both come back, and one sits in the chair and the other runs the province's appellate tribunal ten years on. The bishop says you should have been the finance officer. The notary says the last judicial vicar sent one.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "priests",
+              "delta": 8
+            },
+            {
+              "target": "place",
+              "key": "cases",
+              "delta": 6
+            },
+            {
+              "target": "place",
+              "key": "bishop",
+              "delta": -4
+            },
+            {
+              "target": "relationship",
+              "key": "@closest_classmate",
+              "delta": 6
+            },
+            {
+              "target": "relationship",
+              "key": "@brother_priest",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 2
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

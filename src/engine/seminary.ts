@@ -13,7 +13,7 @@ import { applyEffects } from './effects';
 import type { Rng } from './rng';
 import { gameYearOf, yearStartDay } from './time';
 import { leaveSeminaryClubs } from '@/systems/clubs';
-import { evaluate, formationWeek, nameArchetype, setEmphasis, zeroPillars } from '@/systems/formation';
+import { evaluate, formationWeek, nameArchetype, setEmphasis, zeroPillars, firstFormationYear } from '@/systems/formation';
 import { religiousSummerOptions, summerOptions } from '@/content/seminary';
 import { formationStage } from '@/systems/religious/formation';
 import { renderText } from './text';
@@ -55,10 +55,11 @@ export const SEMINARY_NAMES = [
   'Christ the King Seminary',
 ] as const;
 
-export function freshSeminary(classmateIds: string[], name: string = SEMINARY_NAMES[0]): SeminaryState {
+export function freshSeminary(classmateIds: string[], name: string = SEMINARY_NAMES[0], propaedeutic = true): SeminaryState {
   return {
     name,
-    year: 1,
+    year: propaedeutic ? 1 : 2,
+    ...(propaedeutic ? {} : { propaedeutic: false }),
     emphasis: null,
     pillarScores: zeroPillars(),
     zeroStreak: zeroPillars(),
@@ -77,13 +78,25 @@ export function freshSeminary(classmateIds: string[], name: string = SEMINARY_NA
 }
 
 /** Enter seminary: phase, state, and the first emphasis choice. */
-export function startSeminary(state: GameState, classmateIds: string[], name?: string): GameState {
+export function startSeminary(state: GameState, classmateIds: string[], name?: string, propaedeutic = true): GameState {
+  const seminary = freshSeminary(classmateIds, name, propaedeutic);
   return {
     ...state,
     phase: 'seminary',
-    seminary: freshSeminary(classmateIds, name),
-    mode: { kind: 'year_start', year: 1 },
+    seminary,
+    flags: { ...state.flags, ...houseFlags(state) },
+    mode: { kind: 'year_start', year: seminary.year },
   };
+}
+
+/** The house as flags the scenes can read: how the rector runs it and what the vice-rector is for (generation/formators.ts). */
+export function houseFlags(state: GameState): Record<string, boolean> {
+  const out: Record<string, boolean> = {};
+  for (const n of Object.values(state.npcs)) {
+    if (n.role !== 'formator') continue;
+    for (const t of n.tags) if (t.startsWith('rector:') || t.startsWith('vice_rector:')) out[t] = true;
+  }
+  return out;
 }
 
 /** The absolute week the current or next formation year opens on. */
@@ -136,7 +149,7 @@ export function chooseEmphasis(state: GameState, emphasis: Record<Pillar, number
   }
   // Year one: the formation office asks who he will see, which is presented as an
   // administrative matter and is one of the most consequential choices in the game.
-  if (sem.year === 1 && !next.flags['direction:chosen']) {
+  if (sem.year === firstFormationYear(sem) && !next.flags['direction:chosen']) {
     const offered = offerDirectors(next, rng.derive('directors'));
     next = offered.state;
     if (offered.options.length >= 2) return { ...next, mode: { kind: 'director', options: offered.options } };
@@ -229,9 +242,11 @@ function withLine(entry: GameState['digest'][number] | undefined, line: string) 
 function runEvaluation(state: GameState) {
   const sem = state.seminary!;
   const concernsBefore = Number(state.flags.concerns_at_year_start ?? 0);
+  const rector = Object.values(state.npcs).find((n) => n.status === 'active' && n.tags.includes('rector'));
   return evaluate({
     seminary: sem,
     newConcerns: sem.concerns.slice(concernsBefore),
+    ...(rector ? { rectorRegard: rector.relationship } : {}),
     flags: state.flags,
   });
 }

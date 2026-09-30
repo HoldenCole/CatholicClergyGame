@@ -779,16 +779,25 @@
           }
         },
         {
-          "type": "stat",
-          "key": "theology",
-          "op": ">=",
-          "value": 65
-        },
-        {
           "type": "reputation",
           "key": "chancery",
           "op": ">=",
           "value": 15
+        },
+        {
+          "type": "any",
+          "inner": [
+            {
+              "type": "stat",
+              "key": "theology",
+              "op": ">=",
+              "value": 65
+            },
+            {
+              "type": "credential",
+              "key": "STL"
+            }
+          ]
         }
       ],
       "weight": 30,
@@ -894,7 +903,16 @@
         ],
         "outcome": "You tell {@bishop} that you would be a worse pastor for it. He says that the seminary would have been the better for it and that both things can be true. The rector hires a religious from out of state. The seminarians of the next decade form their theology under a man you have never met."
       },
-      "interest": "seminary_faculty"
+      "interest": "seminary_faculty",
+      "guarantee": {
+        "when": [
+          {
+            "type": "credential",
+            "key": "STL"
+          }
+        ],
+        "withinWeeks": 78
+      }
     },
     {
       "id": "pv_college_adjunct",
@@ -3933,6 +3951,14 @@
             "value": true
           },
           "multiplier": 1.3
+        },
+        {
+          "when": {
+            "type": "flag",
+            "key": "led:nursing_home",
+            "value": true
+          },
+          "multiplier": 1.6
         }
       ],
       "windowWeeks": 3,
@@ -4239,6 +4265,14 @@
             "value": 50
           },
           "multiplier": 1.3
+        },
+        {
+          "when": {
+            "type": "flag",
+            "key": "led:school_teaching",
+            "value": true
+          },
+          "multiplier": 1.4
         }
       ],
       "windowWeeks": 3,
@@ -7312,6 +7346,636 @@
           "multiplier": 1.6
         }
       ]
+    },
+    {
+      "id": "pa_judicial_vicar",
+      "category": "chancery",
+      "phase": [
+        "pastor",
+        "administrator",
+        "parochial_vicar"
+      ],
+      "title": "Judicial Vicar",
+      "body": "{@bishop} asks you to the residence and does not offer dinner, which means it is business he has decided. The judicial vicar is retiring, or is ill, or has been made a bishop somewhere small; he does not say which. He wants you on the third floor of the chancery, in the chair: the tribunal, the marriage cases by the hundred, the sentences in your name, the appeals to the metropolitan, the pastors who call about a wedding on Saturday that the law does not allow and the bishop who calls about a priest the law does not easily remove. It is five years and it is the whole of your week; the parish goes to another man. It is also the one office in the diocese that Rome reads by name, and the men who have held it well have been asked for again.",
+      "from": "@bishop",
+      "requires": [
+        {
+          "type": "credential",
+          "key": "JCL"
+        },
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 6
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "jv_served",
+            "value": true
+          }
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "refused_judicial_vicar",
+            "value": true
+          }
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "office:judicial_vicar",
+            "value": true
+          }
+        },
+        {
+          "type": "reputation",
+          "key": "chancery",
+          "op": ">=",
+          "value": 25
+        },
+        {
+          "type": "any",
+          "inner": [
+            {
+              "type": "flag",
+              "key": "held:office:tribunal",
+              "value": true
+            },
+            {
+              "type": "flag",
+              "key": "office:tribunal",
+              "value": true
+            },
+            {
+              "type": "flag",
+              "key": "tribunal_ready",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "weight": 30,
+      "bias": [
+        {
+          "when": {
+            "type": "stat",
+            "key": "knowledge",
+            "op": ">=",
+            "value": 65
+          },
+          "multiplier": 1.4
+        },
+        {
+          "when": {
+            "type": "flag",
+            "key": "held:office:tribunal",
+            "value": true
+          },
+          "multiplier": 1.6
+        },
+        {
+          "when": {
+            "type": "reputation",
+            "key": "brother_priests",
+            "op": "<=",
+            "value": -1
+          },
+          "multiplier": 0.6
+        }
+      ],
+      "guarantee": {
+        "when": [
+          {
+            "type": "credential",
+            "key": "JCL"
+          },
+          {
+            "type": "flag",
+            "key": "held:office:tribunal",
+            "value": true
+          }
+        ],
+        "withinWeeks": 78
+      },
+      "windowWeeks": 3,
+      "once": true,
+      "cluster": "chancery",
+      "accept": {
+        "effects": [
+          {
+            "target": "flag",
+            "key": "office:judicial_vicar",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "parishioners",
+            "delta": -8
+          },
+          {
+            "target": "reputation",
+            "key": "chancery",
+            "delta": 8
+          },
+          {
+            "target": "reputation",
+            "key": "rome",
+            "delta": 3
+          },
+          {
+            "target": "stat",
+            "key": "piety",
+            "delta": -1
+          }
+        ],
+        "outcome": "The decree names you and the seal is the bishop's. You move to the cathedral rectory and an office on the third floor with a window onto the parking lot and a docket of three hundred cases, forty of them older than your ordination. The first week is a pastor who wants a wedding blessed that cannot be, a woman who has waited four years for a sentence, and the metropolitan's tribunal writing to ask why. The priests of the diocese learn your name in a new way: as the man who says what the law says.",
+        "commitment": {
+          "label": "Judicial vicar",
+          "weeks": 260,
+          "apPerWeek": 0,
+          "onComplete": [
+            {
+              "target": "flag",
+              "key": "jv_served",
+              "value": true
+            },
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": 12
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 15
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 8
+            },
+            {
+              "target": "reputation",
+              "key": "bishops",
+              "delta": 4
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 5
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 3
+            },
+            {
+              "target": "archetype",
+              "key": "administrative",
+              "delta": 5
+            },
+            {
+              "target": "trait",
+              "key": "has signed a thousand sentences"
+            }
+          ],
+          "completeOutcome": "Five years, some thousand sentences, three appeals lost and forty won, two priests removed by a process that held, and a docket the metropolitan stopped writing about. The bishop names your successor, a canonist you trained, and thanks you at the Chrism Mass. Rome has your name in a file it keeps for tribunals that work. The board has a parish for you, and the priests of the diocese greet you with the care of men who have read your sentences.",
+          "away": "judicial_vicar"
+        }
+      },
+      "decline": {
+        "effects": [
+          {
+            "target": "flag",
+            "key": "refused_judicial_vicar",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "chancery",
+            "delta": -6
+          },
+          {
+            "target": "relationship",
+            "key": "@bishop",
+            "delta": -4
+          },
+          {
+            "target": "reputation",
+            "key": "brother_priests",
+            "delta": 2
+          }
+        ],
+        "outcome": "You tell {@bishop} that the licentiate was for the tribunal's afternoons and not for its chair, and that the parish is where you are a priest. He says he expected it and had hoped otherwise, and names a canonist from the next diocese on loan. The presbyterate hears within the week. Some of them are relieved; a canonist who stays in a parish is a canonist who will not be reading their files."
+      }
+    },
+    {
+      "id": "pv_rome_doctorate",
+      "category": "academic",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "title": "The Doctorate",
+      "body": "{@bishop} writes, which he does not often do, to say that the Gregorian has written to him: your licentiate director would take you for the doctorate, two years, the dissertation the licentiate began, and the Casa Santa Maria has a room. He says that the diocese does not need a doctor of theology, and that the conference does, and that the seminary will one day, and that a man who goes back to Rome for a second degree comes home as something the diocese has not had in thirty years. He says it is your decision and that he has already told the Gregorian yes. It is two more years away, and a parish that will not be yours again, and a name that Rome writes down twice.",
+      "from": "@bishop",
+      "requires": [
+        {
+          "type": "credential",
+          "key": "STL"
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "credential",
+            "key": "STD"
+          }
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "rome_doctor",
+            "value": true
+          }
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "refused_doctorate",
+            "value": true
+          }
+        },
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 4
+        },
+        {
+          "type": "reputation",
+          "key": "rome",
+          "op": ">=",
+          "value": 15
+        }
+      ],
+      "weight": 30,
+      "bias": [
+        {
+          "when": {
+            "type": "stat",
+            "key": "theology",
+            "op": ">=",
+            "value": 70
+          },
+          "multiplier": 1.6
+        },
+        {
+          "when": {
+            "type": "flag",
+            "key": "published",
+            "value": true
+          },
+          "multiplier": 1.5
+        },
+        {
+          "when": {
+            "type": "flag",
+            "key": "seminary_faculty",
+            "value": true
+          },
+          "multiplier": 1.4
+        }
+      ],
+      "windowWeeks": 5,
+      "once": true,
+      "cluster": "academic",
+      "final": false,
+      "accept": {
+        "effects": [
+          {
+            "target": "reputation",
+            "key": "parishioners",
+            "delta": -10
+          },
+          {
+            "target": "reputation",
+            "key": "brother_priests",
+            "delta": -4
+          },
+          {
+            "target": "reputation",
+            "key": "rome",
+            "delta": 4
+          },
+          {
+            "target": "stat",
+            "key": "piety",
+            "delta": -1
+          }
+        ],
+        "outcome": "You fly back in October to a room at the Casa with a window on a courtyard and a director who has kept your file. The dissertation is the licentiate's question, asked properly this time, and the two years are the question and a city you already know. The parish sends a card at Christmas signed by the whole council. It is kind and it is a farewell.",
+        "commitment": {
+          "label": "Doctorate in Rome",
+          "weeks": 104,
+          "apPerWeek": 0,
+          "onComplete": [
+            {
+              "target": "credential",
+              "key": "STD"
+            },
+            {
+              "target": "flag",
+              "key": "rome_doctor",
+              "value": true
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 15
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "bishops",
+              "delta": 4
+            },
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 5
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 3
+            },
+            {
+              "target": "archetype",
+              "key": "theological",
+              "delta": 3
+            },
+            {
+              "target": "trait",
+              "key": "defended a doctorate under a fresco"
+            }
+          ],
+          "completeOutcome": "You defend in the room with the fresco, and the examiners are two men who will be cardinals and one who already is, and it passes with the word Rome uses for the ones it will quote. You come home a doctor of theology, which the diocese has not had since the man who is now in Rome permanently. The conference writes within the year. The seminary writes within the month. The parish you left has a pastor and does not need you, and you are not, any longer, entirely a parish priest, and know it.",
+          "away": "rome_std"
+        }
+      },
+      "failure": {
+        "chance": 0.3,
+        "unless": [
+          {
+            "type": "stat",
+            "key": "theology",
+            "op": ">=",
+            "value": 70
+          }
+        ],
+        "effects": [
+          {
+            "target": "flag",
+            "key": "rome_std_washed_out",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "rome",
+            "delta": -6
+          },
+          {
+            "target": "reputation",
+            "key": "chancery",
+            "delta": -4
+          },
+          {
+            "target": "stat",
+            "key": "theology",
+            "delta": 2
+          }
+        ],
+        "outcome": "The dissertation does not finish. The question was the licentiate's and it does not go where a doctorate has to go, and the director says so in the second spring, kindly, and you come home with two years of Rome and no degree, which Rome writes down as carefully as the other thing. The bishop is decent about it. The seminary does not write."
+      },
+      "decline": {
+        "effects": [
+          {
+            "target": "flag",
+            "key": "refused_doctorate",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "rome",
+            "delta": -4
+          },
+          {
+            "target": "relationship",
+            "key": "@bishop",
+            "delta": -3
+          },
+          {
+            "target": "reputation",
+            "key": "parishioners",
+            "delta": 3
+          }
+        ],
+        "outcome": "You write to {@bishop} that the licentiate was for the diocese and the doctorate would be for you, and that you would rather stay a priest of a parish. He answers in a line that says he understands and does not. The Gregorian is told. The director writes once more, a year later, and then not. The parish never knows what it kept."
+      }
+    },
+    {
+      "id": "pv_bishops_theologian",
+      "category": "chancery",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "title": "The Bishop's Theologian",
+      "body": "{@bishop} has a pastoral letter to write on a subject the conference has asked every bishop to write on, and a draft from the chancery that he does not like, and a Roman degree in the diocese that he has not yet used. He asks you to the residence with the draft and a pencil. He would like you to read what he writes before it goes out, from now on: the letters, the answers to Rome, the statement when the paper calls, the conference's documents when they come for comment. It is a chair at a table the diocese did not know it had, and an afternoon a week, and a bishop's mind on loan, which is a thing a man is remembered for by the bishop and resented for by the chancery.",
+      "from": "@bishop",
+      "requires": [
+        {
+          "type": "any",
+          "inner": [
+            {
+              "type": "credential",
+              "key": "STL"
+            },
+            {
+              "type": "credential",
+              "key": "STD"
+            }
+          ]
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "office:bishops_theologian",
+            "value": true
+          }
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "held:office:bishops_theologian",
+            "value": true
+          }
+        },
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 1
+        },
+        {
+          "type": "relationship",
+          "npcId": "@bishop",
+          "op": ">=",
+          "value": 10
+        }
+      ],
+      "weight": 35,
+      "bias": [
+        {
+          "when": {
+            "type": "credential",
+            "key": "STD"
+          },
+          "multiplier": 1.6
+        },
+        {
+          "when": {
+            "type": "flag",
+            "key": "published",
+            "value": true
+          },
+          "multiplier": 1.4
+        },
+        {
+          "when": {
+            "type": "reputation",
+            "key": "chancery",
+            "op": ">=",
+            "value": 30
+          },
+          "multiplier": 1.3
+        }
+      ],
+      "guarantee": {
+        "when": [
+          {
+            "type": "credential",
+            "key": "STL"
+          },
+          {
+            "type": "relationship",
+            "npcId": "@bishop",
+            "op": ">=",
+            "value": 20
+          }
+        ],
+        "withinWeeks": 52
+      },
+      "windowWeeks": 3,
+      "once": true,
+      "cluster": "chancery",
+      "accept": {
+        "effects": [
+          {
+            "target": "flag",
+            "key": "office:bishops_theologian",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "chancery",
+            "delta": 4
+          },
+          {
+            "target": "reputation",
+            "key": "rome",
+            "delta": 2
+          },
+          {
+            "target": "reputation",
+            "key": "parishioners",
+            "delta": -2
+          }
+        ],
+        "outcome": "The first letter goes out with two paragraphs of yours in it and the bishop's name on it, which is the arrangement. The chancellor learns within the week who read the draft and is courteous about it in the way of a man keeping a list. By Advent the bishop calls on Tuesday evenings with a question and rings off when it is answered. It is an afternoon a week and it is, you understand, the whole of how he sees you now.",
+        "commitment": {
+          "label": "The bishop's theologian",
+          "weeks": 156,
+          "apPerWeek": 1,
+          "onComplete": [
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 8
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 3
+            },
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": 8
+            },
+            {
+              "target": "trait",
+              "key": "has read the bishop's letters before the bishop"
+            }
+          ],
+          "completeOutcome": "Three years of letters, one statement to the paper that held, and a comment on a conference document that the conference used without saying whose. The bishop thanks you at a dinner in a sentence the chancellor hears. He keeps calling on Tuesdays. The office is over and the habit is not, which is how a bishop keeps a man.",
+          "weekly": [
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 0.06
+            },
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": 0.04
+            },
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 0.02
+            }
+          ]
+        }
+      },
+      "decline": {
+        "effects": [
+          {
+            "target": "relationship",
+            "key": "@bishop",
+            "delta": -5
+          },
+          {
+            "target": "reputation",
+            "key": "chancery",
+            "delta": -2
+          }
+        ],
+        "outcome": "You say the degree was for the parish's pulpit and not the bishop's desk, and he says that is a good answer and the wrong one, and uses the chancery's draft. He does not ask again. The chancellor is relieved, and says so to the vicar general, who says so to a friend of yours."
+      }
     }
   ]
 }

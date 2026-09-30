@@ -30,6 +30,8 @@ export const ASSIGNMENT = {
   mentorPrestige: 20,
   patron: 12,
   rectorPlan: 16,
+  /** An apostolate led in seminary, where the parish has the same work. */
+  apostolate: 12,
   wary: -10,
   noise: 10,
 } as const;
@@ -169,6 +171,24 @@ export function scoreParish(state: GameState, world: World, parish: Parish, opts
   if ((state.flags['summer:charities'] || state.flags['summer:la_skid_row'] || state.flags['summer:sf_tenderloin'] || state.flags['summer:ny_bronx']) && parish.kind === 'struggling_urban') {
     fit += ASSIGNMENT.summerMission;
     reasons.push('A summer spent where the city is poorest');
+  }
+
+  // The apostolates he led as a seminarian: the board sends a man where he has shown he will go.
+  if (state.flags['led:school_teaching'] && parish.school !== 'none') {
+    fit += ASSIGNMENT.apostolate;
+    reasons.push('You gave a school its retreat once; this parish has a school');
+  }
+  if (state.flags['led:nursing_home'] && parish.generational === 'aging') {
+    fit += ASSIGNMENT.apostolate;
+    reasons.push('The nursing home Sundays, and a parish that is growing old');
+  }
+  if (state.flags['led:soup_kitchen'] && (parish.kind === 'struggling_urban' || parish.kind === 'difficult')) {
+    fit += ASSIGNMENT.apostolate;
+    reasons.push('You kept a kitchen open once; the board remembers where');
+  }
+  if (state.flags['led:respect_life'] && parish.alignment <= -10) {
+    fit += ASSIGNMENT.apostolate;
+    reasons.push('The January bus, and a parish that fills it');
   }
 
   const fitEffective = fit * (1 + c.outspokenness / 100);

@@ -114,12 +114,22 @@ export function formationWeek(state: GameState): GameState {
   return { ...next, character: { ...c, stats }, seminary: { ...sem, pillarScores } };
 }
 
+/** The first year of formation: the propaedeutic year, or philosophy where the seminary runs none. */
+export function firstFormationYear(seminary: Pick<SeminaryState, 'propaedeutic'>): number {
+  return seminary.propaedeutic === false ? 2 : 1;
+}
+
 export interface EvaluationInput {
   seminary: SeminaryState;
   /** Concerns recorded during this year (not carried from earlier years). */
   newConcerns: string[];
   flags: GameState['flags'];
+  /** The rector's relationship with the man, −100..100. His report is the evaluation's last word. */
+  rectorRegard?: number;
 }
+
+/** Where the rector's regard turns an evaluation: a warm rector forgives one weak pillar, a cold one withholds a clean year. */
+export const RECTOR_REPORT = { forgives: 30, withholds: -25 } as const;
 
 const PILLAR_LABEL: Record<Pillar, string> = {
   human: 'human formation',
@@ -151,17 +161,29 @@ export function evaluate(input: EvaluationInput): EvaluationRecord {
   const chronicZero = PILLARS.some((p) => emphasis[p] === 0 && seminary.zeroStreak[p] + 1 >= FORMATION.zeroStreakDismissal);
   const failing = scores[weakest] < FORMATION.failingPillar || total < FORMATION.failingTotal;
 
+  // The first year is forgiven once, whichever year that is; after it the house keeps score.
+  const first = seminary.year === firstFormationYear(seminary);
   let result: EvaluationResult;
-  if (seminary.year >= 2 && (seriousFlag || chronicZero || (failing && seminary.heldBackCount >= 1))) {
+  if (!first && (seriousFlag || chronicZero || (failing && seminary.heldBackCount >= 1))) {
     result = 'DISMISSED';
     notes.push(seriousFlag ? 'The rector has recommended dismissal.' : 'Sustained neglect of formation.');
-  } else if (seminary.year >= 2 && failing) {
+  } else if (!first && failing) {
     result = 'HELD_BACK';
     notes.push('Not ready to advance; the year will be repeated.');
   } else if (notes.length > 0 || flags.candidacy_concern === true) {
     result = 'ADVANCED_WITH_CONCERNS';
+    // The rector's report: one weak pillar and nothing else, and a rector who thinks well of him, is a clean year.
+    const onlyWeak = notes.length === 1 && /^Weak in /.test(notes[0]!) && newConcerns.length === 0 && flags.candidacy_concern !== true;
+    if (onlyWeak && (input.rectorRegard ?? 0) >= RECTOR_REPORT.forgives) {
+      result = 'ADVANCED';
+      notes.push("The rector's report carried the year.");
+    }
     if (flags.candidacy_concern === true && seminary.year === 4) notes.push('Admitted to candidacy with reservations noted.');
-    if (seminary.year === 1 && failing) notes.push('A poor first year, forgiven once.');
+    if (first && failing) notes.push('A poor first year, forgiven once.');
+  } else if ((input.rectorRegard ?? 0) <= RECTOR_REPORT.withholds) {
+    // A clean year the rector will not call clean: his report is cool, and the file reads it.
+    result = 'ADVANCED_WITH_CONCERNS';
+    notes.push("The rector's report was cool.");
   } else {
     result = 'ADVANCED';
   }

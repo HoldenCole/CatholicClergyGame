@@ -27,6 +27,15 @@ const SPECS: FormatorSpec[] = [
     stats: { administration: 25, theology: 15, charisma: 10 },
   },
   {
+    id: 'vice_rector',
+    tag: 'vice_rector',
+    role: 'formator',
+    ageRange: [38, 56],
+    title: () => 'Fr.',
+    alignment: (rng) => rollAlignment(rng, 0, 30),
+    stats: { administration: 22, piety: 10, charisma: 6 },
+  },
+  {
     id: 'spiritual_director',
     tag: 'spiritual_director',
     role: 'formator',
@@ -85,11 +94,26 @@ const SPECS: FormatorSpec[] = [
 ];
 
 /**
+ * How a rector runs his house, and what his vice-rector is for. Rolled apart
+ * from everything else about the man: a warm rector may be a disciplinarian,
+ * a cold one pastoral. The seminary writes these as flags (rector:<style>,
+ * vice_rector:<temper>) for the house scenes to read.
+ */
+export const RECTOR_STYLES = ['pastoral', 'academic', 'disciplinarian'] as const;
+export const VICE_RECTOR_TEMPERS = ['enforcer', 'confidant'] as const;
+export type RectorStyle = (typeof RECTOR_STYLES)[number];
+export type ViceRectorTemper = (typeof VICE_RECTOR_TEMPERS)[number];
+
+/**
  * The seminary faculty and the diocese's nearest officials. The bishop made
  * here is a placeholder that Phase 2's diocese generator replaces.
  */
 export function generateFormators(rng: Rng, entryYear: number, options: { includeBishop?: boolean } = {}): Npc[] {
   const specs = options.includeBishop === false ? SPECS.filter((s) => s.id !== 'bishop') : SPECS;
+  const house = rng.derive('house');
+  const style: RectorStyle = house.pick([...RECTOR_STYLES]);
+  const temper: ViceRectorTemper = house.pick([...VICE_RECTOR_TEMPERS]);
+  const styleTag = (id: string): string[] => (id === 'rector' ? [`rector:${style}`] : id === 'vice_rector' ? [`vice_rector:${temper}`] : []);
   return specs.map((spec) => {
     const age = rng.int(spec.ageRange[0], spec.ageRange[1]);
     const birthYear = entryYear - age;
@@ -103,7 +127,7 @@ export function generateFormators(rng: Rng, entryYear: number, options: { includ
       birthYear,
       origin: rng.pick(CLERGY_ORIGINS),
       stats,
-      tags: [spec.tag],
+      tags: [spec.tag, ...styleTag(spec.id)],
       alignment: spec.alignment(rng),
       relationship: spec.relationship ? rng.int(spec.relationship[0], spec.relationship[1]) : Math.round(rng.gaussian() * 5),
     });

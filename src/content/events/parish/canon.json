@@ -1,0 +1,1707 @@
+{
+  "_notes": "Canon law with teeth (depth round): the cases a canonist is brought, in the parish years. Ids cn_*; gated on the JCL (or the tribunal's afternoons or tribunal_ready for the lighter ones); every one turns on a roll of knowledge. Selectors: @bishop, @brother_priest, @vicar_general, @judicial_vicar (the chancery's judicial vicar, by tag), @province_bishop. Flags written: tribunal_ready (cn_the_petitioner › push_it on success), canon:looked_away, canon:opened_the_drawer, canon:cut_the_process, canon:bishops_counsel. The question that cannot be asked (cn_the_seal_question) is authored only. cn_the_loan_request is a scene about the loan and not the loan itself (systems/loan.ts does that); it is kept from a man who has ever been lent by the flag loan:ever, which the loan system does not yet write, so it may fire beside a real loan.",
+  "events": [
+    {
+      "id": "cn_pastor_wedding",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "pressure": [
+        "loyalty_vs_honesty",
+        "competence"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 12,
+      "suppressYears": 3,
+      "once": true,
+      "requires": [
+        {
+          "type": "any",
+          "inner": [
+            {
+              "type": "credential",
+              "key": "JCL"
+            },
+            {
+              "type": "flag",
+              "key": "office:tribunal",
+              "value": true
+            },
+            {
+              "type": "flag",
+              "key": "tribunal_ready",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "title": "The Wedding on Saturday",
+      "body": "A pastor from across the deanery calls on Tuesday, because you are the canonist he knows, and the problem is a wedding on Saturday: the groom was married before, civilly, at twenty, for a year, to a woman nobody has heard from since, and the pastor did not ask until the rehearsal. There is no annulment. There is no time for one. The family is two hundred people and the hall is paid for. He would like you to tell him there is a way. There is, in the law, sometimes, and there is also the law, and the pastor has known you long enough to ask for the first and not the second.",
+      "flavorPrompt": "A pastor on the phone on Tuesday, a wedding on Saturday, a first marriage nobody asked about.",
+      "choices": [
+        {
+          "id": "find_the_way",
+          "label": "Look for the way: the facts of the first marriage, and what the law allows for them",
+          "outcome": "You take the file home and read the first marriage for what it was in law.",
+          "roll": {
+            "chance": 0.5,
+            "stat": "knowledge",
+            "success": {
+              "outcome": "It was nothing, in law: a Catholic married outside the Church without dispensation, which is a defect of form, which is a decree and not a trial, and the chancellor signs it on Thursday because you walked it up the stairs yourself. The wedding is Saturday. The pastor tells the deanery that you found it. The chancery notes that you found it correctly.",
+              "effects": [
+                {
+                  "target": "reputation",
+                  "key": "brother_priests",
+                  "delta": 4
+                },
+                {
+                  "target": "reputation",
+                  "key": "chancery",
+                  "delta": 3
+                },
+                {
+                  "target": "stat",
+                  "key": "knowledge",
+                  "delta": 1
+                },
+                {
+                  "target": "relationship",
+                  "key": "@brother_priest",
+                  "delta": 4
+                },
+                {
+                  "target": "trait",
+                  "key": "found the defect of form by Thursday"
+                }
+              ]
+            },
+            "failure": {
+              "outcome": "It was a marriage, in law, whatever it was in fact; the first wife was not Catholic and the form does not reach it. You tell the pastor on Wednesday, and he is angry at you for a week and at the law for longer. The wedding is a blessing in the hall on Saturday, which the family does not understand and the groom's mother does. The pastor asks the next canonist next time.",
+              "effects": [
+                {
+                  "target": "reputation",
+                  "key": "brother_priests",
+                  "delta": -2
+                },
+                {
+                  "target": "reputation",
+                  "key": "chancery",
+                  "delta": 2
+                },
+                {
+                  "target": "honesty",
+                  "key": "",
+                  "delta": 1
+                },
+                {
+                  "target": "relationship",
+                  "key": "@brother_priest",
+                  "delta": -3
+                }
+              ]
+            }
+          },
+          "effects": [
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "say_no_now",
+          "label": "Tell him on Tuesday that there is no way, and help him tell the family",
+          "default": true,
+          "outcome": "You say it on Tuesday, plainly, and drive over on Wednesday to sit with him and the couple, and it is a hard hour and an honest one. The wedding becomes a civil one and a promise to come back. Two years later the annulment goes through the tribunal, and you are the one who walks them in. The pastor does not thank you. He sends the next one to you anyway.",
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "look_away",
+          "label": "Tell him it is his parish and his call, and say nothing about the law",
+          "outcome": "He hears what you did not say and marries them on Saturday, and the marriage is invalid, and nobody knows but you and him. It comes back in eleven years, when the couple separates and the wife asks the tribunal why she was never married. You know why. The chancellor asks who the canonist was that the pastor called.",
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": -2
+            },
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": -4
+            },
+            {
+              "target": "flag",
+              "key": "canon:looked_away",
+              "value": true
+            },
+            {
+              "target": "trait",
+              "key": "let a pastor marry a man the law said was married"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cn_the_petitioner",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "pressure": [
+        "loyalty_vs_honesty",
+        "competence"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 11,
+      "suppressYears": 3,
+      "once": true,
+      "requires": [
+        {
+          "type": "any",
+          "inner": [
+            {
+              "type": "credential",
+              "key": "JCL"
+            },
+            {
+              "type": "flag",
+              "key": "office:tribunal",
+              "value": true
+            },
+            {
+              "type": "flag",
+              "key": "tribunal_ready",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "title": "Four Years in the Drawer",
+      "body": "A woman comes to the rectory on a weeknight because someone at the tribunal told her you were a canonist, and she has a case that has been in the tribunal four years without a sentence, and she is going to be married in June whether the Church says so or not, and she would like someone to tell her why. You look at the file the next morning. It is not complicated. It has been in a drawer because the defender of the bond retired and nobody replaced him and the judicial vicar is seventy and does not answer letters. It is not your case. It is your diocese.",
+      "flavorPrompt": "A rectory parlor on a weeknight, a woman with a wedding in June, a file that has been in a drawer for four years.",
+      "choices": [
+        {
+          "id": "push_it",
+          "label": "Walk it up the stairs yourself and ask the judicial vicar why",
+          "outcome": "You go to the third floor with the file and ask the old man, courteously, what is holding it.",
+          "roll": {
+            "chance": 0.5,
+            "stat": "knowledge",
+            "success": {
+              "outcome": "He looks at the file and at you and says, after a while, that nothing is holding it but him, and signs it that afternoon, and asks whether you would take three more like it. You take them. The woman is married in June in the church. The judicial vicar tells the chancellor that the diocese has a canonist who walks up stairs, which is a sentence with a future in it.",
+              "effects": [
+                {
+                  "target": "reputation",
+                  "key": "chancery",
+                  "delta": 4
+                },
+                {
+                  "target": "reputation",
+                  "key": "parishioners",
+                  "delta": 3
+                },
+                {
+                  "target": "stat",
+                  "key": "knowledge",
+                  "delta": 1
+                },
+                {
+                  "target": "relationship",
+                  "key": "@judicial_vicar",
+                  "delta": 6
+                },
+                {
+                  "target": "flag",
+                  "key": "tribunal_ready",
+                  "value": true
+                },
+                {
+                  "target": "trait",
+                  "key": "walked a four-year case up the stairs"
+                }
+              ]
+            },
+            "failure": {
+              "outcome": "He looks at the file and at you and says that the tribunal has its order and that a parish priest does not set it, and that the case will be reached when it is reached. It is reached in September. The woman is married in June in a garden. The judicial vicar remembers the priest who came up the stairs, and the chancellor hears his version.",
+              "effects": [
+                {
+                  "target": "reputation",
+                  "key": "chancery",
+                  "delta": -2
+                },
+                {
+                  "target": "reputation",
+                  "key": "parishioners",
+                  "delta": 2
+                },
+                {
+                  "target": "relationship",
+                  "key": "@judicial_vicar",
+                  "delta": -4
+                },
+                {
+                  "target": "honesty",
+                  "key": "",
+                  "delta": 1
+                }
+              ]
+            }
+          },
+          "effects": [
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "write_to_the_bishop",
+          "label": "Write to the bishop about the drawer, and let him ask",
+          "default": true,
+          "outcome": "You write two pages about the drawer, without her name, and the bishop asks the judicial vicar at the next staff meeting how many cases are older than three years, and the number is forty, and the old man retires at Christmas. The woman is married in June in the church. The presbyterate learns who wrote the letter. Half of them are glad; the other half have cases in the drawer they did not want opened.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 5
+            },
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": 4
+            },
+            {
+              "target": "relationship",
+              "key": "@judicial_vicar",
+              "delta": -8
+            },
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": -2
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            },
+            {
+              "target": "outspokenness",
+              "key": "",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "canon:opened_the_drawer",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "tell_her_the_truth",
+          "label": "Tell her why, and that you cannot move it, and sit with what that does",
+          "outcome": "You tell her about the drawer, and she says thank you for being the first person to say it, and is married in a garden in June, and stops coming to Mass, and comes back four years later when the sentence finally arrives, and asks you to convalidate the marriage, which you do. It was honest. It was also the tribunal's failure worn by a priest who told the truth about it.",
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "pillar",
+              "key": "pastoral",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cn_the_priest_removed",
+      "phase": [
+        "pastor",
+        "administrator"
+      ],
+      "pressure": [
+        "loyalty_vs_honesty",
+        "ambition_vs_integrity"
+      ],
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 10,
+      "suppressYears": 3,
+      "once": true,
+      "requires": [
+        {
+          "type": "credential",
+          "key": "JCL"
+        }
+      ],
+      "title": "The Process",
+      "body": "{@bishop} calls you to the residence because you are the canonist he trusts, and the matter is a pastor: a man who has run his parish into the ground and the parish council into the bishop's office, three times, and who will not go. The bishop would like him gone by Advent. The law has a process for removing a pastor and the process has steps, and a bishop who skips one has a pastor with recourse to Rome and a parish without a pastor for two years while Rome reads it. The bishop knows this. He would like you to tell him the steps are shorter than they are.",
+      "flavorPrompt": "The bishop's study with a personnel file open, a pastor who will not go, a process with more steps than the bishop wants.",
+      "choices": [
+        {
+          "id": "the_whole_process",
+          "label": "Tell him the steps, all of them, and offer to run them",
+          "outcome": "You lay the process out on the table, the whole of it, and say you will carry it.",
+          "roll": {
+            "chance": 0.55,
+            "stat": "knowledge",
+            "success": {
+              "outcome": "You run it, and it takes seven months instead of the bishop's two, and every step is on paper, and the pastor's recourse to Rome fails in a letter that says the diocese did it right. The bishop, who hated every one of the seven months, says at the end that he will never again do it any other way. The presbyterate hears that it was done by the book. Some of them are relieved; the book protects them too.",
+              "effects": [
+                {
+                  "target": "relationship",
+                  "key": "@bishop",
+                  "delta": 7
+                },
+                {
+                  "target": "reputation",
+                  "key": "chancery",
+                  "delta": 6
+                },
+                {
+                  "target": "reputation",
+                  "key": "rome",
+                  "delta": 3
+                },
+                {
+                  "target": "reputation",
+                  "key": "brother_priests",
+                  "delta": 2
+                },
+                {
+                  "target": "stat",
+                  "key": "knowledge",
+                  "delta": 2
+                },
+                {
+                  "target": "stat",
+                  "key": "administration",
+                  "delta": 1
+                },
+                {
+                  "target": "trait",
+                  "key": "ran the process to remove a pastor, and it held"
+                }
+              ]
+            },
+            "failure": {
+              "outcome": "You run it, and a step goes wrong: a letter sent before the consultation the law requires, your error, and the pastor's canonist finds it, and the recourse to Rome succeeds, and the man is back in his parish for a year while the process starts over. The bishop does not blame you in public. In private he asks whether the licentiate covered this. It did. You had not slept.",
+              "effects": [
+                {
+                  "target": "relationship",
+                  "key": "@bishop",
+                  "delta": -4
+                },
+                {
+                  "target": "reputation",
+                  "key": "chancery",
+                  "delta": -3
+                },
+                {
+                  "target": "reputation",
+                  "key": "brother_priests",
+                  "delta": -1
+                },
+                {
+                  "target": "stat",
+                  "key": "knowledge",
+                  "delta": 1
+                },
+                {
+                  "target": "trait",
+                  "key": "ran the process to remove a pastor, and missed a step"
+                }
+              ]
+            },
+            "per": 80
+          },
+          "effects": [
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "shorter",
+          "label": "Tell him what he wants to hear: a shorter way, with a risk",
+          "default": true,
+          "outcome": "You give him the shorter way and the risk in one sentence, and he takes the way and not the risk, and the pastor is gone by Advent and in Rome by Lent, and Rome sends him back in a year with a letter about the diocese's procedures. The bishop does not remember that you named the risk. The chancery does.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": -4
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": -3
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": -1
+            },
+            {
+              "target": "flag",
+              "key": "canon:cut_the_process",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "decline",
+          "label": "Say the bishop needs a canonist who is not this pastor's brother priest, and step back",
+          "outcome": "You say you have concelebrated with the man and would rather not be the one, and the bishop, who respects that or pretends to, brings in a canonist from the province. The process is run, slowly, correctly, by a stranger. The pastor goes in the spring. The bishop does not ask you the next time. He asks the stranger.",
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": -2
+            },
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": -2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cn_the_dispensation",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "pressure": [
+        "competence",
+        "friendship_vs_duty"
+      ],
+      "severity": "NOTABLE",
+      "category": "parish_death",
+      "baseWeight": 11,
+      "suppressYears": 3,
+      "once": true,
+      "requires": [
+        {
+          "type": "any",
+          "inner": [
+            {
+              "type": "credential",
+              "key": "JCL"
+            },
+            {
+              "type": "flag",
+              "key": "office:tribunal",
+              "value": true
+            },
+            {
+              "type": "flag",
+              "key": "tribunal_ready",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "title": "The Dispensation",
+      "body": "A couple in the parish, both in their sixties, both widowed, want to marry, and she is the sister of his late wife, which is nothing in the law any longer and which her family believes is everything, and the family has gone to the chancery and the chancery has sent it back to the parish's canonist, which is you. There is also, in his file, a first marriage before either widowhood that ended in a civil divorce in 1979 and which nobody, including him, has ever thought about. The couple would like to be married at Easter. The family would like the Church to say no.",
+      "flavorPrompt": "Two files from the nineteen-seventies on a rectory desk, a couple in their sixties, a family that wants the Church to say no.",
+      "choices": [
+        {
+          "id": "read_the_files",
+          "label": "Read both files properly, and say what the law says to everyone at once",
+          "outcome": "You spend a week on two files from the seventies and call a meeting of everyone who cares.",
+          "roll": {
+            "chance": 0.55,
+            "stat": "knowledge",
+            "success": {
+              "outcome": "The sister is no impediment and the 1979 marriage was before his baptism, which the law reads its own way, and you say both things in one meeting to the couple and the family and the chancery's letter, and the family, who wanted the Church to say no, hears the Church say yes with the reasons attached, which is harder to argue with. They marry at Easter. The chancellor writes to thank you for the meeting, which nobody has ever done.",
+              "effects": [
+                {
+                  "target": "reputation",
+                  "key": "parishioners",
+                  "delta": 4
+                },
+                {
+                  "target": "reputation",
+                  "key": "chancery",
+                  "delta": 4
+                },
+                {
+                  "target": "stat",
+                  "key": "knowledge",
+                  "delta": 1
+                },
+                {
+                  "target": "stat",
+                  "key": "charisma",
+                  "delta": 1
+                },
+                {
+                  "target": "trait",
+                  "key": "settled a family’s canon law in one meeting"
+                }
+              ]
+            },
+            "failure": {
+              "outcome": "You miss the baptism date in the 1979 file and tell the couple they need an annulment they do not need, and they wait a year for it, and the family enjoys the year. The tribunal finds the error and sends it back with a note. They marry the next Easter. You apologize to the couple, which they accept, and to the tribunal, which files it.",
+              "effects": [
+                {
+                  "target": "reputation",
+                  "key": "parishioners",
+                  "delta": -2
+                },
+                {
+                  "target": "reputation",
+                  "key": "chancery",
+                  "delta": -2
+                },
+                {
+                  "target": "stat",
+                  "key": "knowledge",
+                  "delta": 1
+                },
+                {
+                  "target": "honesty",
+                  "key": "",
+                  "delta": 1
+                }
+              ]
+            }
+          },
+          "effects": [
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "send_it_up",
+          "label": "Send both files to the tribunal and let the third floor decide",
+          "default": true,
+          "outcome": "The tribunal takes six months and decides what you could have decided in a week, and the couple marry in the autumn, and the family has had six months to say what it thinks. The chancellor notes that the parish's canonist sent a dispensation case upstairs. It is not a mark against you. It is not a mark for you either.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": -1
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "pastoral_first",
+          "label": "Marry them at Easter on what is plainly true, and sort the file after",
+          "outcome": "You read the file for what is plainly true, which is enough, and marry them at Easter, and sort the 1979 marriage in the summer with a decree that says what you already knew. The family is furious and comes to Mass anyway. The tribunal, told after, says you were right and should have asked first, in that order.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": -1
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "outspokenness",
+              "key": "",
+              "delta": 1
+            },
+            {
+              "target": "pillar",
+              "key": "pastoral",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cn_the_school_contract",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "pressure": [
+        "competence",
+        "money"
+      ],
+      "severity": "NOTABLE",
+      "category": "admin",
+      "baseWeight": 10,
+      "suppressYears": 3,
+      "once": true,
+      "requires": [
+        {
+          "type": "any",
+          "inner": [
+            {
+              "type": "credential",
+              "key": "JCL"
+            },
+            {
+              "type": "flag",
+              "key": "office:tribunal",
+              "value": true
+            },
+            {
+              "type": "flag",
+              "key": "tribunal_ready",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "title": "What the Contract Says",
+      "body": "The parish school's teacher contract has a morality clause, and a teacher has done a thing the clause names, and the principal wants her gone and the parents are divided and the diocese's lawyer says one thing and the diocese's canon lawyer, who is you because the chancellor asked, is expected to say another. The civil law and the canon law are not the same law. The teacher has a union. The parish has a bishop. Everyone would like a memo by Friday, and everyone would like it to say what they already think.",
+      "flavorPrompt": "A contract with a morality clause, a teacher with a union, two lawyers who disagree and a memo due Friday.",
+      "choices": [
+        {
+          "id": "write_the_memo",
+          "label": "Write the memo: what the canons say, what the contract says, where they part",
+          "outcome": "You write four pages, careful ones, about two laws that do not quite meet.",
+          "roll": {
+            "chance": 0.5,
+            "stat": "knowledge",
+            "success": {
+              "outcome": "The memo is used. It says that the clause is enforceable in canon law and doubtful in civil, and that the diocese should offer the teacher a settlement rather than a hearing, and the bishop does, and she takes it, and the school goes on. The diocesan lawyer, who expected to fight you, asks whether you would read his next one. The chancellor keeps the memo as a template.",
+              "effects": [
+                {
+                  "target": "reputation",
+                  "key": "chancery",
+                  "delta": 5
+                },
+                {
+                  "target": "reputation",
+                  "key": "public",
+                  "delta": 1
+                },
+                {
+                  "target": "stat",
+                  "key": "knowledge",
+                  "delta": 1
+                },
+                {
+                  "target": "stat",
+                  "key": "administration",
+                  "delta": 1
+                },
+                {
+                  "target": "trait",
+                  "key": "wrote the memo the chancery kept"
+                }
+              ]
+            },
+            "failure": {
+              "outcome": "The memo is used against you: it is careful where the bishop wanted certainty, and the parents quote its doubts in the paper, and the teacher's union quotes them in court, and the diocese settles for more than it would have. The bishop says the memo was honest. The chancellor says it was long. You have learned what a memo is for, which is not honesty alone.",
+              "effects": [
+                {
+                  "target": "reputation",
+                  "key": "chancery",
+                  "delta": -3
+                },
+                {
+                  "target": "reputation",
+                  "key": "public",
+                  "delta": -2
+                },
+                {
+                  "target": "honesty",
+                  "key": "",
+                  "delta": 1
+                },
+                {
+                  "target": "stat",
+                  "key": "knowledge",
+                  "delta": 1
+                }
+              ]
+            }
+          },
+          "effects": [
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "say_it_is_civil",
+          "label": "Tell the chancellor it is a civil matter and a canonist has nothing to add",
+          "default": true,
+          "outcome": "You say so, and the chancellor accepts it, and the diocese's lawyer handles it, and it goes the way those go, with a settlement and a story in the paper. You have kept out of it. The chancellor notes that the diocese's canonist kept out of the one case that year where the two laws met, which is the case a canonist is for.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": -2
+            },
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": 0
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "see_the_teacher",
+          "label": "Go and see the teacher before you write anything",
+          "outcome": "You see her, which nobody else has thought to do, and the memo you write afterward is shorter and says what she will accept, and the diocese offers it, and she takes it, and nobody goes to court. The bishop does not learn that you went. The principal does, and does not forgive it, and the teacher writes to you at Christmas for a decade.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 3
+            },
+            {
+              "target": "pillar",
+              "key": "pastoral",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cn_the_appeal",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "pressure": [
+        "competence",
+        "ambition_vs_integrity"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 10,
+      "suppressYears": 3,
+      "once": true,
+      "requires": [
+        {
+          "type": "any",
+          "inner": [
+            {
+              "type": "credential",
+              "key": "JCL"
+            },
+            {
+              "type": "flag",
+              "key": "office:tribunal",
+              "value": true
+            },
+            {
+              "type": "flag",
+              "key": "tribunal_ready",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "title": "The Appeal to the Metropolitan",
+      "body": "A sentence you helped draft has been appealed to the metropolitan's tribunal, which is what appeals are for, and the metropolitan's judicial vicar has written to ask, in the formal way, for the reasoning behind one paragraph, which was yours. The paragraph is right. It is also written in the tone of a man who was sure, and the metropolitan's tribunal does not like sure. The judicial vicar at home would like you to answer it, since you wrote it, and would like the answer to be humble and the paragraph to stand.",
+      "flavorPrompt": "A letter from the metropolitan's tribunal about one paragraph, a judicial vicar who wants it defended humbly.",
+      "choices": [
+        {
+          "id": "defend_it",
+          "label": "Answer it: the reasoning, in full, in a tone the metropolitan will read",
+          "outcome": "You write the reasoning out in full, and rewrite the tone three times, until it is a letter the metropolitan's tribunal will read to the end.",
+          "roll": {
+            "chance": 0.5,
+            "stat": "knowledge",
+            "success": {
+              "outcome": "The paragraph stands. The metropolitan's tribunal upholds the sentence and, in its own decree, borrows a sentence of yours, which is the highest thing a tribunal does for another. The judicial vicar at home shows it to the bishop. The metropolitan's canonist remembers the name, which in a province of six sees is how a canonist becomes known beyond one.",
+              "effects": [
+                {
+                  "target": "reputation",
+                  "key": "chancery",
+                  "delta": 4
+                },
+                {
+                  "target": "reputation",
+                  "key": "bishops",
+                  "delta": 4
+                },
+                {
+                  "target": "reputation",
+                  "key": "rome",
+                  "delta": 2
+                },
+                {
+                  "target": "stat",
+                  "key": "knowledge",
+                  "delta": 2
+                },
+                {
+                  "target": "trait",
+                  "key": "a paragraph the metropolitan’s tribunal borrowed"
+                }
+              ]
+            },
+            "failure": {
+              "outcome": "The paragraph falls. The metropolitan's tribunal reverses on it, in a decree that is polite and exact about what the paragraph assumed, and the case goes back to the beginning, and the couple who waited two years wait two more. The judicial vicar at home says it happens. It does. It has happened to you, with your name on it, in the province's file.",
+              "effects": [
+                {
+                  "target": "reputation",
+                  "key": "chancery",
+                  "delta": -3
+                },
+                {
+                  "target": "reputation",
+                  "key": "bishops",
+                  "delta": -2
+                },
+                {
+                  "target": "stat",
+                  "key": "knowledge",
+                  "delta": 1
+                },
+                {
+                  "target": "honesty",
+                  "key": "",
+                  "delta": 1
+                }
+              ]
+            },
+            "per": 80
+          },
+          "effects": [
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "concede",
+          "label": "Concede the paragraph and rewrite it, before the metropolitan rules",
+          "default": true,
+          "outcome": "You write to say the paragraph was overstated and offer a narrower one, and the metropolitan's tribunal accepts the narrower one and upholds the sentence on it, and the case ends. The judicial vicar at home is relieved and a little disappointed. The metropolitan's canonist notes a man who conceded before he was made to, which reads two ways and, in that office, usually reads well.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "bishops",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 1
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "let_the_jv_answer",
+          "label": "Ask the judicial vicar to answer it himself; it is his sentence",
+          "outcome": "He answers it, in his own tone, which is worse than yours, and the metropolitan reverses, and the case goes back, and the judicial vicar says nothing to you about it and something to the chancellor. You have kept your name out of the province's file. You have put it in the chancery's, under a heading you did not choose.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": -3
+            },
+            {
+              "target": "relationship",
+              "key": "@judicial_vicar",
+              "delta": -5
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cn_the_consult",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "pressure": [
+        "loyalty_vs_honesty",
+        "ambition_vs_integrity"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 10,
+      "suppressYears": 3,
+      "once": true,
+      "requires": [
+        {
+          "type": "credential",
+          "key": "JCL"
+        }
+      ],
+      "title": "The Bishop's Question",
+      "body": "{@bishop} calls on a Sunday night, which he does not do, and the question is canonical and it is about himself: a thing he is being asked to sign by the conference, or by Rome, or by a donor, and he wants to know whether he can, in law, and whether he should, in prudence, and he has called the canonist he knows rather than the chancellor because the chancellor will tell the vicar general. It is the first time a bishop has asked you a question whose answer he will act on that night. He is waiting.",
+      "flavorPrompt": "A bishop on the phone on a Sunday night with a question about himself, waiting.",
+      "choices": [
+        {
+          "id": "answer",
+          "label": "Answer him: the law first, the prudence second, and the difference clearly",
+          "outcome": "You give him the law and then your own judgment, and make sure he can tell which is which.",
+          "roll": {
+            "chance": 0.55,
+            "stat": "knowledge",
+            "success": {
+              "outcome": "He can, in law, and should not, in prudence, and you say both, and he does not sign, and in six months the thing he did not sign is in the papers with three other bishops' names on it and not his. He does not thank you. He calls again, on another Sunday, with another question, which is the thanks.",
+              "effects": [
+                {
+                  "target": "relationship",
+                  "key": "@bishop",
+                  "delta": 8
+                },
+                {
+                  "target": "reputation",
+                  "key": "chancery",
+                  "delta": 4
+                },
+                {
+                  "target": "reputation",
+                  "key": "bishops",
+                  "delta": 2
+                },
+                {
+                  "target": "stat",
+                  "key": "knowledge",
+                  "delta": 1
+                },
+                {
+                  "target": "flag",
+                  "key": "canon:bishops_counsel",
+                  "value": true
+                },
+                {
+                  "target": "trait",
+                  "key": "the canonist the bishop calls on Sunday nights"
+                }
+              ]
+            },
+            "failure": {
+              "outcome": "You answer the law and get it half right, which he learns on Tuesday from the chancellor, who tells the vicar general, who tells everyone. He signs anyway, on the chancellor's reading, and it is fine. He does not call on a Sunday again. You have learned that a bishop's question is an examination, and that there is no resitting it.",
+              "effects": [
+                {
+                  "target": "relationship",
+                  "key": "@bishop",
+                  "delta": -3
+                },
+                {
+                  "target": "reputation",
+                  "key": "chancery",
+                  "delta": -3
+                },
+                {
+                  "target": "stat",
+                  "key": "knowledge",
+                  "delta": 1
+                },
+                {
+                  "target": "honesty",
+                  "key": "",
+                  "delta": 1
+                }
+              ]
+            },
+            "per": 80
+          },
+          "effects": [
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "ask_for_the_morning",
+          "label": "Ask him for the morning to read it properly, and read it",
+          "default": true,
+          "outcome": "He gives you the morning and you read it, and the answer on Monday is right and complete and comes with a page he can keep. He signs, or does not; it is his. He has learned that you will not answer a bishop off the top of your head, which some bishops want and this one, it turns out, prefers.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "send_him_to_the_chancellor",
+          "label": "Tell him this is the chancellor's to answer, and that you will not go round him",
+          "outcome": "He says of course, and calls the chancellor, and the chancellor tells the vicar general, and the question is answered by committee on Wednesday. The bishop respects the answer. He does not call the canonist again. You have kept a rule of the building at the cost of a door that was open on a Sunday night.",
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 2
+            },
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": -2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cn_the_parish_closing",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "pressure": [
+        "loyalty_vs_honesty",
+        "competence"
+      ],
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 10,
+      "suppressYears": 3,
+      "once": true,
+      "requires": [
+        {
+          "type": "credential",
+          "key": "JCL"
+        }
+      ],
+      "title": "The Decree of Suppression",
+      "body": "The diocese is closing a parish in the next deanery and has written the decree badly: the consultation of the presbyteral council was a phone call, the reasons in the decree are three sentences, and the parishioners have a canon lawyer from out of state and a recourse to Rome drafted before the ink dried. The vicar general, who wrote it, has been told by the bishop to fix it and has called you, because a canonist who is not in the chancery can say what the chancery cannot hear from itself.",
+      "flavorPrompt": "A decree of suppression written in three sentences, a parish with a canon lawyer, a vicar general who needs it fixed.",
+      "choices": [
+        {
+          "id": "rewrite_it",
+          "label": "Rewrite the decree properly, consultation and reasons and all, and let it be done again",
+          "outcome": "You tell the vicar general it must be done over, and do it over with him.",
+          "roll": {
+            "chance": 0.5,
+            "stat": "knowledge",
+            "success": {
+              "outcome": "It is done over: the council consulted in a meeting with minutes, the reasons on four pages, the decree in the form Rome reads, and the recourse fails in Rome eight months later on the strength of a paragraph about the reasons. The parish closes. The parishioners hate the diocese and, oddly, not you; their canon lawyer tells them you were the only one who read the law. The vicar general owes you something and knows it.",
+              "effects": [
+                {
+                  "target": "reputation",
+                  "key": "chancery",
+                  "delta": 5
+                },
+                {
+                  "target": "reputation",
+                  "key": "rome",
+                  "delta": 3
+                },
+                {
+                  "target": "relationship",
+                  "key": "@vicar_general",
+                  "delta": 6
+                },
+                {
+                  "target": "stat",
+                  "key": "knowledge",
+                  "delta": 2
+                },
+                {
+                  "target": "trait",
+                  "key": "rewrote a decree of suppression so that it held in Rome"
+                }
+              ]
+            },
+            "failure": {
+              "outcome": "It is done over and a thing is still wrong: the council's minutes are dated after the decree, a clerk's error you did not catch, and the recourse succeeds in Rome on it, and the parish stays open a year and closes the next with a third decree. The vicar general does not blame you aloud. The parishioners' lawyer sends you a Christmas card that is not friendly.",
+              "effects": [
+                {
+                  "target": "reputation",
+                  "key": "chancery",
+                  "delta": -2
+                },
+                {
+                  "target": "reputation",
+                  "key": "rome",
+                  "delta": -2
+                },
+                {
+                  "target": "relationship",
+                  "key": "@vicar_general",
+                  "delta": -2
+                },
+                {
+                  "target": "stat",
+                  "key": "knowledge",
+                  "delta": 1
+                }
+              ]
+            }
+          },
+          "effects": [
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "patch_it",
+          "label": "Patch the decree with a supplementary letter and hope Rome reads the whole file",
+          "default": true,
+          "outcome": "You write the supplement and it goes up with the decree and the recourse, and Rome, which reads everything, reads the patch as a patch and sends the decree back to be done again. The parish stays open a year. The vicar general says you did what could be done in the time, which is true and is not what he says to the bishop.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 0
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": -1
+            },
+            {
+              "target": "relationship",
+              "key": "@vicar_general",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "side_with_the_parish",
+          "label": "Tell the vicar general the parish has a case, and that you will not help him beat it",
+          "outcome": "You say it, and mean it, and the vicar general finds another canonist, and the recourse succeeds anyway, and the parish stays open and knows who would not help close it. The chancery knows too. It is a small parish and a long memory, on both sides.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": -6
+            },
+            {
+              "target": "relationship",
+              "key": "@vicar_general",
+              "delta": -6
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            },
+            {
+              "target": "outspokenness",
+              "key": "",
+              "delta": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cn_the_seal_question",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "pressure": [
+        "friendship_vs_duty",
+        "loyalty_vs_honesty"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 9,
+      "suppressYears": 3,
+      "once": true,
+      "requires": [
+        {
+          "type": "credential",
+          "key": "JCL"
+        }
+      ],
+      "title": "The Question That Cannot Be Asked",
+      "body": "A brother priest, {@brother_priest}, comes to the rectory at night with a canonical question he cannot ask the tribunal because the tribunal is the chancery and the question is about himself: a thing he did, years ago, that may or may not have been an irregularity for orders, and that nobody knows, and that he has carried since. He wants to know whether he was validly ordained. He wants a canonist and not a confessor, and you are the one he trusts to be the first without becoming the second.",
+      "choices": [
+        {
+          "id": "answer_as_canonist",
+          "label": "Answer as a canonist, precisely, and only that",
+          "outcome": "You take the question as a question of law, and answer it as one.",
+          "roll": {
+            "chance": 0.55,
+            "stat": "knowledge",
+            "success": {
+              "outcome": "It was not an irregularity; it was close, and it was not, and you can show him the canon and the commentary, and he reads them at your kitchen table and puts his head in his hands. He has been a priest for fourteen years and has been sure for eleven of them that he was not. You have given a man his priesthood back with a book. He does not speak of it again. He would go through a wall for you.",
+              "effects": [
+                {
+                  "target": "relationship",
+                  "key": "@brother_priest",
+                  "delta": 15
+                },
+                {
+                  "target": "reputation",
+                  "key": "brother_priests",
+                  "delta": 3
+                },
+                {
+                  "target": "stat",
+                  "key": "knowledge",
+                  "delta": 1
+                },
+                {
+                  "target": "stat",
+                  "key": "piety",
+                  "delta": 1
+                },
+                {
+                  "target": "trait",
+                  "key": "told a brother priest, from the canons, that he was a priest"
+                }
+              ]
+            },
+            "failure": {
+              "outcome": "It was close enough that you cannot say, honestly, and you say so, and he hears the one thing he could not bear, which is that a canonist does not know. He goes to Rome on his own, quietly, a year later, and comes back with a rescript that says what you could not. He is grateful for the honesty. He is not the same with you.",
+              "effects": [
+                {
+                  "target": "relationship",
+                  "key": "@brother_priest",
+                  "delta": -2
+                },
+                {
+                  "target": "honesty",
+                  "key": "",
+                  "delta": 2
+                },
+                {
+                  "target": "stat",
+                  "key": "knowledge",
+                  "delta": 1
+                },
+                {
+                  "target": "stat",
+                  "key": "piety",
+                  "delta": 1
+                }
+              ]
+            },
+            "per": 80
+          },
+          "effects": [
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "send_him_to_rome",
+          "label": "Tell him the only answer that will hold is Rome's, and help him write to it",
+          "default": true,
+          "outcome": "You write the petition with him at the kitchen table, without his name in your hand, and it goes to the dicastery, and the rescript comes in nine months and says he was ordained. He frames it. He tells no one it was you. He tells the bishop, years later, that you are the canonist he would trust with his life, without saying why.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@brother_priest",
+              "delta": 10
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 1
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "refuse",
+          "label": "Say you cannot be his canonist and his brother at once, and send him to a stranger",
+          "outcome": "You say it kindly and he goes to a canonist in another diocese, who answers him, and he is fine. He does not come to the rectory at night again. You kept a line. It was a real line and it cost a real thing, and the presbyterate, which knows nothing of this, knows somehow that he stopped coming.",
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            },
+            {
+              "target": "relationship",
+              "key": "@brother_priest",
+              "delta": -6
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cn_the_loan_request",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "pressure": [
+        "ambition_vs_integrity"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 8,
+      "suppressYears": 3,
+      "once": true,
+      "requires": [
+        {
+          "type": "credential",
+          "key": "JCL"
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "loan:ever",
+            "value": true
+          }
+        }
+      ],
+      "title": "The Diocese Next Door",
+      "body": "A bishop of the province, {@province_bishop}, has written to yours to ask for the loan of a canonist for two years, because his tribunal has none, and yours has named you, because you are the one who can be spared or the one who should be seen, and has asked you before answering. It is two years in another chancery, a different bishop's desk, and a name known in two dioceses instead of one. It is also two years away from the parish that has just begun to trust you, and a return that will not be to it.",
+      "flavorPrompt": "A letter from a bishop of the province asking for a canonist, and a bishop at home asking first.",
+      "choices": [
+        {
+          "id": "go",
+          "label": "Say yes, and go where the province is short",
+          "outcome": "You say yes, and the loan is arranged, and the province learns your name.",
+          "roll": {
+            "chance": 0.55,
+            "stat": "administration",
+            "success": {
+              "outcome": "The two years are good: a tribunal built from a filing cabinet, a bishop who is grateful in the particular way of a man who was in trouble with Rome about his docket, and a name that the province's canonists now use when they mean a man who will come. You come home to a parish you did not choose and a chancery that has been asked about you by another bishop, twice.",
+              "effects": [
+                {
+                  "target": "reputation",
+                  "key": "bishops",
+                  "delta": 6
+                },
+                {
+                  "target": "reputation",
+                  "key": "chancery",
+                  "delta": 4
+                },
+                {
+                  "target": "reputation",
+                  "key": "rome",
+                  "delta": 2
+                },
+                {
+                  "target": "stat",
+                  "key": "knowledge",
+                  "delta": 2
+                },
+                {
+                  "target": "relationship",
+                  "key": "@province_bishop",
+                  "delta": 8
+                },
+                {
+                  "target": "trait",
+                  "key": "built a tribunal for the diocese next door"
+                }
+              ]
+            },
+            "failure": {
+              "outcome": "The two years are hard: the tribunal is a filing cabinet and stays one, the bishop who asked for you is moved in the first year and his successor did not ask for you, and you come home with a name in the province and a parish that has forgotten yours. The chancery is polite about it. The province's canonists remember that you went, which is something, and that it did not take, which is something else.",
+              "effects": [
+                {
+                  "target": "reputation",
+                  "key": "bishops",
+                  "delta": 2
+                },
+                {
+                  "target": "reputation",
+                  "key": "chancery",
+                  "delta": 0
+                },
+                {
+                  "target": "reputation",
+                  "key": "parishioners",
+                  "delta": -3
+                },
+                {
+                  "target": "stat",
+                  "key": "knowledge",
+                  "delta": 1
+                },
+                {
+                  "target": "relationship",
+                  "key": "@province_bishop",
+                  "delta": 2
+                }
+              ]
+            }
+          },
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "bishops",
+              "delta": 3
+            }
+          ]
+        },
+        {
+          "id": "stay",
+          "label": "Say no; the parish has just begun to trust you, and it should not be taught otherwise",
+          "default": true,
+          "outcome": "The bishop accepts it and lends a younger man, and the parish keeps you and does not know what it kept. The province's bishop writes a courteous line about the diocese's generosity that does not mention you. The chancery notes that a canonist declined the province. It notes it lightly.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "bishops",
+              "delta": -2
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": -1
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "one_year",
+          "label": "Offer one year instead of two, and let the bishops settle it",
+          "outcome": "The bishops settle on eighteen months, which is what bishops do with one and two, and you go, and it is enough to set a tribunal on its feet and not enough to be missed when you leave. The parish is kept for you by a good vicar. The province learns your name as a man who negotiates, which is a name with two edges.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "bishops",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": -1
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            },
+            {
+              "target": "outspokenness",
+              "key": "",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

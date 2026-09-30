@@ -1,0 +1,1957 @@
+{
+  "_notes": "The apostolates (depth round): what a seminarian volunteers for outside the house. content/clubs/seminary.json defines four with kind 'apostolate' (respect_life, school_teaching, nursing_home, soup_kitchen); joining makes the layperson who runs the work (systems/clubs.ts, tags contact:<id>, selector @contact:<id>), thirty weeks earns apostolate:<id>:veteran, and the leadership letter sem_lead_<id> (offers/seminary.json, guaranteed) writes led:<id> and apostolate_leader, which standing, the first posting (assignment.ts), and two parish offers read. Three scenes each here, gated on club:<id>, all turning on a roll. Flags written: noticed_by_bishop (ap_rl_the_speech › speak on success, ap_nh_the_bishop_visit › say_yes on success). The girl at the door and the man in the storeroom are authored only.",
+  "events": [
+    {
+      "id": "ap_rl_vigil",
+      "phase": "seminary",
+      "yearGate": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "pressure": [
+        "belief_vs_safety",
+        "competence"
+      ],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 13,
+      "suppressYears": 3,
+      "once": true,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "club:respect_life",
+          "value": true
+        }
+      ],
+      "title": "The Sidewalk",
+      "body": "The group keeps a prayer vigil on the sidewalk across from the clinic on the first Saturday of the month, and {@contact:respect_life} has asked you to lead the rosary this time, which means standing at the front of forty people with a microphone the size of a fist. Halfway through the third decade a man crosses the street from the clinic side and stands very close to you and begins, quietly and then not quietly, to tell you what he thinks of priests. He is not drunk. He has a reason, and it is in his voice. The forty people behind you have stopped praying. {@contact:respect_life} is watching you and not moving, because she has decided that this is yours.",
+      "flavorPrompt": "A sidewalk across from a clinic on a Saturday morning, forty people with rosaries, one man with a reason.",
+      "choices": [
+        {
+          "id": "keep_praying",
+          "label": "Keep praying, lower, and let him say it",
+          "outcome": "You go on with the decade in a voice pitched under his, and let him say what he came to say.",
+          "roll": {
+            "chance": 0.55,
+            "stat": "piety",
+            "success": {
+              "outcome": "He says it, all of it, and it takes the rest of the decade, and when he stops the forty people are praying again and so, in a way, is he: he stands there through the Salve and goes back across the street without a word. {@contact:respect_life} says afterward that she has seen men argue with that man and men run from him and never seen anyone pray through him. The story goes round the group and then the chancery.",
+              "effects": [
+                {
+                  "target": "relationship",
+                  "key": "@contact:respect_life",
+                  "delta": 6
+                },
+                {
+                  "target": "stat",
+                  "key": "piety",
+                  "delta": 1
+                },
+                {
+                  "target": "pillar",
+                  "key": "spiritual",
+                  "delta": 2
+                },
+                {
+                  "target": "reputation",
+                  "key": "public",
+                  "delta": 2
+                },
+                {
+                  "target": "trait",
+                  "key": "prayed the rosary through a man shouting at him on the sidewalk"
+                }
+              ]
+            },
+            "failure": {
+              "outcome": "He says it, and you lose the decade, and the forty people behind you are watching you and not praying, and a woman in the front row starts to argue with him, and it becomes what the group has spent twenty years not becoming. {@contact:respect_life} steps in and ends it, kindly, and the man goes. She says nothing to you about it. She says something to the group the next Thursday about what a vigil is for.",
+              "effects": [
+                {
+                  "target": "relationship",
+                  "key": "@contact:respect_life",
+                  "delta": -2
+                },
+                {
+                  "target": "pillar",
+                  "key": "human",
+                  "delta": -1
+                },
+                {
+                  "target": "stat",
+                  "key": "piety",
+                  "delta": 1
+                }
+              ]
+            }
+          },
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "talk_to_him",
+          "label": "Hand the microphone to someone and talk to him, away from the line",
+          "default": true,
+          "outcome": "You give the rosary to the woman beside you and walk him ten yards down the sidewalk and listen. It is about his sister, and it was thirty years ago, and nobody has listened to it since. It takes twenty minutes. He does not change his mind about anything. He shakes your hand. {@contact:respect_life} watches from the line and says afterward that she would not have done that and that she is glad you did.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@contact:respect_life",
+              "delta": 4
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "pillar",
+              "key": "pastoral",
+              "delta": 2
+            },
+            {
+              "target": "pillar",
+              "key": "human",
+              "delta": 1
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "call_it",
+          "label": "End the vigil early and get the people to the cars",
+          "outcome": "You end it after the third decade and the group goes to the cars, quietly, and the man stands on the sidewalk alone and then goes. It was the safe thing. {@contact:respect_life} says so, in the tone of a woman who did not want the safe thing, and the group prays the last two decades in the parking lot without you.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@contact:respect_life",
+              "delta": -4
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            },
+            {
+              "target": "pillar",
+              "key": "human",
+              "delta": -1
+            },
+            {
+              "target": "pillar",
+              "key": "spiritual",
+              "delta": -1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ap_rl_the_girl",
+      "phase": "seminary",
+      "yearGate": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "pressure": [
+        "competence",
+        "doubt"
+      ],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 13,
+      "suppressYears": 3,
+      "once": true,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "club:respect_life",
+          "value": true
+        }
+      ],
+      "title": "The Girl at the Door",
+      "body": "A girl of nineteen comes to the Thursday meeting, which nobody does, and sits at the back, and when it ends she waits until the room is nearly empty and asks {@contact:respect_life} whether it is true that the group helps. She is pregnant and has told no one. {@contact:respect_life} looks at her and then at you, and says that the seminarian will get her a coffee while she makes some calls, and goes to make them, and you are in a parish kitchen with a girl who has decided, for reasons that are hers, that you are the person she will say it to.",
+      "choices": [
+        {
+          "id": "listen",
+          "label": "Get the coffee, sit down, and let her talk",
+          "outcome": "You make the coffee badly and sit down and do not say anything until she has said it all.",
+          "roll": {
+            "chance": 0.6,
+            "stat": "charisma",
+            "success": {
+              "outcome": "She says it all, and it takes an hour, and at the end of it {@contact:respect_life} comes back with a number and a name and a place to stay, and the girl takes them, and looks at you, and says thank you for not saying anything. She has the baby in the spring. The group finds out because {@contact:respect_life} tells them, and tells them who sat in the kitchen.",
+              "effects": [
+                {
+                  "target": "relationship",
+                  "key": "@contact:respect_life",
+                  "delta": 7
+                },
+                {
+                  "target": "stat",
+                  "key": "charisma",
+                  "delta": 1
+                },
+                {
+                  "target": "pillar",
+                  "key": "pastoral",
+                  "delta": 2
+                },
+                {
+                  "target": "pillar",
+                  "key": "human",
+                  "delta": 2
+                },
+                {
+                  "target": "reputation",
+                  "key": "public",
+                  "delta": 2
+                },
+                {
+                  "target": "trait",
+                  "key": "sat with a girl in a parish kitchen while she said it"
+                }
+              ]
+            },
+            "failure": {
+              "outcome": "You say something, which you should not have, about what the Church teaches, which she knows, which is why she is here, and she goes quiet, and {@contact:respect_life} comes back to a girl who has decided the room is not safe. She takes the number anyway. What happens after is hers. {@contact:respect_life} does not blame you. She tells you, the next week, what she would have said, which is nothing.",
+              "effects": [
+                {
+                  "target": "relationship",
+                  "key": "@contact:respect_life",
+                  "delta": 1
+                },
+                {
+                  "target": "pillar",
+                  "key": "pastoral",
+                  "delta": 1
+                },
+                {
+                  "target": "pillar",
+                  "key": "human",
+                  "delta": -1
+                },
+                {
+                  "target": "trait",
+                  "key": "said too much to a girl in a parish kitchen"
+                }
+              ]
+            }
+          },
+          "effects": [
+            {
+              "target": "pillar",
+              "key": "pastoral",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "get_the_woman",
+          "label": "Go and get her, now; this is not a seminarian's kitchen",
+          "default": true,
+          "outcome": "You fetch {@contact:respect_life} from the phone and she comes and sits down and it is, in a minute, the right room. You stand in the door. The girl gets what she came for, from the person who has given it for twenty years. {@contact:respect_life} says afterward that you were right to get her, and also that the girl had chosen you, and that a priest does not always get to hand it off.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@contact:respect_life",
+              "delta": 2
+            },
+            {
+              "target": "pillar",
+              "key": "human",
+              "delta": 1
+            },
+            {
+              "target": "pillar",
+              "key": "pastoral",
+              "delta": -1
+            }
+          ]
+        },
+        {
+          "id": "pray_with_her",
+          "label": "Ask whether she would like to pray, and if she says yes, pray",
+          "outcome": "She says yes, which surprises you both, and you pray a Hail Mary in a parish kitchen with a girl who has not said one since she was twelve, and she cries, and it is the beginning of something rather than the end of it. {@contact:respect_life} comes back to find the two of you praying and waits in the hall. She has the baby. She comes to the vigil, once, in the spring.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "pillar",
+              "key": "spiritual",
+              "delta": 2
+            },
+            {
+              "target": "pillar",
+              "key": "pastoral",
+              "delta": 1
+            },
+            {
+              "target": "relationship",
+              "key": "@contact:respect_life",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ap_rl_the_speech",
+      "phase": "seminary",
+      "yearGate": [
+        4,
+        5,
+        6,
+        7
+      ],
+      "pressure": [
+        "ambition_vs_integrity",
+        "belief_vs_safety"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 12,
+      "suppressYears": 3,
+      "once": true,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "club:respect_life",
+          "value": true
+        }
+      ],
+      "title": "The Bishop's Rally",
+      "body": "{@bishop} holds a rally on the cathedral steps every January before the buses leave, and this year {@contact:respect_life} has put your name in for the seminarian who speaks: four minutes, before the bishop, to eight hundred people and the local news. She says it is because you can talk. The vocation director, who was not consulted, has called the house to say that the bishop is particular about what is said on those steps and that a seminarian who says the wrong thing will hear about it, and that a seminarian who says the right thing will too.",
+      "flavorPrompt": "The cathedral steps in January, eight hundred people and a news van, a bishop waiting to speak second.",
+      "choices": [
+        {
+          "id": "speak",
+          "label": "Write four minutes, and say them",
+          "outcome": "You write it four times and say it once, to eight hundred people, with the bishop behind you.",
+          "roll": {
+            "chance": 0.5,
+            "stat": "charisma",
+            "success": {
+              "outcome": "It lands. It is not the speech the steps usually get; it is about the girl in the kitchen, without her name, and the eight hundred go quiet in the middle of it. {@bishop}, who was going to speak next, speaks shorter. The news uses eleven seconds of yours. {@contact:respect_life} does not say anything. She does not have to; the chancery calls the house on Monday.",
+              "effects": [
+                {
+                  "target": "flag",
+                  "key": "noticed_by_bishop",
+                  "value": true
+                },
+                {
+                  "target": "relationship",
+                  "key": "@bishop",
+                  "delta": 5
+                },
+                {
+                  "target": "reputation",
+                  "key": "public",
+                  "delta": 4
+                },
+                {
+                  "target": "reputation",
+                  "key": "chancery",
+                  "delta": 3
+                },
+                {
+                  "target": "stat",
+                  "key": "charisma",
+                  "delta": 2
+                },
+                {
+                  "target": "relationship",
+                  "key": "@contact:respect_life",
+                  "delta": 5
+                },
+                {
+                  "target": "trait",
+                  "key": "spoke on the cathedral steps before the bishop, and was quoted"
+                }
+              ]
+            },
+            "failure": {
+              "outcome": "It does not land. It is a good speech read badly to a cold crowd by a man who has never used that kind of microphone, and the news does not use it, and {@bishop} is warm afterward in the way of a man being warm. The vocation director says it was fine. {@contact:respect_life} says that steps are hard and that you will do it again, which is her way of saying it was not fine.",
+              "effects": [
+                {
+                  "target": "reputation",
+                  "key": "public",
+                  "delta": 1
+                },
+                {
+                  "target": "stat",
+                  "key": "charisma",
+                  "delta": 1
+                },
+                {
+                  "target": "pillar",
+                  "key": "human",
+                  "delta": -1
+                },
+                {
+                  "target": "relationship",
+                  "key": "@contact:respect_life",
+                  "delta": 1
+                }
+              ]
+            },
+            "per": 80
+          },
+          "effects": [
+            {
+              "target": "pillar",
+              "key": "human",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "decline",
+          "label": "Say no, and say why: you would rather not be on the news",
+          "default": true,
+          "outcome": "She takes it well and puts a fourth-year man in, who is fine, and the rally is the rally. The vocation director is relieved. {@contact:respect_life} is not, and says so once, and does not raise it again, and the group's next big thing is given to someone else without discussion.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@contact:respect_life",
+              "delta": -4
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 1
+            },
+            {
+              "target": "pillar",
+              "key": "spiritual",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "ask_the_bishop",
+          "label": "Ask the bishop's office what he wants said, and say that",
+          "outcome": "The bishop's office sends two paragraphs and you say them, well, and the bishop is pleased and the news is not interested. {@contact:respect_life} hears that you asked the chancery what to say and is quiet about it for a while. You have learned how a rally works. You have also learned what she thinks of men who ask the chancery what to say.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 3
+            },
+            {
+              "target": "relationship",
+              "key": "@contact:respect_life",
+              "delta": -3
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            },
+            {
+              "target": "outspokenness",
+              "key": "",
+              "delta": -1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ap_sch_hard_class",
+      "phase": "seminary",
+      "yearGate": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "pressure": [
+        "competence"
+      ],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 13,
+      "suppressYears": 3,
+      "once": true,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "club:school_teaching",
+          "value": true
+        }
+      ],
+      "title": "Seventh Period",
+      "body": "{@contact:school_teaching} gives you the seventh grade because the seventh grade has eaten two teachers this year and she wants to see what happens. It is the last period on a Tuesday, twenty-eight of them, and the room has decided before you open your mouth that religion is a period in which nothing happens. There is a boy in the back who runs it. He is not cruel. He is bored, and he is the smartest one in the room, and he has noticed that you know it.",
+      "flavorPrompt": "A seventh-grade classroom last period on a Tuesday, twenty-eight of them, one bored boy in the back who runs the room.",
+      "choices": [
+        {
+          "id": "teach_to_him",
+          "label": "Teach to the boy in the back, and let the room follow",
+          "outcome": "You pitch the class at the boy in the back and see whether the room comes with him.",
+          "roll": {
+            "chance": 0.5,
+            "stat": "knowledge",
+            "success": {
+              "outcome": "It comes. He argues with you about the problem of evil for eleven minutes and the room, which has never seen a teacher argued with and not lose, watches like a tennis match, and by the bell twenty-eight thirteen-year-olds have opinions about Augustine. {@contact:school_teaching} is in the corridor. She has heard. She gives you the eighth grade too.",
+              "effects": [
+                {
+                  "target": "relationship",
+                  "key": "@contact:school_teaching",
+                  "delta": 7
+                },
+                {
+                  "target": "stat",
+                  "key": "charisma",
+                  "delta": 2
+                },
+                {
+                  "target": "stat",
+                  "key": "knowledge",
+                  "delta": 1
+                },
+                {
+                  "target": "pillar",
+                  "key": "pastoral",
+                  "delta": 2
+                },
+                {
+                  "target": "reputation",
+                  "key": "parishioners",
+                  "delta": 2
+                },
+                {
+                  "target": "trait",
+                  "key": "taught the seventh grade Augustine by arguing with the boy in the back"
+                }
+              ]
+            },
+            "failure": {
+              "outcome": "It does not come; you pitch it at him and he loses interest, because he can tell you are pitching, and the room goes back to what it was. You get through the period. {@contact:school_teaching} says the seventh grade is like that. She gives you the sixth grade, which is easier, and you understand that a decision has been made about you and the hard ones.",
+              "effects": [
+                {
+                  "target": "relationship",
+                  "key": "@contact:school_teaching",
+                  "delta": 1
+                },
+                {
+                  "target": "pillar",
+                  "key": "pastoral",
+                  "delta": 1
+                },
+                {
+                  "target": "pillar",
+                  "key": "human",
+                  "delta": -1
+                }
+              ]
+            }
+          },
+          "effects": [
+            {
+              "target": "pillar",
+              "key": "intellectual",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "rules_first",
+          "label": "Run it like a class: rules on the board, and a quiz on Friday",
+          "default": true,
+          "outcome": "You put the rules up and the quiz happens and the room, which respects a fence, settles into something that is not learning and is not chaos. The boy in the back gets the quiz right without reading anything. {@contact:school_teaching} says you have the room, which is true, and does not say the other thing.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 2
+            },
+            {
+              "target": "relationship",
+              "key": "@contact:school_teaching",
+              "delta": 3
+            },
+            {
+              "target": "pillar",
+              "key": "pastoral",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "tell_a_story",
+          "label": "Put the book down and tell them about the seminary",
+          "outcome": "You tell them what the seminary is like, honestly, the phone and the silence and the men who leave, and the room goes quiet in a way that is not obedience, and the boy in the back asks whether you have ever wanted to quit, and you tell him. It is not religion class. It is the best period they have had. {@contact:school_teaching} hears about it from four parents.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "pillar",
+              "key": "human",
+              "delta": 2
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            },
+            {
+              "target": "relationship",
+              "key": "@contact:school_teaching",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ap_sch_the_boy",
+      "phase": "seminary",
+      "yearGate": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "pressure": [
+        "doubt",
+        "competence"
+      ],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 13,
+      "suppressYears": 3,
+      "once": true,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "club:school_teaching",
+          "value": true
+        }
+      ],
+      "title": "After the Bell",
+      "body": "A boy stays after the bell, a quiet one from the second row, and asks whether he can ask you something, and the something is that his parents are divorcing and his mother has stopped going to Mass and his father says it is the Church's fault, and he wants to know whether it is. He is eleven. {@contact:school_teaching} is in the office across the hall and does not know he is here. The bus leaves in nine minutes.",
+      "flavorPrompt": "An empty classroom after the bell, a boy of eleven with a question, a bus in nine minutes.",
+      "choices": [
+        {
+          "id": "answer",
+          "label": "Answer him, in nine minutes, as truly as you can",
+          "outcome": "You sit on the desk and try to give an eleven-year-old the truth in nine minutes.",
+          "roll": {
+            "chance": 0.55,
+            "stat": "piety",
+            "success": {
+              "outcome": "You manage it, more or less: that it is nobody's fault he can see, that his mother is still his mother and the Church is still here, that he can come and find you. He makes the bus. He comes and finds you, twice, that spring. {@contact:school_teaching} learns of it from the mother, who has come back to Mass, and who wanted to know which seminarian.",
+              "effects": [
+                {
+                  "target": "relationship",
+                  "key": "@contact:school_teaching",
+                  "delta": 6
+                },
+                {
+                  "target": "stat",
+                  "key": "piety",
+                  "delta": 1
+                },
+                {
+                  "target": "pillar",
+                  "key": "pastoral",
+                  "delta": 2
+                },
+                {
+                  "target": "pillar",
+                  "key": "human",
+                  "delta": 1
+                },
+                {
+                  "target": "reputation",
+                  "key": "parishioners",
+                  "delta": 3
+                },
+                {
+                  "target": "trait",
+                  "key": "answered a boy about his parents’ divorce in nine minutes"
+                }
+              ]
+            },
+            "failure": {
+              "outcome": "You say too much and it is the wrong kind of true, something about annulments that he cannot use and repeats at home, and the father calls the school, and {@contact:school_teaching} has a conversation with you in the corridor that is short and exact. The boy does not stay after the bell again. You learn what nine minutes are for, which is less than you thought.",
+              "effects": [
+                {
+                  "target": "relationship",
+                  "key": "@contact:school_teaching",
+                  "delta": -4
+                },
+                {
+                  "target": "pillar",
+                  "key": "human",
+                  "delta": -1
+                },
+                {
+                  "target": "pillar",
+                  "key": "pastoral",
+                  "delta": 1
+                },
+                {
+                  "target": "reputation",
+                  "key": "parishioners",
+                  "delta": -1
+                }
+              ]
+            }
+          },
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "get_the_principal",
+          "label": "Walk him across the hall to the principal, and stay",
+          "default": true,
+          "outcome": "You take him to {@contact:school_teaching}, who has done this before, and stay in the room while she does it, and learn how it is done: not with answers, with a phone call to the mother that afternoon and a word to the pastor. The boy makes the bus. {@contact:school_teaching} says afterward that you were right to bring him, and that next time you might not have the hall.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@contact:school_teaching",
+              "delta": 4
+            },
+            {
+              "target": "pillar",
+              "key": "pastoral",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "miss_the_bus",
+          "label": "Let him miss the bus, and drive him home yourself",
+          "outcome": "You call the office, and the office calls the mother, and you drive him home in the seminary's car, and it is twenty minutes of a boy talking and you listening, and at the door the mother, who has not been to Mass since Easter, asks you in for a coffee. {@contact:school_teaching} is not pleased about the car. She is pleased about the rest and says the one and not the other.",
+          "effects": [
+            {
+              "target": "pillar",
+              "key": "pastoral",
+              "delta": 2
+            },
+            {
+              "target": "pillar",
+              "key": "human",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 2
+            },
+            {
+              "target": "relationship",
+              "key": "@contact:school_teaching",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": -1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ap_sch_the_play",
+      "phase": "seminary",
+      "yearGate": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "pressure": [
+        "competence"
+      ],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 12,
+      "suppressYears": 3,
+      "once": true,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "club:school_teaching",
+          "value": true
+        }
+      ],
+      "title": "The Christmas Play",
+      "body": "The school's Christmas play is a tradition older than the parish hall, and this year the teacher who directs it is out with her hip, and {@contact:school_teaching} has given it to you, with three weeks, forty children, a shepherd who will not wear the costume, and a mother on the school board who directed it herself in 1998 and has ideas. The pastor comes. The parish comes. It is, the principal says, the one night of the year the school is judged by everyone at once.",
+      "flavorPrompt": "A parish hall stage in December, forty children, a shepherd without a costume, a mother with the 1998 script.",
+      "choices": [
+        {
+          "id": "direct_it",
+          "label": "Direct it, your way, and manage the mother",
+          "outcome": "You take the forty children and the shepherd and the mother and see whether three weeks is enough.",
+          "roll": {
+            "chance": 0.5,
+            "stat": "administration",
+            "success": {
+              "outcome": "It is enough, barely. The shepherd wears the costume because you let him carry a real lamb, borrowed from a farm and lent by a parishioner who wanted to see it. The mother is given the angels and is happy. The pastor laughs in the right places. {@contact:school_teaching} says it was the best in years, and says it to the pastor, who says it to the vocation director.",
+              "effects": [
+                {
+                  "target": "relationship",
+                  "key": "@contact:school_teaching",
+                  "delta": 7
+                },
+                {
+                  "target": "stat",
+                  "key": "administration",
+                  "delta": 2
+                },
+                {
+                  "target": "stat",
+                  "key": "charisma",
+                  "delta": 1
+                },
+                {
+                  "target": "pillar",
+                  "key": "human",
+                  "delta": 2
+                },
+                {
+                  "target": "reputation",
+                  "key": "parishioners",
+                  "delta": 3
+                },
+                {
+                  "target": "trait",
+                  "key": "directed the school’s Christmas play with a real lamb"
+                }
+              ]
+            },
+            "failure": {
+              "outcome": "It is not enough. The shepherd goes on without the costume, the lamb is a dog, the mother has taken the angels and the second act, and the pastor is kind about it in a way that the parish repeats. {@contact:school_teaching} says that the play is always like that, which is a mercy, and gives it back to the teacher with the hip the next year without discussion.",
+              "effects": [
+                {
+                  "target": "relationship",
+                  "key": "@contact:school_teaching",
+                  "delta": 1
+                },
+                {
+                  "target": "pillar",
+                  "key": "human",
+                  "delta": 1
+                },
+                {
+                  "target": "stat",
+                  "key": "administration",
+                  "delta": 1
+                },
+                {
+                  "target": "reputation",
+                  "key": "parishioners",
+                  "delta": -1
+                }
+              ]
+            }
+          },
+          "effects": [
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "give_it_to_the_mother",
+          "label": "Give it to the mother on the board, and be her assistant",
+          "default": true,
+          "outcome": "She directs it and it is exactly the 1998 play, which the parish remembers fondly, and you carry chairs and wrangle shepherds and are thanked from the stage. It goes well. {@contact:school_teaching} notes that you saw who wanted it and let her have it, which she counts as sense, and also that you did not want it, which she counts too.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@contact:school_teaching",
+              "delta": 2
+            },
+            {
+              "target": "pillar",
+              "key": "human",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "simplify",
+          "label": "Cut it to a Nativity and carols, and say why",
+          "outcome": "You cut it to the Gospel read by the eighth grade and six carols with the whole school, and it is over in forty minutes, and it is the most beautiful thing the hall has seen in years because nothing in it is trying. The mother is furious. The pastor says it is what a Christmas play should be. {@contact:school_teaching} agrees with both of them, in different rooms.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "pillar",
+              "key": "spiritual",
+              "delta": 1
+            },
+            {
+              "target": "pillar",
+              "key": "pastoral",
+              "delta": 1
+            },
+            {
+              "target": "relationship",
+              "key": "@contact:school_teaching",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 2
+            },
+            {
+              "target": "outspokenness",
+              "key": "",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ap_nh_the_man_who_stopped",
+      "phase": "seminary",
+      "yearGate": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "pressure": [
+        "doubt",
+        "competence"
+      ],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 13,
+      "suppressYears": 3,
+      "once": true,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "club:nursing_home",
+          "value": true
+        }
+      ],
+      "title": "Room 214",
+      "body": "There is a man in 214 who stopped speaking a year ago, and the aides say he can and will not, and {@contact:nursing_home} has put him on your list because, she says, he was a deacon once and might talk to a seminarian, and because nobody else will go in. You go in. He looks at you from the bed and says nothing for the whole of the Sunday, and the next, and the next. On the fourth Sunday you have decided to stop going, and he says your name, which you did not know he knew.",
+      "flavorPrompt": "A nursing home room on a Sunday afternoon, a man who stopped speaking, a name said after a year.",
+      "choices": [
+        {
+          "id": "stay",
+          "label": "Stay, and let him say what he has decided to say",
+          "outcome": "You sit down again and wait, and he takes a long time.",
+          "roll": {
+            "chance": 0.55,
+            "stat": "piety",
+            "success": {
+              "outcome": "He says it: that he stopped speaking because the last thing he said was to his wife and it was unkind and she died that night, and that he has been keeping the silence as a penance nobody assigned. It takes the afternoon. You tell him, because you are not yet a priest and cannot do the other thing, that the penance is over. He speaks to the aides on Monday. {@contact:nursing_home} tells the chaplain, and the chaplain tells the diocese.",
+              "effects": [
+                {
+                  "target": "relationship",
+                  "key": "@contact:nursing_home",
+                  "delta": 7
+                },
+                {
+                  "target": "stat",
+                  "key": "piety",
+                  "delta": 2
+                },
+                {
+                  "target": "pillar",
+                  "key": "spiritual",
+                  "delta": 2
+                },
+                {
+                  "target": "pillar",
+                  "key": "pastoral",
+                  "delta": 2
+                },
+                {
+                  "target": "reputation",
+                  "key": "parishioners",
+                  "delta": 2
+                },
+                {
+                  "target": "trait",
+                  "key": "the man in 214 spoke to him"
+                }
+              ]
+            },
+            "failure": {
+              "outcome": "He says your name and then nothing more, and you wait an hour, and he sleeps. He does not say it again. You keep going in, most Sundays, and he keeps not speaking, and {@contact:nursing_home} says that this is also the work and that most of it is like this. She is right. It is not a story anyone will tell.",
+              "effects": [
+                {
+                  "target": "relationship",
+                  "key": "@contact:nursing_home",
+                  "delta": 3
+                },
+                {
+                  "target": "stat",
+                  "key": "piety",
+                  "delta": 1
+                },
+                {
+                  "target": "pillar",
+                  "key": "spiritual",
+                  "delta": 1
+                },
+                {
+                  "target": "pillar",
+                  "key": "human",
+                  "delta": 1
+                }
+              ]
+            }
+          },
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "ask_him",
+          "label": "Ask him, plainly, why he stopped",
+          "default": true,
+          "outcome": "You ask, and he looks at you for a long time, and says that a seminarian should learn to wait, and closes his eyes. It is the most he has said in a year. {@contact:nursing_home} says that it was the wrong question and the right instinct, and that he asked for you on Tuesday, which he has never done.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@contact:nursing_home",
+              "delta": 3
+            },
+            {
+              "target": "pillar",
+              "key": "pastoral",
+              "delta": 1
+            },
+            {
+              "target": "outspokenness",
+              "key": "",
+              "delta": 1
+            },
+            {
+              "target": "pillar",
+              "key": "human",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "bring_the_chaplain",
+          "label": "Go and get the chaplain; a deacon who stopped speaking wants a priest",
+          "outcome": "The chaplain comes on Tuesday and is in the room an hour, and comes out with a face that says the seal, and the man in 214 speaks to the aides by Friday. You were the door. {@contact:nursing_home} says that knowing when to fetch the priest is half the job, and that the residents will not remember it was you, and that she will.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@contact:nursing_home",
+              "delta": 5
+            },
+            {
+              "target": "pillar",
+              "key": "spiritual",
+              "delta": 1
+            },
+            {
+              "target": "pillar",
+              "key": "pastoral",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ap_nh_the_death",
+      "phase": "seminary",
+      "yearGate": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "pressure": [
+        "competence",
+        "doubt"
+      ],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 13,
+      "suppressYears": 3,
+      "once": true,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "club:nursing_home",
+          "value": true
+        }
+      ],
+      "title": "Sunday, Third Floor",
+      "body": "A woman on the third floor dies on a Sunday while you are on the round, quietly, between the rosary and the communion service, and the aide who finds her finds you first because you are the one in a collar-shaped shirt. The family is forty minutes away and coming. The chaplain is at the parish. {@contact:nursing_home} is downstairs with the service. You are in a room with a woman who has died and an aide who is twenty-two and has not seen this before, and the family will walk in on whatever they walk in on.",
+      "flavorPrompt": "A third-floor room on a Sunday afternoon, a woman who has died, an aide of twenty-two, a family forty minutes away.",
+      "choices": [
+        {
+          "id": "prepare_the_room",
+          "label": "Pray the prayers, straighten the room, and be at the door when they come",
+          "outcome": "You say the prayers you may say, and put the room in order, and wait at the door.",
+          "roll": {
+            "chance": 0.6,
+            "stat": "charisma",
+            "success": {
+              "outcome": "The family walks into a room with the curtains open and their mother's hands folded on a rosary and a seminarian at the door who knows her name and tells them, before they ask, that she was not alone. The daughter holds your arm for a long time. {@contact:nursing_home} comes up to find it done and says nothing then and a great deal later, to the chaplain, who says it to the diocese.",
+              "effects": [
+                {
+                  "target": "relationship",
+                  "key": "@contact:nursing_home",
+                  "delta": 7
+                },
+                {
+                  "target": "stat",
+                  "key": "charisma",
+                  "delta": 1
+                },
+                {
+                  "target": "stat",
+                  "key": "piety",
+                  "delta": 1
+                },
+                {
+                  "target": "pillar",
+                  "key": "pastoral",
+                  "delta": 2
+                },
+                {
+                  "target": "pillar",
+                  "key": "spiritual",
+                  "delta": 1
+                },
+                {
+                  "target": "reputation",
+                  "key": "parishioners",
+                  "delta": 3
+                },
+                {
+                  "target": "trait",
+                  "key": "met a family at the door on the third floor"
+                }
+              ]
+            },
+            "failure": {
+              "outcome": "You do it, and the family arrives before you are ready, and the son, who is angry at everything, is angry at you: where was the priest, who are you, why was nobody with her. You have no answer he will take. {@contact:nursing_home} comes up and takes him into the hall. The daughter thanks you afterward, quietly. It was the work. It did not feel like enough, and it was not, and there was no more.",
+              "effects": [
+                {
+                  "target": "relationship",
+                  "key": "@contact:nursing_home",
+                  "delta": 3
+                },
+                {
+                  "target": "stat",
+                  "key": "piety",
+                  "delta": 1
+                },
+                {
+                  "target": "pillar",
+                  "key": "human",
+                  "delta": -1
+                },
+                {
+                  "target": "pillar",
+                  "key": "pastoral",
+                  "delta": 1
+                }
+              ]
+            }
+          },
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "stay_with_the_aide",
+          "label": "Sit with the aide first; she is the one shaking",
+          "default": true,
+          "outcome": "You sit with the aide in the hall for ten minutes and let her say it, and she stops shaking, and then the two of you do the room together, and she is the one at the door when the family comes, because she knew the woman and you did not. {@contact:nursing_home} sees that. She hires the aide's kind, and she remembers who steadied one.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@contact:nursing_home",
+              "delta": 5
+            },
+            {
+              "target": "pillar",
+              "key": "human",
+              "delta": 2
+            },
+            {
+              "target": "pillar",
+              "key": "pastoral",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "fetch_the_director",
+          "label": "Go down and get the director, and let her handle the family",
+          "outcome": "{@contact:nursing_home} comes up and does what she has done a hundred times, and the family gets the person who should meet them. You stand in the hall. It was right. It was also, she says later, gently, a thing you could have done, and will have to, and that the next time there may not be a director downstairs.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@contact:nursing_home",
+              "delta": 2
+            },
+            {
+              "target": "pillar",
+              "key": "human",
+              "delta": 1
+            },
+            {
+              "target": "pillar",
+              "key": "pastoral",
+              "delta": -1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ap_nh_the_bishop_visit",
+      "phase": "seminary",
+      "yearGate": [
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "pressure": [
+        "ambition_vs_integrity"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 12,
+      "suppressYears": 3,
+      "once": true,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "club:nursing_home",
+          "value": true
+        }
+      ],
+      "title": "The Bishop at the Home",
+      "body": "{@bishop} visits the nursing home once a year, in Advent, and says Mass in the day room, and {@contact:nursing_home} has told him, because she tells bishops things, that the seminarian who comes on Sundays is the one who should serve it. So you are serving the bishop's Mass in a day room with sixty residents in wheelchairs, three of whom are shouting, and an aide who has put the wrong book on the stand, and the bishop, who has looked at you twice, says, at the sign of peace, in a low voice, 'You know them, don't you.'",
+      "flavorPrompt": "A nursing home day room in Advent, sixty residents in wheelchairs, a bishop's Mass with the wrong book on the stand.",
+      "choices": [
+        {
+          "id": "say_yes",
+          "label": "Say yes, and say their names to him at communion",
+          "outcome": "You go with him down the rows with the ciborium and say each name before he reaches them.",
+          "roll": {
+            "chance": 0.55,
+            "stat": "charisma",
+            "success": {
+              "outcome": "You know all sixty, and he hears that you do, and gives communion to sixty people by name for the first time in his episcopate. Afterwards in the car park he asks {@contact:nursing_home} how long you have been coming and she tells him. He says nothing to you. He says something to the vocation director on Monday, and the vocation director says it to the house.",
+              "effects": [
+                {
+                  "target": "flag",
+                  "key": "noticed_by_bishop",
+                  "value": true
+                },
+                {
+                  "target": "relationship",
+                  "key": "@bishop",
+                  "delta": 6
+                },
+                {
+                  "target": "relationship",
+                  "key": "@contact:nursing_home",
+                  "delta": 5
+                },
+                {
+                  "target": "reputation",
+                  "key": "chancery",
+                  "delta": 3
+                },
+                {
+                  "target": "pillar",
+                  "key": "pastoral",
+                  "delta": 2
+                },
+                {
+                  "target": "trait",
+                  "key": "gave the bishop the residents’ names at communion"
+                }
+              ]
+            },
+            "failure": {
+              "outcome": "You know most of them, and lose the thread on the second row, and the bishop, who is a kind man, does not notice or does not say, and the Mass ends and he is driven away. {@contact:nursing_home} says he was pleased. You know which names you did not have. It is the kind of thing a man remembers about himself longer than anyone else does.",
+              "effects": [
+                {
+                  "target": "relationship",
+                  "key": "@bishop",
+                  "delta": 2
+                },
+                {
+                  "target": "relationship",
+                  "key": "@contact:nursing_home",
+                  "delta": 2
+                },
+                {
+                  "target": "pillar",
+                  "key": "pastoral",
+                  "delta": 1
+                },
+                {
+                  "target": "pillar",
+                  "key": "human",
+                  "delta": -1
+                }
+              ]
+            }
+          },
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "say_a_little",
+          "label": "Say that you come on Sundays, and leave it there",
+          "default": true,
+          "outcome": "He nods and says Mass and goes, and {@contact:nursing_home} tells him in the car park what you did not, and he says that is good. It is good. It is also a thing the bishop learned from her and not from you, and bishops, {@contact:nursing_home} says afterward, prefer to learn things from the man.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": 2
+            },
+            {
+              "target": "relationship",
+              "key": "@contact:nursing_home",
+              "delta": 2
+            },
+            {
+              "target": "pillar",
+              "key": "human",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "fix_the_book",
+          "label": "Say nothing; fix the book on the stand and keep the Mass moving",
+          "outcome": "You fix the book and the Mass moves, and the bishop is grateful for a server who knows where the book should be, which is not nothing to a bishop. He does not ask you anything else. {@contact:nursing_home} tells him about you anyway. You served a good Mass. It was, she says, a good Mass and a missed conversation.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            },
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": 2
+            },
+            {
+              "target": "pillar",
+              "key": "pastoral",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": -1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ap_sk_the_line",
+      "phase": "seminary",
+      "yearGate": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "pressure": [
+        "body_vs_vow",
+        "competence"
+      ],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 13,
+      "suppressYears": 3,
+      "once": true,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "club:soup_kitchen",
+          "value": true
+        }
+      ],
+      "title": "Seven O'Clock",
+      "body": "The line is at the door at seven and something is wrong in it: two men, one of whom has a knife nobody has seen yet, and a woman between them who is shouting at both. {@contact:soup_kitchen} is in the back with the delivery. The volunteers, who are mostly retired women from the cathedral, have stopped moving. You are the nearest thing to a man in charge at the door, and the door is glass.",
+      "flavorPrompt": "A glass door at seven in the morning, a line with a knife in it, retired women from the cathedral standing still.",
+      "choices": [
+        {
+          "id": "go_out",
+          "label": "Go out the door and stand between them",
+          "outcome": "You open the glass door and walk into the middle of it, with the retired women watching from the tables and the line watching from the sidewalk.",
+          "roll": {
+            "chance": 0.5,
+            "stat": "charisma",
+            "success": {
+              "outcome": "You say the wrong thing and it works: you ask the man with the knife whether he wants eggs, and he looks at you as if you were mad, and the woman laughs, and the moment is over before the knife is. {@contact:soup_kitchen} comes out to find the line moving and you serving eggs and says nothing, which is his way, and hands you the keys to the storeroom the next Saturday, which is his other way.",
+              "effects": [
+                {
+                  "target": "relationship",
+                  "key": "@contact:soup_kitchen",
+                  "delta": 7
+                },
+                {
+                  "target": "stat",
+                  "key": "charisma",
+                  "delta": 2
+                },
+                {
+                  "target": "pillar",
+                  "key": "pastoral",
+                  "delta": 2
+                },
+                {
+                  "target": "pillar",
+                  "key": "human",
+                  "delta": 1
+                },
+                {
+                  "target": "reputation",
+                  "key": "public",
+                  "delta": 2
+                },
+                {
+                  "target": "trait",
+                  "key": "walked into the line at seven and asked the man with the knife whether he wanted eggs"
+                }
+              ]
+            },
+            "failure": {
+              "outcome": "You say the wrong thing and it does not work, and the man with the knife shows it, and the woman screams, and {@contact:soup_kitchen} comes out of the back at a run and does in five seconds what you could not in a minute. Nobody is hurt. He says afterward that you went out, which most do not, and that next time you should bring him. You are shaking for an hour. He gives you the dishes to do, which is a kindness.",
+              "effects": [
+                {
+                  "target": "relationship",
+                  "key": "@contact:soup_kitchen",
+                  "delta": 3
+                },
+                {
+                  "target": "pillar",
+                  "key": "human",
+                  "delta": 1
+                },
+                {
+                  "target": "stat",
+                  "key": "charisma",
+                  "delta": -1
+                },
+                {
+                  "target": "trait",
+                  "key": "walked into the line at seven and it went wrong"
+                }
+              ]
+            }
+          },
+          "effects": [
+            {
+              "target": "pillar",
+              "key": "human",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "get_him",
+          "label": "Go and get him; it is his line and his door",
+          "default": true,
+          "outcome": "You get him and he goes out and it is over in a minute, because he has known both men for ten years and the woman for five. He says afterward that fetching him was right and that in a year it will not be, because he is old. He looks at you when he says it.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@contact:soup_kitchen",
+              "delta": 4
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            },
+            {
+              "target": "pillar",
+              "key": "pastoral",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "call_the_police",
+          "label": "Call the police and keep the door shut until they come",
+          "outcome": "They come in eight minutes and the line scatters and the two men are gone and so is half the breakfast crowd, who do not eat where the police come. {@contact:soup_kitchen} says, without heat, that the kitchen has not called the police in thirty years and that the line will take a month to come back. It takes six weeks. He does not mention it again. The volunteers do.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@contact:soup_kitchen",
+              "delta": -6
+            },
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": -2
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            },
+            {
+              "target": "pillar",
+              "key": "human",
+              "delta": -1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ap_sk_the_regular",
+      "phase": "seminary",
+      "yearGate": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "pressure": [
+        "doubt",
+        "belief_vs_safety"
+      ],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 13,
+      "suppressYears": 3,
+      "once": true,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "club:soup_kitchen",
+          "value": true
+        }
+      ],
+      "title": "The Man Who Comes Early",
+      "body": "There is a man who comes to the kitchen at six, an hour before the line, and helps set up, and has for years, and does not eat. This Saturday he asks you, in the storeroom, whether you will hear his confession. You tell him you are not a priest. He says he knows that. He says he cannot say it to a priest, and that he has been waiting for someone he could say it to who was nearly one, and that the storeroom will do. {@contact:soup_kitchen} is outside with the delivery. The line comes at seven.",
+      "choices": [
+        {
+          "id": "listen",
+          "label": "Tell him it is not confession, and that you will listen to anything he needs to say",
+          "outcome": "You say what it is and is not, and he says that will do, and begins.",
+          "roll": {
+            "chance": 0.55,
+            "stat": "piety",
+            "success": {
+              "outcome": "He says it, and it is a thing from thirty years ago that a priest would absolve in a minute and that has kept this man setting up tables at six for a decade, and at the end of it you tell him, because it is true, that a priest would absolve it in a minute, and that you will find him one. He goes to confession at the cathedral on Wednesday. He eats at the kitchen the next Saturday, for the first time. {@contact:soup_kitchen} notices, and knows why, and does not ask.",
+              "effects": [
+                {
+                  "target": "relationship",
+                  "key": "@contact:soup_kitchen",
+                  "delta": 6
+                },
+                {
+                  "target": "stat",
+                  "key": "piety",
+                  "delta": 2
+                },
+                {
+                  "target": "pillar",
+                  "key": "spiritual",
+                  "delta": 2
+                },
+                {
+                  "target": "pillar",
+                  "key": "pastoral",
+                  "delta": 2
+                },
+                {
+                  "target": "trait",
+                  "key": "the man who came early said it to him in the storeroom"
+                }
+              ]
+            },
+            "failure": {
+              "outcome": "He says some of it and stops, because it is not confession and he can feel that it is not, and thanks you and goes back to the tables, and comes early the next Saturday and does not raise it. You have been asked for something you cannot yet give, which is a lesson about the years ahead and not a comfortable one. {@contact:soup_kitchen} says he has asked others. Nobody has managed it.",
+              "effects": [
+                {
+                  "target": "relationship",
+                  "key": "@contact:soup_kitchen",
+                  "delta": 2
+                },
+                {
+                  "target": "stat",
+                  "key": "piety",
+                  "delta": 1
+                },
+                {
+                  "target": "pillar",
+                  "key": "spiritual",
+                  "delta": 1
+                },
+                {
+                  "target": "pillar",
+                  "key": "human",
+                  "delta": -1
+                }
+              ]
+            }
+          },
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "find_a_priest",
+          "label": "Tell him there is a priest at the cathedral on Saturdays, and walk him there after the line",
+          "default": true,
+          "outcome": "You walk him the four blocks at ten, and he goes in, and you wait on the steps forty minutes, and he comes out and does not say anything and shakes your hand. He eats the next Saturday. {@contact:soup_kitchen} says that in thirty years nobody has walked a man to the cathedral, and that he should have thought of it, and that he is glad someone did.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@contact:soup_kitchen",
+              "delta": 6
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "pillar",
+              "key": "pastoral",
+              "delta": 2
+            },
+            {
+              "target": "pillar",
+              "key": "spiritual",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "decline",
+          "label": "Say it would be wrong, and that you are sorry, and go back to the tables",
+          "outcome": "He nods as if he expected it and goes back to the tables, and comes early the next Saturday as always. You were right that it would be wrong. You were not, {@contact:soup_kitchen} says later, obliged to be only right; there was a man in the storeroom and a cathedral four blocks away. He says it once. It is enough.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            },
+            {
+              "target": "relationship",
+              "key": "@contact:soup_kitchen",
+              "delta": -3
+            },
+            {
+              "target": "pillar",
+              "key": "pastoral",
+              "delta": -1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ap_sk_the_city",
+      "phase": "seminary",
+      "yearGate": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "pressure": [
+        "money",
+        "competence"
+      ],
+      "severity": "NOTABLE",
+      "category": "finance",
+      "baseWeight": 12,
+      "suppressYears": 3,
+      "once": true,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "club:soup_kitchen",
+          "value": true
+        }
+      ],
+      "title": "The Inspector",
+      "body": "The health inspector has come and gone and left a letter, and the letter says the kitchen has thirty days: the hood over the stove, the second sink, a thing about the walk-in. {@contact:soup_kitchen} reads it and puts it down and says the kitchen has had letters before. But this one has a number in it that is more than the kitchen has, and the cathedral rector, called, says the parish cannot, and the diocese, called, says to write to Catholic Charities, which will take sixty days. The line is at the door at seven. It will be at the door at seven in thirty-one days too.",
+      "flavorPrompt": "A soup kitchen with a letter from the city on the counter, thirty days, a hood the kitchen cannot afford.",
+      "choices": [
+        {
+          "id": "go_to_the_city",
+          "label": "Go to the city yourself: the inspector, the councilman, whoever will see a seminarian",
+          "outcome": "You put on the collar-shaped shirt and go downtown with the letter.",
+          "roll": {
+            "chance": 0.5,
+            "stat": "administration",
+            "success": {
+              "outcome": "The councilman's aide is Catholic and her grandmother ate at the kitchen in 1985, and thirty days becomes ninety, and a restaurant supply company the aide's cousin runs finds a used hood. {@contact:soup_kitchen} says that in thirty years he never went to the city, because the city is the city. He says it while looking at the hood. The cathedral rector tells the bishop who went downtown.",
+              "effects": [
+                {
+                  "target": "relationship",
+                  "key": "@contact:soup_kitchen",
+                  "delta": 7
+                },
+                {
+                  "target": "stat",
+                  "key": "administration",
+                  "delta": 2
+                },
+                {
+                  "target": "stat",
+                  "key": "charisma",
+                  "delta": 1
+                },
+                {
+                  "target": "reputation",
+                  "key": "public",
+                  "delta": 3
+                },
+                {
+                  "target": "reputation",
+                  "key": "chancery",
+                  "delta": 2
+                },
+                {
+                  "target": "pillar",
+                  "key": "pastoral",
+                  "delta": 1
+                },
+                {
+                  "target": "trait",
+                  "key": "went to the city for the soup kitchen’s hood"
+                }
+              ]
+            },
+            "failure": {
+              "outcome": "The inspector is polite and the councilman is out and the aide says the letter is the letter, and you come back with nothing but the knowledge of how a city works, which is worth something and not a hood. {@contact:soup_kitchen} closes the kitchen for two weeks in the thirty-first day and reopens it with a hood the cathedral's Knights bought at the last minute. He does not blame you. He says the city is the city.",
+              "effects": [
+                {
+                  "target": "relationship",
+                  "key": "@contact:soup_kitchen",
+                  "delta": 2
+                },
+                {
+                  "target": "stat",
+                  "key": "administration",
+                  "delta": 1
+                },
+                {
+                  "target": "stat",
+                  "key": "knowledge",
+                  "delta": 1
+                },
+                {
+                  "target": "pillar",
+                  "key": "human",
+                  "delta": -1
+                }
+              ]
+            }
+          },
+          "effects": [
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "raise_it",
+          "label": "Raise the money: the house, the cathedral, the Knights, a letter to everyone",
+          "default": true,
+          "outcome": "You write the letter and the house gives what a house has, which is little, and the Knights give the rest, and the hood goes in on the twenty-ninth day, and {@contact:soup_kitchen} says that he did not know the Knights had it in them and that he will not say so to them. The cathedral rector notes who wrote the letter. It is a small thing, and it is on a list.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@contact:soup_kitchen",
+              "delta": 5
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": 1
+            },
+            {
+              "target": "pillar",
+              "key": "pastoral",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "write_to_charities",
+          "label": "Write to Catholic Charities, as the diocese said, and wait the sixty days",
+          "outcome": "Charities answers in fifty-eight days, generously, and the kitchen is closed for four weeks in between, and the line goes somewhere and some of it does not come back. {@contact:soup_kitchen} says the diocese was right and that the diocese is always right in sixty days. He does not say it to you unkindly. He says it to the volunteers, who repeat it.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@contact:soup_kitchen",
+              "delta": -2
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": -2
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

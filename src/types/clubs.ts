@@ -37,6 +37,10 @@ export interface ClubDef {
   builds: string;
   /** How a bishop reads membership: −1 the traditional wing .. +1 the progressive wing. Absent means nobody reads anything into it. */
   leaning?: number;
+  /** A society meets in the house; an apostolate goes out to people. Absent means a society. */
+  kind?: 'society' | 'apostolate';
+  /** The layperson who runs the work, made on joining and met in its scenes (@contact:<club id>). */
+  contact?: { who: string; sex: 'm' | 'f'; ageRange: [number, number] };
 }
 
 export interface ClubMembership {
@@ -46,6 +50,8 @@ export interface ClubMembership {
   fellows: string[];
   /** The credential line has been given. */
   earned?: boolean;
+  /** The NPC who runs an apostolate, made on joining. */
+  contact?: string;
 }
 
 export interface ClubsState {

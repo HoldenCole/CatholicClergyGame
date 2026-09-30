@@ -16,9 +16,9 @@ import Portrait from '../portraits/Portrait';
 import { adjustSpec, facesFor, HERITAGE_LABEL, parseSpec, serializeSpec, SPEC_KEYS, SPEC_LABELS } from '../portraits/spec';
 import type { Heritage } from '@/content/names';
 
-type Step = 'name' | 'face' | 'diocese' | 'origin' | 'tie' | 'path' | 'field' | 'career' | 'motive' | 'family' | 'past' | 'order' | 'province' | 'why' | 'ptie' | 'rname' | 'summary';
+type Step = 'name' | 'face' | 'diocese' | 'origin' | 'tie' | 'path' | 'field' | 'career' | 'motive' | 'family' | 'past' | 'seminary' | 'order' | 'province' | 'why' | 'ptie' | 'rname' | 'summary';
 /** The diocese comes after the background so its cards can say where a man like this would be sent. */
-const DIOCESAN_ORDER: Step[] = ['name', 'face', 'origin', 'path', 'field', 'career', 'motive', 'family', 'past', 'diocese', 'tie', 'summary'];
+const DIOCESAN_ORDER: Step[] = ['name', 'face', 'origin', 'path', 'field', 'career', 'motive', 'family', 'past', 'diocese', 'tie', 'seminary', 'summary'];
 /** The religious campaign: the order and the province replace the diocese and its tie. E3 §4. */
 const RELIGIOUS_ORDER: Step[] = ['name', 'face', 'origin', 'path', 'field', 'career', 'motive', 'family', 'past', 'order', 'province', 'why', 'ptie', 'rname', 'summary'];
 
@@ -43,8 +43,15 @@ const QUESTIONS: Record<Step, { title: string; prompt: string }> = {
   motive: { title: 'Why you went', prompt: 'The answer you gave the vocation director was true. This is the truer one.' },
   family: { title: 'Family and obligations', prompt: 'Who you leave, and who will not entirely let you.' },
   past: { title: 'Something in your past', prompt: 'Optional. Taking one makes you more than you would otherwise be, and gives the future something to find.' },
+  seminary: { title: 'How the seminary begins', prompt: 'Not every seminary runs a propaedeutic year. The diocese sends its men where it sends them; this is how yours begins.' },
   summary: { title: 'The file', prompt: 'What the vocation director has written about you.' },
 };
+
+/** Whether the seminary runs a propaedeutic year. A choice of house, not of the man; it changes the length of the road. */
+const SEMINARY_STARTS: CreationOption[] = [
+  { id: 'propaedeutic', label: 'A propaedeutic year first', blurb: 'A year of silence before philosophy: no phone, no news, the house and the chapel. Seven years to ordination. Most seminaries run one now.', outcome: 'The year before the years. You will know by Easter whether you can bear the quiet, and so will the house.', effects: [] },
+  { id: 'philosophy', label: 'Straight into philosophy', blurb: 'The seminary begins with the syllabus: Aristotle in September, a class already arguing, no year of silence first. Six years to ordination.', outcome: 'You arrive to a reading list and a house that expects you to keep up from the first week. There is no year to find your feet; you find them in the corridor.', effects: [] },
+];
 
 export default function CreationScreen() {
   const startGame = useGameStore((s) => s.startGame);
@@ -73,6 +80,7 @@ export default function CreationScreen() {
     motive: 'certainty',
     family: 'supportive',
     past: null,
+    propaedeutic: true,
   });
   const [seen, setSeen] = useState<Partial<Record<Step, string>>>({});
   const [facePage, setFacePage] = useState(0);
@@ -208,6 +216,9 @@ export default function CreationScreen() {
         {step === 'career' && (
           <CareerStep answers={full} onChange={(patch, o) => (o ? choose('career', o, patch) : setAnswers((a) => ({ ...a, ...patch })))} />
         )}
+        {step === 'seminary' && (
+          <OptionList options={SEMINARY_STARTS} selected={full.propaedeutic === false ? 'philosophy' : 'propaedeutic'} onSelect={(o) => choose('seminary', o, { propaedeutic: o.id === 'propaedeutic' })} />
+        )}
         {step === 'motive' && (
           <OptionList options={content.motives} selected={full.motive} onSelect={(o) => choose('motive', o, { motive: o.id })} />
         )}
@@ -310,11 +321,12 @@ function CareerStep({
 
 function Summary({ answers, seen, religious }: { answers: CreationAnswers; seen: Partial<Record<Step, string>>; religious: { order: string; province: string; name?: string | undefined } | null }) {
   const age = entryAge(answers, content);
-  const paragraphs = (['origin', 'tie', 'path', 'field', 'career', 'motive', 'family', 'past', 'why', 'ptie'] as Step[]).map((k) => seen[k]).filter(Boolean);
+  const paragraphs = (['origin', 'tie', 'path', 'field', 'career', 'motive', 'family', 'past', 'seminary', 'why', 'ptie'] as Step[]).map((k) => seen[k]).filter(Boolean);
+  const years = religious || answers.propaedeutic !== false ? 7 : 6;
   return (
     <div className="scroll-paper flex max-h-[480px] flex-col gap-3 overflow-y-auto pr-2 leading-relaxed">
       <p>
-        <span className="font-semibold">{answers.firstName} {answers.lastName}</span>, entering at {age}, to be ordained at {age + 7} if all goes well.
+        <span className="font-semibold">{answers.firstName} {answers.lastName}</span>, entering at {age}, to be ordained at {age + years} if all goes well.
         {religious ? ` With ${religious.order}, in the ${religious.province}${religious.name ? `, to be called ${religious.name}` : ''}.` : ''}
       </p>
       {paragraphs.map((p, i) => (
