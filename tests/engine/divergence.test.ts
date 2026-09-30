@@ -21,9 +21,8 @@ describe('divergence', () => {
     expect(statGap).toBeGreaterThan(8);
     const repGap = (['parishioners', 'chancery', 'brother_priests', 'public', 'rome'] as const).reduce((n, k) => n + Math.abs(ca.reputation[k] - cb.reputation[k]), 0);
     expect(repGap).toBeGreaterThan(5);
-    // The record: two men who both keep their heads down for four years is a legitimate pair of
-    // runs, so the stands are compared where either man took one, and the marks on the file always.
-    if (ca.positions.length || cb.positions.length) expect(JSON.stringify(ca.positions)).not.toBe(JSON.stringify(cb.positions));
+    // The record: the stands are one signal among several (two men may take the same stand in the
+    // same first-year scene, before their paths part), so the marks on the file are what is compared.
     const marks = (flags: Record<string, unknown>) => new Set(Object.keys(flags).filter((k) => flags[k] === true));
     const ma = marks(a.flags);
     const mb = marks(b.flags);

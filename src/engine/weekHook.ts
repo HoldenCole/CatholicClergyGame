@@ -120,18 +120,35 @@ export function fireOrResolve(state: GameState, event: GameEvent, rng: Rng, deps
   return next;
 }
 
+/** What came of a choice, for the sheet laid over the room after it: the scene, the choice, and the prose, rendered. */
+export interface ChoiceOutcome {
+  eventId: string;
+  choiceId: string;
+  week: number;
+  title: string;
+  label: string;
+  text: string;
+  rolled?: 'success' | 'failure';
+}
+
 /** Resolve a pending event with the player's choice; fire its follow-up if any. */
 export function resolvePending(state: GameState, pending: PendingEvent, choiceId: string, rng: Rng, deps: EventDeps): GameState {
+  return resolvePendingWithOutcome(state, pending, choiceId, rng, deps).state;
+}
+
+/** As `resolvePending`, and what came of it, for the player to read: the choice's outcome was never shown before (owner's feedback). */
+export function resolvePendingWithOutcome(state: GameState, pending: PendingEvent, choiceId: string, rng: Rng, deps: EventDeps): { state: GameState; outcome: ChoiceOutcome | null } {
   const event = deps.lookup(pending.eventId);
   if (!event) throw new Error(`unknown event ${pending.eventId}`);
   const result = applyChoice(state, event, pending, choiceId, deps.lookup);
   const choice = event.choices.find((c) => c.id === choiceId)!;
   let next = addDigestLine(result.state, `${renderText(event.title, state, pending.bindings)}: ${renderText(choice.label, state, pending.bindings)}.`);
+  const outcome: ChoiceOutcome | null = result.outcome ? { eventId: event.id, choiceId, week: pending.week, title: renderText(event.title, state, pending.bindings), label: renderText(choice.label, state, pending.bindings), text: renderText(result.outcome, next, pending.bindings), ...(result.rolled ? { rolled: result.rolled } : {}) } : null;
   if (result.followUp) {
     const fired = fireEvent(next, result.followUp, rng);
     next = { ...markBeatFired(fired.state, result.followUp), pending: [...fired.state.pending, { ...fired.pending, bindings: { ...pending.bindings, ...fired.pending.bindings } }] };
   }
-  return next;
+  return { state: next, outcome };
 }
 
 /** How often an unplayed week of a friar's formation carries a scene. Invented. */

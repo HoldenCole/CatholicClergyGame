@@ -1,4 +1,4 @@
-import type { Choice, GameEvent, GameState, HistoryEntry, PendingEvent } from '@/types';
+import type { Choice, ChoiceRoll, GameEvent, GameState, HistoryEntry, PendingEvent } from '@/types';
 import { evaluateAll, evaluateCondition } from './conditions';
 import { applyInternalForum } from './internalForum';
 import { applyEffects } from './effects';
@@ -188,6 +188,23 @@ export interface ApplyResult {
   state: GameState;
   /** A follow-up event that should fire immediately with the same bindings. */
   followUp: GameEvent | null;
+  /** The prose of what came of it: the branch's when the choice had dice, else the choice's own. Unrendered. */
+  outcome: string | null;
+  rolled?: 'success' | 'failure';
+}
+
+/** The odds a rolled choice succeeds for this man: the base, moved by the stat it names, held between one in twenty and nineteen in twenty. */
+export function rollChance(roll: ChoiceRoll, state: GameState): number {
+  const stat = roll.stat && state.character ? state.character.stats[roll.stat] : undefined;
+  const shift = stat !== undefined ? (stat - 50) / (roll.per ?? 100) : 0;
+  return Math.max(0.05, Math.min(0.95, roll.chance + shift));
+}
+
+/** The dice for a choice: deterministic in the seed, the scene, and the week. */
+export function rollChoice(state: GameState, event: GameEvent, choice: Choice): 'success' | 'failure' | null {
+  if (!choice.roll) return null;
+  const rng = createRng(`${state.seed}:roll:${event.id}:${state.clock.week}:${choice.id}`);
+  return rng.chance(rollChance(choice.roll, state)) ? 'success' : 'failure';
 }
 
 /**
@@ -214,6 +231,10 @@ export function applyChoice(
   let next = event.internalForum
     ? applyInternalForum(state, choice.effects, pending.bindings, event.title)
     : applyEffects(state, choice.effects, pending.bindings, event.title);
+  // The dice, when the choice has them: the branch's effects on top of the base, under the same seal.
+  const rolled = rollChoice(state, event, choice);
+  const branch = rolled && choice.roll ? choice.roll[rolled] : null;
+  if (branch) next = event.internalForum ? applyInternalForum(next, branch.effects, pending.bindings, event.title) : applyEffects(next, branch.effects, pending.bindings, event.title);
   // The people in the scene were seen, and anyone it moved remembers why: regard that settles.
   next = noteMarks(state, next, Object.values(pending.bindings), event.title);
 
@@ -253,12 +274,12 @@ export function applyChoice(
     delete threads[choice.resolvesThread];
     next = { ...next, threads };
   }
-  const entry: HistoryEntry = { eventId: event.id, choiceId, week: state.clock.week, ...(auto ? { auto: true } : {}) };
+  const entry: HistoryEntry = { eventId: event.id, choiceId, week: state.clock.week, ...(auto ? { auto: true } : {}), ...(rolled ? { rolled } : {}) };
   next = {
     ...next,
     history: [...next.history, entry],
     pending: next.pending.filter((p) => p !== pending && p.eventId !== pending.eventId),
   };
   const followUp = choice.followUpId ? (lookup(choice.followUpId) ?? null) : null;
-  return { state: next, followUp };
+  return { state: next, followUp, outcome: branch?.outcome ?? choice.outcome ?? null, ...(rolled ? { rolled } : {}) };
 }

@@ -1,0 +1,1721 @@
+{
+  "_notes": "Chance scenes for the seminary years (feedback round): small, house-sized things whose outcome turns on a roll (choice.roll: a chance, a stat that shifts it, success and failure branches with their own prose and effects) rather than on the choice alone, so that the same house is not the same house twice. Most are once; semr_pickup_game, semr_car_on_route_nine and semr_flu_week come round again after their suppression. Flags written: known_scholar (semr_disputation › prepare, on success; also y-pool), stayed_with_the_dying (semr_night_pager), noticed_by_bishop (semr_driving_the_bishop, on success), deacon_buried_a_man (semr_funeral_nobody_could_take). No threads; nothing here is sensitive material.",
+  "events": [
+    {
+      "id": "semr_heat_out",
+      "phase": "seminary",
+      "yearGate": [
+        1
+      ],
+      "pressure": [
+        "competence"
+      ],
+      "severity": "NOTABLE",
+      "category": "formation",
+      "baseWeight": 12,
+      "suppressYears": 3,
+      "once": true,
+      "title": "The Night the Heat Went Out",
+      "body": "The boiler fails in the third week of January, at nine at night, with the temperature outside at four degrees and falling. The house has no plan for this, because the boiler has never failed, and the two old priests in residence on the third floor cannot be moved to a motel at that hour without a great deal of talk. {@rector} stands in the front hall in his overcoat and asks, of the twenty men on the stairs, whether anyone knows anything about boilers, and then, when nobody does, whether anyone knows anything about anything. It is going to be a long night whatever happens. The question is whose night it will be.",
+      "flavorPrompt": "A cold front hall at nine at night, a rector in his overcoat, space heaters and cocoa and two old priests who will not be moved.",
+      "choices": [
+        {
+          "id": "run_it",
+          "label": "Take charge of the night: blankets, the space heaters, the old men, the plumber's number",
+          "outcome": "You take the front hall and start giving people things to do, and find out in the doing whether you can.",
+          "roll": {
+            "chance": 0.5,
+            "stat": "administration",
+            "success": {
+              "outcome": "By midnight the third floor has every space heater in the building and the two old priests have been persuaded, with cocoa, that this is an adventure. The plumber comes at two. {@rector} says nothing at the time and something at breakfast, in front of the house, about a man who knew what to do. It is the first thing the house has learned about you that it did not learn from your file.",
+              "effects": [
+                {
+                  "target": "relationship",
+                  "key": "@rector",
+                  "delta": 5
+                },
+                {
+                  "target": "pillar",
+                  "key": "human",
+                  "delta": 1
+                },
+                {
+                  "target": "stat",
+                  "key": "administration",
+                  "delta": 1
+                },
+                {
+                  "target": "trait",
+                  "key": "ran the night the heat went out, in first year"
+                }
+              ]
+            },
+            "failure": {
+              "outcome": "You give people things to do and half of them are the wrong things. Two space heaters on one circuit put the third floor in the dark, and the old priests are moved twice, and the plumber, when he comes, asks who has been at the valves. {@rector} takes over at midnight without comment. The house is kind about it, which is worse than laughter, and by spring the story has a name.",
+              "effects": [
+                {
+                  "target": "relationship",
+                  "key": "@rector",
+                  "delta": -2
+                },
+                {
+                  "target": "pillar",
+                  "key": "human",
+                  "delta": -1
+                },
+                {
+                  "target": "stat",
+                  "key": "administration",
+                  "delta": 1
+                },
+                {
+                  "target": "trait",
+                  "key": "took charge of the boiler night and made it worse"
+                }
+              ]
+            },
+            "per": 80
+          },
+          "effects": [
+            {
+              "target": "pillar",
+              "key": "human",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "help_quietly",
+          "label": "Do what you are told, and do it well, and go to bed when you are sent",
+          "default": true,
+          "outcome": "You carry blankets and sit with one of the old priests until he sleeps, and the night belongs to someone else, which is what first year is for. Nobody remembers you were there, which is not the same as nobody noticing. The old priest asks your name in the morning and uses it, from then on, at every meal.",
+          "effects": [
+            {
+              "target": "pillar",
+              "key": "human",
+              "delta": 1
+            },
+            {
+              "target": "pillar",
+              "key": "spiritual",
+              "delta": 1
+            },
+            {
+              "target": "relationship",
+              "key": "@random_classmate",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "go_to_bed",
+          "label": "Go to bed; it is not your boiler",
+          "outcome": "You go to bed under two blankets and sleep, and in the morning the house is warm and the story of the night is told at breakfast by the men who were in it, and you are not in it. It is a small thing. First year is made of small things, and the house is keeping count in a way it does not know it is keeping.",
+          "effects": [
+            {
+              "target": "pillar",
+              "key": "human",
+              "delta": -1
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 0
+            },
+            {
+              "target": "trait",
+              "key": "slept through the boiler night"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "semr_first_paper",
+      "phase": "seminary",
+      "yearGate": [
+        1,
+        2
+      ],
+      "pressure": [
+        "competence"
+      ],
+      "severity": "NOTABLE",
+      "category": "formation",
+      "baseWeight": 11,
+      "suppressYears": 3,
+      "once": true,
+      "title": "The First Paper",
+      "body": "The first real paper of your formation is due on a Friday, ten pages on a question you did not choose, for {@professor_trad}, who is known to return papers with more ink on them than the student put there. Half the house is writing it the night before. You have a draft that is not good and three days, and a classmate, {@closest_classmate}, who writes easily and has offered, without being asked, to read yours. There is also the library, which is empty after nine, and the fact that you have never in your life written ten pages on anything.",
+      "flavorPrompt": "A seminary library after nine, one lamp, ten pages that will not come.",
+      "choices": [
+        {
+          "id": "write_it",
+          "label": "Three nights in the library and write it yourself",
+          "outcome": "You take the empty library three nights running and find out what ten pages costs.",
+          "roll": {
+            "chance": 0.5,
+            "stat": "knowledge",
+            "success": {
+              "outcome": "It comes back with ink on it and, at the end, a sentence that says the argument holds. From {@professor_trad} that is a laurel. He asks, in the corridor, whether you have written before, and you say no, and he says that it does not show, which you will repeat to yourself for years.",
+              "effects": [
+                {
+                  "target": "stat",
+                  "key": "knowledge",
+                  "delta": 1
+                },
+                {
+                  "target": "stat",
+                  "key": "theology",
+                  "delta": 1
+                },
+                {
+                  "target": "relationship",
+                  "key": "@professor_trad",
+                  "delta": 4
+                },
+                {
+                  "target": "pillar",
+                  "key": "intellectual",
+                  "delta": 1
+                },
+                {
+                  "target": "trait",
+                  "key": "wrote the first paper alone and it held"
+                }
+              ]
+            },
+            "failure": {
+              "outcome": "It comes back with ink on every page and a grade that is a warning. The argument does not hold, {@professor_trad} writes, and he shows where, and he is right. You have learned how a paper fails, which is not nothing, and you have learned it in front of a man who remembers.",
+              "effects": [
+                {
+                  "target": "stat",
+                  "key": "knowledge",
+                  "delta": 1
+                },
+                {
+                  "target": "relationship",
+                  "key": "@professor_trad",
+                  "delta": -1
+                },
+                {
+                  "target": "pillar",
+                  "key": "intellectual",
+                  "delta": -1
+                }
+              ]
+            }
+          },
+          "effects": [
+            {
+              "target": "pillar",
+              "key": "intellectual",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "let_him_read",
+          "label": "Let {@closest_classmate} read it, and take what he says",
+          "default": true,
+          "outcome": "He reads it at the kitchen table and is honest and kind in the right proportion, and the paper that goes in on Friday is better than the one you wrote and still yours. It comes back with a good deal of ink and a fair grade. You have a friend who will tell you the truth about your work, and you know it now, and so does he.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@closest_classmate",
+              "delta": 5
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 1
+            },
+            {
+              "target": "pillar",
+              "key": "human",
+              "delta": 1
+            },
+            {
+              "target": "pillar",
+              "key": "intellectual",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "hand_in_the_draft",
+          "label": "Hand in the draft as it is; there are other things to do this week",
+          "outcome": "It goes in on Friday as it was on Tuesday, and it comes back on the following Friday with a grade that says so and a note that says {@professor_trad} expected more, which means he had expected something. The week you kept was a good week. The paper is in the file, and files are patient.",
+          "effects": [
+            {
+              "target": "pillar",
+              "key": "intellectual",
+              "delta": -1
+            },
+            {
+              "target": "pillar",
+              "key": "human",
+              "delta": 1
+            },
+            {
+              "target": "relationship",
+              "key": "@professor_trad",
+              "delta": -2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "semr_pickup_game",
+      "phase": "seminary",
+      "yearGate": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "pressure": [
+        "friendship_vs_duty"
+      ],
+      "severity": "NOTABLE",
+      "category": "classmate",
+      "baseWeight": 10,
+      "suppressYears": 2,
+      "title": "The Game Against the Friars",
+      "body": "Every year in October the house plays the Dominican studentate across town at basketball, in the friars' gym, with the rector and the prior in folding chairs at the baseline pretending not to care. The house has lost four years running. This year {@closest_classmate} has been building a team since August and has written your name on it, in a position you have not played since high school, and the friars, it is said, have a novice who played in college. The gym will be full. Half the men you will spend your priesthood with will be in it.",
+      "flavorPrompt": "A friars' gym in October, a rector and a prior in folding chairs, the annual grudge match.",
+      "choices": [
+        {
+          "id": "play_hard",
+          "label": "Play, and play to win",
+          "outcome": "You play the whole game and find out, in front of the house, what is left of the boy who played in high school.",
+          "roll": {
+            "chance": 0.5,
+            "stat": "charisma",
+            "success": {
+              "outcome": "The friars' novice is as good as they said and it does not matter; the house wins by four on a shot {@closest_classmate} takes with two seconds left, and the gym comes apart. The prior shakes the rector's hand with visible effort. For a month you are a man who was on the team that beat the friars, and the house is a warmer place because of it.",
+              "effects": [
+                {
+                  "target": "relationship",
+                  "key": "@closest_classmate",
+                  "delta": 5
+                },
+                {
+                  "target": "pillar",
+                  "key": "human",
+                  "delta": 2
+                },
+                {
+                  "target": "stat",
+                  "key": "charisma",
+                  "delta": 1
+                },
+                {
+                  "target": "relationship",
+                  "key": "@random_classmate",
+                  "delta": 3
+                },
+                {
+                  "target": "trait",
+                  "key": "on the team that beat the friars"
+                }
+              ]
+            },
+            "failure": {
+              "outcome": "You turn an ankle in the second quarter going for a ball you had no business going for, and watch the rest from the baseline next to the rector, who is sympathetic in the way of a man who has seen it before. The house loses by eleven. You are on crutches for a fortnight and the friars' novice, who is decent, comes over afterward to ask how it is.",
+              "effects": [
+                {
+                  "target": "relationship",
+                  "key": "@closest_classmate",
+                  "delta": 2
+                },
+                {
+                  "target": "pillar",
+                  "key": "human",
+                  "delta": 1
+                },
+                {
+                  "target": "stat",
+                  "key": "charisma",
+                  "delta": -1
+                },
+                {
+                  "target": "trait",
+                  "key": "turned an ankle against the friars"
+                }
+              ]
+            }
+          },
+          "effects": [
+            {
+              "target": "pillar",
+              "key": "human",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "keep_score",
+          "label": "Keep the book and run the bench, since somebody has to",
+          "default": true,
+          "outcome": "You keep score and time and hand out water, and the house loses by six, and you have watched every man in it under pressure for forty minutes, which is a thing worth knowing about the men you will be ordained with. {@closest_classmate} says next year, and means it. The rector, on the way out, asks who you thought played well, and listens to the answer.",
+          "effects": [
+            {
+              "target": "pillar",
+              "key": "human",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            },
+            {
+              "target": "relationship",
+              "key": "@rector",
+              "delta": 2
+            },
+            {
+              "target": "relationship",
+              "key": "@closest_classmate",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "skip_it",
+          "label": "Stay home; the game is not for you",
+          "outcome": "You stay home and the house goes without you and comes back loud, having lost, and tells the story at supper, and you are not in the story. It is a small absence. It is also the kind the house counts, and {@closest_classmate}, who wrote your name on the list in August, crosses it out without saying anything.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@closest_classmate",
+              "delta": -3
+            },
+            {
+              "target": "pillar",
+              "key": "human",
+              "delta": -1
+            },
+            {
+              "target": "pillar",
+              "key": "spiritual",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "semr_forty_dollars",
+      "phase": "seminary",
+      "yearGate": [
+        2,
+        3
+      ],
+      "pressure": [
+        "money",
+        "loyalty_vs_honesty"
+      ],
+      "severity": "NOTABLE",
+      "category": "classmate",
+      "baseWeight": 10,
+      "suppressYears": 3,
+      "once": true,
+      "title": "Forty Dollars",
+      "body": "There are forty dollars on the common room floor on a Tuesday night, two twenties folded once, under the chair {@rival_classmate} usually takes, and the room is empty. Nobody in the house has forty dollars to spare; the stipend is small and the men who have families sending money are the men who do not need it. You could put it on the board with a note. You could ask around. You could put it in the poor box, which is what the rector would say to do and which would give it to nobody in the house. It is a small sum and it is a large sum, and the room is still empty.",
+      "flavorPrompt": "A common room at night, two twenties under a chair, a house where nobody has money.",
+      "choices": [
+        {
+          "id": "ask_around",
+          "label": "Ask around quietly, and give it to whoever it belongs to",
+          "outcome": "You ask, over two days, in the way one asks about money in a house of men who have none.",
+          "roll": {
+            "chance": 0.6,
+            "stat": "charisma",
+            "success": {
+              "outcome": "It is {@rival_classmate}'s, as you thought, and he is grateful in a way that surprises you both, and tells you, unasked, that it was the last of the month. Something between you is easier afterward. He does not become a friend. He becomes a man who knows you gave him back forty dollars when you did not have to.",
+              "effects": [
+                {
+                  "target": "relationship",
+                  "key": "@rival_classmate",
+                  "delta": 7
+                },
+                {
+                  "target": "honesty",
+                  "key": "",
+                  "delta": 1
+                },
+                {
+                  "target": "pillar",
+                  "key": "human",
+                  "delta": 1
+                },
+                {
+                  "target": "trait",
+                  "key": "gave a rival back his forty dollars"
+                }
+              ]
+            },
+            "failure": {
+              "outcome": "Three men say it is theirs, which is what happens when one asks about money in a house of men who have none, and the two who are lying are embarrassed and one of them is {@rival_classmate}, who was not. You give it to him. The other two remember that you made them lie, which was not what you did, and which does not matter.",
+              "effects": [
+                {
+                  "target": "relationship",
+                  "key": "@rival_classmate",
+                  "delta": 3
+                },
+                {
+                  "target": "relationship",
+                  "key": "@random_classmate",
+                  "delta": -3
+                },
+                {
+                  "target": "honesty",
+                  "key": "",
+                  "delta": 1
+                },
+                {
+                  "target": "pillar",
+                  "key": "human",
+                  "delta": -1
+                }
+              ]
+            }
+          },
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "post_it",
+          "label": "Pin a note on the board and let the owner come",
+          "default": true,
+          "outcome": "The note goes up and nobody comes for two days, and then {@rival_classmate} does, a little stiffly, and takes it, and says thank you to the board rather than to you. It was the right thing done in the plain way. He knows it was you. He would rather it had not been.",
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            },
+            {
+              "target": "relationship",
+              "key": "@rival_classmate",
+              "delta": 2
+            },
+            {
+              "target": "pillar",
+              "key": "human",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "poor_box",
+          "label": "Put it in the poor box; the rector would say so",
+          "outcome": "You put it in the poor box in the chapel and feel, for an hour, the clean feeling of a rule followed. On Thursday {@rival_classmate} asks the room whether anyone has seen forty dollars, and the room has not, and you have not either, in the sense in which the question was asked. The poor have forty dollars. You have a thing you do not say.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": -1
+            },
+            {
+              "target": "relationship",
+              "key": "@rival_classmate",
+              "delta": -2
+            },
+            {
+              "target": "trait",
+              "key": "put a classmate’s forty dollars in the poor box"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "semr_disputation",
+      "phase": "seminary",
+      "yearGate": [
+        2,
+        3
+      ],
+      "pressure": [
+        "competence",
+        "belief_vs_safety"
+      ],
+      "severity": "NOTABLE",
+      "category": "formation",
+      "baseWeight": 11,
+      "suppressYears": 3,
+      "once": true,
+      "title": "The Public Disputation",
+      "body": "The philosophy faculty holds one public disputation a year, in the old form: a thesis, a defender, two objectors, and the whole house in the chairs. {@professor_prog} has chosen you to defend, which is either a compliment or an experiment, and the thesis he has handed you is one you half believe. You have three weeks. The objectors are {@rival_classmate}, who has been waiting for this, and a fourth-year man who has done it before. The house comes to these to watch someone fail well.",
+      "flavorPrompt": "A lecture hall set for a disputation in the old form, a house that has come to watch someone fail well.",
+      "choices": [
+        {
+          "id": "prepare",
+          "label": "Prepare as if your life depended on it, and defend the thesis",
+          "outcome": "You give three weeks to a thesis you half believe and find out, in front of the house, whether half is enough.",
+          "roll": {
+            "chance": 0.5,
+            "stat": "theology",
+            "success": {
+              "outcome": "You hold. {@rival_classmate} presses and you turn him, twice, and the fourth-year man concedes a distinction with a nod the house sees. {@professor_prog} says afterward that you defended it better than he believes it, which is the highest thing he says. The faculty has a name for you now, and it is a good one.",
+              "effects": [
+                {
+                  "target": "relationship",
+                  "key": "@professor_prog",
+                  "delta": 5
+                },
+                {
+                  "target": "relationship",
+                  "key": "@rival_classmate",
+                  "delta": -2
+                },
+                {
+                  "target": "stat",
+                  "key": "theology",
+                  "delta": 1
+                },
+                {
+                  "target": "pillar",
+                  "key": "intellectual",
+                  "delta": 2
+                },
+                {
+                  "target": "flag",
+                  "key": "known_scholar",
+                  "value": true
+                },
+                {
+                  "target": "trait",
+                  "key": "held a public disputation in philosophy"
+                }
+              ]
+            },
+            "failure": {
+              "outcome": "You hold for twenty minutes and then {@rival_classmate} finds the seam, the one you half believed through, and pulls, and the thesis comes apart in front of the house. It is done with courtesy. {@professor_prog} says afterward that you fell at the right place, which is a kind thing to say and does not help. The house has watched you fail well, which is what it came for.",
+              "effects": [
+                {
+                  "target": "relationship",
+                  "key": "@rival_classmate",
+                  "delta": -4
+                },
+                {
+                  "target": "pillar",
+                  "key": "intellectual",
+                  "delta": 1
+                },
+                {
+                  "target": "stat",
+                  "key": "theology",
+                  "delta": 1
+                },
+                {
+                  "target": "relationship",
+                  "key": "@professor_prog",
+                  "delta": 1
+                },
+                {
+                  "target": "trait",
+                  "key": "lost a public disputation with courtesy"
+                }
+              ]
+            },
+            "per": 80
+          },
+          "effects": [
+            {
+              "target": "pillar",
+              "key": "intellectual",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "ask_to_switch",
+          "label": "Ask him for a thesis you believe",
+          "default": true,
+          "outcome": "He gives you another, a harder one, and says that the switch will be noted, and it is: you defend it competently and without fire, and the house is not much interested, and {@rival_classmate} gets no purchase because there is nothing to get purchase on. It is a draw. You have learned that you will not argue what you do not hold, which the faculty writes down as a virtue and a limit.",
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            },
+            {
+              "target": "pillar",
+              "key": "intellectual",
+              "delta": 1
+            },
+            {
+              "target": "relationship",
+              "key": "@professor_prog",
+              "delta": -1
+            },
+            {
+              "target": "outspokenness",
+              "key": "",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "decline",
+          "label": "Decline; someone else can be the experiment",
+          "outcome": "He accepts it, and gives the thesis to {@random_classmate}, who defends it badly, and the house has its evening. You have kept three weeks and lost a thing you cannot name, which is the chance to be seen holding something. {@professor_prog} does not ask you again.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@professor_prog",
+              "delta": -4
+            },
+            {
+              "target": "pillar",
+              "key": "intellectual",
+              "delta": -1
+            },
+            {
+              "target": "pillar",
+              "key": "human",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "semr_night_pager",
+      "phase": "seminary",
+      "yearGate": [
+        4,
+        5
+      ],
+      "pressure": [
+        "doubt",
+        "competence"
+      ],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 12,
+      "suppressYears": 3,
+      "once": true,
+      "title": "The Night Pager",
+      "body": "The hospital practicum comes with a pager and a rule that a seminarian does not anoint, which everyone knows, and at three in the morning in February the pager goes and it is the oncology floor and a family that does not know the rule. The chaplain is forty minutes away. The nurse says the man has an hour, maybe two. His wife wants a priest and there is not one, and there is you, in a borrowed coat with a rosary and the book of prayers for the dying, and a corridor that is very long at three in the morning.",
+      "flavorPrompt": "An oncology floor at three in the morning, a borrowed coat, the book of prayers for the dying and a corridor that is very long.",
+      "choices": [
+        {
+          "id": "stay",
+          "label": "Stay with them until it is over, and pray the prayers a deacon may pray",
+          "outcome": "You go in, and say what you are and what you are not, and stay.",
+          "roll": {
+            "chance": 0.55,
+            "stat": "piety",
+            "success": {
+              "outcome": "The prayers hold the room. The wife holds your hand through the commendation and the man goes at five, quietly, with the chaplain still on the road. You have been the priest who was not a priest, and the family will not remember the distinction, and the chaplain, when he comes, looks at you and says that you stayed, which is the whole of the practicum in two words.",
+              "effects": [
+                {
+                  "target": "stat",
+                  "key": "piety",
+                  "delta": 2
+                },
+                {
+                  "target": "pillar",
+                  "key": "pastoral",
+                  "delta": 2
+                },
+                {
+                  "target": "pillar",
+                  "key": "spiritual",
+                  "delta": 1
+                },
+                {
+                  "target": "reputation",
+                  "key": "parishioners",
+                  "delta": 2
+                },
+                {
+                  "target": "flag",
+                  "key": "stayed_with_the_dying",
+                  "value": true
+                },
+                {
+                  "target": "trait",
+                  "key": "stayed with a dying man until morning, in the practicum"
+                }
+              ]
+            },
+            "failure": {
+              "outcome": "You stay and it goes badly in the way these things go badly: the daughter arrives and wants to know why there is no priest, and you have no answer that helps, and the prayers, which you have never said over a real man, come out stiff. He goes at five. The chaplain, when he comes, is kind. You drive home in the dark and cannot say whether you were any use, and it is the first time you have asked.",
+              "effects": [
+                {
+                  "target": "stat",
+                  "key": "piety",
+                  "delta": 1
+                },
+                {
+                  "target": "pillar",
+                  "key": "spiritual",
+                  "delta": 1
+                },
+                {
+                  "target": "pillar",
+                  "key": "human",
+                  "delta": -1
+                },
+                {
+                  "target": "trait",
+                  "key": "stayed with a dying man and did not know if it helped"
+                }
+              ]
+            }
+          },
+          "effects": [
+            {
+              "target": "pillar",
+              "key": "spiritual",
+              "delta": 1
+            },
+            {
+              "target": "pillar",
+              "key": "pastoral",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "call_and_wait",
+          "label": "Call the chaplain, sit in the corridor, and wait for the priest",
+          "default": true,
+          "outcome": "You sit in the corridor and pray the rosary and go in when the chaplain comes, forty minutes later, and watch him do what you could not. The man goes at five. The wife thanks you both. You have learned how it is done by a man who knows, which is one way to learn it; the other way was in the room, and you were not in the room.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "pillar",
+              "key": "spiritual",
+              "delta": 1
+            },
+            {
+              "target": "pillar",
+              "key": "pastoral",
+              "delta": -1
+            }
+          ]
+        },
+        {
+          "id": "send_a_nurse",
+          "label": "Ask the nurse to tell them a priest is coming, and go back to sleep",
+          "outcome": "You go back to sleep and the chaplain comes at four and the man goes at five, and in the morning the chaplain asks, not unkindly, where you were, and you tell him, and he writes something short in the practicum log. It is a fair note. It says a man had the pager and did not go.",
+          "effects": [
+            {
+              "target": "pillar",
+              "key": "pastoral",
+              "delta": -2
+            },
+            {
+              "target": "pillar",
+              "key": "human",
+              "delta": -1
+            },
+            {
+              "target": "trait",
+              "key": "did not go when the pager went"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "semr_car_on_route_nine",
+      "phase": "seminary",
+      "yearGate": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "pressure": [
+        "competence"
+      ],
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 9,
+      "suppressYears": 3,
+      "title": "The Car on Route 9",
+      "body": "The seminary's second car, the one with the door that has to be lifted, dies on a Saturday morning on Route 9 with you and {@random_classmate} in it and a parish weekend forty miles ahead in which you are supposed to serve the vigil Mass. There is a shoulder, and a cornfield, and a phone that has one bar. The pastor expecting you does not answer. The rector's number goes to the house, where nobody is awake. It is nine in the morning and it is going to be a day about a car.",
+      "flavorPrompt": "A dead car on a rural highway on a Saturday morning, a cornfield, one bar of signal, a vigil Mass forty miles away.",
+      "choices": [
+        {
+          "id": "fix_it",
+          "label": "Open the hood and see whether it is something a man can fix",
+          "outcome": "You open the hood, which you have done before, and look at what is under it, which you have not.",
+          "roll": {
+            "chance": 0.4,
+            "stat": "knowledge",
+            "success": {
+              "outcome": "It is a battery cable, corroded through, and you clean it with a pocketknife and a bottle of Coke from the trunk, and the car starts, and {@random_classmate} looks at you as if you had raised the dead. You serve the vigil with grease on your cuffs. The story is told at the parish that night, and at the house, and grows.",
+              "effects": [
+                {
+                  "target": "stat",
+                  "key": "knowledge",
+                  "delta": 1
+                },
+                {
+                  "target": "relationship",
+                  "key": "@random_classmate",
+                  "delta": 5
+                },
+                {
+                  "target": "reputation",
+                  "key": "parishioners",
+                  "delta": 1
+                },
+                {
+                  "target": "trait",
+                  "key": "fixed the seminary car on Route 9 with a pocketknife"
+                }
+              ]
+            },
+            "failure": {
+              "outcome": "It is not something a man can fix, or not this man, and an hour under the hood produces nothing but the certainty of that and a burned finger. A farmer with a truck tows you to a garage at noon. You miss the vigil. The pastor is understanding and does not ask you back, and the rector, told of the car, asks why you did not simply call.",
+              "effects": [
+                {
+                  "target": "pillar",
+                  "key": "human",
+                  "delta": 1
+                },
+                {
+                  "target": "relationship",
+                  "key": "@random_classmate",
+                  "delta": 2
+                },
+                {
+                  "target": "reputation",
+                  "key": "parishioners",
+                  "delta": -1
+                },
+                {
+                  "target": "pillar",
+                  "key": "pastoral",
+                  "delta": -1
+                }
+              ]
+            }
+          },
+          "effects": [
+            {
+              "target": "pillar",
+              "key": "human",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "flag_down",
+          "label": "Stand on the shoulder and flag a ride to the parish; the car can wait",
+          "default": true,
+          "outcome": "A woman in a minivan with three children in the back stops for two young men in clerical shirts, which is a thing that still happens on Route 9, and drives you thirty miles out of her way, and you serve the vigil, and her family sits in the second pew. The car is towed on Monday. The pastor tells the story from the pulpit, and you are, for a weekend, the men who came anyway.",
+          "effects": [
+            {
+              "target": "pillar",
+              "key": "pastoral",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "relationship",
+              "key": "@random_classmate",
+              "delta": 3
+            }
+          ]
+        },
+        {
+          "id": "wait_for_the_tow",
+          "label": "Call the tow and wait; the parish will manage without you",
+          "outcome": "The tow comes at eleven and the parish manages without you, as parishes do, and you spend the day in a garage in a small town reading the breviary and eating vending-machine crackers with {@random_classmate}, who turns out to be good company. Nobody is angry. The pastor does not ask for you again, either.",
+          "effects": [
+            {
+              "target": "pillar",
+              "key": "spiritual",
+              "delta": 1
+            },
+            {
+              "target": "relationship",
+              "key": "@random_classmate",
+              "delta": 4
+            },
+            {
+              "target": "pillar",
+              "key": "pastoral",
+              "delta": -1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "semr_paper_due_friday",
+      "phase": "seminary",
+      "yearGate": [
+        4,
+        5
+      ],
+      "pressure": [
+        "competence"
+      ],
+      "severity": "NOTABLE",
+      "category": "formation",
+      "baseWeight": 11,
+      "suppressYears": 3,
+      "once": true,
+      "title": "The Paper Due Friday",
+      "body": "The moral theology paper is due Friday and it is Tuesday and you have a page. It is not laziness; it is the practicum, and the funeral you served on Saturday, and a week in which everything came at once, and now {@professor_prog}, who does not give extensions on principle, has twenty pages coming from you in three days on a question that deserves them. Everyone in the class is in the same boat. Some of them are asking for the extension anyway. Some of them are not going to sleep.",
+      "flavorPrompt": "A theology desk on a Tuesday night, one page of twenty, a professor who does not give extensions.",
+      "choices": [
+        {
+          "id": "three_nights",
+          "label": "Three nights without much sleep, and get it in on Friday",
+          "outcome": "You give it the three nights and hand it in on Friday at four, and go to bed.",
+          "roll": {
+            "chance": 0.5,
+            "stat": "knowledge",
+            "success": {
+              "outcome": "It is good, which surprises you when it comes back; three nights of pressure did something to the argument that three weeks of leisure would not have. {@professor_prog} reads a paragraph of it to the class without saying whose. You know. So, from your face, does {@closest_classmate}.",
+              "effects": [
+                {
+                  "target": "stat",
+                  "key": "knowledge",
+                  "delta": 1
+                },
+                {
+                  "target": "stat",
+                  "key": "theology",
+                  "delta": 1
+                },
+                {
+                  "target": "relationship",
+                  "key": "@professor_prog",
+                  "delta": 3
+                },
+                {
+                  "target": "pillar",
+                  "key": "intellectual",
+                  "delta": 1
+                },
+                {
+                  "target": "trait",
+                  "key": "wrote twenty good pages in three nights"
+                }
+              ]
+            },
+            "failure": {
+              "outcome": "It is twenty pages and it is in on Friday and it is not good, and {@professor_prog} says so with the precision he is known for, and adds that it reads like a man who had not slept, which is a fair description of the author. You have learned what three nights buy, which is twenty pages and not an argument.",
+              "effects": [
+                {
+                  "target": "stat",
+                  "key": "knowledge",
+                  "delta": 1
+                },
+                {
+                  "target": "pillar",
+                  "key": "intellectual",
+                  "delta": -1
+                },
+                {
+                  "target": "pillar",
+                  "key": "human",
+                  "delta": -1
+                },
+                {
+                  "target": "stat",
+                  "key": "charisma",
+                  "delta": -1
+                }
+              ]
+            }
+          },
+          "effects": [
+            {
+              "target": "pillar",
+              "key": "intellectual",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "ask_anyway",
+          "label": "Ask for the extension anyway, and say why",
+          "default": true,
+          "outcome": "You go to his office and say the practicum and the funeral, plainly, and he listens and says no, as he says to everyone, and then, at the door, says Monday, and that he will not say it again. The paper is better for the weekend. He has bent a principle for you, once, and he will not forget that he did, and neither should you.",
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            },
+            {
+              "target": "relationship",
+              "key": "@professor_prog",
+              "delta": 2
+            },
+            {
+              "target": "pillar",
+              "key": "intellectual",
+              "delta": 1
+            },
+            {
+              "target": "outspokenness",
+              "key": "",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "hand_in_ten",
+          "label": "Hand in the ten pages you can write well, and take the grade",
+          "outcome": "Ten pages, clean, on Friday, and a note on the last one that says you chose depth over length and knew the cost. He gives you the grade the length earns and writes, under it, that the ten were good, which is not nothing from him and is not the grade. You have learned something about yourself that the transcript will not show.",
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            },
+            {
+              "target": "pillar",
+              "key": "intellectual",
+              "delta": 0
+            },
+            {
+              "target": "relationship",
+              "key": "@professor_prog",
+              "delta": 1
+            },
+            {
+              "target": "pillar",
+              "key": "spiritual",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "semr_rehearsal",
+      "phase": "seminary",
+      "yearGate": [
+        6,
+        7
+      ],
+      "pressure": [
+        "competence"
+      ],
+      "severity": "NOTABLE",
+      "category": "parish_death",
+      "baseWeight": 11,
+      "suppressYears": 3,
+      "once": true,
+      "title": "The Rehearsal",
+      "body": "A deacon may witness a marriage, and the pastor of the pastoral-year parish, who has four this month, hands you one: a Saturday in June, a couple you have met twice, and a rehearsal on the Friday night at which, you are warned, the mother of the bride will have opinions. She does. She has opinions about the aisle, the unity candle, the reading her sister will do, the placement of the photographer, and the deacon, whom she had not been told about. Her daughter is near tears by seven. The groom has gone outside. The pastor is at a funeral home across town and has left you the rehearsal and the keys.",
+      "flavorPrompt": "A parish church on a Friday night in June, a rehearsal that has stopped, a mother of the bride with the floor.",
+      "choices": [
+        {
+          "id": "take_the_room",
+          "label": "Take the room: kindly, firmly, and in fifteen minutes",
+          "outcome": "You get the mother of the bride into a pew and the couple onto the altar step and the rehearsal moving, and see whether it holds.",
+          "roll": {
+            "chance": 0.55,
+            "stat": "charisma",
+            "success": {
+              "outcome": "It holds. The mother of the bride is told, warmly, that the aisle is the aisle, and finds that she is being managed by a man who likes her, and lets it happen. The rehearsal takes forty minutes. The wedding is the next day and it is lovely, and at the reception the mother of the bride tells the pastor that the deacon was wonderful, which the pastor repeats to the vocation director, who repeats it to the bishop.",
+              "effects": [
+                {
+                  "target": "stat",
+                  "key": "charisma",
+                  "delta": 2
+                },
+                {
+                  "target": "pillar",
+                  "key": "pastoral",
+                  "delta": 2
+                },
+                {
+                  "target": "reputation",
+                  "key": "parishioners",
+                  "delta": 3
+                },
+                {
+                  "target": "relationship",
+                  "key": "@vocation_director",
+                  "delta": 2
+                },
+                {
+                  "target": "trait",
+                  "key": "ran a wedding rehearsal past the mother of the bride"
+                }
+              ]
+            },
+            "failure": {
+              "outcome": "It does not hold; the mother of the bride is not a woman who is managed, and the rehearsal takes two hours and ends with the bride in the sacristy crying and the groom, still outside, on the phone to his own mother. The wedding goes fine, because weddings do. The pastor hears about the rehearsal from three people and says, with sympathy, that some of them are like that.",
+              "effects": [
+                {
+                  "target": "pillar",
+                  "key": "pastoral",
+                  "delta": 1
+                },
+                {
+                  "target": "stat",
+                  "key": "charisma",
+                  "delta": -1
+                },
+                {
+                  "target": "pillar",
+                  "key": "human",
+                  "delta": 1
+                },
+                {
+                  "target": "reputation",
+                  "key": "parishioners",
+                  "delta": -1
+                }
+              ]
+            }
+          },
+          "effects": [
+            {
+              "target": "pillar",
+              "key": "pastoral",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "let_her_run_it",
+          "label": "Let the mother of the bride run the rehearsal, and take notes",
+          "default": true,
+          "outcome": "She runs it, and it takes ninety minutes, and it is not the rehearsal the book describes, and the couple get married the next day in a wedding that is, in every particular, hers. You have kept the peace and lost the room. The bride thanks you at the reception, quietly, for not fighting her mother, which is a thanks with two edges.",
+          "effects": [
+            {
+              "target": "pillar",
+              "key": "human",
+              "delta": 1
+            },
+            {
+              "target": "pillar",
+              "key": "pastoral",
+              "delta": -1
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "call_the_pastor",
+          "label": "Call the pastor at the funeral home and ask what he wants",
+          "outcome": "He wants you to run the rehearsal, which is why he gave you the keys, and he says so in the tone of a man being asked a question at a funeral home. You go back in and run it, late and rattled, and it goes as those go. He does not mention it again. He mentions it in the pastoral-year evaluation, briefly, as a thing observed.",
+          "effects": [
+            {
+              "target": "pillar",
+              "key": "pastoral",
+              "delta": -1
+            },
+            {
+              "target": "relationship",
+              "key": "@rector",
+              "delta": -1
+            },
+            {
+              "target": "pillar",
+              "key": "human",
+              "delta": -1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "semr_driving_the_bishop",
+      "phase": "seminary",
+      "yearGate": [
+        6,
+        7
+      ],
+      "pressure": [
+        "ambition_vs_integrity"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 12,
+      "suppressYears": 3,
+      "once": true,
+      "title": "Driving the Bishop",
+      "body": "The bishop's driver is sick and the confirmation is ninety miles away, and {@vocation_director}, who arranges these things, asks whether you can drive. It is three hours in a car with {@bishop}, who will read in the back for the first hour and then, because he is a man who talks to whoever is there, will talk. The vocation director says only: drive well, and let him lead. Men have been noticed in that car. Men have also said things in it that followed them for years.",
+      "flavorPrompt": "Three hours in a car with the bishop, a breviary in the back seat, a confirmation ninety miles away.",
+      "choices": [
+        {
+          "id": "talk",
+          "label": "Talk with him, when he wants to, as one man to another",
+          "outcome": "He puts down the breviary at the county line and asks where you are from, and you find out what you are like in a car with a bishop.",
+          "roll": {
+            "chance": 0.5,
+            "stat": "charisma",
+            "success": {
+              "outcome": "It goes well. He asks about your family and your pastoral year and what you are reading, and listens, and tells a story about his own first parish that is not in any of his talks. At the confirmation he introduces you to the pastor by name. On the way home he sleeps. {@vocation_director} says, on Monday, that the bishop enjoyed the drive, which is a sentence with a future in it.",
+              "effects": [
+                {
+                  "target": "relationship",
+                  "key": "@bishop",
+                  "delta": 6
+                },
+                {
+                  "target": "flag",
+                  "key": "noticed_by_bishop",
+                  "value": true
+                },
+                {
+                  "target": "reputation",
+                  "key": "chancery",
+                  "delta": 2
+                },
+                {
+                  "target": "stat",
+                  "key": "charisma",
+                  "delta": 1
+                },
+                {
+                  "target": "trait",
+                  "key": "drove the bishop to a confirmation and was remembered"
+                }
+              ]
+            },
+            "failure": {
+              "outcome": "It goes as those go when a man is trying: you say a little too much about the seminary, and a little too much about the pastoral year, and once, near the county line, a thing about a professor that you would take back. He is courteous. He reads for the second hour. At the confirmation he introduces you as the seminarian. {@vocation_director} says, on Monday, that the bishop said you drove well.",
+              "effects": [
+                {
+                  "target": "relationship",
+                  "key": "@bishop",
+                  "delta": 1
+                },
+                {
+                  "target": "outspokenness",
+                  "key": "",
+                  "delta": 1
+                },
+                {
+                  "target": "reputation",
+                  "key": "chancery",
+                  "delta": -1
+                },
+                {
+                  "target": "pillar",
+                  "key": "human",
+                  "delta": 1
+                }
+              ]
+            },
+            "per": 80
+          },
+          "effects": [
+            {
+              "target": "pillar",
+              "key": "human",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "drive_and_listen",
+          "label": "Drive, answer what you are asked, and let the silence be his",
+          "default": true,
+          "outcome": "You answer what you are asked and no more, and he reads, and at the county line he says that it is good to have a driver who does not need to talk, and reads again. At the confirmation you hold the crozier. He does not learn much about you. He learns that you can be in a car for three hours without needing anything from him, which bishops value more than they say.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": 3
+            },
+            {
+              "target": "pillar",
+              "key": "spiritual",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "beg_off",
+          "label": "Say you would rather not; the vocation director can find another man",
+          "outcome": "He finds another man, {@rival_classmate}, who drives the bishop and comes back with a story and, in a month, an invitation to the chancery Christmas dinner. You have kept a Saturday. The vocation director does not ask you again for a while, and when he does it is for something smaller.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@vocation_director",
+              "delta": -3
+            },
+            {
+              "target": "relationship",
+              "key": "@rival_classmate",
+              "delta": -2
+            },
+            {
+              "target": "pillar",
+              "key": "spiritual",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "semr_funeral_nobody_could_take",
+      "phase": "seminary",
+      "yearGate": [
+        6,
+        7
+      ],
+      "pressure": [
+        "competence",
+        "doubt"
+      ],
+      "severity": "NOTABLE",
+      "category": "parish_death",
+      "baseWeight": 12,
+      "suppressYears": 3,
+      "once": true,
+      "title": "The Funeral Nobody Could Take",
+      "body": "The pastor is in the hospital with his heart and the associate is at a conference in another state, and a man has died whose family wants him buried from the parish on Thursday, and there is no priest. There is a deacon. A deacon may preside at a funeral outside Mass and preach, and the chancery, when called, says so, and says that a priest will come for the Mass on Saturday if the family will wait, and the family will not wait; they want Thursday, and the deacon they have met, and the church their father was baptized in. The funeral director is on the line. He would like to know who is doing the service.",
+      "flavorPrompt": "A parish office with a funeral director on the line, a pastor in the hospital, a deacon who may preside outside Mass.",
+      "choices": [
+        {
+          "id": "take_it",
+          "label": "Take it, and preach it",
+          "outcome": "You say you will do it, and spend two days with a family you do not know and a man you never met.",
+          "roll": {
+            "chance": 0.55,
+            "stat": "piety",
+            "success": {
+              "outcome": "You preach him well. The family has told you enough in two days to say a true thing about a man, and you say it, and the church is full of people who knew him and hear him in it. The pastor, told in the hospital, cries, which is the heart medication and also not. It goes in the pastoral-year file as the week the deacon buried a man alone, and the file goes to the bishop.",
+              "effects": [
+                {
+                  "target": "stat",
+                  "key": "piety",
+                  "delta": 1
+                },
+                {
+                  "target": "stat",
+                  "key": "charisma",
+                  "delta": 1
+                },
+                {
+                  "target": "pillar",
+                  "key": "pastoral",
+                  "delta": 2
+                },
+                {
+                  "target": "reputation",
+                  "key": "parishioners",
+                  "delta": 3
+                },
+                {
+                  "target": "flag",
+                  "key": "deacon_buried_a_man",
+                  "value": true
+                },
+                {
+                  "target": "trait",
+                  "key": "buried a man alone as a deacon, when there was no priest"
+                }
+              ]
+            },
+            "failure": {
+              "outcome": "You preach him, and it is a stranger's homily, and the family knows it, and is kind. The service is correct and the church is full and something is missing from it that a priest with a Mass and thirty years would have supplied. The pastor, told in the hospital, says you did right to take it. The family sends a card. It thanks you for your time.",
+              "effects": [
+                {
+                  "target": "stat",
+                  "key": "piety",
+                  "delta": 1
+                },
+                {
+                  "target": "pillar",
+                  "key": "pastoral",
+                  "delta": 1
+                },
+                {
+                  "target": "pillar",
+                  "key": "human",
+                  "delta": 1
+                },
+                {
+                  "target": "reputation",
+                  "key": "parishioners",
+                  "delta": 1
+                }
+              ]
+            }
+          },
+          "effects": [
+            {
+              "target": "pillar",
+              "key": "pastoral",
+              "delta": 1
+            },
+            {
+              "target": "pillar",
+              "key": "spiritual",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "hold_out_for_saturday",
+          "label": "Tell the family, gently, to wait for the priest and the Mass",
+          "default": true,
+          "outcome": "They wait, because you ask them well, and the priest comes on Saturday and says the Mass, and it is a proper funeral, and the family, who wanted Thursday, thank you afterward for making them wait. It was the right liturgical answer. It was not the answer they came in with, and the funeral director, who has a long memory, notes that the parish said no.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "pillar",
+              "key": "spiritual",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 0
+            },
+            {
+              "target": "pillar",
+              "key": "pastoral",
+              "delta": -1
+            }
+          ]
+        },
+        {
+          "id": "find_a_priest",
+          "label": "Spend the day on the phone finding a priest from anywhere",
+          "outcome": "You find one, a retired man two counties over who says Mass on Thursday in a church he has never seen for a man he never met, and does it beautifully, and the family gets its Thursday and its Mass and does not much remember the deacon who spent Tuesday on the phone. The pastor says, from the hospital, that this is what the job is. He is right, and it is not a story anyone tells.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 2
+            },
+            {
+              "target": "pillar",
+              "key": "pastoral",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": 2
+            },
+            {
+              "target": "pillar",
+              "key": "human",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "semr_flu_week",
+      "phase": "seminary",
+      "yearGate": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "pressure": [
+        "body_vs_vow",
+        "competence"
+      ],
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 9,
+      "suppressYears": 2,
+      "title": "The Week of the Flu",
+      "body": "The flu goes through the house in ten days the way it goes through any house of forty men who eat together and pray in one room: the third floor first, then the chapel, then the faculty. By Wednesday half the class is in bed and the other half is serving them, and the infirmarian, who is a Sister of eighty, has run out of things to say. You are on your feet, for now. There is a seminar you are supposed to present at on Friday, a corridor of men who need soup, and the plain fact that whoever does not go to bed this week will be in bed next week.",
+      "flavorPrompt": "A seminary corridor with every third door shut, soup on a tray, a Sister of eighty out of things to say.",
+      "choices": [
+        {
+          "id": "push_through",
+          "label": "Stay on your feet, present on Friday, and take what comes",
+          "outcome": "You present on Friday with a fever you do not mention, and find out afterward what it cost.",
+          "roll": {
+            "chance": 0.5,
+            "stat": "piety",
+            "success": {
+              "outcome": "It costs a weekend. You present, and it is good, and you sleep for two days after and come up on Monday as if nothing had happened, which is how a man of your constitution learns that he has one. The Sister of eighty says you were foolish and gives you an extra blanket anyway.",
+              "effects": [
+                {
+                  "target": "pillar",
+                  "key": "intellectual",
+                  "delta": 1
+                },
+                {
+                  "target": "pillar",
+                  "key": "human",
+                  "delta": 1
+                },
+                {
+                  "target": "stat",
+                  "key": "piety",
+                  "delta": 1
+                },
+                {
+                  "target": "trait",
+                  "key": "presented through the flu and got away with it"
+                }
+              ]
+            },
+            "failure": {
+              "outcome": "It costs a week. You present, badly, with a fever the room can see, and are in bed by supper and stay there through the following Wednesday, and the seminar leader, who is kind, says the presentation will not count. It counts. You have learned that you are a man who does not know when to stop, which the Sister of eighty tells you in those words.",
+              "effects": [
+                {
+                  "target": "pillar",
+                  "key": "intellectual",
+                  "delta": -1
+                },
+                {
+                  "target": "pillar",
+                  "key": "human",
+                  "delta": -1
+                },
+                {
+                  "target": "stat",
+                  "key": "charisma",
+                  "delta": -1
+                },
+                {
+                  "target": "trait",
+                  "key": "presented through the flu and paid for it"
+                }
+              ]
+            }
+          },
+          "effects": [
+            {
+              "target": "pillar",
+              "key": "intellectual",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "go_to_bed",
+          "label": "Go to bed before it takes you, and let the seminar wait",
+          "default": true,
+          "outcome": "You go to bed on Wednesday and are up on Saturday, which is the shortest anyone in the house manages, and the seminar is rescheduled with no comment, because half the seminar is in bed too. It is a week lost. It is a week lost by a man who could tell when to lose it, which is a smaller thing than it sounds and a real one.",
+          "effects": [
+            {
+              "target": "pillar",
+              "key": "human",
+              "delta": 1
+            },
+            {
+              "target": "pillar",
+              "key": "intellectual",
+              "delta": -1
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "nurse_the_house",
+          "label": "Skip the seminar and carry soup for a week",
+          "outcome": "You carry soup and change sheets and sit with the ones who are frightened, because some of them are, and the Sister of eighty, who has seen forty years of seminarians, tells the rector that you have the hands for it. You get the flu on Sunday and are nursed in turn, badly, by men who owe you. The seminar is forgiven. The house is not a place that forgets soup.",
+          "effects": [
+            {
+              "target": "pillar",
+              "key": "human",
+              "delta": 2
+            },
+            {
+              "target": "pillar",
+              "key": "pastoral",
+              "delta": 1
+            },
+            {
+              "target": "relationship",
+              "key": "@closest_classmate",
+              "delta": 4
+            },
+            {
+              "target": "relationship",
+              "key": "@random_classmate",
+              "delta": 4
+            },
+            {
+              "target": "relationship",
+              "key": "@rector",
+              "delta": 2
+            },
+            {
+              "target": "pillar",
+              "key": "intellectual",
+              "delta": -1
+            },
+            {
+              "target": "trait",
+              "key": "carried soup through the week of the flu"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

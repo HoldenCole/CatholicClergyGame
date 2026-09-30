@@ -421,6 +421,19 @@ function checkEvent(ev: GameEvent, file: string, problems: Problem[], ids: Set<s
     if (!Array.isArray(ch.effects)) problems.push(`${cw}: effects must be an array`);
     ch.requires?.forEach((c) => checkCondition(c, cw, problems));
     ch.effects?.forEach((e) => checkEffect(e, cw, problems));
+    if (ch.roll !== undefined) {
+      const r = ch.roll;
+      if (typeof r.chance !== 'number' || r.chance <= 0 || r.chance >= 1) problems.push(`${cw}: roll chance must be between 0 and 1`);
+      if (r.stat !== undefined && !STAT_KEYS.includes(r.stat)) problems.push(`${cw}: bad roll stat ${String(r.stat)}`);
+      if (r.per !== undefined && (typeof r.per !== 'number' || r.per <= 0)) problems.push(`${cw}: roll per must be positive`);
+      for (const side of ['success', 'failure'] as const) {
+        const b = r[side];
+        if (!b || typeof b.outcome !== 'string' || b.outcome.split(/\s+/).length < 12) problems.push(`${cw}: roll ${side} needs outcome prose`);
+        if (!b || !Array.isArray(b.effects)) problems.push(`${cw}: roll ${side} effects must be an array`);
+        else b.effects.forEach((e) => checkEffect(e, `${cw} › ${side}`, problems));
+        for (const token of tokensIn(b?.outcome ?? '')) if (token.startsWith('@') && !SELECTORS.includes(token) && !LIVE_SELECTORS.includes(token)) problems.push(`${cw}: unknown selector ${token}`);
+      }
+    }
     if (ch.volume !== undefined) {
       if (!VOLUMES.includes(ch.volume)) problems.push(`${cw}: bad volume`);
       if (typeof ch.positionTopic !== 'string' || typeof ch.positionValue !== 'number') problems.push(`${cw}: volume needs positionTopic and positionValue`);
@@ -432,7 +445,7 @@ function checkEvent(ev: GameEvent, file: string, problems: Problem[], ids: Set<s
   // CLAUDE.md rule 7: a sealed scene may write only what stays inside the room.
   if (ev.internalForum) {
     for (const ch of ev.choices ?? []) {
-      for (const e of ch.effects ?? []) {
+      for (const e of [...(ch.effects ?? []), ...(ch.roll?.success.effects ?? []), ...(ch.roll?.failure.effects ?? [])]) {
         if (!SEALED_TARGETS.includes(e.target)) problems.push(`${where} › ${ch.id}: the internal forum is sealed; ${e.target} would be visible outside it`);
       }
     }

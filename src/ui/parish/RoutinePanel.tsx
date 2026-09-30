@@ -68,11 +68,14 @@ export default function RoutinePanel() {
   return (
     <>
       <Sheet title="The week">
+        <p className="mb-1 text-sm leading-relaxed">
+          {hoursOf(available)} hours this week are yours, and never fewer than {HOURS.freeFloor}. Your circles, side works, and the jobs you have taken on meet in their own time and take nothing from them.
+        </p>
         <p className="ink-muted text-xs leading-relaxed">
           A working week of about {hoursOf(budget)} hours, after the Office, meals, and sleep, which are not counted here
           {extra > 0 ? ` (${hoursOf(WEEK.baseAp[game.parish.role])} of them the diocese's, and ${hoursOf(extra)} you have taken from your own life)` : ''}. Obligations take {hoursOf(plan.mandatory)}
           {fixed > 0 ? ` (${hoursOf(fixed)} of that is the season and the desk)` : ''}, leaving {hoursOf(available)} for everything else, and never fewer than {HOURS.freeFloor}
-          {requested > available ? `; you have asked for ${hoursOf(requested)}, so it will be trimmed` : ''}. Every block below is four hours; the daily Mass is half an hour a day and is costed that way. Your circles, a side work, the projects, a group being founded, a problem in hand, and the jobs you have taken on meet in their own time and take nothing from these hours.
+          {requested > available ? `; you have asked for ${hoursOf(requested)}, so it will be trimmed` : ''}. Every block below is four hours; the daily Mass is half an hour a day and is costed that way. The projects, a group being founded, and a problem in hand are likewise outside these hours.
         </p>
         {efficiencyWords(game.character?.stats).length > 0 && <p className="ink-faint mt-1 text-xs">What you know saves you time: {efficiencyWords(game.character?.stats).join('; ')}.</p>}
         {game.assignment?.role === 'parochial_vicar' && <p className="ink-faint mt-1 text-xs">As vicar, the people are yours and the books are the pastor's: visits, confessions, and the groups count for more in your hands, and the desk for less.</p>}

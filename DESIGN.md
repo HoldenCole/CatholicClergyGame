@@ -309,7 +309,9 @@ Seminary is the tutorial disguised as a prologue: the weekly loop at low stakes 
 
 ### 6.1 Year shape
 
-Each year runs: an **opening emphasis choice** → **2–3 played weeks** drawn from the year's pool → a **summer assignment** → an **annual evaluation**. Everything between auto-resolves against the emphasis.
+Each year runs: an **opening emphasis choice** → **3–4 played weeks** drawn from the year's pool → a **summer assignment** → an **annual evaluation**. Everything between auto-resolves against the emphasis.
+
+The year's pool is three kinds of scene: the beats that always come (candidacy, the ministries, the diaconate, the eve of ordination), the scenes a man's choices and stats open (the promise scenes in `career.json`, gated on the flag a promise wrote), and the chance scenes (`seminary/chance.json`), which fire from the ordinary draw and whose outcome turns on a roll (§12.3 `roll`). A promise made in seminary is kept where it was promised: the parish offer it pointed at carries a `guarantee` on that flag, the rector's plan shapes the first posting and its pastor, and each promise has a follow-up scene of its own.
 
 ### 6.2 The four pillars
 
@@ -956,6 +958,12 @@ interface Choice {
   opensThread?: string;
   resolvesThread?: string;
   followUpId?: string;
+  roll?: {                    // the dice (owner's feedback): deterministic in the seed, the scene, and the week
+    chance: number;           // 0..1 before the stat
+    stat?: StatKey; per?: number;   // (stat − 50) / per is added to the chance
+    success: { outcome: string; effects: Effect[] };
+    failure: { outcome: string; effects: Effect[] };
+  };                          // the base effects apply either way; the branch's own on top; its prose is what he reads
 }
 
 interface GameEvent {

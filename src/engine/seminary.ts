@@ -104,7 +104,8 @@ export function chooseEmphasis(state: GameState, emphasis: Record<Pillar, number
   const withEmphasis = setEmphasis(state, emphasis);
   const sem = withEmphasis.seminary!;
   const start = upcomingYearStartWeek(state);
-  const count = rng.int(2, 3);
+  // Three or four weeks a year are played in full; the rest resolve against the emphasis. DESIGN §6.1.
+  const count = rng.int(3, 4);
   const played = new Set<number>();
   while (played.size < count) {
     played.add(start + rng.int(YEAR_SHAPE.firstPlayedWeek, YEAR_SHAPE.lastPlayedWeek));

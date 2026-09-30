@@ -53,6 +53,10 @@ export function choiceMeaning(choice: Choice): string | null {
     const strength = Math.abs(choice.positionValue) >= 45 ? 'hard ' : '';
     parts.push(`${volumeWord(choice.volume)} on ${t?.label ?? choice.positionTopic.replace(/_/g, ' ')}, ${strength}${side}.`);
   }
+  if (choice.roll) {
+    const odds = choice.roll.chance >= 0.7 ? 'Likely to go your way' : choice.roll.chance >= 0.4 ? 'Even odds' : 'A long shot';
+    parts.push(`${odds}${choice.roll.stat ? `, better with ${STAT[choice.roll.stat] ?? choice.roll.stat}` : ''}.`);
+  }
   const effects = choice.effects ?? [];
   const align = effects.filter((e) => e.target === 'alignment').reduce((n, e) => n + (e.delta ?? 0), 0);
   if (align <= -1) parts.push('Leans you toward tradition.');
