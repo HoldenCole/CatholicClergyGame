@@ -16,6 +16,9 @@ export const STANDING = {
   rectorPerPoint: 0.12,
   /** The vice-rector runs the house and writes the second report; it counts, less. */
   vicePerPoint: 0.06,
+  /** The house's view of how he keeps the rule, per point around its resting place. */
+  observancePerPoint: 0.15,
+  observanceSteady: 60,
   summer: 4,
   rectorRecommends: 12,
   rectorDoubts: -12,
@@ -62,6 +65,8 @@ export function formationStanding(state: GameState): Standing {
   if (vice) value += vice.relationship * STANDING.vicePerPoint;
   const summers = Object.values(sem.summers).filter((s) => s !== 'home_parish').length;
   value += summers * STANDING.summer;
+  const observance = sem.observance ?? STANDING.observanceSteady;
+  value += (observance - STANDING.observanceSteady) * STANDING.observancePerPoint;
   // What the seminary years wrote in the file (events/seminary/career.json).
   if (state.flags.rector_recommends) value += STANDING.rectorRecommends;
   if (state.flags.rector_doubts) value += STANDING.rectorDoubts;
@@ -80,6 +85,8 @@ export function formationStanding(state: GameState): Standing {
   if (vice && vice.relationship >= 25) reasons.push('the vice-rector speaks for you');
   if (vice && vice.relationship <= -15) reasons.push("the vice-rector's list has your name on it");
   if (summers >= 3) reasons.push('the summers were used well');
+  if (observance >= 75) reasons.push('a man of the rule, the house says');
+  if (observance <= 40) reasons.push('loose with the rule, the house says');
   if (state.flags.rector_recommends) reasons.push('the rector will write for you');
   if (state.flags.rector_doubts) reasons.push("the rector's letter will be careful");
   if (state.flags.seminary_leader) reasons.push('the house followed you');

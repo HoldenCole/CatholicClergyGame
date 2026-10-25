@@ -1,4 +1,5 @@
-import type { Condition, Effect, SeminaryActivityDef, SummerAssignment } from '@/types';
+import type { Condition, DevotionDef, Effect, RecreationDef, SeminaryActivityDef, SeminaryHorariumDef, SummerAssignment } from '@/types';
+import rule from './rule.json';
 import summers from './summers.json';
 import religiousSummers from '../religious/summers.json';
 import activities from './activities.json';
@@ -33,3 +34,10 @@ export const seminaryActivities = activities as SeminaryActivityDef[];
 export function seminaryActivity(id: string): SeminaryActivityDef | undefined {
   return seminaryActivities.find((a) => a.id === id);
 }
+
+/** The seminary as a house with a rule: the day as posted, its lines, the devotions, the evenings. content/seminary/rule.json */
+const ruleContent = rule as unknown as { day: { time: string; label: string }[]; horarium: SeminaryHorariumDef[]; devotions: DevotionDef[]; recreation: RecreationDef[] };
+export const horariumDay = ruleContent.day;
+export const seminaryHorariumDefs = ruleContent.horarium;
+export const devotionDefs = ruleContent.devotions;
+export const recreationDefs = ruleContent.recreation;

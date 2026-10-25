@@ -11,6 +11,7 @@ import { deliverLetter, openMail } from '@/systems/review';
 import { projectWeek } from '@/systems/projects';
 import { workWeek } from '@/systems/problems';
 import { clubsWeek, joinClub, leaveClub } from '@/systems/clubs';
+import { ruleWeek } from '@/systems/seminaryRule';
 import { spendingWeek } from '@/systems/spending';
 import { resolvePermissions } from '@/systems/decor';
 import { awayWeek, goSupply, retreatYearEnd } from '@/systems/away';
@@ -163,6 +164,12 @@ export function seminaryWeekHook(deps: EventDeps): WeekHook {
     // A novice's free hours begin as the order's usual ones, not empty. E3 §3.3.
     if (next.religious) next = defaultFormationRoutine(next);
     const resolved = seminaryWeek(next, rng.derive(`seminary-week:${next.clock.week}`));
+    // The house's rule as he keeps it: the horarium, his own devotions, the evening, and the notebook. A novice's house has its own (religiousWeek).
+    if (!next.religious) {
+      const ruled = ruleWeek(resolved.state, rng.derive(`rule:${next.clock.week}`));
+      resolved.state = ruled.state;
+      for (const l of ruled.lines) resolved.state = addDigestLine(resolved.state, l);
+    }
     // A novice's house has its own week: the horarium as kept, the house's drift. E3 §3.2.
     const week = { ...resolved, state: religiousWeek(resolved.state, rng) };
     next = week.line ? addDigestLine(week.state, week.line) : week.state;

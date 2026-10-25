@@ -1,3 +1,4 @@
+import type { Quality } from './parish';
 import type { Condition } from './events';
 import type { Pillar } from './character';
 import type { StatKey } from './stats';
@@ -79,4 +80,51 @@ export interface SeminaryState {
   hoursLogged?: Record<string, number>;
   /** What this year's free hours built, by stat, for the evaluation. Reset each year. */
   hoursGains?: Partial<Record<StatKey, number>>;
+  /** The house's horarium as he keeps it, by line (content/seminary/rule.json). Absent means standard. */
+  horarium?: Record<string, Quality>;
+  /** His own rule of prayer: devotion ids, up to RULE.maxDevotions. */
+  rule?: string[];
+  /** What he does with the evening hour, as a habit: a recreation id. */
+  recreation?: string;
+  /** Mornings the vice-rector's notebook has him late to the Office this year. */
+  lates?: number;
+  /** The house's view of how he keeps the rule, 0..100, moving toward what he keeps. */
+  observance?: number;
+}
+
+/** A line of the seminary's horarium, kept at a level. content/seminary/rule.json */
+export interface SeminaryHorariumDef {
+  key: string;
+  label: string;
+  time: string;
+  /** Free hours the level gives back (+) or takes (−) each week. */
+  hours: Record<Quality, number>;
+  blurb: Record<Quality, string>;
+  /** Per week: piety, pillar movement, the house's regard (rector and vice-rector), and strain. */
+  effects: Record<Quality, { piety?: number; spiritual?: number; human?: number; house?: number; strain?: number }>;
+  /** The vice-rector's notebook sees this line. */
+  visible: boolean;
+}
+
+/** A devotion of the man's own rule. content/seminary/rule.json */
+export interface DevotionDef {
+  id: string;
+  label: string;
+  blurb: string;
+  when: 'morning' | 'night' | 'day';
+  effects: { piety?: number; spiritual?: number; human?: number; theology?: number; knowledge?: number; strain?: number };
+  digest: string[];
+}
+
+/** What a man does with the evening hour. content/seminary/rule.json */
+export interface RecreationDef {
+  id: string;
+  label: string;
+  blurb: string;
+  requires?: Condition[];
+  /** Per week: human formation, stats, rest (strain eased), warmth with a classmate. */
+  effects: { human?: number; charisma?: number; piety?: number; knowledge?: number; rest?: number; warmth?: number };
+  /** The chance a night runs late enough to miss Lauds. */
+  late: number;
+  digest: string[];
 }

@@ -1,0 +1,460 @@
+{
+  "_notes": "The seminary as a house with a rule (seminary depth round). `day` is the horarium as posted, for the sheet. `horarium` are its lines kept at a level: the minimum frees an hour a week and costs piety and the house's regard (rector and vice-rector), the invested level costs an hour and gives back; `visible` lines are the ones the vice-rector's notebook sees. `devotions` are the man's own rule of prayer, kept in his own time before Lauds and after Compline, up to RULE.maxDevotions at once; `strain` is the rest they cost. `recreation` is what he does with the evening hour as a habit: human formation, friends, rest, and `late`, the chance a night runs late enough to miss Lauds. Flags written by the setters: horarium:<key>:<quality>, rule:<id>, recreation:<id>. Numbers invented; the scenes in events/seminary/rule.json read the flags.",
+  "day": [
+    {
+      "time": "6:00",
+      "label": "Rising"
+    },
+    {
+      "time": "6:30",
+      "label": "Lauds and meditation"
+    },
+    {
+      "time": "7:15",
+      "label": "Mass"
+    },
+    {
+      "time": "8:00",
+      "label": "Breakfast, in silence in the propaedeutic year"
+    },
+    {
+      "time": "8:45",
+      "label": "Classes"
+    },
+    {
+      "time": "12:00",
+      "label": "Midday Prayer"
+    },
+    {
+      "time": "12:15",
+      "label": "Lunch"
+    },
+    {
+      "time": "13:30",
+      "label": "Classes, the apostolate, or the free hours"
+    },
+    {
+      "time": "16:30",
+      "label": "The gym, the grounds, the library"
+    },
+    {
+      "time": "17:30",
+      "label": "Vespers, and a holy hour on Thursdays"
+    },
+    {
+      "time": "18:15",
+      "label": "Supper"
+    },
+    {
+      "time": "19:00",
+      "label": "Recreation"
+    },
+    {
+      "time": "21:00",
+      "label": "Compline, and the Grand Silence after it"
+    }
+  ],
+  "horarium": [
+    {
+      "key": "office",
+      "label": "The Office in common",
+      "time": "Lauds 6:30, Vespers 5:30, Compline 9:00",
+      "hours": {
+        "min": 1,
+        "standard": 0,
+        "invested": -1
+      },
+      "blurb": {
+        "min": "Lauds when you wake in time, Compline when you are in. The stall is empty often enough to be noticed.",
+        "standard": "Lauds and Vespers with the house, and Compline most nights.",
+        "invested": "Every hour, in your stall, the psalms by heart by Lent."
+      },
+      "effects": {
+        "min": {
+          "piety": -0.3,
+          "spiritual": -0.03,
+          "house": -0.5
+        },
+        "standard": {
+          "piety": 0.05,
+          "spiritual": 0.01,
+          "house": 0
+        },
+        "invested": {
+          "piety": 0.4,
+          "spiritual": 0.04,
+          "house": 0.3
+        }
+      },
+      "visible": true
+    },
+    {
+      "key": "mass",
+      "label": "The community Mass",
+      "time": "7:15 daily",
+      "hours": {
+        "min": 0,
+        "standard": 0,
+        "invested": -1
+      },
+      "blurb": {
+        "min": "The back pew, and the door, and sometimes neither.",
+        "standard": "The house Mass, every morning, and a reading when it is your turn.",
+        "invested": "Serving, or in the schola, or the one who sets the sacristy; the Mass as a thing you help make."
+      },
+      "effects": {
+        "min": {
+          "piety": -0.4,
+          "spiritual": -0.03,
+          "house": -0.6
+        },
+        "standard": {
+          "piety": 0.05,
+          "spiritual": 0.01,
+          "house": 0
+        },
+        "invested": {
+          "piety": 0.25,
+          "spiritual": 0.03,
+          "human": 0.01,
+          "house": 0.2
+        }
+      },
+      "visible": true
+    },
+    {
+      "key": "table",
+      "label": "Meals and recreation with the house",
+      "time": "Lunch 12:15, supper 6:15, the hour after",
+      "hours": {
+        "min": 1,
+        "standard": 0,
+        "invested": -1
+      },
+      "blurb": {
+        "min": "A sandwich in the room, the tray at the door; the table notices who is not at it.",
+        "standard": "The refectory, three times a day, and the hour after supper with whoever is there.",
+        "invested": "Every table, the old priests' table on Sundays, the argument carried into the corridor."
+      },
+      "effects": {
+        "min": {
+          "human": -0.03,
+          "house": -0.4,
+          "piety": 0
+        },
+        "standard": {
+          "human": 0.01,
+          "house": 0,
+          "piety": 0
+        },
+        "invested": {
+          "human": 0.04,
+          "house": 0.3,
+          "piety": 0
+        }
+      },
+      "visible": false
+    },
+    {
+      "key": "silence",
+      "label": "The study hall and the Grand Silence",
+      "time": "Study 7:30 to 9:00 in the propaedeutic year; silence from 10:00",
+      "hours": {
+        "min": 1,
+        "standard": 0,
+        "invested": -1
+      },
+      "blurb": {
+        "min": "The phone on, the door open, the corridor at eleven.",
+        "standard": "The silence kept, mostly; the phone face down after Compline.",
+        "invested": "The silence as a discipline: the phone in the drawer, the room dark at ten, the morning clear."
+      },
+      "effects": {
+        "min": {
+          "piety": -0.15,
+          "spiritual": -0.02,
+          "house": -0.3,
+          "strain": 1
+        },
+        "standard": {
+          "piety": 0.05,
+          "spiritual": 0.01,
+          "house": 0,
+          "strain": 0
+        },
+        "invested": {
+          "piety": 0.2,
+          "spiritual": 0.03,
+          "house": 0.15,
+          "strain": -1
+        }
+      },
+      "visible": true
+    }
+  ],
+  "devotions": [
+    {
+      "id": "rosary",
+      "label": "The rosary",
+      "blurb": "Five decades a day, walked in the garden or said in the dark. The oldest habit in the house and the one most men keep after it.",
+      "when": "night",
+      "effects": {
+        "piety": 0.12,
+        "spiritual": 0.015,
+        "strain": 0
+      },
+      "digest": [
+        "the rosary in the garden",
+        "five decades before sleep",
+        "the rosary, walked"
+      ]
+    },
+    {
+      "id": "lectio",
+      "label": "Lectio divina",
+      "blurb": "Half an hour with the Sunday Gospel before Lauds: read, read again, say nothing. The homily begins here years before you preach one.",
+      "when": "morning",
+      "effects": {
+        "piety": 0.1,
+        "spiritual": 0.02,
+        "theology": 0.02,
+        "strain": 0.3
+      },
+      "digest": [
+        "the Gospel before Lauds",
+        "lectio in the cold chapel",
+        "half an hour with Sunday's Gospel"
+      ]
+    },
+    {
+      "id": "examen",
+      "label": "The examen",
+      "blurb": "Ten minutes at night over the day as it was. The Jesuits' habit, and the one that makes the file honest.",
+      "when": "night",
+      "effects": {
+        "piety": 0.08,
+        "spiritual": 0.012,
+        "human": 0.015,
+        "strain": 0
+      },
+      "digest": [
+        "the examen before Compline",
+        "ten minutes over the day",
+        "the day gone through, honestly"
+      ]
+    },
+    {
+      "id": "office_of_readings",
+      "label": "The Office of Readings",
+      "blurb": "The hour the house does not say in common: the Fathers at six in the morning, in your room, with coffee. A priest's habit begun early.",
+      "when": "morning",
+      "effects": {
+        "piety": 0.1,
+        "spiritual": 0.015,
+        "theology": 0.03,
+        "strain": 0.4
+      },
+      "digest": [
+        "the Office of Readings at six",
+        "the Fathers before the house is up",
+        "Augustine with the coffee"
+      ]
+    },
+    {
+      "id": "night_adoration",
+      "label": "The chapel at night",
+      "blurb": "An hour before the tabernacle after Compline, with the key the sacristan lends. Nobody sees it. That is the point, and the cost is the morning.",
+      "when": "night",
+      "effects": {
+        "piety": 0.18,
+        "spiritual": 0.03,
+        "strain": 0.8
+      },
+      "digest": [
+        "the chapel at eleven",
+        "an hour in the dark before the tabernacle",
+        "the sacristan's key, again"
+      ]
+    },
+    {
+      "id": "spiritual_reading",
+      "label": "Spiritual reading",
+      "blurb": "Twenty minutes a day in a book that is not on any syllabus: Thérèse, de Caussade, the Cloud. The director will ask what you are reading.",
+      "when": "day",
+      "effects": {
+        "piety": 0.06,
+        "spiritual": 0.012,
+        "knowledge": 0.02,
+        "strain": 0
+      },
+      "digest": [
+        "twenty minutes of Thérèse",
+        "the Cloud of Unknowing, slowly",
+        "spiritual reading in the window"
+      ]
+    },
+    {
+      "id": "friday_fast",
+      "label": "The Friday fast",
+      "blurb": "Bread and water on Fridays, through the term. The body learns what the will is for; the refectory learns to leave your plate.",
+      "when": "day",
+      "effects": {
+        "piety": 0.1,
+        "spiritual": 0.015,
+        "human": -0.005,
+        "strain": 0.5
+      },
+      "digest": [
+        "bread and water on Friday",
+        "the Friday fast kept",
+        "a Friday with an empty plate"
+      ]
+    }
+  ],
+  "recreation": [
+    {
+      "id": "common_room",
+      "label": "The common room",
+      "blurb": "Cards, the game on, the argument about the professor that nobody wins. Where the class becomes a class.",
+      "effects": {
+        "human": 0.02,
+        "charisma": 0.03,
+        "rest": 0.6,
+        "warmth": 0.3
+      },
+      "late": 0.08,
+      "digest": [
+        "cards in the common room",
+        "the game and the argument",
+        "the common room till Compline"
+      ]
+    },
+    {
+      "id": "the_walk",
+      "label": "The walk",
+      "blurb": "Two by two around the grounds after supper, the old seminary custom, and the conversations that happen only walking.",
+      "effects": {
+        "human": 0.02,
+        "piety": 0.03,
+        "rest": 0.8,
+        "warmth": 0.4
+      },
+      "late": 0.02,
+      "digest": [
+        "the walk round the grounds",
+        "two by two under the trees",
+        "the walk, and what was said on it"
+      ]
+    },
+    {
+      "id": "music_room",
+      "label": "The music room",
+      "blurb": "The piano nobody tunes, a guitar, the men who sing. The schola is born here and so are the house's songs.",
+      "effects": {
+        "human": 0.015,
+        "charisma": 0.02,
+        "piety": 0.02,
+        "rest": 0.7,
+        "warmth": 0.2
+      },
+      "late": 0.04,
+      "digest": [
+        "the piano in the music room",
+        "an hour of the house's songs",
+        "the guitar after supper"
+      ]
+    },
+    {
+      "id": "the_garden",
+      "label": "The garden",
+      "blurb": "The vegetable beds behind the gym that the old Brother keeps, and the men who help him. Dirt, silence, tomatoes in August.",
+      "effects": {
+        "human": 0.01,
+        "piety": 0.03,
+        "rest": 0.9,
+        "warmth": 0.1
+      },
+      "late": 0.0,
+      "digest": [
+        "the garden with the old Brother",
+        "an hour among the beds",
+        "weeding, in silence"
+      ]
+    },
+    {
+      "id": "film_night",
+      "label": "Thursday film night",
+      "blurb": "A film in the lecture hall on Thursdays, chosen by a committee that argues about it all week, and the discussion after that runs past Compline.",
+      "effects": {
+        "human": 0.02,
+        "charisma": 0.02,
+        "knowledge": 0.01,
+        "rest": 0.5,
+        "warmth": 0.3
+      },
+      "late": 0.14,
+      "digest": [
+        "the Thursday film",
+        "the film and the argument after",
+        "a film the committee fought over"
+      ]
+    },
+    {
+      "id": "phone_home",
+      "label": "The phone home",
+      "blurb": "The evening hour on the phone to the people who sent you, and the friends who are not here. The house is far away for an hour.",
+      "effects": {
+        "human": 0.015,
+        "rest": 0.6,
+        "warmth": 0.0
+      },
+      "late": 0.05,
+      "digest": [
+        "an hour on the phone home",
+        "the family, by phone",
+        "a friend from before, called"
+      ]
+    },
+    {
+      "id": "early_to_bed",
+      "label": "Early to bed",
+      "blurb": "The room at nine, the light out at ten, the morning clear. The house thinks you dull. The house is not up at six.",
+      "effects": {
+        "piety": 0.02,
+        "rest": 1.2,
+        "warmth": -0.1
+      },
+      "late": 0.0,
+      "digest": [
+        "the light out at ten",
+        "early to bed, and a clear morning",
+        "asleep before Compline's bell"
+      ]
+    },
+    {
+      "id": "the_bar",
+      "label": "The bar down the hill",
+      "blurb": "The standing table at the bar down the hill, two or three nights a week, with the men who go. The class's secrets are kept there, and its drinkers made.",
+      "requires": [
+        {
+          "type": "year",
+          "op": ">=",
+          "value": 2
+        }
+      ],
+      "effects": {
+        "human": 0.02,
+        "charisma": 0.04,
+        "piety": -0.03,
+        "rest": 0.2,
+        "warmth": 0.4
+      },
+      "late": 0.25,
+      "digest": [
+        "the bar down the hill",
+        "the standing table, late",
+        "the hill, climbed back after eleven"
+      ]
+    }
+  ]
+}

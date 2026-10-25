@@ -1,0 +1,1520 @@
+{
+  "_notes": "The rule's scenes (seminary depth round): what comes of how a man keeps the house's horarium, his own rule of prayer, and his evenings. Ids hr_* (rl_ belongs to the religious expansion); gated on the flags the sheet writes (horarium:<key>:<quality>, rule:<id>, recreation:<id>) and the season; every one turns on a roll. Nothing (hr_dryness) is authored only. Flags written: rule:dropped_once, rule:key_lost, recreation:left_the_hill, noticed_by_bishop (hr_the_music_room › play on success). Concerns written: 'Thirteen mornings late to the Office', 'Eats apart from the house'.",
+  "events": [
+    {
+      "id": "hr_dryness",
+      "phase": "seminary",
+      "yearGate": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "pressure": [
+        "doubt"
+      ],
+      "severity": "NOTABLE",
+      "category": "formation",
+      "baseWeight": 12,
+      "suppressYears": 3,
+      "once": true,
+      "requires": [
+        {
+          "type": "any",
+          "inner": [
+            {
+              "type": "flag",
+              "key": "rule:rosary",
+              "value": true
+            },
+            {
+              "type": "flag",
+              "key": "rule:lectio",
+              "value": true
+            },
+            {
+              "type": "flag",
+              "key": "rule:night_adoration",
+              "value": true
+            },
+            {
+              "type": "flag",
+              "key": "rule:office_of_readings",
+              "value": true
+            },
+            {
+              "type": "flag",
+              "key": "rule:examen",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "title": "Nothing",
+      "body": "The rule you keep has stopped giving anything back. The rosary is beads. The chapel at night is a cold room. Lauds is a thing you stand through, and the psalms you half knew have gone back to being words on a page. It has been like this for six weeks and nobody has noticed, because nothing shows: you are at everything, on time, saying the words. {@spiritual_director} asks, in direction, how the prayer is, in the tone of a man who knows the answer and would like to hear you say it.",
+      "choices": [
+        {
+          "id": "tell_him",
+          "label": "Tell him: nothing, for six weeks",
+          "outcome": "You say it plainly, and he does not look surprised, and asks you to keep saying the words.",
+          "roll": {
+            "chance": 0.55,
+            "stat": "piety",
+            "success": {
+              "outcome": "He tells you about his own year of nothing, which was longer, and what he did, which was nothing different, and that this is what the rule is for: the weeks when the rule is all there is. You keep it. In Lent something comes back, not what went, something plainer. You will have this conversation with other men, from his chair.",
+              "effects": [
+                {
+                  "target": "stat",
+                  "key": "piety",
+                  "delta": 2
+                },
+                {
+                  "target": "pillar",
+                  "key": "spiritual",
+                  "delta": 3
+                },
+                {
+                  "target": "relationship",
+                  "key": "@spiritual_director",
+                  "delta": 6
+                },
+                {
+                  "target": "trait",
+                  "key": "kept the rule through six weeks of nothing"
+                }
+              ]
+            },
+            "failure": {
+              "outcome": "He tells you to keep the words and you do, and nothing comes back for the rest of the year, and the rule becomes a thing you do because you said you would, which he says is a kind of faith and which feels like a kind of habit. It comes back in the summer, at the parish, for no reason. You do not tell him. You should.",
+              "effects": [
+                {
+                  "target": "stat",
+                  "key": "piety",
+                  "delta": 1
+                },
+                {
+                  "target": "pillar",
+                  "key": "spiritual",
+                  "delta": 1
+                },
+                {
+                  "target": "relationship",
+                  "key": "@spiritual_director",
+                  "delta": 2
+                }
+              ]
+            }
+          },
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "say_fine",
+          "label": "Say the prayer is fine",
+          "default": true,
+          "outcome": "He says good, and moves on, and you have told your director the thing the house teaches you not to tell him, and the nothing goes on, and the rule goes on, and the lie is small and sits in the chair with you every fortnight for a year. In the spring you tell him. He says he knew. He waited.",
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": -1
+            },
+            {
+              "target": "pillar",
+              "key": "spiritual",
+              "delta": -1
+            },
+            {
+              "target": "relationship",
+              "key": "@spiritual_director",
+              "delta": -2
+            }
+          ]
+        },
+        {
+          "id": "drop_the_rule",
+          "label": "Tell him you are going to stop the extra things until something comes back",
+          "outcome": "He says that is one way, and that he does not recommend it, and that it is your rule. You stop. The mornings are easier and the evenings are longer and the nothing is now the whole of it rather than a thing inside a shape. Something comes back in Advent, as it does. You have a rule to rebuild, and it is harder the second time.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": -1
+            },
+            {
+              "target": "pillar",
+              "key": "spiritual",
+              "delta": -2
+            },
+            {
+              "target": "pillar",
+              "key": "human",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "rule:dropped_once",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hr_classmate_asks",
+      "phase": "seminary",
+      "yearGate": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "pressure": [
+        "friendship_vs_duty"
+      ],
+      "severity": "NOTABLE",
+      "category": "formation",
+      "baseWeight": 11,
+      "suppressYears": 3,
+      "once": true,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "rule:rosary",
+          "value": true
+        }
+      ],
+      "title": "May I Come",
+      "body": "{@random_classmate} has noticed that you walk the rosary in the garden after Compline, because the garden is under his window, and he asks, awkwardly, in the corridor, whether he could come. He has not prayed the rosary since his grandmother died. He does not say that; it is in how he asks. You have kept the garden as the one place in the house that is yours. He is standing in the corridor waiting.",
+      "flavorPrompt": "A seminary corridor after Compline, a garden under a window, a man asking to come.",
+      "choices": [
+        {
+          "id": "yes",
+          "label": "Say yes, and walk it with him",
+          "outcome": "He comes the next night, and the next, and the garden is two men's.",
+          "roll": {
+            "chance": 0.6,
+            "stat": "charisma",
+            "success": {
+              "outcome": "By Lent there are four of you, and the garden rosary is a thing the house has, and the vice-rector has noticed it and said nothing, which is his way of approving. {@random_classmate} says one night, not looking at you, that his grandmother would have liked this. You have lost the one place that was yours and gained something the house will keep after you.",
+              "effects": [
+                {
+                  "target": "relationship",
+                  "key": "@random_classmate",
+                  "delta": 6
+                },
+                {
+                  "target": "pillar",
+                  "key": "human",
+                  "delta": 2
+                },
+                {
+                  "target": "pillar",
+                  "key": "spiritual",
+                  "delta": 1
+                },
+                {
+                  "target": "reputation",
+                  "key": "brother_priests",
+                  "delta": 1
+                },
+                {
+                  "target": "stat",
+                  "key": "charisma",
+                  "delta": 1
+                },
+                {
+                  "target": "trait",
+                  "key": "the garden rosary began with him"
+                }
+              ]
+            },
+            "failure": {
+              "outcome": "He comes for a week and then does not, and does not say why, and the garden is yours again and smaller. You see him in the chapel at odd hours. It was the right answer. It did not take, which is not the same as being wrong, and he nods to you in the corridor in a way he did not before.",
+              "effects": [
+                {
+                  "target": "relationship",
+                  "key": "@random_classmate",
+                  "delta": 2
+                },
+                {
+                  "target": "pillar",
+                  "key": "human",
+                  "delta": 1
+                },
+                {
+                  "target": "stat",
+                  "key": "piety",
+                  "delta": 1
+                }
+              ]
+            }
+          },
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@random_classmate",
+              "delta": 4
+            }
+          ]
+        },
+        {
+          "id": "no_gently",
+          "label": "Say the garden is where you are alone with it, and offer him the chapel at nine",
+          "default": true,
+          "outcome": "He says of course and takes the chapel at nine, alone, and you see him there sometimes from the door, and the garden stays yours, and the corridor between you is polite. You kept something. He is praying the rosary again, in a cold chapel, by himself, which is also something.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@random_classmate",
+              "delta": -1
+            },
+            {
+              "target": "pillar",
+              "key": "spiritual",
+              "delta": 1
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "give_him_the_garden",
+          "label": "Give him the garden, and find another place",
+          "outcome": "You tell him the garden is a good place for it and that you will be on the roof, and he does not understand and takes the garden, and you pray on the roof of the gym, which is cold and has the whole sky. You have given a man a place to pray his grandmother's rosary. He will never know it was a gift. The roof is better anyway.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@random_classmate",
+              "delta": 3
+            },
+            {
+              "target": "pillar",
+              "key": "human",
+              "delta": 2
+            },
+            {
+              "target": "pillar",
+              "key": "spiritual",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hr_the_key",
+      "phase": "seminary",
+      "yearGate": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "severity": "NOTABLE",
+      "category": "formation",
+      "baseWeight": 12,
+      "suppressYears": 3,
+      "once": true,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "rule:night_adoration",
+          "value": true
+        }
+      ],
+      "title": "The Sacristan's Key",
+      "body": "The sacristan lends you the chapel key for the hour after Compline, which is not allowed, strictly, and which he does for two or three men a year he thinks will not abuse it. This week {@vice_rector} finds the chapel lit at eleven-thirty and you in it, and stands in the door for a while, and in the morning asks you to his office. He has the key in his hand. He wants to know whose it is and how long you have had it, and the sacristan is a friend.",
+      "flavorPrompt": "A chapel lit at half past eleven, a vice-rector in the door, a sacristan's key on a desk in the morning.",
+      "choices": [
+        {
+          "id": "tell_the_truth",
+          "label": "Tell him whose key and how long, and that the sacristan trusted you",
+          "outcome": "You tell him, and watch him decide what the rule is for.",
+          "roll": {
+            "chance": 0.5,
+            "stat": "charisma",
+            "success": {
+              "outcome": "He gives you the key back. He says the rule about the chapel exists for men who are not you, and that he will have a word with the sacristan about the men who are, and that if he finds the chapel lit at eleven-thirty again he will assume it is you and go to bed. It is the most he has ever said to you. The sacristan hears, and lends the key to one man a year after that.",
+              "effects": [
+                {
+                  "target": "relationship",
+                  "key": "@vice_rector",
+                  "delta": 6
+                },
+                {
+                  "target": "stat",
+                  "key": "piety",
+                  "delta": 1
+                },
+                {
+                  "target": "pillar",
+                  "key": "spiritual",
+                  "delta": 1
+                },
+                {
+                  "target": "trait",
+                  "key": "the vice-rector gave him the chapel key back"
+                }
+              ]
+            },
+            "failure": {
+              "outcome": "He keeps the key. He says the rule is the rule and that the sacristan has been spoken to, and that you may pray in your room like the rest of the house, and that an hour's sleep is also a form of obedience. The sacristan does not blame you. The chapel is dark at eleven-thirty for the rest of the year, and you pray in your room, and it is not the same, and you keep it anyway.",
+              "effects": [
+                {
+                  "target": "relationship",
+                  "key": "@vice_rector",
+                  "delta": -2
+                },
+                {
+                  "target": "stat",
+                  "key": "piety",
+                  "delta": 1
+                },
+                {
+                  "target": "pillar",
+                  "key": "spiritual",
+                  "delta": 1
+                },
+                {
+                  "target": "flag",
+                  "key": "rule:key_lost",
+                  "value": true
+                }
+              ]
+            },
+            "per": 80
+          },
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "protect_the_sacristan",
+          "label": "Say you found the chapel unlocked and went in",
+          "default": true,
+          "outcome": "He looks at you for a while and says that the chapel is never unlocked, and gives you a week to think about your answer, and you spend the week knowing that the sacristan would rather have been named than lied for. You name him on Friday. The vice-rector says he knew on Monday, and that he waited to see. He keeps the key. He keeps the week too.",
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": -2
+            },
+            {
+              "target": "relationship",
+              "key": "@vice_rector",
+              "delta": -5
+            },
+            {
+              "target": "pillar",
+              "key": "human",
+              "delta": -1
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "give_up_the_hour",
+          "label": "Hand him the key and say you will keep the hour in your room",
+          "outcome": "He takes it and nods and says that is the right answer, and you keep the hour in your room, and the room is not the chapel and you learn that it does not have to be. The sacristan is not spoken to, because you did not make him be. The vice-rector mentions, months later, that the chapel is open at six in the morning to anyone who is up.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@vice_rector",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "pillar",
+              "key": "spiritual",
+              "delta": 1
+            },
+            {
+              "target": "pillar",
+              "key": "human",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hr_the_bar_night",
+      "phase": "seminary",
+      "yearGate": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "pressure": [
+        "friendship_vs_duty",
+        "loyalty_vs_honesty"
+      ],
+      "severity": "NOTABLE",
+      "category": "classmate",
+      "baseWeight": 12,
+      "suppressYears": 3,
+      "once": true,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "recreation:the_bar",
+          "value": true
+        }
+      ],
+      "title": "The Hill at Midnight",
+      "body": "The bar down the hill closes at midnight and the hill is steep, and this Thursday four of you come up it at twenty past twelve singing, not loudly, and the lights in the vice-rector's wing are on. In the morning nobody says anything. At lunch {@closest_classmate}, who was not there, says that the vice-rector asked him at breakfast who was out, and that he said he did not know, which was true, and that he would like it to stay true, which is a request.",
+      "flavorPrompt": "A steep hill at twenty past midnight, four men singing, a lit window in the vice-rector's wing.",
+      "choices": [
+        {
+          "id": "go_to_the_vice_rector",
+          "label": "Go to the vice-rector yourself before he asks anyone else",
+          "outcome": "You knock on his door after lunch and say it was you, and three others you will not name.",
+          "roll": {
+            "chance": 0.5,
+            "stat": "charisma",
+            "success": {
+              "outcome": "He says he knows who the three were, because he knows the house, and that he asked your friend to see whether anyone would come, and that one did. He says the hill is the hill and that a man who sings on it at midnight is not a scandal, and that a man who does it twice is a pattern. You do not do it twice. He never mentions it again, and he never forgets who knocked.",
+              "effects": [
+                {
+                  "target": "relationship",
+                  "key": "@vice_rector",
+                  "delta": 5
+                },
+                {
+                  "target": "relationship",
+                  "key": "@closest_classmate",
+                  "delta": 3
+                },
+                {
+                  "target": "pillar",
+                  "key": "human",
+                  "delta": 1
+                },
+                {
+                  "target": "trait",
+                  "key": "knocked on the vice-rector’s door the morning after the hill"
+                }
+              ]
+            },
+            "failure": {
+              "outcome": "He says thank you and asks for the three names, and you do not give them, and he says that is loyalty and that loyalty is also a pattern, and writes something, and the three are called in anyway by Friday, because he knew. You have been honest and have protected nobody, which is the usual result of honesty, and the three know you went, and read it two ways.",
+              "effects": [
+                {
+                  "target": "relationship",
+                  "key": "@vice_rector",
+                  "delta": 1
+                },
+                {
+                  "target": "relationship",
+                  "key": "@random_classmate",
+                  "delta": -3
+                },
+                {
+                  "target": "honesty",
+                  "key": "",
+                  "delta": 1
+                },
+                {
+                  "target": "pillar",
+                  "key": "human",
+                  "delta": -1
+                }
+              ]
+            }
+          },
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "let_it_lie",
+          "label": "Let it lie; the lights were on, and nothing was said",
+          "default": true,
+          "outcome": "Nothing is said, and the hill is climbed again the next Thursday, more quietly, and the Thursday after, and in Lent the vice-rector mentions at a house meeting, to nobody, that the bar has a closing time and so does the house. The class hears it as a warning. You hear it as a date.",
+          "effects": [
+            {
+              "target": "pillar",
+              "key": "human",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": -1
+            },
+            {
+              "target": "relationship",
+              "key": "@vice_rector",
+              "delta": -2
+            }
+          ]
+        },
+        {
+          "id": "stop_going",
+          "label": "Stop going down the hill, and say so to the others",
+          "outcome": "You say you are done with the hill, and the others laugh, and one of them stops too, and the standing table is smaller, and the class's secrets are kept at it without you, which is a cost. The vice-rector notices that the hill is quieter on Thursdays and does not know why. You know why. The mornings know too.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "pillar",
+              "key": "spiritual",
+              "delta": 1
+            },
+            {
+              "target": "relationship",
+              "key": "@random_classmate",
+              "delta": -2
+            },
+            {
+              "target": "pillar",
+              "key": "human",
+              "delta": -1
+            },
+            {
+              "target": "flag",
+              "key": "recreation:left_the_hill",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hr_film_committee",
+      "phase": "seminary",
+      "yearGate": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "pressure": [
+        "ambition_vs_integrity"
+      ],
+      "severity": "NOTABLE",
+      "category": "classmate",
+      "baseWeight": 10,
+      "suppressYears": 3,
+      "once": true,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "recreation:film_night",
+          "value": true
+        }
+      ],
+      "title": "The Committee",
+      "body": "The film committee, which chooses Thursday's film and argues about it all week, has lost two members to the diaconate year and asks you to join, because you are always at the film and always have an opinion after it. It meets Tuesdays at nine, which is after Compline, in the common room, loudly. It is the most political body in the house: a film is a position, and the position is noticed. The vice-rector has been known to attend the film and leave at the credits, which is a review.",
+      "flavorPrompt": "A common room on a Tuesday night, a committee that argues about films, and a vice-rector who leaves at the credits.",
+      "choices": [
+        {
+          "id": "join",
+          "label": "Join, and argue for the films you believe in",
+          "outcome": "You join the committee and spend Tuesdays after Compline arguing about films.",
+          "roll": {
+            "chance": 0.5,
+            "stat": "charisma",
+            "success": {
+              "outcome": "You win more than you lose, and the house sees three films that year it would not have, one of which starts an argument that lasts till Easter and is the best argument the house has had in years. The vice-rector stays through the credits of one of them. You have a reputation now: the man who picks the films, which in a house is a kind of office.",
+              "effects": [
+                {
+                  "target": "stat",
+                  "key": "charisma",
+                  "delta": 2
+                },
+                {
+                  "target": "pillar",
+                  "key": "human",
+                  "delta": 2
+                },
+                {
+                  "target": "pillar",
+                  "key": "intellectual",
+                  "delta": 1
+                },
+                {
+                  "target": "relationship",
+                  "key": "@random_classmate",
+                  "delta": 4
+                },
+                {
+                  "target": "trait",
+                  "key": "picked the films, and the house argued till Easter"
+                }
+              ]
+            },
+            "failure": {
+              "outcome": "You lose more than you win, and the committee shows what it always shows, and you spend Tuesdays after Compline losing arguments about films to men who have been losing them longer. It is good for the humility. The vice-rector leaves at the credits every week. You learn what a committee is, which the chancery will not have to teach you.",
+              "effects": [
+                {
+                  "target": "stat",
+                  "key": "charisma",
+                  "delta": 1
+                },
+                {
+                  "target": "pillar",
+                  "key": "human",
+                  "delta": 1
+                },
+                {
+                  "target": "stat",
+                  "key": "piety",
+                  "delta": -1
+                }
+              ]
+            }
+          },
+          "effects": [
+            {
+              "target": "pillar",
+              "key": "human",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "decline",
+          "label": "Say the Tuesdays after Compline are the silence, and you keep it",
+          "default": true,
+          "outcome": "They say fair enough and ask someone else, and the films are what they would have been, and you keep the Tuesdays. The committee thinks you a little pious. The vice-rector, who heard why you said no, thinks something else, and does not say it, and remembers it in May.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "pillar",
+              "key": "spiritual",
+              "delta": 1
+            },
+            {
+              "target": "relationship",
+              "key": "@vice_rector",
+              "delta": 3
+            },
+            {
+              "target": "relationship",
+              "key": "@random_classmate",
+              "delta": -1
+            }
+          ]
+        },
+        {
+          "id": "propose_earlier",
+          "label": "Join on the condition it meets before Compline, and make the case",
+          "outcome": "You make the case and the committee, which has never been asked to change anything, is scandalized and then agrees, and meets at eight, and the vice-rector, told, says it is the first sensible thing the committee has done in a decade. You have changed a house institution in your second year. The house notices who does that.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "pillar",
+              "key": "human",
+              "delta": 1
+            },
+            {
+              "target": "relationship",
+              "key": "@vice_rector",
+              "delta": 2
+            },
+            {
+              "target": "outspokenness",
+              "key": "",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hr_lauds_empty",
+      "phase": "seminary",
+      "yearGate": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "pressure": [
+        "competence",
+        "loyalty_vs_honesty"
+      ],
+      "severity": "NOTABLE",
+      "category": "formation",
+      "baseWeight": 13,
+      "suppressYears": 3,
+      "once": true,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "horarium:office:min",
+          "value": true
+        }
+      ],
+      "title": "The Empty Stall",
+      "body": "{@vice_rector} stops you after lunch and says, without preamble, that your stall at Lauds has been empty eleven mornings this term by his count, and that his count is good, and that he is not going to ask why because the why is always the same, and that the rector reads his notebook in May. He says it as information. He is giving you the chance to make the next count a different one before it is written where it matters.",
+      "flavorPrompt": "A vice-rector after lunch with a count, eleven mornings, a notebook the rector reads in May.",
+      "choices": [
+        {
+          "id": "fix_it",
+          "label": "Say he is right, and be in the stall every morning from tomorrow",
+          "outcome": "You set the alarm for half past five and are in the stall before him for the rest of the term.",
+          "roll": {
+            "chance": 0.6,
+            "stat": "piety",
+            "success": {
+              "outcome": "It holds. Six weeks of mornings and the count stops, and in May the notebook says eleven and then nothing, and the rector reads the nothing. The vice-rector says, once, at the chapel door, good morning, in a tone that means the subject is closed. The Office in common is yours now, which it was not before.",
+              "effects": [
+                {
+                  "target": "relationship",
+                  "key": "@vice_rector",
+                  "delta": 6
+                },
+                {
+                  "target": "stat",
+                  "key": "piety",
+                  "delta": 2
+                },
+                {
+                  "target": "pillar",
+                  "key": "spiritual",
+                  "delta": 2
+                },
+                {
+                  "target": "trait",
+                  "key": "filled the empty stall after the vice-rector counted"
+                }
+              ]
+            },
+            "failure": {
+              "outcome": "It holds for three weeks and then does not, twice, and the vice-rector does not stop you after lunch again, and in May the notebook says thirteen and the rector reads thirteen. It is one line in the evaluation. It is the line that is remembered, because it is the one with a number in it.",
+              "effects": [
+                {
+                  "target": "relationship",
+                  "key": "@vice_rector",
+                  "delta": -2
+                },
+                {
+                  "target": "concern",
+                  "key": "Thirteen mornings late to the Office"
+                },
+                {
+                  "target": "stat",
+                  "key": "piety",
+                  "delta": 1
+                }
+              ]
+            }
+          },
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "explain",
+          "label": "Explain: the night prayer, the late study, the reasons",
+          "default": true,
+          "outcome": "He listens and says the reasons are good and the stall is still empty, and that a priest will have reasons for forty years and a parish that counts the mornings anyway. He does not write it down differently. You have learned that the house does not grade reasons, which is worth knowing before a chancery teaches it.",
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            },
+            {
+              "target": "relationship",
+              "key": "@vice_rector",
+              "delta": 0
+            },
+            {
+              "target": "pillar",
+              "key": "human",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "ask_for_the_count",
+          "label": "Ask to see the notebook",
+          "outcome": "He shows you. It is exact, and it has every man in the house in it, and yours is not the worst page, and seeing it changes something: the notebook is not about you. You are in the stall most mornings after that, not for him. He notices that too and writes nothing, which is a kind of entry.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@vice_rector",
+              "delta": 4
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "pillar",
+              "key": "human",
+              "delta": 2
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hr_the_tray",
+      "phase": "seminary",
+      "yearGate": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "pressure": [
+        "doubt"
+      ],
+      "severity": "NOTABLE",
+      "category": "formation",
+      "baseWeight": 12,
+      "suppressYears": 3,
+      "once": true,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "horarium:table:min",
+          "value": true
+        }
+      ],
+      "title": "The Tray at the Door",
+      "body": "You have been eating in your room, mostly, for a month: the tray from the kitchen, the sandwich, the door shut. The refectory has noticed, because the refectory notices everything, and this week {@formation_advisor} raises it, not as a complaint but as a question: a man who is not at the table is not in the house, and the house is where a priest is formed, and what is in the room that is better than the table?",
+      "flavorPrompt": "A tray outside a shut door, a refectory that has noticed, a formation advisor with a question.",
+      "choices": [
+        {
+          "id": "come_back",
+          "label": "Come back to the table, and sit with the men you have been avoiding",
+          "outcome": "You carry your tray back to the refectory and sit down at the loudest table.",
+          "roll": {
+            "chance": 0.55,
+            "stat": "charisma",
+            "success": {
+              "outcome": "It is easier than you feared. The table makes room, the argument about the professor is where you left it, and within a week the month in your room is a thing the house has forgotten and you have not. The advisor notes it in the file as a man who came back. The house is where a priest is formed; you had known that, and had been forgetting it on purpose.",
+              "effects": [
+                {
+                  "target": "pillar",
+                  "key": "human",
+                  "delta": 2
+                },
+                {
+                  "target": "relationship",
+                  "key": "@formation_advisor",
+                  "delta": 4
+                },
+                {
+                  "target": "relationship",
+                  "key": "@random_classmate",
+                  "delta": 4
+                },
+                {
+                  "target": "stat",
+                  "key": "charisma",
+                  "delta": 1
+                },
+                {
+                  "target": "trait",
+                  "key": "came back to the table"
+                }
+              ]
+            },
+            "failure": {
+              "outcome": "It is harder than you feared: the table has closed over the gap, and you sit at the end of it for a fortnight listening to an argument you are no longer part of. It opens again, slowly, by Lent. You have learned what a month away costs in a house, which is more than a month.",
+              "effects": [
+                {
+                  "target": "pillar",
+                  "key": "human",
+                  "delta": 1
+                },
+                {
+                  "target": "relationship",
+                  "key": "@formation_advisor",
+                  "delta": 2
+                },
+                {
+                  "target": "relationship",
+                  "key": "@random_classmate",
+                  "delta": 1
+                }
+              ]
+            }
+          },
+          "effects": [
+            {
+              "target": "pillar",
+              "key": "human",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "say_why",
+          "label": "Tell him why: the noise, the men, the need to be alone",
+          "default": true,
+          "outcome": "He hears it and says that it is a real need and that a priest does not get to have it met, mostly, and that the table is where he learns to be with people he did not choose. He asks you to come to supper and keep the room for lunch. You do. It is a bargain, and it holds, and he writes that you can be reasoned with.",
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            },
+            {
+              "target": "relationship",
+              "key": "@formation_advisor",
+              "delta": 3
+            },
+            {
+              "target": "pillar",
+              "key": "human",
+              "delta": 1
+            },
+            {
+              "target": "pillar",
+              "key": "spiritual",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "keep_the_room",
+          "label": "Say the room is where you pray, and that you will keep it",
+          "outcome": "He says that is a monk's answer in a diocesan house and that it will go in the file as that, and it does. The refectory stops noticing, which is worse than noticing. You pray in your room. The file says a man apart. It is not wrong. It is not what a parish will want either.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "pillar",
+              "key": "spiritual",
+              "delta": 1
+            },
+            {
+              "target": "pillar",
+              "key": "human",
+              "delta": -2
+            },
+            {
+              "target": "relationship",
+              "key": "@formation_advisor",
+              "delta": -3
+            },
+            {
+              "target": "concern",
+              "key": "Eats apart from the house"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hr_lent_resolution",
+      "phase": "seminary",
+      "yearGate": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "pressure": [
+        "belief_vs_safety"
+      ],
+      "severity": "NOTABLE",
+      "category": "formation",
+      "baseWeight": 10,
+      "suppressYears": 2,
+      "requires": [
+        {
+          "type": "season",
+          "value": "lent"
+        }
+      ],
+      "title": "Ash Wednesday",
+      "body": "Ash Wednesday, and the house makes its resolutions in the way houses do, aloud, at the table, so that they can be held to them. {@closest_classmate} is giving up the bar. {@rival_classmate} is giving up nothing and saying so. The question comes round to you. A Lenten rule in a seminary is a public thing; the house will know by Easter whether you kept it, and so will you.",
+      "flavorPrompt": "Ash Wednesday at the refectory table, resolutions made aloud, a house that will hold you to them.",
+      "choices": [
+        {
+          "id": "the_whole_rule",
+          "label": "Take on the whole of it: the Friday fast, Compline in the chapel every night, no phone after nine",
+          "outcome": "You say it aloud and the table hears it and you are held to it for forty days.",
+          "roll": {
+            "chance": 0.5,
+            "stat": "piety",
+            "success": {
+              "outcome": "You keep it, all forty days, which almost nobody at the table does, and the house notices in the way it notices anyone who finishes a thing: without comment and with a changed estimate. Easter is Easter in a way it has not been. {@rival_classmate}, who gave up nothing, says at the Vigil that you look terrible and well.",
+              "effects": [
+                {
+                  "target": "stat",
+                  "key": "piety",
+                  "delta": 3
+                },
+                {
+                  "target": "pillar",
+                  "key": "spiritual",
+                  "delta": 3
+                },
+                {
+                  "target": "reputation",
+                  "key": "brother_priests",
+                  "delta": 1
+                },
+                {
+                  "target": "relationship",
+                  "key": "@rival_classmate",
+                  "delta": 2
+                },
+                {
+                  "target": "trait",
+                  "key": "kept the whole Lenten rule, aloud, to Easter"
+                }
+              ]
+            },
+            "failure": {
+              "outcome": "You keep it for nineteen days and then the phone is on after nine, and then the Friday fast is broken for a funeral lunch, and by Laetare Sunday it is a rule you had, and the table knows, because the table hears everything. Nobody says anything. Easter is Easter anyway. You have learned what you can carry for forty days, which is less than you said at the table.",
+              "effects": [
+                {
+                  "target": "stat",
+                  "key": "piety",
+                  "delta": 1
+                },
+                {
+                  "target": "pillar",
+                  "key": "spiritual",
+                  "delta": 1
+                },
+                {
+                  "target": "pillar",
+                  "key": "human",
+                  "delta": -1
+                }
+              ]
+            }
+          },
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "one_thing",
+          "label": "Take one thing, and keep it: the Friday fast",
+          "default": true,
+          "outcome": "You take one thing and keep it, every Friday to Good Friday, and it is enough, and the table, which heard you say one thing, holds you to one thing. {@closest_classmate} does not keep the bar. You do not say anything. He knows you did not, and that is the gift.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "pillar",
+              "key": "spiritual",
+              "delta": 2
+            },
+            {
+              "target": "relationship",
+              "key": "@closest_classmate",
+              "delta": 3
+            }
+          ]
+        },
+        {
+          "id": "say_nothing",
+          "label": "Say your Lent is between you and God, and change the subject",
+          "outcome": "The table lets it pass, and {@rival_classmate} says that is what he said, more or less, and you have been grouped with him for a season, which is unfair and is what happens. Your Lent is between you and God. The house has no opinion about it, which in a house is not nothing.",
+          "effects": [
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "pillar",
+              "key": "human",
+              "delta": -1
+            },
+            {
+              "target": "relationship",
+              "key": "@rival_classmate",
+              "delta": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hr_the_garden_brother",
+      "phase": "seminary",
+      "yearGate": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "pressure": [
+        "friendship_vs_duty"
+      ],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 11,
+      "suppressYears": 3,
+      "once": true,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "recreation:the_garden",
+          "value": true
+        }
+      ],
+      "title": "The Brother's Tomatoes",
+      "body": "The old Brother who keeps the garden has not come out for three days, and the tomatoes are splitting on the vine, and the beds you have helped him with all summer are going over, and nobody in the house has noticed because nobody else goes to the garden. You find him in the infirmary. He is eighty-four and has had a fall and wants to know, before anything else, about the tomatoes.",
+      "flavorPrompt": "A garden going over in August, a Brother of eighty-four in the infirmary asking about his tomatoes.",
+      "choices": [
+        {
+          "id": "keep_the_garden",
+          "label": "Keep the garden for him until he is up, and bring him the news",
+          "outcome": "You pick the tomatoes and stake the beans and go to the infirmary every evening with a report.",
+          "roll": {
+            "chance": 0.6,
+            "stat": "piety",
+            "success": {
+              "outcome": "He is up in three weeks and the garden is there to be come back to, and he says so, in the way of a man who did not expect it. He gives you the beans in September, which is a will of sorts. When he dies, in your fifth year, the garden is yours by common consent, and the house calls it the Brother's garden still, and you keep it that way.",
+              "effects": [
+                {
+                  "target": "stat",
+                  "key": "piety",
+                  "delta": 2
+                },
+                {
+                  "target": "pillar",
+                  "key": "human",
+                  "delta": 2
+                },
+                {
+                  "target": "pillar",
+                  "key": "spiritual",
+                  "delta": 1
+                },
+                {
+                  "target": "reputation",
+                  "key": "brother_priests",
+                  "delta": 1
+                },
+                {
+                  "target": "trait",
+                  "key": "kept the Brother’s garden while he was down"
+                }
+              ]
+            },
+            "failure": {
+              "outcome": "You keep it badly: the beans go, the tomatoes are picked too late, the beds are weeds by the time he is up, and he looks at them and says nothing, and starts over, and you help, and he teaches you properly this time, which he had not bothered to before. The garden is worse this year. You are better at it.",
+              "effects": [
+                {
+                  "target": "stat",
+                  "key": "piety",
+                  "delta": 1
+                },
+                {
+                  "target": "pillar",
+                  "key": "human",
+                  "delta": 1
+                },
+                {
+                  "target": "stat",
+                  "key": "knowledge",
+                  "delta": 1
+                }
+              ]
+            }
+          },
+          "effects": [
+            {
+              "target": "pillar",
+              "key": "human",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "visit_him",
+          "label": "Visit him, and let the garden go; it is only a garden",
+          "default": true,
+          "outcome": "You visit every evening and he asks about the tomatoes every evening and you tell him, and he does not blame you, and the garden goes over, and when he is up he starts again from seed, as he has every year for forty years, and you understand that the garden was never the point. The visits were. He says so, once, badly.",
+          "effects": [
+            {
+              "target": "pillar",
+              "key": "human",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "pillar",
+              "key": "spiritual",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "tell_the_rector",
+          "label": "Tell the rector the Brother is in the infirmary and the garden needs someone",
+          "outcome": "The rector did not know, which is the first thing, and sends two first-year men to the garden, who ruin it, and visits the Brother himself, which is the second thing. The Brother is glad of the visit and sorry about the beans. You have done the proper thing. The Brother had wanted you.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@rector",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            },
+            {
+              "target": "pillar",
+              "key": "human",
+              "delta": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hr_the_music_room",
+      "phase": "seminary",
+      "yearGate": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "pressure": [
+        "ambition_vs_integrity"
+      ],
+      "severity": "NOTABLE",
+      "category": "classmate",
+      "baseWeight": 10,
+      "suppressYears": 3,
+      "once": true,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "recreation:music_room",
+          "value": true
+        }
+      ],
+      "title": "The House's Song",
+      "body": "The schola director is leaving at Christmas and the music room, where you have spent the evening hour since autumn, has been asked by the rector to provide the house's Christmas concert, which the diocese attends, and the men in the music room have decided, over your objections, that you will play and that the piece will be one you have been working on alone. It is three weeks off. The piano is still not tuned.",
+      "flavorPrompt": "A music room with an untuned piano, a Christmas concert the diocese attends, three weeks.",
+      "choices": [
+        {
+          "id": "play",
+          "label": "Play it, and get the piano tuned yourself",
+          "outcome": "You find a tuner in the city and pay him from the stipend, and practise every evening, and play it.",
+          "roll": {
+            "chance": 0.5,
+            "stat": "charisma",
+            "success": {
+              "outcome": "It goes well: the piano holds, the piece holds, and the bishop, in the front row, asks the rector afterward who played, and the rector tells him. The music room has a name in the diocese for a season, and so do you, which is not what you took up the piano for and is what it did.",
+              "effects": [
+                {
+                  "target": "stat",
+                  "key": "charisma",
+                  "delta": 2
+                },
+                {
+                  "target": "pillar",
+                  "key": "human",
+                  "delta": 2
+                },
+                {
+                  "target": "reputation",
+                  "key": "chancery",
+                  "delta": 2
+                },
+                {
+                  "target": "flag",
+                  "key": "noticed_by_bishop",
+                  "value": true
+                },
+                {
+                  "target": "trait",
+                  "key": "played the house’s Christmas concert"
+                }
+              ]
+            },
+            "failure": {
+              "outcome": "It goes: the piano holds and you do not, quite, in the middle section, and recover, and the house, which knows what it heard, applauds the recovery. The bishop asks nothing. The men in the music room say it was fine, which is what men say. You have played badly in front of the diocese and lived, which is also a formation.",
+              "effects": [
+                {
+                  "target": "stat",
+                  "key": "charisma",
+                  "delta": 1
+                },
+                {
+                  "target": "pillar",
+                  "key": "human",
+                  "delta": 1
+                },
+                {
+                  "target": "pillar",
+                  "key": "spiritual",
+                  "delta": 1
+                }
+              ]
+            }
+          },
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "sing_instead",
+          "label": "Say the house should sing, not listen to you, and build a programme of the house's songs",
+          "default": true,
+          "outcome": "You put the house's own songs on the programme, the ones sung after supper, and the whole house sings them, badly and together, and the diocese hears a seminary that sings, which is what the rector wanted and did not know how to ask for. Nobody is noticed. Everybody is heard.",
+          "effects": [
+            {
+              "target": "pillar",
+              "key": "human",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "relationship",
+              "key": "@rector",
+              "delta": 3
+            },
+            {
+              "target": "relationship",
+              "key": "@random_classmate",
+              "delta": 3
+            }
+          ]
+        },
+        {
+          "id": "decline",
+          "label": "Say no; the music room is where you go to not perform",
+          "outcome": "They find a man who will, and he plays well, and the concert is a concert, and the music room is a little less yours afterward because you said no to it in front of the men. The piano is still not tuned. You play it anyway, in the evenings, out of tune, for nobody, which is what you had wanted.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "pillar",
+              "key": "human",
+              "delta": -1
+            },
+            {
+              "target": "relationship",
+              "key": "@random_classmate",
+              "delta": -2
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

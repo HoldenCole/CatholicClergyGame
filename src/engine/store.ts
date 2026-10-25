@@ -94,6 +94,7 @@ import { goAway as doGoAway } from '@/systems/away';
 import { setCover as doSetCover } from '@/systems/deanery';
 import { evaluateSeminarian as doEvaluate } from '@/systems/formed';
 import { setSeminaryActivity as doSetSeminaryActivity } from '@/systems/seminaryWeek';
+import { setRecreation, setSeminaryHorarium, toggleDevotion } from '@/systems/seminaryRule';
 import { setStudyActivity as doSetStudyActivity } from '@/systems/studyWeek';
 import { DEFAULT_SETTINGS } from '@/systems/workweek';
 import type { GameSettings } from '@/types';
@@ -266,6 +267,10 @@ export interface GameStore {
   changeSchedule(change: ScheduleChange): void;
   /** Hours a week a seminarian gives an activity. */
   setSeminaryActivity(id: string, ap: number): void;
+  /** The house's rule: a line of the horarium kept at a level, a devotion of his own taken up or let go, the evening's habit. */
+  setSeminaryHorarium(key: string, quality: Quality): void;
+  toggleDevotion(id: string): void;
+  setRecreation(id: string | null): void;
   /** A priest-student's free hours. */
   setStudyActivity(id: string, ap: number): void;
   /** What the man has asked the chancery for, read by the assignment algorithm. DESIGN §7.4 */
@@ -1065,6 +1070,15 @@ export const useGameStore = create<GameStore>()((set, get) => ({
   },
   setSeminaryActivity(id, ap) {
     update(set, get, (game) => doSetSeminaryActivity(game, id, ap));
+  },
+  setSeminaryHorarium(key, quality) {
+    update(set, get, (game) => setSeminaryHorarium(game, key, quality));
+  },
+  toggleDevotion(id) {
+    update(set, get, (game) => toggleDevotion(game, id));
+  },
+  setRecreation(id) {
+    update(set, get, (game) => setRecreation(game, id));
   },
   setStudyActivity(id, ap) {
     update(set, get, (game) => doSetStudyActivity(game, id, ap));
