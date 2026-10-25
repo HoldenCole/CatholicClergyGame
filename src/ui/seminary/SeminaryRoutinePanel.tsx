@@ -35,7 +35,7 @@ export default function SeminaryRoutinePanel() {
           {left > 0 ? ` ${left} still unspoken for; they go nowhere in particular.` : ' All of them are given.'}
           {' '}The house calls you {observanceWord(observance)}.{(sem.lates ?? 0) > 0 ? ` The vice-rector's notebook has you late to Lauds ${sem.lates === 1 ? 'once' : `${sem.lates} times`} this year.` : ''}
         </p>
-        {last && <p className="mt-2 rounded border rule bg-white/30 px-3 py-2 text-sm leading-relaxed">{last.lines.join(' ')}</p>}
+        {last && <p className="mt-2 rounded border rule bg-white/30 px-3 py-2 text-sm leading-relaxed"><span className="ink-faint block text-xs">{last.lines[0]}</span>{last.lines.length > 1 ? last.lines.slice(1).join(' ') : 'Nothing to write down.'}</p>}
       </Sheet>
       <Sheet title="The horarium" fold="closed" summary={seminaryHorariumDefs.map((d) => `${d.label.toLowerCase()}: ${QWORD[horarium[d.key]!].toLowerCase()}`).join(' · ')}>
         <ul className="ink-muted grid grid-cols-2 gap-x-4 gap-y-0.5 text-xs">
@@ -87,7 +87,7 @@ export default function SeminaryRoutinePanel() {
             return (
               <li key={r.id} className="flex items-start justify-between gap-2">
                 <div className={'min-w-0 ' + (offered ? '' : 'ink-faint')}>
-                  <div>{r.label}{r.late >= 0.12 ? <span className="ink-faint text-xs"> · runs late</span> : null}</div>
+                  <div>{r.label}{r.late >= 0.08 ? <span className="ink-faint text-xs"> · runs late</span> : null}</div>
                   <div className="ink-muted text-xs">{r.blurb}</div>
                 </div>
                 <button className={'pbtn shrink-0 px-2 py-0 text-xs ' + (chosen ? 'pbtn-active' : '')} disabled={!offered} onClick={() => setRecreation(chosen ? null : r.id)}>{chosen ? 'your habit' : 'choose'}</button>

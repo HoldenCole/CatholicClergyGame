@@ -18,13 +18,14 @@ export const RULE = {
   /** Mornings late to the Office in a year before the notebook becomes a concern. */
   latesForConcern: 4,
   /** The chance a week has a late morning: the base, per point of strain over the floor, and the evening's own. */
-  lateBase: 0.03,
+  lateBase: 0.015,
   latePerStrain: 1 / 600,
   lateStrainFloor: 20,
-  /** A rule kept in the morning gets a man up; the Office at the minimum lets him lie. */
-  morningDevotion: -0.02,
-  officeMin: 0.12,
-  silenceMin: 0.05,
+  /** A rule kept in the morning gets a man up; the Office at the minimum lets him lie, and kept fully it has him in his stall early. */
+  morningDevotion: -0.015,
+  officeMin: 0.1,
+  officeInvested: -0.015,
+  silenceMin: 0.03,
   /** Whether a late morning is seen: the vice-rector's temper. */
   noticedBase: 0.6,
   noticedEnforcer: 1.5,
@@ -134,7 +135,8 @@ export function observanceOf(sem: SeminaryState): number {
 }
 
 export function observanceWord(v: number): string {
-  return v >= 80 ? 'a man of the rule' : v >= 65 ? 'regular' : v >= 45 ? 'ordinary' : v >= 30 ? 'loose' : 'a problem';
+  // Observance follows its target without quite reaching it, so each word begins a little under the sheet's own sums.
+  return v >= 76 ? 'a man of the rule' : v >= 63 ? 'regular' : v >= 45 ? 'ordinary' : v >= 30 ? 'loose' : 'a problem';
 }
 
 export interface RuleWeekResult {
@@ -208,6 +210,7 @@ export function ruleWeek(state: GameState, rng: Rng): RuleWeekResult {
   const strain = state.strain ?? 0;
   let late = RULE.lateBase + Math.max(0, strain - RULE.lateStrainFloor) * RULE.latePerStrain + (rec?.late ?? 0);
   if (h.office === 'min') late += RULE.officeMin;
+  if (h.office === 'invested') late += RULE.officeInvested;
   if (h.silence === 'min') late += RULE.silenceMin;
   if (ruleOf(sem).some((id) => devotionDef(id)?.when === 'morning')) late += RULE.morningDevotion;
   const roll = rng.derive(`late:${state.clock.week}`);

@@ -167,7 +167,8 @@ describe('engine/seminary', () => {
     const r = runClock(s, rng, { maxWeeks: 60, hook: seminaryWeekHook(d) });
     expect(r.state.mode.kind).toBe('summer');
     expect(r.state.pending).toHaveLength(0);
-    expect(r.state.history.length).toBe(r.state.seminary!.playedWeeks.filter((w) => w <= r.state.clock.week).length);
+    // Every played week carries a scene; since the rule round an unplayed week may carry one too.
+    expect(r.state.history.length).toBeGreaterThanOrEqual(r.state.seminary!.playedWeeks.filter((w) => w <= r.state.clock.week).length);
   });
 
   it('runs a year: summer choice, evaluation, and advancement', () => {

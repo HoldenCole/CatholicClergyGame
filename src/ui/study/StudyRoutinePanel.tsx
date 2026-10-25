@@ -47,7 +47,7 @@ export default function StudyRoutinePanel() {
           {post ? (study.city === 'residence' ? 'Living at the residence, in the room with the view of the parking lot.' : `Living at ${study.residence}.`) : `${study.school.charAt(0).toUpperCase() + study.school.slice(1)}, living at ${study.residence}.`} {pope ? 'There is no term: it ends when you die or lay it down.' : study.city === 'nunciature' ? 'The service has no end date: the Secretariat moves you every few years, and you may ask to go home when it does.' : <>{Math.floor(weeksLeft / 52) > 0 ? `${Math.floor(weeksLeft / 52)} years and ` : ''}{weeksLeft % 52} weeks {post ? (study.city === 'residence' ? 'until he lets you go' : 'until the appointment ends') : `until the degree${study.failed ? ', if it comes' : ''}`}.</>} {post ? `${POST_DAY[study.city] ?? 'The work'} takes the week; the shape of it is yours:` : 'Lectures, the chapel, and the house rule take the week;'} {budget} {post ? 'blocks of it' : 'hours are yours'}.
           {left > 0 ? ` ${left} still unspoken for; ${post ? 'the day takes them' : 'they go to the city'}.` : ' All of them are given.'}
         </p>
-        {last && <p className="mt-2 rounded border rule bg-white/30 px-3 py-2 text-sm leading-relaxed">{last.lines.join(' ')}</p>}
+        {last && <p className="mt-2 rounded border rule bg-white/30 px-3 py-2 text-sm leading-relaxed"><span className="ink-faint block text-xs">{last.lines[0]}</span>{last.lines.length > 1 ? last.lines.slice(1).join(' ') : 'Nothing to write down.'}</p>}
       </Sheet>
       <Sheet title={post ? (POST_DAY[study.city] ?? 'The work') : 'Your studies'}>
         <ul className="flex flex-col gap-1.5">{studies.map(row)}</ul>

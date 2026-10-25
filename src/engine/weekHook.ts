@@ -152,7 +152,7 @@ export function resolvePendingWithOutcome(state: GameState, pending: PendingEven
   return { state: next, outcome };
 }
 
-/** How often an unplayed week of a friar's formation carries a scene. Invented. */
+/** How often an unplayed week of formation carries a scene: a friar's novitiate and studium, and the diocesan seminary too since the rule round, so that a year is more than its three played weeks. Invented. */
 const FORMATION_WEEK_CHANCE = 0.12;
 
 /** The seminary week: formation accrual and beats, then any played-week event. */
@@ -182,8 +182,8 @@ export function seminaryWeekHook(deps: EventDeps): WeekHook {
     if (pool.length > 0) {
       const [event] = drawEvents(pool, next, rng, 1);
       if (event) next = fireOrResolve(next, event, rng, deps);
-    } else if (next.religious && rng.derive(`formation-scene:${next.clock.week}`).chance(FORMATION_WEEK_CHANCE)) {
-      // A friar's formation is lived weekly, not on three played weeks a year: the novitiate and the studium draw at a low chance every week. Friar round D3.
+    } else if (rng.derive(`formation-scene:${next.clock.week}`).chance(FORMATION_WEEK_CHANCE)) {
+      // Formation is lived weekly, not on three played weeks a year: the house draws at a low chance every week, the rule's scenes among them. Friar round D3, and the seminary's rule round.
       const [event] = drawEvents(deps.pool.filter((e) => !e.beat), next, rng, 1);
       if (event) next = fireOrResolve(next, event, rng, deps);
     }
