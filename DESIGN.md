@@ -661,6 +661,12 @@ The rectory after the office closes; the priory after Compline. What a man does 
 - **The bottle** is never a number and never a dial. It is a thread of authored scenes (§11): the third glass, noticed, after months of alone nights and too-much days, with a sink and a phone and a doctor on offer; the brother who noticed, with a number at the door; the place the diocese sends men, or the meetings on Tuesdays in the next town; a year, by the count kept. Every step has a way out, the way out is always written with respect, and the sheet says only that there is a bottle in the evenings, or the date he has been sober since.
 - Numbers (the targets, the follow, the rest factor, the scene cadence) are invented and live in the content file and `NIGHT`.
 
+### 8.9 The schedule
+
+The week's hours for the liturgy are charged for what is on the schedule (`types/schedule.ts`, `systems/schedule.ts`): every Mass with its day, time, language and celebrant; every confession slot with its start and length. A Sunday Mass the man says costs half a block, a weekday Mass a sixth, the box a block for every four hours plus the walk over; the Sunday homily keeps its three levels of preparation. The old quality words for the weekday Masses and the box are derived from the schedule, so the effects and the book still read them. A parish rolls its default once from the run's seed: as many Sunday Masses as its households want (one per 350 and one more), a vigil, a Mass each weekday, the Saturday box, and the communities' Masses in their languages; who says what follows the man's role.
+
+The canon (c. 905) is the working rule: two Masses on a weekday, three on a Sunday with the vigil counted. A pastor or administrator sets the schedule; a vicar asks the pastor, who answers from his regard and his temper (the mentor says yes, the micromanager no, the absent man anything). Attendance is pulled by Masses enough for the households, the communities served in their language, the box open on a weeknight and a Mass before seven; Masses beyond demand are thin and cost. The people ask (`events/parish/schedule.json`): the weeknight box, the Spanish Mass, the six-thirty for the shift workers, the five o'clock for the young families, the thin seven-thirty, the choir's hour, the pastor wanting his Mass back, the canon's number, the funeral home's Saturday, the First Fridays. Scenes change the schedule with the `schedule` effect and ask about it with the `schedule` condition.
+
 ## 9. Generation
 
 ### 9.1 Dioceses

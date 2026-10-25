@@ -1,3 +1,4 @@
+import { scheduleBook, scheduleOf } from '@/systems/schedule';
 import { describe, expect, it } from 'vitest';
 import { createRng } from '@/engine/rng';
 import { parishState } from './week.test';
@@ -27,9 +28,10 @@ describe('systems/ministry', () => {
   it('a year of the ordinary routine counts a priest\'s year of Masses', () => {
     const s = aYear(parishState('year'));
     const book = ministryOf(s);
-    // Three on Sunday and five in the week: about four hundred a year.
-    expect(Math.round(book.masses)).toBe(52 * 8);
-    expect(Math.round(book.confessions)).toBe(52 * 12);
+    // The Masses on the schedule, said every week of the year; the box's hours heard.
+    const said = scheduleBook(scheduleOf(s)!);
+    expect(Math.round(book.masses)).toBe(Math.round(52 * said.masses));
+    expect(Math.round(book.confessions)).toBe(Math.round(52 * said.confessions));
     expect(book.baptisms).toBeGreaterThan(0);
     expect(book.funerals).toBeGreaterThan(0);
     expect(ministryLine(s)).toContain('Masses');
@@ -48,8 +50,12 @@ describe('systems/ministry', () => {
 
   it('a minimal week says fewer Masses and hears fewer confessions than an invested one', () => {
     const s = parishState('quality');
-    const min = parishWeekBook(s, { ...STANDARD, sunday_masses: 'min', weekday_masses: 'min', confessions: 'min' });
-    const invested = parishWeekBook(s, { ...STANDARD, sunday_masses: 'invested', weekday_masses: 'invested', confessions: 'invested' });
+    // The book counts the schedule: a week with fewer Masses and a shorter box is a thinner week.
+    const sched = scheduleOf(s)!;
+    const thin = { ...s, parish: { ...s.parish!, schedule: { ...sched, masses: sched.masses.filter((m) => m.sunday), confessions: sched.confessions.map((c) => ({ ...c, minutes: 30 })) } } };
+    const full = { ...s, parish: { ...s.parish!, schedule: { ...sched, confessions: [...sched.confessions, { id: 'c9', day: 'wed' as const, minute: 18 * 60, minutes: 60, confessor: 'me' as const }] } } };
+    const min = parishWeekBook(thin, STANDARD);
+    const invested = parishWeekBook(full, STANDARD);
     expect(min.masses!).toBeLessThan(invested.masses!);
     expect(min.confessions!).toBeLessThan(invested.confessions!);
     // Hours in the box count: each block is another handful of penitents.
@@ -92,7 +98,7 @@ describe('systems/profile', () => {
     expect(p.name).toContain('Reilly');
     expect(p.age).toBeGreaterThan(20);
     expect(p.post).toMatch(/vicar|Pastor/i);
-    expect(p.ministry.find((r) => r.key === 'masses')!.value).toBe(52 * 8);
+    expect(p.ministry.find((r) => r.key === 'masses')!.value).toBe(Math.round(52 * scheduleBook(scheduleOf(s)!).masses));
     expect(p.line).toContain('priest');
     expect(p.tenures.length).toBeGreaterThanOrEqual(1);
   });

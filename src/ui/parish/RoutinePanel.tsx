@@ -11,6 +11,8 @@ import HomilyPanel from './HomilyPanel';
 import PressPanel from './PressPanel';
 import { hoursLearned, languageDefs, learnable, learningOf } from '@/systems/languages';
 import AwayPanel from './AwayPanel';
+import SchedulePanel from './SchedulePanel';
+import { SCHEDULE } from '@/systems/schedule';
 
 const QUALITIES: Quality[] = ['min', 'standard', 'invested'];
 const FEEDS: Record<string, string> = {
@@ -98,23 +100,25 @@ export default function RoutinePanel() {
           ))}
         </ul>
       </Sheet>
+      <SchedulePanel />
       <Sheet title="The standing routine">
+        <p className="ink-muted text-xs leading-relaxed">The Masses and the box are charged as scheduled above. What is left to decide here is how the homily is prepared, and how the meetings and the sacraments are kept.</p>
         <ul className="mt-3 flex flex-col gap-2">
-          {OBLIGATION_KEYS.map((key) => {
+          {OBLIGATION_KEYS.filter((key) => key !== 'weekday_masses' && key !== 'confessions').map((key) => {
             const def = obligationDefs.find((o) => o.key === key)!;
             const chosen = routine.obligations[key];
             const actual = plan.obligations[key];
             return (
               <li key={key} className="text-sm">
                 <div className="flex items-center justify-between gap-2">
-                  <span className="min-w-0 truncate" title={def.label}>{def.label}</span>
+                  <span className="min-w-0 truncate" title={def.label}>{key === 'sunday_masses' ? 'The Sunday homily' : def.label}</span>
                   <div className="flex gap-1">
                     {QUALITIES.map((q) => {
                       const ap = def.ap[q] === undefined ? undefined : obligationAp(def.key, q, 0, game.character?.stats);
                       if (ap === undefined) return null;
                       return (
                         <button key={q} onClick={() => setObligation(key, q)} className={'pbtn whitespace-nowrap px-2 py-0.5 text-xs ' + (q === chosen ? 'pbtn-active' : '')} title={`${QUALITY_LABEL[q]}: ${def.blurb[q]}`}>
-                          {QUALITY_SHORT[q]} <span className="opacity-70">{hoursOf(ap)}h</span>
+                          {QUALITY_SHORT[q]} <span className="opacity-70">{hoursOf(key === 'sunday_masses' ? SCHEDULE.homilyAp[q] : ap)}h</span>
                         </button>
                       );
                     })}

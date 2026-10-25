@@ -1,0 +1,1230 @@
+{
+  "_notes": "The schedule's scenes (the schedule round): what the people ask of the Mass and confession times, and what the chancery says about them. Ids sch_*; gated on schedule conditions (systems/schedule.ts scheduleMeasure) and parish facts; the choices change the schedule outright with schedule effects (mass:add, mass:remove, confessions:add, confessions:remove), which the prose narrates as the pastor's agreement where a vicar is the man. Most come round again after their suppression, since the schedule moves. Flags written: schedule:spanish_added, schedule:defied_canon. Selectors: @pastor only (sch_pastor_wants_his_mass_back, vicar only). Nothing sensitive.",
+  "events": [
+    {
+      "id": "sch_evening_confessions",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "pressure": [
+        "competence",
+        "doubt"
+      ],
+      "severity": "NOTABLE",
+      "category": "parish_death",
+      "baseWeight": 12,
+      "suppressYears": 3,
+      "requires": [
+        {
+          "type": "schedule",
+          "key": "evening_confessions",
+          "value": false
+        }
+      ],
+      "title": "The Light on a Weeknight",
+      "body": "A man who works two jobs stops you after the eight o'clock to say that he has not been to confession in three years, not because he does not want to but because the box is open on Saturday afternoon and he is at the warehouse on Saturday afternoons, and so is half the parish. He says it without complaint. He says it the way people say things they have given up expecting anyone to fix. Behind him two women are nodding.",
+      "flavorPrompt": "A church door after the eight o'clock, a man who works two jobs, two women nodding behind him.",
+      "choices": [
+        {
+          "id": "open_an_evening",
+          "label": "Open the box on a weeknight, an hour, and tell the bulletin",
+          "outcome": "You put a Wednesday evening hour in the bulletin and sit in the dark church to see who comes.",
+          "roll": {
+            "chance": 0.6,
+            "stat": "piety",
+            "success": {
+              "outcome": "The first week it is him and one of the women. The fourth week it is eleven people and a line, and a man you have never seen who was driving past and saw the light. The warehouse man comes every month for the rest of your time there and tells people you are the priest who opened the box on a Wednesday, which is not the whole of what you are and is the part they repeat.",
+              "effects": [
+                {
+                  "target": "reputation",
+                  "key": "parishioners",
+                  "delta": 4
+                },
+                {
+                  "target": "stat",
+                  "key": "piety",
+                  "delta": 1
+                },
+                {
+                  "target": "trait",
+                  "key": "opened the box on a weeknight"
+                }
+              ]
+            },
+            "failure": {
+              "outcome": "The first week it is him. The second it is nobody, and the third, and you sit an hour in a dark church on a Wednesday three weeks running, which is a kind of prayer and not the kind you meant. He comes in the fifth week and thanks you. The hour stays in the bulletin. It will take a year to be found, and you may not have the year.",
+              "effects": [
+                {
+                  "target": "reputation",
+                  "key": "parishioners",
+                  "delta": 1
+                },
+                {
+                  "target": "stat",
+                  "key": "piety",
+                  "delta": 1
+                }
+              ]
+            }
+          },
+          "effects": [
+            {
+              "target": "schedule",
+              "key": "confessions:add",
+              "value": "wed 18:30 60"
+            }
+          ]
+        },
+        {
+          "id": "before_mass",
+          "label": "Say you will hear confessions before the weekday Masses, and mean it",
+          "default": true,
+          "outcome": "You come twenty minutes early to the weekday Mass and sit in the box, and the eleven people who come to the Mass learn that you are there, and one or two of them use it, and the warehouse man does not, because the Mass is at eight and so is the warehouse. It was a kindness. It was not the one he asked for.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "saturday_is_saturday",
+          "label": "Say Saturday is when the box is open, and that the diocese has other parishes",
+          "outcome": "He nods, and does not argue, and does not come back to the eight o'clock either. The two women behind him remember. The box stays open on Saturday afternoon for the people who can come on Saturday afternoon, which is a real set of people and not the whole of them.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": -2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": -1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sch_spanish_mass_asked",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "pressure": [
+        "competence"
+      ],
+      "severity": "NOTABLE",
+      "category": "parish_death",
+      "baseWeight": 13,
+      "suppressYears": 3,
+      "once": true,
+      "requires": [
+        {
+          "type": "schedule",
+          "key": "community_unserved",
+          "value": true
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "schedule",
+            "key": "mass_in",
+            "value": "spanish"
+          }
+        },
+        {
+          "type": "parish",
+          "key": "needsSpanish",
+          "value": true
+        }
+      ],
+      "title": "A Mass in Their Language",
+      "body": "The Spanish-speaking families have been coming to the English Mass for a year and sitting together in the back, and this week three of the men come to the rectory after it and ask, with great courtesy and a prepared sentence, whether the parish could have a Mass in Spanish. They have asked before, they say, of the last priest. They do not say what he said. There are enough of them to fill the church at noon, and they know it, and so do you.",
+      "flavorPrompt": "Three men at the rectory door after Mass with a prepared sentence, and a church they could fill at noon.",
+      "choices": [
+        {
+          "id": "add_it",
+          "label": "Add the Spanish Mass at noon, and say it yourself",
+          "requires": [
+            {
+              "type": "credential",
+              "key": "spanish"
+            }
+          ],
+          "outcome": "You put a noon Mass in Spanish in the bulletin and say the first one to a church that is fuller than the ten-thirty.",
+          "effects": [
+            {
+              "target": "schedule",
+              "key": "mass:add",
+              "value": "sun 12:00 spanish"
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "schedule:spanish_added",
+              "value": true
+            },
+            {
+              "target": "trait",
+              "key": "gave the parish its Spanish Mass"
+            }
+          ]
+        },
+        {
+          "id": "find_a_priest",
+          "label": "Add the Mass, and find a priest from the deanery to say it until your Spanish is ready",
+          "default": true,
+          "outcome": "A priest from across the deanery says the noon Mass for a stipend and a lunch, and the families come, and they know whose idea it was and who does not yet speak to them. You start the Spanish in the study hours. It is a year before you say the Mass yourself, and the year is remembered as the one when the parish got its Mass.",
+          "effects": [
+            {
+              "target": "schedule",
+              "key": "mass:add",
+              "value": "sun 12:00 spanish"
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 3
+            },
+            {
+              "target": "money",
+              "key": "parish",
+              "delta": -200
+            },
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "not_yet",
+          "label": "Say not yet, and say why: the priest and the hours are not there",
+          "outcome": "They thank you and go, and sit in the back of the ten-thirty the next Sunday, and the Sunday after, and in a year some of them have found the parish across the highway that has the Mass, and the back pews are emptier. You were honest about the hours. The hours were not what they asked about.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": -3
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sch_early_mass",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "pressure": [
+        "competence",
+        "body_vs_vow"
+      ],
+      "severity": "NOTABLE",
+      "category": "parish_death",
+      "baseWeight": 11,
+      "suppressYears": 3,
+      "requires": [
+        {
+          "type": "schedule",
+          "key": "early_mass",
+          "value": false
+        }
+      ],
+      "title": "The Six-Thirty",
+      "body": "The nurses from the hospital up the road, the men from the plant, the woman who opens the bakery: they have found each other at the back of the eight o'clock, late, in uniform, and this month they have found you. Could there be a Mass at six-thirty, two or three mornings a week? They would come. They say it the way shift workers say things: as a fact about the schedule, not a wish. The eight o'clock would lose them and gain its quiet.",
+      "flavorPrompt": "Nurses and plant workers at the back of the eight o'clock in uniform, asking about six-thirty.",
+      "choices": [
+        {
+          "id": "add_two",
+          "label": "Add a six-thirty on Tuesday and Thursday, and get up for it",
+          "outcome": "You add the six-thirty twice a week and find out what a church is like at that hour.",
+          "roll": {
+            "chance": 0.6,
+            "stat": "piety",
+            "success": {
+              "outcome": "It is like a chapel: fourteen people in work clothes who do not sing and do not leave early, and who, by Lent, are the best congregation you have. The bakery woman brings bread on Thursdays. The eight o'clock grows quieter and does not mind. You are tired on Tuesdays and Thursdays for the rest of your time there, and would not give it back.",
+              "effects": [
+                {
+                  "target": "reputation",
+                  "key": "parishioners",
+                  "delta": 4
+                },
+                {
+                  "target": "stat",
+                  "key": "piety",
+                  "delta": 2
+                },
+                {
+                  "target": "trait",
+                  "key": "said the six-thirty for the shift workers"
+                }
+              ]
+            },
+            "failure": {
+              "outcome": "It is like a chapel for a month, and then the plant changes its shifts and the nurses rotate and it is four people and you, at six-thirty, twice a week, through a winter. You keep it because you said you would. The four are grateful. The bakery woman still brings bread. It is a small thing done faithfully for almost nobody, which is a description of a great deal of the priesthood.",
+              "effects": [
+                {
+                  "target": "reputation",
+                  "key": "parishioners",
+                  "delta": 1
+                },
+                {
+                  "target": "stat",
+                  "key": "piety",
+                  "delta": 1
+                }
+              ]
+            }
+          },
+          "effects": [
+            {
+              "target": "schedule",
+              "key": "mass:add",
+              "value": "tue 06:30 english"
+            },
+            {
+              "target": "schedule",
+              "key": "mass:add",
+              "value": "thu 06:30 english"
+            }
+          ]
+        },
+        {
+          "id": "move_the_eight",
+          "label": "Move the eight o'clock to seven, for everyone",
+          "outcome": "You move the weekday Mass to seven, and the shift workers can make it, and the retired people who made the eight o'clock theirs for twenty years cannot, or say they cannot, and the Mass has new faces and has lost old ones, and the old ones write to the pastor, or are the pastor's friends. It was a fair change. Nobody asked for it to be fair.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": -1
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": -1
+            }
+          ]
+        },
+        {
+          "id": "decline",
+          "label": "Say the eight o'clock is the Mass, and that you will keep a place for them in it",
+          "default": true,
+          "outcome": "They keep coming to the back of the eight o'clock, late, in uniform, for as long as the shifts allow, and then they do not. You kept the schedule the parish had. The parish kept most of its people.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 0
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": -1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sch_young_families",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "pressure": [
+        "competence"
+      ],
+      "severity": "NOTABLE",
+      "category": "parish_death",
+      "baseWeight": 11,
+      "suppressYears": 3,
+      "requires": [
+        {
+          "type": "schedule",
+          "key": "evening_mass",
+          "value": false
+        }
+      ],
+      "title": "The Five O'Clock",
+      "body": "The young families have found a spokeswoman, which is how a parish knows it has young families, and she comes to the rectory on a Tuesday with a list: the Masses are all in the morning, the children nap, the soccer is at ten, and a five o'clock on Sunday evening would bring thirty families who are at present going nowhere or across town. She has counted them. She has their names. She would like, she says, to help.",
+      "flavorPrompt": "A young mother at the rectory on a Tuesday with a list of thirty families and their names.",
+      "choices": [
+        {
+          "id": "add_five",
+          "label": "Add a five o'clock Sunday Mass and give her the music",
+          "outcome": "You add the five o'clock and let her build it: the music, the ushers, the coffee after.",
+          "roll": {
+            "chance": 0.55,
+            "stat": "charisma",
+            "success": {
+              "outcome": "It takes. By Advent the five o'clock is the loudest Mass in the parish, children on the floor, a guitar, a coffee hour that goes till seven, and the spokeswoman is on the parish council. The morning Masses are a little thinner and a great deal older, and some of them say so, and the collections are up anyway. The parish has a Mass for people who were not coming.",
+              "effects": [
+                {
+                  "target": "reputation",
+                  "key": "parishioners",
+                  "delta": 5
+                },
+                {
+                  "target": "stat",
+                  "key": "charisma",
+                  "delta": 1
+                },
+                {
+                  "target": "money",
+                  "key": "parish",
+                  "delta": 300
+                },
+                {
+                  "target": "trait",
+                  "key": "built the five o’clock for the young families"
+                }
+              ]
+            },
+            "failure": {
+              "outcome": "It half takes: twelve families, not thirty, and a guitar player who leaves at Christmas, and a Mass that is pleasant and small and costs you a Sunday afternoon you used to have. The spokeswoman is loyal to it. The morning people wonder aloud why there is a Mass for twelve families. There is not a good answer, and there is not a good reason to stop.",
+              "effects": [
+                {
+                  "target": "reputation",
+                  "key": "parishioners",
+                  "delta": 1
+                },
+                {
+                  "target": "stat",
+                  "key": "charisma",
+                  "delta": 1
+                }
+              ]
+            }
+          },
+          "effects": [
+            {
+              "target": "schedule",
+              "key": "mass:add",
+              "value": "sun 17:00 english"
+            }
+          ]
+        },
+        {
+          "id": "move_the_ten_thirty",
+          "label": "Move the ten-thirty to eleven and say that is for the families",
+          "outcome": "You move the big Mass half an hour and it helps the families a little and annoys the choir a great deal, and the spokeswoman says thank you in the tone of a woman who asked for a Mass and got half an hour. The soccer is still at ten. The parish's schedule has been adjusted and nobody is grateful, which is the usual outcome of adjustments.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": -1
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "decline",
+          "label": "Say the parish has the Masses it can staff, and offer her the children's liturgy at the ten-thirty",
+          "default": true,
+          "outcome": "She takes the children's liturgy and runs it well, and the families who can make the ten-thirty make it, and the ones who cannot go across town, where there is a five o'clock. She does not hold it against you. She mentions, once a year, that the parish across town has a five o'clock.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 0
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sch_thin_mass",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "pressure": [
+        "money",
+        "competence"
+      ],
+      "severity": "NOTABLE",
+      "category": "parish_death",
+      "baseWeight": 10,
+      "suppressYears": 3,
+      "requires": [
+        {
+          "type": "schedule",
+          "key": "over_demand",
+          "value": true
+        }
+      ],
+      "title": "The Seven-Thirty",
+      "body": "The seven-thirty on Sunday has nineteen people in it, and has had nineteen people in it for a year, and nine of them are the same nine, and the pastor, or the finance council, or the sacristan who has to come in at seven, has said what everyone can see: the Mass is thin, and a parish with a priest shortage cannot afford to say Mass for nineteen people when the ten-thirty is standing in the aisles. The nineteen know this is being said. They have been coming to the seven-thirty for forty years.",
+      "flavorPrompt": "A seven-thirty Mass with nineteen people in it for forty years, and a parish that cannot afford it.",
+      "choices": [
+        {
+          "id": "drop_it",
+          "label": "Drop the seven-thirty, and go and see the nineteen yourself",
+          "outcome": "You take the seven-thirty off the schedule and spend a month visiting the people who came to it.",
+          "roll": {
+            "chance": 0.5,
+            "stat": "charisma",
+            "success": {
+              "outcome": "The visits do it. Fifteen of the nineteen come to the nine o'clock and sit together at the front, and the other four go across town and send a card, and the parish has one less Mass and the same people, and the sacristan sleeps in. It was done the only way it can be done, which is in kitchens. The pastor, or the council, says it was handled well.",
+              "effects": [
+                {
+                  "target": "reputation",
+                  "key": "parishioners",
+                  "delta": 1
+                },
+                {
+                  "target": "reputation",
+                  "key": "chancery",
+                  "delta": 2
+                },
+                {
+                  "target": "stat",
+                  "key": "charisma",
+                  "delta": 1
+                },
+                {
+                  "target": "trait",
+                  "key": "dropped the seven-thirty and visited the nineteen"
+                }
+              ]
+            },
+            "failure": {
+              "outcome": "The visits do not do it. The nineteen are hurt, and say so to each other and then to the deanery, and seven of them go across town and twelve of them come to the nine o'clock and sit at the back and do not sing, for a year. The Mass is gone. The forty years are not, and the parish learns that you are the priest who dropped the seven-thirty, which is a thing a parish keeps.",
+              "effects": [
+                {
+                  "target": "reputation",
+                  "key": "parishioners",
+                  "delta": -4
+                },
+                {
+                  "target": "reputation",
+                  "key": "chancery",
+                  "delta": 1
+                },
+                {
+                  "target": "stat",
+                  "key": "piety",
+                  "delta": 1
+                }
+              ]
+            }
+          },
+          "effects": [
+            {
+              "target": "schedule",
+              "key": "mass:remove",
+              "value": "sun 07:30"
+            }
+          ]
+        },
+        {
+          "id": "keep_it",
+          "label": "Keep it, and say why: nineteen people are nineteen people",
+          "default": true,
+          "outcome": "You say that the seven-thirty is the Mass of the people who built the church, and that a parish is not a business, and the pastor or the council hears it and lets it stand, and the sacristan goes on coming in at seven. The nineteen know. They do not say anything. One of them leaves the parish a bequest, in a year, that pays for the roof.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": -1
+            },
+            {
+              "target": "money",
+              "key": "parish",
+              "delta": 150
+            }
+          ]
+        },
+        {
+          "id": "merge_it",
+          "label": "Move it to eight and merge it with the first Mass's crowd",
+          "outcome": "The seven-thirty becomes an eight o'clock and the nine o'clock becomes a nine-thirty and the whole morning slides half an hour and everyone is slightly inconvenienced and nobody is lost, which is the parish schedule's version of a victory. The nineteen complain about the half hour. They come.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sch_choir_wants_time",
+      "phase": [
+        "pastor",
+        "administrator"
+      ],
+      "pressure": [
+        "competence"
+      ],
+      "severity": "NOTABLE",
+      "category": "parish_death",
+      "baseWeight": 9,
+      "suppressYears": 3,
+      "requires": [
+        {
+          "type": "schedule",
+          "key": "sunday_masses",
+          "op": ">=",
+          "value": 4
+        }
+      ],
+      "title": "The Choir's Hour",
+      "body": "The choir director comes to the rectory with the choir's position, which is that the ten-thirty is the choir's Mass and always has been, and that the ten-thirty has been getting shorter because the noon Mass is pressing on it, and that a choir cannot sing a Mass in fifty minutes, and that the choir would like the noon moved to twelve-thirty, or the ten-thirty moved to ten, or something, and that the choir has been here for thirty years and the noon Mass for two.",
+      "flavorPrompt": "A choir director in the rectory with thirty years of position and a Mass that has been getting shorter.",
+      "choices": [
+        {
+          "id": "move_noon",
+          "label": "Move the noon to twelve-thirty, and tell the noon crowd why",
+          "outcome": "You move the noon Mass half an hour and the choir sings its Mass at its length and the noon people, who are the newer people, learn that the schedule bends toward the older ones. They come at twelve-thirty. Some of them notice what it meant. The choir director brings the rectory a cake.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "id": "hold_the_line",
+          "label": "Say fifty minutes is a Mass, and the choir can choose shorter music",
+          "default": true,
+          "outcome": "The choir director hears it and the choir hears it from her, and the ten-thirty is sung in fifty minutes with less Palestrina, and the choir loses two members who went to the cathedral, and keeps the rest, and is a little less good and a little less proud. The noon people never know. You have decided something about the parish without saying so.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": -1
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": -2
+            },
+            {
+              "target": "honesty",
+              "key": "",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "ask_the_choir_to_noon",
+          "label": "Ask the choir to sing the noon instead, and give the ten-thirty to the families",
+          "outcome": "It is a radical suggestion and she takes it as one, and after a month of meetings the choir sings the noon, which it comes to like, and the ten-thirty gets the children's choir and a guitar, and the whole parish is faintly scandalized and then used to it. The schedule has been turned over. Nobody died. The director says, a year later, that the noon acoustics are better.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            },
+            {
+              "target": "trait",
+              "key": "moved the choir to the noon Mass"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sch_pastor_wants_his_mass_back",
+      "phase": [
+        "parochial_vicar"
+      ],
+      "pressure": [
+        "ambition_vs_integrity",
+        "loyalty_vs_honesty"
+      ],
+      "severity": "NOTABLE",
+      "category": "parish_death",
+      "baseWeight": 10,
+      "suppressYears": 3,
+      "once": true,
+      "requires": [
+        {
+          "type": "role",
+          "value": "parochial_vicar"
+        },
+        {
+          "type": "weeks_served",
+          "op": ">=",
+          "value": 40
+        }
+      ],
+      "title": "The Pastor's Mass",
+      "body": "The pastor says it at supper, not unkindly: that the ten-thirty was his Mass before you came, and that he has given it to you for a year because you were new and the people should know you, and that he would like it back, and that you can have the seven-thirty and the vigil. It is his parish. It is also the Mass where the parish happens, and you have been preaching it well, and he knows that too, which is part of why he wants it back.",
+      "flavorPrompt": "A rectory supper, a pastor asking for his Mass back, a vicar who has preached it well for a year.",
+      "choices": [
+        {
+          "id": "give_it",
+          "label": "Give it back with good grace, and make the vigil yours",
+          "outcome": "You hand back the ten-thirty and take the vigil and the seven-thirty, and set out to make the vigil a Mass people choose rather than settle for.",
+          "roll": {
+            "chance": 0.55,
+            "stat": "charisma",
+            "success": {
+              "outcome": "The vigil fills. Within a year it is the Mass the working families choose, with a homily people come for and a coffee hour the ten-thirty does not have, and the pastor, who has his Mass back, has also noticed that the vigil's collections are up, and says so at supper. He does not say the rest. He does not need to; the parish says it.",
+              "effects": [
+                {
+                  "target": "relationship",
+                  "key": "@pastor",
+                  "delta": 6
+                },
+                {
+                  "target": "reputation",
+                  "key": "parishioners",
+                  "delta": 3
+                },
+                {
+                  "target": "stat",
+                  "key": "charisma",
+                  "delta": 1
+                },
+                {
+                  "target": "trait",
+                  "key": "gave the pastor his Mass back and made the vigil his own"
+                }
+              ]
+            },
+            "failure": {
+              "outcome": "The vigil stays the vigil: the people who come to it come because of the hour, and your homily is good and the room is half full and the pastor has his Mass back and his parish's attention with it. You have been generous and it has cost you the year's standing. He is grateful. Gratitude from a pastor is worth about what you would expect.",
+              "effects": [
+                {
+                  "target": "relationship",
+                  "key": "@pastor",
+                  "delta": 5
+                },
+                {
+                  "target": "reputation",
+                  "key": "parishioners",
+                  "delta": -1
+                },
+                {
+                  "target": "stat",
+                  "key": "piety",
+                  "delta": 1
+                }
+              ]
+            }
+          },
+          "effects": []
+        },
+        {
+          "id": "ask_to_keep_it",
+          "label": "Ask to keep it, and say why: the people have come to it under you",
+          "outcome": "He hears you out and says that this is exactly why he wants it back, and takes it, and the supper is quiet. You say the vigil and the seven-thirty. The people who came to the ten-thirty under you know what happened and some of them say so to the pastor, which does not help you. It is his parish. You have been told.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@pastor",
+              "delta": -5
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 1
+            },
+            {
+              "target": "outspokenness",
+              "key": "",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "propose_turns",
+          "label": "Propose you take turns: the ten-thirty his one month and yours the next",
+          "default": true,
+          "outcome": "He thinks about it and says yes, because it is fair and because it costs him nothing to be fair about, and the parish gets two preachers at its big Mass and finds it likes that. The pastor finds he likes the months off. You have made an arrangement, which is a thing a vicar does not often get to do.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@pastor",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sch_too_many_masses",
+      "phase": [
+        "pastor",
+        "administrator"
+      ],
+      "pressure": [
+        "competence",
+        "body_vs_vow"
+      ],
+      "severity": "NOTABLE",
+      "category": "parish_death",
+      "baseWeight": 12,
+      "suppressYears": 3,
+      "once": true,
+      "requires": [
+        {
+          "type": "schedule",
+          "key": "sunday_masses",
+          "op": ">=",
+          "value": 4
+        },
+        {
+          "type": "role",
+          "value": "pastor"
+        }
+      ],
+      "title": "Three on a Sunday",
+      "body": "You are saying three Masses on Sunday and the vigil, which is four, which is one more than the canon allows a priest without the bishop's leave, and the vicar for clergy has noticed, because the bulletin is on the diocesan website. He calls on Monday. He is not angry. He says the canon exists because men who say four Masses on a Sunday are no good to anyone by the fourth, and that the bishop will grant the trination if it is asked for and will not grant the fourth, and that something has to come off the schedule or someone has to be found.",
+      "flavorPrompt": "The vicar for clergy on the phone on Monday about the bulletin on the website, and the canon's number.",
+      "choices": [
+        {
+          "id": "find_someone",
+          "label": "Find a priest for one of them: the deanery, a religious house, a retired man",
+          "outcome": "You spend a fortnight on the phone and find a retired priest two parishes over who will take the vigil for a stipend and a dinner.",
+          "roll": {
+            "chance": 0.6,
+            "stat": "administration",
+            "success": {
+              "outcome": "He takes it and is good at it, and the vigil crowd adopts him, and you say three on Sunday under the trination the bishop grants by return of post, and the vicar for clergy notes that the parish found its own solution, which is what the chancery likes a parish to do. You are better by the third Mass than you were by the fourth.",
+              "effects": [
+                {
+                  "target": "reputation",
+                  "key": "chancery",
+                  "delta": 3
+                },
+                {
+                  "target": "reputation",
+                  "key": "brother_priests",
+                  "delta": 2
+                },
+                {
+                  "target": "money",
+                  "key": "parish",
+                  "delta": -150
+                },
+                {
+                  "target": "stat",
+                  "key": "administration",
+                  "delta": 1
+                },
+                {
+                  "target": "trait",
+                  "key": "found a priest for the fourth Mass"
+                }
+              ]
+            },
+            "failure": {
+              "outcome": "He takes it for a month and his hip goes, and you are back to four, and the vicar for clergy calls again, less gently, and the vigil comes off the schedule by the chancery's instruction rather than yours. The vigil crowd is told by letter. They blame the chancery, mostly.",
+              "effects": [
+                {
+                  "target": "schedule",
+                  "key": "mass:remove",
+                  "value": "sat 17:00"
+                },
+                {
+                  "target": "reputation",
+                  "key": "chancery",
+                  "delta": -2
+                },
+                {
+                  "target": "reputation",
+                  "key": "parishioners",
+                  "delta": -2
+                }
+              ]
+            }
+          },
+          "effects": []
+        },
+        {
+          "id": "drop_one",
+          "label": "Drop one yourself, and choose which",
+          "default": true,
+          "outcome": "You take the smallest Mass off the schedule, which is the earliest one, and write to the bishop for the trination, which comes, and the early people come to the next Mass and sit together, and the vicar for clergy says thank you, which he does not often say. You are tired by the third Mass on Sunday and no longer useless by it.",
+          "effects": [
+            {
+              "target": "schedule",
+              "key": "mass:remove",
+              "value": "sun 07:30"
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": -1
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "keep_saying_four",
+          "label": "Say you will keep saying the four until the chancery sends you a priest",
+          "outcome": "The chancery does not send you a priest. It sends a letter, and then the vicar for clergy in person, and the fourth Mass comes off the schedule in a way that is written down in your file as a disagreement with the chancery about the canon, which is the kind of disagreement the chancery wins. You said the four Masses for a season. Nobody in the parish knows what it cost.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": -5
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 2
+            },
+            {
+              "target": "outspokenness",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": -1
+            },
+            {
+              "target": "flag",
+              "key": "schedule:defied_canon",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sch_funeral_home",
+      "phase": [
+        "pastor",
+        "administrator"
+      ],
+      "pressure": [
+        "competence"
+      ],
+      "severity": "NOTABLE",
+      "category": "parish_death",
+      "baseWeight": 9,
+      "suppressYears": 3,
+      "requires": [
+        {
+          "type": "schedule",
+          "key": "weekend_confessions",
+          "value": true
+        },
+        {
+          "type": "role",
+          "value": "pastor"
+        }
+      ],
+      "title": "The Funeral Home's Saturday",
+      "body": "The funeral director calls, as he does, about Saturday: the family wants the funeral at ten, and the parish has confessions from half past nine, which you moved there last year because people asked for a morning slot, and the church cannot do both, and the funeral director has three other parishes and would like to know by noon. The family is a parish family. The people who come to the Saturday morning box are too.",
+      "flavorPrompt": "A funeral director on the phone about Saturday at ten, and a confession slot that is already there.",
+      "choices": [
+        {
+          "id": "move_the_box",
+          "label": "Move Saturday's confessions to the afternoon for good, and give the morning to funerals",
+          "default": true,
+          "outcome": "You move the box to the afternoon and tell the bulletin, and the morning penitents grumble and come in the afternoon, mostly, and the funeral director has his Saturday mornings and sends the parish every funeral he can. It is a small change with a long tail: the parish buries more of its people from its own church, and the box is open when the shops are shut.",
+          "effects": [
+            {
+              "target": "schedule",
+              "key": "confessions:remove",
+              "value": "sat 09:30"
+            },
+            {
+              "target": "schedule",
+              "key": "confessions:add",
+              "value": "sat 15:30 90"
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": 2
+            },
+            {
+              "target": "money",
+              "key": "parish",
+              "delta": 200
+            }
+          ]
+        },
+        {
+          "id": "hold_the_box",
+          "label": "Keep the box, and give the funeral director eleven o'clock",
+          "outcome": "The family takes eleven, with a face, and the funeral director takes it with a shorter one, and the Saturday morning penitents never know the box was in question. The next funeral goes to the parish across town, where Saturday morning is free. It was one funeral. The funeral director counts in funerals.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 0
+            },
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": -1
+            },
+            {
+              "target": "money",
+              "key": "parish",
+              "delta": -100
+            }
+          ]
+        },
+        {
+          "id": "hear_them_both",
+          "label": "Hear confessions in the sacristy before the funeral and let the church have the funeral",
+          "outcome": "You sit in the sacristy from nine with the door open and hear the morning's confessions in whispers while the funeral home sets up in the church, and it works, in the way that things done at the last minute work, and the funeral is at ten, and the penitents are heard, and you are very tired by noon. The funeral director tells people the parish is accommodating. The sacristan does not speak to you for a week.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": -1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sch_first_friday",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "pressure": [
+        "competence",
+        "doubt"
+      ],
+      "severity": "NOTABLE",
+      "category": "parish_death",
+      "baseWeight": 9,
+      "suppressYears": 3,
+      "once": true,
+      "requires": [
+        {
+          "type": "schedule",
+          "key": "evening_mass",
+          "value": false
+        }
+      ],
+      "title": "First Fridays",
+      "body": "A woman of eighty who has made the First Fridays for sixty years comes to the sacristy to say that the parish does not have a First Friday Mass in the evening any longer, and that the devotion needs the evening because the people who make it work during the day, and that she has made the nine First Fridays eleven times and would like to make them a twelfth, and that she will be dead before the parish gets round to it unless you do. She says the last part cheerfully.",
+      "flavorPrompt": "A woman of eighty in the sacristy who has made the First Fridays eleven times and wants a twelfth.",
+      "choices": [
+        {
+          "id": "add_it",
+          "label": "Add an evening Mass on the first Friday of the month, with exposition after",
+          "outcome": "You add the First Friday evening Mass and the hour of exposition after it, and see who comes.",
+          "roll": {
+            "chance": 0.55,
+            "stat": "piety",
+            "success": {
+              "outcome": "Thirty people come, and then fifty, and the hour after is the quietest hour the church has all month, and the woman of eighty makes her twelfth set of nine and tells you so with the particular satisfaction of a person who has finished something. The devotion was there all along; it wanted an evening. The parish has a Mass that is about nothing but prayer.",
+              "effects": [
+                {
+                  "target": "reputation",
+                  "key": "parishioners",
+                  "delta": 3
+                },
+                {
+                  "target": "stat",
+                  "key": "piety",
+                  "delta": 2
+                },
+                {
+                  "target": "reputation",
+                  "key": "traditional_bloc",
+                  "delta": 2
+                },
+                {
+                  "target": "trait",
+                  "key": "gave the parish back its First Fridays"
+                }
+              ]
+            },
+            "failure": {
+              "outcome": "Eight people come, and the woman of eighty, and the hour after is quiet because it is empty, and you say the Mass on the first Friday of every month for a year for nine people and a devotion that the parish has, it turns out, mostly forgotten. She makes her twelfth set. She dies in the spring. The Mass stays on the schedule because taking it off would be a thing you could not say to her, and she is not there to say it to, and you keep it anyway.",
+              "effects": [
+                {
+                  "target": "reputation",
+                  "key": "parishioners",
+                  "delta": 1
+                },
+                {
+                  "target": "stat",
+                  "key": "piety",
+                  "delta": 2
+                },
+                {
+                  "target": "reputation",
+                  "key": "traditional_bloc",
+                  "delta": 1
+                }
+              ]
+            }
+          },
+          "effects": [
+            {
+              "target": "schedule",
+              "key": "mass:add",
+              "value": "fri 19:00 english"
+            }
+          ]
+        },
+        {
+          "id": "morning_only",
+          "label": "Say the morning Mass on First Fridays is the First Friday Mass, and promise exposition after it",
+          "default": true,
+          "outcome": "You add the exposition after the morning Mass and she comes to it, with a dozen others who are free in the morning, and makes her twelfth set, slowly, with a ride from her niece. It was not what she asked for. It was something, and she took it, and was grateful in the way of a woman who has learned to take what the parish has.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "id": "decline",
+          "label": "Say the schedule is full and the devotion has its morning",
+          "outcome": "She thanks you and goes, and makes the First Fridays at the parish across town, where there is an evening Mass, with a ride from her niece, for the rest of her life, which is two more years. Her funeral is at your parish. The niece mentions the First Fridays in the eulogy.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": -2
+            },
+            {
+              "target": "reputation",
+              "key": "traditional_bloc",
+              "delta": -2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": -1
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

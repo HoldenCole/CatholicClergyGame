@@ -8,7 +8,7 @@ import { admit as admitSys, delayMan, dismissMan, nameRector as nameRectorSys, n
 import { callConsistory as callConsistorySys, holdPapalConsistory, planJourney as planJourneySys } from '@/systems/rome/papalActs';
 import { endPontificate } from '@/systems/rome/pontificate';
 import { answerConclave as answerConclaveSys, conclaveAct as conclaveActSys, holdTheConclave } from '@/systems/rome/conclaveFlow';
-import type { ChanceryOffice, DocumentKind, HouseWorkId, LiturgicalStance, SeminaryWhere } from '@/types';
+import type { ChanceryOffice, DocumentKind, HouseWorkId, LiturgicalStance, SeminaryWhere, ScheduleChange } from '@/types';
 import type {
   CreationAnswers,
   EventCategory,
@@ -66,6 +66,7 @@ import {
 } from './seminary';
 import { parishWeekHook, friarWeekHook, resolvePendingWithOutcome, seminaryWeekHook, studyWeekHook, type ChoiceOutcome, type EventDeps } from './weekHook';
 import { setDiscretionary as doSetDiscretionary, setObligation as doSetObligation, startAssignment } from './parish';
+import { changeSchedule as doChangeSchedule } from '@/systems/schedule';
 import { focusGroup as doFocus, replaceLeader as doReplaceLeader, startFounding as doStartFounding, suppressGroup as doSuppress } from '@/systems/groups';
 import { startWork as doStartWork, stopWork as doStopWork } from '@/systems/problems';
 import { joinClub as doJoinClub, leaveClub as doLeaveClub } from '@/systems/clubs';
@@ -261,6 +262,8 @@ export interface GameStore {
   /** The bishop laid out a choice; take one. */
   chooseAssignment(id: string): void;
   setObligation(key: ObligationKey, quality: Quality): void;
+  /** The Mass and confession schedule: changed outright by a pastor, asked of the pastor by a vicar. */
+  changeSchedule(change: ScheduleChange): void;
   /** Hours a week a seminarian gives an activity. */
   setSeminaryActivity(id: string, ap: number): void;
   /** A priest-student's free hours. */
@@ -1056,6 +1059,9 @@ export const useGameStore = create<GameStore>()((set, get) => ({
   },
   setObligation(key, quality) {
     update(set, get, (game) => doSetObligation(game, key, quality));
+  },
+  changeSchedule(change) {
+    update(set, get, (game) => doChangeSchedule(game, change));
   },
   setSeminaryActivity(id, ap) {
     update(set, get, (game) => doSetSeminaryActivity(game, id, ap));

@@ -1,3 +1,4 @@
+import { scheduleEffect } from '@/systems/schedule';
 import { applySeeHours } from './see';
 import { recordNorm } from '@/systems/bishop/reading';
 import type { ReputationKey, Bond } from '@/types';
@@ -280,6 +281,9 @@ export function applyEffect(
     case 'document':
       return recordImplementation(state, effect.key, String(effect.value) as Implementation);
     // A loan across diocesan lines. E2 R1.3.
+    // The parish schedule changed by a scene: the people asked and it was done.
+    case 'schedule':
+      return scheduleEffect(state, effect.key, String(effect.value ?? ''));
     case 'loan': {
       if (effect.key === 'ask') return askLoan(state, String(effect.value) as LoanKind, bindings['@province_bishop'], loanRng(state, 'ask'));
       if (effect.key === 'home') {

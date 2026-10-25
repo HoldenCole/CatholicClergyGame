@@ -34,3 +34,4 @@ export * from './night';
 export * from './rome';
 export * from './conference';
 export * from './loan';
+export * from './schedule';

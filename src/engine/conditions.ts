@@ -1,3 +1,4 @@
+import { scheduleMeasure } from '@/systems/schedule';
 import { resolveConstituency } from '@/systems/campaign';
 import { frictionOf, leanOf, selectedOf } from '@/systems/liturgy';
 import type { Condition, GameState } from '@/types';
@@ -256,6 +257,12 @@ export function evaluateCondition(
       if (cond.key === 'reigning') return !!state.rome?.pontificate === cond.value;
       if (cond.key === 'scene') return duePopeScene(state) === cond.value;
       return !!state.rome?.vacancy === cond.value;
+    case 'schedule': {
+      const got = scheduleMeasure(state, cond.key, typeof cond.value === 'string' ? cond.value : undefined);
+      if ('op' in cond) return typeof got === 'number' && compare(cond.op, got, cond.value);
+      if (cond.key === 'mass_in') return got === true;
+      return got === cond.value;
+    }
     case 'loan': {
       const loan = state.loan;
       if (cond.key === 'scene') return dueLoanScene(state) === cond.value;
