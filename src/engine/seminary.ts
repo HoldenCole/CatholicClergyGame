@@ -322,7 +322,7 @@ function advanceYear(state: GameState): GameState {
   }
   const opened: GameState = {
     ...state,
-    seminary: { ...sem, ...milestones, year: sem.year + 1, emphasis: null, playedWeeks: [] },
+    seminary: { ...sem, ...milestones, year: sem.year + 1, emphasis: null, playedWeeks: [], lates: 0 },
     mode: { kind: 'year_start', year: sem.year + 1 },
   };
   // The studium's first year brings the diocesan seminary's men to the same lectures. E3 §3.13.

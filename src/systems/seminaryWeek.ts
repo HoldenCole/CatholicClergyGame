@@ -10,6 +10,7 @@ import { renderText } from '@/engine/text';
 import { freeHourShift } from './workweek';
 import { withFloor } from './hours';
 import { strainAfterWeek, strainOf, WEEK } from './week';
+import { horariumHourShift } from './seminaryRule';
 
 /** DESIGN §6: the weekly loop at low stakes, with fewer hours than a parish. Invented. */
 export const SEMINARY_WEEK = {
@@ -25,7 +26,9 @@ export function seminaryBudget(state: GameState): number {
   const year = state.seminary?.year ?? 2;
   const base = year === 1 ? SEMINARY_WEEK.propaedeuticHours : year >= 7 ? SEMINARY_WEEK.deaconHours : SEMINARY_WEEK.freeHours;
   const sick = strainOf(state) >= WEEK.strainSick ? 1 : 0;
-  return withFloor(withFloor(base) + freeHourShift(state) - sick);
+  // The horarium as kept gives hours back at the minimum and takes them at the invested level.
+  const rule = state.seminary ? horariumHourShift(state.seminary) : 0;
+  return Math.max(4, withFloor(withFloor(base) + freeHourShift(state) - sick) + rule);
 }
 
 export function routineOf(sem: SeminaryState): Record<string, number> {
