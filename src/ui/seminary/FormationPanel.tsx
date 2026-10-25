@@ -40,7 +40,7 @@ export default function FormationPanel() {
             </div>
           ))}
         </dl>
-        {sem.concerns.length > 0 && <p className="ink-wine mt-3 text-xs">In the file: {sem.concerns.join(' ')}</p>}
+        {sem.concerns.length > 0 && <p className="ink-wine mt-3 text-xs">In the file: {sem.concerns.join('; ')}</p>}
       </Sheet>
       <Sheet title="Classmates">
         <ul className="scroll-paper flex max-h-48 flex-col gap-0.5 overflow-y-auto text-sm">
