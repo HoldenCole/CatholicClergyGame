@@ -1,3 +1,4 @@
+import { credentialList } from '@/systems/credentials';
 import { RANK_WORD } from '@/systems/rome/diplomacy';
 import { useGameStore } from '@/engine/store';
 import { popesOfHisLife } from '@/systems/rome/papacy';
@@ -172,7 +173,7 @@ export default function ProfilePanel() {
       <Sheet title="On the record" fold="closed">
         <ul className="flex flex-col gap-1 text-sm">
           {p.offices.length > 0 && <li>Offices: {p.offices.join(', ')}.</li>}
-          {p.credentials.length > 0 && <li>Degrees and credentials: {p.credentials.map((c) => c.replace(/_/g, ' ')).join(', ')}.</li>}
+          {p.credentials.length > 0 && <li>Degrees and credentials: {credentialList(p.credentials)}.</li>}
           {popes.length > 0 && <li>The popes of his life: {popes.join(', ')}{game?.rome?.vacancy ? '; the see is vacant now' : ''}.</li>}
           {game.rome?.diplomacy && game.rome.diplomacy.rank !== 'student' && <li>In the Holy See's diplomatic service: {RANK_WORD[game.rome.diplomacy.rank]}{game.rome.diplomacy.country ? ` in ${game.rome.diplomacy.country}` : ''}; {game.rome.diplomacy.countries.length} countr{game.rome.diplomacy.countries.length === 1 ? 'y' : 'ies'} served.</li>}
           {game.rome?.pontificate && <li>Bishop of Rome as {game.rome.pontificate.name}, elected {Math.max(0, Math.floor((game.clock.week - game.rome.pontificate.electedWeek) / 52))} years ago; before the conclave, {game.rome.pontificate.from}.</li>}

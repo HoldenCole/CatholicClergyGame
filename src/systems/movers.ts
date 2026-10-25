@@ -8,6 +8,7 @@ import { fundBonuses, spendWords } from './spending';
 import { spendDef } from '@/content/parish';
 import { seasonOf } from '@/engine/time';
 import { confessorPull } from './confessor';
+import { schedulePull } from './schedule';
 
 /** One thing that moved a number (a constituency's opinion, a stat, alignment), kept for a quarter so the man can see why. */
 export interface Mover {
@@ -111,6 +112,8 @@ export function explainAttendance(state: GameState): { target: number; now: numb
     { label: 'the groups', amount: WEEK.groupsAttendance * groups },
     { label: 'the Mass as set', amount: mass },
     { label: 'your name as a confessor', amount: confessorPull(state) },
+    // The week's target counts the schedule (week.ts); the explanation must say so too.
+    { label: 'the Masses and the box as scheduled', amount: schedulePull(state) },
   ];
   for (const id of Object.keys(parish.finance.funds ?? {})) {
     const def = spendDef(id);

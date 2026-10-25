@@ -1,3 +1,4 @@
+import { credentialList } from '@/systems/credentials';
 import { useGameStore } from '@/engine/store';
 import { boardLeavesHim } from '@/engine/career';
 import { allOffers } from '@/content/offers';
@@ -276,7 +277,7 @@ export default function JobsPanel() {
             {summers.map((s) => (
               <li key={s.year}>Summer of year {s.year}: {s.label.toLowerCase()}.</li>
             ))}
-            {game.character.credentials.length > 0 && <li>Credentials: {game.character.credentials.map((c) => c.replace(/_/g, ' ')).join(', ')}.</li>}
+            {game.character.credentials.length > 0 && <li>Credentials: {credentialList(game.character.credentials)}.</li>}
           </ul>
         </Sheet>
       )}
