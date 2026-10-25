@@ -60,7 +60,8 @@ describe('engine/conditions: the book and the life', () => {
     let s: GameState = base;
     expect(evaluateCondition({ type: 'ministry', key: 'masses', op: '>=', value: 1 }, s)).toBe(false);
     for (let i = 0; i < 10; i++) s = ministryWeek(s, STANDARD);
-    expect(evaluateCondition({ type: 'ministry', key: 'masses', op: '>=', value: 70 }, s)).toBe(true);
+    // Ten weeks of the Masses on the schedule: a vicar's share, five or six a week.
+    expect(evaluateCondition({ type: 'ministry', key: 'masses', op: '>=', value: 40 }, s)).toBe(true);
     expect(evaluateCondition({ type: 'ministry', key: 'ordinations', op: '>=', value: 1 }, s)).toBe(false);
   });
 

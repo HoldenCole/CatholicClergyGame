@@ -1,3 +1,4 @@
+import { scheduleBook, scheduleOf } from './schedule';
 import type { GameState, Ministry, MinistryKey, Parish, Quality } from '@/types';
 import { MINISTRY_KEYS } from '@/types';
 import { studyProgram } from '@/content/study';
@@ -98,10 +99,18 @@ export function parishWeekBook(state: GameState, obligations: Record<string, Qua
     const mine = share[key] ?? 1 / priests;
     out[key] = (yearly / 52) * (priests > 1 ? mine : 1);
   }
-  const sunday = MINISTRY.masses.sunday![obligations.sunday_masses as Quality] ?? 3;
-  const weekday = MINISTRY.masses.weekday![obligations.weekday_masses as Quality] ?? 5;
-  out.masses = sunday + weekday;
-  out.confessions = (MINISTRY.confessions.scheduled[obligations.confessions as Quality] ?? 12) + extraConfessionBlocks * MINISTRY.confessions.perBlock;
+  // The schedule says what was said and how long the light was on; without one, the old table stands in.
+  const schedule = scheduleOf(state);
+  if (schedule) {
+    const said = scheduleBook(schedule);
+    out.masses = said.masses;
+    out.confessions = said.confessions + extraConfessionBlocks * MINISTRY.confessions.perBlock;
+  } else {
+    const sunday = MINISTRY.masses.sunday![obligations.sunday_masses as Quality] ?? 3;
+    const weekday = MINISTRY.masses.weekday![obligations.weekday_masses as Quality] ?? 5;
+    out.masses = sunday + weekday;
+    out.confessions = (MINISTRY.confessions.scheduled[obligations.confessions as Quality] ?? 12) + extraConfessionBlocks * MINISTRY.confessions.perBlock;
+  }
   return out;
 }
 

@@ -1,3 +1,4 @@
+import type { ParishSchedule } from './schedule';
 import type { Condition, Effect } from './events';
 import type { Npc } from './npc';
 import type { Season } from './time';
@@ -286,6 +287,8 @@ export interface ParishState {
   seminarian?: { npcId: string; startWeek: number; endWeek: number };
   /** The man you formed, come back as your vicar. */
   vicarId?: string;
+  /** The Masses and confessions as scheduled (types/schedule.ts). Absent in older saves: the default for the parish is used until the sheet is touched. */
+  schedule?: ParishSchedule;
   /** The calendar year of the bishop's last visitation. systems/visitation.ts */
   visitationYear?: number;
   /** The retired priest living in the rectory, and how he is. systems/resident.ts */

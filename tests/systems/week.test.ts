@@ -75,9 +75,10 @@ describe('systems/week', () => {
     let s = parishState();
     const min = { sunday_masses: 'min', weekday_masses: 'min', confessions: 'min', meetings: 'min', sacramental_prep: 'min' } as const;
     s = { ...s, parish: { ...s.parish!, routine: { obligations: { ...min }, discretionary: { visits: 4, study: 1 } } } };
-    // 1 + 0.5 + 0.5 + 0.75 + 1 at the minimum, which skill cannot shorten, less what a thriving group gives back.
+    // The Masses and the box are charged as scheduled, said quickly at the minimum; the homily, meetings and sacraments at theirs.
     expect(planWeek(s).mandatory).toBeGreaterThanOrEqual(3);
-    expect(planWeek(s).mandatory).toBeLessThanOrEqual(3.75);
+    expect(planWeek(s).mandatory).toBeLessThanOrEqual(4.5);
+    expect(planWeek(s).mandatory).toBeLessThan(planWeek(parishState()).mandatory);
     const before = s.character!.reputation.parishioners;
     const rng = createRng('min');
     for (let i = 0; i < 6; i++) s = resolveWeek(s, rng).state;

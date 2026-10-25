@@ -107,7 +107,7 @@ const EFFECT_TARGETS = [
   'stat', 'reputation', 'relationship', 'flag', 'group', 'money', 'ap', 'thread', 'position',
   'pillar', 'alignment', 'outspokenness', 'honesty', 'credential', 'trait', 'archetype',
   'concern', 'risk', 'npc', 'end', 'decor', 'permission', 'trait_known', 'transfer', 'building', 'club', 'bond', 'place', 'record', 'strain', 'arc', 'ministry', 'foundation', 'known', 'loan',
-  'province', 'crossing', 'town', 'rumour', 'document', 'see', 'norm',
+  'province', 'crossing', 'town', 'rumour', 'document', 'see', 'norm', 'schedule',
 ];
 const DECOR_PLACES = ['church', 'chapel', 'office', 'rectory', 'seminary_room', 'chancery'];
 const DECOR_SLOTS = ['sanctuary', 'altar_rail', 'orientation', 'confessionals', 'choir', 'statues', 'tabernacle', 'mass_form', 'music', 'style', 'devotion', 'seating', 'wall', 'desk', 'floor', 'corner'];
@@ -186,6 +186,12 @@ function checkCondition(c: Condition, where: string, problems: Problem[]): void 
       break;
     case 'house':
       if (typeof c.value !== 'boolean' || (c.charism !== undefined && !['contemplative', 'active'].includes(c.charism)) || (c.order !== undefined && !HOUSE_ORDERS.includes(c.order))) problems.push(`${where}: bad house condition`);
+      break;
+    case 'schedule':
+      if (['sunday_masses', 'weekday_masses', 'masses_mine', 'confession_minutes'].includes(c.key)) { if (!hasOp((c as { op?: unknown }).op) || typeof c.value !== 'number') problems.push(`${where}: bad schedule count condition`); }
+      else if (c.key === 'mass_in') { if (typeof c.value !== 'string') problems.push(`${where}: schedule mass_in wants a language`); }
+      else if (['evening_confessions', 'weekend_confessions', 'early_mass', 'evening_mass', 'community_unserved', 'short_of_demand', 'over_demand'].includes(c.key)) { if (typeof c.value !== 'boolean') problems.push(`${where}: bad schedule fact condition`); }
+      else problems.push(`${where}: bad schedule key ${c.key}`);
       break;
     case 'diocese':
       if (c.key !== undefined && !['region', 'size', 'institution', 'spanish', 'ethnic'].includes(c.key)) problems.push(`${where}: bad diocese key ${c.key}`);
@@ -310,6 +316,10 @@ function checkCondition(c: Condition, where: string, problems: Problem[]): void 
 }
 
 function checkEffect(e: Effect, where: string, problems: Problem[]): void {
+  if (e.target === 'schedule') {
+    if (!['mass:add', 'mass:remove', 'confessions:add', 'confessions:remove'].includes(e.key)) problems.push(`${where}: bad schedule key ${e.key}`);
+    if (typeof e.value !== 'string' || !/^(sun|mon|tue|wed|thu|fri|sat) \d{1,2}:\d{2}( \S+)?$/.test(e.value)) problems.push(`${where}: bad schedule value ${String(e.value)}`);
+  }
   if (!EFFECT_TARGETS.includes(e.target)) {
     problems.push(`${where}: unknown effect target ${e.target}`);
     return;

@@ -198,6 +198,13 @@ export type Condition =
   /** Something the loan wrote down (flag loan:<value>, a week), within so many weeks. */
   | { type: 'loan'; key: 'since'; value: 'returned' | 'stayed' | 'refused' | 'excardination_refused' | 'borrowed' | 'bishop_refused' | 'on'; within: number }
   | { type: 'loan'; key: 'years'; op: Op; value: number }
+  /**
+   * The parish schedule: a count (sunday_masses, weekday_masses, masses_mine, confession_minutes) against a value, or a fact
+   * (evening_confessions, weekend_confessions, early_mass, evening_mass, community_unserved, short_of_demand, over_demand; mass_in with the language as value).
+   */
+  | { type: 'schedule'; key: 'sunday_masses' | 'weekday_masses' | 'masses_mine' | 'confession_minutes'; op: Op; value: number }
+  | { type: 'schedule'; key: 'evening_confessions' | 'weekend_confessions' | 'early_mass' | 'evening_mass' | 'community_unserved' | 'short_of_demand' | 'over_demand'; value: boolean }
+  | { type: 'schedule'; key: 'mass_in'; value: string }
   /** E1 R1.3: the nuncio: his scene due for the man now, or his view of the man (0..100) against a value. */
   /** E1 R1.5: the College's scene due for the man now (created, titular, eve, after, eighty, consistory). */
   | { type: 'college'; key: 'scene'; value: string }
@@ -305,7 +312,9 @@ export type EffectTarget =
   /** E1 R1.1: what he did in his parish with the latest document on an axis (key: the axis; value: eager | faithful | minimal | defiant). The record keeps it. */
   | 'document'
   /** E2 R1.3: a loan: key ask (value: the kind), home, stay, extend, excardinate; for a bishop, lend (value: the priest's selector, the see from the @province_bishop binding). */
-  | 'loan';
+  | 'loan'
+  /** The parish schedule (systems/schedule.ts): key mass:add | mass:remove | confessions:add | confessions:remove; value "sun 17:00 spanish", "sun 07:30", "wed 18:00 60". */
+  | 'schedule';
 
 export interface Effect {
   target: EffectTarget;

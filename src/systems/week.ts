@@ -1,4 +1,4 @@
-import type { Effect, GameState, ObligationKey, Quality, Role, Season, WeekLedger, Stats, StatKey } from '@/types';
+import type { Effect, GameState, ObligationKey, Quality, Role, Season, WeekLedger, Stats, StatKey, ParishSchedule } from '@/types';
 import { OBLIGATION_KEYS } from '@/types';
 import { actionDefs, obligationDefs, sacrificeDefs, SEASONAL_LOAD } from '@/content/parish';
 import { takeSnapshot, TRAJECTORY } from './trajectory';
@@ -32,6 +32,7 @@ import { houseHelp, houseRelief, houseWeek } from './houses';
 import { brothersWeek } from './brothers';
 import type { Rng } from '@/engine/rng';
 import { horariumLoad } from './religious/horarium';
+import { SCHEDULE, derivedQuality, scheduleAp, scheduleOf, schedulePull } from './schedule';
 import { restFactor } from './night';
 import { friendshipLoad } from './religious/friendship';
 
@@ -136,6 +137,21 @@ export function obligationAp(key: ObligationKey, quality: Quality, relief = 0, s
   return Math.max(OBLIGATION_FLOOR, ap - relief - saved);
 }
 
+/**
+ * What an obligation costs this week. With a schedule, the three liturgical
+ * obligations are charged for what is on it (systems/schedule.ts): the Sunday
+ * Masses said and the homily as prepared; the weekday Masses said; the hours
+ * the box is open. A week that does not fit says them quickly ('min').
+ */
+export function obligationCost(key: ObligationKey, quality: Quality, relief = 0, stats?: Stats, schedule: ParishSchedule | null = null): number {
+  if (!schedule || !(key === 'sunday_masses' || key === 'weekday_masses' || key === 'confessions')) return obligationAp(key, quality, relief, stats);
+  const base = scheduleAp(schedule, key, quality) ?? 0;
+  // Skill saves time on the homily, as before; the Masses and the box take what they take.
+  const saved = key === 'sunday_masses' && quality !== 'min' ? efficiencyOf(key, stats) : 0;
+  const cut = key !== 'sunday_masses' && quality === 'min' ? SCHEDULE.cutFactor : 1;
+  return Math.max(OBLIGATION_FLOOR, base * cut - relief - saved);
+}
+
 export function adminFloorFor(state: GameState): number {
   const role = state.assignment?.role ?? 'parochial_vicar';
   const admin = state.character?.stats.administration ?? 0;
@@ -217,7 +233,14 @@ export function planWeek(state: GameState): Plan {
   for (const [k, v] of Object.entries(houses)) relief[k] = (relief[k] ?? 0) + (v ?? 0);
   const obligations = { ...parish.routine.obligations };
   const stats = state.character?.stats;
-  const mandatoryOf = () => Math.max(0, fixed + OBLIGATION_KEYS.reduce((n, k) => n + obligationAp(k, obligations[k], (relief as Record<string, number>)[k] ?? 0, stats), 0));
+  // The liturgy is charged as scheduled: Masses by the Mass, confessions by the hour. The old quality words are derived from it.
+  const schedule = scheduleOf(state);
+  if (schedule) {
+    obligations.weekday_masses = derivedQuality(schedule, 'weekday_masses');
+    obligations.confessions = derivedQuality(schedule, 'confessions');
+  }
+  const costOf = (k: ObligationKey, q: Quality) => obligationCost(k, q, (relief as Record<string, number>)[k] ?? 0, stats, schedule);
+  const mandatoryOf = () => Math.max(0, fixed + OBLIGATION_KEYS.reduce((n, k) => n + costOf(k, obligations[k]), 0));
 
   let neglected = false;
   let guard = 0;
@@ -393,7 +416,7 @@ export function resolveWeek(state: GameState, rng: Rng): { state: GameState; led
   next = preached.state;
   const bonuses = fundBonuses(next);
   bonuses.collections += preached.collections;
-  const target = attendanceTarget(next, care, mass.pull + bonuses.pull + confessorPull(next));
+  const target = attendanceTarget(next, care, mass.pull + bonuses.pull + confessorPull(next) + schedulePull(next));
   const attendance = parish.attendance + (target - parish.attendance) * WEEK.attendanceFollow;
 
   // An hour in the priory parlor or the abbey guesthouse, and what it builds. DESIGN §9.4a.
