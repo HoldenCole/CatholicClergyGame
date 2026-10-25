@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { parishState } from './week.test';
 import { createRng } from '@/engine/rng';
 import { generateCandidates } from '@/generation/world';
-import { SCHEDULE, applyChange, canSay, changeSchedule, defaultSchedule, derivedQuality, myMasses, pastorGrants, scheduleAp, scheduleEffect, scheduleMeasure, scheduleOf, schedulePull } from '@/systems/schedule';
+import { SCHEDULE, applyChange, canOpenBox, canSay, changeSchedule, defaultSchedule, derivedQuality, myMasses, pastorGrants, scheduleAp, scheduleEffect, scheduleMeasure, scheduleOf, schedulePull, sundayDemand } from '@/systems/schedule';
 import { obligationAp, obligationCost, planWeek } from '@/systems/week';
 import { evaluateCondition } from '@/engine/conditions';
 import { applyEffects } from '@/engine/effects';
@@ -113,6 +113,28 @@ describe('the parish schedule', () => {
     const set = changeSchedule(pastor, change);
     expect(set.parish!.schedule!.confessions.some((c) => c.day === 'thu' && c.minute === 18 * 60)).toBe(true);
     expect(set.parish!.schedule!.lastAsk).toBeUndefined();
+  });
+
+  it('the box does not open over itself, and two asks in one week keep both answers on the sheet', () => {
+    const vicar = parishState('sched:box');
+    const s = scheduleOf(vicar)!;
+    const mine = s.confessions.find((c) => c.confessor === 'me')!;
+    // Over an hour the man already keeps: refused by the schedule itself, whoever sets it, and the pastor is never asked.
+    expect(canOpenBox(s, mine.day, mine.minute, 60).ok).toBe(false);
+    expect(canOpenBox(s, mine.day, mine.minute + mine.minutes, 60).ok).toBe(true);
+    expect(() => changeSchedule(vicar, { kind: 'add_confessions', day: mine.day, minute: mine.minute + 15, minutes: 30 })).toThrow(/already open/);
+    const pastor = { ...vicar, parish: { ...vicar.parish!, role: 'pastor' as const }, phase: 'pastor' as const };
+    expect(() => changeSchedule(pastor, { kind: 'add_confessions', day: mine.day, minute: mine.minute, minutes: 60 })).toThrow(/already open/);
+    // Two asks in the same week: the second answer joins the first instead of replacing it.
+    const first = changeSchedule(vicar, { kind: 'add_confessions', day: 'thu', minute: 18 * 60, minutes: 60 });
+    const second = changeSchedule(first, { kind: 'add_mass', day: 'tue', minute: 18 * 60, language: 'english' });
+    const text = second.parish!.schedule!.lastAsk!.text;
+    expect(text).toContain('confessions on Thursday');
+    expect(text).toContain('Mass on Tuesday');
+    expect(text.indexOf('confessions on Thursday')).toBeLessThan(text.indexOf('Mass on Tuesday'));
+    // The demand a parish's size asks for is one number, read by the sheet and the pull alike.
+    const parish = vicar.world!.parishes.find((x) => x.id === vicar.parish!.parishId)!;
+    expect(sundayDemand(parish)).toBe(Math.max(2, Math.round(parish.households / SCHEDULE.householdsPerSundayMass) + 1));
   });
 
   it('scenes read the schedule and change it, the pull and the book follow it, and the ten requests validate', () => {

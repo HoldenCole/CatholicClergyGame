@@ -175,7 +175,7 @@ export function schedulePull(state: GameState): number {
   const s = scheduleOf(state);
   const parish = currentParish(state);
   if (!s || !parish) return 0;
-  const demand = Math.max(2, Math.round(parish.households / SCHEDULE.householdsPerSundayMass) + 1);
+  const demand = sundayDemand(parish);
   const sundays = s.masses.filter((m) => m.sunday).length;
   let pull = Math.min(sundays, demand) * SCHEDULE.pullPerMass - Math.max(0, sundays - demand) * SCHEDULE.thinMassPenalty;
   for (const lang of new Set(s.masses.filter((m) => m.sunday && m.language !== 'english').map((m) => m.language))) {
@@ -192,6 +192,18 @@ export function scheduleBook(s: ParishSchedule): { masses: number; confessions: 
 }
 
 /** Whether the man may say one more Mass that day under the canon. */
+/** How many Sunday Masses a parish of that size wants: one per so many households, and one more. */
+export function sundayDemand(parish: Parish): number {
+  return Math.max(2, Math.round(parish.households / SCHEDULE.householdsPerSundayMass) + 1);
+}
+
+/** Whether the box can open then: not over another hour the same confessor already keeps that day. */
+export function canOpenBox(s: ParishSchedule, day: Weekday, minute: number, minutes: number, confessor: Celebrant = 'me'): { ok: boolean; why: string | null } {
+  const clash = s.confessions.find((c) => c.day === day && c.confessor === confessor && minute < c.minute + c.minutes && c.minute < minute + minutes);
+  if (clash) return { ok: false, why: `the box is already open ${DAY_LABEL[day]} at ${timeLabel(clash.minute)}` };
+  return { ok: true, why: null };
+}
+
 export function canSay(s: ParishSchedule, day: Weekday, minute: number): { ok: boolean; why: string | null } {
   const sunday = isSundayMass(day, minute);
   const mine = myMasses(s);
@@ -252,6 +264,8 @@ export function applyChange(state: GameState, s: ParishSchedule, change: Schedul
       return { ...s, masses: s.masses.map((x) => (x.id === m.id ? { ...x, celebrant: change.to } : x)) };
     }
     case 'add_confessions': {
+      const can = canOpenBox(s, change.day, change.minute, change.minutes, celebrant);
+      if (!can.ok) throw new Error(can.why!);
       const slot: ConfessionSlot = { id: nextId(s, 'c'), day: change.day, minute: change.minute, minutes: change.minutes, confessor: celebrant };
       return { ...s, confessions: [...s.confessions, slot].sort(byTime) };
     }
@@ -297,14 +311,18 @@ export function changeSchedule(state: GameState, change: ScheduleChange): GameSt
     const next = applyChange(state, s, change);
     return { ...state, parish: { ...state.parish, schedule: next }, career: [...state.career, { week: state.clock.week, kind: 'note', text: `The schedule: ${text}.` }] };
   }
+  // What the schedule itself forbids is not the pastor's to grant.
+  if (change.kind === 'add_mass') { const can = canSay(s, change.day, change.minute); if (!can.ok) throw new Error(can.why!); }
+  if (change.kind === 'add_confessions') { const can = canOpenBox(s, change.day, change.minute, change.minutes); if (!can.ok) throw new Error(can.why!); }
+  const earlier = s.lastAsk && s.lastAsk.week === state.clock.week ? `${s.lastAsk.text} ` : '';
   const granted = pastorGrants(state, change);
   if (!granted) {
     const pastor = Object.values(state.npcs).find((n) => n.status === 'active' && n.tags.includes(`pastor:${state.parish?.parishId}`));
     const npcs = pastor ? { ...state.npcs, [pastor.id]: { ...pastor, relationship: Math.max(-100, pastor.relationship - 1) } } : state.npcs;
-    return { ...state, npcs, parish: { ...state.parish, schedule: { ...s, lastAsk: { week: state.clock.week, text: `You asked the pastor for ${text}. He said no, and said it kindly, and it is his schedule.`, granted: false } } } };
+    return { ...state, npcs, parish: { ...state.parish, schedule: { ...s, lastAsk: { week: state.clock.week, text: `${earlier}You asked the pastor for ${text}. He said no, and said it kindly, and it is his schedule.`, granted: false } } } };
   }
   const next = applyChange(state, s, change);
-  return { ...state, parish: { ...state.parish, schedule: { ...next, lastAsk: { week: state.clock.week, text: `You asked the pastor for ${text}, and he said yes.`, granted: true } } }, career: [...state.career, { week: state.clock.week, kind: 'note', text: `Asked the pastor for ${text}; he agreed.` }] };
+  return { ...state, parish: { ...state.parish, schedule: { ...next, lastAsk: { week: state.clock.week, text: `${earlier}You asked the pastor for ${text}, and he said yes.`, granted: true } } }, career: [...state.career, { week: state.clock.week, kind: 'note', text: `Asked the pastor for ${text}; he agreed.` }] };
 }
 
 /**

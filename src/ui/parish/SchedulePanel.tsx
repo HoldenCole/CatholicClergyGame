@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useGameStore } from '@/engine/store';
 import { WEEKDAYS, type Weekday } from '@/types';
-import { DAY_LABEL, DAY_SHORT, SCHEDULE, canSay, canSayIn, communityLanguages, languageLabel, myConfessionMinutes, myMasses, scheduleOf, setsSchedule, timeLabel } from '@/systems/schedule';
+import { DAY_LABEL, DAY_SHORT, SCHEDULE, canOpenBox, canSay, canSayIn, communityLanguages, languageLabel, myConfessionMinutes, myMasses, scheduleOf, setsSchedule, sundayDemand, timeLabel } from '@/systems/schedule';
 import { currentParish } from '@/systems/liturgy';
 import { languageDefs, speaks } from '@/systems/languages';
 import { hoursOf } from '@/systems/week';
@@ -32,10 +32,11 @@ export default function SchedulePanel() {
   const sundays = mine.filter((m) => m.sunday).length;
   const weekdays = mine.filter((m) => !m.sunday).length;
   const minutes = myConfessionMinutes(s);
-  const demand = Math.max(2, Math.round(parish.households / SCHEDULE.householdsPerSundayMass) + 1);
+  const demand = sundayDemand(parish);
   const allSundays = s.masses.filter((m) => m.sunday).length;
   const languages = ['english', ...new Set([...communityLanguages(parish), ...languageDefs.filter((l) => speaks(game, l.id)).map((l) => l.id)])];
   const can = canSay(s, day, minute);
+  const box = canOpenBox(s, cDay, cMinute, cLength);
   const act = (c: Parameters<typeof change>[0]) => {
     setError(null);
     try { change(c); } catch (e) { setError(e instanceof Error ? e.message : String(e)); }
@@ -92,7 +93,7 @@ export default function SchedulePanel() {
         <select className="rounded border rule bg-white/40 px-1 py-0.5" value={cDay} onChange={(e) => setCDay(e.target.value as Weekday)}>{WEEKDAYS.map((d) => <option key={d} value={d}>{DAY_LABEL[d]}</option>)}</select>
         <select className="rounded border rule bg-white/40 px-1 py-0.5" value={cMinute} onChange={(e) => setCMinute(Number(e.target.value))}>{TIMES.map((t) => <option key={t} value={t}>{timeLabel(t)}</option>)}</select>
         <select className="rounded border rule bg-white/40 px-1 py-0.5" value={cLength} onChange={(e) => setCLength(Number(e.target.value))}>{[30, 45, 60, 90, 120].map((n) => <option key={n} value={n}>{n} minutes</option>)}</select>
-        <button className="pbtn px-2 py-0 text-xs" onClick={() => act({ kind: 'add_confessions', day: cDay, minute: cMinute, minutes: cLength })}>{verb.toLowerCase()}</button>
+        <button className="pbtn px-2 py-0 text-xs" disabled={!box.ok} title={box.why ?? ''} onClick={() => act({ kind: 'add_confessions', day: cDay, minute: cMinute, minutes: cLength })}>{verb.toLowerCase()}</button>
       </div>
     </Sheet>
   );

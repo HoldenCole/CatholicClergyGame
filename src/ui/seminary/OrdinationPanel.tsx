@@ -1,3 +1,4 @@
+import { credentialList } from '@/systems/credentials';
 import { useGameStore } from '@/engine/store';
 import { nameArchetype } from '@/systems/formation';
 import { ordinationAge } from '@/systems/creation';
@@ -41,7 +42,7 @@ export default function OrdinationPanel() {
             <p>The file reads as <span className="font-medium">{standing.word}</span>{standing.reasons.length ? `: ${standing.reasons.join(', ')}` : ''}.{known.length ? ` The diocese has you down as ${known.join(' and ')}.` : ''}</p>
             {c.traits.length > 0 && <p className="ink-muted mt-1">They say of you: {c.traits.slice(-6).join('; ')}.</p>}
             {summers.length > 0 && <p className="ink-muted mt-1">The summers: {summers.map((x) => x.label.toLowerCase()).join(', ')}.</p>}
-            {c.credentials.length > 0 && <p className="ink-muted mt-1">You leave with: {c.credentials.join(', ')}.</p>}
+            {c.credentials.length > 0 && <p className="ink-muted mt-1">You leave with {credentialList(c.credentials)}.</p>}
           </div>
         );
       })()}

@@ -137,7 +137,7 @@ export default function ParishPanel() {
                   <td className="ink-muted py-0.5 pr-2">{r.label}</td>
                   <td className="ink-faint py-0.5 pr-2 text-xs">{r.then}</td>
                   <td className="py-0.5 pr-2">{r.now}</td>
-                  <td className={'py-0.5 text-xs ' + (r.sign > 0 ? 'ink-green' : r.sign < 0 ? 'ink-wine' : 'ink-faint')}>{r.sign > 0 ? '▲ better' : r.sign < 0 ? '▼ worse' : 'the same'}</td>
+                  <td className={'py-0.5 text-xs ' + (r.sign > 0 ? 'ink-green' : r.sign < 0 ? 'ink-wine' : 'ink-faint')}>{r.sign > 0 ? (r.then === r.now ? '▲ improving' : '▲ better') : r.sign < 0 ? (r.then === r.now ? '▼ slipping' : '▼ worse') : 'the same'}</td>
                 </tr>
               ))}
             </tbody>
