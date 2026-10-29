@@ -12,6 +12,7 @@ import PressPanel from './PressPanel';
 import { hoursLearned, languageDefs, learnable, learningOf } from '@/systems/languages';
 import AwayPanel from './AwayPanel';
 import SchedulePanel from './SchedulePanel';
+import MassSaidNote from '../MassSaidNote';
 import { SCHEDULE } from '@/systems/schedule';
 
 const QUALITIES: Quality[] = ['min', 'standard', 'invested'];
@@ -80,6 +81,7 @@ export default function RoutinePanel() {
           {requested > available ? `; you have asked for ${hoursOf(requested)}, so it will be trimmed` : ''}. Every block below is four hours; the daily Mass is half an hour a day and is costed that way. The projects, a group being founded, and a problem in hand are likewise outside these hours.
         </p>
         {efficiencyWords(game.character?.stats).length > 0 && <p className="ink-faint mt-1 text-xs">What you know saves you time: {efficiencyWords(game.character?.stats).join('; ')}.</p>}
+        <MassSaidNote />
         {game.assignment?.role === 'parochial_vicar' && <p className="ink-faint mt-1 text-xs">As vicar, the people are yours and the books are the pastor's: visits, confessions, and the groups count for more in your hands, and the desk for less.</p>}
         {requested > available && (
           <p className="ink-wine mt-1 text-xs">

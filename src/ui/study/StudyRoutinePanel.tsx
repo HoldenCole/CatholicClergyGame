@@ -1,6 +1,7 @@
 import { useGameStore } from '@/engine/store';
 import { studyActivitiesFor, studyActivityBuilds, studyBudget, studyHours } from '@/systems/studyWeek';
 import Sheet from '../Sheet';
+import MassSaidNote from '../MassSaidNote';
 
 /** The priest-student's week: lectures are fixed; these are the hours that are his, and the work on the side. */
 export default function StudyRoutinePanel() {
@@ -48,6 +49,7 @@ export default function StudyRoutinePanel() {
           {left > 0 ? ` ${left} still unspoken for; ${post ? 'the day takes them' : 'they go to the city'}.` : ' All of them are given.'}
         </p>
         {last && <p className="mt-2 rounded border rule bg-white/30 px-3 py-2 text-sm leading-relaxed"><span className="ink-faint block text-xs">{last.lines[0]}</span>{last.lines.length > 1 ? last.lines.slice(1).join(' ') : 'Nothing to write down.'}</p>}
+        <MassSaidNote />
       </Sheet>
       <Sheet title={post ? (POST_DAY[study.city] ?? 'The work') : 'Your studies'}>
         <ul className="flex flex-col gap-1.5">{studies.map(row)}</ul>
