@@ -2,6 +2,7 @@ import { useGameStore } from '@/engine/store';
 import { seminaryActivities } from '@/content/seminary';
 import { activityBuilds, routineHours, routineOf, seminaryBudget, seminaryActivityOffered } from '@/systems/seminaryWeek';
 import Sheet from '../Sheet';
+import MassSaidNote from '../MassSaidNote';
 import { devotionDefs, horariumDay, recreationDefs, seminaryHorariumDefs } from '@/content/seminary';
 import { RULE, horariumHourShift, horariumOf, observanceOf, observanceWord, recreationOffered, ruleOf } from '@/systems/seminaryRule';
 import type { Quality } from '@/types';
@@ -36,6 +37,7 @@ export default function SeminaryRoutinePanel() {
           {' '}The house calls you {observanceWord(observance)}.{(sem.lates ?? 0) > 0 ? ` The vice-rector's notebook has you late to Lauds ${sem.lates === 1 ? 'once' : `${sem.lates} times`} this year.` : ''}
         </p>
         {last && <p className="mt-2 rounded border rule bg-white/30 px-3 py-2 text-sm leading-relaxed"><span className="ink-faint block text-xs">{last.lines[0]}</span>{last.lines.length > 1 ? last.lines.slice(1).join(' ') : 'Nothing to write down.'}</p>}
+        <MassSaidNote />
       </Sheet>
       <Sheet title="The horarium" fold="closed" summary={seminaryHorariumDefs.map((d) => `${d.label.toLowerCase()}: ${QWORD[horarium[d.key]!].toLowerCase()}`).join(' · ')}>
         <ul className="ink-muted grid grid-cols-2 gap-x-4 gap-y-0.5 text-xs">

@@ -11,6 +11,7 @@ import { spendDefs } from '@/content/religious';
 import { awayForRest, STRAIN } from '@/systems/religious/strain';
 import { strainOf } from '@/systems/week';
 import Sheet from '../Sheet';
+import MassSaidNote from '../MassSaidNote';
 import { religiousOrder } from '@/content/religious';
 import Panel from '../Panel';
 
@@ -56,6 +57,7 @@ export default function FriarWeekPanel() {
           return null;
         })()}
         <p className="ink-faint mt-2 text-xs">The provincial assigns you for a term of three to six years and consults you before each letter. A parish entrusted to the order is held by two keys. Chapters elect the prior and the provincial, and you watch the ballots.</p>
+        <MassSaidNote />
       </Panel>
       {game.flags.ordained && (() => {
         const budget = spendBudget(game);
