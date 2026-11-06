@@ -1,497 +1,872 @@
 {
-  "_notes": "E1 R1.4: Rome's letters that move a priest of the diocese (docs/EXPANSION-E1-ROME.md §6). The Curia asks through the bishop; the dicastery is where the man's record fits (systems/rome/curia.ts, {curia_offer}).",
-  "offers": [
+ "_notes": "E1 R1.4: Rome's letters that move a priest of the diocese (docs/EXPANSION-E1-ROME.md §6). The Curia asks through the bishop; the dicastery is where the man's record fits (systems/rome/curia.ts, {curia_offer}).",
+ "offers": [
+  {
+   "id": "rome_curia_official",
+   "category": "chancery",
+   "phase": [
+    "parochial_vicar",
+    "administrator",
+    "pastor"
+   ],
+   "title": "A Letter from the Secretariat of State",
+   "body": "The letter comes to {@bishop} first, on the letterhead of the Secretariat of State, and {@bishop} sends it on to you with a note of his own clipped to the corner. {curia_offer} would like a priest of the diocese as an official for five years: a desk, a residence near the Borgo, the files. {@bishop} writes that he can spare you, which is not quite true, and that nobody says no to this letter, which is. Men lent to Rome come home different, and some of them do not come home. The note ends: think about it, and then say yes.",
+   "from": "@bishop",
+   "requires": [
     {
-      "id": "rome_curia_official",
-      "category": "chancery",
-      "phase": [
-        "parochial_vicar",
-        "administrator",
-        "pastor"
-      ],
-      "title": "A Letter from the Secretariat of State",
-      "body": "The letter comes to {@bishop} first, on the letterhead of the Secretariat of State, and {@bishop} sends it on to you with a note of his own clipped to the corner. {curia_offer} would like a priest of the diocese as an official for five years: a desk, a residence near the Borgo, the files. {@bishop} writes that he can spare you, which is not quite true, and that nobody says no to this letter, which is. Men lent to Rome come home different, and some of them do not come home. The note ends: think about it, and then say yes.",
-      "from": "@bishop",
-      "requires": [
-        {
-          "type": "years_ordained",
-          "op": ">=",
-          "value": 3
-        },
-        {
-          "type": "age",
-          "op": "<=",
-          "value": 55
-        },
-        {
-          "type": "not",
-          "inner": {
-            "type": "flag",
-            "key": "ordained_bishop",
-            "value": true
-          }
-        },
-        {
-          "type": "not",
-          "inner": {
-            "type": "flag",
-            "key": "curia_served",
-            "value": true
-          }
-        },
-        {
-          "type": "not",
-          "inner": {
-            "type": "flag",
-            "key": "refused_curia",
-            "value": true
-          }
-        },
-        {
-          "type": "reputation",
-          "key": "rome",
-          "op": ">=",
-          "value": 15
-        },
-        {
-          "type": "nuncio",
-          "key": "view",
-          "op": ">=",
-          "value": 45
-        },
-        {
-          "type": "any",
-          "inner": [
-            {
-              "type": "flag",
-              "key": "rome_alumnus",
-              "value": true
-            },
-            {
-              "type": "credential",
-              "key": "italian"
-            },
-            {
-              "type": "flag",
-              "key": "worked_at_the_holy_see",
-              "value": true
-            },
-            {
-              "type": "credential",
-              "key": "JCL"
-            }
-          ]
-        }
-      ],
-      "weight": 14,
-      "bias": [
-        {
-          "when": {
-            "type": "flag",
-            "key": "worked_at_the_holy_see",
-            "value": true
-          },
-          "multiplier": 3.0
-        },
-        {
-          "when": {
-            "type": "flag",
-            "key": "rome_alumnus",
-            "value": true
-          },
-          "multiplier": 1.6
-        },
-        {
-          "when": {
-            "type": "credential",
-            "key": "JCL"
-          },
-          "multiplier": 1.4
-        },
-        {
-          "when": {
-            "type": "outspokenness",
-            "op": ">=",
-            "value": 60
-          },
-          "multiplier": 0.5
-        }
-      ],
-      "windowWeeks": 4,
-      "final": true,
-      "cluster": "curia",
-      "accept": {
-        "effects": [
-          {
-            "target": "reputation",
-            "key": "rome",
-            "delta": 6
-          },
-          {
-            "target": "reputation",
-            "key": "chancery",
-            "delta": 3
-          },
-          {
-            "target": "reputation",
-            "key": "parishioners",
-            "delta": -4
-          }
-        ],
-        "outcome": "You fly to Rome in September with two suitcases and a letter of introduction you will never be asked for. The residence is quiet, the room is small, and on your first morning a porter who has seen forty officials come and go looks at your badge and says, in English, good luck with the files.",
-        "commitment": {
-          "label": "The Roman Curia",
-          "weeks": 260,
-          "apPerWeek": 0,
-          "onComplete": [
-            {
-              "target": "reputation",
-              "key": "rome",
-              "delta": 10
-            },
-            {
-              "target": "reputation",
-              "key": "chancery",
-              "delta": 6
-            },
-            {
-              "target": "stat",
-              "key": "administration",
-              "delta": 4
-            },
-            {
-              "target": "stat",
-              "key": "knowledge",
-              "delta": 2
-            },
-            {
-              "target": "trait",
-              "key": "sat at a desk in the Roman Curia"
-            }
-          ],
-          "completeOutcome": "Five years, a room near the Borgo, and a file of letters that went out under other men's names. The diocese gets back a man it lent, and has to find out who he is now.",
-          "away": "curia_official"
-        }
-      },
-      "decline": {
-        "effects": [
-          {
-            "target": "flag",
-            "key": "refused_curia",
-            "value": true
-          },
-          {
-            "target": "reputation",
-            "key": "rome",
-            "delta": -6
-          }
-        ],
-        "outcome": "You write to the Secretariat of State that the diocese needs you more than Rome does, which your bishop does not quite believe and Rome does not believe at all. The letter is filed. The next American they ask says yes."
-      }
+     "type": "years_ordained",
+     "op": ">=",
+     "value": 3
     },
     {
-      "id": "rome_diplomatic_academy",
-      "category": "chancery",
-      "phase": [
-        "parochial_vicar",
-        "administrator",
-        "pastor"
-      ],
-      "title": "The Academy",
-      "body": "The letter comes to {@bishop} first, on the letterhead of the Secretariat of State: the Pontifical Ecclesiastical Academy would like to receive a young priest of the diocese for its course, two years in Rome and a year of mission, and then the service of the Holy See abroad. {@bishop} writes in his note that he did not know Rome knew your name, and that he does now, and that men who go to the Academy do not, as a rule, come back to be pastors. It is the kind of letter that is not quite an order.",
-      "from": "@bishop",
-      "requires": [
-        {
-          "type": "years_ordained",
-          "op": ">=",
-          "value": 2
-        },
-        {
-          "type": "age",
-          "op": "<=",
-          "value": 40
-        },
-        {
-          "type": "not",
-          "inner": {
-            "type": "flag",
-            "key": "ordained_bishop",
-            "value": true
-          }
-        },
-        {
-          "type": "not",
-          "inner": {
-            "type": "flag",
-            "key": "refused_academy",
-            "value": true
-          }
-        },
-        {
-          "type": "not",
-          "inner": {
-            "type": "flag",
-            "key": "diplomat_served",
-            "value": true
-          }
-        },
-        {
-          "type": "reputation",
-          "key": "rome",
-          "op": ">=",
-          "value": 15
-        },
-        {
-          "type": "nuncio",
-          "key": "view",
-          "op": ">=",
-          "value": 50
-        },
-        {
-          "type": "any",
-          "inner": [
-            {
-              "type": "flag",
-              "key": "rome_alumnus",
-              "value": true
-            },
-            {
-              "type": "credential",
-              "key": "italian"
-            },
-            {
-              "type": "flag",
-              "key": "worked_at_the_holy_see",
-              "value": true
-            },
-            {
-              "type": "credential",
-              "key": "JCL"
-            }
-          ]
-        },
-        {
-          "type": "not",
-          "inner": {
-            "type": "flag",
-            "key": "academy:recruited",
-            "value": true
-          }
-        }
-      ],
-      "weight": 10,
-      "bias": [
-        {
-          "when": {
-            "type": "flag",
-            "key": "worked_at_the_holy_see",
-            "value": true
-          },
-          "multiplier": 2.5
-        },
-        {
-          "when": {
-            "type": "credential",
-            "key": "french"
-          },
-          "multiplier": 1.5
-        },
-        {
-          "when": {
-            "type": "outspokenness",
-            "op": ">=",
-            "value": 60
-          },
-          "multiplier": 0.4
-        }
-      ],
-      "windowWeeks": 4,
-      "final": true,
-      "cluster": "curia",
-      "accept": {
-        "effects": [
-          {
-            "target": "reputation",
-            "key": "rome",
-            "delta": 6
-          },
-          {
-            "target": "reputation",
-            "key": "parishioners",
-            "delta": -4
-          }
-        ],
-        "outcome": "You go to Rome in the autumn with one suitcase and a list of the languages you do not speak. The Academy's porter shows you your room and the chapel and the dining room, and says that the man who had your room is nuncio in Africa now, which is meant kindly.",
-        "commitment": {
-          "label": "The Pontifical Ecclesiastical Academy",
-          "weeks": 156,
-          "apPerWeek": 0,
-          "onComplete": [
-            {
-              "target": "reputation",
-              "key": "rome",
-              "delta": 8
-            },
-            {
-              "target": "stat",
-              "key": "knowledge",
-              "delta": 3
-            },
-            {
-              "target": "trait",
-              "key": "trained at the Pontifical Ecclesiastical Academy"
-            }
-          ],
-          "completeOutcome": "Two years in Rome and a year of mission, and a letter from the Secretariat of State with the name of a country on it.",
-          "away": "diplomatic_academy"
-        }
-      },
-      "decline": {
-        "effects": [
-          {
-            "target": "flag",
-            "key": "refused_academy",
-            "value": true
-          },
-          {
-            "target": "reputation",
-            "key": "rome",
-            "delta": -5
-          }
-        ],
-        "outcome": "You write that your vocation is to a diocese and its parishes, not to a flag and a car with plates. It is a good answer, and the Secretariat files it with the others like it. The Academy does not write twice."
-      }
+     "type": "age",
+     "op": "<=",
+     "value": 55
     },
     {
-      "id": "rome_academy_from_rome",
-      "category": "chancery",
-      "campaign": "diocesan",
-      "phase": [
-        "study"
-      ],
-      "title": "Coffee with the President of the Academy",
-      "body": "The rector of the college asks you to his rooms after supper, where a monsignor you have never met is drinking his coffee: the president of the Pontifical Ecclesiastical Academy. He has read your professors' reports, he says, and heard you at a reception speak to an ambassador's wife in her own language. When your degree is done, would you come across the city to the Academy instead of going home? Your bishop has been written to, and has said he will not stand in the way, which is not the same as saying yes.",
-      "from": "@bishop",
-      "requires": [
-        {
-          "type": "flag",
-          "key": "study:rome",
-          "value": true
-        },
-        {
-          "type": "age",
-          "op": "<=",
-          "value": 38
-        },
-        {
-          "type": "not",
-          "inner": {
-            "type": "flag",
-            "key": "refused_academy",
-            "value": true
-          }
-        },
-        {
-          "type": "not",
-          "inner": {
-            "type": "flag",
-            "key": "academy:recruited",
-            "value": true
-          }
-        },
-        {
-          "type": "not",
-          "inner": {
-            "type": "flag",
-            "key": "diplomat_served",
-            "value": true
-          }
-        },
-        {
-          "type": "reputation",
-          "key": "rome",
-          "op": ">=",
-          "value": 10
-        },
-        {
-          "type": "any",
-          "inner": [
-            {
-              "type": "credential",
-              "key": "italian"
-            },
-            {
-              "type": "credential",
-              "key": "french"
-            },
-            {
-              "type": "stat",
-              "key": "knowledge",
-              "op": ">=",
-              "value": 55
-            }
-          ]
-        }
-      ],
-      "weight": 6,
-      "bias": [
-        {
-          "when": {
-            "type": "flag",
-            "key": "worked_at_the_holy_see",
-            "value": true
-          },
-          "multiplier": 2.0
-        },
-        {
-          "when": {
-            "type": "credential",
-            "key": "french"
-          },
-          "multiplier": 1.5
-        },
-        {
-          "when": {
-            "type": "outspokenness",
-            "op": ">=",
-            "value": 60
-          },
-          "multiplier": 0.4
-        }
-      ],
-      "windowWeeks": 4,
-      "final": true,
-      "cluster": "curia",
-      "accept": {
-        "effects": [
-          {
-            "target": "flag",
-            "key": "academy:recruited",
-            "value": true
-          },
-          {
-            "target": "reputation",
-            "key": "rome",
-            "delta": 4
-          }
-        ],
-        "outcome": "You say yes over the second cup. The president writes the date on the back of his card: the Monday after your defense. You finish the degree, and the car that would have taken you to Fiumicino takes you across the city instead."
+     "type": "not",
+     "inner": {
+      "type": "flag",
+      "key": "ordained_bishop",
+      "value": true
+     }
+    },
+    {
+     "type": "not",
+     "inner": {
+      "type": "flag",
+      "key": "curia_served",
+      "value": true
+     }
+    },
+    {
+     "type": "not",
+     "inner": {
+      "type": "flag",
+      "key": "refused_curia",
+      "value": true
+     }
+    },
+    {
+     "type": "reputation",
+     "key": "rome",
+     "op": ">=",
+     "value": 15
+    },
+    {
+     "type": "nuncio",
+     "key": "view",
+     "op": ">=",
+     "value": 45
+    },
+    {
+     "type": "any",
+     "inner": [
+      {
+       "type": "flag",
+       "key": "rome_alumnus",
+       "value": true
       },
-      "decline": {
-        "effects": [
-          {
-            "target": "flag",
-            "key": "refused_academy",
-            "value": true
-          },
-          {
-            "target": "reputation",
-            "key": "rome",
-            "delta": -3
-          }
-        ],
-        "outcome": "You tell him you were ordained for a diocese and you mean to go home to it. He says that is a good answer, and that he hears it often from the best of them, and finishes his coffee. The Academy does not ask twice."
+      {
+       "type": "credential",
+       "key": "italian"
+      },
+      {
+       "type": "flag",
+       "key": "worked_at_the_holy_see",
+       "value": true
+      },
+      {
+       "type": "credential",
+       "key": "JCL"
       }
+     ]
     }
-  ]
+   ],
+   "weight": 14,
+   "bias": [
+    {
+     "when": {
+      "type": "flag",
+      "key": "worked_at_the_holy_see",
+      "value": true
+     },
+     "multiplier": 3.0
+    },
+    {
+     "when": {
+      "type": "flag",
+      "key": "rome_alumnus",
+      "value": true
+     },
+     "multiplier": 1.6
+    },
+    {
+     "when": {
+      "type": "credential",
+      "key": "JCL"
+     },
+     "multiplier": 1.4
+    },
+    {
+     "when": {
+      "type": "outspokenness",
+      "op": ">=",
+      "value": 60
+     },
+     "multiplier": 0.5
+    },
+    {
+     "when": {
+      "type": "flag",
+      "key": "nac_alumnus",
+      "value": true
+     },
+     "multiplier": 2.5
+    }
+   ],
+   "windowWeeks": 4,
+   "final": true,
+   "cluster": "curia",
+   "accept": {
+    "effects": [
+     {
+      "target": "reputation",
+      "key": "rome",
+      "delta": 6
+     },
+     {
+      "target": "reputation",
+      "key": "chancery",
+      "delta": 3
+     },
+     {
+      "target": "reputation",
+      "key": "parishioners",
+      "delta": -4
+     }
+    ],
+    "outcome": "You fly to Rome in September with two suitcases and a letter of introduction you will never be asked for. The residence is quiet, the room is small, and on your first morning a porter who has seen forty officials come and go looks at your badge and says, in English, good luck with the files.",
+    "commitment": {
+     "label": "The Roman Curia",
+     "weeks": 260,
+     "apPerWeek": 0,
+     "onComplete": [
+      {
+       "target": "reputation",
+       "key": "rome",
+       "delta": 10
+      },
+      {
+       "target": "reputation",
+       "key": "chancery",
+       "delta": 6
+      },
+      {
+       "target": "stat",
+       "key": "administration",
+       "delta": 4
+      },
+      {
+       "target": "stat",
+       "key": "knowledge",
+       "delta": 2
+      },
+      {
+       "target": "trait",
+       "key": "sat at a desk in the Roman Curia"
+      }
+     ],
+     "completeOutcome": "Five years, a room near the Borgo, and a file of letters that went out under other men's names. The diocese gets back a man it lent, and has to find out who he is now.",
+     "away": "curia_official"
+    }
+   },
+   "decline": {
+    "effects": [
+     {
+      "target": "flag",
+      "key": "refused_curia",
+      "value": true
+     },
+     {
+      "target": "reputation",
+      "key": "rome",
+      "delta": -6
+     }
+    ],
+    "outcome": "You write to the Secretariat of State that the diocese needs you more than Rome does, which your bishop does not quite believe and Rome does not believe at all. The letter is filed. The next American they ask says yes."
+   }
+  },
+  {
+   "id": "rome_diplomatic_academy",
+   "category": "chancery",
+   "phase": [
+    "parochial_vicar",
+    "administrator",
+    "pastor"
+   ],
+   "title": "The Academy",
+   "body": "The letter comes to {@bishop} first, on the letterhead of the Secretariat of State: the Pontifical Ecclesiastical Academy would like to receive a young priest of the diocese for its course, two years in Rome and a year of mission, and then the service of the Holy See abroad. {@bishop} writes in his note that he did not know Rome knew your name, and that he does now, and that men who go to the Academy do not, as a rule, come back to be pastors. It is the kind of letter that is not quite an order.",
+   "from": "@bishop",
+   "requires": [
+    {
+     "type": "years_ordained",
+     "op": ">=",
+     "value": 2
+    },
+    {
+     "type": "age",
+     "op": "<=",
+     "value": 40
+    },
+    {
+     "type": "not",
+     "inner": {
+      "type": "flag",
+      "key": "ordained_bishop",
+      "value": true
+     }
+    },
+    {
+     "type": "not",
+     "inner": {
+      "type": "flag",
+      "key": "refused_academy",
+      "value": true
+     }
+    },
+    {
+     "type": "not",
+     "inner": {
+      "type": "flag",
+      "key": "diplomat_served",
+      "value": true
+     }
+    },
+    {
+     "type": "reputation",
+     "key": "rome",
+     "op": ">=",
+     "value": 15
+    },
+    {
+     "type": "nuncio",
+     "key": "view",
+     "op": ">=",
+     "value": 50
+    },
+    {
+     "type": "any",
+     "inner": [
+      {
+       "type": "flag",
+       "key": "rome_alumnus",
+       "value": true
+      },
+      {
+       "type": "credential",
+       "key": "italian"
+      },
+      {
+       "type": "flag",
+       "key": "worked_at_the_holy_see",
+       "value": true
+      },
+      {
+       "type": "credential",
+       "key": "JCL"
+      }
+     ]
+    },
+    {
+     "type": "not",
+     "inner": {
+      "type": "flag",
+      "key": "academy:recruited",
+      "value": true
+     }
+    }
+   ],
+   "weight": 10,
+   "bias": [
+    {
+     "when": {
+      "type": "flag",
+      "key": "worked_at_the_holy_see",
+      "value": true
+     },
+     "multiplier": 2.5
+    },
+    {
+     "when": {
+      "type": "credential",
+      "key": "french"
+     },
+     "multiplier": 1.5
+    },
+    {
+     "when": {
+      "type": "outspokenness",
+      "op": ">=",
+      "value": 60
+     },
+     "multiplier": 0.4
+    }
+   ],
+   "windowWeeks": 4,
+   "final": true,
+   "cluster": "curia",
+   "accept": {
+    "effects": [
+     {
+      "target": "reputation",
+      "key": "rome",
+      "delta": 6
+     },
+     {
+      "target": "reputation",
+      "key": "parishioners",
+      "delta": -4
+     }
+    ],
+    "outcome": "You go to Rome in the autumn with one suitcase and a list of the languages you do not speak. The Academy's porter shows you your room and the chapel and the dining room, and says that the man who had your room is nuncio in Africa now, which is meant kindly.",
+    "commitment": {
+     "label": "The Pontifical Ecclesiastical Academy",
+     "weeks": 156,
+     "apPerWeek": 0,
+     "onComplete": [
+      {
+       "target": "reputation",
+       "key": "rome",
+       "delta": 8
+      },
+      {
+       "target": "stat",
+       "key": "knowledge",
+       "delta": 3
+      },
+      {
+       "target": "trait",
+       "key": "trained at the Pontifical Ecclesiastical Academy"
+      }
+     ],
+     "completeOutcome": "Two years in Rome and a year of mission, and a letter from the Secretariat of State with the name of a country on it.",
+     "away": "diplomatic_academy"
+    }
+   },
+   "decline": {
+    "effects": [
+     {
+      "target": "flag",
+      "key": "refused_academy",
+      "value": true
+     },
+     {
+      "target": "reputation",
+      "key": "rome",
+      "delta": -5
+     }
+    ],
+    "outcome": "You write that your vocation is to a diocese and its parishes, not to a flag and a car with plates. It is a good answer, and the Secretariat files it with the others like it. The Academy does not write twice."
+   }
+  },
+  {
+   "id": "rome_academy_from_rome",
+   "category": "chancery",
+   "campaign": "diocesan",
+   "phase": [
+    "study"
+   ],
+   "title": "Coffee with the President of the Academy",
+   "body": "The rector of the college asks you to his rooms after supper, where a monsignor you have never met is drinking his coffee: the president of the Pontifical Ecclesiastical Academy. He has read your professors' reports, he says, and heard you at a reception speak to an ambassador's wife in her own language. When your degree is done, would you come across the city to the Academy instead of going home? Your bishop has been written to, and has said he will not stand in the way, which is not the same as saying yes.",
+   "from": "@bishop",
+   "requires": [
+    {
+     "type": "flag",
+     "key": "study:rome",
+     "value": true
+    },
+    {
+     "type": "age",
+     "op": "<=",
+     "value": 38
+    },
+    {
+     "type": "not",
+     "inner": {
+      "type": "flag",
+      "key": "refused_academy",
+      "value": true
+     }
+    },
+    {
+     "type": "not",
+     "inner": {
+      "type": "flag",
+      "key": "academy:recruited",
+      "value": true
+     }
+    },
+    {
+     "type": "not",
+     "inner": {
+      "type": "flag",
+      "key": "diplomat_served",
+      "value": true
+     }
+    },
+    {
+     "type": "reputation",
+     "key": "rome",
+     "op": ">=",
+     "value": 10
+    },
+    {
+     "type": "any",
+     "inner": [
+      {
+       "type": "credential",
+       "key": "italian"
+      },
+      {
+       "type": "credential",
+       "key": "french"
+      },
+      {
+       "type": "stat",
+       "key": "knowledge",
+       "op": ">=",
+       "value": 55
+      }
+     ]
+    }
+   ],
+   "weight": 6,
+   "bias": [
+    {
+     "when": {
+      "type": "flag",
+      "key": "worked_at_the_holy_see",
+      "value": true
+     },
+     "multiplier": 2.0
+    },
+    {
+     "when": {
+      "type": "credential",
+      "key": "french"
+     },
+     "multiplier": 1.5
+    },
+    {
+     "when": {
+      "type": "outspokenness",
+      "op": ">=",
+      "value": 60
+     },
+     "multiplier": 0.4
+    }
+   ],
+   "windowWeeks": 4,
+   "final": true,
+   "cluster": "curia",
+   "accept": {
+    "effects": [
+     {
+      "target": "flag",
+      "key": "academy:recruited",
+      "value": true
+     },
+     {
+      "target": "reputation",
+      "key": "rome",
+      "delta": 4
+     }
+    ],
+    "outcome": "You say yes over the second cup. The president writes the date on the back of his card: the Monday after your defense. You finish the degree, and the car that would have taken you to Fiumicino takes you across the city instead."
+   },
+   "decline": {
+    "effects": [
+     {
+      "target": "flag",
+      "key": "refused_academy",
+      "value": true
+     },
+     {
+      "target": "reputation",
+      "key": "rome",
+      "delta": -3
+     }
+    ],
+    "outcome": "You tell him you were ordained for a diocese and you mean to go home to it. He says that is a good answer, and that he hears it often from the best of them, and finishes his coffee. The Academy does not ask twice."
+   }
+  },
+  {
+   "id": "rome_nac_formator",
+   "category": "academic",
+   "phase": [
+    "parochial_vicar",
+    "administrator",
+    "pastor"
+   ],
+   "title": "The College Asks for You Back",
+   "body": "The rector of the North American College writes to {@bishop}, and {@bishop} hands you the letter at the residence as if it were a bill. The College wants a formator: a priest of the house who was a man of the house, three years on the faculty corridor, spiritual direction for a dozen men, the evaluations in November, the pilgrims on Saturdays, and the rector's Monday meeting. They ask for one American diocesan priest in a year and get him about half the time, because bishops do not like to give a parish away for three years to a house in Rome. {@bishop} says he has not decided. He says it in the voice he uses when he has.",
+   "from": "@bishop",
+   "requires": [
+    {
+     "type": "flag",
+     "key": "nac_alumnus",
+     "value": true
+    },
+    {
+     "type": "years_ordained",
+     "op": ">=",
+     "value": 3
+    },
+    {
+     "type": "age",
+     "op": "<=",
+     "value": 48
+    },
+    {
+     "type": "not",
+     "inner": {
+      "type": "flag",
+      "key": "nac:formator_served",
+      "value": true
+     }
+    },
+    {
+     "type": "not",
+     "inner": {
+      "type": "flag",
+      "key": "refused_nac_formator",
+      "value": true
+     }
+    },
+    {
+     "type": "not",
+     "inner": {
+      "type": "flag",
+      "key": "ordained_bishop",
+      "value": true
+     }
+    },
+    {
+     "type": "reputation",
+     "key": "rome",
+     "op": ">=",
+     "value": 8
+    }
+   ],
+   "weight": 4,
+   "bias": [
+    {
+     "when": {
+      "type": "flag",
+      "key": "nac:wants_fifth_year",
+      "value": true
+     },
+     "multiplier": 1.5
+    },
+    {
+     "when": {
+      "type": "flag",
+      "key": "rome_alumnus",
+      "value": true
+     },
+     "multiplier": 1.6
+    },
+    {
+     "when": {
+      "type": "reputation",
+      "key": "chancery",
+      "op": ">=",
+      "value": 40
+     },
+     "multiplier": 1.3
+    },
+    {
+     "when": {
+      "type": "outspokenness",
+      "op": ">=",
+      "value": 60
+     },
+     "multiplier": 0.5
+    }
+   ],
+   "windowWeeks": 4,
+   "once": true,
+   "cluster": "curia",
+   "accept": {
+    "effects": [
+     {
+      "target": "reputation",
+      "key": "rome",
+      "delta": 4
+     },
+     {
+      "target": "reputation",
+      "key": "parishioners",
+      "delta": -6
+     },
+     {
+      "target": "reputation",
+      "key": "brother_priests",
+      "delta": -2
+     },
+     {
+      "target": "relationship",
+      "key": "@bishop",
+      "delta": 2
+     }
+    ],
+    "outcome": "You say yes, and he says that he thought you would, and that the diocese will have to do without a man it can ill spare, which is the compliment. The parish is told at the Masses. The men who were at the College with you write, one by one, to say the corridor is cold in January.",
+    "commitment": {
+     "label": "Formator at the College",
+     "weeks": 156,
+     "apPerWeek": 0,
+     "onComplete": [
+      {
+       "target": "flag",
+       "key": "nac:formator_served",
+       "value": true
+      },
+      {
+       "target": "reputation",
+       "key": "rome",
+       "delta": 10
+      },
+      {
+       "target": "reputation",
+       "key": "chancery",
+       "delta": 5
+      },
+      {
+       "target": "reputation",
+       "key": "bishops",
+       "delta": 6
+      },
+      {
+       "target": "stat",
+       "key": "piety",
+       "delta": 3
+      },
+      {
+       "target": "stat",
+       "key": "charisma",
+       "delta": 2
+      },
+      {
+       "target": "trait",
+       "key": "formed a dozen priests on the Janiculum"
+      }
+     ],
+     "completeOutcome": "Three years on the corridor: a dozen men directed, three ordinations at St. Peter's served, the rector's confidence, and a dozen bishops who now know your name because their men talked. The diocese gets back a man the College shaped twice.",
+     "away": "nac_formator"
+    }
+   },
+   "decline": {
+    "effects": [
+     {
+      "target": "flag",
+      "key": "refused_nac_formator",
+      "value": true
+     },
+     {
+      "target": "reputation",
+      "key": "rome",
+      "delta": -3
+     },
+     {
+      "target": "reputation",
+      "key": "parishioners",
+      "delta": 3
+     }
+    ],
+    "outcome": "You tell him the parish needs you more than the College does, and he agrees so readily that you wonder whether he wrote the rector before he handed you the letter. The College finds a man from Boston."
+   }
+  },
+  {
+   "id": "rome_vatican_chaplain",
+   "category": "chancery",
+   "phase": [
+    "parochial_vicar",
+    "administrator",
+    "pastor"
+   ],
+   "title": "A Confessional at St. Peter's",
+   "body": "The Prefecture has asked the bishops' conference for English-speaking confessors for the basilica, two years, and the conference has asked the bishops, and {@bishop} has the letter on his desk with your name pencilled on it by someone at the College who remembered you. The English confessional from nine to one, the pilgrims' Masses at the side altars, the Wednesday audience with a list of names, a room at the Casa, and a Roman parish on Sunday for the Italian. It is not a career, he says. It is two years of hearing the whole world's sins in the biggest church in it, and some men come home from it changed, and a few do not come home.",
+   "from": "@bishop",
+   "requires": [
+    {
+     "type": "any",
+     "inner": [
+      {
+       "type": "flag",
+       "key": "nac_alumnus",
+       "value": true
+      },
+      {
+       "type": "flag",
+       "key": "rome_alumnus",
+       "value": true
+      }
+     ]
+    },
+    {
+     "type": "credential",
+     "key": "italian"
+    },
+    {
+     "type": "years_ordained",
+     "op": ">=",
+     "value": 2
+    },
+    {
+     "type": "age",
+     "op": "<=",
+     "value": 55
+    },
+    {
+     "type": "not",
+     "inner": {
+      "type": "flag",
+      "key": "vatican:chaplain_served",
+      "value": true
+     }
+    },
+    {
+     "type": "not",
+     "inner": {
+      "type": "flag",
+      "key": "refused_vatican_chaplain",
+      "value": true
+     }
+    },
+    {
+     "type": "not",
+     "inner": {
+      "type": "flag",
+      "key": "ordained_bishop",
+      "value": true
+     }
+    },
+    {
+     "type": "reputation",
+     "key": "rome",
+     "op": ">=",
+     "value": 10
+    }
+   ],
+   "weight": 3,
+   "bias": [
+    {
+     "when": {
+      "type": "flag",
+      "key": "nac_alumnus",
+      "value": true
+     },
+     "multiplier": 2.0
+    },
+    {
+     "when": {
+      "type": "confessor",
+      "op": ">=",
+      "value": 20
+     },
+     "multiplier": 1.6
+    },
+    {
+     "when": {
+      "type": "outspokenness",
+      "op": ">=",
+      "value": 60
+     },
+     "multiplier": 0.4
+    }
+   ],
+   "windowWeeks": 4,
+   "once": true,
+   "cluster": "curia",
+   "accept": {
+    "effects": [
+     {
+      "target": "reputation",
+      "key": "rome",
+      "delta": 3
+     },
+     {
+      "target": "reputation",
+      "key": "parishioners",
+      "delta": -6
+     },
+     {
+      "target": "stat",
+      "key": "piety",
+      "delta": 1
+     }
+    ],
+    "outcome": "You say yes. The parish hears it at the Masses and some of the older women cry, which is the right response to a man going to sit in a box in St. Peter's for two years. The Casa has a room at the back. The bells find it anyway.",
+    "commitment": {
+     "label": "Chaplain at the Vatican",
+     "weeks": 104,
+     "apPerWeek": 0,
+     "onComplete": [
+      {
+       "target": "flag",
+       "key": "vatican:chaplain_served",
+       "value": true
+      },
+      {
+       "target": "reputation",
+       "key": "rome",
+       "delta": 8
+      },
+      {
+       "target": "reputation",
+       "key": "chancery",
+       "delta": 3
+      },
+      {
+       "target": "stat",
+       "key": "piety",
+       "delta": 4
+      },
+      {
+       "target": "stat",
+       "key": "charisma",
+       "delta": 1
+      },
+      {
+       "target": "trait",
+       "key": "heard the world's confessions at St. Peter's"
+      }
+     ],
+     "completeOutcome": "Two years in the box: the sins of forty countries, the Wednesday lists, the side altars at seven, and a Roman parish that learned your Italian. You come home a confessor people drive to, and with a Prefecture that keeps a file on the men it liked.",
+     "away": "vatican_chaplain"
+    }
+   },
+   "decline": {
+    "effects": [
+     {
+      "target": "flag",
+      "key": "refused_vatican_chaplain",
+      "value": true
+     },
+     {
+      "target": "reputation",
+      "key": "rome",
+      "delta": -2
+     },
+     {
+      "target": "reputation",
+      "key": "parishioners",
+      "delta": 2
+     }
+    ],
+    "outcome": "You tell him two years is a long time to be away from a parish for a confessional, and he says the parish will be here, and sends the Prefecture another name, and the pencil mark stays on his desk for a week."
+   }
+  }
+ ]
 }

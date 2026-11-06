@@ -154,7 +154,7 @@ export function massSaid(state: GameState): MassSaid {
   }
   if (state.study) {
     const city = state.study.city;
-    const where = city === 'rome' ? "at the college's altar, in Italian or in Latin as the house has it" : city === 'washington' ? "at the college chapel, in English" : 'where the work takes you';
+    const where = city === 'rome' ? "at the college's altar, in Italian or in Latin as the house has it" : city === 'washington' ? "at the college chapel, in English" : city === 'college' ? "at the College's altar on the Janiculum, with the men in choir" : city === 'vatican' ? "at the basilica's side altars, in English for the pilgrims and in Italian for Rome" : 'where the work takes you';
     return { form: 'ordinary', celebrant: true, line: `${cap(REFORMED)}, ${where}.`, older, standing };
   }
   if (state.parish) {

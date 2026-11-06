@@ -29,7 +29,7 @@ export default function OrdinationPanel() {
   return (
     <Panel title="Ordination" tilt="l">
       <p className="leading-relaxed">
-        {bishop ? `${bishop.title} ${bishop.name.last}` : 'The bishop'} lays hands on you in the cathedral. You are {ordinationAge(c)}. The seminary
+        {game.seminary?.place === 'rome' ? `A cardinal lays hands on you at the Altar of the Chair in St. Peter's, with ${bishop ? `${bishop.title} ${bishop.name.last}` : 'your bishop'} in choir; the diocese's Mass of thanksgiving waits for July.` : `${bishop ? `${bishop.title} ${bishop.name.last}` : 'The bishop'} lays hands on you in the cathedral.`} You are {ordinationAge(c)}. The seminary
         names you {ARCHETYPE_TEXT[archetype]}. {ordainedWith.length} of the {classmates.length} men you entered with are ordained beside you.
       </p>
       {(() => {

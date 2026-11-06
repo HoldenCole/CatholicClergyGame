@@ -8,7 +8,7 @@ import { Bookcase, Chair, Crucifix, Desk, Door, Frame, Lamp, LightPool, Room, Sh
  */
 /** The Roman postings share the student's room and city; the rest are rooms at home. */
 function inRome(city: StudyCity): boolean {
-  return city === 'rome' || city === 'curia' || city === 'holy_see' || city === 'academy' || city === 'nunciature' || city === 'generalate' || city === 'faculty';
+  return city === 'rome' || city === 'curia' || city === 'holy_see' || city === 'academy' || city === 'nunciature' || city === 'generalate' || city === 'faculty' || city === 'college' || city === 'vatican';
 }
 
 export function StudyRoom({ city, school }: { city: StudyCity; school: string }) {
