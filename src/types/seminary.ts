@@ -18,7 +18,10 @@ export interface EvaluationRecord {
 export type SummerAssignment = string;
 
 /** Where an activity happens, for the room's hotspots. */
-export type SeminaryLocation = 'chapel' | 'library' | 'common_room' | 'gym' | 'director' | 'rector' | 'parish' | 'desk' | 'language';
+export type SeminaryLocation = 'chapel' | 'library' | 'common_room' | 'gym' | 'director' | 'rector' | 'parish' | 'desk' | 'language' | 'city';
+
+/** Where a man's seminary years are lived: the diocese's own house, or the North American College in Rome. */
+export type SeminaryPlace = 'home' | 'rome';
 
 /**
  * Something a seminarian can give his free hours to each week, on top of
@@ -37,7 +40,9 @@ export interface SeminaryActivityDef {
   /** Relationship movement per hour per week, by selector. */
   relationships?: { selector: string; delta: number }[];
   /** Standing with a constituency per hour per week. */
-  reputation?: { key: 'parishioners' | 'brother_priests' | 'chancery'; delta: number };
+  reputation?: { key: 'parishioners' | 'brother_priests' | 'chancery' | 'rome'; delta: number };
+  /** Offered only in that house: the parish weekend is the diocese's, the city is Rome's. Absent: anywhere. */
+  place?: SeminaryPlace;
   /** Hours logged toward a credential, and what arrives when they are done. */
   credentialAfter?: { hours: number; credential: string; flag?: string; line: string };
   /** Phrases for the week's digest line, rotated. */
@@ -78,6 +83,13 @@ export interface SeminaryState {
   routine?: Record<string, number>;
   /** Hours ever given to each activity, for credentials that take time. */
   hoursLogged?: Record<string, number>;
+  /** Where the years are lived; absent reads as the diocese's own house (an older save). */
+  place?: SeminaryPlace;
+  /** In Rome: the pontifical university the College sends him to, by its id in content/seminary/rome.json. */
+  university?: string;
+  /** In Rome: the year he was sent, and the men of the College he lives with (NPC ids, tagged nac_classmate). */
+  romeSince?: number;
+  romeClassmateIds?: string[];
   /** What this year's free hours built, by stat, for the evaluation. Reset each year. */
   hoursGains?: Partial<Record<StatKey, number>>;
   /** The house's horarium as he keeps it, by line (content/seminary/rule.json). Absent means standard. */

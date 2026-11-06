@@ -131,9 +131,12 @@ export function massSaid(state: GameState): MassSaid {
     const religious = !!state.religious;
     const year = state.seminary?.year ?? 1;
     const deacon = !religious && year >= 7;
+    const rome = state.seminary?.place === 'rome';
     const line = religious
       ? `You do not yet say Mass. The conventual Mass of the house is ${REFORMED}, in the order's own manner, and a novice sits in choir for it.`
-      : `You do not yet say Mass. The community Mass is ${REFORMED}, in English with the ordinary sometimes in Latin, and ${deacon ? 'a deacon assists at it, reads the Gospel, and preaches when the rector allows' : 'a seminarian serves it'}.`;
+      : rome
+        ? `You do not yet say Mass. The College's Mass on the Janiculum is ${REFORMED}, in English, with the Latin ordinary on the feasts; the lectures across the river are in Italian, and ${deacon ? 'a deacon of the College assists at St. Peter\'s when the basilica asks' : 'the College sends its men to serve the papal liturgies'}.`
+        : `You do not yet say Mass. The community Mass is ${REFORMED}, in English with the ordinary sometimes in Latin, and ${deacon ? 'a deacon assists at it, reads the Gospel, and preaches when the rector allows' : 'a seminarian serves it'}.`;
     return { form: 'ordinary', celebrant: false, line, older, standing };
   }
   if (state.see) {

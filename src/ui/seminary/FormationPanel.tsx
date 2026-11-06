@@ -53,6 +53,20 @@ export default function FormationPanel() {
           ))}
         </ul>
       </Sheet>
+      {sem.romeClassmateIds && sem.romeClassmateIds.length > 0 && (
+        <Sheet title="The College's men">
+          <p className="ink-faint mb-1 text-xs">The men of the North American College at your table, from other dioceses; the class you entered with is at home, and is still your class.</p>
+          <ul className="flex flex-col gap-0.5 text-sm">
+            {sem.romeClassmateIds.map((id) => game.npcs[id]).filter((n): n is NonNullable<typeof n> => !!n).map((n) => (
+              <li key={n.id} className={'flex items-center gap-2 ' + (n.status !== 'active' ? 'ink-faint line-through' : '')}>
+                <Portrait portrait={portraitForNpc(n, year, true)} size={22} />
+                <span className="flex-1">{n.name.first} {n.name.last}</span>
+                <span className="ink-muted">{relationshipWord(n.relationship)}</span>
+              </li>
+            ))}
+          </ul>
+        </Sheet>
+      )}
       <Sheet title="">
         <div className="flex items-center justify-between">
           <button className="pbtn-link" onClick={() => setInspect((v) => !v)}>{inspect ? 'Hide the numbers' : 'Inspect the numbers'}</button>

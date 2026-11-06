@@ -969,6 +969,202 @@
       }
     },
     {
+      "id": "sem_nac",
+      "category": "academic",
+      "phase": [
+        "seminary"
+      ],
+      "yearGate": [
+        3
+      ],
+      "title": "The College on the Janiculum",
+      "body": "{@rector} asks you to his office after supper and shuts the door, which he does for two kinds of news. This is the other kind. {@bishop} has written: he would like to send one man of this class to Rome for theology, four years at the North American College, lectures at a pontifical university in a language you do not have yet, the diaconate at St. Peter's, and ordination at home, a stranger to the men you entered with. The rector says the bishop asked for a name and that he gave yours, and that he is not sure he was right. Rome makes a certain kind of priest. The diocese needs that kind, in small numbers, and it needs the other kind in large ones. He says the College has one bed for this diocese and that beds in Rome have a way of going to other dioceses between the letter and the plane. He wants an answer by Friday.",
+      "from": "@rector",
+      "requires": [
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "seminary:rome",
+            "value": true
+          }
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "nac:sent",
+            "value": true
+          }
+        },
+        {
+          "type": "pillar",
+          "key": "intellectual",
+          "op": ">=",
+          "value": 3
+        },
+        {
+          "type": "stat",
+          "key": "theology",
+          "op": ">=",
+          "value": 40
+        },
+        {
+          "type": "relationship",
+          "npcId": "@rector",
+          "op": ">=",
+          "value": 8
+        }
+      ],
+      "weight": 14,
+      "bias": [
+        {
+          "when": {
+            "type": "flag",
+            "key": "summer:rome",
+            "value": true
+          },
+          "multiplier": 1.6
+        },
+        {
+          "when": {
+            "type": "flag",
+            "key": "published",
+            "value": true
+          },
+          "multiplier": 1.3
+        },
+        {
+          "when": {
+            "type": "diocese",
+            "key": "rome_connection",
+            "min": 4
+          },
+          "multiplier": 1.8
+        },
+        {
+          "when": {
+            "type": "not",
+            "inner": {
+              "type": "diocese",
+              "key": "rome_connection",
+              "min": 3
+            }
+          },
+          "multiplier": 0.5
+        },
+        {
+          "when": {
+            "type": "flag",
+            "key": "concerns_at_year_start",
+            "value": true
+          },
+          "multiplier": 0.4
+        }
+      ],
+      "windowWeeks": 3,
+      "once": true,
+      "cluster": "academic",
+      "accept": {
+        "effects": [
+          {
+            "target": "flag",
+            "key": "nac:sent",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "rome",
+            "delta": 3
+          },
+          {
+            "target": "reputation",
+            "key": "parishioners",
+            "delta": -2
+          },
+          {
+            "target": "relationship",
+            "key": "@bishop",
+            "delta": 5
+          },
+          {
+            "target": "relationship",
+            "key": "@rector",
+            "delta": 3
+          },
+          {
+            "target": "pillar",
+            "key": "pastoral",
+            "delta": -1
+          }
+        ],
+        "outcome": "You say yes on Thursday so as not to seem eager. The rector nods as if he expected it and writes to the bishop that night. The house knows by breakfast. {@closest_classmate} says Rome, in the voice men use for a place they will visit once, and buys you a beer with the air of a man paying a debt early."
+      },
+      "decline": {
+        "effects": [
+          {
+            "target": "flag",
+            "key": "declined_nac",
+            "value": true
+          },
+          {
+            "target": "relationship",
+            "key": "@rector",
+            "delta": -3
+          },
+          {
+            "target": "relationship",
+            "key": "@bishop",
+            "delta": -2
+          },
+          {
+            "target": "reputation",
+            "key": "rome",
+            "delta": -2
+          },
+          {
+            "target": "pillar",
+            "key": "pastoral",
+            "delta": 1
+          }
+        ],
+        "outcome": "You tell him you would rather be formed by the diocese you will serve. He says that is the answer a good pastor gives and that he will pass it on without the adjective. The bed goes to a man from Lansing, who will be a bishop one day, and you will read about it at breakfast."
+      },
+      "failure": {
+        "chance": 0.3,
+        "unless": [
+          {
+            "type": "diocese",
+            "key": "rome_connection",
+            "min": 4
+          }
+        ],
+        "effects": [
+          {
+            "target": "flag",
+            "key": "nac:sent",
+            "value": false
+          },
+          {
+            "target": "flag",
+            "key": "nac:fell_through",
+            "value": true
+          },
+          {
+            "target": "reputation",
+            "key": "rome",
+            "delta": 1
+          },
+          {
+            "target": "relationship",
+            "key": "@rector",
+            "delta": 2
+          }
+        ],
+        "outcome": "In July the rector calls you in again. The College wrote: the bed went to another diocese whose bishop wrote sooner, or wrote to the right man. He is sorrier than you are, and says so, and says that the bishop has not forgotten the name he put forward, which is the kind of consolation the Church is good at."
+      }
+    },
+    {
       "id": "sem_rome_track",
       "category": "academic",
       "phase": [

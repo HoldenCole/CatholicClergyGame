@@ -1,0 +1,590 @@
+{
+  "_notes": "The North American College (DESIGN §6.8): the years a bishop's man lives in Rome. Ids nac_*. Every scene is gated on the flag seminary:rome, which systems/nac.ts writes when the College becomes his house at the start of first theology; the rector and vice-rector are the College's (retagged from the diocese's), @nac_classmate is one of the men of the College, @bishop is his own bishop at home. nac_diaconate_st_peters carries the diaconate beat for year six. Flags written: nac:first_lecture_italians / nac:first_lecture_americans, nac:served_papal_mass, nac:roof_rosary, nac:bishop_dinner, nac:casa_warned, nac:oral_passed / nac:oral_failed, nac:pilgrims_home, nac:deacon_st_peters, nac:deacon_family, nac:curia_errand, nac:wants_fifth_year / nac:home_first (year seven; the Gregorian reads these), nac:fever_rested. Concerns: 'Failed the oral examination at the university'. Homesickness and the fever are authored only (no flavorPrompt). Nobody real is named.",
+  "events": [
+    {
+      "id": "nac_first_lecture",
+      "phase": "seminary",
+      "yearGate": [4],
+      "pressure": ["competence"],
+      "severity": "NOTABLE",
+      "category": "formation",
+      "baseWeight": 16,
+      "suppressYears": 5,
+      "once": true,
+      "requires": [{ "type": "flag", "key": "seminary:rome", "value": true }],
+      "title": "The First Lecture",
+      "body": "The hall holds three hundred men from sixty countries and the professor, a Jesuit of a certain age, lectures in an Italian that moves like water over stones. You understand the nouns. The Americans sit together by instinct in the fourth row with a translation passed hand to hand; the Italians and the Africans sit everywhere else and take notes in three alphabets. At the break {@nac_classmate} says the only way to learn it is to sit where the English is not.",
+      "choices": [
+        {
+          "id": "sit_with_italians",
+          "label": "Move to the back, among the men who have no English",
+          "outcome": "You understand a third of the next hour and all of the one after Easter. The Italians lend you notes you cannot read and a word for the professor that is not in any dictionary.",
+          "effects": [
+            { "target": "flag", "key": "nac:first_lecture_italians", "value": true },
+            { "target": "stat", "key": "knowledge", "delta": 2 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "pillar", "key": "human", "delta": 1 },
+            { "target": "relationship", "key": "@nac_classmate", "delta": 4 }
+          ]
+        },
+        {
+          "id": "the_translation",
+          "label": "Stay in the fourth row with the translation",
+          "outcome": "You pass the year on the Americans' notes and a good dictionary, and the Italian comes anyway, slower, from the bars and the bus. The professor never learns your name, which in that hall is a mercy.",
+          "effects": [
+            { "target": "flag", "key": "nac:first_lecture_americans", "value": true },
+            { "target": "stat", "key": "theology", "delta": 2 },
+            { "target": "pillar", "key": "intellectual", "delta": 1 }
+          ],
+          "default": true
+        },
+        {
+          "id": "ask_after",
+          "label": "Go up after and ask him, in your Italian, to say the hard part again",
+          "outcome": "You ask in an Italian that makes him smile, and he answers in English, slowly, as to a child, and then asks where you are from and says he taught your bishop.",
+          "effects": [
+            { "target": "stat", "key": "theology", "delta": 1 }
+          ],
+          "roll": {
+            "chance": 0.5,
+            "stat": "charisma",
+            "success": {
+              "outcome": "He remembers you after that, which at the Gregorian is a kind of scholarship: he calls on you in March, in English, and you have the answer.",
+              "effects": [
+                { "target": "stat", "key": "theology", "delta": 2 },
+                { "target": "stat", "key": "charisma", "delta": 1 },
+                { "target": "reputation", "key": "rome", "delta": 2 }
+              ]
+            },
+            "failure": {
+              "outcome": "He remembers you after that too, as the American who could not follow, and calls on you in March to prove it. You do not have the answer.",
+              "effects": [
+                { "target": "stat", "key": "piety", "delta": 1 },
+                { "target": "pillar", "key": "intellectual", "delta": -1 }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "nac_papal_mass",
+      "phase": "seminary",
+      "yearGate": [4, 5, 6, 7],
+      "pressure": ["competence"],
+      "severity": "NOTABLE",
+      "category": "formation",
+      "baseWeight": 13,
+      "suppressYears": 2,
+      "requires": [{ "type": "flag", "key": "seminary:rome", "value": true }],
+      "title": "Five in the Morning at St. Peter's",
+      "body": "The College has been asked for twelve men to serve the papal Mass on the feast, and {@vice_rector} has put your name on the list without asking, which is how he asks. The sacristy at five is the size of your parish church at home and colder. A monsignor with a clipboard assigns the candles and the books in a Latin nobody has spoken since the seminary closed, and the Holy Father arrives at the far end of a corridor like weather.",
+      "flavorPrompt": "The sacristy of St. Peter's before a papal Mass, from a seminarian's eye.",
+      "choices": [
+        {
+          "id": "the_book",
+          "label": "Take the book, which puts you four feet from him for an hour",
+          "outcome": "You hold the book and do not drop it. He looks up once, at the collect, and you will tell that look to people for forty years, correctly, as nothing.",
+          "effects": [
+            { "target": "flag", "key": "nac:served_papal_mass", "value": true },
+            { "target": "stat", "key": "piety", "delta": 2 },
+            { "target": "reputation", "key": "rome", "delta": 3 }
+          ],
+          "roll": {
+            "chance": 0.6,
+            "stat": "charisma",
+            "success": {
+              "outcome": "The monsignor with the clipboard asks the vice-rector afterwards who the tall American was with the steady hands, and writes it down.",
+              "effects": [
+                { "target": "reputation", "key": "rome", "delta": 3 },
+                { "target": "relationship", "key": "@vice_rector", "delta": 4 }
+              ]
+            },
+            "failure": {
+              "outcome": "You turn two pages at once at the preface and the master of ceremonies corrects it with a thumb and a look. Nobody else saw. He did.",
+              "effects": [
+                { "target": "relationship", "key": "@vice_rector", "delta": -2 },
+                { "target": "stat", "key": "piety", "delta": 1 }
+              ]
+            }
+          }
+        },
+        {
+          "id": "the_candle",
+          "label": "Take a candle, at the back, where a man can pray",
+          "outcome": "You hold a candle for ninety minutes under the baldacchino and watch the Mass the way the people do, from a distance, which is where it is largest. Your arm goes dead at the Sanctus.",
+          "effects": [
+            { "target": "flag", "key": "nac:served_papal_mass", "value": true },
+            { "target": "stat", "key": "piety", "delta": 3 },
+            { "target": "pillar", "key": "spiritual", "delta": 1 },
+            { "target": "reputation", "key": "rome", "delta": 1 }
+          ],
+          "default": true
+        }
+      ]
+    },
+    {
+      "id": "nac_the_roof",
+      "phase": "seminary",
+      "yearGate": [4, 5],
+      "pressure": ["doubt"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 13,
+      "suppressYears": 3,
+      "once": true,
+      "requires": [{ "type": "flag", "key": "seminary:rome", "value": true }, { "type": "season", "value": "advent" }],
+      "title": "The Roof in December",
+      "body": "The College's roof looks at the dome and the whole lit city, and in December, with the men at home for Christmas and you not, because the ticket costs what your diocese gives a seminarian in a year, it looks at them from very far away. The house is twenty men and a cook. Your mother called at the hour she thought was evening here, which was two in the morning, to ask whether you were eating. {@nac_classmate} is staying too. He has a bottle of something from his uncle.",
+      "choices": [
+        {
+          "id": "the_rosary",
+          "label": "Say the rosary on the roof, alone, facing the dome",
+          "outcome": "Five decades in the cold with the city underneath, and by the fifth the homesickness has become something quieter that you will later call prayer and were right to.",
+          "effects": [
+            { "target": "flag", "key": "nac:roof_rosary", "value": true },
+            { "target": "stat", "key": "piety", "delta": 3 },
+            { "target": "pillar", "key": "spiritual", "delta": 2 },
+            { "target": "strain", "key": "", "delta": -4 }
+          ],
+          "default": true
+        },
+        {
+          "id": "the_bottle",
+          "label": "Sit with him and the bottle, and talk about home until the bells",
+          "outcome": "Two Americans on a Roman roof at midnight, saying the names of streets to each other. You go to bed friends, which is what the College is for, and with a headache, which is what the bottle is for.",
+          "effects": [
+            { "target": "relationship", "key": "@nac_classmate", "delta": 8 },
+            { "target": "pillar", "key": "human", "delta": 2 },
+            { "target": "strain", "key": "", "delta": -2 },
+            { "target": "stat", "key": "piety", "delta": -1 }
+          ],
+          "roll": {
+            "chance": 0.75,
+            "stat": "charisma",
+            "success": {
+              "outcome": "You are both at Morning Prayer, somehow, and the vice-rector, who was also on the roof, says nothing, which is the kindest thing he will do all year.",
+              "effects": [
+                { "target": "relationship", "key": "@vice_rector", "delta": 2 }
+              ]
+            },
+            "failure": {
+              "outcome": "Neither of you is at Morning Prayer. The vice-rector was. He writes it down, and the College's notebook is thinner than the diocese's, so it shows.",
+              "effects": [
+                { "target": "relationship", "key": "@vice_rector", "delta": -3 },
+                { "target": "pillar", "key": "spiritual", "delta": -1 }
+              ]
+            }
+          }
+        },
+        {
+          "id": "call_home",
+          "label": "Call home at the right hour this time, and let it be as long as it is",
+          "outcome": "An hour on the phone with the kitchen at home, the dog, the weather, the parish bulletin read aloud. It costs a week's money and is worth a month's.",
+          "effects": [
+            { "target": "pillar", "key": "human", "delta": 1 },
+            { "target": "strain", "key": "", "delta": -3 },
+            { "target": "relationship", "key": "@mother", "delta": 5 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "nac_bishop_visit",
+      "phase": "seminary",
+      "yearGate": [5, 6, 7],
+      "pressure": ["ambition_vs_integrity"],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 14,
+      "suppressYears": 2,
+      "requires": [{ "type": "flag", "key": "seminary:rome", "value": true }],
+      "title": "The Bishop in Rome",
+      "body": "{@bishop} is in Rome for a week of the Congregations and has asked the College for his seminarian at supper, which means a trattoria off the Borgo and the bishop without his secretary for once. He wants to know how the Italian is, how the Gregorian is, whether the College is what it was in his day. He also wants, you realize at the second course, to know what you intend to be, and he has not asked it yet.",
+      "flavorPrompt": "A bishop and his seminarian at supper in Rome: what is said, and what is not.",
+      "choices": [
+        {
+          "id": "ask_him",
+          "label": "Ask him plainly what he sent you to Rome to become",
+          "outcome": "He puts his fork down and tells you: a priest the diocese can send anywhere, and then one it can keep in the building. He says it as a plan and a warning.",
+          "effects": [
+            { "target": "flag", "key": "nac:bishop_dinner", "value": true },
+            { "target": "relationship", "key": "@bishop", "delta": 5 },
+            { "target": "reputation", "key": "chancery", "delta": 3 }
+          ],
+          "roll": {
+            "chance": 0.55,
+            "stat": "charisma",
+            "success": {
+              "outcome": "He talks for an hour, about his own years here, about the chancery, about a parish he still misses. You walk him to the hotel. He says you may call him when you need to, and means the verb.",
+              "effects": [
+                { "target": "relationship", "key": "@bishop", "delta": 6 },
+                { "target": "flag", "key": "bishop_knows_you", "value": true }
+              ]
+            },
+            "failure": {
+              "outcome": "He answers, but shortly, and the rest of the supper is the Italian and the weather. Too direct, too soon; the diocese will teach you the pace.",
+              "effects": [
+                { "target": "relationship", "key": "@bishop", "delta": -2 }
+              ]
+            }
+          }
+        },
+        {
+          "id": "let_him_lead",
+          "label": "Let him lead, and answer what he asks, well",
+          "outcome": "The Italian is coming, the Gregorian is hard, the College is itself. He is pleased in the way bishops are pleased, with a nod and the bill, and you learn nothing you did not know.",
+          "effects": [
+            { "target": "flag", "key": "nac:bishop_dinner", "value": true },
+            { "target": "relationship", "key": "@bishop", "delta": 3 },
+            { "target": "stat", "key": "administration", "delta": 1 }
+          ],
+          "default": true
+        }
+      ]
+    },
+    {
+      "id": "nac_casa_priest",
+      "phase": "seminary",
+      "yearGate": [4, 5, 6, 7],
+      "pressure": ["loyalty_vs_honesty"],
+      "severity": "NOTABLE",
+      "category": "formation",
+      "baseWeight": 12,
+      "suppressYears": 3,
+      "once": true,
+      "requires": [{ "type": "flag", "key": "seminary:rome", "value": true }],
+      "title": "A Priest from the Casa",
+      "body": "A priest of the Casa Santa Maria, the graduate house down the hill, ten years ordained and halfway through a licentiate he did not ask for, walks you back from a lecture and tells you how it goes. The men sent to Rome, he says, come home to the chancery whether they want it or not, and the parish they were promised is a desk with a window. He is not bitter, he says, twice. He asks whether your bishop has told you what he wants.",
+      "choices": [
+        {
+          "id": "listen",
+          "label": "Listen, and ask what he would do differently",
+          "outcome": "He thinks about it on the bridge and says he would have asked for a parish first, in writing, and then come. He gives you his number at the Casa and says the roof is open to seminarians who bring wine.",
+          "effects": [
+            { "target": "flag", "key": "nac:casa_warned", "value": true },
+            { "target": "stat", "key": "knowledge", "delta": 2 },
+            { "target": "reputation", "key": "chancery", "delta": 1 },
+            { "target": "pillar", "key": "human", "delta": 1 }
+          ],
+          "default": true
+        },
+        {
+          "id": "defend_the_bishop",
+          "label": "Tell him your bishop is not that kind, and that you will take what you are given",
+          "outcome": "He laughs, kindly, and says every man at the Casa said that in fourth theology. You part at the Casa's door on good terms and he is right, and you will remember that he was.",
+          "effects": [
+            { "target": "reputation", "key": "chancery", "delta": 2 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "pillar", "key": "pastoral", "delta": 1 }
+          ]
+        },
+        {
+          "id": "write_home",
+          "label": "Write to the bishop that night and ask him plainly for a parish after ordination",
+          "outcome": "The letter takes a week to write and a month to be answered. The answer says that the bishop plans for his priests and that your plans are welcome information. You cannot tell what it means, which is the point of a bishop's letter.",
+          "effects": [
+            { "target": "flag", "key": "nac:home_first", "value": true },
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "reputation", "key": "rome", "delta": -2 },
+            { "target": "relationship", "key": "@bishop", "delta": -1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "nac_oral_exam",
+      "phase": "seminary",
+      "yearGate": [5, 6],
+      "pressure": ["competence"],
+      "severity": "NOTABLE",
+      "category": "formation",
+      "baseWeight": 15,
+      "suppressYears": 2,
+      "requires": [{ "type": "flag", "key": "seminary:rome", "value": true }, { "type": "season", "value": "easter" }],
+      "title": "The Oral, in Italian",
+      "body": "The June examinations at the university are oral and in Italian: fifteen minutes alone with a professor and a list of forty theses, one of which he picks, and the whole year's grade on it. The Americans have a tradition of walking to the examination together, in silence, like men to a scaffold. {@nac_classmate} has not slept. The professor has a reputation for failing men whose Italian offends him before their theology can.",
+      "flavorPrompt": "Waiting outside an oral examination at a pontifical university.",
+      "choices": [
+        {
+          "id": "answer_in_italian",
+          "label": "Answer in Italian, whatever it costs",
+          "outcome": "Fifteen minutes of a language you have had for twenty months, on the Trinity, with a man who corrects your verbs between your clauses.",
+          "effects": [
+            { "target": "pillar", "key": "intellectual", "delta": 1 }
+          ],
+          "roll": {
+            "chance": 0.55,
+            "stat": "theology",
+            "success": {
+              "outcome": "He writes a number on a card and says, in English, that the Americans who try are the ones he passes, and that your Augustine was better than your Italian, which is as it should be.",
+              "effects": [
+                { "target": "flag", "key": "nac:oral_passed", "value": true },
+                { "target": "stat", "key": "theology", "delta": 3 },
+                { "target": "stat", "key": "knowledge", "delta": 2 },
+                { "target": "pillar", "key": "intellectual", "delta": 2 },
+                { "target": "relationship", "key": "@rector", "delta": 3 }
+              ]
+            },
+            "failure": {
+              "outcome": "He stops you at the fourth minute and says, in a kind Italian you understand perfectly, that you will come back in October. The walk home is the long way, alone.",
+              "effects": [
+                { "target": "flag", "key": "nac:oral_failed", "value": true },
+                { "target": "concern", "key": "Failed the oral examination at the university" },
+                { "target": "pillar", "key": "intellectual", "delta": -2 },
+                { "target": "stat", "key": "theology", "delta": 1 },
+                { "target": "relationship", "key": "@rector", "delta": -3 },
+                { "target": "strain", "key": "", "delta": 6 }
+              ]
+            }
+          },
+          "default": true
+        },
+        {
+          "id": "ask_for_english",
+          "label": "Ask whether you may answer in English, which some professors allow",
+          "outcome": "He allows it, with a look, and you give him twenty minutes of good theology in a language he follows with his eyes half shut. The number on the card is fair and a little cool.",
+          "effects": [
+            { "target": "flag", "key": "nac:oral_passed", "value": true },
+            { "target": "stat", "key": "theology", "delta": 2 },
+            { "target": "pillar", "key": "intellectual", "delta": 1 },
+            { "target": "reputation", "key": "rome", "delta": -1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "nac_pilgrims_home",
+      "phase": "seminary",
+      "yearGate": [4, 5, 6, 7],
+      "pressure": ["friendship_vs_duty"],
+      "severity": "NOTABLE",
+      "category": "formation",
+      "baseWeight": 12,
+      "suppressYears": 2,
+      "requires": [{ "type": "flag", "key": "seminary:rome", "value": true }],
+      "title": "The Parish from Home",
+      "body": "A pilgrimage from your own diocese is in Rome for four days, forty people and a pastor you served Mass for at twelve, and the College has asked you to meet them at the Scavi and show them the city. They have been told you are theirs. They want the Pietà, the Pope, a restaurant with no tourists, and to know when you are coming home. One of them has brought a letter from your mother and a bag of something that did not survive the flight.",
+      "choices": [
+        {
+          "id": "give_them_the_days",
+          "label": "Give them the four days, all of it, and skip two lectures",
+          "outcome": "Four days of basilicas and gelato and a parish that will tell your story at home for a year. The pastor says a Mass at the College's altar and cries at the Memorare, and so does your mother's friend.",
+          "effects": [
+            { "target": "flag", "key": "nac:pilgrims_home", "value": true },
+            { "target": "reputation", "key": "parishioners", "delta": 6 },
+            { "target": "pillar", "key": "pastoral", "delta": 2 },
+            { "target": "stat", "key": "charisma", "delta": 2 },
+            { "target": "pillar", "key": "intellectual", "delta": -1 }
+          ],
+          "roll": {
+            "chance": 0.65,
+            "stat": "charisma",
+            "success": {
+              "outcome": "The pastor writes to the bishop that the diocese has a priest in Rome already, in everything but the hands. The bishop's secretary reads it to him. It is in the file.",
+              "effects": [
+                { "target": "relationship", "key": "@bishop", "delta": 3 },
+                { "target": "reputation", "key": "chancery", "delta": 2 }
+              ]
+            },
+            "failure": {
+              "outcome": "A lady of the group loses her purse at the Trevi and the four days become a police station and a consulate, and what the parish remembers is the purse.",
+              "effects": [
+                { "target": "strain", "key": "", "delta": 4 },
+                { "target": "stat", "key": "administration", "delta": 2 }
+              ]
+            }
+          },
+          "default": true
+        },
+        {
+          "id": "one_afternoon",
+          "label": "Give them an afternoon and the Mass, and keep the lectures",
+          "outcome": "The Scavi, a Mass, a restaurant, and your regrets for the rest; they understand, and say so, and are a little hurt, and say that too, in the way parishes do, to your mother.",
+          "effects": [
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "pillar", "key": "intellectual", "delta": 1 },
+            { "target": "pillar", "key": "pastoral", "delta": -1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "nac_diaconate_st_peters",
+      "phase": "seminary",
+      "yearGate": [6],
+      "beat": "diaconate",
+      "pressure": ["belief_vs_safety"],
+      "severity": "CRITICAL",
+      "category": "formation",
+      "baseWeight": 40,
+      "suppressYears": 7,
+      "once": true,
+      "requires": [{ "type": "flag", "key": "seminary:rome", "value": true }],
+      "title": "The Altar of the Chair",
+      "body": "The College's deacons are ordained at St. Peter's, at the Altar of the Chair under Bernini's window, by a cardinal, in a basilica that holds your family in one pew and twenty thousand strangers in the rest. Your parents have flown for the first time in their lives. The promise of celibacy is made in Latin to a man who will not remember your face, and it binds exactly as much as the one made at home would have. {@rector} says to look at the window, not the crowd.",
+      "flavorPrompt": "The morning of a diaconate ordination at St. Peter's, as the man lives it.",
+      "choices": [
+        {
+          "id": "the_window",
+          "label": "Look at the window, as he said, and make the promise to it",
+          "outcome": "You say adsum in a basilica that swallows it, lie face down on marble that is colder than any floor at home, and get up a deacon of your diocese four thousand miles from it.",
+          "effects": [
+            { "target": "flag", "key": "nac:deacon_st_peters", "value": true },
+            { "target": "flag", "key": "diaconate_promised", "value": true },
+            { "target": "stat", "key": "piety", "delta": 3 },
+            { "target": "pillar", "key": "spiritual", "delta": 2 },
+            { "target": "reputation", "key": "rome", "delta": 3 }
+          ],
+          "default": true
+        },
+        {
+          "id": "the_pew",
+          "label": "Find your parents in the pew first, and make the promise with them in your eye",
+          "outcome": "Your father has his hat in both hands and your mother has stopped pretending not to cry. You promise celibacy and obedience looking at the two people who made you able to, and the cardinal, who has seen it before, waits.",
+          "effects": [
+            { "target": "flag", "key": "nac:deacon_st_peters", "value": true },
+            { "target": "flag", "key": "nac:deacon_family", "value": true },
+            { "target": "flag", "key": "diaconate_promised", "value": true },
+            { "target": "stat", "key": "piety", "delta": 2 },
+            { "target": "pillar", "key": "human", "delta": 2 },
+            { "target": "relationship", "key": "@mother", "delta": 6 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "nac_curia_errand",
+      "phase": "seminary",
+      "yearGate": [5, 6, 7],
+      "pressure": ["ambition_vs_integrity"],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 12,
+      "suppressYears": 2,
+      "requires": [{ "type": "flag", "key": "seminary:rome", "value": true }],
+      "title": "An Envelope for the Congregation",
+      "body": "{@rector} has an envelope that must be at a Congregation by noon and no one to take it, and you have a free morning and a cassock. The building is a palazzo with a doorman who has outlasted four prefects. The monsignor who takes the envelope is an American, from a diocese next to yours, and asks you to sit for a minute, which in that building is a career. He wants to know about your bishop. He wants to know about you.",
+      "choices": [
+        {
+          "id": "sit",
+          "label": "Sit, and answer him, and let the morning go",
+          "outcome": "Forty minutes in a room with a view of a courtyard, talking about a diocese he has not seen in twenty years and knows better than you do. He walks you to the stairs himself.",
+          "effects": [
+            { "target": "flag", "key": "nac:curia_errand", "value": true },
+            { "target": "reputation", "key": "rome", "delta": 4 },
+            { "target": "stat", "key": "knowledge", "delta": 1 }
+          ],
+          "roll": {
+            "chance": 0.5,
+            "stat": "charisma",
+            "success": {
+              "outcome": "He says that he will mention you to the rector and that he will remember the name, and that men who are remembered in that building are sometimes sent for. You are not sure you want to be.",
+              "effects": [
+                { "target": "reputation", "key": "rome", "delta": 4 },
+                { "target": "flag", "key": "study_curial_backchannel", "value": true }
+              ]
+            },
+            "failure": {
+              "outcome": "You say something about the diocese that was true and should not have left the diocese, and watch him file it. He walks you to the stairs anyway. The Curia is courteous about everything.",
+              "effects": [
+                { "target": "reputation", "key": "chancery", "delta": -2 },
+                { "target": "stat", "key": "administration", "delta": 1 }
+              ]
+            }
+          }
+        },
+        {
+          "id": "the_envelope_only",
+          "label": "Deliver the envelope, thank him, and go to the lecture",
+          "outcome": "You are back across the river by ten with the morning intact and the sense of having walked past a door. The rector thanks you for the errand and says nothing about the monsignor, which means he knows him.",
+          "effects": [
+            { "target": "pillar", "key": "intellectual", "delta": 1 },
+            { "target": "reputation", "key": "rome", "delta": 1 },
+            { "target": "flag", "key": "study_kept_clear_of_curia", "value": true }
+          ],
+          "default": true
+        }
+      ]
+    },
+    {
+      "id": "nac_fifth_year",
+      "phase": "seminary",
+      "yearGate": [7],
+      "pressure": ["ambition_vs_integrity"],
+      "severity": "CRITICAL",
+      "category": "chancery",
+      "baseWeight": 30,
+      "suppressYears": 7,
+      "once": true,
+      "requires": [{ "type": "flag", "key": "seminary:rome", "value": true }],
+      "title": "The Fifth Year",
+      "body": "{@rector} asks the deacons, one by one, the question the College asks every spring: whether, if the bishop were willing, you would stay for a fifth year and begin the licentiate, ordained at home in June and back on the Janiculum in October with a priest's faculties and a thesis. He does not say that bishops are rarely willing, that the Casa has fewer beds than names, or that the men who stay are the ones the diocese will keep in the building. He asks what you would say if asked.",
+      "choices": [
+        {
+          "id": "say_yes",
+          "label": "Say that you would stay, and would like him to say so",
+          "outcome": "He writes it down and says he will tell the bishop that the College would take you, which is not the same as the bishop sending you, and that you should not count the weeks.",
+          "effects": [
+            { "target": "flag", "key": "nac:wants_fifth_year", "value": true },
+            { "target": "reputation", "key": "rome", "delta": 3 },
+            { "target": "reputation", "key": "parishioners", "delta": -2 },
+            { "target": "relationship", "key": "@rector", "delta": 3 },
+            { "target": "archetype", "key": "theological", "delta": 1 }
+          ],
+          "default": true
+        },
+        {
+          "id": "the_parish",
+          "label": "Say that four years is enough of Rome, and that you want a parish",
+          "outcome": "He nods as if that were the answer he hoped for and says the College's best men are the ones who go home and stay there. He will write it that way. The bishop will read it either way.",
+          "effects": [
+            { "target": "flag", "key": "nac:home_first", "value": true },
+            { "target": "reputation", "key": "parishioners", "delta": 3 },
+            { "target": "reputation", "key": "rome", "delta": -1 },
+            { "target": "pillar", "key": "pastoral", "delta": 1 },
+            { "target": "archetype", "key": "pastoral", "delta": 1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "nac_fever",
+      "phase": "seminary",
+      "yearGate": [4, 5, 6, 7],
+      "pressure": ["body_vs_vow"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 10,
+      "suppressYears": 3,
+      "once": true,
+      "requires": [{ "type": "flag", "key": "seminary:rome", "value": true }, { "type": "strain", "op": ">=", "value": 35 }],
+      "title": "The Roman Fever",
+      "body": "It starts as the cold everyone at the College has in February and becomes, on the third day, a fever that the infirmarian, a Sister who has seen a century of American boys, calls by an Italian name and treats with soup and a closed shutter. The lectures go on without you. The thesis goes on without you. {@vice_rector} looks in once, says the house has seen worse, and leaves a newspaper you cannot read.",
+      "choices": [
+        {
+          "id": "rest",
+          "label": "Do what the Sister says, all of it, for the week",
+          "outcome": "A week of soup and shutters and the bells, counted. You come out of it thinner, behind, and rested in a way the College does not otherwise allow, and the Sister calls you a good boy in a language you now have.",
+          "effects": [
+            { "target": "flag", "key": "nac:fever_rested", "value": true },
+            { "target": "strain", "key": "", "delta": -15 },
+            { "target": "pillar", "key": "intellectual", "delta": -1 },
+            { "target": "stat", "key": "piety", "delta": 1 }
+          ],
+          "default": true
+        },
+        {
+          "id": "get_up",
+          "label": "Get up on the fourth day for the lecture you cannot miss",
+          "outcome": "You sit through two hours of ecclesiology shaking in a borrowed coat and understand none of it, and the fever comes back that night with interest.",
+          "effects": [
+            { "target": "strain", "key": "", "delta": 6 },
+            { "target": "pillar", "key": "intellectual", "delta": 1 },
+            { "target": "relationship", "key": "@vice_rector", "delta": -2 }
+          ]
+        }
+      ]
+    }
+  ]
+}

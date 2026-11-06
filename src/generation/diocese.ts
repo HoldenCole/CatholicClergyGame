@@ -149,6 +149,7 @@ export function generateDiocese(rng: Rng, preset: DiocesePreset, year: number): 
       scandal: { latent: rng.int(0, 100), handling: scandalHandling },
       pastorAges: rng.weighted(['young', 'mixed', 'top_heavy'] as const, (p) => ({ young: 1, mixed: 3, top_heavy: 2 })[p]),
       hiddenComplication: rng.pick(preset.hiddenComplications),
+      romeConnection: preset.romeConnection,
     },
   };
   return { diocese, parishes, npcs: [bishop.npc, ...chancery, ...pastors, ...religious], institutes };

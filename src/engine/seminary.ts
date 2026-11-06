@@ -22,6 +22,7 @@ import { withChoice } from '@/systems/choice';
 import { beginCareer } from './career';
 import { driftYear } from '@/systems/drift';
 import { fromDayNumber } from './calendar';
+import { NAC, italianAfterFirstYear, ordainedFromRome, sendToRome } from '@/systems/nac';
 
 /** Absolute week offsets within a formation year. Invented. */
 export const YEAR_SHAPE = {
@@ -138,6 +139,12 @@ export function chooseEmphasis(state: GameState, emphasis: Record<Pillar, number
     },
     rng,
   );
+  // The bishop's man goes to Rome for theology: the College becomes his house from first theology on. DESIGN §6.8.
+  if (next.flags['nac:sent'] && next.seminary && next.seminary.place !== 'rome' && next.seminary.year >= NAC.fromYear) {
+    const sent = sendToRome(next, rng.derive(`nac:${sem.year}`));
+    next = sent.state;
+    if (sent.line) next = { ...next, digest: [...next.digest.slice(0, -1), withLine(next.digest[next.digest.length - 1], sent.line)] };
+  }
   // A man of the class may discern out into an order, and another may arrive from
   // one he left. DESIGN §6.7: they diverge rather than disappear.
   const gone = divergeStep(next, rng.derive(`diverge:${sem.year}`));
@@ -299,6 +306,8 @@ export function acknowledgeEvaluation(state: GameState): GameState {
       ]);
       break;
   }
+  // A year at the College leaves a man with Italian.
+  next = italianAfterFirstYear(next);
   return advanceYear(next);
 }
 
@@ -354,12 +363,12 @@ export function ordain(state: GameState, rng: Rng): GameState {
   state = leaveSeminaryClubs(state);
   if (!state.character || !state.seminary) return state;
   const archetype = nameArchetype(state);
-  const ordained: GameState = {
+  const ordained: GameState = ordainedFromRome({
     ...state,
     character: { ...state.character, archetype },
     phase: 'parochial_vicar',
     flags: { ...state.flags, ordained: true, ordination_week: state.clock.week },
-  };
+  });
   if (!ordained.world) return { ...ordained, mode: { kind: 'clock' } };
   const withCareer = beginCareer(ordained, rng);
   // A friar is not assigned by the bishop: the provincial consults him, and the letter follows. E3 §3.1.

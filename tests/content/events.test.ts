@@ -94,6 +94,7 @@ const SELECTORS = [
   '@franciscan_guardian', '@franciscan_kitchen', '@franciscan_confessor',
   '@augustinian_prior', '@augustinian_headmaster', '@augustinian_old_pastor',
   '@prior', '@provincial', '@novice_master', '@master_of_students', '@confrere', '@old_friar', '@formed_man', '@metropolitan', '@province_bishop',
+  '@nac_classmate',
 ];
 const LIFE_IDS = lifeDefs.map((l) => l.id);
 const LIVE_SELECTORS = [...LIFE_IDS.map((id) => `@life:${id}`), '@rumour_subject'];
@@ -194,8 +195,9 @@ function checkCondition(c: Condition, where: string, problems: Problem[]): void 
       else problems.push(`${where}: bad schedule key ${c.key}`);
       break;
     case 'diocese':
-      if (c.key !== undefined && !['region', 'size', 'institution', 'spanish', 'ethnic'].includes(c.key)) problems.push(`${where}: bad diocese key ${c.key}`);
+      if (c.key !== undefined && !['region', 'size', 'institution', 'spanish', 'ethnic', 'rome_connection'].includes(c.key)) problems.push(`${where}: bad diocese key ${c.key}`);
       if (c.key === 'spanish') { if (c.value !== undefined) problems.push(`${where}: diocese spanish takes no value`); }
+      else if (c.key === 'rome_connection') { if (typeof c.min !== 'number') problems.push(`${where}: diocese rome_connection wants a min`); }
       else if (!(typeof c.value === 'string' || (Array.isArray(c.value) && c.value.every((v: unknown) => typeof v === 'string')))) problems.push(`${where}: bad diocese condition`);
       if (c.share !== undefined && (typeof c.share !== 'number' || c.share <= 0 || c.share > 1)) problems.push(`${where}: bad diocese share`);
       break;

@@ -11,6 +11,7 @@ import { freeHourShift } from './workweek';
 import { withFloor } from './hours';
 import { strainAfterWeek, strainOf, WEEK } from './week';
 import { horariumHourShift } from './seminaryRule';
+import { atRome, romeClassLine } from './nac';
 
 /** DESIGN §6: the weekly loop at low stakes, with fewer hours than a parish. Invented. */
 export const SEMINARY_WEEK = {
@@ -63,7 +64,13 @@ export function hoursGainsSentence(sem: SeminaryState): string | null {
 /** Give an activity so many hours a week; clamped to its maximum and to what is left of the week. */
 /** Whether an activity is offered: a language already held is not. */
 export function seminaryActivityOffered(state: GameState, def: SeminaryActivityDef): boolean {
+  if (!inThisHouse(state, def)) return false;
   return !def.requires || evaluateAll(def.requires, state);
+}
+
+/** Whether the activity belongs to the house he is in: the parish weekend is the diocese's, the city is Rome's. */
+export function inThisHouse(state: GameState, def: SeminaryActivityDef): boolean {
+  return !def.place || def.place === (state.seminary?.place ?? 'home');
 }
 
 export function setSeminaryActivity(state: GameState, id: string, ap: number): GameState {
@@ -172,7 +179,7 @@ export function seminaryWeek(state: GameState, rng: Rng): SeminaryWeekResult {
     character: { ...c, stats, reputation, credentials },
     seminary: { ...sem, pillarScores, hoursLogged, hoursGains, ...(freed.length ? { routine: routineAfter } : {}) },
   };
-  const head = CLASSES[sem.year] ?? 'Classes';
+  const head = atRome(sem) ? romeClassLine(sem) : CLASSES[sem.year] ?? 'Classes';
   const body = phrases.length ? `${head}; ${phrases.join(', ')}.` : `${head}, and the free hours went nowhere in particular.`;
   const line = renderText([body, ...earned].join(' '), next, bindings);
   return { state: next, line };
