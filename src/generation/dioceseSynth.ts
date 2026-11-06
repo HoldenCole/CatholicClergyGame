@@ -123,6 +123,9 @@ export function synthPreset(rng: Rng, see: SynthSee, opts: SynthOptions = {}): D
     wealth,
     mediaExposure: size === 'large' ? rng.int(2, 4) : rng.int(1, 3),
     romeConnection: rng.int(1, 3),
+    // A generated diocese names no real institution (rule 13): its postings and institutions keep the programs' generic words.
+    postings: {},
+    institutionNames: {},
     latinoShare: see.latinoShare,
     growth: see.growth,
     dispositionBias: Math.round((SYNTH.regionLean[see.region] ?? 0) + rng.float(-20, 20)),
