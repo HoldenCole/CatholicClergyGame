@@ -1,0 +1,429 @@
+{
+  "_notes": "St. Mary's Catholic Center at Texas A&M (the Diocese of Austin's campus block): the Newman posting (study:campus) when the diocese is Austin. Ids ag_*. Every scene requires the diocese and the posting; phase is study; the selectors are the study phase's (@bishop, @closest_classmate, @random_classmate, @brother_priest). The place effects move the campus program's own dials (students, vocations, campus). A scene that sends a man to seminary counts him in the flag vocation:entered, which the record, the profile, and the parish's own vocations read. Aggie traditions are named as the university keeps them (Silver Taps, Muster, the Corps, Awakening, the Bonfire memorial); no living person is named. The student who is leaving and the one who was hurt are authored only (no flavorPrompt). Flags written: ag_silver_taps, ag_muster_spoke / ag_muster_sat, ag_sent_to_seminary, ag_awakening_led, ag_corps_blessed, ag_second_mass, ag_the_engineer, ag_bishop_visit, ag_kept_the_girl, ag_bonfire.",
+  "events": [
+    {
+      "id": "ag_silver_taps",
+      "phase": "study",
+      "pressure": ["doubt"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 12,
+      "suppressYears": 1,
+      "requires": [{ "type": "diocese", "value": "austin" }, { "type": "flag", "key": "study:campus", "value": true }],
+      "title": "Silver Taps",
+      "body": "A junior from the Corps died on the highway home on Sunday night, and the university does what it does: the lights go out on campus at half past ten on the first Tuesday, the bugles play from the dome of the Academic Building, and ten thousand students stand in the dark in silence. His mother has asked St. Mary's for the funeral Mass. His Corps outfit has asked whether they may carry him. The Awakening leaders have asked whether you will say something at the vigil tonight, and the dean has asked you to say nothing that could be quoted.",
+      "choices": [
+        {
+          "id": "stand_with_them",
+          "label": "Stand in the dark with them, and say the Mass in the morning as the Church says it",
+          "outcome": "You stand in the silence with the Corps and say nothing, which is what the night is for, and in the morning you bury him with the whole outfit in the front pews, and the church says the responses like one voice.",
+          "effects": [
+            { "target": "flag", "key": "ag_silver_taps", "value": true },
+            { "target": "stat", "key": "piety", "delta": 2 },
+            { "target": "place", "key": "students", "delta": 8 },
+            { "target": "place", "key": "campus", "delta": 6 },
+            { "target": "reputation", "key": "parishioners", "delta": 4 }
+          ],
+          "default": true
+        },
+        {
+          "id": "speak_at_vigil",
+          "label": "Speak at the vigil, briefly, about what the dark is for",
+          "outcome": "Four sentences from the steps of St. Mary's to a crowd that spills into the street. One of them is quoted in the campus paper and the dean sends it to the bishop, who approves.",
+          "effects": [
+            { "target": "flag", "key": "ag_silver_taps", "value": true },
+            { "target": "stat", "key": "charisma", "delta": 2 },
+            { "target": "place", "key": "campus", "delta": 10 },
+            { "target": "place", "key": "students", "delta": 5 },
+            { "target": "reputation", "key": "public", "delta": 3 }
+          ],
+          "roll": {
+            "chance": 0.6,
+            "stat": "charisma",
+            "success": {
+              "outcome": "The four sentences are the ones they remember. The Corps commander writes to thank you, and the mother writes twice.",
+              "effects": [
+                { "target": "reputation", "key": "parishioners", "delta": 5 },
+                { "target": "relationship", "key": "@bishop", "delta": 3 }
+              ]
+            },
+            "failure": {
+              "outcome": "The fourth sentence runs long and a faculty member writes to the paper that a priest should not use a boy's death to preach. The dean says nothing, which is what he asked of you.",
+              "effects": [
+                { "target": "reputation", "key": "public", "delta": -3 },
+                { "target": "place", "key": "campus", "delta": -4 }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "ag_muster",
+      "phase": "study",
+      "pressure": ["competence"],
+      "severity": "NOTABLE",
+      "category": "formation",
+      "baseWeight": 11,
+      "suppressYears": 1,
+      "requires": [{ "type": "diocese", "value": "austin" }, { "type": "flag", "key": "study:campus", "value": true }, { "type": "month", "op": ">=", "value": 4 }, { "type": "month", "op": "<=", "value": 4 }],
+      "title": "Muster",
+      "body": "On the twenty-first of April the Aggies gather, here and in a thousand places, to call the roll of the year's dead and answer 'here' for them, and the campus Muster fills the arena. The committee has asked St. Mary's for the invocation, which a Catholic priest has given about one year in four, the other years going to a Baptist, a Methodist, and once a rabbi. Ten thousand people, television, and a prayer that must be a prayer and must offend no one, which is harder than preaching.",
+      "flavorPrompt": "A priest asked to pray before a university's Muster.",
+      "choices": [
+        {
+          "id": "pray_plainly",
+          "label": "Pray plainly, in the Church's words, and let the words carry",
+          "outcome": "Ninety seconds, the Lord's name in it, and silence after. The committee says it was the best in years. A letter to the paper says it was the most Catholic in years, and means the same thing.",
+          "effects": [
+            { "target": "flag", "key": "ag_muster_spoke", "value": true },
+            { "target": "stat", "key": "charisma", "delta": 2 },
+            { "target": "place", "key": "campus", "delta": 12 },
+            { "target": "reputation", "key": "public", "delta": 4 },
+            { "target": "reputation", "key": "chancery", "delta": 2 }
+          ],
+          "default": true
+        },
+        {
+          "id": "sit_with_the_students",
+          "label": "Decline the microphone and sit with the St. Mary's students in the stands",
+          "outcome": "You answer 'here' from the stands for a student of yours who died in March, with two hundred Aggie Catholics around you, and the committee gives the invocation to the Methodist, who is good.",
+          "effects": [
+            { "target": "flag", "key": "ag_muster_sat", "value": true },
+            { "target": "place", "key": "students", "delta": 8 },
+            { "target": "stat", "key": "piety", "delta": 1 },
+            { "target": "reputation", "key": "parishioners", "delta": 3 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ag_the_one_who_asks",
+      "phase": "study",
+      "pressure": ["friendship_vs_duty"],
+      "severity": "MAJOR",
+      "category": "formation",
+      "baseWeight": 14,
+      "suppressYears": 1,
+      "requires": [{ "type": "diocese", "value": "austin" }, { "type": "flag", "key": "study:campus", "value": true }],
+      "title": "The Engineer Who Asks",
+      "body": "A senior in petroleum engineering, with a job in Houston signed and a girl from Dallas who thinks they are engaged, comes to the open door at eleven at night and says the thing St. Mary's hears more than any church in the state: he thinks he might be called. He has been at the nine o'clock for four years and on the Awakening staff for two. He has told nobody. The job starts in June. He wants you to tell him whether it is real, which you cannot, and what to do, which you can.",
+      "choices": [
+        {
+          "id": "send_him",
+          "label": "Send him to the vocations director in Austin this month, job or no job",
+          "outcome": "He drives to Austin on a Tuesday and comes back quiet. In June he turns the job down and in August he enters the seminary, and the girl from Dallas comes to St. Mary's to tell you what she thinks of you, and then to Mass.",
+          "effects": [
+            { "target": "flag", "key": "ag_sent_to_seminary", "value": true },
+            { "target": "flag", "key": "vocation:entered", "delta": 1 },
+            { "target": "place", "key": "vocations", "delta": 15 },
+            { "target": "reputation", "key": "chancery", "delta": 5 },
+            { "target": "reputation", "key": "parishioners", "delta": 2 },
+            { "target": "stat", "key": "piety", "delta": 2 }
+          ],
+          "roll": {
+            "chance": 0.7,
+            "stat": "charisma",
+            "success": {
+              "outcome": "The vocations director calls to say the diocese has St. Mary's to thank again, and that the bishop said so at the presbyteral council.",
+              "effects": [
+                { "target": "relationship", "key": "@bishop", "delta": 4 },
+                { "target": "reputation", "key": "brother_priests", "delta": 2 }
+              ]
+            },
+            "failure": {
+              "outcome": "He goes to Austin, and then to Houston after all, and writes you a long email in October that you keep. He comes back to St. Mary's at Christmas, and three years later he enters, from Houston, and tells the director your name.",
+              "effects": [
+                { "target": "place", "key": "vocations", "delta": -5 },
+                { "target": "stat", "key": "piety", "delta": 1 }
+              ]
+            }
+          },
+          "default": true
+        },
+        {
+          "id": "take_the_job",
+          "label": "Tell him to take the job for a year and keep praying, and to call you from Houston",
+          "outcome": "He takes the job, keeps the girl for a year and then does not, and calls you every month from a Houston apartment. In his second year he writes to the vocations director himself, and says you told him to wait, which the director reads two ways.",
+          "effects": [
+            { "target": "place", "key": "vocations", "delta": 4 },
+            { "target": "stat", "key": "knowledge", "delta": 1 },
+            { "target": "reputation", "key": "chancery", "delta": -1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ag_awakening",
+      "phase": "study",
+      "pressure": ["competence"],
+      "severity": "NOTABLE",
+      "category": "formation",
+      "baseWeight": 12,
+      "suppressYears": 1,
+      "requires": [{ "type": "diocese", "value": "austin" }, { "type": "flag", "key": "study:campus", "value": true }],
+      "title": "Awakening",
+      "body": "Aggie Awakening is a retreat run by students for students, three hundred of them in a weekend, with a staff of sixty who have planned it since August and a chaplain who is asked to be there, say the Masses, hear confessions until two in the morning, and otherwise stay out of the way. The retreat director, a junior from Laredo, comes to tell you the talks are set and that one of them, on chastity, is being given by a boy whose talk she has not read, because he will not show it to her.",
+      "choices": [
+        {
+          "id": "read_the_talk",
+          "label": "Ask to read the talk yourself, tonight, as the chaplain",
+          "outcome": "He shows it to you because you are a priest. It is honest and wrong in two places, and you fix the two places with him at the kitchen table, and he gives it on Saturday to three hundred people who are very quiet.",
+          "effects": [
+            { "target": "flag", "key": "ag_awakening_led", "value": true },
+            { "target": "stat", "key": "theology", "delta": 2 },
+            { "target": "place", "key": "students", "delta": 10 },
+            { "target": "place", "key": "vocations", "delta": 6 }
+          ],
+          "default": true
+        },
+        {
+          "id": "trust_the_students",
+          "label": "Tell her the retreat is theirs, and hear confessions until two",
+          "outcome": "The talk is honest and wrong in two places and nobody minds but you, and the confessions run until half past two, and the retreat is the best in years by the only measure that counts, which is who is at Mass in March.",
+          "effects": [
+            { "target": "flag", "key": "ag_awakening_led", "value": true },
+            { "target": "place", "key": "students", "delta": 14 },
+            { "target": "stat", "key": "piety", "delta": 2 },
+            { "target": "stat", "key": "theology", "delta": -1 }
+          ],
+          "roll": {
+            "chance": 0.6,
+            "stat": "piety",
+            "success": {
+              "outcome": "Two of the three hundred come to the open door the next week to ask about seminary, and one about the convent, which is how Awakening works and why the vocations office sends its director to it.",
+              "effects": [
+                { "target": "place", "key": "vocations", "delta": 10 }
+              ]
+            },
+            "failure": {
+              "outcome": "A parent hears about the two places from a daughter and writes to the bishop, who asks you what the chaplain is for, and listens to the answer.",
+              "effects": [
+                { "target": "relationship", "key": "@bishop", "delta": -3 },
+                { "target": "place", "key": "campus", "delta": -3 }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "ag_the_corps",
+      "phase": "study",
+      "pressure": ["loyalty_vs_honesty"],
+      "severity": "NOTABLE",
+      "category": "formation",
+      "baseWeight": 10,
+      "suppressYears": 2,
+      "requires": [{ "type": "diocese", "value": "austin" }, { "type": "flag", "key": "study:campus", "value": true }],
+      "title": "The Corps Chaplain",
+      "body": "The Corps of Cadets has asked St. Mary's for a priest for its Catholic cadets: a Mass in uniform once a month at the quad, a blessing at the commissioning in May, and someone to call when a cadet is in trouble that the Corps does not want to be the first to know about. The commandant is a Methodist colonel who respects the collar and does not entirely trust it. He wants the Mass. He also wants to be told things.",
+      "choices": [
+        {
+          "id": "the_mass_and_the_seal",
+          "label": "Take the Mass, and tell the colonel plainly that you will tell him nothing",
+          "outcome": "He takes it well, having expected it, and the Mass in uniform on the quad becomes the most photographed thing St. Mary's does. The cadets come to the door with things the Corps never hears.",
+          "effects": [
+            { "target": "flag", "key": "ag_corps_blessed", "value": true },
+            { "target": "place", "key": "campus", "delta": 10 },
+            { "target": "place", "key": "students", "delta": 6 },
+            { "target": "reputation", "key": "public", "delta": 2 },
+            { "target": "stat", "key": "charisma", "delta": 1 }
+          ],
+          "default": true
+        },
+        {
+          "id": "decline_the_corps",
+          "label": "Decline: the cadets are welcome at St. Mary's like anyone, and the Corps can come to the nine o'clock",
+          "outcome": "The colonel finds a Baptist who will do the commissioning, and the Catholic cadets come to the nine o'clock in their boots anyway, and sit together, and the Corps does not forget that you said no.",
+          "effects": [
+            { "target": "place", "key": "campus", "delta": -6 },
+            { "target": "place", "key": "students", "delta": 2 },
+            { "target": "stat", "key": "piety", "delta": 1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ag_second_mass",
+      "phase": "study",
+      "pressure": ["competence"],
+      "severity": "NOTABLE",
+      "category": "admin",
+      "baseWeight": 11,
+      "suppressYears": 2,
+      "requires": [{ "type": "diocese", "value": "austin" }, { "type": "flag", "key": "study:campus", "value": true }, { "type": "place", "key": "students", "op": ">=", "value": 20 }],
+      "title": "The Church Is Full",
+      "body": "St. Mary's church holds a thousand and the nine o'clock Sunday night Mass has three hundred standing in the aisles and a hundred on the steps listening through the doors. The fire marshal has been, courteously. The campus ministry director wants a second Sunday night Mass at seven, which means two homilies, two choirs, and a priest who is not you for one of them, because the diocese is short and the nearest help is a retired pastor in Bryan who says Mass in fifty minutes.",
+      "choices": [
+        {
+          "id": "two_masses",
+          "label": "Add the seven o'clock and say both yourself, every Sunday",
+          "outcome": "Two Masses, two homilies, and a church that is full twice. By Lent you are tired in a way the students cannot see and the director can.",
+          "effects": [
+            { "target": "flag", "key": "ag_second_mass", "value": true },
+            { "target": "place", "key": "students", "delta": 15 },
+            { "target": "strain", "key": "", "delta": 8 },
+            { "target": "reputation", "key": "parishioners", "delta": 4 }
+          ],
+          "default": true
+        },
+        {
+          "id": "the_retired_pastor",
+          "label": "Add the seven o'clock and give it to the retired pastor from Bryan",
+          "outcome": "Fifty minutes, no homily to speak of, and a church that is full anyway, because the students come for the Mass and the music and the people around them, and not, it turns out, for you.",
+          "effects": [
+            { "target": "flag", "key": "ag_second_mass", "value": true },
+            { "target": "place", "key": "students", "delta": 10 },
+            { "target": "stat", "key": "administration", "delta": 2 },
+            { "target": "reputation", "key": "brother_priests", "delta": 2 }
+          ]
+        },
+        {
+          "id": "the_steps",
+          "label": "Leave it: a church with people on the steps is what a campus church should look like",
+          "outcome": "The fire marshal comes back, less courteously, and the director stops asking and starts counting, and sends the count to the bishop with a note.",
+          "effects": [
+            { "target": "place", "key": "campus", "delta": -5 },
+            { "target": "relationship", "key": "@bishop", "delta": -2 },
+            { "target": "stat", "key": "piety", "delta": 1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ag_bishop_visit",
+      "phase": "study",
+      "pressure": ["ambition_vs_integrity"],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 10,
+      "suppressYears": 2,
+      "requires": [{ "type": "diocese", "value": "austin" }, { "type": "flag", "key": "study:campus", "value": true }, { "type": "weeks_away", "op": ">=", "value": 40 }],
+      "title": "The Bishop Comes for the Nine O'Clock",
+      "body": "{@bishop} comes to St. Mary's for the Sunday night Mass without a secretary, sits in the back, and sees what every bishop of this diocese has seen: a church full of twenty-year-olds who sing. Afterward in the priests' house he says what every bishop says, that St. Mary's is where his priests come from, and then what this one says, which is that he would like to know what you want after this, and whether you have thought about the chancery, and whether the vocations office should be run from College Station.",
+      "flavorPrompt": "A bishop at the campus Mass, and the conversation after it.",
+      "choices": [
+        {
+          "id": "the_vocations_office",
+          "label": "Say that the vocations office should be here, and that you would run it",
+          "outcome": "He writes it down and says he will think about it, and does, which in this diocese means a letter within the year. The chancery hears that the chaplain asked for an office.",
+          "effects": [
+            { "target": "flag", "key": "ag_bishop_visit", "value": true },
+            { "target": "flag", "key": "noticed_by_bishop", "value": true },
+            { "target": "reputation", "key": "chancery", "delta": 5 },
+            { "target": "relationship", "key": "@bishop", "delta": 3 },
+            { "target": "reputation", "key": "brother_priests", "delta": -2 }
+          ],
+          "roll": {
+            "chance": 0.5,
+            "stat": "administration",
+            "success": {
+              "outcome": "He says yes before he leaves: the office stays in Austin but its director will be the chaplain of St. Mary's, which is you, and the presbyterate learns it from the bulletin.",
+              "effects": [
+                { "target": "flag", "key": "office:vocations", "value": true },
+                { "target": "reputation", "key": "chancery", "delta": 4 },
+                { "target": "place", "key": "vocations", "delta": 10 }
+              ]
+            },
+            "failure": {
+              "outcome": "He gives the office to a pastor in Round Rock who has sent two men, and tells you kindly that St. Mary's is work enough. It is.",
+              "effects": [
+                { "target": "reputation", "key": "chancery", "delta": -1 }
+              ]
+            }
+          }
+        },
+        {
+          "id": "the_students",
+          "label": "Say that you want St. Mary's, for as long as he will leave you here",
+          "outcome": "He looks at you as bishops look at a man who has just made himself hard to move, and says the diocese will need you somewhere else one day, and that he will try to make it late.",
+          "effects": [
+            { "target": "flag", "key": "ag_bishop_visit", "value": true },
+            { "target": "relationship", "key": "@bishop", "delta": 4 },
+            { "target": "place", "key": "students", "delta": 6 },
+            { "target": "reputation", "key": "parishioners", "delta": 3 },
+            { "target": "stat", "key": "piety", "delta": 1 }
+          ],
+          "default": true
+        }
+      ]
+    },
+    {
+      "id": "ag_the_girl_who_stays",
+      "phase": "study",
+      "pressure": ["belief_vs_safety"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 10,
+      "suppressYears": 2,
+      "once": true,
+      "requires": [{ "type": "diocese", "value": "austin" }, { "type": "flag", "key": "study:campus", "value": true }],
+      "title": "What She Was Told",
+      "body": "A sophomore who has been at every nine o'clock since August comes to the open door and does not sit down. Something happened at a party in September that she has told nobody, and she has been told since by a boy at the Awakening table that she should go to confession for it. She has not. She wants to know whether he is right. She is twenty and has the look of someone deciding whether the Church is a place she can stay.",
+      "choices": [
+        {
+          "id": "tell_her_the_truth",
+          "label": "Tell her the truth: what was done to her is not hers to confess, and the boy was wrong",
+          "outcome": "You say it twice because she needs it twice, and then you walk her to the counseling center yourself, and then you find the boy and speak to him in a way he will remember. She is at the nine o'clock in March. She is at the nine o'clock in May.",
+          "effects": [
+            { "target": "flag", "key": "ag_kept_the_girl", "value": true },
+            { "target": "stat", "key": "piety", "delta": 2 },
+            { "target": "stat", "key": "charisma", "delta": 1 },
+            { "target": "place", "key": "students", "delta": 6 },
+            { "target": "reputation", "key": "parishioners", "delta": 3 }
+          ],
+          "default": true
+        },
+        {
+          "id": "the_counselor_first",
+          "label": "Send her to the counseling center first, and tell her the door is open after",
+          "outcome": "She goes, because you asked, and does not come back to the door for a month, and then does, and the Church is a place she can stay, though it was close.",
+          "effects": [
+            { "target": "place", "key": "students", "delta": 2 },
+            { "target": "stat", "key": "knowledge", "delta": 1 },
+            { "target": "stat", "key": "piety", "delta": 1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ag_bonfire",
+      "phase": "study",
+      "pressure": ["doubt"],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 9,
+      "suppressYears": 2,
+      "once": true,
+      "requires": [{ "type": "diocese", "value": "austin" }, { "type": "flag", "key": "study:campus", "value": true }, { "type": "month", "op": ">=", "value": 11 }, { "type": "month", "op": "<=", "value": 11 }],
+      "title": "The Memorial at Dawn",
+      "body": "Every November, at the hour the stack fell in 1999, the students gather at the Bonfire Memorial in the dark and cold and stand until the sun comes up, for twelve people none of them knew. The families still come. Some of them are Catholic and have asked St. Mary's, as they do every year, for a priest to stand with them, and a Mass after. You were in high school when it happened. The students were in kindergarten.",
+      "choices": [
+        {
+          "id": "stand_until_dawn",
+          "label": "Stand with the families until dawn, and say the Mass after",
+          "outcome": "Three hours in the cold with a mother who has stood there twenty times, and a Mass at St. Mary's for twelve names and two hundred students, and the sense, which the university gives its priests, of a place that remembers.",
+          "effects": [
+            { "target": "flag", "key": "ag_bonfire", "value": true },
+            { "target": "stat", "key": "piety", "delta": 2 },
+            { "target": "place", "key": "campus", "delta": 6 },
+            { "target": "place", "key": "students", "delta": 4 },
+            { "target": "strain", "key": "", "delta": 2 }
+          ],
+          "default": true
+        },
+        {
+          "id": "the_mass_only",
+          "label": "Say the Mass after, and let the students keep the dark",
+          "outcome": "The Mass is full, and the mother who has stood there twenty times asks, gently, where you were, and you have no answer that the morning would accept.",
+          "effects": [
+            { "target": "place", "key": "students", "delta": 2 },
+            { "target": "place", "key": "campus", "delta": -2 },
+            { "target": "stat", "key": "piety", "delta": 1 }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,3 +1,4 @@
+import { presetById } from '@/content/dioceses';
 import type { GameState, OfferDef, StudyState } from '@/types';
 import type { Rng } from './rng';
 import { studyProgram } from '@/content/study';
@@ -54,13 +55,16 @@ export function beginStudy(state: GameState, def: OfferDef, failed: boolean, rng
   const carried = Math.round(ch.reputation.parishioners * ARC.parishionersCarryover);
   next = { ...next, character: { ...ch, reputation: { ...ch.reputation, parishioners: carried } } };
   next = applyEffects(next, [{ target: 'reputation', key: 'parishioners', delta: STUDY.leaveParishioners }]);
+  // A diocese whose campus chaplaincy is a place of its own names the posting (the preset's campus: St. Mary's at Texas A&M).
+  const campus = program.city === 'campus' ? presetById(next.world?.diocese.presetId ?? '')?.campus : undefined;
   const study: StudyState = {
     offerId: def.id,
     program: program.id,
     city: program.city,
-    label: program.label,
-    school: program.school,
-    residence: program.residence,
+    label: campus ? `Chaplain of ${campus.label}` : program.label,
+    school: campus?.school ?? program.school,
+    residence: campus?.residence ?? program.residence,
+    ...(campus ? { placeLabel: campus.label } : {}),
     startWeek: next.clock.week,
     // A school with a year of its own runs its weeks from the week it opens, if he comes a little early.
     endWeek: (program.term ? termWeek(next.clock, program.term, next.clock.week) : next.clock.week) + c.weeks,

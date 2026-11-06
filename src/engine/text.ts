@@ -1,3 +1,4 @@
+import { presetById } from '@/content/dioceses';
 import type { GameState } from '@/types';
 import { resolveSelector } from './selectors';
 import { pendingAppointment, APPOINTMENT_FLAGS } from './appointment';
@@ -31,6 +32,8 @@ export function textExtras(state: GameState): Record<string, string> {
     if (state.study.city === 'campus') out.city = 'the campus';
   }
   if (state.world) out.diocese = state.world.diocese.visible.name;
+  // The campus chaplaincy by its own name where the diocese gives it one, else the Newman Center.
+  out.campus = (state.world && presetById(state.world.diocese.presetId)?.campus?.school) ?? 'the Newman Center at the state university';
   const pending = pendingAppointment(state);
   const program = pending ? studyProgram(offerById(pending.offerId)?.accept.commitment?.away ?? '') : undefined;
   if (program) {

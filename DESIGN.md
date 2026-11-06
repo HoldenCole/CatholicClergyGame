@@ -681,7 +681,7 @@ The canon (c. 905) is the working rule: two Masses on a weekday, three on a Sund
 
 ### 9.1 Dioceses
 
-The presets keep their character across runs; everything else rolls at game start. Ten are archdioceses; the eleventh, the Diocese of Austin (`content/dioceses/austin.json`), is a suffragan see of Galveston-Houston with its real parishes by name, place, year, and coordinates, a map built from Natural Earth's counties, rivers, lakes, and roads (`maps/austin.json`), and no seminary of its own. Its founding years and coordinates are flagged for verification in the file.
+The presets keep their character across runs; everything else rolls at game start. Ten are archdioceses; the eleventh, the Diocese of Austin (`content/dioceses/austin.json`), is a suffragan see of Galveston-Houston with its real parishes by name, place, year, and coordinates, a map built from Natural Earth's counties, rivers, lakes, and roads (`maps/austin.json`), and no seminary of its own. Its founding years and coordinates are flagged for verification in the file. A preset may name its campus chaplaincy as a place of its own (`campus`): for Austin it is St. Mary's Catholic Center at Texas A&M, which names the Newman posting (`engine/study.ts`), has its own scenes (`events/study/aggie.json`: Silver Taps, Muster, the engineer who asks, Awakening, the Corps, the full church, the bishop at the nine o'clock, the memorial at dawn) that move the posting's dials and send men to seminary, and gives Austin's seminarians a summer there (`aus_aggie`).
 
 - **New York** — large, wealthy, media-exposed, nationally significant cathedral
 - **Chicago** — deep ethnic parish roots, shrinking, consolidating
