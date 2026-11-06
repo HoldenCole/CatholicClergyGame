@@ -110,10 +110,10 @@ export function sendToRome(state: GameState, rng: Rng): { state: GameState; line
   return { state: next, line };
 }
 
-/** What the College's years leave on a man at ordination: the flag the chancery reads, and the line. */
+/** What the College's years leave on a man at ordination, which is in Rome, at St. Peter's: the flags the chancery and the record read, and the line. */
 export function ordainedFromRome(state: GameState): GameState {
   if (!atRome(state.seminary)) return state;
-  return { ...state, flags: { ...state.flags, nac_alumnus: true }, career: [...state.career, { week: state.clock.week, kind: 'note', text: romeCollege.lines.ordination ?? 'Ordained at home, from the College.' }] };
+  return { ...state, flags: { ...state.flags, nac_alumnus: true, ordained_in_rome: true }, career: [...state.career, { week: state.clock.week, kind: 'note', text: romeCollege.lines.ordination ?? 'Ordained in Rome, from the College.' }] };
 }
 
 /** The College gives a man Italian in his first year; the credential is his after it. */

@@ -7,6 +7,8 @@ import { romeCollege, seminaryActivities, summerOptions } from '@/content/semina
 import { seminaryActivityOffered } from '@/systems/seminaryWeek';
 import { allEvents } from '@/content';
 import { offerById } from '@/content/offers';
+import { studyProgram } from '@/content/study';
+import { placeChance } from '@/engine/appointment';
 import { resolveSelector } from '@/engine/selectors';
 import { massSaid } from '@/systems/massSaid';
 import { evaluateAll } from '@/engine/conditions';
@@ -96,6 +98,9 @@ describe('the North American College', () => {
     expect(italianAfterFirstYear(after)).toBe(after);
     const ordained = ordainedFromRome(after);
     expect(ordained.flags.nac_alumnus).toBe(true);
+    // The College's men are ordained in Rome, at St. Peter's.
+    expect(ordained.flags.ordained_in_rome).toBe(true);
+    expect(ordained.career[ordained.career.length - 1]!.text).toMatch(/Altar of the Chair/);
     expect(ordainedFromRome(thirdYear('nac:home')).flags.nac_alumnus).toBeUndefined();
   });
 
@@ -115,5 +120,24 @@ describe('the North American College', () => {
     expect(typeof withWorld.world!.diocese.hidden.romeConnection).toBe('number');
     expect(evaluateAll([{ type: 'diocese', key: 'rome_connection', min: 4 }], strong)).toBe(true);
     expect(evaluateAll([{ type: 'diocese', key: 'rome_connection', min: 4 }], weak)).toBe(false);
+  });
+
+  it('rare letters keep a man in Rome: the College asks for a formator, the basilica for a confessor, each rolled for its place like the Gregorian', () => {
+    const formator = offerById('rome_nac_formator')!;
+    const chaplain = offerById('rome_vatican_chaplain')!;
+    expect(formator.weight).toBeLessThanOrEqual(5);
+    expect(chaplain.weight).toBeLessThanOrEqual(5);
+    expect(JSON.stringify(formator.requires)).toContain('nac_alumnus');
+    expect(JSON.stringify(chaplain.requires)).toContain('italian');
+    expect(studyProgram('nac_formator')!.city).toBe('college');
+    expect(studyProgram('vatican_chaplain')!.city).toBe('vatican');
+    const s = parishState('nac:stay');
+    expect(placeChance(s, formator)).toBe(0.6);
+    expect(placeChance({ ...s, flags: { ...s.flags, nac_alumnus: true } }, formator)).toBe(0.8);
+    expect(placeChance(s, chaplain)).toBe(0.5);
+    // A College man's Curia desk comes likelier.
+    expect(JSON.stringify(offerById('rome_curia_official')!.bias)).toContain('nac_alumnus');
+    // The eve of ordination has its Roman scene.
+    expect(allEvents.find((e) => e.id === 'nac_ordination_eve')!.beat).toBe('ordination_eve');
   });
 });

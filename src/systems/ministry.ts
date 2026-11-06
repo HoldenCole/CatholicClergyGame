@@ -54,6 +54,9 @@ export const MINISTRY = {
     deployment: { masses: 8, confessions: 10, anointings: 0.4, funerals: 0.1, converts: 0.1 },
     seminary_director: { masses: 7, confessions: 8 },
     schools_superintendent: { masses: 7, confessions: 1.5, confirmations: 0.6 },
+    // Staying in Rome after the College: the formator's week, and the basilica's confessional.
+    nac_formator: { masses: 7, confessions: 6, baptisms: 0.05 },
+    vatican_chaplain: { masses: 9, confessions: 30, anointings: 0.2, converts: 0.1, weddings: 0.05 },
   } as Record<string, Partial<Record<MinistryKey, number>>>,
   /** A bishop's week: the confirmations of a whole diocese, and the ordinations of one June. */
   see: { masses: 8, confirmations: 22, ordinations: 0.06, funerals: 0.2 } as Partial<Record<MinistryKey, number>>,

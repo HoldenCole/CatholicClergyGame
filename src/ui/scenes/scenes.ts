@@ -332,7 +332,7 @@ export const STUDY_SCHOOLS = postScene('The schools office', 'Back to the apartm
 
 /** The Roman postings all live in the same room over the same city: the student's, the Curia's, the Academy's, the nunciature's. */
 export function romanCity(city: StudyCity): boolean {
-  return city === 'rome' || city === 'washington' || city === 'curia' || city === 'holy_see' || city === 'academy' || city === 'nunciature' || city === 'generalate' || city === 'faculty';
+  return city === 'rome' || city === 'washington' || city === 'curia' || city === 'holy_see' || city === 'academy' || city === 'nunciature' || city === 'generalate' || city === 'faculty' || city === 'college' || city === 'vatican';
 }
 
 /** The room at a post, where the desk, the crucifix, and the shelf all open the week. */
