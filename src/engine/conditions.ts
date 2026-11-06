@@ -232,6 +232,7 @@ export function evaluateCondition(
         case 'size': return has(w.diocese.visible.size);
         case 'institution': return w.diocese.visible.institutions.some((i) => has(i));
         case 'spanish': return w.parishes.some((p) => p.needsSpanish);
+        case 'rome_connection': return (w.diocese.hidden.romeConnection ?? 3) >= (cond.min ?? 3);
         case 'ethnic': return w.parishes.some((p) => Object.entries(p.ethnic).some(([k, share]) => has(k) && share >= (cond.share ?? 0.3)));
         default: return has(w.diocese.presetId);
       }

@@ -1,6 +1,7 @@
 import { useGameStore } from '@/engine/store';
 import { seminaryActivities } from '@/content/seminary';
-import { activityBuilds, routineHours, routineOf, seminaryBudget, seminaryActivityOffered } from '@/systems/seminaryWeek';
+import { activityBuilds, inThisHouse, routineHours, routineOf, seminaryBudget, seminaryActivityOffered } from '@/systems/seminaryWeek';
+import { atRome, postedDay, romeUniversity } from '@/systems/nac';
 import Sheet from '../Sheet';
 import MassSaidNote from '../MassSaidNote';
 import { devotionDefs, horariumDay, recreationDefs, seminaryHorariumDefs } from '@/content/seminary';
@@ -32,7 +33,7 @@ export default function SeminaryRoutinePanel() {
     <>
       <Sheet title="The week">
         <p className="ink-muted text-xs leading-relaxed">
-          The horarium is the house's: Mass, the hours, classes, and meals. How you keep it is yours, and so are {budget} hours a week{shift !== 0 ? ` (${shift > 0 ? `${shift} of them taken from the rule` : `${-shift} fewer for keeping it fully`})` : ''}.
+          {atRome(sem) ? `The horarium is the College's: Morning Prayer and Mass on the Janiculum, the walk down to ${romeUniversity(sem)?.label ?? 'the Gregorian'}, pranzo, the siesta, Vespers.` : "The horarium is the house's: Mass, the hours, classes, and meals."} How you keep it is yours, and so are {budget} hours a week{shift !== 0 ? ` (${shift > 0 ? `${shift} of them taken from the rule` : `${-shift} fewer for keeping it fully`})` : ''}.
           {left > 0 ? ` ${left} still unspoken for; they go nowhere in particular.` : ' All of them are given.'}
           {' '}The house calls you {observanceWord(observance)}.{(sem.lates ?? 0) > 0 ? ` The vice-rector's notebook has you late to Lauds ${sem.lates === 1 ? 'once' : `${sem.lates} times`} this year.` : ''}
         </p>
@@ -41,7 +42,7 @@ export default function SeminaryRoutinePanel() {
       </Sheet>
       <Sheet title="The horarium" fold="closed" summary={seminaryHorariumDefs.map((d) => `${d.label.toLowerCase()}: ${QWORD[horarium[d.key]!].toLowerCase()}`).join(' · ')}>
         <ul className="ink-muted grid grid-cols-2 gap-x-4 gap-y-0.5 text-xs">
-          {horariumDay.map((p) => <li key={p.time} className="flex gap-2"><span className="w-10 shrink-0 font-mono">{p.time}</span><span>{p.label}</span></li>)}
+          {postedDay(sem, horariumDay).map((p) => <li key={p.time} className="flex gap-2"><span className="w-10 shrink-0 font-mono">{p.time}</span><span>{p.label}</span></li>)}
         </ul>
         <p className="ink-faint mt-2 text-xs">A house runs on its rule the way a parish runs on its schedule. Kept loosely, a line gives an hour back and costs you with the house and in the chapel; kept fully, it costs an hour and pays in both.</p>
         <ul className="mt-2 flex flex-col gap-2">
@@ -103,6 +104,8 @@ export default function SeminaryRoutinePanel() {
           {seminaryActivities
             // An order's own formation (its rite) is not listed for a man outside it.
             .filter((a) => !(a.requires ?? []).some((c) => c.type === 'flag' && c.key.startsWith('order:') && c.value && !game.flags[c.key]))
+            // The other house's activities are not listed: the parish weekend at home, the city in Rome.
+            .filter((a) => inThisHouse(game, a))
             .filter((a) => a.location !== 'language' || (routine[a.id] ?? 0) > 0 || (sem.hoursLogged?.[a.id] ?? 0) > 0).map((a) => {
             const ap = routine[a.id] ?? 0;
             const offered = seminaryActivityOffered(game, a);

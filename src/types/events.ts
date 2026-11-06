@@ -155,7 +155,7 @@ export type Condition =
    * (value, one or several), an institution it has, whether any parish needs Spanish, or whether any
    * parish has that people ('ethnic', with `share` as the least share of the parish, default 0.3).
    */
-  | { type: 'diocese'; value?: string | string[]; key?: 'region' | 'size' | 'institution' | 'spanish' | 'ethnic'; share?: number }
+  | { type: 'diocese'; value?: string | string[]; key?: 'region' | 'size' | 'institution' | 'spanish' | 'ethnic' | 'rome_connection'; share?: number; /** rome_connection: the least connection (1..5) that passes. */ min?: number }
   /** The calendar month of the current week, 1..12. */
   | { type: 'month'; op: Op; value: number }
   /** The man's name as a confessor, 0..100 (systems/confessor.ts). */

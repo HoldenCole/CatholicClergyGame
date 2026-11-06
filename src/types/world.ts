@@ -187,6 +187,8 @@ export interface DioceseHidden {
   scandal: { latent: number; handling: ScandalHandling };
   pastorAges: PastorAgeProfile;
   hiddenComplication: string;
+  /** The preset's Rome connection, 1..5, kept here so content can read it (the College's letters come likelier where it is strong). */
+  romeConnection?: number;
 }
 
 /**

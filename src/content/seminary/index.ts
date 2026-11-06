@@ -3,6 +3,7 @@ import rule from './rule.json';
 import summers from './summers.json';
 import religiousSummers from '../religious/summers.json';
 import activities from './activities.json';
+import rome from './rome.json';
 
 export interface SummerOption {
   id: SummerAssignment;
@@ -41,3 +42,14 @@ export const horariumDay = ruleContent.day;
 export const seminaryHorariumDefs = ruleContent.horarium;
 export const devotionDefs = ruleContent.devotions;
 export const recreationDefs = ruleContent.recreation;
+
+/** The North American College: the seminary in Rome, its day, the universities it sends its men to. content/seminary/rome.json */
+export interface RomeUniversityDef {
+  id: string;
+  label: string;
+  blurb: string;
+  share: number;
+  lean: number;
+  stats: Partial<Record<'theology' | 'knowledge' | 'piety' | 'administration', number>>;
+}
+export const romeCollege = rome as unknown as { name: string; short: string; city: string; day: { time: string; label: string }[]; universities: RomeUniversityDef[]; classes: Record<string, string>; arrival: string; lines: Record<string, string> };
