@@ -227,7 +227,7 @@ function letterStep(state: GameState, rng: Rng, deps: EventDeps): { state: GameS
   if (!res.letter) return { state: res.state, moved: false };
   let next = res.state;
   const def = deps.offerLookup?.(state.flags[APPOINTMENT_FLAGS.offer] as string);
-  next = addDigestLine(next, res.letter === 'go' ? (def ? renderText(def.accept.outcome, next) : 'The letter of appointment came.') : "The bishop's answer came: he keeps you where you are.");
+  next = addDigestLine(next, res.letter === 'go' ? (def ? renderText(def.accept.outcome, next) : 'The letter of appointment came.') : res.letter === 'no_place' ? "Rome's answer came through the bishop: no place for the diocese this year." : "The bishop's answer came: he keeps you where you are.");
   const letter = deps.lookup(`ap_letter_${res.letter}`);
   if (letter) {
     next = { ...next, flags: { ...next.flags, [`${APPOINTMENT_FLAGS.letter}:${res.letter}`]: true } };

@@ -27,7 +27,7 @@ export interface StudyProgramDef {
   /** A posting's own dials: what the years there move; and its book, the things it counts. */
   place?: { label: string; dials: { id: string; label: string; low: string; high: string }[]; book?: { id: string; label: string }[] };
   /** Whether the bishop releases a man someone else asked for: certain for Rome's call, likelier when the post is his priority. */
-  release?: { priority?: BishopPriority; always?: boolean };
+  release?: { priority?: BishopPriority; always?: boolean; /** Rome's places: the chance the place is there once the bishop has said yes, and the better chance for a man of the College. */ place?: { chance: number; nac?: number } };
 }
 
 export type StudyLocation = 'desk' | 'chapel' | 'library' | 'hospital' | 'parish' | 'basilica' | 'college_office' | 'curia' | 'piazza' | 'language' | 'field' | 'monastery';

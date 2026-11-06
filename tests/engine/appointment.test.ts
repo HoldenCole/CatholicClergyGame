@@ -40,7 +40,7 @@ describe("a post that moves you is the bishop's letter", () => {
     expect(p.week - next.clock.week).toBeLessThanOrEqual(APPOINTMENT.waitWeeks[1]);
     expect(next.beats.some((b) => b.kind === 'assignment' && b.label === APPOINTMENT_BEAT && b.week === p.week)).toBe(true);
     expect(next.career[next.career.length - 1]!.text).toMatch(/Said yes/);
-    expect(renderText('{appointment} at {appointment_residence}, from {appointment_from}', next)).toMatch(/licentiate in theology at the North American College, from /);
+    expect(renderText('{appointment} at {appointment_residence}, from {appointment_from}', next)).toMatch(/licentiate in theology at the Casa Santa Maria, from /);
     // Before the week, nothing happens.
     expect(appointmentStep(next, createRng('early'), offerById).letter).toBeNull();
   });

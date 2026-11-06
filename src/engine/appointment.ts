@@ -81,6 +81,25 @@ export function releaseChance(state: GameState, def: OfferDef): number {
   return Math.min(r.ceiling, Math.max(r.floor, p));
 }
 
+/** The chance the place is there at all, once the bishop has said yes: Rome's own number, better for a man of the College, certain elsewhere. */
+export function placeChance(state: GameState, def: OfferDef): number {
+  const place = studyProgram(def.accept.commitment?.away ?? '')?.release?.place;
+  if (!place) return 1;
+  return state.flags.nac_alumnus ? place.nac ?? place.chance : place.chance;
+}
+
+/** Rome had no place: the yes is noted, the man stays, and the bishop may ask again another year. */
+export function noPlace(state: GameState, def: OfferDef): GameState {
+  const program = studyProgram(def.accept.commitment?.away ?? '');
+  const next = clearPending(state);
+  return {
+    ...next,
+    flags: { ...next.flags, [`no_place:${program?.id ?? def.id}`]: true },
+    offerHistory: [...next.offerHistory, { offerId: def.id, week: next.clock.week, decision: 'kept' }],
+    career: [...next.career, { week: next.clock.week, kind: 'offer', text: `Rome had no place: ${program?.label.toLowerCase() ?? def.title} went to another diocese this year, and the bishop says he will write again.` }],
+  };
+}
+
 /** The letter of appointment: he goes. */
 export function grantAppointment(state: GameState, def: OfferDef, rng: Rng): GameState {
   const p = pendingAppointment(state);
@@ -102,7 +121,7 @@ export function keepAppointment(state: GameState, def: OfferDef): GameState {
 export interface AppointmentResult {
   state: GameState;
   /** Which letter came, if the week has arrived. */
-  letter: 'go' | 'kept' | null;
+  letter: 'go' | 'kept' | 'no_place' | null;
 }
 
 /** The week the letter is due: the bishop sends him or keeps him. */
@@ -112,5 +131,9 @@ export function appointmentStep(state: GameState, rng: Rng, lookup: (id: string)
   const def = lookup(p.offerId);
   if (!def) return { state: clearPending(state), letter: null };
   const go = rng.derive(`appointment:${p.offerId}:${p.week}`).chance(releaseChance(state, def));
-  return go ? { state: grantAppointment(state, def, rng.derive(`appointed:${p.week}`)), letter: 'go' } : { state: keepAppointment(state, def), letter: 'kept' };
+  if (!go) return { state: keepAppointment(state, def), letter: 'kept' };
+  // Rome's places are fewer than the bishops who ask for them: the bishop's yes is not the Gregorian's.
+  const place = placeChance(state, def);
+  if (place < 1 && !rng.derive(`place:${p.offerId}:${p.week}`).chance(place)) return { state: noPlace(state, def), letter: 'no_place' };
+  return { state: grantAppointment(state, def, rng.derive(`appointed:${p.week}`)), letter: 'go' };
 }

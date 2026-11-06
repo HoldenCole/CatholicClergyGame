@@ -1,134 +1,236 @@
 {
-  "_notes": "The bishop's letter after a yes to a post that moves a man (engine/appointment.ts). Fired by id when the letter is due, never drawn: the requires flag exists only in that instant. {appointment}, {appointment_residence} and {appointment_from} are text tokens from the pending request.",
-  "events": [
+ "_notes": "The bishop's letter after a yes to a post that moves a man (engine/appointment.ts). Fired by id when the letter is due, never drawn: the requires flag exists only in that instant. {appointment}, {appointment_residence} and {appointment_from} are text tokens from the pending request.",
+ "events": [
+  {
+   "id": "ap_letter_go",
+   "phase": [
+    "parochial_vicar",
+    "administrator",
+    "pastor",
+    "study",
+    "chancery",
+    "bishop"
+   ],
+   "pressure": [
+    "ambition_vs_integrity"
+   ],
+   "severity": "MAJOR",
+   "category": "assignment",
+   "baseWeight": 1,
+   "suppressYears": 1,
+   "requires": [
     {
-      "id": "ap_letter_go",
-      "phase": [
-        "parochial_vicar",
-        "administrator",
-        "pastor",
-        "study",
-        "chancery",
-        "bishop"
-      ],
-      "pressure": [
-        "ambition_vs_integrity"
-      ],
-      "severity": "MAJOR",
-      "category": "assignment",
-      "baseWeight": 1,
-      "suppressYears": 1,
-      "requires": [
-        {
-          "type": "flag",
-          "key": "appointment:letter:go",
-          "value": true
-        }
-      ],
-      "title": "The Bishop's Letter",
-      "body": "It comes on the chancery's paper, two paragraphs, signed by {@bishop} in the ink he uses for appointments and nothing else. By this letter you are appointed {appointment}, to take up residence at {appointment_residence}, and relieved of your duties at {appointment_from} with his thanks for what you did there. The second paragraph is the one they all have, about the needs of the diocese and the confidence he places in you. The secretary has already heard. The parish will hear on Sunday, from you, in the announcements, in three sentences you will write four times.",
-      "flavorPrompt": "The letter of appointment; the ink; the parish that has not been told yet.",
-      "choices": [
-        {
-          "id": "so_be_it",
-          "label": "So be it: tell the parish on Sunday and start packing",
-          "default": true,
-          "outcome": "You say it after the announcements, and the church is quiet, and then it is not. A woman you have known for years says nothing to you at the door and calls the rectory that night to say the thing she could not say at the door. You pack. The letter goes in the drawer with the others.",
-          "effects": [
-            {
-              "target": "relationship",
-              "key": "@bishop",
-              "delta": 2
-            },
-            {
-              "target": "flag",
-              "key": "appointed_by_letter",
-              "value": true
-            }
-          ]
-        }
-      ]
+     "type": "flag",
+     "key": "appointment:letter:go",
+     "value": true
+    }
+   ],
+   "title": "The Bishop's Letter",
+   "body": "It comes on the chancery's paper, two paragraphs, signed by {@bishop} in the ink he uses for appointments and nothing else. By this letter you are appointed {appointment}, to take up residence at {appointment_residence}, and relieved of your duties at {appointment_from} with his thanks for what you did there. The second paragraph is the one they all have, about the needs of the diocese and the confidence he places in you. The secretary has already heard. The parish will hear on Sunday, from you, in the announcements, in three sentences you will write four times.",
+   "flavorPrompt": "The letter of appointment; the ink; the parish that has not been told yet.",
+   "choices": [
+    {
+     "id": "so_be_it",
+     "label": "So be it: tell the parish on Sunday and start packing",
+     "default": true,
+     "outcome": "You say it after the announcements, and the church is quiet, and then it is not. A woman you have known for years says nothing to you at the door and calls the rectory that night to say the thing she could not say at the door. You pack. The letter goes in the drawer with the others.",
+     "effects": [
+      {
+       "target": "relationship",
+       "key": "@bishop",
+       "delta": 2
+      },
+      {
+       "target": "flag",
+       "key": "appointed_by_letter",
+       "value": true
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "ap_letter_kept",
+   "phase": [
+    "parochial_vicar",
+    "administrator",
+    "pastor",
+    "study",
+    "chancery",
+    "bishop"
+   ],
+   "pressure": [
+    "ambition_vs_integrity",
+    "loyalty_vs_honesty"
+   ],
+   "severity": "MAJOR",
+   "category": "assignment",
+   "baseWeight": 1,
+   "suppressYears": 1,
+   "requires": [
+    {
+     "type": "flag",
+     "key": "appointment:letter:kept",
+     "value": true
+    }
+   ],
+   "title": "The Bishop Keeps You",
+   "body": "{@bishop}'s answer goes not to you but to the one who asked for you, and you hear it from the chancery secretary before the copy reaches the rectory. He writes that the diocese cannot spare you from {appointment_from} this year; that {appointment} is a post for a man who can be spared; that he is grateful you were willing, and that he has noted it. He has noted it. The one who asked will find someone else, and will remember that the diocese said no, and the diocese will remember that you said yes.",
+   "flavorPrompt": "Being kept; the compliment inside the refusal; the one who asked, told second-hand.",
+   "choices": [
+    {
+     "id": "take_it",
+     "label": "Take it as the compliment it half is, and go back to work",
+     "default": true,
+     "outcome": "You write him two lines of thanks, which he did not expect, and the secretary tells you he read them twice. The parish, which never knew it might have lost you, notices nothing, except that you are in the office on Wednesday mornings again.",
+     "effects": [
+      {
+       "target": "reputation",
+       "key": "chancery",
+       "delta": 3
+      },
+      {
+       "target": "reputation",
+       "key": "parishioners",
+       "delta": 2
+      },
+      {
+       "target": "relationship",
+       "key": "@bishop",
+       "delta": 2
+      }
+     ]
     },
     {
-      "id": "ap_letter_kept",
-      "phase": [
-        "parochial_vicar",
-        "administrator",
-        "pastor",
-        "study",
-        "chancery",
-        "bishop"
-      ],
-      "pressure": [
-        "ambition_vs_integrity",
-        "loyalty_vs_honesty"
-      ],
-      "severity": "MAJOR",
-      "category": "assignment",
-      "baseWeight": 1,
-      "suppressYears": 1,
-      "requires": [
-        {
-          "type": "flag",
-          "key": "appointment:letter:kept",
-          "value": true
-        }
-      ],
-      "title": "The Bishop Keeps You",
-      "body": "{@bishop}'s answer goes not to you but to the one who asked for you, and you hear it from the chancery secretary before the copy reaches the rectory. He writes that the diocese cannot spare you from {appointment_from} this year; that {appointment} is a post for a man who can be spared; that he is grateful you were willing, and that he has noted it. He has noted it. The one who asked will find someone else, and will remember that the diocese said no, and the diocese will remember that you said yes.",
-      "flavorPrompt": "Being kept; the compliment inside the refusal; the one who asked, told second-hand.",
-      "choices": [
-        {
-          "id": "take_it",
-          "label": "Take it as the compliment it half is, and go back to work",
-          "default": true,
-          "outcome": "You write him two lines of thanks, which he did not expect, and the secretary tells you he read them twice. The parish, which never knew it might have lost you, notices nothing, except that you are in the office on Wednesday mornings again.",
-          "effects": [
-            {
-              "target": "reputation",
-              "key": "chancery",
-              "delta": 3
-            },
-            {
-              "target": "reputation",
-              "key": "parishioners",
-              "delta": 2
-            },
-            {
-              "target": "relationship",
-              "key": "@bishop",
-              "delta": 2
-            }
-          ]
-        },
-        {
-          "id": "press",
-          "label": "Ask to see him and press the case",
-          "outcome": "He sees you on a Tuesday for eleven minutes and does not change his mind, and is courteous about it in the way that closes a subject. The vicar for clergy hears that you pressed. So does the one who asked for you, who is grateful, and cannot do anything with it.",
-          "effects": [
-            {
-              "target": "relationship",
-              "key": "@bishop",
-              "delta": -4
-            },
-            {
-              "target": "reputation",
-              "key": "chancery",
-              "delta": -2
-            },
-            {
-              "target": "reputation",
-              "key": "public",
-              "delta": 2
-            },
-            {
-              "target": "flag",
-              "key": "pressed_the_bishop",
-              "value": true
-            }
-          ]
-        }
-      ]
+     "id": "press",
+     "label": "Ask to see him and press the case",
+     "outcome": "He sees you on a Tuesday for eleven minutes and does not change his mind, and is courteous about it in the way that closes a subject. The vicar for clergy hears that you pressed. So does the one who asked for you, who is grateful, and cannot do anything with it.",
+     "effects": [
+      {
+       "target": "relationship",
+       "key": "@bishop",
+       "delta": -4
+      },
+      {
+       "target": "reputation",
+       "key": "chancery",
+       "delta": -2
+      },
+      {
+       "target": "reputation",
+       "key": "public",
+       "delta": 2
+      },
+      {
+       "target": "flag",
+       "key": "pressed_the_bishop",
+       "value": true
+      }
+     ]
     }
-  ]
+   ]
+  },
+  {
+   "id": "ap_letter_no_place",
+   "phase": [
+    "parochial_vicar",
+    "administrator",
+    "pastor",
+    "study",
+    "chancery",
+    "bishop"
+   ],
+   "pressure": [
+    "ambition_vs_integrity"
+   ],
+   "severity": "MAJOR",
+   "category": "assignment",
+   "baseWeight": 1,
+   "suppressYears": 1,
+   "requires": [
+    {
+     "type": "flag",
+     "key": "appointment:letter:no_place",
+     "value": true
+    }
+   ],
+   "title": "No Place This Year",
+   "body": "{@bishop}'s secretary calls, which he does when the bishop would rather not write. The Gregorian has answered the bishop's letter: the places for the autumn are taken, two of them by dioceses that wrote in January, and the Casa has no bed for a man without a place. The bishop asked for you by name and was told no by a Jesuit in a courteous Italian that took a page. He will write again next year if you are still willing; he says so through the secretary, who adds, on his own account, that the bishop does not often ask twice for the same man.",
+   "flavorPrompt": "A priest told, second-hand, that Rome had no place for him this year.",
+   "choices": [
+    {
+     "id": "take_it",
+     "label": "Say you are still willing, and go back to the parish",
+     "default": true,
+     "outcome": "You tell the secretary to tell him yes, next year, and go to the four o'clock baptism. The parish never knew. The chancery did, and the file says a man Rome did not take, which reads two ways.",
+     "effects": [
+      {
+       "target": "reputation",
+       "key": "chancery",
+       "delta": 2
+      },
+      {
+       "target": "relationship",
+       "key": "@bishop",
+       "delta": 2
+      },
+      {
+       "target": "flag",
+       "key": "rome:still_willing",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": "let_it_go",
+     "label": "Say that one letter was enough, and that the parish needs you more than Rome does",
+     "outcome": "The secretary writes it down in the voice of a man who has heard it before. The bishop does not ask again. The parish, which was never told, keeps you, and you keep the Italian you learned for nothing.",
+     "effects": [
+      {
+       "target": "reputation",
+       "key": "parishioners",
+       "delta": 3
+      },
+      {
+       "target": "reputation",
+       "key": "rome",
+       "delta": -2
+      },
+      {
+       "target": "flag",
+       "key": "refused_rome",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": "write_rome",
+     "label": "Write to the Gregorian yourself, in Italian, and ask for the next place",
+     "outcome": "A dean answers in three weeks, in English, that the Gregorian takes the men bishops send and not the men who write, and that your Italian is good. The bishop hears that you wrote.",
+     "effects": [
+      {
+       "target": "reputation",
+       "key": "rome",
+       "delta": 2
+      },
+      {
+       "target": "relationship",
+       "key": "@bishop",
+       "delta": -3
+      },
+      {
+       "target": "reputation",
+       "key": "chancery",
+       "delta": -2
+      },
+      {
+       "target": "flag",
+       "key": "rome:wrote_himself",
+       "value": true
+      }
+     ]
+    }
+   ]
+  }
+ ]
 }

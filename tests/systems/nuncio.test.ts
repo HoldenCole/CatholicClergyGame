@@ -89,7 +89,8 @@ describe("the nuncio's reading of a man", () => {
     const good = nuncioView(withRecord(s, true));
     const bad = nuncioView(withRecord(s, false));
     expect(good.value).toBeGreaterThanOrEqual(NUNCIO.candidate.view);
-    expect(bad.value).toBeLessThan(NUNCIO.consult.view);
+    // A Roman alumnus who served as vicar general is still read, loud as he is; but far below the terna's threshold.
+    expect(bad.value).toBeLessThan(NUNCIO.candidate.view - 20);
     expect(good.good).toContain('you put Traditionis Custodes into effect');
     expect(bad.bad).toContain('you would not put Traditionis Custodes into effect');
     expect(bad.bad).toContain('you are a loud man');

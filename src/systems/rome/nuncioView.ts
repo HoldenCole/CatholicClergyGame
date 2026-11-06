@@ -25,7 +25,8 @@ export const VIEW = {
   gapCap: 20,
   loud: 50,
   loudCost: 6,
-  credit: { JCL: 6, STL: 6, STD: 8, rome_alumnus: 5, vg_served: 8, jv_served: 6, bishops_secretary: 4, hard_parish_turned: 3, auxiliary: 10, curia: 8 },
+  /** A Roman licentiate is the credential that makes bishops: with the degree and the College's years a man of ordinary gifts is named about half the time over a career (calibrated in tests/systems/gregorian.test.ts). */
+  credit: { JCL: 6, STL: 8, STD: 10, rome_alumnus: 18, nac_alumnus: 4, vg_served: 8, jv_served: 6, bishops_secretary: 4, hard_parish_turned: 3, auxiliary: 10, curia: 8 },
   /** A friar's own credits (E3 §16B): a provincial's term, a prior's, the head of the order's. */
   friar: { provincial: 8, prior: 3, general: 10 },
   bishopPer: 10,
@@ -100,6 +101,7 @@ export function nuncioView(state: GameState): NuncioView {
   if (c.credentials.includes('STL')) v += VIEW.credit.STL;
   if (c.credentials.includes('STD')) { v += VIEW.credit.STD; good.push('the doctorate'); }
   if (f.rome_alumnus) { v += VIEW.credit.rome_alumnus; good.push('the Roman degree'); }
+  if (f.nac_alumnus) { v += VIEW.credit.nac_alumnus; good.push("the College's years"); }
   if (f.vg_served) { v += VIEW.credit.vg_served; good.push('the years as vicar general'); }
   if (f.jv_served) { v += VIEW.credit.jv_served; good.push('the years as judicial vicar'); }
   if (f['office:bishops_secretary']) { v += VIEW.credit.bishops_secretary; good.push("the bishop's secretary's desk"); }
