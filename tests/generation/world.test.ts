@@ -14,7 +14,7 @@ describe('generation/world', () => {
 
   it('rolls every preset, in preset order, from one seed', () => {
     const c = runs[0]!;
-    expect(c.map((x) => x.presetId)).toEqual(['new_york', 'chicago', 'los_angeles', 'houston', 'washington', 'philadelphia', 'boston', 'san_francisco', 'miami', 'new_orleans']);
+    expect(c.map((x) => x.presetId)).toEqual(['new_york', 'chicago', 'los_angeles', 'houston', 'washington', 'philadelphia', 'boston', 'san_francisco', 'miami', 'new_orleans', 'austin']);
     expect(generateCandidates(createRng('w-0'), 2010)).toEqual(c);
     expect(generateCandidates(createRng('w-1'), 2010)).not.toEqual(c);
   });

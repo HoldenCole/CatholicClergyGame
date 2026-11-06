@@ -146,10 +146,12 @@ describe('the bishop through the store', () => {
 });
 
 describe('a bishop of a different diocese', () => {
-  it('the pool holds the small sees and the ten great ones, never home and never the chair he sits in', () => {
-    expect(presetSees.length).toBe(10);
-    expect(presetSees.every((s) => s.great)).toBe(true);
-    expect(seeDefs.length).toBe(smallSees.length + 10);
+  it('the pool holds the small sees and the presets, never home and never the chair he sits in', () => {
+    expect(presetSees.length).toBe(11);
+    // The ten archdioceses are great sees; Austin, a suffragan, is a first see like the small ones.
+    expect(presetSees.filter((s) => s.great)).toHaveLength(10);
+    expect(presetSees.find((s) => s.id === 'austin')!.great).toBe(false);
+    expect(seeDefs.length).toBe(smallSees.length + 11);
     // The see a terna named him to is the see he gets (E1 §5); without one, Rome's pool.
     expect(generateSee(candidate('pool'), createRng('named')).id).toBe('gaylord');
     const named = candidate('pool');

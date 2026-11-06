@@ -15,7 +15,8 @@ import type { GameState, Terna } from '@/types';
 
 describe('E2 R1.0: the province as data', () => {
   it('the file covers every preset, every city of the pool, and every small see, with no see in two provinces', () => {
-    for (const p of diocesePresets) expect(metropoliaOfSee(p.see)?.rank, p.see).toBe('metropolitan');
+    // Ten archdioceses, and Austin, which sits under Galveston-Houston.
+    for (const p of diocesePresets) expect(metropoliaOfSee(p.see)?.rank, p.see).toBe(p.id === 'austin' ? 'suffragan' : 'metropolitan');
     for (const s of synthPool.sees) expect(metropoliaOfSee(s.see, s.state), `${s.see}, ${s.state}`).toBeDefined();
     for (const s of smallSees) expect(metropoliaOfSee(s.see), s.see).toBeDefined();
     const seen = new Map<string, string>();
