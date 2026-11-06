@@ -2,11 +2,12 @@ import type { SeeDef } from '@/types';
 import sees from './sees.json';
 import { diocesePresets } from './dioceses';
 import { synthSeeById } from './dioceses/synth';
+import { metropoliaOfSee } from './metropolias';
 
 /** The small sees a man is first named to. */
 export const smallSees = (sees as { sees: SeeDef[] }).sees;
 
-/** The ten dioceses of the game as sees: the great ones a bishop may be translated to, or, rarely, named to first. */
+/** The presets as sees: the archdioceses are the great ones a bishop may be translated to, or, rarely, named to first; a preset that is a suffragan see (Austin) is a first see like any other. */
 export const presetSees: SeeDef[] = diocesePresets.map((p) => ({
   id: p.id,
   name: p.name,
@@ -22,7 +23,7 @@ export const presetSees: SeeDef[] = diocesePresets.map((p) => ({
     people: 0,
     presbyterate: 0,
   },
-  great: true,
+  great: metropoliaOfSee(p.see)?.rank !== 'suffragan',
 }));
 
 export const seeDefs: SeeDef[] = [...smallSees, ...presetSees];

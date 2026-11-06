@@ -681,7 +681,7 @@ The canon (c. 905) is the working rule: two Masses on a weekday, three on a Sund
 
 ### 9.1 Dioceses
 
-The ten presets keep their character across runs; everything else rolls at game start.
+The presets keep their character across runs; everything else rolls at game start. Ten are archdioceses; the eleventh, the Diocese of Austin (`content/dioceses/austin.json`), is a suffragan see of Galveston-Houston with its real parishes by name, place, year, and coordinates, a map built from Natural Earth's counties, rivers, lakes, and roads (`maps/austin.json`), and no seminary of its own. Its founding years and coordinates are flagged for verification in the file.
 
 - **New York** — large, wealthy, media-exposed, nationally significant cathedral
 - **Chicago** — deep ethnic parish roots, shrinking, consolidating

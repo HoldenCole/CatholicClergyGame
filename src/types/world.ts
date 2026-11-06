@@ -1,7 +1,7 @@
 import type { Institute } from './religious';
 import type { Npc } from './npc';
 
-/** DESIGN.md §9.1. The five presets keep their character; everything else rolls. */
+/** DESIGN.md §9.1. The presets keep their character; everything else rolls. */
 export type DioceseSize = 'small' | 'medium' | 'large' | 'huge';
 export type Tension = 'one_voice' | 'quietly_split' | 'openly_divided';
 export type ClergyNeed = 'critically_short' | 'stretched' | 'adequate' | 'deep_bench';
