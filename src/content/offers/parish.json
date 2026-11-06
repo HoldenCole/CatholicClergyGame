@@ -92,7 +92,7 @@
           ]
         }
       ],
-      "weight": 30,
+      "weight": 8,
       "bias": [
         {
           "when": {
@@ -115,7 +115,39 @@
             "key": "rome_track",
             "value": true
           },
-          "multiplier": 1.4
+          "multiplier": 2.0
+        },
+        {
+          "when": {
+            "type": "flag",
+            "key": "nac_alumnus",
+            "value": true
+          },
+          "multiplier": 3.0
+        },
+        {
+          "when": {
+            "type": "flag",
+            "key": "nac:wants_fifth_year",
+            "value": true
+          },
+          "multiplier": 1.5
+        },
+        {
+          "when": {
+            "type": "flag",
+            "key": "rome:still_willing",
+            "value": true
+          },
+          "multiplier": 2.0
+        },
+        {
+          "when": {
+            "type": "diocese",
+            "key": "rome_connection",
+            "min": 4
+          },
+          "multiplier": 1.5
         }
       ],
       "windowWeeks": 6,
@@ -254,28 +286,18 @@
       "guarantee": {
         "when": [
           {
-            "type": "any",
+            "type": "all",
             "inner": [
               {
                 "type": "flag",
-                "key": "rome_track",
+                "key": "rector_plan",
                 "value": true
               },
               {
-                "type": "all",
-                "inner": [
-                  {
-                    "type": "flag",
-                    "key": "rector_plan",
-                    "value": true
-                  },
-                  {
-                    "type": "stat",
-                    "key": "theology",
-                    "op": ">=",
-                    "value": 60
-                  }
-                ]
+                "type": "stat",
+                "key": "theology",
+                "op": ">=",
+                "value": 60
               }
             ]
           }

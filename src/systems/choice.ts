@@ -36,6 +36,25 @@ export const CHOICE = {
 
 export type Occasion = 'ordination' | 'degree' | 'board';
 
+/** Rome at ordination is rare for an American: the chance the bishop can send him, by how he came to ask. Invented. */
+export const ROME_CHOICE = {
+  /** A man of the College whom the rector put forward for a fifth year. */
+  fifthYear: 0.45,
+  /** A man the rector marked for Rome at home. */
+  tracked: 0.2,
+  /** The top of the class, who only asked. */
+  asked: 0.05,
+} as const;
+
+/** The chance Rome is among the options at ordination, or 0 when the man has no claim to it. */
+export function romeChoiceChance(state: GameState): number {
+  const f = state.flags;
+  if (f.nac_alumnus && f['nac:wants_fifth_year']) return ROME_CHOICE.fifthYear;
+  if (f.rome_track) return ROME_CHOICE.tracked;
+  if (hasInterest(state, 'rome') && formationStanding(state).value >= CHOICE.ordinationStanding) return ROME_CHOICE.asked;
+  return 0;
+}
+
 function prestigeWord(p: number): string {
   return p >= 0.9 ? 'the diocese watches this one' : p >= 0.65 ? 'a parish people have heard of' : p >= 0.4 ? 'an ordinary parish' : p >= 0.25 ? 'a parish the diocese forgets' : 'a parish nobody asked for';
 }
@@ -154,6 +173,7 @@ export function buildChoice(state: GameState, rng: Rng, occasion: Occasion, fall
   const here = parishes.find((p) => p.id === fallback.parishId);
   const options: AssignmentOption[] = [];
   const c = state.character!;
+  let romeRefused = false;
 
   if (occasion === 'ordination') {
     if (here) options.push(option(state, 'first', `Parochial vicar of ${here.name}`, 'The board\'s own choice for you: the parish that fits what the seminary said you were for.', here, 'parochial_vicar', fallback.reasons));
@@ -165,9 +185,13 @@ export function buildChoice(state: GameState, rng: Rng, occasion: Occasion, fall
     if (askedParish && (formationStanding(state).value >= CHOICE.ordinationStanding - INTERESTS.parishSlack || askedParish.kind === 'difficult' || askedParish.kind === 'rural')) {
       options.push(option(state, 'asked', `Parochial vicar of ${askedParish.name}`, 'The parish you told the chancery you wanted. The board heard, and would rather send a man where he asked to go than argue with him about it.', askedParish, 'parochial_vicar', ['You asked for it, and the record was good enough to be heard']));
     }
-    // Rome straight from ordination, for the top of the class who asked for it.
-    if (hasInterest(state, 'rome') && (formationStanding(state).value >= CHOICE.ordinationStanding || !!state.flags.rome_track) && offerById('pv_rome_study')) {
-      options.push({ id: 'rome', headline: 'Rome, for the licentiate', blurb: 'The Gregorian, three years, and the North American College. You asked, the rector agreed, and the bishop would rather send a man who wants it than one who does not. No parish yet; the parish comes home with you.', assignment: fallback, prestige: 'the diocese watches who is sent to Rome', time: 'Rome, all of it', involves: ['Lectures in Italian', 'A thesis, and the Curia across the river', 'A parish when you come home, chosen with the degree in hand'], posting: 'pv_rome_study' });
+    // Rome straight from ordination: rare for an American, rolled, likelier for a man of the College the rector put forward.
+    const romeChance = romeChoiceChance(state);
+    if (romeChance > 0 && offerById('pv_rome_study')) {
+      if (rng.derive('rome').chance(romeChance)) {
+        const fifth = !!state.flags.nac_alumnus;
+        options.push({ id: 'rome', headline: fifth ? 'Rome, for the fifth year and the licentiate' : 'Rome, for the licentiate', blurb: fifth ? 'Back to the Janiculum in October, to the Casa Santa Maria this time, with faculties and a thesis: the licentiate at the university you know, three years, and the diocese watching from four thousand miles. The rector asked for you and the bishop said yes, which bishops rarely do.' : 'The Gregorian, three years, and the Casa Santa Maria. You asked, the rector agreed, and the bishop found a place, which he will tell you more than once was not easy. No parish yet; the parish comes home with you.', assignment: fallback, prestige: 'the diocese watches who is sent to Rome', time: 'Rome, all of it', involves: ['Lectures in Italian', 'A thesis, and the Curia across the river', 'A parish when you come home, chosen with the degree in hand'], posting: 'pv_rome_study' });
+      } else romeRefused = true;
     }
     // The posts he asked for, straight from ordination, for a man whose record earned the choice: the hospital,
     // the Newman Center, canon law in Washington, and the bishop's own desk when the bishop already knows him.
@@ -237,7 +261,7 @@ export function buildChoice(state: GameState, rng: Rng, occasion: Occasion, fall
   }
 
   if (options.length < 2) return null;
-  const why = occasion === 'ordination' ? 'The rector\'s letter was strong enough that the bishop has let you choose, and he has laid out one parish of every kind.' : occasion === 'degree' ? (state.flags.home_from === 'curia' ? 'A man comes home from the Curia with a choice; the bishop lays the diocese on the desk.' : state.flags.home_from === 'service' ? "A man comes home from the Holy See's service with a choice; the bishop lays the diocese on the desk." : 'A man comes home from a degree with a choice; the bishop lays the diocese on the desk.') : 'The chancery thinks well enough of you that the bishop asks which you would rather, of everything that is open.';
+  const why = occasion === 'ordination' ? `The rector's letter was strong enough that the bishop has let you choose, and he has laid out one parish of every kind.${romeRefused ? ' Rome was asked for, and the Gregorian had no place for the diocese this year; the bishop says so plainly, and that he may ask again.' : ''}` : occasion === 'degree' ? (state.flags.home_from === 'curia' ? 'A man comes home from the Curia with a choice; the bishop lays the diocese on the desk.' : state.flags.home_from === 'service' ? "A man comes home from the Holy See's service with a choice; the bishop lays the diocese on the desk." : 'A man comes home from a degree with a choice; the bishop lays the diocese on the desk.') : 'The chancery thinks well enough of you that the bishop asks which you would rather, of everything that is open.';
   return { options, why };
 }
 

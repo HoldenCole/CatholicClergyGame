@@ -45,7 +45,7 @@ describe('study away', () => {
     expect(next.flags['role:parochial_vicar']).toBeUndefined();
     expect(next.beats.some((b) => b.kind === 'assignment' && b.week === next.study!.endWeek)).toBe(true);
     expect(next.career[next.career.length - 1]!.text).toMatch(/Left for Rome/);
-    expect(renderText('{school} in {city}, at {residence}', next)).toBe('the Gregorian in Rome, at the North American College');
+    expect(renderText('{school} in {city}, at {residence}', next)).toBe('the Gregorian in Rome, at the Casa Santa Maria');
   });
 
   it('the hours build what they say, a language becomes a credential, and the Curia is gated', () => {
