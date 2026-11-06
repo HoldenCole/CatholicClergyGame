@@ -5,6 +5,9 @@ import { generateCandidates } from '@/generation/world';
 import { metropoliaOfSee } from '@/content/metropolias';
 import { synthPool } from '@/content/dioceses/synth';
 import { project } from '@/generation/geo';
+import { allEvents } from '@/content';
+import { summerOptions } from '@/content/seminary';
+import { evaluateAll } from '@/engine/conditions';
 
 describe('the Diocese of Austin', () => {
   const preset = presetById('austin')!;
@@ -71,5 +74,31 @@ describe('the Diocese of Austin', () => {
     expect(map.towns.map((t) => t.name)).toContain('Waco');
     // Everything on the sheet, with its margin.
     for (const ring of map.diocese[0]!) for (const [x, y] of ring) { expect(x).toBeGreaterThanOrEqual(-7.5); expect(x).toBeLessThanOrEqual(107.5); expect(y).toBeGreaterThanOrEqual(-7.5); expect(y).toBeLessThanOrEqual(107.5); }
+  });
+
+  it("keeps St. Francis of Assisi in Franklin, and names St. Mary's at Texas A&M as a place of its own", () => {
+    const franklin = preset.parishSeeds.find((s) => s.real?.place === 'Franklin');
+    expect(franklin?.real?.name).toBe('St. Francis of Assisi');
+    expect(franklin?.kind).toBe('rural');
+    expect(preset.places?.some((p) => p.name === 'Franklin')).toBe(true);
+    expect(preset.campus?.school).toMatch(/St\. Mary's Catholic Center at Texas A&M/);
+    expect(preset.campus?.label).toBe("St. Mary's at Texas A&M");
+    // Its scenes are gated on the diocese and the posting, and move the campus program's own dials.
+    const scenes = allEvents.filter((e) => e.id.startsWith('ag_'));
+    expect(scenes.length).toBeGreaterThanOrEqual(8);
+    for (const e of scenes) {
+      expect(e.requires?.some((c) => c.type === 'diocese' && c.value === 'austin'), e.id).toBe(true);
+      expect(e.requires?.some((c) => c.type === 'flag' && c.key === 'study:campus'), e.id).toBe(true);
+    }
+    expect(scenes.some((e) => e.choices.some((c) => c.effects.some((x) => x.target === 'flag' && x.key === 'vocation:entered')))).toBe(true);
+    // The summer at St. Mary's is Austin's, and no one else's.
+    const summer = summerOptions.find((o) => o.id === 'aus_aggie')!;
+    expect(summer.where).toBeTruthy();
+    const cands = generateCandidates(createRng('austin:summer'), 2010);
+    const austin = cands.find((x) => x.presetId === 'austin')!;
+    const houston = cands.find((x) => x.presetId === 'houston')!;
+    const world = (c: typeof austin) => ({ world: { diocese: c.diocese, parishes: c.parishes, generatedYear: 2010, bishopHistory: [], institutes: [] } });
+    expect(evaluateAll(summer.where!, world(austin) as never)).toBe(true);
+    expect(evaluateAll(summer.where!, world(houston) as never)).toBe(false);
   });
 });

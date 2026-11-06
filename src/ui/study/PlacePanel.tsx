@@ -11,7 +11,7 @@ export default function PlacePanel() {
   if (!program?.place) return null;
   const years = Math.floor((game.clock.week - game.study.startWeek) / 52);
   return (
-    <Sheet title={program.place.label}>
+    <Sheet title={game.study.placeLabel ?? program.place.label}>
       <p className="ink-muted text-xs">{years === 0 ? 'Your first year here.' : `${years} year${years === 1 ? '' : 's'} here.`} {placeVerdict(game) ? `So far, ${placeVerdict(game)}.` : ''}</p>
       <dl className="mt-2 flex flex-col gap-1 text-sm">
         {program.place.dials.map((d) => (

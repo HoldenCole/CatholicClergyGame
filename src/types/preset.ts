@@ -64,4 +64,9 @@ export interface DiocesePreset {
    * custom diocese would use; a preset without it rolls on charism alone.
    */
   orders?: Partial<Record<string, { presence: OrderPresence; line?: string }>>;
+  /**
+   * The diocese's campus chaplaincy, where it is a place of its own (St. Mary's at Texas A&M): the names the
+   * Newman posting takes there, and the line the diocese says about it. Absent: the generic Newman Center.
+   */
+  campus?: { school: string; residence: string; label: string; line: string };
 }

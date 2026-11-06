@@ -67,6 +67,8 @@ export interface StudyState {
   label: string;
   school: string;
   residence: string;
+  /** The place's own name on the sheet, where the diocese gives the posting one (the preset's campus). */
+  placeLabel?: string;
   startWeek: number;
   endWeek: number;
   /** Set when the failure roll went against him: he washes out at the end instead of graduating. */
