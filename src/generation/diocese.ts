@@ -109,7 +109,8 @@ export function generateDiocese(rng: Rng, preset: DiocesePreset, year: number): 
   if (tensionLine) character.push(tensionLine);
   if (finLine && financial !== 'strained') character.push(finLine);
 
-  const opportunities = preset.institutions.map((i) => INSTITUTION_LINES[i]);
+  // By name where the preset knows it (St. Edward's, Seton), the generic line where it does not.
+  const opportunities = preset.institutions.map((i) => (preset.institutionNames?.[i] ? `${preset.institutionNames[i]!.name}: ${preset.institutionNames[i]!.line}` : INSTITUTION_LINES[i]));
   const troubled = parishes.filter((p) => p.debt >= 1_000_000).length;
   if (troubled >= 2) opportunities.push(`${troubled === 2 ? 'Two' : 'Three'} parishes in serious financial trouble: a fixer will be noticed.`);
   if (shortage >= 4) opportunities.push('A presbyterate short enough that a competent man is promoted before he asks.');
@@ -136,6 +137,7 @@ export function generateDiocese(rng: Rng, preset: DiocesePreset, year: number): 
       character,
       opportunities,
       institutions: preset.institutions,
+      ...(preset.institutionNames ? { institutionNames: preset.institutionNames } : {}),
       houses: linked.houses,
       complication: rng.pick(preset.complications),
       metropolia: visibleMetropolia(preset.see, preset.region),

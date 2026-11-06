@@ -43,7 +43,7 @@ export default function StudyRoutinePanel() {
 
   return (
     <>
-      <Sheet title={post ? study.label : `${study.label} in ${where}`}>
+      <Sheet title={post ? (study.placeLabel ? `${study.label}: ${study.placeLabel}` : study.label) : `${study.label} in ${where}`}>
         <p className="ink-muted text-xs leading-relaxed">
           {post ? (study.city === 'residence' ? 'Living at the residence, in the room with the view of the parking lot.' : `Living at ${study.residence}.`) : `${study.school.charAt(0).toUpperCase() + study.school.slice(1)}, living at ${study.residence}.`} {pope ? 'There is no term: it ends when you die or lay it down.' : study.city === 'nunciature' ? 'The service has no end date: the Secretariat moves you every few years, and you may ask to go home when it does.' : <>{Math.floor(weeksLeft / 52) > 0 ? `${Math.floor(weeksLeft / 52)} years and ` : ''}{weeksLeft % 52} weeks {post ? (study.city === 'residence' ? 'until he lets you go' : 'until the appointment ends') : `until the degree${study.failed ? ', if it comes' : ''}`}.</>} {post ? `${POST_DAY[study.city] ?? 'The work'} takes the week; the shape of it is yours:` : 'Lectures, the chapel, and the house rule take the week;'} {budget} {post ? 'blocks of it' : 'hours are yours'}.
           {left > 0 ? ` ${left} still unspoken for; ${post ? 'the day takes them' : 'they go to the city'}.` : ' All of them are given.'}

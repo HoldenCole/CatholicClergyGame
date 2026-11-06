@@ -32,8 +32,13 @@ export function textExtras(state: GameState): Record<string, string> {
     if (state.study.city === 'campus') out.city = 'the campus';
   }
   if (state.world) out.diocese = state.world.diocese.visible.name;
-  // The campus chaplaincy by its own name where the diocese gives it one, else the Newman Center.
-  out.campus = (state.world && presetById(state.world.diocese.presetId)?.campus?.school) ?? 'the Newman Center at the state university';
+  // The postings by their own names where the diocese gives them, else the programs' generic words.
+  const preset = state.world ? presetById(state.world.diocese.presetId) : undefined;
+  out.campus = preset?.postings?.campus?.school ?? 'the Newman Center at the state university';
+  out.hospital = preset?.postings?.hospital?.school ?? 'the regional hospital';
+  out.prison = preset?.postings?.prison?.school ?? 'the state penitentiary an hour north';
+  out.seminary_name = preset?.seminaryName ?? 'the seminary';
+  out.university = preset?.institutionNames?.catholic_university?.name ?? 'the Catholic university';
   const pending = pendingAppointment(state);
   const program = pending ? studyProgram(offerById(pending.offerId)?.accept.commitment?.away ?? '') : undefined;
   if (program) {

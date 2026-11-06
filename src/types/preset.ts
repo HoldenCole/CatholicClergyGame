@@ -65,8 +65,23 @@ export interface DiocesePreset {
    */
   orders?: Partial<Record<string, { presence: OrderPresence; line?: string }>>;
   /**
-   * The diocese's campus chaplaincy, where it is a place of its own (St. Mary's at Texas A&M): the names the
-   * Newman posting takes there, and the line the diocese says about it. Absent: the generic Newman Center.
+   * The postings of the diocese by their real names, where they are places of their own: the campus chaplaincy,
+   * the hospital, the prison, the seminary's corridor, the schools office. A posting the preset names takes its
+   * school, residence, and sheet title from here (engine/study.ts); the offer letters name it through the
+   * {campus}, {hospital}, {prison}, and {seminary_name} tokens. Absent: the program's generic words.
    */
-  campus?: { school: string; residence: string; label: string; line: string };
+  postings?: Partial<Record<NamedPostingCity, NamedPosting>>;
+  /** The diocese's institutions by their real names, with a line each, for the card and the sheet. Absent: the generic line. */
+  institutionNames?: Partial<Record<Institution, { name: string; line: string }>>;
+}
+
+export type NamedPostingCity = 'campus' | 'hospital' | 'prison' | 'seminary' | 'formation' | 'schools';
+export interface NamedPosting {
+  /** The place by name: "St. Mary's Catholic Center at Texas A&M". */
+  school: string;
+  residence: string;
+  /** The short name the sheet uses. */
+  label: string;
+  /** A line about it, for the diocese. */
+  line: string;
 }

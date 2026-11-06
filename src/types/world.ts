@@ -95,6 +95,8 @@ export interface DioceseVisible {
   /** Institutions present and what they open. */
   opportunities: string[];
   institutions: Institution[];
+  /** The institutions by their real names, where the preset gives them. */
+  institutionNames?: Partial<Record<Institution, { name: string; line: string }>>;
   /** The religious houses of the diocese: abbeys, friaries, monasteries of nuns. Public knowledge. */
   houses: ReligiousHouse[];
   /** One visible problem. */

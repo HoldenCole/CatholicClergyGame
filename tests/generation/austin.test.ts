@@ -81,8 +81,8 @@ describe('the Diocese of Austin', () => {
     expect(franklin?.real?.name).toBe('St. Francis of Assisi');
     expect(franklin?.kind).toBe('rural');
     expect(preset.places?.some((p) => p.name === 'Franklin')).toBe(true);
-    expect(preset.campus?.school).toMatch(/St\. Mary's Catholic Center at Texas A&M/);
-    expect(preset.campus?.label).toBe("St. Mary's at Texas A&M");
+    expect(preset.postings?.campus?.school).toMatch(/St\. Mary's Catholic Center at Texas A&M/);
+    expect(preset.postings?.campus?.label).toBe("St. Mary's at Texas A&M");
     // Its scenes are gated on the diocese and the posting, and move the campus program's own dials.
     const scenes = allEvents.filter((e) => e.id.startsWith('ag_'));
     expect(scenes.length).toBeGreaterThanOrEqual(8);

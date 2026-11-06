@@ -119,6 +119,11 @@ export default function ParishPanel() {
           return (
             <>
               <p className="ink-muted text-xs leading-relaxed">{v.region}. {NEED_LABEL[v.clergyNeed]}. {v.character[0]}</p>
+              {v.institutionNames && Object.keys(v.institutionNames).length > 0 && (
+                <ul className="ink-faint mt-1 text-xs leading-relaxed">
+                  {Object.values(v.institutionNames).map((n) => n && <li key={n.name}><span className="ink-muted">{n.name}</span>: {n.line}</li>)}
+                </ul>
+              )}
               {voice && (
                 <p className="ink-faint mt-1 text-xs leading-relaxed">
                   {voice.weather[Math.floor(((week % 52) / 52) * voice.weather.length) % voice.weather.length]} {voice.sunday[week % voice.sunday.length]} {voice.presbyterate[Math.floor(week / 52) % voice.presbyterate.length]}

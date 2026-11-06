@@ -1,5 +1,5 @@
 import { presetById } from '@/content/dioceses';
-import type { GameState, OfferDef, StudyState } from '@/types';
+import type { GameState, NamedPosting, NamedPostingCity, OfferDef, StudyState } from '@/types';
 import type { Rng } from './rng';
 import { studyProgram } from '@/content/study';
 import { offerById } from '@/content/offers';
@@ -25,6 +25,12 @@ import { dateOf, sundayOf, termWeek } from './time';
 import { scheduleAppointment } from './appointment';
 
 /** How a place is named in prose. */
+/** The preset's own name for a posting in this city, if it gives one. */
+export function namedPosting(state: Pick<GameState, 'world'>, city: StudyState['city']): NamedPosting | undefined {
+  const preset = presetById(state.world?.diocese.presetId ?? '');
+  return preset?.postings?.[city as NamedPostingCity];
+}
+
 export const CITY_WORD: Record<StudyState['city'], string> = { rome: 'Rome', washington: 'Washington', residence: "the bishop's residence", campus: 'the Newman Center', hospital: 'the hospital', seminary: 'the seminary', chancery: 'the chancery', tribunal: 'the tribunal', auxiliary: 'the chancery', see: 'the see', prison: 'the penitentiary', mission: 'the missions', deployment: 'the deployment', formation: 'the seminary', schools: 'the schools office', curia: 'the Curia', holy_see: 'the Apostolic Palace', academy: 'the Academy', nunciature: 'the nunciature', generalate: "the order's house in Rome", faculty: "the order's faculty in Rome", college: 'the North American College', vatican: 'the Vatican' };
 
 /** Invented: what leaving costs the man's standing with the people he leaves. DESIGN §7.5 rule 3. */
@@ -55,16 +61,17 @@ export function beginStudy(state: GameState, def: OfferDef, failed: boolean, rng
   const carried = Math.round(ch.reputation.parishioners * ARC.parishionersCarryover);
   next = { ...next, character: { ...ch, reputation: { ...ch.reputation, parishioners: carried } } };
   next = applyEffects(next, [{ target: 'reputation', key: 'parishioners', delta: STUDY.leaveParishioners }]);
-  // A diocese whose campus chaplaincy is a place of its own names the posting (the preset's campus: St. Mary's at Texas A&M).
-  const campus = program.city === 'campus' ? presetById(next.world?.diocese.presetId ?? '')?.campus : undefined;
+  // A diocese names its postings where they are places of their own (St. Mary's at Texas A&M, Seton, San Quentin): the posting takes the name.
+  const named = namedPosting(next, program.city);
   const study: StudyState = {
     offerId: def.id,
     program: program.id,
     city: program.city,
-    label: campus ? `Chaplain of ${campus.label}` : program.label,
-    school: campus?.school ?? program.school,
-    residence: campus?.residence ?? program.residence,
-    ...(campus ? { placeLabel: campus.label } : {}),
+    // The label stays the program's (the record says "years as hospital chaplain"); the sheet's title and the body carry the name.
+    label: program.label,
+    school: named?.school ?? program.school,
+    residence: named?.residence ?? program.residence,
+    ...(named ? { placeLabel: named.label } : {}),
     startWeek: next.clock.week,
     // A school with a year of its own runs its weeks from the week it opens, if he comes a little early.
     endWeek: (program.term ? termWeek(next.clock, program.term, next.clock.week) : next.clock.week) + c.weeks,
