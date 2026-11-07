@@ -94,9 +94,11 @@ describe('systems/groups', () => {
     let s = parishState('found');
     const existing = new Set(parishGroups(s).map((g) => g.type));
     const type = (['grief_support', 'recovery', 'mens_group', 'bible_study', 'adoration'] as const).find((t) => !existing.has(t))!;
+    const beforeFounding = planWeek(s).mandatory;
     s = startFounding(s, type);
     expect(s.founding?.apPerWeek).toBeGreaterThan(0);
-    expect(planWeek(s).mandatory).toBeGreaterThan(5);
+    // A group being founded meets in its own time (DESIGN §2.6): the week's hours do not move.
+    expect(planWeek(s).mandatory).toBeCloseTo(beforeFounding);
     expect(() => startFounding(s, type)).toThrow();
     const done: GameState = { ...s, clock: { ...s.clock, week: s.founding!.endWeek } };
     let successes = 0;

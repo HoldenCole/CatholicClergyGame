@@ -4,6 +4,7 @@ import { createRng } from '@/engine/rng';
 import { generateCandidates } from '@/generation/world';
 import { SCHEDULE, applyChange, canOpenBox, canSay, changeSchedule, defaultSchedule, derivedQuality, myMasses, pastorGrants, scheduleAp, scheduleEffect, scheduleMeasure, scheduleOf, schedulePull, sundayDemand } from '@/systems/schedule';
 import { obligationAp, obligationCost, planWeek } from '@/systems/week';
+import { liturgyLoadBlocks, quickChanges } from '@/systems/schedule';
 import { evaluateCondition } from '@/engine/conditions';
 import { applyEffects } from '@/engine/effects';
 import { parishWeekBook } from '@/systems/ministry';
@@ -53,16 +54,55 @@ describe('the parish schedule', () => {
     expect(scheduleAp(sched, 'weekday_masses', 'standard')).toBeCloseTo(SCHEDULE.weekdayMassAp * myMasses(sched).filter((m) => !m.sunday).length);
     expect(derivedQuality(sched, 'weekday_masses')).toBe('standard');
     expect(derivedQuality(sched, 'confessions')).toBe('standard');
-    // Without a schedule the old table stands; with one the liturgy is charged as scheduled.
+    // Without a schedule the old table stands; with one the liturgy is said in its own time (owner's feedback) and only the homily is charged.
     expect(obligationCost('weekday_masses', 'standard')).toBe(obligationAp('weekday_masses', 'standard'));
-    expect(obligationCost('weekday_masses', 'standard', 0, undefined, sched)).toBeCloseTo(scheduleAp(sched, 'weekday_masses', 'standard')!);
-    expect(obligationCost('weekday_masses', 'min', 0, undefined, sched)).toBeLessThan(obligationCost('weekday_masses', 'standard', 0, undefined, sched));
+    expect(obligationCost('weekday_masses', 'standard', 0, undefined, sched)).toBe(0);
+    expect(obligationCost('confessions', 'invested', 0, undefined, sched)).toBe(0);
+    expect(obligationCost('sunday_masses', 'invested', 0, undefined, sched)).toBeGreaterThan(obligationCost('sunday_masses', 'min', 0, undefined, sched));
+    expect(obligationCost('sunday_masses', 'standard', 0, undefined, sched)).toBeLessThanOrEqual(SCHEDULE.homilyAp.standard);
     const plan = planWeek(s);
-    expect(plan.mandatory).toBeGreaterThan(3);
+    expect(plan.mandatory).toBeGreaterThan(1);
     expect(plan.mandatory).toBeLessThan(7);
+    // A change to the schedule moves nothing that is his.
+    const more = { ...s, parish: { ...s.parish!, schedule: applyChange(s, sched, { kind: 'add_mass', day: 'tue', minute: 18 * 60 + 30, language: 'english' }) } };
+    expect(planWeek(more).mandatory).toBeCloseTo(plan.mandatory);
+    // A heavy schedule wears him instead: nothing up to an ordinary week's, then by the Mass and the hour.
+    expect(liturgyLoadBlocks(sched)).toBe(0);
+    let heavy: ParishSchedule = sched;
+    for (const [d, m] of [['mon', 18 * 60 + 30], ['tue', 18 * 60 + 30], ['wed', 18 * 60 + 30], ['thu', 18 * 60 + 30]] as const) heavy = applyChange({ ...s, parish: { ...s.parish!, role: 'pastor' } }, heavy, { kind: 'add_mass', day: d, minute: m, language: 'english' });
+    heavy = applyChange(s, heavy, { kind: 'add_confessions', day: 'fri', minute: 18 * 60, minutes: 120 });
+    expect(liturgyLoadBlocks(heavy)).toBeGreaterThan(0);
     // Round trip: a schedule written to the record survives the save.
     const written = { ...s, parish: { ...s.parish!, schedule: sched } };
     expect(deserialize(serialize(buildSave(written, createRng(written.seed), null))).state.parish!.schedule).toEqual(sched);
+  });
+
+  it('the changes worth making are buttons: computed from the schedule, each a plain change the sheet could make by hand', () => {
+    const s = parishState('sched:quick');
+    const pastor: GameState = { ...s, parish: { ...s.parish!, role: 'pastor' }, phase: 'pastor' };
+    const quick = quickChanges(pastor);
+    expect(quick.length).toBeGreaterThanOrEqual(2);
+    const ids = new Set(quick.map((q) => q.id));
+    expect(ids.size).toBe(quick.length);
+    for (const q of quick) {
+      expect(q.label.length).toBeGreaterThan(8);
+      expect(q.why.length).toBeGreaterThan(8);
+      expect(() => applyChange(pastor, scheduleOf(pastor)!, q.change), q.id).not.toThrow();
+    }
+    // A parish short of Sunday Masses is offered one; one over demand is offered the thinnest to drop; a heavy week a lighter one.
+    const sched = scheduleOf(pastor)!;
+    const short: GameState = { ...pastor, parish: { ...pastor.parish!, schedule: { ...sched, masses: sched.masses.filter((m) => !m.sunday).concat(sched.masses.filter((m) => m.sunday).slice(0, 1)) } } };
+    expect(quickChanges(short).some((q) => q.id === 'sunday')).toBe(true);
+    // Beyond demand (the extra Masses said by another priest of the house, since the canon holds him to three), the thinnest of his is offered to drop.
+    const over: ParishSchedule = { ...sched, masses: [...sched.masses, ...[14 * 60, 15 * 60 + 30, 19 * 60].map((minute, i) => ({ id: `x${i}`, day: 'sun' as const, minute, language: 'english', celebrant: 'other' as const, sunday: true }))] };
+    const thin = quickChanges({ ...pastor, parish: { ...pastor.parish!, schedule: over } }).find((q) => q.id === 'drop:thin');
+    expect(thin).toBeTruthy();
+    expect(thin!.change.kind).toBe('remove_mass');
+    expect(over.masses.find((m) => m.id === (thin!.change as { id: string }).id)!.celebrant).toBe('me');
+    // A vicar sees the same changes, as asks.
+    expect(quickChanges(s).length).toBeGreaterThanOrEqual(1);
+    // Nothing in a save without a parish.
+    expect(quickChanges({ ...s, parish: null })).toEqual([]);
   });
 
   it('the canon holds: two on a weekday, three on a Sunday with the vigil counted; a parish keeps one Sunday Mass', () => {

@@ -46,6 +46,13 @@ export const SCHEDULE = {
   ask: { base: 0.55, perRegard: 1 / 200, mentor: 0.2, absent: 0.25, micromanager: -0.2 },
   /** Times the sheet offers. */
   times: { from: 6 * 60, to: 20 * 60, step: 30 },
+  /**
+   * The liturgy is said in its own time and takes nothing from the week's hours (owner's feedback); what a heavy
+   * schedule does is wear him. Masses and box hours beyond these count as extra blocks for strain. Invented.
+   */
+  load: { massesFree: 8, perMass: 0.4, boxFreeMinutes: 120, perBoxHour: 0.5 },
+  /** The times the quick changes reach for. */
+  quick: { sunday: [7 * 60 + 30, 9 * 60, 10 * 60 + 30, 12 * 60, 17 * 60], vigil: 17 * 60, morning: [7 * 60, 8 * 60, 6 * 60 + 30], evening: 18 * 60 + 30, box: { saturday: 15 * 60 + 30, weeknight: 18 * 60, minutes: 60 } },
 } as const;
 
 export const DAY_LABEL: Record<Weekday, string> = { sun: 'Sunday', mon: 'Monday', tue: 'Tuesday', wed: 'Wednesday', thu: 'Thursday', fri: 'Friday', sat: 'Saturday' };
@@ -170,6 +177,83 @@ export function scheduleAp(s: ParishSchedule, key: ObligationKey, homily: Qualit
   }
 }
 
+/** What a heavy week of Masses and the box costs in wear, in blocks: nothing up to an ordinary week's, then by the Mass and the hour. */
+export function liturgyLoadBlocks(s: ParishSchedule | null): number {
+  if (!s) return 0;
+  const masses = myMasses(s).length;
+  const minutes = myConfessionMinutes(s);
+  return Math.max(0, masses - SCHEDULE.load.massesFree) * SCHEDULE.load.perMass + (Math.max(0, minutes - SCHEDULE.load.boxFreeMinutes) / 60) * SCHEDULE.load.perBoxHour;
+}
+
+/** A change the sheet offers as one button, with its reason. */
+export interface QuickChange {
+  id: string;
+  label: string;
+  change: ScheduleChange;
+  /** What it is for: the pews, the communities, the canon, a lighter week. */
+  why: string;
+}
+
+/**
+ * The changes most worth making, computed from the schedule and the parish (owner's feedback: the sheet needed
+ * buttons for the Mass decisions instead of three menus). Each is a plain `ScheduleChange`; nothing here the
+ * sheet's menus could not do by hand.
+ */
+export function quickChanges(state: GameState): QuickChange[] {
+  const s = scheduleOf(state);
+  const parish = currentParish(state);
+  if (!s || !parish) return [];
+  const out: QuickChange[] = [];
+  const mine = myMasses(s);
+  const sundays = s.masses.filter((m) => m.sunday);
+  const demand = sundayDemand(parish);
+  const q = SCHEDULE.quick;
+  // Sunday: a Mass the households want, at the first ordinary time that is free.
+  if (sundays.length < demand) {
+    const t = q.sunday.find((m) => canSay(s, 'sun', m).ok);
+    if (t !== undefined) out.push({ id: 'sunday', label: `Add a Sunday Mass at ${timeLabel(t)}`, change: { kind: 'add_mass', day: 'sun', minute: t, language: 'english' }, why: `the ${parish.households} households want about ${demand} Sunday Masses and have ${sundays.length}` });
+  }
+  if (!s.masses.some((m) => m.day === 'sat' && m.sunday) && canSay(s, 'sat', q.vigil).ok) out.push({ id: 'vigil', label: `Add a Saturday vigil at ${timeLabel(q.vigil)}`, change: { kind: 'add_mass', day: 'sat', minute: q.vigil, language: 'english' }, why: 'the vigil counts for Sunday, and reaches the people who work on Sunday' });
+  // The communities, in their languages, where the man has the language.
+  for (const lang of communityLanguages(parish)) {
+    if (s.masses.some((m) => m.sunday && m.language === lang)) continue;
+    if (!canSayIn(state, lang)) continue;
+    const t = [12 * 60, 13 * 60 + 30, 17 * 60, 10 * 60 + 30].find((m) => canSay(s, 'sun', m).ok);
+    if (t !== undefined) out.push({ id: `community:${lang}`, label: `Add a ${languageLabel(lang)} Mass on Sunday at ${timeLabel(t)}`, change: { kind: 'add_mass', day: 'sun', minute: t, language: lang }, why: `the parish has a ${languageLabel(lang)}-speaking community with no Mass of its own` });
+  }
+  // A weekday morning where there is none, and an evening Mass once a week.
+  const weekdays: Weekday[] = ['mon', 'tue', 'wed', 'thu', 'fri'];
+  const bare = weekdays.find((d) => !s.masses.some((m) => m.day === d));
+  if (bare) {
+    const t = q.morning.find((m) => canSay(s, bare, m).ok);
+    if (t !== undefined) out.push({ id: `morning:${bare}`, label: `Add a ${DAY_LABEL[bare]} morning Mass at ${timeLabel(t)}`, change: { kind: 'add_mass', day: bare, minute: t, language: 'english' }, why: `${DAY_LABEL[bare]} has no Mass` });
+  }
+  if (!s.masses.some((m) => !m.sunday && m.minute >= 17 * 60)) {
+    const d = weekdays.find((x) => canSay(s, x, q.evening).ok);
+    if (d) out.push({ id: 'evening', label: `Add a ${DAY_LABEL[d]} evening Mass at ${timeLabel(q.evening)}`, change: { kind: 'add_mass', day: d, minute: q.evening, language: 'english' }, why: 'an evening Mass reaches the people who work' });
+  }
+  if (!s.masses.some((m) => !m.sunday && m.minute <= 7 * 60)) {
+    const d = weekdays.find((x) => canSay(s, x, 6 * 60 + 30).ok);
+    if (d) out.push({ id: 'early', label: `Add a ${DAY_LABEL[d]} Mass at ${timeLabel(6 * 60 + 30)}, before work`, change: { kind: 'add_mass', day: d, minute: 6 * 60 + 30, language: 'english' }, why: 'a Mass before seven reaches the shift workers' });
+  }
+  // The box: a Saturday afternoon, and a weeknight.
+  if (!s.confessions.some((c) => c.day === 'sat') && canOpenBox(s, 'sat', q.box.saturday, 90).ok) out.push({ id: 'box:sat', label: `Open the box Saturday at ${timeLabel(q.box.saturday)} for 90 minutes`, change: { kind: 'add_confessions', day: 'sat', minute: q.box.saturday, minutes: 90 }, why: 'a parish keeps a Saturday box' });
+  if (!s.confessions.some((c) => c.minute >= 17 * 60)) {
+    const d = weekdays.find((x) => canOpenBox(s, x, q.box.weeknight, q.box.minutes).ok);
+    if (d) out.push({ id: 'box:evening', label: `Open the box ${DAY_LABEL[d]} at ${timeLabel(q.box.weeknight)} for an hour`, change: { kind: 'add_confessions', day: d, minute: q.box.weeknight, minutes: q.box.minutes }, why: 'a weeknight box reaches the people the Saturday one does not' });
+  }
+  // Too many: the thinnest Sunday Mass of his, and the heaviest week.
+  if (sundays.length > demand) {
+    const thin = [...mine.filter((m) => m.sunday && m.language === 'english' && m.day === 'sun')].sort((a, b) => b.minute - a.minute)[0] ?? mine.find((m) => m.sunday);
+    if (thin) out.push({ id: 'drop:thin', label: `Drop the ${DAY_LABEL[thin.day]} ${timeLabel(thin.minute)} Mass, the thinnest`, change: { kind: 'remove_mass', id: thin.id }, why: `${sundays.length} Sunday Masses for ${parish.households} households: the pews are thin` });
+  }
+  if (liturgyLoadBlocks(s) > 0) {
+    const heavy = mine.filter((m) => !m.sunday).sort((a, b) => a.minute - b.minute)[0];
+    if (heavy) out.push({ id: 'drop:weekday', label: `Drop the ${DAY_LABEL[heavy.day]} ${timeLabel(heavy.minute)} Mass, for a lighter week`, change: { kind: 'remove_mass', id: heavy.id }, why: `${mine.length} Masses and ${myConfessionMinutes(s)} minutes in the box a week wears on you` });
+  }
+  return out;
+}
+
 /** The attendance pull of the schedule: Masses enough for the households, the communities served, the box open when people can come. */
 export function schedulePull(state: GameState): number {
   const s = scheduleOf(state);
@@ -276,7 +360,7 @@ export function applyChange(state: GameState, s: ParishSchedule, change: Schedul
 
 export function describeChange(change: ScheduleChange, s: ParishSchedule): string {
   switch (change.kind) {
-    case 'add_mass': return `a ${languageLabel(change.language)} Mass on ${DAY_LABEL[change.day]} at ${timeLabel(change.minute)}`;
+    case 'add_mass': { const lang = languageLabel(change.language); return `${/^[AEIOU]/.test(lang) ? 'an' : 'a'} ${lang} Mass on ${DAY_LABEL[change.day]} at ${timeLabel(change.minute)}`; }
     case 'remove_mass': { const m = s.masses.find((x) => x.id === change.id); return m ? `dropping the ${DAY_LABEL[m.day]} ${timeLabel(m.minute)} Mass` : 'dropping a Mass'; }
     case 'hand_mass': { const m = s.masses.find((x) => x.id === change.id); return m ? `the ${DAY_LABEL[m.day]} ${timeLabel(m.minute)} Mass ${change.to === 'me' ? 'taken on' : 'handed to ' + change.to}` : 'a Mass handed on'; }
     case 'add_confessions': return `confessions on ${DAY_LABEL[change.day]} at ${timeLabel(change.minute)} for ${change.minutes} minutes`;
