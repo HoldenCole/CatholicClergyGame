@@ -82,7 +82,7 @@ export interface RomeState {
 /** E1 R1.7 — the diplomatic service (§11). */
 export type DiplomatRank = 'student' | 'secretary2' | 'secretary1' | 'counsellor' | 'nuncio';
 /** `release`: the Secretariat has no higher rung for him; the service ends unless he asks for a last country. */
-export type DiplomacySceneKind = 'mission' | 'rotation' | 'release' | 'terna' | 'seventy_five';
+export type DiplomacySceneKind = 'mission' | 'release' | 'terna' | 'seventy_five';
 
 /** A country of the service, as data (content/rome/nunciatures.json). */
 export interface NunciatureDef {
@@ -94,6 +94,29 @@ export interface NunciatureDef {
   hardship: number;
   /** One line about the Church there. */
   church: string;
+  /** What the post is, in two or three sentences: the nunciature, the work, the city. Shown when the post is offered. */
+  line: string;
+}
+
+/** What a man of the service has told the Secretariat he would want: a region, and hard posts or quiet ones. */
+export interface PostingPreference {
+  region?: string;
+  hardship?: 'hard' | 'quiet';
+}
+
+/** A post offered, with what a man can know of it before he goes. */
+export interface PostingOption {
+  country: string;
+  region: string;
+  hardship: number;
+  hardshipWord: string;
+  church: string;
+  line: string;
+  language?: string;
+  /** Whether he has the language. */
+  speaks: boolean;
+  /** Whether it is what he asked for. */
+  preferred: boolean;
 }
 
 export interface Diplomacy {
@@ -105,9 +128,11 @@ export interface Diplomacy {
   country?: string;
   arrivedWeek?: number;
   rotateWeek?: number;
-  /** The next country, chosen when the rotation scene is put to him. */
+  /** The next country, chosen when the posts are put to him. */
   next?: string;
   countries: string[];
+  /** What he has told the Secretariat he would want. */
+  preference?: PostingPreference;
   scene?: { kind: DiplomacySceneKind; dueWeek: number };
 }
 

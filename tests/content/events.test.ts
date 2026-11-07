@@ -272,7 +272,7 @@ function checkCondition(c: Condition, where: string, problems: Problem[]): void 
       if (c.key !== 'scene' || !['created', 'titular', 'eve', 'after', 'eighty', 'consistory'].includes(c.value)) problems.push(`${where}: bad college condition`);
       break;
     case 'diplomacy':
-      if (['hardship', 'years', 'countries', 'in_country'].includes(c.key) ? typeof c.value !== 'number' || !hasOp((c as { op?: unknown }).op) : c.key === 'scene' ? !['mission', 'rotation', 'release', 'terna', 'seventy_five'].includes(String(c.value)) : c.key === 'region' ? !['Africa', 'Asia', 'Latin America', 'Europe', 'Middle East', 'Oceania'].includes(String(c.value)) : !['student', 'secretary2', 'secretary1', 'counsellor', 'nuncio'].includes(String(c.value))) problems.push(`${where}: bad diplomacy condition`);
+      if (['hardship', 'years', 'countries', 'in_country'].includes(c.key) ? typeof c.value !== 'number' || !hasOp((c as { op?: unknown }).op) : c.key === 'scene' ? !['mission', 'release', 'terna', 'seventy_five'].includes(String(c.value)) : c.key === 'region' ? !['Africa', 'Asia', 'Latin America', 'Europe', 'Middle East', 'Oceania'].includes(String(c.value)) : !['student', 'secretary2', 'secretary1', 'counsellor', 'nuncio'].includes(String(c.value))) problems.push(`${where}: bad diplomacy condition`);
       break;
     case 'papacy':
       if (c.key === 'scene' ? !['first', 'journey', 'anniversary', 'laying_down'].includes(String(c.value)) : !['vacant', 'reigning'].includes(c.key) || typeof c.value !== 'boolean') problems.push(`${where}: bad papacy condition`);

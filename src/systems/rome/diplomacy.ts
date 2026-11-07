@@ -1,4 +1,6 @@
-import type { Diplomacy, DiplomacySceneKind, DiplomatRank, GameState, Letter, Npc, NunciatureDef, StudyState } from '@/types';
+import type { Diplomacy, DiplomacySceneKind, DiplomatRank, GameState, Letter, Npc, NunciatureDef, PostingOption, PostingPreference, StudyState } from '@/types';
+import { deliverLetter } from '../review';
+import { speaks } from '../languages';
 import { createRng, type Rng } from '@/engine/rng';
 import { sundayOf } from '@/engine/time';
 import { fromDayNumber } from '@/engine/calendar';
@@ -104,15 +106,108 @@ export function beginAcademy(state: GameState): GameState {
   return schedule(s, 'mission', state.clock.week + DIPLOMACY.missionAfter);
 }
 
-/** A country for the next posting: not one he has served, the hard ones likelier while he is young and when he is first a nuncio. */
+/** How likely the Secretariat is to name a country for him: the hard ones while he is young and when he is first a nuncio, his languages, and what he asked for. */
+export function postingWeight(state: GameState, n: NunciatureDef, nuncio: boolean): number {
+  const d = diplomacyOf(state);
+  const young = (d?.countries.length ?? 0) < 2;
+  const creds = state.character?.credentials ?? [];
+  let w = (young || nuncio ? n.hardship : 4 - n.hardship) * (n.language && creds.includes(n.language) ? 1.6 : 1);
+  const pref = d?.preference;
+  if (pref?.region && pref.region === n.region) w *= PREFERENCE.region;
+  if (pref?.hardship === 'hard') w *= n.hardship >= 3 ? PREFERENCE.hardship : n.hardship <= 1 ? PREFERENCE.against : 1;
+  if (pref?.hardship === 'quiet') w *= n.hardship <= 1 ? PREFERENCE.hardship : n.hardship >= 3 ? PREFERENCE.against : 1;
+  return w;
+}
+
+/** How far what he asked for moves the Secretariat (owner's feedback: the man should be able to say where he would go). Invented. */
+export const PREFERENCE = { region: 2.5, hardship: 2, against: 0.5, /** A second post from a region already drawn, when he did not ask for it. */ sameRegion: 0.3 } as const;
+
+/** A country for the next posting: not one he has served, weighted as the Secretariat weighs them. */
 export function pickCountry(state: GameState, rng: Rng, nuncio: boolean): NunciatureDef {
   const d = diplomacyOf(state);
   const served = new Set(d?.countries ?? []);
-  const young = (d?.countries.length ?? 0) < 2;
   const pool = nunciatures.filter((n) => !served.has(n.country));
   const from = pool.length ? pool : nunciatures;
-  const creds = state.character?.credentials ?? [];
-  return rng.weighted(from, (n) => (young || nuncio ? n.hardship : 4 - n.hardship) * (n.language && creds.includes(n.language) ? 1.6 : 1));
+  return rng.weighted(from, (n) => postingWeight(state, n, nuncio));
+}
+
+/** Three posts the Secretariat has open for him: distinct, unserved where it can, drawn by the same weights. */
+export function drawPostings(state: GameState, rng: Rng, nuncio: boolean, count = 3): NunciatureDef[] {
+  const d = diplomacyOf(state);
+  const served = new Set(d?.countries ?? []);
+  let pool = nunciatures.filter((n) => !served.has(n.country));
+  if (pool.length < count) pool = [...nunciatures];
+  const out: NunciatureDef[] = [];
+  const pref = d?.preference?.region;
+  for (let i = 0; i < count && pool.length; i++) {
+    // Three posts from three parts of the world where it can, unless he asked for one region.
+    const pick = rng.weighted(pool, (n) => postingWeight(state, n, nuncio) * (out.some((o) => o.region === n.region) && n.region !== pref ? PREFERENCE.sameRegion : 1));
+    out.push(pick);
+    pool = pool.filter((n) => n.country !== pick.country);
+  }
+  return out;
+}
+
+export function hardshipWord(h: number): string {
+  return h >= 3 ? 'a hard post' : h >= 2 ? 'a demanding post' : 'a quiet post';
+}
+
+export function postingOption(state: GameState, n: NunciatureDef): PostingOption {
+  const pref = diplomacyOf(state)?.preference;
+  const preferred = !!pref && ((!!pref.region && pref.region === n.region) || (pref.hardship === 'hard' && n.hardship >= 3) || (pref.hardship === 'quiet' && n.hardship <= 1));
+  return { country: n.country, region: n.region, hardship: n.hardship, hardshipWord: hardshipWord(n.hardship), church: n.church, line: n.line, ...(n.language ? { language: n.language } : {}), speaks: !n.language || speaks(state, n.language), preferred };
+}
+
+/** The Secretariat's letter: three posts, put to him. The first posting has no way home; a nuncio's post is still the pope's, but the Secretariat asks. */
+export function offerPostings(state: GameState, rng: Rng, first: boolean): GameState {
+  const d = diplomacyOf(state)!;
+  const nuncio = d.rank === 'nuncio';
+  const options = drawPostings(state, rng, nuncio).map((n) => postingOption(state, n));
+  const why = first
+    ? 'The Secretariat of State has three posts open for a secretary of nunciature, second class, and asks, in the way the service asks, which you would take. Each is three years or so, a nuncio to learn, and a country to explain to Rome in four pages. The service does not promise the one you choose; it mostly gives it.'
+    : nuncio
+      ? `After your years in ${d.country ?? 'this country'} the Holy Father will send you to a new nunciature, and the Secretariat asks which of three you would accept, which is the pope's way of asking. A nuncio does not go home to a parish.`
+      : `After your years in ${d.country ?? 'this country'} the Secretariat is moving you, and puts three posts to you, which it does not have to do. A priest of a diocese who has served the Holy See abroad may also ask, at a moment like this one, to be released to go home, and the Secretariat, in the ordinary way, lets him.`;
+  return { ...state, mode: { kind: 'posting_choice', options, why, first, canGoHome: !first && !nuncio } };
+}
+
+/** What he has told the Secretariat he would want. */
+export function setPostingPreference(state: GameState, pref: PostingPreference): GameState {
+  const d = diplomacyOf(state);
+  if (!d) return state;
+  const clean: PostingPreference = { ...(pref.region ? { region: pref.region } : {}), ...(pref.hardship ? { hardship: pref.hardship } : {}) };
+  const words = [clean.region ? clean.region : null, clean.hardship === 'hard' ? 'the hard posts' : clean.hardship === 'quiet' ? 'a quiet post' : null].filter(Boolean);
+  return { ...withDiplomacy(state, { ...d, preference: clean }), career: [...state.career, { week: state.clock.week, kind: 'note', text: words.length ? `Told the Secretariat where you would go: ${words.join(', ')}.` : 'Told the Secretariat you would go anywhere.' }] };
+}
+
+/** The post chosen, or the way home: the first posting sends him now; a rotation names the next country and the move follows on its week. */
+export function choosePosting(state: GameState, country: string, rng: Rng): GameState {
+  if (state.mode.kind !== 'posting_choice') return state;
+  const { options, canGoHome, first } = state.mode;
+  const week = state.clock.week;
+  if (country === 'home') {
+    if (!canGoHome) throw new Error('the first posting has no way home, and a nuncio does not go home to a parish');
+    return { ...state, mode: { kind: 'clock' }, flags: { ...state.flags, 'diplomat:go_home': true }, career: [...state.career, { week, kind: 'note', text: 'Asked the Secretariat to be released to go home to the diocese; the answer was kind and quick.' }] };
+  }
+  const opt = options.find((o) => o.country === country);
+  const def = nunciatureDef(country);
+  if (!opt || !def) throw new Error(`the Secretariat did not offer ${country}`);
+  const d = diplomacyOf(state)!;
+  if (first || d.country === undefined) {
+    let s = postTo({ ...state, mode: { kind: 'clock' } }, def, rng.derive('post'));
+    s = { ...s, career: [...s.career, { week, kind: 'promotion', text: `Entered the diplomatic service of the Holy See: secretary of nunciature in ${def.country}.` }] };
+    return deliverLetter(s, {
+      sort: 'rome',
+      title: `The service: ${def.country}`,
+      body: [
+        `The Secretariat of State's letter gives you the country you asked for: ${def.country}, where the Church is ${def.church}. You are secretary of nunciature, second class, the lowest rank of the service and the one every nuncio began in.`,
+        def.line,
+        'You will draft what the nuncio signs, carry what he cannot, and learn a country well enough to explain it to Rome in four pages. In three years or so they will move you somewhere else, and then somewhere else again. Your diocese still has your name in its book. The Secretariat has it in another.',
+      ],
+      week,
+    });
+  }
+  return { ...withDiplomacy({ ...state, mode: { kind: 'clock' } }, { ...d, next: def.country }), career: [...state.career, { week, kind: 'note', text: `Told the Secretariat you would take ${def.country}, of the three it offered.` }] };
 }
 
 function chief(rng: Rng, id: string, year: number, country?: string): Npc {
@@ -177,19 +272,19 @@ export function beginService(state: GameState, rng: Rng): { state: GameState; le
     place: Object.fromEntries(program.place!.dials.map((x) => [x.id, 0])),
     record: {},
   };
-  let s = withDiplomacy({ ...state, study, phase: 'study', flags: { ...state.flags, 'study:nunciature': true, diplomat: true } }, { rank: 'secretary2', since: week, countries: [] });
-  const def = pickCountry(s, rng.derive('first'), false);
-  s = postTo(s, def, rng.derive('post'));
-  s = { ...s, career: [...s.career, { week, kind: 'promotion', text: `Entered the diplomatic service of the Holy See: secretary of nunciature in ${def.country}.` }] };
+  const prior = diplomacyOf(state);
+  let s = withDiplomacy({ ...state, study, phase: 'study', flags: { ...state.flags, 'study:nunciature': true, diplomat: true } }, { rank: 'secretary2', since: week, countries: [], ...(prior?.preference ? { preference: prior.preference } : {}) });
+  // The posts are put to him (owner's feedback: he was thrust into a country without knowing what he was choosing). E1 §11.10.
+  s = offerPostings(s, rng.derive('first'), true);
   return {
     state: s,
     letter: {
       sort: 'rome',
-      title: `The service: ${def.country}`,
+      title: 'The service begins',
       body: [
-        `The Secretariat of State's letter gives you a country: ${def.country}, where the Church is ${def.church}. You are secretary of nunciature, second class, the lowest rank of the service and the one every nuncio began in.`,
-        'You will draft what the nuncio signs, carry what he cannot, and learn a country well enough to explain it to Rome in four pages. In three years or so they will move you somewhere else, and then somewhere else again.',
-        'Your diocese still has your name in its book. The Secretariat has it in another.',
+        'The Academy gives its students a dinner and a blessing, and the Secretariat of State gives each of them a country. Yours comes as three: the posts the Secretariat has open for a secretary of nunciature, second class, the lowest rank of the service and the one every nuncio began in.',
+        'The shape of what follows: three years or so in a country, then another, and another; first secretary after three years and counsellor after seven if the reports are read; a nunciature of your own, for a few, from fourteen; and the way home at any move, to the parish your diocese keeps for you. A secretary the Secretariat has no higher rung for after ten years, or a counsellor after eighteen, is released with thanks.',
+        'The Secretariat does not promise the post you choose. It mostly gives it.',
       ],
       week,
     },
@@ -245,7 +340,7 @@ export function diplomacyWeek(state: GameState): DiplomacyWeek {
   const letters: Letter[] = [];
   const d = diplomacyOf(state);
   const study = state.study;
-  if (!d || !study || study.city !== 'nunciature' || d.since === undefined) return { state, lines, letters };
+  if (!d || !study || study.city !== 'nunciature' || d.since === undefined || d.country === undefined) return { state, lines, letters };
   const week = state.clock.week;
   let s = state;
   // The letter at seventy-five: a nuncio's service ends in retirement.
@@ -262,12 +357,12 @@ export function diplomacyWeek(state: GameState): DiplomacyWeek {
   if (cur.rotateWeek !== undefined && !cur.next && week >= cur.rotateWeek - DIPLOMACY.askBefore && !cur.scene) {
     if (releaseDue(s) && !s.flags['diplomat:last_country']) {
       s = schedule({ ...s, flags: { ...s.flags, 'diplomat:released': true } }, 'release', week);
-    } else {
-      const next = pickCountry(s, createRng(`${s.seed}:rotation:${week}`), cur.rank === 'nuncio');
+    } else if (s.mode.kind === 'clock') {
       const flags = { ...s.flags };
       // The last country he asked for: taken now, and the release comes for good at the next rotation.
       if (flags['diplomat:last_country']) { delete flags['diplomat:last_country']; flags['diplomat:last_country_taken'] = true; }
-      s = schedule(withDiplomacy({ ...s, flags }, { ...cur, next: next.country }), 'rotation', week);
+      // The posts are put to him; the move follows on the rotation's week once he has answered.
+      return { state: offerPostings({ ...s, flags }, createRng(`${s.seed}:rotation:${week}`), false), lines, letters };
     }
   }
   const now = diplomacyOf(s)!;

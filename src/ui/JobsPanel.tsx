@@ -33,6 +33,7 @@ function urgencyWord(u: number): string {
 export default function JobsPanel() {
   const game = useGameStore((s) => s.game);
   const setPreference = useGameStore((s) => s.setPreference);
+  const setPostingPreference = useGameStore((s) => s.setPostingPreference);
   const setInterest = useGameStore((s) => s.setInterest);
   const apply = useGameStore((s) => s.applyForOpening);
   const file = useGameStore((s) => s.fileRequest);
@@ -82,6 +83,33 @@ export default function JobsPanel() {
           </p>
         )}
       </Sheet>
+
+      {game.rome?.diplomacy && (
+        <Sheet title="The service: where you would go">
+          {(() => {
+            const pref = game.rome!.diplomacy!.preference ?? {};
+            const regions = ['Africa', 'Asia', 'Latin America', 'Europe', 'Middle East', 'Oceania'];
+            return (
+              <>
+                <p className="ink-muted text-xs leading-relaxed">
+                  The Secretariat moves its men every few years and asks, when it does, which of three posts you would take. What you say here weighs in which three it offers: a region, and the hard posts or the quiet ones. It does not promise. {game.study?.city === 'academy' ? 'The first country comes when the Academy\u2019s years end.' : ''}
+                </p>
+                <div className="mt-2 flex flex-wrap gap-1">
+                  <button className={'pbtn px-2 py-0.5 text-xs ' + (!pref.region ? 'pbtn-active' : '')} onClick={() => setPostingPreference({ ...(pref.hardship ? { hardship: pref.hardship } : {}) })}>Anywhere</button>
+                  {regions.map((r) => (
+                    <button key={r} className={'pbtn px-2 py-0.5 text-xs ' + (pref.region === r ? 'pbtn-active' : '')} onClick={() => setPostingPreference({ ...pref, region: r })}>{r}</button>
+                  ))}
+                </div>
+                <div className="mt-2 flex flex-wrap gap-1">
+                  <button className={'pbtn px-2 py-0.5 text-xs ' + (!pref.hardship ? 'pbtn-active' : '')} onClick={() => setPostingPreference({ ...(pref.region ? { region: pref.region } : {}) })} title="Whatever the Secretariat has">Hard or quiet, as they come</button>
+                  <button className={'pbtn px-2 py-0.5 text-xs ' + (pref.hardship === 'hard' ? 'pbtn-active' : '')} onClick={() => setPostingPreference({ ...pref, hardship: 'hard' })} title="A war, a hostile government, a Church under pressure: the posts the service remembers a man for">The hard posts</button>
+                  <button className={'pbtn px-2 py-0.5 text-xs ' + (pref.hardship === 'quiet' ? 'pbtn-active' : '')} onClick={() => setPostingPreference({ ...pref, hardship: 'quiet' })} title="A conference that meets, a government that is courteous, a garden">A quiet post</button>
+                </div>
+              </>
+            );
+          })()}
+        </Sheet>
+      )}
 
       <Sheet title="Interests on file">
         {(() => {

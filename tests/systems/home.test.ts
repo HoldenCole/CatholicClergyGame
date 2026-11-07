@@ -32,6 +32,7 @@ function away(seed: string, weeks: number): GameState {
     if (game.mode.kind === 'letter') { s.getState().readLetter(); continue; }
     if (game.mode.kind === 'assignment') { s.getState().acceptAssignment(); continue; }
     if (game.mode.kind === 'assignment_choice') { s.getState().chooseAssignment(game.mode.options[0]!.id); continue; }
+    if (game.mode.kind === 'posting_choice') { s.getState().choosePosting(game.mode.options[0]!.country); continue; }
     if (game.mode.kind !== 'clock') throw new Error(`mode ${game.mode.kind}`);
     s.getState().setSpeed('SKIP');
     s.getState().runToStop();

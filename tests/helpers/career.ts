@@ -135,6 +135,7 @@ export function playFriar(seed: string, order: 'OP' | 'OSA', maxWeeks: number, a
       case 'ordination': s.getState().ordain(); break;
       case 'assignment': s.getState().acceptAssignment(); break;
       case 'assignment_choice': s.getState().chooseAssignment(game.mode.options[0]!.id); break;
+      case 'posting_choice': s.getState().choosePosting(game.mode.options[0]!.country); break;
       case 'letter': s.getState().readLetter(); break;
       case 'director': s.getState().chooseDirector(game.mode.options[0]!.npcId, true); break;
       case 'consultation': s.getState().letProvincialDecide(); break;
