@@ -22,9 +22,12 @@ export interface InterestDef {
   blurb: string;
   /** The letter it makes likelier. */
   offer?: string;
+  /** Only a seminarian can file it, and only before the year it is decided (the NAC: through third year, at home). */
+  seminaryThroughYear?: number;
 }
 
 export const INTEREST_DEFS: InterestDef[] = [
+  { id: 'nac', label: 'The North American College', blurb: 'Theology in Rome, four years on the Janiculum, ordination at St. Peter\'s. The rector hears who wants it; the top of the class who asked is put forward in third year, and the bed is still Rome\'s to give.', offer: 'sem_nac', seminaryThroughYear: 3 },
   { id: 'rome', label: 'The Gregorian', blurb: 'Three years in Rome for a licentiate. The top of the class may go straight from ordination; a strong record earns the letter later.', offer: 'pv_rome_study' },
   { id: 'canon_law', label: 'Canon law in Washington', blurb: 'Two years at the Catholic University for the tribunal. The judicial vicar keeps a list; a strong record may go straight from ordination.', offer: 'pv_canon_law_licentiate' },
   { id: 'seminary_faculty', label: 'The seminary faculty', blurb: 'A chair, a classroom, and the formation reports. The rector asks the bishop for men who asked, once they have a degree; never straight from ordination.', offer: 'pv_seminary_faculty' },
@@ -32,6 +35,15 @@ export const INTEREST_DEFS: InterestDef[] = [
   { id: 'newman', label: 'The Newman Center', blurb: 'Sunday night Mass and a room of twenty-year-olds with questions. Campus ministry asks for the men who asked, and a strong record may go straight from ordination.', offer: 'pv_university_chaplain' },
   { id: 'secretary', label: "The bishop's secretary", blurb: "The calendar, the car, and the bishop's mind from the next chair. He picks the men who wanted it, when he trusts them; a man he noticed in the seminary may start there.", offer: 'pv_bishops_secretary' },
 ];
+
+/** The interests a man may file now: the seminary's own fall away once the year that decides them has passed, or he is already in Rome. */
+export function interestsAvailable(state: GameState): InterestDef[] {
+  return INTEREST_DEFS.filter((d) => {
+    if (d.seminaryThroughYear === undefined) return true;
+    if (!state.seminary || state.phase !== 'seminary' || state.flags['seminary:rome'] || state.flags['nac:sent']) return false;
+    return state.seminary.year <= d.seminaryThroughYear;
+  });
+}
 
 export function interestDef(id: string): InterestDef | undefined {
   return INTEREST_DEFS.find((d) => d.id === id);
