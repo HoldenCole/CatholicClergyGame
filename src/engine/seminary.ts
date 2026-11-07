@@ -22,7 +22,7 @@ import { withChoice } from '@/systems/choice';
 import { beginCareer } from './career';
 import { driftYear } from '@/systems/drift';
 import { fromDayNumber } from './calendar';
-import { NAC, italianAfterFirstYear, ordainedFromRome, sendToRome } from '@/systems/nac';
+import { NAC, atRome, italianAfterFirstYear, ordainedFromRome, sendToRome } from '@/systems/nac';
 import { summerAsAsked } from '@/systems/interview';
 
 /** Absolute week offsets within a formation year. Invented. */
@@ -179,11 +179,18 @@ export function playedWeekBeat(state: GameState): { played: boolean; requiredBea
 export function weekPool(pool: GameEvent[], state: GameState): GameEvent[] {
   const { played, requiredBeat } = playedWeekBeat(state);
   if (!played) return [];
+  const here = placePool(pool, state);
   if (requiredBeat) {
-    const beatPool = pool.filter((e) => e.beat === requiredBeat);
+    const beatPool = here.filter((e) => e.beat === requiredBeat);
     if (beatPool.length) return beatPool;
   }
-  return pool.filter((e) => !e.beat || e.beat === REQUIRED_BEATS[state.seminary!.year] || e.beat === 'propaedeutic');
+  return here.filter((e) => !e.beat || e.beat === REQUIRED_BEATS[state.seminary!.year] || e.beat === 'propaedeutic');
+}
+
+/** The scenes that can happen where he is: the home house's own never draw in Rome, the College's never at home. */
+export function placePool(pool: GameEvent[], state: GameState): GameEvent[] {
+  const rome = atRome(state.seminary);
+  return pool.filter((e) => !e.place || (e.place === 'rome') === rome);
 }
 
 export function markBeatFired(state: GameState, event: GameEvent): GameState {

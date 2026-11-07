@@ -386,6 +386,13 @@ export interface GameEvent {
    * (diocesan); 'religious' is a friar's scene; 'any' fires in both. E3 §11.
    */
   campaign?: 'diocesan' | 'religious' | 'any';
+  /**
+   * Where a seminary scene can happen. 'home' is the diocese's own house and
+   * its city (the cathedral's Chrism Mass, the vocations director's car, the
+   * teaching parish forty minutes south); it never draws for a man at the
+   * North American College. 'rome' is the College's own. Absent means either.
+   */
+  place?: 'home' | 'rome';
   yearGate?: number[];
   pressure: Pressure[];
   severity: Severity;

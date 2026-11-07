@@ -79,5 +79,5 @@ export function setInterest(state: GameState, key: string, on: boolean): GameSta
   flags[`interest:${key}`] = true;
   const parish = key.startsWith('parish:') ? state.world?.parishes.find((p) => p.id === key.slice('parish:'.length)) : undefined;
   const label = parish ? parish.name : (interestDef(key)?.label ?? key);
-  return { ...state, flags, career: [...state.career, { week: state.clock.week, kind: 'note', text: `Told the chancery you would be interested: ${label.toLowerCase().startsWith('the ') ? label.toLowerCase() : label}.` }] };
+  return { ...state, flags, career: [...state.career, { week: state.clock.week, kind: 'note', text: `Told the chancery you would be interested: ${label.replace(/^The /, 'the ')}.` }] };
 }

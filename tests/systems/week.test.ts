@@ -16,7 +16,9 @@ export function parishState(seed = 'week', overrides: Partial<GameState> = {}, k
   s = { ...s, character: testCharacter(), phase: 'parochial_vicar', mode: { kind: 'clock' }, flags: { ordained: true, ordination_week: 0 }, ...overrides };
   const assignment = assignFirstParish(s, createRng(`${seed}:assign`));
   s = { ...s, assignment, mode: { kind: 'assignment', assignment } };
-  const started = startAssignment({ ...s, mode: { kind: 'clock' } }, createRng(`${seed}:start`));
+  const begun = startAssignment({ ...s, mode: { kind: 'clock' } }, createRng(`${seed}:start`));
+  // A year in the post already: the letters that move a man wait for that (weeks_served), and most fixtures want them open.
+  const started: GameState = { ...begun, parish: { ...begun.parish!, weeksServed: 60 } };
   if (keepBoss) return started;
   const flags = { ...started.flags };
   for (const k of Object.keys(flags)) if (k.startsWith('boss:')) delete flags[k];

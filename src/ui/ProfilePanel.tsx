@@ -56,9 +56,12 @@ export default function ProfilePanel() {
             {(() => {
               const ow = game.flags.ordination_week;
               const toRetire = 75 - p.age;
-              const weeksTo = typeof ow === 'number' ? (52 - ((game.clock.week - ow) % 52)) % 52 : null;
-              const years = typeof ow === 'number' ? Math.floor((game.clock.week - ow) / 52) : null;
-              return <div className="ink-faint text-xs">{toRetire > 0 ? `Retirement at seventy-five is ${toRetire} year${toRetire === 1 ? '' : 's'} off` : 'Past seventy-five; the letter to Rome is written or due'}{years !== null && years >= 0 ? `; ${years === 0 ? 'the first anniversary of ordination' : `the ${years + 1 === 25 ? 'silver' : years + 1 === 40 ? 'ruby' : years + 1 === 50 ? 'golden' : nth(years + 1)} anniversary of ordination`} is ${weeksTo === 0 ? 'this week' : `in ${weeksTo} week${weeksTo === 1 ? '' : 's'}`}` : ''}.</div>;
+              const since = typeof ow === 'number' ? game.clock.week - ow : null;
+              // On the anniversary week itself it is the anniversary; the week of ordination is not the first one.
+              const onIt = since !== null && since > 0 && since % 52 === 0;
+              const weeksTo = since === null ? null : onIt ? 0 : 52 - (since % 52);
+              const years = since === null ? null : onIt ? since / 52 - 1 : Math.floor(since / 52);
+              return <div className="ink-faint text-xs">{toRetire > 0 ? `Retirement at seventy-five is ${toRetire} year${toRetire === 1 ? '' : 's'} off` : 'Past seventy-five; the letter to Rome is written or due'}{since === 0 ? '; ordained this week' : years !== null && years >= 0 ? `; ${years === 0 ? 'the first anniversary of ordination' : `the ${years + 1 === 25 ? 'silver' : years + 1 === 40 ? 'ruby' : years + 1 === 50 ? 'golden' : nth(years + 1)} anniversary of ordination`} is ${weeksTo === 0 ? 'this week' : `in ${weeksTo} week${weeksTo === 1 ? '' : 's'}`}` : ''}.</div>;
             })()}
             <div className="ink-faint mt-1 text-xs">{p.line}</div>
           </div>

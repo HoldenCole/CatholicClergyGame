@@ -114,7 +114,8 @@ export interface RegardMark {
 }
 
 /** One thing a priest did for a parishioner that the parish remembers. */
-export type BondKind = 'baptized' | 'married' | 'buried' | 'anointed' | 'confirmed' | 'counseled' | 'helped' | 'quarreled';
+/** What passed between you. The last four are the scenes' own: a man you formed, a confession you heard, a thing you told him, a boy you taught. */
+export type BondKind = 'baptized' | 'married' | 'buried' | 'anointed' | 'confirmed' | 'counseled' | 'helped' | 'quarreled' | 'formed' | 'heard' | 'told' | 'taught';
 
 export interface Bond {
   kind: BondKind;
