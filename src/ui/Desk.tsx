@@ -30,6 +30,7 @@ import OffersPanel from './seminary/OffersPanel';
 import FormationPanel from './seminary/FormationPanel';
 import DigestPanel from './DigestPanel';
 import JobsPanel from './JobsPanel';
+import HomePanel from './HomePanel';
 import ProfilePanel from './ProfilePanel';
 import ClubsPanel from './ClubsPanel';
 import InterruptSettings from './InterruptSettings';
@@ -46,6 +47,7 @@ import FoundationPanel from './religious/FoundationPanel';
 
 const LABEL: Record<Sheet, string> = {
   week: 'Week',
+  home: 'Home',
   house: 'House',
   profile: 'You',
   parish: 'Parish',
@@ -80,7 +82,7 @@ export default function Desk() {
   const inParish = !!game.parish;
   const away = !!game.study;
   const friar = !!game.religious && !!game.flags.ordained && !inParish && !away;
-  const tabs: Sheet[] = friar ? ['week', 'jobs', 'profile', 'circle', 'clubs', 'letters', 'record', 'settings'] : inParish ? ['week', 'parish', 'people', 'town', 'deanery', 'map', 'jobs', 'profile', 'circle', 'clubs', 'letters', 'record', 'settings'] : away ? (game.rome?.pontificate ? ['week', 'holy_see', 'place', 'profile', 'circle', 'letters', 'record', 'settings'] : game.see ? ['week', 'see', 'map', 'jobs', 'profile', 'circle', 'letters', 'record', 'settings'] : game.study?.place ? ['week', 'place', 'jobs', 'profile', 'circle', 'letters', 'record', 'settings'] : ['week', 'jobs', 'profile', 'circle', 'letters', 'record', 'settings']) : ['week', 'formation', 'jobs', 'profile', 'circle', 'clubs', 'letters', 'record', 'settings'];
+  const tabs: Sheet[] = friar ? ['week', 'jobs', 'profile', 'circle', 'clubs', 'letters', 'record', 'settings'] : inParish ? ['week', 'parish', 'people', 'town', 'deanery', 'map', 'jobs', 'profile', 'circle', 'clubs', 'letters', 'record', 'settings'] : away ? (game.rome?.pontificate ? ['week', 'holy_see', 'place', 'home', 'profile', 'circle', 'letters', 'record', 'settings'] : game.see ? ['week', 'see', 'map', 'home', 'jobs', 'profile', 'circle', 'letters', 'record', 'settings'] : game.study?.place ? ['week', 'place', 'home', 'jobs', 'profile', 'circle', 'letters', 'record', 'settings'] : ['week', 'home', 'jobs', 'profile', 'circle', 'letters', 'record', 'settings']) : ['week', 'formation', 'jobs', 'profile', 'circle', 'clubs', 'letters', 'record', 'settings'];
   // A friar lives in a house: its sheet sits beside the week. E3 §3.2.
   if (game.religious) tabs.splice(1, 0, 'house');
   // A friar pastor sits in the diocese's deanery. E3 §3.12.
@@ -119,6 +121,7 @@ export default function Desk() {
         {open === 'parish' && <ParishPanel />}
         {open === 'town' && <TownPanel />}
         {open === 'map' && <MapPanel />}
+        {open === 'home' && <HomePanel />}
         {open === 'deanery' && (
           <>
             <DeaneryPanel />

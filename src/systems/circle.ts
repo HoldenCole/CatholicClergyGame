@@ -9,7 +9,7 @@ import { yearOf } from '@/ui/portraits/spec';
  * the groups the shelf uses at the end. A view over records the game
  * already keeps; nothing here is stored.
  */
-export type CircleGroup = 'family' | 'house' | 'class' | 'province' | 'directees' | 'brothers' | 'chancery' | 'bishops' | 'parish' | 'former' | 'others';
+export type CircleGroup = 'family' | 'house' | 'class' | 'province' | 'directees' | 'brothers' | 'chancery' | 'bishops' | 'rome' | 'parish' | 'former' | 'others';
 
 const CIRCLE_LABEL: Record<CircleGroup, string> = {
   family: 'The family',
@@ -20,6 +20,7 @@ const CIRCLE_LABEL: Record<CircleGroup, string> = {
   brothers: 'Brother priests',
   chancery: 'The chancery',
   bishops: 'The bishops',
+  rome: 'The Roman years',
   parish: 'The people of the parish',
   former: 'The people of the parishes before',
   others: 'Others',
@@ -31,9 +32,9 @@ export function circleLabel(state: Pick<GameState, 'religious'>, group: CircleGr
   return (state.religious ? FRIAR_LABEL[group] : undefined) ?? CIRCLE_LABEL[group];
 }
 
-const DIOCESAN_ORDER: readonly CircleGroup[] = ['family', 'class', 'brothers', 'chancery', 'bishops', 'parish', 'former', 'others'];
+const DIOCESAN_ORDER: readonly CircleGroup[] = ['family', 'class', 'brothers', 'chancery', 'bishops', 'rome', 'parish', 'former', 'others'];
 /** A friar's circle is his house first, then the men he entered with, then the province. */
-const FRIAR_ORDER: readonly CircleGroup[] = ['family', 'house', 'class', 'province', 'directees', 'bishops', 'brothers', 'chancery', 'parish', 'former', 'others'];
+const FRIAR_ORDER: readonly CircleGroup[] = ['family', 'house', 'class', 'province', 'directees', 'bishops', 'rome', 'brothers', 'chancery', 'parish', 'former', 'others'];
 
 export function circleOrder(state: Pick<GameState, 'religious'>): readonly CircleGroup[] {
   return state.religious ? FRIAR_ORDER : DIOCESAN_ORDER;
@@ -64,6 +65,9 @@ export function inCircle(npc: Npc, state?: Pick<GameState, 'religious' | 'orderH
   return Math.abs(npc.relationship) >= 15 || (npc.bonds?.length ?? 0) > 0 || (npc.marks?.length ?? 0) > 0 || npc.role === 'bishop' || npc.role === 'family';
 }
 
+/** The tags the Roman people carry (systems/nac.ts, rome/diplomacy.ts, rome/curia.ts, rome/nuncio.ts). */
+export const ROME_TAGS = ['nac', 'nac_classmate', 'nac_rector', 'nac_vice_rector', 'nuncio_chief', 'nuncio', 'curia_prefect', 'curia_secretary', 'curia_colleague', 'secretary_of_state', 'pope_secretary'];
+
 function groupOf(state: GameState, npc: Npc): CircleGroup {
   const pid = state.assignment?.parishId;
   if (npc.role === 'family') return 'family';
@@ -74,6 +78,8 @@ function groupOf(state: GameState, npc: Npc): CircleGroup {
     if (npc.tags.includes('directee')) return 'directees';
     if (npc.tags.includes('friar') || npc.tags.includes('provincial') || npc.tags.includes('prior')) return 'province';
   }
+  // The people of the Roman years keep a place of their own after he comes home: the College, the Academy, the nunciatures, the Curia.
+  if (ROME_TAGS.some((t) => npc.tags.includes(t))) return 'rome';
   if (npc.role === 'bishop' || npc.tags.includes('bishop_emeritus')) return 'bishops';
   if (npc.role === 'official' || npc.tags.includes('chancery')) return 'chancery';
   if (npc.role === 'priest' || npc.role === 'formator') return 'brothers';

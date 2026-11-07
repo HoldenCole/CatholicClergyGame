@@ -82,6 +82,14 @@ export function whoWord(state: GameState, npc: Npc): string {
   if (npc.role === 'family') return npc.tags.find((t) => ['mother', 'father', 'sibling'].includes(t)) ?? 'family';
   if (npc.role === 'bishop') return 'bishop';
   if (npc.role === 'formator') return npc.tags.find((t) => ['rector', 'vice_rector', 'spiritual_director', 'formation_advisor', 'vocation_director'].includes(t))?.replace(/_/g, ' ') ?? 'formator';
+  // The Roman years' people by what they were to him, not by the chancery's words.
+  if (npc.tags.includes('nuncio_chief')) return 'the nuncio you served under';
+  if (npc.tags.includes('nuncio')) return 'the nuncio';
+  if (npc.tags.includes('curia_prefect')) return 'the prefect';
+  if (npc.tags.includes('curia_secretary')) return "the dicastery's secretary";
+  if (npc.tags.includes('curia_colleague')) return 'of the dicastery';
+  if (npc.tags.includes('nac_rector')) return "the College's rector";
+  if (npc.tags.includes('nac_vice_rector')) return "the College's vice-rector";
   if (npc.role === 'official') return npc.tags.find((t) => ['vicar_general', 'chancellor', 'vicar_for_clergy'].includes(t))?.replace(/_/g, ' ') ?? 'chancery';
   if (npc.role === 'priest') return npc.tags.some((t) => t.startsWith('pastor:')) ? 'pastor' : state.religious ? 'diocesan priest' : 'brother priest';
   const staff = npc.tags.find((t) => ['secretary', 'dre', 'music_director', 'maintenance'].includes(t));
