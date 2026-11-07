@@ -32,7 +32,7 @@ import { houseHelp, houseRelief, houseWeek } from './houses';
 import { brothersWeek } from './brothers';
 import type { Rng } from '@/engine/rng';
 import { horariumLoad } from './religious/horarium';
-import { SCHEDULE, derivedQuality, scheduleAp, scheduleOf, schedulePull } from './schedule';
+import { SCHEDULE, derivedQuality, liturgyLoadBlocks, scheduleOf, schedulePull } from './schedule';
 import { restFactor } from './night';
 import { friendshipLoad } from './religious/friendship';
 
@@ -145,11 +145,12 @@ export function obligationAp(key: ObligationKey, quality: Quality, relief = 0, s
  */
 export function obligationCost(key: ObligationKey, quality: Quality, relief = 0, stats?: Stats, schedule: ParishSchedule | null = null): number {
   if (!schedule || !(key === 'sunday_masses' || key === 'weekday_masses' || key === 'confessions')) return obligationAp(key, quality, relief, stats);
-  const base = scheduleAp(schedule, key, quality) ?? 0;
-  // Skill saves time on the homily, as before; the Masses and the box take what they take.
-  const saved = key === 'sunday_masses' && quality !== 'min' ? efficiencyOf(key, stats) : 0;
-  const cut = key !== 'sunday_masses' && quality === 'min' ? SCHEDULE.cutFactor : 1;
-  return Math.max(OBLIGATION_FLOOR, base * cut - relief - saved);
+  // Owner's feedback: a change to the schedule should not move the hours that are his. With a schedule the Masses and the
+  // box are said in their own time, like the Office; only the homily's preparation is charged here, and a heavy schedule
+  // wears him instead (systems/schedule.ts liturgyLoadBlocks).
+  if (key !== 'sunday_masses') return 0;
+  const saved = quality !== 'min' ? efficiencyOf(key, stats) : 0;
+  return Math.max(OBLIGATION_FLOOR, SCHEDULE.homilyAp[quality] - relief - saved);
 }
 
 export function adminFloorFor(state: GameState): number {
@@ -240,7 +241,10 @@ export function planWeek(state: GameState): Plan {
     obligations.confessions = derivedQuality(schedule, 'confessions');
   }
   const costOf = (k: ObligationKey, q: Quality) => obligationCost(k, q, (relief as Record<string, number>)[k] ?? 0, stats, schedule);
-  const mandatoryOf = () => Math.max(0, fixed + OBLIGATION_KEYS.reduce((n, k) => n + costOf(k, obligations[k]), 0));
+  // With a schedule the Masses and the box cost no hours, so what relieves them (a Saturday confessor from the priory, a group that runs
+  // its own) gives hours back to the week instead of taking them off a cost that is not there.
+  const liturgyRelief = schedule ? (['sunday_masses', 'weekday_masses', 'confessions'] as const).reduce((n, k) => n + ((relief as Record<string, number>)[k] ?? 0), 0) : 0;
+  const mandatoryOf = () => Math.max(0, fixed - liturgyRelief + OBLIGATION_KEYS.reduce((n, k) => n + costOf(k, obligations[k]), 0));
 
   let neglected = false;
   let guard = 0;
@@ -364,7 +368,8 @@ export function resolveWeek(state: GameState, rng: Rng): { state: GameState; led
   const sacrificed = sacrificesOf(state);
   for (const d of sacrificed) next = applyEffects(next, d.effectsPerWeek, {}, `${d.label} cut from the week`);
   const strainBefore = strainOf(state);
-  const strain = strainAfterWeek(state, sacrificed.reduce((n, d) => n + d.strain, 0), extraBlocks(state));
+  // A heavy schedule wears him as extra hours do: the Masses and the box beyond an ordinary week's.
+  const strain = strainAfterWeek(state, sacrificed.reduce((n, d) => n + d.strain, 0), extraBlocks(state) + liturgyLoadBlocks(scheduleOf(state)));
   if (strain >= WEEK.strainWorn) next = applyEffects(next, [{ target: 'stat', key: 'piety', delta: -WEEK.strainPietyDrain }], {}, 'worn out');
   if (strainBefore < WEEK.strainWorn && strain >= WEEK.strainWorn) lines.push('You are tired in a way sleep does not fix.');
   if (strainBefore < WEEK.strainSick && strain >= WEEK.strainSick) lines.push('You were sick for two days and said Mass anyway. Something has to give.');

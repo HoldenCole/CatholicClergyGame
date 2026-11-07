@@ -4,7 +4,7 @@ import { newGame } from '@/engine/game';
 import { generateCandidates, installWorld } from '@/generation/world';
 import { assignFirstParish } from '@/systems/assignment';
 import { startAssignment } from '@/engine/parish';
-import { efficiencyWords, obligationAp, hoursOf, adminFloorFor, planWeek, resolveWeek, weekBudget } from '@/systems/week';
+import { efficiencyWords, obligationAp, hoursOf, adminFloorFor, planWeek, resolveWeek, seasonalLoad, weekBudget } from '@/systems/week';
 import { testCharacter } from '../helpers/fixtures';
 import type { GameState } from '@/types';
 
@@ -28,9 +28,10 @@ describe('systems/week', () => {
     const s = parishState();
     const plan = planWeek(s);
     expect(weekBudget(s)).toBe(12);
-    // 2 + 0.75 + 1 + 1 + 1.5 at standard, ordinary time, vicar, less what a thriving group gives back and what his stats save.
-    expect(plan.mandatory).toBeGreaterThanOrEqual(4.5);
-    expect(plan.mandatory).toBeLessThanOrEqual(6.25);
+    // The homily (1) + meetings (1) + the sacraments (1.5) at standard, ordinary time, vicar, less what a thriving group gives back and
+    // what his stats save. The Masses and the box are said in their own time (schedule round two) and are not here.
+    expect(plan.mandatory).toBeGreaterThanOrEqual(2);
+    expect(plan.mandatory).toBeLessThanOrEqual(4);
     expect(Object.values(plan.discretionary).reduce((a, b) => a + b, 0)).toBe(3);
     expect(plan.neglected).toBe(false);
     expect(plan.obligations).toEqual(s.parish!.routine.obligations);
@@ -67,17 +68,22 @@ describe('systems/week', () => {
     s = { ...s, parish: { ...s.parish!, routine: { ...s.parish!.routine, obligations: { ...s.parish!.routine.obligations, sunday_masses: 'invested' } } } };
     const plan = planWeek(s);
     expect(plan.mandatory).toBeLessThanOrEqual(12);
-    expect(plan.obligations.meetings).toBe('min');
-    expect(Object.values(plan.discretionary).reduce((a, b) => a + b, 0)).toBeLessThan(3);
+    // Holy Week takes most of the week; with the Masses in their own time it no longer forces a cut on its own,
+    // but a man who asks for more than the week has is cut in the fixed order, meetings first.
+    expect(seasonalLoad(s)).toBeGreaterThanOrEqual(4);
+    expect(plan.mandatory).toBeGreaterThan(planWeek(parishState()).mandatory + 3);
+    const greedy = { ...s, parish: { ...s.parish!, routine: { ...s.parish!.routine, discretionary: { visits: 6, study: 6, groups: 6 } } } };
+    expect(Object.values(planWeek(greedy).discretionary).reduce((a, b) => a + b, 0)).toBeLessThan(18);
+    expect(planWeek(greedy).obligations.meetings).toBe(plan.obligations.meetings);
   });
 
   it('minimum everywhere buys back AP; a recycled homily streak costs lay support', () => {
     let s = parishState();
     const min = { sunday_masses: 'min', weekday_masses: 'min', confessions: 'min', meetings: 'min', sacramental_prep: 'min' } as const;
     s = { ...s, parish: { ...s.parish!, routine: { obligations: { ...min }, discretionary: { visits: 4, study: 1 } } } };
-    // The Masses and the box are charged as scheduled, said quickly at the minimum; the homily, meetings and sacraments at theirs.
-    expect(planWeek(s).mandatory).toBeGreaterThanOrEqual(3);
-    expect(planWeek(s).mandatory).toBeLessThanOrEqual(4.5);
+    // The Masses and the box are said in their own time; the homily, meetings and sacraments at their minimum.
+    expect(planWeek(s).mandatory).toBeGreaterThanOrEqual(1);
+    expect(planWeek(s).mandatory).toBeLessThanOrEqual(3);
     expect(planWeek(s).mandatory).toBeLessThan(planWeek(parishState()).mandatory);
     const before = s.character!.reputation.parishioners;
     const rng = createRng('min');

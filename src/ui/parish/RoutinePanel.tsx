@@ -61,7 +61,9 @@ export default function RoutinePanel() {
   if (desk > 0) segments.push({ label: 'The desk', ap: desk, kind: 'desk' });
   for (const key of OBLIGATION_KEYS) {
     const def = obligationDefs.find((o) => o.key === key)!;
-    segments.push({ label: def.label, ap: obligationAp(key, plan.obligations[key], 0, game.character?.stats), kind: 'obligation' });
+    // The Masses and the box are said in their own time (the schedule sheet); only the homily is on the bar.
+    if (key === 'weekday_masses' || key === 'confessions') continue;
+    segments.push({ label: key === 'sunday_masses' ? 'The homily' : def.label, ap: key === 'sunday_masses' ? SCHEDULE.homilyAp[plan.obligations[key]] : obligationAp(key, plan.obligations[key], 0, game.character?.stats), kind: 'obligation' });
   }
   for (const [id, ap] of Object.entries(plan.discretionary)) if (ap > 0) segments.push({ label: actionDefs.find((a) => a.id === id)?.label ?? id, ap, kind: 'action' });
   if (plan.slack > 0) segments.push({ label: 'Unspoken for', ap: plan.slack, kind: 'slack' });
@@ -78,7 +80,7 @@ export default function RoutinePanel() {
           A working week of about {hoursOf(budget)} hours, after the Office, meals, and sleep, which are not counted here
           {extra > 0 ? ` (${hoursOf(WEEK.baseAp[game.parish.role])} of them the diocese's, and ${hoursOf(extra)} you have taken from your own life)` : ''}. Obligations take {hoursOf(plan.mandatory)}
           {fixed > 0 ? ` (${hoursOf(fixed)} of that is the season and the desk)` : ''}, leaving {hoursOf(available)} for everything else, and never fewer than {HOURS.freeFloor}
-          {requested > available ? `; you have asked for ${hoursOf(requested)}, so it will be trimmed` : ''}. Every block below is four hours; the daily Mass is half an hour a day and is costed that way. The projects, a group being founded, and a problem in hand are likewise outside these hours.
+          {requested > available ? `; you have asked for ${hoursOf(requested)}, so it will be trimmed` : ''}. Every block below is four hours. The Masses and the box are said in their own time, like the Office, and are on the schedule sheet; a heavy schedule wears you rather than costing hours here. The projects, a group being founded, and a problem in hand are likewise outside these hours.
         </p>
         {efficiencyWords(game.character?.stats).length > 0 && <p className="ink-faint mt-1 text-xs">What you know saves you time: {efficiencyWords(game.character?.stats).join('; ')}.</p>}
         <MassSaidNote />
@@ -104,7 +106,7 @@ export default function RoutinePanel() {
       </Sheet>
       <SchedulePanel />
       <Sheet title="The standing routine">
-        <p className="ink-muted text-xs leading-relaxed">The Masses and the box are charged as scheduled above. What is left to decide here is how the homily is prepared, and how the meetings and the sacraments are kept.</p>
+        <p className="ink-muted text-xs leading-relaxed">The Masses and the posted hours in the box are on the schedule sheet and take their own time. What is decided here is how the homily is prepared, and how the meetings and the sacraments are kept.</p>
         <ul className="mt-3 flex flex-col gap-2">
           {OBLIGATION_KEYS.filter((key) => key !== 'weekday_masses' && key !== 'confessions').map((key) => {
             const def = obligationDefs.find((o) => o.key === key)!;
