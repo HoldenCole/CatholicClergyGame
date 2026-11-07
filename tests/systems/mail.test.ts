@@ -13,7 +13,7 @@ function withClassmates(s: GameState): GameState {
   return { ...s, npcs: { ...s.npcs, cm1: mk('cm1', 'active', ['pastor', 'rome_alumnus']), cm2: mk('cm2', 'active', []), cm3: mk('cm3', 'left', []), ...(s.npcs.mother ? {} : { mother }) } };
 }
 
-const KNOWN_TOKENS = new Set(['sender', 'sender_first', 'who', 'bond', 'former_parish', 'years', 'post', 'parish', 'town', 'diocese', 'first_name', 'name', 'surname', 'bishop', 'bishop_last', 'kin', 'sibling']);
+const KNOWN_TOKENS = new Set(['sender', 'sender_first', 'who', 'bond', 'former_parish', 'years', 'post', 'parish', 'town', 'diocese', 'first_name', 'name', 'surname', 'bishop', 'bishop_last', 'kin', 'sibling', 'country', 'house', 'superior', 'members']);
 const TARGETS = new Set(['relationship', 'reputation', 'stat', 'strain', 'flag', 'bond', 'town', 'known', 'money', 'honesty']);
 
 describe('the mailbag', () => {

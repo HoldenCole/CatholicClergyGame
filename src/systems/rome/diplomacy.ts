@@ -115,7 +115,7 @@ export function pickCountry(state: GameState, rng: Rng, nuncio: boolean): Nuncia
   return rng.weighted(from, (n) => (young || nuncio ? n.hardship : 4 - n.hardship) * (n.language && creds.includes(n.language) ? 1.6 : 1));
 }
 
-function chief(rng: Rng, id: string, year: number): Npc {
+function chief(rng: Rng, id: string, year: number, country?: string): Npc {
   const heritage = rng.weighted(['italian', 'polish', 'german', 'irish', 'mexican', 'filipino', 'indian', 'nigerian', 'lebanese'] as const, (h) => (h === 'italian' ? 4 : 1));
   return finishNpc(rng, {
     id,
@@ -125,7 +125,7 @@ function chief(rng: Rng, id: string, year: number): Npc {
     birthYear: year - rng.int(56, 72),
     origin: 'urban_ethnic',
     stats: addStats(rollBaseStats(rng, 45, 70), { administration: 10 }),
-    tags: ['nuncio_chief'],
+    tags: ['nuncio_chief', ...(country ? [`country:${country}`] : [])],
     alignment: rng.int(-50, 50),
     relationship: 0,
     ambition: rng.int(20, 90),
@@ -141,7 +141,7 @@ function postTo(state: GameState, def: NunciatureDef, rng: Rng): GameState {
   const npcs: GameState['npcs'] = {};
   for (const [id, npc] of Object.entries(state.npcs)) npcs[id] = npc.tags.includes('nuncio_chief') && npc.status === 'active' ? { ...npc, status: 'retired' } : npc;
   if (!nuncio) {
-    const boss = chief(rng.derive('chief'), `nuncio_chief_${week}`, fromDayNumber(sundayOf(state.clock)).year);
+    const boss = chief(rng.derive('chief'), `nuncio_chief_${week}`, fromDayNumber(sundayOf(state.clock)).year, def.country);
     npcs[boss.id] = boss;
   }
   const study = state.study!;

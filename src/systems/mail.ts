@@ -10,6 +10,7 @@ import { deliverLetter, readLetter } from './review';
 import { bondWord, bondsPhrase, parishPeople } from './bonds';
 import { castName } from './cast';
 import { classmatePost } from './classmates';
+import { housesOf, standingOf } from './houses';
 
 /**
  * The mailbag. DESIGN §8.10: letters from someone, a few a year, that tell
@@ -17,9 +18,11 @@ import { classmatePost } from './classmates';
  * the past reaches him from. Templates in content/mail.json name the kind
  * of sender; this file finds one, or the letter does not come.
  */
-export type MailFrom = 'parishioner' | 'former_parish' | 'buried' | 'classmate' | 'classmate_left' | 'stranger' | 'stranger_column' | 'seminarian_mother' | 'mother' | 'father' | 'sibling' | 'old_pastor' | 'bishop_emeritus' | 'emeritus_funeral' | 'old_bloc' | 'kin';
+export type MailFrom = 'parishioner' | 'former_parish' | 'buried' | 'classmate' | 'classmate_left' | 'stranger' | 'stranger_column' | 'seminarian_mother' | 'mother' | 'father' | 'sibling' | 'old_pastor' | 'bishop_emeritus' | 'emeritus_funeral' | 'old_bloc' | 'kin'
+  // One world, round 2: the past of the other lanes writes too. The nuncio he served under, a colleague of the dicastery, a man of the College's table, a man he formed, the superior of a house that knows him.
+  | 'nuncio_chief' | 'curia_colleague' | 'nac_classmate' | 'formed' | 'house';
 
-export const MAIL_FROM: readonly MailFrom[] = ['parishioner', 'former_parish', 'buried', 'classmate', 'classmate_left', 'stranger', 'stranger_column', 'seminarian_mother', 'mother', 'father', 'sibling', 'old_pastor', 'bishop_emeritus', 'emeritus_funeral', 'old_bloc', 'kin'] as const;
+export const MAIL_FROM: readonly MailFrom[] = ['parishioner', 'former_parish', 'buried', 'classmate', 'classmate_left', 'stranger', 'stranger_column', 'seminarian_mother', 'mother', 'father', 'sibling', 'old_pastor', 'bishop_emeritus', 'emeritus_funeral', 'old_bloc', 'kin', 'nuncio_chief', 'curia_colleague', 'nac_classmate', 'formed', 'house'] as const;
 
 export interface MailDef {
   id: string;
@@ -48,6 +51,8 @@ export const MAIL = {
   gapWeeks: 4,
   /** A bond old enough for someone to write about it. */
   buriedYears: 5,
+  /** A house's regard at which its superior writes. */
+  houseRegard: 20,
 } as const;
 
 export function mailDef(id: string): MailDef | undefined {
@@ -175,6 +180,48 @@ export function findSender(state: GameState, from: MailFrom, rng: Rng): FoundSen
       const sib = npcs.find((n) => npc.tags.includes(`child_of:${n.id}`));
       const who = `your ${npc.tags.includes('niece') ? 'niece' : 'nephew'}${sib ? `, ${sib.name.first}'s` : ''}`;
       return { sender: { npcId: npc.id, name: npc.name.first, who }, bindings: { '@sender': npc.id }, extra: { sender: npc.name.first, sender_first: npc.name.first, who, kin: npc.name.first, sibling: sib?.name.first ?? 'your sister' } };
+    }
+    case 'nuncio_chief': {
+      // The nuncio he served under, retired or still at a post, writing from the country or from Rome.
+      const pool = npcs.filter((n) => n.status !== 'dead' && n.tags.includes('nuncio_chief') && n.relationship >= 5);
+      if (!pool.length) return null;
+      const npc = rng.weighted(pool, (n) => Math.max(1, 10 + n.relationship));
+      const country = npc.tags.find((t) => t.startsWith('country:'))?.slice('country:'.length) ?? 'the country';
+      const found = person(state, npc, `the nuncio you served under in ${country}`, { country });
+      return found;
+    }
+    case 'curia_colleague': {
+      const pool = npcs.filter((n) => n.status !== 'dead' && n.tags.some((t) => t === 'curia_colleague' || t === 'curia_secretary') && n.relationship >= 5);
+      if (!pool.length) return null;
+      const npc = rng.weighted(pool, (n) => Math.max(1, 10 + n.relationship));
+      return person(state, npc, npc.tags.includes('curia_secretary') ? "the dicastery's secretary" : 'of the dicastery');
+    }
+    case 'nac_classmate': {
+      const pool = npcs.filter((n) => n.status === 'active' && n.tags.includes('nac_classmate'));
+      if (!pool.length) return null;
+      const npc = rng.weighted(pool, (n) => Math.max(1, 20 + n.relationship));
+      const found = person(state, npc, "of the College's table", { post: classmatePost(npc) });
+      found.sender.name = `Fr. ${npc.name.first} ${npc.name.last}`;
+      found.extra.sender = found.sender.name;
+      return found;
+    }
+    case 'formed': {
+      const pool = npcs.filter((n) => n.status === 'active' && n.tags.includes('formed_by:player'));
+      if (!pool.length) return null;
+      const npc = rng.weighted(pool, (n) => Math.max(1, 20 + n.relationship));
+      const found = person(state, npc, 'a man you formed');
+      found.sender.name = `Fr. ${npc.name.first} ${npc.name.last}`;
+      found.extra.sender = found.sender.name;
+      return found;
+    }
+    case 'house': {
+      // The superior of a house of the diocese that knows him: no man of the house is bound, so the effects are the man's own.
+      const known = housesOf(state).filter((h) => standingOf(state, h.id).regard >= MAIL.houseRegard);
+      if (!known.length) return null;
+      const house = rng.pick(known);
+      const superior = house.members === 'nuns' ? 'prioress' : house.members === 'monks' ? 'abbot' : house.members === 'canons' ? 'provost' : 'prior';
+      const name = `the ${superior} of ${house.name}`;
+      return { sender: { name, who: house.orderLabel }, bindings: {}, extra: { sender: name, sender_first: `the ${superior}`, who: house.orderLabel, house: house.name, superior, members: house.members } };
     }
     case 'old_pastor': {
       const current = state.assignment?.parishId;

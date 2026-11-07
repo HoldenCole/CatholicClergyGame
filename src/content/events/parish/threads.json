@@ -1,0 +1,956 @@
+{
+  "_notes": "One world, round 2 (DESIGN §9A): the tracks come home. What a parish priest is asked, and by whom, because of the years he spent elsewhere: the diplomatic service (diplomat_served), the Curia (curia_served), the College as a student (nac_alumnus) and as a formator (nac:formator_served), the basilica's confessional (vatican:chaplain_served), the hospital's unit (cpe_unit), the Roman degree (STL, STD). Ids th_*. Selectors: @bishop only; the people of the years away are named in prose, since they are retired or abroad. Flags written, all threads:*.",
+  "events": [
+    {
+      "id": "th_embassy_calls",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 8,
+      "suppressYears": 99,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "diplomat_served",
+          "value": true
+        }
+      ],
+      "title": "The Embassy Calls",
+      "body": "A man from the State Department's regional desk telephones the rectory, having found you through a nuncio who remembered the American. There is a delegation coming from a country you served in, and a dinner, and nobody in the city who knows the difference between the bishops and the government's bishops. Would you come, in a collar, and sit where they put you?",
+      "choices": [
+        {
+          "id": "go",
+          "label": "Go, and sit where they put you",
+          "outcome": "You go. You know the delegation's leader from a reception twenty years ago; he knows you. The dinner goes as dinners go, and the desk officer sends a note afterwards that the department is grateful, and the nuncio in Washington hears of it and is pleased, and the chancery hears of it and is not sure what to make of a pastor at the State Department.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": -1
+            },
+            {
+              "target": "flag",
+              "key": "threads:embassy_dinner",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "decline",
+          "label": "Say the parish has you on Thursday nights",
+          "outcome": "You say Thursday is the parish's. The desk finds a Jesuit. The nuncio's man does not hear of it, which is the point, and the parish has its pastor at the finance council, which is the other point.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": -1
+            }
+          ]
+        }
+      ],
+      "once": true
+    },
+    {
+      "id": "th_bishop_from_the_country",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 8,
+      "suppressYears": 99,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "diplomat_served",
+          "value": true
+        }
+      ],
+      "title": "A Bishop from the Country",
+      "body": "A bishop from a country you served in is in the city for a conference and has asked, through the chancery, to see the priest who was at the nunciature when his diocese was divided. He arrives at the rectory in a borrowed car with a priest who speaks no English and a photograph of the cathedral you remember as a shell. He would like to say Mass for your people on Sunday, and he would like, at lunch, to ask about the terna.",
+      "choices": [
+        {
+          "id": "mass",
+          "label": "Give him the eleven o'clock and the pulpit",
+          "outcome": "He preaches for twenty-five minutes through the priest who speaks no English, who speaks it after all, and the parish gives him the second collection without being asked. At lunch you tell him what you can about the terna, which is less than he wants and more than the rules allow, and he kisses your hand at the car.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "threads:bishop_from_the_country",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "lunch",
+          "label": "Lunch, and no Mass: the parish has its own Sunday",
+          "outcome": "You give him lunch and say the Sunday is the parish's, and he understands, and asks about the terna, and you say the rules are the rules, and he understands that too. He sends the parish a vestment from the cathedral's sacristy at Christmas, which the sewing circle repairs.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 1
+            }
+          ]
+        }
+      ],
+      "once": true
+    },
+    {
+      "id": "th_host_the_nuncio",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 7,
+      "suppressYears": 99,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "diplomat_served",
+          "value": true
+        }
+      ],
+      "title": "The Nuncio Comes to Dinner",
+      "body": "The nuncio to the United States is passing through the diocese and has written to {@bishop} that he would like, among the formal things, to have supper at the parish of the priest who was in the service. The bishop forwards the letter with a note: he has never had the nuncio to supper himself. The nuncio arrives with a secretary your age who looks at the rectory the way you once looked at rectories.",
+      "choices": [
+        {
+          "id": "plain",
+          "label": "Give him the parish's supper, and talk about the parish",
+          "outcome": "You give him the parish's supper and the parish's wine and talk about the parish, and he listens, and asks the housekeeper's name, and says at the door that it is the best evening he has had in the country, which nuncios say, and which this one, you think, meant. The bishop is told, by the secretary, that the pastor did not talk about Rome.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 3
+            },
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "threads:nuncio_to_supper",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "service",
+          "label": "Talk about the service, and the countries, and the men",
+          "outcome": "You talk about the countries until midnight and the secretary stops looking at the rectory and starts looking at you. The nuncio says, at the door, that the Secretariat does not forget a man, and you believe it for a week. The bishop is told that the pastor misses Rome.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 4
+            },
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": -3
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": -2
+            },
+            {
+              "target": "flag",
+              "key": "threads:talked_about_rome",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "once": true
+    },
+    {
+      "id": "th_dicastery_writes",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 9,
+      "suppressYears": 99,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "curia_served",
+          "value": true
+        }
+      ],
+      "title": "A Letter from the Dicastery",
+      "body": "The dicastery you served in writes to {@bishop}, who sends it on with a question mark in the margin: a document is being drafted that touches the parishes of this country, and the dicastery would like the view of a pastor who knows how the building works, in confidence, on four pages, by the end of the month. The bishop's question mark means: what did you do there, exactly?",
+      "choices": [
+        {
+          "id": "write",
+          "label": "Write the four pages, and show the bishop",
+          "outcome": "You write them, plainly, about what the document will do to a parish like yours, and show the bishop, who reads them twice and says he did not know you could write like that and asks whether he might use the third page himself. The dicastery sends thanks over a signature you know.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 3
+            },
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "threads:wrote_for_rome_at_home",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "write_quiet",
+          "label": "Write them, and send them without the bishop",
+          "outcome": "You write them and send them, and the dicastery is grateful, and the document comes out a year later with a paragraph that is yours, and the bishop reads it and remembers the question mark.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 4
+            },
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": -4
+            },
+            {
+              "target": "flag",
+              "key": "threads:wrote_for_rome_quietly",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "decline",
+          "label": "Write that a pastor has a parish and the dicastery has its channels",
+          "outcome": "You write two lines. The bishop, told, says that was the right answer and that he would have liked to read the four pages all the same.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": -2
+            }
+          ]
+        }
+      ],
+      "once": true
+    },
+    {
+      "id": "th_ad_limina_asks",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 8,
+      "suppressYears": 99,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "curia_served",
+          "value": true
+        }
+      ],
+      "title": "Come to Rome with Us",
+      "body": "The bishops of the region go to Rome for the ad limina in the spring, and {@bishop} has had an idea: the man who worked in a dicastery might come along, as the diocese's secretary for the week, and walk him through the buildings. It is ten days away from the parish in Lent, at the diocese's expense, and the vicar general has already said he thinks it is unnecessary.",
+      "choices": [
+        {
+          "id": "go",
+          "label": "Go, and walk him through the buildings",
+          "outcome": "You go. You know which door, which monsignor, and which coffee bar, and the bishop comes out of the dicastery meetings having been heard, which bishops of his size are not always. He tells the presbyterate at the Chrism Mass that the diocese has a man who knows Rome. The vicar general says nothing.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 2
+            },
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": -1
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "threads:ad_limina",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "stay",
+          "label": "Say Lent is the parish's, and write him a list",
+          "outcome": "You write him four pages: which door, which monsignor, which coffee bar. He takes the list and comes back saying it was worth the airfare. The vicar general reads the list and keeps it.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 1
+            }
+          ]
+        }
+      ],
+      "once": true
+    },
+    {
+      "id": "th_college_dinner",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 8,
+      "suppressYears": 99,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "nac_alumnus",
+          "value": true
+        }
+      ],
+      "title": "The College's Dinner",
+      "body": "The North American College's alumni of the diocese have a dinner every year in Lent, at the cathedral rectory, and this year it is yours to say grace at, the oldest of them having died. There are nine of you: two monsignori, a man who left and came back, the vicar general, and a priest ordained last June who looks at the rest as if at a museum. Everyone remembers the Janiculum. Nobody says what they thought the years would be for.",
+      "choices": [
+        {
+          "id": "say",
+          "label": "Say grace, and then say what the years were for",
+          "outcome": "You say grace and then say it: that the College made a kind of priest the diocese needed in small numbers and that the nine of you are the small number. The monsignori look at their plates. The young one writes it down. The vicar general asks for your help with the dinner next year.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "threads:said_what_the_years_were_for",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "grace",
+          "label": "Say grace, and let the dinner be a dinner",
+          "outcome": "You say grace. The dinner is a dinner: the Janiculum, the coffee, the rector who threw the chair. The young one asks you in the parking lot what the years were for, and you tell him, which was easier with one than with nine.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "threads:college_dinner",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "once": true
+    },
+    {
+      "id": "th_rector_asks_for_a_man",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 7,
+      "suppressYears": 99,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "nac_alumnus",
+          "value": true
+        },
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 8
+        }
+      ],
+      "title": "The Rector Asks for a Man",
+      "body": "The College's rector writes, to its alumni in the diocese, in a letter that is the same letter to all of them: the house has a bed for this diocese next year and {@bishop} has not sent a man in six years, and would the alumni say a word. You know the seminarian he means; everyone does. He is the right kind, and he is the vicar general's nephew, and the vicar general wants him at home.",
+      "choices": [
+        {
+          "id": "word",
+          "label": "Say the word to the bishop",
+          "outcome": "You say it, in the bishop's office, with the vicar general in the next room. The bishop sends the nephew. The vicar general does not forgive it for a year, and the nephew sends you a postcard of the dome in October with four words on it.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": -3
+            },
+            {
+              "target": "flag",
+              "key": "threads:sent_a_man_to_the_college",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "silence",
+          "label": "Say nothing: it is the bishop's to decide",
+          "outcome": "You say nothing. The bishop keeps the nephew at home. The rector's next letter is the same letter again, and the bed goes to Lansing.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": -1
+            }
+          ]
+        }
+      ],
+      "once": true
+    },
+    {
+      "id": "th_formed_man_arrives",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 9,
+      "suppressYears": 99,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "nac:formator_served",
+          "value": true
+        }
+      ],
+      "title": "One of Yours",
+      "body": "A priest from another diocese comes to say Mass at the parish while he is in the city for a wedding, and when he takes off his coat in the sacristy you know him: one of the men you had in direction at the College, ordained five years now, a pastor already in a diocese that is short of men. He has not told you he was coming. He wants to see whether the man who wrote his November evaluation is the man he remembers.",
+      "choices": [
+        {
+          "id": "supper",
+          "label": "Keep him for supper, and ask him everything",
+          "outcome": "You keep him for supper and ask him everything, and he tells you, and at eleven he says that the second paragraph was true and that he has never thanked you for it, and does. He concelebrates at seven in the morning and drives to the wedding.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "threads:a_formed_man_came",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "mass",
+          "label": "Give him the Mass, and the sacristy, and let him go to his wedding",
+          "outcome": "You give him the Mass. He preaches well, in a way you recognise, and shakes your hand at the door like a man shaking a hand, and goes to the wedding. He writes at Christmas.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": 1
+            }
+          ]
+        }
+      ],
+      "once": true
+    },
+    {
+      "id": "th_college_retreat",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 7,
+      "suppressYears": 99,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "nac:formator_served",
+          "value": true
+        },
+        {
+          "type": "phase",
+          "value": "pastor"
+        }
+      ],
+      "title": "The College Asks You Back",
+      "body": "The College's rector telephones: the house's Lenten retreat preacher has fallen ill, and the men who were in direction with you are deacons now and asked for you by name. Six days on the Janiculum in Lent, the Casa's room, the chapel at six, and a parish that will have the Sunday from a supply priest it has not met.",
+      "choices": [
+        {
+          "id": "go",
+          "label": "Go up the Janiculum for the six days",
+          "outcome": "You go. The deacons you formed sit in the front row and the first-year men behind them, and you preach to the ones you know and the ones you do not and cannot tell afterwards which heard more. The rector drives you to the airport himself and says the house would have you back on the corridor tomorrow.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": -1
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "threads:preached_the_college_retreat",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "no",
+          "label": "Say Lent is the parish's, and send a letter for the deacons",
+          "outcome": "You write the deacons a letter the rector reads in the chapel, and a Jesuit preaches the retreat, and the deacons write back, all six, on one card.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "threads:letter_to_the_deacons",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "once": true
+    },
+    {
+      "id": "th_pilgrims_find_him",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 8,
+      "suppressYears": 99,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "vatican:chaplain_served",
+          "value": true
+        }
+      ],
+      "title": "The Pilgrims Find Him",
+      "body": "A tour company's letter, forwarded by the chancery with a sticky note: a group of pilgrims going to Rome has asked whether the priest who used to be in the English confessional at St. Peter's would come as their chaplain, ten days in October, all expenses, forty people, two of whom confessed to you in the basilica in a year you have not forgotten and would like to again.",
+      "choices": [
+        {
+          "id": "go",
+          "label": "Go, as their chaplain",
+          "outcome": "You go. Forty pilgrims, the bus, the basilica by its side doors, which you still know, and the English box, where the Prefecture's man lets you sit for an afternoon, and the two who find you there. The parish has a supply priest for two Sundays and asks, when you are back, whether you are leaving.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": -2
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "threads:pilgrims_to_rome",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "no",
+          "label": "Write that the parish has its pastor in October",
+          "outcome": "You write that October is the parish's. The company finds a Franciscan. The two who had confessed to you write, separately, to say they were sorry, and one of them says what she had wanted to say in the box, in a letter you burn.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ]
+        }
+      ],
+      "once": true
+    },
+    {
+      "id": "th_icu_calls",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 7,
+      "suppressYears": 99,
+      "requires": [
+        {
+          "type": "credential",
+          "key": "cpe_unit"
+        },
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 6
+        }
+      ],
+      "title": "The ICU Remembers",
+      "body": "The hospital's chaplaincy office calls the rectory at eleven at night: a family in the ICU has asked for a priest and the on-call man is forty minutes away and the charge nurse, who was a new nurse when you did your unit of clinical pastoral education there, has said that the pastor of your parish used to be good at this. The family is not yours. The nurse remembers that you were.",
+      "choices": [
+        {
+          "id": "go",
+          "label": "Go to the hospital",
+          "outcome": "You go. The family is not yours and does not become yours; the nurse walks you to the room and stands at the door as she did fifteen years ago, and the man dies at two with the anointing done and his daughter's hand in yours, and the nurse says in the corridor that you have not lost it. You say the seven o'clock.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 1
+            },
+            {
+              "target": "strain",
+              "key": "",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "threads:icu_at_night",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "oncall",
+          "label": "Say the on-call man is forty minutes away and that is what on-call means",
+          "outcome": "You say it. The on-call man arrives at midnight and does it well. The nurse does not call again, and you notice, in the spring, that you had wanted her to.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": -1
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": -1
+            }
+          ]
+        }
+      ],
+      "once": true
+    },
+    {
+      "id": "th_the_degree_at_home",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 7,
+      "suppressYears": 99,
+      "requires": [
+        {
+          "type": "any",
+          "inner": [
+            {
+              "type": "credential",
+              "key": "STL"
+            },
+            {
+              "type": "credential",
+              "key": "STD"
+            }
+          ]
+        },
+        {
+          "type": "phase",
+          "value": "pastor"
+        }
+      ],
+      "title": "The Degree on the Wall",
+      "body": "The parish's adult-education committee, which has two members, has found out that you have a Roman degree and would like a course: six Tuesday nights on the Creed, in the hall, with handouts. The last course the parish had was on the Enneagram and forty people came. The committee would be happy with twelve.",
+      "choices": [
+        {
+          "id": "teach",
+          "label": "Teach the six nights, properly",
+          "outcome": "You teach it, properly, with the Fathers and the handouts, and nineteen come to the first and thirty to the sixth, and the committee asks for the sacraments in the spring, and the diocesan paper, having nothing else, writes it up. A pastor two parishes over asks whether you would do it there.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "public",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "brother_priests",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "threads:taught_the_creed",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "light",
+          "label": "Six nights, lightly, with the Enneagram people in mind",
+          "outcome": "You teach it lightly and well and twenty-five come each night and are pleased, and learn something, and the committee is satisfied, and the degree stays on the wall.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 2
+            }
+          ]
+        }
+      ],
+      "once": true
+    }
+  ]
+}
