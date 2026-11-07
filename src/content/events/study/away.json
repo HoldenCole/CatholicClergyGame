@@ -460,7 +460,7 @@
       "severity": "ROUTINE",
       "category": "personal",
       "baseWeight": 9,
-      "suppressYears": 2,
+      "suppressYears": 3,
       "requires": [
         {
           "type": "flag",
@@ -1835,7 +1835,7 @@
       "severity": "ROUTINE",
       "category": "classmate",
       "baseWeight": 9,
-      "suppressYears": 2,
+      "suppressYears": 5,
       "title": "A Letter from Home",
       "body": "It is an actual letter, on parish stationery, four pages in the hand of a man you were ordained beside, who was never a writer and has clearly sat down at a kitchen table on a Sunday night to do this on purpose. He is a vicar in a parish you know, and the news is the news: the old pastor of the cathedral is dead and the funeral was enormous; two parishes in the north of the diocese have been put under one man, who is drowning; a classmate of yours has gone quiet and nobody can get him on the phone; the chancery has a new chancellor's assistant who is twenty-nine and already feared. And then a paragraph about you. They talk about you, he says. The men at the deanery meetings say the bishop has plans for you, and they say it the way priests say things, half proud and half something else, and he thought you should know. He signs it with his first name and a request: write back. Not an email. A letter. He wants to know what {city} is actually like.",
       "flavorPrompt": "Four handwritten pages on parish stationery, the deanery gossip, the classmate who cannot be reached.",
@@ -1973,6 +1973,762 @@
           ]
         }
       ]
+    },
+    {
+      "id": "st_casa_table",
+      "phase": "study",
+      "pressure": [
+        "friendship_vs_duty"
+      ],
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 10,
+      "suppressYears": 99,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:rome",
+          "value": true
+        },
+        {
+          "type": "weeks_away",
+          "op": "<=",
+          "value": 10
+        }
+      ],
+      "title": "The Casa's Table",
+      "body": "Supper at {residence} is at seven-thirty, at long tables, and the seating is not assigned and is entirely fixed. The canonists sit by the window. The men who have been here six years sit near the door, where the wine is. A monsignor from Milwaukee who is writing a doctorate on a fourteenth-century bishop and has been writing it since the last pope but one explains the house to you in one sentence: everyone here is somebody's bishop's idea, and the house's job is to find out whether the bishop was right.",
+      "choices": [
+        {
+          "id": "door",
+          "label": "Sit near the door, with the men who have been here longest",
+          "outcome": "You sit near the door. The six-year men know every priest in the Curia by his weakness and every trattoria by its back table, and they like you because you listen. The thesis goes slowly. The city goes quickly. The monsignor from Milwaukee says you will be a bishop or a drunk and that he has been wrong about both.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "study_casa_door",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "window",
+          "label": "Sit by the window, with the canonists",
+          "outcome": "The canonists talk about their tribunals and their bishops and go to bed at ten. You learn the Code at supper and the Gregorian's library by nine every morning. The men by the door call you the Carthusian, without malice. The thesis goes quickly.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "study_casa_window",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "once": true
+    },
+    {
+      "id": "st_gregorian_first_lecture",
+      "phase": "study",
+      "pressure": [
+        "competence"
+      ],
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 10,
+      "suppressYears": 99,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:rome",
+          "value": true
+        },
+        {
+          "type": "weeks_away",
+          "op": "<=",
+          "value": 8
+        }
+      ],
+      "title": "Aula Magna",
+      "body": "The first lecture of the licentiate, in an aula built for four hundred, delivered by a Jesuit in Italian at the speed of a man who has given it for thirty years, on a question you studied in English in third theology and now cannot follow. The Koreans beside you take notes in three languages. The Nigerian behind you is asleep. At the break a Pole explains that nobody understands the first month and that the examination is oral, in Italian, in June.",
+      "choices": [
+        {
+          "id": "record",
+          "label": "Record the lectures, and type them out at night",
+          "outcome": "You type them out at night, badly, and then less badly, and by Advent you can follow him and by Lent you can disagree with him. The nights cost you the city for a term. The June examination is ten minutes and he asks you the one question you typed out twice.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 1
+            },
+            {
+              "target": "strain",
+              "key": "strain",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "study_typed_the_lectures",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "pole",
+          "label": "Let the Pole explain it over coffee, every day",
+          "outcome": "The Pole explains it, every day, in the bar across the piazza, for the price of the coffee. You understand the Jesuit through a Pole through a second language and it is, strangely, enough. You know every Polish priest in Rome by Christmas, and one of them is a bishop's secretary.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "study_the_pole",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "once": true
+    },
+    {
+      "id": "st_station_churches",
+      "phase": "study",
+      "pressure": [
+        "body_vs_vow"
+      ],
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 9,
+      "suppressYears": 2,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:rome",
+          "value": true
+        },
+        {
+          "type": "season",
+          "value": "lent"
+        }
+      ],
+      "title": "The Stations of Lent",
+      "body": "The College keeps the old Roman custom: Mass at seven every morning of Lent at that day's station church, a different one each day across the city, the seminarians walking in the dark from the Janiculum. The Casa's men are invited and mostly do not go, having been. It is Ash Wednesday, the station is Santa Sabina on the Aventine, and the walk is forty minutes.",
+      "choices": [
+        {
+          "id": "walk",
+          "label": "Walk it, every morning, the whole of Lent",
+          "outcome": "You walk it. Forty churches in forty days, the dark streets, the seminarians' breath in the cold, Mass in a basilica with the sun coming through the alabaster, and coffee afterwards with men half your age who ask you what a parish is like. By Easter you know the city underfoot and have not missed a morning, and the thesis has not suffered, which surprises you.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "study_walked_the_stations",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "some",
+          "label": "Go when the church is worth it",
+          "outcome": "You go to Santa Sabina, and San Clemente, and the big ones in Holy Week. The seminarians stop expecting you and are glad when you come. The mornings you do not walk are spent on the thesis, which is the honest reason, and the Jesuit notices the chapter is better.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "st_easter_vigil",
+      "phase": "study",
+      "pressure": [
+        "friendship_vs_duty"
+      ],
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 9,
+      "suppressYears": 99,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:rome",
+          "value": true
+        },
+        {
+          "type": "season",
+          "value": "holy_week"
+        }
+      ],
+      "title": "The Vigil at St. Peter's",
+      "body": "A monsignor at the Casa has two places for the Easter Vigil in the basilica, in the sanctuary, concelebrating with the pope, and one of them is his and the other was for a man who has gone home to bury his father. He offers it to you across the table on Holy Thursday as if offering the salt.",
+      "choices": [
+        {
+          "id": "go",
+          "label": "Take it",
+          "outcome": "You vest in a sacristy the size of your home parish's church with four hundred priests and the pope, and stand for three hours in a sanctuary you have only seen from the nave, and the Exsultet is sung by a deacon from Ohio, and at the Gloria the lights come on and the bells of the basilica ring over your head. You will say Easter Vigils for forty years and every one of them will be in that building.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "study_vigil_at_st_peters",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "parish",
+          "label": "Give it to the man from Kerala, and keep the parish Vigil you promised",
+          "outcome": "You keep your promise to the parish off the Via Veneto, where the Vigil is two hours and the fire is in a barbecue and the pastor forgets the Exsultet and sings it anyway. The man from Kerala comes back at two in the morning with a face you remember. The pastor gives you the Easter envelope and says you are a priest, which from him is a long speech.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "study_kept_the_parish_vigil",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "once": true
+    },
+    {
+      "id": "st_august_rome",
+      "phase": "study",
+      "pressure": [
+        "body_vs_vow"
+      ],
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 10,
+      "suppressYears": 99,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:rome",
+          "value": true
+        },
+        {
+          "type": "month",
+          "op": ">=",
+          "value": 8
+        },
+        {
+          "type": "month",
+          "op": "<=",
+          "value": 8
+        }
+      ],
+      "title": "August",
+      "body": "In August the Casa closes its kitchen and the Gregorian closes its doors and the city closes itself, and the Americans scatter: to the hills, to Ireland, to a parish in New Jersey that pays the airfare. The thesis is two chapters short. The Germans from the Anima have rented a house above the lake and have a bed.",
+      "choices": [
+        {
+          "id": "stay",
+          "label": "Stay in the empty city and write",
+          "outcome": "You stay. Rome in August is a different city, silent and hot and yours, the fountains loud, the one bar open run by a Bangladeshi who learns your coffee. The two chapters are written by the Assumption. You say Mass alone in the Casa's chapel every morning and it is the best month of the three years.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "strain",
+              "key": "strain",
+              "delta": -3
+            },
+            {
+              "target": "flag",
+              "key": "study_august_in_rome",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "lake",
+          "label": "The Germans' house above the lake",
+          "outcome": "The lake, the Germans, the wine, the arguments about Ratzinger in three languages, the swim at six before the Office. The thesis does not move and you do not mind. You come back in September with friends in four dioceses of Bavaria and a sentence of German, and write the chapters in October, badly, at night.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "strain",
+              "key": "strain",
+              "delta": -5
+            },
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": -1
+            },
+            {
+              "target": "flag",
+              "key": "study_august_at_the_lake",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "home",
+          "label": "A parish in New Jersey that pays the fare",
+          "outcome": "You take the parish. Four weeks of baptisms and the eleven o'clock and a pastor who wants to hear about the pope, and the diocese hears you were back and did not come, which you had not thought of. The thesis waits. The parish gives you an envelope and asks for next August.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": -1
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ]
+        }
+      ],
+      "once": true
+    },
+    {
+      "id": "st_thesis_defense",
+      "phase": "study",
+      "pressure": [
+        "competence"
+      ],
+      "severity": "NOTABLE",
+      "category": "formation",
+      "baseWeight": 14,
+      "suppressYears": 99,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:rome",
+          "value": true
+        },
+        {
+          "type": "weeks_away",
+          "op": ">=",
+          "value": 120
+        }
+      ],
+      "title": "The Defense",
+      "body": "The licentiate ends in a room with three Jesuits and a clock. Forty-five minutes on the thesis, in Italian, and then the questions, which are not about the thesis. The director has told you the one thing they will ask and the one thing not to say. You have slept four hours.",
+      "choices": [
+        {
+          "id": "defend",
+          "label": "Defend it",
+          "outcome": "Forty-five minutes, and then the questions, and the clock on the wall that you will remember better than any of the three faces.",
+          "effects": [],
+          "default": true,
+          "roll": {
+            "chance": 0.65,
+            "stat": "theology",
+            "per": 120,
+            "success": {
+              "outcome": "They ask the one thing, and you answer it, and then the oldest of them asks the thing you were told not to say and you say it anyway, because it is true, and he smiles for the first time. Summa cum laude, which in this room means they liked you. The director buys you lunch and tells you that you should stay for the doctorate, which he says to everyone and means about once a year.",
+              "effects": [
+                {
+                  "target": "stat",
+                  "key": "theology",
+                  "delta": 3
+                },
+                {
+                  "target": "reputation",
+                  "key": "rome",
+                  "delta": 3
+                },
+                {
+                  "target": "flag",
+                  "key": "study_defended_well",
+                  "value": true
+                }
+              ]
+            },
+            "failure": {
+              "outcome": "They ask the one thing, and you answer it, and then the questions go somewhere you did not prepare, and you hear yourself speaking Italian like a man reading it off a wall. Magna cum laude, which is the degree and nothing more. The director says the thesis was better than the defense and that this is usually the case, and buys you lunch anyway.",
+              "effects": [
+                {
+                  "target": "stat",
+                  "key": "theology",
+                  "delta": 1
+                },
+                {
+                  "target": "flag",
+                  "key": "study_defended_badly",
+                  "value": true
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "once": true
+    },
+    {
+      "id": "st_bishop_asks_doctorate",
+      "phase": "study",
+      "pressure": [
+        "ambition_vs_integrity"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 9,
+      "suppressYears": 99,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:rome",
+          "value": true
+        },
+        {
+          "type": "weeks_away",
+          "op": ">=",
+          "value": 90
+        }
+      ],
+      "title": "A Letter about the Doctorate",
+      "body": "{@bishop} writes, in his own hand, a letter that gets to its point on the second page: the Gregorian has written to him about you, which the Gregorian does for perhaps one man in ten, and he would like to know, before he decides anything, whether you would want the doctorate, three more years, and what you would say if he said no.",
+      "choices": [
+        {
+          "id": "want",
+          "label": "Tell him you would want it, and would come home if he said no",
+          "outcome": "You write that you would want it, and why, and that you would come home the week he said so. He writes back one line: good; we will see. The Gregorian is told nothing, and neither are you, and the thesis goes better for the letter's having been sent.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 2
+            },
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "wants_doctorate",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "home",
+          "label": "Tell him the diocese has had you away long enough",
+          "outcome": "You write that three years is enough and that the diocese needs priests more than doctors. He writes back that he agrees and that he is grateful, and you believe him, and in some years you will wonder about the letter, and in others you will not.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": -1
+            },
+            {
+              "target": "flag",
+              "key": "declined_doctorate_early",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "once": true
+    },
+    {
+      "id": "st_campo_verano",
+      "phase": "study",
+      "pressure": [
+        "competence"
+      ],
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 8,
+      "suppressYears": 99,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:rome",
+          "value": true
+        },
+        {
+          "type": "month",
+          "op": ">=",
+          "value": 11
+        },
+        {
+          "type": "month",
+          "op": "<=",
+          "value": 11
+        }
+      ],
+      "title": "All Souls at the Verano",
+      "body": "On All Souls the Casa goes to the Campo Verano, the city's cemetery behind San Lorenzo, where the College has a plot: seminarians and priests of the house who died in Rome, from the cholera in the 1860s to a boy from Boston in the 1980s, their names on a wall. Mass is said at the wall. The Romans are at the next plot with chrysanthemums and folding chairs.",
+      "choices": [
+        {
+          "id": "names",
+          "label": "Read the names after Mass, all of them, aloud",
+          "outcome": "You read them. Eighty-one names, and the Romans at the next plot stop talking and listen, and an old woman says the responses. The Casa's men stand longer than they meant to. You think about who reads your name, and where, and go back and write to your mother.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "study_read_the_names",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "walk",
+          "label": "Walk the cemetery alone afterward",
+          "outcome": "You walk the Verano for two hours: the Romans' photographs on the stones, the film stars, the children, the partisans. You say the De profundis at a stone you cannot read. The thesis seems, for an afternoon, a smaller thing than it was in the morning, and the Jesuit notices nothing.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "strain",
+              "key": "strain",
+              "delta": -2
+            }
+          ]
+        }
+      ],
+      "once": true
+    },
+    {
+      "id": "st_confessions_english",
+      "phase": "study",
+      "pressure": [
+        "body_vs_vow"
+      ],
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 8,
+      "suppressYears": 99,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:rome",
+          "value": true
+        },
+        {
+          "type": "weeks_away",
+          "op": ">=",
+          "value": 20
+        }
+      ],
+      "title": "Confessions in English",
+      "body": "The basilica down the hill has posted a sign: Confessions in English, Saturdays, four to six, and has nobody for it, and the sacristan has learned that the Casa has an American who says Mass well. Two hours a week in a box in a church you do not belong to, for pilgrims you will never see again, with a thesis due.",
+      "choices": [
+        {
+          "id": "yes",
+          "label": "Take the box, every Saturday",
+          "outcome": "You take the box. The pilgrims come: honeymooners, a Marine, a woman who has not been in forty years and starts with that, a priest from Texas who is drunk at four in the afternoon. Nobody in Rome knows you do it except the sacristan, who gives you panettone at Christmas. It is the most priestly thing you do in three years.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "place",
+              "key": "priesthood",
+              "delta": 0
+            },
+            {
+              "target": "flag",
+              "key": "study_english_confessions",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "no",
+          "label": "Say the thesis cannot spare the afternoon",
+          "outcome": "The sacristan finds a Franciscan. The Saturdays go to the library. The thesis is a chapter ahead by Easter, and you walk past the sign every Saturday on the way to the bus, and read it every time.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": -1
+            }
+          ]
+        }
+      ],
+      "once": true
+    },
+    {
+      "id": "st_roman_bus",
+      "phase": "study",
+      "pressure": [
+        "competence"
+      ],
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 6,
+      "suppressYears": 99,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:rome",
+          "value": true
+        }
+      ],
+      "title": "The 64",
+      "body": "The 64 bus from Termini to St. Peter's is the most pickpocketed vehicle in Europe and the only way from the Gregorian to the Casa in the rain. You are standing in it with a Roman grandmother, two nuns, a man selling umbrellas, and a hand that is not yours in your coat pocket.",
+      "choices": [
+        {
+          "id": "hand",
+          "label": "Take the hand out of your pocket and hold it",
+          "outcome": "You take the hand out of your pocket and hold it, and look at the boy it belongs to, who is fourteen and terrified, and the grandmother says something to him in Roman that makes the nuns laugh. You give him back his hand at the next stop and your wallet is still there. You tell the story at the Casa for three years and it gets better.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "study_the_64",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "walk",
+          "label": "Get off and walk, in the rain, as you should have",
+          "outcome": "You get off and walk the forty minutes along the river in the rain, and your wallet is in your pocket, and the city is empty and lit, and by the Castel Sant'Angelo you have stopped minding the rain. You walk it every day after that, and know the river better than the Jesuit knows his footnotes.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "strain",
+              "key": "strain",
+              "delta": -1
+            }
+          ]
+        }
+      ],
+      "once": true
     }
   ]
 }

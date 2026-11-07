@@ -1,0 +1,1190 @@
+{
+  "_notes": "E1: the rare stays in Rome after ordination (DESIGN §6.8): three years as a formator at the North American College (study:college; dials men, rector, city, priesthood; book directed, evaluations, pilgrims, ordinations) and two as an English confessor and chaplain at the Vatican basilica (study:vatican; dials confessional, pilgrims, prefecture, priesthood; book confessions, pilgrim_masses, audiences, groups). Phase study; no parish, no pastor; the only selector is @bishop. The man who wants to leave and the second paragraph are authored only. Flags written, nf_* and vc_*.",
+  "events": [
+    {
+      "id": "nf_first_monday",
+      "phase": "study",
+      "pressure": [
+        "competence"
+      ],
+      "severity": "ROUTINE",
+      "category": "formation",
+      "baseWeight": 12,
+      "suppressYears": 99,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:college",
+          "value": true
+        },
+        {
+          "type": "weeks_away",
+          "op": "<=",
+          "value": 8
+        }
+      ],
+      "title": "The Rector's Monday",
+      "body": "The rector's Monday meeting is at eight, in a room with the dome in the window: the vice-rector, the spiritual directors, the formation advisors, and you, the new man on the corridor, with twelve seminarians in direction whose names you learned last week. The rector goes down the house by class. When he reaches a man of yours he looks at you and waits.",
+      "choices": [
+        {
+          "id": "little",
+          "label": "Say little, and listen to how the house talks",
+          "outcome": "You say that he is settling in, which is true of everyone. The vice-rector says something sharper and more useful. You learn in a month how the house talks about a man, which is carefully and in full sentences and never on paper until November, and by the second Monday you can do it.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "rector",
+              "delta": 3
+            },
+            {
+              "target": "place",
+              "key": "men",
+              "delta": 1
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "plain",
+          "label": "Say what you have seen",
+          "outcome": "You say that he is lonely and hiding it in the gym and that his bishop should not have sent him this year. The room is quiet. The rector writes something down. Afterwards the vice-rector says that was right and that you should say it to the man first next time, which you had not.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "rector",
+              "delta": 5
+            },
+            {
+              "target": "place",
+              "key": "men",
+              "delta": -3
+            },
+            {
+              "target": "place",
+              "key": "priesthood",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "nf_spoke_on_the_first_monday",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "once": true
+    },
+    {
+      "id": "nf_man_wants_to_leave",
+      "phase": "study",
+      "pressure": [
+        "belief_vs_safety"
+      ],
+      "severity": "NOTABLE",
+      "category": "formation",
+      "baseWeight": 10,
+      "suppressYears": 99,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:college",
+          "value": true
+        },
+        {
+          "type": "weeks_away",
+          "op": ">=",
+          "value": 6
+        }
+      ],
+      "title": "Eleven at Night",
+      "body": "A second-year from a diocese you could not find on a map knocks at eleven at night, which the house allows and does not encourage. He wants to leave. Not the house: the whole thing. He has told nobody, and his bishop paid for the flight, and his mother has told the parish, and he is twenty-four and has not slept in a week.",
+      "choices": [
+        {
+          "id": "help",
+          "label": "Help him leave well",
+          "outcome": "You sit with him until one, and the next day you walk him to the rector, and the day after that you help him write to his bishop, and a week later you drive him to the airport in the College's car and he weeps at the gate and thanks you. His bishop writes to the rector that the College lost him a vocation. The rector shows you the letter and says nothing about it, which is his way of saying the opposite.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "men",
+              "delta": 7
+            },
+            {
+              "target": "place",
+              "key": "priesthood",
+              "delta": 5
+            },
+            {
+              "target": "place",
+              "key": "rector",
+              "delta": -2
+            },
+            {
+              "target": "record",
+              "key": "directed",
+              "delta": 0
+            },
+            {
+              "target": "flag",
+              "key": "nf_helped_a_man_leave",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "retreat",
+          "label": "Send him on the eight-day retreat first",
+          "outcome": "You send him to the Jesuits above the lake for eight days, as the house does. He comes back and stays, and is ordained in four years, and in eight he leaves the priesthood, and writes to you from Phoenix to say you were kind and he should have gone at twenty-four. You keep the letter.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "men",
+              "delta": 2
+            },
+            {
+              "target": "place",
+              "key": "rector",
+              "delta": 4
+            },
+            {
+              "target": "place",
+              "key": "priesthood",
+              "delta": -3
+            },
+            {
+              "target": "flag",
+              "key": "nf_sent_him_on_retreat",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "once": true
+    },
+    {
+      "id": "nf_november_evaluation",
+      "phase": "study",
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "severity": "NOTABLE",
+      "category": "formation",
+      "baseWeight": 12,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:college",
+          "value": true
+        },
+        {
+          "type": "month",
+          "op": ">=",
+          "value": 11
+        },
+        {
+          "type": "month",
+          "op": "<=",
+          "value": 11
+        }
+      ],
+      "title": "November",
+      "body": "The evaluations are written in November, and the one on your desk is for a man whose bishop has already told the rector that he will be ordained in June whatever the College says. You have seen him with the first-year men. You have seen him with the Filipina sisters who cook, and with the pilgrims, and in the chapel at six when he thinks nobody is there, and the four things you have seen do not fit in one paragraph.",
+      "choices": [
+        {
+          "id": "saw",
+          "label": "Write what you saw, all four things",
+          "outcome": "You write all four. The rector reads it twice and asks whether you will stand by the second paragraph in front of the bishop, and you say yes, and in March you do, in the rector's office, with the bishop looking at you the way bishops look at formators. The man is ordained in June. In two years the bishop sends the rector a note that says: you were right about the second paragraph.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "rector",
+              "delta": 5
+            },
+            {
+              "target": "place",
+              "key": "men",
+              "delta": -2
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 2
+            },
+            {
+              "target": "record",
+              "key": "evaluations",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "nf_wrote_the_second_paragraph",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "kind",
+          "label": "Write it kindly; the bishop has decided",
+          "outcome": "You write a kind paragraph that is true in every sentence and says nothing. The rector reads it once and initials it. The man is ordained in June and is a fine priest, and you will never know whether the second paragraph was true, and the house will never ask you to write a hard one, which you notice in March.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "men",
+              "delta": 3
+            },
+            {
+              "target": "place",
+              "key": "rector",
+              "delta": -3
+            },
+            {
+              "target": "record",
+              "key": "evaluations",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "nf_wrote_it_kindly",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "nf_bishop_visits_his_men",
+      "phase": "study",
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "severity": "NOTABLE",
+      "category": "formation",
+      "baseWeight": 9,
+      "suppressYears": 99,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:college",
+          "value": true
+        },
+        {
+          "type": "weeks_away",
+          "op": ">=",
+          "value": 12
+        }
+      ],
+      "title": "Your Own Bishop at the College",
+      "body": "{@bishop} is in Rome for a meeting and comes up to the College to see his men, of whom there are three, and asks the rector whether he might have a word with you, since you are here. The word is at dinner, in the rector's dining room, and it is about his three men, two of whom are yours in direction.",
+      "choices": [
+        {
+          "id": "tell",
+          "label": "Tell him what you know",
+          "outcome": "You tell him what a formator may tell a bishop and a little more, because it is your bishop and he asked. He listens like a man who will remember. One of the three is sent home in the spring on your paragraph, and the other two are ordained, and the bishop tells the presbyterate that the College has a man of the diocese on its staff, in a tone the men know how to read.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": 6
+            },
+            {
+              "target": "place",
+              "key": "men",
+              "delta": -4
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "nf_told_the_bishop",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "ask",
+          "label": "Tell him to ask them",
+          "outcome": "You tell him that the men will tell him more than you can, and that the house keeps the forums apart for a reason, and that you will tell him the day one of them should not be ordained and not before. He looks at you for a moment and then says that is the right answer and he is sorry he asked. He asks them. They tell him.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "men",
+              "delta": 5
+            },
+            {
+              "target": "place",
+              "key": "priesthood",
+              "delta": 2
+            },
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": -2
+            },
+            {
+              "target": "flag",
+              "key": "nf_kept_the_forum",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "once": true
+    },
+    {
+      "id": "nf_saturday_pilgrims",
+      "phase": "study",
+      "pressure": [
+        "friendship_vs_duty"
+      ],
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 9,
+      "suppressYears": 99,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:college",
+          "value": true
+        }
+      ],
+      "title": "Saturday on the Via della Conciliazione",
+      "body": "The College's formators take the pilgrim groups on Saturdays: a bus from a parish in Ohio, forty people in matching hats, four hours from the bronze doors to the grottoes to the dome and a Mass at a side altar if the Prefecture is kind. This Saturday's group is from {diocese}, and the pastor leading it was two years ahead of you.",
+      "choices": [
+        {
+          "id": "whole",
+          "label": "Give them the whole day, and the dome",
+          "outcome": "You give them the day. The dome at noon in July, the pastor red in the face at the top, a widow from the cathedral parish who holds your arm on the stairs and asks whether the pope is kind. Mass at the altar of St. Joseph. They go home and tell the diocese that the College's priest is one of ours.",
+          "effects": [
+            {
+              "target": "record",
+              "key": "pilgrims",
+              "delta": 1
+            },
+            {
+              "target": "place",
+              "key": "city",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 3
+            },
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "nf_pilgrims_from_home",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "short",
+          "label": "The two hours the schedule gives, and back to the men",
+          "outcome": "You give them the two hours, well, and go back up the hill to a man who needs the afternoon more than the dome does. The pastor is gracious and says so in the bulletin. The widow sends a card to the College in September with a twenty-dollar bill in it.",
+          "effects": [
+            {
+              "target": "record",
+              "key": "pilgrims",
+              "delta": 1
+            },
+            {
+              "target": "place",
+              "key": "men",
+              "delta": 3
+            },
+            {
+              "target": "place",
+              "key": "city",
+              "delta": 1
+            }
+          ]
+        }
+      ],
+      "once": true
+    },
+    {
+      "id": "nf_diaconate_served",
+      "phase": "study",
+      "pressure": [
+        "competence"
+      ],
+      "severity": "NOTABLE",
+      "category": "formation",
+      "baseWeight": 12,
+      "suppressYears": 99,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:college",
+          "value": true
+        },
+        {
+          "type": "month",
+          "op": ">=",
+          "value": 10
+        },
+        {
+          "type": "month",
+          "op": "<=",
+          "value": 10
+        }
+      ],
+      "title": "The Altar of the Chair",
+      "body": "October, and the College's fourth-year men are ordained deacons at the Altar of the Chair by a cardinal of the Curia, as they have been since the house moved to the Janiculum. Six of the men are yours. The formators vest and sit in the apse and are, for the morning, nobody; the families fill the nave; the sacristan of the basilica, who has seen four thousand ordinations, asks you whether you are new.",
+      "choices": [
+        {
+          "id": "men",
+          "label": "Watch your men, and nothing else",
+          "outcome": "You watch the six. The one who nearly left in second year lies on the marble with his face in his hands. The one whose second paragraph you wrote prostrates like a man who has read the second paragraph. You do not hear the cardinal's homily and could not say afterwards what the music was. At the sign of peace the six come to the apse and find you.",
+          "effects": [
+            {
+              "target": "record",
+              "key": "ordinations",
+              "delta": 1
+            },
+            {
+              "target": "place",
+              "key": "men",
+              "delta": 5
+            },
+            {
+              "target": "place",
+              "key": "priesthood",
+              "delta": 4
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "nf_served_the_diaconate",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "sacristy",
+          "label": "Make yourself useful in the sacristy",
+          "outcome": "You make yourself useful. The sacristan, who was not asking an idle question, puts you to work with the dalmatics and the cardinal's secretary, and by the end of the morning the Prefecture knows the College has a formator who can run a sacristy, and asks for you at Christmas. Your six find you afterwards in the square.",
+          "effects": [
+            {
+              "target": "record",
+              "key": "ordinations",
+              "delta": 1
+            },
+            {
+              "target": "place",
+              "key": "city",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 2
+            },
+            {
+              "target": "place",
+              "key": "men",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "nf_useful_in_the_sacristy",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "once": true
+    },
+    {
+      "id": "nf_a_roman",
+      "phase": "study",
+      "pressure": [
+        "body_vs_vow"
+      ],
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 8,
+      "suppressYears": 99,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:college",
+          "value": true
+        },
+        {
+          "type": "weeks_away",
+          "op": ">=",
+          "value": 48
+        }
+      ],
+      "title": "Keys",
+      "body": "A year on the Janiculum and you have keys: to the College's side gate, to a chapel in a basilica where a sacristan lets you say Mass alone at six, to a Roman family's apartment near the Pantheon where the mother feeds the College's priests on Sunday nights and has since the 1970s. The vice-rector says the keys are the test: a man either becomes a Roman or counts the months.",
+      "choices": [
+        {
+          "id": "roman",
+          "label": "Use the keys",
+          "outcome": "You use them. Sunday nights near the Pantheon, Mass alone in the basilica at six with the cleaners, the side gate at midnight after a walk you took for no reason. You stop counting the months. When the three years end you will pack the keys by mistake and post them back from the airport.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "city",
+              "delta": 8
+            },
+            {
+              "target": "place",
+              "key": "priesthood",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "nf_a_roman",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "months",
+          "label": "Count the months, and keep the keys in a drawer",
+          "outcome": "You keep them in a drawer and count the months, and are a good formator, and write to the diocese every week, and the men notice that you are a priest who is going home and like you for it. The vice-rector, who became a Roman, says nothing, and is a little sad, and a little envious.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "men",
+              "delta": 4
+            },
+            {
+              "target": "place",
+              "key": "priesthood",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "nf_counted_the_months",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "once": true
+    },
+    {
+      "id": "vc_first_morning",
+      "phase": "study",
+      "pressure": [
+        "body_vs_vow"
+      ],
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 14,
+      "suppressYears": 99,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:vatican",
+          "value": true
+        },
+        {
+          "type": "weeks_away",
+          "op": "<=",
+          "value": 6
+        }
+      ],
+      "title": "The English Confessional",
+      "body": "The confessional in the right transept with the sign that says English is a box of walnut and brass with a light, a curtain, and a line of seven people at nine in the morning on your first day, the first of whom has been waiting since the basilica opened and says, before you have sat down, that it has been thirty-one years.",
+      "choices": [
+        {
+          "id": "time",
+          "label": "Give him all the time there is",
+          "outcome": "You give him an hour, and the line of six grows to fourteen, and nobody in it leaves. He goes out into the nave and sits for a long time looking at nothing. You hear the fourteen by one o'clock, with ten minutes for a sandwich, and go back to the Casa and sleep until the bells. It was the best day of your priesthood so far and you tell nobody.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "confessional",
+              "delta": 8
+            },
+            {
+              "target": "place",
+              "key": "priesthood",
+              "delta": 6
+            },
+            {
+              "target": "record",
+              "key": "confessions",
+              "delta": 14
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "vc_the_first_morning",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "line",
+          "label": "Give him what the line allows, and ask him to come back",
+          "outcome": "You give him twenty minutes and absolution and ask him to come back on Thursday, when it is quieter, and he says he will and does not, and you think about him for a year, and the thirteen others are heard before noon and are grateful. The Prefecture's man notes that the English box moved its line.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "confessional",
+              "delta": 4
+            },
+            {
+              "target": "place",
+              "key": "prefecture",
+              "delta": 3
+            },
+            {
+              "target": "record",
+              "key": "confessions",
+              "delta": 14
+            },
+            {
+              "target": "place",
+              "key": "priesthood",
+              "delta": -2
+            }
+          ]
+        }
+      ],
+      "once": true
+    },
+    {
+      "id": "vc_wednesday_audience",
+      "phase": "study",
+      "pressure": [
+        "competence"
+      ],
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 10,
+      "suppressYears": 99,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:vatican",
+          "value": true
+        },
+        {
+          "type": "weeks_away",
+          "op": ">=",
+          "value": 2
+        }
+      ],
+      "title": "The Names",
+      "body": "At the Wednesday audience the chaplains read the names of the groups, by language, from the platform, into a microphone that reaches thirty thousand people: the parish of St. Somebody from Somewhere, the Knights of Columbus of a council, a school. The list is forty groups long and you have twelve minutes and a monsignor of the Prefecture at your elbow with a watch. The thirty-first group on the list is from {diocese}.",
+      "choices": [
+        {
+          "id": "read",
+          "label": "Read them all, and the thirty-first a little slower",
+          "outcome": "You read them all, in a voice the Prefecture's man says afterwards was the right voice, and the thirty-first a little slower, and hear from the square a sound you know: a parish from home, forty of them, hearing their name said at the Vatican. The pope waves at the Koreans. You find them afterwards at the obelisk and they have brought you a cake.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "pilgrims",
+              "delta": 6
+            },
+            {
+              "target": "place",
+              "key": "prefecture",
+              "delta": 3
+            },
+            {
+              "target": "record",
+              "key": "audiences",
+              "delta": 1
+            },
+            {
+              "target": "record",
+              "key": "groups",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "vc_read_the_names",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "cut",
+          "label": "Cut the list to the time, as the monsignor wants",
+          "outcome": "You cut nine groups and finish in eleven minutes and the monsignor is pleased. The nine include a school from Idaho that raised money for two years. Their teacher writes to the Prefecture. The Prefecture writes to you, two lines, and you read the whole list from then on and finish late and nobody says anything.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "prefecture",
+              "delta": 5
+            },
+            {
+              "target": "place",
+              "key": "pilgrims",
+              "delta": -3
+            },
+            {
+              "target": "record",
+              "key": "audiences",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "vc_cut_the_list",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "once": true
+    },
+    {
+      "id": "vc_sampietrini",
+      "phase": "study",
+      "pressure": [
+        "friendship_vs_duty"
+      ],
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 9,
+      "suppressYears": 99,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:vatican",
+          "value": true
+        },
+        {
+          "type": "weeks_away",
+          "op": ">=",
+          "value": 8
+        }
+      ],
+      "title": "The Sampietrini",
+      "body": "The basilica's workmen, the sampietrini, who have kept the building since Michelangelo and are hired by family, have a Mass at six on Monday mornings in the Chapel of the Choir before the tourists, and their chaplain has died. The foreman asks you, in Roman, by way of the sacristan, whether the American would. It is not in the Prefecture's rota and it pays nothing.",
+      "choices": [
+        {
+          "id": "yes",
+          "label": "Say the six o'clock, every Monday",
+          "outcome": "You say it every Monday for two years: forty men in overalls, the smell of the scaffolding, the responses in a Roman the Prefecture does not speak. They take you up inside the dome one night and show you the city. When a man falls from the facade in the second year you bury him, and the basilica is yours after that in a way the Prefecture cannot give.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "priesthood",
+              "delta": 8
+            },
+            {
+              "target": "place",
+              "key": "pilgrims",
+              "delta": 2
+            },
+            {
+              "target": "place",
+              "key": "prefecture",
+              "delta": -1
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "vc_the_sampietrini",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "no",
+          "label": "Say the rota does not allow it",
+          "outcome": "You say the rota does not allow it, which is true. A Capuchin takes it. The foreman nods at you in the nave for two years, without rancour, as at a man who was asked something once.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "prefecture",
+              "delta": 2
+            },
+            {
+              "target": "place",
+              "key": "priesthood",
+              "delta": -3
+            }
+          ]
+        }
+      ],
+      "once": true
+    },
+    {
+      "id": "vc_prefecture_envelope",
+      "phase": "study",
+      "pressure": [
+        "ambition_vs_integrity"
+      ],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 10,
+      "suppressYears": 99,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:vatican",
+          "value": true
+        },
+        {
+          "type": "weeks_away",
+          "op": ">=",
+          "value": 10
+        }
+      ],
+      "title": "An Envelope from the Prefecture",
+      "body": "The Prefecture's envelope comes to the Casa at nine at night: a papal Mass tomorrow at ten, a concelebrant has fallen ill, you are to be in the sacristy at eight-thirty in an alb and nothing else, and the English confessional will be unattended until one. There is a line at the English confessional by nine most days.",
+      "choices": [
+        {
+          "id": "go",
+          "label": "Go: the Prefecture does not ask twice",
+          "outcome": "You go. The sacristy, the rows of albs, the Master of Ceremonies who speaks only in numbers, the walk out into a basilica with ten thousand people in it and the pope eleven feet away, and Communion to the Chinese section of the nave for forty minutes. The Prefecture writes your name on a different list after that. The English box was empty until one, and the sacristan says a woman waited the whole morning.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "prefecture",
+              "delta": 8
+            },
+            {
+              "target": "place",
+              "key": "pilgrims",
+              "delta": 2
+            },
+            {
+              "target": "place",
+              "key": "confessional",
+              "delta": -3
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "vc_served_the_pope",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "box",
+          "label": "Find them another man, and keep the box",
+          "outcome": "You telephone the Casa's corridor and find a Scot who would walk through fire for a papal Mass, and send him, and sit in the box at nine. The woman who would have waited the whole morning is the third in line. The Prefecture notes that the American found a man, which is nearly as good, and not the same.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "confessional",
+              "delta": 5
+            },
+            {
+              "target": "place",
+              "key": "priesthood",
+              "delta": 4
+            },
+            {
+              "target": "place",
+              "key": "prefecture",
+              "delta": -2
+            },
+            {
+              "target": "flag",
+              "key": "vc_kept_the_box",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "once": true
+    },
+    {
+      "id": "vc_group_from_home",
+      "phase": "study",
+      "pressure": [
+        "friendship_vs_duty"
+      ],
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 9,
+      "suppressYears": 99,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:vatican",
+          "value": true
+        },
+        {
+          "type": "weeks_away",
+          "op": ">=",
+          "value": 4
+        }
+      ],
+      "title": "At the Bronze Doors",
+      "body": "A group from {diocese} at the bronze doors at eight in the morning, as arranged by a parish secretary who found your name on the Prefecture's list: thirty people, a deacon with a flag, and {@bishop}'s secretary, who is leading it and did not know you were here and is not sure whether to be pleased.",
+      "choices": [
+        {
+          "id": "day",
+          "label": "Take them through the basilica yourself",
+          "outcome": "You take them through: the Pietà, the grottoes, the altar where you said Mass on Tuesday, the chapel where the sampietrini hear Mass. Mass at the altar of St. Pius X with the deacon reading. The secretary thaws by the grottoes and tells you at lunch what the bishop says about you, which is more than you knew.",
+          "effects": [
+            {
+              "target": "record",
+              "key": "groups",
+              "delta": 1
+            },
+            {
+              "target": "place",
+              "key": "pilgrims",
+              "delta": 5
+            },
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "vc_group_from_home",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "hand",
+          "label": "Hand them to the Prefecture's guide, and say the Mass",
+          "outcome": "You hand them to the guide, who is excellent, and say their Mass at eleven, and shake thirty hands at the end. The secretary is correct and brief. The bishop hears that his chaplain at the Vatican was busy, which is accurate.",
+          "effects": [
+            {
+              "target": "record",
+              "key": "groups",
+              "delta": 1
+            },
+            {
+              "target": "place",
+              "key": "prefecture",
+              "delta": 2
+            },
+            {
+              "target": "place",
+              "key": "pilgrims",
+              "delta": 1
+            }
+          ]
+        }
+      ],
+      "once": true
+    },
+    {
+      "id": "vc_christmas_eve",
+      "phase": "study",
+      "pressure": [
+        "competence"
+      ],
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 12,
+      "suppressYears": 99,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:vatican",
+          "value": true
+        },
+        {
+          "type": "season",
+          "value": "christmas"
+        }
+      ],
+      "title": "Midnight at St. Peter's",
+      "body": "The Christmas Mass of the pope at the basilica, and the chaplains are the ministers of Communion for the nave: eighty priests in albs sent out with ciboria into ten thousand people who have waited since afternoon, under the lights, with the choir, in a building you now know by its side doors. You are given the section by the Pietà, which is the Americans.",
+      "choices": [
+        {
+          "id": "faces",
+          "label": "Look at the faces",
+          "outcome": "You look at every face. A boy from Minnesota in a hockey jacket, a family from Lagos in white, a woman alone who is weeping and takes the Host in a hand that shakes. Twenty minutes, four hundred Communions, the choir somewhere above. It is the most Catholic thing you will ever see, and you saw it from the inside, with a ciborium, in the dark.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "priesthood",
+              "delta": 6
+            },
+            {
+              "target": "place",
+              "key": "pilgrims",
+              "delta": 4
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 4
+            },
+            {
+              "target": "flag",
+              "key": "vc_midnight_mass",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "count",
+          "label": "Count the Hosts, and watch the aisle",
+          "outcome": "You count the Hosts and watch the aisle and get four hundred people through in eighteen minutes and the ciborium back to the altar with six Hosts to spare, and the Master of Ceremonies, who notices everything, notices. You are given the section by the Pietà every year after. You do not remember a single face.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "prefecture",
+              "delta": 5
+            },
+            {
+              "target": "place",
+              "key": "pilgrims",
+              "delta": 2
+            },
+            {
+              "target": "place",
+              "key": "priesthood",
+              "delta": -2
+            }
+          ]
+        }
+      ],
+      "once": true
+    },
+    {
+      "id": "vc_the_line",
+      "phase": "study",
+      "pressure": [
+        "ambition_vs_integrity"
+      ],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 9,
+      "suppressYears": 99,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:vatican",
+          "value": true
+        },
+        {
+          "type": "weeks_away",
+          "op": ">=",
+          "value": 48
+        }
+      ],
+      "title": "The Line down the Nave",
+      "body": "A year in the English box and the line is down the nave by ten most mornings: pilgrims, Romans who have found that the American does not shout, a seminarian from the College every Thursday, a cardinal's secretary who comes on the first Friday and never says who he is. The Prefecture has noticed. The Prefecture's monsignor says, without quite saying it, that a chaplain with a line is a chaplain the Prefecture keeps.",
+      "choices": [
+        {
+          "id": "stay",
+          "label": "Say nothing, and keep the box",
+          "outcome": "You say nothing and keep the box. The two years run out, and the Prefecture writes to your bishop asking for a third, and your bishop, who has a parish waiting, writes back the kind of letter bishops write to Rome, and you do not know which way it will go, and sit in the box while it is decided.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "confessional",
+              "delta": 6
+            },
+            {
+              "target": "place",
+              "key": "priesthood",
+              "delta": 4
+            },
+            {
+              "target": "place",
+              "key": "prefecture",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "vc_the_line",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "home",
+          "label": "Tell the monsignor the diocese has a parish for you",
+          "outcome": "You tell him the diocese has a parish and that you mean to go to it. He is surprised, and then not, and says that the basilica has had chaplains who could not leave and that they were not its best ones. The line is still down the nave on your last morning, and the sacristan locks the box behind you and gives you the key.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "priesthood",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": -1
+            },
+            {
+              "target": "flag",
+              "key": "vc_going_home",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "once": true
+    }
+  ]
+}

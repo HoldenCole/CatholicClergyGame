@@ -2354,6 +2354,463 @@
           ]
         }
       ]
+    },
+    {
+      "id": "cu_portiera",
+      "phase": "study",
+      "pressure": [
+        "competence"
+      ],
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 8,
+      "suppressYears": 99,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:curia",
+          "value": true
+        },
+        {
+          "type": "weeks_away",
+          "op": "<=",
+          "value": 12
+        }
+      ],
+      "title": "The Portiera",
+      "body": "The apartment near the Borgo comes with a building, and the building comes with a portiera: a widow from Abruzzo who has sat in the glass box by the door since 1979, knows which monsignori on the third floor have housekeepers who are not housekeepers, and has decided to find out what the American is. She has a question about her grandson's First Communion and a plate of something.",
+      "choices": [
+        {
+          "id": "sit",
+          "label": "Sit in the box and eat whatever it is",
+          "outcome": "You sit in the box. The grandson's First Communion is a matter of the parish's politics, which she explains, and you say you will have a word, and do, and after that you are hers: the post comes up, the plumber comes, the third floor's affairs are reported to you whether you want them or not. The dicastery notices that you know things about Rome.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "cu_the_portiera",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "nod",
+          "label": "Nod, and take the stairs",
+          "outcome": "You nod and take the stairs, every day, for five years, and she tells the building that the American is cold, and the plumber does not come, and the post is late, and you learn nothing about the third floor, which is a loss you will not measure.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": -1
+            }
+          ]
+        }
+      ],
+      "once": true
+    },
+    {
+      "id": "cu_synod_october",
+      "phase": "study",
+      "pressure": [
+        "competence"
+      ],
+      "severity": "ROUTINE",
+      "category": "chancery",
+      "baseWeight": 5,
+      "suppressYears": 3,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:curia",
+          "value": true
+        },
+        {
+          "type": "month",
+          "op": ">=",
+          "value": 10
+        },
+        {
+          "type": "month",
+          "op": "<=",
+          "value": 10
+        }
+      ],
+      "title": "The Synod's October",
+      "body": "October, and a synod in the Aula: three weeks, three hundred bishops, and the dicasteries told to lend men to the secretariat for the drafting, the translating, and the sitting at the back of the hall with the summaries. {dicastery} is asked for one official and the secretary has named you, which is either a compliment or a way of losing you for a month.",
+      "choices": [
+        {
+          "id": "go",
+          "label": "Go, and sit at the back of the Aula",
+          "outcome": "You go. Three weeks of the Aula at eight, the bishops' four-minute interventions, the small-group reports written at midnight in four languages, the Holy Father in the front row taking notes. You know forty bishops by their voices when it is over, and two of them ask the dicastery for you afterwards, by name.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "theology",
+              "delta": 1
+            },
+            {
+              "target": "strain",
+              "key": "strain",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "cu_the_synod",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "desk",
+          "label": "Ask to be spared: the desk cannot",
+          "outcome": "You ask to be spared and are, and the file you were keeping is finished on time, and the secretary, who would have gone himself at your age, says nothing and remembers. The Aula's October passes on the other side of the wall.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": -1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cu_cardinal_funeral",
+      "phase": "study",
+      "pressure": [
+        "ambition_vs_integrity"
+      ],
+      "severity": "ROUTINE",
+      "category": "chancery",
+      "baseWeight": 5,
+      "suppressYears": 99,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:curia",
+          "value": true
+        },
+        {
+          "type": "weeks_away",
+          "op": ">=",
+          "value": 20
+        }
+      ],
+      "title": "A Cardinal's Funeral",
+      "body": "A cardinal of the Curia has died, one you met twice, and the funeral is in the basilica with the pope presiding and the College of Cardinals in a red block in the sanctuary. The dicastery goes in a body. On the steps afterwards the corridor's talk is not of the dead man but of his offices, which are vacant, and of who will have them, and the men saying it are your colleagues.",
+      "choices": [
+        {
+          "id": "pray",
+          "label": "Go back in, and pray for him",
+          "outcome": "You go back into the empty basilica and kneel at the catafalque for a quarter of an hour, which nobody sees except a sacristan and a Swiss Guard. The offices go to someone. At the dicastery on Monday a colleague who saw you go back in says, without irony, that you are the only priest on the corridor.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "cu_prayed_for_the_cardinal",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "listen",
+          "label": "Stand on the steps, and listen",
+          "outcome": "You stand on the steps and listen, and learn which three names are in the running and which two are being pushed by whom, and by the evening have told your secretary, who already knew, and who notes that you heard it on the steps, which is where it is to be heard.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "knowledge",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "cu_heard_it_on_the_steps",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "once": true
+    },
+    {
+      "id": "cu_summer_desk",
+      "phase": "study",
+      "pressure": [
+        "ambition_vs_integrity"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 5,
+      "suppressYears": 99,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:curia",
+          "value": true
+        },
+        {
+          "type": "month",
+          "op": ">=",
+          "value": 7
+        },
+        {
+          "type": "month",
+          "op": "<=",
+          "value": 7
+        }
+      ],
+      "title": "July, the Prefect Away",
+      "body": "July: the prefect in his mountains, the secretary at a conference, the undersecretary on leave, and a file on your desk that cannot wait a week: a bishop's request that needs the dicastery's answer by Friday or a diocese loses something real. The answer is obvious. The authority to give it is on three other floors, all of them empty.",
+      "choices": [
+        {
+          "id": "answer",
+          "label": "Answer it, over the dicastery's name, and tell them in September",
+          "outcome": "You answer it on Wednesday, over the dicastery's name, in the dicastery's sentences, and the diocese keeps its something. In September the secretary reads the file and says you had no authority and were right, in that order, and that if you are ever wrong he will have your badge, and that he would have done the same at your age. He would not have.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 4
+            },
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "cu_answered_in_july",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "wait",
+          "label": "Telephone the prefect's mountain, and wait",
+          "outcome": "You telephone the mountain. The prefect's housekeeper says he is walking. He telephones back on Saturday and says yes, and the diocese has lost its something by then, and writes to say so, and the file notes that the dicastery answered within the week, which it did.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": -1
+            },
+            {
+              "target": "strain",
+              "key": "strain",
+              "delta": 2
+            }
+          ]
+        }
+      ],
+      "once": true
+    },
+    {
+      "id": "cu_permesso",
+      "phase": "study",
+      "pressure": [
+        "competence"
+      ],
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 6,
+      "suppressYears": 99,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:curia",
+          "value": true
+        },
+        {
+          "type": "weeks_away",
+          "op": "<=",
+          "value": 16
+        }
+      ],
+      "title": "The Permesso di Soggiorno",
+      "body": "The Holy See gives you a Vatican card. The Italian Republic requires a permesso di soggiorno, which is obtained at a police station in a suburb on a Tuesday between eight and ten with four photographs, a tax stamp from a tobacconist, a form in triplicate, and a man behind a window who has decided before you arrive that one of the four is wrong. The dicastery's drivers know a way. The way costs something.",
+      "choices": [
+        {
+          "id": "line",
+          "label": "Do it the Italian way, in the line, as many Tuesdays as it takes",
+          "outcome": "Four Tuesdays. On the fourth the man behind the window, who remembers you, finds all four photographs acceptable and stamps the form with the air of a man conferring a sacrament. You have the permesso and the knowledge, useful for five years, that Italy can be waited out.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 2
+            },
+            {
+              "target": "stat",
+              "key": "charisma",
+              "delta": 1
+            },
+            {
+              "target": "strain",
+              "key": "strain",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "cu_waited_for_the_permesso",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "driver",
+          "label": "Let the driver's cousin handle it",
+          "outcome": "The driver's cousin handles it in a week for a sum you do not ask about. The permesso is real. The dicastery's secretary, who did it the Italian way in 1988, learns how you did it and says nothing and knows a thing about you.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": -1
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": -1
+            },
+            {
+              "target": "flag",
+              "key": "cu_the_drivers_cousin",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "once": true
+    },
+    {
+      "id": "cu_jubilee",
+      "phase": "study",
+      "pressure": [
+        "competence"
+      ],
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 12,
+      "suppressYears": 99,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:curia",
+          "value": true
+        },
+        {
+          "type": "calendar_year",
+          "op": ">=",
+          "value": 2025
+        },
+        {
+          "type": "calendar_year",
+          "op": "<=",
+          "value": 2025
+        }
+      ],
+      "title": "The Jubilee",
+      "body": "The Holy Year, and the city has four times its pilgrims, the dicasteries have been asked for confessors for the basilica on Saturdays, and the Via della Conciliazione is a river of parish groups with flags. {dicastery}'s secretary has put your name down for the English confessional every Saturday of the year, without asking, because you were ordained to it.",
+      "choices": [
+        {
+          "id": "saturdays",
+          "label": "The Saturdays, all of them",
+          "outcome": "Fifty Saturdays. The American pilgrims who have walked through the Holy Door and want, having walked, to confess something, and the Nigerians and the Filipinos who ask for the American because he does not shout. The file work slips a day a week and the secretary, who put you there, does not mention it. You will remember the year by the box and not the desk.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 2
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "cu_the_jubilee_box",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "half",
+          "label": "Half the Saturdays; the desk has its own pilgrims",
+          "outcome": "You do half and a Franciscan does half, and the desk is kept, and the secretary says the dicastery is grateful, in a tone that means the dicastery would have been more grateful for all of them. The Holy Door closes in January and you were through it twice.",
+          "effects": [
+            {
+              "target": "stat",
+              "key": "administration",
+              "delta": 1
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ]
+        }
+      ],
+      "once": true
     }
   ]
 }
