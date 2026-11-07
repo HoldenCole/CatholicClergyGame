@@ -243,9 +243,12 @@ function letterStep(state: GameState, rng: Rng, deps: EventDeps): { state: GameS
 const STUDY_EVENT_CHANCE = 0.1;
 /** A friar's Roman posting is a life and not a course: the generalate, the order's faculty, and the Curia draw a scene more often (friar round Q6, Q7). Invented. */
 const ROMAN_FRIAR_EVENT_CHANCE: Partial<Record<StudyState['city'], number>> = { generalate: 0.28, faculty: 0.22, curia: 0.2 };
+/** A priest's Roman years are a life too (owner's QA: a year at the Academy at "let it run" showed one scene): the Academy, the nunciature, the Curia, the College's corridor, and the basilica draw more often; the licentiate a little more. Invented. */
+const ROMAN_EVENT_CHANCE: Partial<Record<StudyState['city'], number>> = { rome: 0.15, academy: 0.18, nunciature: 0.18, curia: 0.18, college: 0.18, vatican: 0.18 };
 export function studySceneChance(state: GameState): number {
   const city = state.study?.city;
-  return (state.religious && city && ROMAN_FRIAR_EVENT_CHANCE[city]) || STUDY_EVENT_CHANCE;
+  if (!city) return STUDY_EVENT_CHANCE;
+  return (state.religious ? ROMAN_FRIAR_EVENT_CHANCE[city] : ROMAN_EVENT_CHANCE[city]) ?? STUDY_EVENT_CHANCE;
 }
 
 /** The week away: the hours resolve, a scene may come, the years end with the board. */

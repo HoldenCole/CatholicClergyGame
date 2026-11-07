@@ -13,6 +13,8 @@ const SHOWN = 13;
 const LANES: Lane[] = ['decided', 'money', 'parish', 'people', 'diocese', 'you', 'around'];
 const FILTERS: { key: Lane | 'all'; label: string }[] = [{ key: 'all', label: 'Everything' }, { key: 'decided', label: 'Decided' }, { key: 'money', label: 'Money' }, { key: 'parish', label: 'Parish' }, { key: 'people', label: 'People' }, { key: 'diocese', label: 'Diocese' }, { key: 'you', label: 'You' }];
 /** A friar has no parish money to read, and his lanes are the house, the brothers, and the province. */
+/** Away on a posting: no parish, and the parish's lane is the post's. */
+const AWAY_FILTERS: { key: Lane | 'all'; label: string }[] = FILTERS.map((f) => (f.key === 'parish' ? { ...f, label: 'The post' } : f)).filter((f) => f.key !== 'money');
 const FRIAR_FILTERS: { key: Lane | 'all'; label: string }[] = [{ key: 'all', label: 'Everything' }, { key: 'decided', label: 'Decided' }, { key: 'parish', label: 'House' }, { key: 'people', label: 'Brothers' }, { key: 'diocese', label: 'Province' }, { key: 'you', label: 'You' }];
 
 function arrow(sign: -1 | 0 | 1): string {
@@ -20,7 +22,7 @@ function arrow(sign: -1 | 0 | 1): string {
 }
 
 /** The weeks, read: a month at a glance, then each week in lanes with the money and the pews against the week before. */
-function WeeksSheet({ digest, going, seed, religious }: { digest: DigestWeek[]; going: string[]; seed: string; religious: boolean }) {
+function WeeksSheet({ digest, going, seed, religious, away }: { digest: DigestWeek[]; going: string[]; seed: string; religious: boolean; away: boolean }) {
   // The filter is kept across the desk's tabs, so a man reading the money does not start over each time he looks away.
   const filter = useUiStore((s) => s.digestLane);
   const setFilter = useUiStore((s) => s.setDigestLane);
@@ -62,10 +64,10 @@ function WeeksSheet({ digest, going, seed, religious }: { digest: DigestWeek[]; 
         </div>
       )}
       <div className="mb-2 flex flex-wrap items-center gap-1 text-xs">
-        {(religious ? FRIAR_FILTERS : FILTERS).map((f) => (
+        {(religious ? FRIAR_FILTERS : away ? AWAY_FILTERS : FILTERS).map((f) => (
           <button key={f.key} className={'tab ' + (filter === f.key ? 'tab-active' : '')} onClick={() => setFilter(f.key)}>{f.label}</button>
         ))}
-        <label className="ink-faint ml-auto flex items-center gap-1"><input type="checkbox" checked={flavor} onChange={(e) => setFlavor(e.target.checked)} /> {religious ? "around the house" : "around the parish"}</label>
+        <label className="ink-faint ml-auto flex items-center gap-1"><input type="checkbox" checked={flavor} onChange={(e) => setFlavor(e.target.checked)} /> {religious ? 'around the house' : away ? 'around the post' : 'around the parish'}</label>
       </div>
       {shown.length === 0 ? (
         <p className="ink-faint text-sm">{weeks.length === 0 ? 'No weeks have passed yet.' : 'Nothing of that kind in these weeks.'}</p>
@@ -88,7 +90,7 @@ function WeeksSheet({ digest, going, seed, religious }: { digest: DigestWeek[]; 
                 if (!lines?.length) return null;
                 return (
                   <div key={lane} className="ml-10 flex gap-2">
-                    <span className={'w-16 shrink-0 text-[11px] uppercase tracking-[0.12em] ' + (lane === 'decided' ? 'ink-wine' : 'ink-faint')}>{laneLabelFor(lane, religious)}</span>
+                    <span className={'w-16 shrink-0 text-[11px] uppercase tracking-[0.12em] ' + (lane === 'decided' ? 'ink-wine' : 'ink-faint')}>{laneLabelFor(lane, religious, away)}</span>
                     <span className={'min-w-0 flex-1 leading-5 ' + (lane === 'around' ? 'ink-faint' : '')}>{lines.join(' ')}</span>
                   </div>
                 );
@@ -97,7 +99,7 @@ function WeeksSheet({ digest, going, seed, religious }: { digest: DigestWeek[]; 
                 <div className="ml-10 ink-faint text-xs">Nothing to write down.</div>
               )}
               {filter === 'money' && w.lanes.money && w.lanes.money.length > 1 && (
-                <div className="ml-10 flex gap-2"><span className="ink-faint w-16 shrink-0 text-[11px] uppercase tracking-[0.12em]">{laneLabelFor('money', religious)}</span><span className="min-w-0 flex-1 leading-5">{w.lanes.money.filter((l) => !/^Collections \$/.test(l)).join(' ')}</span></div>
+                <div className="ml-10 flex gap-2"><span className="ink-faint w-16 shrink-0 text-[11px] uppercase tracking-[0.12em]">{laneLabelFor('money', religious, away)}</span><span className="min-w-0 flex-1 leading-5">{w.lanes.money.filter((l) => !/^Collections \$/.test(l)).join(' ')}</span></div>
               )}
               {filter === 'all' && w.lanes.money && w.lanes.money.some((l) => !/^Collections \$/.test(l)) && (
                 <div className="ml-10 flex gap-2"><span className="ink-faint w-16 shrink-0 text-[11px] uppercase tracking-[0.12em]">{laneLabelFor('money', religious)}</span><span className="min-w-0 flex-1 leading-5">{w.lanes.money.filter((l) => !/^Collections \$/.test(l)).join(' ')}</span></div>
@@ -123,7 +125,7 @@ export default function DigestPanel() {
 
   return (
     <>
-      <WeeksSheet digest={game.digest} going={game.parish ? whatIsGoingOn(game) : []} seed={game.seed} religious={!!game.religious} />
+      <WeeksSheet digest={game.digest} going={game.parish ? whatIsGoingOn(game) : []} seed={game.seed} religious={!!game.religious} away={!!game.study && !game.parish} />
       {game.character && (
         <>
         <Sheet title="What is running">

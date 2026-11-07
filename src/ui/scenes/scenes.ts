@@ -331,6 +331,18 @@ export const STUDY_FORMATION = postScene('The seminary', 'Back to your suite', [
 export const STUDY_SCHOOLS = postScene('The schools office', 'Back to the apartment', ['principals', 'school_board', 'enrolment', 'the_school_to_close', 'teachers_pay', 'school_visits']);
 
 /** The Roman postings all live in the same room over the same city: the student's, the Curia's, the Academy's, the nunciature's. */
+/** The room's name by the house: the College is the student's; the Academy, the nunciature, the Curia, the Casa, and the faculty corridor are their own. */
+const ROMAN_ROOM_LABEL: Partial<Record<StudyCity, string>> = {
+  academy: 'Your room at the Academy',
+  nunciature: 'Your room at the nunciature',
+  curia: 'Your apartment near the Borgo',
+  holy_see: 'Your rooms in the Apostolic Palace',
+  college: 'Your room on the faculty corridor',
+  vatican: 'Your room at the Casa',
+  generalate: "Your cell at the order's house",
+  faculty: "Your cell at the order's faculty",
+};
+
 export function romanCity(city: StudyCity): boolean {
   return city === 'rome' || city === 'washington' || city === 'curia' || city === 'holy_see' || city === 'academy' || city === 'nunciature' || city === 'generalate' || city === 'faculty' || city === 'college' || city === 'vatican';
 }
@@ -339,7 +351,7 @@ export function romanCity(city: StudyCity): boolean {
 const ROOM_LABEL: Record<string, string> = { desk: 'The desk: the week', crucifix: 'The crucifix: the house chapel', shelf: 'The shelf: the books' };
 
 export function sceneById(id: SceneId, city: StudyCity = 'rome'): SceneDef {
-  if (id === 'study_room') return romanCity(city) ? STUDY_ROOM : { ...STUDY_ROOM_RESIDENCE, label: city === 'residence' ? STUDY_ROOM_RESIDENCE.label : city === 'see' ? "The bishop's house" : 'Your rooms', hotspots: STUDY_ROOM_RESIDENCE.hotspots.map((h) => (h.binds.kind === 'study_action' ? { ...h, binds: { kind: 'panel', panel: 'routine' } as const, label: ROOM_LABEL[h.id] ?? h.label } : h)) };
+  if (id === 'study_room') return romanCity(city) ? (ROMAN_ROOM_LABEL[city] ? { ...STUDY_ROOM, label: ROMAN_ROOM_LABEL[city]! } : STUDY_ROOM) : { ...STUDY_ROOM_RESIDENCE, label: city === 'residence' ? STUDY_ROOM_RESIDENCE.label : city === 'see' ? "The bishop's house" : 'Your rooms', hotspots: STUDY_ROOM_RESIDENCE.hotspots.map((h) => (h.binds.kind === 'study_action' ? { ...h, binds: { kind: 'panel', panel: 'routine' } as const, label: ROOM_LABEL[h.id] ?? h.label } : h)) };
   if (id === 'study_city') return city === 'residence' ? STUDY_HOUSE : city === 'campus' ? STUDY_CAMPUS : city === 'hospital' ? STUDY_HOSPITAL : city === 'seminary' ? STUDY_SEMINARY : city === 'chancery' || city === 'tribunal' ? STUDY_CHANCERY : city === 'auxiliary' ? STUDY_AUXILIARY : city === 'see' ? STUDY_SEE : city === 'prison' ? STUDY_PRISON : city === 'mission' ? STUDY_MISSION : city === 'deployment' ? STUDY_DEPLOYMENT : city === 'formation' ? STUDY_FORMATION : city === 'schools' ? STUDY_SCHOOLS : city === 'washington' ? STUDY_CITY_DC : STUDY_CITY;
   if (id === 'seminary_room') return SEMINARY_SCENE;
   if (id === 'seminary_hall') return SEMINARY_HALL;

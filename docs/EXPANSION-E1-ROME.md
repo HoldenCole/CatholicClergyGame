@@ -341,6 +341,16 @@ About twenty-five, beat `diplomacy`: the Academy (the first dinner, the language
 - **The Curia** (`curia.json`, +6): the portiera and the permesso in the first months, the synod's October (every three years), a cardinal's funeral, July with the prefect away, and the Jubilee of 2025 (`calendar_year`).
 - `tests/content/romeFlavour.test.ts` renders every scene of the four pools against a man in that posting and checks the gating, the first-week and late scenes, and that no pool leaks into another.
 
+### 11.8 Browser QA of the service (R1.7a)
+
+*Two saves driven through the real screens at "let it run": a year at the Academy, and twenty-eight years from the seventh year of the service. The second man was counsellor by his seventh year, moved to Paraguay, Thailand, and Colombia with the rotation scene each time, had the ten-years retreat, the new nuncio, the coup, the village, the Bureau, the patroness's day, and a bishop against the land reform, and was named to a see at home from the nuncio's terna at fifty-six, before the release could reach him; a cardinal at sixty-eight; an elector at seventy-two. Nothing leaked and no console errors. Fixed from what the screens showed:*
+
+- A year at the Academy at "let it run" showed one scene, the missionary year: the draw was a tenth a week against a pool mostly spent. The Roman postings now draw more often (`ROMAN_EVENT_CHANCE`: the Academy, the nunciature, the Curia, the College's corridor, and the basilica 0.18; the licentiate 0.15; invented), as a friar's Roman years already did.
+- The week sheet said the service had no end date; it now says it has a shape, and what the release is.
+- The work sheet's note about a new country was shown at the Academy, where there is none; the Academy has its own line.
+- The room was "Your room at the college" in every Roman posting; it is now the Academy's, the nunciature's, the apartment near the Borgo, the faculty corridor, or the Casa, by the posting (`ROMAN_ROOM_LABEL`).
+- The record's lanes read "The parish" and "around the parish" for a man with no parish; away, they read "The post".
+
 ## 12. The odds of the mitre (as built, owner's decision: generous)
 
 *R1.9 (E3 §16B): a friar is read by the same nuncio at the same odds, with the province's regard in place of the chancery's and the provincial's letter in place of the bishop's; the terna, the auxiliary, the see, the translation and the red hat of a great see are his on these terms.*
