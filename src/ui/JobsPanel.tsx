@@ -3,7 +3,7 @@ import { useGameStore } from '@/engine/store';
 import { boardLeavesHim } from '@/engine/career';
 import { allOffers } from '@/content/offers';
 import { currentPreference, PREFERENCES, PREFERENCE_LABEL } from '@/systems/assignment';
-import { INTEREST_DEFS, INTERESTS, interestsOf, parishInterest } from '@/systems/interests';
+import { INTERESTS, interestsAvailable, interestsOf, parishInterest } from '@/systems/interests';
 import { chancesFor } from '@/systems/openings';
 import { canRequest, postLabel, REQUESTABLE_POSTS, requestChance, requestOf, requestWord } from '@/systems/request';
 import { CATEGORY_WORD, offerDoors } from '@/systems/doors';
@@ -96,7 +96,7 @@ export default function JobsPanel() {
               </p>
               {full && <p className="ink-faint mt-1 text-xs">{INTERESTS.max} is the most the chancery will read; drop one to add another.</p>}
               <div className="mt-2 flex flex-wrap gap-1">
-                {INTEREST_DEFS.map((d) => {
+                {interestsAvailable(game).map((d) => {
                   const on = have.includes(d.id);
                   return (
                     <button key={d.id} className={'pbtn px-2 py-0.5 text-xs ' + (on ? 'pbtn-active' : '')} disabled={!on && full} title={d.blurb} onClick={() => setInterest(d.id, !on)}>

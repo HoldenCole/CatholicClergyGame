@@ -160,6 +160,10 @@ export type Condition =
   | { type: 'month'; op: Op; value: number }
   /** The man's name as a confessor, 0..100 (systems/confessor.ts). */
   | { type: 'confessor'; op: Op; value: number }
+  /** An interest the man has put on file with the chancery (systems/interests.ts): 'nac', 'rome', 'hospital', 'parish:<id>'. */
+  | { type: 'interest'; key: string }
+  /** His formation standing as the bishop reads it, 0..100 (systems/standing.ts): the top of the class is 66 and up. */
+  | { type: 'standing'; op: Op; value: number }
   /** E1 R1.1: where a policy axis of the universal Church stands now (content/rome/axes.json): one value or several. */
   | { type: 'policy'; axis: string; value: string | string[] }
   /**

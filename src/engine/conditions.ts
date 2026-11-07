@@ -19,6 +19,8 @@ import { dueDiplomacyScene, nunciatureDef } from '@/systems/rome/diplomacy';
 import { nuncioView } from '@/systems/rome/nuncioView';
 import { CONFERENCE, dueConferenceScene, latestConferenceDocument, nextOffice } from '@/systems/conference';
 import { dueLoanScene, loanAvailable } from '@/systems/loan';
+import { hasInterest } from '@/systems/interests';
+import { formationStanding } from '@/systems/standing';
 
 import type { Group } from '@/types';
 import { vitalityBand } from '@/systems/groups';
@@ -239,6 +241,10 @@ export function evaluateCondition(
     }
     case 'confessor':
       return compare(cond.op, state.character?.confessor ?? 0, cond.value);
+    case 'interest':
+      return hasInterest(state, cond.key);
+    case 'standing':
+      return compare(cond.op, formationStanding(state).value, cond.value);
     case 'house': {
       const houses = state.world?.diocese.visible.houses ?? [];
       return houses.some((h) => (!cond.charism || h.charism === cond.charism) && (!cond.order || h.order === cond.order)) === cond.value;

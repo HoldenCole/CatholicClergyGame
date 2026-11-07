@@ -13,6 +13,9 @@ import { resolveSelector } from '@/engine/selectors';
 import { massSaid } from '@/systems/massSaid';
 import { evaluateAll } from '@/engine/conditions';
 import { availableSummers } from '@/engine/seminary';
+import { isOfferEligible, offersWeek, offerWeight } from '@/engine/offers';
+import { INTERESTS, interestsAvailable, setInterest } from '@/systems/interests';
+import { formationStanding } from '@/systems/standing';
 import type { GameState } from '@/types';
 
 /** A diocesan seminarian in third year, with the house's formators tagged as the generator tags them. */
@@ -120,6 +123,36 @@ describe('the North American College', () => {
     expect(typeof withWorld.world!.diocese.hidden.romeConnection).toBe('number');
     expect(evaluateAll([{ type: 'diocese', key: 'rome_connection', min: 4 }], strong)).toBe(true);
     expect(evaluateAll([{ type: 'diocese', key: 'rome_connection', min: 4 }], weak)).toBe(false);
+  });
+
+  it('a seminarian may ask for the College; the top of the class who asked is put forward in third year without fail, and the ask fades once the year has passed', () => {
+    const base = thirdYear('nac:ask');
+    const home: GameState = { ...base, seminary: { ...base.seminary!, year: 3, pillarScores: { human: 3, spiritual: 3, intellectual: 4, pastoral: 3 } }, flags: { ...base.flags, rector_recommends: true, seminary_leader: true, noticed_by_bishop: true }, npcs: { ...base.npcs, rector: { ...base.npcs.rector!, relationship: 40 }, bishop: testNpc('bishop', { role: 'bishop', title: 'Bishop', tags: ['bishop'] }) } };
+    // Offered through third year at home, and not to a man already on the Janiculum.
+    expect(interestsAvailable(home).map((d) => d.id)).toContain('nac');
+    expect(interestsAvailable({ ...home, seminary: { ...home.seminary!, year: 4 } }).map((d) => d.id)).not.toContain('nac');
+    expect(interestsAvailable(sendToRome(home, createRng('nac')).state).map((d) => d.id)).not.toContain('nac');
+    expect(interestsAvailable(parishState('nac:ask:parish')).map((d) => d.id)).not.toContain('nac');
+    const offer = offerById('sem_nac')!;
+    expect(offer.interest).toBe('nac');
+    const asked = setInterest(home, 'nac', true);
+    expect(offerWeight(offer, asked)).toBeCloseTo(offerWeight(offer, home) * INTERESTS.offerWeight);
+    // The top of the class who asked: the letter is promised within the term.
+    expect(formationStanding(asked).value).toBeGreaterThanOrEqual(66);
+    expect(evaluateAll(offer.guarantee!.when, asked)).toBe(true);
+    expect(evaluateAll(offer.guarantee!.when, home)).toBe(false);
+    expect(evaluateAll([{ type: 'standing', op: '>=', value: 66 }], { ...asked, flags: { ...asked.flags, rector_doubts: true, rector_recommends: false, seminary_leader: false, noticed_by_bishop: false } })).toBe(false);
+    expect(isOfferEligible(offer, asked)).toBe(true);
+    const defs = [offer];
+    const lookup = (id: string) => defs.find((d) => d.id === id);
+    let s: GameState = asked;
+    let arrived = -1;
+    for (let w = 0; w <= offer.guarantee!.withinWeeks + 1 && arrived < 0; w++) {
+      s = offersWeek({ ...s, clock: { ...s.clock, week: s.clock.week + 1 } }, createRng(`ask${w}`), defs, lookup);
+      if (s.offers.some((o) => o.offerId === 'sem_nac')) arrived = w;
+    }
+    expect(arrived).toBeGreaterThanOrEqual(0);
+    expect(arrived).toBeLessThanOrEqual(offer.guarantee!.withinWeeks);
   });
 
   it('rare letters keep a man in Rome: the College asks for a formator, the basilica for a confessor, each rolled for its place like the Gregorian', () => {
