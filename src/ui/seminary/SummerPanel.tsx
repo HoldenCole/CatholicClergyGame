@@ -2,6 +2,7 @@ import { availableSummers } from '@/engine/seminary';
 import { useGameStore } from '@/engine/store';
 import Panel from '../Panel';
 import { renderText } from '@/engine/text';
+import { summerWanted } from '@/systems/interview';
 
 export default function SummerPanel() {
   const game = useGameStore((s) => s.game);
@@ -16,6 +17,7 @@ export default function SummerPanel() {
           <li key={option.id}>
             <button disabled={!available} onClick={() => choose(option.id)} className="choice h-full border rule">
               <div className="font-medium">{renderText(option.label, game)}{taken && <span className="ink-faint ml-2 text-xs">(a summer already spent)</span>}</div>
+              {summerWanted(game, option.id) && !taken && <div className="ink-faint mt-0.5 text-xs">You asked the vocations director for this one. He remembers.</div>}
               <div className="ink-muted mt-1 text-sm leading-snug">{renderText(option.blurb, game)}</div>
             </button>
           </li>

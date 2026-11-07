@@ -4,6 +4,7 @@ import type { Rng } from '@/engine/rng';
 import { creationContent } from '@/content/creation';
 import { applyCreation } from '@/systems/creation';
 import { SEMINARY_NAMES, startSeminary } from '@/engine/seminary';
+import { beginInterview } from '@/systems/interview';
 import { generateClass } from './classmates';
 import { generateFamily } from './family';
 import { generateFormators } from './formators';
@@ -47,5 +48,6 @@ export function generateRun(state: GameState, answers: CreationAnswers, rng: Rng
   const preset = created.world ? presetById(created.world.diocese.presetId) : undefined;
   const seminaryName = created.religious ? (created.orderHouses?.[created.religious.houseId]?.name ?? 'the novitiate') : preset?.seminaryName ?? rng.derive('seminary').pick(SEMINARY_NAMES);
   // A friar's novitiate is its own first year; a diocesan seminary may or may not run a propaedeutic year.
-  return startSeminary({ ...created, character: { ...created.character!, hooks }, npcs: map }, classmateIds, seminaryName, created.religious ? true : answers.propaedeutic !== false);
+  // The vocations director sees a diocesan man before the first year (DESIGN §6.1a); a friar's novitiate opens on the emphasis.
+  return beginInterview(startSeminary({ ...created, character: { ...created.character!, hooks }, npcs: map }, classmateIds, seminaryName, created.religious ? true : answers.propaedeutic !== false));
 }

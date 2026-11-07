@@ -14,6 +14,7 @@ import SummerPanel from './seminary/SummerPanel';
 import EvaluationPanel from './seminary/EvaluationPanel';
 import OrdinationPanel from './seminary/OrdinationPanel';
 import DirectorPanel from './seminary/DirectorPanel';
+import InterviewPanel from './seminary/InterviewPanel';
 import AssignmentPanel from './seminary/AssignmentPanel';
 import AssignmentChoicePanel from './seminary/AssignmentChoicePanel';
 import LetterPanel from './LetterPanel';
@@ -95,6 +96,7 @@ export default function App() {
     // What came of the last choice is read before anything else is put on the table.
     lastOutcome ? <OutcomePanel /> :
     pending ? <EventPanel /> :
+    game.mode.kind === 'interview' ? <InterviewPanel /> :
     game.mode.kind === 'year_start' ? <EmphasisPanel /> :
     game.mode.kind === 'summer' ? <SummerPanel /> :
     game.mode.kind === 'evaluation' ? <EvaluationPanel /> :

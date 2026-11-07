@@ -318,7 +318,9 @@ export type EffectTarget =
   /** E2 R1.3: a loan: key ask (value: the kind), home, stay, extend, excardinate; for a bishop, lend (value: the priest's selector, the see from the @province_bishop binding). */
   | 'loan'
   /** The parish schedule (systems/schedule.ts): key mass:add | mass:remove | confessions:add | confessions:remove; value "sun 17:00 spanish", "sun 07:30", "wed 18:00 60". */
-  | 'schedule';
+  | 'schedule'
+  /** An interest put on file with the chancery (systems/interests.ts): key the interest id, value false to take it off. Skipped when his file is full. */
+  | 'interest';
 
 export interface Effect {
   target: EffectTarget;
