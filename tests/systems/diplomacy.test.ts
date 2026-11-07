@@ -14,7 +14,7 @@ import { studyActivitiesFor } from '@/systems/studyWeek';
 import { nuncioView } from '@/systems/rome/nuncioView';
 import { mayBeCreated } from '@/systems/rome/college';
 import { afar, homeSuccession } from '@/systems/homeFromAfar';
-import { closeDiplomacyScene, DIPLOMACY, diplomacyWeek, dueDiplomacyScene } from '@/systems/rome/diplomacy';
+import { closeDiplomacyScene, DIPLOMACY, diplomacyWeek, dueDiplomacyScene, keptForNunciature, releaseDue } from '@/systems/rome/diplomacy';
 import { atAcademy, young } from '../helpers/diplomat';
 import { acceptAndGo } from '../helpers/appointment';
 import type { GameState } from '@/types';
@@ -272,5 +272,106 @@ describe('home, from the nunciature (E1 §9 E, §11)', () => {
     expect(out!.letter!.body.join(' ')).not.toMatch(/brother bishop/);
     expect(out!.state.career.at(-1)!.kind).toBe('note');
     expect(out!.state.flags.new_bishop_pending).toBeFalsy();
+  });
+});
+
+describe('the service has a shape (owner: twenty years of it reads oddly)', () => {
+  /** Years on, at the rotation window, the dials where the man keeps them. */
+  function atRotation(state: GameState, years: number, place: Record<string, number>): GameState {
+    const d = state.rome!.diplomacy!;
+    const week = d.since! + years * 52;
+    return { ...state, clock: { ...state.clock, week }, study: { ...state.study!, place }, rome: { ...state.rome!, diplomacy: { ...d, rotateWeek: week + DIPLOMACY.askBefore, arrivedWeek: week - 150 } } };
+  }
+  const high = { reports: 95, church: 70, state: 50, priesthood: 40 };
+  const low = { reports: 40, church: 20, state: 10, priesthood: 40 };
+
+  it('a secretary never made counsellor is released at ten years: the scene, then home or a desk or one last country', () => {
+    const s = inService('dip-release');
+    expect(releaseDue(atRotation(s, 9, high))).toBe(false);
+    const ten = atRotation(s, 10, high);
+    expect(releaseDue(ten)).toBe(true);
+    const put = diplomacyWeek(ten).state;
+    expect(dueDiplomacyScene(put)).toBe('release');
+    expect(put.flags['diplomat:released']).toBe(true);
+    expect(put.rome!.diplomacy!.next).toBeUndefined();
+    // The scene is the secretary's, not the counsellor's.
+    expect(evaluateAll(eventById('dp_release_secretary')!.requires!, put)).toBe(true);
+    expect(evaluateAll(eventById('dp_release_counsellor')!.requires!, put)).toBe(false);
+    // Unanswered a month past the rotation, the service lets him go.
+    let gone = closeDiplomacyScene(put);
+    for (let i = 0; i < 12 && !gone.flags['diplomat:go_home']; i++) gone = diplomacyWeek({ ...gone, clock: { ...gone.clock, week: gone.clock.week + 1 } }).state;
+    expect(gone.flags['diplomat:go_home']).toBe(true);
+    expect(gone.study!.endWeek).toBe(gone.clock.week);
+    // One last country, asked for: the rotation comes with a country named, and the next release has no such choice.
+    let last: GameState = { ...closeDiplomacyScene(put), flags: { ...put.flags, 'diplomat:last_country': true } };
+    last = diplomacyWeek({ ...last, clock: { ...last.clock, week: last.clock.week + 1 } }).state;
+    expect(dueDiplomacyScene(last)).toBe('rotation');
+    expect(last.rome!.diplomacy!.next).toBeTruthy();
+    expect(last.flags['diplomat:last_country']).toBeUndefined();
+    expect(last.flags['diplomat:last_country_taken']).toBe(true);
+    last = closeDiplomacyScene(last);
+    const before = last.rome!.diplomacy!.countries.length;
+    for (let i = 0; i < 10; i++) last = diplomacyWeek({ ...last, clock: { ...last.clock, week: last.clock.week + 1 } }).state;
+    expect(last.rome!.diplomacy!.countries.length).toBe(before + 1);
+    // Reports fall on a move: a new nuncio does not know his drafts.
+    expect(last.study!.place!.reports).toBe(95 - DIPLOMACY.reportsOnMove);
+    const again = atRotation(last, 13, high);
+    expect(dueDiplomacyScene(diplomacyWeek(again).state)).toBe('release');
+    const release = eventById('dp_release_secretary')!;
+    expect(evaluateAll(release.choices.find((c) => c.id === 'last')!.requires!, again)).toBe(false);
+    expect(evaluateAll(release.choices.find((c) => c.id === 'last')!.requires!, put)).toBe(true);
+  });
+
+  it('a counsellor is released at eighteen unless the Secretariat rates him for a nunciature, and at twenty-four regardless', () => {
+    const s = inService('dip-release-c');
+    const c: GameState = { ...s, rome: { ...s.rome!, diplomacy: { ...s.rome!.diplomacy!, rank: 'counsellor' } } };
+    expect(releaseDue(atRotation(c, 17, low))).toBe(false);
+    expect(releaseDue(atRotation(c, 18, low))).toBe(true);
+    expect(keptForNunciature(atRotation(c, 18, high))).toBe(true);
+    expect(releaseDue(atRotation(c, 18, high))).toBe(false);
+    expect(releaseDue(atRotation(c, 24, high))).toBe(true);
+    const put = diplomacyWeek(atRotation(c, 18, low)).state;
+    expect(dueDiplomacyScene(put)).toBe('release');
+    expect(evaluateAll(eventById('dp_release_counsellor')!.requires!, put)).toBe(true);
+    expect(evaluateAll(eventById('dp_release_secretary')!.requires!, put)).toBe(false);
+    // A nuncio is never released.
+    expect(releaseDue({ ...atRotation(c, 30, low), rome: { ...c.rome!, diplomacy: { ...c.rome!.diplomacy!, rank: 'nuncio' } } })).toBe(false);
+  });
+
+  it('a desk at the Secretariat, asked for on release, is promised at home whatever his age', () => {
+    const s = inService('dip-curia');
+    const def = offerById('rome_curia_official')!;
+    expect(def.guarantee!.when).toEqual([{ type: 'flag', key: 'diplomat:asked_curia', value: true }]);
+    const old: GameState = { ...s, character: { ...s.character!, entryYear: s.character!.entryYear - 25 } };
+    const asked: GameState = { ...old, flags: { ...old.flags, 'diplomat:asked_curia': true } };
+    const ageRule = def.requires.find((c) => c.type === 'any')!;
+    expect(evaluateCondition(ageRule, old)).toBe(false);
+    expect(evaluateCondition(ageRule, asked)).toBe(true);
+    expect(def.accept.effects.some((e) => e.target === 'flag' && e.key === 'diplomat:asked_curia' && e.value === false)).toBe(true);
+  });
+
+  it('the scenes read the years, the countries, the weeks in a country, and the region; the old repeaters come once', async () => {
+    const s = inService('dip-conds');
+    const d = s.rome!.diplomacy!;
+    const def = nunciatures.find((n) => n.country === d.country)!;
+    const at: GameState = { ...s, clock: { ...s.clock, week: d.since! + 52 * 7 + 3 }, rome: { ...s.rome!, diplomacy: { ...d, arrivedWeek: d.since! + 52 * 7, countries: ['A', 'B', d.country!] } } };
+    expect(evaluateCondition({ type: 'diplomacy', key: 'years', op: '>=', value: 7 }, at)).toBe(true);
+    expect(evaluateCondition({ type: 'diplomacy', key: 'years', op: '>=', value: 8 }, at)).toBe(false);
+    expect(evaluateCondition({ type: 'diplomacy', key: 'countries', op: '>=', value: 3 }, at)).toBe(true);
+    expect(evaluateCondition({ type: 'diplomacy', key: 'in_country', op: '<=', value: 10 }, at)).toBe(true);
+    expect(evaluateCondition({ type: 'diplomacy', key: 'in_country', op: '<=', value: 2 }, at)).toBe(false);
+    expect(evaluateCondition({ type: 'diplomacy', key: 'region', value: def.region }, at)).toBe(true);
+    expect(evaluateCondition({ type: 'diplomacy', key: 'region', value: 'Atlantis' }, at)).toBe(false);
+    for (const id of ['dp_national_day', 'dp_journalist', 'dp_letter_mother']) expect(eventById(id)!.once, id).toBe(true);
+    expect(eventById('dp_chief_temper')!.suppressYears).toBeGreaterThanOrEqual(6);
+    // Every region has a scene of its own, and every new scene is the nunciature's.
+    const scenes = (await import('@/content')).allEvents.filter((e) => e.id.startsWith('dp_'));
+    expect(scenes.length).toBeGreaterThanOrEqual(45);
+    for (const region of ['Africa', 'Asia', 'Latin America', 'Europe', 'Middle East', 'Oceania']) expect(scenes.some((e) => JSON.stringify(e.requires).includes(`"region","value":"${region}"`)), region).toBe(true);
+    for (const e of scenes) if (!e.id.startsWith('dp_release') && !['dp_mission', 'dp_rotation', 'dp_rotation_nuncio', 'dp_terna', 'dp_seventy_five'].includes(e.id) && !e.id.match(/dp_(first_dinner|language_wall|old_nuncio|personnel|bishop_asks_back)/)) expect(JSON.stringify(e.requires), e.id).toContain('study:nunciature');
+    for (const id of ['dp_release_secretary', 'dp_release_counsellor']) { expect(eventById(id)!.beat).toBe('diplomacy'); expect(eventById(id)!.severity).toBe('CRITICAL'); }
+    // The year's review names the country and the years.
+    const { letter } = (await import('@/systems/review')).yearInReview(at);
+    expect(letter.body.join(' ')).toMatch(/Year 7 of the service, in /);
   });
 });

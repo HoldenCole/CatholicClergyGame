@@ -419,7 +419,7 @@
       "severity": "ROUTINE",
       "category": "chancery",
       "baseWeight": 4,
-      "suppressYears": 3,
+      "suppressYears": 6,
       "requires": [
         {
           "type": "flag",
@@ -737,7 +737,7 @@
       "severity": "ROUTINE",
       "category": "chancery",
       "baseWeight": 3,
-      "suppressYears": 4,
+      "suppressYears": 99,
       "requires": [
         {
           "type": "flag",
@@ -783,7 +783,8 @@
             }
           ]
         }
-      ]
+      ],
+      "once": true
     },
     {
       "id": "dp_national_day",
@@ -797,7 +798,7 @@
       "severity": "ROUTINE",
       "category": "chancery",
       "baseWeight": 3,
-      "suppressYears": 2,
+      "suppressYears": 99,
       "requires": [
         {
           "type": "flag",
@@ -848,7 +849,8 @@
             }
           ]
         }
-      ]
+      ],
+      "once": true
     },
     {
       "id": "dp_local_priest",
@@ -939,7 +941,7 @@
       "severity": "ROUTINE",
       "category": "personal",
       "baseWeight": 3,
-      "suppressYears": 4,
+      "suppressYears": 99,
       "requires": [
         {
           "type": "flag",
@@ -990,7 +992,8 @@
             }
           ]
         }
-      ]
+      ],
+      "once": true
     },
     {
       "id": "dp_charge",
@@ -1646,6 +1649,2231 @@
       ],
       "beat": "diplomacy",
       "priority": 1
+    },
+    {
+      "id": "dp_release_secretary",
+      "phase": [
+        "study",
+        "bishop"
+      ],
+      "pressure": [
+        "ambition_vs_integrity"
+      ],
+      "severity": "CRITICAL",
+      "category": "chancery",
+      "baseWeight": 3,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "diplomacy",
+          "key": "scene",
+          "value": "release"
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "diplomacy",
+            "key": "rank",
+            "value": "nuncio"
+          }
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "diplomacy",
+            "key": "rank",
+            "value": "counsellor"
+          }
+        }
+      ],
+      "title": "The Secretariat Has No Rung for You",
+      "body": "The letter that should name your next country names none. It is signed by the assessor himself, which is the Secretariat's way of being kind. Ten years in the service, and the counsellors' list has not had your name on it: the reports were read, the nuncios were fond of you, and the men who go higher went past you in the corridor without malice. The service does not keep a secretary forever; it thanks him. You are thanked, in two sentences, and asked what you would like to do.",
+      "choices": [
+        {
+          "id": "home",
+          "label": "Ask to be released to go home to your diocese",
+          "outcome": "You write the letter that afternoon, and it is easier than you expected. The Secretariat's answer is warm and three paragraphs long, which is two more than most men get. Your bishop writes that there is a parish, and that he had begun to wonder whether he would ever get you back.",
+          "effects": [
+            {
+              "target": "flag",
+              "key": "diplomat:go_home",
+              "value": true
+            },
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": 4
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "curia",
+          "label": "Ask for a desk at the Secretariat instead",
+          "outcome": "You write that you would rather not leave the Holy See's service altogether, and ask whether there is a desk. The answer takes a month and says that there may be, and that the Secretariat will write to your bishop. You go home to wait for a letter you half believe in, with ten years of other men's countries in your head.",
+          "effects": [
+            {
+              "target": "flag",
+              "key": "diplomat:asked_curia",
+              "value": true
+            },
+            {
+              "target": "flag",
+              "key": "diplomat:go_home",
+              "value": true
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 2
+            }
+          ],
+          "requires": [
+            {
+              "type": "age",
+              "op": "<=",
+              "value": 58
+            }
+          ]
+        },
+        {
+          "id": "last",
+          "label": "Ask for one more country, and then go",
+          "outcome": "You ask for one more country. The letter says yes, in the tone of a man granting a favour he has granted before and will not grant twice. You will go where they send you, for three years, and then you will go home, and both of you know it.",
+          "effects": [
+            {
+              "target": "flag",
+              "key": "diplomat:last_country",
+              "value": true
+            },
+            {
+              "target": "place",
+              "key": "reports",
+              "delta": 3
+            },
+            {
+              "target": "place",
+              "key": "priesthood",
+              "delta": -2
+            }
+          ],
+          "requires": [
+            {
+              "type": "not",
+              "inner": {
+                "type": "flag",
+                "key": "diplomat:last_country_taken",
+                "value": true
+              }
+            }
+          ]
+        }
+      ],
+      "beat": "diplomacy",
+      "priority": 1
+    },
+    {
+      "id": "dp_release_counsellor",
+      "phase": [
+        "study",
+        "bishop"
+      ],
+      "pressure": [
+        "ambition_vs_integrity"
+      ],
+      "severity": "CRITICAL",
+      "category": "chancery",
+      "baseWeight": 3,
+      "suppressYears": 1,
+      "requires": [
+        {
+          "type": "diplomacy",
+          "key": "scene",
+          "value": "release"
+        },
+        {
+          "type": "diplomacy",
+          "key": "rank",
+          "value": "counsellor"
+        }
+      ],
+      "title": "No Nunciature",
+      "body": "The assessor telephones, which he does not do, and asks you to come to Rome for a day. In his office on the Third Loggia he says what the file has said for some years: there are more counsellors than nunciatures, the Holy Father has his own list, and your name, which has been on the Secretariat's, is not on his. He says it without unkindness; he has said it to better men. A counsellor who will not be a nuncio goes home, or to a desk in this building, and the Secretariat would like to know which.",
+      "choices": [
+        {
+          "id": "home",
+          "label": "Ask to be released to go home to your diocese",
+          "outcome": "You write the letter that afternoon, and it is easier than you expected. The Secretariat's answer is warm and three paragraphs long, which is two more than most men get. Your bishop writes that there is a parish, and that he had begun to wonder whether he would ever get you back.",
+          "effects": [
+            {
+              "target": "flag",
+              "key": "diplomat:go_home",
+              "value": true
+            },
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": 4
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "curia",
+          "label": "Ask for a desk at the Secretariat instead",
+          "outcome": "You write that you would rather not leave the Holy See's service altogether, and ask whether there is a desk. The answer takes a month and says that there may be, and that the Secretariat will write to your bishop. You go home to wait for a letter you half believe in, with eighteen years of other men's countries in your head.",
+          "effects": [
+            {
+              "target": "flag",
+              "key": "diplomat:asked_curia",
+              "value": true
+            },
+            {
+              "target": "flag",
+              "key": "diplomat:go_home",
+              "value": true
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 2
+            }
+          ],
+          "requires": [
+            {
+              "type": "age",
+              "op": "<=",
+              "value": 58
+            }
+          ]
+        },
+        {
+          "id": "last",
+          "label": "Ask for one more country, and then go",
+          "outcome": "You ask for one more country. The letter says yes, in the tone of a man granting a favour he has granted before and will not grant twice. You will go where they send you, for three years, and then you will go home, and both of you know it.",
+          "effects": [
+            {
+              "target": "flag",
+              "key": "diplomat:last_country",
+              "value": true
+            },
+            {
+              "target": "place",
+              "key": "reports",
+              "delta": 3
+            },
+            {
+              "target": "place",
+              "key": "priesthood",
+              "delta": -2
+            }
+          ],
+          "requires": [
+            {
+              "type": "not",
+              "inner": {
+                "type": "flag",
+                "key": "diplomat:last_country_taken",
+                "value": true
+              }
+            }
+          ]
+        }
+      ],
+      "beat": "diplomacy",
+      "priority": 1
+    },
+    {
+      "id": "dp_first_cipher",
+      "phase": [
+        "study",
+        "bishop"
+      ],
+      "pressure": [
+        "competence"
+      ],
+      "severity": "ROUTINE",
+      "category": "chancery",
+      "baseWeight": 5,
+      "suppressYears": 99,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:nunciature",
+          "value": true
+        },
+        {
+          "type": "diplomacy",
+          "key": "rank",
+          "value": "secretary2"
+        },
+        {
+          "type": "diplomacy",
+          "key": "in_country",
+          "op": "<=",
+          "value": 10
+        }
+      ],
+      "title": "Your First Dispatch",
+      "body": "Your first dispatch to Rome comes back from {@nuncio_chief}'s desk with every paragraph struck through and one sentence of yours left standing, circled. He says it is a good sentence and the rest is a seminarian's essay, and that a dispatch is four pages the Secretary of State can read in a car. He wants it again by six.",
+      "choices": [
+        {
+          "id": "rewrite",
+          "label": "Write it again his way, four pages, by six",
+          "outcome": "You write it his way. It is better, and you resent that it is better, and by the third dispatch you cannot remember writing any other way. He initials it without reading it, which is the highest praise the house gives.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "reports",
+              "delta": 6
+            },
+            {
+              "target": "relationship",
+              "key": "@nuncio_chief",
+              "delta": 5
+            },
+            {
+              "target": "place",
+              "key": "priesthood",
+              "delta": -1
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "sentence",
+          "label": "Write it again, and keep three of your sentences",
+          "outcome": "You keep three sentences. He strikes two. The one that survives is quoted back to the nunciature in a letter from the Secretariat four months later, unsigned, in a paragraph that begins 'as the nunciature has observed'. You do not tell him it was yours. He knows.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "reports",
+              "delta": 4
+            },
+            {
+              "target": "relationship",
+              "key": "@nuncio_chief",
+              "delta": -2
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "diplomat:own_sentence",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "once": true
+    },
+    {
+      "id": "dp_cook",
+      "phase": [
+        "study",
+        "bishop"
+      ],
+      "pressure": [
+        "friendship_vs_duty"
+      ],
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 4,
+      "suppressYears": 99,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:nunciature",
+          "value": true
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "diplomacy",
+            "key": "rank",
+            "value": "nuncio"
+          }
+        },
+        {
+          "type": "diplomacy",
+          "key": "in_country",
+          "op": "<=",
+          "value": 24
+        }
+      ],
+      "title": "The Cook",
+      "body": "The nunciature's cook has outlasted four nuncios and intends to outlast {@nuncio_chief}. She tells you, in a kitchen you were not invited into, which minister's wife is Catholic, which bishop drinks, and why the last secretary left early. The nuncio eats in the dining room, alone, with a book. She has set a second place at the kitchen table and is waiting to see what kind of priest you are.",
+      "choices": [
+        {
+          "id": "kitchen",
+          "label": "Eat in the kitchen",
+          "outcome": "You eat in the kitchen, most nights, for three years. You learn the country from her before you learn it from anyone, and when the nuncio asks you how you knew about the minister's wife you say a parishioner told you, which is true.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "priesthood",
+              "delta": 3
+            },
+            {
+              "target": "place",
+              "key": "church",
+              "delta": 3
+            },
+            {
+              "target": "place",
+              "key": "state",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "diplomat:kitchen",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "dining",
+          "label": "Eat with the nuncio, as the house expects",
+          "outcome": "You eat in the dining room, with the nuncio and his book, and learn the service from him instead. She feeds you anyway, and tells you less, and when you leave she says you were a good secretary, which from her is not a compliment.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "reports",
+              "delta": 3
+            },
+            {
+              "target": "relationship",
+              "key": "@nuncio_chief",
+              "delta": 3
+            },
+            {
+              "target": "place",
+              "key": "priesthood",
+              "delta": -1
+            }
+          ]
+        }
+      ],
+      "once": true
+    },
+    {
+      "id": "dp_language_street",
+      "phase": [
+        "study",
+        "bishop"
+      ],
+      "pressure": [
+        "competence"
+      ],
+      "severity": "ROUTINE",
+      "category": "chancery",
+      "baseWeight": 4,
+      "suppressYears": 99,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:nunciature",
+          "value": true
+        },
+        {
+          "type": "diplomacy",
+          "key": "countries",
+          "op": ">=",
+          "value": 2
+        },
+        {
+          "type": "diplomacy",
+          "key": "in_country",
+          "op": "<=",
+          "value": 12
+        }
+      ],
+      "title": "The Language on the Street",
+      "body": "The second country has a second language, and the nunciature's French and Italian do not reach the market. You can learn it from the embassy's tutor, in the mornings, at the Secretariat's expense, or from the parish down the road, on Sundays, from people who will laugh at you.",
+      "choices": [
+        {
+          "id": "market",
+          "label": "The parish, on Sundays, and the market every morning",
+          "outcome": "You are laughed at for a year and understood in the second. The nuncio notices that the bishops talk to you in a language he does not have, and says nothing, and sends you to the ones he cannot read.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "church",
+              "delta": 6
+            },
+            {
+              "target": "place",
+              "key": "priesthood",
+              "delta": 3
+            },
+            {
+              "target": "place",
+              "key": "reports",
+              "delta": 2
+            },
+            {
+              "target": "strain",
+              "key": "strain",
+              "delta": 2
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "tutor",
+          "label": "The embassy's tutor, properly, in the mornings",
+          "outcome": "You learn it properly, with the grammar, from a woman who has taught four ambassadors. You can read the newspaper in six months and the ministry's letters in nine. The market still laughs at you, in a friendlier way.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "state",
+              "delta": 4
+            },
+            {
+              "target": "place",
+              "key": "reports",
+              "delta": 3
+            }
+          ]
+        }
+      ],
+      "once": true
+    },
+    {
+      "id": "dp_american_embassy",
+      "phase": [
+        "study",
+        "bishop"
+      ],
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "severity": "ROUTINE",
+      "category": "chancery",
+      "baseWeight": 3,
+      "suppressYears": 99,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:nunciature",
+          "value": true
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "diplomacy",
+            "key": "rank",
+            "value": "nuncio"
+          }
+        }
+      ],
+      "title": "The Fourth of July",
+      "body": "The American embassy's invitation comes in a thick envelope: the Fourth of July reception, the ambassador's residence, the only American priest in the diplomatic corps requested. {@nuncio_chief} reads it and says that the Holy See has no country and that you are its man here, not Washington's, and then says that you should probably go, and that he will want to know who was there.",
+      "choices": [
+        {
+          "id": "go",
+          "label": "Go, and remember who was there",
+          "outcome": "You go. The ambassador calls you Father and then, after the second drink, asks what the nuncio really thinks of the president. You tell him the nuncio thinks very highly of everyone, which is in the training. Your report on who was there runs to two pages and is the most useful thing you write that year.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "state",
+              "delta": 5
+            },
+            {
+              "target": "place",
+              "key": "reports",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": -1
+            },
+            {
+              "target": "flag",
+              "key": "diplomat:fourth_of_july",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "regrets",
+          "label": "Send regrets, as the Holy See's man",
+          "outcome": "You send regrets on the nunciature's card. The ambassador's deputy telephones to ask whether anything is wrong, and you say nothing is wrong, and the Secretariat, which reads everything, notes that the nunciature's American is not at the Americans' table, and approves.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 3
+            },
+            {
+              "target": "place",
+              "key": "state",
+              "delta": -2
+            },
+            {
+              "target": "place",
+              "key": "reports",
+              "delta": 1
+            }
+          ]
+        }
+      ],
+      "once": true
+    },
+    {
+      "id": "dp_nuncio_retires",
+      "phase": [
+        "study",
+        "bishop"
+      ],
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "severity": "ROUTINE",
+      "category": "chancery",
+      "baseWeight": 3,
+      "suppressYears": 6,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:nunciature",
+          "value": true
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "diplomacy",
+            "key": "rank",
+            "value": "nuncio"
+          }
+        },
+        {
+          "type": "diplomacy",
+          "key": "years",
+          "op": ">=",
+          "value": 2
+        }
+      ],
+      "title": "A New Nuncio",
+      "body": "{@nuncio_chief} is seventy-five, and the letter has come for him as it comes for everyone. His successor arrives in a month, from a country you have never been to, with a reputation for reading every draft twice. The old man spends his last fortnight telling you what to keep from the new one and what to show him, and gives you his pen, which does not work.",
+      "choices": [
+        {
+          "id": "grace",
+          "label": "Learn the new man, and let the drafts be rewritten",
+          "outcome": "The new nuncio rewrites your first month's drafts entirely and your third month's hardly at all. You learn his sentences the way you learned the old man's. The pen sits in your drawer.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@nuncio_chief",
+              "delta": 5
+            },
+            {
+              "target": "place",
+              "key": "reports",
+              "delta": 3
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "argue",
+          "label": "Argue the paragraphs that matter",
+          "outcome": "You argue three paragraphs in the first month, and win one, and the new nuncio, who was told you were easy, revises his view. He tells Rome you have opinions. Rome, which likes to know that about a man early, writes it down.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@nuncio_chief",
+              "delta": -5
+            },
+            {
+              "target": "place",
+              "key": "reports",
+              "delta": -2
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "diplomat:argued_the_new_nuncio",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dp_classmate_pastor",
+      "phase": [
+        "study",
+        "bishop"
+      ],
+      "pressure": [
+        "friendship_vs_duty"
+      ],
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 3,
+      "suppressYears": 99,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:nunciature",
+          "value": true
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "diplomacy",
+            "key": "rank",
+            "value": "nuncio"
+          }
+        },
+        {
+          "type": "diplomacy",
+          "key": "years",
+          "op": ">=",
+          "value": 4
+        }
+      ],
+      "title": "A Letter from a Pastor",
+      "body": "A letter from a classmate, in the hand you remember from the seminary's noticeboard: he has been made pastor of a parish with a school and a debt, and writes to say so, and to ask what it is like to have lunch with ambassadors. There is a photograph of him in a hard hat in front of the school's new roof. You have not had a parish, and may never have one.",
+      "choices": [
+        {
+          "id": "truth",
+          "label": "Write him the truth",
+          "outcome": "You write that it is like being a curate in a house with one priest and a flag, that you say Mass for the cook and a guard, and that you envy him the roof. He writes back that he envies you the ambassadors, and that the roof leaks. You keep the letter.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "priesthood",
+              "delta": 4
+            },
+            {
+              "target": "flag",
+              "key": "diplomat:wrote_the_truth_home",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "postcard",
+          "label": "Write him the postcard version",
+          "outcome": "You write about the ambassadors and the national day and the time the president's car came for you. It is all true. He reads it to the parish council, who are impressed, and you do not hear from him for four years.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "reports",
+              "delta": 1
+            },
+            {
+              "target": "place",
+              "key": "priesthood",
+              "delta": -2
+            }
+          ]
+        }
+      ],
+      "once": true
+    },
+    {
+      "id": "dp_bishop_recall",
+      "phase": [
+        "study",
+        "bishop"
+      ],
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 4,
+      "suppressYears": 99,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:nunciature",
+          "value": true
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "diplomacy",
+            "key": "rank",
+            "value": "nuncio"
+          }
+        },
+        {
+          "type": "diplomacy",
+          "key": "years",
+          "op": ">=",
+          "value": 6
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "diplomat:released",
+            "value": true
+          }
+        }
+      ],
+      "title": "The Bishop Wants You Home",
+      "body": "{@bishop} writes, not through the Secretariat but to you, which bishops are not supposed to do and all of them do. He is short of men who can read a budget and a room, the chancery needs a vicar for something, and he has watched your name go round the world for six years on other people's business. He does not say come home. He says that if you asked to be released he would know what to do with you, and that the Secretariat has had its share.",
+      "choices": [
+        {
+          "id": "stay",
+          "label": "Write that the Secretariat has not finished with you",
+          "outcome": "You write that you are the Holy See's for now, in the careful sentences the service teaches. He writes back a line, in his own hand, that he understands, which is what bishops write when they do not. The chancery finds another man for the vicar's desk, and you read about him in the diocesan paper.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": -6
+            },
+            {
+              "target": "flag",
+              "key": "diplomat:refused_bishop",
+              "value": true
+            },
+            {
+              "target": "place",
+              "key": "reports",
+              "delta": 3
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 1
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "home",
+          "label": "Ask the Secretariat to release you to him",
+          "outcome": "You write to the Secretariat the same week. The answer comes within the month: released, thanked, a medal in a box. {@bishop} meets you at the airport himself, which he has done for no one, and tells you in the car what the desk is.",
+          "effects": [
+            {
+              "target": "flag",
+              "key": "diplomat:go_home",
+              "value": true
+            },
+            {
+              "target": "flag",
+              "key": "diplomat:recalled",
+              "value": true
+            },
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": 8
+            },
+            {
+              "target": "place",
+              "key": "priesthood",
+              "delta": 2
+            }
+          ]
+        }
+      ],
+      "once": true
+    },
+    {
+      "id": "dp_ten_years",
+      "phase": [
+        "study",
+        "bishop"
+      ],
+      "pressure": [
+        "body_vs_vow"
+      ],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 4,
+      "suppressYears": 99,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:nunciature",
+          "value": true
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "diplomacy",
+            "key": "rank",
+            "value": "nuncio"
+          }
+        },
+        {
+          "type": "diplomacy",
+          "key": "years",
+          "op": ">=",
+          "value": 10
+        }
+      ],
+      "title": "Ten Years",
+      "body": "Ten years since the Academy, and the Secretariat's annual letter of leave arrives with a line it did not have before: a priest of the service is reminded of the retreat the Academy makes for its own at the Benedictines above the lake, a week in October, no cipher traffic. You have not made a retreat in six years. There is a report on the elections due the same week.",
+      "choices": [
+        {
+          "id": "retreat",
+          "label": "Go up to the lake",
+          "outcome": "You go up to the lake. The abbot, who was a nuncio once, hears your confession on the fourth day and says nothing about it afterwards except that the service is a hard place to stay a priest and that you are still one. You come down and write the elections report in two days, and it is fine.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "priesthood",
+              "delta": 8
+            },
+            {
+              "target": "place",
+              "key": "reports",
+              "delta": -2
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "diplomat:retreat_at_ten",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "report",
+          "label": "Write the report; the lake will be there next year",
+          "outcome": "The report is the best thing you have written: forty pages, read on the Third Loggia, quoted. The lake is there next year, and the year after, and the letter of leave stops mentioning it, and you notice, two Octobers later, that you have stopped noticing.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "reports",
+              "delta": 6
+            },
+            {
+              "target": "place",
+              "key": "priesthood",
+              "delta": -5
+            },
+            {
+              "target": "strain",
+              "key": "strain",
+              "delta": 4
+            }
+          ]
+        }
+      ],
+      "once": true
+    },
+    {
+      "id": "dp_af_seminary",
+      "phase": [
+        "study",
+        "bishop"
+      ],
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 4,
+      "suppressYears": 99,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:nunciature",
+          "value": true
+        },
+        {
+          "type": "diplomacy",
+          "key": "region",
+          "value": "Africa"
+        }
+      ],
+      "title": "Four Hundred Seminarians",
+      "body": "The major seminary has four hundred men, a library with a roof that leaks onto the Fathers, and a rector who asks the nunciature, through you, for money it does not have. The bishops' conference says the seminary is its glory. The rector, when the bishops have gone, says that the glory sleeps three to a room and that half the men should not be there. He wants Rome told. The bishops do not.",
+      "choices": [
+        {
+          "id": "plain",
+          "label": "Tell Rome what the rector said",
+          "outcome": "You write it plainly: four hundred, three to a room, half of them a mistake, a rector who knows it. The Congregation reads it and asks the conference questions the conference does not enjoy. The rector is moved within the year, and sends you a note that says thank you, without irony, from a parish.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "reports",
+              "delta": 6
+            },
+            {
+              "target": "place",
+              "key": "church",
+              "delta": -5
+            },
+            {
+              "target": "flag",
+              "key": "diplomat:told_rome_about_the_seminary",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "bishops",
+          "label": "Write what the bishops asked",
+          "outcome": "You write about the glory, and the roof, and the need. Rome sends money for the roof. The rector says nothing to you again. The bishops ask for you at their meetings, which the nuncio notices and uses.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "church",
+              "delta": 6
+            },
+            {
+              "target": "place",
+              "key": "reports",
+              "delta": -3
+            }
+          ]
+        },
+        {
+          "id": "embassy",
+          "label": "Find the roof money from the Americans",
+          "outcome": "You mention the roof to the ambassador's wife at a dinner and the embassy's small-grants fund fixes it in a season, with a plaque. Rome learns of the plaque before it learns of the roof and is not pleased that a nunciature went to an embassy for a seminary's roof. The rector does not care who paid.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "state",
+              "delta": 4
+            },
+            {
+              "target": "place",
+              "key": "church",
+              "delta": 4
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": -3
+            }
+          ]
+        }
+      ],
+      "once": true
+    },
+    {
+      "id": "dp_af_roadblock",
+      "phase": [
+        "study",
+        "bishop"
+      ],
+      "pressure": [
+        "belief_vs_safety"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 3,
+      "suppressYears": 99,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:nunciature",
+          "value": true
+        },
+        {
+          "type": "diplomacy",
+          "key": "region",
+          "value": "Africa"
+        },
+        {
+          "type": "diplomacy",
+          "key": "hardship",
+          "op": ">=",
+          "value": 2
+        }
+      ],
+      "title": "The Roadblock",
+      "body": "Four hours out on the road to the bishop's funeral, the nunciature's car with its small flag is stopped by six men in parts of uniforms. The driver, who has done this before, reaches under the seat. The Vienna Convention is in your briefcase. The men have a rifle between them and have not eaten today.",
+      "choices": [
+        {
+          "id": "pay",
+          "label": "Let the driver pay",
+          "outcome": "The driver pays what the driver pays. You arrive at the funeral two hours late and preach, in a borrowed stole, about the Church that keeps going when the state does not. The nuncio, when you tell him, says that the driver has a budget for that and that you should never know what it is.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "state",
+              "delta": -1
+            },
+            {
+              "target": "place",
+              "key": "priesthood",
+              "delta": -1
+            },
+            {
+              "target": "place",
+              "key": "church",
+              "delta": 2
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "flag",
+          "label": "Get out of the car with the flag",
+          "outcome": "You get out. You say, in their language, who you are and whose car it is, and that the bishop they are burying today was from their district. The oldest of them crosses himself. They let you through and keep the driver's money. The nuncio says you were a fool, and tells the story at every dinner for a year.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "state",
+              "delta": 4
+            },
+            {
+              "target": "place",
+              "key": "church",
+              "delta": 4
+            },
+            {
+              "target": "strain",
+              "key": "strain",
+              "delta": 4
+            },
+            {
+              "target": "relationship",
+              "key": "@nuncio_chief",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "diplomat:roadblock",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "once": true
+    },
+    {
+      "id": "dp_la_shrine",
+      "phase": [
+        "study",
+        "bishop"
+      ],
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "severity": "ROUTINE",
+      "category": "chancery",
+      "baseWeight": 4,
+      "suppressYears": 99,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:nunciature",
+          "value": true
+        },
+        {
+          "type": "diplomacy",
+          "key": "region",
+          "value": "Latin America"
+        }
+      ],
+      "title": "The Patroness's Day",
+      "body": "The feast of the national patroness: a basilica built for ten thousand, the president in the front pew with his generals, the bishops in a row behind him, and the people outside in the square since dawn. The nunciature is placed, by protocol, beside the president. {@nuncio_chief} has a cold, or says he has, and sends you.",
+      "choices": [
+        {
+          "id": "president",
+          "label": "Sit where the protocol puts you",
+          "outcome": "You sit beside the president. He talks through the consecration and asks you, during the homily, whether the Holy Father will visit. You say the Holy Father prays for his country every day, which is true of every country. The photograph is in every paper. The bishops see it.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "state",
+              "delta": 6
+            },
+            {
+              "target": "place",
+              "key": "church",
+              "delta": -3
+            },
+            {
+              "target": "place",
+              "key": "reports",
+              "delta": 2
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "bishops",
+          "label": "Sit with the bishops, and let the president's chair be empty",
+          "outcome": "You take a chair in the bishops' row and the president's aide spends the Gloria rearranging the protocol. The cardinal archbishop, who has not spoken to a nuncio's secretary in years, asks you to lunch. The ministry of foreign affairs sends a note that is not quite a complaint.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "church",
+              "delta": 7
+            },
+            {
+              "target": "place",
+              "key": "state",
+              "delta": -5
+            },
+            {
+              "target": "place",
+              "key": "priesthood",
+              "delta": 2
+            }
+          ]
+        }
+      ],
+      "once": true
+    },
+    {
+      "id": "dp_la_land",
+      "phase": [
+        "study",
+        "bishop"
+      ],
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 3,
+      "suppressYears": 99,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:nunciature",
+          "value": true
+        },
+        {
+          "type": "diplomacy",
+          "key": "region",
+          "value": "Latin America"
+        },
+        {
+          "type": "diplomacy",
+          "key": "hardship",
+          "op": ">=",
+          "value": 2
+        }
+      ],
+      "title": "The Bishop and the Land",
+      "body": "A bishop in the south has said from the pulpit that the land reform is theft and the men behind it are thieves, and named two of them, and one of them is a minister. The ministry asks the nunciature whether the Holy See shares the bishop's view. {@nuncio_chief} asks you to draft the report to Rome and the reply to the ministry, and says that the two should not contradict each other, and that they will.",
+      "choices": [
+        {
+          "id": "whole",
+          "label": "Send the bishop's words to Rome whole, and tell the ministry the Church speaks for the poor",
+          "outcome": "Rome gets the sermon entire and a note that the bishop is right and imprudent. The ministry gets a sentence it frames. The minister does not receive the nuncio for a year, and the bishop sends the nunciature a case of the south's wine, which the nuncio says you may not drink.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "church",
+              "delta": 6
+            },
+            {
+              "target": "place",
+              "key": "state",
+              "delta": -6
+            },
+            {
+              "target": "place",
+              "key": "reports",
+              "delta": 3
+            },
+            {
+              "target": "place",
+              "key": "priesthood",
+              "delta": 2
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "soften",
+          "label": "Soften the bishop in the report, and the Church in the reply",
+          "outcome": "Rome reads that a bishop has spoken strongly on a local matter. The ministry reads that the Holy See hopes for justice and dialogue. Nobody is angry. The bishop learns what you wrote and does not write to the nunciature again, and the priests of the south, who hear everything, know your name as the man who softened him.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "state",
+              "delta": 4
+            },
+            {
+              "target": "place",
+              "key": "reports",
+              "delta": 2
+            },
+            {
+              "target": "place",
+              "key": "church",
+              "delta": -7
+            },
+            {
+              "target": "place",
+              "key": "priesthood",
+              "delta": -3
+            },
+            {
+              "target": "flag",
+              "key": "diplomat:softened_a_bishop",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "once": true
+    },
+    {
+      "id": "dp_as_bureau",
+      "phase": [
+        "study",
+        "bishop"
+      ],
+      "pressure": [
+        "belief_vs_safety"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 4,
+      "suppressYears": 99,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:nunciature",
+          "value": true
+        },
+        {
+          "type": "diplomacy",
+          "key": "region",
+          "value": "Asia"
+        }
+      ],
+      "title": "The Bureau of Religious Affairs",
+      "body": "The appointment of a bishop here passes, by a sentence in an agreement nobody has read, through the government's Bureau of Religious Affairs, whose director is a courteous man with a file on every priest in the country. He has the Holy See's name for the vacant see and has had it for seven months. He invites you to tea, which is how the bureau says no.",
+      "choices": [
+        {
+          "id": "patient",
+          "label": "Drink the tea, for as long as it takes",
+          "outcome": "You drink tea with the director every month for a year. He asks about your family and the weather in Rome and never about the name. In the thirteenth month he mentions that the bureau would have no objection to the man, and the man is ordained in the spring. The nuncio says you have learned the one thing the Academy cannot teach.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "state",
+              "delta": 6
+            },
+            {
+              "target": "place",
+              "key": "reports",
+              "delta": 4
+            },
+            {
+              "target": "relationship",
+              "key": "@nuncio_chief",
+              "delta": 3
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "bishops",
+          "label": "Tell the bishops to pray the name from the pulpit",
+          "outcome": "You let the bishops know, carefully, that the Holy See has a name and the bureau has not answered. The name is in every church by Sunday. The director stops inviting you to tea. The man is ordained in the autumn, after Rome and the government have had a conversation that does not include you, and the director's file on you is thicker.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "church",
+              "delta": 7
+            },
+            {
+              "target": "place",
+              "key": "state",
+              "delta": -7
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": -2
+            }
+          ]
+        }
+      ],
+      "once": true
+    },
+    {
+      "id": "dp_as_village",
+      "phase": [
+        "study",
+        "bishop"
+      ],
+      "pressure": [
+        "belief_vs_safety"
+      ],
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 3,
+      "suppressYears": 99,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:nunciature",
+          "value": true
+        },
+        {
+          "type": "diplomacy",
+          "key": "region",
+          "value": "Asia"
+        },
+        {
+          "type": "diplomacy",
+          "key": "hardship",
+          "op": ">=",
+          "value": 2
+        }
+      ],
+      "title": "The Village",
+      "body": "A Christian village in the hills has had its church burned, twice, and a catechist beaten, and the police have found nothing to investigate. The bishop asks whether someone from the nunciature could come, not to do anything, but to be seen to have come. It is nine hours by road and the ministry would rather you did not.",
+      "choices": [
+        {
+          "id": "go",
+          "label": "Go, and be seen",
+          "outcome": "You go. The catechist meets you at the edge of the village with the whole village behind him, and you say Mass in the burned church with the roof open. The police arrive while you are preaching and stand at the back. The church is not burned a third time. The ministry's note says that the nunciature's travel was not cleared, and the nuncio files it.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "church",
+              "delta": 9
+            },
+            {
+              "target": "place",
+              "key": "state",
+              "delta": -4
+            },
+            {
+              "target": "place",
+              "key": "priesthood",
+              "delta": 5
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "strain",
+              "key": "strain",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "diplomat:went_to_the_village",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "money",
+          "label": "Send money for the roof, and a letter",
+          "outcome": "You send what the nunciature can and a letter the bishop reads aloud. The catechist writes to thank you, in careful English, and asks when you will come. You mean to. There is a report due.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "church",
+              "delta": 2
+            },
+            {
+              "target": "place",
+              "key": "reports",
+              "delta": 2
+            },
+            {
+              "target": "place",
+              "key": "priesthood",
+              "delta": -2
+            }
+          ]
+        }
+      ],
+      "once": true
+    },
+    {
+      "id": "dp_eu_empty",
+      "phase": [
+        "study",
+        "bishop"
+      ],
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "severity": "ROUTINE",
+      "category": "chancery",
+      "baseWeight": 4,
+      "suppressYears": 99,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:nunciature",
+          "value": true
+        },
+        {
+          "type": "diplomacy",
+          "key": "region",
+          "value": "Europe"
+        }
+      ],
+      "title": "The Eleven O'Clock",
+      "body": "The cathedral's eleven o'clock on an ordinary Sunday: forty people in a nave built for two thousand, a choir of six, a bishop who preaches well to nobody. The Church here is rich from the state's church tax and empty, and the report Rome wants is about the numbers. The bishop would like it to be about the renewal he sees beginning.",
+      "choices": [
+        {
+          "id": "numbers",
+          "label": "Write the numbers",
+          "outcome": "You write the numbers, and the forty, and the choir of six, and the money. Rome reads it in a car and quotes it to the bishop at his next visit, who knows at once whose sentences they are. He is cool at the next three receptions and then, at the fourth, says that it was fair.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "reports",
+              "delta": 6
+            },
+            {
+              "target": "place",
+              "key": "church",
+              "delta": -3
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "renewal",
+          "label": "Write the renewal he sees",
+          "outcome": "You write about the renewal, which is real and small: a young priest in the suburbs, a Mass for the Poles that is full. Rome reads it and is pleased and learns nothing. The bishop invites you to the renewal, which is twelve people in a hall, and you go, and it is good.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "church",
+              "delta": 4
+            },
+            {
+              "target": "place",
+              "key": "reports",
+              "delta": -3
+            },
+            {
+              "target": "place",
+              "key": "priesthood",
+              "delta": 2
+            }
+          ]
+        }
+      ],
+      "once": true
+    },
+    {
+      "id": "dp_eu_inquiry",
+      "phase": [
+        "study",
+        "bishop"
+      ],
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "severity": "MAJOR",
+      "category": "scandal",
+      "baseWeight": 3,
+      "suppressYears": 99,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:nunciature",
+          "value": true
+        },
+        {
+          "type": "diplomacy",
+          "key": "region",
+          "value": "Europe"
+        }
+      ],
+      "title": "The Inquiry",
+      "body": "The state's inquiry into the abuse of children in the Church has written to the nunciature asking for its files on three dioceses from the years before the nuncio came. The Holy See's position is that a nunciature is an embassy and its archive inviolable. The victims' lawyers are on the television every night saying so. {@nuncio_chief} has asked Rome and Rome has not answered, and he has asked you what you would do, and he means it.",
+      "choices": [
+        {
+          "id": "give",
+          "label": "Counsel him to give what the nunciature has",
+          "outcome": "You tell him that the Convention protects the archive and that the Church cannot be seen to hide behind it on this, of all things. He sends what the nunciature holds, with a note to Rome that he has done it. Rome's answer is silence for a year, and then a transfer for him that is not a promotion. The inquiry says the nunciature cooperated. The bishops say nothing, which is thanks.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "church",
+              "delta": 5
+            },
+            {
+              "target": "place",
+              "key": "state",
+              "delta": 6
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": -7
+            },
+            {
+              "target": "place",
+              "key": "priesthood",
+              "delta": 4
+            },
+            {
+              "target": "flag",
+              "key": "diplomat:gave_the_files",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "hold",
+          "label": "Counsel him to hold the Convention until Rome speaks",
+          "outcome": "You tell him the Convention is Rome's to waive and not his. He holds. Rome, when it speaks, speaks of a protocol, and the files are given four years later through the foreign ministry, when nobody is watching. The inquiry's report has a paragraph about the nunciature. You read it twice and put it away.",
+          "effects": [
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 5
+            },
+            {
+              "target": "place",
+              "key": "state",
+              "delta": -8
+            },
+            {
+              "target": "place",
+              "key": "church",
+              "delta": -5
+            },
+            {
+              "target": "place",
+              "key": "priesthood",
+              "delta": -3
+            },
+            {
+              "target": "flag",
+              "key": "diplomat:held_the_files",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "once": true
+    },
+    {
+      "id": "dp_me_visas",
+      "phase": [
+        "study",
+        "bishop"
+      ],
+      "pressure": [
+        "belief_vs_safety"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 4,
+      "suppressYears": 99,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:nunciature",
+          "value": true
+        },
+        {
+          "type": "diplomacy",
+          "key": "region",
+          "value": "Middle East"
+        }
+      ],
+      "title": "The Visa Line",
+      "body": "Every morning there is a line outside the Western embassies, and in it, every morning, there are Christians from the north with a priest's letter saying that they are Christians from the north. They come to the nunciature afterwards, for a second letter, because a letter with the Holy See's seal on it moves a file. The embassies have asked the nunciature, politely, to stop. The patriarch has asked it, less politely, to go on: he is losing his people and would rather lose them alive.",
+      "choices": [
+        {
+          "id": "write",
+          "label": "Write the letters",
+          "outcome": "You write the letters, hundreds of them, in the evenings, and sign them with a title you do not have. The embassies complain to Rome through their own channels and Rome asks the nunciature to be prudent, which the nuncio reads aloud and then puts in a drawer. Years later a man in a parish in Michigan shows you the letter, laminated.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "church",
+              "delta": 6
+            },
+            {
+              "target": "place",
+              "key": "state",
+              "delta": -4
+            },
+            {
+              "target": "place",
+              "key": "priesthood",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": -2
+            },
+            {
+              "target": "flag",
+              "key": "diplomat:wrote_the_letters",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "refuse",
+          "label": "Stop, as the embassies ask",
+          "outcome": "You stop. The line still forms, and the nunciature's porter sends it away, and the patriarch does not receive the nuncio for Easter. The embassies are grateful in the way embassies are. You say Mass for the ones who stayed.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "state",
+              "delta": 4
+            },
+            {
+              "target": "place",
+              "key": "reports",
+              "delta": 2
+            },
+            {
+              "target": "place",
+              "key": "church",
+              "delta": -5
+            },
+            {
+              "target": "place",
+              "key": "priesthood",
+              "delta": -3
+            }
+          ]
+        }
+      ],
+      "once": true
+    },
+    {
+      "id": "dp_me_patriarch",
+      "phase": [
+        "study",
+        "bishop"
+      ],
+      "pressure": [
+        "competence"
+      ],
+      "severity": "ROUTINE",
+      "category": "chancery",
+      "baseWeight": 3,
+      "suppressYears": 99,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:nunciature",
+          "value": true
+        },
+        {
+          "type": "diplomacy",
+          "key": "region",
+          "value": "Middle East"
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "diplomacy",
+            "key": "rank",
+            "value": "nuncio"
+          }
+        }
+      ],
+      "title": "The Patriarch's Anteroom",
+      "body": "The patriarch of the Eastern Church here is older than the nunciature and treats it as a Latin innovation. He receives the nuncio twice a year, for form, and the nuncio's secretary not at all. The nuncio needs something from him that cannot wait for Easter and has sent you with a letter, and the patriarch's deacon has put you in an anteroom with a glass of water and gone away.",
+      "choices": [
+        {
+          "id": "wait",
+          "label": "Wait, all day if need be",
+          "outcome": "You wait. At four the deacon brings tea. At six the patriarch comes out himself, an old man in black with a staff, and looks at you for some time and says that the Latins have at last sent someone who knows how to sit. He reads the letter standing up and answers it from memory. You are received every month after that, before the nuncio.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "church",
+              "delta": 7
+            },
+            {
+              "target": "strain",
+              "key": "strain",
+              "delta": 1
+            },
+            {
+              "target": "place",
+              "key": "priesthood",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "diplomat:sat_for_the_patriarch",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "latin",
+          "label": "Leave the letter, and go to the Latin bishop instead",
+          "outcome": "You leave the letter with the deacon and go to the Latin bishop, who is helpful and has no standing. The patriarch's answer comes at Easter, to the nuncio, and mentions that a young man of the nunciature could not wait an afternoon. The nuncio says nothing, and sends someone else next time.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "church",
+              "delta": -4
+            },
+            {
+              "target": "place",
+              "key": "reports",
+              "delta": 2
+            },
+            {
+              "target": "relationship",
+              "key": "@nuncio_chief",
+              "delta": -3
+            }
+          ]
+        }
+      ],
+      "once": true
+    },
+    {
+      "id": "dp_oc_boat",
+      "phase": [
+        "study",
+        "bishop"
+      ],
+      "pressure": [
+        "friendship_vs_duty"
+      ],
+      "severity": "ROUTINE",
+      "category": "chancery",
+      "baseWeight": 4,
+      "suppressYears": 99,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:nunciature",
+          "value": true
+        },
+        {
+          "type": "diplomacy",
+          "key": "region",
+          "value": "Oceania"
+        }
+      ],
+      "title": "The Bishop Who Comes by Boat",
+      "body": "A bishop of the islands has written that he will come to the nunciature for the conference, by boat, in four days, with two priests and a catechist, and that the boat is his cathedral's and leaks. He asks, since the nunciature is on the coast, whether its secretary would like to come back with him for a week and see a diocese with no roads. The nuncio says it is not the sort of thing the service does.",
+      "choices": [
+        {
+          "id": "go",
+          "label": "Go back with him on the boat",
+          "outcome": "You go. The diocese is ninety islands, a seminary of eleven, and a bishop who swims to one of his parishes. You confirm two hundred children on a beach with a borrowed mitre on the bishop's instruction and a canon lawyer's doubts. The report you write is read aloud at the Congregation, which has never had one like it.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "church",
+              "delta": 9
+            },
+            {
+              "target": "place",
+              "key": "priesthood",
+              "delta": 5
+            },
+            {
+              "target": "place",
+              "key": "reports",
+              "delta": 4
+            },
+            {
+              "target": "strain",
+              "key": "strain",
+              "delta": 3
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            },
+            {
+              "target": "flag",
+              "key": "diplomat:the_islands",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "papers",
+          "label": "Send the papers he needs, and a good lunch",
+          "outcome": "You give him lunch and the papers and the nunciature's car to the harbour. He writes afterwards to say the boat made it, and encloses a photograph of a church made of coral. You keep it on the desk through two more countries.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "church",
+              "delta": 3
+            },
+            {
+              "target": "place",
+              "key": "reports",
+              "delta": 1
+            }
+          ]
+        }
+      ],
+      "once": true
+    },
+    {
+      "id": "dp_national_day_again",
+      "phase": [
+        "study",
+        "bishop"
+      ],
+      "pressure": [
+        "competence"
+      ],
+      "severity": "ROUTINE",
+      "category": "chancery",
+      "baseWeight": 3,
+      "suppressYears": 99,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:nunciature",
+          "value": true
+        },
+        {
+          "type": "diplomacy",
+          "key": "countries",
+          "op": ">=",
+          "value": 4
+        }
+      ],
+      "title": "Another National Day",
+      "body": "The national day, in your fourth country. You know the formula now: the stand, the anthem you learned on the plane, the ambassador of the country that is quarrelling with this one placed next to you so that the Holy See can stand between them. The president's speech is two hours long. The French ambassador, beside you, has a flask.",
+      "choices": [
+        {
+          "id": "stand",
+          "label": "Stand the two hours, as the Holy See's man",
+          "outcome": "You stand. The president's protocol chief notices that the nunciature did not sit when the others did, and the president notices the protocol chief noticing, and the nunciature is placed better at the next one. The French ambassador says you are a fanatic and offers the flask anyway.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "state",
+              "delta": 4
+            },
+            {
+              "target": "place",
+              "key": "reports",
+              "delta": 1
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "flask",
+          "label": "Take the flask",
+          "outcome": "You take the flask, twice. The president's speech is still two hours long. The French ambassador becomes the nunciature's friend for three years, which is worth more than the protocol, and tells you things about the ministry over dinner that the nuncio puts in dispatches without attribution.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "state",
+              "delta": 3
+            },
+            {
+              "target": "place",
+              "key": "reports",
+              "delta": 3
+            },
+            {
+              "target": "place",
+              "key": "priesthood",
+              "delta": -1
+            },
+            {
+              "target": "flag",
+              "key": "diplomat:french_flask",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "once": true
+    },
+    {
+      "id": "dp_journalist_again",
+      "phase": [
+        "study",
+        "bishop"
+      ],
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 3,
+      "suppressYears": 99,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:nunciature",
+          "value": true
+        },
+        {
+          "type": "diplomacy",
+          "key": "countries",
+          "op": ">=",
+          "value": 2
+        },
+        {
+          "type": "diplomacy",
+          "key": "hardship",
+          "op": ">=",
+          "value": 2
+        }
+      ],
+      "title": "The Correspondent",
+      "body": "A foreign correspondent you knew in the last country has turned up in this one, as they do, and knows that you know things. She is writing about the government's war in the north and the Church's part in it, which is real, and wants the nunciature's view, which she will print as 'a Vatican source'. {@nuncio_chief} has a rule about journalists, and a rule about this one.",
+      "choices": [
+        {
+          "id": "lunch",
+          "label": "Have lunch, and say nothing printable",
+          "outcome": "You have lunch and say nothing she can use and she prints 'a Vatican source' anyway, with a sentence you did not say and would have. The nuncio reads it and asks whether it was you and you say no, which is true, and he believes you, which is the point of three years.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "state",
+              "delta": -1
+            },
+            {
+              "target": "place",
+              "key": "reports",
+              "delta": 2
+            },
+            {
+              "target": "relationship",
+              "key": "@nuncio_chief",
+              "delta": 2
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "truth",
+          "label": "Tell her the truth, off the record, and trust her",
+          "outcome": "You tell her what the nunciature knows about the north, off the record. She keeps it off the record and writes a better piece for it, and the government, which cannot prove anything, lets the nuncio know it suspects. Years later, in Rome, she sends you a book with a dedication that does not name you.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "reports",
+              "delta": -2
+            },
+            {
+              "target": "place",
+              "key": "state",
+              "delta": -5
+            },
+            {
+              "target": "place",
+              "key": "church",
+              "delta": 4
+            },
+            {
+              "target": "place",
+              "key": "priesthood",
+              "delta": 3
+            },
+            {
+              "target": "flag",
+              "key": "diplomat:told_a_journalist",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "once": true
+    },
+    {
+      "id": "dp_nuncio_ordains",
+      "phase": [
+        "study",
+        "bishop"
+      ],
+      "pressure": [
+        "loyalty_vs_honesty"
+      ],
+      "severity": "NOTABLE",
+      "category": "chancery",
+      "baseWeight": 4,
+      "suppressYears": 99,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:nunciature",
+          "value": true
+        },
+        {
+          "type": "diplomacy",
+          "key": "rank",
+          "value": "nuncio"
+        }
+      ],
+      "title": "A Bishop of Your Own Terna",
+      "body": "The first name you sent on a terna has come back from Rome as a bishop, and the bishops' conference asks the nuncio to be the principal consecrator, as nuncios are. He is a quiet man from a mountain diocese who did not expect it and is afraid of it, which is why you put him first. The cathedral holds four thousand and the government has sent a minister, in case.",
+      "choices": [
+        {
+          "id": "people",
+          "label": "Preach to him about the people",
+          "outcome": "You preach about his people, whom he knows, and not about Rome, which he does not. He weeps once, at the litany, and is a good bishop for twenty years, and writes to you at Christmas in every country after. The minister leaves before the end.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "church",
+              "delta": 7
+            },
+            {
+              "target": "place",
+              "key": "priesthood",
+              "delta": 3
+            },
+            {
+              "target": "record",
+              "key": "ordinations",
+              "delta": 1
+            },
+            {
+              "target": "flag",
+              "key": "diplomat:ordained_a_bishop",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "rome",
+          "label": "Preach about communion with Rome, for the minister's benefit",
+          "outcome": "You preach about Peter, and communion, and the Holy Father's care for this country, in sentences the minister can report. The bishop listens carefully and does as he is told for ten years and then, in a crisis, does not. The minister stays to the end and is photographed with you.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "state",
+              "delta": 5
+            },
+            {
+              "target": "reputation",
+              "key": "rome",
+              "delta": 3
+            },
+            {
+              "target": "place",
+              "key": "church",
+              "delta": 2
+            },
+            {
+              "target": "record",
+              "key": "ordinations",
+              "delta": 1
+            }
+          ]
+        }
+      ],
+      "once": true
+    },
+    {
+      "id": "dp_nuncio_home_bishop",
+      "phase": [
+        "study",
+        "bishop"
+      ],
+      "pressure": [
+        "friendship_vs_duty"
+      ],
+      "severity": "ROUTINE",
+      "category": "personal",
+      "baseWeight": 3,
+      "suppressYears": 99,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "study:nunciature",
+          "value": true
+        },
+        {
+          "type": "diplomacy",
+          "key": "rank",
+          "value": "nuncio"
+        }
+      ],
+      "title": "The Bishop of Your Own Diocese",
+      "body": "{@bishop} is in the country on a pilgrimage with forty parishioners and a bus, and comes to the nunciature in a clerical shirt to see the man he ordained, who is now an archbishop and the pope's representative and receives him in a room with a flag. He calls you by your first name in front of the staff, and then corrects himself, and then does it again.",
+      "choices": [
+        {
+          "id": "first_name",
+          "label": "Tell him to go on calling you by your first name",
+          "outcome": "You tell him to go on. He does, through the lunch and the tour of the chapel, and tells the staff stories about your first parish that they repeat for a year. He says, at the car, that the diocese is proud of you and does not know what to do with that, and that he does not either.",
+          "effects": [
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": 8
+            },
+            {
+              "target": "place",
+              "key": "priesthood",
+              "delta": 4
+            },
+            {
+              "target": "flag",
+              "key": "diplomat:home_bishop_visited",
+              "value": true
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "protocol",
+          "label": "Let the protocol stand",
+          "outcome": "You let the protocol stand, gently. He is Excellency and you are Excellency and the lunch is correct. He says at the car that the diocese is proud of you, and you believe him, and you watch the bus go and stand in the courtyard for some time.",
+          "effects": [
+            {
+              "target": "place",
+              "key": "state",
+              "delta": 2
+            },
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": -2
+            },
+            {
+              "target": "place",
+              "key": "priesthood",
+              "delta": -2
+            }
+          ]
+        }
+      ],
+      "once": true
     }
   ]
 }

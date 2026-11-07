@@ -218,8 +218,9 @@ export type Condition =
   | { type: 'papacy'; key: 'reigning'; value: boolean }
   | { type: 'papacy'; key: 'scene'; value: string }
   /** E1 R1.7: the diplomatic service: its scene due now (mission, rotation, terna, seventy_five), his rank, or his post's hardship (1..3) against a value. */
-  | { type: 'diplomacy'; key: 'scene' | 'rank'; value: string }
-  | { type: 'diplomacy'; key: 'hardship'; op: Op; value: number }
+  | { type: 'diplomacy'; key: 'scene' | 'rank' | 'region'; value: string }
+  /** hardship: the country's (1..3); years: in the service since the Academy; countries: served so far; in_country: weeks since he came. */
+  | { type: 'diplomacy'; key: 'hardship' | 'years' | 'countries' | 'in_country'; op: Op; value: number }
   /** E2 §2.2: the man's diocese's rank in its province; a common policy the province adopted (within so many weeks); the province's meeting this month; the metropolitan see vacant or newly filled. */
   | { type: 'metropolia'; key: 'rank'; value: 'metropolitan' | 'suffragan' }
   | { type: 'metropolia'; key: 'policy'; value: string; within?: number }

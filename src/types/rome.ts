@@ -81,7 +81,8 @@ export interface RomeState {
 
 /** E1 R1.7 — the diplomatic service (§11). */
 export type DiplomatRank = 'student' | 'secretary2' | 'secretary1' | 'counsellor' | 'nuncio';
-export type DiplomacySceneKind = 'mission' | 'rotation' | 'terna' | 'seventy_five';
+/** `release`: the Secretariat has no higher rung for him; the service ends unless he asks for a last country. */
+export type DiplomacySceneKind = 'mission' | 'rotation' | 'release' | 'terna' | 'seventy_five';
 
 /** A country of the service, as data (content/rome/nunciatures.json). */
 export interface NunciatureDef {

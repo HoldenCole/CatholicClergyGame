@@ -19,9 +19,19 @@
      "value": 3
     },
     {
-     "type": "age",
-     "op": "<=",
-     "value": 55
+     "type": "any",
+     "inner": [
+      {
+       "type": "age",
+       "op": "<=",
+       "value": 55
+      },
+      {
+       "type": "flag",
+       "key": "diplomat:asked_curia",
+       "value": true
+      }
+     ]
     },
     {
      "type": "not",
@@ -123,6 +133,14 @@
       "value": true
      },
      "multiplier": 2.5
+    },
+    {
+     "when": {
+      "type": "flag",
+      "key": "diplomat:asked_curia",
+      "value": true
+     },
+     "multiplier": 4.0
     }
    ],
    "windowWeeks": 4,
@@ -144,6 +162,11 @@
       "target": "reputation",
       "key": "parishioners",
       "delta": -4
+     },
+     {
+      "target": "flag",
+      "key": "diplomat:asked_curia",
+      "value": false
      }
     ],
     "outcome": "You fly to Rome in September with two suitcases and a letter of introduction you will never be asked for. The residence is quiet, the room is small, and on your first morning a porter who has seen forty officials come and go looks at your badge and says, in English, good luck with the files.",
@@ -192,9 +215,24 @@
       "target": "reputation",
       "key": "rome",
       "delta": -6
+     },
+     {
+      "target": "flag",
+      "key": "diplomat:asked_curia",
+      "value": false
      }
     ],
     "outcome": "You write to the Secretariat of State that the diocese needs you more than Rome does, which your bishop does not quite believe and Rome does not believe at all. The letter is filed. The next American they ask says yes."
+   },
+   "guarantee": {
+    "when": [
+     {
+      "type": "flag",
+      "key": "diplomat:asked_curia",
+      "value": true
+     }
+    ],
+    "withinWeeks": 30
    }
   },
   {

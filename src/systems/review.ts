@@ -13,6 +13,7 @@ import { isFigure } from './reputation';
 import { bondWord } from './bonds';
 import { studyProgram } from '@/content/study';
 import { placeWord } from './studyWeek';
+import { RANK_WORD } from './rome/diplomacy';
 import { ministryLine } from './ministry';
 import { requestChance, requestOf, requestWord } from './request';
 import { townReviewLine } from './town';
@@ -58,6 +59,12 @@ export function yearInReview(state: GameState): { letter: Letter; baseline: NonN
     const program = studyProgram(state.study.program);
     if (program?.place && state.study.place) {
       body.push(`${program.place.label}, a year on: ${program.place.dials.map((d) => `${d.label.toLowerCase()}, ${placeWord(state.study!.place![d.id] ?? 0, d.low, d.high)}`).join('; ')}.`);
+      const d = state.rome?.diplomacy;
+      if (d?.country && d.since !== undefined) {
+        const n = d.countries.length;
+        const nth = n === 1 ? 'first' : n === 2 ? 'second' : n === 3 ? 'third' : `${n}th`;
+        body.push(`Year ${Math.max(1, Math.round((week - d.since) / 52))} of the service, in ${d.country}, the ${nth} country, as ${RANK_WORD[d.rank]}; ${state.study.record?.dispatches ?? 0} dispatches to Rome in all.`);
+      }
     } else body.push(`A year away at ${state.study.school}. The diocese counts the years.`);
   }
 
