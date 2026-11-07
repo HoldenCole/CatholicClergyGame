@@ -23,6 +23,7 @@ import { beginCareer } from './career';
 import { driftYear } from '@/systems/drift';
 import { fromDayNumber } from './calendar';
 import { NAC, italianAfterFirstYear, ordainedFromRome, sendToRome } from '@/systems/nac';
+import { summerAsAsked } from '@/systems/interview';
 
 /** Absolute week offsets within a formation year. Invented. */
 export const YEAR_SHAPE = {
@@ -232,7 +233,7 @@ export function chooseSummer(state: GameState, id: SummerAssignment): GameState 
   const option = summersOffered(state).find((o) => o.id === id);
   if (!option || !evaluateAll(option.requires, state) || summerTaken(state, id)) throw new Error(`summer ${id} unavailable`);
   const sem = state.seminary!;
-  const next = applyEffects(state, option.effects);
+  const next = summerAsAsked(applyEffects(state, option.effects), id);
   return {
     ...next,
     mode: { kind: 'clock' },

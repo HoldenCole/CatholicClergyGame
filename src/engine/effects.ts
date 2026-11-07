@@ -37,6 +37,7 @@ import { askExcardination, askLoan, extendLoan, incardinate, lendPriest, LOAN, l
 import { metropoliaSeeById } from '@/systems/metropolia';
 import type { LoanKind } from '@/types';
 import { createRng, type Rng } from './rng';
+import { hasInterest, INTERESTS, interestsOf, setInterest } from '@/systems/interests';
 
 /**
  * Effects carry no generator, and an arc's next stage needs one. The seed and
@@ -126,6 +127,13 @@ export function applyEffect(
     case 'honesty': {
       const c = requireCharacter(state, effect);
       return { ...state, character: { ...c, honesty: Math.max(0, c.honesty + delta) } };
+    }
+    case 'interest': {
+      // The chancery reads a man with too many interests as asking for everything: a full file takes no more.
+      const on = effect.value !== false;
+      if (on && interestsOf(state).length >= INTERESTS.max && !hasInterest(state, effect.key)) return state;
+      if (on && hasInterest(state, effect.key)) return state;
+      return setInterest(state, effect.key, on);
     }
     case 'credential': {
       const c = requireCharacter(state, effect);

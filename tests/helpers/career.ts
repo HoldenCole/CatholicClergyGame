@@ -1,3 +1,4 @@
+import { interviewAnswers, interviewQuestions } from '@/systems/interview';
 import { eventById } from '@/content';
 import { visibleChoices } from '@/engine/events';
 import { useGameStore } from '@/engine/store';
@@ -45,6 +46,10 @@ export function playCareer(seed: string, diocese: string, maxWeeks: number, a: C
       continue;
     }
     switch (game.mode.kind) {
+      case 'interview': {
+        s.getState().answerInterview(interviewAnswers(game, interviewQuestions(game)[game.mode.index]!).find((a) => a.available)!.answer.id);
+        break;
+      }
       case 'year_start': {
         const x = emphasisPointsFor(game) - 10;
         s.getState().chooseEmphasis(policy === 'last' ? { human: 2, spiritual: 2 + x, intellectual: 3, pastoral: 3 } : { human: 3, spiritual: 3, intellectual: 2 + x, pastoral: 2 });
@@ -116,6 +121,10 @@ export function playFriar(seed: string, order: 'OP' | 'OSA', maxWeeks: number, a
       continue;
     }
     switch (game.mode.kind) {
+      case 'interview': {
+        s.getState().answerInterview(interviewAnswers(game, interviewQuestions(game)[game.mode.index]!).find((a) => a.available)!.answer.id);
+        break;
+      }
       case 'year_start': {
         const x = emphasisPointsFor(game) - 10;
         s.getState().chooseEmphasis({ human: 3, spiritual: 3, intellectual: 2 + x, pastoral: 2 });

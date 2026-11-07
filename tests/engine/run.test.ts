@@ -1,3 +1,4 @@
+import { interviewAnswers, interviewQuestions } from '@/systems/interview';
 import { availableSummers } from '@/engine/seminary';
 import { describe, it, expect, beforeEach } from 'vitest';
 import { eventById, allEvents } from '@/content';
@@ -30,7 +31,8 @@ describe('generation/generateRun', () => {
   it('builds a complete seminary run from answers', () => {
     const { state, rng } = newGame({ seed: 'run', start: { year: 2010, month: 8, day: 20 } });
     const run = generateRun(state, answers, rng);
-    expect(run.mode).toEqual({ kind: 'year_start', year: 1 });
+    // The vocations director sees him first (DESIGN §6.1a); the year begins when the interview ends.
+    expect(run.mode).toEqual({ kind: 'interview', index: 0 });
     expect(run.character?.name.last).toBe('Reilly');
     const tags = new Set(Object.values(run.npcs).flatMap((n) => n.tags));
     for (const t of ['rector', 'spiritual_director', 'formation_advisor', 'vocation_director', 'professor_trad', 'professor_prog', 'bishop', 'mother', 'home_pastor']) {
@@ -59,6 +61,10 @@ function autoplay(maxSteps = 5000): GameState {
       continue;
     }
     switch (game.mode.kind) {
+      case 'interview': {
+        s.getState().answerInterview(interviewAnswers(game, interviewQuestions(game)[game.mode.index]!).find((a) => a.available)!.answer.id);
+        break;
+      }
       case 'year_start': {
         const extra = emphasisPointsFor(game) - 10;
         s.getState().chooseEmphasis({ human: 3, spiritual: 3, intellectual: 2 + extra, pastoral: 2 });
@@ -105,7 +111,7 @@ describe('engine/store with real content', () => {
     const s = useGameStore.getState();
     s.startGame(answers);
     const started = useGameStore.getState().game!;
-    expect(started.mode).toEqual({ kind: 'year_start', year: 1 });
+    expect(started.mode).toEqual({ kind: 'interview', index: 0 });
     // The world's people survive character creation.
     expect(started.npcs[started.world!.diocese.hidden.bishop.npcId]).toBeTruthy();
     for (const p of started.world!.parishes) expect(started.npcs[p.pastorId]?.tags).toContain('pastor');

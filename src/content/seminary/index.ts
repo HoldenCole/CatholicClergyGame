@@ -1,9 +1,10 @@
-import type { Condition, DevotionDef, Effect, RecreationDef, SeminaryActivityDef, SeminaryHorariumDef, SummerAssignment } from '@/types';
+import type { Condition, DevotionDef, Effect, InterviewDef, RecreationDef, SeminaryActivityDef, SeminaryHorariumDef, SummerAssignment } from '@/types';
 import rule from './rule.json';
 import summers from './summers.json';
 import religiousSummers from '../religious/summers.json';
 import activities from './activities.json';
 import rome from './rome.json';
+import interview from './interview.json';
 
 export interface SummerOption {
   id: SummerAssignment;
@@ -53,3 +54,6 @@ export interface RomeUniversityDef {
   stats: Partial<Record<'theology' | 'knowledge' | 'piety' | 'administration', number>>;
 }
 export const romeCollege = rome as unknown as { name: string; short: string; city: string; day: { time: string; label: string }[]; universities: RomeUniversityDef[]; classes: Record<string, string>; arrival: string; lines: Record<string, string> };
+
+/** The vocations director's interview before the first year. DESIGN §6.1a. */
+export const interviewContent = interview as unknown as InterviewDef;

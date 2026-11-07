@@ -21,6 +21,8 @@ export type Ending =
 export type Mode =
   | { kind: 'creation' }
   | { kind: 'clock' }
+  /** The vocations director's interview before the first year (DESIGN §6.1a): the question he is on, and what the last answer did. */
+  | { kind: 'interview'; index: number; said?: string }
   | { kind: 'year_start'; year: number }
   | { kind: 'summer'; year: number }
   | { kind: 'evaluation'; record: EvaluationRecord }

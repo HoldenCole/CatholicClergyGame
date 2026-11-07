@@ -86,6 +86,7 @@ import { pushProject as doPushProject, startProject as doStartProject } from '@/
 import { setDial as doSetDial } from '@/systems/liturgy';
 import { chooseAssignment as doChooseAssignment } from '@/systems/choice';
 import { chooseDirector as doChooseDirector, seekDirectors as seekDirectorsSys } from '@/systems/direction';
+import { answerInterview as answerInterviewSys } from '@/systems/interview';
 import { furnish as doFurnish, petition as doPetition } from '@/systems/decor';
 import { setHomily as doSetHomily } from '@/systems/homily';
 import { writeColumn as doWriteColumn } from '@/systems/press';
@@ -365,6 +366,8 @@ export interface GameStore {
   seekDirector(): void;
   declineDirectors(): void;
   chooseSummer(id: SummerAssignment): void;
+  /** One answer to the vocations director. DESIGN §6.1a. */
+  answerInterview(answerId: string): void;
   /** Resolve the event at the head of the pending queue. */
   resolveEvent(choiceId: string): void;
   acknowledgeEvaluation(): void;
@@ -1020,6 +1023,9 @@ export const useGameStore = create<GameStore>()((set, get) => ({
   },
   chooseSummer(id) {
     update(set, get, (game) => pickSummer(game, id));
+  },
+  answerInterview(answerId) {
+    update(set, get, (game) => answerInterviewSys(game, answerId));
   },
   resolveEvent(choiceId) {
     const before = get().game;

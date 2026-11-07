@@ -7,6 +7,7 @@ export * from './character';
 export * from './npc';
 export * from './seminary';
 export * from './mode';
+export * from './interview';
 export * from './creation';
 export * from './offers';
 export * from './world';
