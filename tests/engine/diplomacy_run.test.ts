@@ -28,6 +28,7 @@ function career(seed: string, weeks: number, home: boolean): GameState {
     if (game.mode.kind === 'letter') { s.getState().readLetter(); continue; }
     if (game.mode.kind === 'assignment') { s.getState().acceptAssignment(); continue; }
     if (game.mode.kind === 'assignment_choice') { s.getState().chooseAssignment(game.mode.options[0]!.id); continue; }
+    if (game.mode.kind === 'posting_choice') { s.getState().choosePosting(home && game.mode.canGoHome ? 'home' : game.mode.options[0]!.country); continue; }
     if (game.mode.kind !== 'clock') throw new Error(`unexpected mode ${game.mode.kind}`);
     if (game.study && Object.keys(game.study.routine).length === 0) {
       const ids = game.study.city === 'academy' ? ['acad_history', 'acad_languages', 'acad_drafting', 'acad_chapel'] : ['nun_reports', 'nun_bishops', 'nun_government', 'nun_chapel'];

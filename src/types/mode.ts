@@ -1,4 +1,5 @@
 import type { DirectorOption } from './religious';
+import type { PostingOption } from './rome';
 import type { EvaluationRecord } from './seminary';
 import type { Assignment } from './world';
 
@@ -32,6 +33,8 @@ export type Mode =
   | { kind: 'assignment'; assignment: Assignment }
   /** The bishop offers the man a choice; each option says what it involves. */
   | { kind: 'assignment_choice'; options: AssignmentOption[]; why: string }
+  /** The Secretariat of State puts three posts to a man of the service, and the way home when there is one. E1 §11.10. */
+  | { kind: 'posting_choice'; options: PostingOption[]; why: string; first: boolean; canGoHome: boolean }
   /** A letter that stops the clock until read: the year in review, a new bishop's reading of the file. */
   | { kind: 'letter'; letter: Letter }
   | { kind: 'ended'; ending: Ending; summary: string }

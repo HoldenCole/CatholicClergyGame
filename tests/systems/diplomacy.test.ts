@@ -14,16 +14,24 @@ import { studyActivitiesFor } from '@/systems/studyWeek';
 import { nuncioView } from '@/systems/rome/nuncioView';
 import { mayBeCreated } from '@/systems/rome/college';
 import { afar, homeSuccession } from '@/systems/homeFromAfar';
-import { closeDiplomacyScene, DIPLOMACY, diplomacyWeek, dueDiplomacyScene, keptForNunciature, releaseDue } from '@/systems/rome/diplomacy';
+import { choosePosting, closeDiplomacyScene, DIPLOMACY, diplomacyWeek, drawPostings, dueDiplomacyScene, keptForNunciature, PREFERENCE, releaseDue, setPostingPreference } from '@/systems/rome/diplomacy';
 import { atAcademy, young } from '../helpers/diplomat';
 import { acceptAndGo } from '../helpers/appointment';
 import type { GameState } from '@/types';
 
 const ACADEMY_TERM = { month: 10, day: 1 };
 
+/** The Academy's years done and the first of the three posts taken. */
 function inService(seed: string): GameState {
   const s = atAcademy(seed);
-  return endStudy({ ...s, clock: { ...s.clock, week: s.study!.endWeek } }, offerById('rome_diplomatic_academy')!, createRng(`${seed}:end`));
+  const asked = endStudy({ ...s, clock: { ...s.clock, week: s.study!.endWeek } }, offerById('rome_diplomatic_academy')!, createRng(`${seed}:end`));
+  if (asked.mode.kind !== 'posting_choice') throw new Error(`expected the posts, got ${asked.mode.kind}`);
+  return choosePosting(asked, asked.mode.options[0]!.country, createRng(`${seed}:choose`));
+}
+
+/** The posts answered as they come: the first of the three, or home when asked. */
+function answerPosts(s: GameState, home = false): GameState {
+  return s.mode.kind === 'posting_choice' ? choosePosting(s, home && s.mode.canGoHome ? 'home' : s.mode.options[0]!.country, createRng(`answer:${s.clock.week}`)) : s;
 }
 
 /** Weeks of the service, the dials held where a trusted man keeps them. */
@@ -33,7 +41,8 @@ function serve(state: GameState, n: number, keep = true): GameState {
     s = { ...s, clock: { ...s.clock, week: s.clock.week + 1 } };
     if (keep) s = { ...s, study: { ...s.study!, place: { reports: 90, church: 60, state: 40, priesthood: 40 } } };
     s = diplomacyWeek(s).state;
-    // The scene is answered as it comes: the next country is taken.
+    // The posts are answered as they come, and any scene closed: the next country is taken.
+    s = answerPosts(s);
     if (dueDiplomacyScene(s)) s = closeDiplomacyScene(s);
   }
   return s;
@@ -80,15 +89,21 @@ describe('the service', () => {
     const first = s.rome!.diplomacy!.country!;
     const chief = resolveSelector(s, '@nuncio_chief')!.id;
     const at = s.rome!.diplomacy!.rotateWeek!;
-    // The rotation is put to him before it happens, the next country named.
+    // The posts are put to him before it happens: three, distinct, none the one he is in, and the way home.
     let asked = false;
     while (s.clock.week < at) {
       s = { ...s, clock: { ...s.clock, week: s.clock.week + 1 } };
       s = diplomacyWeek(s).state;
-      if (dueDiplomacyScene(s) === 'rotation') {
+      if (s.mode.kind === 'posting_choice') {
         asked = true;
+        expect(s.mode.first).toBe(false);
+        expect(s.mode.canGoHome).toBe(true);
+        expect(s.mode.options).toHaveLength(3);
+        expect(new Set(s.mode.options.map((o) => o.country)).size).toBe(3);
+        expect(s.mode.options.map((o) => o.country)).not.toContain(first);
+        for (const o of s.mode.options) { expect(o.line.length).toBeGreaterThan(40); expect(o.hardshipWord).toMatch(/post/); }
+        s = choosePosting(s, s.mode.options[1]!.country, createRng('take'));
         expect(renderText('{country_next}', s)).not.toBe(first);
-        s = closeDiplomacyScene(s);
       }
     }
     expect(asked).toBe(true);
@@ -143,6 +158,83 @@ describe('the service', () => {
     expect(dueDiplomacyScene(s)).toBe('seventy_five');
     const end = endStudy({ ...s, clock: { ...s.clock, week: s.study!.endWeek } }, offerById('rome_diplomatic_academy')!, createRng('dip-75:end'));
     expect(end.mode).toMatchObject({ kind: 'ended', ending: 'retired' });
+  });
+});
+
+describe('the posts put to him (E1 §11.10)', () => {
+  it('the service begins with three posts and no way home; taking one sends him, with the letter', () => {
+    const s = atAcademy('posts-first');
+    const asked = endStudy({ ...s, clock: { ...s.clock, week: s.study!.endWeek } }, offerById('rome_diplomatic_academy')!, createRng('posts-first:end'));
+    expect(asked.mode.kind).toBe('posting_choice');
+    if (asked.mode.kind !== 'posting_choice') return;
+    expect(asked.mode.first).toBe(true);
+    expect(asked.mode.canGoHome).toBe(false);
+    expect(asked.mode.options).toHaveLength(3);
+    expect(asked.rome!.diplomacy!.country).toBeUndefined();
+    expect(asked.study!.city).toBe('nunciature');
+    expect(asked.letterQueue!.some((l) => l.title === 'The service begins')).toBe(true);
+    expect(() => choosePosting(asked, 'home', createRng('x'))).toThrow(/first posting/);
+    expect(() => choosePosting(asked, 'Atlantis', createRng('x'))).toThrow(/did not offer/);
+    // Until he answers, the week waits.
+    expect(diplomacyWeek({ ...asked, clock: { ...asked.clock, week: asked.clock.week + 1 } }).state.rome!.diplomacy!.country).toBeUndefined();
+    const pick = asked.mode.options[2]!;
+    const gone = choosePosting(asked, pick.country, createRng('posts-first:go'));
+    expect(gone.mode.kind).toBe('clock');
+    expect(gone.rome!.diplomacy!.country).toBe(pick.country);
+    expect(gone.rome!.diplomacy!.countries).toEqual([pick.country]);
+    expect(resolveSelector(gone, '@nuncio_chief')).toBeTruthy();
+    expect(gone.letterQueue!.some((l) => l.title === `The service: ${pick.country}` && l.body.join(' ').includes(pick.line))).toBe(true);
+    expect(gone.career.some((c) => c.text.includes(`secretary of nunciature in ${pick.country}`))).toBe(true);
+  });
+
+  it('at a rotation the way home is one of the answers, and taking it ends the service', () => {
+    let s = inService('posts-home');
+    const at = s.rome!.diplomacy!.rotateWeek!;
+    while (s.clock.week < at && s.mode.kind !== 'posting_choice') s = diplomacyWeek({ ...s, clock: { ...s.clock, week: s.clock.week + 1 } }).state;
+    expect(s.mode.kind).toBe('posting_choice');
+    const home = choosePosting(s, 'home', createRng('home'));
+    expect(home.flags['diplomat:go_home']).toBe(true);
+    expect(home.mode.kind).toBe('clock');
+    const next = diplomacyWeek({ ...home, clock: { ...home.clock, week: home.clock.week + 1 } }).state;
+    expect(next.study!.endWeek).toBe(next.clock.week);
+  });
+
+  it('what he tells the Secretariat weighs: a region asked for comes up far more often, and the hard posts for a man who wants them', () => {
+    const s = inService('posts-pref');
+    let plain = 0;
+    let asked = 0;
+    let hard = 0;
+    let quiet = 0;
+    const N = 300;
+    for (let i = 0; i < N; i++) {
+      plain += drawPostings(s, createRng(`p${i}`), false).filter((n) => n.region === 'Africa').length;
+      asked += drawPostings(setPostingPreference(s, { region: 'Africa' }), createRng(`p${i}`), false).filter((n) => n.region === 'Africa').length;
+      hard += drawPostings(setPostingPreference(s, { hardship: 'hard' }), createRng(`h${i}`), false).filter((n) => n.hardship === 3).length;
+      quiet += drawPostings(setPostingPreference(s, { hardship: 'quiet' }), createRng(`h${i}`), false).filter((n) => n.hardship === 3).length;
+    }
+    expect(asked).toBeGreaterThan(plain * 1.5);
+    expect(hard).toBeGreaterThan(quiet * 1.5);
+    expect(PREFERENCE.region).toBeGreaterThan(1);
+    // Three distinct posts every time, none he has served, and mostly from three parts of the world.
+    let spread = 0;
+    for (let i = 0; i < 40; i++) {
+      const three = drawPostings(s, createRng(`d${i}`), false);
+      expect(new Set(three.map((n) => n.country)).size).toBe(3);
+      expect(three.map((n) => n.country)).not.toContain(s.rome!.diplomacy!.country);
+      if (new Set(three.map((n) => n.region)).size === 3) spread++;
+    }
+    expect(spread).toBeGreaterThan(24);
+    // The preference is remembered through the Academy into the service, and said plainly in the record.
+    const pref = setPostingPreference(s, { region: 'Asia', hardship: 'quiet' });
+    expect(pref.rome!.diplomacy!.preference).toEqual({ region: 'Asia', hardship: 'quiet' });
+    expect(pref.career[pref.career.length - 1]!.text).toMatch(/Asia, a quiet post/);
+    expect(setPostingPreference(pref, {}).career.slice(-1)[0]!.text).toMatch(/anywhere/);
+    // Every nunciature has its line for the sheet.
+    for (const n of nunciatures) expect(n.line.length, n.country).toBeGreaterThan(80);
+    // The options say what he can know: the region, the word for the hardship, the Church, the language and whether he has it.
+    const opts = (() => { let t = s; const at = t.rome!.diplomacy!.rotateWeek!; while (t.clock.week < at && t.mode.kind !== 'posting_choice') t = diplomacyWeek({ ...t, clock: { ...t.clock, week: t.clock.week + 1 } }).state; return t.mode.kind === 'posting_choice' ? t.mode.options : []; })();
+    expect(opts.length).toBe(3);
+    for (const o of opts) { expect(['Africa', 'Asia', 'Latin America', 'Europe', 'Middle East', 'Oceania']).toContain(o.region); expect(typeof o.speaks).toBe('boolean'); expect(o.church.length).toBeGreaterThan(10); }
   });
 });
 
@@ -305,11 +397,11 @@ describe('the service has a shape (owner: twenty years of it reads oddly)', () =
     // One last country, asked for: the rotation comes with a country named, and the next release has no such choice.
     let last: GameState = { ...closeDiplomacyScene(put), flags: { ...put.flags, 'diplomat:last_country': true } };
     last = diplomacyWeek({ ...last, clock: { ...last.clock, week: last.clock.week + 1 } }).state;
-    expect(dueDiplomacyScene(last)).toBe('rotation');
-    expect(last.rome!.diplomacy!.next).toBeTruthy();
+    expect(last.mode.kind).toBe('posting_choice');
     expect(last.flags['diplomat:last_country']).toBeUndefined();
     expect(last.flags['diplomat:last_country_taken']).toBe(true);
-    last = closeDiplomacyScene(last);
+    last = answerPosts(last);
+    expect(last.rome!.diplomacy!.next).toBeTruthy();
     const before = last.rome!.diplomacy!.countries.length;
     for (let i = 0; i < 10; i++) last = diplomacyWeek({ ...last, clock: { ...last.clock, week: last.clock.week + 1 } }).state;
     expect(last.rome!.diplomacy!.countries.length).toBe(before + 1);
@@ -368,7 +460,7 @@ describe('the service has a shape (owner: twenty years of it reads oddly)', () =
     const scenes = (await import('@/content')).allEvents.filter((e) => e.id.startsWith('dp_'));
     expect(scenes.length).toBeGreaterThanOrEqual(45);
     for (const region of ['Africa', 'Asia', 'Latin America', 'Europe', 'Middle East', 'Oceania']) expect(scenes.some((e) => JSON.stringify(e.requires).includes(`"region","value":"${region}"`)), region).toBe(true);
-    for (const e of scenes) if (!e.id.startsWith('dp_release') && !['dp_mission', 'dp_rotation', 'dp_rotation_nuncio', 'dp_terna', 'dp_seventy_five'].includes(e.id) && !e.id.match(/dp_(first_dinner|language_wall|old_nuncio|personnel|bishop_asks_back)/)) expect(JSON.stringify(e.requires), e.id).toContain('study:nunciature');
+    for (const e of scenes) if (!e.id.startsWith('dp_release') && !['dp_mission', 'dp_terna', 'dp_seventy_five'].includes(e.id) && !e.id.match(/dp_(first_dinner|language_wall|old_nuncio|personnel|bishop_asks_back)/)) expect(JSON.stringify(e.requires), e.id).toContain('study:nunciature');
     for (const id of ['dp_release_secretary', 'dp_release_counsellor']) { expect(eventById(id)!.beat).toBe('diplomacy'); expect(eventById(id)!.severity).toBe('CRITICAL'); }
     // The year's review names the country and the years.
     const { letter } = (await import('@/systems/review')).yearInReview(at);

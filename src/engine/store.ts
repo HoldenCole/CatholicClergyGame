@@ -8,7 +8,7 @@ import { admit as admitSys, delayMan, dismissMan, nameRector as nameRectorSys, n
 import { callConsistory as callConsistorySys, holdPapalConsistory, planJourney as planJourneySys } from '@/systems/rome/papalActs';
 import { endPontificate } from '@/systems/rome/pontificate';
 import { answerConclave as answerConclaveSys, conclaveAct as conclaveActSys, holdTheConclave } from '@/systems/rome/conclaveFlow';
-import type { ChanceryOffice, DocumentKind, HouseWorkId, LiturgicalStance, SeminaryWhere, ScheduleChange } from '@/types';
+import type { ChanceryOffice, DocumentKind, HouseWorkId, LiturgicalStance, PostingPreference, SeminaryWhere, ScheduleChange } from '@/types';
 import type {
   CreationAnswers,
   EventCategory,
@@ -86,6 +86,7 @@ import { pushProject as doPushProject, startProject as doStartProject } from '@/
 import { setDial as doSetDial } from '@/systems/liturgy';
 import { chooseAssignment as doChooseAssignment } from '@/systems/choice';
 import { chooseDirector as doChooseDirector, seekDirectors as seekDirectorsSys } from '@/systems/direction';
+import { choosePosting as choosePostingSys, setPostingPreference as setPostingPreferenceSys } from '@/systems/rome/diplomacy';
 import { answerInterview as answerInterviewSys } from '@/systems/interview';
 import { furnish as doFurnish, petition as doPetition } from '@/systems/decor';
 import { setHomily as doSetHomily } from '@/systems/homily';
@@ -263,6 +264,10 @@ export interface GameStore {
   acceptAssignment(keepOffice?: boolean): void;
   /** The bishop laid out a choice; take one. */
   chooseAssignment(id: string): void;
+  /** The service: the post taken of the three the Secretariat put to him, or 'home'. E1 §11.10. */
+  choosePosting(country: string): void;
+  /** The service: where he would go, told to the Secretariat. */
+  setPostingPreference(pref: PostingPreference): void;
   setObligation(key: ObligationKey, quality: Quality): void;
   /** The Mass and confession schedule: changed outright by a pastor, asked of the pastor by a vicar. */
   changeSchedule(change: ScheduleChange): void;
@@ -1067,6 +1072,12 @@ export const useGameStore = create<GameStore>()((set, get) => ({
   },
   chooseAssignment(id) {
     update(set, get, (game, r) => doChooseAssignment(game, id, r.derive(`choose:${game.clock.week}`)));
+  },
+  choosePosting(country) {
+    update(set, get, (game, r) => choosePostingSys(game, country, r.derive(`posting:${game.clock.week}`)));
+  },
+  setPostingPreference(pref) {
+    update(set, get, (game) => setPostingPreferenceSys(game, pref));
   },
   setObligation(key, quality) {
     update(set, get, (game) => doSetObligation(game, key, quality));

@@ -17,6 +17,7 @@ import DirectorPanel from './seminary/DirectorPanel';
 import InterviewPanel from './seminary/InterviewPanel';
 import AssignmentPanel from './seminary/AssignmentPanel';
 import AssignmentChoicePanel from './seminary/AssignmentChoicePanel';
+import PostingChoicePanel from './study/PostingChoicePanel';
 import LetterPanel from './LetterPanel';
 import OfferLetter, { unreadOffers } from './OfferLetter';
 import ConsultationPanel from './religious/ConsultationPanel';
@@ -104,6 +105,7 @@ export default function App() {
     game.mode.kind === 'director' ? <DirectorPanel /> :
     game.mode.kind === 'assignment' ? <AssignmentPanel /> :
     game.mode.kind === 'assignment_choice' ? <AssignmentChoicePanel /> :
+    game.mode.kind === 'posting_choice' ? <PostingChoicePanel /> :
     game.mode.kind === 'letter' ? (letterFolded ? null : <LetterPanel />) :
     game.mode.kind === 'consultation' ? <ConsultationPanel /> :
     game.mode.kind === 'obedience_letter' ? <ObedienceLetter /> :
