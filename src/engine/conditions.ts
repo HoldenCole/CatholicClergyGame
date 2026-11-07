@@ -20,6 +20,7 @@ import { nuncioView } from '@/systems/rome/nuncioView';
 import { CONFERENCE, dueConferenceScene, latestConferenceDocument, nextOffice } from '@/systems/conference';
 import { dueLoanScene, loanAvailable } from '@/systems/loan';
 import { hasInterest } from '@/systems/interests';
+import { houseRegardMeasure } from '@/systems/houses';
 import { formationStanding } from '@/systems/standing';
 
 import type { Group } from '@/types';
@@ -243,6 +244,10 @@ export function evaluateCondition(
       return compare(cond.op, state.character?.confessor ?? 0, cond.value);
     case 'interest':
       return hasInterest(state, cond.key);
+    case 'house_regard': {
+      const best = houseRegardMeasure(state, cond);
+      return best !== null && compare(cond.op, best, cond.value);
+    }
     case 'standing':
       return compare(cond.op, formationStanding(state).value, cond.value);
     case 'house': {

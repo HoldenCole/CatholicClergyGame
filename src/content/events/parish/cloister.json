@@ -1,0 +1,400 @@
+{
+  "_notes": "One world, round 3 (DESIGN §9A): the cloister from the diocesan side. A priest of the diocese who has stood with a contemplative men's house for years (house_regard, with his retreat made there) may be asked, after Compline, whether he has thought of it; his director asks which way it points (internal forum); his bishop's leave is the canon's (c. 644/684-style consent, rolled on his piety and the bishop's need, askable again after three years); and the door is a CRITICAL scene whose first choice is the ending `entered_cloister`, written with the respect DESIGN §11 asks for leaving. Tokens {cloister_house}, {cloister_superior}, {cloister_members}, {cloister_order}. Flags cloister:thought, cloister:toward, cloister:unsure, cloister:told_bishop, cloister:leave, cloister:refused, cloister:closed, cloister:turned_back, cloister:house (the ending's).",
+  "events": [
+    {
+      "id": "cl_the_question",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "pressure": [
+        "belief_vs_safety"
+      ],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 6,
+      "suppressYears": 99,
+      "once": true,
+      "requires": [
+        {
+          "type": "house_regard",
+          "charism": "contemplative",
+          "men": true,
+          "retreat": true,
+          "op": ">=",
+          "value": 50
+        },
+        {
+          "type": "stat",
+          "key": "piety",
+          "op": ">=",
+          "value": 55
+        },
+        {
+          "type": "years_ordained",
+          "op": ">=",
+          "value": 8
+        },
+        {
+          "type": "age",
+          "op": "<=",
+          "value": 60
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "ordained_bishop",
+            "value": true
+          }
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "cloister:closed",
+            "value": true
+          }
+        }
+      ],
+      "title": "After Compline",
+      "body": "The last night of your retreat at {cloister_house}, after Compline, the {cloister_superior} walks you to the guesthouse door as he has every year, and this year stops at it. He says the community has noticed something and asked him to say it: that you come here the way a man comes home, that the {cloister_members} have watched you in choir for years, and that if you ever thought of it, there would be a cell. He says it once, plainly, and does not wait for an answer.",
+      "choices": [
+        {
+          "id": "thought",
+          "label": "Say that you have thought of it",
+          "outcome": "You say that you have, more than once, and that you did not know it showed. He nods, as at something confirmed, and says the law has a way, and that it goes through your bishop, and that he will say nothing to anyone until you do. You drive home in the dark and say the seven o'clock, and the church is very large.",
+          "effects": [
+            {
+              "target": "flag",
+              "key": "cloister:thought",
+              "value": true
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "cell",
+          "label": "Say that the parish is your cell",
+          "outcome": "You say that the parish is your cell and he smiles and says that is what the parish priests always say and that some of them are right. He blesses you at the door. You come back every year, and he never says it again, and you never forget that he said it.",
+          "effects": [
+            {
+              "target": "flag",
+              "key": "cloister:closed",
+              "value": true
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            },
+            {
+              "target": "reputation",
+              "key": "parishioners",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cl_the_director",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "pressure": [
+        "belief_vs_safety"
+      ],
+      "severity": "NOTABLE",
+      "category": "personal",
+      "baseWeight": 10,
+      "suppressYears": 99,
+      "once": true,
+      "internalForum": true,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "cloister:thought",
+          "value": true
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "cloister:leave",
+            "value": true
+          }
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "cloister:closed",
+            "value": true
+          }
+        }
+      ],
+      "title": "Direction: the cloister",
+      "body": "You tell your director what the {cloister_superior} said and what you said back. He is quiet for longer than usual. Then he asks the question directors ask: whether you want God, or whether you want the silence; and whether you have been running toward something or away from the parish; and he says that the Church has room for the answer either way, but that you must know which it is before you write to the bishop.",
+      "choices": [
+        {
+          "id": "toward",
+          "label": "Say that it is toward, and that you have known for some time",
+          "outcome": "He asks you to say how long, and you say it, and the number surprises you both. He says that he will not stand in the way of a thing that old, and that you should write to the bishop in the spring, after Easter, when nobody writes anything in a hurry.",
+          "effects": [
+            {
+              "target": "flag",
+              "key": "cloister:toward",
+              "value": true
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 2
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "away",
+          "label": "Admit that it might be away from the parish",
+          "outcome": "You say it might be the parish, and the tiredness, and the finance council. He says that is an honest answer and that a monastery is a poor place to hide from a finance council, having one of its own. He asks you to wait a year and see whether it is still there. It is, or it is not.",
+          "effects": [
+            {
+              "target": "flag",
+              "key": "cloister:unsure",
+              "value": true
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cl_the_bishops_leave",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "pressure": [
+        "ambition_vs_integrity"
+      ],
+      "severity": "MAJOR",
+      "category": "chancery",
+      "baseWeight": 7,
+      "suppressYears": 3,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "cloister:thought",
+          "value": true
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "cloister:leave",
+            "value": true
+          }
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "cloister:closed",
+            "value": true
+          }
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "ordained_bishop",
+            "value": true
+          }
+        },
+        {
+          "type": "age",
+          "op": "<=",
+          "value": 62
+        }
+      ],
+      "title": "The Bishop's Leave",
+      "body": "A priest of a diocese may enter a religious institute with his own bishop's consent, and not without it; the canon is short and the bishop is not obliged. You have written {@bishop} a letter of one page and he has asked you to come in. On his desk are the letter, the {cloister_superior}'s note, which you did not know had been sent, and the diocese's list of parishes without a pastor, which has nine names on it.",
+      "choices": [
+        {
+          "id": "ask",
+          "label": "Ask him, plainly, for his leave",
+          "outcome": "You ask, in the words you rehearsed in the car, and then in your own. He does not answer at once. He looks at the list of nine, and at the abbot's note, and at you.",
+          "roll": {
+            "chance": 0.5,
+            "stat": "piety",
+            "per": 150,
+            "success": {
+              "outcome": "He looks at the list of nine for a long time, and then at you, and says that he has never refused a man God was calling and does not intend to begin with one who has given the diocese what you have. He will write to the {cloister_superior}. He asks for a year, to find your parish a pastor, and he asks you to say nothing until the letter has gone, and he stands up, which he does not do, and shakes your hand.",
+              "effects": [
+                {
+                  "target": "flag",
+                  "key": "cloister:leave",
+                  "value": true
+                },
+                {
+                  "target": "relationship",
+                  "key": "@bishop",
+                  "delta": 6
+                },
+                {
+                  "target": "reputation",
+                  "key": "chancery",
+                  "delta": 2
+                },
+                {
+                  "target": "stat",
+                  "key": "piety",
+                  "delta": 2
+                }
+              ]
+            },
+            "failure": {
+              "outcome": "He looks at the list of nine and says no, kindly and completely: not now, not with the diocese as it is, and he does not say when. He says the {cloister_members} will still be there, and that you will still be a priest, and that he has been refused things too. You drive home. The church is very large. In a few years you may ask again.",
+              "effects": [
+                {
+                  "target": "flag",
+                  "key": "cloister:refused",
+                  "value": true
+                },
+                {
+                  "target": "relationship",
+                  "key": "@bishop",
+                  "delta": -2
+                },
+                {
+                  "target": "stat",
+                  "key": "piety",
+                  "delta": -1
+                },
+                {
+                  "target": "reputation",
+                  "key": "chancery",
+                  "delta": 1
+                }
+              ]
+            }
+          },
+          "effects": [],
+          "default": true
+        },
+        {
+          "id": "wait",
+          "label": "Say that you wanted him to know, and that you are not asking yet",
+          "outcome": "He says that he is glad to know and that the letter will keep, and puts it in a drawer rather than a file, which you notice. The list of nine stays on the desk.",
+          "effects": [
+            {
+              "target": "flag",
+              "key": "cloister:told_bishop",
+              "value": true
+            },
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cl_the_door",
+      "phase": [
+        "parochial_vicar",
+        "administrator",
+        "pastor"
+      ],
+      "pressure": [
+        "belief_vs_safety"
+      ],
+      "severity": "CRITICAL",
+      "category": "personal",
+      "baseWeight": 9,
+      "suppressYears": 99,
+      "once": true,
+      "requires": [
+        {
+          "type": "flag",
+          "key": "cloister:leave",
+          "value": true
+        },
+        {
+          "type": "not",
+          "inner": {
+            "type": "flag",
+            "key": "cloister:closed",
+            "value": true
+          }
+        }
+      ],
+      "title": "The Door",
+      "body": "The year the bishop asked for has run. The new pastor has the keys, the parish gave you a dinner and a chalice you may not keep, and your mother has stopped asking. {cloister_house} has a cell with your name on the door in pencil, and the {cloister_superior} has said, twice, that the door opens from the inside and that a man may still turn round in the car park. You have driven up the hill. The car is running.",
+      "choices": [
+        {
+          "id": "go_in",
+          "label": "Turn the engine off, and go in",
+          "outcome": "You go in. The porter takes the suitcase and the {cloister_superior} takes you to Vespers, and at the psalm you have sung in a parish church for twenty years the {cloister_members} on either side of you take the other half, and the thing that was a parish is a choir. A year on you are clothed; the diocese keeps your name in its necrology, and the house in its own.",
+          "effects": [
+            {
+              "target": "end",
+              "key": "entered_cloister",
+              "value": "A priest of the diocese for the years the record shows, and then a novice of the cloister, with his bishop's leave, at an age when most men are settling. The parish kept the chalice in the sacristy with his name on the base."
+            }
+          ],
+          "default": true
+        },
+        {
+          "id": "turn_back",
+          "label": "Turn the car round",
+          "outcome": "You turn the car round in the gravel and drive down the hill, and ring the bishop from the first town, and he says that he thought you might, and that the parish on the list of nine with the leaking roof is yours if you want it, which you do. The {cloister_superior} writes that the cell will keep, and it does, and you come up every year, and the door opens from the inside.",
+          "effects": [
+            {
+              "target": "flag",
+              "key": "cloister:closed",
+              "value": true
+            },
+            {
+              "target": "flag",
+              "key": "cloister:turned_back",
+              "value": true
+            },
+            {
+              "target": "stat",
+              "key": "piety",
+              "delta": -2
+            },
+            {
+              "target": "reputation",
+              "key": "chancery",
+              "delta": 1
+            },
+            {
+              "target": "relationship",
+              "key": "@bishop",
+              "delta": 3
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

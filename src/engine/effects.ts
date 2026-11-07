@@ -37,6 +37,7 @@ import { askExcardination, askLoan, extendLoan, incardinate, lendPriest, LOAN, l
 import { metropoliaSeeById } from '@/systems/metropolia';
 import type { LoanKind } from '@/types';
 import { createRng, type Rng } from './rng';
+import { cloisterHouse } from '@/systems/houses';
 import { hasInterest, INTERESTS, interestsOf, setInterest } from '@/systems/interests';
 
 /**
@@ -194,7 +195,8 @@ export function applyEffect(
     }
     case 'end':
       return {
-        ...closeTenure(state, effect.key === 'left_priesthood' ? 'left the priesthood' : effect.key.replace(/_/g, ' ')),
+        ...closeTenure(state, effect.key === 'left_priesthood' ? 'left the priesthood' : effect.key === 'entered_cloister' ? 'entered the cloister' : effect.key.replace(/_/g, ' ')),
+        ...(effect.key === 'entered_cloister' ? { flags: { ...closeTenure(state, 'entered the cloister').flags, 'cloister:house': cloisterHouse(state)?.name ?? 'the cloister' } } : {}),
         speed: 'PAUSED',
         mode: { kind: 'ended', ending: effect.key as Ending, summary: String(effect.value ?? '') },
       };

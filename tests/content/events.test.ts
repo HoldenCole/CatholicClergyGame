@@ -41,7 +41,7 @@ const PRESSURES = [
 ];
 const SEASONS = ['advent', 'christmas', 'ordinary', 'lent', 'holy_week', 'easter'];
 const VOLUMES = ['private', 'semi_public', 'public'];
-const ENDINGS = ['dismissed', 'left_seminary', 'left_priesthood', 'died', 'retired'];
+const ENDINGS = ['dismissed', 'left_seminary', 'left_priesthood', 'entered_cloister', 'died', 'retired'];
 const NPC_STATUSES = ['active', 'left', 'dead', 'retired', 'dismissed'];
 const SELECTORS = [
   '@nuncio', '@terna_subject', '@curia_prefect', '@curia_secretary', '@curia_colleague', '@secretary_of_state', '@pope_secretary', '@nuncio_chief',
@@ -184,6 +184,9 @@ function checkCondition(c: Condition, where: string, problems: Problem[]): void 
       break;
     case 'homily':
       if (!['readings', 'the_parish', 'the_news', 'the_bishop', 'the_money', 'vocations'].includes(c.value)) problems.push(`${where}: bad homily topic ${c.value}`);
+      break;
+    case 'house_regard':
+      if (!hasOp(c.op) || typeof c.value !== 'number' || (c.charism !== undefined && !['contemplative', 'active'].includes(c.charism))) problems.push(`${where}: bad house_regard condition`);
       break;
     case 'house':
       if (typeof c.value !== 'boolean' || (c.charism !== undefined && !['contemplative', 'active'].includes(c.charism)) || (c.order !== undefined && !HOUSE_ORDERS.includes(c.order))) problems.push(`${where}: bad house condition`);
@@ -411,7 +414,7 @@ function checkEvent(ev: GameEvent, file: string, problems: Problem[], ids: Set<s
   });
   for (const token of tokensIn(ev.title + ' ' + ev.body)) {
     if (token.startsWith('@') && !SELECTORS.includes(token) && !LIVE_SELECTORS.includes(token)) problems.push(`${where}: unknown selector ${token}`);
-    if (!token.startsWith('@') && !['name', 'first_name', 'surname', 'diocese', 'parish', 'seminary', 'school', 'city', 'residence', 'appointment', 'appointment_residence', 'appointment_from', 'town'].includes(token) && !(token.startsWith('town:') && TOWN_PLACE_KINDS.includes(token.slice(5) as never)) && !isRomeToken(token) && !['nuncio_view', 'see', 'see_city', 'named', 'dicastery', 'dicastery_short', 'dicastery_work', 'curia_rank', 'curia_offer', 'titular', 'college_electors', 'pope_name', 'pope_journey', 'pope_draft', 'pope_years', 'pope_from', 'pope_age', 'country', 'country_next', 'country_church', 'diplomat_rank', 'nunciature', 'visitor', 'visitor_first', 'visitation_cause', 'closed_house', 'removed_provincial', 'direction_priest', 'direction_parish', 'visit_parish', 'visit_town', 'visit_pastor', 'seminary_man', 'presbyterate_man', 'conference_doc', 'conference_doc_gist', 'conference_president', 'conference_office', 'conference_winner', 'conference_temper', 'loan_diocese', 'loan_home', 'loan_bishop', 'loan_years', 'loan_kind'].includes(token)) {
+    if (!token.startsWith('@') && !['name', 'first_name', 'surname', 'diocese', 'parish', 'seminary', 'school', 'city', 'residence', 'appointment', 'appointment_residence', 'appointment_from', 'town'].includes(token) && !(token.startsWith('town:') && TOWN_PLACE_KINDS.includes(token.slice(5) as never)) && !isRomeToken(token) && !['nuncio_view', 'see', 'see_city', 'named', 'dicastery', 'dicastery_short', 'dicastery_work', 'curia_rank', 'curia_offer', 'titular', 'college_electors', 'pope_name', 'pope_journey', 'pope_draft', 'pope_years', 'pope_from', 'pope_age', 'country', 'country_next', 'country_church', 'cloister_house', 'cloister_superior', 'cloister_members', 'cloister_order', 'diplomat_rank', 'nunciature', 'visitor', 'visitor_first', 'visitation_cause', 'closed_house', 'removed_provincial', 'direction_priest', 'direction_parish', 'visit_parish', 'visit_town', 'visit_pastor', 'seminary_man', 'presbyterate_man', 'conference_doc', 'conference_doc_gist', 'conference_president', 'conference_office', 'conference_winner', 'conference_temper', 'loan_diocese', 'loan_home', 'loan_bishop', 'loan_years', 'loan_kind'].includes(token)) {
       problems.push(`${where}: unknown token {${token}}`);
     }
   }
