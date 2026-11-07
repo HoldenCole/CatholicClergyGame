@@ -169,7 +169,10 @@ export function endStudy(state: GameState, def: OfferDef, rng: Rng): GameState {
     delete flags0['study:nunciature'];
     // A nuncio does not come home to a parish, and the letter at seventy-five ends any man's service.
     if (d?.rank === 'nuncio' || age >= DIPLOMACY.retirementAge) return retire({ ...next, flags: flags0 });
-    next = note(next, 'offer', `Left the diplomatic service after ${Math.max(1, Math.round((next.clock.week - study.startWeek) / 52))} years, at his own asking.`);
+    const years = Math.max(1, Math.round((next.clock.week - study.startWeek) / 52));
+    const how = next.flags['diplomat:recalled'] ? 'at his bishop\'s asking' : next.flags['diplomat:released'] && !next.flags['diplomat:last_country'] ? 'released by the Secretariat, with thanks' : 'at his own asking';
+    for (const k of ['diplomat:released', 'diplomat:last_country', 'diplomat:last_country_taken', 'diplomat:go_home', 'diplomat:recalled']) delete flags0[k];
+    next = note({ ...next, flags: flags0 }, 'offer', `Left the diplomatic service after ${years} years, ${how}.`);
   } else if (study.failed && def.failure) {
     next = applyEffects(next, def.failure.effects);
     next = { ...next, offerHistory: [...next.offerHistory, { offerId: def.id, week: next.clock.week, decision: 'failed' }] };

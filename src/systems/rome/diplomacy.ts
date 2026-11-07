@@ -34,8 +34,19 @@ export const DIPLOMACY = {
     { key: 'counsellor' as const, years: 7, score: 55, minAge: 0, cap: 1 },
     { key: 'nuncio' as const, years: 14, score: 72, minAge: 48, cap: 0.04 },
   ],
+  /** A counsellor kept past eighteen years for a nunciature: the Secretariat pushes the name harder before it must let him go. Invented. */
+  capKept: 0.1,
   /** The local dials a new country starts from: harder posts start colder. */
   coldPerHardship: 10,
+  /**
+   * The service has a shape (owner's feedback: a priest in the service for twenty years reads oddly). At the
+   * rotation after these years the Secretariat has no higher rung for him and says so: a secretary never made
+   * counsellor after ten years, a counsellor never named nuncio after eighteen. He goes home, asks for a desk at
+   * the Secretariat, or asks for one last country, once. Invented; the real service keeps some men longer.
+   */
+  release: { notCounsellorAfter: 10, notNuncioAfter: 18, /** A counsellor the Secretariat rates for a nunciature is kept past eighteen years, but not past this. */ atMost: 24 },
+  /** A new nuncio does not know his drafts: the reports dial falls this much on a move. Invented. */
+  reportsOnMove: 30,
   /** How far the service draws his reading toward Rome's by the time he goes home. */
   romePull: 0.3,
   priestHigh: 30,
@@ -135,7 +146,7 @@ function postTo(state: GameState, def: NunciatureDef, rng: Rng): GameState {
   }
   const study = state.study!;
   const cold = -DIPLOMACY.coldPerHardship * (def.hardship - 1);
-  const place = { ...(study.place ?? {}), church: cold, state: cold };
+  const place = { ...(study.place ?? {}), church: cold, state: cold, reports: Math.max(-100, (study.place?.reports ?? 0) - (d.countries.length ? DIPLOMACY.reportsOnMove : 0)) };
   const record = { ...(study.record ?? {}), countries: (study.record?.countries ?? 0) + 1 };
   const { next: _n, ...rest } = d;
   return withDiplomacy({ ...state, npcs, study: { ...study, place, record, school: `the Apostolic Nunciature in ${def.country}`, label: postLabel(d.rank, def.country) } }, { ...rest, country: def.country, arrivedWeek: week, rotateWeek: week + rng.int(range[0], range[1]), countries: [...d.countries, def.country] });
@@ -185,6 +196,32 @@ export function beginService(state: GameState, rng: Rng): { state: GameState; le
   };
 }
 
+/** Years in the service since the Academy ended. */
+export function yearsInService(state: GameState): number {
+  const d = diplomacyOf(state);
+  return d?.since === undefined ? 0 : (state.clock.week - d.since) / 52;
+}
+
+/** Whether the Secretariat has no higher rung for him: the years are past and the rank is not the one they keep. */
+export function releaseDue(state: GameState): boolean {
+  const d = diplomacyOf(state);
+  if (!d || d.rank === 'nuncio' || d.rank === 'student') return false;
+  const years = yearsInService(state);
+  if (d.rank !== 'counsellor') return years >= DIPLOMACY.release.notCounsellorAfter;
+  if (years >= DIPLOMACY.release.atMost) return true;
+  if (years < DIPLOMACY.release.notNuncioAfter) return false;
+  // The Holy Father's list: a counsellor the Secretariat reads at a nuncio's score is kept on for it.
+  return !keptForNunciature(state);
+}
+
+/** Whether a counsellor past his years is still on the list for a nunciature: read once, at the Secretariat's score for the rung. */
+export function keptForNunciature(state: GameState): boolean {
+  const d = diplomacyOf(state);
+  if (d?.rank !== 'counsellor') return false;
+  const rung = DIPLOMACY.rungs.find((r) => r.key === 'nuncio')!;
+  return serviceScore(state, createRng(`${state.seed}:kept:${d.since ?? 0}`)) >= rung.score;
+}
+
 /** How the Secretariat reads him this year: the reports, the chief's regard, the local Church, Rome, and a year's luck. */
 export function serviceScore(state: GameState, rng: Rng): number {
   const place = state.study?.place ?? {};
@@ -220,19 +257,31 @@ export function diplomacyWeek(state: GameState): DiplomacyWeek {
   // He asked to go home at the rotation: the service lets him go.
   if (s.flags['diplomat:go_home']) return { state: { ...s, study: { ...s.study!, endWeek: week } }, lines, letters };
   const cur = diplomacyOf(s)!;
-  // The rotation is put to him a few weeks ahead, with the next country named.
+  // The rotation is put to him a few weeks ahead, with the next country named; or, past the years the Secretariat
+  // keeps a man without a higher rung, the release is put to him instead, and the last country he may ask for once.
   if (cur.rotateWeek !== undefined && !cur.next && week >= cur.rotateWeek - DIPLOMACY.askBefore && !cur.scene) {
-    const next = pickCountry(s, createRng(`${s.seed}:rotation:${week}`), cur.rank === 'nuncio');
-    s = schedule(withDiplomacy(s, { ...cur, next: next.country }), 'rotation', week);
+    if (releaseDue(s) && !s.flags['diplomat:last_country']) {
+      s = schedule({ ...s, flags: { ...s.flags, 'diplomat:released': true } }, 'release', week);
+    } else {
+      const next = pickCountry(s, createRng(`${s.seed}:rotation:${week}`), cur.rank === 'nuncio');
+      const flags = { ...s.flags };
+      // The last country he asked for: taken now, and the release comes for good at the next rotation.
+      if (flags['diplomat:last_country']) { delete flags['diplomat:last_country']; flags['diplomat:last_country_taken'] = true; }
+      s = schedule(withDiplomacy({ ...s, flags }, { ...cur, next: next.country }), 'rotation', week);
+    }
   }
   const now = diplomacyOf(s)!;
+  // Released and still here a month on (the scene not answered): the service lets him go.
+  if (now.rotateWeek !== undefined && week >= now.rotateWeek + 4 && !now.next && now.rank !== 'nuncio' && s.flags['diplomat:released'] && !s.flags['diplomat:last_country']) {
+    return { state: { ...s, flags: { ...s.flags, 'diplomat:go_home': true }, study: { ...s.study!, endWeek: week } }, lines, letters };
+  }
   if (now.rotateWeek !== undefined && week >= now.rotateWeek && now.next) {
     const def = nunciatureDef(now.next)!;
     const from = now.country;
     s = postTo(s, def, createRng(`${s.seed}:post:${week}`));
     lines.push(`Posted from ${from} to ${def.country}.`);
     s = { ...s, career: [...s.career, { week, kind: 'note', text: `Moved by the Secretariat of State from ${from} to ${def.country}, as ${RANK_WORD[now.rank]}.` }] };
-    letters.push({ sort: 'rome', title: `A new country: ${def.country}`, body: [`The packing is done in a week; it always is. ${def.country}: the Church there is ${def.church}.`, now.rank === 'nuncio' ? 'You present your credentials to the head of state within the month, in the old formula, and become, in the protocol, the dean of the diplomatic corps. The bishops come to see what kind of nuncio you are.' : 'A new nuncio to learn, a new language on the street, and the same cipher traffic in the morning.'], week });
+    letters.push({ sort: 'rome', title: `A new country: ${def.country}`, body: [`The packing is done in a week; it always is. ${def.country.replace(/^./, (c) => c.toUpperCase())}: the Church there is ${def.church}.`, now.rank === 'nuncio' ? 'You present your credentials to the head of state within the month, in the old formula, and become, in the protocol, the dean of the diplomatic corps. The bishops come to see what kind of nuncio you are.' : 'A new nuncio to learn, a new language on the street, and the same cipher traffic in the morning.'], week });
   }
   // Once a year the Secretariat looks at him; the nunciature is the pope's to give, and waits out a vacancy.
   const served = week - now.since!;
@@ -242,7 +291,8 @@ export function diplomacyWeek(state: GameState): DiplomacyWeek {
     const papal = rung?.key === 'nuncio';
     // A chance each year, the score against the rung's; the pope's nunciature waits for a man of the years.
     const yearRng = createRng(`${s.seed}:service-year:${week}`);
-    if (rung && served / 52 >= rung.years && ageOn(s) >= rung.minAge && !(papal && sedeVacante(s)) && yearRng.derive('climb').chance(rung.cap * climbChance(serviceScore(s, yearRng), rung.score))) {
+    const cap = papal && served / 52 >= DIPLOMACY.release.notNuncioAfter && keptForNunciature(s) ? DIPLOMACY.capKept : rung?.cap ?? 0;
+    if (rung && served / 52 >= rung.years && ageOn(s) >= rung.minAge && !(papal && sedeVacante(s)) && yearRng.derive('climb').chance(cap * climbChance(serviceScore(s, yearRng), rung.score))) {
       const out = promote(s, rung.key);
       s = out.state;
       lines.push(out.line);

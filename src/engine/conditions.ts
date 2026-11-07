@@ -257,7 +257,11 @@ export function evaluateCondition(
       const d = state.rome?.diplomacy;
       if (!d) return false;
       if (cond.key === 'hardship') return compare(cond.op, nunciatureDef(d.country)?.hardship ?? 0, cond.value);
+      if (cond.key === 'years') return d.since !== undefined && compare(cond.op, (state.clock.week - d.since) / 52, cond.value);
+      if (cond.key === 'countries') return compare(cond.op, d.countries.length, cond.value);
+      if (cond.key === 'in_country') return d.arrivedWeek !== undefined && compare(cond.op, state.clock.week - d.arrivedWeek, cond.value);
       if (cond.key === 'scene') return dueDiplomacyScene(state) === cond.value;
+      if (cond.key === 'region') return nunciatureDef(d.country)?.region === cond.value;
       return d.rank === cond.value;
     }
     case 'papacy':
