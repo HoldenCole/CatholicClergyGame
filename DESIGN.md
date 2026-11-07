@@ -860,6 +860,12 @@ The hours in the routine marked *time with brother priests* now land on **one ma
 What it buys is **favours**, each gated on the relationship and on what that man actually is: a weekend covered (blocks back in the week), a word at the chancery from somebody who is there, what the board is actually thinking three months early, a name for a roofer or a bookkeeper or a lawyer who will not charge a parish, and an hour on the telephone at eleven at night. A favour costs the man who grants it — that is what makes it a favour — and it cannot be asked of the same man twice.
 
 
+## 9A. One world
+
+*Owner's feedback: the careers, the monasteries, the educational tracks, and the whole should flow as one world and not as lanes. The lanes are real: each phase has its own sheets and its own pools, and when a man changes lane the people and the place of the last one fall out of view. These rounds pull the lanes through each other.*
+
+**Round 1: home from away.** The mailbag (§8.10) reached a man only in a parish or a house; now it reaches him in Rome, in the service, and in a see elsewhere, so the past keeps writing wherever he is (`studyWeekHook`); away, a reply that is a drive (four hours or more, `MAIL.driveHours`) is not offered, and a letter whose every answer is a drive does not come. The circle and the sheets name the Roman people by what they were to him (the nuncio he served under, the prefect, the dicastery's secretary) and not as the chancery. A man away has a **Home** sheet (`ui/HomePanel.tsx`, `systems/home.ts`): the diocese on its map with the parish he left ringed and who holds it now, his bishop and the chancery as they hold him, the class, the openings at home, and the year's news from home out of the record. The circle (`systems/circle.ts`) gives the people of the Roman years a group of their own, "The Roman years": the College's men, the chiefs of the nunciatures, the Curia's prefect, secretary, and colleagues, the nuncio; before, they were filed under the chancery or lost.
+
 ## 10. Special interest groups
 
 The parish's living layer and the most direct way the player changes anything.

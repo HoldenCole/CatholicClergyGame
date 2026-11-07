@@ -39,6 +39,8 @@ export const mailDefs: MailDef[] = content.letters;
 export const MAIL = {
   /** Weeks a letter waits in the tray before the drawer takes it. */
   trayWeeks: 4,
+  /** A reply that takes this many hours is a drive: a man away cannot make it, and a letter whose every answer is a drive does not reach him (one world, round 1). */
+  driveHours: 4,
   /** What the family makes of a letter left in the drawer. */
   familyUnanswered: -6,
   chancePerWeek: content.chancePerWeek,
@@ -200,10 +202,21 @@ export function eligibleMail(state: GameState, rng: Rng): { def: MailDef; found:
     if (def.weight <= 0) continue;
     if (suppressed(state, def)) continue;
     if (def.requires && !evaluateAll(def.requires, state)) continue;
+    if (!repliesFor(state, def).length && def.replies.length) continue;
     const found = findSender(state, def.from, rng.derive(`sender:${def.id}`));
     if (found) out.push({ def, found });
   }
   return out;
+}
+
+/** Whether the man is away from the diocese: a posting, a degree, the service, a see elsewhere. */
+export function awayFromHome(state: GameState): boolean {
+  return !!state.study && !state.parish;
+}
+
+/** The replies open to him where he is: away, the ones that need the car are not there. */
+export function repliesFor(state: GameState, def: MailDef): MailReply[] {
+  return awayFromHome(state) ? def.replies.filter((r) => (r.hours ?? 0) < MAIL.driveHours) : def.replies;
 }
 
 /** Build the letter from a template and a sender: the body rendered now, the replies kept for the answer. */
@@ -216,7 +229,7 @@ export function composeMail(state: GameState, def: MailDef, found: FoundSender):
     week: state.clock.week,
     mailId: def.id,
     from: found.sender,
-    replies: def.replies.map((r) => ({ ...r, label: render(r.label) })),
+    replies: repliesFor(state, def).map((r) => ({ ...r, label: render(r.label) })),
   };
 }
 

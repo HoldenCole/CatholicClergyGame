@@ -342,6 +342,8 @@ export function studyWeekHook(deps: EventDeps): WeekHook {
       if (event) next = fireOrResolve(next, event, rng, deps);
     }
     if (next.mode.kind !== 'clock' || next.pending.length > 0) return next;
+    // The mailbag reaches a man away too: the past keeps writing to Rome (one world, round 1). DESIGN §8.10.
+    next = mailWeek(mailTrayWeek(next), rng.derive(`mail:${next.clock.week}`));
     return religiousModeStep(openMail(offersStep(next, rng, deps)));
   };
 }
