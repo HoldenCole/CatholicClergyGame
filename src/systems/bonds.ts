@@ -31,7 +31,7 @@ function rollBond(rng: Rng, npc: Npc, year: number): Bond | null {
   return { kind: pick[0], who: pick[1], week: 0 };
 }
 
-const VERB: Record<BondKind, string> = { baptized: 'baptized', married: 'married', buried: 'buried', anointed: 'anointed', confirmed: 'prepared', counseled: 'sat with', helped: 'helped', quarreled: 'quarreled with' };
+const VERB: Record<BondKind, string> = { baptized: 'baptized', married: 'married', buried: 'buried', anointed: 'anointed', confirmed: 'prepared', counseled: 'sat with', helped: 'helped', quarreled: 'quarreled with', formed: 'formed', heard: 'heard', told: 'told', taught: 'taught' };
 /** The verb for a bond, the scenes' own kinds included (taught, heard, told, formed): the kind itself when the table has no word for it. */
 export function bondVerb(kind: string): string {
   return (VERB as Record<string, string>)[kind] ?? kind.replace(/_/g, ' ');
@@ -42,7 +42,7 @@ const isPerson = (who: string) => ['them', 'him', 'her'].includes(who);
 
 /** One bond in words: "buried her husband", "married the two of them". */
 export function bondWord(b: Bond): string {
-  return `${VERB[b.kind]} ${b.who}`;
+  return `${bondVerb(b.kind)} ${b.who}`;
 }
 
 /** A person's bonds in a phrase: "whose daughter you baptized and whose husband you buried". */
@@ -63,7 +63,7 @@ export function parishPeople(state: GameState): Npc[] {
 
 /** Every bond he has with the people of every parish, counted by kind. */
 export function bondCounts(state: GameState): Record<BondKind, number> {
-  const out: Record<BondKind, number> = { baptized: 0, married: 0, buried: 0, anointed: 0, confirmed: 0, counseled: 0, helped: 0, quarreled: 0 };
+  const out: Record<BondKind, number> = { baptized: 0, married: 0, buried: 0, anointed: 0, confirmed: 0, counseled: 0, helped: 0, quarreled: 0, formed: 0, heard: 0, told: 0, taught: 0 };
   for (const n of Object.values(state.npcs)) for (const b of n.bonds ?? []) if (b.kind in out) out[b.kind] += 1;
   return out;
 }

@@ -313,7 +313,8 @@ export function nextAssignment(state: GameState, rng: Rng): { state: GameState; 
     const parishId = opening.parishId!;
     assignment = { parishId, role, startWeek: next.clock.week, letter: letterFor(next, opening, role), reasons: won.reasons };
     next = { ...next, openings: next.openings.filter((o) => o.id !== won.opening.id) };
-    next = note(next, 'promotion', `Appointed ${role.replace('_', ' ')} of ${openingBlurb(next, opening).split(':')[0]}. ${won.reasons.slice(0, 2).join('; ')}.`);
+    const why = won.reasons.slice(0, 2).join('; ');
+    next = note(next, 'promotion', `Appointed ${role.replace('_', ' ')} of ${openingBlurb(next, opening).split(':')[0]}. ${why.charAt(0).toUpperCase()}${why.slice(1)}.`);
   } else if ((state.assignment?.role === 'pastor' || state.assignment?.role === 'administrator') && next.parish) {
     // A pastor is never sent back as a vicar: he is renewed where he is, or moved as pastor.
     const role = state.assignment.role;

@@ -25,7 +25,7 @@ export default function OffersPanel() {
   return (
     <>
       <Sheet title="Letters">
-        {outcome && <p className="mb-3 rounded border rule bg-white/30 px-3 py-2 text-sm leading-relaxed">{outcome}</p>}
+        {outcome && <p className="mb-3 rounded border rule bg-white/30 px-3 py-2 text-sm leading-relaxed">{renderText(outcome, game)}</p>}
         {open.length === 0 && tray.length === 0 && !outcome && <p className="ink-faint text-sm">Nothing in the mail today.</p>}
         {open.map((o) => <OfferCard key={o.offerId} o={o} />)}
         {tray.map((t, i) => (

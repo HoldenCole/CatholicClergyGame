@@ -4,7 +4,7 @@ import { evaluateAll } from './conditions';
 import { shouldInterrupt } from './interrupts';
 import { offersWeek } from './offers';
 import { createRng, type Rng } from './rng';
-import { formationBeats, markBeatFired, weekPool } from './seminary';
+import { formationBeats, markBeatFired, placePool, weekPool } from './seminary';
 import { isPlayedWeek, parishWeek } from './parish';
 import { careerYear, directedTransfer, isCareerYear, nextAssignment } from './career';
 import { deliverLetter, openMail } from '@/systems/review';
@@ -23,7 +23,7 @@ import { deaneryWeek } from '@/systems/deanery';
 import { regardWeek } from '@/systems/regard';
 import { christmasLine } from '@/systems/kin';
 import { returnOfTheFormed, seminarianWeek, summerSeminarian } from '@/systems/formed';
-import { isYearStart } from './time';
+import { dateOf, isYearStart } from './time';
 import { seminaryWeek } from '@/systems/seminaryWeek';
 import { studyWeek } from '@/systems/studyWeek';
 import { endStudy } from './study';
@@ -155,6 +155,9 @@ export function resolvePendingWithOutcome(state: GameState, pending: PendingEven
 /** How often an unplayed week of formation carries a scene: a friar's novitiate and studium, and the diocesan seminary too since the rule round, so that a year is more than its three played weeks. Invented. */
 const FORMATION_WEEK_CHANCE = 0.12;
 
+/** A summer on loan begins in June: the month the vicar for clergy's letter waits for. */
+const SUPPLY_FROM_MONTH = 6;
+
 /** The seminary week: formation accrual and beats, then any played-week event. */
 export function seminaryWeekHook(deps: EventDeps): WeekHook {
   return (state: GameState, rng: Rng, reachedBeats: Beat[]) => {
@@ -184,7 +187,7 @@ export function seminaryWeekHook(deps: EventDeps): WeekHook {
       if (event) next = fireOrResolve(next, event, rng, deps);
     } else if (rng.derive(`formation-scene:${next.clock.week}`).chance(FORMATION_WEEK_CHANCE)) {
       // Formation is lived weekly, not on three played weeks a year: the house draws at a low chance every week, the rule's scenes among them. Friar round D3, and the seminary's rule round.
-      const [event] = drawEvents(deps.pool.filter((e) => !e.beat), next, rng, 1);
+      const [event] = drawEvents(placePool(deps.pool, next).filter((e) => !e.beat), next, rng, 1);
       if (event) next = fireOrResolve(next, event, rng, deps);
     }
     // The house's invitations and the chancery's summers come by letter, week by week, like everyone else's.
@@ -590,7 +593,8 @@ export function parishWeekHook(deps: EventDeps): WeekHook {
       state = closeRequest(clearRequestAnswer(state), 'lapsed');
     }
     // The vicar for clergy's letter about a summer on loan: go, and the away week takes it from here.
-    if (state.flags['supply:pending'] && !state.away) {
+    // The loan is for the summer: the letter comes in Lent, and he goes when the school year ends, not the week he said yes.
+    if (state.flags['supply:pending'] && !state.away && dateOf(state.clock).month >= SUPPLY_FROM_MONTH) {
       state = goSupply(state, rng.derive(`supply:${state.clock.week}`));
       const preset = state.away?.presetId ? presetById(state.away.presetId) : undefined;
       if (preset) state = addDigestLine(state, `The letter from ${preset.name} came through the vicar for clergy: twelve weeks, three parishes, a room in a rectory in ${preset.see}. You packed.`);

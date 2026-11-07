@@ -68,7 +68,7 @@ describe('engine/parish', () => {
       }
     }
     expect(s.clock.week).toBe(52);
-    expect(s.parish!.weeksServed).toBe(52);
+    expect(s.parish!.weeksServed).toBe(parishState('year').parish!.weeksServed + 52);
     expect(events + s.history.filter((h) => h.auto).length).toBe(scheduled);
     const week10 = s.digest.find((d) => d.week === 10)!;
     expect(week10.lines.some((l) => /Collections/.test(l))).toBe(true);

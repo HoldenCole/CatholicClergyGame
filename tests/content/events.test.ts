@@ -232,7 +232,7 @@ function checkCondition(c: Condition, where: string, problems: Problem[]): void 
       else if (!LITURGY_DIALS.has(c.key) || typeof c.value !== 'string' || !LITURGY_OPTIONS.has(`${c.key}:${c.value}`)) problems.push(`${where}: bad liturgy condition ${JSON.stringify(c)}`);
       break;
     case 'bond':
-      if (!['any', 'baptized', 'married', 'buried', 'anointed', 'confirmed', 'counseled', 'helped', 'quarreled'].includes(c.kind) || !hasOp(c.op) || typeof c.value !== 'number') problems.push(`${where}: bad bond condition`);
+      if (!['any', ...BOND_KINDS].includes(c.kind) || !hasOp(c.op) || typeof c.value !== 'number') problems.push(`${where}: bad bond condition`);
       break;
     case 'see':
       if (!['presbyterate', 'people', 'rome', 'money', 'shortage', 'years'].includes(c.key) || !hasOp(c.op) || typeof c.value !== 'number') problems.push(`${where}: bad see condition`);
@@ -320,6 +320,9 @@ function checkCondition(c: Condition, where: string, problems: Problem[]): void 
   }
 }
 
+/** systems/bonds.ts knows a verb for each; a kind outside this list prints as nothing in the year's review. */
+const BOND_KINDS = ['baptized', 'married', 'buried', 'anointed', 'confirmed', 'counseled', 'helped', 'quarreled', 'formed', 'heard', 'told', 'taught'];
+
 function checkEffect(e: Effect, where: string, problems: Problem[]): void {
   if (e.target === 'schedule') {
     if (!['mass:add', 'mass:remove', 'confessions:add', 'confessions:remove'].includes(e.key)) problems.push(`${where}: bad schedule key ${e.key}`);
@@ -334,6 +337,7 @@ function checkEffect(e: Effect, where: string, problems: Problem[]): void {
   if (needsDelta.includes(e.target) && typeof e.delta !== 'number') problems.push(`${where}: ${e.target} effect needs delta`);
   if (e.target === 'stat' && !STAT_KEYS.includes(e.key as never)) problems.push(`${where}: bad stat key ${e.key}`);
   if (e.target === 'see' && (!['presbyterate', 'people', 'rome', 'money', 'shortage'].includes(e.key) || typeof e.delta !== 'number')) problems.push(`${where}: bad see effect`);
+  if (e.target === 'bond' && (typeof e.value !== 'string' || !BOND_KINDS.includes(String(e.value).split(/[:_]/)[0]!))) problems.push(`${where}: bond effect kind must be one of ${BOND_KINDS.join(', ')}: ${String(e.value)}`);
   if (e.target === 'norm' && (!AXES.has(e.key) || !['enthusiastic', 'faithful', 'minimal', 'slow'].includes(String(e.value)))) problems.push(`${where}: bad norm effect`);
   if (e.target === 'pillar' && !PILLARS.includes(e.key as never)) problems.push(`${where}: bad pillar key ${e.key}`);
   if (e.target === 'ministry' && !MINISTRY_COND_KEYS.includes(e.key)) problems.push(`${where}: unknown ministry key ${e.key}`);
@@ -386,6 +390,8 @@ function tokensIn(text: string): string[] {
 }
 
 function checkEvent(ev: GameEvent, file: string, problems: Problem[], ids: Set<string>): void {
+  if (ev.place !== undefined && !['home', 'rome'].includes(ev.place)) problems.push(`${ev.id}: bad place ${String(ev.place)}`);
+  if (ev.place !== undefined && !(ev.phase === 'seminary' || (Array.isArray(ev.phase) && ev.phase.every((p) => p === 'seminary')))) problems.push(`${ev.id}: place is a seminary scene's field`);
   const where = `${file} › ${ev.id ?? '(no id)'}`;
   if (typeof ev.id !== 'string' || !/^[a-z0-9_]+$/.test(ev.id)) problems.push(`${where}: id must be snake_case`);
   if (ids.has(ev.id)) problems.push(`${where}: duplicate id`);
