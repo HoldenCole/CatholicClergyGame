@@ -25,7 +25,11 @@ export const FRIAR_LANE_LABEL: Record<Lane, string> = {
   header: '', decided: 'Decided', money: 'The purse', parish: 'The house', people: 'The brothers', diocese: 'The province', you: 'You', around: 'Around the house',
 };
 
-export function laneLabelFor(lane: Lane, religious: boolean): string {
+/** A man away has no parish: the parish's lane is the post's. */
+const AWAY_LANE_LABEL: Partial<Record<Lane, string>> = { parish: 'The post', around: 'Around the post' };
+
+export function laneLabelFor(lane: Lane, religious: boolean, away = false): string {
+  if (away && !religious && AWAY_LANE_LABEL[lane]) return AWAY_LANE_LABEL[lane]!;
   return (religious ? FRIAR_LANE_LABEL : LANE_LABEL)[lane];
 }
 
