@@ -351,6 +351,10 @@ About twenty-five, beat `diplomacy`: the Academy (the first dinner, the language
 - The room was "Your room at the college" in every Roman posting; it is now the Academy's, the nunciature's, the apartment near the Borgo, the faculty corridor, or the Casa, by the posting (`ROMAN_ROOM_LABEL`).
 - The record's lanes read "The parish" and "around the parish" for a man with no parish; away, they read "The post".
 
+### 11.9 The Roman postings' hours (R1.7a)
+
+*Owner's feedback: a diplomat's or a Roman's week should have more to it than the desk: Masses, confessions, theology.* The College's formator and the Vatican's chaplain had no hours at all to give (their sheets listed nothing); the Academy, the nunciature, and the Curia had the desk, a parish, and the chapel. Now (`content/study/activities.json`): the College's formator has the men in direction, the rector's Monday and the reports, a seminar, reading theology, the chapel, the English confessional at St. Peter's, the Saturday pilgrims, Rome, and the ordinations served; the Vatican's chaplain the English box nine to one, the pilgrims' Masses at the side altars, the Wednesday audience, the Prefecture's envelopes, groups from home at the bronze doors, a Roman parish, the Casa's library and chapel; and the Academy, the nunciature, and the Curia each gain confessions in a basilica or the city, theology kept up at night, and a Mass for the sisters or the house's people. Each moves its posting's own dials and book.
+
 ## 12. The odds of the mitre (as built, owner's decision: generous)
 
 *R1.9 (E3 §16B): a friar is read by the same nuncio at the same odds, with the province's regard in place of the chancery's and the provincial's letter in place of the bishop's; the terna, the auxiliary, the see, the translation and the red hat of a great see are his on these terms.*
