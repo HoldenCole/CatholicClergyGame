@@ -408,7 +408,7 @@ function friarArc(state: GameState): string {
   return parts.join(' ');
 }
 
-export function careerSummary(state: GameState, ending: 'retired' | 'died' | 'left_priesthood' | 'elected_pope' | 'pope_died' | 'pope_renounced'): string {
+export function careerSummary(state: GameState, ending: 'retired' | 'died' | 'left_priesthood' | 'entered_cloister' | 'elected_pope' | 'pope_died' | 'pope_renounced'): string {
   const c = state.character!;
   const age = playerAge(state);
   const years = Math.floor(yearsOrdained(state));
@@ -425,6 +425,7 @@ export function careerSummary(state: GameState, ending: 'retired' | 'died' | 'le
     ending === 'elected_pope' ? `The College of Cardinals elected you pope at ${age}, ${years} years a priest, and you took the name ${String(state.flags['pope:name'] ?? 'the College will remember')}.` :
     ending === 'pope_died' ? `You died Bishop of Rome at ${age}, ${years} years a priest, as ${String(state.flags['pope:name'] ?? 'pope')}.` :
     ending === 'pope_renounced' ? `You laid down the see of Peter at ${age}, ${years} years a priest, and were ${String(state.flags['pope:name'] ?? 'pope')} no longer; the Church calls you pope emeritus.` :
+    ending === 'entered_cloister' ? `You entered ${String(state.flags['cloister:house'] ?? 'the cloister')} at ${age}, ${years} years a priest of the diocese, with your bishop's leave, a novice again.` :
     `You left the priesthood at ${age}, after ${years} years.`;
   const see = state.see;
   const reign = pontificateLine(state);

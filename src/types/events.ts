@@ -160,6 +160,11 @@ export type Condition =
   | { type: 'month'; op: Op; value: number }
   /** The man's name as a confessor, 0..100 (systems/confessor.ts). */
   | { type: 'confessor'; op: Op; value: number }
+  /**
+   * His standing with a house of the diocese (systems/houses.ts): the best regard among the houses of that charism
+   * (men's houses only when `men`), and with `retreat`, only a house he has made his retreat at. DESIGN §9A round 3.
+   */
+  | { type: 'house_regard'; charism?: 'contemplative' | 'active'; men?: boolean; retreat?: boolean; op: Op; value: number }
   /** An interest the man has put on file with the chancery (systems/interests.ts): 'nac', 'rome', 'hospital', 'parish:<id>'. */
   | { type: 'interest'; key: string }
   /** His formation standing as the bishop reads it, 0..100 (systems/standing.ts): the top of the class is 66 and up. */

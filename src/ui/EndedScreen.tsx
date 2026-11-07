@@ -9,6 +9,7 @@ const ENDING_TITLE: Record<string, string> = {
   dismissed: 'Dismissed',
   left_seminary: 'You left',
   left_priesthood: 'You left the priesthood',
+  entered_cloister: 'Into the cloister',
   died: 'Requiescat',
   retired: 'Retired',
   elected_pope: 'Habemus papam',
@@ -41,9 +42,9 @@ export default function EndedScreen() {
   if (!game || game.mode.kind !== 'ended') return null;
   const c = game.character;
   const ending = game.mode.ending;
-  const priest = !!game.flags.ordained && (ending === 'left_priesthood' || ending === 'retired' || ending === 'died' || ending === 'elected_pope' || ending === 'pope_died' || ending === 'pope_renounced');
+  const priest = !!game.flags.ordained && (ending === 'left_priesthood' || ending === 'entered_cloister' || ending === 'retired' || ending === 'died' || ending === 'elected_pope' || ending === 'pope_died' || ending === 'pope_renounced');
   const life = c && priest ? lifeOf(game) : null;
-  const summary = c && priest && !/years a priest/.test(game.mode.summary) ? careerSummary(game, ending as 'left_priesthood' | 'retired' | 'died' | 'elected_pope' | 'pope_died' | 'pope_renounced') : null;
+  const summary = c && priest && !/years a priest/.test(game.mode.summary) ? careerSummary(game, ending as 'left_priesthood' | 'entered_cloister' | 'retired' | 'died' | 'elected_pope' | 'pope_died' | 'pope_renounced') : null;
   const year = yearOf(game.clock.startDay, game.clock.week);
   const download = () => {
     const blob = new Blob([exportSave()], { type: 'application/json' });

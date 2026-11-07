@@ -427,3 +427,25 @@ export function houseLine(state: GameState, house: ReligiousHouse): string {
   const years = s.regard !== 0 || s.asked ? Math.round((state.clock.week - s.sinceWeek) / 52) : 0;
   return `${regardWord(s.regard)}${years >= 2 ? `, ${years} years of it` : ''}${running.length ? `. Standing: ${running.join(', ')}` : ''}.`;
 }
+
+/** The contemplative men's house of the diocese he stands best with, if any: the one a priest would enter. DESIGN §9A round 3. */
+export function cloisterHouse(state: GameState): ReligiousHouse | undefined {
+  const men = housesOf(state).filter((h) => h.charism === 'contemplative' && h.members !== 'nuns');
+  if (!men.length) return undefined;
+  return [...men].sort((a, b) => standingOf(state, b.id).regard - standingOf(state, a.id).regard || a.id.localeCompare(b.id))[0];
+}
+
+/** A condition on his standing with the houses: the best regard among those that fit, and whether he has made his retreat there. */
+export function houseRegardMeasure(state: GameState, cond: { charism?: 'contemplative' | 'active'; men?: boolean; retreat?: boolean }): number | null {
+  const fit = housesOf(state).filter((h) => (!cond.charism || h.charism === cond.charism) && (!cond.men || h.members !== 'nuns') && (!cond.retreat || standingOf(state, h.id).lastUsed?.retreat !== undefined));
+  if (!fit.length) return null;
+  return Math.max(...fit.map((h) => standingOf(state, h.id).regard));
+}
+
+/** {cloister_house}, {cloister_superior}, {cloister_members}, {cloister_order}: the house a priest would enter, for the cloister's scenes. */
+export function cloisterTokens(state: GameState): Record<string, string> {
+  const h = cloisterHouse(state);
+  if (!h) return {};
+  const superior = h.members === 'monks' ? 'abbot' : h.members === 'canons' ? 'provost' : 'prior';
+  return { cloister_house: h.name, cloister_superior: superior, cloister_members: h.members, cloister_order: h.orderLabel };
+}

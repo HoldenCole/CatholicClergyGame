@@ -7,6 +7,8 @@ export type Ending =
   | 'dismissed'
   | 'left_seminary'
   | 'left_priesthood'
+  /** One world, round 3: a diocesan priest enters a contemplative house of the diocese, with his bishop's leave. */
+  | 'entered_cloister'
   | 'died'
   | 'retired'
   /** E1 R1.5: elected pope in a conclave and accepted (older saves; R1.6 plays the pontificate on). */

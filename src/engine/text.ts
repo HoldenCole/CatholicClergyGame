@@ -1,4 +1,5 @@
 import { presetById } from '@/content/dioceses';
+import { cloisterTokens } from '@/systems/houses';
 import type { GameState } from '@/types';
 import { resolveSelector } from './selectors';
 import { pendingAppointment, APPOINTMENT_FLAGS } from './appointment';
@@ -64,6 +65,7 @@ export function textExtras(state: GameState): Record<string, string> {
   Object.assign(out, conferenceTokens(state));
   Object.assign(out, loanTokens(state));
   Object.assign(out, collegeTokens(state));
+  Object.assign(out, cloisterTokens(state));
   Object.assign(out, romanTokens(state));
   Object.assign(out, visitationTokens(state));
   Object.assign(out, directionTokens(state));
