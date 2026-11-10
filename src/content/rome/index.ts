@@ -6,10 +6,13 @@ import documentPoolsRaw from './documentPools.json';
 import dicasteriesRaw from './dicasteries.json';
 import collegeRaw from './college.json';
 import nunciaturesRaw from './nunciatures.json';
-import type { DiocesanNorm, DocumentKind, HistoricalDocumentDef, HistoricalPapacyDef, NunciatureDef, PolicyAxisDef } from '@/types';
+import type { DiocesanNorm, DocumentKind, HistoricalDocumentDef, HistoricalPapacyDef, NunciatureDef, PolicyAxisDef, RecordAfterDef } from '@/types';
 
 /** The papal record, in order. E1 §9 A. */
 export const papalHistory: HistoricalPapacyDef[] = (historyRaw as unknown as { popes: HistoricalPapacyDef[] }).popes;
+
+/** What the record knows of the reign after its last pope, who is living and unnamed. E1 §9 A. */
+export const recordAfter: RecordAfterDef | undefined = (historyRaw as unknown as { after?: RecordAfterDef }).after;
 
 export interface PapalPools {
   /** Regnal name to the ordinal last used before the generated popes begin. */

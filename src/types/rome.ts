@@ -29,6 +29,8 @@ export interface Papacy {
   order?: string;
   /** A pope who was a friar of the player's own province: the NPC he was. E3 §7.5, the rarest event. */
   confrereId?: string;
+  /** The pope elected after the record's last: living, unnamed, and held to what the record knows of his reign (history.json `after`). */
+  afterRecord?: boolean;
 }
 
 export interface Vacancy {
@@ -342,6 +344,25 @@ export interface IssuedDocument {
 
 
 /** A pope of the record, as data. */
+/**
+ * What the record knows of the reign after its last pope, while that pope is
+ * living and unnamed (E1 §9 A): the day he was elected, a reading near the
+ * one he has shown, and the acts of his reign the game must not contradict.
+ * His name, age, and country are still rolled. content/rome/history.json `after`.
+ */
+export interface RecordAfterDef {
+  /** ISO date of the election. */
+  elected: string;
+  /** ISO date the record last knew him living: his rolled end never falls before it. */
+  knownThrough: string;
+  /** His reading on the game's axis, rolled about this mean. */
+  temperament: { mean: number; sd: number };
+  /** Axes his own generated documents leave where the record's acts put them. */
+  holds: string[];
+  /** Each act is issued once, on a day rolled from the seed inside `between`, with an invented incipit. */
+  acts: { axis: string; value: string; kind: DocumentKind; between: [string, string] }[];
+}
+
 export interface HistoricalPapacyDef {
   key: string;
   name: string;

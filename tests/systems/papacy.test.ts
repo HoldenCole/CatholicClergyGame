@@ -48,6 +48,8 @@ describe('Rome on the day the game begins', () => {
     expect(between.vacancy?.electionDay).toBe(day(2013, 3, 13));
     const after = romeOn('a', day(2025, 4, 27));
     expect(after.vacancy?.priorId).toBe('hist:francis');
+    // The conclave that followed is known, though the man it elected is not named.
+    expect(after.vacancy?.electionDay).toBe(day(2025, 5, 8));
   });
 
   it('after the record the popes are generated from the seed: the same world, the same pope', () => {
