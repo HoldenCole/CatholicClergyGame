@@ -2,7 +2,7 @@ import type { DocumentKind, GameState, Implementation, IssuedDocument, Letter, P
 import { createRng, type Rng } from '@/engine/rng';
 import { sundayOf } from '@/engine/time';
 import { fromDayNumber } from '@/engine/calendar';
-import { documentHistory, documentPools, papalHistory, policyAxes } from '@/content/rome';
+import { documentHistory, documentPools, papalHistory, policyAxes, recordAfter } from '@/content/rome';
 import { dateWords, recordEndDay, romeOn, walkRome } from './papacy';
 import { docLean, initialPolicies, isoDay, readerOf, readingLine, rollNorm } from './policy';
 import { axisDef } from '@/content/rome';
@@ -70,7 +70,9 @@ export function generatedDocument(seed: string, period: number, pope: Papacy, po
   const kinds = Object.keys(documentPools.kinds) as DocumentKind[];
   if (rng.chance(axisChance)) {
     const dir = t >= 0 ? 1 : -1;
-    const moves = policyAxes.filter((a) => a.generated).flatMap((a) => {
+    // The pope after the record leaves the axes his known acts settled (history.json `after`).
+    const held = pope.afterRecord ? recordAfter?.holds ?? [] : [];
+    const moves = policyAxes.filter((a) => a.generated && !held.includes(a.key)).flatMap((a) => {
       const line = ordered(a.key);
       const i = line.indexOf(policies[a.key]?.value ?? a.initial);
       const to = line[i + dir];
@@ -97,6 +99,17 @@ function historicalDraft(i: number, from?: string): Draft {
   return { id: `hist:${h.key}`, kind: h.kind, title: h.title, gist: h.gist, day: isoDay(h.date), popeId: `hist:${h.pope}`, ...(h.axis && h.value ? { axis: h.axis, value: h.value, ...(from ? { from } : {}) } : {}) };
 }
 
+/** The known acts of the reign after the record: each on a day rolled from the seed inside its window, with an invented incipit. */
+function recordActs(seed: string): (Draft & { at: number })[] {
+  return (recordAfter?.acts ?? []).map((a, i) => {
+    const rng = createRng(`${seed}:after-act:${i}`);
+    const from = isoDay(a.between[0]);
+    const day = from + rng.int(0, Math.max(0, isoDay(a.between[1]) - from));
+    const value = policyAxes.find((x) => x.key === a.axis)?.values.find((v) => v.key === a.value);
+    return { id: `after:${i}`, kind: a.kind, title: incipit(rng), gist: value?.gist ?? '', day, popeId: '', axis: a.axis, value: a.value, at: day };
+  });
+}
+
 /** Every document from 1939 to `day`, in order, as the line of popes issued them: the record, then the generated line. */
 export function draftsBetween(seed: string, popes: Papacy[], fromDay: number, toDay: number, policies: Record<string, PolicyStanding>): { drafts: Draft[]; policies: Record<string, PolicyStanding> } {
   let now = policies;
@@ -110,7 +123,17 @@ export function draftsBetween(seed: string, popes: Papacy[], fromDay: number, to
   });
   const end = recordEndDay();
   if (toDay > end) {
+    const acts = recordActs(seed);
     for (let k = Math.max(0, periodOf(fromDay)); k <= periodOf(toDay); k++) {
+      // The reign's known acts, in their week, issued by him if he is the pope that day.
+      for (const { at, ...act } of acts) {
+        if (periodOf(at) !== k || at <= fromDay || at > toDay) continue;
+        const by = popeOnDay(popes, at);
+        if (!by?.afterRecord) continue;
+        const d: Draft = { ...act, popeId: by.id, ...(act.axis && now[act.axis] ? { from: now[act.axis]!.value } : {}) };
+        drafts.push(d);
+        now = apply(now, d);
+      }
       const day = periodDay(k);
       if (day <= fromDay || day > toDay) continue;
       const pope = popeOnDay(popes, day);
